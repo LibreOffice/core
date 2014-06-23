@@ -68,6 +68,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     // TODO: figure out a clever view of getting paths set up.
     pDocView->pOffice = 0;
     pDocView->pDocument = 0;
+
+    pDocView->fZoom = 1;
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
@@ -77,16 +79,10 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
-SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
+void renderDocument( LOKDocView* pDocView )
 {
-    if ( pDocView->pDocument )
-    {
-        pDocView->pDocument->pClass->destroy( pDocView->pDocument );
-        pDocView->pDocument = 0;
-    }
+    g_assert( pDocView->pDocument );
 
-    pDocView->pDocument = pDocView->pOffice->pClass->documentLoad( pDocView->pOffice,
-                                                           pPath );
     if ( pDocView->pPixBuf )
     {
         g_object_unref( G_OBJECT( pDocView->pPixBuf ) );
@@ -96,15 +92,17 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     pDocView->pDocument->pClass->getDocumentSize( pDocView->pDocument, &nWidth, &nHeight );
 
     // Draw the whole document at once (for now)
-    int nRenderWidth = nWidth / 10;
-    int nRenderHeight = nHeight / 10;
+
+    // TODO: we really should scale by screen DPI here -- 10 seems to be a vaguely
+    // correct factor for my screen at least.
+    int nRenderWidth = nWidth * pDocView->fZoom / 10;
+    int nRenderHeight = nHeight * pDocView->fZoom / 10;
 
     pDocView->pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
                                         TRUE, 8,
                                         nRenderWidth, nRenderHeight);
 
 
-    // TODO: move the rendering into it's own function etc.
     unsigned char* pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
     int nRowStride;
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
@@ -119,8 +117,34 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     (void) nRowStride;
 
     gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
+}
+
+SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
+{
+    if ( pDocView->pDocument )
+    {
+        pDocView->pDocument->pClass->destroy( pDocView->pDocument );
+        pDocView->pDocument = 0;
+    }
+
+    pDocView->pDocument = pDocView->pOffice->pClass->documentLoad( pDocView->pOffice,
+                                                           pPath );
+
+    renderDocument( pDocView );
 
     return FALSE;
+}
+
+SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
+{
+    pDocView->fZoom = fZoom;
+    renderDocument( pDocView );
+    // TODO: maybe remember and reset positiong?
+}
+
+SAL_DLLPUBLIC_EXPORT float lok_docview_get_zoom ( LOKDocView* pDocView )
+{
+    return pDocView->fZoom;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
