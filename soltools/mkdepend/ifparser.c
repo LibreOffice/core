@@ -123,66 +123,66 @@ parse_value (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '(':
-    DO (cp = ParseIfExpression (g, cp + 1, valp));
-    SKIPSPACE (cp);
-    if (*cp != ')')
-        return CALLFUNC(g, handle_error) (g, cp, ")");
+        DO (cp = ParseIfExpression (g, cp + 1, valp));
+        SKIPSPACE (cp);
+        if (*cp != ')')
+            return CALLFUNC(g, handle_error) (g, cp, ")");
 
-    return cp + 1;          /* skip the right paren */
+        return cp + 1;          /* skip the right paren */
 
       case '!':
-    DO (cp = parse_value (g, cp + 1, valp));
-    *valp = !(*valp);
-    return cp;
+        DO (cp = parse_value (g, cp + 1, valp));
+        *valp = !(*valp);
+        return cp;
 
       case '-':
-    DO (cp = parse_value (g, cp + 1, valp));
-    *valp = -(*valp);
-    return cp;
+        DO (cp = parse_value (g, cp + 1, valp));
+        *valp = -(*valp);
+        return cp;
 
       case '#':
-    DO (cp = parse_variable (g, cp + 1, &var));
-    SKIPSPACE (cp);
-    if (*cp != '(')
-        return CALLFUNC(g, handle_error) (g, cp, "(");
-    do {
         DO (cp = parse_variable (g, cp + 1, &var));
         SKIPSPACE (cp);
-    } while (*cp && *cp != ')');
-    if (*cp != ')')
-        return CALLFUNC(g, handle_error) (g, cp, ")");
-    *valp = 1; /* XXX */
-    return cp + 1;
+        if (*cp != '(')
+            return CALLFUNC(g, handle_error) (g, cp, "(");
+        do {
+            DO (cp = parse_variable (g, cp + 1, &var));
+            SKIPSPACE (cp);
+        } while (*cp && *cp != ')');
+        if (*cp != ')')
+            return CALLFUNC(g, handle_error) (g, cp, ")");
+        *valp = 1; /* XXX */
+        return cp + 1;
 
       case 'd':
-    if (strncmp (cp, "defined", 7) == 0 && !isalnum(cp[7])) {
-        int paren = 0;
-        int len;
+        if (strncmp (cp, "defined", 7) == 0 && !isalnum(cp[7])) {
+            int paren = 0;
+            int len;
 
-        cp += 7;
-        SKIPSPACE (cp);
-        if (*cp == '(') {
-        paren = 1;
-        cp++;
+            cp += 7;
+            SKIPSPACE (cp);
+            if (*cp == '(') {
+              paren = 1;
+              cp++;
+            }
+            DO (cp = parse_variable (g, cp, &var));
+            len = (int)(cp - var);
+            SKIPSPACE (cp);
+            if (paren && *cp != ')')
+                return CALLFUNC(g, handle_error) (g, cp, ")");
+            *valp = (*(g->funcs.eval_defined)) (g, var, len);
+            return cp + paren;      /* skip the right paren */
         }
-        DO (cp = parse_variable (g, cp, &var));
-        len = (int)(cp - var);
-        SKIPSPACE (cp);
-        if (paren && *cp != ')')
-            return CALLFUNC(g, handle_error) (g, cp, ")");
-        *valp = (*(g->funcs.eval_defined)) (g, var, len);
-        return cp + paren;      /* skip the right paren */
-    }
     /* fall out */
     }
 
     if (isdigit(*cp)) {
-    DO (cp = parse_number (g, cp, valp));
+      DO (cp = parse_number (g, cp, valp));
     } else if (!isvarfirstletter(*cp))
-    return CALLFUNC(g, handle_error) (g, cp, "variable or number");
+      return CALLFUNC(g, handle_error) (g, cp, "variable or number");
     else {
-    DO (cp = parse_variable (g, cp, &var));
-    *valp = (*(g->funcs.eval_variable)) (g, var, cp - var);
+      DO (cp = parse_variable (g, cp, &var));
+      *valp = (*(g->funcs.eval_variable)) (g, var, cp - var);
     }
 
     return cp;
@@ -200,23 +200,23 @@ parse_product (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '*':
-    DO (cp = parse_product (g, cp + 1, &rightval));
-    *valp = (*valp * rightval);
-    break;
+        DO (cp = parse_product (g, cp + 1, &rightval));
+        *valp = (*valp * rightval);
+        break;
 
       case '/':
-    DO (cp = parse_product (g, cp + 1, &rightval));
+        DO (cp = parse_product (g, cp + 1, &rightval));
 
-    /* Do nothing in the divide-by-zero case. */
-    if (rightval) {
-        *valp = (*valp / rightval);
-    }
-    break;
+        /* Do nothing in the divide-by-zero case. */
+        if (rightval) {
+            *valp = (*valp / rightval);
+        }
+        break;
 
       case '%':
-    DO (cp = parse_product (g, cp + 1, &rightval));
-    *valp = (*valp % rightval);
-    break;
+        DO (cp = parse_product (g, cp + 1, &rightval));
+        *valp = (*valp % rightval);
+        break;
     }
     return cp;
 }
@@ -232,14 +232,14 @@ parse_sum (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '+':
-    DO (cp = parse_sum (g, cp + 1, &rightval));
-    *valp = (*valp + rightval);
-    break;
+        DO (cp = parse_sum (g, cp + 1, &rightval));
+        *valp = (*valp + rightval);
+        break;
 
       case '-':
-    DO (cp = parse_sum (g, cp + 1, &rightval));
-    *valp = (*valp - rightval);
-    break;
+        DO (cp = parse_sum (g, cp + 1, &rightval));
+        *valp = (*valp - rightval);
+        break;
     }
     return cp;
 }
@@ -255,18 +255,18 @@ parse_shift (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '<':
-    if (cp[1] == '<') {
-        DO (cp = parse_shift (g, cp + 2, &rightval));
-        *valp = (*valp << rightval);
-    }
-    break;
+        if (cp[1] == '<') {
+            DO (cp = parse_shift (g, cp + 2, &rightval));
+            *valp = (*valp << rightval);
+        }
+        break;
 
       case '>':
-    if (cp[1] == '>') {
-        DO (cp = parse_shift (g, cp + 2, &rightval));
-        *valp = (*valp >> rightval);
-    }
-    break;
+        if (cp[1] == '>') {
+            DO (cp = parse_shift (g, cp + 2, &rightval));
+            *valp = (*valp >> rightval);
+        }
+        break;
     }
     return cp;
 }
@@ -282,24 +282,24 @@ parse_inequality (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '<':
-    if (cp[1] == '=') {
-        DO (cp = parse_inequality (g, cp + 2, &rightval));
-        *valp = (*valp <= rightval);
-    } else {
-        DO (cp = parse_inequality (g, cp + 1, &rightval));
-        *valp = (*valp < rightval);
-    }
-    break;
+        if (cp[1] == '=') {
+            DO (cp = parse_inequality (g, cp + 2, &rightval));
+            *valp = (*valp <= rightval);
+        } else {
+            DO (cp = parse_inequality (g, cp + 1, &rightval));
+            *valp = (*valp < rightval);
+        }
+        break;
 
       case '>':
-    if (cp[1] == '=') {
-        DO (cp = parse_inequality (g, cp + 2, &rightval));
-        *valp = (*valp >= rightval);
-    } else {
-        DO (cp = parse_inequality (g, cp + 1, &rightval));
-        *valp = (*valp > rightval);
-    }
-    break;
+        if (cp[1] == '=') {
+            DO (cp = parse_inequality (g, cp + 2, &rightval));
+            *valp = (*valp >= rightval);
+        } else {
+            DO (cp = parse_inequality (g, cp + 1, &rightval));
+            *valp = (*valp > rightval);
+        }
+        break;
     }
     return cp;
 }
@@ -315,18 +315,18 @@ parse_equality (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '=':
-    if (cp[1] == '=')
-        cp++;
-    DO (cp = parse_equality (g, cp + 1, &rightval));
-    *valp = (*valp == rightval);
-    break;
+        if (cp[1] == '=')
+            cp++;
+        DO (cp = parse_equality (g, cp + 1, &rightval));
+        *valp = (*valp == rightval);
+        break;
 
       case '!':
-    if (cp[1] != '=')
+        if (cp[1] != '=')
+            break;
+        DO (cp = parse_equality (g, cp + 2, &rightval));
+        *valp = (*valp != rightval);
         break;
-    DO (cp = parse_equality (g, cp + 2, &rightval));
-    *valp = (*valp != rightval);
-    break;
     }
     return cp;
 }
@@ -342,11 +342,11 @@ parse_band (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '&':
-    if (cp[1] != '&') {
-        DO (cp = parse_band (g, cp + 1, &rightval));
-        *valp = (*valp & rightval);
-    }
-    break;
+        if (cp[1] != '&') {
+            DO (cp = parse_band (g, cp + 1, &rightval));
+            *valp = (*valp & rightval);
+        }
+        break;
     }
     return cp;
 }
@@ -362,11 +362,11 @@ parse_bor (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '|':
-    if (cp[1] != '|') {
-        DO (cp = parse_bor (g, cp + 1, &rightval));
-        *valp = (*valp | rightval);
-    }
-    break;
+        if (cp[1] != '|') {
+            DO (cp = parse_bor (g, cp + 1, &rightval));
+            *valp = (*valp | rightval);
+        }
+        break;
     }
     return cp;
 }
@@ -382,11 +382,11 @@ parse_land (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '&':
-    if (cp[1] != '&')
-        return CALLFUNC(g, handle_error) (g, cp, "&&");
-    DO (cp = parse_land (g, cp + 2, &rightval));
-    *valp = (*valp && rightval);
-    break;
+        if (cp[1] != '&')
+            return CALLFUNC(g, handle_error) (g, cp, "&&");
+        DO (cp = parse_land (g, cp + 2, &rightval));
+        *valp = (*valp && rightval);
+        break;
     }
     return cp;
 }
@@ -402,11 +402,11 @@ parse_lor (IfParser *g, const char *cp, int *valp)
 
     switch (*cp) {
       case '|':
-    if (cp[1] != '|')
-        return CALLFUNC(g, handle_error) (g, cp, "||");
-    DO (cp = parse_lor (g, cp + 2, &rightval));
-    *valp = (*valp || rightval);
-    break;
+        if (cp[1] != '|')
+            return CALLFUNC(g, handle_error) (g, cp, "||");
+        DO (cp = parse_lor (g, cp + 2, &rightval));
+        *valp = (*valp || rightval);
+        break;
     }
     return cp;
 }
@@ -417,10 +417,7 @@ parse_lor (IfParser *g, const char *cp, int *valp)
  ****************************************************************************/
 
 const char *
-ParseIfExpression (g, cp, valp)
-    IfParser *g;
-    const char *cp;
-    int *valp;
+ParseIfExpression (IfParser *g, const char *cp, int *valp)
 {
     return parse_lor (g, cp, valp);
 }

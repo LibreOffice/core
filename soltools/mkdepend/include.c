@@ -38,14 +38,14 @@ int issymbolic(char * dir, char * component);
 int exists_path(struct IncludesCollection*, char*);
 
 
-extern struct   inclist inclist[ MAXFILES ],
-            *inclistp;
+extern struct inclist inclist[ MAXFILES ],
+                      *inclistp;
 extern char *includedirs[ ];
 extern char *notdotdot[ ];
 extern boolean show_where_not;
 extern boolean warn_multiple;
 
-struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection* incCollection)
+struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection *incCollection)
 {
     static char path[ BUFSIZ ];
     char   **pp, *p;
@@ -61,8 +61,8 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
     for (ip = inclist; ip->i_file; ip++)
         if ((strcmp(ip->i_incstring, include) == 0) && !ip->i_included_sym)
         {
-        found = TRUE;
-        break;
+          found = TRUE;
+          break;
         }
 
     /*
@@ -128,9 +128,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
     return(ip);
 }
 
-int exists_path(incCollection, path)
-    struct IncludesCollection* incCollection;
-    char* path;
+int exists_path(struct IncludesCollection *incCollection, char *path)
 {
     convert_slashes(path);
     return call_IncludesCollection_exists(incCollection, path);
@@ -141,8 +139,7 @@ int exists_path(incCollection, path)
  * Any of the 'x/..' sequences within the name can be eliminated.
  * (but only if 'x' is not a symbolic link!!)
  */
-void remove_dotdot(path)
-    char    *path;
+void remove_dotdot(char *path)
 {
     char    *end, *from, *to, **cp;
     char    *components[ MAXFILES ],
@@ -179,9 +176,9 @@ void remove_dotdot(path)
             char **fp = cp + 2;
             char **tp = cp;
 
-            do
-            *tp++ = *fp; /* move all the pointers down */
-            while (*fp++);
+            do {
+              *tp++ = *fp; /* move all the pointers down */
+            } while (*fp++);
             if (cp != components)
             cp--;   /* go back and check for nested ".." */
         } else {
@@ -210,24 +207,21 @@ void remove_dotdot(path)
     strcpy(path, newpath);
 }
 
-int isdot(p)
-    char   *p;
+int isdot(char *p)
 {
     if(p && p[0] == '.' && p[1] == '\0')
         return(TRUE);
     return(FALSE);
 }
 
-int isdotdot(p)
-    char   *p;
+int isdotdot(char *p)
 {
     if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
         return(TRUE);
     return(FALSE);
 }
 
-int issymbolic(dir, component)
-    char   *dir, *component;
+int issymbolic(char *dir, char *component)
 {
 #ifdef S_IFLNK
     struct stat st;
@@ -251,8 +245,7 @@ int issymbolic(dir, component)
 /*
  * Add an include file to the list of those included by 'file'.
  */
-struct inclist *newinclude(newfile, incstring)
-    char   *newfile, *incstring;
+struct inclist *newinclude(char *newfile, char *incstring)
 {
     struct inclist *ip;
 
@@ -272,8 +265,7 @@ struct inclist *newinclude(newfile, incstring)
     return(ip);
 }
 
-void included_by(ip, newfile)
-    struct inclist *ip, *newfile;
+void included_by(struct inclist *ip, struct inclist *newfile)
 {
     int i;
 
