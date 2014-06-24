@@ -72,17 +72,18 @@ void PageObjectPainter::PaintPageObject (
 {
     if (UpdatePageObjectLayouter())
     {
+        PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
         // Turn off antialiasing to avoid the bitmaps from being
         // shifted by fractions of a pixel and thus show blurry edges.
         const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
         rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
 
-        PaintBackground(rDevice, rpDescriptor);
-        PaintPreview(rDevice, rpDescriptor);
-        PaintPageNumber(rDevice, rpDescriptor);
-        PaintTransitionEffect(rDevice, rpDescriptor);
+        PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
+        PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
+        PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
+        PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
         if (rpDescriptor->GetPage()->hasAnimationNode())
-            PaintCustomAnimationEffect(rDevice, rpDescriptor);
+            PaintCustomAnimationEffect(pPageObjectLayouter, rDevice, rpDescriptor);
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
@@ -101,36 +102,7 @@ bool PageObjectPainter::UpdatePageObjectLayouter (void)
         return false;
     }
 
-    // Turn off antialiasing to avoid the bitmaps from being shifted by
-    // fractions of a pixel and thus show blurry edges.
-    const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
-
-    PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
-    PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);
-    PaintPageNumber(pPageObjectLayouter, rDevice, rpDescriptor);
-    PaintTransitionEffect(pPageObjectLayouter, rDevice, rpDescriptor);
-
-    rDevice.SetAntialiasing(nSavedAntialiasingMode);
-
     return true;
-}
-
-void PageObjectPainter::NotifyResize (const bool bForce)
-{
-    mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
-    if (bForce || ! mpPageObjectLayouter)
-        InvalidateBitmaps();
-    else if (UpdatePageObjectLayouter())
-    {
-        const Size aSize (mpPageObjectLayouter->GetGridMaxSize(
-                PageObjectLayouter::WindowCoordinateSystem));
-        if (maSize != aSize)
-        {
-            maSize = aSize;
-            InvalidateBitmaps();
-        }
-    }
 }
 
 void PageObjectPainter::InvalidateBitmaps (void)
@@ -145,7 +117,6 @@ void PageObjectPainter::InvalidateBitmaps (void)
     maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
 
->>>>>>> slidesorter - cleanup redundant caches and notifications.
 void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;
@@ -327,11 +298,12 @@ void PageObjectPainter::PaintTransitionEffect (
 
         rDevice.DrawBitmapEx(
             aBox.TopCenter(),
-            mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
+            pPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
     }
 }
 
 void PageObjectPainter::PaintCustomAnimationEffect (
+    PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {

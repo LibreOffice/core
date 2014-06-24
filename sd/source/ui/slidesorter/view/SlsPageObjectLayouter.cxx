@@ -263,11 +263,6 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     return aSize;
 }
 
-Image PageObjectLayouter::GetTransitionEffectIcon (void) const
-{
-    return maTransitionEffectIcon;
-}
-
 } } } // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
