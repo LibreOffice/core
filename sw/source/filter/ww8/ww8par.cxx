@@ -3959,10 +3959,9 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     }
     else
     {
-        sal_uInt16 nPos = mrReader.rDoc.MakePageDesc(
+        rIter->mpPage = mrReader.rDoc.MakePageDesc(
             ViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE),
             0, false);
-        rIter->mpPage = &mrReader.rDoc.GetPageDesc(nPos);
     }
     OSL_ENSURE(rIter->mpPage, "no page!");
     if (!rIter->mpPage)

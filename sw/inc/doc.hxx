@@ -1371,7 +1371,7 @@ public:
     void DelPageDesc( const String & rName, bool bBroadcast = false);
     void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
-    sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
+    SwPageDesc* MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,

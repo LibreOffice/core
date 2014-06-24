@@ -2098,17 +2098,15 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 
     bool bFollow = (pFirstPageDesc != 0);
     SwPageDesc* pNewPD;
-    sal_uInt16 nPos;
     if (bFollow && pFirstPageDesc->GetFollow() != pFirstPageDesc)
         return pFirstPageDesc;      // Fehler: hat schon Follow
 // Erkennung doppelter Namen fehlt noch (Wahrscheinlichkeit
 // fuer dopp. Namen ist gering)
 
-    nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
+    pNewPD = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
                                    GetDoc().GetPageDescCnt(), bFollow ? ShellResource::FOLLOW_PAGE : ShellResource::NORMAL_PAGE),
                                 pFirstPageDesc, false );
 
-    pNewPD =  &GetDoc().GetPageDesc(nPos);
     if (bFollow)
     {               // Dieser ist der folgende von pPageDesc
         pFirstPageDesc->SetFollow(pNewPD);
