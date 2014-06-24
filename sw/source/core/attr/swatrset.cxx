@@ -390,8 +390,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                                                     pPgDesc->GetName() );
                 if( !pDstPgDesc )
                 {
-                    pDstPgDesc = &pDstDoc->GetPageDesc(
-                                   pDstDoc->MakePageDesc( pPgDesc->GetName() ));
+                    pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
                     pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
                 }
                 SwFmtPageDesc aDesc( pDstPgDesc );

@@ -1854,8 +1854,7 @@ void SwDocStyleSheet::Create()
             pDesc = lcl_FindPageDesc( rDoc, aName );
             if( !pDesc )
             {
-                sal_uInt16 nId = rDoc.MakePageDesc(aName);
-                pDesc = &rDoc.GetPageDesc(nId);
+                pDesc = rDoc.MakePageDesc(aName);
             }
             break;
 

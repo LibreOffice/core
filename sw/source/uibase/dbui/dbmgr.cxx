@@ -780,13 +780,12 @@ static void lcl_CopyFollowPageDesc(
     {
         SwDoc* pTargetDoc = rTargetShell.GetDoc();
         OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
-        sal_uInt16 nNewDesc = pTargetDoc->MakePageDesc( sNewFollowPageDesc );
-        SwPageDesc& rTargetFollowPageDesc = pTargetDoc->GetPageDesc( nNewDesc );
+        SwPageDesc* pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
 
-        pTargetDoc->CopyPageDesc( *pFollowPageDesc, rTargetFollowPageDesc, false );
-        SwPageDesc aDesc( rTargetPageDesc );
-        aDesc.SetFollow( &rTargetFollowPageDesc );
-        pTargetDoc->ChgPageDesc( rTargetPageDesc.GetName(), aDesc );
+        pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
+        SwPageDesc aDesc(rTargetPageDesc);
+        aDesc.SetFollow(pTargetFollowPageDesc);
+        pTargetDoc->ChgPageDesc(rTargetPageDesc.GetName(), aDesc);
     }
 }
 
