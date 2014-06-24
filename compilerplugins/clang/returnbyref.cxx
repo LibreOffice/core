@@ -10,6 +10,7 @@
 #include <string>
 #include <set>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find places where we are returning a pointer to something, where we can be returning a reference.
@@ -56,7 +57,7 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
                               functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
         return true;
     }
-    QualType t1 { functionDecl->getResultType() };
+    QualType t1 { compat::getReturnType(*functionDecl) };
     if (!t1->isPointerType()) {
         return true;
     }
