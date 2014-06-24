@@ -354,6 +354,8 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
 
             lcl_resetColumnControlInfo( *col );
 
+            Reference< XInterface > xNormColumn( col->xColumn, UNO_QUERY_THROW );
+
             const Reference< XControl >* pControl( _rControls.getConstArray() );
             const Reference< XControl >* pControlEnd( pControl + _rControls.getLength() );
             for ( ; pControl != pControlEnd; ++pControl )
@@ -375,7 +377,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                     {
                         Reference< XPropertySet > xGridColumnModel( xGridColAccess->getByIndex( gridCol ), UNO_QUERY_THROW );
 
-                        if  (   !lcl_isBoundTo( xGridColumnModel, col->xColumn )
+                        if  (   !lcl_isBoundTo( xGridColumnModel, xNormColumn )
                             ||  !lcl_isInputRequired( xGridColumnModel )
                             )
                             continue;   // with next grid column
@@ -395,7 +397,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                 }
 
                 if  (   !xModelPSI->hasPropertyByName( FM_PROP_BOUNDFIELD )
-                    ||  !lcl_isBoundTo( xModel, col->xColumn )
+                    ||  !lcl_isBoundTo( xModel, xNormColumn )
                     ||  !lcl_isInputRequired( xModel )
                     )
                     continue;   // with next control
