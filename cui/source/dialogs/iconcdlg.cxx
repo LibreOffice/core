@@ -35,31 +35,6 @@
 
 using ::std::vector;
 
-// some stuff for easier changes for SvtViewOptions
-static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
-
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
-{
-    rOpt.SetUserItem( VIEWOPT_DATANAME, css::uno::makeAny( rData ) );
-}
-
-static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
-{
-    ::com::sun::star::uno::Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
-    OUString aUserData;
-    aAny >>= aUserData;
-
-    return aUserData;
-}
-
-
-
-
-// Class IconChoicePage
-
-
-
 /**********************************************************************
 |
 | Ctor / Dtor
@@ -209,7 +184,6 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     pOutSet         ( NULL ),
     pExampleSet     ( NULL ),
     pRanges         ( NULL ),
-    rId             ( rID ),
 
     bHideResetBtn   ( false ),
     bModal          ( false ),
@@ -754,7 +728,7 @@ void IconChoiceDialog::Start_Impl()
             nActPage = maPageList.front()->nId;
     }*/
     //else if ( USHRT_MAX != mnCurrentPageId && GetPageData ( mnCurrentPageId ) != NULL )
-        nActPage = mnCurrentPageId;
+    nActPage = mnCurrentPageId;
 
     mnCurrentPageId = nActPage;
 
