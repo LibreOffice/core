@@ -189,6 +189,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
         m_bIsFirstRun(false),
+        m_bIsOutsideAParagraph(true),
         m_bIsTableHasDirectFormatting(false),
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
@@ -1132,6 +1133,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
         pParaContext->ResetFrameProperties();
     }
 
+    SetIsOutsideAParagraph(true);
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
@@ -4196,6 +4198,12 @@ void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUStri
                 }
 
                 xCursor->gotoRange( xTextAppend->getEnd(), true );
+                // A Paragraph was recently finished, and a new Paragraph has not been started as yet
+                // then  move the bookmark-End to the earlier paragraph
+                if (IsOutsideAParagraph())
+                {
+                    xCursor->goLeft( 1, false );
+                }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 //todo: make sure the name is not used already!
                 if ( !aBookmarkIter->second.m_sBookmarkName.isEmpty() )

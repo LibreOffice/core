@@ -388,6 +388,7 @@ private:
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
+    bool                            m_bIsOutsideAParagraph;
     bool                            m_bIsTableHasDirectFormatting;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
@@ -714,6 +715,8 @@ public:
     void SetCurrentRedlineInitials( const OUString& sInitials );
     bool IsFirstRun() { return m_bIsFirstRun;}
     void SetIsFirstRun(bool bval) { m_bIsFirstRun = bval;}
+    bool IsOutsideAParagraph() { return m_bIsOutsideAParagraph;}
+    void SetIsOutsideAParagraph(bool bval) { m_bIsOutsideAParagraph = bval;}
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
