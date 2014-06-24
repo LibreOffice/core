@@ -3080,10 +3080,29 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
 
     if (!pXmlDoc)
         return;
+    assertXPath ( pXmlDoc, "//w:tbl/w:tblPr/w:tblpPr",1);
+    assertXPath ( pXmlDoc, "//w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing",1);
+}
 
-    // Ensure that two separate w:drawing tags are written after the code changes.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing",1);
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing",1);
+DECLARE_OOXMLEXPORT_TEST(testfdo79541, "testfdo79541.docx")
+{
+    // fdo#79541: Doc contains a inline drawing within a floating table
+    // After this fix, the floating table would no more be enclosed in a textFrame.
+    // Only one table will be exported.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(155) , getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(975), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "//w:tbl/w:tr/w:tc",1);
+    assertXPath(pXmlDocument, "//w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:txbx/w:txbxContent",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
