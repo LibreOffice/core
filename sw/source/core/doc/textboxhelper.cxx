@@ -126,6 +126,21 @@ std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
     return aRet;
 }
 
+std::map<SwFrmFmt*, SwFrmFmt*> SwTextBoxHelper::findShapes(const SwDoc* pDoc)
+{
+    std::map<SwFrmFmt*, SwFrmFmt*> aRet;
+
+    const SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
+    for (SwFrmFmts::const_iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
+    {
+        SwFrmFmt* pTextBox = findTextBox(*it);
+        if (pTextBox)
+            aRet[pTextBox] = *it;
+    }
+
+    return aRet;
+}
+
 /// If the passed SdrObject is in fact a TextFrame, that is used as a TextBox.
 bool lcl_isTextBox(SdrObject* pSdrObject, std::list<SwFrmFmt*>& rTextBoxes)
 {

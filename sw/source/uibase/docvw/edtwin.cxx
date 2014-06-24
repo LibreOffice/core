@@ -76,6 +76,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <textboxhelper.hxx>
+#include <dcontact.hxx>
 #include <fldbas.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
@@ -4241,8 +4243,21 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SdrPageView* pPV;
             if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER ))
             {
-                pSdrView->UnmarkAllObj();
-                pSdrView->MarkObj(pObj,pPV,false,false);
+                std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
+                SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+                SwFrmFmt* pFmt = pDrawContact->GetFmt();
+                if (aTextBoxShapes.find(pFmt) == aTextBoxShapes.end())
+                {
+                    pSdrView->UnmarkAllObj();
+                    pSdrView->MarkObj(pObj,pPV,false,false);
+                }
+                else
+                {
+                    // If the fly frame is a textbox of a shape, then select the shape instead.
+                    SdrObject* pShape = aTextBoxShapes[pFmt]->FindSdrObject();
+                    pSdrView->UnmarkAllObj();
+                    pSdrView->MarkObj(pShape, pPV, false, false);
+                }
             }
         }
         ReleaseMouse();

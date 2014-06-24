@@ -69,6 +69,8 @@ public:
 
     /// Look up TextFrames in a document, which are in fact TextBoxes.
     static std::list<SwFrmFmt*> findTextBoxes(const SwDoc* pDoc);
+    /// Build a textbox -> shape format map.
+    static std::map<SwFrmFmt*, SwFrmFmt*> findShapes(const SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes);
     /// Get a shape by index, excluding TextBoxes.
