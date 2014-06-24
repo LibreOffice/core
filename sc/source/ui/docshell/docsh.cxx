@@ -208,6 +208,11 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
 }
 
+std::vector<Color> ScDocShell::GetDocColors()
+{
+    return aDocument.GetDocColors();
+}
+
 void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();

@@ -18,6 +18,12 @@
 #include <tokenstringcontext.hxx>
 #include <poolhelp.hxx>
 
+#include "dociter.hxx"
+#include "patattr.hxx"
+#include <svl/whiter.hxx>
+#include <editeng/colritem.hxx>
+#include "scitems.hxx"
+
 // Add totally brand-new methods to this source file.
 
 bool ScDocument::IsMerged( const ScAddress& rPos ) const
@@ -232,6 +238,50 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
         return;
 
     pTab->CopyCellValuesFrom(rTopPos.Col(), rTopPos.Row(), rSrc);
+}
+
+std::vector<Color> ScDocument::GetDocColors()
+{
+    std::vector<Color> docColors;
+
+    for( unsigned int nTabIx = 0; nTabIx < maTabs.size(); ++nTabIx )
+    {
+        ScUsedAreaIterator aIt(this, nTabIx, 0, 0, MAXCOLCOUNT-1, MAXROWCOUNT-1);
+
+        for( bool bIt = aIt.GetNext(); bIt; bIt = aIt.GetNext() )
+        {
+            const ScPatternAttr* pPattern = aIt.GetPattern();
+
+            if( pPattern == 0 )
+                continue;
+
+            const SfxItemSet& rItemSet = pPattern->GetItemSet();
+
+            SfxWhichIter aIter( rItemSet );
+            sal_uInt16 nWhich = aIter.FirstWhich();
+            while( nWhich )
+            {
+                const SfxPoolItem *pItem;
+                if( SFX_ITEM_SET == rItemSet.GetItemState( nWhich, false, &pItem ) )
+                {
+                    sal_uInt16 aWhich = pItem->Which();
+                    if( ATTR_FONT_COLOR     == aWhich ||
+                        ATTR_BACKGROUND     == aWhich )
+                    {
+                        Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                        if( COL_AUTO != aColor.GetColor() &&
+                            std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                        {
+                            docColors.push_back( aColor );
+                        }
+                    }
+                }
+
+                nWhich = aIter.NextWhich();
+            }
+        }
+    }
+    return docColors;
 }
 
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
