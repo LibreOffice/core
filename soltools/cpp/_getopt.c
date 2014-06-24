@@ -34,8 +34,8 @@ int
     stgetopt(int argc, char *const argv[], const char *opts)
 {
     static int sp = 1;
-    register int c;
-    register char *cp;
+    int c;
+    char *cp;
 
     if (sp == 1)
     {

@@ -42,8 +42,8 @@ extern boolean  show_where_not;
 
 void add_include(struct filepointer *filep, struct inclist *file, struct inclist *file_red, char *include, boolean dot, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
 {
-    register struct inclist *newfile;
-    register struct filepointer *content;
+    struct inclist *newfile;
+    struct filepointer *content;
 
     /*
      * First decide what the pathname of this include file really is.
@@ -79,17 +79,17 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     }
 }
 
-void pr_dummy(register struct inclist  *ip)
+void pr_dummy(struct inclist  *ip)
 {
     fwrite(ip->i_file, strlen(ip->i_file), 1, stdout);
     fwrite(" :\n\n", 4, 1, stdout);
 }
 
 void recursive_pr_dummy(head, file)
-    register struct inclist *head;
-    register char   *file;
+    struct inclist *head;
+    char   *file;
 {
-    register int    i;
+    int    i;
 
     if (head->i_marked == 2)
         return;
@@ -102,10 +102,10 @@ void recursive_pr_dummy(head, file)
 
 
 void recursive_pr_include(head, file, base)
-    register struct inclist *head;
-    register char   *file, *base;
+    struct inclist *head;
+    char   *file, *base;
 {
-    register int    i;
+    int    i;
 
     if (head->i_marked)
         return;
@@ -117,13 +117,13 @@ void recursive_pr_include(head, file, base)
 }
 
 size_t pr(ip, file, base)
-    register struct inclist  *ip;
+    struct inclist  *ip;
     char    *file, *base;
 {
     size_t ret;
     static char *lastfile;
     static int  current_len;
-    register int    len, i;
+    int    len, i;
     char    buf[ BUFSIZ ];
 
     printed = TRUE;

@@ -30,21 +30,21 @@ in this Software without prior written authorization from the X Consortium.
 #include "def.h"
 char *hash_lookup( char *symbol, struct symhash *symbols );
 void hash_undefine( char *symbol, struct symhash *symbols );
-int gobble( register struct filepointer *filep, struct inclist *file,
+int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-int deftype ( register char *line, register struct filepointer *filep,
-    register struct inclist *file_red, register struct inclist *file,
+int deftype ( char *line, struct filepointer *filep,
+    struct inclist *file_red, struct inclist *file,
     int parse_it, struct symhash *symbols);
-int zero_value(register char *exp, register struct filepointer *filep,
-    register struct inclist *file_red, register struct symhash *symbols);
+int zero_value(char *exp, struct filepointer *filep,
+    struct inclist *file_red, struct symhash *symbols);
 
 extern char *directives[];
 extern struct symhash *maininclist;
 
 int find_includes(struct filepointer *filep, struct inclist *file, struct inclist *file_red, int recursion, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
 {
-    register char   *line;
-    register int    type;
+    char   *line;
+    int    type;
     boolean recfailOK;
 
     while ((line = get_line(filep))) {
@@ -163,12 +163,12 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
 }
 
 int gobble(filep, file, file_red, symbols)
-    register struct filepointer *filep;
+    struct filepointer *filep;
     struct inclist      *file, *file_red;
     struct symhash      *symbols;
 {
-    register char   *line;
-    register int    type;
+    char   *line;
+    int    type;
 
     while ((line = get_line(filep))) {
         switch(type = deftype(line, filep, file_red, file, FALSE, symbols)) {
@@ -217,15 +217,15 @@ int gobble(filep, file, file_red, symbols)
  * Decide what type of # directive this line is.
  */
 int deftype (line, filep, file_red, file, parse_it, symbols)
-    register char   *line;
-    register struct filepointer *filep;
-    register struct inclist *file_red, *file;
+    char   *line;
+    struct filepointer *filep;
+    struct inclist *file_red, *file;
     int parse_it;
     struct symhash  *symbols;
 {
-    register char   *p;
+    char   *p;
     char    *directive, savechar;
-    register int    ret;
+    int    ret;
 
     /*
      * Parse the directive...
@@ -369,7 +369,7 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
 struct symhash *global_symbols = NULL;
 
 char * isdefined( symbol )
-    register char *symbol;
+    char *symbol;
 {
     return hash_lookup( symbol, global_symbols );
 }
@@ -378,10 +378,10 @@ char * isdefined( symbol )
  * Return type based on if the #if expression evaluates to 0
  */
 int zero_value(exp, filep, file_red, symbols)
-    register char   *exp;
-    register struct filepointer *filep;
-    register struct inclist *file_red;
-    register struct symhash *symbols;
+    char   *exp;
+    struct filepointer *filep;
+    struct inclist *file_red;
+    struct symhash *symbols;
 {
     global_symbols = symbols; /* HACK! see above */
     if (cppsetup(exp, filep, file_red))
@@ -410,10 +410,10 @@ void define( def, symbols )
     hash_define( def, val, symbols );
 }
 
-static int hash( register char *str )
+static int hash( char *str )
 {
     /* Hash (Kernighan and Ritchie) */
-    register unsigned int hashval = 0;
+    unsigned int hashval = 0;
 
     for ( ; *str; str++ )
     {

@@ -230,7 +230,7 @@ void InitCpp1()
 
 int MAIN(int argc, char** argv)
 {
-        register int    i;
+        int    i;
         char **useargv, **pfargv;
 
 
@@ -383,8 +383,8 @@ void cppmain()
  * file.
  */
 {
-        register int            c;              /* Current character    */
-        register int            counter;        /* newlines and spaces  */
+        int            c;              /* Current character    */
+        int            counter;        /* newlines and spaces  */
 
         /*
          * Explicitly output a #line at the start of cpp output so
@@ -569,7 +569,7 @@ void sharp()
  * Output a line number line.
  */
 {
-        register char           *name;
+        char           *name;
 
         if (keepcomments)                       /* Make sure # comes on */
             PUTCHAR('\n');                      /* a fresh, new line.   */
