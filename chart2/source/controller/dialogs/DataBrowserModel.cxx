@@ -311,110 +311,113 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     OSL_ASSERT( m_apDialogModel.get());
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-    if( xDataProvider.is())
+
+    if (!xDataProvider.is())
+        return;
+
+    if( isCategoriesColumn(nAfterColumnIndex) )
+        nAfterColumnIndex = getCategoryColumnCount()-1;
+
+    sal_Int32 nStartCol = 0;
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
+    Reference< chart2::XChartType > xChartType;
+    Reference< chart2::XDataSeries > xSeries;
+    if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
+        xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
+
+    sal_Int32 nSeriesNumberFormat = 0;
+    if( xSeries.is())
     {
-        if( isCategoriesColumn(nAfterColumnIndex) )
-            nAfterColumnIndex = getCategoryColumnCount()-1;
+        xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
+        tDataHeaderVector::const_iterator aIt(
+            ::std::find_if( m_aHeaders.begin(), m_aHeaders.end(),
+                            lcl_DataSeriesOfHeaderMatches( xSeries )));
+        if( aIt != m_aHeaders.end())
+            nStartCol = aIt->m_nEndColumn;
 
-        sal_Int32 nStartCol = 0;
-        Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
-        Reference< chart2::XChartType > xChartType;
-        Reference< chart2::XDataSeries > xSeries;
-        if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
-            xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
+        Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
+        if( xSeriesProps.is() )
+            xSeriesProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nSeriesNumberFormat;
+    }
+    else
+    {
+        xChartType.set( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ));
+        nStartCol = nAfterColumnIndex;
+    }
 
-        sal_Int32 nSeriesNumberFormat = 0;
-        if( xSeries.is())
+    if (!xChartType.is())
+        return;
+
+    sal_Int32 nOffset = 0;
+    if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
+        nOffset=getCategoryColumnCount();
+
+    // get shared sequences of current series
+    Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
+    lcl_tSharedSeqVec aSharedSequences;
+    if( xSeriesCnt.is())
+        aSharedSequences = lcl_getSharedSequences( xSeriesCnt->getDataSeries());
+
+    Reference<chart2::XDataSeries> xNewSeries =
+        m_apDialogModel->insertSeriesAfter(xSeries, xChartType, true);
+
+    if (!xNewSeries.is())
+        return;
+
+    Reference< chart2::data::XDataSource > xSource( xNewSeries, uno::UNO_QUERY );
+    if (xSource.is())
+    {
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
+            xSource->getDataSequences());
+        sal_Int32 nSeqIdx = 0;
+        sal_Int32 nSeqSize = aLSequences.getLength();
+        nStartCol -= (nOffset - 1);
+        for( sal_Int32 nIndex = nStartCol;
+             (nSeqIdx < nSeqSize);
+             ++nSeqIdx )
         {
-            xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
-            tDataHeaderVector::const_iterator aIt(
-                ::std::find_if( m_aHeaders.begin(), m_aHeaders.end(),
-                                lcl_DataSeriesOfHeaderMatches( xSeries )));
-            if( aIt != m_aHeaders.end())
-                nStartCol = aIt->m_nEndColumn;
-
-            Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
-            if( xSeriesProps.is() )
-                xSeriesProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nSeriesNumberFormat;
-        }
-        else
-        {
-            xChartType.set( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ));
-            nStartCol = nAfterColumnIndex;
-        }
-
-        if( xChartType.is())
-        {
-            sal_Int32 nOffset = 0;
-            if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
-                nOffset=getCategoryColumnCount();
-            // get shared sequences of current series
-            Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
-            lcl_tSharedSeqVec aSharedSequences;
-            if( xSeriesCnt.is())
-                aSharedSequences = lcl_getSharedSequences( xSeriesCnt->getDataSeries());
-            Reference< chart2::XDataSeries > xNewSeries(
-                m_apDialogModel->insertSeriesAfter( xSeries, xChartType, true /* bCreateDataCachedSequences */ ));
-            if( xNewSeries.is())
+            lcl_tSharedSeqVec::const_iterator aSharedIt(
+                ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
+                                lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
+            if( aSharedIt != aSharedSequences.end())
             {
-                {
-                    Reference< chart2::data::XDataSource > xSource( xNewSeries, uno::UNO_QUERY );
-                    if( xSource.is())
-                    {
-                        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
-                            xSource->getDataSequences());
-                        sal_Int32 nSeqIdx = 0;
-                        sal_Int32 nSeqSize = aLSequences.getLength();
-                        nStartCol -= (nOffset - 1);
-                        for( sal_Int32 nIndex = nStartCol;
-                             (nSeqIdx < nSeqSize);
-                             ++nSeqIdx )
-                        {
-                            lcl_tSharedSeqVec::const_iterator aSharedIt(
-                                ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
-                                                lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
-                            if( aSharedIt != aSharedSequences.end())
-                            {
-                                aLSequences[nSeqIdx]->setValues( (*aSharedIt)->getValues());
-                                aLSequences[nSeqIdx]->setLabel( (*aSharedIt)->getLabel());
-                            }
-                            else
-                            {
-                                xDataProvider->insertSequence( nIndex - 1 );
+                aLSequences[nSeqIdx]->setValues( (*aSharedIt)->getValues());
+                aLSequences[nSeqIdx]->setLabel( (*aSharedIt)->getLabel());
+            }
+            else
+            {
+                xDataProvider->insertSequence( nIndex - 1 );
 
-                                // values
-                                Reference< chart2::data::XDataSequence > xNewSeq(
-                                    xDataProvider->createDataSequenceByRangeRepresentation(
-                                        OUString::number( nIndex )));
-                                lcl_copyDataSequenceProperties(
-                                    aLSequences[nSeqIdx]->getValues(), xNewSeq );
-                                aLSequences[nSeqIdx]->setValues( xNewSeq );
+                // values
+                Reference< chart2::data::XDataSequence > xNewSeq(
+                    xDataProvider->createDataSequenceByRangeRepresentation(
+                        OUString::number( nIndex )));
+                lcl_copyDataSequenceProperties(
+                    aLSequences[nSeqIdx]->getValues(), xNewSeq );
+                aLSequences[nSeqIdx]->setValues( xNewSeq );
 
-                                // labels
-                                Reference< chart2::data::XDataSequence > xNewLabelSeq(
-                                    xDataProvider->createDataSequenceByRangeRepresentation(
-                                        "label " +
-                                        OUString::number( nIndex )));
-                                lcl_copyDataSequenceProperties(
-                                    aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
-                                aLSequences[nSeqIdx]->setLabel( xNewLabelSeq );
-                                ++nIndex;
-                            }
-                        }
-                    }
-                }
-                if( nSeriesNumberFormat != 0 )
-                {
-                    //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
-                    Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
-                    if( xNewSeriesProps.is() )
-                        xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::makeAny(nSeriesNumberFormat));
-                }
-
-                updateFromModel();
+                // labels
+                Reference< chart2::data::XDataSequence > xNewLabelSeq(
+                    xDataProvider->createDataSequenceByRangeRepresentation(
+                        "label " +
+                        OUString::number( nIndex )));
+                lcl_copyDataSequenceProperties(
+                    aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
+                aLSequences[nSeqIdx]->setLabel( xNewLabelSeq );
+                ++nIndex;
             }
         }
     }
+
+    if( nSeriesNumberFormat != 0 )
+    {
+        //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
+        Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
+        if( xNewSeriesProps.is() )
+            xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::makeAny(nSeriesNumberFormat));
+    }
+
+    updateFromModel();
 }
 
 void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
@@ -423,90 +426,90 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
 
     OSL_ASSERT( m_apDialogModel.get());
     Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-    if( xDataProvider.is() )
+    if (!xDataProvider.is())
+        return;
+
+    if( !isCategoriesColumn(nAfterColumnIndex) )
+        nAfterColumnIndex = getCategoryColumnCount()-1;
+
+    if(nAfterColumnIndex<0)
     {
-        if( !isCategoriesColumn(nAfterColumnIndex) )
-            nAfterColumnIndex = getCategoryColumnCount()-1;
-
-        if(nAfterColumnIndex<0)
-        {
-            OSL_FAIL( "wrong index for category level insertion" );
-            return;
-        }
-
-        m_apDialogModel->startControllerLockTimer();
-        ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
-        xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
-        updateFromModel();
+        OSL_FAIL( "wrong index for category level insertion" );
+        return;
     }
+
+    m_apDialogModel->startControllerLockTimer();
+    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
+    updateFromModel();
 }
 
 void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 {
     OSL_ASSERT( m_apDialogModel.get());
-    if( static_cast< tDataColumnVector::size_type >( nAtColumnIndex ) < m_aColumns.size())
+    if (static_cast<size_t>(nAtColumnIndex) >= m_aColumns.size())
+        return;
+
+    Reference< chart2::XDataSeries > xSeries( m_aColumns[nAtColumnIndex].m_xDataSeries );
+    if (!xSeries.is())
     {
-        Reference< chart2::XDataSeries > xSeries( m_aColumns[nAtColumnIndex].m_xDataSeries );
-        if( xSeries.is())
+        //delete a category column if there is more than one level (in case of a single column we do not get here)
+        OSL_ENSURE(nAtColumnIndex>0, "wrong index for categories deletion" );
+
+        Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+        if (!xDataProvider.is())
+            return;
+
+        m_apDialogModel->startControllerLockTimer();
+        ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+        xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
+        updateFromModel();
+
+        return;
+    }
+
+    m_apDialogModel->deleteSeries(
+        xSeries, getHeaderForSeries( xSeries ).m_xChartType );
+
+    //delete sequences from internal data provider that are not used anymore
+    //but do not delete sequences that are still in use by the remaining series
+    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+    Reference< chart2::data::XDataSource > xSourceOfDeletedSeries( xSeries, uno::UNO_QUERY );
+    if( xDataProvider.is() && xSourceOfDeletedSeries.is())
+    {
+        ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequencesOfDeletedSeries( xSourceOfDeletedSeries->getDataSequences() );
+        Reference< chart2::XDataSeriesContainer > xSeriesCnt( getHeaderForSeries( xSeries ).m_xChartType, uno::UNO_QUERY );
+        if( xSeriesCnt.is())
         {
-            m_apDialogModel->deleteSeries(
-                xSeries, getHeaderForSeries( xSeries ).m_xChartType );
-
-            //delete sequences from internal data provider that are not used anymore
-            //but do not delete sequences that are still in use by the remaining series
-            Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-            Reference< chart2::data::XDataSource > xSourceOfDeletedSeries( xSeries, uno::UNO_QUERY );
-            if( xDataProvider.is() && xSourceOfDeletedSeries.is())
+            Reference< chart2::data::XDataSource > xRemainingDataSource( DataSeriesHelper::getDataSource( xSeriesCnt->getDataSeries() ) );
+            if( xRemainingDataSource.is() )
             {
-                ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
-                Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequencesOfDeletedSeries( xSourceOfDeletedSeries->getDataSequences() );
-                Reference< chart2::XDataSeriesContainer > xSeriesCnt( getHeaderForSeries( xSeries ).m_xChartType, uno::UNO_QUERY );
-                if( xSeriesCnt.is())
+                ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aRemainingSeq( ContainerHelper::SequenceToVector( xRemainingDataSource->getDataSequences() ) );
+                for( sal_Int32 i=0; i<aSequencesOfDeletedSeries.getLength(); ++i )
                 {
-                    Reference< chart2::data::XDataSource > xRemainingDataSource( DataSeriesHelper::getDataSource( xSeriesCnt->getDataSeries() ) );
-                    if( xRemainingDataSource.is() )
-                    {
-                        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aRemainingSeq( ContainerHelper::SequenceToVector( xRemainingDataSource->getDataSequences() ) );
-                        for( sal_Int32 i=0; i<aSequencesOfDeletedSeries.getLength(); ++i )
-                        {
-                            ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aHitIt(
-                                ::std::find_if( aRemainingSeq.begin(), aRemainingSeq.end(),
-                                    lcl_RepresentationsOfLSeqMatch( aSequencesOfDeletedSeries[i] )));
-                            // if not used by the remaining series this sequence can be deleted
-                            if( aHitIt == aRemainingSeq.end() )
-                                aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeletedSeries[i] ) );
-                        }
-                    }
-                }
-
-                // delete unnecessary sequences of the internal data
-                // iterate using greatest index first, so that deletion does not
-                // shift other sequences that will be deleted later
-                ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
-                for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
-                         aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
-                {
-                    if( *aIt != -1 )
-                        xDataProvider->deleteSequence( *aIt );
+                    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aHitIt(
+                        ::std::find_if( aRemainingSeq.begin(), aRemainingSeq.end(),
+                            lcl_RepresentationsOfLSeqMatch( aSequencesOfDeletedSeries[i] )));
+                    // if not used by the remaining series this sequence can be deleted
+                    if( aHitIt == aRemainingSeq.end() )
+                        aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeletedSeries[i] ) );
                 }
             }
-            updateFromModel();
         }
-        else
-        {
-            //delete a category column if there is more than one level (in case of a single column we do not get here)
-            OSL_ENSURE(nAtColumnIndex>0, "wrong index for categories deletion" );
 
-            Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-            if( xDataProvider.is() )
-            {
-                m_apDialogModel->startControllerLockTimer();
-                ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
-                xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
-                updateFromModel();
-            }
+        // delete unnecessary sequences of the internal data
+        // iterate using greatest index first, so that deletion does not
+        // shift other sequences that will be deleted later
+        ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
+        for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
+                 aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
+        {
+            if( *aIt != -1 )
+                xDataProvider->deleteSequence( *aIt );
         }
     }
+    updateFromModel();
 }
 
 void DataBrowserModel::swapDataSeries( sal_Int32 nFirstColumnIndex )
