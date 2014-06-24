@@ -144,8 +144,6 @@ private :
     SfxItemSet*             pExampleSet;
     sal_uInt16*                 pRanges;
 
-    const OString&          rId;
-
     bool                    bHideResetBtn;
     bool                    bModal;
     bool                    bInOK;
