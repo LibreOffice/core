@@ -38,6 +38,7 @@ private:
     const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
     ::std::auto_ptr<SwHistory> m_pHistory;
     ::std::auto_ptr<SwRedlineData> m_pRedlData;
+    ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     sal_uLong m_nSectionNodePos;
     bool m_bSplitAtStart : 1;
     bool m_bSplitAtEnd : 1;
