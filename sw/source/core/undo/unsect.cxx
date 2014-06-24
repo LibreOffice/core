@@ -70,6 +70,7 @@ SwUndoInsSection::SwUndoInsSection(
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : 0 )
     , m_pHistory(0)
     , m_pRedlData(0)
+    , m_pRedlineSaveData(0)
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)
     , m_bSplitAtEnd(false)
@@ -82,6 +83,9 @@ SwUndoInsSection::SwUndoInsSection(
                                         rDoc.GetRedlineAuthor() ));
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
+        m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
+        if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
+            m_pRedlineSaveData.reset( NULL );
 
     if( !rPam.HasMark() )
     {
@@ -151,6 +155,9 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     AddUndoRedoPaM(rContext);
+
+    if( m_pRedlineSaveData.get())
+        SetSaveData( rDoc, *m_pRedlineSaveData );
 }
 
 void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
