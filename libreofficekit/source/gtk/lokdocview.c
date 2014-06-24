@@ -17,6 +17,15 @@
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
 
+// We specifically need to destroy the document when closing in order to ensure
+// that lock files etc. are cleaned up.
+void lcl_onDestroy( LOKDocView* pDocView, gpointer pData )
+{
+    (void) pData;
+    pDocView->pDocument->pClass->destroy( pDocView->pDocument );
+    pDocView->pDocument = 0;
+}
+
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
 {
     static guint lok_docview_type = 0;
@@ -70,6 +79,9 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->pDocument = 0;
 
     pDocView->fZoom = 1;
+
+    gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
+                        GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
