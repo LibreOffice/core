@@ -1061,7 +1061,7 @@
           <desc>Contains settings for the visibility of various non-printing characters.</desc>
         </info>
         <prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: View - Nonprinting Characters -->
+          <!-- UIHints: View - Non-printing Characters -->
           <info>
             <desc>Determines whether certain settings are applied (display of tab stops, spaces, breaks)</desc>
             <label>Meta characters</label>
@@ -1071,7 +1071,7 @@
         <prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Paragraph end</label>
@@ -1081,7 +1081,7 @@
         <prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether optional hyphens are shown on the screen.</desc>
             <label>Optional hyphens</label>
@@ -1091,7 +1091,7 @@
         <prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether spaces are shown on the screen.</desc>
             <label>Spaces</label>
@@ -1101,7 +1101,7 @@
         <prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
@@ -1111,7 +1111,7 @@
         <prop oor:name="Tab" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether breaks are shown on the screen.</desc>
             <label>Tabs</label>
@@ -1121,7 +1121,7 @@
         <prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Breaks</label>
@@ -1131,7 +1131,7 @@
         <prop oor:name="HiddenText" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether hidden text fields are displayed on the screen.</desc>
             <label>Fields: Hidden text</label>
@@ -1141,7 +1141,7 @@
         <prop oor:name="HiddenParagraph" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Contents/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
+          <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether hidden paragraphs are displayed on the screen.</desc>
             <label>Hidden paragraphs</label>
