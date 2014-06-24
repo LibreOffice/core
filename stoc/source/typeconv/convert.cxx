@@ -391,15 +391,15 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // STRING
     case TypeClass_STRING:
     {
-        sal_Int64 fVal = SAL_CONST_INT64(0);
-        if (! getHyperValue( fVal, *(OUString const *)rAny.getValue() ))
+        sal_Int64 nVal = SAL_CONST_INT64(0);
+        if (! getHyperValue( nVal, *(OUString const *)rAny.getValue() ))
         {
             throw CannotConvertException(
                 "invalid STRING value!",
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
-        nRet = fVal;
-        if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
+        nRet = nVal;
+        if (nVal >= min && (nVal < 0 || ((sal_uInt64)nVal) <= max))
             return nRet;
         throw CannotConvertException(
             "STRING value out of range!",
