@@ -230,49 +230,49 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_AUTO_STYLE,                                 // 125
     RES_FRMATR_STYLE_NAME,                          // 126
     RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 127
-    RES_FRMATR_GRABBAG,                             // 130
-    RES_TEXT_VERT_ADJUST,                           // 131
+    RES_FRMATR_GRABBAG,                             // 128
+    RES_TEXT_VERT_ADJUST,                           // 129
 RES_FRMATR_END
 };
 
 enum RES_GRFATR
 {
 RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 132
-    RES_GRFATR_CROPGRF,                             // 133
+    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 130
+    RES_GRFATR_CROPGRF,                             // 131
 
-    RES_GRFATR_ROTATION,                            // 134
-    RES_GRFATR_LUMINANCE,                           // 135
-    RES_GRFATR_CONTRAST,                            // 136
-    RES_GRFATR_CHANNELR,                            // 137
-    RES_GRFATR_CHANNELG,                            // 138
-    RES_GRFATR_CHANNELB,                            // 139
-    RES_GRFATR_GAMMA,                               // 140
-    RES_GRFATR_INVERT,                              // 141
-    RES_GRFATR_TRANSPARENCY,                        // 142
-    RES_GRFATR_DRAWMODE,                            // 143
+    RES_GRFATR_ROTATION,                            // 132
+    RES_GRFATR_LUMINANCE,                           // 133
+    RES_GRFATR_CONTRAST,                            // 134
+    RES_GRFATR_CHANNELR,                            // 135
+    RES_GRFATR_CHANNELG,                            // 136
+    RES_GRFATR_CHANNELB,                            // 137
+    RES_GRFATR_GAMMA,                               // 138
+    RES_GRFATR_INVERT,                              // 139
+    RES_GRFATR_TRANSPARENCY,                        // 140
+    RES_GRFATR_DRAWMODE,                            // 141
 
-    RES_GRFATR_DUMMY1,                              // 144
-    RES_GRFATR_DUMMY2,                              // 145
-    RES_GRFATR_DUMMY3,                              // 146
-    RES_GRFATR_DUMMY4,                              // 147
-    RES_GRFATR_DUMMY5,                              // 148
+    RES_GRFATR_DUMMY1,                              // 142
+    RES_GRFATR_DUMMY2,                              // 143
+    RES_GRFATR_DUMMY3,                              // 144
+    RES_GRFATR_DUMMY4,                              // 145
+    RES_GRFATR_DUMMY5,                              // 146
 RES_GRFATR_END
 };
 
 enum RES_BOXATR
 {
 RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 149
-    RES_BOXATR_FORMULA,                             // 150
-    RES_BOXATR_VALUE,                               // 151
+    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 147
+    RES_BOXATR_FORMULA,                             // 148
+    RES_BOXATR_VALUE,                               // 149
 RES_BOXATR_END
 };
 
 enum RES_UNKNOWNATR
 {
 RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 152
+    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 150
 RES_UNKNOWNATR_END
 };
 
@@ -280,13 +280,13 @@ RES_UNKNOWNATR_END
 enum RES_FMT
 {
 RES_FMT_BEGIN = RES_UNKNOWNATR_END,
-    RES_CHRFMT = RES_FMT_BEGIN,                     // 144
-    RES_FRMFMT,                                     // 145
-    RES_FLYFRMFMT,                                  // 146
-    RES_TXTFMTCOLL,                                 // 147
-    RES_GRFFMTCOLL,                                 // 148
-    RES_DRAWFRMFMT,                                 // 149
-    RES_CONDTXTFMTCOLL,                             // 150
+    RES_CHRFMT = RES_FMT_BEGIN,                     // 151
+    RES_FRMFMT,                                     // 152
+    RES_FLYFRMFMT,                                  // 153
+    RES_TXTFMTCOLL,                                 // 154
+    RES_GRFFMTCOLL,                                 // 155
+    RES_DRAWFRMFMT,                                 // 156
+    RES_CONDTXTFMTCOLL,                             // 157
 RES_FMT_END
 };
 
@@ -294,7 +294,7 @@ RES_FMT_END
 enum RES_MSG
 {
 RES_MSG_BEGIN = RES_FMT_END,
-    RES_OBJECTDYING = RES_MSG_BEGIN,                // 151
+    RES_OBJECTDYING = RES_MSG_BEGIN,                // 158
     RES_FMT_CHG,
     RES_ATTRSET_CHG,
     RES_FRM_SIZECHG,
