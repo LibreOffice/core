@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_009be8ca",
+        "filename": "svtools/source/filter/exportdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-06-24T23:02:15Z",
+      "side": 1,
+      "message": "That looks like one unnecessary assignment to aTitle.\n\nsomething like \n\nOUString aTitle \u003d GetText().replaceFirst(\"%1\", maExt); and removing the line above should work.",
+      "revId": "2e01d1bc5cd5186973d0451e8e9beaf3a924bcea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
