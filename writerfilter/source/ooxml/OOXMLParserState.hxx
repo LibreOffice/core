@@ -31,6 +31,18 @@ namespace writerfilter {
 namespace ooxml
 {
 
+/**
+ * Struct to store our 'alternate state'. If multiple mc:AlternateContent
+ * elements arrive, then while the inner ones are active, the original state is
+ * saved away, and once they inner goes out of scope, the original state is
+ * restored.
+ */
+struct SavedAlternateState
+{
+    bool m_bDiscardChildren;
+    bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
+};
+
 class OOXMLParserState
 {
     bool mbInSectionGroup;
@@ -51,6 +63,7 @@ class OOXMLParserState
     bool savedInParagraphGroup;
     bool savedInCharacterGroup;
     bool savedLastParagraphInSection;
+    std::vector<SavedAlternateState> maSavedAlternateStates;
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -63,6 +76,8 @@ public:
 
     void setLastParagraphInSection(bool bLastParagraphInSection);
     bool isLastParagraphInSection() const { return mbLastParagraphInSection;}
+
+    std::vector<SavedAlternateState>& getSavedAlternateStates() { return maSavedAlternateStates; }
 
     bool isInParagraphGroup() const { return mbInParagraphGroup;}
     void setInParagraphGroup(bool bInParagraphGroup);
