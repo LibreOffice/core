@@ -407,6 +407,14 @@ DECLARE_WW8IMPORT_TEST(testBnc863018, "bnc863018.doc")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5002), getProperty<sal_Int32>(xTable, "TopMargin"));
 }
 
+DECLARE_WW8IMPORT_TEST(testBnc875715, "bnc875715.doc")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // Was incorrectly set as -1270.
+    CPPUNIT_ASSERT_EQUAL(0, getProperty<sal_Int32>(xSections->getByIndex(0), "SectionLeftMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
