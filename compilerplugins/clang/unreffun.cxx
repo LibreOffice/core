@@ -53,9 +53,6 @@ public:
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitFunctionDecl(FunctionDecl const * decl);
-
-private:
-    bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
 };
 
 bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
@@ -120,25 +117,6 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             << canon->getSourceRange();
     }
     return true;
-}
-
-bool UnrefFun::isInUnoIncludeFile(SourceLocation spellingLocation) const {
-    StringRef name {
-        compiler.getSourceManager().getFilename(spellingLocation) };
-    return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
-           || name == SRCDIR "/cppuhelper/source/compat.cxx"
-           || name == SRCDIR "/sal/osl/all/compat.cxx")
-        : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/cppu/")
-           || name.startswith(SRCDIR "/include/cppuhelper/")
-           || name.startswith(SRCDIR "/include/osl/")
-           || name.startswith(SRCDIR "/include/rtl/")
-           || name.startswith(SRCDIR "/include/sal/")
-           || name.startswith(SRCDIR "/include/salhelper/")
-           || name.startswith(SRCDIR "/include/systools/")
-           || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/"));
 }
 
 loplugin::Plugin::Registration<UnrefFun> X("unreffun");

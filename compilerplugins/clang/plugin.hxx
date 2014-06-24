@@ -73,6 +73,11 @@ class Plugin
         */
         const Stmt* parentStmt( const Stmt* stmt );
         Stmt* parentStmt( Stmt* stmt );
+        /**
+         Checks if the location is inside an UNO file, more specifically, if it forms part of the URE stable interface,
+         which is not allowed to be changed.
+        */
+        bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
     private:
         static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
         template< typename T > static Plugin* createHelper( const InstantiationData& data );
