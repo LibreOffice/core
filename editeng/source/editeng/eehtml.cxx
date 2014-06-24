@@ -165,6 +165,7 @@ void EditHTMLParser::NextToken( int nToken )
             ImpInsertParaBreak();
         ImpInsertParaBreak();
     }
+    break;
     case HTML_NONBREAKSPACE:
     {
         if ( bInPara )
