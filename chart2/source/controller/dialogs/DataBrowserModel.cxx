@@ -748,10 +748,14 @@ OUString DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
 
 bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const
 {
-    bool bIsCategories = false;
-    if( nColumnIndex>=0 && nColumnIndex<static_cast< sal_Int32 >(m_aColumns.size()) )
-        bIsCategories = !m_aColumns[ nColumnIndex ].m_xDataSeries.is();
-    return bIsCategories;
+    if (nColumnIndex < 0)
+        return false;
+
+    if (static_cast<size_t>(nColumnIndex) >= m_aColumns.size())
+        return false;
+
+    // A column is a category when it doesn't have an associated data series.
+    return !m_aColumns[nColumnIndex].m_xDataSeries.is();
 }
 
 sal_Int32 DataBrowserModel::getCategoryColumnCount()
