@@ -186,8 +186,6 @@ public :
                        const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
 
-    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
