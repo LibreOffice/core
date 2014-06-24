@@ -1103,6 +1103,7 @@ void SerfSession::UNLOCK( const OUString & inPath,
     {
         HandleError( aReqProc );
         SAL_INFO("ucb.ucp.webdav",  "UNLOCK of " << inPath << " succeeded." );
+        apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->removeLock( inPath );
     }
     catch(...)
     {
