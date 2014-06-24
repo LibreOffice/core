@@ -32,7 +32,7 @@ in this Software without prior written authorization from the X Consortium.
 size_t pr( struct inclist *ip, char *file,char *base);
 
 extern struct   inclist inclist[ MAXFILES ],
-            *inclistp;
+                *inclistp;
 extern char *objprefix;
 extern char *objsuffix;
 extern int  width;
@@ -85,9 +85,7 @@ void pr_dummy(struct inclist  *ip)
     fwrite(" :\n\n", 4, 1, stdout);
 }
 
-void recursive_pr_dummy(head, file)
-    struct inclist *head;
-    char   *file;
+void recursive_pr_dummy(struct inclist *head, char *file)
 {
     int    i;
 
@@ -101,9 +99,7 @@ void recursive_pr_dummy(head, file)
 }
 
 
-void recursive_pr_include(head, file, base)
-    struct inclist *head;
-    char   *file, *base;
+void recursive_pr_include(struct inclist *head, char *file, char *base)
 {
     int    i;
 
@@ -116,9 +112,7 @@ void recursive_pr_include(head, file, base)
         recursive_pr_include(head->i_list[ i ], file, base);
 }
 
-size_t pr(ip, file, base)
-    struct inclist  *ip;
-    char    *file, *base;
+size_t pr(struct inclist *ip, char *file, char *base)
 {
     size_t ret;
     static char *lastfile;

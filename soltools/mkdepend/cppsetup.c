@@ -187,20 +187,17 @@ _my_eval_variable (IfParser *ip, const char *var, int len)
     if (!s)
         return 0;
     do {
-    var = s;
-    if (!isvarfirstletter(*var))
+      var = s;
+      if (!isvarfirstletter(*var))
         break;
-    s = _lookup_variable (var, strlen(var));
+      s = _lookup_variable (var, strlen(var));
     } while (s);
 
     return atoi(var);
 }
 
 
-int cppsetup(line, filep, inc)
-    char   *line;
-    struct filepointer *filep;
-    struct inclist     *inc;
+int cppsetup(char *line, struct filepointer *filep, struct inclist *inc)
 {
     IfParser ip;
     struct _parse_data pd;
@@ -216,9 +213,9 @@ int cppsetup(line, filep, inc)
 
     (void) ParseIfExpression (&ip, line, &val);
     if (val)
-    return IF;
+      return IF;
     else
-    return IFFALSE;
+      return IFFALSE;
 }
 #endif /* CPP */
 
