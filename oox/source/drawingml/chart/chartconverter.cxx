@@ -20,8 +20,8 @@
 #include "oox/drawingml/chart/chartconverter.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include "oox/drawingml/chart/chartspaceconverter.hxx"
-#include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "drawingml/chart/chartspaceconverter.hxx"
+#include "drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 

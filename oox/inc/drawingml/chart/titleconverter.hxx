@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLECONVERTER_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_TITLECONVERTER_HXX
 
-#include <oox/drawingml/chart/converterbase.hxx>
+#include <drawingml/chart/converterbase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 { class XDiagram; }

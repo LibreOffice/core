@@ -20,7 +20,7 @@
 #include "oox/ppt/dgmlayout.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "drawingml/diagram/diagram.hxx"
 #include "oox/dump/pptxdumper.hxx"
 
 #include <com/sun/star/drawing/XShape.hpp>

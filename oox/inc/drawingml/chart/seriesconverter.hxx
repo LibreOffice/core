@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_SERIESCONVERTER_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_SERIESCONVERTER_HXX
 
-#include <oox/drawingml/chart/converterbase.hxx>
-#include <oox/drawingml/chart/seriesmodel.hxx>
+#include <drawingml/chart/converterbase.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 { class XDataSeries; }

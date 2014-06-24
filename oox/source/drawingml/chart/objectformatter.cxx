@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/objectformatter.hxx"
+#include "drawingml/chart/objectformatter.hxx"
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -30,7 +30,7 @@
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 
 namespace oox {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "drawingml/chart/typegroupconverter.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
@@ -34,8 +34,8 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/chart/seriesconverter.hxx"
-#include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "drawingml/chart/seriesconverter.hxx"
+#include "drawingml/chart/typegroupmodel.hxx"
 #include "oox/helper/containerhelper.hxx"
 
 namespace oox {

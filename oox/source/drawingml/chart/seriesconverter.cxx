@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/seriesconverter.hxx"
+#include "drawingml/chart/seriesconverter.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -28,11 +28,11 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <basegfx/numeric/ftools.hxx>
-#include "oox/drawingml/chart/datasourceconverter.hxx"
-#include "oox/drawingml/chart/seriesmodel.hxx"
-#include "oox/drawingml/chart/titleconverter.hxx"
-#include "oox/drawingml/chart/typegroupconverter.hxx"
-#include "oox/drawingml/chart/typegroupmodel.hxx"
+#include "drawingml/chart/datasourceconverter.hxx"
+#include "drawingml/chart/seriesmodel.hxx"
+#include "drawingml/chart/titleconverter.hxx"
+#include "drawingml/chart/typegroupconverter.hxx"
+#include "drawingml/chart/typegroupmodel.hxx"
 #include "oox/helper/containerhelper.hxx"
 
 namespace oox {

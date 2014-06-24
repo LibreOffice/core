@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
 
-#include <oox/drawingml/chart/chartcontextbase.hxx>
-#include <oox/drawingml/chart/objectformatter.hxx>
+#include <drawingml/chart/chartcontextbase.hxx>
+#include <drawingml/chart/objectformatter.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }

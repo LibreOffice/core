@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
 
 #include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/chart/plotareamodel.hxx>
-#include <oox/drawingml/chart/titlemodel.hxx>
+#include <drawingml/chart/plotareamodel.hxx>
+#include <drawingml/chart/titlemodel.hxx>
 
 namespace oox {
 namespace drawingml {

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 
-#include <oox/drawingml/chart/chartcontextbase.hxx>
+#include <drawingml/chart/chartcontextbase.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -28,57 +28,46 @@ namespace chart {
 
 
 
-struct DataSequenceModel;
+struct TextModel;
 
-typedef ContextBase< DataSequenceModel > DataSequenceContextBase;
-
-
-
-/** Handler for a double sequence context (c:numLit, c:numRef elements).
+/** Handler for a chart text context (c:tx element).
  */
-class DoubleSequenceContext : public DataSequenceContextBase
+class TextContext : public ContextBase< TextModel >
 {
 public:
-    explicit            DoubleSequenceContext( ::oox::core::ContextHandler2Helper& rParent, DataSequenceModel& rModel );
-    virtual             ~DoubleSequenceContext();
+    explicit            TextContext(  ::oox::core::ContextHandler2Helper& rParent, TextModel& rModel );
+    virtual             ~TextContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
     virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-
-private:
-    sal_Int32           mnPtIndex;          /// Current data point index.
 };
 
 
 
-/** Handler for a string sequence context (c:multiLvlStrRef, c:strLit,
-    c:strRef elements).
+struct TitleModel;
+
+/** Handler for a chart title context (c:title element).
  */
-class StringSequenceContext : public DataSequenceContextBase
+class TitleContext : public ContextBase< TitleModel >
 {
 public:
-    explicit            StringSequenceContext( ::oox::core::ContextHandler2Helper& rParent, DataSequenceModel& rModel );
-    virtual             ~StringSequenceContext();
+    explicit            TitleContext( ::oox::core::ContextHandler2Helper& rParent, TitleModel& rModel );
+    virtual             ~TitleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
-
-private:
-    sal_Int32           mnPtIndex;          /// Current data point index.
 };
 
 
 
-struct DataSourceModel;
+struct LegendModel;
 
-/** Handler for a data source context (c:bubbleSize, c:cat, c:minus, c:plus,
-    c:val, c:xVal, c:yVal elements).
+/** Handler for a chart legend context (c:legend element).
  */
-class DataSourceContext : public ContextBase< DataSourceModel >
+class LegendContext : public ContextBase< LegendModel >
 {
 public:
-    explicit            DataSourceContext( ::oox::core::ContextHandler2Helper& rParent, DataSourceModel& rModel );
-    virtual             ~DataSourceContext();
+    explicit            LegendContext( ::oox::core::ContextHandler2Helper& rParent, LegendModel& rModel );
+    virtual             ~LegendContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };

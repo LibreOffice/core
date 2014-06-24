@@ -29,7 +29,7 @@
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/textrun.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/ppt/pptshape.hxx"

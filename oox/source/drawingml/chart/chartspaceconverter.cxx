@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/chartspaceconverter.hxx"
+#include "drawingml/chart/chartspaceconverter.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -27,10 +27,10 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/drawingml/chart/chartdrawingfragment.hxx"
-#include "oox/drawingml/chart/chartspacemodel.hxx"
-#include "oox/drawingml/chart/plotareaconverter.hxx"
-#include "oox/drawingml/chart/titleconverter.hxx"
+#include "drawingml/chart/chartdrawingfragment.hxx"
+#include "drawingml/chart/chartspacemodel.hxx"
+#include "drawingml/chart/plotareaconverter.hxx"
+#include "drawingml/chart/titleconverter.hxx"
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
