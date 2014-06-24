@@ -407,11 +407,41 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrmFmt& rFrmFmt)
     return bFrameProperties;
 }
 
+bool DocxAttributeOutput::TextBoxIsFloatingTable(const SwFrmFmt& rFrmFmt)
+{
+    uno::Reference< drawing::XShape > xShape;
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    if (pSdrObj)
+        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+    uno::Any aFrameProperties ;
+    bool bIsFrameForFloatingTable = false;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "FloatingTable")
+            {
+                bIsFrameForFloatingTable = true;
+                break;
+            }
+        }
+    }
+    return bIsFrameForFloatingTable;
+}
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks();
     std::vector<  boost::shared_ptr <sw::Frame> > aFramePrTextbox;
+    std::vector<  boost::shared_ptr <sw::Frame> > aFloatingTableFrame;
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
     ++m_nTextFrameLevel;
@@ -425,7 +455,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
             const SwFrmFmt& rFrmFmt = aFrame.GetFrmFmt();
 
-            if (!TextBoxIsFramePr(rFrmFmt) || m_bWritingHeaderFooter)
+           if ((!TextBoxIsFramePr(rFrmFmt) || m_bWritingHeaderFooter) && !TextBoxIsFloatingTable(rFrmFmt))
             {
                 m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
                 m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
@@ -479,11 +509,17 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 m_pSerializer->endElementNS( XML_w, XML_r );
                 m_bParagraphFrameOpen = false;
             }
-            else
+            else if(TextBoxIsFramePr(rFrmFmt))
             {
                 ::boost::shared_ptr<sw::Frame>  pFramePr;
                 pFramePr.reset(new sw::Frame(aFrame));
                 aFramePrTextbox.push_back(pFramePr);
+            }
+            else if(TextBoxIsFloatingTable(rFrmFmt))
+            {
+                ::boost::shared_ptr<sw::Frame>  floatTable;
+                floatTable.reset(new sw::Frame(aFrame));
+                aFloatingTableFrame.push_back(floatTable);
             }
         }
         if (!m_postponedCustomShape->empty())
@@ -551,12 +587,32 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             m_rExport.mpTableInfo = pOldTableInfo;
             aFramePrTextbox.clear();
     }
+
+    //fdo#79541 : write floating table
+    WriteFloatingTables(aFloatingTableFrame);
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
 
     if( !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() )
         m_bParagraphOpened = false;
 
+}
+
+void DocxAttributeOutput::WriteFloatingTables(std::vector<  boost::shared_ptr <sw::Frame> > aFloatingTableFrame)
+{
+    if(!aFloatingTableFrame.empty())
+    {
+          ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+            for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFloatingTableFrame.begin() ; it != aFloatingTableFrame.end(); ++it)
+            {
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
+                m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
+                m_pSerializer->endElementNS( XML_w, XML_p );
+            }
+            m_rExport.mpTableInfo = pOldTableInfo;
+            aFloatingTableFrame.clear();
+    }
 }
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
