@@ -275,34 +275,34 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
             }
 
             sal_uLong nFontSize = 20;
-            sal_uInt16 nLower = 100;
+            sal_uInt16 nUpper = 100;
 
             switch (nLevel)
             {
                 case 1:
                 {
                     nFontSize = 32;
-                    nLower = 500;
+                    nUpper = 500;
                 }
                 break;
 
                 case 2:
                 {
                     nFontSize = 28;
-                    nLower = 400;
+                    nUpper = 400;
                 }
                 break;
 
                 case 3:
                 {
                     nFontSize = 24;
-                    nLower = 300;
+                    nUpper = 300;
                 }
                 break;
 
                 case 4:
                 {
-                    nLower = 200;
+                    nUpper = 200;
                 }
                 break;
             }
@@ -314,8 +314,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );
             rOutlineSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( nFontSize ), 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
-            // Line distance (downwards). Stuff around here cleaned up in i35937
-            aSvxULSpaceItem.SetLower(nLower);
+            // Line distance (upwards). Stuff around here cleaned up in i35937
+            aSvxULSpaceItem.SetUpper(nUpper);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
         }
     }
