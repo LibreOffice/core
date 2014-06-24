@@ -12,6 +12,10 @@
 #include <crsskip.hxx>
 #include <shellio.hxx>
 #include <expfld.hxx>
+#include <docary.hxx>
+#include <redline.hxx>
+#include <section.hxx>
+#include <fmtclds.hxx>
 
 #include "UndoManager.hxx"
 
@@ -32,6 +36,7 @@ public:
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
+    void testCp1000071();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -43,6 +48,7 @@ public:
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
+    CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -259,6 +265,45 @@ void SwUiWriterTest::testFdo74981()
     aIdx--;
     pTxtNode = aIdx.GetNode().GetTxtNode();
     CPPUNIT_ASSERT(!pTxtNode->HasHints());
+}
+
+void SwUiWriterTest::testCp1000071()
+{
+    SwDoc* pDoc = createDoc("cp1000071.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
+    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTbl.size());
+    sal_uLong redlineStart0NodeIndex = rTbl[ 0 ]->Start()->nNode.GetIndex();
+    sal_Int32 redlineStart0Index = rTbl[ 0 ]->Start()->nContent.GetIndex();
+    sal_uLong redlineEnd0NodeIndex = rTbl[ 0 ]->End()->nNode.GetIndex();
+    sal_Int32 redlineEnd0Index = rTbl[ 0 ]->End()->nContent.GetIndex();
+    sal_uLong redlineStart1NodeIndex = rTbl[ 1 ]->Start()->nNode.GetIndex();
+    sal_Int32 redlineStart1Index = rTbl[ 1 ]->Start()->nContent.GetIndex();
+    sal_uLong redlineEnd1NodeIndex = rTbl[ 1 ]->End()->nNode.GetIndex();
+    sal_Int32 redlineEnd1Index = rTbl[ 1 ]->End()->nContent.GetIndex();
+
+    // Change the document layout to be 2 columns, and then undo.
+    pWrtShell->SelAll();
+    SwSectionData section(CONTENT_SECTION, pWrtShell->GetUniqueSectionName());
+    SfxItemSet set( pDoc->GetDocShell()->GetPool(), RES_COL, RES_COL, 0 );
+    SwFmtCol col;
+    col.Init( 2, 0, 10000 );
+    set.Put( col );
+    pWrtShell->InsertSection( section, &set );
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+
+    // Check that redlines are the same like at the beginning.
+    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTbl.size());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTbl[ 0 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTbl[ 0 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTbl[ 0 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTbl[ 0 ]->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTbl[ 1 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTbl[ 1 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTbl[ 1 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTbl[ 1 ]->End()->nContent.GetIndex());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
