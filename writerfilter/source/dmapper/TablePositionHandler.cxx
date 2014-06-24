@@ -16,6 +16,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include "dmapperLoggers.hxx"
 
+#include <comphelper/sequenceashashmap.hxx>
+
 namespace writerfilter
 {
 namespace dmapper
@@ -93,36 +95,23 @@ void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/)
 
 uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
-    uno::Sequence< beans::PropertyValue > aFrameProperties(19);
-    beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
+    comphelper::SequenceAsHashMap aFrameProperties;
 
-    pFrameProperties[0].Name = "LeftBorderDistance";
-    pFrameProperties[0].Value <<= sal_Int32(0);
-    pFrameProperties[1].Name = "RightBorderDistance";
-    pFrameProperties[1].Value <<= sal_Int32(0);
-    pFrameProperties[2].Name = "TopBorderDistance";
-    pFrameProperties[2].Value <<= sal_Int32(0);
-    pFrameProperties[3].Name = "BottomBorderDistance";
-    pFrameProperties[3].Value <<= sal_Int32(0);
+    aFrameProperties["LeftBorderDistance"] <<= sal_Int32(0);
+    aFrameProperties["RightBorderDistance"] <<= sal_Int32(0);
+    aFrameProperties["TopBorderDistance"] <<= sal_Int32(0);
+    aFrameProperties["BottomBorderDistance"] <<= sal_Int32(0);
 
-    pFrameProperties[4].Name = "LeftMargin";
-    pFrameProperties[4].Value <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
-    pFrameProperties[5].Name = "RightMargin";
-    pFrameProperties[5].Value <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
-    pFrameProperties[6].Name = "TopMargin";
-    pFrameProperties[6].Value <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
-    pFrameProperties[7].Name = "BottomMargin";
-    pFrameProperties[7].Value <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
+    aFrameProperties["LeftMargin"] <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
+    aFrameProperties["RightMargin"] <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
+    aFrameProperties["TopMargin"] <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
+    aFrameProperties["BottomMargin"] <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
 
     table::BorderLine2 aEmptyBorder;
-    pFrameProperties[8].Name = "TopBorder";
-    pFrameProperties[8].Value <<= aEmptyBorder;
-    pFrameProperties[9].Name = "BottomBorder";
-    pFrameProperties[9].Value <<= aEmptyBorder;
-    pFrameProperties[10].Name = "LeftBorder";
-    pFrameProperties[10].Value <<= aEmptyBorder;
-    pFrameProperties[11].Name = "RightBorder";
-    pFrameProperties[11].Value <<= aEmptyBorder;
+    aFrameProperties["TopBorder"] <<= aEmptyBorder;
+    aFrameProperties["BottomBorder"] <<= aEmptyBorder;
+    aFrameProperties["LeftBorder"] <<= aEmptyBorder;
+    aFrameProperties["RightBorder"] <<= aEmptyBorder;
 
     // Horizontal positioning
     sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
@@ -145,13 +134,9 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     else if (m_aHorzAnchor == "text")
         nHoriOrientRelation = text::RelOrientation::FRAME;
 
-    pFrameProperties[12].Name = "HoriOrient";
-    pFrameProperties[12].Value <<= nHoriOrient;
-    pFrameProperties[13].Name = "HoriOrientRelation";
-    pFrameProperties[13].Value <<= nHoriOrientRelation;
-    pFrameProperties[14].Name = "HoriOrientPosition";
-    pFrameProperties[14].Value <<= ConversionHelper::convertTwipToMM100(m_nX);
-
+    aFrameProperties["HoriOrient"] <<= nHoriOrient;
+    aFrameProperties["HoriOrientRelation"] <<= nHoriOrientRelation;
+    aFrameProperties["HoriOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nX);
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;
@@ -172,16 +157,12 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     else if (m_aVertAnchor == "text")
         nVertOrientRelation = text::RelOrientation::FRAME;
 
-    pFrameProperties[15].Name = "VertOrient";
-    pFrameProperties[15].Value <<= nVertOrient;
-    pFrameProperties[16].Name = "VertOrientRelation";
-    pFrameProperties[16].Value <<= nVertOrientRelation;
-    pFrameProperties[17].Name = "VertOrientPosition";
-    pFrameProperties[17].Value <<= ConversionHelper::convertTwipToMM100(m_nY);
-    pFrameProperties[18].Name = "FillTransparence";
-    pFrameProperties[18].Value <<= sal_Int32(100);
+    aFrameProperties["VertOrient"] <<= nVertOrient;
+    aFrameProperties["VertOrientRelation"] <<= nVertOrientRelation;
+    aFrameProperties["VertOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nY);
+    aFrameProperties["FillTransparence"] <<= sal_Int32(100);
 
-    return aFrameProperties;
+    return aFrameProperties.getAsConstPropertyValueList();
 }
 
 bool TablePositionHandler::operator== (const TablePositionHandler& rHandler) const
