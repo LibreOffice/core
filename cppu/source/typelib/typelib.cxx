@@ -270,7 +270,9 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
     if( pWeakMap )
     {
         std::vector< typelib_TypeDescriptionReference * > ppTDR;
-        // save al weak references
+        ppTDR.reserve( pWeakMap->size() );
+
+        // save all weak references
         WeakMap_Impl::const_iterator aIt = pWeakMap->begin();
         while( aIt != pWeakMap->end() )
         {
