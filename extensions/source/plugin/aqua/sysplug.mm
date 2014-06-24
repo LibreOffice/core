@@ -196,7 +196,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)mouseDown:    (NSEvent*)i_pEvent
@@ -204,7 +204,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)mouseDragged: (NSEvent*)i_pEvent
@@ -212,7 +212,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)mouseUp:      (NSEvent*)i_pEvent
@@ -220,7 +220,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)rightMouseDown:    (NSEvent*)i_pEvent
@@ -228,7 +228,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)rightMouseDragged: (NSEvent*)i_pEvent
@@ -236,7 +236,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)rightMouseUp:      (NSEvent*)i_pEvent
@@ -244,7 +244,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)otherMouseDown:    (NSEvent*)i_pEvent
@@ -252,7 +252,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)otherMouseDragged: (NSEvent*)i_pEvent
@@ -260,7 +260,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)otherMouseUp:      (NSEvent*)i_pEvent
@@ -268,7 +268,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)mouseEntered: (NSEvent*)i_pEvent
@@ -276,7 +276,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 -(void)mouseExited:  (NSEvent*)i_pEvent
@@ -284,7 +284,7 @@ struct FakeEventRecord : public EventRecord
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
-    m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
+    m_pCom->NPP_HandleEvent( &m_pImpl->getNPPInstance(), &aRec );
 }
 
 @end
@@ -397,7 +397,7 @@ IMPL_LINK_NOARG(MacPluginComm, NullTimerHdl)
     {
         SysPlugData& rPlugData( (*it)->getSysPlugData() );
         if( rPlugData.m_pPlugView ) // for safety do not dispatch null events before first NPP_SetWindow
-            (*m_aNPPfuncs.event)( (*it)->getNPPInstance(), &aRec );
+            (*m_aNPPfuncs.event)( &(*it)->getNPPInstance(), &aRec );
     }
 
     return 0;
@@ -594,7 +594,7 @@ NPError MacPluginComm::NPP_Destroy( XPlugin_Impl* i_pImpl, NPSavedData** save )
     // remove from NullEvent timer
     m_aNullEventClients.remove( i_pImpl );
 
-    NPError nErr = NPP_Destroy( i_pImpl->getNPPInstance(), save );
+    NPError nErr = NPP_Destroy( &i_pImpl->getNPPInstance(), save );
 
     // release plugin view
     SysPlugData& rPlugData( i_pImpl->getSysPlugData() );
@@ -808,7 +808,7 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
     else
         [rPlugData.m_pPlugView setFrame: aPlugRect];
 
-    NPWindow* pNPWin = i_pImpl->getNPWindow();
+    NPWindow* pNPWin = &i_pImpl->getNPWindow();
     NSWindow* pWin = [rPlugData.m_pPlugView window];
     NSRect aWinRect = [pWin frame];
     NSRect aBounds = [rPlugData.m_pPlugView frame];
@@ -872,7 +872,7 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
     if( pNPWin->width == 0 || pNPWin->height == 0 || [rPlugData.m_pPlugView isHiddenOrHasHiddenAncestor] )
         rPlugData.m_bSetWindowOnDraw = true;
 
-    NPError nErr = NPP_SetWindow( i_pImpl->getNPPInstance(), i_pImpl->getNPWindow() );
+    NPError nErr = NPP_SetWindow( &i_pImpl->getNPPInstance(), i_pImpl->getNPWindow() );
 
     return nErr;
 }
@@ -896,7 +896,7 @@ void MacPluginComm::drawView( XPlugin_Impl* i_pImpl )
     FakeEventRecord aRec;
     aRec.what       =  updateEvt;
     aRec.message    = (uint32_t)[pWin windowRef];
-    this->NPP_HandleEvent( i_pImpl->getNPPInstance(), &aRec );
+    this->NPP_HandleEvent( &i_pImpl->getNPPInstance(), &aRec );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
