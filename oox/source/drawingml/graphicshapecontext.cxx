@@ -23,7 +23,7 @@
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "drawingml/diagram/diagram.hxx"
 #include "drawingml/table/tablecontext.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"

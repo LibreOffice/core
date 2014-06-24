@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/axisconverter.hxx"
+#include "drawingml/chart/axisconverter.hxx"
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -32,9 +32,9 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/titleconverter.hxx"
-#include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "drawingml/chart/axismodel.hxx"
+#include "drawingml/chart/titleconverter.hxx"
+#include "drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "comphelper/processfactory.hxx"
 

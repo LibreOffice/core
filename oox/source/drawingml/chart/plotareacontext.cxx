@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/plotareacontext.hxx"
+#include "drawingml/chart/plotareacontext.hxx"
 
 #include "oox/drawingml/shapepropertiescontext.hxx"
-#include "oox/drawingml/chart/axiscontext.hxx"
-#include "oox/drawingml/chart/plotareamodel.hxx"
-#include "oox/drawingml/chart/seriescontext.hxx"
-#include "oox/drawingml/chart/titlecontext.hxx"
-#include "oox/drawingml/chart/typegroupcontext.hxx"
+#include "drawingml/chart/axiscontext.hxx"
+#include "drawingml/chart/plotareamodel.hxx"
+#include "drawingml/chart/seriescontext.hxx"
+#include "drawingml/chart/titlecontext.hxx"
+#include "drawingml/chart/typegroupcontext.hxx"
 
 namespace oox {
 namespace drawingml {

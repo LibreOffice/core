@@ -21,7 +21,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/chartexport.hxx"
 #include "oox/export/utils.hxx"
-#include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "drawingml/chart/typegroupconverter.hxx"
 
 #include <cstdio>
 

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/titlecontext.hxx"
+#include "drawingml/chart/titlecontext.hxx"
 
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "oox/drawingml/chart/datasourcecontext.hxx"
-#include "oox/drawingml/chart/titlemodel.hxx"
+#include "drawingml/chart/datasourcecontext.hxx"
+#include "drawingml/chart/titlemodel.hxx"
 
 #include "rtl/ustrbuf.hxx"
 

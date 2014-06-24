@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_SERIESMODEL_HXX
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
-#include <oox/drawingml/chart/titlemodel.hxx>
+#include <drawingml/chart/titlemodel.hxx>
 
 namespace oox {
 namespace drawingml {

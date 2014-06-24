@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/chartcontextbase.hxx"
+#include "drawingml/chart/chartcontextbase.hxx"
 
 #include "oox/drawingml/chart/modelbase.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"

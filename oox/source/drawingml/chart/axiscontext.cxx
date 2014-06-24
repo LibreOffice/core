@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/axiscontext.hxx"
+#include "drawingml/chart/axiscontext.hxx"
 
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/titlecontext.hxx"
+#include "drawingml/chart/axismodel.hxx"
+#include "drawingml/chart/titlecontext.hxx"
 
 namespace oox {
 namespace drawingml {

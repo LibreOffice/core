@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_TYPEGROUPMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_TYPEGROUPMODEL_HXX
 
-#include <oox/drawingml/chart/seriesmodel.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
 
 namespace oox {
 namespace drawingml {
