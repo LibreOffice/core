@@ -23,12 +23,13 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 {
-    SvStream *pStrm = ::utl::UcbStreamHelper::CreateStream(
+    boost::scoped_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
                                 GetStrURL().GetMainURL( INetURLObject::NO_DECODE ),
-                                STREAM_READ );
+                                STREAM_READ ));
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
 
@@ -86,7 +87,6 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
                 }
             }
         }
-        delete pStrm;
     }
 
     SAL_INFO( "svx", "readStrFromIni returns '" << aResult << "'");

@@ -34,6 +34,7 @@
 #include "svx/gallery1.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <boost/scoped_ptr.hpp>
 
 // - Namespaces -
 
@@ -242,7 +243,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
             OUString        aTestFile( "cdefghij.klm" );
 
             aTestURL.Append( aTestFile );
-            SvStream* pTestStm = ::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
+            boost::scoped_ptr<SvStream> pTestStm(::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
 
             if( pTestStm )
             {
@@ -251,7 +252,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                 if( pTestStm->GetError() )
                     rbDirIsReadOnly = true;
 
-                delete pTestStm;
+                pTestStm.reset();
                 KillFile( aTestURL );
             }
             else
@@ -601,7 +602,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
             if( FileExists( aURL ) )
             {
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+                boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
 
                 if( pIStm )
                 {
@@ -618,8 +619,6 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
                     catch (const css::ucb::ContentCreationException&)
                     {
                     }
-
-                    delete pIStm;
                 }
             }
 

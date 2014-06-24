@@ -57,6 +57,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <map>
+#include <boost/scoped_ptr.hpp>
 
 #undef GALLERY_USE_CLIPBOARD
 
@@ -1205,7 +1206,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle );
+                        boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");
                         if( aDlg->Execute() == RET_OK )
                         {
@@ -1222,7 +1223,6 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                         }
 
                         mpCurTheme->ReleaseObject( pObj );
-                        delete aDlg;
                     }
                 }
             }
