@@ -40,6 +40,7 @@
 #include <DocumentSettingManager.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
+#include <textboxhelper.hxx>
 #include <poolfmt.hrc>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
@@ -217,6 +218,22 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 pDView->MarkObj( pTmpObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
                 break;
             }
+        }
+    }
+
+    // If the fly frame is a textbox of a shape, then select the shape instead.
+    std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(mpDoc);
+    for (sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i)
+    {
+        SdrObject* pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
+        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
+        SwFrmFmt* pFmt = pDrawContact->GetFmt();
+        if (aTextBoxShapes.find(pFmt) != aTextBoxShapes.end())
+        {
+            SdrObject* pShape = aTextBoxShapes[pFmt]->FindSdrObject();
+            pDView->UnmarkAll();
+            pDView->MarkObj(pShape, Imp()->GetPageView(), bAddSelect, bEnterGroup);
+            break;
         }
     }
 

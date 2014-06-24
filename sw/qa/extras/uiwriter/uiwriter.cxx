@@ -17,8 +17,10 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <fmtclds.hxx>
+#include <dcontact.hxx>
 
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 
 #include "UndoManager.hxx"
 
@@ -39,6 +41,7 @@ public:
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
+    void testShapeTextboxSelect();
     void testShapeTextboxDelete();
     void testCp1000071();
 
@@ -52,6 +55,7 @@ public:
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
+    CPPUNIT_TEST(testShapeTextboxSelect);
     CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST_SUITE_END();
@@ -282,9 +286,27 @@ void SwUiWriterTest::testFdo74981()
     CPPUNIT_ASSERT(!pTxtNode->HasHints());
 }
 
+void SwUiWriterTest::testShapeTextboxSelect()
+{
+    SwDoc* pDoc = createDoc("shape-textbox.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwDrawContact* pTextBox = static_cast<SwDrawContact*>(pObject->GetUserCall());
+    // First, make sure that pTextBox is a fly frame (textbox of a shape).
+    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFmt()->Which()));
+
+    // Then select it.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+    SwDrawContact* pShape = static_cast<SwDrawContact*>(rMarkList.GetMark(0)->GetMarkedSdrObj()->GetUserCall());
+    // And finally make sure the shape got selected, not just the textbox itself.
+    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFmt()->Which()));
+}
+
 void SwUiWriterTest::testShapeTextboxDelete()
 {
-    SwDoc* pDoc = createDoc("shape-textbox-delete.odt");
+    SwDoc* pDoc = createDoc("shape-textbox.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
