@@ -74,7 +74,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     // Change working mode first!
     if  (
             ( m_eWorkingMode == E_INIT        && eMode == E_WORK        ) ||
-            ( m_eWorkingMode == E_WORK        && eMode == E_BEFORECLOSE ) ||
+            ( (m_eWorkingMode == E_WORK || m_eWorkingMode == E_INIT) && eMode == E_BEFORECLOSE ) ||
             ( m_eWorkingMode == E_BEFORECLOSE && eMode == E_CLOSE       ) ||
             ( m_eWorkingMode == E_CLOSE       && eMode == E_INIT        )
         )
