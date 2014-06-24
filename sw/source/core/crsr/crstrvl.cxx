@@ -1447,7 +1447,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     RES_BOXATR_VALUE, false, &pItem ))
 #else
                     SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
-                    RES_BOXATR_FORMULA, sal_False, &pItem )
+                    RES_BOXATR_FORMULA, false, &pItem )
 #endif
                     )
                 {

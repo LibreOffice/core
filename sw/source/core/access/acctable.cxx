@@ -1438,8 +1438,8 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
 
     if( HasTableData() )
     {
-        OSL_ENSURE( !HasTableData() ||
-                GetFrm()->Frm().Pos() == GetTableData().GetTablePos(),
+        SAL_WARN_IF( HasTableData() &&
+                GetFrm()->Frm().Pos() != GetTableData().GetTablePos(), "sw.core",
                 "table has invalid position" );
         if( HasTableData() )
         {

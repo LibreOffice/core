@@ -132,8 +132,8 @@ public:
 #ifdef DBG_UTIL
     void                SetModified(bool bRepaint = true);
 #else
-    void                SetModified(sal_Bool bRepaint = sal_True)
-                            {   bModified = sal_True;
+    void                SetModified(bool bRepaint = true)
+                            {   bModified = true;
                                 if(bRepaint)
                                 {
                                     m_pPreviewWIN->SetLevel(nActNumLvl);
