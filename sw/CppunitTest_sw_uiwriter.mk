@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     cppu \
     cppuhelper \
     sal \
+    svl \
     svt \
     sw \
     test \
