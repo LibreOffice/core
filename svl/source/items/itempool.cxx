@@ -711,6 +711,9 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 
     SfxPoolItemArrayBase_Impl::iterator ppFree;
     bool ppFreeIsSet = false;
+
+    // Is this a 'poolable' item - ie. should we re-use and return
+    // the same underlying item for equivalent (==) SfxPoolItems ?
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
         // if is already in a pool, then it is worth checking if it is in this one.
@@ -751,7 +754,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
     else
     {
-        // look for a freed place
+        // Unconditionally insert; check for a recently freed place
         if (pItemArr->maFree.size() > 0)
         {
             SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
@@ -765,7 +768,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         }
     }
 
-    // nicht vorhanden, also im PtrArray eintragen
+    // 3. not found, so clone to insert into the pointer array.
     SfxPoolItem* pNewItem = rItem.Clone(pImp->mpMaster);
     pNewItem->SetWhich(nWhich);
 #ifdef DBG_UTIL
@@ -782,6 +785,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 #endif
     AddRef( *pNewItem, pImp->nInitRefCount );
 
+    // 4. finally insert into the pointer array
     assert( pItemArr->maHash.find(pNewItem) == pItemArr->maHash.end() );
     if ( !ppFreeIsSet )
     {
