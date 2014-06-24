@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <time.h>
 #include <stdlib.h>
+#include <boost/shared_ptr.hpp>
 
 using namespace std;
 //
@@ -339,9 +340,6 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
 bool Export::CopyFile( const ByteString& source , const ByteString& dest )
 {
 //    cout << "CopyFile( " << source.GetBuffer() << " , " << dest.GetBuffer() << " )\n";
-    static const int BUFFERSIZE = 0x100000;
-    char buf[ BUFFERSIZE ];
-
     FILE* IN_FILE = fopen( source.GetBuffer() , "r" );
     if( IN_FILE == NULL )
     {
@@ -356,6 +354,10 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
         fclose( IN_FILE );
         return false;
     }
+
+    static const int BUFFERSIZE = 0x100000;
+    boost::shared_ptr<char> aScopedBuffer( new char[BUFFERSIZE] );
+    char* buf = aScopedBuffer.get();
 
     bool bOk = true;
     while( bOk )
