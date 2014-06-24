@@ -2122,7 +2122,7 @@
       </node>
       <node oor:name=".uno:ControlCodes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Nonprinting Characters</value>
+          <value xml:lang="en-US">~Non-printing Characters</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
