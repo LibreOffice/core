@@ -372,49 +372,47 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
 {
     // make the descriptor more useable :-)
     utl::MediaDescriptor stlDescriptor(lDescriptor);
-
-    // SAFE -> ----------------------------------
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-
-
-    // parse given URL to split it into e.g. main and jump marks ...
-    OUString sURL = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
-
-#if OSL_DEBUG_LEVEL > 0
-    if (stlDescriptor.find( "FileName" ) != stlDescriptor.end())
-        OSL_FAIL("Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
-#endif
-
-    css::util::URL  aURL;
-    aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
-    xParser->parseStrict(aURL);
-
-    OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
-    if (!aSelectedFilter.isEmpty())
-    {
-        // Caller specified the filter type.  Honor it.  Just get the default
-        // type for that filter, and bail out.
-        if (impl_validateAndSetFilterOnDescriptor(stlDescriptor, aSelectedFilter))
-            return stlDescriptor[utl::MediaDescriptor::PROP_TYPENAME()].get<OUString>();
-    }
-
-    FlatDetection lFlatTypes;
-    impl_getAllFormatTypes(aURL, stlDescriptor, lFlatTypes);
-
-    aLock.clear();
-    // <- SAFE ----------------------------------
-
-    // Properly prioritize all candidate types.
-    lFlatTypes.sort(SortByPriority());
-    lFlatTypes.unique(EqualByType());
-
-    OUString sType      ;
-    OUString sLastChance;
+    OUString sType, sURL;
 
     try
     {
+        // SAFE -> ----------------------------------
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+
+        // parse given URL to split it into e.g. main and jump marks ...
+        sURL = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
+
+#if OSL_DEBUG_LEVEL > 0
+        if (stlDescriptor.find( "FileName" ) != stlDescriptor.end())
+            OSL_FAIL("Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
+#endif
+
+        css::util::URL  aURL;
+        aURL.Complete = sURL;
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
+        xParser->parseStrict(aURL);
+
+        OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
+        if (!aSelectedFilter.isEmpty())
+        {
+            // Caller specified the filter type.  Honor it.  Just get the default
+            // type for that filter, and bail out.
+            if (impl_validateAndSetFilterOnDescriptor(stlDescriptor, aSelectedFilter))
+                return stlDescriptor[utl::MediaDescriptor::PROP_TYPENAME()].get<OUString>();
+        }
+
+        FlatDetection lFlatTypes;
+        impl_getAllFormatTypes(aURL, stlDescriptor, lFlatTypes);
+
+        aLock.clear();
+        // <- SAFE ----------------------------------
+
+        // Properly prioritize all candidate types.
+        lFlatTypes.sort(SortByPriority());
+        lFlatTypes.unique(EqualByType());
+
+        OUString sLastChance;
 
         // verify every flat detected (or preselected!) type
         // by calling its registered deep detection service.
@@ -445,16 +443,17 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         }
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception& e)
-        {
-            SAL_WARN(
-                "filter.config",
-                "caught Exception \"" << e.Message
-                    << "\" while querying type of <" << sURL << ">");
-            sType = OUString();
-        }
-
+    {
+        SAL_WARN(
+            "filter.config",
+            "caught Exception \"" << e.Message
+                << "\" while querying type of <" << sURL << ">");
+        sType = OUString();
+    }
 
     // adapt media descriptor, so it contains the right values
     // for type/filter name/document service/ etcpp.
