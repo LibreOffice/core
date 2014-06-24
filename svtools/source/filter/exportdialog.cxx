@@ -640,7 +640,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mpFtEstimatedSize->SetText(OUString(" \n "));
 
     OUString aTitle(maExt);
-    aTitle += GetText();
+    aTitle = GetText().replaceFirst("%1", aTitle);
     SetText(aTitle);
 
     mnFormat = GetFilterFormat( maExt );
