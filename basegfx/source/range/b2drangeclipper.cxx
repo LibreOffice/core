@@ -258,7 +258,6 @@ namespace basegfx
             }
 
             void setPolygonPoolIndex( std::ptrdiff_t nIdx ) { mnIdx = nIdx; }
-            bool isFinished() const { return mbIsFinished; }
 
             /// Add point to the end of the existing points
             void append( const B2DPoint& rPoint )
@@ -304,7 +303,7 @@ namespace basegfx
                                       B2DPolyPolygon&   rRes,
                                       bool              isFinishingEdge )
             {
-                OSL_PRECOND( !isFinished(),
+                OSL_PRECOND( !mbIsFinished,
                              "ImplPolygon::intersect(): called on already finished polygon!" );
                 OSL_PRECOND( !isFinishingEdge
                              || (isFinishingEdge && &rEvent.getRect() == &rActiveEdge.getRect()),
