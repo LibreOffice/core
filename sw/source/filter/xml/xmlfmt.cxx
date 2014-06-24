@@ -632,7 +632,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                    sName,
                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
                                    true);
-    SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
+    SwPageDesc *pPageDesc = pDoc->FindPageDesc(sName);
     if( !pPageDesc )
     {
         // If the page style is a pool style, then we maybe have to create it

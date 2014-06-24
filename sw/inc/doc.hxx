@@ -1170,8 +1170,7 @@ public:
     sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *maPageDescs[i]; }
     SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *maPageDescs[i]; }
-    SwPageDesc* FindPageDescByName( const OUString& rName,
-                                    sal_uInt16* pPos = 0 ) const;
+    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
@@ -1192,7 +1191,6 @@ public:
     SwPageDesc * GetPageDesc( const OUString & rName );
     void ChgPageDesc( const OUString & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    bool FindPageDesc( const OUString & rName, sal_uInt16 * pFound );
     void DelPageDesc( const OUString & rName, bool bBroadcast = false);
     void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
