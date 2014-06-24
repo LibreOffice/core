@@ -1818,6 +1818,8 @@ public:
 
     void CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc );
 
+    std::vector<Color> GetDocColors();
+
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
 
