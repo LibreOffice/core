@@ -604,7 +604,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     // define drawing layer map mode and paint rectangle
-    const MapMode aDrawMode = GetDrawMapMode();
+    MapMode aDrawMode = pOutDev->GetMapMode();
+    aDrawMode.SetMapUnit( MAP_100TH_MM );
     Rectangle aDrawingRectLogic;
 
     {
