@@ -2561,6 +2561,7 @@ void DomainMapper::lcl_startParagraphGroup()
             m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
     }
     m_pImpl->SetIsFirstRun(true);
+    m_pImpl->SetIsOutsideAParagraph(false);
     m_pImpl->clearDeferredBreaks();
 }
 
@@ -2570,6 +2571,7 @@ void DomainMapper::lcl_endParagraphGroup()
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
+    m_pImpl->SetIsOutsideAParagraph(true);
 }
 
 void DomainMapper::markLastParagraphInSection( )
