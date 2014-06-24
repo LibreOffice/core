@@ -150,8 +150,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   inPositionV(pContext->inPositionV),
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
-  m_bTookChoice(pContext->m_bTookChoice),
-  m_aSavedAlternateStates(pContext->m_aSavedAlternateStates)
+  m_bTookChoice(pContext->m_bTookChoice)
 {
     mpParserState = pContext->mpParserState;
 
@@ -179,7 +178,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                 m_bDiscardChildren = false;
                 aState.m_bTookChoice = m_bTookChoice;
                 m_bTookChoice = false;
-                m_aSavedAlternateStates.push_back(aState);
+                mpParserState->getSavedAlternateStates().push_back(aState);
             }
             break;
         case OOXML_Choice:
@@ -241,8 +240,8 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
         m_bDiscardChildren = false;
     else if (Element == (NS_mce | OOXML_AlternateContent))
     {
-        SavedAlternateState aState(m_aSavedAlternateStates.back());
-        m_aSavedAlternateStates.pop_back();
+        SavedAlternateState aState(mpParserState->getSavedAlternateStates().back());
+        mpParserState->getSavedAlternateStates().pop_back();
         m_bDiscardChildren = aState.m_bDiscardChildren;
         m_bTookChoice = aState.m_bTookChoice;
     }
