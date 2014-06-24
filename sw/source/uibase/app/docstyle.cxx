@@ -2301,9 +2301,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         break;
     case SFX_STYLE_FAMILY_PAGE :
         {
-            sal_uInt16 nPos;
-            if (rDoc.FindPageDesc(sName, &nPos))
-                rDoc.DelPageDesc(nPos);
+            rDoc.DelPageDesc(sName);
         }
         break;
 
