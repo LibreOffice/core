@@ -111,7 +111,10 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
-    SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
+
+    // set OK/Cancel - button
+    GetOKButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
+    GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
@@ -122,14 +125,31 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 
     SetInputSet (mpItemSet);
 
+    //loop through the pages and get their max bounds and lock that down
+    ShowPage(RID_SVXPAGE_HYPERLINK_NEWDOCUMENT);
+    VclBox *pBox = get_content_area();
+    Size aMaxPrefSize(pBox->get_preferred_size());
+    ShowPage(RID_SVXPAGE_HYPERLINK_DOCUMENT);
+    Size aSize(pBox->get_preferred_size());
+    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
+    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    ShowPage(RID_SVXPAGE_HYPERLINK_MAIL);
+    aSize = pBox->get_preferred_size();
+    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
+    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    ShowPage(RID_SVXPAGE_HYPERLINK_INTERNET);
+    aSize = pBox->get_preferred_size();
+    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
+    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    pBox->set_width_request(aMaxPrefSize.Width());
+    pBox->set_height_request(aMaxPrefSize.Height());
+
+    SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
+
     // Init Dialog
     Start (false);
 
     pBindings->Update( SID_READONLY_MODE );
-
-    // set OK/Cancel - button
-    GetOKButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
-    GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     GetOKButton().SetClickHdl    ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
     GetCancelButton().SetClickHdl( LINK ( this, SvxHpLinkDlg, ClickCloseHdl_Impl ) );
