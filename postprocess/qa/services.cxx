@@ -38,7 +38,7 @@ public:
 void ServicesTest::test()
 {
     std::vector<OUString> blacklist;
-#if defined WNT
+
     // On Windows, blacklist the com.sun.star.report.ReportDefinition service,
     // as its reportdesign::OReportDefinition implementation (in
     // reportdesign/source/core/api/ReportDefinition.cxx) spawns a thread that
@@ -54,7 +54,6 @@ void ServicesTest::test()
     // ImplBorderWindow::ImplInit -> Window::ImplInit ->
     // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
     blacklist.push_back("com.sun.star.report.ReportDefinition");
-#endif
 
     Reference< XHierarchicalNameAccess > xTypeManager(
             m_xContext->getValueByName(
