@@ -172,7 +172,7 @@ private:
 
 public:
     Binding();
-    virtual ~Binding() throw();
+    virtual ~Binding();
 
 
     // property methods: get/set value

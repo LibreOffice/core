@@ -135,12 +135,10 @@ Binding::Binding() :
     initializePropertySet();
 }
 
-Binding::~Binding() throw()
+Binding::~Binding()
 {
     _setModel(NULL);
 }
-
-
 
 void Binding::_setModel( const Model_t& xModel )
 {
