@@ -1982,7 +1982,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
             if( !pPageDesc )
             {
-                pPageDesc = maPageDescs[ MakePageDesc( rNm ) ];
+                pPageDesc = MakePageDesc(rNm);
             }
             aPageDesc.RegisterToPageDesc( *pPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
@@ -2111,8 +2111,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         if( !pFollow )
         {
             // copy
-            sal_uInt16 nPos = MakePageDesc( rSrcDesc.GetFollow()->GetName() );
-            pFollow = maPageDescs[ nPos ];
+            pFollow = MakePageDesc(rSrcDesc.GetFollow()->GetName());
             CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
         }
         rDstDesc.SetFollow( pFollow );

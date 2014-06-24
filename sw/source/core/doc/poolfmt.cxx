@@ -1480,13 +1480,11 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         const OUString aNm( aResId );
         const bool bIsModified = IsModified();
 
-        sal_uInt16 nPageDescIdx = 0;
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-            nPageDescIdx = MakePageDesc( aNm, 0, bRegardLanguage );
+            pNewPgDsc = MakePageDesc(aNm, 0, bRegardLanguage);
         }
 
-        pNewPgDsc = maPageDescs[ nPageDescIdx ];
         pNewPgDsc->SetPoolFmtId( nId );
         if ( !bIsModified )
         {

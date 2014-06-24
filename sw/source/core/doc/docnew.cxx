@@ -714,8 +714,7 @@ void SwDoc::ClearDoc()
     InitTOXTypes();
 
     // create a dummy pagedesc for the layout
-    sal_uInt16 nDummyPgDsc = MakePageDesc(OUString("?DUMMY?"));
-    SwPageDesc* pDummyPgDsc = maPageDescs[ nDummyPgDsc ];
+    SwPageDesc* pDummyPgDsc = MakePageDesc("?DUMMY?");
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // create the first one over and over again (without attributes/style etc.
@@ -763,8 +762,11 @@ void SwDoc::ClearDoc()
     // Counting of phantoms depends on <IsOldNumbering()>
     mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(IDocumentSettingAccess::OLD_NUMBERING) );
 
-    // remove the dummy pagedec from the array and delete all the old ones
-    maPageDescs.erase( maPageDescs.begin() + nDummyPgDsc );
+    // remove the dummy pagedesc from the array and delete all the old ones
+    sal_uInt16 nDummyPgDsc = 0;
+    if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
+        maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
+
     BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
         delete pPageDesc;
     maPageDescs.clear();

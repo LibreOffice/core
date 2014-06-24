@@ -587,7 +587,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
     SetModified();
 }
 
-sal_uInt16 SwDoc::MakePageDesc( const OUString &rName, const SwPageDesc *pCpy,
+SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
                             bool bRegardLanguage, bool bBroadcast)
 {
     SwPageDesc *pNew;
@@ -629,7 +629,7 @@ sal_uInt16 SwDoc::MakePageDesc( const OUString &rName, const SwPageDesc *pCpy,
     }
 
     SetModified();
-    return (maPageDescs.size()-1);
+    return pNew;
 }
 
 SwPageDesc* SwDoc::FindPageDescByName( const OUString& rName, sal_uInt16* pPos ) const
