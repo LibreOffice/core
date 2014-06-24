@@ -139,7 +139,6 @@ private :
     PushButton              *m_pResetBtn;
 
     VclVBox                 *m_pTabContainer;
-
     const SfxItemSet*       pSet;
     SfxItemSet*             pOutSet;
     SfxItemSet*             pExampleSet;
