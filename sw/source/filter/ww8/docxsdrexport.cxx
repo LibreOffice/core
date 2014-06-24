@@ -1225,6 +1225,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
 
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
+    m_pImpl->m_rExport.mpParentFrame = NULL;
 
     m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);

@@ -537,9 +537,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             // Only top level table position depends on border width
             if (rInfo.nNestLevel == 1)
             {
-                if (!rFrameProperties.hasElements())
-                    rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
-                else
+                // fdo#79541 : The below calculation needs to be done for both floating and
+                // non-floating tables both.
+                rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
+                if (rFrameProperties.hasElements())
                     lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
             }
         }
@@ -1010,6 +1011,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         // If we have a table with a start and an end position, we should make it a floating one.
         if (xTable.is() && xStart.is() && xEnd.is())
         {
+            aFrameProperties.realloc(aFrameProperties.getLength() + 1);
+            beans::PropertyValue aVal;
+            uno::Sequence<beans::PropertyValue> aGrabBag(1);
+
+            aVal.Name = "FloatingTable";
+            aVal.Value <<= uno::Any(true);
+            aGrabBag[0] = aVal;
+            aFrameProperties[aFrameProperties.getLength() - 1].Name = "FrameInteropGrabBag";
+            aFrameProperties[aFrameProperties.getLength() - 1].Value = uno::Any(aGrabBag);
+
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             bool bIsRelative = false;
             xTableProperties->getPropertyValue("IsWidthRelative") >>= bIsRelative;

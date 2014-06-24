@@ -427,6 +427,8 @@ private:
     bool TextBoxIsFramePr(const SwFrmFmt& rFrmFmt);
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
+    bool TextBoxIsFloatingTable(const SwFrmFmt& rFrmFmt);
+    void WriteFloatingTables(std::vector<  boost::shared_ptr <sw::Frame> > aFloatingTableFrame);
 
     void WriteFFData( const FieldInfos& rInfos );
     void WritePendingPlaceholder();
