@@ -2077,6 +2077,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                     break;
                 }
             }
+            break;
             case BASEPROPERTY_MULTILINE:
             {
                 if  (  ( eWinType == WINDOW_FIXEDTEXT )
