@@ -48,7 +48,7 @@ openfile(char* filename)
  * This is called only from openfile() above.
  */
 {
-        register FILE           *fp;
+        FILE           *fp;
 
         if ((fp = fopen(filename, "r")) == NULL) {
 #if OSL_DEBUG_LEVEL > 1
@@ -74,7 +74,7 @@ void addfile(FILE* fp, char* filename)
  * to setup a macro replacement.)
  */
 {
-        register FILEINFO       *file;
+        FILEINFO       *file;
         extern FILEINFO         *getfile( int, char * );
         file = getfile(NBUFF, filename);
         file->fp = fp;                  /* Better remember FILE *       */
@@ -204,15 +204,15 @@ dooptions(int argc, char** argv)
  * It is called only at cpp startup.
  */
 {
-        register char           *ap;
-        register DEFBUF         *dp;
-        register int            c;
-        int                     i, j;
-        char                    *arg;
-        SIZES                   *sizp;          /* For -S               */
-        int                     size;           /* For -S               */
-        int                     isdatum;        /* FALSE for -S*        */
-        int                     endtest;        /* For -S               */
+        char           *ap;
+        DEFBUF         *dp;
+        int            c;
+        int            i, j;
+        char           *arg;
+        SIZES          *sizp;          /* For -S               */
+        int            size;           /* For -S               */
+        int            isdatum;        /* FALSE for -S*        */
+        int            endtest;        /* For -S               */
 
         for (i = j = 1; i < argc; i++) {
             arg = ap = argv[i];
@@ -434,11 +434,11 @@ void initdefines()
  * __LINE__, __FILE__, and __DATE__ are always present.
  */
 {
-        register char           **pp;
-        register char           *tp;
-        register DEFBUF         *dp;
-        int                     i;
-        time_t                  tvec;
+        char           **pp;
+        char           *tp;
+        DEFBUF         *dp;
+        int            i;
+        time_t         tvec;
 
 #if !defined( WNT ) && !defined(G3)
         extern char             *ctime(time_t const *);
@@ -515,7 +515,7 @@ char            **argv;
  *      }
  */
 {
-        register char           *ap;    /* Argument pointer     */
+        char                    *ap;    /* Argument pointer     */
         int                     i;      /* argv[] index         */
         int                     j;      /* Output index         */
         int                     file;   /* File_descriptor      */

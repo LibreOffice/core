@@ -165,10 +165,10 @@ boolean native_win_slashes = FALSE;
 
 int main(int argc, char    **argv)
 {
-    register char   **fp = filelist;
-    register char   **incp = includedirs;
-    register char   *p;
-    register struct inclist *ip;
+    char   **fp = filelist;
+    char   **incp = includedirs;
+    char   *p;
+    struct inclist *ip;
     char    *makefile = NULL;
     struct filepointer  *filecontent;
     struct pair *psymp = predefs;
@@ -475,7 +475,7 @@ int main(int argc, char    **argv)
 struct filepointer *getfile(file)
     char    *file;
 {
-    register int    fd;
+    int    fd;
     struct filepointer  *content;
     struct stat st;
     off_t       size_backup;
@@ -529,18 +529,18 @@ void freefile(fp)
 }
 
 char *copy(str)
-    register char   *str;
+    char   *str;
 {
-    register char   *p = (char *)malloc(strlen(str) + 1);
+    char   *p = (char *)malloc(strlen(str) + 1);
 
     strcpy(p, str);
     return(p);
 }
 
 int match(str, list)
-    register char   *str, **list;
+    char   *str, **list;
 {
-    register int    i;
+    int    i;
 
     for (i=0; *list; i++, list++)
         if (strcmp(str, *list) == 0)
@@ -553,12 +553,12 @@ int match(str, list)
  * is all this program is ever interested in.
  */
 char *get_line(filep)
-    register struct filepointer *filep;
+    struct filepointer *filep;
 {
-    register char   *p, /* walking pointer */
-            *eof,   /* end of file pointer */
-            *bol;   /* beginning of line pointer */
-    register int    lineno; /* line number */
+    char   *p, /* walking pointer */
+           *eof,   /* end of file pointer */
+           *bol;   /* beginning of line pointer */
+    int    lineno; /* line number */
 
     p = filep->f_p;
     eof = filep->f_end;
@@ -599,7 +599,7 @@ char *get_line(filep)
         else if (*p == '\n') {
             lineno++;
             if (*bol == '#') {
-                register char *cp;
+                char *cp;
 
                 *p++ = '\0';
                 /* punt lines with just # (yacc generated) */
@@ -623,9 +623,9 @@ done:
  * It will have objprefix and objsuffix around it.
  */
 char *base_name(file)
-    register char   *file;
+    char   *file;
 {
-    register char   *p;
+    char   *p;
 
     file = copy(file);
     for(p=file+strlen(file); p>file && *p != '.'; p--) ;

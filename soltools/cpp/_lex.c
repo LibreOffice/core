@@ -331,9 +331,9 @@ void
 int
     gettokens(Tokenrow * trp, int reset)
 {
-    register int c, state, oldstate;
-    register uchar *ip;
-    register Token *tp, *maxp;
+    int c, state, oldstate;
+    uchar *ip;
+    Token *tp, *maxp;
     int runelen;
     Source *s = cursource;
     int nmac = 0;

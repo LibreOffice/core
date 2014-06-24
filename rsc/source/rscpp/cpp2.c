@@ -76,10 +76,10 @@ control(int counter)
  * the end of the previous line if cpp is invoked with the -C option.
  */
 {
-        register int            c;
-        register char           *tp;
-        register int            hash;
-        char                    *ep;
+        int            c;
+        char           *tp;
+        int            hash;
+        char           *ep;
 
         c = skipws();
         if (c == '\n' || c == EOF_CHAR)
@@ -319,8 +319,8 @@ void doif(int hash)
  * suppresses unnecessary warnings.
  */
 {
-        register int            c;
-        register int            found;
+        int            c;
+        int            found;
 
         if ((c = skipws()) == '\n' || c == EOF_CHAR) {
             unget();
@@ -370,8 +370,8 @@ void doinclude()
  * This restriction is unnecessary and not implemented.
  */
 {
-        register int            c;
-        register int            delim;
+        int            c;
+        int            delim;
 #if HOST == SYS_VMS
         char                    def_filename[NAM$C_MAXRSS + 1];
 #endif
@@ -434,7 +434,7 @@ openinclude(char* filename, int searchlocal)
  * if openinclude() fails.  No error message is printed.
  */
 {
-        register char           **incptr;
+        char           **incptr;
 #if HOST == SYS_VMS
 #if NFWORK < (NAM$C_MAXRSS + 1)
     << error, NFWORK is not greater than NAM$C_MAXRSS >>
@@ -508,7 +508,7 @@ hasdirectory(char* source, char* result)
  */
 {
 #if HOST == SYS_UNIX
-        register char           *tp;
+        char           *tp;
 
         if ((tp = strrchr(source, '/')) == NULL)
             return (FALSE);
@@ -529,7 +529,7 @@ hasdirectory(char* source, char* result)
         /*
          * Random DEC operating system (RSX, RT11, RSTS/E)
          */
-        register char           *tp;
+        char           *tp;
 
         if ((tp = strrchr(source, ']')) == NULL
          && (tp = strrchr(source, ':')) == NULL)
@@ -569,7 +569,7 @@ char            *result;        /* Size is at least NAM$C_MAXRSS + 1    */
         struct FAB      fab = cc$rms_fab;       /* File access block    */
         struct NAM      nam = cc$rms_nam;       /* File name block      */
         char            fullname[NAM$C_MAXRSS + 1];
-        register char   *rp;                    /* Result pointer       */
+        char            *rp;                    /* Result pointer       */
 
         fab.fab$l_nam = &nam;                   /* fab -> nam           */
         fab.fab$l_fna = source;                 /* Source filename      */

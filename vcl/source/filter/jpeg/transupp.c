@@ -98,8 +98,8 @@ static void lcl_jcopy_block_row (JBLOCKROW input_row, JBLOCKROW output_row, JDIM
 #ifdef FMEMCOPY
   FMEMCOPY(output_row, input_row, num_blocks * (DCTSIZE2 * SIZEOF(JCOEF)));
 #else
-  register JCOEFPTR inptr, outptr;
-  register long count;
+  JCOEFPTR inptr, outptr;
+  long count;
 
   inptr = (JCOEFPTR) input_row;
   outptr = (JCOEFPTR) output_row;

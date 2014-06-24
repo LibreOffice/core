@@ -90,7 +90,7 @@ static int  evalue;         /* Current value from evallex() */
 #ifdef  nomacargs
 FILE_LOCAL int
 isbinary(op)
-register int    op;
+int    op;
 {
     return (op >= FIRST_BINOP && op <= LAST_BINOP);
 }
@@ -209,9 +209,9 @@ eval()
  * if a syntax error is detected.
  */
 {
-    register int    op;     /* Current operator     */
-    register int    *valp;      /* -> value vector      */
-    register OPTAB  *opp;       /* Operator stack       */
+    int    op;     /* Current operator     */
+    int    *valp;      /* -> value vector      */
+    OPTAB  *opp;       /* Operator stack       */
     int     prec;       /* Op precedence        */
     int     binop;      /* Set if binary op. needed */
     int     op1;        /* Operand from stack       */
@@ -371,7 +371,7 @@ evallex(int skip)
  * evalnum  called to evaluate numbers.
  */
 {
-    register int    c, c1, t;
+    int    c, c1, t;
 
 again:  do {                    /* Collect the token    */
         c = skipws();
@@ -488,11 +488,11 @@ dosizeof()
  *  OP_FAIL     bad parse or something.
  */
 {
-    register int    c;
-    register TYPES  *tp;
-    register SIZES  *sizp;
-    register short  *testp;
-    short       typecode;
+    int    c;
+    TYPES  *tp;
+    SIZES  *sizp;
+    short  *testp;
+    short  typecode;
 
     if ((c = skipws()) != '(')
         goto nogood;
@@ -609,9 +609,9 @@ evalnum(int c)
  * the unsigned suffix, but only returns a signed int value.
  */
 {
-    register int    value;
-    register int    base;
-    register int    c1;
+    int    value;
+    int    base;
+    int    c1;
 
     if (c != '0')
         base = 10;
@@ -650,9 +650,9 @@ evalchar(int skip)
  * Get a character constant
  */
 {
-    register int    c;
-    register int    value;
-    register int    count;
+    int    c;
+    int    value;
+    int    count;
 
     instring = TRUE;
     if ((c = cget()) == '\\') {
@@ -754,7 +754,7 @@ evaleval(int* valp, int op, int skip)
  * evaleval() returns the new pointer to the top of the value stack.
  */
 {
-    register int    v1, v2 = 0;
+    int    v1, v2 = 0;
 
     if (isbinary(op))
         v2 = *--valp;
@@ -882,10 +882,10 @@ evaleval(int* valp, int op, int skip)
 
 #ifdef  DEBUG_EVAL
 dumpstack(opstack, opp, value, valp)
-OPTAB       opstack[NEXP];  /* Operand stack        */
-register OPTAB  *opp;       /* Operator stack       */
+OPTAB   opstack[NEXP];  /* Operand stack        */
+OPTAB  *opp;            /* Operator stack       */
 int     value[NEXP];    /* Value stack          */
-register int    *valp;      /* -> value vector      */
+int    *valp;           /* -> value vector      */
 {
     fprintf( pCppOut, "index op prec skip name -- op stack at %s", infile->bptr);
     while (opp > opstack) {

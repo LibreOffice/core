@@ -160,8 +160,8 @@ char            *base_name(char *);
 char            *get_line(struct filepointer *);
 char            *isdefined(char *);
 struct filepointer  *getfile(char *);
-struct inclist *newinclude(register char *newfile,
-                           register char *incstring);
+struct inclist *newinclude(char *newfile,
+                           char *incstring);
 struct inclist      *inc_path(char *, char *, boolean,
                                   struct IncludesCollection *);
 
@@ -173,17 +173,17 @@ void freefile( struct filepointer * fp );
 int find_includes(struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, int recursion, boolean failOK,
     struct IncludesCollection* incCollection, struct symhash *symbols);
-void included_by(register struct inclist *ip,
-    register struct inclist * newfile);
-int cppsetup(register char *line,
-    register struct filepointer *filep, register struct inclist *inc);
+void included_by(struct inclist *ip,
+    struct inclist * newfile);
+int cppsetup(char *line,
+    struct filepointer *filep, struct inclist *inc);
 void add_include(struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, char *include, boolean dot, boolean failOK,
     struct IncludesCollection* incCollection, struct symhash *symbols);
-int match(register char *str, register char **list);
-void recursive_pr_include(register struct inclist *head, register char *file,
-    register char *base);
-void recursive_pr_dummy(register struct inclist *head, register char *file);
+int match(char *str, char **list);
+void recursive_pr_include(struct inclist *head, char *file,
+    char *base);
+void recursive_pr_dummy(struct inclist *head, char *file);
 void inc_clean(void);
 
 void fatalerr(char *, ...);

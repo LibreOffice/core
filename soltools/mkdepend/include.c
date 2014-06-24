@@ -45,11 +45,11 @@ extern char *notdotdot[ ];
 extern boolean show_where_not;
 extern boolean warn_multiple;
 
-struct inclist *inc_path(register char *file, register char *include, boolean dot, struct IncludesCollection* incCollection)
+struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection* incCollection)
 {
     static char path[ BUFSIZ ];
-    register char       **pp, *p;
-    register struct inclist *ip;
+    char   **pp, *p;
+    struct inclist *ip;
     struct stat st;
     boolean found = FALSE;
     (void)dot;
@@ -144,8 +144,8 @@ int exists_path(incCollection, path)
 void remove_dotdot(path)
     char    *path;
 {
-    register char   *end, *from, *to, **cp;
-    char        *components[ MAXFILES ],
+    char    *end, *from, *to, **cp;
+    char    *components[ MAXFILES ],
             newpath[ BUFSIZ ];
     boolean     component_copied;
 
@@ -211,7 +211,7 @@ void remove_dotdot(path)
 }
 
 int isdot(p)
-    register char   *p;
+    char   *p;
 {
     if(p && p[0] == '.' && p[1] == '\0')
         return(TRUE);
@@ -219,7 +219,7 @@ int isdot(p)
 }
 
 int isdotdot(p)
-    register char   *p;
+    char   *p;
 {
     if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
         return(TRUE);
@@ -227,7 +227,7 @@ int isdotdot(p)
 }
 
 int issymbolic(dir, component)
-    register char   *dir, *component;
+    char   *dir, *component;
 {
 #ifdef S_IFLNK
     struct stat st;
@@ -252,9 +252,9 @@ int issymbolic(dir, component)
  * Add an include file to the list of those included by 'file'.
  */
 struct inclist *newinclude(newfile, incstring)
-    register char   *newfile, *incstring;
+    char   *newfile, *incstring;
 {
-    register struct inclist *ip;
+    struct inclist *ip;
 
     /*
      * First, put this file on the global list of include files.
@@ -273,9 +273,9 @@ struct inclist *newinclude(newfile, incstring)
 }
 
 void included_by(ip, newfile)
-    register struct inclist *ip, *newfile;
+    struct inclist *ip, *newfile;
 {
-    register int i;
+    int i;
 
     if (ip == NULL)
         return;
@@ -319,7 +319,7 @@ void included_by(ip, newfile)
 
 void inc_clean (void)
 {
-    register struct inclist *ip;
+    struct inclist *ip;
 
     for (ip = inclist; ip < inclistp; ip++) {
         ip->i_marked = FALSE;
