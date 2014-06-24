@@ -323,31 +323,6 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     return pEntry;
 }
 
-/**********************************************************************
-|
-| Paint-method
-|
-\**********************************************************************/
-
-void IconChoiceDialog::Paint( const Rectangle& rRect )
-{
-    Dialog::Paint ( rRect );
-
-    for ( size_t i = 0; i < maPageList.size(); i++ )
-    {
-        IconChoicePageData* pData = maPageList[ i ];
-
-        if ( pData->nId == mnCurrentPageId )
-        {
-            ShowPageImpl ( pData );
-        }
-        else
-        {
-            HidePageImpl ( pData );
-        }
-    }
-}
-
 void IconChoiceDialog::SetCtrlStyle()
 {
     WinBits aWinBits = WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN | WB_ALIGN_LEFT | WB_NOHSCROLL;
@@ -375,20 +350,26 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
         pData->pPage->Hide();
 }
 
-
-
-void IconChoiceDialog::ShowPage( sal_uInt16 nId )
+void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 {
-    bool bInvalidate = GetCurPageId() != nId;
-    SetCurPageId( nId );
-    ActivatePageImpl( );
-    if(bInvalidate)
-        Invalidate();
+    sal_uInt16 nOldPageId = GetCurPageId();
+    bool bInvalidate = nOldPageId != nId;
+    SetCurPageId(nId);
+    ActivatePageImpl();
+    if (bInvalidate)
+    {
+        IconChoicePageData* pOldData = GetPageData(nOldPageId);
+        if (pOldData && pOldData->pPage)
+        {
+            DeActivatePageImpl();
+            HidePageImpl(pOldData);
+        }
 
-    // IA2 CWS. MT: I guess we want the event now, and not in Paint()?
-    IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
-    if(pData)
-        ShowPageImpl ( pData );
+        Invalidate();
+    }
+    IconChoicePageData* pNewData = GetPageData(nId);
+    if (pNewData && pNewData->pPage)
+        ShowPageImpl(pNewData);
 }
 
 /**********************************************************************
@@ -408,14 +389,7 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 
     if( *pId != mnCurrentPageId )
     {
-        IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
-        if ( pData->pPage )
-            DeActivatePageImpl();
-
-        SetCurPageId ( *pId );
-
-        ActivatePageImpl();
-        Invalidate();
+        ShowPage(*pId);
     }
 
     return 0L;
