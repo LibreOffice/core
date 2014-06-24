@@ -639,9 +639,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32(OUString("MaxFilesizeForRealtimePreview"), 0);
     mpFtEstimatedSize->SetText(OUString(" \n "));
 
-    OUString aTitle(maExt);
-    aTitle += GetText();
-    SetText(aTitle);
+    SetText( GetText().replaceFirst("%1", maExt) );
 
     mnFormat = GetFilterFormat( maExt );
 
