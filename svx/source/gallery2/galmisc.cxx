@@ -47,6 +47,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -95,7 +96,7 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
     if( pIStm )
     {
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL;
+        boost::scoped_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL);
         sal_uInt16              nFormat;
 
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
@@ -103,8 +104,6 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
             rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
             nRet = SGA_IMPORT_FILE;
         }
-
-        delete pProgress;
     }
 
     return nRet;

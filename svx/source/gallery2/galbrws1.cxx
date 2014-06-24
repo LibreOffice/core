@@ -38,6 +38,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // - Namespaces -
 
@@ -361,13 +362,12 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                VclAbstractRefreshableDialog* aActualizeProgress = pFact->CreateActualizeProgressDialog( this, pTheme );
+                boost::scoped_ptr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
                 DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");
 
                 aActualizeProgress->Update();
                 aActualizeProgress->Execute();
                 mpGallery->ReleaseTheme( pTheme, *this );
-                delete aActualizeProgress;
             }
         }
         break;
@@ -386,7 +386,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName );
+            boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldName ));
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
 
             if( aDlg->Execute() == RET_OK )
@@ -409,7 +409,6 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                 }
             }
             mpGallery->ReleaseTheme( pTheme, *this );
-            delete aDlg;
         }
         break;
 
@@ -423,12 +422,11 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGalleryIdDialog* aDlg = pFact->CreateGalleryIdDialog( this, pTheme );
+                    boost::scoped_ptr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog( this, pTheme ));
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
 
                     if( aDlg->Execute() == RET_OK )
                         pTheme->SetId( aDlg->GetId(), true );
-                    delete aDlg;
                 }
             }
 

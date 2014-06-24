@@ -39,6 +39,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -230,8 +231,8 @@ const OUString SgaObject::GetTitle() const
                 !aResourceName.isEmpty() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
                 OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
-                ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
-                            Application::GetSettings().GetUILanguageTag() );
+                boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aMgrName.getStr(),
+                            Application::GetSettings().GetUILanguageTag() ));
                 if ( pResMgr )
                 {
                     ResId aResId( (sal_uInt16)nResId, *pResMgr );
@@ -240,7 +241,6 @@ const OUString SgaObject::GetTitle() const
                     {
                         aReturnValue = aResId.toString();
                     }
-                    delete pResMgr;
                 }
             }
         }

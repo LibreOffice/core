@@ -1600,9 +1600,9 @@ void FmXFormShell::ExecuteSearch()
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractFmSearchDialog* pDialog = NULL;
+    boost::scoped_ptr<AbstractFmSearchDialog> pDialog;
     if ( pFact )
-        pDialog = pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) );
+        pDialog.reset(pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) ));
     DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
     if ( pDialog )
     {
@@ -1610,7 +1610,7 @@ void FmXFormShell::ExecuteSearch()
         pDialog->SetFoundHandler( LINK( this, FmXFormShell, OnFoundData ) );
         pDialog->SetCanceledNotFoundHdl( LINK( this, FmXFormShell, OnCanceledNotFound ) );
         pDialog->Execute();
-        delete pDialog;
+        pDialog.reset();
     }
 
     // GridControls wieder restaurieren
@@ -4101,7 +4101,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
         {
             // We can't simply re-insert the item because we have a clear order for all the our items.
             // So first we have to determine the position of the item to insert.
-            PopupMenu* pSource = FmXFormShell::GetConversionMenu();
+            boost::scoped_ptr<PopupMenu> pSource(FmXFormShell::GetConversionMenu());
             sal_uInt16 nSourcePos = pSource->GetItemPos(nSID);
             DBG_ASSERT(nSourcePos != MENU_ITEM_NOTFOUND, "ControlConversionMenuController::StateChanged : FmXFormShell supplied an invalid menu !");
             sal_uInt16 nPrevInSource = nSourcePos;
@@ -4122,8 +4122,6 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
                 pSource->GetItemBits(nSID), OString(), ++nPrevInConversion);
             m_pConversionMenu->SetItemImage(nSID, pSource->GetItemImage(nSID));
             m_pConversionMenu->SetHelpId(nSID, pSource->GetHelpId(nSID));
-
-            delete pSource;
         }
         m_pMainMenu->EnableItem(SID_FM_CHANGECONTROLTYPE, m_pConversionMenu->GetItemCount() > 0);
     }
