@@ -114,16 +114,14 @@ public:
     /// the maximum size of each tile, also position independent
     Size GetGridMaxSize(const CoordinateSystem eCoordinateSystem);
 
-    Image GetTransitionEffectIcon (void) const;
+    Image GetTransitionEffectIcon (void) const { return maTransitionEffectIcon;}
+    Image GetCustomAnimationEffectIcon (void) const { return maCustomAnimationEffectIcon;}
 
 private:
     Rectangle GetBoundingBox (
         const Point& rPageObjectLocation,
         const Part ePart,
         const CoordinateSystem eCoordinateSystem);
-
-    Image GetTransitionEffectIcon (void) const { return maTransitionEffectIcon;}
-    Image GetCustomAnimationEffectIcon (void) const { return maCustomAnimationEffectIcon;}
 
 private:
     SharedSdWindow mpWindow;

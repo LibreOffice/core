@@ -614,13 +614,6 @@ bool SlideSorterView::SetOrientation (const Layouter::Orientation eOrientation)
         return false;
 }
 
-
-
-
-
-
-
-
 void SlideSorterView::RequestRepaint (void)
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
@@ -978,13 +971,6 @@ bool SlideSorterView::SetState (
         mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));
     return mpPageObjectPainter;
 }
-
-
-
-
-
-
-
 
 //===== SlideSorterView::DrawLock =============================================
 
