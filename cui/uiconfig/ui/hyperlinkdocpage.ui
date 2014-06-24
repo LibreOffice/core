@@ -509,4 +509,15 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="path_label"/>
+      <widget name="subject_label"/>
+      <widget name="target_label"/>
+      <widget name="url_label"/>
+      <widget name="frame_label"/>
+      <widget name="indication_label"/>
+      <widget name="name_label"/>
+    </widgets>
+  </object>
 </interface>
