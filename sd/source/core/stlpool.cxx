@@ -264,14 +264,14 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             sal_uLong nFontSize = 20;
             short nFirstIndent = -600;
 //          sal_uInt16 nIndent = nLevel * 1200;
-            sal_uInt16 nLower = 100;
+            sal_uInt16 nUpper = 100;
 
             switch (nLevel)
             {
                 case 1:
                 {
                     nFontSize = 32;
-                    nLower = 500;
+                    nUpper = 500;
                     nFirstIndent = -900;
                 }
                 break;
@@ -279,7 +279,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 case 2:
                 {
                     nFontSize = 28;
-                    nLower = 400;
+                    nUpper = 400;
                     nFirstIndent = -800;
                 }
                 break;
@@ -287,13 +287,13 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 case 3:
                 {
                     nFontSize = 24;
-                    nLower = 300;
+                    nUpper = 300;
                 }
                 break;
 
                 case 4:
                 {
-                    nLower = 200;
+                    nUpper = 200;
                 }
                 break;
             }
@@ -314,7 +314,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             pSheet->GetItemSet().Put(aSvxLRSpaceItem);
 */
             // Zeilendurchschuss (Abstand nach unten)
-            aSvxULSpaceItem.SetLower(nLower);
+            aSvxULSpaceItem.SetUpper(nUpper);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
 
 /* i35937
