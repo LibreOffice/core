@@ -468,7 +468,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
             {
                 basegfx::B2DVector aFullVec(aStartPos - aEndPos);
                 const basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
-                const basegfx::B2DPoint aCenterLeft(aRange.getMinX(), aRange.getHeight());
+                const basegfx::B2DPoint aCenterLeft(aRange.getMinX(), aCenter.getY());
                 const basegfx::B2DVector aOldVec(aCenterLeft - aTopLeft);
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
