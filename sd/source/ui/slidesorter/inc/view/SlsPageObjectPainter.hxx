@@ -103,6 +103,7 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintCustomAnimationEffect (
+        PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintBorder (

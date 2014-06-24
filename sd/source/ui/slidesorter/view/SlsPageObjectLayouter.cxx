@@ -270,12 +270,6 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     return aSize;
 }
 
-
-
-
-
-
-
 } } } // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
