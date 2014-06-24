@@ -133,11 +133,7 @@ public:
     bool VisitValueDecl(ValueDecl const * decl);
 
 private:
-    bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
-
     bool isInSpecialMainFile(SourceLocation spellingLocation) const;
-
-    bool isInMainFile(SourceLocation spellingLocation) const;
 
     bool isMacroBodyExpansion(SourceLocation location) const;
 
@@ -501,38 +497,10 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
     return true;
 }
 
-bool SalBool::isInUnoIncludeFile(SourceLocation spellingLocation) const {
-    StringRef name {
-        compiler.getSourceManager().getFilename(spellingLocation) };
-    return isInMainFile(spellingLocation)
-        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
-           || name == SRCDIR "/cppuhelper/source/compat.cxx"
-           || name == SRCDIR "/sal/osl/all/compat.cxx")
-        : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/cppu/")
-           || name.startswith(SRCDIR "/include/cppuhelper/")
-           || name.startswith(SRCDIR "/include/osl/")
-           || name.startswith(SRCDIR "/include/rtl/")
-           || name.startswith(SRCDIR "/include/sal/")
-           || name.startswith(SRCDIR "/include/salhelper/")
-           || name.startswith(SRCDIR "/include/systools/")
-           || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/")
-           || name == SRCDIR "/include/comphelper/implbase_var.hxx");
-}
-
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
-    return isInMainFile(spellingLocation)
+    return compat::isInMainFile(spellingLocation)
         && (compiler.getSourceManager().getFilename(spellingLocation)
             == SRCDIR "/cppu/qa/test_any.cxx");
-}
-
-bool SalBool::isInMainFile(SourceLocation spellingLocation) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
-    return compiler.getSourceManager().isInMainFile(spellingLocation);
-#else
-    return compiler.getSourceManager().isFromMainFile(spellingLocation);
-#endif
 }
 
 bool SalBool::isMacroBodyExpansion(SourceLocation location) const {

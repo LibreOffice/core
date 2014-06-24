@@ -34,9 +34,6 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCXXMethodDecl(const CXXMethodDecl * decl);
-private:
-    bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
-    bool isInMainFile(SourceLocation spellingLocation) const;
 };
 
 bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
@@ -116,35 +113,6 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
       << functionDecl->getCanonicalDecl()->getSourceRange();
 
     return true;
-}
-
-bool ReturnByRef::isInUnoIncludeFile(SourceLocation spellingLocation) const {
-    StringRef name {
-        compiler.getSourceManager().getFilename(spellingLocation) };
-    return isInMainFile(spellingLocation)
-        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
-           || name == SRCDIR "/cppuhelper/source/compat.cxx"
-           || name == SRCDIR "/sal/osl/all/compat.cxx")
-        : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/cppu/")
-           || name.startswith(SRCDIR "/include/cppuhelper/")
-           || name.startswith(SRCDIR "/include/osl/")
-           || name.startswith(SRCDIR "/include/rtl/")
-           || name.startswith(SRCDIR "/include/sal/")
-           || name.startswith(SRCDIR "/include/salhelper/")
-           || name.startswith(SRCDIR "/include/systools/")
-           || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/")
-           || name.startswith(SRCDIR "/workdir/")
-           || name == SRCDIR "/include/comphelper/implbase_var.hxx");
-}
-
-bool ReturnByRef::isInMainFile(SourceLocation spellingLocation) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
-    return compiler.getSourceManager().isInMainFile(spellingLocation);
-#else
-    return compiler.getSourceManager().isFromMainFile(spellingLocation);
-#endif
 }
 
 loplugin::Plugin::Registration< ReturnByRef > X("returnbyref");

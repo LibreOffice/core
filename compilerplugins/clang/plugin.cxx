@@ -17,6 +17,7 @@
 #include <clang/Lex/Lexer.h>
 
 #include "pluginhandler.hxx"
+#include "compat.hxx"
 
 /*
 Base classes for plugin actions.
@@ -72,6 +73,28 @@ Stmt* Plugin::parentStmt( Stmt* stmt )
     assert( parents.count( stmt ) == 1 );
     return const_cast< Stmt* >( parents[ stmt ] );
     }
+
+
+bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
+    StringRef name {
+        compiler.getSourceManager().getFilename(spellingLocation) };
+    return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
+           || name == SRCDIR "/cppuhelper/source/compat.cxx"
+           || name == SRCDIR "/sal/osl/all/compat.cxx")
+        : (name.startswith(SRCDIR "/include/com/")
+           || name.startswith(SRCDIR "/include/cppu/")
+           || name.startswith(SRCDIR "/include/cppuhelper/")
+           || name.startswith(SRCDIR "/include/osl/")
+           || name.startswith(SRCDIR "/include/rtl/")
+           || name.startswith(SRCDIR "/include/sal/")
+           || name.startswith(SRCDIR "/include/salhelper/")
+           || name.startswith(SRCDIR "/include/systools/")
+           || name.startswith(SRCDIR "/include/typelib/")
+           || name.startswith(SRCDIR "/include/uno/")
+           || name.startswith(SRCDIR "/workdir/")
+           || name == SRCDIR "/include/comphelper/implbase_var.hxx");
+}
 
 namespace
 {

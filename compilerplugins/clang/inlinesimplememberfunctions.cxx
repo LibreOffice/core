@@ -10,6 +10,7 @@
 #include <string>
 
 #include "plugin.hxx"
+#include "compat.hxx"
 
 // Methods that purely return a local field should be declared in the header and be declared inline.
 // So that the compiler can elide the function call and turn it into a simple fixed-offset-load instruction.
@@ -26,8 +27,6 @@ public:
 
     bool VisitCXXMethodDecl(const CXXMethodDecl * decl);
 private:
-    bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
-    bool isInMainFile(SourceLocation spellingLocation) const;
     bool rewrite(const CXXMethodDecl * functionDecl);
 };
 
@@ -216,35 +215,6 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
     return true;
 }
 
-bool InlineSimpleMemberFunctions::isInUnoIncludeFile(SourceLocation spellingLocation) const {
-    StringRef name {
-        compiler.getSourceManager().getFilename(spellingLocation) };
-    return isInMainFile(spellingLocation)
-        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
-           || name == SRCDIR "/cppuhelper/source/compat.cxx"
-           || name == SRCDIR "/sal/osl/all/compat.cxx")
-        : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/cppu/")
-           || name.startswith(SRCDIR "/include/cppuhelper/")
-           || name.startswith(SRCDIR "/include/osl/")
-           || name.startswith(SRCDIR "/include/rtl/")
-           || name.startswith(SRCDIR "/include/sal/")
-           || name.startswith(SRCDIR "/include/salhelper/")
-           || name.startswith(SRCDIR "/include/systools/")
-           || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/")
-           || name.startswith(SRCDIR "/workdir/")
-           || name == SRCDIR "/include/comphelper/implbase_var.hxx");
-}
-
-bool InlineSimpleMemberFunctions::isInMainFile(SourceLocation spellingLocation) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
-    return compiler.getSourceManager().isInMainFile(spellingLocation);
-#else
-    return compiler.getSourceManager().isFromMainFile(spellingLocation);
-#endif
-}
-
 static std::string ReplaceString(std::string subject, const std::string& search,
                           const std::string& replace) {
     size_t pos = 0;
@@ -264,7 +234,7 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     // definition (in a main file only processed later) to fail
     // with a "mismatch" error before the rewriter had a chance
     // to act upon the definition.
-    if (!isInMainFile(
+    if (!compat::isInMainFile( compiler.getSourceManager(),
                compiler.getSourceManager().getSpellingLoc(
                    functionDecl->getNameInfo().getLoc()))) {
         return false;
