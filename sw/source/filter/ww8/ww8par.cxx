@@ -4506,24 +4506,6 @@ void wwSectionManager::InsertSegments()
             aSectPaM.GetPoint()->nContent.Assign(
                 aSectPaM.GetCntntNode(), 0);
 
-            // End getting the bounds of this section, quite a job eh?
-            SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
-            // The last section if continous is always unbalanced
-            if (pRet)
-            {
-                // Set the columns to be UnBalanced if that compatability option is set
-                if (mrReader.pWDop->fNoColumnBalance)
-                    pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
-                else
-                {
-                    // Otherwise set to unbalanced if the following section is
-                    // not continuous, (which also means that the last section
-                    // is unbalanced)
-                    if (aNext == aEnd || !aNext->IsContinuous())
-                        pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
-                }
-            }
-
             bool bHasOwnHdFt = false;
             /*
              In this nightmare scenario the continuous section has its own
@@ -4569,6 +4551,25 @@ void wwSectionManager::InsertSegments()
                     aIter->mpPage = pOrig;
                 }
             }
+
+            // End getting the bounds of this section, quite a job eh?
+            SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
+            // The last section if continous is always unbalanced
+            if (pRet)
+            {
+                // Set the columns to be UnBalanced if that compatability option is set
+                if (mrReader.pWDop->fNoColumnBalance)
+                    pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
+                else
+                {
+                    // Otherwise set to unbalanced if the following section is
+                    // not continuous, (which also means that the last section
+                    // is unbalanced)
+                    if (aNext == aEnd || !aNext->IsContinuous())
+                        pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
+                }
+            }
+
         }
 
         if (pTxtNd)
