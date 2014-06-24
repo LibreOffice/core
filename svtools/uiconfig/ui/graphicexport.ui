@@ -23,7 +23,7 @@
   <object class="GtkDialog" id="GraphicExportDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes"> Options</property>
+    <property name="title" translatable="yes">%1 Options</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
