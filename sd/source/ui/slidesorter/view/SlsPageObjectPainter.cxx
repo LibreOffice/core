@@ -313,19 +313,20 @@ void PageObjectPainter::PaintCustomAnimationEffect (
     EffectSequence::iterator aEnd = aMainSequence->getEnd();
     if ( aIter != aEnd )
     {
-        const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+        const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::CustomAnimationEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
         rDevice.DrawBitmapEx(
             aBox.TopCenter(),
-            mpPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmapEx());
+            pPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmapEx());
     }
 }
 
-Bitmap& PageObjectPainter::GetBackgroundForState (
-    const model::SharedPageDescriptor& rpDescriptor,
-    const OutputDevice& rReferenceDevice)
+void PageObjectPainter::PaintBackgroundDetail(
+        PageObjectLayouter *pPageObjectLayouter,
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const
 {
     enum State { None = 0x00, Selected = 0x01, MouseOver = 0x02, Focused = 0x04 };
     const int eState =
@@ -344,12 +345,6 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
             break;
 
         case MouseOver | Selected:
-            return GetBackground(
-                maMouseOverSelectedBackground,
-                Theme::Gradient_MouseOverSelected,
-                rReferenceDevice,
-                false);
-
         case MouseOver:
             eColorType = Theme::Gradient_MouseOverPage;
             bHasFocusBorder = false;

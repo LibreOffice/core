@@ -522,6 +522,11 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 ))
 endif # ENABLE_AVAHI=TRUE
 
+$(eval $(call gb_Library_add_exception_objects,sd,\
+	sd/source/ui/remotecontrol/DiscoveryService \
+))
+
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
