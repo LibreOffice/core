@@ -108,6 +108,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, IconChoiceDialog* 
     get(m_pBtCreate, "create");
     m_pBtCreate->SetModeImage(Image(CUI_RES(RID_SVXBMP_NEWDOC)));
     get(m_pLbDocTypes, "types");
+    m_pLbDocTypes->set_height_request(m_pLbDocTypes->GetTextHeight() * 5);
 
     // Set HC bitmaps and disable display of bitmap names.
     m_pBtCreate->EnableTextDisplay (false);
