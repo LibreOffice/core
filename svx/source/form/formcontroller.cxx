@@ -308,7 +308,7 @@ namespace
     bool lcl_isBoundTo( const Reference< XPropertySet >& _rxControlModel, const Reference< XInterface >& _rxNormDBField )
     {
         Reference< XInterface > xNormBoundField( _rxControlModel->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY );
-        return ( xNormBoundField.get() == _rxNormDBField.get() );
+        return ( xNormBoundField == _rxNormDBField );
     }
 
     bool lcl_isInputRequired( const Reference< XPropertySet >& _rxControlModel )
