@@ -12638,12 +12638,12 @@ ONEDRIVE_CLIENT_ID="\"$with_onedrive_client_id\""
 ONEDRIVE_CLIENT_SECRET="\"$with_onedrive_client_secret\""
 if test "$with_onedrive_client_id" = "no" -o -z "$with_onedrive_client_id"; then
 #    ONEDRIVE_CLIENT_ID="\"\""
-    ONEDRIVE_CLIENT_ID="00000000441136A5"
+    ONEDRIVE_CLIENT_ID="\"00000000441136A5\""
 fi
 
 if test "$with_onedrive_client_secret" = "no" -o -z "$with_onedrive_client_secret"; then
 #    ONEDRIVE_CLIENT_SECRET="\"\""
-    ONEDRIVE_CLIENT_SECRET="280mTUglE4C5vbdNOoQAhNrWD5XyqBEV"
+    ONEDRIVE_CLIENT_SECRET="\"280mTUglE4C5vbdNOoQAhNrWD5XyqBEV\""
 fi
 
 if test -z "$ONEDRIVE_CLIENT_ID" -o -z "$ONEDRIVE_CLIENT_SECRET"; then
