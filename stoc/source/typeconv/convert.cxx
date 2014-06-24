@@ -398,7 +398,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
                 "invalid STRING value!",
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
-        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
+        nRet = fVal;
         if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
             return nRet;
         throw CannotConvertException(
