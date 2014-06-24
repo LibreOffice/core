@@ -118,7 +118,7 @@ char    *directives[] = {
 void redirect(char * line, char * makefile );
 
 struct  inclist inclist[ MAXFILES ],
-        *inclistp = inclist;
+                *inclistp = inclist;
 
 struct symhash *maininclist = NULL;
 
@@ -472,8 +472,7 @@ int main(int argc, char    **argv)
     exit(0);
 }
 
-struct filepointer *getfile(file)
-    char    *file;
+struct filepointer *getfile(char *file)
 {
     int    fd;
     struct filepointer  *content;
@@ -521,15 +520,13 @@ struct filepointer *getfile(file)
     return(content);
 }
 
-void freefile(fp)
-    struct filepointer  *fp;
+void freefile(struct filepointer *fp)
 {
     free(fp->f_base);
     free(fp);
 }
 
-char *copy(str)
-    char   *str;
+char *copy(char *str)
 {
     char   *p = (char *)malloc(strlen(str) + 1);
 
@@ -537,8 +534,7 @@ char *copy(str)
     return(p);
 }
 
-int match(str, list)
-    char   *str, **list;
+int match(char *str, char **list)
 {
     int    i;
 
@@ -552,8 +548,7 @@ int match(str, list)
  * Get the next line.  We only return lines beginning with '#' since that
  * is all this program is ever interested in.
  */
-char *get_line(filep)
-    struct filepointer *filep;
+char *get_line(struct filepointer *filep)
 {
     char   *p, /* walking pointer */
            *eof,   /* end of file pointer */
@@ -622,8 +617,7 @@ done:
  * Strip the file name down to what we want to see in the Makefile.
  * It will have objprefix and objsuffix around it.
  */
-char *base_name(file)
-    char   *file;
+char *base_name(char *file)
 {
     char   *p;
 
@@ -644,8 +638,7 @@ char *base_name(file)
 }
 
 #if defined(USG) && !defined(CRAY) && !defined(SVR4)
-int rename (from, to)
-    char *from, *to;
+int rename (char *from, char *to)
 {
     (void) unlink (to);
     if (link (from, to) == 0) {
@@ -657,9 +650,7 @@ int rename (from, to)
 }
 #endif /* USGISH */
 
-void redirect(line, makefile)
-    char    *line,
-        *makefile;
+void redirect(char *line, char *makefile)
 {
     FILE    *fdout;
     fdout = freopen(makefile, "wb", stdout); // binary mode please
@@ -771,8 +762,7 @@ void warning1(char *msg, ...)
 #endif /* DEBUG_MKDEPEND */
 }
 
-void convert_slashes(path)
-    char* path;
+void convert_slashes(char *path)
 {
 #if defined (WNT)
     /*
@@ -793,8 +783,7 @@ void convert_slashes(path)
 #endif
 }
 
-char* append_slash(path)
-    char* path;
+char* append_slash(char *path)
 {
     char *new_string;
     if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\')) {

@@ -162,10 +162,10 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
     return(-1);
 }
 
-int gobble(filep, file, file_red, symbols)
-    struct filepointer *filep;
-    struct inclist      *file, *file_red;
-    struct symhash      *symbols;
+int gobble(struct filepointer *filep,
+           struct inclist *file,
+           struct inclist *file_red,
+           struct symhash *symbols)
 {
     char   *line;
     int    type;
@@ -216,12 +216,7 @@ int gobble(filep, file, file_red, symbols)
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (line, filep, file_red, file, parse_it, symbols)
-    char   *line;
-    struct filepointer *filep;
-    struct inclist *file_red, *file;
-    int parse_it;
-    struct symhash  *symbols;
+int deftype (char *line, struct filepointer *filep, struct inclist *file_red, struct inclist *file, int parse_it, struct symhash *symbols)
 {
     char   *p;
     char    *directive, savechar;
@@ -251,7 +246,7 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
     if (ret == ELIF && !parse_it)
     {
         while (*p == ' ' || *p == '\t')
-        p++;
+            p++;
         /*
          * parse an expression.
          */
@@ -260,16 +255,16 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
         ret = zero_value(p, filep, file_red, symbols);
         if (ret != IF)
         {
-        debug(0,("false...\n"));
-        if (ret == IFFALSE)
-            return(ELIFFALSE);
-        else
-            return(ELIFGUESSFALSE);
-        }
+          debug(0,("false...\n"));
+          if (ret == IFFALSE)
+              return(ELIFFALSE);
+          else
+              return(ELIFGUESSFALSE);
+          }
         else
         {
-        debug(0,("true...\n"));
-        return(ELIF);
+          debug(0,("true...\n"));
+          return(ELIF);
         }
     }
 
@@ -368,8 +363,7 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
  */
 struct symhash *global_symbols = NULL;
 
-char * isdefined( symbol )
-    char *symbol;
+char * isdefined( char *symbol )
 {
     return hash_lookup( symbol, global_symbols );
 }
@@ -377,11 +371,7 @@ char * isdefined( symbol )
 /*
  * Return type based on if the #if expression evaluates to 0
  */
-int zero_value(exp, filep, file_red, symbols)
-    char   *exp;
-    struct filepointer *filep;
-    struct inclist *file_red;
-    struct symhash *symbols;
+int zero_value(char *exp, struct filepointer *filep, struct inclist *file_red, struct symhash *symbols)
 {
     global_symbols = symbols; /* HACK! see above */
     if (cppsetup(exp, filep, file_red))
@@ -390,9 +380,7 @@ int zero_value(exp, filep, file_red, symbols)
         return(IF);
 }
 
-void define( def, symbols )
-    char            *def;
-    struct symhash **symbols;
+void define( char *def, struct symhash **symbols )
 {
     char *val;
 
@@ -423,8 +411,7 @@ static int hash( char *str )
     return hashval & ( SYMHASHMEMBERS - 1 );
 }
 
-struct symhash *hash_copy( symbols )
-    struct symhash *symbols;
+struct symhash *hash_copy( struct symhash *symbols )
 {
     int i;
     struct symhash *newsym;
@@ -459,8 +446,7 @@ struct symhash *hash_copy( symbols )
     return newsym;
 }
 
-void hash_free( symbols )
-    struct symhash *symbols;
+void hash_free( struct symhash *symbols )
 {
     int i;
 
@@ -481,9 +467,7 @@ void hash_free( symbols )
     free( symbols->s_pairs );
 }
 
-void hash_define( name, val, symbols )
-    char            *name, *val;
-    struct symhash **symbols;
+void hash_define( char *name, char *val, struct symhash **symbols )
 {
     int hashval;
     struct pair *it;
@@ -537,9 +521,7 @@ void hash_define( name, val, symbols )
     }
 }
 
-char *hash_lookup( symbol, symbols )
-    char           *symbol;
-    struct symhash *symbols;
+char *hash_lookup( char *symbol, struct symhash *symbols )
 {
     struct pair *it;
 
@@ -558,9 +540,7 @@ char *hash_lookup( symbol, symbols )
     return NULL;
 }
 
-void hash_undefine( symbol, symbols )
-    char           *symbol;
-    struct symhash *symbols;
+void hash_undefine( char *symbol, struct symhash *symbols )
 {
     int hashval;
     struct pair *it;
