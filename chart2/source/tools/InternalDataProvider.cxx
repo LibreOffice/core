@@ -411,7 +411,7 @@ InternalDataProvider::InternalDataProvider( const InternalDataProvider & rOther 
 InternalDataProvider::~InternalDataProvider()
 {}
 
-void InternalDataProvider::lcl_addDataSequenceToMap(
+void InternalDataProvider::addDataSequenceToMap(
     const OUString & rRangeRepresentation,
     const Reference< chart2::data::XDataSequence > & xSequence )
 {
@@ -421,7 +421,7 @@ void InternalDataProvider::lcl_addDataSequenceToMap(
             uno::WeakReference< chart2::data::XDataSequence >( xSequence )));
 }
 
-void InternalDataProvider::lcl_deleteMapReferences( const OUString & rRangeRepresentation )
+void InternalDataProvider::deleteMapReferences( const OUString & rRangeRepresentation )
 {
     // set sequence to deleted by setting its range to an empty string
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( rRangeRepresentation ));
@@ -439,7 +439,7 @@ void InternalDataProvider::lcl_deleteMapReferences( const OUString & rRangeRepre
     m_aSequenceMap.erase( aRange.first, aRange.second );
 }
 
-void InternalDataProvider::lcl_adaptMapReferences(
+void InternalDataProvider::adaptMapReferences(
     const OUString & rOldRangeRepresentation,
     const OUString & rNewRangeRepresentation )
 {
@@ -464,31 +464,31 @@ void InternalDataProvider::lcl_adaptMapReferences(
                                   m_aSequenceMap.upper_bound( rNewRangeRepresentation )));
 }
 
-void InternalDataProvider::lcl_increaseMapReferences(
+void InternalDataProvider::increaseMapReferences(
     sal_Int32 nBegin, sal_Int32 nEnd )
 {
     for( sal_Int32 nIndex = nEnd - 1; nIndex >= nBegin; --nIndex )
     {
-        lcl_adaptMapReferences( OUString::number( nIndex ),
+        adaptMapReferences( OUString::number( nIndex ),
                             OUString::number( nIndex + 1 ));
-        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
+        adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
                             lcl_aLabelRangePrefix + OUString::number( nIndex + 1 ));
     }
 }
 
-void InternalDataProvider::lcl_decreaseMapReferences(
+void InternalDataProvider::decreaseMapReferences(
     sal_Int32 nBegin, sal_Int32 nEnd )
 {
     for( sal_Int32 nIndex = nBegin; nIndex < nEnd; ++nIndex )
     {
-        lcl_adaptMapReferences( OUString::number( nIndex ),
+        adaptMapReferences( OUString::number( nIndex ),
                             OUString::number( nIndex - 1 ));
-        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
+        adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
                             lcl_aLabelRangePrefix + OUString::number( nIndex - 1 ));
     }
 }
 
-Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSequenceAndAddToMap(
+Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
     OUString aRangeRepresentation = rRangeRepresentation;
@@ -563,17 +563,17 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
 
     Reference< chart2::data::XDataSequence > xSeq(
         new UncachedDataSequence( this, aRangeRepresentation ));
-    lcl_addDataSequenceToMap( aRangeRepresentation, xSeq );
+    addDataSequenceToMap( aRangeRepresentation, xSeq );
     return xSeq;
 }
 
-Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSequenceAndAddToMap(
+Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation,
     const OUString & rRole )
 {
     Reference< chart2::data::XDataSequence > xSeq(
         new UncachedDataSequence( this, rRangeRepresentation, rRole ));
-    lcl_addDataSequenceToMap( rRangeRepresentation, xSeq );
+    addDataSequenceToMap( rRangeRepresentation, xSeq );
     return xSeq;
 }
 
@@ -653,7 +653,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     // categories
     if( bHasCategories )
         aResultLSeqVec.push_back(
-            new LabeledDataSequence( lcl_createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName ) ) );
+            new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName ) ) );
 
     // data with labels
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;
@@ -662,8 +662,8 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     {
         aDataVec.push_back(
             new LabeledDataSequence(
-                lcl_createDataSequenceAndAddToMap( OUString::number( nIdx )),
-                lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIdx ))));
+                createDataSequenceAndAddToMap( OUString::number( nIdx )),
+                createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIdx ))));
     }
 
     // attention: this data provider has the limitation that it stores
@@ -740,25 +740,25 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
         OSL_ASSERT( aRangeRepresentation.equals( lcl_aCategoriesRangeName ) );//it is not expected nor implmented that only parts of the categories are really requested
 
         // categories
-        return lcl_createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName );
+        return createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName );
     }
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
         // label
         sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
-        return lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIndex ));
+        return createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIndex ));
     }
     else if ( aRangeRepresentation == "last" )
     {
         sal_Int32 nIndex = (m_bDataInColumns
                             ? m_aInternalData.getColumnCount()
                             : m_aInternalData.getRowCount()) - 1;
-        return lcl_createDataSequenceAndAddToMap( OUString::number( nIndex ));
+        return createDataSequenceAndAddToMap( OUString::number( nIndex ));
     }
     else if( !aRangeRepresentation.isEmpty())
     {
         // data
-        return lcl_createDataSequenceAndAddToMap( aRangeRepresentation );
+        return createDataSequenceAndAddToMap( aRangeRepresentation );
     }
 
     return Reference< chart2::data::XDataSequence >();
@@ -941,12 +941,12 @@ void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
 {
     if( m_bDataInColumns )
     {
-        lcl_increaseMapReferences( nAfterIndex + 1, m_aInternalData.getColumnCount());
+        increaseMapReferences( nAfterIndex + 1, m_aInternalData.getColumnCount());
         m_aInternalData.insertColumn( nAfterIndex );
     }
     else
     {
-        lcl_increaseMapReferences( nAfterIndex + 1, m_aInternalData.getRowCount());
+        increaseMapReferences( nAfterIndex + 1, m_aInternalData.getRowCount());
         m_aInternalData.insertRow( nAfterIndex );
     }
 }
@@ -954,16 +954,16 @@ void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
 void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
     throw (uno::RuntimeException, std::exception)
 {
-    lcl_deleteMapReferences( OUString::number( nAtIndex ));
-    lcl_deleteMapReferences( lcl_aLabelRangePrefix + OUString::number( nAtIndex ));
+    deleteMapReferences( OUString::number( nAtIndex ));
+    deleteMapReferences( lcl_aLabelRangePrefix + OUString::number( nAtIndex ));
     if( m_bDataInColumns )
     {
-        lcl_decreaseMapReferences( nAtIndex + 1, m_aInternalData.getColumnCount());
+        decreaseMapReferences( nAtIndex + 1, m_aInternalData.getColumnCount());
         m_aInternalData.deleteColumn( nAtIndex );
     }
     else
     {
-        lcl_decreaseMapReferences( nAtIndex + 1, m_aInternalData.getRowCount());
+        decreaseMapReferences( nAtIndex + 1, m_aInternalData.getRowCount());
         m_aInternalData.deleteRow( nAtIndex );
     }
 }
@@ -1084,7 +1084,7 @@ void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Refere
     throw (uno::RuntimeException, std::exception)
 {
     if( xSeq.is())
-        lcl_addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
+        addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
 }
 
 // ____ XRangeXMLConversion ____

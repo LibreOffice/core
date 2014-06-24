@@ -217,27 +217,27 @@ public:
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
 private:
-    void lcl_addDataSequenceToMap(
+    void addDataSequenceToMap(
         const OUString & rRangeRepresentation,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSequence );
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        lcl_createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
+        createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
                                        const OUString & rRole );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        lcl_createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
+        createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
 
-    void lcl_deleteMapReferences( const OUString & rRangeRepresentation );
+    void deleteMapReferences( const OUString & rRangeRepresentation );
 
-    void lcl_adaptMapReferences(
+    void adaptMapReferences(
         const OUString & rOldRangeRepresentation,
         const OUString & rNewRangeRepresentation );
 
-    void lcl_increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
-    void lcl_decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
+    void increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
+    void decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
 
     typedef ::std::multimap< OUString,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::chart2::data::XDataSequence > >
