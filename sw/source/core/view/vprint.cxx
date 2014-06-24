@@ -372,7 +372,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     OSL_ENSURE( pPage, "no page found!" );
 
     // get page descriptor - fall back to the first one if pPage could not be found
-    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
+    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDesc(
         pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr && pActCrsr->HasMark() )
