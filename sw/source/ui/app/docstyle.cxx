@@ -229,7 +229,7 @@ static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
 
     if( rName.Len() )
     {
-        pDesc = rDoc.FindPageDescByName( rName );
+        pDesc = rDoc.FindPageDesc(rName);
         if( !pDesc && bCreate )
         {
             sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
@@ -453,7 +453,7 @@ void SwDocStyleSheet::SetHidden( sal_Bool bValue )
 
         case SFX_STYLE_FAMILY_PAGE:
             {
-                SwPageDesc* pPgDesc = rDoc.FindPageDescByName( aName );
+                SwPageDesc* pPgDesc = rDoc.FindPageDesc(aName);
                 if ( pPgDesc )
                 {
                     pPgDesc->SetHidden( bValue );
@@ -509,7 +509,7 @@ sal_Bool SwDocStyleSheet::IsHidden( ) const
 
         case SFX_STYLE_FAMILY_PAGE:
             {
-                SwPageDesc* pPgDesc = rDoc.FindPageDescByName( aName );
+                SwPageDesc* pPgDesc = rDoc.FindPageDesc(aName);
                 bRet = pPgDesc && pPgDesc->IsHidden( );
             }
             break;
@@ -1004,8 +1004,7 @@ bool   SwDocStyleSheet::SetFollow( const String& rStr)
                                             ? lcl_FindPageDesc(rDoc, rStr)
                                             : 0;
             sal_uInt16 nId;
-            if( pFollowDesc != pDesc->GetFollow() &&
-                rDoc.FindPageDescByName( pDesc->GetName(), &nId ) )
+            if (pFollowDesc != pDesc->GetFollow() && rDoc.FindPageDesc(pDesc->GetName(), &nId))
             {
                 SwPageDesc aDesc( *pDesc );
                 aDesc.SetFollow( pFollowDesc );
@@ -1304,7 +1303,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             {
                 OSL_ENSURE(pDesc, "Where's PageDescriptor");
 
-                if( rDoc.FindPageDescByName( pDesc->GetName(), &nPgDscPos ))
+                if (rDoc.FindPageDesc(pDesc->GetName(), &nPgDscPos))
                 {
                     pNewDsc = new SwPageDesc( *pDesc );
                     // #i48949# - no undo actions for the
@@ -2145,7 +2144,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
                 pSourceFmt = &((SwDocStyleSheet&)rSource).GetPageDesc()
                                 ->GetMaster();
             {
-                SwPageDesc *pDesc = rDoc.FindPageDescByName(
+                SwPageDesc *pDesc = rDoc.FindPageDesc(
                     ((SwDocStyleSheet&)rTarget).GetPageDesc()->GetName(),
                     &nPgDscPos );
 
@@ -2223,8 +2222,8 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
     case SFX_STYLE_FAMILY_PAGE :
         {
             sal_uInt16 nPos;
-            if( rDoc.FindPageDescByName( rName, &nPos ))
-                rDoc.DelPageDesc( nPos );
+            if (rDoc.FindPageDesc(rName, &nPos))
+                rDoc.DelPageDesc(nPos);
         }
         break;
 
@@ -2846,7 +2845,7 @@ void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<String>& rLis
             case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
                 {
                     bUsed = rDoc.IsPoolPageDescUsed( nId );
-                    SwPageDesc* pPgDesc = rDoc.FindPageDescByName( rList[i] );
+                    SwPageDesc* pPgDesc = rDoc.FindPageDesc(rList[i]);
                     bHidden = pPgDesc && pPgDesc->IsHidden( );
                 }
                 break;

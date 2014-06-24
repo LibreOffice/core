@@ -630,9 +630,9 @@ SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     return pNew;
 }
 
-SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) const
+SwPageDesc* SwDoc::FindPageDesc( const String& rName, sal_uInt16* pPos ) const
 {
-    SwPageDesc* pRet = 0;
+    SwPageDesc* pRet = NULL;
     if( pPos ) *pPos = USHRT_MAX;
 
     for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
@@ -838,33 +838,9 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
-{
-    bool bResult = false;
-    sal_uInt16 nI;
-    for (nI = 0; nI < maPageDescs.size(); nI++)
-    {
-        if (maPageDescs[nI]->GetName() == rName)
-        {
-            *pFound = nI;
-            bResult = true;
-            break;
-        }
-    }
-
-    return bResult;
-}
-
 SwPageDesc * SwDoc::GetPageDesc( const String & rName )
 {
-    SwPageDesc * aResult = NULL;
-
-    sal_uInt16 nI;
-
-    if (FindPageDesc(rName, &nI))
-        aResult = maPageDescs[nI];
-
-    return aResult;
+    return FindPageDesc(rName);
 }
 
 void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
