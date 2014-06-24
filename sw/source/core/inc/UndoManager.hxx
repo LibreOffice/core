@@ -23,6 +23,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <boost/shared_ptr.hpp>
 #include <svx/sdrundomanager.hxx>
+#include <ndarr.hxx>
 
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
@@ -83,6 +84,8 @@ public:
 
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
+
+    void dumpAsXml(xmlTextWriterPtr w);
 
 private:
     IDocumentDrawModelAccess & m_rDrawModelAccess;
