@@ -112,6 +112,7 @@ Content::Content(
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( false ),
+  m_bLocked( false ),
   m_bCollection( false ),
   m_bDidGetOrHead( false )
 {
@@ -144,6 +145,7 @@ Content::Content(
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( true ),
+  m_bLocked( false ),
   m_bCollection( isCollection ),
   m_bDidGetOrHead( false )
 {
@@ -164,6 +166,8 @@ Content::Content(
 // virtual
 Content::~Content()
 {
+    if (m_bLocked)
+        unlock(uno::Reference< ucb::XCommandEnvironment >());
 }
 
 
@@ -2818,6 +2822,7 @@ void Content::lock(
             uno::Sequence< OUString >() );
 
         xResAccess->LOCK( aLock, Environment );
+        m_bLocked = true;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2847,6 +2852,7 @@ void Content::unlock(
         }
 
         xResAccess->UNLOCK( Environment );
+        m_bLocked = false;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
