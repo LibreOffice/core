@@ -872,7 +872,7 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
     if( pNPWin->width == 0 || pNPWin->height == 0 || [rPlugData.m_pPlugView isHiddenOrHasHiddenAncestor] )
         rPlugData.m_bSetWindowOnDraw = true;
 
-    NPError nErr = NPP_SetWindow( &i_pImpl->getNPPInstance(), i_pImpl->getNPWindow() );
+    NPError nErr = NPP_SetWindow( &i_pImpl->getNPPInstance(), &i_pImpl->getNPWindow() );
 
     return nErr;
 }
