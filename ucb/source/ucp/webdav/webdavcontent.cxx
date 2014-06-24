@@ -1492,8 +1492,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     }
                     catch ( DAVException const & e )
                     {
-                        bNetworkAccessAllowed
-                            = shouldAccessNetworkAfterException( e );
+                        bNetworkAccessAllowed = bNetworkAccessAllowed &&
+                            shouldAccessNetworkAfterException( e );
 
                         if ( !bNetworkAccessAllowed )
                         {
@@ -3367,71 +3367,78 @@ const Content::ResourceType & Content::getResourceType(
                     bool * networkAccessAllowed )
     throw ( uno::Exception )
 {
-    if ( m_eResourceType == UNKNOWN )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        ResourceType eResourceType = UNKNOWN;
-
-        try
-        {
-            // Try to fetch some frequently used property value, e.g. those
-            // used when loading documents... along with identifying whether
-            // this is a DAV resource.
-            std::vector< DAVResource > resources;
-            std::vector< OUString > aPropNames;
-            uno::Sequence< beans::Property > aProperties( 5 );
-            aProperties[ 0 ].Name
-                = OUString::createFromAscii( "IsFolder" );
-            aProperties[ 1 ].Name
-                = OUString::createFromAscii( "IsDocument" );
-            aProperties[ 2 ].Name
-                = OUString::createFromAscii( "IsReadOnly" );
-            aProperties[ 3 ].Name
-                = OUString::createFromAscii( "MediaType" );
-            aProperties[ 4 ].Name
-                = DAVProperties::SUPPORTEDLOCK;
-
-            ContentProperties::UCBNamesToDAVNames(
-                aProperties, aPropNames );
-
-            rResAccess->PROPFIND(
-                DAVZERO, aPropNames, resources, xEnv );
-
-            // TODO - is this really only one?
-            if ( resources.size() == 1 )
-            {
-                m_xCachedProps.reset(
-                    new CachableContentProperties( resources[ 0 ] ) );
-                m_xCachedProps->containsAllNames(
-                    aProperties, m_aFailedPropNames );
-            }
-
-            eResourceType = DAV;
+        osl::MutexGuard g(m_aMutex);
+        if (m_eResourceType != UNKNOWN) {
+            return m_eResourceType;
         }
-        catch ( DAVException const & e )
+    }
+
+    ResourceType eResourceType = UNKNOWN;
+
+    try
+    {
+        // Try to fetch some frequently used property value, e.g. those
+        // used when loading documents... along with identifying whether
+        // this is a DAV resource.
+        std::vector< DAVResource > resources;
+        std::vector< OUString > aPropNames;
+        uno::Sequence< beans::Property > aProperties( 5 );
+        aProperties[ 0 ].Name = "IsFolder";
+        aProperties[ 1 ].Name = "IsDocument";
+        aProperties[ 2 ].Name = "IsReadOnly";
+        aProperties[ 3 ].Name = "MediaType";
+        aProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
+
+        ContentProperties::UCBNamesToDAVNames(
+            aProperties, aPropNames );
+
+        rResAccess->PROPFIND(
+            DAVZERO, aPropNames, resources, xEnv );
+
+        // TODO - is this really only one?
+        if ( resources.size() == 1 )
         {
-            rResAccess->resetUri();
-
-            if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
-            {
-                // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
-                // resource is NON_DAV
-                eResourceType = NON_DAV;
-            }
-            else if (networkAccessAllowed != 0)
-            {
-                *networkAccessAllowed = *networkAccessAllowed
-                    && shouldAccessNetworkAfterException(e);
-            }
-
-            // cancel command execution is case that no user authentication data has been provided.
-            if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
-            {
-                cancelCommandExecution( e, uno::Reference< ucb::XCommandEnvironment >() );
-            }
+            osl::MutexGuard g(m_aMutex);
+            m_xCachedProps.reset(
+                new CachableContentProperties( resources[ 0 ] ) );
+            m_xCachedProps->containsAllNames(
+                aProperties, m_aFailedPropNames );
         }
+
+        eResourceType = DAV;
+    }
+    catch ( DAVException const & e )
+    {
+        rResAccess->resetUri();
+
+        if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
+        {
+            // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
+            // resource is NON_DAV
+            eResourceType = NON_DAV;
+        }
+        else if (networkAccessAllowed != 0)
+        {
+            *networkAccessAllowed = *networkAccessAllowed
+                && shouldAccessNetworkAfterException(e);
+        }
+
+        // cancel command execution is case that no user authentication data has been provided.
+        if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
+        {
+            cancelCommandExecution( e, uno::Reference< ucb::XCommandEnvironment >() );
+        }
+    }
+
+    osl::MutexGuard g(m_aMutex);
+    if (m_eResourceType == UNKNOWN) {
         m_eResourceType = eResourceType;
+    } else {
+        SAL_WARN_IF(
+            eResourceType != m_eResourceType, "ucb.ucp.webdav",
+            "different resource types for <" << rResAccess->getURL() << ">: "
+            << +eResourceType << " vs. " << +m_eResourceType);
     }
     return m_eResourceType;
 }
