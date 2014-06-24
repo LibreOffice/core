@@ -2999,8 +2999,9 @@ public:
     _SectionSaveStruct( SwHTMLParser& rParser );
     virtual ~_SectionSaveStruct();
 
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMinSave; }
-
+#endif
     void Restore( SwHTMLParser& rParser );
 };
 
