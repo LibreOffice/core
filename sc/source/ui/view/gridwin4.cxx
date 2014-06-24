@@ -413,7 +413,7 @@ Size ScGridWindow::GetDataAreaSize()
     // the data area.
 
     // This doesn't include the final (bottom & right) borders...
-    return Size( nX * 1440L / 2540L, nY * 1440L / 2540L );
+    return Size( nX, nY );
 }
 
 //  Draw  ----------------------------------------------------------------
@@ -923,25 +923,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
-    // Scaling. Must convert from pixels to TWIPs. We know
-    // that VirtualDevices use a DPI of 96. We might as well do this
-    // calculation now, rather than after another dimension conversion,
-    // to minimise errors.
     Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
                                 Fraction( nTileWidth);
     Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
                                  Fraction( nTileHeight);
 
-    // Now scale back to 100th mm dimensions.
-    nTilePosX = nTilePosX * 2540L / 1440L;
-    nTilePosY = nTilePosY * 2540L / 1440L;
-
-    nTileWidth = nTileWidth * 2540L / 1440L;
-    nTileHeight = nTileHeight * 2540L / 1440L;
-
     rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
     MapMode aMapMode( rDevice.GetMapMode() );
-    aMapMode.SetMapUnit( MAP_100TH_MM );
+    aMapMode.SetMapUnit( MAP_TWIP );
     aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) ); // size
 
     aMapMode.SetScaleX( scaleX );
