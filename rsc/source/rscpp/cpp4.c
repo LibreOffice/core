@@ -82,8 +82,8 @@ void dodefine()
  *              in a manner analogous to textput().
  */
 {
-        register int            c;
-        register DEFBUF         *dp;            /* -> new definition    */
+        int                     c;
+        DEFBUF                  *dp;            /* -> new definition    */
         int                     isredefine;     /* TRUE if redefined    */
         char                    *old = 0;       /* Remember redefined   */
 
@@ -239,8 +239,8 @@ void checkparm(int c, DEFBUF* dp)
  * looping if someone writes "#define foo foo".
  */
 {
-        register int            i;
-        register char           *cp;
+        int            i;
+        char           *cp;
 
         scanid(c);                              /* Get parm to token[]  */
         for (i = 0; i < nargs; i++) {           /* For each argument    */
@@ -261,7 +261,7 @@ void checkparm(int c, DEFBUF* dp)
 #if STRING_FORMAL
 void stparmscan(delim, dp)
 int             delim;
-register DEFBUF *dp;
+DEFBUF          *dp;
 /*
  * Scan the string (starting with the given delimiter).
  * The token is replaced if it is the only text in this string or
@@ -269,7 +269,7 @@ register DEFBUF *dp;
  * Note that scanstring() has approved of the string.
  */
 {
-        register int            c;
+        int            c;
 
         /*
          * Warning -- this code hasn't been tested for a while.
@@ -301,8 +301,8 @@ void stparmscan(int delim)
  * Normal string parameter scan.
  */
 {
-        register char           *wp;
-        register int            i;
+        char           *wp;
+        int            i;
 
         wp = workp;                     /* Here's where it starts       */
         if (!scanstring(delim, save))
@@ -336,7 +336,7 @@ void doundef()
  * Called from the #control processor.
  */
 {
-        register int            c;
+        int            c;
 
         if (type[(c = skipws())] != LET)
             cerror("Illegal #undef argument", NULLST);
@@ -355,7 +355,7 @@ void textput(char* text)
  * Put the string in the parm[] buffer.
  */
 {
-        register int    size;
+        int    size;
 
         size = strlen(text) + 1;
         if ((parmp + size) >= &parm[NPARMWORK])
@@ -395,8 +395,8 @@ void expand(DEFBUF* tokenp)
  * off the end of the macro line, it will dismiss the macro itself.)
  */
 {
-        register int            c;
-        register FILEINFO       *file;
+        int            c;
+        FILEINFO       *file;
     extern FILEINFO     *getfile(int, char *);
 
 #if OSL_DEBUG_LEVEL > 1
@@ -485,8 +485,8 @@ expcollect()
  * Collect the actual parameters for this macro.  TRUE if ok.
  */
 {
-        register int    c;
-        register int    paren;                  /* For embedded ()'s    */
+        int    c;
+        int    paren;                  /* For embedded ()'s    */
         for (;;) {
             paren = 0;                          /* Collect next arg.    */
             while ((c = skipws()) == '\n')      /* Skip over whitespace */
@@ -546,9 +546,9 @@ void expstuff(DEFBUF* tokenp)
  * Stuff the macro body, replacing formal parameters by actual parameters.
  */
 {
-        register int    c;                      /* Current character    */
-        register char   *inp;                   /* -> repl string       */
-        register char   *defp;                  /* -> macro output buff */
+        int             c;                      /* Current character    */
+        char            *inp;                   /* -> repl string       */
+        char            *defp;                  /* -> macro output buff */
         int             size;                   /* Actual parm. size    */
         char            *defend;                /* -> output buff end   */
         int             string_magic;           /* String formal hack   */
@@ -612,7 +612,7 @@ void dumpparm(char* why)
  * Dump parameter list.
  */
 {
-        register int    i;
+        int    i;
 
     fprintf( pCppOut, "dump of %d parameters (%" SAL_PRI_SIZET "u bytes total) %s\n",
             nargs, parmp - parm, why);

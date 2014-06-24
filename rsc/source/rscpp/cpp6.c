@@ -194,7 +194,7 @@ void skipnl()
  * Skip to the end of the current input line.
  */
 {
-        register int            c;
+        int            c;
 
         do {                            /* Skip to newline      */
             c = get();
@@ -207,7 +207,7 @@ skipws()
  * Skip over whitespace
  */
 {
-        register int            c;
+        int            c;
 
         do {                            /* Skip whitespace      */
             c = get();
@@ -226,7 +226,7 @@ void scanid(int c)
  * Change one, change both.
  */
 {
-        register char   *bp;
+        char   *bp;
 
         if (c == DEF_MAGIC)                     /* Eat the magic token  */
             c = get();                          /* undefiner.           */
@@ -249,7 +249,7 @@ macroid(int c)
  * Else, return the character.  If type[c] is a LET, the token is in token.
  */
 {
-        register DEFBUF *dp;
+        DEFBUF *dp;
 
         if (infile != NULL && infile->fp != NULL)
             recursion = 0;
@@ -270,8 +270,8 @@ catenate()
  * and return FALSE.
  */
 {
-        register int            c;
-        register char           *token1;
+        int            c;
+        char           *token1;
 
 #if OK_CONCAT
         if (get() != TOK_SEP) {                 /* Token concatenation  */
@@ -340,7 +340,7 @@ void         (*outfun)() /* BP */
  * TRUE if ok, FALSE if error.
  */
 {
-        register int            c;
+        int            c;
 
         instring = TRUE;                /* Don't strip comments         */
         (*outfun)(delim);
@@ -367,9 +367,9 @@ void         (*outfun)() /* BP */
 
 void scannumber(int c,
 #ifndef _NO_PROTO
-register void    (*outfun)( int )  /* BP */    /* Output/store func    */
+void    (*outfun)( int )  /* BP */    /* Output/store func    */
 #else
-register void    (*outfun)() /* BP */
+void    (*outfun)() /* BP */
 #endif
 )
 /*
@@ -377,7 +377,7 @@ register void    (*outfun)() /* BP */
  * Algorithm from Dave Conroy's Decus C.
  */
 {
-        register int    radix;                  /* 8, 10, or 16         */
+        int             radix;                  /* 8, 10, or 16         */
         int             expseen;                /* 'e' seen in floater  */
         int             signseen;               /* '+' or '-' seen      */
         int             octal89;                /* For bad octal test   */
@@ -510,7 +510,7 @@ savestring(char* text)
  * Store a string into free memory.
  */
 {
-        register char   *result;
+        char   *result;
 
         result = getmem(strlen(text) + 1);
         strcpy(result, text);
@@ -523,8 +523,8 @@ getfile(int bufsize, char* name)
  * Common FILEINFO buffer initialization for a new file or macro.
  */
 {
-        register FILEINFO       *file;
-        register int            size;
+        FILEINFO       *file;
+        int            size;
 
         size = strlen(name);                    /* File/macro name      */
         file = (FILEINFO *) getmem(sizeof (FILEINFO) + bufsize + size);
@@ -549,7 +549,7 @@ getmem(int size)
  * Get a block of free memory.
  */
 {
-        register char   *result;
+        char   *result;
 
         if ((result = malloc((unsigned) size)) == NULL)
             cfatal("Out of memory", NULLST);
@@ -563,9 +563,9 @@ lookid(int c)
  * If found, returns the table pointer;  Else returns NULL.
  */
 {
-        register int            nhash;
-        register DEFBUF         *dp;
-        register char           *np;
+        int                     nhash;
+        DEFBUF                  *dp;
+        char                    *np;
         int                     temp = 0;
         int                     isrecurse;      /* For #define foo foo  */
 
@@ -604,12 +604,12 @@ defendel(char* name, int delete)
  * Returns NULL if the symbol wasn't defined (delete = TRUE).
  */
 {
-        register DEFBUF         *dp;
-        register DEFBUF         **prevp;
-        register char           *np;
-        int                     nhash;
-        int                     temp;
-        int                     size;
+        DEFBUF         *dp;
+        DEFBUF         **prevp;
+        char           *np;
+        int            nhash;
+        int            temp;
+        int            size;
 
         for (nhash = 0, np = name; *np != EOS;)
             nhash += *np++;
@@ -648,8 +648,8 @@ defendel(char* name, int delete)
 
 void dumpdef(char *why)
 {
-        register DEFBUF         *dp;
-        register DEFBUF         **syp;
+        DEFBUF         *dp;
+        DEFBUF         **syp;
         FILE *pRememberOut = NULL;
 
         if ( bDumpDefs )    /*ER */
@@ -673,10 +673,10 @@ void dumpdef(char *why)
         }
 }
 
-void dumpadef(char *why, register DEFBUF *dp)
+void dumpadef(char *why, DEFBUF *dp)
 {
-        register char           *cp;
-        register int            c;
+        char           *cp;
+        int            c;
         FILE *pRememberOut = NULL;
 
 /*ER dump #define's to pDefOut */
@@ -775,9 +775,9 @@ get()
  * Handle end of file from #include files.
  */
 {
-        register int            c;
-        register FILEINFO       *file;
-        register int            popped;         /* Recursion fixup      */
+        int            c;
+        FILEINFO       *file;
+        int            popped;         /* Recursion fixup      */
 
         popped = 0;
 get_from_file:
@@ -1004,7 +1004,7 @@ void unget()
  * be ungotten.  If you need to unget more, call ungetstring().
  */
 {
-        register FILEINFO       *file;
+        FILEINFO       *file;
 
         if ((file = infile) == NULL)
             return;                     /* Unget after EOF              */
@@ -1020,7 +1020,7 @@ void ungetstring(char* text)
  * the text as if it were a macro.
  */
 {
-        register FILEINFO       *file;
+        FILEINFO       *file;
         extern FILEINFO         *getfile(int, char *);
         file = getfile(strlen(text) + 1, "");
         strcpy(file->buffer, text);
@@ -1033,7 +1033,7 @@ cget()
  * token concatenation
  */
 {
-        register int    c;
+        int    c;
 
         do {
             c = get();
@@ -1057,8 +1057,8 @@ static void domsg(char* severity, char* format, void* arg)
  * Print filenames, macro names, and line numbers for error messages.
  */
 {
-        register char           *tp;
-        register FILEINFO       *file;
+        char           *tp;
+        FILEINFO       *file;
 
         fprintf(stderr, "%sline %d, %s: ", MSG_PREFIX, line, &severity[1]);
         if (*severity == 'S')
