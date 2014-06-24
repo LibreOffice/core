@@ -95,7 +95,7 @@
           <desc>Contains settings for the visibility of various non-printing characters.</desc>
         </info>
         <prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: View - Nonprinting Characters -->
+          <!-- UIHints: View - Non-printing Characters -->
           <info>
             <desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
             <label>Meta characters</label>
@@ -105,7 +105,7 @@
         <prop oor:name="ParagraphEnd" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Paragraph end</label>
@@ -115,7 +115,7 @@
         <prop oor:name="OptionalHyphen" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether optional hyphens are shown on the screen.</desc>
             <label>Optional hyphens</label>
@@ -125,7 +125,7 @@
         <prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether spaces are shown on the screen.</desc>
             <label>Spaces</label>
@@ -135,7 +135,7 @@
         <prop oor:name="ProtectedSpace" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
@@ -145,7 +145,7 @@
         <prop oor:name="Break" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
+          <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Non-printing Characters -->
           <info>
             <desc>Specifies whether breaks are shown on the screen.</desc>
             <label>Breaks</label>

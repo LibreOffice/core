@@ -135,7 +135,7 @@
    <menu:menuitem menu:id="slot:20214" menu:helpid="20214" menu:label="Te~xt Boundaries"/>
    <menu:menuitem menu:id="slot:20225" menu:helpid="20225" menu:label="Fie~ld Shadings"/>
    <menu:menuitem menu:id="slot:20226" menu:helpid="20226" menu:label="~Fields"/>
-   <menu:menuitem menu:id="slot:20224" menu:helpid="20224" menu:label="~Nonprinting Characters"/>
+   <menu:menuitem menu:id="slot:20224" menu:helpid="20224" menu:label="~Non-printing Characters"/>
    <menu:menuitem menu:id="slot:20242" menu:helpid="20242" menu:label="~Hidden Paragraphs"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:6313" menu:helpid="6313" menu:label="~Online Layout"/>
