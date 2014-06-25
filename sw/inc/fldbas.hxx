@@ -319,6 +319,8 @@ public:
       */
     OUString            ExpandField(bool const bCached, ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
 
+    OUString            ExpandCitation(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
+
     /// @return name or content.
     virtual OUString    GetFieldName() const;
 

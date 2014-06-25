@@ -1392,7 +1392,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         OUString sExpand;
         if(rInfos.eType == ww::eCITATION)
         {
-            sExpand = rInfos.pField->ExpandField( false , AUTH_FIELD_TITLE);
+            sExpand = rInfos.pField->ExpandCitation(AUTH_FIELD_TITLE);
         }
         else
         {
