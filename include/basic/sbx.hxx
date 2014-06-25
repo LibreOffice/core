@@ -115,7 +115,7 @@ public:
 // The variables convert from SbxVariablen. Put()/Insert() into the
 // declared datatype, if they are not SbxVARIANT.
 
-class SbxVarEntry;
+struct SbxVarEntry;
 
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
