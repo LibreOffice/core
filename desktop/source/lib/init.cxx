@@ -49,11 +49,14 @@
 
 #include <salinst.hxx>
 
+// Tiled Rendering is Linux only for now.
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 // And let's also grab the SvpSalInstance and SvpSalVirtualDevice
 #include <headless/svpinst.hxx>
 #include <headless/svpvd.hxx>
 
 #include <basebmp/bitmapdevice.hxx>
+#endif
 
 using namespace css;
 using namespace utl;
@@ -448,7 +451,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     Application::AcquireSolarMutex(1);
     {
-#if defined(UNX) && !defined(MACOSX)
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
         ImplSVData* pSVData = ImplGetSVData();
         SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
         pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
