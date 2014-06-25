@@ -20,7 +20,7 @@ namespace vcl
 class VCL_DLLPUBLIC ITiledRenderable
 {
 public:
-    virtual ~ITiledRenderable() {};
+    virtual ~ITiledRenderable();
 
     /**
      * Paint a tile to a given VirtualDevice.
