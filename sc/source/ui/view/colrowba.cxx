@@ -83,7 +83,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
     if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
+        return pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab );
 }
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -238,8 +238,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
     if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
-                    nTab ), pViewData->GetPPTY() );
+        return pDoc->GetOriginalHeight( nEntryNo, nTab );
 }
 
 OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
