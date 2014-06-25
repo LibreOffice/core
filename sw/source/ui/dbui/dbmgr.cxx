@@ -1652,7 +1652,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             try
             {
                 sRet = xColumn->getString();
-                sRet = sRet.replace( '\xb', '\n' ); // MSWord uses \xb as a newline
+                sRet.SearchAndReplaceAll( '\xb', '\n' ); // MSWord uses \xb as a newline
             }
             catch(const SQLException&)
             {
