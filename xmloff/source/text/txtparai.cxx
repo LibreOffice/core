@@ -1959,7 +1959,7 @@ XMLParaContext::~XMLParaContext()
         {
             xIdCursor->gotoRange( xEnd, sal_True );
             GetImport().getInterfaceToIdentifierMapper().registerReference(
-                m_sXmlId, xIdCursor);
+                m_sXmlId, Reference<XInterface>( xIdCursor, UNO_QUERY ));
         }
     }
 

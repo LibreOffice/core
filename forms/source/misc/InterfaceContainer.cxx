@@ -261,7 +261,7 @@ void OInterfaceContainer::disposing()
         // revoke event knittings
         if ( m_xEventAttacher.is() )
         {
-            m_xEventAttacher->detach( i - 1, xSet );
+            m_xEventAttacher->detach( i - 1, Reference<XInterface>(xSet, UNO_QUERY) );
             m_xEventAttacher->removeEntry( i - 1 );
         }
 

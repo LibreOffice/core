@@ -2009,7 +2009,7 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
             if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
             {
-                m_xModelAsManager->attach( nPos, xControl, makeAny(xControl) );
+                m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), makeAny(xControl) );
                 break;
             }
         }
@@ -2036,7 +2036,7 @@ void FormController::removeFromEventAttacher(const Reference< XControl > & xCont
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
             if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
             {
-                m_xModelAsManager->detach( nPos, xControl );
+                m_xModelAsManager->detach( nPos, Reference<XInterface>( xControl, UNO_QUERY ) );
                 break;
             }
         }
@@ -3043,7 +3043,7 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
         if ( xFormOfChild == xTemp )
         {
-            m_xModelAsManager->attach( nPos, _ChildController, makeAny( _ChildController) );
+            m_xModelAsManager->attach( nPos, Reference<XInterface>( _ChildController, UNO_QUERY ), makeAny( _ChildController) );
             break;
         }
     }
