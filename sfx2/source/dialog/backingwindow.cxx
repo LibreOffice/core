@@ -283,18 +283,21 @@ void BackingWindow::initControls()
 
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
-    mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
+    //mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
     //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
     mpViewBar->Hide();
+    mpViewBar->HideItem("import");
 
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
-    mpTemplateBar->SetClickHdl( LINK( this, BackingWindow,TBXTemplateHdl ) );
+    //mpTemplateBar->SetClickHdl( LINK( this, BackingWindow,TBXTemplateHdl ) );
+    //mpTemplateBar->SetDoubleClickHdl( LINK(this, BackingWindow, OpenTemplateHdl) );
     //mpTemplateBar->SetDropdownClickHdl(LINK(this, BackingWindow,TBXDropdownHdl));
 
     //set handlers
     mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
     mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
+    mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
 
     /*FIXME: Add other things for Local View
      *Filter and the bars*/
@@ -491,6 +494,8 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
+//Editing related method
+/*
 void BackingWindow::OnTemplateImport ()
 {
     size_t nDialogType =
@@ -610,9 +615,10 @@ void BackingWindow::OnTemplateImport ()
             }
         }
     }
-}
+}*/
 
-void BackingWindow::OnFolderDelete()
+//Editing related method
+/*void BackingWindow::OnFolderDelete()
 {
     QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
 
@@ -644,10 +650,10 @@ void BackingWindow::OnFolderDelete()
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
         ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aFolderList)).Execute();
     }
-}
+}*/
 
-
-void BackingWindow::OnFolderNew()
+//Editing related method
+/*void BackingWindow::OnFolderNew()
 {
     InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
@@ -659,34 +665,34 @@ void BackingWindow::OnFolderNew()
 
         mpCurrentView->createRegion(aName);
     }
-}
+}*/
 
 
-void BackingWindow::OnRegionState (const ThumbnailViewItem *pItem)
-{
-    if (pItem->isSelected())
-    {
-        if (maSelFolders.empty() && !mbIsSaveMode)
-        {
-            mpViewBar->ShowItem("import");
-            mpViewBar->ShowItem("delete");
-            mpViewBar->HideItem("new_folder");
-        }
+// void BackingWindow::OnRegionState (const ThumbnailViewItem *pItem)
+// {
+//     if (pItem->isSelected())
+//     {
+//         if (maSelFolders.empty() && !mbIsSaveMode)
+//         {
+//             mpViewBar->ShowItem("import");
+//             mpViewBar->ShowItem("delete");
+//             mpViewBar->HideItem("new_folder");
+//         }
 
-        maSelFolders.insert(pItem);
-    }
-    else
-    {
-        maSelFolders.erase(pItem);
+//         maSelFolders.insert(pItem);
+//     }
+//     else
+//     {
+//         maSelFolders.erase(pItem);
 
-        if (maSelFolders.empty() && !mbIsSaveMode)
-        {
-            mpViewBar->HideItem("import");
-            mpViewBar->HideItem("delete");
-            mpViewBar->ShowItem("new_folder");
-        }
-    }
-}
+//         if (maSelFolders.empty() && !mbIsSaveMode)
+//         {
+//             mpViewBar->HideItem("import");
+//             mpViewBar->HideItem("delete");
+//             mpViewBar->ShowItem("new_folder");
+//         }
+//     }
+// }
 
 
 IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
@@ -768,10 +774,22 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 */
         mpAllRecentThumbnails->Hide();
         mpLocalView->Show();
-        mpViewBar->Show();
+        mpViewBar->Hide();
+        mpViewBar->HideItem("import");
+        mpViewBar->HideItem("delete");
+        mpViewBar->HideItem("new_folder");
     }
     return 0;
 }
+
+IMPL_LINK_NOARG(BackingWindow, DoubleClickHdl)
+{
+    ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
+
+    OpenTemplateHdl(pItem);
+    return 0;
+}
+
 
 //FIXME: Obvious enough
 IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
@@ -779,25 +797,60 @@ IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
     maSelFolders.clear();
     maSelTemplates.clear();
 
-    mpViewBar->ShowItem("new_folder", mpCurrentView->isNestedRegionAllowed());
+    //mpViewBar->ShowItem("new_folder", mpCurrentView->isNestedRegionAllowed());
 
-    if (!mbIsSaveMode)
-        mpViewBar->ShowItem("import", mpCurrentView->isImportAllowed());
+    //if (!mbIsSaveMode)
+      //  mpViewBar->ShowItem("import", mpCurrentView->isImportAllowed());
 
-    //mpTemplateBar->Hide();
-    mpViewBar->Show();
+    mpTemplateBar->Hide();
+    mpViewBar->Hide();
+    mpViewBar->HideItem("import");
+    mpViewBar->HideItem("delete");
+    mpViewBar->HideItem("new_folder");
     //mpActionBar->Show();
 
     return 0;
 }
 
-//FIXME: Implement OnSomething() methods
-IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
+//FIXME: Cleanup the code
+IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
-    const size_t nCurItemId = mpViewBar->GetCurItemId();
+    if (!mbIsSaveMode)
+    {
+        uno::Sequence< PropertyValue > aArgs(4);
+        aArgs[0].Name = "AsTemplate";
+        aArgs[0].Value <<= sal_True;
+        aArgs[1].Name = "MacroExecutionMode";
+        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+        aArgs[2].Name = "UpdateDocMode";
+        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+        aArgs[3].Name = "InteractionHandler";
+        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
 
-    if (nCurItemId == mpViewBar->GetItemId("import"))
-        OnTemplateImport();
+        TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+
+        try
+        {
+            dispatchURL( pTemplateItem->getPath(), "_default", xFrame, aArgs );
+            //mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+    }
+
+    return 0;
+}
+
+//FIXME: Implement OnSomething() methods
+//IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
+//{
+  //  const size_t nCurItemId = mpViewBar->GetCurItemId();
+
+    /*//if (nCurItemId == mpViewBar->GetItemId("import"))
+      //  OnTemplateImport();
     else if (nCurItemId == mpViewBar->GetItemId("delete"))
     {
         if (mpCurrentView == mpLocalView)
@@ -809,11 +862,11 @@ IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
         OnFolderNew();
     //else if (nCurItemId == mpViewBar->GetItemId("save"))
         ////OnTemplateSaveAs();
+    */
+    //return 0;
+//}
 
-    return 0;
-}
-
-//FIXME: Implement OnSomething() methods
+//FIXME: Implement OnSomething() methods // might be deleted
 IMPL_LINK_NOARG(BackingWindow,TBXTemplateHdl)
 {
     //const size_t nCurItemId = mpTemplateBar->GetCurItemId();
@@ -837,10 +890,10 @@ IMPL_LINK_NOARG(BackingWindow,TBXTemplateHdl)
 
 IMPL_LINK(BackingWindow, TVItemStateHdl, const ThumbnailViewItem*, pItem)
 {
-    const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
+    //const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
 
-    if (pCntItem)
-        OnRegionState(pItem);
+    //if (pCntItem)
+        //OnRegionState(pItem);
     //else
         //FIXME:Move this to here
         //OnTemplateState(pItem);
