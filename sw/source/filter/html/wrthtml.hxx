@@ -407,7 +407,7 @@ public:
 
     void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
 
-    // gebe alle an in aktuellen Ansatz stehenden ::com::sun::star::text::Bookmarks aus
+    // gebe alle an in aktuellen Ansatz stehenden Bookmarks aus
     void OutAnchor( const OUString& rName );
     void OutBookmarks();
     void OutPointFieldmarks( const SwPosition& rPos );

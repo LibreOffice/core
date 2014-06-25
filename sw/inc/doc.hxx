@@ -1270,7 +1270,7 @@ public:
     bool SortText(const SwPaM&, const SwSortOptions&);
 
     // Correct the SwPosition-Objects that are registered with the document
-    // e. g. ::com::sun::star::text::Bookmarks or tables/indices.
+    // e. g. Bookmarks or tables/indices.
     // If bMoveCrsr is set move Crsr too.
 
     // Set everything in rOldNode on rNewPos + Offset.
@@ -1639,7 +1639,7 @@ public:
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
     // Query if ::com::sun::star::util::URL was visited.
-    // Query via Doc, if only a ::com::sun::star::text::Bookmark has been given.
+    // Query via Doc, if only a Bookmark has been given.
     // In this case the document name has to be set in front.
     bool IsVisitedURL( const OUString& rURL ) const;
 
