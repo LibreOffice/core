@@ -93,7 +93,7 @@ using ::com::sun::star::text::XSimpleText;
 using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
 
-void dump_pset(Reference< XPropertySet > rXPropSet);
+DBG(void dump_pset(Reference< XPropertySet > rXPropSet);)
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
