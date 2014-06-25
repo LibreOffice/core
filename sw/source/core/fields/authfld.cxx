@@ -569,6 +569,28 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
     return sRet;
 }
 
+OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField) const
+{
+    SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
+    OUString sRet;
+
+    if( pAuthType->IsSequence() )
+    {
+       if(!pAuthType->GetDoc()->IsExpFldsLocked())
+           m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
+       if( m_nTempSequencePos >= 0 )
+           sRet += OUString::number( m_nTempSequencePos );
+    }
+    else
+    {
+        const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
+        //TODO: Expand to: identifier, number sequence, ...
+        if(pEntry)
+            sRet += pEntry->GetAuthorField(eField);
+    }
+    return sRet;
+}
+
 SwField* SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
