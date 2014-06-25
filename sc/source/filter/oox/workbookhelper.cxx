@@ -747,6 +747,13 @@ void WorkbookHelper::finalizeWorkbookImport()
     mrBookGlob.getWorkbookSettings().finalizeImport();
     mrBookGlob.getViewSettings().finalizeImport();
 
+    // Import the VBA project (after finalizing workbook settings which
+    // contains the workbook code name).  Do it before processing formulas in
+    // order to correctly resolve VBA custom function names.
+    StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
+    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+        getBaseFilter().getVbaProject().importModulesAndForms( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
+
     // need to import formulas before scenarios
     mrBookGlob.getFormulaBuffer().finalizeImport();
 
@@ -766,12 +773,6 @@ void WorkbookHelper::finalizeWorkbookImport()
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( "Default", true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
-
-    /*  Import the VBA project (after finalizing workbook settings which
-        contains the workbook code name). */
-    StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
-    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-        getBaseFilter().getVbaProject().importModulesAndForms( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
 
 // document model -------------------------------------------------------------
