@@ -36,15 +36,6 @@ public:
    ~SbxVarEntry() { delete pAlias; }
 };
 
-typedef SbxVarEntry* SbxVarEntryPtr;
-typedef vector< SbxVarEntryPtr > SbxVarEntryPtrVector;
-class SbxVarRefs : public SbxVarEntryPtrVector
-{
-public:
-    SbxVarRefs( void ) {}
-};
-
-
 TYPEINIT1(SbxArray,SbxBase)
 TYPEINIT1(SbxDimArray,SbxArray)
 
@@ -52,7 +43,7 @@ TYPEINIT1(SbxDimArray,SbxArray)
 
 SbxArray::SbxArray( SbxDataType t ) : SbxBase()
 {
-    pData = new SbxVarRefs;
+    pData = new VarEntriesType;
     eType = t;
     if( t != SbxVARIANT )
         SetFlag( SBX_FIXED );
@@ -61,7 +52,7 @@ SbxArray::SbxArray( SbxDataType t ) : SbxBase()
 SbxArray::SbxArray( const SbxArray& rArray ) :
     SvRefBase( rArray ), SbxBase()
 {
-    pData = new SbxVarRefs;
+    pData = new VarEntriesType;
     if( rArray.eType != SbxVARIANT )
         SetFlag( SBX_FIXED );
     *this = rArray;
@@ -73,14 +64,14 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
     {
         eType = rArray.eType;
         Clear();
-        SbxVarRefs* pSrc = rArray.pData;
+        VarEntriesType* pSrc = rArray.pData;
         for( sal_uInt32 i = 0; i < pSrc->size(); i++ )
         {
-            SbxVarEntryPtr pSrcRef = (*pSrc)[i];
+            SbxVarEntry* pSrcRef = (*pSrc)[i];
             const SbxVariable* pSrc_ = *pSrcRef;
             if( !pSrc_ )
                 continue;
-            SbxVarEntryPtr pDstRef = new SbxVarEntry;
+            SbxVarEntry* pDstRef = new SbxVarEntry;
             *((SbxVariableRef*) pDstRef) = *((SbxVariableRef*) pSrcRef);
             if( pSrcRef->pAlias )
             {
@@ -151,8 +142,7 @@ SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
     }
     while( pData->size() <= nIdx )
     {
-        const SbxVarEntryPtr p = new SbxVarEntry;
-        pData->push_back( p );
+        pData->push_back(new SbxVarEntry);
     }
     return *((*pData)[nIdx]);
 }
@@ -169,8 +159,7 @@ SbxVariableRef& SbxArray::GetRef( sal_uInt16 nIdx )
     }
     while( pData->size() <= nIdx )
     {
-        const SbxVarEntryPtr p = new SbxVarEntry;
-        pData->push_back( p );
+        pData->push_back(new SbxVarEntry);
     }
     return *((*pData)[nIdx]);
 }
@@ -291,9 +280,9 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
     {
             return;
     }
-    SbxVarEntryPtr p = new SbxVarEntry;
+    SbxVarEntry* p = new SbxVarEntry;
     *((SbxVariableRef*) p) = pVar;
-    SbxVarEntryPtrVector::size_type nSize = pData->size();
+    size_t nSize = pData->size();
     if( nIdx > nSize )
     {
         nIdx = nSize;
@@ -370,7 +359,7 @@ void SbxArray::Merge( SbxArray* p )
         sal_uInt32 nSize = p->Count();
         for( sal_uInt32 i = 0; i < nSize; i++ )
         {
-            SbxVarEntryPtr pRef1 = (*(p->pData))[i];
+            SbxVarEntry* pRef1 = (*(p->pData))[i];
             // Is the element by name already inside?
             // Then overwrite!
             SbxVariable* pVar = *pRef1;
@@ -390,9 +379,8 @@ void SbxArray::Merge( SbxArray* p )
                 }
                 if( pRef1 )
                 {
-                    SbxVarEntryPtr pRef = new SbxVarEntry;
-                    const SbxVarEntryPtr pTemp = pRef;
-                    pData->push_back( pTemp );
+                    SbxVarEntry* pRef = new SbxVarEntry;
+                    pData->push_back(pRef);
                     *((SbxVariableRef*) pRef) = *((SbxVariableRef*) pRef1);
                     if( pRef1->pAlias )
                     {
