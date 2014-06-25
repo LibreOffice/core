@@ -1,0 +1,14 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-23 20:35:06.246847670 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-23 20:35:24.366846890 +0200
+@@ -1919,7 +1919,9 @@
+ 
+ double RenderScene::getAnimTime()
+ {
+-    return mCurrentTime;
++    errno = 0;
++    double time = fmod(this->mCurrentTime, this->mDuration);
++    return errno == EDOM ? 0.0 : time;
+ }
+ 
+ void RenderScene::setAnimLoop(int loop)
