@@ -27,6 +27,8 @@ class SwTxtFtn;
 class SwBorderAttrs;
 class SwFtnFrm;
 
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
+
 // There exists a special section on a page for footnotes. It's called
 // SwFtnContFrm. Each footnote is separated by a SwFtnFrm which contains
 // the paragraphs of a footnote. SwFtnFrm can be splitted and will then

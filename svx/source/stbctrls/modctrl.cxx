@@ -28,6 +28,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include "modctrl_internal.hxx"
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;

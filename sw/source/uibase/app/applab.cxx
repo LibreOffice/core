@@ -75,11 +75,9 @@
 #include <IDocumentDeviceAccess.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <appenv.hxx>
 
 using namespace ::com::sun::star;
-
-// is in appenv.cxx
-extern OUString InsertLabEnvText( SwWrtShell& , SwFldMgr& , const OUString& );
 
 const char MASTER_LABEL[] = "MasterLabel";
 

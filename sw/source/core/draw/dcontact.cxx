@@ -68,6 +68,7 @@
 #include <switerator.hxx>
 #include <algorithm>
 #include <drawdoc.hxx>
+#include <txtfly.hxx>
 
 using namespace ::com::sun::star;
 

@@ -138,7 +138,12 @@ private:
 
 typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;
 
+css::uno::Reference< css::animations::XAnimationNode > implImportEffects( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
+
+void implImportLabels( const css::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, UStringMap& rStringMap );
+
 }
+
 
 #endif // _SD_CUSTOMANIMATIONEFFECTS_HXX
 

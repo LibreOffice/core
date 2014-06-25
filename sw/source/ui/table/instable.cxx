@@ -33,11 +33,7 @@
 
 #include "swabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
-
-namespace swui
-{
-    SwAbstractDialogFactory * GetFactory();
-}
+#include <swuiexp.hxx>
 
 #define ROW_COL_PROD 16384
 

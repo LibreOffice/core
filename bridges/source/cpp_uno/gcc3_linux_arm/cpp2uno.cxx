@@ -456,8 +456,6 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
     return nRegReturn;
 }
 
-extern "C" void privateSnippetExecutor(void);
-
 namespace
 {
     const int codeSnippetSize = 20;

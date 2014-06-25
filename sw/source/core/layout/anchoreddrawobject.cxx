@@ -28,6 +28,7 @@
 #include <vector>
 #include <svx/svdogrp.hxx>
 #include <DocumentSettingManager.hxx>
+#include <txtfly.hxx>
 
 using namespace ::com::sun::star;
 

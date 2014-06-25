@@ -29,6 +29,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <oleembobj.hxx>
+#include <olepersist.hxx>
 
 #include "ownview.hxx"
 
@@ -37,8 +38,6 @@
 #endif
 
 using namespace ::com::sun::star;
-
-bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 
 

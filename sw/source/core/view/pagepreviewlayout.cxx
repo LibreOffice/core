@@ -36,12 +36,9 @@
 #include <frmtool.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <printdata.hxx>
+#include <paintfrm.hxx>
 
 #include <IDocumentDeviceAccess.hxx>
-
-// OD 20.02.2003 #107369# - method to update statics for paint
-// Note: method defined in '/sw/source/core/layout/paintfrm.cxx'
-extern void SwCalcPixStatics( OutputDevice *pOut );
 
 // methods to initialize page preview layout
 

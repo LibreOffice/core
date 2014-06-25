@@ -25,13 +25,7 @@
 #include <tools/debug.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/svapp.hxx>
-
-namespace toolkit
-{
-    void                        setButtonLikeFaceColor( Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue );
-    ::com::sun::star::uno::Any  getButtonLikeFaceColor( const Window* _pWindow );
-}
-
+#include "vclxwindows_internal.hxx"
 
 namespace toolkit
 {

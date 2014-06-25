@@ -45,7 +45,7 @@
 
 #include "commonembobj.hxx"
 #include "intercept.hxx"
-
+#include "embedobj.hxx"
 
 using namespace ::com::sun::star;
 

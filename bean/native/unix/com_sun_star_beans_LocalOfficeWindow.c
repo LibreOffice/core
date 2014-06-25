@@ -29,11 +29,9 @@
 #include "jawt.h"
 
 #include "sal/types.h"
+#include "comp_LocalOfficeWindow.h"
 
 #define SYSTEM_XWINDOW 6
-
-SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
-  (JNIEnv * env, jobject obj_this);
 
 /*****************************************************************************/
 /*

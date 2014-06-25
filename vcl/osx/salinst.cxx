@@ -46,7 +46,7 @@
 #include "print.h"
 #include "impbmp.hxx"
 #include "salimestatus.hxx"
-#include "svmain.hxx"
+#include "vcl/svmain.hxx"
 
 #include <comphelper/processfactory.hxx>
 

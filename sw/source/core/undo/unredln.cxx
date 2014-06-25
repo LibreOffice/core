@@ -30,9 +30,7 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <sortopt.hxx>
-
-extern void sw_JoinText( SwPaM& rPam, bool bJoinPrev );
-extern void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev );
+#include <docedt.hxx>
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),

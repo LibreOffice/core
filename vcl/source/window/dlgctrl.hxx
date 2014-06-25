@@ -17,14 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SVMAIN_HXX
-#define INCLUDED_VCL_INC_SVMAIN_HXX
+#ifndef INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
+#define INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
 
-#include <sal/config.h>
+#include <window.h>
 
-// #i47888# allow for alternative initialization as required for e.g. MacOSX
-bool ImplSVMainHook( int* );
+Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
 
-#endif
+Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
+                               sal_uInt16& rFormStart, sal_uInt16& rFormEnd );
+
+Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
+                             sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true );
+
+sal_Unicode getAccel( const OUString& rStr );
+
+#endif // INCLUDED_VCL_SOURCE_WINDOW_DLGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,6 +38,7 @@
 
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
+#include "xmlExportDocumentHandler.hxx"
 
 #include <connectivity/dbtools.hxx>
 
@@ -45,8 +46,6 @@ namespace rptxml
 {
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context)
     :m_bImportedChart( false )

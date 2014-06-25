@@ -98,6 +98,7 @@
 #include "documentlinkmgr.hxx"
 #include "interpre.hxx"
 #include <tokenstringcontext.hxx>
+#include "docsh.hxx"
 
 using namespace com::sun::star;
 
@@ -923,8 +924,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     return bValid;
 }
-
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
 
 sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,

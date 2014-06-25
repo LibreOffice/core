@@ -37,6 +37,8 @@ OUString GetNewFilledTempFile_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory)
     throw (css::io::IOException, css::uno::RuntimeException);
 
+bool KillFile_Impl( const OUString& aURL, const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,6 +28,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
+#include <vcl/svmain.hxx>
 
 
 #ifdef ANDROID
@@ -42,8 +43,6 @@
 #ifdef IOS
 #include <touch/touch.h>
 #endif
-
-int SVMain();
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {

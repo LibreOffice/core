@@ -70,6 +70,7 @@
 #include <sortedobjs.hxx>
 #include <switerator.hxx>
 #include <vcl/svapp.hxx>
+#include <txtfly.hxx>
 
 using namespace ::com::sun::star;
 

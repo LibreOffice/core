@@ -630,6 +630,12 @@ int sw_CompareCellRanges(
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
 
+void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
+
+OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
+
+int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

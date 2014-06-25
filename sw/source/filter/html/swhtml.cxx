@@ -103,6 +103,7 @@
 
 #include <statstr.hrc>
 #include <swerror.h>
+#include <css1atr.hxx>
 
 #define FONTSIZE_MASK           7
 
@@ -2033,8 +2034,6 @@ void SwHTMLParser::NextToken( int nToken )
     if( !aParaAttrs.empty() && pPam->GetPoint()->nContent.GetIndex() )
         aParaAttrs.clear();
 }
-
-extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
                                  bool& rScriptDependent, bool& rFont,

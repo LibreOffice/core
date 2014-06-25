@@ -50,6 +50,9 @@ class SwSectionFmt;
 class SwFmtRefMark;
 class SwXReferenceMark;
 class SwXBookmark;
+struct SvEventDescription;
+
+const SvEventDescription* sw_GetSupportedMacroItems();
 
 class SwUnoCollection
 {

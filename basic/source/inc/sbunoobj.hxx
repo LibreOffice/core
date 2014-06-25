@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
@@ -37,6 +38,8 @@
 #include <vector>
 #include <map>
 #include <boost/shared_ptr.hpp>
+
+void registerComponentToBeDisposedForBasic( css::uno::Reference< css::lang::XComponent > xComponent, StarBASIC* pBasic );
 
 class StructRefInfo
 {
