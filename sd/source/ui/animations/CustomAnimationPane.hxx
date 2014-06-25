@@ -177,6 +177,8 @@ private:
 
 void fillRepeatComboBox( ListBox* pBox );
 
+void fillDurationComboBox( ListBox* pBox );
+
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX

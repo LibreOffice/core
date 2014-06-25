@@ -112,6 +112,10 @@ private:
 
 };
 
+OUString getPropertyName( sal_Int32 nPropertyType );
+
+OUString getShapeDescription( const css::uno::Reference< css::drawing::XShape >& xShape, bool bWithText = true );
+
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX

@@ -20,11 +20,11 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEMANAGER_HXX
 
 #include "TablePropertiesHandler.hxx"
-#include <TablePositionHandler.hxx>
+#include "TablePositionHandler.hxx"
 
 #include <resourcemodel/TableManager.hxx>
-#include <PropertyMap.hxx>
-#include <StyleSheetTable.hxx>
+#include "PropertyMap.hxx"
+#include "StyleSheetTable.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
 #include <vector>
 

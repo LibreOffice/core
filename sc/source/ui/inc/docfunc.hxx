@@ -231,6 +231,8 @@ public:
     virtual ~ScDocFuncDirect() {}
 };
 
+void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

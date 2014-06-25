@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
 
-#include <FFDataHandler.hxx>
+#include "FFDataHandler.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>

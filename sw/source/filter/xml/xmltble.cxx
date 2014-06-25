@@ -289,7 +289,6 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
     return bInsert;
 }
 
-void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
                                   sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {

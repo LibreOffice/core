@@ -95,12 +95,10 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <swtable.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
-
-// from swtable.cxx
-extern void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 

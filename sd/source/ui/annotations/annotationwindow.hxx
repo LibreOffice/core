@@ -43,6 +43,7 @@ namespace sd {
 class AnnotationManagerImpl;
 class AnnotationWindow;
 class DrawDocShell;
+class TextApiObject;
 class View;
 
 class AnnotationTextWindow : public Control
@@ -154,6 +155,9 @@ class AnnotationWindow : public FloatingWindow
         Color           maColorDark;
         Color           maColorLight;
 };
+
+TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+
 
 } // namespace sd
 

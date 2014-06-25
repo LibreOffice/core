@@ -100,10 +100,6 @@ using namespace ::com::sun::star::text;
 
 namespace sd {
 
-extern OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotation );
-extern SfxItemPool* GetAnnotationPool();
-extern com::sun::star::util::DateTime getCurrentDateTime();
-
 Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color &aFront, Color &aBack )
 {
     return Color((sal_uInt8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),

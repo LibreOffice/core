@@ -52,6 +52,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <docsh.hxx>
 #include <poolfmt.hrc>
+#include <fntcap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -69,7 +70,6 @@ long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
-extern sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat );
 sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
 {
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
@@ -2278,12 +2278,6 @@ SwCacheObj *SwFntAccess::NewObj( )
     // a new Font, a new "MagicNumber".
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
 }
-
-extern sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
-                                   const OUString& rOrigString,
-                                   sal_Int32 nOfst,
-                                   sal_Int32 nLen,
-                                   sal_Int32 nIdx );
 
 sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {

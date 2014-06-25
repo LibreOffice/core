@@ -63,8 +63,6 @@ const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
 
-extern void fillDurationComboBox( ListBox* pBox );
-
 class CategoryListBox : public ListBox
 {
 public:

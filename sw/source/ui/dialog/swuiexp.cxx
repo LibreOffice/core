@@ -19,6 +19,7 @@
 
 #include "swdlgfact.hxx"
 #include "dialmgr.hxx"
+#include <swuiexp.hxx>
 
 namespace swui
 {

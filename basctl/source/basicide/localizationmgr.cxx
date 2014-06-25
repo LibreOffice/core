@@ -24,6 +24,7 @@
 #include "basobj.hxx"
 #include "iderdll.hxx"
 #include "dlged.hxx"
+#include "managelang.hxx"
 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -183,9 +184,6 @@ OUString implCreatePureResourceId
     aPureIdStr += aPropName;
     return aPureIdStr;
 }
-
-extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
-                             const ::com::sun::star::lang::Locale& rLocaleRight );
 
 // Works on xStringResourceManager's current language for SET_IDS/RESET_IDS,
 // anyway only one language should exist when calling this method then,

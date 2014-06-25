@@ -21,6 +21,7 @@
 #include "convuno.hxx"
 #include "rangelst.hxx"
 #include "excelvbahelper.hxx"
+#include "vbarange.hxx"
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -39,8 +40,6 @@ using namespace ::ooo::vba;
 
 #define ZOOM_IN 10
 #define ZOOM_MAX 400
-
-bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRange& refRange, ScRangeList& aCellRanges, formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException );
 
 ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,

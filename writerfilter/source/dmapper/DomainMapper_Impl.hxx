@@ -36,17 +36,17 @@
 #include <ooxml/resourceids.hxx>
 #endif
 #include <dmapper/DomainMapper.hxx>
-#include <DomainMapperTableManager.hxx>
-#include <PropertyMap.hxx>
-#include <FontTable.hxx>
-#include <NumberingManager.hxx>
-#include <StyleSheetTable.hxx>
-#include <SettingsTable.hxx>
-#include <ThemeTable.hxx>
-#include <GraphicImport.hxx>
-#include <OLEHandler.hxx>
-#include <FFDataHandler.hxx>
-#include <FormControlHelper.hxx>
+#include "DomainMapperTableManager.hxx"
+#include "PropertyMap.hxx"
+#include "FontTable.hxx"
+#include "NumberingManager.hxx"
+#include "StyleSheetTable.hxx"
+#include "SettingsTable.hxx"
+#include "ThemeTable.hxx"
+#include "GraphicImport.hxx"
+#include "OLEHandler.hxx"
+#include "FFDataHandler.hxx"
+#include "FormControlHelper.hxx"
 #include <map>
 
 #include <string.h>
@@ -813,6 +813,11 @@ private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
 };
+
+// export just for test
+SAL_DLLPUBLIC_EXPORT boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
+    lcl_SplitFieldCommand(const OUString& rCommand);
+
 } //namespace dmapper
 } //namespace writerfilter
 #endif

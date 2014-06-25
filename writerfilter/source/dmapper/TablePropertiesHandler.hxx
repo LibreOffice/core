@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPROPERTIESHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPROPERTIESHANDLER_HXX
 
-#include <PropertyMap.hxx>
+#include "PropertyMap.hxx"
 
 #include <resourcemodel/TableManager.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>

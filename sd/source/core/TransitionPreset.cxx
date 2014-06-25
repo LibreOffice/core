@@ -37,6 +37,7 @@
 #include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
+#include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -59,9 +60,6 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::beans::NamedValue;
 
 namespace sd {
-
-extern Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
-extern void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, UStringMap& rStringMap );
 
 TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {

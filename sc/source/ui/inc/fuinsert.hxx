@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_FUINSERT_HXX
 
 #include "fupoor.hxx"
+#include "scdllapi.h"
 
 class FuInsertGraphic : public FuPoor
 {
@@ -73,6 +74,8 @@ class FuInsertMedia : public FuPoor
     virtual void Activate() SAL_OVERRIDE;
     virtual void Deactivate() SAL_OVERRIDE;
 };
+
+void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
 
 #endif      // _SD_FUINSERT_HXX
 

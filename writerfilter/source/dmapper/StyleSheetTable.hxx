@@ -24,8 +24,8 @@
 #include <dmapper/DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <PropertyMap.hxx>
-#include <FontTable.hxx>
+#include "PropertyMap.hxx"
+#include "FontTable.hxx"
 #include <resourcemodel/LoggedResources.hxx>
 
 namespace com{ namespace sun { namespace star { namespace text{

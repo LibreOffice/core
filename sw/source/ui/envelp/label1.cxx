@@ -34,9 +34,7 @@
 #include <helpid.h>
 #include <globals.hrc>
 #include <../../uibase/envelp/label.hrc>
-
-//impl in envimg.cxx
-extern SW_DLLPUBLIC OUString MakeSender();
+#include <envimg.hxx>
 
 void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {

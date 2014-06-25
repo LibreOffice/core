@@ -85,6 +85,7 @@ using namespace com::sun::star::uno;
 #include <errno.h>
 
 #include "sbobjmod.hxx"
+#include "sbxmod.hxx"
 
 #ifdef WNT
 #include <prewin.h>
@@ -94,9 +95,6 @@ using namespace com::sun::star::uno;
 #endif
 
 #ifndef DISABLE_SCRIPTING
-
-// from source/classes/sbxmod.cxx
-uno::Reference< frame::XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( OUString& rStr )
 {

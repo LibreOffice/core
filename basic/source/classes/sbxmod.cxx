@@ -55,8 +55,6 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 
-using namespace com::sun::star;
-
 #ifdef UNX
 #include <sys/resource.h>
 #endif
@@ -71,13 +69,6 @@ using namespace com::sun::star;
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-using namespace ::com::sun::star;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::script;
-using namespace com::sun::star::uno;
-
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -86,6 +77,14 @@ using namespace com::sun::star::uno;
 #include <comphelper/anytostring.hxx>
 #include <ooo/vba/VbQueryClose.hpp>
 #include "sbcomp.hxx"
+#include "sbxmod.hxx"
+
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::reflection;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
+using namespace com::sun::star::uno;
 
 typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
 typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
@@ -2661,8 +2660,6 @@ void SbUserFormModule::Unload()
     }
 }
 
-
-void registerComponentToBeDisposedForBasic( Reference< XComponent > xComponent, StarBASIC* pBasic );
 
 void SbUserFormModule::InitObject()
 {

@@ -33,20 +33,10 @@ using namespace ::com::sun::star::lang;
 
 // #i73788#
 #include <cppuhelper/implementationentry.hxx>
-namespace comp_FinalThreadManager {
+#include <finalthreadmanager.hxx>
 
-// component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
-
-}
-
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 static ::cppu::ImplementationEntry const entries[] = {
     { &comp_FinalThreadManager::_create,
@@ -280,8 +270,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
     return pRet;
 }
 
-#ifdef __cplusplus
-}
-#endif
+} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

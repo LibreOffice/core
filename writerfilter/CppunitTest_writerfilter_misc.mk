@@ -14,13 +14,28 @@ $(eval $(call gb_CppunitTest_use_api,writerfilter_misc,\
 	udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,writerfilter_misc,\
+	writerfilter/source \
+))
+
+$(eval $(call gb_CppunitTest_set_include,writerfilter_misc,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/writerfilter/inc \
+    -I$(SRCDIR)/writerfilter/source \
+))
+
 $(eval $(call gb_CppunitTest_use_external,writerfilter_misc,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_misc, \
 	writerfilter \
 	cppu \
 	sal \
+	salhelper \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,writerfilter_misc,\
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_misc, \

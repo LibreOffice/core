@@ -132,8 +132,6 @@ namespace desktop
         "      Eg. -env:UserInstallation=file:///tmp/test to set a non-default user profile path.\n"\
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
-    OUString ReplaceStringHookProc(const OUString& rStr);
-
     void displayCmdlineHelp(OUString const & unknown)
     {
         // if you put variables in other chunks don't forget to call the replace routines

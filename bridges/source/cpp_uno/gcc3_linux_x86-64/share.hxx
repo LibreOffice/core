@@ -130,6 +130,8 @@ extern "C" void __cxa_throw(
 
 #endif
 
+extern "C" void privateSnippetExecutor( ... );
+
 namespace CPPU_CURRENT_NAMESPACE
 {
 

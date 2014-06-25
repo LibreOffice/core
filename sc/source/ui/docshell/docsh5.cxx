@@ -54,9 +54,6 @@
 #include <rowheightcontext.hxx>
 #include <refupdatecontext.hxx>
 
-// defined in docfunc.cxx
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
-
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
 using com::sun::star::container::XNameContainer;

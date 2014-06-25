@@ -76,6 +76,7 @@
 #include "svtools/colrdlg.hxx"
 #include "RemoteServer.hxx"
 #include "customshowlist.hxx"
+#include "unopage.hxx"
 
 #include <boost/bind.hpp>
 
@@ -91,8 +92,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
-
-extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace sd
 {

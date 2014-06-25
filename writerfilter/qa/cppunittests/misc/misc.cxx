@@ -20,23 +20,12 @@
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
+#include <dmapper/ConversionHelper.hxx>
+#include <dmapper/DomainMapper_Impl.hxx>
 
 
 
 using namespace std;
-
-namespace writerfilter { namespace dmapper {
-    namespace ConversionHelper{
-        SAL_DLLPUBLIC_IMPORT sal_Int32 convertTwipToMM100(sal_Int32 _t);
-        SAL_DLLPUBLIC_IMPORT sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t);
-    }
-
-SAL_DLLPUBLIC_IMPORT // export just for test
-boost::tuple<OUString, vector<OUString>, vector<OUString> >
-lcl_SplitFieldCommand(const OUString& rCommand);
-
-} }
-
 
 namespace {
 
