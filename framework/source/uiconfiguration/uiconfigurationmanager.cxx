@@ -547,6 +547,7 @@ void UIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
@@ -559,7 +560,7 @@ void UIConfigurationManager::impl_resetElementTypeData(
             ConfigurationEvent aEvent;
             aEvent.ResourceURL = rElement.aResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xThis;
+            aEvent.Source = xIfac;
             aEvent.Element <<= rElement.xSettings;
 
             rRemoveNotifyContainer.push_back( aEvent );
@@ -588,6 +589,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
     Reference< XStorage > xElementStorage( rDocElementType.xStorage );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rDocElementType.nElementType;
 
     while ( pIter != rHashMap.end() )
@@ -606,7 +608,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xThis;
+                aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -620,7 +622,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
 
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
-                aRemoveEvent.Source = xThis;
+                aRemoveEvent.Source = xIfac;
                 aRemoveEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aRemoveEvent );
@@ -992,13 +994,14 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             rElementType.bModified = true;
 
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about replaced element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = ResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xThis;
+            aEvent.Source = xIfac;
             aEvent.ReplacedElement <<= xOldSettings;
             aEvent.Element <<= pDataSettings->xSettings;
 
@@ -1049,13 +1052,14 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 rElementType.bModified = true;
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about removed element settings
                 ConfigurationEvent aEvent;
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xThis;
+                aEvent.Source = xIfac;
                 aEvent.Element <<= xRemovedSettings;
 
                 aGuard.clear();
@@ -1125,13 +1129,14 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xThis;
+            aEvent.Source = xIfac;
             aEvent.Element <<= xInsertSettings;
 
             aGuard.clear();

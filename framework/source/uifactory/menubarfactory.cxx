@@ -118,7 +118,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         {
             Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager =
                 ModuleManager::create( _rxContext );
-            OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+            OUString aModuleIdentifier = xModuleManager->identify( Reference<XInterface>( xFrame, UNO_QUERY ) );
             if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
