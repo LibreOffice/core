@@ -277,7 +277,7 @@ class SW_DLLPUBLIC SwDoc :
     Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
     SwDBData    maDBData;                //< database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
-    OUString    msTOIAutoMarkURL;        //< ::com::sun::star::util::URL of table of index AutoMark file
+    OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         mxXForms;                        //< container with XForms models
@@ -1638,7 +1638,7 @@ public:
 
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-    // Query if ::com::sun::star::util::URL was visited.
+    // Query if URL was visited.
     // Query via Doc, if only a Bookmark has been given.
     // In this case the document name has to be set in front.
     bool IsVisitedURL( const OUString& rURL ) const;
