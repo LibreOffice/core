@@ -33,7 +33,7 @@ Menu MN_SPELL_POPUP
         {
             Identifier = MN_IGNORE_WORD ;
             HelpID = HID_LINGU_IGNORE_WORD ;
-            Text [ en-US ] = "Ignore All" ;
+            Text [ en-US ] = "I~gnore All" ;
         };
         MenuItem
         {
@@ -116,7 +116,7 @@ String STR_LANGSTATUS_MORE
 };
 String STR_IGNORE_SELECTION
 {
-    Text [ en-US ] = "Ignore" ;
+    Text [ en-US ] = "~Ignore" ;
 };
 String STR_EXPLANATION_LINK
 {
