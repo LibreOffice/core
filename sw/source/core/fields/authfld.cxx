@@ -547,8 +547,6 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     OUString sRet;
-    if(pAuthType->GetPrefix() && eField != AUTH_FIELD_TITLE)
-        sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
     {
@@ -562,10 +560,9 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
         const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
         if(pEntry)
-            sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+            sRet += pEntry->GetAuthorField(eField);
     }
-    if(pAuthType->GetSuffix() && eField != AUTH_FIELD_TITLE)
-        sRet += OUString(pAuthType->GetSuffix());
+
     return sRet;
 }
 

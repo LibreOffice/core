@@ -3758,12 +3758,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                                   uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
                                   uno::UNO_QUERY_THROW);
-
-                        if( !sFirstParam.isEmpty()){
+                        OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText inclusing the index e.g. CITATION Kra06 \l 1033
+                        if( !sCmd.isEmpty()){
                             uno::Sequence<com::sun::star::beans::PropertyValue> aValues(1);
                             com::sun::star::beans::PropertyValue propertyVal;
                             propertyVal.Name = "Identifier";
-                            propertyVal.Value = uno::makeAny(sFirstParam);
+                            propertyVal.Value = uno::makeAny(sCmd);
                             aValues[0] = propertyVal;
                                     xTC->setPropertyValue("Fields",
                                             uno::makeAny(aValues));

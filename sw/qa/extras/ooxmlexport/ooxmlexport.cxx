@@ -3013,14 +3013,8 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc,"/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT(pXmlNodes != 0);
-    CPPUNIT_ASSERT(pXmlNodes->nodeNr > 0);
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText", " CITATION Kra06 \\l 1033 ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "(Kramer & Chen, 2006)");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")

@@ -2923,9 +2923,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         break;
     case RES_AUTHORITY:
     {
-        const OUString sStr = " CITATION "
-                + lcl_GetExpandedField(*pFld);
-        GetExport().OutputField( pFld, ww::eCITATION, sStr );
+        //lcl_GetExpandedField(*pFld) will return the entire instrText.
+        GetExport().OutputField( pFld, ww::eCITATION, lcl_GetExpandedField(*pFld) );
     }
     break;
     case RES_POSTITFLD:
