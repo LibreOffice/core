@@ -296,6 +296,12 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
         return;
     uno::Reference< text::XTextCursor > xCursor = GetTopTextAppend()->createTextCursorByRange(pSectionContext->GetStartingRange());
 
+    // Remove the extra NumPicBullets from the document,
+    // which get attached to the first paragraph in the
+    // document
+    ListsManager::Pointer pListTable = GetListTable();
+    pListTable->DisposeNumPicBullets();
+
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
     if (xEnumerationAccess.is() && m_aTextAppendStack.size() == 1 )
     {

@@ -699,6 +699,11 @@ ListsManager::ListsManager(DomainMapper& rDMapper,
 
 ListsManager::~ListsManager( )
 {
+    DisposeNumPicBullets();
+}
+
+void ListsManager::DisposeNumPicBullets( )
+{
     uno::Reference<drawing::XShape> xShape;
     for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
     {
