@@ -115,17 +115,19 @@ public:
 // The variables convert from SbxVariablen. Put()/Insert() into the
 // declared datatype, if they are not SbxVARIANT.
 
-class SbxVarRefs;
+class SbxVarEntry;
 
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
+    typedef std::vector<SbxVarEntry*> VarEntriesType;
+
 // #100883 Method to set method directly to parameter array
     friend class SbMethod;
     friend class SbClassModuleObject;
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
     BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
 
-    SbxVarRefs*   pData;          // The variables
+    VarEntriesType* pData;          // The variables
 
 protected:
     SbxDataType eType;            // Data type of the array
