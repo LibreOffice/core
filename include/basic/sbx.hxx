@@ -152,7 +152,7 @@ public:
     void                 Remove( sal_uInt16 );
     void                 Remove( SbxVariable* );
     void                 Merge( SbxArray* );
-    const OUString&      GetAlias( sal_uInt16 );
+    OUString             GetAlias( sal_uInt16 );
     void                 PutAlias( const OUString&, sal_uInt16 );
     SbxVariable*         FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const OUString&, SbxClassType );

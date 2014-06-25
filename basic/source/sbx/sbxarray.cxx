@@ -21,6 +21,9 @@
 #include <basic/sbx.hxx>
 #include "runtime.hxx"
 #include <vector>
+
+#include <boost/optional.hpp>
+
 using namespace std;
 
 struct SbxDim {                 // an array-dimension:
@@ -31,9 +34,8 @@ struct SbxDim {                 // an array-dimension:
 
 class SbxVarEntry : public SbxVariableRef {
 public:
-    OUString* pAlias;
-    SbxVarEntry() : SbxVariableRef(), pAlias( NULL ) {}
-   ~SbxVarEntry() { delete pAlias; }
+    boost::optional<OUString> maAlias;
+    SbxVarEntry() : SbxVariableRef() {}
 };
 
 TYPEINIT1(SbxArray,SbxBase)
@@ -73,10 +75,10 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
                 continue;
             SbxVarEntry* pDstRef = new SbxVarEntry;
             *((SbxVariableRef*) pDstRef) = *((SbxVariableRef*) pSrcRef);
-            if( pSrcRef->pAlias )
-            {
-                pDstRef->pAlias = new OUString( *pSrcRef->pAlias );
-            }
+
+            if (pSrcRef->maAlias)
+                pDstRef->maAlias.reset(*pSrcRef->maAlias);
+
             if( eType != SbxVARIANT )
             {
                 // Convert no objects
@@ -234,23 +236,19 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
     }
 }
 
-const OUString& SbxArray::GetAlias( sal_uInt16 nIdx )
+OUString SbxArray::GetAlias( sal_uInt16 nIdx )
 {
-static const OUString sEmpty("");
-
     if( !CanRead() )
     {
         SetError( SbxERR_PROP_WRITEONLY );
-        return sEmpty;
+        return OUString();
     }
     SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
 
-    if ( !rRef.pAlias )
-    {
-        return sEmpty;
-    }
+    if (!rRef.maAlias)
+        return OUString();
 
-    return *rRef.pAlias;
+    return *rRef.maAlias;
 }
 
 void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
@@ -262,14 +260,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
     else
     {
         SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
-        if( !rRef.pAlias )
-        {
-            rRef.pAlias = new OUString( rAlias );
-        }
-        else
-        {
-            *rRef.pAlias = rAlias;
-        }
+        rRef.maAlias.reset(rAlias);
     }
 }
 
@@ -382,9 +373,9 @@ void SbxArray::Merge( SbxArray* p )
                     SbxVarEntry* pRef = new SbxVarEntry;
                     mpVarEntries->push_back(pRef);
                     *((SbxVariableRef*) pRef) = *((SbxVariableRef*) pRef1);
-                    if( pRef1->pAlias )
+                    if (pRef1->maAlias)
                     {
-                        pRef->pAlias = new OUString( *pRef1->pAlias );
+                        pRef->maAlias.reset(*pRef1->maAlias);
                     }
                 }
             }
