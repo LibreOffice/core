@@ -163,7 +163,7 @@ struct DocxSdrExport::Impl
     sal_Int32 m_nSeq ;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::list<SwFrmFmt*> m_aTextBoxes;
+    std::set<SwFrmFmt*> m_aTextBoxes;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),

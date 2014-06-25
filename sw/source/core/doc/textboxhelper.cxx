@@ -111,16 +111,16 @@ void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
     }
 }
 
-std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
+std::set<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
 {
-    std::list<SwFrmFmt*> aRet;
+    std::set<SwFrmFmt*> aRet;
 
     const SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
     for (SwFrmFmts::const_iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
     {
         SwFrmFmt* pTextBox = findTextBox(*it);
         if (pTextBox)
-            aRet.push_back(pTextBox);
+            aRet.insert(pTextBox);
     }
 
     return aRet;
@@ -142,13 +142,13 @@ std::map<SwFrmFmt*, SwFrmFmt*> SwTextBoxHelper::findShapes(const SwDoc* pDoc)
 }
 
 /// If the passed SdrObject is in fact a TextFrame, that is used as a TextBox.
-bool lcl_isTextBox(SdrObject* pSdrObject, std::list<SwFrmFmt*>& rTextBoxes)
+bool lcl_isTextBox(SdrObject* pSdrObject, std::set<SwFrmFmt*>& rTextBoxes)
 {
     SwVirtFlyDrawObj* pObject = PTR_CAST(SwVirtFlyDrawObj, pSdrObject);
     return pObject && std::find(rTextBoxes.begin(), rTextBoxes.end(), pObject->GetFmt()) != rTextBoxes.end();
 }
 
-sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes)
+sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::set<SwFrmFmt*>& rTextBoxes)
 {
     sal_Int32 nRet = 0;
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
@@ -160,7 +160,7 @@ sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextB
     return nRet;
 }
 
-uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list<SwFrmFmt*>& rTextBoxes) throw(lang::IndexOutOfBoundsException)
+uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<SwFrmFmt*>& rTextBoxes) throw(lang::IndexOutOfBoundsException)
 {
     if (nIndex < 0 || nIndex >= getCount(pPage, rTextBoxes))
         throw lang::IndexOutOfBoundsException();
