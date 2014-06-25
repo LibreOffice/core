@@ -42,6 +42,7 @@
 #include <svx/svdograf.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/svdotable.hxx> // #i124389#
+#include <vcl/svapp.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -761,6 +762,8 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
 
 SdrUndoObjList::~SdrUndoObjList()
 {
+    SolarMutexGuard aGuard;
+
     delete m_pListener;
 
     if (pObj!=NULL && IsOwner())
