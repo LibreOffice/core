@@ -295,7 +295,7 @@ public:
     std::set<OUString> aScriptTextStyles;// script dependent text styles
     std::vector<OUString> aOutlineMarks;
     std::vector<sal_uInt32> aOutlineMarkPoss;
-    HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
+    HTMLControls aHTMLControls;     // die zu schreibenden Forms
     SwHTMLFmtInfos aChrFmtInfos;
     SwHTMLFmtInfos aTxtCollInfos;
     INetFmts aINetFmts;             // die "offenen" INet-Attribute

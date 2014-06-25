@@ -766,7 +766,7 @@ private:
                             SvxCSS1PropertyInfo &rPropInfo,
                             const OUString *pLang=0, const OUString *pDir=0 );
 
-    // Inserting Controls and ::com::sun::star::form::Forms (htmlform.cxx)
+    // Inserting Controls and Forms (htmlform.cxx)
 
     // Insert draw object into document
     void InsertDrawObject( SdrObject* pNewDrawObj, const Size& rSpace,
