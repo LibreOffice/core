@@ -192,7 +192,7 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-OUString GetRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xLabeledDataSequence )
+OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xLabeledDataSequence )
 {
     OUString aRet;
     if( xLabeledDataSequence.is() )

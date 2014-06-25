@@ -39,9 +39,8 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-OUString GetRole(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
+OOO_DLLPUBLIC_CHARTTOOLS OUString
+    getRole( const css::uno::Reference<css::chart2::data::XLabeledDataSequence>& xLabeledDataSequence );
 
 /** Retrieves the data sequence in the given data source that matches the
     given role.  If more than one sequences match the role, the first match

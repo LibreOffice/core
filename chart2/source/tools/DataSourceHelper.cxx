@@ -254,7 +254,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     //add all other sequences now without x-values
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {
-        OUString aRole( DataSeriesHelper::GetRole( aDataSeqences[nN] ) );
+        OUString aRole = DataSeriesHelper::getRole(aDataSeqences[nN]);
         if( !aRole.equals("values-x") )
             aResultVector.push_back( aDataSeqences[nN] );
     }

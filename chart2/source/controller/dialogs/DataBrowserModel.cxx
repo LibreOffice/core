@@ -33,6 +33,7 @@
 
 #include "ChartModel.hxx"
 #include <unonames.hxx>
+#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -81,19 +82,10 @@ OUString lcl_getRole(
     return aResult;
 }
 
-OUString lcl_getRole(
-    const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
-{
-    OUString aResult;
-    if( xLSeq.is())
-        aResult = lcl_getRole( xLSeq->getValues());
-    return aResult;
-}
-
 OUString lcl_getUIRoleName(
     const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
-    OUString aResult( lcl_getRole( xLSeq ));
+    OUString aResult = ::chart::DataSeriesHelper::getRole(xLSeq);
     if( !aResult.isEmpty())
         aResult = ::chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
     return aResult;
@@ -123,7 +115,7 @@ bool lcl_SequenceOfSeriesIsShared(
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
         for( sal_Int32 i=0; i<aLSeq.getLength(); ++i )
             if( aLSeq[i].is() &&
-                lcl_getRole( aLSeq[i] ).equals( aValuesRole ))
+                ::chart::DataSeriesHelper::getRole(aLSeq[i]).equals( aValuesRole ))
             {
                 // getValues().is(), because lcl_getRole checked that already
                 bResult = (aValuesRep == aLSeq[i]->getValues()->getSourceRangeRepresentation());
@@ -204,11 +196,11 @@ private:
 struct lcl_RolesOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
     lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
-            m_aRole( lcl_getRole( xLSeq ))
-    {}
+        m_aRole(::chart::DataSeriesHelper::getRole(xLSeq)) {}
+
     bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
     {
-        return lcl_getRole( xLSeq ).equals( m_aRole );
+        return ::chart::DataSeriesHelper::getRole(xLSeq).equals(m_aRole);
     }
 private:
     OUString m_aRole;
@@ -269,8 +261,8 @@ struct DataBrowserModel::implColumnLess : public ::std::binary_function<
     {
         if( rLeft.m_xLabeledDataSequence.is() && rRight.m_xLabeledDataSequence.is())
         {
-            return DialogModel::GetRoleIndexForSorting( lcl_getRole( rLeft.m_xLabeledDataSequence )) <
-                DialogModel::GetRoleIndexForSorting( lcl_getRole( rRight.m_xLabeledDataSequence ));
+            return DialogModel::GetRoleIndexForSorting(DataSeriesHelper::getRole(rLeft.m_xLabeledDataSequence)) <
+                DialogModel::GetRoleIndexForSorting(DataSeriesHelper::getRole(rRight.m_xLabeledDataSequence));
         }
         return true;
     }
@@ -885,7 +877,7 @@ void DataBrowserModel::updateFromModel()
                         for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
                         {
                             sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
-                            OUString aRole = lcl_getRole( aLSeqs[nSeqIdx] );
+                            OUString aRole = DataSeriesHelper::getRole(aLSeqs[nSeqIdx]);
 
                             if( aRole.equals( aRoleForDataLabelNumberFormat ) )
                             {
