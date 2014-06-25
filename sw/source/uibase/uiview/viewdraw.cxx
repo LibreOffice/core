@@ -31,6 +31,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <textboxhelper.hxx>
 #include <editeng/langitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
@@ -459,6 +460,16 @@ void SwView::NoRotate()
 
 // Enable DrawTextEditMode
 
+static bool lcl_isTextBox(SdrObject* pObject)
+{
+    if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObject->GetUserCall()))
+    {
+        if (SwFrmFmt* pFmt = pDrawContact->GetFmt())
+            return SwTextBoxHelper::findTextBox(pFmt);
+    }
+    return false;
+}
+
 bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
@@ -483,7 +494,9 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
         !m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
     {
-        bReturn = BeginTextEdit( pObj, pPV, m_pEditWin, false );
+        // Refuse to edit editeng text of the shape if it has textbox attached.
+        if (!lcl_isTextBox(pObj))
+            bReturn = BeginTextEdit( pObj, pPV, m_pEditWin, false );
     }
 
     pSdrView->SetHitTolerancePixel( nOld );
