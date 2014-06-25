@@ -53,7 +53,9 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     ucbhelper \
     utl \
     vcl \
-    $(if $(ENABLE_HEADLESS),,vclplug_svp) \
+    $(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+        $(if $(ENABLE_HEADLESS),,vclplug_svp) \
+    ) \
 	$(gb_UWINAPI) \
 ))
 
