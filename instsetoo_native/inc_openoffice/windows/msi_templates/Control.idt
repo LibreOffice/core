@@ -195,7 +195,7 @@ PatchWelcome	TextLine2	Text	135	54	228	45	65539		OOO_CONTROL_162
 ReadyToInstall	Back	PushButton	164	243	66	17	3		OOO_CONTROL_163	InstallNow	
 ReadyToInstall	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToInstall	BannerLine	Line	0	44	374	0	1				
-ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	Back	
+ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	DesktopLink	
 ReadyToInstall	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_167		
 ReadyToInstall	DlgLine	Line	0	234	374	0	1				
 ReadyToInstall	DlgText	Text	21	51	326	20	3		OOO_CONTROL_168		
