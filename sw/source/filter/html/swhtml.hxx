@@ -136,7 +136,7 @@ public:
 struct _HTMLAttrTable
 {
     _HTMLAttr
-                *pKeep,         // ::com::sun::star::frame::Frame-Attribure
+                *pKeep,         // Frame-Attribute
                 *pBox,
                 *pBrush,
                 *pBreak,
@@ -440,7 +440,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
     bool bSetModEnabled : 1;
 
-    bool bInFloatingFrame : 1;  // Wir sind in einen Floating ::com::sun::star::frame::Frame
+    bool bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
     bool bInField : 1;
     bool bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
     // 8
