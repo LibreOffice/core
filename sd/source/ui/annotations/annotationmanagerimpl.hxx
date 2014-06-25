@@ -127,6 +127,12 @@ private:
     Font maFont;
 };
 
+OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+
+SfxItemPool* GetAnnotationPool();
+
+com::sun::star::util::DateTime getCurrentDateTime();
+
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONMANAGERIMPL_HXX

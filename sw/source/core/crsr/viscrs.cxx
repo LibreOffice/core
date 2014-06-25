@@ -52,8 +52,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <touch/touch.h>
-
-extern void SwCalcPixStatics( OutputDevice *pOut );
+#include <paintfrm.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCrsr the same size does not have to be

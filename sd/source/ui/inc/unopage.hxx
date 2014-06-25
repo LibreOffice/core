@@ -313,6 +313,8 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
+OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
+
 #endif // INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

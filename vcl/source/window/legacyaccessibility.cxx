@@ -20,8 +20,8 @@
 #include <tools/debug.hxx>
 
 #include <svdata.hxx>
-#include <window.h>
 
+#include <dlgctrl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
@@ -37,16 +37,6 @@
 
 using namespace ::com::sun::star;
 
-
-Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
-
-Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
-                               sal_uInt16& rFormStart, sal_uInt16& rFormEnd );
-
-Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
-                             sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true );
-
-sal_Unicode getAccel( const OUString& rStr );
 
 static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window* pLabel, sal_Unicode nAccel )
 {

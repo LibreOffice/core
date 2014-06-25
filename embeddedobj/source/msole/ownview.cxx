@@ -49,8 +49,6 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
-
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
 public:

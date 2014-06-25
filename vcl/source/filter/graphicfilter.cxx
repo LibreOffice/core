@@ -67,6 +67,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "FilterConfigCache.hxx"
+#include "graphicfilter_internal.hxx"
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 

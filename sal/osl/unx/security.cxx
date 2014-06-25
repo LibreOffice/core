@@ -45,7 +45,6 @@
 static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
-extern "C" sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
 static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);

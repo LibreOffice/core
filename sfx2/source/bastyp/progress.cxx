@@ -41,7 +41,8 @@
 #include <sfx2/sfxresid.hxx>
 #include "bastyp.hrc"
 #include <sfx2/msg.hxx>
-
+#include "sfxslots.hxx"
+#include "sfxbasecontroller_internal.hxx"
 #include <time.h>
 
 using namespace ::com::sun::star::uno;
@@ -69,13 +70,6 @@ struct SfxProgress_Impl
     void                    Enable_Impl( bool );
 
 };
-
-
-
-#include "sfxslots.hxx"
-
-
-extern sal_uInt32 Get10ThSec();
 
 
 

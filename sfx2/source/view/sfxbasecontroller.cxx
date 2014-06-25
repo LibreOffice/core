@@ -78,6 +78,7 @@
 
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>
+#include "sfxbasecontroller_internal.hxx"
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 

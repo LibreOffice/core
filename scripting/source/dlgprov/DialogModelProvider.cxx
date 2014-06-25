@@ -24,25 +24,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-// component helper namespace
-namespace comp_DialogModelProvider {
-
-using namespace ::com::sun::star;
-using namespace awt;
-using namespace lang;
-using namespace uno;
-using namespace script;
-using namespace beans;
-
-
-// component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-
-} // closing component helper namespace
-
-
-
 /// anonymous implementation namespace
 namespace dlgprov {
 

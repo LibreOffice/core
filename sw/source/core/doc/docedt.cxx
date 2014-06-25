@@ -45,6 +45,7 @@
 #include <docufld.hxx>
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include <docedt.hxx>
 
 #include <vector>
 

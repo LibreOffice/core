@@ -33,6 +33,7 @@
 #include <sfx2/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
+#include "modctrl_internal.hxx"
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
@@ -187,8 +188,6 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
 {
     GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_FIT_SLIDE));
 }
-
-extern Point centerImage(const Rectangle& rBoundingRect, const Image& rImg);
 
 void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
 {

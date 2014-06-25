@@ -33,18 +33,8 @@ using namespace ::com::sun::star::uno;
 using rtl::OUString;
 using rtl::OString;
 
-namespace
-{
-    class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};
-}
-
 namespace cppu
 {
-
-Mutex & SAL_CALL getImplHelperInitMutex(void)
-{
-    return theImplHelperInitMutex::get();
-}
 
 // ClassDataBase
 

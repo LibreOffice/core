@@ -34,8 +34,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
-
 // Declaration of a variable
 // If there are errors it will be parsed up to the comma or the newline.
 // Return-value: a new instance, which were inserted and then deleted.

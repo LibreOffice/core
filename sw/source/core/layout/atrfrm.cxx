@@ -24,6 +24,7 @@
 #include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
+#include <unocoll.hxx>
 #include <unosett.hxx>
 #include <unostyle.hxx>
 #include <fmtclds.hxx>
@@ -1690,8 +1691,6 @@ void SwFmtURL::SetMap( const ImageMap *pM )
     delete pMap;
     pMap = pM ? new ImageMap( *pM ) : 0;
 }
-
-extern const SvEventDescription* sw_GetSupportedMacroItems();
 
 bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {

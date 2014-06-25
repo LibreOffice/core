@@ -50,6 +50,8 @@ class DlgEdView;
 class DialogWindowLayout;
 class ObjectCatalog;
 
+bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName );
+
 class DialogWindow: public BaseWindow
 {
 private:

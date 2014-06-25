@@ -40,6 +40,9 @@
 #include "ndindex.hxx"
 #include "switerator.hxx"
 #include <boost/foreach.hpp>
+#ifdef DBG_UTIL
+#include "tblrwcl.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -1676,9 +1679,6 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
 
 #ifdef DBG_UTIL
         {
-            // is located in tblrwcl.cxx
-            extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
-
             // check if the tables have correct widths
             SwTwips nSize = pSwTable->GetFrmFmt()->GetFrmSize().GetWidth();
             const SwTableLines& rLines = pSwTable->GetTabLines();

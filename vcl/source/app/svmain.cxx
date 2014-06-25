@@ -57,7 +57,7 @@
 #include "salinst.hxx"
 #include "salwtype.hxx"
 #include "svdata.hxx"
-#include "svmain.hxx"
+#include "vcl/svmain.hxx"
 #include "dbggui.hxx"
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
