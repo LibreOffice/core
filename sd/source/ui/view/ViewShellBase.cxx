@@ -1106,7 +1106,7 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
 
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
 
-        OUString aModuleIdentifier( xModuleManager->identify( xFrame ) );
+        OUString aModuleIdentifier( xModuleManager->identify( Reference<XInterface>( xFrame, UNO_QUERY_THROW ) ) );
 
         if( !aModuleIdentifier.isEmpty() )
         {

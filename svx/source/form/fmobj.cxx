@@ -586,7 +586,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     }
     while ( nTokIndex >= 0 );
 
-    return xDestContainer;
+    return Reference<XInterface>( xDestContainer, UNO_QUERY );
 }
 
 //------------------------------------------------------------------

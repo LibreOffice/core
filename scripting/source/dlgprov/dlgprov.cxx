@@ -539,11 +539,11 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 Reference< XInterface >* pObjects = aObjects.getArray();
                 for ( sal_Int32 i = 0; i < nControlCount; ++i )
                 {
-                    pObjects[i] = pControls[i];
+                    pObjects[i] = Reference<XInterface>( pControls[i], UNO_QUERY );
                 }
 
                 // also add the dialog control itself to the sequence
-                pObjects[nControlCount] = rxControl;
+                pObjects[nControlCount] = Reference<XInterface>( rxControl, UNO_QUERY );
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
                     ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
