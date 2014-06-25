@@ -254,12 +254,12 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     vMup = glm::normalize(vMup);
                     vMup *= 25.0f;
 
-                    if(nCode == KEY_W)vMoveBy += vMove*(0.005f*fModelSize);
-                    if(nCode == KEY_S)vMoveBy -= vMove*(0.005f*fModelSize);
+                    if(nCode == KEY_W)vMoveBy += vMove*(0.0005f*fModelSize);
+                    if(nCode == KEY_S)vMoveBy -= vMove*(0.0005f*fModelSize);
                     if( !m_bIsOrbitMode )
                     {
-                        if(nCode == KEY_A)vMoveBy -= vStrafe*(0.005f*fModelSize);
-                        if(nCode == KEY_D)vMoveBy += vStrafe*(0.005f*fModelSize);
+                        if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
+                        if(nCode == KEY_D)vMoveBy += vStrafe*(0.0005f*fModelSize);
                     }
                 }
                 gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
