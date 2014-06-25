@@ -46,8 +46,6 @@ private:
     PreviewRenderer maRenderer;
 };
 
-
-
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif

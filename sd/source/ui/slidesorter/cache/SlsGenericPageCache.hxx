@@ -148,7 +148,6 @@ private:
     void ProvideCacheAndProcessor (void);
 };
 
-
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif

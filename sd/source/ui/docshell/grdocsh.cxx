@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
 #include <svl/srchitem.hxx>
@@ -26,7 +25,6 @@
 #include <comphelper/classids.hxx>
 
 #include <sfx2/objface.hxx>
-
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -72,7 +70,6 @@ GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
 GraphicDocShell::~GraphicDocShell()
 {
 }
-
 
 } // end of namespace sd
 

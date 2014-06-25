@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PageListWatcher.hxx"
 
 #include "sdpage.hxx"
 #include <tools/debug.hxx>
 #include <svx/svdmodel.hxx>
-
-
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {
@@ -166,7 +163,6 @@ sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
     return nRetval;
 }
 
-
 sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
 {
     sal_uInt32 nVisiblePageCount = 0;
@@ -181,8 +177,6 @@ sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
     }
     return nVisiblePageCount;
 }
-
-
 
 sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
 {
@@ -202,8 +196,6 @@ ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
 ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
 {
 }
-
-
 
 sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
 {

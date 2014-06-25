@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PresenterTextView.hxx"
 #include "facreg.hxx"
 
@@ -44,7 +43,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -58,16 +56,10 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterTextView(rxContext)));
 }
 
-
-
-
 OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterTextView");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -75,8 +67,6 @@ Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (v
     static const OUString sServiceName("com.sun.star.drawing.PresenterTextView");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
 
 // PresenterTextView::Implementation
 class PresenterTextView::Implementation
@@ -125,9 +115,6 @@ private:
     void CheckTop (void);
 };
 
-
-
-
 // PresenterTextView
 PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxContext)
     : PresenterTextViewInterfaceBase(),
@@ -136,23 +123,14 @@ PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxCont
     (void)rxContext;
 }
 
-
-
-
 PresenterTextView::~PresenterTextView (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterTextView::disposing (void)
 {
     mpImplementation.reset();
 }
-
-
-
 
 // XInitialization
 void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
@@ -183,11 +161,6 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     }
 }
 
-
-
-
-
-
 Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)
 {
     ThrowIfDisposed();
@@ -207,9 +180,6 @@ Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)
 
     return Any();
 }
-
-
-
 
 Any PresenterTextView::SetPropertyValue (
     const OUString& rsPropertyName,
@@ -265,9 +235,6 @@ Any PresenterTextView::SetPropertyValue (
     return aOldValue;
 }
 
-
-
-
 void PresenterTextView::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -279,9 +246,6 @@ void PresenterTextView::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 // PresenterTextView::Implementation
 PresenterTextView::Implementation::Implementation (void)
@@ -311,9 +275,6 @@ PresenterTextView::Implementation::Implementation (void)
     GetEditEngine();
 }
 
-
-
-
 PresenterTextView::Implementation::~Implementation (void)
 {
     delete mpEditEngine;
@@ -321,18 +282,12 @@ PresenterTextView::Implementation::~Implementation (void)
     delete mpOutputDevice;
 }
 
-
-
-
 EditEngine * PresenterTextView::Implementation::GetEditEngine (void)
 {
     if (mpEditEngine == NULL)
         mpEditEngine = CreateEditEngine ();
     return mpEditEngine;
 }
-
-
-
 
 EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 {
@@ -383,7 +338,6 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
                     rFntDta.nFontInfoId));
         }
 
-
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
         pEditEngine->EnableUndo (true);
@@ -406,17 +360,11 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
     return pEditEngine;
 }
 
-
-
-
 void PresenterTextView::Implementation::SetCanvas (const cppcanvas::CanvasSharedPtr& rpCanvas)
 {
     mpCanvas = rpCanvas;
     mxBitmap = NULL;
 }
-
-
-
 
 void PresenterTextView::Implementation::SetSize (const Size aSize)
 {
@@ -427,9 +375,6 @@ void PresenterTextView::Implementation::SetSize (const Size aSize)
     mnTotalHeight = -1;
     mxBitmap = NULL;
 }
-
-
-
 
 void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
 {
@@ -443,9 +388,6 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
     mpEditEngine->ForceAutoColor(false);
 }
 
-
-
-
 void PresenterTextView::Implementation::SetTextColor (const Color aColor)
 {
     maTextColor = aColor;
@@ -454,9 +396,6 @@ void PresenterTextView::Implementation::SetTextColor (const Color aColor)
     DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
     mpEditEngineItemPool->SetPoolDefaultItem(SvxColorItem(aColor, EE_CHAR_COLOR));
 }
-
-
-
 
 void PresenterTextView::Implementation::SetFontDescriptor (
     const awt::FontDescriptor& rFontDescriptor)
@@ -489,13 +428,6 @@ void PresenterTextView::Implementation::SetFontDescriptor (
     mnTotalHeight = -1;
 }
 
-
-
-
-
-
-
-
 void PresenterTextView::Implementation::SetTop (const sal_Int32 nTop)
 {
     if (nTop == mnTop)
@@ -506,9 +438,6 @@ void PresenterTextView::Implementation::SetTop (const sal_Int32 nTop)
     CheckTop();
 }
 
-
-
-
 void PresenterTextView::Implementation::SetText (const OUString& rText)
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
@@ -517,9 +446,6 @@ void PresenterTextView::Implementation::SetText (const OUString& rText)
     mnTotalHeight = -1;
     mxBitmap = NULL;
 }
-
-
-
 
 sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDistance) const
 {
@@ -539,9 +465,6 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
 
     return nDistance;
 }
-
-
-
 
 Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void)
 {
@@ -580,9 +503,6 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
     return mxBitmap;
 }
 
-
-
-
 sal_Int32 PresenterTextView::Implementation::GetTotalHeight (void)
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
@@ -595,9 +515,6 @@ sal_Int32 PresenterTextView::Implementation::GetTotalHeight (void)
     }
     return mnTotalHeight;
 }
-
-
-
 
 void PresenterTextView::Implementation::CheckTop (void)
 {
@@ -617,7 +534,6 @@ void PresenterTextView::Implementation::CheckTop (void)
     if (mnTop < 0)
         mnTop = 0;
 }
-
 
 } } // end of namespace ::sd::presenter
 

@@ -55,14 +55,12 @@ public:
     SdAttrLayerDesc( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
 };
 
-
 class SdAttrLayerVisible : public SfxBoolItem
 {
 public:
     SdAttrLayerVisible( bool bValue = true ) :
         SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
 };
-
 
 class SdAttrLayerPrintable : public SfxBoolItem
 {
@@ -71,7 +69,6 @@ public:
         SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
 };
 
-
 class SdAttrLayerLocked : public SfxBoolItem
 {
 public:
@@ -79,14 +76,12 @@ public:
         SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
 };
 
-
 class SdAttrLayerThisPage : public SfxBoolItem
 {
 public:
     SdAttrLayerThisPage( bool bValue = false ) :
         SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
 };
-
 
 class DiaEffectItem : public SfxEnumItem
 {
@@ -102,7 +97,6 @@ public:
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
 
-
 class DiaSpeedItem : public SfxEnumItem
 {
 public:
@@ -117,7 +111,6 @@ public:
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
 
-
 class DiaAutoItem : public SfxEnumItem
 {
 public:
@@ -130,7 +123,6 @@ public:
             sal_uInt16          GetValueCount() const SAL_OVERRIDE { return PRESCHANGE_COUNT; }
             PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
-
 
 class DiaTimeItem : public SfxUInt32Item
 {

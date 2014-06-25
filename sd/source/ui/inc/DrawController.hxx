@@ -65,7 +65,6 @@ class DrawSubController;
 class ViewShellBase;
 class ViewShell;
 
-
 /** The DrawController is the UNO controller for Impress and Draw.  It
     relies objects that implement the DrawSubController interface for view
     specific behaviour.  The life time of the DrawController is roughly that
@@ -209,18 +208,15 @@ public:
         getCurrentPage (void)
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // lang::XEventListener
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // view::XSelectionChangeListener
     virtual void  SAL_CALL
         selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XControllerManager
 
@@ -231,7 +227,6 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XUnoTunnel
 

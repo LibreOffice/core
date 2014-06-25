@@ -289,7 +289,6 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent )
     }
 }
 
-
 sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
 {
     sal_uInt16 nSlot = 0;
@@ -319,8 +318,6 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
     OSL_FAIL( "Slot in array not found!" );
     return( USHRT_MAX );
 }
-
-
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
@@ -353,8 +350,6 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         }
     }
 }
-
-
 
 IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fucushow.hxx"
 
 #include <svx/svxids.hrc>
@@ -37,8 +36,6 @@
 namespace sd {
 
 TYPEINIT1( FuCustomShowDlg, FuPoor );
-
-
 
 FuCustomShowDlg::FuCustomShowDlg (
     ViewShell* pViewSh,

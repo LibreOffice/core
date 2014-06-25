@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationTracer.hxx"
 
 #include <cstdio>
@@ -48,9 +47,6 @@ void ConfigurationTracer::TraceConfiguration (
     (void)pMessage;
 #endif
 }
-
-
-
 
 #ifdef DEBUG
 void ConfigurationTracer::TraceBoundResources (

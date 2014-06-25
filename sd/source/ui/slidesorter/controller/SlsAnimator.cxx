@@ -62,9 +62,6 @@ public:
     bool mbIsExpired;
 };
 
-
-
-
 Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maTimer(),
@@ -78,9 +75,6 @@ Animator::Animator (SlideSorter& rSlideSorter)
     maTimer.SetTimeoutHdl(LINK(this,Animator,TimeoutHandler));
 }
 
-
-
-
 Animator::~Animator (void)
 {
     if ( ! mbIsDisposed)
@@ -89,9 +83,6 @@ Animator::~Animator (void)
         Dispose();
     }
 }
-
-
-
 
 void Animator::Dispose (void)
 {
@@ -109,9 +100,6 @@ void Animator::Dispose (void)
         mpDrawLock.reset();
     }
 }
-
-
-
 
 Animator::AnimationId Animator::AddAnimation (
     const AnimationFunctor& rAnimation,
@@ -169,9 +157,6 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
     }
 }
 
-
-
-
 void Animator::RemoveAllAnimations (void)
 {
     ::std::for_each(
@@ -188,9 +173,6 @@ void Animator::RemoveAllAnimations (void)
     mpDrawLock.reset();
 }
 
-
-
-
 bool Animator::ProcessAnimations (const double nTime)
 {
     bool bExpired (false);
@@ -198,7 +180,6 @@ bool Animator::ProcessAnimations (const double nTime)
     OSL_ASSERT( ! mbIsDisposed);
     if (mbIsDisposed)
         return bExpired;
-
 
     AnimationList aCopy (maAnimations);
     AnimationList::const_iterator iAnimation;
@@ -209,9 +190,6 @@ bool Animator::ProcessAnimations (const double nTime)
 
     return bExpired;
 }
-
-
-
 
 void Animator::CleanUpAnimationList (void)
 {
@@ -231,9 +209,6 @@ void Animator::CleanUpAnimationList (void)
     maAnimations.swap(aActiveAnimations);
 }
 
-
-
-
 void Animator::RequestNextFrame (const double nFrameStart)
 {
     (void)nFrameStart;
@@ -246,9 +221,6 @@ void Animator::RequestNextFrame (const double nFrameStart)
         maTimer.Start();
     }
 }
-
-
-
 
 IMPL_LINK_NOARG(Animator, TimeoutHandler)
 {
@@ -266,9 +238,6 @@ IMPL_LINK_NOARG(Animator, TimeoutHandler)
 
     return 0;
 }
-
-
-
 
 //===== Animator::Animation ===================================================
 
@@ -290,15 +259,9 @@ Animator::Animation::Animation (
     Run(nGlobalTime);
 }
 
-
-
-
 Animator::Animation::~Animation (void)
 {
 }
-
-
-
 
 bool Animator::Animation::Run (const double nGlobalTime)
 {
@@ -326,9 +289,6 @@ bool Animator::Animation::Run (const double nGlobalTime)
     return mbIsExpired;
 }
 
-
-
-
 void Animator::Animation::Expire (void)
 {
     if ( ! mbIsExpired)
@@ -338,13 +298,6 @@ void Animator::Animation::Expire (void)
             maFinishFunctor();
     }
 }
-
-
-
-
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

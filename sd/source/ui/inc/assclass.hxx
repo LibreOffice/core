@@ -66,7 +66,6 @@ public:
     int  GetCurrentPage() const { return mnCurrentPage;}
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

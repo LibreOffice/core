@@ -34,7 +34,6 @@ public:
         const SharedCacheContext& rpCacheContext);
 };
 
-
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif

@@ -129,7 +129,6 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 };
 
-
 } } // end of namespace sd::framework
 
 #endif

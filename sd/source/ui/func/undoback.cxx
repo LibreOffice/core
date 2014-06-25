@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "undoback.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
@@ -25,8 +24,6 @@
 #include <svl/itemset.hxx>
 
 TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
-
-
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
@@ -40,14 +37,10 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SetComment( aString );
 }
 
-
-
 SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
 {
     delete mpItemSet;
 }
-
-
 
 void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 {
@@ -61,21 +54,15 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
     mrPage.ActionChanged();
 }
 
-
-
 void SdBackgroundObjUndoAction::Undo()
 {
     ImplRestoreBackgroundObj();
 }
 
-
-
 void SdBackgroundObjUndoAction::Redo()
 {
     ImplRestoreBackgroundObj();
 }
-
-
 
 SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {

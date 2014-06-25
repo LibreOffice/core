@@ -32,7 +32,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace framework {
 
-
 void ImpressModule::Initialize (Reference<frame::XController>& rxController)
 {
     new CenterViewFocusModule(rxController);
@@ -50,7 +49,6 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }
-
 
 } } // end of namespace sd::framework
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SdUnoOutlineView.hxx"
 
 #include "DrawController.hxx"
@@ -35,8 +34,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-
 namespace sd {
 
 SdUnoOutlineView::SdUnoOutlineView(
@@ -46,22 +43,13 @@ SdUnoOutlineView::SdUnoOutlineView(
 {
 }
 
-
-
-
 SdUnoOutlineView::~SdUnoOutlineView (void) throw()
 {
 }
 
-
-
-
 void SAL_CALL SdUnoOutlineView::disposing (void)
 {
 }
-
-
-
 
 //----- XSelectionSupplier ----------------------------------------------------
 
@@ -72,8 +60,6 @@ sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
     return sal_False;
 }
 
-
-
 Any SAL_CALL SdUnoOutlineView::getSelection()
     throw(RuntimeException, std::exception)
 {
@@ -81,17 +67,12 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
     return aAny;
 }
 
-
-
 void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
     throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
-
-
-
 
 void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
@@ -149,16 +130,10 @@ void SdUnoOutlineView::setFastPropertyValue (
     }
 }
 
-
-
-
 void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
-
-
-
 
 Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
     sal_Int32 nHandle)

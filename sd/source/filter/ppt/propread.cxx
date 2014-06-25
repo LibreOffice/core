@@ -53,15 +53,11 @@ PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
     return *this;
 }
 
-
-
 void PropItem::Clear()
 {
     Seek( STREAM_SEEK_TO_BEGIN );
     delete[] (sal_uInt8*)SwitchBuffer();
 }
-
-
 
 static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 {
@@ -173,8 +169,6 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
     return bRetValue;
 }
 
-
-
 PropItem& PropItem::operator=( PropItem& rPropItem )
 {
     if ( this != &rPropItem )
@@ -191,8 +185,6 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     return *this;
 }
 
-
-
 Section::Section( const Section& rSection )
     : mnTextEnc(rSection.mnTextEnc),
     maEntries(rSection.maEntries.clone())
@@ -201,16 +193,12 @@ Section::Section( const Section& rSection )
         aFMTID[ i ] = rSection.aFMTID[ i ];
 }
 
-
-
 Section::Section( const sal_uInt8* pFMTID )
 {
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = pFMTID[ i ];
 }
-
-
 
 bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
@@ -234,8 +222,6 @@ bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
     }
     return false;
 }
-
-
 
 void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize )
 {
@@ -261,8 +247,6 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
 
     maEntries.push_back( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ) );
 }
-
-
 
 bool Section::GetDictionary( Dictionary& rDict )
 {
@@ -319,8 +303,6 @@ bool Section::GetDictionary( Dictionary& rDict )
     return bRetValue;
 }
 
-
-
 void Section::Read( SvStorageStream *pStrm )
 {
     sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
@@ -352,7 +334,6 @@ void Section::Read( SvStorageStream *pStrm )
             }
             else
                 nVectorCount = 1;
-
 
             bool bVariant = ( nPropType == VT_VARIANT );
 
@@ -507,8 +488,6 @@ void Section::Read( SvStorageStream *pStrm )
     pStrm->Seek( nSecOfs + nSecSize );
 }
 
-
-
 Section& Section::operator=( const Section& rSection )
 {
     if ( this != &rSection )
@@ -519,8 +498,6 @@ Section& Section::operator=( const Section& rSection )
     }
     return *this;
 }
-
-
 
 PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
         mbStatus            ( false ),
@@ -541,14 +518,10 @@ PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
     }
 }
 
-
-
 void PropRead::AddSection( Section& rSection )
 {
     maSections.push_back( new Section( rSection ) );
 }
-
-
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
@@ -560,8 +533,6 @@ const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
     }
     return NULL;
 }
-
-
 
 void PropRead::Read()
 {
@@ -597,8 +568,6 @@ void PropRead::Read()
         }
     }
 }
-
-
 
 PropRead& PropRead::operator=( const PropRead& rPropRead )
 {

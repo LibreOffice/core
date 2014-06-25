@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 
 #include <comphelper/classids.hxx>
@@ -1102,7 +1101,6 @@ Rectangle SdPage::GetTitleRect() const
     return aTitleRect;
 }
 
-
 /*************************************************************************
 |*
 |* return outline area
@@ -1147,7 +1145,6 @@ Rectangle SdPage::GetLayoutRect() const
 
     return aLayoutRect;
 }
-
 
 /**************************************************************************
 |*
@@ -1391,7 +1388,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
         }
     }
 }
-
 
 void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit, bool bSwitchLayout )
 {
@@ -1686,8 +1682,6 @@ SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::ReplaceObject(pNewObj, nObjNum);
 }
-
-
 
 // called after a shape is removed or replaced from this slide
 
@@ -2307,7 +2301,6 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
     return pObj;
 }
 
-
 /*************************************************************************
 |*
 |* Returns the PresObjKind of a object
@@ -2513,7 +2506,6 @@ void SdPage::SetLayoutName(const OUString& aName)
             FmFormPage::SetName(maLayoutName.copy(0, nPos));
     }
 }
-
 
 /*************************************************************************
 |*
@@ -3066,16 +3058,10 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
     }
 }
 
-
-
-
 void SdPage::SetPrecious (const bool bIsPrecious)
 {
     mbIsPrecious = bIsPrecious;
 }
-
-
-
 
 HeaderFooterSettings::HeaderFooterSettings()
 {

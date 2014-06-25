@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsFontProvider.hxx"
 
 #include "controller/SlideSorterController.hxx"
 
 #include <sfx2/app.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-
 
 using namespace ::sd::slidesorter;
 
@@ -63,31 +61,20 @@ FontProvider& FontProvider::Instance (void)
     return *mpInstance;
 }
 
-
-
-
 FontProvider::FontProvider (void)
     : maFont(),
       maMapMode()
 {
 }
 
-
-
-
 FontProvider::~FontProvider (void)
 {
 }
-
-
-
 
 void FontProvider::Invalidate (void)
 {
     maFont.reset();
 }
-
-
 
 } } }  // end of namespace ::sd::slidesorter::view
 

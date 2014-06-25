@@ -45,7 +45,6 @@ namespace {
     > SlideSorterServiceInterfaceBase;
 }
 
-
 /** Implementation of the com.sun.star.drawing.SlideSorter service.
 */
 class SlideSorterService
@@ -59,12 +58,10 @@ public:
     virtual ~SlideSorterService (void);
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XResourceId
 
@@ -73,7 +70,6 @@ public:
 
     sal_Bool SAL_CALL isAnchorOnly (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XWindowListener
 
@@ -89,11 +85,9 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XDrawView
 
@@ -103,7 +97,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // Attributes
 

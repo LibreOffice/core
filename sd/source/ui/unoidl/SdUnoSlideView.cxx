@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/supportsservice.hxx>
 
 #include "DrawController.hxx"
@@ -33,12 +32,10 @@
 #include "sdpage.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sd {
-
 
 SdUnoSlideView::SdUnoSlideView (
     slidesorter::SlideSorter& rSlideSorter) throw()
@@ -47,15 +44,9 @@ SdUnoSlideView::SdUnoSlideView (
 {
 }
 
-
-
-
 SdUnoSlideView::~SdUnoSlideView (void) throw()
 {
 }
-
-
-
 
 //----- XSelectionSupplier ----------------------------------------------------
 
@@ -93,9 +84,6 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
     return bOk;
 }
 
-
-
-
 Any SAL_CALL SdUnoSlideView::getSelection (void)
       throw(RuntimeException, std::exception)
 {
@@ -119,9 +107,6 @@ Any SAL_CALL SdUnoSlideView::getSelection (void)
     return aResult;
 }
 
-
-
-
 void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
     throw(css::uno::RuntimeException, std::exception)
@@ -129,18 +114,12 @@ void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
     (void)rxListener;
 }
 
-
-
-
 void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
     throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
-
-
-
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -161,18 +140,12 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     }
 }
 
-
-
-
 css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
     SdUnoSlideView::getCurrentPage (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide()->GetXDrawPage();
 }
-
-
-
 
 //----- XFastPropertySet ------------------------------------------------------
 
@@ -191,9 +164,6 @@ void SdUnoSlideView::setFastPropertyValue (
     throw beans::UnknownPropertyException();
 }
 
-
-
-
 Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
     sal_Int32 nHandle)
     throw(css::beans::UnknownPropertyException,
@@ -207,7 +177,6 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 
     return Any();
 }
-
 
 // XServiceInfo
 OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw (RuntimeException, std::exception)

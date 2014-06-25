@@ -141,13 +141,11 @@ public:
         const css::geometry::RealPoint2D& rLocation,
         const css::geometry::RealSize2D& rSize);
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XCanvas
 
@@ -299,7 +297,6 @@ public:
         getDevice (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XSpriteCanvas
 
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
@@ -329,12 +326,10 @@ public:
     sal_Bool SAL_CALL updateScreen (sal_Bool bUpdateAll)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XEventListener
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XWindowListener
 
@@ -349,7 +344,6 @@ public:
 
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XBitmap
 
@@ -409,8 +403,6 @@ private:
     void ThrowIfDisposed (void)
         throw (css::lang::DisposedException);
 };
-
-
 
 } } // end of namespace ::sd::presenter
 

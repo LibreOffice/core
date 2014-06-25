@@ -31,7 +31,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 
-
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -43,8 +42,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
     > PresentationFactoryInterfaceBase;
 
 } // end of anonymous namespace.
-
-
 
 namespace sd { namespace framework {
 
@@ -65,7 +62,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
@@ -78,13 +74,11 @@ public:
         const css::uno::Reference<css::drawing::framework::XResource>& xView)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // lang::XEventListener
 

@@ -51,7 +51,6 @@ SdPagesField::SdPagesField( Window* pParent,
     aStr += "XXX";
     Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
 
-
     SetSizePixel( aSize );
 
     // set parameter of MetricFields
@@ -65,13 +64,9 @@ SdPagesField::SdPagesField( Window* pParent,
     Show();
 }
 
-
-
 SdPagesField::~SdPagesField()
 {
 }
-
-
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
@@ -87,8 +82,6 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
     else
         SetText( OUString() );
 }
-
-
 
 void SdPagesField::Modify()
 {
@@ -109,13 +102,9 @@ SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox&
 {
 }
 
-
-
 SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 {
 }
-
-
 
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )
@@ -143,13 +132,9 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-
-
 Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
 {
     return new SdPagesField( pParent, m_xFrame );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

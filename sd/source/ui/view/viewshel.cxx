@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 #include "createtableobjectbar.hxx"
@@ -107,9 +106,7 @@ private:
     ShellCache maShellCache;
 };
 
-
 } // end of anonymous namespace
-
 
 namespace sd {
 
@@ -133,10 +130,8 @@ SfxViewFrame* ViewShell::GetViewFrame (void) const
     }
 }
 
-
 /// declare SFX-Slotmap and standard interface
 TYPEINIT1(ViewShell, SfxShell);
-
 
 ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
 :   SfxShell(&rViewShellBase)
@@ -168,7 +163,6 @@ ViewShell::~ViewShell()
         mpContentWindow.reset();
     }
 }
-
 
 /**
  * common initialization part of both constructors
@@ -272,9 +266,6 @@ void ViewShell::Init (bool bIsMainViewShell)
         SetActiveWindow (mpContentWindow.get());
 }
 
-
-
-
 void ViewShell::Exit (void)
 {
     sd::View* pView = GetView();
@@ -293,9 +284,6 @@ void ViewShell::Exit (void)
 
     SetIsMainViewShell(false);
 }
-
-
-
 
 /**
  * set focus to working window
@@ -357,8 +345,6 @@ void ViewShell::UIActivating( SfxInPlaceClient*  )
     GetViewShellBase().GetToolBarManager()->ToolBarsDestroyed();
 }
 
-
-
 void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
@@ -366,7 +352,6 @@ void ViewShell::UIDeactivated( SfxInPlaceClient*  )
     if ( GetDrawView() )
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this, *GetDrawView());
 }
-
 
 void ViewShell::Deactivate(bool bIsMDIActivate)
 {
@@ -405,16 +390,10 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     SfxShell::Deactivate(bIsMDIActivate);
 }
 
-
-
-
 void ViewShell::Shutdown (void)
 {
     Exit ();
 }
-
-
-
 
 bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -446,7 +425,6 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             bool bConsumed = false;
             if( GetView() )
                 bConsumed = GetView()->getSmartTags().KeyInput(rKEvt);
-
 
             if( !bConsumed )
             {
@@ -484,7 +462,6 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     return(bReturn);
 }
-
 
 void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -525,7 +502,6 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if (rMEvt.IsLeaveWindow())
@@ -559,7 +535,6 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-
 void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( pWin )
@@ -589,8 +564,6 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             pLock->Release();
     }
 }
-
-
 
 void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
@@ -632,7 +605,6 @@ bool ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
     }
     return nRet;
 }
-
 
 bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
@@ -716,8 +688,6 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
     return bDone;
 }
-
-
 
 void ViewShell::SetupRulers (void)
 {
@@ -828,11 +798,6 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
     return pTmpItem;
 }
 
-
-
-
-
-
 void ViewShell::Resize (void)
 {
     SetupRulers ();
@@ -891,9 +856,6 @@ SvBorder ViewShell::GetBorder (bool )
 
     return aBorder;
 }
-
-
-
 
 void ViewShell::ArrangeGUIElements (void)
 {
@@ -1000,15 +962,11 @@ void ViewShell::ArrangeGUIElements (void)
     mpImpl->mbArrangeActive = false;
 }
 
-
-
-
 void ViewShell::SetUIUnit(FieldUnit eUnit)
 {
     // Set unit at horizontal and vertical rulers.
     if (mpHorizontalRuler.get() != NULL)
         mpHorizontalRuler->SetUnit(eUnit);
-
 
     if (mpVerticalRuler.get() != NULL)
         mpVerticalRuler->SetUnit(eUnit);
@@ -1023,9 +981,6 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
         mpHorizontalRuler->SetDefTabDist( nDefTab );
 }
 
-
-
-
 /** Tell the FmFormShell that the view shell is closing.  Give it the
     opportunity to prevent that.
 */
@@ -1039,9 +994,6 @@ bool ViewShell::PrepareClose (bool bUI)
 
     return nResult;
 }
-
-
-
 
 void ViewShell::UpdatePreview (SdPage*, bool )
 {
@@ -1085,9 +1037,6 @@ void ViewShell::UpdatePreview (SdPage*, bool )
     return NULL;
 }
 
-
-
-
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
@@ -1114,8 +1063,6 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         }
     }
 }
-
-
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
@@ -1144,8 +1091,6 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         }
     }
 }
-
-
 
 void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 {
@@ -1194,8 +1139,6 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
     rReq.Done();
 }
 
-
-
 void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
 {
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
@@ -1243,8 +1186,6 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
     rReq.Done();
 }
 
-
-
 void ViewShell::ExecReq( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -1287,9 +1228,6 @@ void ViewShell::ExecReq( SfxRequest& rReq )
     }
 }
 
-
-
-
 /** This default implemenation returns only an empty reference.  See derived
     classes for more interesting examples.
 */
@@ -1303,39 +1241,25 @@ ViewShell::CreateAccessibleDocumentView (::sd::Window* )
         ::com::sun::star::accessibility::XAccessible> ();
 }
 
-
-
 ::sd::WindowUpdater* ViewShell::GetWindowUpdater (void) const
 {
     return mpWindowUpdater.get();
 }
-
-
-
 
 ViewShellBase& ViewShell::GetViewShellBase (void) const
 {
     return *static_cast<ViewShellBase*>(GetViewShell());
 }
 
-
-
-
 ViewShell::ShellType ViewShell::GetShellType (void) const
 {
     return meShellType;
 }
 
-
-
-
 DrawDocShell* ViewShell::GetDocSh (void) const
 {
     return GetViewShellBase().GetDocShell();
 }
-
-
-
 
 SdDrawDocument* ViewShell::GetDoc (void) const
 {
@@ -1439,37 +1363,17 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
     }
 }
 
-
-
-
-
-
-
-
 void ViewShell::PrePaint()
 {
 }
-
-
-
 
 void ViewShell::Paint (const Rectangle&, ::sd::Window* )
 {
 }
 
-
-
-
 void ViewShell::Draw(OutputDevice &, const Region &)
 {
 }
-
-
-
-
-
-
-
 
 void ViewShell::ShowUIControls (bool bVisible)
 {
@@ -1496,10 +1400,6 @@ void ViewShell::ShowUIControls (bool bVisible)
     if (mpContentWindow.get() != NULL)
         mpContentWindow->Show( bVisible );
 }
-
-
-
-
 
 bool ViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
@@ -1549,12 +1449,7 @@ void ViewShell::NotifyAccUpdate( )
     GetViewShellBase().GetDrawController().NotifyAccUpdate();
 }
 
-
 } // end of namespace sd
-
-
-
-
 
 //===== ViewShellObjectBarFactory =============================================
 
@@ -1566,9 +1461,6 @@ ViewShellObjectBarFactory::ViewShellObjectBarFactory (
 {
 }
 
-
-
-
 ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
 {
     for (ShellCache::iterator aI(maShellCache.begin());
@@ -1578,9 +1470,6 @@ ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
         delete aI->second;
     }
 }
-
-
-
 
 SfxShell* ViewShellObjectBarFactory::CreateShell (
     ::sd::ShellId nId,
@@ -1636,9 +1525,6 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
     return pShell;
 }
-
-
-
 
 void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 {

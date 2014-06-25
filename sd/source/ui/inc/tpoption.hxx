@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 
-
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -55,7 +54,6 @@ private:
     CheckBox*    m_pCbxDragStripes;
     CheckBox*    m_pCbxHandlesBezier;
     CheckBox*    m_pCbxMoveOutline;
-
 
 public:
             SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -156,7 +154,6 @@ public:
     using OutputDevice::SetDrawMode;
 
 };
-
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TPOPTION_HXX
 

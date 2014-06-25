@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FullScreenPane.hxx"
 #include "ViewShellBase.hxx"
 #include <cppcanvas/vclfactory.hxx>
@@ -35,7 +34,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-
 
 namespace sd { namespace framework {
 
@@ -99,15 +97,9 @@ FullScreenPane::FullScreenPane (
     mpWindow->GrabFocus();
 }
 
-
-
-
 FullScreenPane::~FullScreenPane (void) throw()
 {
 }
-
-
-
 
 void SAL_CALL FullScreenPane::disposing (void)
 {
@@ -124,12 +116,8 @@ void SAL_CALL FullScreenPane::disposing (void)
         mpWorkWindow.reset();
     }
 
-
     FrameWindowPane::disposing();
 }
-
-
-
 
 //----- XPane -----------------------------------------------------------------
 
@@ -144,9 +132,6 @@ sal_Bool SAL_CALL FullScreenPane::isVisible (void)
         return false;
 }
 
-
-
-
 void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
     throw (RuntimeException, std::exception)
 {
@@ -158,9 +143,6 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
         mpWorkWindow->Show(bIsVisible);
 }
 
-
-
-
 Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
     throw (RuntimeException, std::exception)
 {
@@ -171,9 +153,6 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
     else
         return NULL;
 }
-
-
-
 
 void SAL_CALL FullScreenPane::setAccessible (
     const Reference<css::accessibility::XAccessible>& rxAccessible)
@@ -198,11 +177,6 @@ void SAL_CALL FullScreenPane::setAccessible (
     }
 }
 
-
-
-
-
-
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     switch (pEvent->GetId())
@@ -220,9 +194,6 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
     }
     return 1;
 }
-
-
-
 
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
     throw (RuntimeException)
@@ -250,9 +221,6 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
         throw RuntimeException();
 }
 
-
-
-
 void FullScreenPane::ExtractArguments (
     const Reference<XResourceId>& rxPaneId,
     sal_Int32& rnScreenNumberReturnValue)
@@ -277,7 +245,6 @@ void FullScreenPane::ExtractArguments (
         }
     }
 }
-
 
 } } // end of namespace sd::framework
 

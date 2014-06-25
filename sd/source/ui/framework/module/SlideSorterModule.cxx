@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorterModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -34,9 +33,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-
 namespace sd { namespace framework {
-
 
 //===== SlideSorterModule ==================================================
 
@@ -74,9 +71,6 @@ SlideSorterModule::SlideSorterModule (
     }
 }
 
-
-
-
 SlideSorterModule::~SlideSorterModule (void)
 {
 }
@@ -90,7 +84,6 @@ void SlideSorterModule::SaveResourceState (void)
     SvtSlideSorterBarOptions().SetVisibleSlideSorterView(IsResourceActive(FrameworkHelper::msSlideSorterURL));
     SvtSlideSorterBarOptions().SetVisibleDrawView(IsResourceActive(FrameworkHelper::msDrawViewURL));
 }
-
 
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -152,8 +145,6 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             xBar->addTabBarButtonAfter(aButtonA, aButtonB);
     }
 }
-
-
 
 } } // end of namespace sd::framework
 

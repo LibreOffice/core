@@ -52,8 +52,6 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
     }
 }
 
-
-
 bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
     bool bRet = false;
@@ -73,8 +71,6 @@ bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star:
     return bRet;
 }
 
-
-
 sal_uInt32 GroupTable::GetGroupsClosed()
 {
     sal_uInt32 nRet = mnGroupsClosed;
@@ -82,23 +78,17 @@ sal_uInt32 GroupTable::GetGroupsClosed()
     return nRet;
 }
 
-
-
 void GroupTable::ClearGroupTable()
 {
     for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] ) ;
     mnCurrentGroupEntry = 0;
 }
 
-
-
 void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 {
     ClearGroupTable();
     mpGroupEntry[ mnCurrentGroupEntry++ ] = new GroupEntry( nCount );
 }
-
-
 
 bool GroupTable::GetNextGroupEntry()
 {
@@ -116,7 +106,5 @@ bool GroupTable::GetNextGroupEntry()
     }
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

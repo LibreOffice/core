@@ -70,7 +70,6 @@ public:
 
     virtual ~TitledControl (void);
 
-
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
@@ -139,9 +138,6 @@ private:
 
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 };
-
-
-
 
 /** This standard implementation of the ClickHandler expands, or toggles the
     expansion state, of the control, whose title was clicked.

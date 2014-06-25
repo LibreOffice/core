@@ -304,7 +304,6 @@ public:
     cssu::Reference<cssdf::XConfigurationController>
         GetConfigurationController (void) const { return mxConfigurationController;}
 
-
 private:
     typedef ::std::map<
         ViewShellBase*,
@@ -355,7 +354,6 @@ private:
     */
     void disposing (const css::lang::EventObject& rEventObject);
 };
-
 
 } } // end of namespace sd::framework
 

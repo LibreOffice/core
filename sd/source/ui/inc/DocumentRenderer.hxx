@@ -35,7 +35,6 @@ namespace {
         > DocumentRendererInterfaceBase;
 }
 
-
 class DocumentRenderer
     : protected ::cppu::BaseMutex,
       public DocumentRendererInterfaceBase

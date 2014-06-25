@@ -120,27 +120,19 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
     return aRet;
 }
 
-
-
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DOCUMENT_TYPE_DRAW )
 {
 }
 
-
-
 SdHtmlOptionsDialog::~SdHtmlOptionsDialog()
 {
 }
-
-
 
 void SAL_CALL SdHtmlOptionsDialog::acquire() throw()
 {
     OWeakObject::acquire();
 }
-
-
 
 void SAL_CALL SdHtmlOptionsDialog::release() throw()
 {
@@ -169,7 +161,6 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
 {
     return SdHtmlOptionsDialog_getSupportedServiceNames();
 }
-
 
 // XPropertyAccess
 Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()

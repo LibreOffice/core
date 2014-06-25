@@ -27,7 +27,6 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 
-
 class SdPage;
 
 namespace sd { namespace slidesorter {
@@ -41,7 +40,6 @@ class SlideSorterModel;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
-
 
 /** A sub-controller that handles page selection of the slide browser.
     Selecting a page does not make it the current page (of the main view)
@@ -117,7 +115,6 @@ public:
             The returned anchor may be NULL.
     */
     model::SharedPageDescriptor GetSelectionAnchor (void) const { return mpSelectionAnchor;}
-
 
     typedef ::std::vector<SdPage*> PageSelection;
 

@@ -205,7 +205,6 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
     return Control::Notify( rNEvt );
 }
 
-
 void SdDocPreviewWin::updateViewSettings()
 {
     ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,mpObj);
@@ -249,7 +248,6 @@ void SdDocPreviewWin::updateViewSettings()
             pMtf->Record( &aVDev );
 
             ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
-
 
             const Size aSize( pPage->GetSize() );
 

@@ -64,9 +64,7 @@ typedef ::std::vector<sd::sidebar::SharedMasterPageDescriptor> MasterPageContain
 
 } // end of anonymous namespace
 
-
 namespace sd { namespace sidebar {
-
 
 /** Inner implementation class of the MasterPageContainer.
 */
@@ -178,9 +176,6 @@ private:
     void CleanContainer (void);
 };
 
-
-
-
 //===== MasterPageContainer ===================================================
 
 ::boost::weak_ptr<MasterPageContainer::Implementation>
@@ -220,9 +215,6 @@ private:
     return pInstance;
 }
 
-
-
-
 MasterPageContainer::MasterPageContainer (void)
     : mpImpl(Implementation::Instance()),
       mePreviewSize(SMALL)
@@ -230,31 +222,19 @@ MasterPageContainer::MasterPageContainer (void)
     mpImpl->LateInit();
 }
 
-
-
-
 MasterPageContainer::~MasterPageContainer (void)
 {
 }
-
-
-
 
 void MasterPageContainer::AddChangeListener (const Link& rLink)
 {
     mpImpl->AddChangeListener(rLink);
 }
 
-
-
-
 void MasterPageContainer::RemoveChangeListener (const Link& rLink)
 {
     mpImpl->RemoveChangeListener(rLink);
 }
-
-
-
 
 void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
 {
@@ -264,29 +244,16 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
         NIL_TOKEN);
 }
 
-
-
-
-
-
-
-
 Size MasterPageContainer::GetPreviewSizePixel (void) const
 {
     return mpImpl->GetPreviewSizePixel(mePreviewSize);
 }
-
-
-
 
 MasterPageContainer::Token MasterPageContainer::PutMasterPage (
     const SharedMasterPageDescriptor& rDescriptor)
 {
     return mpImpl->PutMasterPage(rDescriptor);
 }
-
-
-
 
 void MasterPageContainer::AcquireToken (Token aToken)
 {
@@ -296,9 +263,6 @@ void MasterPageContainer::AcquireToken (Token aToken)
         ++pDescriptor->mnUseCount;
     }
 }
-
-
-
 
 void MasterPageContainer::ReleaseToken (Token aToken)
 {
@@ -324,9 +288,6 @@ void MasterPageContainer::ReleaseToken (Token aToken)
     }
 }
 
-
-
-
 int MasterPageContainer::GetTokenCount (void) const
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -334,18 +295,12 @@ int MasterPageContainer::GetTokenCount (void) const
     return mpImpl->maContainer.size();
 }
 
-
-
-
 bool MasterPageContainer::HasToken (Token aToken) const
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     return mpImpl->HasToken(aToken);
 }
-
-
-
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForIndex (int nIndex)
 {
@@ -356,9 +311,6 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForIndex (int nIndex)
         aResult = mpImpl->maContainer[nIndex]->maToken;
     return aResult;
 }
-
-
-
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
     const OUString& sURL)
@@ -379,9 +331,6 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
     return aResult;
 }
 
-
-
-
 MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const OUString& sStyleName)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -399,9 +348,6 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const OUSt
     }
     return aResult;
 }
-
-
-
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     const SdPage* pPage)
@@ -422,9 +368,6 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     return aResult;
 }
 
-
-
-
 OUString MasterPageContainer::GetURLForToken (
     MasterPageContainer::Token aToken)
 {
@@ -436,9 +379,6 @@ OUString MasterPageContainer::GetURLForToken (
     else
         return OUString();
 }
-
-
-
 
 OUString MasterPageContainer::GetPageNameForToken (
     MasterPageContainer::Token aToken)
@@ -452,9 +392,6 @@ OUString MasterPageContainer::GetPageNameForToken (
         return OUString();
 }
 
-
-
-
 OUString MasterPageContainer::GetStyleNameForToken (
     MasterPageContainer::Token aToken)
 {
@@ -466,9 +403,6 @@ OUString MasterPageContainer::GetStyleNameForToken (
     else
         return OUString();
 }
-
-
-
 
 SdPage* MasterPageContainer::GetPageObjectForToken (
     MasterPageContainer::Token aToken,
@@ -495,9 +429,6 @@ SdPage* MasterPageContainer::GetPageObjectForToken (
     return pPageObject;
 }
 
-
-
-
 MasterPageContainer::Origin MasterPageContainer::GetOriginForToken (Token aToken)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -508,9 +439,6 @@ MasterPageContainer::Origin MasterPageContainer::GetOriginForToken (Token aToken
     else
         return UNKNOWN;
 }
-
-
-
 
 sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
 {
@@ -523,9 +451,6 @@ sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
         return -1;
 }
 
-
-
-
 SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
     MasterPageContainer::Token aToken)
 {
@@ -534,39 +459,25 @@ SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
     return mpImpl->GetDescriptor(aToken);
 }
 
-
-
 void MasterPageContainer::InvalidatePreview (MasterPageContainer::Token aToken)
 {
     mpImpl->InvalidatePreview(aToken);
 }
-
-
-
 
 Image MasterPageContainer::GetPreviewForToken (MasterPageContainer::Token aToken)
 {
     return mpImpl->GetPreviewForToken(aToken,mePreviewSize);
 }
 
-
-
-
 MasterPageContainer::PreviewState MasterPageContainer::GetPreviewState (Token aToken)
 {
     return mpImpl->GetPreviewState(aToken);
 }
 
-
-
-
 bool MasterPageContainer::RequestPreview (Token aToken)
 {
     return mpImpl->RequestPreview(aToken);
 }
-
-
-
 
 //==== Implementation ================================================
 
@@ -592,9 +503,6 @@ MasterPageContainer::Implementation::Implementation (void)
     UpdatePreviewSizePixel();
 }
 
-
-
-
 MasterPageContainer::Implementation::~Implementation (void)
 {
     // When the initializer or filler tasks are still running then we have
@@ -617,9 +525,6 @@ MasterPageContainer::Implementation::~Implementation (void)
     mxModel = NULL;
 }
 
-
-
-
 void MasterPageContainer::Implementation::LateInit (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -641,9 +546,6 @@ void MasterPageContainer::Implementation::LateInit (void)
     }
 }
 
-
-
-
 void MasterPageContainer::Implementation::AddChangeListener (const Link& rLink)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -655,9 +557,6 @@ void MasterPageContainer::Implementation::AddChangeListener (const Link& rLink)
 
 }
 
-
-
-
 void MasterPageContainer::Implementation::RemoveChangeListener (const Link& rLink)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -667,9 +566,6 @@ void MasterPageContainer::Implementation::RemoveChangeListener (const Link& rLin
     if (iListener != maChangeListeners.end())
         maChangeListeners.erase(iListener);
 }
-
-
-
 
 void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
 {
@@ -712,9 +608,6 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     }
 }
 
-
-
-
 Size MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize) const
 {
     if (eSize == SMALL)
@@ -722,9 +615,6 @@ Size MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize
     else
         return maLargePreviewSizePixel;
 }
-
-
-
 
 IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventData*, pData)
 {
@@ -738,9 +628,6 @@ IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventD
 
     return 0;
 }
-
-
-
 
 MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     const SharedMasterPageDescriptor& rpDescriptor)
@@ -819,18 +706,12 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     return aResult;
 }
 
-
-
-
 bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
         && (unsigned)aToken<maContainer.size()
         && maContainer[aToken].get()!=NULL;
 }
-
-
-
 
 const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (
     Token aToken) const
@@ -841,9 +722,6 @@ const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescrip
         return SharedMasterPageDescriptor();
 }
 
-
-
-
 SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken)
 {
     if (aToken>=0 && (unsigned)aToken<maContainer.size())
@@ -851,9 +729,6 @@ SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (T
     else
         return SharedMasterPageDescriptor();
 }
-
-
-
 
 void MasterPageContainer::Implementation::InvalidatePreview (Token aToken)
 {
@@ -867,9 +742,6 @@ void MasterPageContainer::Implementation::InvalidatePreview (Token aToken)
         RequestPreview(aToken);
     }
 }
-
-
-
 
 Image MasterPageContainer::Implementation::GetPreviewForToken (
     MasterPageContainer::Token aToken,
@@ -924,9 +796,6 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
     return aPreview;
 }
 
-
-
-
 MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPreviewState (
     Token aToken) const
 {
@@ -955,9 +824,6 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
     return eState;
 }
 
-
-
-
 bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
@@ -966,9 +832,6 @@ bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
     else
         return false;
 }
-
-
-
 
 Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
 {
@@ -1022,17 +885,11 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
     return mxModel;
 }
 
-
-
-
 SdDrawDocument* MasterPageContainer::Implementation::GetDocument (void)
 {
     GetModel();
     return mpDocument;
 }
-
-
-
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (
     sal_uInt16 nId,
@@ -1078,9 +935,6 @@ Image MasterPageContainer::Implementation::GetPreviewSubstitution (
     return aPreview;
 }
 
-
-
-
 void MasterPageContainer::Implementation::CleanContainer (void)
 {
     // Remove the empty elements at the end of the container.  The empty
@@ -1091,9 +945,6 @@ void MasterPageContainer::Implementation::CleanContainer (void)
         --nIndex;
     maContainer.resize(++nIndex);
 }
-
-
-
 
 void MasterPageContainer::Implementation::FireContainerChange (
     MasterPageContainerChangeEvent::EventType eType,
@@ -1117,9 +968,6 @@ void MasterPageContainer::Implementation::FireContainerChange (
             iListener->Call(&aEvent);
     }
 }
-
-
-
 
 bool MasterPageContainer::Implementation::UpdateDescriptor (
     const SharedMasterPageDescriptor& rpDescriptor,
@@ -1172,9 +1020,6 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
     return nPageObjectModified || bPreviewModified;
 }
 
-
-
-
 void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
 {
     if (aToken>=0 && (unsigned)aToken<maContainer.size())
@@ -1184,15 +1029,10 @@ void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
     }
 }
 
-
-
-
 void MasterPageContainer::Implementation::FillingDone (void)
 {
     mpRequestQueue->ProcessAllRequests();
 }
-
-
 
 } } // end of namespace sd::sidebar
 

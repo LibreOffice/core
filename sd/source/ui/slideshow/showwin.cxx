@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/awt/Key.hpp>
 
 #include "showwindow.hxx"
 
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
-
 
 #include "res_bmp.hrc"
 #include "slideshow.hxx"
@@ -42,8 +40,6 @@ namespace sd {
 
 static const sal_uLong HIDE_MOUSE_TIMEOUT = 10000;
 static const sal_uLong SHOW_MOUSE_TIMEOUT = 1000;
-
-
 
 ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::Window* pParent )
 : ::sd::Window( pParent )
@@ -86,7 +82,6 @@ ShowWindow::~ShowWindow(void)
     maPauseTimer.Stop();
     maMouseTimer.Stop();
 }
-
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 {
@@ -170,7 +165,6 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         mpViewShell->SetActiveWindow( this );
 }
 
-
 void ShowWindow::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 {
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode )
@@ -182,7 +176,6 @@ void ShowWindow::MouseButtonDown(const MouseEvent& /*rMEvt*/)
         mpViewShell->SetActiveWindow( this );
     }
 }
-
 
 void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
 {
@@ -224,7 +217,6 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
     if( mpViewShell )
         mpViewShell->SetActiveWindow( this );
 }
-
 
 void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -289,8 +281,6 @@ void ShowWindow::GetFocus()
     Window::GetFocus();
 }
 
-
-
 void ShowWindow::LoseFocus()
 {
     Window::LoseFocus();
@@ -299,21 +289,15 @@ void ShowWindow::LoseFocus()
         TerminateShow();
 }
 
-
-
 void ShowWindow::Resize()
 {
     ::sd::Window::Resize();
 }
 
-
-
 void ShowWindow::Move()
 {
     ::sd::Window::Move();
 }
-
-
 
 bool ShowWindow::SetEndMode()
 {
@@ -335,8 +319,6 @@ bool ShowWindow::SetEndMode()
 
     return( SHOWWINDOWMODE_END == meShowWindowMode );
 }
-
-
 
 bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
@@ -376,8 +358,6 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
     return( SHOWWINDOWMODE_PAUSE == meShowWindowMode );
 }
 
-
-
 bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
@@ -400,14 +380,10 @@ bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
     return( SHOWWINDOWMODE_BLANK == meShowWindowMode );
 }
 
-
-
 void ShowWindow::SetPreviewMode()
 {
     meShowWindowMode = SHOWWINDOWMODE_PREVIEW;
 }
-
-
 
 void ShowWindow::TerminateShow()
 {
@@ -435,14 +411,10 @@ void ShowWindow::TerminateShow()
     mnRestartPageIndex = PAGE_NO_END;
 }
 
-
-
 void ShowWindow::RestartShow()
 {
     RestartShow( mnRestartPageIndex );
 }
-
-
 
 void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
@@ -486,8 +458,6 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
         mbShowNavigatorAfterSpecialMode = false;
     }
 }
-
-
 
 void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 {
@@ -562,8 +532,6 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     }
 }
 
-
-
 void ShowWindow::DrawEndScene()
 {
     const Font      aOldFont( GetFont() );
@@ -582,14 +550,10 @@ void ShowWindow::DrawEndScene()
     SetFont( aOldFont );
 }
 
-
-
 void ShowWindow::DrawBlankScene()
 {
     // just blank through background color => nothing to be done here
 }
-
-
 
 IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
 {

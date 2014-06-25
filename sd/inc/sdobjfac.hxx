@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_SDOBJFAC_HXX
 #define INCLUDED_SD_INC_SDOBJFAC_HXX
 
-
 #include <tools/link.hxx>
 
 // class SdObjectFactory
@@ -43,7 +42,6 @@ public:
 };
 
 extern SdObjectFactory aSdObjectFactory;
-
 
 #endif // INCLUDED_SD_INC_SDOBJFAC_HXX
 

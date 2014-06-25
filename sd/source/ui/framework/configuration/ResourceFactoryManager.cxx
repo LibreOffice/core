@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ResourceFactoryManager.hxx"
 #include <tools/wldcrd.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -49,18 +48,12 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
     mxURLTransformer = util::URLTransformer::create(xContext);
 }
 
-
-
-
 ResourceFactoryManager::~ResourceFactoryManager (void)
 {
     Reference<lang::XComponent> xComponent (mxURLTransformer, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 }
-
-
-
 
 void ResourceFactoryManager::AddFactory (
     const OUString& rsURL,
@@ -97,9 +90,6 @@ void ResourceFactoryManager::AddFactory (
     }
 }
 
-
-
-
 void ResourceFactoryManager::RemoveFactoryForURL (
     const OUString& rsURL)
     throw (RuntimeException)
@@ -131,10 +121,6 @@ void ResourceFactoryManager::RemoveFactoryForURL (
         }
     }
 }
-
-
-
-
 
 void ResourceFactoryManager::RemoveFactoryForReference(
     const Reference<XResourceFactory>& rxFactory)
@@ -168,9 +154,6 @@ void ResourceFactoryManager::RemoveFactoryForReference(
         maFactoryPatternList.erase(iNewEnd, maFactoryPatternList.end());
 }
 
-
-
-
 Reference<XResourceFactory> ResourceFactoryManager::GetFactory (
     const OUString& rsCompleteURL)
     throw (RuntimeException)
@@ -202,9 +185,6 @@ Reference<XResourceFactory> ResourceFactoryManager::GetFactory (
 
     return xFactory;
 }
-
-
-
 
 Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString& rsURLBase)
     throw (RuntimeException)

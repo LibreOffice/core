@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEPAGESHAPE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEPAGESHAPE_HXX
 
@@ -96,7 +95,6 @@ public:
         getAccessibleChild (sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XAccessibleComponent  ============================================
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
@@ -114,7 +112,6 @@ public:
         dispose (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
@@ -125,13 +122,11 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& Source)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     using AccessibleShape::disposing;
 

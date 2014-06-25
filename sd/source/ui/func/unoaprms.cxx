@@ -21,9 +21,7 @@
 #include "unoaprms.hxx"
 #include "anminfo.hxx"
 
-
 TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
-
 
 void SdAnimationPrmsUndoAction::Undo()
 {
@@ -100,6 +98,5 @@ void SdAnimationPrmsUndoAction::Redo()
 SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction()
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

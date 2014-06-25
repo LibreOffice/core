@@ -27,7 +27,6 @@ class OutputDevice;
 
 namespace accessibility {
 
-
 /** <p>This class provides the means to transform between internal coordinates
     and screen coordinates without giving direct access to the underlying
     view.  It represents a certain window.  A call to

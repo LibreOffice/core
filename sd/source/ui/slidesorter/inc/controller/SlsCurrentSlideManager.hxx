@@ -31,7 +31,6 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 /** Manage the current slide.  This includes setting the according flags at
@@ -113,7 +112,6 @@ private:
 
     DECL_LINK(SwitchPageCallback,void*);
 };
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

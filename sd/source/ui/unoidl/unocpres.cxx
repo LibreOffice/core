@@ -38,7 +38,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-
 uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 {
     return (cppu::OWeakObject*)new SdXCustomPresentation( pShow, NULL );
@@ -262,7 +261,6 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException, std:
     mpSdCustomShow = NULL;
 }
 
-
 void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException, std::exception)
 {
@@ -271,7 +269,6 @@ void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lan
 
     aDisposeListeners.addInterface(xListener);
 }
-
 
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException, std::exception)
 {
@@ -450,7 +447,6 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
 
     return aSequence;
 }
-
 
 sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)

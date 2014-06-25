@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuinsfil.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
@@ -73,7 +72,6 @@ using namespace ::com::sun::star;
 namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
-
 
 FuInsertFile::FuInsertFile (
     ViewShell*    pViewSh,
@@ -314,8 +312,6 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     }
 }
 
-
-
 bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
     bool bOK = false;
@@ -410,8 +406,6 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     return (bOK);
 }
-
-
 
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
@@ -547,8 +541,6 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     }
 }
 
-
-
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
     // selected file format: text, RTF or HTML (default is text)
@@ -680,8 +672,6 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
 }
 
-
-
 bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(mpView);
@@ -725,8 +715,6 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     else
         return false;
 }
-
-
 
 void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {

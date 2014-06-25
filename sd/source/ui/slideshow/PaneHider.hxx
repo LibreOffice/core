@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 
-
 namespace sd {
 
 class ViewShell;

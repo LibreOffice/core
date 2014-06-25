@@ -38,9 +38,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
 
 } // end of anonymous namespace.
 
-
-
-
 namespace sd { namespace framework {
 
 /** A configuration describes the resources of an application like panes,
@@ -86,7 +83,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XConfiguration
 
     virtual void SAL_CALL addResource (
@@ -112,13 +108,11 @@ public:
             rxResourceId)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XCloneable
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
         SAL_CALL createClone (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XNamed
 
@@ -182,7 +176,6 @@ private:
     void ThrowIfDisposed (void) const
         throw (::com::sun::star::lang::DisposedException);
 };
-
 
 /** Return whether the two given configurations contain the same resource
     ids.  The order of resource ids is ignored.  Empty references are

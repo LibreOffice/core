@@ -50,7 +50,6 @@ public:
 };
 typedef ::boost::shared_ptr<ILayerPainter> SharedILayerPainter;
 
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

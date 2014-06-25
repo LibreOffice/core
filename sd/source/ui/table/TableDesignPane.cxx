@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sddll.hxx"
 
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -76,9 +75,6 @@ static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cel
 static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
 static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
-
-
-
 static const OUString* getPropertyNames()
 {
     static const OUString gPropNames[ CB_COUNT ] =
@@ -92,7 +88,6 @@ static const OUString* getPropertyNames()
     };
     return &gPropNames[0];
 }
-
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
     : mrBase(rBase)
@@ -144,14 +139,10 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     updateControls();
 }
 
-
-
 TableDesignWidget::~TableDesignWidget()
 {
     removeListener();
 }
-
-
 
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
@@ -161,8 +152,6 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
         return 0;
 }
 
-
-
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
@@ -171,8 +160,6 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
         return 0;
 }
 
-
-
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
 {
     mbStyleSelected = true;
@@ -180,8 +167,6 @@ IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
         ApplyStyle();
     return 0;
 }
-
-
 
 void TableDesignWidget::ApplyStyle()
 {
@@ -232,8 +217,6 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-
-
 IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
 {
     mbOptionsChanged = true;
@@ -244,8 +227,6 @@ IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
     FillDesignPreviewControl();
     return 0;
 }
-
-
 
 void TableDesignWidget::ApplyOptions()
 {
@@ -282,8 +263,6 @@ void TableDesignWidget::ApplyOptions()
         }
     }
 }
-
-
 
 void TableDesignWidget::onSelectionChanged()
 {
@@ -326,8 +305,6 @@ void TableDesignWidget::onSelectionChanged()
         updateControls();
     }
 }
-
-
 
 void TableValueSet::Resize()
 {
@@ -397,8 +374,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *p
     return new TableValueSet(pParent, nWinStyle);
 }
 
-
-
 void TableDesignWidget::updateControls()
 {
     static const sal_Bool gDefaults[CB_COUNT] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
@@ -424,7 +399,6 @@ void TableDesignWidget::updateControls()
     FillDesignPreviewControl();
     m_pValueSet->updateSettings();
     m_pValueSet->Resize();
-
 
     sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
@@ -452,8 +426,6 @@ void TableDesignWidget::updateControls()
     m_pValueSet->SelectItem( nSelection );
 }
 
-
-
 void TableDesignWidget::addListener()
 {
     Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
@@ -466,15 +438,11 @@ void TableDesignWidget::addListener()
         | tools::EventMultiplexerEvent::EID_DISPOSING);
 }
 
-
-
 void TableDesignWidget::removeListener()
 {
     Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
-
-
 
 IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
@@ -498,8 +466,6 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     }
     return 0;
 }
-
-
 
 struct CellInfo
 {
@@ -536,8 +502,6 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     }
 }
 
-
-
 typedef std::vector< boost::shared_ptr< CellInfo > > CellInfoVector;
 typedef boost::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns][nPreviewRows];
 
@@ -558,8 +522,6 @@ struct TableStyleSettings
         , mbUseRowBanding(true)
         , mbUseColumnBanding(false) {}
 };
-
-
 
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {
@@ -656,8 +618,6 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-
-
 const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {
     CellInfoVector aCellInfoVector(sdr::table::style_count);
@@ -673,7 +633,6 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
 // bccccccccccb t = text color
 // bccccccccccb
 // bbbbbbbbbbbb
-
 
     Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, NULL );
     BitmapWriteAccess* pAccess = aPreviewBmp.AcquireWriteAccess();
@@ -834,8 +793,6 @@ void TableDesignWidget::FillDesignPreviewControl()
     m_pValueSet->SelectItem(nSelectedItem);
 }
 
-
-
 short TableDesignDialog::Execute()
 {
     if( ModalDialog::Execute() )
@@ -850,14 +807,10 @@ short TableDesignDialog::Execute()
     return RET_CANCEL;
 }
 
-
-
 ::Window * createTableDesignPanel( ::Window* pParent, ViewShellBase& rBase )
 {
     return new TableDesignPane( pParent, rBase );
 }
-
-
 
 void showTableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
 {
@@ -865,8 +818,6 @@ void showTableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
     xDialog->Execute();
 }
 
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

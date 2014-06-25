@@ -96,12 +96,6 @@ const transition* transition::find( const OUString& rName )
     return NULL;
 }
 
-
-
-
-
-
-
 SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
     rIn.ReadInt32( rNode.mnU1 );
@@ -115,8 +109,6 @@ SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 
     return rIn;
 }
-
-
 
 static bool convertMeasure( OUString& rString )
 {
@@ -153,15 +145,10 @@ static bool convertMeasure( OUString& rString )
     return bRet;
 }
 
-
-
-
 bool PropertySet::hasProperty( sal_Int32 nProperty ) const
 {
     return maProperties.find( nProperty ) != maProperties.end();
 }
-
-
 
 Any PropertySet::getProperty( sal_Int32 nProperty ) const
 {
@@ -171,8 +158,6 @@ Any PropertySet::getProperty( sal_Int32 nProperty ) const
     else
         return Any();
 }
-
-
 
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
@@ -209,14 +194,10 @@ static Any addToSequence( const Any& rOldValue, const Any& rNewValue )
     }
 }
 
-
-
 AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl )
 : mpPPTImport( pPPTImport ), mrStCtrl( rStCtrl )
 {
 }
-
-
 
 int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd )
 {
@@ -256,14 +237,10 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
     return nNodes;
 }
 
-
-
 void AnimationImporter::processAfterEffectNodes()
 {
     std::for_each( maAfterEffectNodes.begin(), maAfterEffectNodes.end(), sd::stl_process_after_effect_node_func );
 }
-
-
 
 Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, const AnimationNode& rNode )
 {
@@ -328,8 +305,6 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
     return xNode;
 }
 
-
-
 static bool is_random( const AnimationNode& rNode, const PropertySet& rSet, sal_Int32& rPresetClass )
 {
     if( rNode.mnGroupType != mso_Anim_GroupType_PAR )
@@ -353,7 +328,6 @@ static bool is_random( const AnimationNode& rNode, const PropertySet& rSet, sal_
     }
     return false;
 }
-
 
 int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Reference< XAnimationNode >& xParent )
 {
@@ -569,7 +543,6 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
     return nNodes;
 }
 
-
 void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
     try
@@ -634,8 +607,6 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
     }
 }
 
-
-
 void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
     try
@@ -658,8 +629,6 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
         OSL_FAIL("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
     }
 }
-
-
 
 bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >& xNode, const Reference< XAnimationNode >& xParent )
 {
@@ -1039,8 +1008,6 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     return bRet;
 }
 
-
-
 static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
 {
     const sal_Char* pStr = 0;
@@ -1099,8 +1066,6 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
     else
         return OUString::number( nPresetSubType );
 }
-
-
 
 void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const AnimationNode& rNode, const PropertySet& rSet )
 {
@@ -1361,7 +1326,6 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         }
     }
 
-
 // TODO: DFF_ANIM_ENDAFTERSLIDE / DFF_ANIM_VOLUME handling. git history has sample code
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
     if( xColor.is() )
@@ -1381,8 +1345,6 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         }
     }
 }
-
-
 
 int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1494,8 +1456,6 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
     return nNodes;
 }
 
-
-
 int AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     int nNodes = 0;
@@ -1569,8 +1529,6 @@ int AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Re
 
     return nNodes;
 }
-
-
 
 void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1648,8 +1606,6 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
         }
     }
 }
-
-
 
 void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1794,8 +1750,6 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
     }
 }
 
-
-
 sal_Int16 AnimationImporter::implGetColorSpace( sal_Int32 nMode, sal_Int32 /*nA*/, sal_Int32 /*nB*/, sal_Int32 /*nC*/ )
 {
     switch( nMode )
@@ -1811,8 +1765,6 @@ sal_Int16 AnimationImporter::implGetColorSpace( sal_Int32 nMode, sal_Int32 /*nA*
         return AnimationColorSpace::HSL;
     }
 }
-
-
 
 Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC )
 {
@@ -1933,8 +1885,6 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
     }
 }
 
-
-
 void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     Reference< XAnimateSet > xSet( xNode, UNO_QUERY );
@@ -1991,8 +1941,6 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
         }
     }
 }
-
-
 
 void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2070,8 +2018,6 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
         }
     }
 }
-
-
 
 void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2152,8 +2098,6 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
         }
     }
 }
-
-
 
 void AnimationImporter::importCommandContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2272,8 +2216,6 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     }
 }
 
-
-
 int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     int nNodes = 0;
@@ -2351,8 +2293,6 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
     return nNodes;
 }
 
-
-
 void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     Reference< XAnimateTransform > xTransform( xNode, UNO_QUERY );
@@ -2421,7 +2361,6 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                     }
                 }
 
-
 #ifdef DBG_ANIM_LOG
                 if( nBits & 1 )
                     fprintf( mpFile, " by=\"%g,%g\"", (double)fByX, (double)fByY );
@@ -2451,8 +2390,6 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
         }
     }
 }
-
-
 
 void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2522,7 +2459,6 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
     }
 }
 
-
 bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames )
 {
     OUStringBuffer aNames;
@@ -2558,8 +2494,6 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
     rAttributeNames = aNames.makeStringAndClear();
     return true;
 }
-
-
 
 void AnimationImporter::importAnimationValues( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2636,8 +2570,6 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
         }
     }
 }
-
-
 
 void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2771,8 +2703,6 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
     }
 }
 
-
-
 bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
 {
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimAttributeValue, "invalid call to ppt::AnimationImporter::importAttributeValue()!" );
@@ -2845,8 +2775,6 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
     DBG_ASSERT( bOk, "invalid value inside ppt::AnimationImporter::importAttributeValue()!" );
     return bOk;
 }
-
-
 
 void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2964,8 +2892,6 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
 #endif
 }
 
-
-
 void AnimationImporter::importAnimationActions( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     DBG_ASSERT( pAtom && xNode.is(), "invalid call to ppt::AnimationImporter::importAnimationActions()!");
@@ -3002,8 +2928,6 @@ void AnimationImporter::importAnimationActions( const Atom* pAtom, const Referen
         }
     }
 }
-
-
 
 sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rTarget, sal_Int16& rSubType )
 {
@@ -3126,8 +3050,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
     return nRefMode;
 }
 
-
-
 void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertySet& rSet )
 {
     DBG_ASSERT( pAtom && (pAtom->getType() == DFF_msofbtAnimPropertySet), "invalid call to ppt::AnimationImporter::importPropertySetContainer()!" );
@@ -3152,8 +3074,6 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
         }
     }
 }
-
-
 
 #ifdef DBG_ANIM_LOG
 void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend )
@@ -3215,8 +3135,6 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
     }
 }
 
-
-
 void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
 {
     char * faul = "0123456789abcdef";
@@ -3241,8 +3159,6 @@ void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
     if( (b != 0) && bNewLine )
         fprintf(mpFile,"\n");
 }
-
-
 
 void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
 {
@@ -3307,8 +3223,6 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
         }
     }
 }
-
-
 
 void AnimationImporter::dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen )
 {
@@ -3717,7 +3631,6 @@ void AnimationImporter::dump( const PropertySet& rSet )
         break;
 
         }
-
 
         if( !bKnown )
         {

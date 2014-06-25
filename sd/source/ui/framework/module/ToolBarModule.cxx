@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ToolBarModule.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "framework/ConfigurationController.hxx"
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -86,15 +84,9 @@ ToolBarModule::ToolBarModule (
     }
 }
 
-
-
-
 ToolBarModule::~ToolBarModule (void)
 {
 }
-
-
-
 
 void SAL_CALL ToolBarModule::disposing (void)
 {
@@ -103,9 +95,6 @@ void SAL_CALL ToolBarModule::disposing (void)
 
     mxConfigurationController = NULL;
 }
-
-
-
 
 void SAL_CALL ToolBarModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -144,12 +133,6 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
     }
 }
 
-
-
-
-
-
-
 void ToolBarModule::HandleUpdateStart (void)
 {
     // Lock the ToolBarManager and tell it to lock the ViewShellManager as
@@ -163,9 +146,6 @@ void ToolBarModule::HandleUpdateStart (void)
         pToolBarManager->LockViewShellManager();
     }
 }
-
-
-
 
 void ToolBarModule::HandleUpdateEnd (void)
 {
@@ -203,9 +183,6 @@ void ToolBarModule::HandleUpdateEnd (void)
     mpToolBarManagerLock.reset();
 }
 
-
-
-
 void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
 {
@@ -217,9 +194,6 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
         dispose();
     }
 }
-
-
-
 
 } } // end of namespace sd::framework
 

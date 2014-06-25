@@ -219,8 +219,6 @@ private:
     void UpdateCacheSize (const CacheEntry& rKey, CacheOperation eOperation);
 };
 
-
-
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif

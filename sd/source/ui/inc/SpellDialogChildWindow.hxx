@@ -22,7 +22,6 @@
 
 #include <svx/SpellDialogChildWindow.hxx>
 
-
 namespace sd {
 
 class Outliner;

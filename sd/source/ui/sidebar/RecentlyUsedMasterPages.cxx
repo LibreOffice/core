@@ -46,7 +46,6 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 static const OUString& GetPathToImpressConfigurationRoot (void)
@@ -59,7 +58,6 @@ static const OUString& GetPathToSetNode (void)
     static const OUString sPathToSetNode("MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages");
     return sPathToSetNode;
 }
-
 
 class Descriptor
 {
@@ -85,9 +83,6 @@ public:
 
 } // end of anonymous namespace
 
-
-
-
 namespace sd { namespace sidebar {
 
 class RecentlyUsedMasterPages::MasterPageList : public ::std::vector<Descriptor>
@@ -96,9 +91,7 @@ public:
     MasterPageList (void) {}
 };
 
-
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
-
 
 RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
 {
@@ -123,9 +116,6 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
     return *mpInstance;
 }
 
-
-
-
 RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
     : maListeners(),
       mpMasterPages(new MasterPageList()),
@@ -133,9 +123,6 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
       mpContainer(new MasterPageContainer())
 {
 }
-
-
-
 
 RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
 {
@@ -146,9 +133,6 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
 
-
-
-
 void RecentlyUsedMasterPages::LateInit (void)
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
@@ -158,9 +142,6 @@ void RecentlyUsedMasterPages::LateInit (void)
     MasterPageObserver::Instance().AddEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
-
-
-
 
 void RecentlyUsedMasterPages::LoadPersistentValues (void)
 {
@@ -227,9 +208,6 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
     }
 }
 
-
-
-
 void RecentlyUsedMasterPages::SavePersistentValues (void)
 {
     try
@@ -289,9 +267,6 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
     }
 }
 
-
-
-
 void RecentlyUsedMasterPages::AddEventListener (const Link& rEventListener)
 {
     if (::std::find (
@@ -303,9 +278,6 @@ void RecentlyUsedMasterPages::AddEventListener (const Link& rEventListener)
     }
 }
 
-
-
-
 void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
 {
     maListeners.erase (
@@ -315,16 +287,10 @@ void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
             rEventListener));
 }
 
-
-
-
 int RecentlyUsedMasterPages::GetMasterPageCount (void) const
 {
     return mpMasterPages->size();
 }
-
-
-
 
 MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32 nIndex) const
 {
@@ -333,9 +299,6 @@ MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32
     else
         return MasterPageContainer::NIL_TOKEN;
 }
-
-
-
 
 void RecentlyUsedMasterPages::SendEvent (void)
 {
@@ -347,9 +310,6 @@ void RecentlyUsedMasterPages::SendEvent (void)
         ++aLink;
     }
 }
-
-
-
 
 IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
     MasterPageObserverEvent*, pEvent)
@@ -372,9 +332,6 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
     return 0;
 }
 
-
-
-
 IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
     MasterPageContainerChangeEvent*, pEvent)
 {
@@ -394,9 +351,6 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
         }
     return 0;
 }
-
-
-
 
 void RecentlyUsedMasterPages::AddMasterPage (
     MasterPageContainer::Token aToken,
@@ -437,9 +391,6 @@ void RecentlyUsedMasterPages::AddMasterPage (
     }
 }
 
-
-
-
 void RecentlyUsedMasterPages::ResolveList (void)
 {
     bool bNotify (false);
@@ -467,7 +418,6 @@ void RecentlyUsedMasterPages::ResolveList (void)
     if (bNotify)
         SendEvent();
 }
-
 
 } } // end of namespace sd::sidebar
 

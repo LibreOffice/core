@@ -273,8 +273,6 @@ AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContai
 {
 }
 
-
-
 sal_Int16 AnimationExporter::GetFillMode( const Reference< XAnimationNode >& xNode, const sal_Int16 nFillDefault )
 {
     sal_Int16 nFill = xNode->getFill();

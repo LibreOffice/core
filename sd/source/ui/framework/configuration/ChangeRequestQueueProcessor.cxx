@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationTracer.hxx"
 
@@ -49,7 +48,6 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 
 } // end of anonymous namespace
 
-
 namespace sd { namespace framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
@@ -64,17 +62,11 @@ ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
 {
 }
 
-
-
-
 ChangeRequestQueueProcessor::~ChangeRequestQueueProcessor (void)
 {
     if (mnUserEventId != 0)
         Application::RemoveUserEvent(mnUserEventId);
 }
-
-
-
 
 void ChangeRequestQueueProcessor::SetConfiguration (
     const Reference<XConfiguration>& rxConfiguration)
@@ -84,9 +76,6 @@ void ChangeRequestQueueProcessor::SetConfiguration (
     mxConfiguration = rxConfiguration;
     StartProcessing();
 }
-
-
-
 
 void ChangeRequestQueueProcessor::AddRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
@@ -108,9 +97,6 @@ void ChangeRequestQueueProcessor::AddRequest (
     StartProcessing();
 }
 
-
-
-
 void ChangeRequestQueueProcessor::StartProcessing (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -124,9 +110,6 @@ void ChangeRequestQueueProcessor::StartProcessing (void)
             LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
     }
 }
-
-
-
 
 IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
 {
@@ -146,9 +129,6 @@ IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
 
     return 0;
 }
-
-
-
 
 void ChangeRequestQueueProcessor::ProcessOneEvent (void)
 {
@@ -189,16 +169,10 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
     }
 }
 
-
-
-
 bool ChangeRequestQueueProcessor::IsEmpty (void) const
 {
     return maQueue.empty();
 }
-
-
-
 
 void ChangeRequestQueueProcessor::ProcessUntilEmpty (void)
 {
@@ -206,15 +180,11 @@ void ChangeRequestQueueProcessor::ProcessUntilEmpty (void)
         ProcessOneEvent();
 }
 
-
-
-
 void ChangeRequestQueueProcessor::Clear (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
     maQueue.clear();
 }
-
 
 } } // end of namespace sd::framework::configuration
 

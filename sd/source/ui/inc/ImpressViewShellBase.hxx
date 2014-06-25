@@ -22,7 +22,6 @@
 
 #include "ViewShellBase.hxx"
 
-
 namespace sd {
 
 /** This class implements a few features that exist only for the Impress

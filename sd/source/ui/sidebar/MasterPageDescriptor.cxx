@@ -25,7 +25,6 @@
 
 namespace sd { namespace sidebar {
 
-
 //===== MasterPageDescriptor ==================================================
 
 MasterPageDescriptor::MasterPageDescriptor (
@@ -55,9 +54,6 @@ MasterPageDescriptor::MasterPageDescriptor (
 {
 }
 
-
-
-
 MasterPageDescriptor::MasterPageDescriptor (const MasterPageDescriptor& rDescriptor)
     : maToken(rDescriptor.maToken),
       meOrigin(rDescriptor.meOrigin),
@@ -77,23 +73,14 @@ MasterPageDescriptor::MasterPageDescriptor (const MasterPageDescriptor& rDescrip
 {
 }
 
-
-
-
 MasterPageDescriptor::~MasterPageDescriptor (void)
 {
 }
-
-
-
 
 void MasterPageDescriptor::SetToken (MasterPageContainer::Token aToken)
 {
     maToken = aToken;
 }
-
-
-
 
 Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) const
 {
@@ -102,8 +89,6 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) 
     else
         return maLargePreview;
 }
-
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
@@ -174,8 +159,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
 int MasterPageDescriptor::UpdatePageObject (
     sal_Int32 nCostThreshold,
     SdDrawDocument* pDocument)
@@ -229,9 +212,6 @@ int MasterPageDescriptor::UpdatePageObject (
     return nModified;
 }
 
-
-
-
 bool MasterPageDescriptor::UpdatePreview (
     sal_Int32 nCostThreshold,
     const Size& rSmallSize,
@@ -273,9 +253,6 @@ bool MasterPageDescriptor::UpdatePreview (
     return bModified;
 }
 
-
-
-
 MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassification (void)
 {
     if (meURLClassification == URLCLASS_UNDETERMINED)
@@ -303,17 +280,12 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
     return meURLClassification;
 }
 
-
-
 //===== URLComparator =========================================================
 
 MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
     : msURL(sURL)
 {
 }
-
-
-
 
 bool MasterPageDescriptor::URLComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
@@ -324,18 +296,12 @@ bool MasterPageDescriptor::URLComparator::operator() (
         return rDescriptor->msURL.equals(msURL);
 }
 
-
-
-
 // ===== StyleNameComparator ==================================================
 
 MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& sStyleName)
     : msStyleName(sStyleName)
 {
 }
-
-
-
 
 bool MasterPageDescriptor::StyleNameComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
@@ -346,18 +312,12 @@ bool MasterPageDescriptor::StyleNameComparator::operator() (
         return rDescriptor->msStyleName.equals(msStyleName);
 }
 
-
-
-
 //===== PageObjectComparator ==================================================
 
 MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* pPageObject)
     : mpMasterPage(pPageObject)
 {
 }
-
-
-
 
 bool MasterPageDescriptor::PageObjectComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
@@ -368,18 +328,12 @@ bool MasterPageDescriptor::PageObjectComparator::operator() (
         return rDescriptor->mpMasterPage==mpMasterPage;
 }
 
-
-
-
 //===== AllComparator =========================================================
 
 MasterPageDescriptor::AllComparator::AllComparator(const SharedMasterPageDescriptor& rDescriptor)
     : mpDescriptor(rDescriptor)
 {
 }
-
-
-
 
 bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDescriptor&rDescriptor)
 {
@@ -408,7 +362,6 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
                     && mpDescriptor->mpPageObjectProvider==rDescriptor->mpPageObjectProvider));
     }
 }
-
 
 } } // end of namespace sd::sidebar
 

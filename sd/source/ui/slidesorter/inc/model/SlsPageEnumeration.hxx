@@ -34,7 +34,6 @@ namespace sd { namespace slidesorter { namespace model {
 
 class SlideSorterModel;
 
-
 /** Public class of page enumerations that delegates its calls to an
     implementation object that can filter pages by using a given predicate.
 

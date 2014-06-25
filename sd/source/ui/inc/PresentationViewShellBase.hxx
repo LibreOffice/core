@@ -22,7 +22,6 @@
 
 #include "ViewShellBase.hxx"
 
-
 namespace sd {
 
 /** This class exists to be able to register another factory that

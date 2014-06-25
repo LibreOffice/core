@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TemplateScanner.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -57,7 +56,6 @@ const char IMPRESS_XML_TEMPLATE[] = MIMETYPE_VND_SUN_XML_IMPRESS_ASCII;
 // The following id comes from the bugdoc in #i2764#.
 const char IMPRESS_XML_TEMPLATE_B[] = "Impress 2.0";
 const char IMPRESS_XML_TEMPLATE_OASIS[] = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII;
-
 
 class FolderDescriptor
 {
@@ -126,9 +124,6 @@ int Classify (const OUString&, const OUString& rsURL)
 
 } // end of anonymous namespace
 
-
-
-
 namespace sd
 {
 
@@ -188,9 +183,6 @@ TemplateScanner::TemplateScanner (void)
     //  empty;
 }
 
-
-
-
 TemplateScanner::~TemplateScanner (void)
 {
     mpFolderDescriptors.reset();
@@ -203,9 +195,6 @@ TemplateScanner::~TemplateScanner (void)
             delete *I;
 }
 
-
-
-
 TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
 {
     State eNextState (INITIALIZE_FOLDER_SCANNING);
@@ -216,9 +205,6 @@ TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
 
     return eNextState;
 }
-
-
-
 
 TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
 {
@@ -245,9 +231,6 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
 
     return eNextState;
 }
-
-
-
 
 TemplateScanner::State TemplateScanner::ScanEntry (void)
 {
@@ -308,9 +291,6 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
     return eNextState;
 }
 
-
-
-
 TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
 {
     State eNextState (ERROR);
@@ -343,9 +323,6 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
     return eNextState;
 }
 
-
-
-
 TemplateScanner::State TemplateScanner::GatherFolderList (void)
 {
     State eNextState (ERROR);
@@ -377,9 +354,6 @@ TemplateScanner::State TemplateScanner::GatherFolderList (void)
 
     return eNextState;
 }
-
-
-
 
 TemplateScanner::State TemplateScanner::ScanFolder (void)
 {
@@ -416,21 +390,11 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
     return eNextState;
 }
 
-
-
-
 void TemplateScanner::Scan (void)
 {
     while (HasNextStep())
         RunNextStep();
 }
-
-
-
-
-
-
-
 
 void TemplateScanner::RunNextStep (void)
 {
@@ -480,9 +444,6 @@ void TemplateScanner::RunNextStep (void)
     }
 }
 
-
-
-
 bool TemplateScanner::HasNextStep (void)
 {
     switch (meState)
@@ -495,10 +456,6 @@ bool TemplateScanner::HasNextStep (void)
             return true;
     }
 }
-
-
-
-
 
 }
 

@@ -29,7 +29,6 @@ namespace sd {
 
 class Window;
 
-
 class FuConstructBezierPolygon
     : public FuConstruct
 {

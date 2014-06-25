@@ -84,7 +84,6 @@ public:
     Color GetColorLight(sal_uInt16 aAuthorIndex);
     Color GetColor(sal_uInt16 aAuthorIndex);
 
-
     // callbacks
     void onTagSelected( AnnotationTag& rTag );
     void onTagDeselected( AnnotationTag& rTag );

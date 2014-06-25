@@ -30,11 +30,9 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/current_function.hpp>
 
-
 class ScrollBar;
 class ScrollBarBox;
 class Window;
-
 
 namespace sd {
 class ViewShell;
@@ -57,9 +55,7 @@ class SlotManager;
 class Properties;
 } } }
 
-
 typedef ::boost::shared_ptr<sd::Window> SharedSdWindow;
-
 
 namespace sd { namespace slidesorter {
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/SdGlobalResourceContainer.hxx"
 
 #include <algorithm>
@@ -26,9 +25,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 namespace sd {
-
 
 //===== SdGlobalResourceContainer::Implementation =============================
 
@@ -53,9 +50,6 @@ private:
     XInterfaceResourceList maXInterfaceResources;
 };
 
-
-
-
 // static
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
 {
@@ -67,9 +61,6 @@ SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
 
 SdGlobalResourceContainer*
     SdGlobalResourceContainer::Implementation::mpInstance = NULL;
-
-
-
 
 //===== SdGlobalResourceContainer =============================================
 
@@ -97,9 +88,6 @@ void SdGlobalResourceContainer::AddResource (
     pResource.release();
 }
 
-
-
-
 void SdGlobalResourceContainer::AddResource (
     ::boost::shared_ptr<SdGlobalResource> pResource)
 {
@@ -119,9 +107,6 @@ void SdGlobalResourceContainer::AddResource (
     }
 }
 
-
-
-
 void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -140,16 +125,11 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
     }
 }
 
-
-
 SdGlobalResourceContainer::SdGlobalResourceContainer (void)
     : mpImpl (new SdGlobalResourceContainer::Implementation())
 {
     Implementation::mpInstance = this;
 }
-
-
-
 
 SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
 {
@@ -198,9 +178,6 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
         "~SdGlobalResourceContainer(): more than one instance of singleton");
     Implementation::mpInstance = NULL;
 }
-
-
-
 
 } // end of namespace sd
 

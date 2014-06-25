@@ -26,7 +26,6 @@ namespace sd {
 
 class Outliner;
 
-
 class FuHangulHanjaConversion : public FuPoor
 {
  public:
@@ -60,7 +59,6 @@ private:
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_FUHHCONV_HXX
-
 
 } // end of namespace sd
 

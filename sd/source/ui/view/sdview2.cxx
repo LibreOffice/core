@@ -71,9 +71,7 @@ namespace sd {
 
 using namespace ::com::sun::star;
 
-
 // - SdNavigatorDropEvent -
-
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
@@ -95,8 +93,6 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
           mnLayer( nLayer )
     {}
 };
-
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, ::Window& )
 {
@@ -161,8 +157,6 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-
-
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
     SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
@@ -212,8 +206,6 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-
-
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
     SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
@@ -239,8 +231,6 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-
-
 void View::UpdateSelectionClipboard( bool bForceDeselect )
 {
     if( mpViewSh && mpViewSh->GetActiveWindow() )
@@ -254,8 +244,6 @@ void View::UpdateSelectionClipboard( bool bForceDeselect )
         }
     }
 }
-
-
 
 void View::DoCut(::Window* )
 {
@@ -274,8 +262,6 @@ void View::DoCut(::Window* )
     }
 }
 
-
-
 void View::DoCopy (::Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
@@ -288,8 +274,6 @@ void View::DoCopy (::Window* pWindow)
         CreateClipboardDataObject( this, *pWindow );
     }
 }
-
-
 
 void View::DoPaste (::Window* pWindow)
 {
@@ -370,8 +354,6 @@ void View::DoPaste (::Window* pWindow)
     }
 }
 
-
-
 void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 {
     if( AreObjectsMarked() && IsAction() && mpViewSh && pWindow && !mpDragSrcMarkList )
@@ -402,8 +384,6 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
         CreateDragDataObject( this, *pWindow, rStartPos );
     }
 }
-
-
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
@@ -466,8 +446,6 @@ void View::DragFinished( sal_Int8 nDropAction )
     delete mpDragSrcMarkList;
     mpDragSrcMarkList = NULL;
 }
-
-
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                              ::sd::Window*, sal_uInt16, sal_uInt16 nLayer )
@@ -647,8 +625,6 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
     return nRet;
 }
-
-
 
 sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                               ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
@@ -832,8 +808,6 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
     return nRet;
 }
-
-
 
 IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
 {

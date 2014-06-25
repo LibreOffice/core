@@ -82,5 +82,4 @@ void Transmitter::addMessage( const OString& aMessage, const Priority aPriority 
     }
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

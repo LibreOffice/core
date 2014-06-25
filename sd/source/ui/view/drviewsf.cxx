@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -269,8 +268,6 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         }
     }
 }
-
-
 
 void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 {
@@ -576,7 +573,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aNewAttr( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
                 aNewAttr.Put( aEditAttr, false );
 
-
                 boost::scoped_ptr<SvxNumRule> pNumRule;
                 const SfxPoolItem* pTmpItem=NULL;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
@@ -750,8 +746,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     }
 }
 
-
-
 OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
 {
     OUString aStrSelection;
@@ -777,7 +771,6 @@ OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
 
     return (aStrSelection);
 }
-
 
 bool DrawViewShell::HasSelection(bool bText) const
 {

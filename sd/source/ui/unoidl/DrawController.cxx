@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawController.hxx"
 #include "DrawDocShell.hxx"
 
@@ -83,15 +82,9 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     ProvideFrameworkControllers();
 }
 
-
-
-
 DrawController::~DrawController (void) throw()
 {
 }
-
-
-
 
 void DrawController::SetSubController (
     const Reference<drawing::XDrawSubController>& rxSubController)
@@ -105,16 +98,12 @@ void DrawController::SetSubController (
     FireSelectionChangeListener();
 }
 
-
-
-
 // XInterface
 
 IMPLEMENT_FORWARD_XINTERFACE2(
     DrawController,
     DrawControllerInterfaceBase,
     OPropertySetHelper);
-
 
 // XTypeProvider
 
@@ -137,10 +126,7 @@ Sequence<Type> SAL_CALL DrawController::getTypes (void)
 
 IMPLEMENT_GET_IMPLEMENTATION_ID(DrawController);
 
-
-
 // XComponent
-
 
 void SAL_CALL DrawController::dispose (void)
     throw( RuntimeException, std::exception )
@@ -183,9 +169,6 @@ void SAL_CALL DrawController::dispose (void)
     }
 }
 
-
-
-
 void SAL_CALL DrawController::addEventListener(
     const Reference<lang::XEventListener >& xListener)
     throw (RuntimeException, std::exception)
@@ -193,9 +176,6 @@ void SAL_CALL DrawController::addEventListener(
     ThrowIfDisposed();
     SfxBaseController::addEventListener( xListener );
 }
-
-
-
 
 void SAL_CALL DrawController::removeEventListener (
     const Reference<lang::XEventListener >& aListener)
@@ -263,9 +243,6 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
         return false;
 }
 
-
-
-
 Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException, std::exception)
 {
@@ -278,9 +255,6 @@ Any SAL_CALL DrawController::getSelection()
         return Any();
 }
 
-
-
-
 void SAL_CALL DrawController::addSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener)
     throw(RuntimeException, std::exception)
@@ -290,9 +264,6 @@ void SAL_CALL DrawController::addSelectionChangeListener(
 
     BroadcastHelperOwner::maBroadcastHelper.addListener (m_aSelectionTypeIdentifier, xListener);
 }
-
-
-
 
 void SAL_CALL DrawController::removeSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener )
@@ -304,10 +275,6 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     BroadcastHelperOwner::maBroadcastHelper.removeListener (m_aSelectionTypeIdentifier, xListener);
 }
 
-
-
-
-
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL
@@ -315,9 +282,6 @@ void SAL_CALL
     throw (uno::RuntimeException, std::exception)
 {
 }
-
-
-
 
 //=====  view::XSelectionChangeListener  ======================================
 
@@ -350,9 +314,6 @@ void  SAL_CALL
     }
 }
 
-
-
-
 // XDrawView
 
 void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )
@@ -364,9 +325,6 @@ void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPag
     if (mxSubController.is())
         mxSubController->setCurrentPage(xPage);
 }
-
-
-
 
 Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     throw(RuntimeException, std::exception)
@@ -386,9 +344,6 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
 
     return xPage;
 }
-
-
-
 
 void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
 {
@@ -413,9 +368,6 @@ void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
         maLastVisArea = rVisArea;
     }
 }
-
-
-
 
 void DrawController::FireSelectionChangeListener() throw()
 {
@@ -444,9 +396,6 @@ void DrawController::FireSelectionChangeListener() throw()
     }
 }
 
-
-
-
 void DrawController::FireChangeEditMode (bool bMasterPageMode) throw()
 {
     if (bMasterPageMode != mbMasterPageMode )
@@ -460,9 +409,6 @@ void DrawController::FireChangeEditMode (bool bMasterPageMode) throw()
     }
 }
 
-
-
-
 void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
 {
     if (bLayerMode != mbLayerMode)
@@ -475,9 +421,6 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
         mbLayerMode = bLayerMode;
     }
 }
-
-
-
 
 void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 {
@@ -568,9 +511,6 @@ void DrawController::FirePropertyChange (
 
 }
 
-
-
-
 void DrawController::BroadcastContextChange (void) const
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpBase->GetMainViewShell());
@@ -614,21 +554,11 @@ void DrawController::BroadcastContextChange (void) const
     ContextChangeEventMultiplexer::NotifyContextChange(mpBase, eContext);
 }
 
-
-
-
-
-
-
-
 void DrawController::ReleaseViewShellBase (void)
 {
     DisposeFrameworkControllers();
     mpBase = NULL;
 }
-
-
-
 
 //===== XControllerManager ==============================================================
 
@@ -641,9 +571,6 @@ Reference<XConfigurationController> SAL_CALL
     return mxConfigurationController;
 }
 
-
-
-
 Reference<XModuleController> SAL_CALL
     DrawController::getModuleController (void)
     throw (RuntimeException, std::exception)
@@ -652,9 +579,6 @@ Reference<XModuleController> SAL_CALL
 
     return mxModuleController;
 }
-
-
-
 
 //===== XUnoTunnel ============================================================
 
@@ -667,9 +591,6 @@ const Sequence<sal_Int8>& DrawController::getUnoTunnelId (void)
 {
     return theDrawControllerUnoTunnelId::get().getSeq();
 }
-
-
-
 
 sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException, std::exception)
@@ -684,9 +605,6 @@ sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 
     return nResult;
 }
-
-
-
 
 //===== Properties ============================================================
 
@@ -758,9 +676,6 @@ void DrawController::FillPropertyTable (
             beans::PropertyAttribute::BOUND ));
 }
 
-
-
-
 IPropertyArrayHelper & DrawController::getInfoHelper()
 {
     SolarMutexGuard aGuard;
@@ -778,9 +693,6 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
     return *mpPropertyArrayHelper.get();
 }
 
-
-
-
 Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
         throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -789,7 +701,6 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
     static Reference < beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-
 
 uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException, std::exception)
 {
@@ -843,9 +754,6 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
     return xControl;
 }
 
-
-
-
 sal_Bool DrawController::convertFastPropertyValue (
     Any & rConvertedValue,
     Any & rOldValue,
@@ -879,9 +787,6 @@ sal_Bool DrawController::convertFastPropertyValue (
     return bResult;
 }
 
-
-
-
 void DrawController::setFastPropertyValue_NoBroadcast (
     sal_Int32 nHandle,
     const Any& rValue)
@@ -893,9 +798,6 @@ void DrawController::setFastPropertyValue_NoBroadcast (
     else if (mxSubController.is())
         mxSubController->setFastPropertyValue(nHandle, rValue);
 }
-
-
-
 
 void DrawController::getFastPropertyValue (
     Any & rRet,
@@ -924,11 +826,6 @@ void DrawController::getFastPropertyValue (
     }
 }
 
-
-
-
-
-
 void DrawController::ProvideFrameworkControllers (void)
 {
     SolarMutexGuard aGuard;
@@ -951,9 +848,6 @@ void DrawController::ProvideFrameworkControllers (void)
     }
 }
 
-
-
-
 void DrawController::DisposeFrameworkControllers (void)
 {
     Reference<XComponent> xComponent (mxModuleController, UNO_QUERY);
@@ -964,9 +858,6 @@ void DrawController::DisposeFrameworkControllers (void)
     if (xComponent.is())
         xComponent->dispose();
 }
-
-
-
 
 void DrawController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
@@ -980,11 +871,6 @@ void DrawController::ThrowIfDisposed (void) const
     }
 }
 
-
-
-
-
 } // end of namespace sd
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

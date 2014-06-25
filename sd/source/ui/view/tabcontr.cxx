@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TabControl.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
-
 
 #include "sdattr.hxx"
 #include "sdmod.hxx"
@@ -42,38 +40,28 @@
 #include "DrawDocShell.hxx"
 #include "sdresid.hxx"
 
-
 namespace sd {
 
-
 // - SdTabControl::SdPageObjsTransferable -
-
 
 TabControl::TabControlTransferable::~TabControlTransferable()
 {
 }
-
-
 
 void TabControl::TabControlTransferable::AddSupportedFormats()
 {
     AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
 }
 
-
-
 bool TabControl::TabControlTransferable::GetData( const css::datatransfer::DataFlavor& /*rFlavor*/, const OUString& /*rDestDoc*/ )
 {
     return false;
 }
 
-
-
 void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mrParent.DragFinished( nDropAction );
 }
-
 
 TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
@@ -88,7 +76,6 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     SetMaxPageWidth( 150 );
     SetHelpId( HID_SD_TABBAR_PAGES );
 }
-
 
 TabControl::~TabControl()
 {
@@ -161,7 +148,6 @@ void TabControl::DoubleClick()
     }
 }
 
-
 void TabControl::StartDrag( sal_Int8, const Point& )
 {
     bInternalMove = true;
@@ -170,12 +156,10 @@ void TabControl::StartDrag( sal_Int8, const Point& )
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
-
 void TabControl::DragFinished( sal_Int8 )
 {
     bInternalMove = false;
 }
-
 
 sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -215,7 +199,6 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
     return nRet;
 }
-
 
 sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -368,17 +351,11 @@ bool TabControl::DeactivatePage()
     return pDrViewSh->IsSwitchPageAllowed();
 }
 
-
-
-
 void TabControl::SendActivatePageEvent (void)
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
 }
-
-
-
 
 void TabControl::SendDeactivatePageEvent (void)
 {

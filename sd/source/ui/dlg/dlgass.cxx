@@ -76,15 +76,12 @@ using namespace ::sd;
 
 using ::std::vector;
 
-
 class PasswordEntry
 {
 public:
     uno::Sequence< beans::NamedValue > aEncryptionData;
     OUString maPath;
 };
-
-
 
 /** A simple wrapper that looks like a PushButton and is used to force the
     broadcasting of focus events primarily for accessibility tools.
@@ -107,10 +104,6 @@ private:
     PushButton* mpNextButton2;
     bool mbIsFirstButtonActive;
 };
-
-
-
-
 
 class AssistentDlgImpl : public SfxListener
 {
@@ -324,10 +317,6 @@ public:
     CheckBox*           mpPage5SummaryCB;
 
 };
-
-
-
-
 
 AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, bool bAutoPilot ) :
     mpTemplateRegion(NULL),
@@ -584,7 +573,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
-
     // general
     mpLastPageButton->SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
     mpNextPageButton->SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
@@ -655,9 +643,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     }
 }
 
-
-
-
 AssistentDlgImpl::~AssistentDlgImpl()
 {
     CloseDocShell();
@@ -697,9 +682,6 @@ void AssistentDlgImpl::EndDialog( long )
 {
     mpWindow = NULL;
 }
-
-
-
 
 void    AssistentDlgImpl::ScanDocmenu   (void)
 {
@@ -778,8 +760,6 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
         // Ignore all exceptions.
     }
 }
-
-
 
 void AssistentDlgImpl::ProvideTemplates (void)
 {
@@ -867,9 +847,6 @@ void AssistentDlgImpl::TemplateScanDone (
     if (mpWindow)
         UpdatePage();
 }
-
-
-
 
 // ********************************************************************
 // state methods
@@ -1231,7 +1208,6 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
     return 0;
 }
 
-
 IMPL_LINK_NOARG(AssistentDlgImpl, NextPageHdl)
 {
     // When changing from the first to the second page make sure that the
@@ -1505,7 +1481,6 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
                 xDocShell = pRet->GetFrame()->GetObjectShell();
         }
 
-
         Application::SetDefDialogParent( pParent );
 
         mnShowPage = 0;
@@ -1646,9 +1621,6 @@ bool AssistentDlgImpl::IsOwnFormat( const OUString& rPath )
     return !aExt.equalsIgnoreAsciiCase( "ppt" );
 }
 
-
-
-
 OUString AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
 {
     OUString sLabel;
@@ -1701,9 +1673,6 @@ OUString AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
     return sLabel;
 }
 
-
-
-
 Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 {
     Image aIcon;
@@ -1751,9 +1720,6 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 
     return aIcon;
 }
-
-
-
 
 AssistentDlg::AssistentDlg(Window* pParent, bool bAutoPilot) :
     ModalDialog(pParent, "Assistent", "modules/simpress/ui/assistentdialog.ui")
@@ -1858,9 +1824,6 @@ uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()
     return mpImpl->GetPassword( mpImpl->maDocFile );
 }
 
-
-
-
 //===== NextButton ============================================================
 
 NextButton::NextButton (::Window* pParent) :
@@ -1872,9 +1835,6 @@ NextButton::NextButton (::Window* pParent) :
     // Hide the unused button.
     mpNextButton2->Hide();
 }
-
-
-
 
 void NextButton::ForceFocusEventBroadcast (void)
 {
@@ -1895,9 +1855,6 @@ void NextButton::ForceFocusEventBroadcast (void)
     }
 }
 
-
-
-
 void NextButton::SetClickHdl (const Link& rLink)
 {
     // Forward the setting of the click handler to the two buttons
@@ -1906,18 +1863,12 @@ void NextButton::SetClickHdl (const Link& rLink)
     mpNextButton2->SetClickHdl(rLink);
 }
 
-
-
-
 bool NextButton::IsEnabled (void)
 {
     // Because the buttons are both either enabled or disabled, it is
     // sufficient to ask one to determine the state.
     return mpNextButton1->IsEnabled();
 }
-
-
-
 
 void NextButton::Enable (bool bEnable)
 {

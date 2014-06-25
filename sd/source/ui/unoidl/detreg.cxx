@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sddetect.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -68,6 +67,5 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdd_component_getFactory(
     return pReturn ;
 }
 } // extern "C"
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawController.hxx"
 #include "SlideShowRestarter.hxx"
 #include "framework/ConfigurationController.hxx"
@@ -33,7 +32,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using ::sd::framework::FrameworkHelper;
-
 
 namespace sd {
 

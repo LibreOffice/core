@@ -22,9 +22,6 @@
 #include <vcl/decoview.hxx>
 #include <vcl/builder.hxx>
 
-
-
-
 SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, WinBits nStyle )
 :Control( pParent, nStyle )
 {
@@ -41,12 +38,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdHtmlAttrPreview(Window *p
     return new SdHtmlAttrPreview(pParent, nWinStyle);
 }
 
-
 SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
-
-
 
 void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
 {
@@ -82,8 +76,6 @@ void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
     DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_VLINK),
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 }
-
-
 
 void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
                                    Color& aVLink, Color& aALink )

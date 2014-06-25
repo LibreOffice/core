@@ -54,8 +54,6 @@ static const sal_uInt16 aEscDirArray[] =
 //  SDRESC_ALL
 };
 
-
-
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 
 /**
@@ -171,7 +169,6 @@ Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 
     return( NULL );
 }
-
 
 /**
  * Returns position in the array for EscDir (Mapping for Listbox)

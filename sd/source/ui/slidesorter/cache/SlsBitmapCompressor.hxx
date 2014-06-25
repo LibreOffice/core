@@ -23,13 +23,11 @@
 #include <sal/types.h>
 #include <boost/shared_ptr.hpp>
 
-
 class Bitmap;
 
 namespace sd { namespace slidesorter { namespace cache {
 
 class BitmapReplacement;
-
 
 /** This interface class provides the minimal method set for classes that
     implement the compression and decompression of preview bitmaps.
@@ -61,8 +59,6 @@ protected:
     ~BitmapCompressor() {}
 };
 
-
-
 /** Interface for preview bitmap replacements.  Each bitmap
     compressor/decompressor has to provide an implementation that is
     suitable to store the compressed bitmaps.
@@ -75,9 +71,6 @@ public:
 protected:
     ~BitmapReplacement() {}
 };
-
-
-
 
 /** This is one trivial bitmap compressor.  It stores bitmaps unmodified
     instead of compressing them.
@@ -94,9 +87,6 @@ public:
     virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
-
-
-
 /** This is another trivial bitmap compressor.  Instead of compressing a
     bitmap, it throws the bitmap away.  Its Decompress() method returns a
     NULL pointer.  The caller has to create a new preview bitmap instead.
@@ -111,9 +101,6 @@ public:
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
     virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
-
-
-
 
 /** Compress a preview bitmap by reducing its resolution.  While the aspect
     ratio is maintained the horizontal resolution is scaled down to 100
@@ -134,9 +121,6 @@ public:
     virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
-
-
-
 /** Compress preview bitmaps using the PNG format.
     This compressor is lossless.
 */
@@ -150,7 +134,6 @@ public:
     virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
     virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

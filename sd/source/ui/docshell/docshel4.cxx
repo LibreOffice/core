@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawDocShell.hxx"
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <tools/urlobj.hxx>
@@ -79,7 +78,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
-
 
 namespace sd {
 
@@ -272,7 +270,6 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     SfxItemSet* pSet = rMedium.GetItemSet();
 
-
     if( pSet )
     {
         if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
@@ -356,7 +353,6 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
     // TODO/LATER: nobody is interested in the error code?!
     ErrCode nError = ERRCODE_NONE;
     bool bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
-
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
@@ -647,7 +643,6 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
     return bRet;
 }
 
-
 SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 {
     return( (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool() );
@@ -936,7 +931,6 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             }
             delete pUnoDrawView;
 
-
             if (pObj)
             {
                 // Objekt einblenden und selektieren
@@ -944,7 +938,6 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                                        *pDrViewSh->GetActiveWindow());
 
                  bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
-
 
             }
         }
@@ -1042,7 +1035,6 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             }
             delete pUnoDrawView;
 
-
             if (pObj)
             {
                 // Objekt einblenden und selektieren
@@ -1112,7 +1104,6 @@ bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
     return SfxObjectShell::SaveAsOwnFormat(rMedium);
 }
-
 
 void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         sal_uInt32*  pFormat,

@@ -32,7 +32,6 @@
 
 namespace sd { namespace sidebar {
 
-
 MasterPagesSelector* RecentMasterPagesSelector::Create (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
@@ -57,9 +56,6 @@ MasterPagesSelector* RecentMasterPagesSelector::Create (
     return pSelector;
 }
 
-
-
-
 RecentMasterPagesSelector::RecentMasterPagesSelector (
     ::Window* pParent,
     SdDrawDocument& rDocument,
@@ -70,17 +66,11 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
 {
 }
 
-
-
-
 RecentMasterPagesSelector::~RecentMasterPagesSelector (void)
 {
     RecentlyUsedMasterPages::Instance().RemoveEventListener (
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
-
-
-
 
 void RecentMasterPagesSelector::LateInit (void)
 {
@@ -91,17 +81,11 @@ void RecentMasterPagesSelector::LateInit (void)
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
 
-
-
-
 IMPL_LINK_NOARG(RecentMasterPagesSelector, MasterPageListListener)
 {
     MasterPagesSelector::Fill();
     return 0;
 }
-
-
-
 
 void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
@@ -138,9 +122,6 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
     }
 }
 
-
-
-
 void RecentMasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
@@ -159,17 +140,11 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
     }
 }
 
-
-
-
 void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
     if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
         rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
 }
-
-
-
 
 } } // end of namespace sd::sidebar
 

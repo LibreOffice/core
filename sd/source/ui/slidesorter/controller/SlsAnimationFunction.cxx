@@ -21,7 +21,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 
-
 #include <osl/diagnose.hxx>
 #include <rtl/math.hxx>
 
@@ -39,18 +38,12 @@ AnimationBezierFunction::AnimationBezierFunction (
 {
 }
 
-
-
-
 ::basegfx::B2DPoint AnimationBezierFunction::operator() (const double nT)
 {
     return ::basegfx::B2DPoint(
         EvaluateComponent(nT, mnX1, mnX2),
         EvaluateComponent(nT, mnY1, mnY2));
 }
-
-
-
 
 double AnimationBezierFunction::EvaluateComponent (
     const double nT,
@@ -75,9 +68,6 @@ double AnimationBezierFunction::EvaluateComponent (
 
     return nV0123;
 }
-
-
-
 
 //===== AnimationParametricFunction ===========================================
 
@@ -120,9 +110,6 @@ AnimationParametricFunction::AnimationParametricFunction (const ParametricFuncti
     }
 }
 
-
-
-
 double AnimationParametricFunction::operator() (const double nX)
 {
     const sal_Int32 nIndex0 (static_cast<sal_Int32>(nX * maY.size()));
@@ -138,7 +125,6 @@ double AnimationParametricFunction::operator() (const double nX)
     const double nU ((nX-nX1) / (nX0 - nX1));
     return maY[nIndex0]*nU + maY[nIndex1]*(1-nU);
 }
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

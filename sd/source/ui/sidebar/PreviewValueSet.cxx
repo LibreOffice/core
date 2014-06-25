@@ -20,9 +20,7 @@
 #include "PreviewValueSet.hxx"
 #include <vcl/image.hxx>
 
-
 namespace sd { namespace sidebar {
-
 
 PreviewValueSet::PreviewValueSet (::Window* pParent)
     : ValueSet (pParent, WB_TABSTOP),
@@ -40,31 +38,19 @@ PreviewValueSet::PreviewValueSet (::Window* pParent)
     SetExtraSpacing (2);
 }
 
-
-
-
 PreviewValueSet::~PreviewValueSet (void)
 {
 }
-
-
-
 
 void PreviewValueSet::SetPreviewSize (const Size& rSize)
 {
     maPreviewSize = rSize;
 }
 
-
-
-
 void PreviewValueSet::SetRightMouseClickHandler (const Link& rLink)
 {
     maRightMouseClickHandler = rLink;
 }
-
-
-
 
 void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
 {
@@ -75,9 +61,6 @@ void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
         ValueSet::MouseButtonDown (rEvent);
 
 }
-
-
-
 
 void PreviewValueSet::Resize (void)
 {
@@ -90,9 +73,6 @@ void PreviewValueSet::Resize (void)
     }
 }
 
-
-
-
 void PreviewValueSet::Rearrange (bool /*bForceRequestResize*/)
 {
     sal_uInt16 nNewColumnCount (CalculateColumnCount (
@@ -102,9 +82,6 @@ void PreviewValueSet::Rearrange (bool /*bForceRequestResize*/)
     SetColCount(nNewColumnCount);
     SetLineCount(nNewRowCount);
 }
-
-
-
 
 sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
 {
@@ -120,9 +97,6 @@ sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
     return (sal_uInt16)nColumnCount;
 }
 
-
-
-
 sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
 {
     int nRowCount = 0;
@@ -136,9 +110,6 @@ sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
 
     return (sal_uInt16)nRowCount;
 }
-
-
-
 
 sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
 {
@@ -161,9 +132,6 @@ sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
     return nPreferredWidth;
 }
 
-
-
-
 sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nRowCount (CalculateRowCount(CalculateColumnCount(nWidth)));
@@ -171,9 +139,6 @@ sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 
     return nRowCount * (nItemHeight + 2*mnBorderHeight);
 }
-
-
-
 
 } } // end of namespace sd::sidebar
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsViewCacheContext.hxx"
 
 #include "SlideSorter.hxx"
@@ -36,22 +35,15 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-
 ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
       mrSlideSorter(rSlideSorter)
 {
 }
 
-
-
-
 ViewCacheContext::~ViewCacheContext (void)
 {
 }
-
-
-
 
 void ViewCacheContext::NotifyPreviewCreation (
     cache::CacheKey aKey,
@@ -71,9 +63,6 @@ void ViewCacheContext::NotifyPreviewCreation (
     }
 }
 
-
-
-
 bool ViewCacheContext::IsIdle (void)
 {
     sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow().get()));
@@ -83,25 +72,16 @@ bool ViewCacheContext::IsIdle (void)
         return false;
 }
 
-
-
-
 bool ViewCacheContext::IsVisible (cache::CacheKey aKey)
 {
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     return pDescriptor && pDescriptor->HasState(model::PageDescriptor::ST_Visible);
 }
 
-
-
-
 const SdrPage* ViewCacheContext::GetPage (cache::CacheKey aKey)
 {
     return static_cast<const SdrPage*>(aKey);
 }
-
-
-
 
 ::boost::shared_ptr<std::vector<cache::CacheKey> > ViewCacheContext::GetEntryList (bool bVisible)
 {
@@ -121,25 +101,16 @@ const SdrPage* ViewCacheContext::GetPage (cache::CacheKey aKey)
     return pKeys;
 }
 
-
-
-
 sal_Int32 ViewCacheContext::GetPriority (cache::CacheKey aKey)
 {
     return - (static_cast<const SdrPage*>(aKey)->GetPageNum()-1) / 2;
 }
-
-
-
 
 model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKey)
 {
     sal_uInt16 nPageIndex ((static_cast<const SdrPage*>(aKey)->GetPageNum() - 1) / 2);
     return mrModel.GetPageDescriptor(nPageIndex);
 }
-
-
-
 
 ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ViewCacheContext::GetModel (void)
 {

@@ -50,7 +50,6 @@ namespace sd {
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
 TYPEINIT1( FuMorph, FuPoor );
 
-
 FuMorph::FuMorph (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -271,7 +270,6 @@ void FuMorph::ImpEqualizePolyPointCount(
     aPoly2.setClosed(rBig.isClosed());
     rSmall = aPoly2;
 }
-
 
 sal_uInt32 FuMorph::ImpGetNearestIndex(
     const ::basegfx::B2DPolygon& rPoly,

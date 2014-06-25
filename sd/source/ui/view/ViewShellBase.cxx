@@ -108,7 +108,6 @@ private:
 
 } // end of anonymous namespace
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -195,7 +194,6 @@ private:
     ::boost::shared_ptr<slidesorter::cache::PageCacheManager> mpPageCacheManager;
 };
 
-
 namespace {
 /** The only task of this window is to forward key presses to the content
     window of the main view shell.  With the key press it forwards the focus
@@ -260,9 +258,6 @@ ViewShellBase::ViewShellBase (
     _pFrame->GetWindow().Hide();
 }
 
-
-
-
 /** In this destructor the order in which some of the members are destroyed
     (and/or being prepared to being destroyed) is important.  Change it only
     when you know what you are doing.
@@ -291,9 +286,6 @@ ViewShellBase::~ViewShellBase (void)
 
     SetWindow(NULL);
 }
-
-
-
 
 void ViewShellBase::LateInit (const OUString& rsDefaultView)
 {
@@ -368,16 +360,10 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     }
 }
 
-
-
-
 ::boost::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager (void) const
 {
     return mpImpl->mpViewShellManager;
 }
-
-
-
 
 ::boost::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell (void) const
 {
@@ -389,9 +375,6 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             ->GetViewShell(framework::FrameworkHelper::msFullScreenPaneURL);
     return pMainViewShell;
 }
-
-
-
 
 ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 {
@@ -408,16 +391,6 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 
     return pBase;
 }
-
-
-
-
-
-
-
-
-
-
 
 void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -444,13 +417,9 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-
-
-
 void ViewShellBase::InitializeFramework (void)
 {
 }
-
 
 OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
 {
@@ -490,16 +459,10 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
     mpImpl->ResizePixel(rOrigin, rSize, false);
 }
 
-
-
-
 void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
 {
     mpImpl->ResizePixel (rOrigin, rSize, true);
 }
-
-
-
 
 void ViewShellBase::Rearrange (void)
 {
@@ -522,9 +485,6 @@ void ViewShellBase::Rearrange (void)
     GetViewFrame()->Resize(true);
 }
 
-
-
-
 ErrCode ViewShellBase::DoVerb (long nVerb)
 {
     ErrCode aResult = ERRCODE_NONE;
@@ -536,9 +496,6 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
     return aResult;
 }
 
-
-
-
 Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
 {
     // Create a new DocumentRenderer on every call.  It observes the life
@@ -546,18 +503,12 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
     return Reference<view::XRenderable>(new DocumentRenderer(*this));
 }
 
-
-
-
 SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
     return GetDocShell()->GetPrinter (bCreate);
 }
-
-
-
 
 sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
@@ -609,9 +560,6 @@ sal_uInt16 ViewShellBase::SetPrinter (
     return 0;
 }
 
-
-
-
 void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 {
     mpImpl->ShowViewTabBar(false);
@@ -622,9 +570,6 @@ void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 
     SfxViewShell::UIActivating( pClient );
 }
-
-
-
 
 void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
 {
@@ -637,9 +582,6 @@ void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
         pViewShell->UIDeactivated( pClient );
 }
 
-
-
-
 SvBorder ViewShellBase::GetBorder (bool )
 {
     int nTop = 0;
@@ -647,9 +589,6 @@ SvBorder ViewShellBase::GetBorder (bool )
         nTop = mpImpl->mpViewTabBar->GetHeight();
     return SvBorder(0,nTop,0,0);
 }
-
-
-
 
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
@@ -709,18 +648,12 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
     }
 }
 
-
-
-
 void ViewShellBase::GetState (SfxItemSet& rSet)
 {
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
 }
-
-
-
 
 void ViewShellBase::WriteUserDataSequence (
     ::com::sun::star::uno::Sequence <
@@ -732,9 +665,6 @@ void ViewShellBase::WriteUserDataSequence (
     if (pShell != NULL)
         pShell->WriteUserDataSequence (rSequence, bBrowse);
 }
-
-
-
 
 void ViewShellBase::ReadUserDataSequence (
     const ::com::sun::star::uno::Sequence <
@@ -783,9 +713,6 @@ void ViewShellBase::ReadUserDataSequence (
     }
 }
 
-
-
-
 void ViewShellBase::Activate (bool bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
@@ -801,16 +728,10 @@ void ViewShellBase::Activate (bool bIsMDIActivate)
     GetToolBarManager()->RequestUpdate();
 }
 
-
-
-
 void ViewShellBase::Deactivate (bool bIsMDIActivate)
 {
     SfxViewShell::Deactivate(bIsMDIActivate);
 }
-
-
-
 
 void ViewShellBase::SetZoomFactor (
     const Fraction &rZoomX,
@@ -822,9 +743,6 @@ void ViewShellBase::SetZoomFactor (
     if (pShell != NULL)
         pShell->SetZoomFactor (rZoomX, rZoomY);
 }
-
-
-
 
 bool ViewShellBase::PrepareClose (bool bUI)
 {
@@ -843,9 +761,6 @@ bool ViewShellBase::PrepareClose (bool bUI)
     return nResult;
 }
 
-
-
-
 void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)
 {
     SfxViewShell::WriteUserData (rString, bBrowse);
@@ -855,9 +770,6 @@ void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)
     if (pShell != NULL)
         pShell->WriteUserData (rString);
 }
-
-
-
 
 void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
 {
@@ -869,9 +781,6 @@ void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
         pShell->ReadUserData (rString);
 }
 
-
-
-
 SdrView* ViewShellBase::GetDrawView (void) const
 {
     // Forward call to main sub shell.
@@ -882,25 +791,16 @@ SdrView* ViewShellBase::GetDrawView (void) const
         return SfxViewShell::GetDrawView();
 }
 
-
-
-
 void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
 {
     SfxViewShell::AdjustPosSizePixel (rOfs, rSize);
 }
-
-
-
 
 void ViewShellBase::SetBusyState (bool bBusy)
 {
     if (GetDocShell() != NULL)
         GetDocShell()->SetWaitCursor (bBusy);
 }
-
-
-
 
 void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 {
@@ -926,9 +826,6 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     }
 }
 
-
-
-
 void ViewShellBase::ShowUIControls (bool bVisible)
 {
     if (mpImpl->mpViewTabBar.is())
@@ -942,9 +839,6 @@ void ViewShellBase::ShowUIControls (bool bVisible)
     if (bVisible)
         Rearrange();
 }
-
-
-
 
 OUString ViewShellBase::GetInitialViewShellType (void)
 {
@@ -1009,9 +903,6 @@ OUString ViewShellBase::GetInitialViewShellType (void)
     return sRequestedView;
 }
 
-
-
-
 /** this method starts the presentation by
     executing the slot SID_PRESENTATION asynchronous */
 void ViewShellBase::StartPresentation()
@@ -1019,10 +910,6 @@ void ViewShellBase::StartPresentation()
     if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
         GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
-
-
-
-
 
 ::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer (void)
 {
@@ -1032,14 +919,10 @@ void ViewShellBase::StartPresentation()
     return mpImpl->mpEventMultiplexer;
 }
 
-
-
-
 const Rectangle& ViewShellBase::getClientRectangle (void) const
 {
     return mpImpl->maClientArea;
 }
-
 
 ::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager (void) const
 {
@@ -1049,9 +932,6 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
     return mpImpl->mpToolBarManager;
 }
 
-
-
-
 ::boost::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
@@ -1060,18 +940,12 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
     return mpImpl->mpFormShellManager;
 }
 
-
-
-
 DrawController& ViewShellBase::GetDrawController (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
     return *mpImpl->mpController;
 }
-
-
-
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)
 {
@@ -1080,16 +954,12 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
-
-
-
 ::Window* ViewShellBase::GetViewWindow (void)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
     return mpImpl->mpViewWindow.get();
 }
-
 
 OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL )
 {
@@ -1135,8 +1005,6 @@ OUString ViewShellBase::RetrieveLabelFromCommand( const OUString& aCmdURL ) cons
     return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 
-
-
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
@@ -1154,9 +1022,6 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
 {
 }
 
-
-
-
 ViewShellBase::Implementation::~Implementation (void)
 {
     mpController = NULL;
@@ -1165,16 +1030,10 @@ ViewShellBase::Implementation::~Implementation (void)
     mpToolBarManager.reset();
 }
 
-
-
-
 void ViewShellBase::Implementation::LateInit (void)
 {
     mpController = new DrawController(mrBase);
 }
-
-
-
 
 void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 {
@@ -1199,9 +1058,6 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
     }
 }
 
-
-
-
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
     if (mpViewTabBar.is()
@@ -1211,9 +1067,6 @@ void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
         mrBase.Rearrange();
     }
 }
-
-
-
 
 void ViewShellBase::Implementation::ResizePixel (
     const Point& rOrigin,
@@ -1262,9 +1115,6 @@ void ViewShellBase::Implementation::ResizePixel (
 
     maClientArea = Rectangle(Point(0,0), aViewWindowSize);
 }
-
-
-
 
 void ViewShellBase::Implementation::SetPaneVisibility (
     const SfxRequest& rRequest,
@@ -1327,10 +1177,6 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-
-
-
 
 void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
 {
@@ -1460,12 +1306,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
 
 }
 
-
-
 } // end of namespace sd
-
-
-
 
 //===== CurrentPageSetter ===========================================
 
@@ -1475,10 +1316,6 @@ CurrentPageSetter::CurrentPageSetter (ViewShellBase& rBase)
     : mrBase(rBase)
 {
 }
-
-
-
-
 
 void CurrentPageSetter::operator() (bool)
 {
@@ -1532,9 +1369,6 @@ void CurrentPageSetter::operator() (bool)
 
 } // end of anonymouse namespace
 
-
-
-
 //===== FocusForwardingWindow =================================================
 
 namespace sd { namespace {
@@ -1548,16 +1382,10 @@ FocusForwardingWindow::FocusForwardingWindow (
     OSL_TRACE("created FocusForwardingWindow at %x", this);
 }
 
-
-
-
 FocusForwardingWindow::~FocusForwardingWindow (void)
 {
     OSL_TRACE("destroyed FocusForwardingWindow at %x", this);
 }
-
-
-
 
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 {
@@ -1576,9 +1404,6 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
     }
 }
 
-
-
-
 void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 {
     ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
@@ -1591,7 +1416,6 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
         }
     }
 }
-
 
 } // end of anonymouse namespace
 

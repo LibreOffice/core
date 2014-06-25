@@ -40,7 +40,6 @@ namespace sd { namespace slidesorter {
     class SlideSorter;
 } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 /** Manage the horizontal and vertical scroll bars.  Listen for events, set

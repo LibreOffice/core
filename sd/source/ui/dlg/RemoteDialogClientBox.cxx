@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-
 //                          struct ClientBoxEntry
 
 ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
@@ -43,11 +42,8 @@ ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
 {
 }
 
-
 ClientBoxEntry::~ClientBoxEntry()
 {}
-
-
 
 // ClientRemovedListener
 
@@ -57,11 +53,9 @@ void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
     (void) rEvt;
 }
 
-
 ClientRemovedListener::~ClientRemovedListener()
 {
 }
-
 
 // ClientBox
 
@@ -126,7 +120,6 @@ Size ClientBox::GetOptimalSize() const
     return LogicToPixel(Size(200, 140), MAP_APPFONT);
 }
 
-
 ClientBox::~ClientBox()
 {
     if ( ! m_bInDelete )
@@ -145,7 +138,6 @@ ClientBox::~ClientBox()
 
     m_xRemoveListener.clear();
 }
-
 
 // Title + description
 void ClientBox::CalcActiveHeight( const long nPos )
@@ -179,7 +171,6 @@ void ClientBox::CalcActiveHeight( const long nPos )
     m_nActiveHeight = aTextHeight + 2;
 }
 
-
 Rectangle ClientBox::GetEntryRect( const long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
@@ -200,7 +191,6 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
 
     return Rectangle( aPos, aSize );
 }
-
 
 void ClientBox::DeleteRemoved()
 {
@@ -223,7 +213,6 @@ long ClientBox::GetActiveEntryIndex()
     else
         return -1;
 }
-
 
 //This function may be called with nPos < 0
 void ClientBox::selectEntry( const long nPos )
@@ -268,7 +257,6 @@ void ClientBox::selectEntry( const long nPos )
 
     guard.clear();
 }
-
 
 void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 {
@@ -357,10 +345,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
         m_aPinBox.SetPosPixel( aBtnPos );
 
-
-
-
-
 //         long nExtraHeight = 0;
 
 //         if ( pEntry->m_bHasButtons )
@@ -376,7 +360,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     SetLineColor( Color( COL_LIGHTGRAY ) );
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
 }
-
 
 void ClientBox::RecalcAll()
 {
@@ -428,12 +411,10 @@ void ClientBox::RecalcAll()
     m_bNeedsRecalc = false;
 }
 
-
 bool ClientBox::HandleTabKey( bool )
 {
     return false;
 }
-
 
 bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
 {
@@ -479,7 +460,6 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
     return true;
 }
 
-
 void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
 {
     if ( !m_bInDelete )
@@ -506,7 +486,6 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
     }
 }
 
-
 long ClientBox::GetTotalHeight() const
 {
     long nHeight = m_vEntries.size() * m_nStdHeight;
@@ -518,7 +497,6 @@ long ClientBox::GetTotalHeight() const
 
     return nHeight;
 }
-
 
 void ClientBox::SetupScrollBar()
 {
@@ -552,12 +530,10 @@ void ClientBox::SetupScrollBar()
     m_bHasScrollBar = bNeedsScrollBar;
 }
 
-
 void ClientBox::Resize()
 {
     RecalcAll();
 }
-
 
 long ClientBox::PointToPos( const Point& rPos )
 {
@@ -579,7 +555,6 @@ OUString ClientBox::getPin()
     return OUString::number( m_aPinBox.GetValue() );
 }
 
-
 void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     long nPos = PointToPos( rMEvt.GetPosPixel() );
@@ -592,7 +567,6 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
             selectEntry( nPos );
     }
 }
-
 
 bool ClientBox::Notify( NotifyEvent& rNEvt )
 {
@@ -637,8 +611,6 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-
-
 long ClientBox::addEntry( ClientInfo* pClientInfo )
 {
     long         nPos = 0;
@@ -676,7 +648,6 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
         //         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
     }
 
-
 //     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
 //     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
 //     pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
@@ -700,7 +671,6 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
     return nPos;
 }
 
-
 void ClientBox::DoScroll( long nDelta )
 {
     m_nTopIndex += nDelta;
@@ -712,7 +682,6 @@ void ClientBox::DoScroll( long nDelta )
 
     m_aScrollBar.SetPosPixel( aNewSBPt );
 }
-
 
 IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
 {

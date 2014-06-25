@@ -30,7 +30,6 @@ class VirtualDevice;
 
 namespace sd { namespace toolpanel {
 
-
 /** The title bar above a control in a sub tool panel.
 
     <p>The title bar shows two kinds of indicators: 1) Expansion is

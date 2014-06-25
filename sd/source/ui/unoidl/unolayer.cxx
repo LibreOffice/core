@@ -54,7 +54,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-
 // class SdLayer
 #define WID_LAYER_LOCKED    1
 #define WID_LAYER_PRINTABLE 2
@@ -401,7 +400,6 @@ uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
     return uno::Reference<uno::XInterface> (mxLayerManager, uno::UNO_QUERY);
 }
 
-
 void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
     throw (::com::sun::star::lang::NoSupportException,
         ::com::sun::star::uno::RuntimeException, std::exception)
@@ -426,8 +424,6 @@ void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventLi
 {
     OSL_FAIL("not implemented!");
 }
-
-
 
 // class SdLayerManager
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
@@ -730,8 +726,6 @@ void SdLayerManager::UpdateLayerView( bool modify ) const throw()
     }
     return NULL;
 }
-
-
 
 namespace
 {

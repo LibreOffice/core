@@ -22,7 +22,6 @@
 
 #include "View.hxx"
 
-
 namespace sd {
 
 class DrawDocShell;

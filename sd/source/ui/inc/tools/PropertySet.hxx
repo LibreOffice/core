@@ -34,7 +34,6 @@ namespace {
     > PropertySetInterfaceBase;
 }
 
-
 /** A very simple implementation of the XPropertySet interface.  It does not
     support constrained properties and thus does not support vetoable
     listeners.  It does not support the optional property set info.

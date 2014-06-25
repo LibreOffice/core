@@ -19,18 +19,12 @@
 
 #include "escherex.hxx"
 
-
-
-
-
 PptEscherEx::PptEscherEx( SvStream& rOutStrm, const OUString& rBaseURI ) :
     EscherEx( EscherExGlobalRef( new EscherExGlobal ), &rOutStrm )
 {
     mxGlobal->SetBaseURI( rBaseURI );
     mnCurrentDg = 0;
 }
-
-
 
 sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 {
@@ -45,8 +39,6 @@ void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 
     ImplWriteDggContainer( rSt );
 }
-
-
 
 sal_uInt32 PptEscherEx::ImplDggContainerSize()
 {
@@ -76,8 +68,6 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
     }
 }
 
-
-
 #define ESCHER_OPT_COUNT 6
 
 sal_uInt32 PptEscherEx::ImplOptAtomSize()
@@ -104,8 +94,6 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
     }
 }
 
-
-
 #define ESCHER_SPLIT_MENU_COLORS_COUNT  4
 
 sal_uInt32 PptEscherEx::ImplSplitMenuColorsAtomSize()
@@ -131,13 +119,9 @@ void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
 
 }
 
-
-
 PptEscherEx::~PptEscherEx()
 {
 }
-
-
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
@@ -174,8 +158,6 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
         break;
     }
 }
-
-
 
 void PptEscherEx::CloseContainer()
 {
@@ -220,8 +202,6 @@ void PptEscherEx::CloseContainer()
         mpOutStrm->Seek( nPos );
     }
 }
-
-
 
 sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
 {
@@ -283,7 +263,5 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
     mnGroupLevel++;
     return nShapeId;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

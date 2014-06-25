@@ -204,7 +204,6 @@
 #define EPP_Comment10                   12000
 #define EPP_CommentAtom10               12001
 
-
 #define EPP_PLACEHOLDER_NONE                    0   //  0 None
 #define EPP_PLACEHOLDER_MASTERTITLE             1   //  1 Master title
 #define EPP_PLACEHOLDER_MASTERBODY              2   //  2 Master body

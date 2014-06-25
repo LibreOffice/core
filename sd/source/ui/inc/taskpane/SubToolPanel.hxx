@@ -26,7 +26,6 @@
 #include <vcl/scrbar.hxx>
 #include <vector>
 
-
 class Window;
 
 namespace sd { namespace toolpanel {

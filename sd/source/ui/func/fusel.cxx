@@ -881,7 +881,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             mpView->MarkObj(aPnt, nHitLog, false, rMEvt.IsMod1());
         }
 
-
         ForcePointer(&rMEvt);
         pHdl = NULL;
         mpWindow->ReleaseMouse();
@@ -994,7 +993,6 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 
 }
-
 
 void FuSelection::Activate()
 {
@@ -1135,13 +1133,10 @@ void FuSelection::Activate()
     FuDraw::Activate();
 }
 
-
-
 void FuSelection::Deactivate()
 {
     FuDraw::Deactivate();
 }
-
 
 void FuSelection::SelectionHasChanged()
 {
@@ -1160,7 +1155,6 @@ void FuSelection::SelectionHasChanged()
     // Activate the right tool bar for the current context of the view.
     mpViewShell->GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*mpViewShell, *mpView);
 }
-
 
 /**
  * Set current bezier edit mode
@@ -1462,8 +1456,6 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
     return bAnimated;
 }
 
-
-
 /** is called when the current function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
@@ -1483,9 +1475,6 @@ bool FuSelection::cancel()
         return false;
     }
 }
-
-
-
 
 SdrObject* FuSelection::pickObject (const Point& rTestPoint)
 {

@@ -186,8 +186,6 @@ private:
     void UnlockUpdate (void);
 };
 
-
-
 } // end of namespace sd
 
 #endif

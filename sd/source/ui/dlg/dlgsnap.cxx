@@ -28,7 +28,6 @@
 #include "drawdoc.hxx"
 #include "dlgsnap.hxx"
 
-
 /**
  * dialog to adjust grid (scarcely ESO!)
  */
@@ -183,7 +182,5 @@ void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
         m_pFtY->Disable();
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

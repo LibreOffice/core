@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -70,7 +69,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
-
 namespace {
     /** This local version of the work window overloads DataChanged() so that it
         can restart the slide show when a display is added or removed.
@@ -101,10 +99,6 @@ namespace {
     };
 }
 
-
-
-
-
 const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
@@ -131,9 +125,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     return aPresentationPropertyMap_Impl;
 }
 
-
 // class SlideShow
-
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
@@ -159,8 +151,6 @@ rtl::Reference< SlideShow > SlideShow::Create( SdDrawDocument* pDoc )
     return new SlideShow( pDoc );
 }
 
-
-
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
 {
     rtl::Reference< SlideShow > xRet;
@@ -171,22 +161,16 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
     return xRet;
 }
 
-
-
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument& rDocument )
 {
     return rtl::Reference< SlideShow >(
         dynamic_cast< SlideShow* >( rDocument.getPresentation().get() ) );
 }
 
-
-
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
 {
     return GetSlideShow( rBase.GetDocument() );
 }
-
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase& rBase )
 {
@@ -198,8 +182,6 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
 
     return xRet;
 }
-
-
 
 bool SlideShow::StartPreview( ViewShellBase& rBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
@@ -213,8 +195,6 @@ bool SlideShow::StartPreview( ViewShellBase& rBase,
     return false;
 }
 
-
-
 void SlideShow::Stop( ViewShellBase& rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
@@ -222,23 +202,17 @@ void SlideShow::Stop( ViewShellBase& rBase )
         xSlideShow->end();
 }
 
-
-
 bool SlideShow::IsRunning( ViewShellBase& rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     return xSlideShow.is() && xSlideShow->isRunning();
 }
 
-
-
 bool SlideShow::IsRunning( ViewShell& rViewShell )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rViewShell.GetViewShellBase() ) );
     return xSlideShow.is() && xSlideShow->isRunning() && (xSlideShow->mxController->getViewShell() == &rViewShell);
 }
-
-
 
 void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow )
 {
@@ -558,8 +532,6 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         mpDoc->SetChanged( true );
 }
 
-
-
 Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -626,41 +598,29 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     }
 }
 
-
-
 void SAL_CALL SlideShow::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
-
 
 void SAL_CALL SlideShow::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
-
-
 void SAL_CALL SlideShow::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
-
 
 void SAL_CALL SlideShow::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
 
-
 // XPresentation
-
 
 void SAL_CALL SlideShow::start() throw(RuntimeException, std::exception)
 {
     const Sequence< PropertyValue > aArguments;
     startWithArguments( aArguments );
 }
-
-
 
 WorkWindow *SlideShow::GetWorkWindow()
 {
@@ -832,8 +792,6 @@ void SAL_CALL SlideShow::end()
     }
 }
 
-
-
 void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException, std::exception)
 {
     Sequence< PropertyValue > aArguments(1);
@@ -842,9 +800,7 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException, std::exceptio
     startWithArguments( aArguments );
 }
 
-
 // XPresentation2
-
 
 void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rArguments)
     throw (RuntimeException, std::exception)
@@ -908,15 +864,11 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
 
 }
 
-
-
 sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();
 }
-
-
 
 Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (RuntimeException, std::exception)
 {
@@ -926,9 +878,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (R
     return xController;
 }
 
-
 // XComponent
-
 
 void SAL_CALL SlideShow::disposing (void)
 {
@@ -950,8 +900,6 @@ void SAL_CALL SlideShow::disposing (void)
     mpFullScreenViewShellBase = 0;
     mpDoc = 0;
 }
-
-
 
 bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode, ::Window* pParent )
 {
@@ -978,21 +926,15 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
     return true;
 }
 
-
-
 ShowWindow* SlideShow::getShowWindow()
 {
     return mxController.is() ? mxController->mpShowWindow : 0;
 }
 
-
-
 int SlideShow::getAnimationMode()
 {
     return mxController.is() ? mxController->meAnimationMode : ANIMATIONMODE_SHOW;
 }
-
-
 
 void SlideShow::jumpToPageIndex( sal_Int32 nPageIndex )
 {
@@ -1000,22 +942,16 @@ void SlideShow::jumpToPageIndex( sal_Int32 nPageIndex )
         mxController->displaySlideIndex( nPageIndex );
 }
 
-
-
 void SlideShow::jumpToPageNumber( sal_Int32 nPageNumber )
 {
     if( mxController.is() )
         mxController->displaySlideNumber( nPageNumber );
 }
 
-
-
 sal_Int32 SlideShow::getCurrentPageNumber()
 {
     return mxController.is() ? mxController->getCurrentSlideNumber() : 0;
 }
-
-
 
 void SlideShow::jumpToBookmark( const OUString& sBookmark )
 {
@@ -1023,22 +959,16 @@ void SlideShow::jumpToBookmark( const OUString& sBookmark )
         mxController->jumpToBookmark( sBookmark );
 }
 
-
-
 bool SlideShow::isFullScreen()
 {
     return mxController.is() && mxController->maPresSettings.mbFullScreen;
 }
-
-
 
 void SlideShow::resize( const Size &rSize )
 {
     if( mxController.is() )
         mxController->resize( rSize );
 }
-
-
 
 void SlideShow::activate( ViewShellBase& rBase )
 {
@@ -1071,21 +1001,15 @@ void SlideShow::activate( ViewShellBase& rBase )
 
 }
 
-
-
 void SlideShow::deactivate( ViewShellBase& /*rBase*/ )
 {
     mxController->deactivate();
 }
 
-
-
 bool SlideShow::keyInput(const KeyEvent& rKEvt)
 {
     return mxController.is() && mxController->keyInput(rKEvt);
 }
-
-
 
 void SlideShow::paint( const Rectangle& rRect )
 {
@@ -1093,14 +1017,10 @@ void SlideShow::paint( const Rectangle& rRect )
         mxController->paint( rRect );
 }
 
-
-
 bool SlideShow::isAlwaysOnTop()
 {
     return mxController.is() && mxController->maPresSettings.mbAlwaysOnTop;
 }
-
-
 
 bool SlideShow::pause( bool bPause )
 {
@@ -1114,43 +1034,31 @@ bool SlideShow::pause( bool bPause )
     return true;
 }
 
-
-
 void SlideShow::receiveRequest(SfxRequest& rReq)
 {
     if( mxController.is() )
         mxController->receiveRequest( rReq );
 }
 
-
-
 sal_Int32 SlideShow::getFirstPageNumber()
 {
     return mxController.is() ? mxController->getFirstSlideNumber() : 0;
 }
-
-
 
 sal_Int32 SlideShow::getLastPageNumber()
 {
     return mxController.is() ? mxController->getLastSlideNumber() : 0;
 }
 
-
-
 bool SlideShow::isEndless()
 {
     return mxController.is() && mxController->isEndless();
 }
 
-
-
 bool SlideShow::isDrawingPossible()
 {
     return mxController.is() && mxController->getUsePen();
 }
-
-
 
 void SlideShow::StartInPlacePresentationConfigurationCallback()
 {
@@ -1160,16 +1068,12 @@ void SlideShow::StartInPlacePresentationConfigurationCallback()
     mnInPlaceConfigEvent = Application::PostUserEvent( LINK( this, SlideShow, StartInPlacePresentationConfigurationHdl ) );
 }
 
-
-
 IMPL_LINK_NOARG(SlideShow, StartInPlacePresentationConfigurationHdl)
 {
     mnInPlaceConfigEvent = 0;
     StartInPlacePresentation();
     return 0;
 }
-
-
 
 void SlideShow::StartInPlacePresentation()
 {
@@ -1240,8 +1144,6 @@ void SlideShow::StartInPlacePresentation()
     }
 }
 
-
-
 void SlideShow::StartFullscreenPresentation( )
 {
     // Create the top level window in which the PresentationViewShell(Base)
@@ -1284,8 +1186,6 @@ void SlideShow::StartFullscreenPresentation( )
     }
 }
 
-
-
 /// convert configuration setting display concept to real screens
 sal_Int32 SlideShow::GetDisplay()
 {
@@ -1307,21 +1207,14 @@ sal_Int32 SlideShow::GetDisplay()
     return nDisplay;
 }
 
-
-
-
 bool SlideShow::dependsOn( ViewShellBase* pViewShellBase )
 {
     return mxController.is() && (pViewShellBase == mpCurrentViewShellBase) && mpFullScreenViewShellBase;
 }
 
-
-
 Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
 {
     return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ).get() );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

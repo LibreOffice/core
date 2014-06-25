@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 
@@ -26,7 +25,6 @@
 #include <svx/tabarea.hxx>
 
 #include "prlayout.hxx"
-
 
 class SfxObjectShell;
 class SfxStyleSheetBase;
@@ -91,7 +89,6 @@ public:
 
     const SfxItemSet* GetOutputItemSet() const;
 };
-
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 

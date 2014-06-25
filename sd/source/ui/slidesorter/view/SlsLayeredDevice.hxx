@@ -81,8 +81,6 @@ private:
     void RepaintRectangle (const Rectangle& rRepaintRectangle);
 };
 
-
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

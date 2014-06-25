@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "OutlineViewShell.hxx"
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
@@ -71,7 +70,6 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
 namespace sd {
-
 
 /************************************************************************/
 
@@ -630,7 +628,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
     Invalidate(SID_PASTE);
     Invalidate(SID_PASTE_UNFORMATTED);
 }
-
 
 } // end of namespace sd
 

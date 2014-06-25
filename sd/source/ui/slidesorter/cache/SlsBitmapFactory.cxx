@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsBitmapFactory.hxx"
 
 #include "PreviewRenderer.hxx"
@@ -44,15 +43,9 @@ BitmapFactory::BitmapFactory (void)
 {
 }
 
-
-
-
 BitmapFactory::~BitmapFactory (void)
 {
 }
-
-
-
 
 Bitmap BitmapFactory::CreateBitmap (
     const SdPage& rPage,
@@ -82,9 +75,6 @@ Bitmap BitmapFactory::CreateBitmap (
     return aPreview;
 }
 
-
 } } } // end of namespace ::sd::slidesorter::cache
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

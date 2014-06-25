@@ -24,9 +24,7 @@
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 
-
 TYPEINIT1(SdPresentationLayoutUndoAction, SdUndoAction);
-
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             SdDrawDocument* pTheDoc,
@@ -71,7 +69,5 @@ OUString SdPresentationLayoutUndoAction::GetComment() const
 {
     return aComment;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

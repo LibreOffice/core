@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "Ruler.hxx"
 #include <svl/ptitem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
-
 
 #include "View.hxx"
 #include "DrawViewShell.hxx"
@@ -70,8 +68,6 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
     }
 }
 
-
-
 Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal_uInt16 nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
     : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
     , pSdView(NULL)
@@ -94,7 +90,6 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal
     }
 }
 
-
 Ruler::~Ruler()
 {
     SfxBindings& rBindings = pCtrlItem->GetBindings();
@@ -102,7 +97,6 @@ Ruler::~Ruler()
     delete pCtrlItem;
     rBindings.LeaveRegistrations();
 }
-
 
 void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -119,18 +113,15 @@ void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
         SvxRuler::MouseButtonDown(rMEvt);
 }
 
-
 void Ruler::MouseMove(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseMove(rMEvt);
 }
 
-
 void Ruler::MouseButtonUp(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseButtonUp(rMEvt);
 }
-
 
 void Ruler::SetNullOffset(const Point& rOffset)
 {
@@ -142,7 +133,6 @@ void Ruler::SetNullOffset(const Point& rOffset)
     SetNullOffsetLogic(nOffset);
 }
 
-
 void Ruler::Command(const CommandEvent& rCEvt)
 {
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
@@ -151,7 +141,6 @@ void Ruler::Command(const CommandEvent& rCEvt)
         SvxRuler::Command( rCEvt );
     }
 }
-
 
 void Ruler::ExtraDown()
 {

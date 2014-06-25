@@ -31,7 +31,6 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
-
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Reference;
@@ -48,7 +47,6 @@ using namespace ::com::sun::star;
 
 namespace sd
 {
-
 
 // SlideShowViewListeners
 SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
@@ -111,7 +109,6 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
     maListeners.clear();
 }
 
-
 // SlideShowViewPaintListeners
 SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
 :   SlideShowViewPaintListeners_Base( rMutex )
@@ -124,7 +121,6 @@ bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintL
     rListener->windowPaint( rEvent );
     return true; // continue calling listeners
 }
-
 
 // SlideShowViewMouseListeners
 SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) :
@@ -157,7 +153,6 @@ bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseL
     return true; // continue calling listeners
 }
 
-
 // SlideShowViewMouseMotionListeners
 SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) :
     SlideShowViewMouseMotionListeners_Base( rMutex )
@@ -180,7 +175,6 @@ bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::X
 
     return true; // continue calling listeners
 }
-
 
 // SlideShowView
 SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
@@ -303,7 +297,6 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
     SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
-
 
     const Size aWindowSize( mrOutputWindow.GetSizePixel() );
 

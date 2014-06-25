@@ -65,8 +65,6 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace sidebar {
 
-
-
 struct snewfoil_value_info
 {
     sal_uInt16 mnBmpResId;
@@ -122,9 +120,6 @@ static const snewfoil_value_info standard[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-
-
-
 LayoutMenu::LayoutMenu (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
@@ -153,9 +148,6 @@ LayoutMenu::LayoutMenu (
     SetText(OUString("sd:LayoutMenu"));
 #endif
 }
-
-
-
 
 void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 {
@@ -200,17 +192,11 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     GetParent()->AddEventListener(aWindowEventHandlerLink);
 }
 
-
-
-
 LayoutMenu::~LayoutMenu (void)
 {
     OSL_TRACE("destroying LayoutMenu at %x", this);
     Dispose();
 }
-
-
-
 
 void LayoutMenu::Dispose (void)
 {
@@ -232,9 +218,6 @@ void LayoutMenu::Dispose (void)
     Link aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
     GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
-
-
-
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
@@ -273,9 +256,6 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-
-
-
 void LayoutMenu::Paint (const Rectangle& rRect)
 {
     if (mbSelectionUpdatePending)
@@ -285,9 +265,6 @@ void LayoutMenu::Paint (const Rectangle& rRect)
     }
     ValueSet::Paint (rRect);
 }
-
-
-
 
 void LayoutMenu::Resize (void)
 {
@@ -318,9 +295,6 @@ void LayoutMenu::Resize (void)
     ValueSet::Resize ();
 }
 
-
-
-
 void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 {
     // As a preparation for the context menu the item under the mouse is
@@ -335,9 +309,6 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 
     ValueSet::MouseButtonDown (rEvent);
 }
-
-
-
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
@@ -366,9 +337,6 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     UpdateSelection();
 }
 
-
-
-
 void LayoutMenu::InvalidateContent (void)
 {
     // Throw away the current set and fill the menu anew according to the
@@ -378,9 +346,6 @@ void LayoutMenu::InvalidateContent (void)
     if (mxSidebar.is())
         mxSidebar->requestLayout();
 }
-
-
-
 
 int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
 {
@@ -397,17 +362,11 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     return nRowCount;
 }
 
-
-
-
 IMPL_LINK_NOARG(LayoutMenu, ClickHandler)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
     return 0;
 }
-
-
-
 
 /** The specified layout is assigned to the current page of the view shell
     in the center pane.
@@ -478,7 +437,6 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
 
-
         if (pPageSelection->empty())
             break;
 
@@ -497,9 +455,6 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
     }
     while(false);
 }
-
-
-
 
 SfxRequest LayoutMenu::CreateRequest (
     sal_uInt16 nSlotId,
@@ -537,9 +492,6 @@ SfxRequest LayoutMenu::CreateRequest (
 
     return aRequest;
 }
-
-
-
 
 void LayoutMenu::Fill (void)
 {
@@ -607,9 +559,6 @@ void LayoutMenu::Fill (void)
     mbSelectionUpdatePending = true;
 }
 
-
-
-
 void LayoutMenu::Clear (void)
 {
     for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
@@ -617,30 +566,19 @@ void LayoutMenu::Clear (void)
     ValueSet::Clear();
 }
 
-
-
 void LayoutMenu::StartDrag (sal_Int8 , const Point& )
 {
 }
-
-
-
 
 sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& )
 {
     return 0;
 }
 
-
-
-
 sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& )
 {
     return 0;
 }
-
-
-
 
 void LayoutMenu::Command (const CommandEvent& rEvent)
 {
@@ -692,17 +630,11 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
     }
 }
 
-
-
-
 IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler)
 {
     InvalidateContent();
     return 0;
 }
-
-
-
 
 IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
 {
@@ -728,9 +660,6 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
 
     return 0;
 }
-
-
-
 
 void LayoutMenu::UpdateSelection (void)
 {
@@ -771,9 +700,6 @@ void LayoutMenu::UpdateSelection (void)
         SetNoSelection();
 }
 
-
-
-
 IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
 {
     switch (pEvent->meEventId)
@@ -808,9 +734,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
     return 0;
 }
 
-
-
-
 IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if (pEvent != NULL)
@@ -830,9 +753,6 @@ IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_False;
 }
 
-
-
-
 void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
 {
     Fill();
@@ -840,10 +760,6 @@ void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
     SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
     SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
 }
-
-
-
-
 
 } } // end of namespace ::sd::sidebar
 

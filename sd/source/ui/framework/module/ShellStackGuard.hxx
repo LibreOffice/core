@@ -32,7 +32,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <boost/scoped_ptr.hpp>
 
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <
@@ -46,9 +45,6 @@ namespace sd {
 class ViewShellBase;
 
 }
-
-
-
 
 namespace sd { namespace framework {
 
@@ -71,7 +67,6 @@ public:
     virtual ~ShellStackGuard (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
 
     // XConfigurationChangeListener
 

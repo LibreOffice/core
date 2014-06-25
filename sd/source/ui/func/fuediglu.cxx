@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuediglu.hxx"
 #include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
 #include <sfx2/request.hxx>
-
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -39,7 +37,6 @@
 namespace sd {
 
 TYPEINIT1( FuEditGluePoints, FuDraw );
-
 
 FuEditGluePoints::FuEditGluePoints (
     ViewShell* pViewSh,
@@ -73,14 +70,12 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
         ToolBarManager::msGluePointsToolBar);
 }
 
-
 FuEditGluePoints::~FuEditGluePoints()
 {
     mpView->BrkAction();
     mpView->UnmarkAllGluePoints();
     mpView->SetInsGluePointMode(false);
 }
-
 
 bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -204,7 +199,6 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
@@ -223,7 +217,6 @@ bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 
     return true;
 }
-
 
 bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -374,20 +367,17 @@ bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
     return FuPoor::Command( rCEvt );
 }
 
-
 void FuEditGluePoints::Activate()
 {
     mpView->SetGluePointEditMode();
     FuDraw::Activate();
 }
 
-
 void FuEditGluePoints::Deactivate()
 {
     mpView->SetGluePointEditMode( false );
     FuDraw::Deactivate();
 }
-
 
 void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 {
@@ -476,7 +466,6 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
     // at the end, call base class
     FuPoor::ReceiveRequest(rReq);
 }
-
 
 } // end of namespace sd
 

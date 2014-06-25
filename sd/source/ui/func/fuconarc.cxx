@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconarc.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdocirc.hxx>
@@ -27,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewfrm.hxx>
-
 
 #include <svx/svxids.hrc>
 #include <math.h>
@@ -46,7 +44,6 @@
 namespace sd {
 
 TYPEINIT1( FuConstructArc, FuConstruct );
-
 
 FuConstructArc::FuConstructArc (
     ViewShell*  pViewSh,
@@ -103,7 +100,6 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
     }
 }
 
-
 bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
@@ -130,12 +126,10 @@ bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-
 bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
-
 
 bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -173,7 +167,6 @@ bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
     return FuConstruct::KeyInput(rKEvt);
 }
-
 
 void FuConstructArc::Activate()
 {
@@ -217,7 +210,6 @@ void FuConstructArc::Activate()
 
     FuConstruct::Activate();
 }
-
 
 void FuConstructArc::Deactivate()
 {

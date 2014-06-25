@@ -35,17 +35,13 @@
 #include "drawdoc.hxx"
 #include "sdfilter.hxx"
 
-
 // - Namespaces -
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-
 // - SdFilter -
-
 
 SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress )
 :   mxModel( rDocShell.GetModel() )
@@ -57,21 +53,15 @@ SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bSho
 {
 }
 
-
-
 SdFilter::~SdFilter()
 {
 }
-
-
 
 OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName ) const
 {
     OUString aTemp(SVLIBRARY("?"));
     return aTemp.replaceFirst( "?", rLibraryName );
 }
-
-
 
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -85,8 +75,6 @@ extern "C" { static void SAL_CALL thisModule() {} }
 }
 
 #endif
-
-
 
 void SdFilter::CreateStatusIndicator()
 {

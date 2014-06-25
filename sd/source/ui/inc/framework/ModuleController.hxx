@@ -41,8 +41,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
 
 } // end of anonymous namespace.
 
-
-
 namespace sd { namespace framework {
 
 /** The ModuleController has to tasks:
@@ -76,12 +74,10 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XModuleController
 
     virtual void SAL_CALL requestResource(const OUString& rsResourceURL)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XInitialization
 

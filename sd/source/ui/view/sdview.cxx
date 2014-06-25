@@ -104,7 +104,6 @@ namespace sd {
 
 TYPEINIT1(View, FmFormView);
 
-
 View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)
   : FmFormView(&rDrawDoc, pOutDev),
@@ -155,7 +154,6 @@ void View::ImplClearDrawDropMarker()
     }
 }
 
-
 View::~View()
 {
     maSmartTags.Dispose();
@@ -174,7 +172,6 @@ View::~View()
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
     }
 }
-
 
 class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
 {
@@ -518,7 +515,6 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
     }
 }
 
-
 void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
@@ -527,19 +523,16 @@ void View::MarkListHasChanged()
         maSmartTags.deselect();
 }
 
-
 bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
 }
 
-
 bool View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
-
 
 /**
  * Is a presentation object selected?
@@ -610,7 +603,6 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
     return (bSelected);
 }
 
-
 void View::SelectAll()
 {
     if ( IsTextEdit() )
@@ -625,21 +617,17 @@ void View::SelectAll()
     }
 }
 
-
-
 void View::ModelHasChanged()
 {
     // First, notify SdrView
     FmFormView::ModelHasChanged();
 }
 
-
 bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     // forward to SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
-
 
 /**
  * Start text input
@@ -810,8 +798,6 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
     return(eKind);
 }
-
-
 
 /** restores the default text if the given text object is currently in edit mode and
     no text has been entered already. Is only useful just before text edit ends. */

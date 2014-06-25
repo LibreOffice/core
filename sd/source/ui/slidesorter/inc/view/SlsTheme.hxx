@@ -30,7 +30,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-
 namespace sd { namespace slidesorter { namespace controller {
 class Properties;
 } } }
@@ -148,7 +147,6 @@ private:
     */
     void InitializeIcon (const IconType eType, sal_uInt16 nResourceId);
 };
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

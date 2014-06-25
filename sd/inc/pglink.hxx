@@ -24,8 +24,6 @@
 
 class SdPage;
 
-
-
 class SdPageLink : public ::sfx2::SvBaseLink
 {
     SdPage* pPage;
@@ -41,8 +39,5 @@ public:
 };
 
 #endif // INCLUDED_SD_INC_PGLINK_HXX
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

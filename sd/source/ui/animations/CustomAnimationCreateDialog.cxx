@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/i18n/Collator.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -58,14 +57,11 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
-
 const int ENTRANCE = 0;
 const int EMPHASIS = 1;
 const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
-
-
 
 extern void fillDurationComboBox( ListBox* pBox );
 
@@ -146,15 +142,11 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-
-
 IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
 {
     CaptureMouse();
     return 0;
 }
-
-
 
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -169,8 +161,6 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
         ListBox::MouseButtonUp( rMEvt );
     }
 }
-
-
 
 class CustomAnimationCreateTabPage : public TabPage
 {
@@ -410,8 +400,6 @@ PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
     return eKind;
 }
 
-
-
 double CustomAnimationCreateTabPage::getDuration() const
 {
     sal_Int32 nPos = mpCBSpeed->GetSelectEntryPos();
@@ -473,7 +461,6 @@ void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
     mpCBXPReview->Check( bIsPreview );
 }
 
-
 bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 {
     sal_Int32 nPos = mpLBEffects->GetEntryCount();
@@ -493,8 +480,6 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 
     return false;
 }
-
-
 
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )

@@ -33,14 +33,12 @@ namespace sd {
 
 TYPEINIT1( FuDisplayOrder, FuPoor );
 
-
 FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 , mpRefObj(NULL)
 , mpOverlay(0L)
 {
 }
-
 
 FuDisplayOrder::~FuDisplayOrder()
 {
@@ -62,7 +60,6 @@ rtl::Reference<FuPoor> FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window*
     return xFunc;
 }
 
-
 bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -70,7 +67,6 @@ bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 
     return true;
 }
-
 
 bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
@@ -101,7 +97,6 @@ bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
     return true;
 }
 
-
 bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -127,19 +122,16 @@ bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     return true;
 }
 
-
 void FuDisplayOrder::Activate()
 {
     maPtr = mpWindow->GetPointer();
     mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
 }
 
-
 void FuDisplayOrder::Deactivate()
 {
     mpWindow->SetPointer( maPtr );
 }
-
 
 } // end of namespace sd
 

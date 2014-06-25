@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include "DrawViewShell.hxx"
@@ -39,7 +38,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
-
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -74,7 +72,6 @@ namespace sd {
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 
-
 void DrawViewShell::DeleteActualPage()
 {
     sal_uInt16          nPage = maTabControl.GetCurPageId() - 1;
@@ -93,7 +90,6 @@ void DrawViewShell::DeleteActualPage()
         OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
-
 
 void DrawViewShell::DeleteActualLayer()
 {
@@ -123,8 +119,6 @@ void DrawViewShell::DeleteActualLayer()
         ChangeEditMode(GetEditMode(), true);
     }
 }
-
-
 
 bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -299,8 +293,6 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     }
 }
 
-
-
 void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
@@ -408,8 +400,6 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-
-
 void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
@@ -450,7 +440,6 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         FreshNavigatrTree();
     }
 }
-
 
 void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
@@ -804,7 +793,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     }
 }
 
-
 void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
     ::sd::Window* pWin)
 {
@@ -887,9 +875,6 @@ void DrawViewShell::UnlockInput()
     if ( mnLockCount )
         mnLockCount--;
 }
-
-
-
 
 void DrawViewShell::ShowSnapLineContextMenu (
     SdrPageView& rPageView,

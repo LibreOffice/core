@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSelectionManager.hxx"
@@ -29,7 +28,6 @@
 #include <svx/svdmodel.hxx>
 #include "drawdoc.hxx"
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 SelectionObserver::Context::Context (SlideSorter& rSlideSorter)
@@ -40,17 +38,11 @@ SelectionObserver::Context::Context (SlideSorter& rSlideSorter)
         mpSelectionObserver->StartObservation();
 }
 
-
-
-
 SelectionObserver::Context::~Context(void)
 {
     if (mpSelectionObserver)
         mpSelectionObserver->EndObservation();
 }
-
-
-
 
 void SelectionObserver::Context::Abort(void)
 {
@@ -60,9 +52,6 @@ void SelectionObserver::Context::Abort(void)
         mpSelectionObserver.reset();
     }
 }
-
-
-
 
 //===== SelectionObserver =====================================================
 
@@ -75,15 +64,9 @@ SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 SelectionObserver::~SelectionObserver (void)
 {
 }
-
-
-
 
 void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 {
@@ -107,8 +90,6 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
     }
 }
 
-
-
 void SelectionObserver::StartObservation (void)
 {
     OSL_ASSERT(!mbIsOvservationActive);
@@ -117,9 +98,6 @@ void SelectionObserver::StartObservation (void)
     mbIsOvservationActive = true;
 }
 
-
-
-
 void SelectionObserver::AbortObservation (void)
 {
     OSL_ASSERT(mbIsOvservationActive);
@@ -127,9 +105,6 @@ void SelectionObserver::AbortObservation (void)
     maInsertedPages.clear();
     maDeletedPages.clear();
 }
-
-
-
 
 void SelectionObserver::EndObservation (void)
 {
@@ -158,8 +133,6 @@ void SelectionObserver::EndObservation (void)
     mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
 
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

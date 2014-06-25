@@ -26,7 +26,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 namespace sd { namespace sidebar {
 
 MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapter)
@@ -52,15 +51,9 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     mrContainerAdapter.PutMasterPage(pDescriptor);
 }
 
-
-
-
 MasterPageContainerFiller::~MasterPageContainerFiller (void)
 {
 }
-
-
-
 
 void MasterPageContainerFiller::RunNextStep (void)
 {
@@ -102,9 +95,6 @@ void MasterPageContainerFiller::RunNextStep (void)
     }
 }
 
-
-
-
 bool MasterPageContainerFiller::HasNextStep (void)
 {
     switch (meState)
@@ -117,9 +107,6 @@ bool MasterPageContainerFiller::HasNextStep (void)
             return true;
     }
 }
-
-
-
 
 MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate (void)
 {
@@ -147,9 +134,6 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate (void)
 
     return eState;
 }
-
-
-
 
 MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
 {
@@ -181,8 +165,6 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
 
     return SCAN_TEMPLATE;
 }
-
-
 
 } } // end of namespace sd::sidebar
 

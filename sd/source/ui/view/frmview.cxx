@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FrameView.hxx"
 
 #include <svx/svxids.hrc>
@@ -50,7 +49,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::std;
 
 namespace sd {
-
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
   : SdrView(pDrawDoc, (OutputDevice*) NULL),
@@ -250,19 +248,14 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
 }
 
-
 FrameView::~FrameView()
 {
 }
-
-
 
 void FrameView::Connect()
 {
     mnRefCount++;
 }
-
-
 
 void FrameView::Disconnect()
 {
@@ -325,7 +318,6 @@ void FrameView::Update(SdOptions* pOptions)
     }
 }
 
-
 /**
  * Set EditMode (Page or MasterPage) of working mode
  */
@@ -344,7 +336,6 @@ void FrameView::SetViewShEditMode(EditMode eMode, PageKind eKind)
         meHandoutEditMode = eMode;
     }
 }
-
 
 /**
  * Return EditMode (Page or MasterPage) of working mode
@@ -369,20 +360,10 @@ EditMode FrameView::GetViewShEditMode(PageKind eKind)
     return (eMode);
 }
 
-
-
-
 void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
 {
     meEditModeOnLoad = eMode;
 }
-
-
-
-
-
-
-
 
 static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
@@ -944,54 +925,25 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     }
 }
 
-
-
-
 void FrameView::SetPreviousViewShellType (ViewShell::ShellType eType)
 {
     mePreviousViewShellType = eType;
 }
-
-
-
-
-
-
-
 
 void FrameView::SetViewShellTypeOnLoad (ViewShell::ShellType eType)
 {
     meViewShellTypeOnLoad = eType;
 }
 
-
-
-
-
-
-
-
 void FrameView::SetSelectedPage(sal_uInt16 nPage)
 {
     mnSelectedPage = nPage;
 }
 
-
-
-
-
-
-
-
 void FrameView::SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes)
 {
     mbIsNavigatorShowingAllShapes = bIsNavigatorShowingAllShapes;
 }
-
-
-
-
-
 
 } // end of namespace sd
 

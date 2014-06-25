@@ -40,7 +40,6 @@ namespace {
     > SlideRendererInterfaceBase;
 }
 
-
 /** Render single slides into bitmaps.
 */
 class SlideRenderer
@@ -53,12 +52,10 @@ public:
     virtual ~SlideRenderer (void);
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XSlideRenderer
 

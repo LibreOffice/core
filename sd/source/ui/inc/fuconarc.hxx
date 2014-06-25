@@ -24,7 +24,6 @@
 
 namespace sd {
 
-
 class FuConstructArc
     : public FuConstruct
 {

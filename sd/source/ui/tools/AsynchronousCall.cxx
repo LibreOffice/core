@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/AsynchronousCall.hxx"
 
 #include "DrawViewShell.hxx"
@@ -32,17 +31,11 @@ AsynchronousCall::AsynchronousCall (void)
     maTimer.SetTimeoutHdl(aCallback);
 }
 
-
-
-
 AsynchronousCall::~AsynchronousCall (void)
 {
     mpFunction.reset();
     maTimer.Stop();
 }
-
-
-
 
 void AsynchronousCall::Post (
     const AsynchronousFunction& rFunction,
@@ -52,9 +45,6 @@ void AsynchronousCall::Post (
     maTimer.SetTimeout(nTimeoutInMilliseconds);
     maTimer.Start();
 }
-
-
-
 
 IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer)
 {
@@ -68,7 +58,6 @@ IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer)
     }
     return 0;
 }
-
 
 } } // end of namespace ::sd::tools
 

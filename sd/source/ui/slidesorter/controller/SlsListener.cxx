@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsListener.hxx"
 
 #include "SlideSorter.hxx"
@@ -48,14 +47,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/diagnose_ex.h>
 
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 namespace sd { namespace slidesorter { namespace controller {
-
 
 Listener::Listener (
     SlideSorter& rSlideSorter)
@@ -139,17 +136,11 @@ Listener::Listener (
     }
 }
 
-
-
-
 Listener::~Listener (void)
 {
     DBG_ASSERT( !mbListeningToDocument && !mbListeningToUNODocument && !mbListeningToFrame,
         "sd::Listener::~Listener(), disposing() was not called, ask DBO!" );
 }
-
-
-
 
 void Listener::ReleaseListeners (void)
 {
@@ -205,9 +196,6 @@ void Listener::ReleaseListeners (void)
     }
 }
 
-
-
-
 void Listener::ConnectToController (void)
 {
     ViewShell* pShell = mrSlideSorter.GetViewShell();
@@ -253,9 +241,6 @@ void Listener::ConnectToController (void)
     }
 }
 
-
-
-
 void Listener::DisconnectFromController (void)
 {
     if (mbListeningToController)
@@ -291,9 +276,6 @@ void Listener::DisconnectFromController (void)
         mxControllerWeak = Reference<frame::XController>();
     }
 }
-
-
-
 
 void Listener::Notify (
     SfxBroadcaster& rBroadcaster,
@@ -367,9 +349,6 @@ void Listener::Notify (
     }
 }
 
-
-
-
 IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent*, pEvent)
 {
     switch (pEvent->meEventId)
@@ -384,7 +363,6 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
             }
         }
         break;
-
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             mbIsMainViewChangePending = true;
@@ -411,7 +389,6 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         }
         break;
 
-
         case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
             DisconnectFromController();
             break;
@@ -437,9 +414,6 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
     return 0;
 }
 
-
-
-
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL Listener::disposing (
@@ -464,9 +438,6 @@ void SAL_CALL Listener::disposing (
     }
 }
 
-
-
-
 //=====  document::XEventListener  ============================================
 
 void SAL_CALL Listener::notifyEvent (
@@ -474,9 +445,6 @@ void SAL_CALL Listener::notifyEvent (
     throw (RuntimeException, std::exception)
 {
 }
-
-
-
 
 //=====  beans::XPropertySetListener  =========================================
 
@@ -527,9 +495,6 @@ void SAL_CALL Listener::propertyChange (
     }
 }
 
-
-
-
 //===== frame::XFrameActionListener  ==========================================
 
 void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
@@ -554,9 +519,6 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
     }
 }
 
-
-
-
 //===== accessibility::XAccessibleEventListener  ==============================
 
 void SAL_CALL Listener::notifyEvent (
@@ -565,16 +527,10 @@ void SAL_CALL Listener::notifyEvent (
 {
 }
 
-
-
-
 void SAL_CALL Listener::disposing (void)
 {
     ReleaseListeners();
 }
-
-
-
 
 void Listener::UpdateEditMode (void)
 {
@@ -600,8 +556,6 @@ void Listener::UpdateEditMode (void)
     mrController.ChangeEditMode (
         bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }
-
-
 
 void Listener::HandleModelChange (const SdrPage* pPage)
 {
@@ -635,8 +589,6 @@ void Listener::HandleModelChange (const SdrPage* pPage)
         mrController.HandleModelChange();
     }
 }
-
-
 
 void Listener::HandleShapeModification (const SdrPage* pPage)
 {
@@ -679,9 +631,6 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     }
 }
 
-
-
-
 void Listener::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -691,9 +640,6 @@ void Listener::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

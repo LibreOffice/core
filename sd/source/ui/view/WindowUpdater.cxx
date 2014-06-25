@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WindowUpdater.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
@@ -40,16 +39,10 @@ WindowUpdater::WindowUpdater (void)
     maCTLOptions.AddListener(this);
 }
 
-
-
-
 WindowUpdater::~WindowUpdater (void) throw ()
 {
     maCTLOptions.RemoveListener(this);
 }
-
-
-
 
 void WindowUpdater::RegisterWindow (::Window* pWindow)
 {
@@ -67,9 +60,6 @@ void WindowUpdater::RegisterWindow (::Window* pWindow)
     }
 }
 
-
-
-
 void WindowUpdater::UnregisterWindow (::Window* pWindow)
 {
     tWindowList::iterator aWindowIterator (
@@ -81,23 +71,15 @@ void WindowUpdater::UnregisterWindow (::Window* pWindow)
     }
 }
 
-
-
 void WindowUpdater::SetViewShell (ViewShell& rViewShell)
 {
     mpViewShell = &rViewShell;
 }
 
-
-
-
 void WindowUpdater::SetDocument (SdDrawDocument* pDocument)
 {
     mpDocument = pDocument;
 }
-
-
-
 
 void WindowUpdater::Update (
     OutputDevice* pDevice,
@@ -110,9 +92,6 @@ void WindowUpdater::Update (
             pDocument->ReformatAllTextObjects();
     }
 }
-
-
-
 
 void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 {
@@ -145,9 +124,6 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
     }
 }
 
-
-
-
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     // Set the current state at all registered output devices.
@@ -164,7 +140,6 @@ void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
     while (aWindowIterator != maWindowList.end())
         (*aWindowIterator++)->Invalidate();
 }
-
 
 } // end of namespace sd
 

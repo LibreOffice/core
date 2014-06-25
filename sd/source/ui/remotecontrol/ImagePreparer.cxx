@@ -220,7 +220,6 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     else
         return "";
 
-
     static const OUString sNotesShapeName (
         "com.sun.star.presentation.NotesShape" );
     static const OUString sTextShapeName (

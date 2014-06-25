@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fusnapln.hxx"
 #include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
-
 
 #include "strings.hrc"
 
@@ -85,7 +83,6 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
             aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
             static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( false );
-
 
             if ( aLinePos.X() >= 0 )
             {

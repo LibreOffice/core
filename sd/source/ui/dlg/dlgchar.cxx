@@ -48,8 +48,6 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
     mnCharPosition =  AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
 }
 
-
-
 void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -66,7 +64,5 @@ void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rPage.PageCreated(aSet);
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,6 @@
 
 namespace sd { namespace sidebar {
 
-
 SlideTransitionPanel::SlideTransitionPanel (
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
@@ -38,15 +37,9 @@ SlideTransitionPanel::SlideTransitionPanel (
 #endif
 }
 
-
-
-
 SlideTransitionPanel::~SlideTransitionPanel (void)
 {
 }
-
-
-
 
 ::Window* SlideTransitionPanel::CreateWrappedControl (
     ::Window* pParentWindow,
@@ -54,9 +47,6 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
 {
     return createSlideTransitionPanel(pParentWindow, rViewShellBase, mxFrame);
 }
-
-
-
 
 css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {

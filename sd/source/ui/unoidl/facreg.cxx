@@ -40,10 +40,6 @@ using namespace ::sd::presenter;
 using namespace ::sd::slidesorter;
 using namespace ::sd::sidebar;
 
-
-
-
-
 // Declaration and initialization of a map from service names to locally
 // unique factory identifiers.
 
@@ -74,7 +70,6 @@ enum FactoryId
     InsertSlideControllerFactoryId,
 };
 typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
-
 
 namespace {
 static ::boost::shared_ptr<FactoryMap> spFactoryMap;
@@ -109,7 +104,6 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
     return spFactoryMap;
 };
 } // end of anonymous namespace
-
 
 extern "C"
 {

@@ -28,7 +28,6 @@
 #include <boost/weak_ptr.hpp>
 #include <memory>
 
-
 class SvxIMapDlg;
 
 namespace sd {
@@ -149,7 +148,6 @@ public:
 private:
     ViewShell& mrViewShell;
 };
-
 
 } // end of namespace sd
 

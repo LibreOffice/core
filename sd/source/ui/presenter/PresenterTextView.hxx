@@ -41,7 +41,6 @@ namespace {
     > PresenterTextViewInterfaceBase;
 }
 
-
 /** Render text into bitmaps.  An edit engine is used to render the text.
     This service is used by the presenter screen to render the notes view.
 */
@@ -57,7 +56,6 @@ public:
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
 protected:
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;

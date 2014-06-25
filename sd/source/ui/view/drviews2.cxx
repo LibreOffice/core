@@ -1581,7 +1581,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             bool bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
             bool bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
 
-
             const SfxItemSet* pArgs = rReq.GetArgs();
             // is it allowed to delete the layer?
             bool bDelete = true;

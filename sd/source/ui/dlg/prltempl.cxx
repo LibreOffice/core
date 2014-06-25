@@ -221,14 +221,10 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     nHatchingListState = CT_NONE;
 }
 
-
-
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 {
     delete pOutSet;
 }
-
-
 
 void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -299,8 +295,6 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         return SfxTabDialog::GetOutputItemSet();
 }
 
-
-
 sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
 {
     switch( ePO )
@@ -319,7 +313,5 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
     }
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

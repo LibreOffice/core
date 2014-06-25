@@ -57,7 +57,6 @@ private:
 
 } // namespace sd
 
-
 #endif // INCLUDED_SD_INC_TEXTAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

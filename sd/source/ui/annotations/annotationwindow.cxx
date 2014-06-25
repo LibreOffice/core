@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -520,8 +519,6 @@ SvxLanguageItem AnnotationWindow::GetLanguage(void)
     return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );
 }
 
-
-
 TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
 {
     if( xAnnotation.is() )
@@ -531,8 +528,6 @@ TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
     }
     return 0;
 }
-
-
 
 void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation, bool bGrabFocus )
 {

@@ -381,7 +381,6 @@ public:
     sal_Int32 getHash() const;
     OString stringify() const;
 
-
 private:
     bool mbIsPrecious;
 

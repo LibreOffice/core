@@ -29,14 +29,11 @@
 #include <vector>
 #include <utility>
 
-
 class Size;
 
 namespace sd { namespace slidesorter { namespace view {
 
 class InsertPosition;
-
-
 
 /** Calculate the size and position of page objects displayed by a slide
     sorter.  The layouter takes into account various input values:
@@ -198,10 +195,6 @@ private:
     SharedSdWindow mpWindow;
 };
 
-
-
-
-
 /** Collect all values concerning the logical and visual properties of the
     insertion position that is used for drag-and-drop and copy-and-past.
 */
@@ -246,8 +239,6 @@ private:
     Point maLeadingOffset;
     Point maTrailingOffset;
 };
-
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

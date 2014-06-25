@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleViewForwarder.hxx"
 #include <svx/svdpntv.hxx>
 #include <vcl/outdev.hxx>
@@ -51,24 +50,15 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
     }
 }
 
-
-
-
 AccessibleViewForwarder::~AccessibleViewForwarder (void)
 {
     // empty
 }
 
-
-
-
 bool AccessibleViewForwarder::IsValid (void) const
 {
     return true;
 }
-
-
-
 
 Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 {
@@ -82,9 +72,6 @@ Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 
     return aVisibleArea;
 }
-
-
-
 
 /** Tansform the given point into pixel coordiantes.  After the pixel
     coordiantes of the window origin are added to make the point coordinates
@@ -104,9 +91,6 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
         return Point();
 }
 
-
-
-
 Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);
@@ -119,9 +103,6 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
     else
         return Size();
 }
-
-
-
 
 /** First subtract the window origin to make the point coordinates relative
     to the window and then transform them into internal coordinates.
@@ -152,7 +133,6 @@ Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
     else
         return Size();
 }
-
 
 } // end of namespace accessibility
 

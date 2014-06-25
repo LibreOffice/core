@@ -51,16 +51,10 @@ Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
     return static_cast<XWeak*>(new ConfigurationController());
 }
 
-
-
-
 OUString ConfigurationController_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.configuration.ConfigurationController");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -68,9 +62,6 @@ Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (vo
     static const OUString sServiceName("com.sun.star.drawing.framework.ConfigurationController");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //----- ConfigurationController::Implementation -------------------------------
 
@@ -114,9 +105,6 @@ public:
     sal_Int32 mnLockCount;
 };
 
-
-
-
 //===== ConfigurationController::Lock =========================================
 
 ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& rxController)
@@ -128,17 +116,11 @@ ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& 
         mxController->lock();
 }
 
-
-
-
 ConfigurationController::Lock::~Lock (void)
 {
     if (mxController.is())
         mxController->unlock();
 }
-
-
-
 
 //===== ConfigurationController ===============================================
 
@@ -152,7 +134,6 @@ ConfigurationController::ConfigurationController (void) throw()
 ConfigurationController::~ConfigurationController (void) throw()
 {
 }
-
 
 void SAL_CALL ConfigurationController::disposing (void)
 {
@@ -186,9 +167,6 @@ void SAL_CALL ConfigurationController::disposing (void)
     mpImplementation.reset();
 }
 
-
-
-
 void ConfigurationController::ProcessEvent (void)
 {
     if (mpImplementation.get() != NULL)
@@ -199,9 +177,6 @@ void ConfigurationController::ProcessEvent (void)
     }
 }
 
-
-
-
 void ConfigurationController::RequestSynchronousUpdate (void)
 {
     if (mpImplementation.get() == NULL)
@@ -210,9 +185,6 @@ void ConfigurationController::RequestSynchronousUpdate (void)
         return;
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
 }
-
-
-
 
 //----- XConfigurationControllerBroadcaster -----------------------------------
 
@@ -229,9 +201,6 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
 }
 
-
-
-
 void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener)
     throw (RuntimeException, std::exception)
@@ -241,9 +210,6 @@ void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     ThrowIfDisposed();
     mpImplementation->mpBroadcaster->RemoveListener(rxListener);
 }
-
-
-
 
 void SAL_CALL ConfigurationController::notifyEvent (
     const ConfigurationChangeEvent& rEvent)
@@ -264,15 +230,11 @@ void SAL_CALL ConfigurationController::lock()
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-
     ++mpImplementation->mnLockCount;
     if (mpImplementation->mpConfigurationUpdaterLock.get()==NULL)
         mpImplementation->mpConfigurationUpdaterLock
             = mpImplementation->mpConfigurationUpdater->GetLock();
 }
-
-
-
 
 void SAL_CALL ConfigurationController::unlock (void)
     throw (RuntimeException, std::exception)
@@ -289,9 +251,6 @@ void SAL_CALL ConfigurationController::unlock (void)
     if (mpImplementation->mnLockCount == 0)
         mpImplementation->mpConfigurationUpdaterLock.reset();
 }
-
-
-
 
 void SAL_CALL ConfigurationController::requestResourceActivation (
     const Reference<XResourceId>& rxResourceId,
@@ -352,9 +311,6 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     }
 }
 
-
-
-
 void SAL_CALL ConfigurationController::requestResourceDeactivation (
     const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException, std::exception)
@@ -393,9 +349,6 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     }
 }
 
-
-
-
 Reference<XResource> SAL_CALL ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException, std::exception)
@@ -407,9 +360,6 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
         mpImplementation->mpResourceManager->GetResource(rxResourceId));
     return aDescriptor.mxResource;
 }
-
-
-
 
 void SAL_CALL ConfigurationController::update (void)
     throw (RuntimeException, std::exception)
@@ -430,9 +380,6 @@ void SAL_CALL ConfigurationController::update (void)
     }
 }
 
-
-
-
 sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
     throw (RuntimeException, std::exception)
 {
@@ -441,10 +388,6 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
 
     return ! mpImplementation->mpQueueProcessor->IsEmpty();
 }
-
-
-
-
 
 void SAL_CALL ConfigurationController::postChangeRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
@@ -455,9 +398,6 @@ void SAL_CALL ConfigurationController::postChangeRequest (
 
     mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
 }
-
-
-
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration (void)
     throw (RuntimeException, std::exception)
@@ -472,9 +412,6 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
         return Reference<XConfiguration>();
 }
 
-
-
-
 Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration (void)
     throw (RuntimeException, std::exception)
 {
@@ -488,9 +425,6 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfigurat
     else
         return Reference<XConfiguration>();
 }
-
-
-
 
 /** The given configuration is restored by generating the appropriate set of
     activation and deactivation requests.
@@ -553,9 +487,6 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     pLock.reset();
 }
 
-
-
-
 //----- XResourceFactoryManager -----------------------------------------------
 
 void SAL_CALL ConfigurationController::addResourceFactory(
@@ -568,9 +499,6 @@ void SAL_CALL ConfigurationController::addResourceFactory(
     mpImplementation->mpResourceFactoryContainer->AddFactory(sResourceURL, rxResourceFactory);
 }
 
-
-
-
 void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
     throw (RuntimeException, std::exception)
@@ -579,9 +507,6 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     ThrowIfDisposed();
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForURL(sResourceURL);
 }
-
-
-
 
 void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     const Reference<XResourceFactory>& rxResourceFactory)
@@ -592,9 +517,6 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
 }
 
-
-
-
 Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
     throw (RuntimeException, std::exception)
@@ -604,9 +526,6 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
 
     return mpImplementation->mpResourceFactoryContainer->GetFactory(sResourceURL);
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -663,15 +582,9 @@ ConfigurationController::Implementation::Implementation (
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
 }
 
-
-
-
 ConfigurationController::Implementation::~Implementation (void)
 {
 }
-
-
-
 
 } } // end of namespace sd::framework
 

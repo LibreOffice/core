@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "Client.hxx"
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <svx/svdoole2.hxx>
@@ -38,7 +37,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-
 Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
     SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
     mpViewShell(pViewShell),
@@ -53,7 +51,6 @@ Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
 Client::~Client()
 {
 }
-
 
 /**
  * If IP active, then we get this request to increase the visible section of the
@@ -191,7 +188,6 @@ void Client::ViewChanged()
         }
     }
 }
-
 
 /**
  * Scroll object into visible area.

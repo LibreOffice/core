@@ -224,9 +224,7 @@ public:
         SharedMasterPageDescriptor mpDescriptor;
     };
 
-
 };
-
 
 } } // end of namespace sd::sidebar
 

@@ -45,7 +45,6 @@
 #include "fusel.hxx"
 #include "fuconbez.hxx"
 
-
 using namespace sd;
 #define BezierObjectBar
 #include "sdslots.hxx"
@@ -79,12 +78,10 @@ BezierObjectBar::BezierObjectBar(
     SetHelpId( SD_IF_SDDRAWBEZIEROBJECTBAR );
 }
 
-
 BezierObjectBar::~BezierObjectBar()
 {
     SetRepeatTarget(NULL);
 }
-
 
 /**
  * Status of attribute items.
@@ -326,7 +323,6 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
     Invalidate();
 }
-
 
 } // end of namespace sd
 

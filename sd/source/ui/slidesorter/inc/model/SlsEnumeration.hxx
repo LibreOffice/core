@@ -24,7 +24,6 @@
 
 namespace sd { namespace slidesorter { namespace model {
 
-
 /** Interface to generic enumerations.  Designed to operate on shared
     pointers.  Therefore GetNextElement() returns T and not T&.
 */

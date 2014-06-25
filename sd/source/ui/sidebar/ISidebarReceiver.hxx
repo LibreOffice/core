@@ -23,7 +23,6 @@
 
 namespace sd { namespace sidebar {
 
-
 class ISidebarReceiver
 {
 public:
@@ -31,7 +30,6 @@ public:
         ::com::sun::star::ui::XSidebar>& rxSidebar) = 0;
     virtual ~ISidebarReceiver();
 };
-
 
 } } // end of namespace ::sd::sidebar
 

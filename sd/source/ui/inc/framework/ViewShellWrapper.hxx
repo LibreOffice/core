@@ -115,7 +115,6 @@ public:
             com::sun::star::drawing::framework::XResource>& xResource)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XWindowListener
 
     virtual void SAL_CALL windowResized(
@@ -133,7 +132,6 @@ public:
     virtual void SAL_CALL windowHidden(
         const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XEventListener
 

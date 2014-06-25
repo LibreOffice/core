@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SdUnoDrawView.hxx"
 
 #include "DrawController.hxx"
@@ -45,11 +44,9 @@
 
 #include <vector>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
-
 
 namespace sd {
 
@@ -62,23 +59,14 @@ SdUnoDrawView::SdUnoDrawView(
 {
 }
 
-
-
-
 SdUnoDrawView::~SdUnoDrawView() throw()
 {
 }
-
-
-
 
 bool SdUnoDrawView::getMasterPageMode(void) const throw()
 {
     return (mrDrawViewShell.GetEditMode() == EM_MASTERPAGE);
 }
-
-
-
 
 void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
 {
@@ -90,16 +78,10 @@ void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
     }
 }
 
-
-
-
 bool SdUnoDrawView::getLayerMode(void) const throw()
 {
     return mrDrawViewShell.IsLayerModeActive();
 }
-
-
-
 
 void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
 {
@@ -110,9 +92,6 @@ void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
             bLayerMode);
     }
 }
-
-
-
 
 Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 {
@@ -147,9 +126,6 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
     return xCurrentLayer;
 }
 
-
-
-
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
     throw (uno::RuntimeException)
 {
@@ -170,11 +146,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
     mrDrawViewShell.ResetActualLayer ();
 }
 
-
-
-
 // XSelectionSupplier
-
 
 sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     throw (lang::IllegalArgumentException,
@@ -274,8 +246,6 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     return bOk;
 }
 
-
-
 Any SAL_CALL SdUnoDrawView::getSelection()
     throw (RuntimeException, std::exception)
 {
@@ -283,7 +253,6 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 
     if( mrView.IsTextEdit() )
         mrView.getTextSelection( aAny );
-
 
     if( !aAny.hasValue() )
     {
@@ -325,9 +294,6 @@ Any SAL_CALL SdUnoDrawView::getSelection()
     return aAny;
 }
 
-
-
-
 void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
     throw(css::uno::RuntimeException, std::exception)
@@ -335,18 +301,12 @@ void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
     (void)rxListener;
 }
 
-
-
-
 void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
     const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
     throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxListener;
 }
-
-
-
 
 void SdUnoDrawView::setFastPropertyValue (
     sal_Int32 nHandle,
@@ -415,9 +375,6 @@ void SdUnoDrawView::setFastPropertyValue (
     }
 }
 
-
-
-
 Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
     sal_Int32 nHandle)
     throw(css::beans::UnknownPropertyException,
@@ -464,11 +421,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
     return aValue;
 }
 
-
-
-
 // XDrawView
-
 
 void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
@@ -489,8 +442,6 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     }
 }
 
-
-
 Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     throw(RuntimeException, std::exception)
 {
@@ -504,7 +455,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
 
     return xPage;
 }
-
 
 sal_Int16 SdUnoDrawView::GetZoom(void) const
 {
@@ -532,7 +482,6 @@ void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
         }
     }
 }
-
 
 void SdUnoDrawView::SetViewOffset(const awt::Point& rWinPos )
 {
@@ -583,9 +532,6 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
         }
     }
 }
-
-
-
 
 SdXImpressDocument* SdUnoDrawView::GetModel (void) const throw()
 {

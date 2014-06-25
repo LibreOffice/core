@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef _MSC_VER
 #pragma warning (disable:4190)
 #endif
@@ -48,14 +47,11 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
-
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
-
-
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -87,9 +83,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-
-
-
 
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
@@ -128,23 +121,16 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
         m_xInter->handle( xRequest );
 }
 
-
-
 // - SdPPTFilter -
-
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, true )
 {
 }
 
-
-
 SdGRFFilter::~SdGRFFilter()
 {
 }
-
-
 
 void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError )
 {
@@ -187,8 +173,6 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
         aErrorBox.Execute();
     }
 }
-
-
 
 bool SdGRFFilter::Import()
 {
@@ -246,8 +230,6 @@ bool SdGRFFilter::Import()
         }
     return bRet;
 }
-
-
 
 bool SdGRFFilter::Export()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsDragAndDropContext.hxx"
 
 #include "SlideSorter.hxx"
@@ -64,24 +63,15 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(pTransferable);
 }
 
-
-
-
 DragAndDropContext::~DragAndDropContext (void)
 {
     SetTargetSlideSorter (NULL, Point(0,0), InsertionIndicatorHandler::UnknownMode, false);
 }
 
-
-
-
 void DragAndDropContext::Dispose (void)
 {
     mnInsertionIndex = -1;
 }
-
-
-
 
 void DragAndDropContext::UpdatePosition (
     const Point& rMousePosition,
@@ -119,9 +109,6 @@ void DragAndDropContext::UpdatePosition (
     }
 }
 
-
-
-
 void DragAndDropContext::SetTargetSlideSorter (
     SlideSorter* pSlideSorter,
     const Point aMousePosition,
@@ -147,7 +134,6 @@ void DragAndDropContext::SetTargetSlideSorter (
 
     }
 }
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

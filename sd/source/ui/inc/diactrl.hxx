@@ -30,7 +30,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-
 // SdPagesField:
 
 class SdPagesField : public SvxMetricField
@@ -49,9 +48,7 @@ public:
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
 
-
 // SdTbxCtlDiaPages:
-
 
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
@@ -67,7 +64,5 @@ public:
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

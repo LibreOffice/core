@@ -919,7 +919,6 @@ void SdFiltersTest::testBnc880763()
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
-
     xDocShRef->DoClose();
 }
 

@@ -22,7 +22,6 @@
 
 #include <vcl/bitmapex.hxx>
 
-
 namespace sd { namespace slidesorter { namespace view {
 
 class FramePainter
@@ -106,7 +105,6 @@ private:
     OffsetBitmap maCenter;
     bool mbIsValid;
 };
-
 
 } } } // end of namespace sd::slidesorter::view
 

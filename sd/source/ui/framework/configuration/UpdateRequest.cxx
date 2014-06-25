@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UpdateRequest.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -25,7 +24,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-
 
 namespace sd { namespace framework {
 
@@ -35,15 +33,9 @@ UpdateRequest::UpdateRequest (void)
 {
 }
 
-
-
-
 UpdateRequest::~UpdateRequest (void) throw()
 {
 }
-
-
-
 
 void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfiguration)
     throw (RuntimeException, std::exception)
@@ -53,17 +45,11 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
     // becomes empty.
 }
 
-
-
-
 OUString SAL_CALL UpdateRequest::getName (void)
     throw (RuntimeException, std::exception)
 {
     return OUString("UpdateRequest");
 }
-
-
-
 
 void SAL_CALL UpdateRequest::setName (const OUString& rsName)
     throw (RuntimeException, std::exception)

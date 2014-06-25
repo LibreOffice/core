@@ -131,7 +131,6 @@ static sal_uInt16 SidArray[] = {
 
 TYPEINIT1( FuText, FuConstruct );
 
-
 static bool bTestText = false;
 
 /**
@@ -396,7 +395,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             bFirstMouseMove = true;
                             aDragTimer.Start();
                         }
-
 
                         if ( ! rMEvt.IsRight())
                         {
@@ -965,8 +963,6 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-
-
 void FuText::Activate()
 {
     mpView->SetQuickTextEditMode(mpViewShell->GetFrameView()->IsQuickEdit());
@@ -986,7 +982,6 @@ void FuText::Activate()
         mpView->SetEditMode(SDREDITMODE_EDIT);
 }
 
-
 void FuText::Deactivate()
 {
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
@@ -998,7 +993,6 @@ void FuText::Deactivate()
 
     FuConstruct::Deactivate();
 }
-
 
 /**
  * Sets the object into the edit mode.
@@ -1330,9 +1324,6 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
     return pObj;
 }
-
-
-
 
 /** is called when the current function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also

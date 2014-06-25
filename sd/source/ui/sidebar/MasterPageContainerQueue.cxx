@@ -70,9 +70,6 @@ public:
     };
 };
 
-
-
-
 //===== MasterPageContainerQueue::RequestQueue ================================
 
 class MasterPageContainerQueue::RequestQueue
@@ -81,9 +78,6 @@ class MasterPageContainerQueue::RequestQueue
 public:
     RequestQueue (void) {}
 };
-
-
-
 
 //===== MasterPageContainerQueue ==============================================
 
@@ -95,9 +89,6 @@ MasterPageContainerQueue* MasterPageContainerQueue::Create (
     return pQueue;
 }
 
-
-
-
 MasterPageContainerQueue::MasterPageContainerQueue (
     const ::boost::weak_ptr<ContainerAdapter>& rpContainer)
     : mpWeakContainer(rpContainer),
@@ -107,18 +98,12 @@ MasterPageContainerQueue::MasterPageContainerQueue (
 {
 }
 
-
-
-
 MasterPageContainerQueue::~MasterPageContainerQueue (void)
 {
     maDelayedPreviewCreationTimer.Stop();
     while ( ! mpRequestQueue->empty())
         mpRequestQueue->erase(mpRequestQueue->begin());
 }
-
-
-
 
 void MasterPageContainerQueue::LateInit (void)
 {
@@ -127,9 +112,6 @@ void MasterPageContainerQueue::LateInit (void)
     Link aLink (LINK(this,MasterPageContainerQueue,DelayedPreviewCreation));
     maDelayedPreviewCreationTimer.SetTimeoutHdl(aLink);
 }
-
-
-
 
 bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor& rpDescriptor)
 {
@@ -164,9 +146,6 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
     return bSuccess;
 }
 
-
-
-
 sal_Int32 MasterPageContainerQueue::CalculatePriority (
     const SharedMasterPageDescriptor& rpDescriptor) const
 {
@@ -196,9 +175,6 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
 
     return nPriority;
 }
-
-
-
 
 IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
 {
@@ -263,9 +239,6 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
     return 0;
 }
 
-
-
-
 bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) const
 {
     RequestQueue::iterator iRequest (::std::find_if(
@@ -275,16 +248,10 @@ bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) co
     return (iRequest != mpRequestQueue->end());
 }
 
-
-
-
 bool MasterPageContainerQueue::IsEmpty (void) const
 {
     return mpRequestQueue->empty();
 }
-
-
-
 
 void MasterPageContainerQueue::ProcessAllRequests (void)
 {
@@ -292,7 +259,6 @@ void MasterPageContainerQueue::ProcessAllRequests (void)
     if (mpRequestQueue->size() > 0)
         maDelayedPreviewCreationTimer.Start();
 }
-
 
 } } // end of namespace sd::sidebar
 

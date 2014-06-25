@@ -134,7 +134,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     }
 }
 
-
 void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
     // nothing is executed during a slide show!
@@ -217,7 +216,6 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     rSet.Put( SfxUInt16Item( SID_ANIMATOR_STATE, nValue ) );
 }
 
-
 void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 {
     // State of SfxChild-Windows (Animator, Fontwork etc.)
@@ -272,7 +270,6 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
-
 
 /**
  * Handle SfxRequests for pipette

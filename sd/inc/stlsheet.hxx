@@ -157,6 +157,4 @@ typedef std::vector< SdStyleSheetRef > SdStyleSheetVector;
 
 #endif // INCLUDED_SD_INC_STLSHEET_HXX
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

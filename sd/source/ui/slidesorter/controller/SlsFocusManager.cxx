@@ -45,15 +45,9 @@ FocusManager::FocusManager (SlideSorter& rSlideSorter)
         mnPageIndex = 0;
 }
 
-
-
-
 FocusManager::~FocusManager (void)
 {
 }
-
-
-
 
 void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 {
@@ -159,26 +153,17 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
     }
 }
 
-
-
-
 void FocusManager::ShowFocus (const bool bScrollToFocus)
 {
     mbPageIsFocused = true;
     ShowFocusIndicator(GetFocusedPageDescriptor(), bScrollToFocus);
 }
 
-
-
-
 void FocusManager::HideFocus (void)
 {
     mbPageIsFocused = false;
     HideFocusIndicator(GetFocusedPageDescriptor());
 }
-
-
-
 
 bool FocusManager::ToggleFocus (void)
 {
@@ -192,26 +177,15 @@ bool FocusManager::ToggleFocus (void)
     return mbPageIsFocused;
 }
 
-
-
-
 bool FocusManager::HasFocus (void) const
 {
     return mrSlideSorter.GetContentWindow()->HasFocus();
 }
 
-
-
-
 model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor (void) const
 {
     return mrSlideSorter.GetModel().GetPageDescriptor(mnPageIndex);
 }
-
-
-
-
-
 
 void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
@@ -222,33 +196,21 @@ void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescript
     }
 }
 
-
-
-
 void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
 {
     FocusHider aFocusHider (*this);
     mnPageIndex = nPageIndex;
 }
 
-
-
-
 void FocusManager::SetFocusedPageToCurrentPage (void)
 {
     SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
-
-
-
 bool FocusManager::IsFocusShowing (void) const
 {
     return HasFocus() && mbPageIsFocused;
 }
-
-
-
 
 void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
 {
@@ -260,9 +222,6 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
         NotifyFocusChangeListeners();
     }
 }
-
-
-
 
 void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
@@ -284,9 +243,6 @@ void FocusManager::ShowFocusIndicator (
     }
 }
 
-
-
-
 void FocusManager::AddFocusChangeListener (const Link& rListener)
 {
     if (::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener)
@@ -295,9 +251,6 @@ void FocusManager::AddFocusChangeListener (const Link& rListener)
         maFocusChangeListeners.push_back (rListener);
     }
 }
-
-
-
 
 void FocusManager::RemoveFocusChangeListener (const Link& rListener)
 {
@@ -319,18 +272,12 @@ void FocusManager::NotifyFocusChangeListeners (void) const
     }
 }
 
-
-
-
 FocusManager::FocusHider::FocusHider (FocusManager& rManager)
 : mbFocusVisible(rManager.IsFocusShowing())
 , mrManager(rManager)
 {
     mrManager.HideFocus();
 }
-
-
-
 
 FocusManager::FocusHider::~FocusHider (void)
 {

@@ -139,7 +139,6 @@ public:
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND) SAL_OVERRIDE;
 
-
     // Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const SAL_OVERRIDE;
 

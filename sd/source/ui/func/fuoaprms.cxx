@@ -56,7 +56,6 @@ TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 #define ATTR_MIXED      1       ///< Attribute ambiguous (on multi-selection)
 #define ATTR_SET        2       ///< Attribute unique
 
-
 FuObjectAnimationParameters::FuObjectAnimationParameters (
     ViewShell*   pViewSh,
     ::sd::Window*        pWin,
@@ -118,7 +117,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
     bool            bSecondSoundOn  = false;
     bool            bSecondPlayFull = false;
-
 
     SdAnimationInfo* pInfo;
     SdrMark* pMark;
@@ -628,7 +626,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
         pUndoGroup->SetComment(aComment);
 
-
         // for the path effect, remember some stuff
         SdrObject*  pRunningObj = NULL;
         SdrPathObj* pPath       = NULL;
@@ -659,7 +656,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             }
 
             DBG_ASSERT(pPath, "no curve found");
-
 
             // push the running object to the end of the curve
             Rectangle aCurRect(pRunningObj->GetLogicRect());

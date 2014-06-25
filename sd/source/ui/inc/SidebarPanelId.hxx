@@ -24,7 +24,6 @@ namespace rtl
     class OUString;
 }
 
-
 namespace sd { namespace sidebar {
 
 /** List of top level panels that can be shown in the task pane.
@@ -45,7 +44,6 @@ enum PanelId
 };
 
 } } // namespace sd::sidebar
-
 
 #endif
 

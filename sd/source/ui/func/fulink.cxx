@@ -31,13 +31,11 @@
 #include "app.hrc"
 #include <boost/scoped_ptr.hpp>
 
-
 class SfxRequest;
 
 namespace sd {
 
 TYPEINIT1( FuLink, FuPoor );
-
 
 FuLink::FuLink (
     ViewShell* pViewSh,
@@ -68,7 +66,6 @@ void FuLink::DoExecute( SfxRequest& )
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
     }
 }
-
 
 } // end of namespace sd
 

@@ -48,7 +48,6 @@ int GetURLPriority (const SharedMasterPageDescriptor& rpDescriptor)
     return nPriority;
 }
 
-
 class MasterPageDescriptorOrder
 {
 public:
@@ -69,8 +68,6 @@ public:
 
 } // end of anonymous namespace
 
-
-
 namespace sd { namespace sidebar {
 
 class AllMasterPagesSelector::SortedMasterPageDescriptorList
@@ -79,9 +76,6 @@ class AllMasterPagesSelector::SortedMasterPageDescriptorList
 public:
     SortedMasterPageDescriptorList (void) {}
 };
-
-
-
 
 MasterPagesSelector* AllMasterPagesSelector::Create (
     ::Window* pParent,
@@ -107,9 +101,6 @@ MasterPagesSelector* AllMasterPagesSelector::Create (
     return pSelector;
 }
 
-
-
-
 AllMasterPagesSelector::AllMasterPagesSelector (
     ::Window* pParent,
     SdDrawDocument& rDocument,
@@ -122,15 +113,9 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     MasterPagesSelector::Fill();
 }
 
-
-
-
 AllMasterPagesSelector::~AllMasterPagesSelector (void)
 {
 }
-
-
-
 
 void AllMasterPagesSelector::Fill (ItemList& rItemList)
 {
@@ -138,9 +123,6 @@ void AllMasterPagesSelector::Fill (ItemList& rItemList)
         UpdateMasterPageList();
     UpdatePageSet(rItemList);
 }
-
-
-
 
 void AllMasterPagesSelector::NotifyContainerChangeEvent (
     const MasterPageContainerChangeEvent& rEvent)
@@ -164,9 +146,6 @@ void AllMasterPagesSelector::NotifyContainerChangeEvent (
     }
 }
 
-
-
-
 void AllMasterPagesSelector::UpdateMasterPageList (void)
 {
     mpSortedMasterPages->clear();
@@ -174,9 +153,6 @@ void AllMasterPagesSelector::UpdateMasterPageList (void)
     for (int i=0; i<nTokenCount; i++)
         AddItem(mpContainer->GetTokenForIndex(i));
 }
-
-
-
 
 void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
 {
@@ -198,9 +174,6 @@ void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
     }
 }
 
-
-
-
 void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
 {
     SortedMasterPageDescriptorList::const_iterator iDescriptor;
@@ -209,9 +182,6 @@ void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
         rItemList.push_back((*iDescriptor)->maToken);
 }
 
-
-
-
 void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
 {
     //    MasterPagesSelector::GetState(rItemSet);
@@ -219,9 +189,6 @@ void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
     if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE)
         rItemSet.DisableItem(SID_TP_EDIT_MASTER);
 }
-
-
-
 
 } } // end of namespace sd::sidebar
 

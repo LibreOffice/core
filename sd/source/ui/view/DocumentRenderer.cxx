@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "DocumentRenderer.hxx"
@@ -57,11 +56,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 namespace sd {
 
 namespace {
-
 
     /** Convenience class to extract values from the sequence of properties
         given to one of the XRenderable methods.
@@ -245,8 +242,6 @@ namespace {
         }
     };
 
-
-
     /** A collection of values that helps to reduce the number of arguments
         given to some functions.  Note that not all values are set at the
         same time.
@@ -278,8 +273,6 @@ namespace {
         MapMode maMap;
         const bool mbPrintMarkedOnly;
     };
-
-
 
     /** Output one page of the document to the given printer.  Note that
         more than one document page may be output to one printer page.
@@ -314,9 +307,6 @@ namespace {
         rPrintView.HideSdrPage();
     }
 
-
-
-
     /** Output a string (that typically is not part of a document page) to
         the given printer.
     */
@@ -330,9 +320,6 @@ namespace {
         rPrinter.DrawText(rPageStringOffset, rsPageString);
         rPrinter.SetFont(aOriginalFont);
     }
-
-
-
 
     /** Read the resource file and process it into a sequence of properties
         that can be passed to the printing dialog.
@@ -440,7 +427,6 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("contents",
                                SD_RESSTR(_STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT), "" ) );
-
 
             if( mbImpress )
             {
@@ -660,9 +646,6 @@ namespace {
         }
     };
 
-
-
-
     /** The Prepare... methods of the DocumentRenderer::Implementation class
         create a set of PrinterPage objects that contain all necessary
         information to do the actual printing.  There is one PrinterPage
@@ -723,9 +706,6 @@ namespace {
         const sal_uInt16 mnPaperTray;
     };
 
-
-
-
     /** The RegularPrinterPage is used for printing one regular slide (no
         notes, handout, or outline) to one printer page.
     */
@@ -779,9 +759,6 @@ namespace {
     private:
         const sal_uInt16 mnPageIndex;
     };
-
-
-
 
     /** Print one slide multiple times on a printer page so that the whole
         printer page is covered.
@@ -942,9 +919,6 @@ namespace {
         const Point maSecondOffset;
     };
 
-
-
-
     /** One handout page displays one to nine slides.
     */
     class HandoutPrinterPage : public PrinterPage
@@ -1087,9 +1061,6 @@ namespace {
         const ::std::vector<sal_uInt16> maPageIndices;
     };
 
-
-
-
     /** The outline information (title, subtitle, outline objects) of the
         document.  There is no fixed mapping of slides to printer pages.
     */
@@ -1165,7 +1136,6 @@ namespace {
     };
 }
 
-
 //===== DocumentRenderer::Implementation ======================================
 
 class DocumentRenderer::Implementation
@@ -1190,16 +1160,10 @@ public:
         StartListening(mrBase);
     }
 
-
-
-
     virtual ~Implementation()
     {
         EndListening(mrBase);
     }
-
-
-
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE
     {
@@ -1211,8 +1175,6 @@ public:
             Dispose();
         }
     }
-
-
 
     /** Process the sequence of properties given to one of the XRenderable
         methods.
@@ -1253,8 +1215,6 @@ public:
             PreparePages();
     }
 
-
-
     /** Return the number of pages that are to be printed.
     */
     sal_Int32 GetPrintPageCount()
@@ -1265,8 +1225,6 @@ public:
         else
             return maPrinterPages.size();
     }
-
-
 
     /** Return a sequence of properties that can be returned by the
         XRenderable::getRenderer() method.
@@ -1290,9 +1248,6 @@ public:
 
         return aProperties;
     }
-
-
-
 
     /** Print one of the prepared pages.
     */
@@ -1329,7 +1284,6 @@ public:
         const sal_uLong nSavedDrawMode (rPrinter.GetDrawMode());
         const MapMode aSavedMapMode (rPrinter.GetMapMode());
         const sal_uInt16 nSavedPaperBin (rPrinter.GetPaperBin());
-
 
         // Set page orientation.
         if ( ! rPrinter.SetOrientation(pPage->GetOrientation()))
@@ -1372,9 +1326,6 @@ public:
         rPrinter.SetMapMode(aSavedMapMode);
         rPrinter.SetPaperBin(nSavedPaperBin);
     }
-
-
-
 
 private:
     // rhbz#657394: keep the document alive: prevents crash when
@@ -1435,8 +1386,6 @@ private:
 
         return true;
     }
-
-
 
     /** Top most method for preparing printer pages.  In this and the other
         Prepare... methods the various special cases are detected and
@@ -1522,9 +1471,6 @@ private:
         }
     }
 
-
-
-
     /** Create the page objects of the handout template.  When the actual
         printing takes place then the page objects are assigned different
         sets of slides for each printed page (see HandoutPrinterPage::Print).
@@ -1603,9 +1549,6 @@ private:
         }
     }
 
-
-
-
     /** Detect whether the specified slide is to be printed.
         @return
             When the slide is not to be printed then <NULL/> is returned.
@@ -1627,9 +1570,6 @@ private:
         else
             return NULL;
     }
-
-
-
 
     /** Prepare the outline of the document for printing.  There is no fixed
         number of slides whose outline data is put onto one printer page.
@@ -1788,9 +1728,6 @@ private:
         pOutliner->Init(nSavedOutlMode);
     }
 
-
-
-
     /** Prepare handout pages for slides that are to be printed.
     */
     void PrepareHandout (PrintInfo& rInfo)
@@ -1905,9 +1842,6 @@ private:
         }
     }
 
-
-
-
     /** Prepare the notes pages or regular slides.
     */
     void PrepareStdOrNotes (
@@ -1934,9 +1868,6 @@ private:
         else
             PrepareRegularPages(ePageKind, rInfo);
     }
-
-
-
 
     /** Prepare slides in a non-booklet way: one slide per one to many
         printer pages.
@@ -2021,9 +1952,6 @@ private:
             }
         }
     }
-
-
-
 
     /** Put two slides on one printer page.
     */
@@ -2148,9 +2076,6 @@ private:
         }
     }
 
-
-
-
     /** Print one slide multiple times on one printer page so that the whole
         printer page is covered.
     */
@@ -2179,8 +2104,6 @@ private:
                     rInfo.meOrientation,
                     nPaperBin)));
     }
-
-
 
     /** Print one standard slide or notes page on one to many printer
         pages.  More than on printer page is used when the slide is larger
@@ -2270,9 +2193,6 @@ private:
     }
 };
 
-
-
-
 //===== DocumentRenderer ======================================================
 
 DocumentRenderer::DocumentRenderer (ViewShellBase& rBase)
@@ -2281,15 +2201,9 @@ DocumentRenderer::DocumentRenderer (ViewShellBase& rBase)
 {
 }
 
-
-
-
 DocumentRenderer::~DocumentRenderer()
 {
 }
-
-
-
 
 //----- XRenderable -----------------------------------------------------------
 
@@ -2303,9 +2217,6 @@ sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
     return mpImpl->GetPrintPageCount();
 }
 
-
-
-
 Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     sal_Int32 nRenderer,
     const css::uno::Any& rSelection,
@@ -2318,9 +2229,6 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     return mpImpl->GetProperties(rOptions);
 }
 
-
-
-
 void SAL_CALL DocumentRenderer::render (
     sal_Int32 nRenderer,
     const css::uno::Any& rSelection,
@@ -2331,8 +2239,6 @@ void SAL_CALL DocumentRenderer::render (
     mpImpl->ProcessProperties(rOptions);
     mpImpl->PrintPage(nRenderer);
 }
-
-
 
 } // end of namespace sd
 

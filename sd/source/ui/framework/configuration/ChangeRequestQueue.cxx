@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChangeRequestQueue.hxx"
 
 namespace sd { namespace framework {

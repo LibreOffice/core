@@ -40,7 +40,6 @@ namespace sd {
 
 TYPEINIT1( FuSlideShowDlg, FuPoor );
 
-
 FuSlideShowDlg::FuSlideShowDlg (
     ViewShell* pViewSh,
     ::sd::Window* pWin,

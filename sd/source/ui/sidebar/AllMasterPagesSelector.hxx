@@ -30,7 +30,6 @@ class TemplateEntry;
 
 namespace sd { namespace sidebar {
 
-
 /** Show a list of all available master pages so that the user can assign
     them to the document.
 */

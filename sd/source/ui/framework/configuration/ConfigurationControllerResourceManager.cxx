@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationControllerResourceManager.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ResourceFactoryManager.hxx"
@@ -44,15 +43,9 @@ ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
 {
 }
 
-
-
-
 ConfigurationControllerResourceManager::~ConfigurationControllerResourceManager (void)
 {
 }
-
-
-
 
 ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::GetResource (
@@ -65,9 +58,6 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     else
         return ResourceDescriptor();
 }
-
-
-
 
 void ConfigurationControllerResourceManager::ActivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
@@ -84,9 +74,6 @@ void ConfigurationControllerResourceManager::ActivateResources (
             this, _1, rxConfiguration));
 }
 
-
-
-
 void ConfigurationControllerResourceManager::DeactivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
     const Reference<XConfiguration>& rxConfiguration)
@@ -101,9 +88,6 @@ void ConfigurationControllerResourceManager::DeactivateResources (
         ::boost::bind(&ConfigurationControllerResourceManager::DeactivateResource,
             this, _1, rxConfiguration));
 }
-
-
-
 
 /* In this method we do following steps.
     1. Get the factory with which the resource will be created.
@@ -180,9 +164,6 @@ void ConfigurationControllerResourceManager::ActivateResource (
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-
-
 
 /* In this method we do following steps.
     1. Remove the resource from the URL->Object map of the configuration
@@ -262,9 +243,6 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 #endif
 }
 
-
-
-
 void ConfigurationControllerResourceManager::AddResource (
     const Reference<XResource>& rxResource,
     const Reference<XResourceFactory>& rxFactory)
@@ -288,9 +266,6 @@ void ConfigurationControllerResourceManager::AddResource (
             RTL_TEXTENCODING_UTF8).getStr() << " -> " << rxResource.get());
 #endif
 }
-
-
-
 
 ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::RemoveResource (
@@ -316,9 +291,6 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     return aDescriptor;
 }
 
-
-
-
 //===== ConfigurationControllerResourceManager::ResourceComparator ============
 
 bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
@@ -332,9 +304,6 @@ bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
     else
         return false;
 }
-
-
-
 
 } } // end of namespace sd::framework
 

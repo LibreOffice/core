@@ -49,9 +49,6 @@ namespace {
         > ViewTabBarInterfaceBase;
 }
 
-
-
-
 namespace sd {
 
 /** Tab control for switching between views in the center pane.
@@ -81,13 +78,11 @@ public:
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
         const com::sun::star::lang::EventObject& rEvent)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //----- XTabBar -----------------------------------------------------------
 
@@ -116,7 +111,6 @@ public:
         SAL_CALL getTabBarButtons (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<
@@ -126,13 +120,10 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-
 
     /** The returned value is calculated as the difference between the
         total height of the control and the heigh of its first tab page.

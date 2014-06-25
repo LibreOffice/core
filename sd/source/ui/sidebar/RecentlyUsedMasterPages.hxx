@@ -34,7 +34,6 @@ namespace sd {
 class MasterPageObserverEvent;
 }
 
-
 namespace sd { namespace sidebar {
 
 /** This singleton holds a list of the most recently used master pages.
@@ -109,8 +108,6 @@ private:
 
     void ResolveList (void);
 };
-
-
 
 } } // end of namespace sd::sidebar
 

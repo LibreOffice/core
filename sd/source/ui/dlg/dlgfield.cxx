@@ -239,7 +239,6 @@ void SdModifyFieldDlg::FillFormatList()
 
     }
 
-
 }
 
 void SdModifyFieldDlg::FillControls()
@@ -298,7 +297,6 @@ void SdModifyFieldDlg::FillControls()
     FillFormatList();
     m_pLbFormat->SaveValue();
 }
-
 
 IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl)
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
@@ -28,7 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-
 
 #include "app.hrc"
 
@@ -100,7 +98,6 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_IMAP_EXEC, bDisable ) );
 }
 
-
 void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
     // during a slide show, nothing is executed!
@@ -117,7 +114,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         case SID_SOLID_CREATE:
             pOptions->SetSolidDragging( !mpDrawView->IsSolidDragging() );
         break;
-
 
         // Grid- / Help lines option
         case SID_GRID_VISIBLE: // not here yet!
@@ -150,7 +146,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         }
         break;
 
-
         case SID_SNAP_BORDER:
         {
             pOptions->SetSnapBorder( !mpDrawView->IsBordSnap() );
@@ -168,7 +163,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
             pOptions->SetSnapPoints( !mpDrawView->IsOPntSnap() );
         }
         break;
-
 
         case SID_QUICKEDIT:
         {
@@ -216,8 +210,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     }
 
 }
-
-
 
 void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {

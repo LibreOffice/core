@@ -32,11 +32,9 @@
 
 namespace sd { namespace tools {
 
-
 typedef cppu::WeakComponentImplHelper1<
     ::com::sun::star::frame::XStatusListener
     > SlotStateListenerInterfaceBase;
-
 
 /** Listen for state changes of slots.  This class has been created in order
     to be informed when the support for vertical writing changes but it can

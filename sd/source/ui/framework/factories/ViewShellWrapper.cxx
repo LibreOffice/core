@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
 #include "sdpage.hxx"
@@ -45,7 +44,6 @@
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -53,7 +51,6 @@ using namespace ::com::sun::star::drawing::framework;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::rendering::XCanvas;
 using ::com::sun::star::lang::DisposedException;
-
 
 namespace sd { namespace framework {
 
@@ -70,15 +67,9 @@ ViewShellWrapper::ViewShellWrapper (
 {
 }
 
-
-
-
 ViewShellWrapper::~ViewShellWrapper (void)
 {
 }
-
-
-
 
 void SAL_CALL ViewShellWrapper::disposing (void)
 {
@@ -111,12 +102,6 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
         return ViewShellWrapperInterfaceBase::queryInterface( rType );
 }
 
-
-
-
-
-
-
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
@@ -125,15 +110,11 @@ Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
     throw (RuntimeException, std::exception)
 {
     return false;
 }
-
 
 //----- XSelectionSupplier --------------------------------------------------
 
@@ -207,7 +188,6 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 {
 }
 
-
 //----- XRelocatableResource --------------------------------------------------
 
 sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
@@ -246,9 +226,6 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     return bResult;
 }
 
-
-
-
 //----- XUnoTunnel ------------------------------------------------------------
 
 namespace
@@ -260,9 +237,6 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
 {
     return theViewShellWrapperUnoTunnelId::get().getSeq();
 }
-
-
-
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException, std::exception)
@@ -278,9 +252,6 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
     return nResult;
 }
 
-
-
-
 //===== awt::XWindowListener ==================================================
 
 void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
@@ -292,17 +263,11 @@ void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
         pViewShell->Resize();
 }
 
-
-
-
 void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
@@ -313,17 +278,11 @@ void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
         pViewShell->Resize();
 }
 
-
-
-
 void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
-
-
-
 
 //===== XEventListener ========================================================
 
@@ -333,7 +292,6 @@ void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
     if (rEvent.Source == mxWindow)
         mxWindow = NULL;
 }
-
 
 } } // end of namespace sd::framework
 

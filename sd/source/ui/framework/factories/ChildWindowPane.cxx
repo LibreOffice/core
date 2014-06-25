@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChildWindowPane.hxx"
 
 #include "PaneDockingWindow.hxx"
@@ -32,7 +31,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ChildWindowPane::ChildWindowPane (
@@ -88,14 +86,9 @@ ChildWindowPane::ChildWindowPane (
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
 ChildWindowPane::~ChildWindowPane (void)
 {
 }
-
-
-
 
 void ChildWindowPane::Hide (void)
 {
@@ -109,9 +102,6 @@ void ChildWindowPane::Hide (void)
     // may use a different window.
     mxWindow = NULL;
 }
-
-
-
 
 void SAL_CALL ChildWindowPane::disposing (void)
 {
@@ -127,9 +117,6 @@ void SAL_CALL ChildWindowPane::disposing (void)
 
     Pane::disposing();
 }
-
-
-
 
 ::Window* ChildWindowPane::GetWindow (void)
 {
@@ -196,9 +183,6 @@ void SAL_CALL ChildWindowPane::disposing (void)
     return mpWindow;
 }
 
-
-
-
 Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow (void)
     throw (RuntimeException, std::exception)
 {
@@ -206,8 +190,6 @@ Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow (void)
         GetWindow();
     return Pane::getWindow();
 }
-
-
 
 IMPLEMENT_FORWARD_XINTERFACE2(
     ChildWindowPane,
@@ -217,9 +199,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(
     ChildWindowPane,
     ChildWindowPaneInterfaceBase,
     Pane);
-
-
-
 
 //----- XEventListener --------------------------------------------------------
 
@@ -236,9 +215,6 @@ void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
         mpWindow = NULL;
     }
 }
-
-
-
 
 } } // end of namespace sd::framework
 

@@ -87,9 +87,6 @@ private:
     MasterPageObserver& operator= (const MasterPageObserver&);
 };
 
-
-
-
 /** Objects of this class are sent to listeners of the MasterPageObserver
     singleton when the list of master pages of one document has changed.
 */

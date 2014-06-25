@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PreviewRenderer.hxx"
 
 #include "DrawDocShell.hxx"
@@ -40,7 +39,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 namespace sd {
 
 const int PreviewRenderer::snSubstitutionTextSize = 11;
@@ -60,9 +58,6 @@ namespace {
                 const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
     };
 }
-
-
-
 
 //===== PreviewRenderer =======================================================
 
@@ -87,17 +82,11 @@ PreviewRenderer::PreviewRenderer (
     }
 }
 
-
-
-
 PreviewRenderer::~PreviewRenderer (void)
 {
     if (mpDocShellOfView != NULL)
         EndListening (*mpDocShellOfView);
 }
-
-
-
 
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
@@ -124,9 +113,6 @@ Image PreviewRenderer::RenderPage (
     else
         return Image();
 }
-
-
-
 
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
@@ -163,9 +149,6 @@ Image PreviewRenderer::RenderPage (
 
     return aPreview;
 }
-
-
-
 
 Image PreviewRenderer::RenderSubstitution (
     const Size& rPreviewPixelSize,
@@ -224,9 +207,6 @@ Image PreviewRenderer::RenderSubstitution (
 
     return aPreview;
 }
-
-
-
 
 bool PreviewRenderer::Initialize (
     const SdPage* pPage,
@@ -303,16 +283,10 @@ bool PreviewRenderer::Initialize (
     return true;
 }
 
-
-
-
 void PreviewRenderer::Cleanup (void)
 {
     mpView->HideSdrPage();
 }
-
-
-
 
 void PreviewRenderer::PaintPage (
     const SdPage* pPage,
@@ -351,9 +325,6 @@ void PreviewRenderer::PaintPage (
         pOutliner->SetControlWord(nSavedControlWord);
 }
 
-
-
-
 void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
 {
     if (!rSubstitutionText.isEmpty())
@@ -382,9 +353,6 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
     }
 }
 
-
-
-
 void PreviewRenderer::PaintFrame (void)
 {
     if (mbHasFrame)
@@ -400,9 +368,6 @@ void PreviewRenderer::PaintFrame (void)
         mpPreviewDevice->EnableMapMode(true);
      }
 }
-
-
-
 
 void PreviewRenderer::SetupOutputSize (
     const SdPage& rPage,
@@ -434,9 +399,6 @@ void PreviewRenderer::SetupOutputSize (
     mpPreviewDevice->SetMapMode (aMapMode);
     mpPreviewDevice->SetOutputSizePixel(rFramePixelSize);
 }
-
-
-
 
 void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
 {
@@ -473,9 +435,6 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     mpView->SetPagePaintingAllowed(false);
 #endif
 }
-
-
-
 
 Image PreviewRenderer::ScaleBitmap (
     const BitmapEx& rBitmapEx,
@@ -529,9 +488,6 @@ Image PreviewRenderer::ScaleBitmap (
     return aPreview;
 }
 
-
-
-
 void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if (rHint.IsA(TYPE(SfxSimpleHint))
@@ -551,9 +507,6 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-
-
-
 //===== ViewRedirector ========================================================
 
 namespace {
@@ -562,15 +515,9 @@ ViewRedirector::ViewRedirector (void)
 {
 }
 
-
-
-
 ViewRedirector::~ViewRedirector (void)
 {
 }
-
-
-
 
 drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
     const sdr::contact::ViewObjectContact& rOriginal,
@@ -603,7 +550,6 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 }
 
 } // end of anonymous namespace
-
 
 } // end of namespace ::sd
 

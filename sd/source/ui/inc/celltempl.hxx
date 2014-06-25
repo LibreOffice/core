@@ -43,7 +43,6 @@ public:
     const SfxItemSet* GetOutputItemSet() const;
 };
 
-
 #endif // INCLUDED_SD_SOURCE_UI_INC_CELLTEMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

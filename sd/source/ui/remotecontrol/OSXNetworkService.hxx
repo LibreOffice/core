@@ -9,7 +9,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_HXX
 
-
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>

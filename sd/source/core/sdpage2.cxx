@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -251,7 +250,6 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     }
 }
 
-
 /*************************************************************************
 |*
 |* disconnect outline text object from templates for outline levels
@@ -343,7 +341,6 @@ void SdPage::ConnectLink()
     }
 }
 
-
 /*************************************************************************
 |*
 |* Disconnect from sfx2::LinkManager
@@ -418,8 +415,6 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mpPageLink           = NULL;    // is set when inserting via ConnectLink()
 }
 
-
-
 /*************************************************************************
 |*
 |* Clone
@@ -462,7 +457,6 @@ SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 |*
 \************************************************************************/
 
-
 SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 {
     const PresObjKind eKind = ((SdPage*)this)->GetPresObjKind(pObj);
@@ -481,7 +475,6 @@ SfxItemSet* SdPage::getOrCreateItems()
 
     return mpItems;
 }
-
 
 bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
 {
@@ -528,13 +521,11 @@ void SdPage::RemoveEmptyPresentationObjects()
     }
 }
 
-
 void SdPage::setTransitionType( sal_Int16 nTransitionType )
 {
     mnTransitionType = nTransitionType;
     ActionChanged();
 }
-
 
 void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
 {
@@ -542,20 +533,17 @@ void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
     ActionChanged();
 }
 
-
 void SdPage::setTransitionDirection ( bool bTransitionbDirection )
 {
     mbTransitionDirection = bTransitionbDirection;
     ActionChanged();
 }
 
-
 void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
 {
     mnTransitionFadeColor = nTransitionFadeColor;
     ActionChanged();
 }
-
 
 void SdPage::setTransitionDuration ( double fTranstionDuration )
 {

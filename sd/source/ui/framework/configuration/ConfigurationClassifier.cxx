@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationClassifier.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -39,9 +38,6 @@ ConfigurationClassifier::ConfigurationClassifier (
 {
 }
 
-
-
-
 bool ConfigurationClassifier::Partition (void)
 {
     maC1minusC2.clear();
@@ -54,18 +50,6 @@ bool ConfigurationClassifier::Partition (void)
 
     return !maC1minusC2.empty() || !maC2minusC1.empty();
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 void ConfigurationClassifier::PartitionResources (
     const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS1,
@@ -99,9 +83,6 @@ void ConfigurationClassifier::PartitionResources (
             mxConfiguration2->getResources(*iResource, OUString(), AnchorBindingMode_DIRECT));
     }
 }
-
-
-
 
 void ConfigurationClassifier::ClassifyResources (
     const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS1,
@@ -146,9 +127,6 @@ void ConfigurationClassifier::ClassifyResources (
     }
 }
 
-
-
-
 void ConfigurationClassifier::CopyResources (
     const ResourceIdVector& rSource,
     const Reference<XConfiguration>& rxConfiguration,
@@ -184,7 +162,6 @@ void ConfigurationClassifier::CopyResources (
     }
 }
 
-
 void ConfigurationClassifier::TraceResourceIdVector (
     const sal_Char* pMessage,
     const ResourceIdVector& rResources) const
@@ -199,7 +176,6 @@ void ConfigurationClassifier::TraceResourceIdVector (
             OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
-
 
 } } // end of namespace sd::framework
 

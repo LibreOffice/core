@@ -71,7 +71,6 @@ private:
     DECL_LINK(DelayTrigger, void*);
 };
 
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

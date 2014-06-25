@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ShellStackGuard.hxx"
 
 #include "framework/ConfigurationController.hxx"
@@ -34,7 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
-
 
 namespace sd { namespace framework {
 
@@ -78,15 +76,9 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     }
 }
 
-
-
-
 ShellStackGuard::~ShellStackGuard (void)
 {
 }
-
-
-
 
 void SAL_CALL ShellStackGuard::disposing (void)
 {
@@ -96,9 +88,6 @@ void SAL_CALL ShellStackGuard::disposing (void)
     mxConfigurationController = NULL;
     mpBase = NULL;
 }
-
-
-
 
 void SAL_CALL ShellStackGuard::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -117,9 +106,6 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
     }
 }
 
-
-
-
 void SAL_CALL ShellStackGuard::disposing (
     const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
@@ -131,9 +117,6 @@ void SAL_CALL ShellStackGuard::disposing (
             mpBase = NULL;
         }
 }
-
-
-
 
 IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
 {
@@ -159,10 +142,6 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
     return 0;
 }
 
-
-
-
-
 bool ShellStackGuard::IsPrinting (void) const
 {
     if (mpBase != NULL)
@@ -177,7 +156,6 @@ bool ShellStackGuard::IsPrinting (void) const
 
     return false;
 }
-
 
 } } // end of namespace sd::framework
 

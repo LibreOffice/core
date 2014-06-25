@@ -24,7 +24,6 @@
 
 namespace sd { namespace sidebar {
 
-
 TableDesignPanel::TableDesignPanel (
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
@@ -35,15 +34,9 @@ TableDesignPanel::TableDesignPanel (
 #endif
 }
 
-
-
-
 TableDesignPanel::~TableDesignPanel (void)
 {
 }
-
-
-
 
 ::Window* TableDesignPanel::CreateWrappedControl (
     ::Window* pParentWindow,
@@ -51,9 +44,6 @@ TableDesignPanel::~TableDesignPanel (void)
 {
     return createTableDesignPanel(pParentWindow, rViewShellBase);
 }
-
-
-
 
 css::ui::LayoutSize TableDesignPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {

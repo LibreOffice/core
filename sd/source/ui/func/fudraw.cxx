@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sot/object.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/waitobj.hxx>
@@ -212,7 +211,6 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
     FrameView* pFrameView = mpViewShell->GetFrameView();
@@ -321,7 +319,6 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 
     return bReturn;
 }
-
 
 bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -498,19 +495,16 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-
 void FuDraw::Activate()
 {
     FuPoor::Activate();
     ForcePointer();
 }
 
-
 void FuDraw::Deactivate()
 {
     FuPoor::Deactivate();
 }
-
 
 /**
  * Toggle mouse-pointer
@@ -726,8 +720,6 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
     return bSet;
 }
 
-
-
 /**
  * Response of doubleclick
  */
@@ -787,7 +779,6 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-
 bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bReturn = false;
@@ -828,8 +819,6 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
     return(bReturn);
 }
-
-
 
 bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
@@ -984,7 +973,6 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
 
     return bSet;
 }
-
 
 /** is called when the current function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also

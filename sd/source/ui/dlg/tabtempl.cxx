@@ -28,7 +28,6 @@
 #include <svx/svdmodel.hxx>
 #include <svl/cjkoptions.hxx>
 
-
 #include <svx/dialogs.hrc>
 
 #include <svx/svxdlg.hxx>
@@ -108,8 +107,6 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
     nHatchingListState = CT_NONE;
 }
 
-
-
 void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -175,8 +172,6 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-
-
 const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 {
     SfxItemSet* pRet = GetInputSetImpl();
@@ -191,7 +186,5 @@ const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 
     return pRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,14 +26,12 @@ class Window;
 
 namespace sd { namespace sidebar {
 
-
 class IDisposable
 {
 public:
     virtual void Dispose (void) = 0;
     virtual ~IDisposable();
 };
-
 
 } } // end of namespace ::sd::sidebar
 

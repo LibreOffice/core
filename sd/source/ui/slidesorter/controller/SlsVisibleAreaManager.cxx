@@ -28,7 +28,6 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 namespace {
@@ -49,8 +48,6 @@ namespace {
 
 } // end of anonymous namespace
 
-
-
 VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maVisibleRequests(),
@@ -62,35 +59,19 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 VisibleAreaManager::~VisibleAreaManager (void)
 {
 }
-
-
-
 
 void VisibleAreaManager::ActivateCurrentSlideTracking (void)
 {
     mbIsCurrentSlideTrackingActive = true;
 }
 
-
-
-
 void VisibleAreaManager::DeactivateCurrentSlideTracking (void)
 {
     mbIsCurrentSlideTrackingActive = false;
 }
-
-
-
-
-
-
-
 
 void VisibleAreaManager::RequestVisible (
     const model::SharedPageDescriptor& rpDescriptor,
@@ -111,18 +92,12 @@ void VisibleAreaManager::RequestVisible (
     }
 }
 
-
-
-
 void VisibleAreaManager::RequestCurrentSlideVisible (void)
 {
     if (mbIsCurrentSlideTrackingActive && mnDisableCount==0)
         RequestVisible(
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
-
-
-
 
 void VisibleAreaManager::MakeVisible (void)
 {
@@ -170,9 +145,6 @@ void VisibleAreaManager::MakeVisible (void)
     }
     meRequestedAnimationMode = Animator::AM_Immediate;
 }
-
-
-
 
 ::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft (void) const
 {
@@ -228,9 +200,6 @@ void VisibleAreaManager::MakeVisible (void)
         return ::boost::optional<Point>(aRequestedTopLeft);
 }
 
-
-
-
 //===== VisibleAreaManager::TemporaryDisabler =================================
 
 VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSorter)
@@ -239,15 +208,10 @@ VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSor
     ++mrVisibleAreaManager.mnDisableCount;
 }
 
-
-
-
 VisibleAreaManager::TemporaryDisabler::~TemporaryDisabler (void)
 {
     --mrVisibleAreaManager.mnDisableCount;
 }
-
-
 
 //===== VerticalVisibleAreaScroller ===========================================
 
@@ -284,9 +248,6 @@ VisibleAreaScroller::VisibleAreaScroller (
             maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
     }
 }
-
-
-
 
 void VisibleAreaScroller::operator() (const double nTime)
 {

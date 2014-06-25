@@ -28,9 +28,6 @@ namespace sd { namespace toolpanel {
 class TreeNode;
 } }
 
-
-
-
 namespace sd { namespace toolpanel {
 
 /** A simple factory base class defines the interface that is used by
@@ -56,8 +53,6 @@ protected:
     virtual TreeNode* InternalCreateControl( ::Window& i_rParent ) = 0;
 };
 
-
-
 /** A simple helper class that realizes a ControlFactory that is able to create root controls, providing
     the to-be-created control with an additional parameter.
 */
@@ -79,7 +74,6 @@ protected:
 private:
     ArgumentType& mrArgument;
 };
-
 
 } } // end of namespace ::sd::toolpanel
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ToolPanelModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -34,9 +33,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-
 namespace sd { namespace framework {
-
 
 //===== ToolPanelModule ==================================================
 

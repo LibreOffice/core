@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
@@ -72,7 +71,6 @@ public:
     Image maImgGroup;
 };
 
-
 bool SdPageObjsTLB::bIsInDrag = false;
 
 bool SdPageObjsTLB::IsInDrag()
@@ -82,9 +80,7 @@ bool SdPageObjsTLB::IsInDrag()
 
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
 
-
 // - SdPageObjsTLB::SdPageObjsTransferable -
-
 
 SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     SdPageObjsTLB& rParent,
@@ -114,16 +110,12 @@ SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 {
 }
 
-
-
 void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 {
     AddFormat(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK);
     AddFormat(SOT_FORMATSTR_ID_TREELISTBOX);
     AddFormat(GetListBoxDropFormatId());
 }
-
-
 
 bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
@@ -143,21 +135,11 @@ bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::Da
     }
 }
 
-
-
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mrParent.OnDragFinished( nDropAction );
     SdTransferable::DragFinished(nDropAction);
 }
-
-
-
-
-
-
-
-
 
 sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
@@ -184,8 +166,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTran
     return theSdPageObjsTLBUnoTunnelId::get().getSeq();
 }
 
-
-
 SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData )
     throw()
 {
@@ -203,7 +183,6 @@ SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::ge
     return 0;
 }
 
-
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 {
     if (mnListBoxDropFormatId == SAL_MAX_UINT32)
@@ -211,7 +190,6 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
         "application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""));
     return mnListBoxDropFormatId;
 }
-
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
@@ -275,7 +253,6 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
             SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
 }
 
-
 SdPageObjsTLB::~SdPageObjsTLB()
 {
     if ( mpBookmarkDoc )
@@ -292,7 +269,6 @@ OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , bool isAltT
     sal_uInt16 pageNo;
     SdrObject*   pObj = NULL;
     SdPage* pPage = NULL;
-
 
     OUString ParentName = GetEntryText( GetRootLevelParent( pEntry ) );
 
@@ -505,7 +481,6 @@ bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
     return( bChildren );
 }
 
-
 /**
  * Fill TreeLB with pages and objects
  */
@@ -589,9 +564,6 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
                  reinterpret_cast< void* >( 1 )
     );
 }
-
-
-
 
 void SdPageObjsTLB::AddShapeList (
     const SdrObjList& rList,
@@ -809,9 +781,6 @@ void SdPageObjsTLB::AddShapeList (
     }
 }
 
-
-
-
 void SdPageObjsTLB::SetShowAllShapes (
     const bool bShowAllShapes,
     const bool bFillList)
@@ -825,13 +794,6 @@ void SdPageObjsTLB::SetShowAllShapes (
             Fill(mpDoc, mpMedium, maDocName);
     }
 }
-
-
-
-
-
-
-
 
 /**
  * Checks if the pages (PK_STANDARD) of a doc and the objects on the pages
@@ -1396,7 +1358,6 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (nRet == DND_ACTION_NONE)
         SvTreeListBox::ExecuteDrop(rEvt, this);
 
-
     return nRet;
 }
 
@@ -1410,7 +1371,6 @@ IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
     pThis->DoDrag();
     return 0;
 }
-
 
 bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
 {
@@ -1524,9 +1484,6 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
     return pEntry;
 }
 
-
-
-
 bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry* pEntry)
 {
     if (pEntry == NULL)
@@ -1540,9 +1497,6 @@ bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry* pEntry)
 
     return true;
 }
-
-
-
 
 void SdPageObjsTLB::AddShapeToTransferable (
     SdTransferable& rTransferable,
@@ -1592,9 +1546,6 @@ void SdPageObjsTLB::AddShapeToTransferable (
     rTransferable.SetStartPos(aDragPos);
     rTransferable.SetObjectDescriptor( aObjectDescriptor );
 }
-
-
-
 
 ::sd::ViewShell* SdPageObjsTLB::GetViewShellForDocShell (::sd::DrawDocShell& rDocShell)
 {
@@ -1646,9 +1597,6 @@ void SdPageObjsTLB::AddShapeToTransferable (
     }
     return NULL;
 }
-
-
-
 
 //===== IconProvider ==========================================================
 

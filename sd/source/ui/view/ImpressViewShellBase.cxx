@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ImpressViewShellBase.hxx"
 
 #include "DrawDocShell.hxx"
@@ -54,13 +53,6 @@ void ImpressViewShellBase::InitFactory()
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
 
-
-
-
-
-
-
-
 ImpressViewShellBase::ImpressViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
@@ -69,16 +61,10 @@ ImpressViewShellBase::ImpressViewShellBase (
     MasterPageObserver::Instance().RegisterDocument (*GetDocShell()->GetDoc());
 }
 
-
-
-
 ImpressViewShellBase::~ImpressViewShellBase (void)
 {
     MasterPageObserver::Instance().UnregisterDocument (*GetDocShell()->GetDoc());
 }
-
-
-
 
 void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 {
@@ -97,9 +83,6 @@ void ImpressViewShellBase::Execute (SfxRequest& rRequest)
             break;
     }
 }
-
-
-
 
 void ImpressViewShellBase::InitializeFramework (void)
 {

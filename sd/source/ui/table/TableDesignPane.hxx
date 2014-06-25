@@ -43,8 +43,6 @@ class EventMultiplexerEvent;
 
 class ViewShellBase;
 
-
-
 #define CB_HEADER_ROW       0
 #define CB_TOTAL_ROW        1
 #define CB_BANDED_ROWS      2
@@ -120,8 +118,6 @@ public:
     {
     }
 };
-
-
 
 class TableDesignDialog : public ModalDialog
 {

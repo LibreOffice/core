@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -109,7 +108,6 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
     GetActiveWindow()->GrabFocus();
 }
 
-
 SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, bool)
 {
     return NULL;
@@ -119,7 +117,6 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 {
     return NULL;
 }
-
 
 void PresentationViewShell::Activate( bool bIsMDIActivate )
 {

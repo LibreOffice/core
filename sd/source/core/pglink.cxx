@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/linkmgr.hxx>
 
 #include "pglink.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
-
 
 /*************************************************************************
 |*
@@ -40,13 +38,11 @@ SdPageLink::SdPageLink(SdPage* pPg, const OUString& rFileName,
     pPage->SetBookmarkName(rBookmarkName);
 }
 
-
 /*************************************************************************
 |*
 |* Dtor
 |*
 \************************************************************************/
-
 
 SdPageLink::~SdPageLink()
 {
@@ -131,7 +127,5 @@ void SdPageLink::Closed()
 
     SvBaseLink::Closed();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

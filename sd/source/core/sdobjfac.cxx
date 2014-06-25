@@ -27,7 +27,6 @@
 #include "imapinfo.hxx"
 #include "drawdoc.hxx"
 
-
 SdObjectFactory aSdObjectFactory;
 
 /*************************************************************************
@@ -63,6 +62,5 @@ IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

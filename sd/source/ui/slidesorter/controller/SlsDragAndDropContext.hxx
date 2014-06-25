@@ -26,12 +26,9 @@
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include <vector>
 
-
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
-
-
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -74,8 +71,6 @@ private:
     model::SharedPageDescriptor mpHitDescriptor;
     sal_Int32 mnInsertionIndex;
 };
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

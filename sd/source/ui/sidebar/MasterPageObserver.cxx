@@ -29,7 +29,6 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 
-
 namespace sd {
 
 class MasterPageObserver::Implementation
@@ -91,8 +90,6 @@ private:
 
 MasterPageObserver* MasterPageObserver::Implementation::mpInstance = NULL;
 
-
-
 //===== MasterPageObserver ====================================================
 
 MasterPageObserver&  MasterPageObserver::Instance (void)
@@ -120,24 +117,15 @@ MasterPageObserver&  MasterPageObserver::Instance (void)
     return *Implementation::mpInstance;
 }
 
-
-
-
 void MasterPageObserver::RegisterDocument (SdDrawDocument& rDocument)
 {
     mpImpl->RegisterDocument (rDocument);
 }
 
-
-
-
 void MasterPageObserver::UnregisterDocument (SdDrawDocument& rDocument)
 {
     mpImpl->UnregisterDocument (rDocument);
 }
-
-
-
 
 void MasterPageObserver::AddEventListener (const Link& rEventListener)
 {
@@ -145,29 +133,17 @@ void MasterPageObserver::AddEventListener (const Link& rEventListener)
     mpImpl->AddEventListener (rEventListener);
 }
 
-
-
-
 void MasterPageObserver::RemoveEventListener (const Link& rEventListener)
 {
     mpImpl->RemoveEventListener (rEventListener);
 }
 
-
-
-
 MasterPageObserver::MasterPageObserver (void)
     : mpImpl (new Implementation())
 {}
 
-
-
-
 MasterPageObserver::~MasterPageObserver (void)
 {}
-
-
-
 
 //===== MasterPageObserver::Implementation ====================================
 
@@ -189,9 +165,6 @@ void MasterPageObserver::Implementation::RegisterDocument (
     StartListening (rDocument);
 }
 
-
-
-
 void MasterPageObserver::Implementation::UnregisterDocument (
     SdDrawDocument& rDocument)
 {
@@ -201,9 +174,6 @@ void MasterPageObserver::Implementation::UnregisterDocument (
     if(aMasterPageDescriptor != maUsedMasterPages.end())
         maUsedMasterPages.erase(aMasterPageDescriptor);
 }
-
-
-
 
 void MasterPageObserver::Implementation::AddEventListener (
     const Link& rEventListener)
@@ -236,9 +206,6 @@ void MasterPageObserver::Implementation::AddEventListener (
         }
     }
 }
-
-
-
 
 void MasterPageObserver::Implementation::RemoveEventListener (
     const Link& rEventListener)
@@ -282,9 +249,6 @@ void MasterPageObserver::Implementation::Notify(
         }
     }
 }
-
-
-
 
 void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     SdDrawDocument& rDocument)
@@ -367,9 +331,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     }
 }
 
-
-
-
 void MasterPageObserver::Implementation::SendEvent (
     MasterPageObserverEvent& rEvent)
 {
@@ -381,7 +342,6 @@ void MasterPageObserver::Implementation::SendEvent (
         ++aLink;
     }
 }
-
 
 } // end of namespace sd
 

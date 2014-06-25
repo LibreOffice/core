@@ -37,7 +37,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::XCloneable;
 using namespace ::com::sun::star::animations;
 
-
 namespace sd
 {
 

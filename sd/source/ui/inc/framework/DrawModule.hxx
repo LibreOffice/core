@@ -22,7 +22,6 @@
 
 #include <com/sun/star/frame/XController.hpp>
 
-
 namespace sd { namespace framework {
 
 /** The task of this module is to instantiate all modules that belong to the

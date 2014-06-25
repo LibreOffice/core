@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/gen.hxx>
 #include "SlsGenericPageCache.hxx"
 #include "SlsRequestFactory.hxx"
@@ -26,9 +25,7 @@
 
 using namespace ::com::sun::star;
 
-
 namespace sd { namespace slidesorter { namespace cache {
-
 
 //===== PageCache =============================================================
 
@@ -44,15 +41,9 @@ PageCache::PageCache (
 {
 }
 
-
-
-
 PageCache::~PageCache (void)
 {
 }
-
-
-
 
 void PageCache::ChangeSize (
     const Size& rPreviewSize,
@@ -61,18 +52,12 @@ void PageCache::ChangeSize (
     mpImplementation->ChangePreviewSize(rPreviewSize, bDoSuperSampling);
 }
 
-
-
-
 Bitmap PageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
     return mpImplementation->GetPreviewBitmap(aKey, bResize);
 }
-
-
-
 
 Bitmap PageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey,
@@ -81,9 +66,6 @@ Bitmap PageCache::GetMarkedPreviewBitmap (
     return mpImplementation->GetMarkedPreviewBitmap(aKey, bResize);
 }
 
-
-
-
 void PageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
     const Bitmap& rMarkedBitmap)
@@ -91,16 +73,10 @@ void PageCache::SetMarkedPreviewBitmap (
     mpImplementation->SetMarkedPreviewBitmap(aKey, rMarkedBitmap);
 }
 
-
-
-
 void PageCache::RequestPreviewBitmap (const CacheKey aKey)
 {
     return mpImplementation->RequestPreviewBitmap(aKey);
 }
-
-
-
 
 void PageCache::InvalidatePreviewBitmap (
     const CacheKey aKey,
@@ -110,16 +86,10 @@ void PageCache::InvalidatePreviewBitmap (
         RequestPreviewBitmap(aKey);
 }
 
-
-
-
 void PageCache::InvalidateCache (const bool bUpdateCache)
 {
     mpImplementation->InvalidateCache(bUpdateCache);
 }
-
-
-
 
 void PageCache::SetPreciousFlag (
     const CacheKey aKey,
@@ -128,22 +98,15 @@ void PageCache::SetPreciousFlag (
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }
 
-
-
-
 void PageCache::Pause (void)
 {
     mpImplementation->Pause();
 }
 
-
-
-
 void PageCache::Resume (void)
 {
     mpImplementation->Resume();
 }
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

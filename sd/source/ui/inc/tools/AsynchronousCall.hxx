@@ -26,7 +26,6 @@
 
 namespace sd { namespace tools {
 
-
 /** Store a function object and execute it asynchronous.
 
     The features of this class are:
@@ -77,7 +76,6 @@ private:
     ::std::auto_ptr<AsynchronousFunction> mpFunction;
     DECL_LINK(TimerCallback,Timer*);
 };
-
 
 } } // end of namespace ::sd::tools
 

@@ -131,8 +131,6 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, bCheckMasters ) );
     aSet.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aOldLayoutName));
 
-
-
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
     if (pArgs)

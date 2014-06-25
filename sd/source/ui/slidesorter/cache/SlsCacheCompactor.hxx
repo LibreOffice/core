@@ -85,9 +85,6 @@ private:
     DECL_LINK(CompactionCallback, void *);
 };
 
-
-
-
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif

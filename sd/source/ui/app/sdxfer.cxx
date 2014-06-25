@@ -737,8 +737,6 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
     return nRet;
 }
 
-
-
 void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
 {
     maUserData.push_back(rpData);

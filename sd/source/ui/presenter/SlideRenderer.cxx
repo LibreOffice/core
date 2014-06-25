@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideRenderer.hxx"
 #include "facreg.hxx"
 #include "sdpage.hxx"
@@ -40,16 +39,10 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new SlideRenderer(rxContext)));
 }
 
-
-
-
 OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.SlideRenderer");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -57,9 +50,6 @@ Sequence<OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.drawing.SlideRenderer");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== SlideRenderer ==========================================================
 
@@ -70,22 +60,13 @@ SlideRenderer::SlideRenderer (const Reference<XComponentContext>& rxContext)
     (void)rxContext;
 }
 
-
-
-
 SlideRenderer::~SlideRenderer (void)
 {
 }
 
-
-
-
 void SAL_CALL SlideRenderer::disposing (void)
 {
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -101,9 +82,6 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
     }
 }
 
-
-
-
 //----- XSlideRenderer --------------------------------------------------------
 
 Reference<awt::XBitmap> SlideRenderer::createPreview (
@@ -118,9 +96,6 @@ Reference<awt::XBitmap> SlideRenderer::createPreview (
     return VCLUnoHelper::CreateBitmap(
         CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
 }
-
-
-
 
 Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     const Reference<drawing::XDrawPage>& rxSlide,
@@ -141,9 +116,6 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     else
         return NULL;
 }
-
-
-
 
 awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
     double nSlideAspectRatio,
@@ -167,11 +139,6 @@ awt::Size SAL_CALL SlideRenderer::calculatePreviewSize (
             rMaximalSize.Width,
             sal::static_int_cast<sal_Int32>(rMaximalSize.Width / nSlideAspectRatio));
 }
-
-
-
-
-
 
 BitmapEx SlideRenderer::CreatePreview (
     const Reference<drawing::XDrawPage>& rxSlide,
@@ -230,9 +197,6 @@ BitmapEx SlideRenderer::CreatePreview (
     }
 }
 
-
-
-
 void SlideRenderer::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -242,7 +206,6 @@ void SlideRenderer::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
 
 } } // end of namespace ::sd::presenter
 

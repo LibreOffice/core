@@ -56,13 +56,9 @@
 #include <svl/itempool.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-
 using namespace ::com::sun::star::text;
 
-
-
 namespace sd { namespace sidebar {
-
 
 MasterPagesSelector::MasterPagesSelector (
     ::Window* pParent,
@@ -102,9 +98,6 @@ MasterPagesSelector::MasterPagesSelector (
     mpContainer->AddChangeListener(aChangeListener);
 }
 
-
-
-
 MasterPagesSelector::~MasterPagesSelector (void)
 {
     Clear();
@@ -114,15 +107,9 @@ MasterPagesSelector::~MasterPagesSelector (void)
     mpContainer->RemoveChangeListener(aChangeListener);
 }
 
-
-
-
 void MasterPagesSelector::LateInit (void)
 {
 }
-
-
-
 
 sal_Int32 MasterPagesSelector::GetPreferredWidth (sal_Int32 nHeight)
 {
@@ -131,18 +118,12 @@ sal_Int32 MasterPagesSelector::GetPreferredWidth (sal_Int32 nHeight)
     return PreviewValueSet::GetPreferredWidth (nHeight);
 }
 
-
-
-
 sal_Int32 MasterPagesSelector::GetPreferredHeight (sal_Int32 nWidth)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
     return PreviewValueSet::GetPreferredHeight (nWidth);
 }
-
-
-
 
 Size MasterPagesSelector::GetPreferredSize (void)
 {
@@ -152,9 +133,6 @@ Size MasterPagesSelector::GetPreferredSize (void)
     return Size (nPreferredWidth, nPreferredHeight);
 
 }
-
-
-
 
 void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 {
@@ -183,9 +161,6 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
     maLockedMasterPages.swap(aNewLockList);
 }
 
-
-
-
 void MasterPagesSelector::Fill (void)
 {
     ::std::auto_ptr<ItemList> pItemList (new ItemList());
@@ -196,16 +171,10 @@ void MasterPagesSelector::Fill (void)
     UpdateItemList(pItemList);
 }
 
-
-
-
 ResId MasterPagesSelector::GetContextMenuResId (void) const
 {
     return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
 }
-
-
-
 
 IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
 {
@@ -216,9 +185,6 @@ IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
 
     return 0;
 }
-
-
-
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
 {
@@ -241,9 +207,6 @@ IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
     }
     return 0;
 }
-
-
-
 
 void MasterPagesSelector::Command (const CommandEvent& rEvent)
 {
@@ -285,9 +248,6 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
     }
 }
 
-
-
-
 void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
     // Disable some entries.
@@ -296,9 +256,6 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     else
         rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, false);
 }
-
-
-
 
 IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu)
 {
@@ -312,9 +269,6 @@ IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu)
     ExecuteCommand(pMenu->GetCurItemId());
     return 0;
 }
-
-
-
 
 void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
 {
@@ -383,18 +337,12 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
     }
 }
 
-
-
-
 IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent*, pEvent)
 {
     if (pEvent)
         NotifyContainerChangeEvent(*pEvent);
     return 0;
 }
-
-
-
 
 SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
 {
@@ -409,9 +357,6 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
     }
     return pMasterPage;
 }
-
-
-
 
 /** Assemble a list of all slides of the document and pass it to
     AssignMasterPageToPageList().
@@ -443,9 +388,6 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     AssignMasterPageToPageList(pMasterPage, pPageList);
 }
 
-
-
-
 /** Assemble a list of the currently selected slides (selected in a visible
     slide sorter) and pass it to AssignMasterPageToPageList().
 */
@@ -474,18 +416,12 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
     pSlideSorter->SetPageSelection(pPageSelection);
 }
 
-
-
-
 void MasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const ::sd::slidesorter::SharedPageSelection& rPageList)
 {
     DocumentHelper::AssignMasterPageToPageList(mrDocument, pMasterPage, rPageList);
 }
-
-
-
 
 void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent)
 {
@@ -529,18 +465,12 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
    }
 }
 
-
-
-
 MasterPagesSelector::UserData* MasterPagesSelector::CreateUserData (
     int nIndex,
     MasterPageContainer::Token aToken) const
 {
     return new UserData(nIndex,aToken);
 }
-
-
-
 
 MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) const
 {
@@ -551,9 +481,6 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     else
         return NULL;
 }
-
-
-
 
 void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
 {
@@ -568,39 +495,24 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
     }
 }
 
-
-
-
 bool MasterPagesSelector::IsResizable (void)
 {
     return false;
 }
-
-
-
 
 ::Window* MasterPagesSelector::GetWindow (void)
 {
     return this;
 }
 
-
-
-
 sal_Int32 MasterPagesSelector::GetMinimumWidth (void)
 {
     return mpContainer->GetPreviewSizePixel().Width() + 2*3;
 }
 
-
-
-
 void MasterPagesSelector::UpdateSelection (void)
 {
 }
-
-
-
 
 void MasterPagesSelector::SetItem (
     sal_uInt16 nIndex,
@@ -648,9 +560,6 @@ void MasterPagesSelector::SetItem (
 
 }
 
-
-
-
 void MasterPagesSelector::AddTokenToIndexEntry (
     sal_uInt16 nIndex,
     MasterPageContainer::Token aToken)
@@ -659,9 +568,6 @@ void MasterPagesSelector::AddTokenToIndexEntry (
 
     maTokenToValueSetIndex[aToken] = nIndex;
 }
-
-
-
 
 void MasterPagesSelector::RemoveTokenToIndexEntry (
     sal_uInt16 nIndex,
@@ -682,9 +588,6 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
         }
     }
 }
-
-
-
 
 void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 {
@@ -726,9 +629,6 @@ void MasterPagesSelector::UpdateAllPreviews (void)
     PreviewValueSet::Rearrange(true);
 }
 
-
-
-
 void MasterPagesSelector::ClearPageSet (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -742,18 +642,12 @@ void MasterPagesSelector::ClearPageSet (void)
     PreviewValueSet::Clear();
 }
 
-
-
-
 void MasterPagesSelector::SetHelpId( const OString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
     PreviewValueSet::SetHelpId( aId );
 }
-
-
-
 
 sal_Int32 MasterPagesSelector::GetIndexForToken (MasterPageContainer::Token aToken) const
 {
@@ -766,18 +660,12 @@ sal_Int32 MasterPagesSelector::GetIndexForToken (MasterPageContainer::Token aTok
         return -1;
 }
 
-
-
-
 void MasterPagesSelector::Clear (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
     ClearPageSet();
 }
-
-
-
 
 void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
 {
@@ -793,8 +681,6 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
         }
     }
 }
-
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList)
@@ -835,8 +721,6 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
         mxSidebar->requestLayout();
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
-
-
 
 css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth (const sal_Int32 nWidth)
 {

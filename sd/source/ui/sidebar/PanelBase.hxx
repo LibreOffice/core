@@ -33,11 +33,7 @@ namespace sd {
     class ViewShellBase;
 }
 
-
-
-
 namespace sd { namespace sidebar {
-
 
 class PanelBase
     : public Control,

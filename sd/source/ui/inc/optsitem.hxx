@@ -56,7 +56,6 @@ private:
 
     const SdOptionsGeneric& mrParent;
 
-
 public:
 
     SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
@@ -109,7 +108,6 @@ public:
     void                    EnableModify( bool bModify ) { mbEnableModify = bModify; }
 
     void                    Store();
-
 
     static bool             isMetricSystem();
 };

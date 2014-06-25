@@ -24,7 +24,6 @@
 
 namespace sd { namespace sidebar {
 
-
 CustomAnimationPanel::CustomAnimationPanel (
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
@@ -40,15 +39,9 @@ CustomAnimationPanel::CustomAnimationPanel (
 #endif
 }
 
-
-
-
 CustomAnimationPanel::~CustomAnimationPanel (void)
 {
 }
-
-
-
 
 ::Window* CustomAnimationPanel::CreateWrappedControl (
     ::Window* pParentWindow,
@@ -57,16 +50,12 @@ CustomAnimationPanel::~CustomAnimationPanel (void)
     return createCustomAnimationPanel(pParentWindow, rViewShellBase, mxFrame);
 }
 
-
-
-
 css::ui::LayoutSize CustomAnimationPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
     Window *pControl = mpWrappedControl.get();
     sal_Int32 nMinimumHeight = pControl ? pControl->get_preferred_size().Height() : 0;
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }
-
 
 } } // end of namespace sd::sidebar
 

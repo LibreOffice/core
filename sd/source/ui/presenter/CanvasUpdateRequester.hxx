@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_CANVASUPDATEREQUESTER_HXX
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_CANVASUPDATEREQUESTER_HXX
 
-
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

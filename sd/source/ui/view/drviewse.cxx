@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -835,7 +834,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 nFormat = pIsActive->GetValue();
             }
 
-
             if( nFormat && aDataHelper.GetTransferable().is() )
             {
                 sal_Int8 nAction = DND_ACTION_COPY;
@@ -1013,7 +1011,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-
         case SID_CLOSE_MASTER_VIEW:
         {
             Broadcast (
@@ -1034,11 +1031,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     SFX_CALLMODE_ASYNCHRON);
             }
 
-
             rReq.Done();
         }
         break;
-
 
         case SID_RULER:
         {
@@ -1493,7 +1488,6 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
     }
 }
 
-
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
                                    const OUString& rTarget, const Point* pPos)
 {
@@ -1551,7 +1545,6 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->Init( nOutlMode );
     }
 }
-
 
 void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                                     const OUString& rTarget, const Point* pPos)

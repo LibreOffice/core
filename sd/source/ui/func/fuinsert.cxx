@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuinsert.hxx"
 
 #include <comphelper/storagehelper.hxx>
@@ -179,7 +178,6 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
     }
 }
 
-
 FuInsertClipboard::FuInsertClipboard (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -247,8 +245,6 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
         }
     }
 }
-
-
 
 FuInsertOLE::FuInsertOLE (
     ViewShell* pViewSh,
@@ -679,8 +675,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         }
     }
 }
-
-
 
 FuInsertAVMedia::FuInsertAVMedia(
     ViewShell* pViewSh,

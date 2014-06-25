@@ -66,13 +66,9 @@ SdDisplay::SdDisplay( Window* pWin, SdResId Id ) :
     SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
 
-
-
 SdDisplay::~SdDisplay()
 {
 }
-
-
 
 void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
 {
@@ -87,8 +83,6 @@ void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
         aBitmapEx.Erase(aFillColor);
     }
 }
-
-
 
 void SdDisplay::Paint( const Rectangle& )
 {
@@ -105,8 +99,6 @@ void SdDisplay::Paint( const Rectangle& )
 
     aBitmapEx.Draw( this, aPt, aBmpSize );
 }
-
-
 
 void SdDisplay::SetScale( const Fraction& rFrac )
 {
@@ -156,7 +148,6 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
         aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
         aBtnHelp            ( this, SdResId( BTN_HELP ) ),
-
 
         pWin                ( pParent ),
         m_nCurrentFrame     ( EMPTY_FRAMELIST ),
@@ -216,8 +207,6 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     aBtnRemoveAll.SetAccessibleRelationMemberOf( &aGrpBitmap );
 }
 
-
-
 AnimationWindow::~AnimationWindow()
 {
     delete pControllerItem;
@@ -234,8 +223,6 @@ AnimationWindow::~AnimationWindow()
     delete pMyDoc;
 }
 
-
-
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
 {
     m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
@@ -244,15 +231,11 @@ IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
     return( 0L );
 }
 
-
-
 IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
 {
     bMovie = false;
     return( 0L );
 }
-
-
 
 IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
@@ -373,8 +356,6 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     return( 0L );
 }
 
-
-
 IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 {
     m_nCurrentFrame =
@@ -383,8 +364,6 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 
     return( 0L );
 }
-
-
 
 IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 {
@@ -410,8 +389,6 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     return( 0L );
 }
 
-
-
 IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 {
     bAllObjects = pBtn == &aBtnGetAllObjects;
@@ -423,8 +400,6 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
         SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
     return( 0L );
 }
-
-
 
 IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 {
@@ -501,8 +476,6 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     return( 0L );
 }
 
-
-
 IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 {
     // Code now in CreatePresObj()
@@ -512,8 +485,6 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
         SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
     return( 0L );
 }
-
-
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 {
@@ -531,8 +502,6 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
     return( 0L );
 }
 
-
-
 IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
     sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
@@ -543,8 +512,6 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 
     return( 0L );
 }
-
-
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 {
@@ -575,7 +542,6 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             pObject->SingleObjectPainter( aVD );
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
-
 
         aCtlDisplay.SetBitmapEx( &aBmp );
     }
@@ -648,8 +614,6 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     ClickRbtHdl( NULL );
 }
 
-
-
 void AnimationWindow::ResetAttrs()
 {
     aRbtGroup.Check();
@@ -659,8 +623,6 @@ void AnimationWindow::ResetAttrs()
 
     UpdateControl();
 }
-
-
 
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
@@ -680,8 +642,6 @@ void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
             return;
     }
 }
-
-
 
 Fraction AnimationWindow::GetScale()
 {
@@ -707,8 +667,6 @@ Fraction AnimationWindow::GetScale()
     }
     return( aFrac );
 }
-
-
 
 void AnimationWindow::Resize()
 {
@@ -751,7 +709,6 @@ void AnimationWindow::Resize()
         aLbAdjustment.Hide();
         aBtnCreateGroup.Hide();
         aGrpAnimation.Hide();
-
 
         aBtnFirst.SetPosPixel( aBtnFirst.GetPosPixel() + aPt );
         aBtnReverse.SetPosPixel( aBtnReverse.GetPosPixel() + aPt );
@@ -808,8 +765,6 @@ void AnimationWindow::Resize()
     SfxDockingWindow::Resize();
 }
 
-
-
 bool AnimationWindow::Close()
 {
     if( maPlayLock.isLocked() )
@@ -829,14 +784,10 @@ bool AnimationWindow::Close()
     }
 }
 
-
-
 void AnimationWindow::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo ) ;
 }
-
-
 
 void AnimationWindow::AddObj (::sd::View& rView )
 {
@@ -1018,8 +969,6 @@ void AnimationWindow::AddObj (::sd::View& rView )
         UpdateControl();
     }
 }
-
-
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
@@ -1268,8 +1217,6 @@ AnimationControllerItem::AnimationControllerItem(
 {
 }
 
-
-
 void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
@@ -1285,7 +1232,6 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
         }
     }
 }
-
 
 } // end of namespace sd
 

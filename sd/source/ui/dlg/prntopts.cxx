@@ -72,13 +72,9 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
     m_pCbxBack->SetAccessibleRelationLabeledBy( m_pRbtBooklet );
 }
 
-
-
 SdPrintOptions::~SdPrintOptions()
 {
 }
-
-
 
 bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 {
@@ -130,8 +126,6 @@ bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
     }
     return false;
 }
-
-
 
 void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
 {
@@ -188,15 +182,11 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     ClickBookletHdl( NULL );
 }
 
-
-
 SfxTabPage* SdPrintOptions::Create( Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
     return( new SdPrintOptions( pWindow, *rOutAttrs ) );
 }
-
-
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 {
@@ -207,8 +197,6 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
     updateControls();
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl)
 {

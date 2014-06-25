@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsClipboard.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -75,7 +74,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <boost/bind.hpp>
-
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -143,9 +141,6 @@ private:
     ::boost::shared_ptr<ViewShell> mpMainViewShell;
 };
 
-
-
-
 Clipboard::Clipboard (SlideSorter& rSlideSorter)
     : ViewClipboard(rSlideSorter.GetView()),
       mrSlideSorter(rSlideSorter),
@@ -159,17 +154,11 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 Clipboard::~Clipboard (void)
 {
     if (mnDragFinishedUserEventId != 0)
         Application::RemoveUserEvent(mnDragFinishedUserEventId);
 }
-
-
-
 
 /** With the current implementation the forwarded calls to the current
     function will come back eventually to call the local Do(Cut|Copy|Paste)
@@ -228,9 +217,6 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
     }
 }
 
-
-
-
 void Clipboard::DoCut (::Window* pWindow)
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
@@ -240,9 +226,6 @@ void Clipboard::DoCut (::Window* pWindow)
     }
 }
 
-
-
-
 void Clipboard::DoDelete (::Window* )
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 1)
@@ -251,16 +234,10 @@ void Clipboard::DoDelete (::Window* )
     }
 }
 
-
-
-
 void Clipboard::DoCopy (::Window* pWindow )
 {
     CreateSlideTransferable( pWindow, false );
 }
-
-
-
 
 void Clipboard::DoPaste (::Window* pWindow)
 {
@@ -281,9 +258,6 @@ void Clipboard::DoPaste (::Window* pWindow)
         }
     }
 }
-
-
-
 
 sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
 {
@@ -324,9 +298,6 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
 
     return nInsertPosition;
 }
-
-
-
 
 sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
 {
@@ -383,9 +354,6 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     return nInsertPageCount;
 }
 
-
-
-
 void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
 {
     // Select the newly inserted pages.  That are the nInsertPageCount pages
@@ -407,9 +375,6 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
         }
     }
 }
-
-
-
 
 void Clipboard::CreateSlideTransferable (
     ::Window* pWindow,
@@ -504,9 +469,6 @@ void Clipboard::CreateSlideTransferable (
     }
 }
 
-
-
-
 ::boost::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData (SdTransferable* pTransferable)
 {
     do
@@ -592,9 +554,6 @@ void Clipboard::CreateSlideTransferable (
     return ::boost::shared_ptr<SdTransferable::UserData>();
 }
 
-
-
-
 void Clipboard::StartDrag (
     const Point& rPosition,
     ::Window* pWindow)
@@ -609,9 +568,6 @@ void Clipboard::StartDrag (
         InsertionIndicatorHandler::UnknownMode);
 }
 
-
-
-
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     if (mnDragFinishedUserEventId == 0)
@@ -621,9 +577,6 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
             reinterpret_cast<void*>(nDropAction));
     }
 }
-
-
-
 
 IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
 {
@@ -657,9 +610,6 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
 
     return 1;
 }
-
-
-
 
 sal_Int8 Clipboard::AcceptDrop (
     const AcceptDropEvent& rEvent,
@@ -728,9 +678,6 @@ sal_Int8 Clipboard::AcceptDrop (
 
     return nAction;
 }
-
-
-
 
 sal_Int8 Clipboard::ExecuteDrop (
     const ExecuteDropEvent& rEvent,
@@ -836,9 +783,6 @@ sal_Int8 Clipboard::ExecuteDrop (
     return nResult;
 }
 
-
-
-
 bool Clipboard::IsInsertionTrivial (
     SdTransferable* pTransferable,
     const sal_Int8 nDndAction) const
@@ -851,9 +795,6 @@ bool Clipboard::IsInsertionTrivial (
     return mrController.GetInsertionIndicatorHandler()->IsInsertionTrivial(nDndAction);
 }
 
-
-
-
 void Clipboard::Abort (void)
 {
     if (mpSelectionObserverContext)
@@ -862,9 +803,6 @@ void Clipboard::Abort (void)
         mpSelectionObserverContext.reset();
     }
 }
-
-
-
 
 sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
@@ -880,9 +818,6 @@ sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
     else
         return 0;
 }
-
-
-
 
 sal_uInt16 Clipboard::InsertSlides (
     const SdTransferable& rTransferable,
@@ -906,9 +841,6 @@ sal_uInt16 Clipboard::InsertSlides (
     return nInsertedPageCount;
 }
 
-
-
-
 Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
 {
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
@@ -930,9 +862,6 @@ Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
 
     return DT_SHAPE;
 }
-
-
-
 
 sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     DropCommand eCommand,
@@ -998,8 +927,6 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
 
     return nResult;
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

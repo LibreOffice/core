@@ -26,8 +26,6 @@
 
 class SdDrawDocument;
 
-
-
 class SdInsertPagesObjsDlg : public ModalDialog
 {
 private:
@@ -58,7 +56,6 @@ public:
     bool        IsLink();
     bool        IsRemoveUnnessesaryMasterPages() const;
 };
-
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_INSPAGOB_HXX
 

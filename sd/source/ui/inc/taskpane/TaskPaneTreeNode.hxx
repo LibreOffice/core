@@ -39,7 +39,6 @@ enum TreeNodeStateChangeEventId {
     EID_SHOWING_STATE_CHANGED
 };
 
-
 /** Base class for all members of the object hierarchy that makes up the
     tool panel. In the task pane, there are multiple hierarchies of such nodes,
     with every panel having an own tree. The pane node is the root of the tree, below
@@ -176,9 +175,6 @@ private:
     typedef ::std::vector<Link> StateChangeListenerContainer;
     StateChangeListenerContainer maStateChangeListeners;
 };
-
-
-
 
 /** Objects of this class are sent to listeners to notify them about state
     changes of a tree node.

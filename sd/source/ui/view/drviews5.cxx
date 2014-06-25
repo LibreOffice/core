@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include "PresentationViewShell.hxx"
 #include <editeng/outliner.hxx>
@@ -87,9 +86,6 @@ void DrawViewShell::ModelHasChanged()
     }
 }
 
-
-
-
 void DrawViewShell::Resize (void)
 {
     ViewShell::Resize();
@@ -106,9 +102,6 @@ void DrawViewShell::Resize (void)
     }
 }
 
-
-
-
 void DrawViewShell::ArrangeGUIElements (void)
 {
     // Retrieve the current size (thickness) of the scroll bars.  That is
@@ -120,7 +113,6 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     Point aHPos = maViewPos;
     aHPos.Y() += maViewSize.Height();
-
 
     ViewShell::ArrangeGUIElements ();
 
@@ -248,7 +240,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if( nTmp != 9 )
         mpDrawView->SetMarkHdlSizePixel( 9 );
 
-
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
     if (pPageView)
     {
@@ -318,7 +309,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         mpDrawView->SetFrameDragSingles( pView->IsFrameDragSingles() );
 }
-
 
 /**
  * Apply data of the current view on the FrameView
@@ -405,8 +395,6 @@ void DrawViewShell::WriteFrameViewData()
       mpFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
 }
 
-
-
 void DrawViewShell::PrePaint()
 {
     mpDrawView->PrePaint();
@@ -462,15 +450,12 @@ void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
 
-
 void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
         pFormShell->PrepareClose(false);
 }
-
-
 
 void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
 {
@@ -563,9 +548,6 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
     rController.FireVisAreaChanged (rRect);
 }
 
-
-
-
 /** If there is a valid controller then create a new instance of
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
@@ -593,9 +575,6 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
     return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>();
 }
 
-
-
-
 int DrawViewShell::GetActiveTabLayerIndex (void) const
 {
     const LayerTabBar* pBar
@@ -605,9 +584,6 @@ int DrawViewShell::GetActiveTabLayerIndex (void) const
     else
         return -1;
 }
-
-
-
 
 void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 {
@@ -629,20 +605,10 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
     }
 }
 
-
-
-
-
-
-
-
 LayerTabBar* DrawViewShell::GetLayerTabControl (void)
 {
     return mpLayerTabBar.get();
 }
-
-
-
 
 int DrawViewShell::GetTabLayerCount (void) const
 {
@@ -653,7 +619,6 @@ int DrawViewShell::GetTabLayerCount (void) const
     else
         return 0;
 }
-
 
 } // end of namespace sd
 

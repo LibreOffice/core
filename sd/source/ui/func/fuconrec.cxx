@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconrec.hxx"
 #include <svx/svdpagv.hxx>
-
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -67,7 +65,6 @@
 namespace sd {
 
 TYPEINIT1( FuConstructRectangle, FuConstruct );
-
 
 FuConstructRectangle::FuConstructRectangle (
     ViewShell*  pViewSh,
@@ -180,7 +177,6 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
     }
 }
 
-
 bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -220,12 +216,10 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
-
 
 bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -281,7 +275,6 @@ bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
     return FuConstruct::KeyInput(rKEvt);
 }
-
 
 void FuConstructRectangle::Activate()
 {
@@ -384,7 +377,6 @@ void FuConstructRectangle::Activate()
     FuConstruct::Activate();
 }
 
-
 void FuConstructRectangle::Deactivate()
 {
     if( nSlotId == SID_TOOL_CONNECTOR               ||
@@ -427,7 +419,6 @@ void FuConstructRectangle::Deactivate()
     }
     FuConstruct::Deactivate();
 }
-
 
 /**
  * set attribute for the object to be created
@@ -519,7 +510,6 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     {
     }
 }
-
 
 /**
  * set line starts and ends for the object to be created

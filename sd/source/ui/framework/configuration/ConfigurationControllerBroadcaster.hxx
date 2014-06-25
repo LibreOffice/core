@@ -131,9 +131,6 @@ private:
         const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 };
 
-
-
-
 } } // end of namespace sd::framework
 
 #endif

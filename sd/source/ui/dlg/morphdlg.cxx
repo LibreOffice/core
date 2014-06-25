@@ -89,8 +89,6 @@ void MorphDlg::LoadSettings()
     m_pCbxAttributes->Check( bAttrib );
 }
 
-
-
 void MorphDlg::SaveSettings() const
 {
     SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( OUString(SD_OPTION_MORPHING) ,

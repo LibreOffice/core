@@ -28,7 +28,6 @@
 
 #include <boost/enable_shared_from_this.hpp>
 
-
 class SdPage;
 class SdrPage;
 
@@ -135,7 +134,6 @@ private:
     bool mbIsCurrent : 1;
     bool mbIsMouseOver : 1;
     bool mbHasTransition : 1;
-
 
     // Do not use the copy constructor operator.  It is not implemented.
     PageDescriptor (const PageDescriptor& rDescriptor);

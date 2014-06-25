@@ -34,8 +34,6 @@ namespace sd {
 class ViewShellBase;
 }
 
-
-
 namespace sd { namespace framework {
 
 namespace {
@@ -43,7 +41,6 @@ namespace {
         css::drawing::framework::XConfigurationChangeListener
         > ToolBarModuleInterfaceBase;
 }
-
 
 /** This module is responsible for locking the ToolBarManager during
     configuration updates and for triggering ToolBarManager updates.
@@ -62,7 +59,6 @@ public:
     virtual ~ToolBarModule (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
 
     // XConfigurationChangeListener
 

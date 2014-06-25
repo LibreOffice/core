@@ -81,7 +81,6 @@ static sal_uInt16 SidArray[] = {
 
 TYPEINIT1( FuOutlineText, FuOutline );
 
-
 FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
                              ::sd::View* pView, SdDrawDocument* pDoc,
                              SfxRequest& rReq)
@@ -95,7 +94,6 @@ rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* 
     xFunc->DoExecute( rReq );
     return xFunc;
 }
-
 
 bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -116,7 +114,6 @@ bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-
 bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
     bool bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
@@ -128,7 +125,6 @@ bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 
     return (bReturn);
 }
-
 
 bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -240,14 +236,10 @@ void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
         pOutlineViewShell->UpdatePreview (pOutlineViewShell->GetActualPage());
 }
 
-
-
-
 void FuOutlineText::Activate()
 {
     FuOutline::Activate();
 }
-
 
 void FuOutlineText::Deactivate()
 {
@@ -291,8 +283,6 @@ void FuOutlineText::DoPasteUnformatted()
            pOutlineView->GetViewByWindow(mpWindow)->InsertText(aText);
    }
 }
-
-
 
 } // end of namespace sd
 

@@ -31,7 +31,6 @@ namespace sd {
 
 TYPEINIT1( FuConnectionDlg, FuPoor );
 
-
 FuConnectionDlg::FuConnectionDlg (
     ViewShell* pViewSh,
     ::sd::Window* pWin,

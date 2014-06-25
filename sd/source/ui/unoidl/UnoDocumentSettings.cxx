@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vector>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1183,7 +1182,6 @@ void SAL_CALL DocumentSettings::release(  ) throw ()
 {
     WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >::release();
 }
-
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL DocumentSettings::getPropertySetInfo(  ) throw(RuntimeException, std::exception)

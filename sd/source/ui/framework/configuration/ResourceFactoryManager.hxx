@@ -115,7 +115,6 @@ private:
         throw (css::uno::RuntimeException);
 };
 
-
 } } // end of namespace sd::framework
 
 #endif

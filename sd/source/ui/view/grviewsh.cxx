@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GraphicViewShell.hxx"
 #include "LayerTabBar.hxx"
 #include "FrameView.hxx"
@@ -31,7 +30,6 @@
 namespace sd {
 
 static const int TABCONTROL_INITIAL_SIZE = 350;
-
 
 GraphicViewShell::GraphicViewShell (
     SfxViewFrame* pFrame,
@@ -52,9 +50,6 @@ GraphicViewShell::~GraphicViewShell (void)
 {
 }
 
-
-
-
 void GraphicViewShell::ConstructGraphicViewShell(void)
 {
     meShellType = ST_DRAW;
@@ -67,9 +62,6 @@ void GraphicViewShell::ConstructGraphicViewShell(void)
         mpLayerTabBar->Show();
 }
 
-
-
-
 void GraphicViewShell::ChangeEditMode (
     EditMode eMode,
     bool )
@@ -79,9 +71,6 @@ void GraphicViewShell::ChangeEditMode (
     // said. (We have to change the callers behaviour, of course.)
     DrawViewShell::ChangeEditMode (eMode, true);
 }
-
-
-
 
 void GraphicViewShell::ArrangeGUIElements (void)
 {
@@ -116,9 +105,6 @@ void GraphicViewShell::ArrangeGUIElements (void)
 
     DrawViewShell::ArrangeGUIElements();
 }
-
-
-
 
 IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
 {

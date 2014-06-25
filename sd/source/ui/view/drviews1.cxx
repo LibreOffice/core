@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
@@ -112,7 +111,6 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 
     ViewShell::UIDeactivated(pCli);
 }
-
 
 void DrawViewShell::Deactivate(bool bIsMDIActivate)
 {
@@ -468,11 +466,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     }
 }
 
-
-
-
-
-
 /**
  * Generate horizontal ruler
  */
@@ -723,7 +716,6 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
 
     return 0;
 }
-
 
 /**
  * Activate OLE-object
@@ -1100,7 +1092,6 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
     return (bOK);
 }
-
 
 /**
  * Check if page change is allowed

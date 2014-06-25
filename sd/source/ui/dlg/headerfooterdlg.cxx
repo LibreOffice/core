@@ -42,7 +42,6 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 
-
 // preview control for presentation layout
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
@@ -87,9 +86,7 @@ public:
 
 }
 
-
 // tab page for slide & header'n'notes
-
 
 namespace sd
 {
@@ -166,10 +163,7 @@ public:
 
 }
 
-
-
 using namespace ::sd;
-
 
 HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage ) :
         TabDialog ( pParent, "HeaderFooterDialog", "modules/simpress/ui/headerfooterdialog.ui" ),
@@ -244,15 +238,11 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
 }
 
-
-
 HeaderFooterDialog::~HeaderFooterDialog()
 {
     delete mpSlideTabPage;
     delete mpNotesHandoutsTabPage;
 }
-
-
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -265,14 +255,10 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
 {
     return sal_True;
 }
-
-
 
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
 {
@@ -280,23 +266,17 @@ IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
 {
     Apply();
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
 {
     Cancel();
     return 0;
 }
-
-
 
 short HeaderFooterDialog::Execute()
 {
@@ -306,16 +286,12 @@ short HeaderFooterDialog::Execute()
     return nRet;
 }
 
-
-
 void HeaderFooterDialog::ApplyToAll()
 {
     sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
     apply( true, tabId == mnSlidesId );
     EndDialog(1);
 }
-
-
 
 void HeaderFooterDialog::Apply()
 {
@@ -324,14 +300,10 @@ void HeaderFooterDialog::Apply()
     EndDialog(1);
 }
 
-
-
 void HeaderFooterDialog::Cancel()
 {
     EndDialog();
 }
-
-
 
 void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 {
@@ -411,15 +383,11 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
 }
 
-
-
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
 {
     pUndoGroup->AddAction(new SdHeaderFooterUndoAction(mpDoc, pPage, rNewSettings ));
     pPage->setHeaderFooterSettings( rNewSettings );
 }
-
-
 
 HeaderFooterTabPage::HeaderFooterTabPage( ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
@@ -481,22 +449,16 @@ HeaderFooterTabPage::HeaderFooterTabPage( ::Window* pWindow, SdDrawDocument* pDo
     FillFormatList(SVXDATEFORMAT_A);
 }
 
-
 HeaderFooterTabPage::~HeaderFooterTabPage()
 {
 }
-
-
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
     FillFormatList( (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() ) );
 
-
     return 0L;
 }
-
-
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )
 {
@@ -522,8 +484,6 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
         }
     }
 }
-
-
 
 void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle )
 {
@@ -559,8 +519,6 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     update();
 }
 
-
-
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
     rSettings.mbDateTimeVisible = mpCBDateTime->IsChecked();
@@ -582,8 +540,6 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rNotOnTitle = mpCBNotOnTitle->IsChecked();
 }
 
-
-
 void HeaderFooterTabPage::update()
 {
     mpRBDateTimeFixed->Enable( mpCBDateTime->IsChecked() );
@@ -603,16 +559,12 @@ void HeaderFooterTabPage::update()
     mpCTPreview->update( aSettings );
 }
 
-
-
 IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
 {
     update();
 
     return 0;
 }
-
-
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet )
 {
@@ -644,8 +596,6 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         }
     }
 }
-
-
 
 void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage )
 {
@@ -688,7 +638,6 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                 }
             }
 
-
             if( aFieldInfo.pFieldItem != NULL )
             {
                 if( bSet )
@@ -722,15 +671,11 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-
-
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
     : Control(pParent)
     , mpMaster(NULL)
 {
 }
-
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Window *pParent, VclBuilder::stringmap & )
 {
@@ -746,8 +691,6 @@ Size PresLayoutPreview::GetOptimalSize() const
     return LogicToPixel(Size(80, 80), MAP_APPFONT);
 }
 
-
-
 void PresLayoutPreview::init( SdPage *pMaster )
 {
     mpMaster = pMaster;
@@ -759,8 +702,6 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
     maSettings = rSettings;
     Invalidate();
 }
-
-
 
 void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
@@ -806,8 +747,6 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
         aOut.DrawPolyLine(aGeometry.getB2DPolygon(a));
     }
 }
-
-
 
 void PresLayoutPreview::Paint( const Rectangle& )
 {

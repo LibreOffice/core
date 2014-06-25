@@ -113,7 +113,6 @@ static sal_uInt16 const pAllowed[] =
     SID_NAVIGATOR_OBJECT                      //    27293
 };
 
-
 class AnimationSlideController
 {
 public:
@@ -194,7 +193,6 @@ bool AnimationSlideController::isVisibleSlideNumber( sal_Int32 nSlideNumber ) co
     else
         return false;
 }
-
 
 void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >& xPreviewNode )
 {
@@ -398,7 +396,6 @@ sal_Int32 AnimationSlideController::getNextSlideNumber() const
     }
 }
 
-
 bool AnimationSlideController::nextSlide()
 {
     return jumpToSlideIndex( getNextSlideIndex() );
@@ -491,10 +488,6 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             xShow->displaySlide( xSlide, xDrawPages, xAnimNode, aPropertySequence );
     }
 }
-
-
-
-
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, ::Window* pParentWindow )
 : SlideshowImplBase( m_aMutex )
@@ -908,8 +901,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             mbRehearseTimings = pPresSettings->mbRehearseTimings;
         }
 
-
-
         OUString  aPresSlide( maPresSettings.maPresPage );
         SdPage* pStartPage = mpViewShell->GetActualPage();
         bool    bStartWithActualSlide =  pStartPage;
@@ -1167,7 +1158,6 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
         mxListenerProxy->addAsSlideShowListener();
 
-
         NotifyDocumentEvent( mpDoc, "OnStartPresentation");
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
 
@@ -1222,23 +1212,17 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException, std::exception)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->addSlideShowListener( xListener );
 }
 
-
-
 void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideShowListener >& xListener ) throw (RuntimeException, std::exception)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->removeSlideShowListener( xListener );
 }
-
-
 
 void SlideshowImpl::slideEnded(const bool bReverse)
 {
@@ -1247,8 +1231,6 @@ void SlideshowImpl::slideEnded(const bool bReverse)
     else
         gotoNextSlide();
 }
-
-
 
 void SlideshowImpl::removeShapeEvents()
 {
@@ -1275,8 +1257,6 @@ void SlideshowImpl::removeShapeEvents()
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
-
-
 
 void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
 {
@@ -1310,8 +1290,6 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
-
-
 
 void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception )
 {
@@ -1389,8 +1367,6 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
     }
 }
 
-
-
 void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 {
     stopSound();
@@ -1420,8 +1396,6 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
     }
 }
 
-
-
 void SlideshowImpl::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)
@@ -1435,8 +1409,6 @@ void SlideshowImpl::endPresentation()
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
 
-
-
 IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
 {
     mnEndShowEvent = 0;
@@ -1445,8 +1417,6 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
         mxPresentation->end();
     return 0;
 }
-
-
 
 void SAL_CALL SlideshowImpl::pause() throw (RuntimeException, std::exception)
 {
@@ -1473,8 +1443,6 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException, std::exception)
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
-
-
 
 void SAL_CALL SlideshowImpl::resume() throw (RuntimeException, std::exception)
 {
@@ -1513,15 +1481,11 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException, std::exception)
 #endif
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::isPaused() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbIsPaused;
 }
-
-
 
 void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeException, std::exception)
 {
@@ -1536,9 +1500,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeExcep
     }
 }
 
-
 // XShapeEventListener
-
 
 void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& /* aOriginalEvent */ )
 {
@@ -1658,8 +1620,6 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     }
 }
 
-
-
 sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
 {
     bool bIsMasterPage;
@@ -1684,8 +1644,6 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     return ( nPgNum - 1) >> 1;
 }
 
-
-
 void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
 {
     OUString aBookmark( aHyperLink );
@@ -1702,8 +1660,6 @@ void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (Runtim
     mpDocSh->OpenBookmark( aBookmark );
 }
 
-
-
 void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 {
     if( mpSlideController.get() )
@@ -1714,8 +1670,6 @@ void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
         }
     }
 }
-
-
 
 /** nSlideIndex == -1 displays current slide again */
 void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
@@ -1729,8 +1683,6 @@ void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
     }
 }
 
-
-
 void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
 {
     sal_Int32 nSlideNumber = getSlideNumberForBookmark( sBookmark );
@@ -1738,14 +1690,10 @@ void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
         displaySlideNumber( nSlideNumber );
 }
 
-
-
 sal_Int32 SlideshowImpl::getCurrentSlideNumber()
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
 }
-
-
 
 sal_Int32 SlideshowImpl::getFirstSlideNumber()
 {
@@ -1768,8 +1716,6 @@ sal_Int32 SlideshowImpl::getFirstSlideNumber()
     return nRet;
 }
 
-
-
 sal_Int32 SlideshowImpl::getLastSlideNumber()
 {
     sal_Int32 nRet = 0;
@@ -1791,15 +1737,11 @@ sal_Int32 SlideshowImpl::getLastSlideNumber()
     return nRet;
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbEndless;
 }
-
-
 
 double SlideshowImpl::update()
 {
@@ -1807,16 +1749,12 @@ double SlideshowImpl::update()
     return -1;
 }
 
-
-
 void SlideshowImpl::startUpdateTimer()
 {
     SolarMutexGuard aSolarGuard;
     maUpdateTimer.SetTimeout( 0 );
     maUpdateTimer.Start();
 }
-
-
 
 /** this timer is called 20ms after a new slide was displayed.
     This is used to unfreeze user input that was disabled after
@@ -1828,8 +1766,6 @@ IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
     return 0;
 }
 
-
-
 /** if I catch someone someday who calls this method by hand
     and not by using the timer, I will personaly punish this
     person seriously, even if this person is me.
@@ -1838,9 +1774,6 @@ IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
 {
     return updateSlideShow();
 }
-
-
-
 
 IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
 {
@@ -1857,9 +1790,6 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
     Application::Reschedule(true);
     return updateSlideShow();
 }
-
-
-
 
 sal_Int32 SlideshowImpl::updateSlideShow (void)
 {
@@ -1928,8 +1858,6 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
     }
     return 0;
 }
-
-
 
 bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 {
@@ -2136,8 +2064,6 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-
-
 void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 {
     if( rMEvt.IsRight() && !mnContextMenuEvent )
@@ -2146,8 +2072,6 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
         mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
     }
 }
-
-
 
 IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 {
@@ -2282,8 +2206,6 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
         resume();
     return 0;
 }
-
-
 
 IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
 {
@@ -2439,8 +2361,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-
-
 Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 {
     Reference< XSlideShow > xShow;
@@ -2464,8 +2384,6 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
     return xShow;
 }
-
-
 
 void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 {
@@ -2492,7 +2410,6 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
         if( eMode != AnimationSlideController::CUSTOM )
         {
             sal_Int32 nFirstVisibleSlide = 0;
-
 
             // normal presentation
             if( !rPresSlide.isEmpty() )
@@ -2555,8 +2472,6 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
     }
 }
 
-
-
 typedef sal_uInt16 (*FncGetChildWindowId)();
 
 FncGetChildWindowId aShowChildren[] =
@@ -2603,8 +2518,6 @@ void SlideshowImpl::hideChildWindows()
     }
 }
 
-
-
 void SlideshowImpl::showChildWindows()
 {
     if( ANIMATIONMODE_SHOW == meAnimationMode )
@@ -2623,28 +2536,20 @@ void SlideshowImpl::showChildWindows()
     }
 }
 
-
-
 SfxViewFrame* SlideshowImpl::getViewFrame() const
 {
     return mpViewShell ? mpViewShell->GetViewFrame() : 0;
 }
-
-
 
 SfxDispatcher* SlideshowImpl::getDispatcher() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : 0;
 }
 
-
-
 SfxBindings* SlideshowImpl::getBindings() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : 0;
 }
-
-
 
 void SlideshowImpl::resize( const Size& rSize )
 {
@@ -2671,8 +2576,6 @@ void SlideshowImpl::resize( const Size& rSize )
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
-
-
 
 void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
 {
@@ -2705,8 +2608,6 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
         }
     }
 }
-
-
 
 void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
 {
@@ -2747,8 +2648,6 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -2758,8 +2657,6 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException, std::exceptio
         maDeactivateTimer.Start();
     }
 }
-
-
 
 IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 {
@@ -2783,15 +2680,11 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
     return 0;
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbActive;
 }
-
-
 
 void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 {
@@ -2845,8 +2738,6 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
     }
 }
 
-
-
 void SlideshowImpl::setAutoSaveState( bool bOn)
 {
     try
@@ -2871,8 +2762,6 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     }
 }
 
-
-
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -2888,8 +2777,6 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide() throw (RuntimeE
     return xSlide;
 }
 
-
-
 sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -2904,23 +2791,17 @@ sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex() throw (RuntimeException, s
     }
 }
 
-
-
 sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException, std::exception)
 {
     return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
 }
 
-
 // ::com::sun::star::presentation::XSlideShowController:
-
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount() throw (RuntimeException, std::exception)
 {
     return mpSlideController.get() ? mpSlideController->getSlideIndexCount() : 0;
 }
-
-
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index) throw (RuntimeException, css::lang::IndexOutOfBoundsException, std::exception)
 {
@@ -2936,8 +2817,6 @@ sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop() throw (RuntimeException, std::
     return maPresSettings.mbAlwaysOnTop;
 }
 
-
-
 void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -2948,23 +2827,17 @@ void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways ) throw (RuntimeEx
     }
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::isFullScreen() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbFullScreen;
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::getMouseVisible() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbMouseVisible;
 }
-
-
 
 void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (RuntimeException, std::exception)
 {
@@ -2977,15 +2850,11 @@ void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible ) throw (Runtime
     }
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::getUsePen() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mbUsePen;
 }
-
-
 
 void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeException, std::exception)
 {
@@ -3028,15 +2897,11 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     }
 }
 
-
-
 double SAL_CALL SlideshowImpl::getPenWidth() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mdUserPaintStrokeWidth;
 }
-
-
 
 void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeException, std::exception)
 {
@@ -3045,15 +2910,11 @@ void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth ) throw (RuntimeEx
     setUsePen( true ); // enable pen mode, update color and width
 }
 
-
-
 sal_Int32 SAL_CALL SlideshowImpl::getPenColor() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mnUserPaintColor;
 }
-
-
 
 void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeException, std::exception)
 {
@@ -3062,13 +2923,9 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeExcep
     setUsePen( true ); // enable pen mode, update color
 }
 
-
-
 void SAL_CALL SlideshowImpl::setUseEraser( sal_Bool /*_usepen*/ ) throw (css::uno::RuntimeException)
 {
 }
-
-
 
 void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeException)
 {
@@ -3076,7 +2933,6 @@ void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeExc
     setUsePen( bSwitchPenMode ); // SwitchPen Mode
 
 }
-
 
 void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (css::uno::RuntimeException)
 {
@@ -3096,7 +2952,6 @@ void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (cs
     }
 }
 
-
 void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometry::RealPoint2D& pos ) throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -3114,7 +2969,6 @@ void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometr
             "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
     }
 }
-
 
 void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeException)
 {
@@ -3144,17 +2998,13 @@ void SAL_CALL SlideshowImpl::setEraserMode( bool /*bSwitchEraserMode*/ ) throw (
 {
 }
 
-
 // XSlideShowController Methods
-
 
 sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mxShow.is();
 }
-
-
 
 void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException, std::exception)
 {
@@ -3182,8 +3032,6 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  ) throw (RuntimeException, std::ex
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -3206,8 +3054,6 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  ) throw (RuntimeException, std
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -3228,8 +3074,6 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  ) throw (RuntimeException, std::ex
         }
     }
 }
-
-
 
 void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException, std::exception)
 {
@@ -3302,8 +3146,6 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException, std::exc
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoPreviousSlide(  ) throw (RuntimeException, std::exception)
 {
     gotoPreviousSlide(false);
@@ -3358,8 +3200,6 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -3384,8 +3224,6 @@ void SAL_CALL SlideshowImpl::gotoLastSlide() throw (RuntimeException, std::excep
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -3397,8 +3235,6 @@ void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark ) throw (Ru
     if( nSlideNumber != -1 )
         displaySlideNumber( nSlideNumber );
 }
-
-
 
 void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
     throw(IllegalArgumentException, RuntimeException, std::exception)
@@ -3421,8 +3257,6 @@ void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
     }
 }
 
-
-
 void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -3432,8 +3266,6 @@ void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex ) throw (RuntimeEx
 
     displaySlideIndex( nIndex );
 }
-
-
 
 void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException, std::exception)
 {
@@ -3458,45 +3290,32 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException, std::excepti
     }
 }
 
-
 // XIndexAccess
-
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSlideCount();
 }
 
-
-
 ::com::sun::star::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Any( getSlideByIndex( Index ) );
 }
-
-
 
 ::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDrawPage>::get();
 }
 
-
-
 sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSlideCount() != 0;
 }
 
-
-
 Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeException, std::exception)
 {
     return mxShow;
 }
-
-
-
 
 PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r )
 : PresentationSettings( r )
@@ -3620,11 +3439,7 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
     throw IllegalArgumentException();
 }
 
-
-
-
 // XAnimationListener
-
 
 SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow )
 : maListeners( m_aMutex )
@@ -3633,13 +3448,9 @@ SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowI
 {
 }
 
-
-
 SlideShowListenerProxy::~SlideShowListenerProxy()
 {
 }
-
-
 
 void SlideShowListenerProxy::addAsSlideShowListener()
 {
@@ -3650,8 +3461,6 @@ void SlideShowListenerProxy::addAsSlideShowListener()
     }
 }
 
-
-
 void SlideShowListenerProxy::removeAsSlideShowListener()
 {
     if( mxSlideShow.is() )
@@ -3660,8 +3469,6 @@ void SlideShowListenerProxy::removeAsSlideShowListener()
         mxSlideShow->removeSlideShowListener( xSlideShowListener );
     }
 }
-
-
 
 void SlideShowListenerProxy::addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
@@ -3672,8 +3479,6 @@ void SlideShowListenerProxy::addShapeEventListener( const css::uno::Reference< c
     }
 }
 
-
-
 void SlideShowListenerProxy::removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     if( mxSlideShow.is() )
@@ -3683,21 +3488,15 @@ void SlideShowListenerProxy::removeShapeEventListener( const css::uno::Reference
     }
 }
 
-
-
 void SlideShowListenerProxy::addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
     maListeners.addInterface(xListener);
 }
 
-
-
 void SlideShowListenerProxy::removeSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
     maListeners.removeInterface(xListener);
 }
-
-
 
 void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
 {
@@ -3707,8 +3506,6 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  boost::cref(xNode) ));
 }
 
-
-
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3716,8 +3513,6 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
     if( maListeners.getLength() >= 0 )
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, boost::cref(xNode) ));
 }
-
-
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException, std::exception)
 {
@@ -3727,9 +3522,7 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
 }
 
-
 // ::com::sun::star::presentation::XSlideShowListener:
-
 
 void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -3739,8 +3532,6 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::R
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
 }
 
-
-
 void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3748,8 +3539,6 @@ void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::
     if( maListeners.getLength() >= 0 )
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
 }
-
-
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException, std::exception)
 {
@@ -3759,8 +3548,6 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeEx
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
 }
 
-
-
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3769,8 +3556,6 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun:
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
 }
 
-
-
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3778,8 +3563,6 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun
     if( maListeners.getLength() >= 0 )
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
 }
-
-
 
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException, std::exception)
 {
@@ -3798,8 +3581,6 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
     }
 }
 
-
-
 void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException, std::exception)
 {
     {
@@ -3816,9 +3597,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
     }
 }
 
-
 // XEventListener
-
 
 void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::EventObject& aDisposeEvent ) throw (RuntimeException, std::exception)
 {
@@ -3827,9 +3606,7 @@ void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::E
     mxSlideShow.clear();
 }
 
-
 // XShapeEventListener
-
 
 void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException, std::exception)
 {

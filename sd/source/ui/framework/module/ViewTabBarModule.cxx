@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewTabBarModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -27,7 +26,6 @@
 
 #include "strings.hrc"
 #include "sdresid.hxx"
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,15 +77,9 @@ ViewTabBarModule::ViewTabBarModule (
     }
 }
 
-
-
-
 ViewTabBarModule::~ViewTabBarModule (void)
 {
 }
-
-
-
 
 void SAL_CALL ViewTabBarModule::disposing (void)
 {
@@ -96,9 +88,6 @@ void SAL_CALL ViewTabBarModule::disposing (void)
 
     mxConfigurationController = NULL;
 }
-
-
-
 
 void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -135,9 +124,6 @@ void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
     }
 }
 
-
-
-
 void SAL_CALL ViewTabBarModule::disposing (
     const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
@@ -150,9 +136,6 @@ void SAL_CALL ViewTabBarModule::disposing (
         disposing();
     }
 }
-
-
-
 
 void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 {
@@ -203,9 +186,6 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         }
     }
 }
-
-
-
 
 } } // end of namespace sd::framework
 

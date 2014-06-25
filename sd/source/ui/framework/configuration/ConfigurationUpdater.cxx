@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationUpdater.hxx"
 #include "ConfigurationTracer.hxx"
 #include "ConfigurationClassifier.hxx"
@@ -46,7 +45,6 @@ static const sal_Int32 snNormalTimeoutCountThreshold (5);
 
 namespace sd { namespace framework {
 
-
 //===== ConfigurationUpdaterLock ==============================================
 
 class ConfigurationUpdaterLock
@@ -58,9 +56,6 @@ public:
 private:
     ConfigurationUpdater& mrUpdater;
 };
-
-
-
 
 //===== ConfigurationUpdater ==================================================
 
@@ -87,25 +82,16 @@ ConfigurationUpdater::ConfigurationUpdater (
     SetControllerManager(rxControllerManager);
 }
 
-
-
-
 ConfigurationUpdater::~ConfigurationUpdater (void)
 {
     maUpdateTimer.Stop();
 }
-
-
-
 
 void ConfigurationUpdater::SetControllerManager(
     const Reference<XControllerManager>& rxControllerManager)
 {
     mxControllerManager = rxControllerManager;
 }
-
-
-
 
 void ConfigurationUpdater::RequestUpdate (
     const Reference<XConfiguration>& rxRequestedConfiguration)
@@ -135,13 +121,6 @@ void ConfigurationUpdater::RequestUpdate (
     }
 }
 
-
-
-
-
-
-
-
 bool ConfigurationUpdater::IsUpdatePossible (void)
 {
     return ! mbUpdateBeingProcessed
@@ -150,9 +129,6 @@ bool ConfigurationUpdater::IsUpdatePossible (void)
         && mxRequestedConfiguration.is()
         && mxCurrentConfiguration.is();
 }
-
-
-
 
 void ConfigurationUpdater::UpdateConfiguration (void)
 {
@@ -219,9 +195,6 @@ void ConfigurationUpdater::UpdateConfiguration (void)
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration end");
 }
 
-
-
-
 void ConfigurationUpdater::CleanRequestedConfiguration (void)
 {
     if (mxControllerManager.is())
@@ -240,9 +213,6 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
         }
     }
 }
-
-
-
 
 void ConfigurationUpdater::CheckUpdateSuccess (void)
 {
@@ -265,9 +235,6 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
         mnFailedUpdateCount = 0;
     }
 }
-
-
-
 
 void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifier)
 {
@@ -308,9 +275,6 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-
-
 
 void ConfigurationUpdater::CheckPureAnchors (
     const Reference<XConfiguration>& rxConfiguration,
@@ -380,16 +344,10 @@ void ConfigurationUpdater::CheckPureAnchors (
     }
 }
 
-
-
-
 void ConfigurationUpdater::LockUpdates (void)
 {
     ++mnLockCount;
 }
-
-
-
 
 void ConfigurationUpdater::UnlockUpdates (void)
 {
@@ -400,24 +358,15 @@ void ConfigurationUpdater::UnlockUpdates (void)
     }
 }
 
-
-
-
 ::boost::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock (void)
 {
     return ::boost::shared_ptr<ConfigurationUpdaterLock>(new ConfigurationUpdaterLock(*this));
 }
 
-
-
-
 void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)
 {
     mbUpdateBeingProcessed = bValue;
 }
-
-
-
 
 IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler)
 {
@@ -434,7 +383,6 @@ IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler)
     }
     return 0;
 }
-
 
 } } // end of namespace sd::framework
 

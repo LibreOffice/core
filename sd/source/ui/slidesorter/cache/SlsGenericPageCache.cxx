@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsGenericPageCache.hxx"
 
 #include "SlsQueueProcessor.hxx"
@@ -27,7 +26,6 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "controller/SlideSorterController.hxx"
-
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -49,9 +47,6 @@ GenericPageCache::GenericPageCache (
         "This may indicate an error.");
 }
 
-
-
-
 GenericPageCache::~GenericPageCache (void)
 {
     if (mpQueueProcessor.get() != NULL)
@@ -65,9 +60,6 @@ GenericPageCache::~GenericPageCache (void)
         PageCacheManager::Instance()->ReleaseCache(mpBitmapCache);
     mpBitmapCache.reset();
 }
-
-
-
 
 void GenericPageCache::ProvideCacheAndProcessor (void)
 {
@@ -84,9 +76,6 @@ void GenericPageCache::ProvideCacheAndProcessor (void)
             mbDoSuperSampling,
             mpCacheContext));
 }
-
-
-
 
 void GenericPageCache::ChangePreviewSize (
     const Size& rPreviewSize,
@@ -114,9 +103,6 @@ void GenericPageCache::ChangePreviewSize (
         mbDoSuperSampling = bDoSuperSampling;
     }
 }
-
-
-
 
 Bitmap GenericPageCache::GetPreviewBitmap (
     const CacheKey aKey,
@@ -156,9 +142,6 @@ Bitmap GenericPageCache::GetPreviewBitmap (
     return aPreview;
 }
 
-
-
-
 Bitmap GenericPageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
@@ -182,9 +165,6 @@ Bitmap GenericPageCache::GetMarkedPreviewBitmap (
     return aMarkedPreview;
 }
 
-
-
-
 void GenericPageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
     const Bitmap& rMarkedBitmap)
@@ -195,9 +175,6 @@ void GenericPageCache::SetMarkedPreviewBitmap (
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
     mpBitmapCache->SetMarkedBitmap(pPage, rMarkedBitmap);
 }
-
-
-
 
 void GenericPageCache::RequestPreviewBitmap (
     const CacheKey aKey,
@@ -236,9 +213,6 @@ void GenericPageCache::RequestPreviewBitmap (
     }
 }
 
-
-
-
 bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
     // Invalidate the page in all caches that reference it, not just this one.
@@ -273,9 +247,6 @@ void GenericPageCache::InvalidateCache (const bool bUpdateCache)
     }
 }
 
-
-
-
 void GenericPageCache::SetPreciousFlag (
     const CacheKey aKey,
     const bool bIsPrecious)
@@ -305,18 +276,12 @@ void GenericPageCache::SetPreciousFlag (
     mpBitmapCache->SetPrecious(mpCacheContext->GetPage(aKey), bIsPrecious);
 }
 
-
-
-
 void GenericPageCache::Pause (void)
 {
     ProvideCacheAndProcessor();
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Pause();
 }
-
-
-
 
 void GenericPageCache::Resume (void)
 {
@@ -325,10 +290,6 @@ void GenericPageCache::Resume (void)
         mpQueueProcessor->Resume();
 }
 
-
-
 } } } // end of namespace ::sd::slidesorter::cache
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

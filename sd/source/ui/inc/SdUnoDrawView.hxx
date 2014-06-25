@@ -66,7 +66,6 @@ public:
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
@@ -76,7 +75,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XFastPropertySet
 

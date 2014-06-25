@@ -37,9 +37,6 @@ typedef ::cppu::WeakComponentImplHelper1 <
 
 } // end of anonymous namespace.
 
-
-
-
 namespace sd { namespace framework {
 
 /** This module is responsible for showing the ViewTabBar above the view in
@@ -65,7 +62,6 @@ public:
     virtual ~ViewTabBarModule (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
 
     // XConfigurationChangeListener
 

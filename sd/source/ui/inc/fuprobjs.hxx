@@ -31,7 +31,6 @@ class View;
 class ViewShell;
 class Window;
 
-
 class FuPresentationObjects
     : public FuPoor
 {

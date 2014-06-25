@@ -226,7 +226,6 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
     return pNumberFormatter;
 }
 
-
 /** This method is deprecated and only an alias to
  *   <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
  */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewShellHint.hxx"
 
 namespace sd {
@@ -29,11 +28,6 @@ ViewShellHint::ViewShellHint (HintId eHintId)
       meHintId(eHintId)
 {
 }
-
-
-
-
-
 
 } // end of namespace sd
 

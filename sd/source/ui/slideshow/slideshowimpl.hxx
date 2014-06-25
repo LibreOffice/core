@@ -87,8 +87,6 @@ class SlideShowView;
 class AnimationSlideController;
 class PaneHider;
 
-
-
 struct PresentationSettingsEx : public PresentationSettings
 {
     bool mbRehearseTimings;
@@ -105,8 +103,6 @@ struct PresentationSettingsEx : public PresentationSettings
     void SetPropertyValue( const OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException);
 };
 
-
-
 struct WrappedShapeEventImpl
 {
     css::presentation::ClickAction meClickAction;
@@ -117,8 +113,6 @@ struct WrappedShapeEventImpl
 
 typedef boost::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
 typedef std::map< css::uno::Reference< css::drawing::XShape >, WrappedShapeEventImplPtr > WrappedShapeEventImplMap;
-
-
 
 class SlideShowListenerProxy : private ::cppu::BaseMutex,
         public ::cppu::WeakImplHelper2< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
@@ -161,8 +155,6 @@ public:
     rtl::Reference< SlideshowImpl > mxController;
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
-
-
 
 typedef ::cppu::WeakComponentImplHelper2< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
 

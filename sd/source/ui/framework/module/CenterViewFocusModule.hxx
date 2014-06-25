@@ -28,7 +28,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <
@@ -42,9 +41,6 @@ namespace sd {
 class ViewShellBase;
 
 }
-
-
-
 
 namespace sd { namespace framework {
 
@@ -63,7 +59,6 @@ public:
     virtual ~CenterViewFocusModule (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
 
     // XConfigurationChangeListener
 

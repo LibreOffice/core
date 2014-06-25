@@ -47,7 +47,6 @@
 #include <svx/svditer.hxx>
 #include <svtools/imapobj.hxx>
 
-
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -135,7 +134,6 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 
     return (pObjFound);
 }
-
 
 // Find SdPage by name
 sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, bool& rbIsMasterPage) const
@@ -628,7 +626,6 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         if( bClipboard )
             pNotesMPage->SetLayoutName( pPage->GetLayoutName() );
 
-
         if( !pRefPage && (meDocType != DOCUMENT_TYPE_DRAW) )
             pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
@@ -802,7 +799,6 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     return bSomethingHappened;
 }
 
-
 // Return number of links in sfx2::LinkManager
 sal_uLong SdDrawDocument::GetLinkCount()
 {
@@ -839,7 +835,6 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const sal_uInt16 nId
     }
 }
 
-
 // Return language
 LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 {
@@ -852,7 +847,6 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 
     return eLangType;
 }
-
 
 // Initiate WorkStartup
 IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
@@ -893,7 +887,6 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
         mpDocSh->SetWaitCursor( false );
     return 0;
 }
-
 
 // When the WorkStartupTimer has been created (this only happens in
 // SdDrawViewShell::Construct() ), the timer may be stopped and the WorkStartup
@@ -1278,9 +1271,6 @@ sal_uInt16 SdDrawDocument::CreatePage (
         nInsertPosition);
 }
 
-
-
-
 sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 {
     PageKind ePageKind = PK_STANDARD;
@@ -1301,9 +1291,6 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
         aVisibleLayers.IsSet(aBckgrnd),
         aVisibleLayers.IsSet(aBckgrndObj));
 }
-
-
-
 
 sal_uInt16 SdDrawDocument::DuplicatePage (
     SdPage* pActualPage,
@@ -1349,9 +1336,6 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
         pNotesPage,
         nInsertPosition);
 }
-
-
-
 
 sal_uInt16 SdDrawDocument::InsertPageSet (
     SdPage* pActualPage,
@@ -1417,9 +1401,6 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     // pages by using GetSdPage()
     return pStandardPage->GetPageNum() / 2;
 }
-
-
-
 
 void SdDrawDocument::SetupNewPage (
     SdPage* pPreviousPage,

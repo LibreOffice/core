@@ -26,7 +26,6 @@
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
 
-
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     ::Window* pWindow, const SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
@@ -53,7 +52,6 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
     Reset();
 }
-
 
 SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 {
@@ -130,6 +128,5 @@ IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl)
 
     return( 0 );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
