@@ -322,7 +322,7 @@ sal_Size SvStream::GetData( void* pData, sal_Size nSize )
     if( !GetError() )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
-        sal_Size nRet;
+        sal_Size nRet(0);
         nError = xLockBytes->ReadAt(m_nActPos, pData, nSize, &nRet);
         m_nActPos += nRet;
         return nRet;
@@ -335,7 +335,7 @@ sal_Size SvStream::PutData( const void* pData, sal_Size nSize )
     if( !GetError() )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
-        sal_Size nRet;
+        sal_Size nRet(0);
         nError = xLockBytes->WriteAt(m_nActPos, pData, nSize, &nRet);
         m_nActPos += nRet;
         return nRet;
