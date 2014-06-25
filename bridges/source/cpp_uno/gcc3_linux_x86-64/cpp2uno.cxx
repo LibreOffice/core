@@ -386,8 +386,6 @@ typelib_TypeClass cpp_vtable_call(
     return eRet;
 }
 
-extern "C" void privateSnippetExecutor( ... );
-
 const int codeSnippetSize = 24;
 
 // Generate a trampoline that redirects method calls to

@@ -16,23 +16,23 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
-#define INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
-
+/*
 #include "sal/config.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Intrinsic.h>
+
+#include "jni.h"
+
+#include "jawt_md.h"
+#include "jawt.h"
+
 #include "sal/types.h"
+*/
 
-#if defined OOO_DLLIMPLEMENTATION_CHARTTOOLS
-#define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_EXPORT
-#else
-#define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_IMPORT
-#endif
+SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
+  (JNIEnv * env, jobject obj_this);
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

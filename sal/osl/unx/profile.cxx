@@ -19,6 +19,7 @@
 
 #include "system.h"
 #include "readwrite_helper.h"
+#include "file_impl.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -130,9 +131,6 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl*);
 static bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen);
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
-
-/* implemented in file.c */
-extern "C" oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 
 oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOption Options)
 {

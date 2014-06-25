@@ -42,6 +42,7 @@
 #include <osl/diagnose.h>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
+#include "typelib.hxx"
 
 using namespace std;
 using namespace osl;
@@ -146,11 +147,6 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
     return nSize;
 }
 
-
-
-extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
-    typelib_TypeDescriptionReference ** ppRet, rtl_uString * pName )
-    SAL_THROW_EXTERN_C();
 
 
 struct equalStr_Impl
@@ -380,12 +376,6 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
         }
     }
 }
-
-extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
-    const typelib_TypeDescription * pTypeDescription,
-    sal_Int32 nOffset, sal_Int32 & rMaxIntegralTypeSize )
-    SAL_THROW_EXTERN_C();
-
 
 static inline void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )

@@ -26,11 +26,9 @@
 #endif
 
 #include "jawt.h"
+#include "comp_LocalOfficeWindow.h"
 
 #define SYSTEM_WIN32   1
-
-JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
-  (JNIEnv * env, jobject obj_this);
 
 /*****************************************************************************/
 /*

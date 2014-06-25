@@ -24,6 +24,10 @@
 #include <stddef.h>
 #include <sys/types.h>
 
+extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
+
+extern "C" oslFileError FileURLToPath( char *, size_t, rtl_uString* );
+
 struct DirectoryItem_Impl
 {
     sal_Int32     m_RefCount;

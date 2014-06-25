@@ -28,6 +28,7 @@
 #include <rtl/bootstrap.h>
 
 #include "sockimpl.h"
+#include "secimpl.h"
 
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
@@ -35,7 +36,6 @@
 #define PIPENAMEMASK    "OSL_PIPE_%s"
 #define SECPIPENAMEMASK "OSL_PIPE_%s_%s"
 
-sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 static struct

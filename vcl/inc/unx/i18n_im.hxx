@@ -24,6 +24,10 @@
 
 extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
 
+#if defined(SOLARIS) ||  defined(LINUX)
+extern "C" char * XSetIMValues(XIM im, ...);
+#endif
+
 #define bUseInputMethodDefault True
 
 class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod

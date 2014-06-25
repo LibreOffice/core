@@ -79,6 +79,8 @@ namespace CPPU_CURRENT_NAMESPACE
         __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
+extern "C" void privateSnippetExecutor(void);
+
 namespace arm
 {
     enum armlimits { MAX_GPR_REGS = 4, MAX_FPR_REGS = 8 };

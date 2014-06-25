@@ -29,6 +29,8 @@
 #include "jawt.h"
 #undef JAWT_GetAWT
 
+#include "comp_LocalOfficeWindow.h"
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif

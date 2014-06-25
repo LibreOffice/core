@@ -27,6 +27,7 @@
 #include <osl/file.h>
 
 #include "system.h"
+#include "file_impl.hxx"
 
 #ifdef AIX
 #include <sys/ldr.h>
@@ -35,9 +36,6 @@
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #endif
-
-/* implemented in file.c */
-extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 static bool getModulePathFromAddress(void * address, rtl_String ** path) {
     bool result = false;

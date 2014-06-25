@@ -105,6 +105,13 @@ extern "C" void __cxa_throw(
 }
 #endif
 
+extern "C" void privateSnippetExecutorGeneral();
+extern "C" void privateSnippetExecutorVoid();
+extern "C" void privateSnippetExecutorHyper();
+extern "C" void privateSnippetExecutorFloat();
+extern "C" void privateSnippetExecutorDouble();
+extern "C" void privateSnippetExecutorClass();
+
 namespace CPPU_CURRENT_NAMESPACE
 {
 

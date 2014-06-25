@@ -41,12 +41,6 @@
 #include <rtl/strbuf.hxx>
 
 
-// Entry point declaration for modules rscpp and rsc2
-extern "C"
-{
-    int rscpp_main(int, char**);
-}
-
 static bool CallPrePro( const OString& rInput,
                         const OString& rOutput, RscPtrPtr * pCmdLine,
                         bool bResponse )

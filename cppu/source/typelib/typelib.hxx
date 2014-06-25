@@ -17,22 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
-#define INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
+#define INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
 
-#include "sal/config.h"
+extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
+    const typelib_TypeDescription * pTypeDescription,
+    sal_Int32 nOffset,
+    sal_Int32 & rMaxIntegralTypeSize )
+    SAL_THROW_EXTERN_C();
 
-#include "sal/types.h"
 
-#if defined OOO_DLLIMPLEMENTATION_CHARTTOOLS
-#define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_EXPORT
-#else
-#define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_IMPORT
-#endif
+extern "C" void SAL_CALL typelib_typedescription_newEmpty(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeClass eTypeClass,
+    rtl_uString * pTypeName )
+    SAL_THROW_EXTERN_C();
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
+    typelib_TypeDescriptionReference ** ppRet,
+    rtl_uString * pName )
+    SAL_THROW_EXTERN_C();
 
-#endif
+#endif // INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

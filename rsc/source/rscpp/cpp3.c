@@ -75,7 +75,6 @@ void addfile(FILE* fp, char* filename)
  */
 {
         FILEINFO       *file;
-        extern FILEINFO         *getfile( int, char * );
         file = getfile(NBUFF, filename);
         file->fp = fp;                  /* Better remember FILE *       */
         file->buffer[0] = EOS;          /* Initialize for first read    */
@@ -439,10 +438,6 @@ void initdefines()
         DEFBUF         *dp;
         int            i;
         time_t         tvec;
-
-#if !defined( WNT ) && !defined(G3)
-        extern char             *ctime(time_t const *);
-#endif
 
         /*
          * Predefine the built-in symbols.  Allow the
