@@ -93,6 +93,11 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
 
 void renderDocument( LOKDocView* pDocView )
 {
+    long nWidth, nHeight;
+    int nRenderWidth, nRenderHeight;
+    unsigned char* pBuffer;
+    int nRowStride;
+
     g_assert( pDocView->pDocument );
 
     if ( pDocView->pPixBuf )
@@ -100,23 +105,21 @@ void renderDocument( LOKDocView* pDocView )
         g_object_unref( G_OBJECT( pDocView->pPixBuf ) );
     }
 
-    long nWidth, nHeight;
     pDocView->pDocument->pClass->getDocumentSize( pDocView->pDocument, &nWidth, &nHeight );
 
     // Draw the whole document at once (for now)
 
     // TODO: we really should scale by screen DPI here -- 10 seems to be a vaguely
     // correct factor for my screen at least.
-    int nRenderWidth = nWidth * pDocView->fZoom / 10;
-    int nRenderHeight = nHeight * pDocView->fZoom / 10;
+    nRenderWidth = nWidth * pDocView->fZoom / 10;
+    nRenderHeight = nHeight * pDocView->fZoom / 10;
 
     pDocView->pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
                                         TRUE, 8,
                                         nRenderWidth, nRenderHeight);
 
 
-    unsigned char* pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
-    int nRowStride;
+    pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             pBuffer,
                                             nRenderWidth, nRenderHeight,
