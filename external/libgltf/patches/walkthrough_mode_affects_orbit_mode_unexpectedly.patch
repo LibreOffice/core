@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/Camera.cpp libgltf/src/Camera.cpp
+--- libgltf.org/src/Camera.cpp	2014-06-24 17:36:27.870055125 +0200
++++ libgltf/src/Camera.cpp	2014-06-24 17:36:43.514054463 +0200
+@@ -243,6 +243,8 @@
+     if (abs(horizontal) > planar || abs(vertical) > 0.0001)
+     {
+         bRotateCameraModel = true;
++        fRotateCameraXSpeed = 0;
++        fRotateCameraYSpeed = 0;
+         float deltaX = (float)(horizontal * fSensitivity * 0.01f);
+         float deltaY = (float)(-vertical * fSensitivity * 0.01f);
+         AerialViewY += -vertical;

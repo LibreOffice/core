@@ -27,6 +27,8 @@ namespace avmedia { namespace ogl {
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
     , m_pHandle(NULL)
+    , m_pOGLWindow(NULL)
+    , m_bIsRendering(false)
 {
 }
 
@@ -140,8 +142,14 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
+
+    // gltf_animation_start play animation from the time 0.0,
+    // but OGLPlayer::start used as play from that time where it was stopped before
+    double fTime = gltf_animation_get_time(m_pHandle);
     gltf_animation_start(m_pHandle);
+    gltf_animation_set_time(m_pHandle, fTime);
     m_aTimer.Start();
+    m_bIsRendering = true;
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
@@ -150,13 +158,19 @@ void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
     assert(m_pHandle);
     m_aTimer.Stop();
     gltf_animation_stop(m_pHandle);
+    m_bIsRendering = false;
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    return (sal_Bool)gltf_animation_is_playing(m_pHandle);
+    // Here isPlaying means model is rendered in the window and
+    // able to interact with the user (e.g. moving camera)
+    if( getDuration() > 0.0 )
+        return gltf_animation_is_playing(m_pHandle);
+    else
+        return m_bIsRendering;
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
@@ -168,18 +182,16 @@ double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exc
 
 void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeException, std::exception )
 {
-    // TODO: doesn't work, but cause problem in playing
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    (void) fTime;
-    //gltf_animation_set_time(m_pHandle, fTime);
+    gltf_animation_set_time(m_pHandle, fTime);
 }
 
 double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    return 0.0; //gltf_animation_get_time(m_pHandle);
+    return gltf_animation_get_time(m_pHandle);
 }
 
 double SAL_CALL OGLPlayer::getRate() throw ( uno::RuntimeException, std::exception )
@@ -270,6 +282,9 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
         return uno::Reference< media::XPlayerWindow >();
     }
+    // The background color is white by default, but we need to separate the
+    // OpenGL window from the main window so set background color to grey
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
     m_pOGLWindow = new OGLWindow(*m_pHandle, m_aContext, *pChildWindow->GetParent());
     return uno::Reference< media::XPlayerWindow >( m_pOGLWindow );
 }
@@ -297,6 +312,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
         return uno::Reference< media::XFrameGrabber >();
     }
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
     OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( *m_pHandle );
     return uno::Reference< media::XFrameGrabber >( pFrameGrabber );
 }

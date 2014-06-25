@@ -1,0 +1,14 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-23 21:16:55.134739637 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-23 21:16:58.834739477 +0200
+@@ -1976,5 +1976,10 @@
+     {
+         bIsTimeAvailable = false;
+     }
++    if( !mAnimationLoop && mCurrentTime > mDuration )
++    {
++        stopAnimation();
++	setAnimTime(0.0);
++    }
+ }
+ 
