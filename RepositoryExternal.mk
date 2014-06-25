@@ -142,6 +142,7 @@ endif # SYSTEM_MDDS
 ifneq ($(SYSTEM_GLM),)
 
 gb_LinkTarget__use_glm_headers :=
+gb_ExternalProject__use_glm_headers :=
 
 else
 
@@ -151,6 +152,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,glm) \
 	$$(INCLUDE) \
 )
+
+endef
+
+define gb_ExternalProject__use_glm_headers
+$(call gb_ExternalProject_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,glm)
 
 endef
 
@@ -239,6 +245,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(GLEW_LIBS))
 
 endef
 
+gb_ExternalProject__use_glew :=
+
 else # !SYSTEM_GLEW
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
@@ -261,6 +269,11 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
 )
 endif
+
+endef
+
+define gb_ExternalProject__use_glew
+$(call gb_ExternalProject_use_external_project,$(1),glew)
 
 endef
 
@@ -1274,7 +1287,7 @@ endef
 
 gb_ExternalProject__use_freetype :=
 
-else ifneq (,$(or $(findstring ANDROID,$(OS)),$(ENABLE_GLTF)))
+else ifeq ($(OS),ANDROID)
 
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_use_external_project,$(1),freetype)
@@ -3258,7 +3271,6 @@ endif # SYSTEM_NSS
 
 endif # DESKTOP
 
-
 ifeq ($(ENABLE_GLTF),TRUE)
 
 define gb_LinkTarget__use_libgltf
@@ -3267,9 +3279,23 @@ $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
 )
 
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	libgltf \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libgltf)/build/win32/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/libgltf.lib,Release/libgltf.lib) \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libgltf)/src/.libs/libgltf-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+endif
+
+$(call gb_LinkTarget_use_external_project,$(1),libgltf)
+
+endef
+
+define gb_ExternalProject__use_libgltf
+$(call gb_ExternalProject_use_external_project,$(1),libgltf)
+
 endef
 
 define gb_LinkTarget__use_opencollada_parser

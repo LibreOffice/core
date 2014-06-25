@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 	boost_headers \
 	glew \
 	mesa_headers \
-	zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\

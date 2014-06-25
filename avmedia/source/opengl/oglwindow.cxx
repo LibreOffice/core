@@ -20,6 +20,7 @@ OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEve
     , m_rEventHandler( rEventHandlerParent )
     , m_bVisible ( false )
     , m_aLastMousePos(Point())
+    , m_bIsOrbitMode( false )
 {
 }
 
@@ -249,33 +250,36 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     glm::vec3 vStrafe = glm::cross(vView-vEye, vUp);
                     vStrafe = glm::normalize(vStrafe);
                     vStrafe *= 25.0f;
-                    glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.f,0.f,0.f) );
+                    glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.0f,0.0f,0.0f) );
                     vMup = glm::normalize(vMup);
                     vMup *= 25.0f;
 
-                    if(nCode == KEY_Q)vMoveBy += vMove*(0.0005f*fModelSize);
-                    if(nCode == KEY_E)vMoveBy -= vMove*(0.0005f*fModelSize);
-                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
-                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.0005f*fModelSize);
-                    if(nCode == KEY_W)vMoveBy -= vMup*(0.0005f*fModelSize);
-                    if(nCode == KEY_S)vMoveBy += vMup*(0.0005f*fModelSize);
+                    if(nCode == KEY_W)vMoveBy += vMove*(0.005f*fModelSize);
+                    if(nCode == KEY_S)vMoveBy -= vMove*(0.005f*fModelSize);
+                    if( !m_bIsOrbitMode )
+                    {
+                        if(nCode == KEY_A)vMoveBy -= vStrafe*(0.005f*fModelSize);
+                        if(nCode == KEY_D)vMoveBy += vStrafe*(0.005f*fModelSize);
+                    }
                 }
                 gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
             }
-        }
-    }
-    // TODO: Clean this mess up after libgltf gets a working camera handling
-     else if( pEvent->GetId() == VCLEVENT_WINDOW_KEYUP )
-    {
-        KeyEvent* pKeyEvt = (KeyEvent*)pEvent->GetData();
-        if(pKeyEvt)
-        {
-            const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
-            if (nCode == KEY_Q || nCode == KEY_E ||
-                nCode == KEY_A || nCode == KEY_D ||
-                nCode == KEY_W || nCode == KEY_S )
+            else if(nCode == KEY_M)
             {
-                gltf_renderer_move_camera(&m_rHandle, 0.0, 0.0, 0.0, 0.0);
+                if(m_bIsOrbitMode)
+                {
+                    gltf_orbit_view_stop(&m_rHandle);
+                    m_bIsOrbitMode = false;
+                }
+                else
+                {
+                    gltf_orbit_mode_start(&m_rHandle);
+                    m_bIsOrbitMode = true;
+                }
+            }
+            else if(nCode == KEY_F)
+            {
+                gltf_render_FPS_enable(&m_rHandle);
             }
         }
     }
@@ -303,12 +307,30 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             else
                 fSensitivity = 540.0 / fSensitivity;
 
-            long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
-            long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
-            // TODO: It seems this method just moves the camera but not rotate it.
-            gltf_renderer_rotate_camera(&m_rHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0, 0.0);
 
+            long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
+            long nDeltaY = m_aLastMousePos.Y()-aCurPos.Y();
+            if( m_bIsOrbitMode )
+            {
+                fSensitivity *= 5;
+                gltf_renderer_rotate_model(&m_rHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0);
+            }
+            else
+            {
+                // Filter out too small deltas to avoid rewrite rotation parameter with 0
+                // before rotation is done
+                if( nDeltaX != 0 || nDeltaY != 0 )
+                    gltf_renderer_rotate_camera(&m_rHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0);
+            }
             m_aLastMousePos = aCurPos;
+        }
+    }
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
+    {
+        MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
+        if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
+        {
+            gltf_renderer_stop_rotate_model(&m_rHandle);
         }
     }
     return 0;

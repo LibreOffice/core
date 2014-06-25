@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/libgltf.cpp libgltf/src/libgltf.cpp
+--- libgltf.org/src/libgltf.cpp	2014-06-23 20:38:35.470838661 +0200
++++ libgltf/src/libgltf.cpp	2014-06-23 20:44:37.042823092 +0200
+@@ -235,7 +235,7 @@
+     RenderScene* renderScene = (RenderScene*)handle->renderer;
+     if (time <= 0)
+     {
+-        renderScene->startAnimation();
++        renderScene->setAnimTime(0.0);
+     } 
+     else
+     {
