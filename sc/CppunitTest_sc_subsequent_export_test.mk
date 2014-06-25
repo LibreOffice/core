@@ -44,8 +44,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_export_test, \
     svx \
     svxcore \
 	test \
-    tl \
     tk \
+    tl \
     ucbhelper \
 	unotest \
     utl \
@@ -69,8 +69,8 @@ $(eval $(call gb_CppunitTest_use_ure,sc_subsequent_export_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_subsequent_export_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
-    chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
+    chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
@@ -79,17 +79,17 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \
-    i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
+    i18npool/util/i18npool \
     linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sc/util/sc \
-    sc/util/scfilt \
     scaddins/source/analysis/analysis \
     scaddins/source/datefunc/date \
+    sc/util/sc \
+    sc/util/scfilt \
     sfx2/util/sfx \
     sot/util/sot \
     svl/util/svl \
@@ -102,8 +102,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     xmloff/util/xo \
-    xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
+    xmlsecurity/util/xsec_fw \
 ))
 
 ifeq ($(OS),WNT)

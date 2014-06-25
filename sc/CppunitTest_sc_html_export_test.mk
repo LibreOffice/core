@@ -42,8 +42,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_html_export_test, \
     svx \
     svxcore \
 	test \
-    tl \
     tk \
+    tl \
     ucbhelper \
 	unotest \
     utl \
@@ -71,25 +71,27 @@ $(eval $(call gb_CppunitTest_use_components,sc_html_export_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
+    i18npool/source/search/i18nsearch \
     i18npool/util/i18npool \
     linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
+    scripting/source/basprov/basprov \
+    scripting/source/dlgprov/dlgprov \
+    scripting/source/vbaevents/vbaevents \
+    scripting/util/scriptframe \
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
-    scripting/source/vbaevents/vbaevents \
-    scripting/source/dlgprov/dlgprov \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
@@ -103,10 +105,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_html_export_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-    xmloff/util/xo \
-    eventattacher/source/evtatt \
-    i18npool/source/search/i18nsearch \
     vbahelper/util/msforms \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_html_export_test))
