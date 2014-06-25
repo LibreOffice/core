@@ -102,6 +102,7 @@
             <menu:menuitem menu:id=".uno:Presentation" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:EditDoc"/>
                <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>

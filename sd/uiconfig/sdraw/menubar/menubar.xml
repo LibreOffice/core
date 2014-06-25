@@ -97,6 +97,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:PageMode" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:MasterPage" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:EditDoc"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:DisplayQualityMenu">
         <menu:menupopup>

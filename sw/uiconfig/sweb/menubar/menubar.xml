@@ -99,6 +99,7 @@
       <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:SourceView" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:EditDoc"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>

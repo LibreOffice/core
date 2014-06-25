@@ -135,6 +135,7 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:NormalViewMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:PagebreakMode"  menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:EditDoc"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:InputLineVisible"/>
