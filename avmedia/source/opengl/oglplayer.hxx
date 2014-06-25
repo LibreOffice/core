@@ -64,6 +64,7 @@ private:
     OpenGLContext m_aContext;
     AutoTimer m_aTimer;
     OGLWindow* m_pOGLWindow;
+    bool m_bIsRendering;
 };
 
 } // namespace ogl

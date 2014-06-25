@@ -10528,13 +10528,6 @@ if test "x$enable_gltf" != "xno"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_GLTF,1)
     BUILD_TYPE="$BUILD_TYPE LIBGLTF"
-    if test "$test_freetype" = "no"; then
-        BUILD_TYPE="$BUILD_TYPE FREETYPE"
-        if test "$COM" = "MSC"; then
-            test -n "${MSVC_USE_DEBUG_RUNTIME}" && FREETYPE_LIB_DEBUGLIB_SUFFIX="_D"
-            FREETYPE_LIBS="${WORKDIR}/UnpackedTarball/freetype/objs/win32/vc2010/freetype248$FREETYPE_LIB_DEBUGLIB_SUFFIX.lib"
-        fi
-    fi
     # otherwise build fails in collada2gltf external because of std::shared_ptr
     if test "$have_std_shared_ptr" = "yes"; then
         BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
