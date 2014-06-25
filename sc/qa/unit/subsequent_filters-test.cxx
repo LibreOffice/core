@@ -256,7 +256,7 @@ public:
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
     CPPUNIT_TEST(testCopyMergedNumberFormats);
-//  CPPUNIT_TEST(testVBAUserFunctionXLSM); // TODO : Macro not working in unit test. Get this to work.
+    CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST_SUITE_END();
 
 private:
