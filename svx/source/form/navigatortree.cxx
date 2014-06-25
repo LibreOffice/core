@@ -1369,7 +1369,7 @@ namespace svxform
         if( pFormShell )
         {
             InterfaceBag aSelection;
-            aSelection.insert( xNewForm );
+            aSelection.insert( Reference<XInterface>( xNewForm, UNO_QUERY ) );
             pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);

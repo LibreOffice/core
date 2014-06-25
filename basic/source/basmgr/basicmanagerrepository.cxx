@@ -381,9 +381,10 @@ namespace basic
 
     BasicManagerPointer& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
+        Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        BasicManagerPointer& location = m_aStore[ _rxDocumentModel ];
+        BasicManagerPointer& location = m_aStore[ xNormalized ];
         return location;
     }
 

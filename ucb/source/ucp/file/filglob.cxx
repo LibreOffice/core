@@ -554,7 +554,7 @@ namespace fileaccess {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
-            excep.Context = xComProc;
+            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "file exists and overwrite forbidden";
             aAny <<= excep;
             cancelCommandExecution( aAny,xEnv );
@@ -576,7 +576,7 @@ namespace fileaccess {
             seq[0] <<= prop;
             excep.Arguments = seq;
             excep.Classification = InteractionClassification_ERROR;
-            excep.Context = xComProc;
+            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "the name contained invalid characters";
             if(isHandled)
                 throw excep;
@@ -853,7 +853,7 @@ namespace fileaccess {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
-            excep.Context = xComProc;
+            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash during copy or move";
             aAny <<= excep;
 
@@ -864,7 +864,7 @@ namespace fileaccess {
         {
             UnsupportedNameClashException excep;
             excep.NameClash = minorCode;
-            excep.Context = xComProc;
+            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash value not supported during copy or move";
 
             aAny <<= excep;

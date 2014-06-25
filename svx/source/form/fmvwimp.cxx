@@ -367,7 +367,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
 
         // attaching the events
         Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
-        xEventManager->attach(m_aControllerList.size() - 1, xController, makeAny(xController) );
+        xEventManager->attach(m_aControllerList.size() - 1, Reference<XInterface>( xController, UNO_QUERY ), makeAny(xController) );
     }
 
     // jetzt die Subforms durchgehen

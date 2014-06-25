@@ -637,6 +637,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XInterface >  xIfac( xThis, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
@@ -656,7 +657,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 ui::ConfigurationEvent aReplaceEvent;
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xThis;
+                aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
 
@@ -673,7 +674,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 ui::ConfigurationEvent aEvent;
                 aEvent.ResourceURL = rElement.aResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xThis;
+                aEvent.Source = xIfac;
                 aEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aEvent );
@@ -706,6 +707,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
     while ( pIter != rHashMap.end() )
@@ -724,7 +726,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xThis;
+                aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -742,7 +744,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xThis;
+                aReplaceEvent.Source = xIfac;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -759,7 +761,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
-                aRemoveEvent.Source = xThis;
+                aRemoveEvent.Source = xIfac;
                 aRemoveEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aRemoveEvent );
@@ -1232,12 +1234,13 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 rElementType.bModified = true;
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
                 ui::ConfigurationEvent aEvent;
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xThis;
+                aEvent.Source = xIfac;
                 aEvent.ReplacedElement <<= xOldSettings;
                 aEvent.Element <<= pDataSettings->xSettings;
 
@@ -1279,13 +1282,14 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                     rElements.insert( UIElementDataHashMap::value_type( ResourceURL, aUIElementData ));
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
                 ui::ConfigurationEvent aEvent;
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xThis;
+                aEvent.Source = xIfac;
                 aEvent.ReplacedElement <<= pDataSettings->xSettings;
                 aEvent.Element <<= aUIElementData.xSettings;
 
@@ -1338,6 +1342,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 rElementType.bModified = true;
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Check if we have settings in the default layer which replaces the user-defined one!
                 UIElementData* pDefaultDataSettings = impl_findUIElementData( ResourceURL, nElementType );
@@ -1348,7 +1353,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
-                    aEvent.Source = xThis;
+                    aEvent.Source = xIfac;
                     aEvent.Element <<= xRemovedSettings;
                     aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
 
@@ -1363,7 +1368,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
-                    aEvent.Source = xThis;
+                    aEvent.Source = xIfac;
                     aEvent.Element <<= xRemovedSettings;
 
                     aGuard.clear();
