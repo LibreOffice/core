@@ -11,6 +11,11 @@
 
 $(eval $(call gb_Library_Library,officebean))
 
+$(eval $(call gb_Library_set_include,officebean,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/bean/inc \
+))
+
 $(eval $(call gb_Library_use_externals,officebean,\
 	jawt \
 ))

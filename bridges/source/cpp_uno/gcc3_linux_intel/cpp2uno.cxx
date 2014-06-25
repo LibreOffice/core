@@ -331,12 +331,6 @@ extern "C" void cpp_vtable_call(
     }
 }
 
-extern "C" void privateSnippetExecutorGeneral();
-extern "C" void privateSnippetExecutorVoid();
-extern "C" void privateSnippetExecutorHyper();
-extern "C" void privateSnippetExecutorFloat();
-extern "C" void privateSnippetExecutorDouble();
-extern "C" void privateSnippetExecutorClass();
 extern "C" typedef void (*PrivateSnippetExecutor)();
 
 int const codeSnippetSize = 16;

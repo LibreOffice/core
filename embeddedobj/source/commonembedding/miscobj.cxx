@@ -33,12 +33,9 @@
 
 #include "closepreventer.hxx"
 #include "intercept.hxx"
+#include "persistence.hxx"
 
 using namespace ::com::sun::star;
-
-
-uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
-                                                            bool bCanUseDocumentBaseURL );
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,

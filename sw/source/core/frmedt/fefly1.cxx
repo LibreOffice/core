@@ -67,6 +67,7 @@
 #include <fmtsrnd.hxx>
 #include <ndole.hxx>
 #include <editeng/opaqitem.hxx>
+#include <fefly.hxx>
 
 using namespace ::com::sun::star;
 

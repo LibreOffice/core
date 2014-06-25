@@ -45,13 +45,12 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "drtxtob.hxx"
 #include <gridwin.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 
 #include <boost/bind.hpp>
-
-sal_uInt16 ScGetFontWorkId();       // in drtxtob
 
 using namespace com::sun::star;
 

@@ -52,6 +52,7 @@
 #include "toolkit/controls/unocontrols.hxx"
 
 #include "helper/unopropertyarrayhelper.hxx"
+#include "controlmodelcontainerbase_internal.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -140,9 +141,6 @@ public:
         return ( things.size() > 0 );
     }
 };
-
-////HELPER
-OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 namespace {
 

@@ -20,8 +20,8 @@
 #include <tools/debug.hxx>
 
 #include <svdata.hxx>
-#include <window.h>
 
+#include <dlgctrl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
@@ -379,7 +379,7 @@ Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIn
 }
 
 Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
-                             sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true )
+                             sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable )
 {
     DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
                 "Window::ImplFindAccelWindow() - rIndex not in Form" );

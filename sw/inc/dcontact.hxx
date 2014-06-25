@@ -56,10 +56,6 @@ bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
 
-/** When changes occur remove object from ContourCache.
- Implementation in TxtFly.cxx. */
-void ClrContourCache( const SdrObject *pObj );
-
 /// @return BoundRect plus distance.
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 

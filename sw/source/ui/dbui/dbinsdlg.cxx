@@ -92,11 +92,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-
-namespace swui
-{
-    SwAbstractDialogFactory * GetFactory();
-}
+#include <swuiexp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

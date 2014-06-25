@@ -18,6 +18,7 @@
  */
 
 #include "spinbutton.hxx"
+#include "scrollbar.hxx"
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 
@@ -43,12 +44,6 @@ namespace frm
 
 
     //= OSpinButtonModel
-
-    // implemented elsewhere
-    Any translateExternalDoubleToControlIntValue(
-        const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
-        const OUString& _rMinValueName, const OUString& _rMaxValueName );
-    Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, true, true, false )

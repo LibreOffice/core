@@ -26,6 +26,9 @@ class SwDoc;
 class SwTxtNode;
 class SwTxtFld;
 
+bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
+                    const SwTxtNode& rBehindNd, sal_Int32 nSttPos );
+
 enum REFERENCESUBTYPE
 {
     REF_SETREFATTR = 0,

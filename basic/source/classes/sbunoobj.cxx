@@ -72,17 +72,6 @@
 
 #include <rtlproto.hxx>
 
-using com::sun::star::uno::Reference;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::script;
-using namespace com::sun::star::container;
-using namespace com::sun::star::bridge;
-using namespace cppu;
-
-
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
@@ -97,6 +86,16 @@ using namespace cppu;
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+
+using com::sun::star::uno::Reference;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::reflection;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
+using namespace com::sun::star::container;
+using namespace com::sun::star::bridge;
+using namespace cppu;
 
 TYPEINIT1(SbUnoMethod,SbxMethod)
 TYPEINIT1(SbUnoProperty,SbxProperty)

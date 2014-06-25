@@ -95,10 +95,6 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace sd {
 
-extern void fillDurationComboBox( ListBox* pBox );
-extern OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true );
-extern OUString getPropertyName( sal_Int32 nPropertyType );
-
 class PresetPropertyBox  : public PropertySubControl
 {
 public:

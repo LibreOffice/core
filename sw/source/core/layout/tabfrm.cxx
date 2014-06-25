@@ -66,9 +66,6 @@
 #include <switerator.hxx>
 #include <DocumentSettingManager.hxx>
 
-extern void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
-                        SwFrm *pFrm, SwPageFrm *pPage );
-
 using namespace ::com::sun::star;
 
 SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):

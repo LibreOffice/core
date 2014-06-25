@@ -63,9 +63,6 @@
 
 using namespace ::com::sun::star::uno;
 
-extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
-                        const SwTxtNode& rBehindNd, sal_Int32 nSttPos );
-
 /** Insert field types
  *
  * @param rFldTyp ???

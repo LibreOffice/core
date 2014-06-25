@@ -83,6 +83,14 @@ namespace frm
 
     };
 
+    css::uno::Any translateExternalDoubleToControlIntValue(
+        const css::uno::Any& _rExternalValue, const css::uno::Reference< css::beans::XPropertySet >& _rxProperties,
+        const OUString& _rMinValueName, const OUString& _rMaxValueName );
+
+    css::uno::Any translateControlIntToExternalDoubleValue( const css::uno::Any& _rControlIntValue );
+
+
+
 } // namespacefrm
 
 

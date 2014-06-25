@@ -21,11 +21,11 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include "commonembobj.hxx"
+#include "embedobj.hxx"
 
 
 using namespace ::com::sun::star;
 
-awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2 );
 bool RectanglesEqual( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2 )
 {
     return ( aRect1.X == aRect2.X

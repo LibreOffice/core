@@ -62,6 +62,8 @@ inline sal_Int16 _Int16( sal_Int32 nValue )
 
 class VirtualDevice;
 
+sal_uInt16 getMaxBitsSigned( sal_Int32 nValue );
+
 namespace swf {
 
 const sal_uInt8 TAG_END             = 0;

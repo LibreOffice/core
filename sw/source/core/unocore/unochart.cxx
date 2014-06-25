@@ -49,11 +49,6 @@
 
 using namespace ::com::sun::star;
 
-// from unotbl.cxx
-extern void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
-extern OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
-extern int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
-
 //static
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 {

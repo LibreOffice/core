@@ -50,6 +50,7 @@ class ScCellRangeObj;
 class ScDocShell;
 class ScDocument;
 class ScRangeList;
+class ScRange;
 
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
 
@@ -297,6 +298,12 @@ public:
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
+
+bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRange& refRange,
+                               ScRangeList& aCellRanges,
+                               formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 )
+    throw ( css::uno::RuntimeException );
+
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

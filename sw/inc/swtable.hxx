@@ -60,6 +60,8 @@ struct SwSaveRowSpan;
 struct Parm;
 class SwServerObject;
 
+void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
+
 class SwTableLines : public std::vector<SwTableLine*> {
 public:
     // free's any remaining child objects

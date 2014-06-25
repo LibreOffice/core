@@ -86,6 +86,7 @@
 #include "css1kywd.hxx"
 #include "wrthtml.hxx"
 #include "htmlnum.hxx"
+#include "css1atr.hxx"
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>

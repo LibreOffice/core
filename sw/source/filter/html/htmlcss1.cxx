@@ -59,6 +59,7 @@
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
 #include <numrule.hxx>
+#include <css1atr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -645,8 +646,6 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
     rToken = rToken.toAsciiLowerCase();
     return eType;
 }
-
-extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
                                const SfxItemSet *pParentItemSet = 0 )
