@@ -481,13 +481,13 @@ namespace svxform
         void SynchronizeSelection(FmEntryDataArray& arredToSelect);
             // nach dem Aufruf dieser Methode sind genau die Eintraege selektiert, die in dem Array bezeichnet sind
         void SynchronizeSelection();
-            // macht das selbe, nimmt die MarkList der ::com::sun::star::sdbcx::View
+            // macht das selbe, nimmt die MarkList der View
         void SynchronizeMarkList();
-            // umgekehrte Richtung von SynchronizeMarkList : markiert in der ::com::sun::star::sdbcx::View alle der aktuellen Selektion entsprechenden Controls
+            // umgekehrte Richtung von SynchronizeMarkList : markiert in der View alle der aktuellen Selektion entsprechenden Controls
 
         void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >& _rObjects);
 
-        // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen ::com::sun::star::sdbcx::View, mit folgenden Funktionen
+        // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen View, mit folgenden Funktionen
         // kann ich das Locking dieses Verhaltens steuern
         void LockSelectionHandling() { ++m_nSelectLock; }
         void UnlockSelectionHandling() { --m_nSelectLock; }

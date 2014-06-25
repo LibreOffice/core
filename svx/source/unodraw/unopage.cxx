@@ -75,7 +75,7 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
         StartListening( *mpModel );
 
 
-    // Erzeugen der (hidden) ::com::sun::star::sdbcx::View
+    // Erzeugen der (hidden) View
     mpView = new SdrView( mpModel );
     if( mpView )
         mpView->SetDesignMode(true);

@@ -64,7 +64,7 @@ namespace svxform
         // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
 
     #define EXPLORER_SYNC_DELAY                 200
-        // dieser Betrag an Millisekunden wird gewartet, ehe der Explorer nach einem Select oder Deselect die ::com::sun::star::sdbcx::View synchronisiert
+        // dieser Betrag an Millisekunden wird gewartet, ehe der Explorer nach einem Select oder Deselect die View synchronisiert
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;

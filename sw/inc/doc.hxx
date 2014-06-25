@@ -421,7 +421,7 @@ private:
     bool mbInCallModified        : 1;    //< TRUE: in Set/Reset-Modified link.
     bool mbIsAutoFmtRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
     bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
-                                                ::com::sun::star::sdbcx::View
+                                                View
                                                 notification of OLE-Objects PrtOLENotify() is required. */
     bool mbAllOLENotify          : 1;    //< True: Notification of all objects is required.
     bool mbIsRedlineMove         : 1;    //< True: Redlines are moved into to / out of the section.
