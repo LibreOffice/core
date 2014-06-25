@@ -13,65 +13,12 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
-#define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKit.hxx>
-
-using namespace ::lok;
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
 static int help()
 {
     fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install> [path to document]\n" );
     return 1;
-}
-
-static GtkWidget* ourCanvas;
-static GdkPixbuf* ourPixBuf = 0;
-
-bool drawCallback(GtkWidget* /* The eventbox */, void* /* cairo_t* cr */, gpointer pData)
-{
-    fprintf(stderr, "attempting to draw tile");
-
-    Document* pDocument = static_cast< Document* >( pData );
-
-    long nWidth, nHeight;
-    pDocument->getDocumentSize( &nWidth, &nHeight );
-
-    // Draw the whole document at once (for now)
-    int nRenderWidth = nWidth / 10;
-    int nRenderHeight = nHeight / 10;
-    int nRowStride;
-
-    if ( ourPixBuf &&
-            (gdk_pixbuf_get_width( ourPixBuf ) != nRenderWidth ||
-             gdk_pixbuf_get_height( ourPixBuf ) != nRenderHeight ) )
-    {
-        g_object_unref( G_OBJECT( ourPixBuf ) );
-        ourPixBuf = 0;
-
-    }
-    if (!ourPixBuf)
-    {
-        ourPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
-                                    true, 8,
-                                    nRenderWidth, nRenderHeight);
-    }
-
-    unsigned char* pBuffer = gdk_pixbuf_get_pixels( ourPixBuf );
-
-    pDocument->paintTile( pBuffer,
-                          nRenderWidth, nRenderHeight,
-                          &nRowStride,
-                          0, 0, // origin
-                          nWidth, nHeight );
-    // TODO: double check that the rowstride really matches what we expected,
-    // although presumably we'd already be crashing by now if things were
-    // wrong.
-    (void) nRowStride;
-
-    gtk_image_set_from_pixbuf( GTK_IMAGE( ourCanvas ), ourPixBuf );
-
-    return true;
-
 }
 
 int main( int argc, char* argv[] )
@@ -86,7 +33,7 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    ::lok::Office *pOffice = ::lok::lok_cpp_init( argv[1] );
+    LibreOfficeKit* pOffice = lok_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );
@@ -103,24 +50,13 @@ int main( int argc, char* argv[] )
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
 
-    GtkWidget* pScroller = gtk_scrolled_window_new( 0, 0 );
-    gtk_container_add( GTK_CONTAINER(pWindow), pScroller );
+    GtkWidget* pDocView = lok_docview_new( pOffice );
+    gtk_container_add( GTK_CONTAINER(pWindow), pDocView );
 
-    GtkWidget* pEventBox = gtk_event_box_new();
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pScroller), pEventBox );
+    lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
 
-    GtkWidget* pCanvas = gtk_image_new();
-    ourCanvas = pCanvas;
-    gtk_container_add( GTK_CONTAINER( pEventBox ), pCanvas );
-
-    g_signal_connect( G_OBJECT(pEventBox), "button-press-event", G_CALLBACK(drawCallback), pDocument);
-
-    gtk_widget_show( pCanvas );
-    gtk_widget_show( pEventBox );
-    gtk_widget_show( pScroller );
+    gtk_widget_show( pDocView );
     gtk_widget_show( pWindow );
-
-    drawCallback( pCanvas, 0, pDocument );
 
     gtk_main();
 
