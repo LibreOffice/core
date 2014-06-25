@@ -106,10 +106,57 @@ ScHeaderControl::~ScHeaderControl()
 {
 }
 
+void ScHeaderControl::UpdateTabInfo( SCCOL nX1, SCCOL nX2, SCCOL nY1, SCCOL nY2 )
+{
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewSh)
+        return;
+
+    ScViewData& rViewData = pViewSh->GetViewData();
+
+    int nTab = rViewData.GetTabNo();
+    ScDocument* pDoc = rViewData.GetDocument();
+
+    const ScViewOptions& rOpts = rViewData.GetOptions();
+    bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
+
+    pDoc->FillInfo( mTabInfo, nX1, nY1, nX2, nY2, nTab,
+                                        rViewData.GetPPTX(), rViewData.GetPPTY(),
+                                        false, bFormulaMode,
+                                        &rViewData.GetMarkData() );
+}
+
 void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 {
     bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    if ( nStart == nEnd )
+    {
+        // No point in painting 0 items...
+        // This happens e.g. during the construction, and can actually cause
+        // problems at that point as we don't yet have a viewshell, hence
+        // we can't populate the tab info, hence we get segfaults when trying
+        // to access inexistent data in the tabinfo.
+        return;
+    }
+
+    // We need to make sure we have at least one row and one column, or we won't
+    // get valid data out from UpdateTabInfo (and specifically FillInfo).
+    SCROW nY1 = 0, nY2 = 1;
+    SCCOL nX1 = 0, nX2 = 1;
+    if ( bVertical )
+    {
+        nY1 = nStart;
+        nY2 = nEnd + 1; // We request the size of nEnd+1 too below
+    }
+    else
+    {
+        nX1 = nStart;
+        nX2 = nEnd + 1; // We request the size of nEnd+1 too below
+    }
+
+    UpdateTabInfo( nX1, nX2, nY1, nY2 );
 
     Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
@@ -239,6 +286,19 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 {
     //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
     //  Linien zusammengefasst
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewSh)
+    {
+        assert(false);
+        return;
+    }
+
+    ScViewData& rViewData = pViewSh->GetViewData();
+    MapMode aMapMode( GetMapMode() );
+//     aMapMode.SetMapUnit( MAP_TWIP );
+    aMapMode.SetScaleX( rViewData.GetZoomX() * Fraction(0.96) );
+    aMapMode.SetScaleY( rViewData.GetZoomY() * Fraction(0.96) );
+    SetMapMode( aMapMode );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     bool bHighContrast = rStyleSettings.GetHighContrastMode();
@@ -299,6 +359,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     //  Zuerst Ende der letzten Zelle finden
 
     long nLineEnd = nInitScrPos - nLayoutSign;
+
+    UpdateTabInfo( 0, bVertical ? 1 : nSize, 0, bVertical ? nSize : 1 );
 
     for (SCCOLROW i=nPos; i<nSize; i++)
     {

@@ -23,6 +23,7 @@
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 #include "address.hxx"
+#include "fillinfo.hxx"
 
 #define HDR_SIZE_OPTIMUM    0xFFFF
 
@@ -79,7 +80,8 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
                     // new methods
-
+    ScTableInfo     mTabInfo;
+    void            UpdateTabInfo( SCCOL nX1, SCCOL nX2, SCCOL nY1, SCCOL nY2 );
     virtual SCCOLROW    GetPos() const = 0;                         // current position (Scrolling)
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const = 0;      // width / height (Pixel)
     virtual OUString  GetEntryText( SCCOLROW nEntryNo ) const = 0;
