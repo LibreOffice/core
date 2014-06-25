@@ -1117,7 +1117,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
             // Don't select header / footer objects in body edition and vice-versa
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-            if ( !pContact->ObjAnchoredAtPage() )
+            if (pContact && !pContact->ObjAnchoredAtPage() )
             {
                 const SwPosition& rPos = pContact->GetCntntAnchor();
                 bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.nNode );
