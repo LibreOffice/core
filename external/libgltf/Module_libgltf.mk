@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,libgltf))
 
 $(eval $(call gb_Module_add_targets,libgltf,\
-	StaticLibrary_libgltf \
+	ExternalProject_libgltf \
 	UnpackedTarball_libgltf \
 ))
 

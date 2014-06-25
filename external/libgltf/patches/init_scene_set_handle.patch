@@ -1,7 +1,7 @@
 diff -ur libgltf.org/src/LoadScene.cpp libgltf/src/LoadScene.cpp
---- libgltf.org/src/LoadScene.cpp	2014-06-13 01:13:40.654653289 +0200
-+++ libgltf/src/LoadScene.cpp	2014-06-13 01:15:45.034648018 +0200
-@@ -148,10 +148,14 @@
+--- libgltf.org/src/LoadScene.cpp	2014-06-23 14:55:58.099723870 +0200
++++ libgltf/src/LoadScene.cpp	2014-06-23 14:56:04.399723599 +0200
+@@ -149,10 +149,14 @@
      return true;
  }
  
@@ -16,12 +16,12 @@ diff -ur libgltf.org/src/LoadScene.cpp libgltf/src/LoadScene.cpp
      int status;
 -    this->pScene = pscene;
  
-     {
-         TRACE_TIME ("parseScene->readBuffers", CPU);
+     status = this->readBuffers();
+     if (status < 0)
 diff -ur libgltf.org/src/LoadScene.h libgltf/src/LoadScene.h
---- libgltf.org/src/LoadScene.h	2014-06-13 01:13:40.654653289 +0200
-+++ libgltf/src/LoadScene.h	2014-06-13 01:16:03.886647220 +0200
-@@ -27,7 +27,8 @@
+--- libgltf.org/src/LoadScene.h	2014-06-23 14:55:58.079723871 +0200
++++ libgltf/src/LoadScene.h	2014-06-23 14:56:37.303722182 +0200
+@@ -21,7 +21,8 @@
  public:
      glTFHandle* getFileNameInJson(const std::string& jsonFile);
      bool releaseFileName();
@@ -31,41 +31,30 @@ diff -ur libgltf.org/src/LoadScene.h libgltf/src/LoadScene.h
      bool parseJsonFile();
      void setJsonInfo(const std::string& sbuffer);
      void setJsonInfo(const std::string& direct, const std::string& fileName);
-@@ -81,4 +82,4 @@
-     bool is_json_in_buffer;
- };
- 
--#endif
-\ No newline at end of file
-+#endif
 diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
---- libgltf.org/src/RenderScene.cpp	2014-06-13 01:13:40.654653289 +0200
-+++ libgltf/src/RenderScene.cpp	2014-06-13 01:15:11.222649451 +0200
-@@ -561,7 +561,7 @@
+--- libgltf.org/src/RenderScene.cpp	2014-06-23 14:55:58.099723870 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-23 14:56:07.239723477 +0200
+@@ -657,16 +657,15 @@
      {
          return LIBGLTF_PARSE_JSON_ERROR;
      }
 -    int iStatus = mLoadJson.parseScene(&scene);
 +    int iStatus = mLoadJson.parseScene();
-     if (iStatus != LIBGLTF_SUCESS)
-     {
-         return iStatus;
-@@ -571,12 +571,11 @@
+     return iStatus;
+ }
  
  int RenderScene::loadScene(Scene& scene, glTFHandle* handle)
  {
 -    scene.setGltfHandle(handle);
      try
      {
-         {
-             TRACE_TIME ("loadScene->parseScene", CPU);
--            int iStatus = mLoadJson.parseScene(&scene);
-+            int iStatus = mLoadJson.parseScene();
-             if (iStatus != LIBGLTF_SUCESS)
-             {
-                 return iStatus;
-@@ -612,7 +611,11 @@
-         }
+-        int iStatus = mLoadJson.parseScene(&scene);
++        int iStatus = mLoadJson.parseScene();
+         return iStatus;
+     }
+     catch (boost::property_tree::ptree_error& e)
+@@ -694,7 +693,11 @@
+         return 0;
      }
      string tmpFileName(jsonfile->filename);
 -    return mLoadJson.getFileNameInJson(tmpFileName);
@@ -77,22 +66,15 @@ diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
  }
  
  unsigned int RenderScene::bindAttribute(const Attribute* pAttr)
-@@ -844,11 +847,6 @@
- 
- int RenderScene::initRender(glTFHandle* handle)
+@@ -969,11 +972,6 @@
  {
+     initOpengl();
+ 
 -    pScene = new Scene();
--    if(0 == pScene)
+-    if (0 == pScene)
 -    {
 -        return LIBGLTF_MEMORY_ERROR;
 -    }
      int iResult = loadScene(*pScene, handle);
-     if( iResult != LIBGLTF_SUCESS)
+     if (iResult != LIBGLTF_SUCCESS)
      {
-@@ -1543,4 +1541,4 @@
- int  RenderScene::isAnimPlay()
- {
-     return this->mAnimationPlay ? 1 : 0;
--}
-\ No newline at end of file
-+}

@@ -1,0 +1,11 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-23 21:17:51.466737211 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-23 21:23:23.718722904 +0200
+@@ -602,6 +602,7 @@
+     , roCameraX(1.0f), roCameraY(1.0f)
+     , initCameraLocalMatrix(1.0f),initCameraGlobalMatrix(1.0f)
+     , bAnimation(true), pTempMatrix(0)
++    , bIsTimeAvailable(false)
+ {
+     mLastModelView = glm::mat4(0.0);
+ #if ENABLE_FPS

@@ -16,11 +16,9 @@ $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 $(eval $(call gb_Library_use_externals,avmediaogl, \
     boost_headers \
     libgltf \
+    glew \
     glm_headers \
     mesa_headers \
-    glew \
-    zlib \
-    freetype \
 ))
 
 $(eval $(call gb_Library_use_libraries,avmediaogl,\
@@ -50,8 +48,6 @@ $(eval $(call gb_Library_add_exception_objects,avmediaogl,\
 ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,avmediaogl,\
     opengl32 \
-    gdi32 \
-    glu32 \
 ))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaogl,\
@@ -59,10 +55,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaogl,\
 ))
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,avmediaogl,\
-    -ldl \
     -lGL \
-    -lGLU \
-    -lX11 \
 ))
 endif
 
