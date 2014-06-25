@@ -794,7 +794,7 @@ void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) thro
 void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    AddElement(rForms);
+    AddElement(Reference<XInterface>( rForms, UNO_QUERY ));
     UnLock();
 }
 
@@ -802,7 +802,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
-    RemoveElement(rForms);
+    RemoveElement(Reference<XInterface>( rForms, UNO_QUERY ));
     UnLock();
 }
 

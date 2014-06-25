@@ -2523,7 +2523,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrRelativeGridColumn.push_back(-1);
 
                         // and for the formatted search...
-                        pfmscContextInfo->arrFields.push_back(xControl);
+                        pfmscContextInfo->arrFields.push_back(Reference<XInterface>( xControl, UNO_QUERY ));
                     }
                 }
             }
@@ -2712,7 +2712,7 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
     Reference< XForm > xNewForm( GetForm( rEvent.Source ) );
 
     InterfaceBag aNewSelection;
-    aNewSelection.insert( xSelObj );
+    aNewSelection.insert( Reference<XInterface>( xSelObj, UNO_QUERY ) );
 
     if ( setCurrentSelection( aNewSelection ) && IsPropBrwOpen() )
         ShowSelectionProperties( sal_True );

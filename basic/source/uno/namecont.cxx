@@ -297,7 +297,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
         throw RuntimeException("addContainerListener called with null xListener",
                                static_cast< cppu::OWeakObject * >(this));
     }
-    maContainerListeners.addInterface( xListener );
+    maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -307,7 +307,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     {
         throw RuntimeException();
     }
-    maContainerListeners.removeInterface( xListener );
+    maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
 
 // Methods XChangesNotifier
@@ -318,7 +318,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
     {
         throw RuntimeException();
     }
-    maChangesListeners.addInterface( xListener );
+    maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
@@ -328,7 +328,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     {
         throw RuntimeException();
     }
-    maChangesListeners.removeInterface( xListener );
+    maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
 
 //============================================================================
@@ -2992,7 +2992,7 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     leaveMethod();
 
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
-    vba::VBAScriptEvent aEvent( xModel, nIdentifier, rModuleName );
+    vba::VBAScriptEvent aEvent( Reference<XInterface>(xModel, UNO_QUERY), nIdentifier, rModuleName );
     maVBAScriptListeners.notify( aEvent );
 }
 
