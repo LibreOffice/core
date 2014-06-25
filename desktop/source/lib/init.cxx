@@ -448,6 +448,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     Application::AcquireSolarMutex(1);
     {
+#if defined(UNX) && !defined(MACOSX)
         ImplSVData* pSVData = ImplGetSVData();
         SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
         pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
@@ -465,6 +466,16 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
         basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
         *pRowStride = pBmpDev->getScanlineStride();
+#else
+        (void) pBuffer;
+        (void) nCanvasWidth;
+        (void) nCanvasHeight;
+        (void) pRowStride;
+        (void) nTilePosX;
+        (void) nTilePosY;
+        (void) nTileWidth;
+        (void) nTileHeight;
+#endif
     }
     Application::ReleaseSolarMutex();
 }
