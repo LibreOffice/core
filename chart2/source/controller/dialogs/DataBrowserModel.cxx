@@ -316,31 +316,39 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         return;
 
     if( isCategoriesColumn(nAfterColumnIndex) )
+        // Move to the last category column.
         nAfterColumnIndex = getCategoryColumnCount()-1;
 
     sal_Int32 nStartCol = 0;
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
-    Reference< chart2::XChartType > xChartType;
-    Reference< chart2::XDataSeries > xSeries;
-    if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
+    Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
+    Reference<chart2::XChartType> xChartType;
+    Reference<chart2::XDataSeries> xSeries;
+    if (static_cast<size_t>(nAfterColumnIndex) < m_aColumns.size())
+        // Get the data series at specific column position (if available).
         xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
 
     sal_Int32 nSeriesNumberFormat = 0;
     if( xSeries.is())
     {
+        // Use the chart type of the currently selected data series.
         xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
+
+        // Find the corresponding header and determine the last column of this
+        // data series.
         tDataHeaderVector::const_iterator aIt(
             ::std::find_if( m_aHeaders.begin(), m_aHeaders.end(),
                             lcl_DataSeriesOfHeaderMatches( xSeries )));
         if( aIt != m_aHeaders.end())
             nStartCol = aIt->m_nEndColumn;
 
+        // Get the number format too.
         Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
         if( xSeriesProps.is() )
             xSeriesProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nSeriesNumberFormat;
     }
     else
     {
+        // No data series at specified column position. Use the first chart type.
         xChartType.set( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ));
         nStartCol = nAfterColumnIndex;
     }
@@ -350,9 +358,10 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 
     sal_Int32 nOffset = 0;
     if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
-        nOffset=getCategoryColumnCount();
+        nOffset = getCategoryColumnCount();
 
-    // get shared sequences of current series
+    // Get shared sequences of current series.  Normally multiple data series
+    // only share "values-x" sequences. (TODO: simplify this logic).
     Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
     lcl_tSharedSeqVec aSharedSequences;
     if( xSeriesCnt.is())
@@ -362,30 +371,31 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         m_apDialogModel->insertSeriesAfter(xSeries, xChartType, true);
 
     if (!xNewSeries.is())
+        // Failed to insert new data series to the model. Bail out.
         return;
 
     Reference< chart2::data::XDataSource > xSource( xNewSeries, uno::UNO_QUERY );
     if (xSource.is())
     {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
-            xSource->getDataSequences());
+        Sequence<Reference<chart2::data::XLabeledDataSequence> > aLSequences = xSource->getDataSequences();
         sal_Int32 nSeqIdx = 0;
         sal_Int32 nSeqSize = aLSequences.getLength();
-        nStartCol -= (nOffset - 1);
-        for( sal_Int32 nIndex = nStartCol;
-             (nSeqIdx < nSeqSize);
-             ++nSeqIdx )
+        nStartCol -= (nOffset - 1); // ???
+        for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
         {
             lcl_tSharedSeqVec::const_iterator aSharedIt(
                 ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                 lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
+
             if( aSharedIt != aSharedSequences.end())
             {
+                // Shared sequence. Most likely "values-x" sequence.  Copy it from existing sequence.
                 aLSequences[nSeqIdx]->setValues( (*aSharedIt)->getValues());
                 aLSequences[nSeqIdx]->setLabel( (*aSharedIt)->getLabel());
             }
             else
             {
+                // Insert a new column in the internal data for the new sequence.
                 xDataProvider->insertSequence( nIndex - 1 );
 
                 // values
