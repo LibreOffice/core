@@ -604,7 +604,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     if( pModel )
     {
         pModel->SetChanged();
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationInserted" , xAnnotation );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationInserted", Reference<XInterface>( xAnnotation, UNO_QUERY ) );
     }
 }
 
@@ -624,7 +624,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
     if( pModel )
     {
         pModel->SetChanged();
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), OUString( "OnAnnotationRemoved" ), xAnnotation );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationRemoved", Reference<XInterface>( xAnnotation, UNO_QUERY ) );
     }
 }
 
