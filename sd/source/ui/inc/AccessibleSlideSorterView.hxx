@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 
-
 #include <memory>
 
 class Window;
@@ -42,7 +41,6 @@ class SlideSorter;
 } }
 
 namespace accessibility {
-
 
 class AccessibleSlideSorterObject;
 
@@ -106,7 +104,6 @@ public:
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
@@ -233,7 +230,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //===== XAccessibleSelection ==============================================
 
     virtual void SAL_CALL
@@ -268,7 +264,6 @@ public:
         deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //=====  XServiceInfo  ====================================================
 

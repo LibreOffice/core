@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
@@ -47,7 +46,6 @@
 
 #include <sfx2/viewfrm.hxx>
 
-
 #include "app.hrc"
 #include "strings.hrc"
 #include "Window.hxx"
@@ -62,7 +60,6 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace sd {
-
 
 void DrawViewShell::ExecGallery(SfxRequest& rReq)
 {
@@ -96,7 +93,6 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         Size aPageSize = pPage->GetSize();
         aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-
 
         // Falls Grafik zu gross, wird die Grafik
         // in die Seite eingepasst
@@ -166,7 +162,6 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
             }
         }
 
-
         if( bInsertNewObject )
         {
             pGrafObj = new SdrGrafObj(aGraphic, aRect);
@@ -183,8 +178,6 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     GetDocSh()->SetWaitCursor( false );
 }
-
-
 
 void DrawViewShell::GetGalleryState(SfxItemSet& )
 {

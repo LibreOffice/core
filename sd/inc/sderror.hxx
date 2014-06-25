@@ -30,7 +30,6 @@
 #define WARN_SD_READ_BASE       (WARN_SD_BASE | ERRCODE_CLASS_READ )
 #define WARN_SD_WRITE_BASE      (WARN_SD_BASE | ERRCODE_CLASS_WRITE )
 
-
 // Import errors
 #define ERR_FORMAT_ROWCOL               (ERROR_SD_READ_BASE | 1)
 #define ERR_FORMAT_FILE_ROWCOL          (ERROR_SD_READ_BASE | 2)
@@ -47,7 +46,6 @@ inline bool IsWarning( sal_uLong nErr )
 }
 
 #endif
-
 
 #endif
 

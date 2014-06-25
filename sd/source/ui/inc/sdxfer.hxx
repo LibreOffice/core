@@ -25,7 +25,6 @@
 #include <sfx2/objsh.hxx>
 #include <svl/lstner.hxx>
 
-
 // SdTransferable
 class SdDrawDocument;
 class SdrObject;

@@ -87,7 +87,6 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         if (pNotesMasterPage == NULL)
             break;
 
-
         // Check if a master page with the same name as that of the given
         // master page already exists.
         bool bPageExists (false);
@@ -155,9 +154,6 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
     return pNewMasterPage;
 }
 
-
-
-
 SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
 {
     SdPage* pCandidate = NULL;
@@ -203,9 +199,6 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
 
     return pCandidate;
 }
-
-
-
 
 SdPage* DocumentHelper::AddMasterPage (
     SdDrawDocument& rTargetDocument,
@@ -253,9 +246,6 @@ SdPage* DocumentHelper::AddMasterPage (
     return pClonedMasterPage;
 }
 
-
-
-
 void DocumentHelper::ProvideStyles (
     SdDrawDocument& rSourceDocument,
     SdDrawDocument& rTargetDocument,
@@ -293,9 +283,6 @@ void DocumentHelper::ProvideStyles (
        }
     }
 }
-
-
-
 
 void DocumentHelper::AssignMasterPageToPageList (
     SdDrawDocument& rTargetDocument,
@@ -354,9 +341,6 @@ void DocumentHelper::AssignMasterPageToPageList (
         pUndoMgr->LeaveListAction();
 }
 
-
-
-
 SdPage* DocumentHelper::AddMasterPage (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
@@ -399,9 +383,6 @@ SdPage* DocumentHelper::AddMasterPage (
 
     return pClonedMasterPage;
 }
-
-
-
 
 /** In here we have to handle three cases:
     1. pPage is a normal slide.  We can use SetMasterPage to assign the
@@ -483,9 +464,6 @@ void DocumentHelper::AssignMasterPageToPage (
     }
 }
 
-
-
-
 SdPage* DocumentHelper::ProvideMasterPage (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
@@ -564,10 +542,6 @@ SdPage* DocumentHelper::ProvideMasterPage (
 
     return pMasterPageInDocument;
 }
-
-
-
-
 
 } } // end of namespace sd::sidebar
 

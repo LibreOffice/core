@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsInsertionIndicatorOverlay.hxx"
 
 #include "SlideSorter.hxx"
@@ -40,13 +39,9 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-
 namespace {
 
-
 static const double gnPreviewOffsetScale = 1.0 / 8.0;
-
-
 
 Rectangle GrowRectangle (const Rectangle& rBox, const sal_Int32 nOffset)
 {
@@ -61,9 +56,7 @@ sal_Int32 RoundToInt (const double nValue) { return sal_Int32(::rtl::math::round
 
 } // end of anonymous namespace
 
-
 namespace sd { namespace slidesorter { namespace view {
-
 
 //=====  InsertionIndicatorOverlay  ===========================================
 
@@ -82,16 +75,10 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 InsertionIndicatorOverlay::~InsertionIndicatorOverlay (void)
 {
     Hide();
 }
-
-
-
 
 void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
 {
@@ -117,9 +104,6 @@ void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
     }
     Create(pData->GetRepresentatives(), nSelectionCount);
 }
-
-
-
 
 void InsertionIndicatorOverlay::Create (
     const ::std::vector<controller::TransferableData::Representative>& rRepresentatives,
@@ -165,9 +149,6 @@ void InsertionIndicatorOverlay::Create (
     maIcon = aContent.GetBitmapEx(Point(0,0), aIconSize);
     maIcon.Scale(aIconSize);
 }
-
-
-
 
 Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
@@ -255,9 +236,6 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     return aPageOffset;
 }
 
-
-
-
 void InsertionIndicatorOverlay::PaintPageCount (
     OutputDevice& rDevice,
     const sal_Int32 nSelectionCount,
@@ -301,9 +279,6 @@ void InsertionIndicatorOverlay::PaintPageCount (
     }
 }
 
-
-
-
 void InsertionIndicatorOverlay::SetLocation (const Point& rLocation)
 {
     const Point  aTopLeft (
@@ -324,9 +299,6 @@ void InsertionIndicatorOverlay::SetLocation (const Point& rLocation)
     }
 }
 
-
-
-
 void InsertionIndicatorOverlay::Paint (
     OutputDevice& rDevice,
     const Rectangle& rRepaintArea)
@@ -339,9 +311,6 @@ void InsertionIndicatorOverlay::Paint (
     rDevice.DrawImage(maLocation, Image(maIcon));
 }
 
-
-
-
 void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator)
 {
     mpLayerInvalidator = rpInvalidator;
@@ -349,13 +318,6 @@ void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidat
     if (mbIsVisible && mpLayerInvalidator)
         mpLayerInvalidator->Invalidate(GetBoundingBox());
 }
-
-
-
-
-
-
-
 
 void InsertionIndicatorOverlay::Show (void)
 {
@@ -374,9 +336,6 @@ void InsertionIndicatorOverlay::Show (void)
     }
 }
 
-
-
-
 void InsertionIndicatorOverlay::Hide (void)
 {
     if (mbIsVisible)
@@ -394,16 +353,10 @@ void InsertionIndicatorOverlay::Hide (void)
     }
 }
 
-
-
-
 Rectangle InsertionIndicatorOverlay::GetBoundingBox (void) const
 {
     return Rectangle(maLocation, maIcon.GetSizePixel());
 }
-
-
-
 
 Size InsertionIndicatorOverlay::GetSize (void) const
 {
@@ -411,8 +364,6 @@ Size InsertionIndicatorOverlay::GetSize (void) const
         maIcon.GetSizePixel().Width() + 10,
         maIcon.GetSizePixel().Height() + 10);
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

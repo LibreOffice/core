@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuprobjs.hxx"
 
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/smplhint.hxx>
-
 
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -46,7 +44,6 @@
 namespace sd {
 
 TYPEINIT1( FuPresentationObjects, FuPoor );
-
 
 FuPresentationObjects::FuPresentationObjects (
     ViewShell* pViewSh,

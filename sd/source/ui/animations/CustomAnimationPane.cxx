@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
@@ -105,8 +104,6 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 
-
-
 void fillDurationComboBox( ListBox* pBox )
 {
     static const double gdVerySlow = 5.0;
@@ -148,9 +145,6 @@ void fillRepeatComboBox( ListBox* pBox )
     OUString aEndOfSlide( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
     pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
 }
-
-
-
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
                                           const cssu::Reference<css::frame::XFrame>& rxFrame,
@@ -804,17 +798,11 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
     updateControls();
 }
 
-
-
-
 void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
     UpdateLook();
 }
-
-
-
 
 void CustomAnimationPane::UpdateLook (void)
 {
@@ -829,9 +817,6 @@ void CustomAnimationPane::UpdateLook (void)
     if (mpFTSpeed != NULL)
         mpFTSpeed->SetBackground(aBackground);
 }
-
-
-
 
 void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
 {
@@ -2207,7 +2192,6 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
 }
 
-
 // ICustomAnimationListController
 void CustomAnimationPane::onSelect()
 {
@@ -2216,17 +2200,12 @@ void CustomAnimationPane::onSelect()
     markShapesFromSelectedEffects();
 }
 
-
-
-
 const CustomAnimationPresets& CustomAnimationPane::getPresets (void)
 {
     if (mpCustomAnimationPresets == NULL)
         mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
     return *mpCustomAnimationPresets;
 }
-
-
 
 void CustomAnimationPane::markShapesFromSelectedEffects()
 {
@@ -2255,7 +2234,6 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
     }
 }
 
-
 void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag )
 {
     MainSequenceRebuildGuard aGuard( mpMainSequence );
@@ -2278,9 +2256,6 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     }
 }
 
-
-
-
 ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
 {
     ::Window* pWindow = 0;
@@ -2294,7 +2269,6 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
     return pWindow;
 }
-
 
 }
 

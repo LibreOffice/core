@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconstr.hxx"
 
 #include <svx/svxids.hrc>
@@ -45,7 +44,6 @@ namespace sd {
 
 TYPEINIT1( FuConstruct, FuDraw );
 
-
 FuConstruct::FuConstruct (
     ViewShell*      pViewSh,
     ::sd::Window*           pWin,
@@ -61,7 +59,6 @@ void FuConstruct::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
 }
-
 
 bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -103,7 +100,6 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
@@ -127,7 +123,6 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
     return true;
 }
-
 
 bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -236,13 +231,11 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
-
 void FuConstruct::Activate()
 {
     mpView->SetEditMode(SDREDITMODE_CREATE);
     FuDraw::Activate();
 }
-
 
 void FuConstruct::Deactivate()
 {

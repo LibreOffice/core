@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GenericConfigurationChangeRequest.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -25,7 +24,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-
 
 namespace sd { namespace framework {
 
@@ -40,15 +38,9 @@ GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
         throw ::com::sun::star::lang::IllegalArgumentException();
 }
 
-
-
-
 GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest (void) throw()
 {
 }
-
-
-
 
 void SAL_CALL GenericConfigurationChangeRequest::execute (
     const Reference<XConfiguration>& rxConfiguration)
@@ -69,9 +61,6 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
     }
 }
 
-
-
-
 OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
     throw (RuntimeException, std::exception)
 {
@@ -79,9 +68,6 @@ OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
         + (meMode==Activation ? OUString("activate ") : OUString("deactivate "))
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }
-
-
-
 
 void SAL_CALL GenericConfigurationChangeRequest::setName (const OUString& rsName)
     throw (RuntimeException, std::exception)

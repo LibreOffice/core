@@ -40,9 +40,6 @@ public:
     virtual ~PaneChildWindow (void);
 };
 
-
-
-
 class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
@@ -52,9 +49,6 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
 };
 
-
-
-
 class LeftPaneDrawChildWindow
     : public PaneChildWindow
 {
@@ -63,7 +57,6 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneDrawChildWindow);
 };
-
 
 } // end of namespace ::sd
 

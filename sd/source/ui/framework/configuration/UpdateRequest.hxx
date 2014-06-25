@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <cppuhelper/compbase2.hxx>
 
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <
@@ -35,8 +34,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
     > UpdateRequestInterfaceBase;
 
 } // end of anonymous namespace.
-
-
 
 namespace sd { namespace framework {
 
@@ -56,14 +53,12 @@ public:
     UpdateRequest (void) throw();
     virtual ~UpdateRequest (void) throw();
 
-
     // XConfigurationChangeOperation
 
     virtual void SAL_CALL execute (
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XNamed
 

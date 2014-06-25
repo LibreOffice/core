@@ -164,9 +164,6 @@ private:
     static BitmapEx LoadPreviewFromURL (const OUString& aURL);
 };
 
-
-
-
 /** For some changes to the set of master pages in a MasterPageContainer or
     to the data stored for each master page one or more events are sent to
     registered listeners.
@@ -197,7 +194,6 @@ public:
     // removed.
     MasterPageContainer::Token maChildToken;
 };
-
 
 } } // end of namespace sd::sidebar
 

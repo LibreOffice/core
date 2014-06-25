@@ -57,7 +57,6 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
-
 class RenameLayoutTemplateUndoAction : public SdUndoAction
 {
 public:

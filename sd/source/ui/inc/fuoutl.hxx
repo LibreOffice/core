@@ -25,7 +25,6 @@
 class SdDrawDocument;
 class SfxRequest;
 
-
 namespace sd {
 
 class OutlineView;

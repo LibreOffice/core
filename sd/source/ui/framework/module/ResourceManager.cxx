@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ResourceManager.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -37,9 +36,6 @@ namespace {
     static const sal_Int32 ResourceDeactivationRequestEvent = 1;
 }
 
-
-
-
 namespace sd { namespace framework {
 
 class ResourceManager::MainViewContainer
@@ -48,9 +44,6 @@ class ResourceManager::MainViewContainer
 public:
     MainViewContainer (void) {}
 };
-
-
-
 
 //===== ResourceManager =======================================================
 
@@ -87,15 +80,9 @@ ResourceManager::ResourceManager (
     }
 }
 
-
-
-
 ResourceManager::~ResourceManager (void)
 {
 }
-
-
-
 
 void ResourceManager::AddActiveMainView (
     const OUString& rsMainViewURL)
@@ -178,9 +165,6 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
     }
 }
 
-
-
-
 void ResourceManager::UpdateForMainViewShell (void)
 {
     if (mxConfigurationController.is())
@@ -205,9 +189,6 @@ void ResourceManager::UpdateForMainViewShell (void)
     }
 }
 
-
-
-
 void ResourceManager::HandleMainViewSwitch (
     const OUString& rsViewURL,
     const Reference<XConfiguration>& rxConfiguration,
@@ -220,9 +201,6 @@ void ResourceManager::HandleMainViewSwitch (
         msCurrentMainViewURL = OUString();
     UpdateForMainViewShell();
 }
-
-
-
 
 void ResourceManager::HandleResourceRequest(
     bool bActivation,
@@ -247,9 +225,6 @@ void ResourceManager::HandleResourceRequest(
         }
     }
 }
-
-
-
 
 void SAL_CALL ResourceManager::disposing (
     const lang::EventObject& rEvent)

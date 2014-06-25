@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -59,7 +58,6 @@ using namespace sd::ui::table;
 #define TableObjectBar
 #include "sdslots.hxx"
 
-
 namespace sd { namespace ui { namespace table {
 
 /** creates a table object bar for the given ViewShell */
@@ -67,7 +65,6 @@ SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView )
 {
     return new TableObjectBar( &rShell, pView );
 }
-
 
 /** registers the interfaces from the table ui */
 void RegisterInterfaces(SfxModule* pMod)
@@ -102,8 +99,6 @@ TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
     SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }
 
-
-
 TableObjectBar::~TableObjectBar()
 {
     SetRepeatTarget( NULL );
@@ -127,8 +122,6 @@ void TableObjectBar::GetAttrState( SfxItemSet& rSet )
     if( pDrawViewShell )
         pDrawViewShell->GetAttrState( rSet );
 }
-
-
 
 void TableObjectBar::Execute( SfxRequest& rReq )
 {

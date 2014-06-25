@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -29,7 +28,6 @@
 #include <editeng/outlobj.hxx>
 #include "Outliner.hxx"
 #include <svx/svdpool.hxx>
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

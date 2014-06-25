@@ -69,7 +69,6 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
     }
 }
 
-
 void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                     FontCollection& rFontCollection, int nLevel )
 {
@@ -384,7 +383,6 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
            .WriteUInt16( rLev.mnBiDi );
     }
 }
-
 
 PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv )
 {

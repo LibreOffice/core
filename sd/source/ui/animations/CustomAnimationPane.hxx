@@ -58,8 +58,6 @@ class ViewShellBase;
 
 typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
 
-
-
 class CustomAnimationPane : public PanelLayout, public ICustomAnimationListController
 {
     friend class MotionPathTag;

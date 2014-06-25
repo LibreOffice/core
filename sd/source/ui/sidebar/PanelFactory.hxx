@@ -34,7 +34,6 @@
 
 namespace cssu = ::com::sun::star::uno;
 
-
 namespace sd {
     class ViewShellBase;
 }
@@ -47,7 +46,6 @@ namespace
         css::ui::XUIElementFactory
         > PanelFactoryInterfaceBase;
 }
-
 
 class PanelFactory
     : private ::boost::noncopyable,
@@ -65,7 +63,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XUIElementFactory
 
     cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
@@ -76,7 +73,6 @@ public:
             css::lang::IllegalArgumentException,
             cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 } } // end of namespace sd::sidebar
 

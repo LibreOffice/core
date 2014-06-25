@@ -52,7 +52,6 @@ class VclSimpleEvent;
 
 namespace accessibility {
 
-
 /** Base class for the various document views of the Draw and
     Impress applications.
 
@@ -163,7 +162,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XAccessibleComponent  ============================================
 
     virtual ::com::sun::star::uno::Reference<
@@ -183,7 +181,6 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XInterface  ======================================================
 
     virtual com::sun::star::uno::Any SAL_CALL
@@ -198,7 +195,6 @@ public:
         release (void)
         throw () SAL_OVERRIDE;
 
-
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -211,13 +207,11 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //=====  lang::XEventListener  ============================================
 
@@ -225,13 +219,11 @@ public:
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
         propertyChange (const ::com::sun::star::beans::PropertyChangeEvent& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //=====  XWindowListener  =================================================
 

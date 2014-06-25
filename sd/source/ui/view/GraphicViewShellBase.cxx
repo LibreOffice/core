@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GraphicViewShellBase.hxx"
 
 #include "GraphicDocShell.hxx"
@@ -53,13 +52,6 @@ void GraphicViewShellBase::InitFactory()
     SFX_VIEW_REGISTRATION(GraphicDocShell);
 }
 
-
-
-
-
-
-
-
 GraphicViewShellBase::GraphicViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
@@ -67,15 +59,9 @@ GraphicViewShellBase::GraphicViewShellBase (
 {
 }
 
-
-
-
 GraphicViewShellBase::~GraphicViewShellBase (void)
 {
 }
-
-
-
 
 void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 {
@@ -105,16 +91,12 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
 }
 
-
-
-
 void GraphicViewShellBase::InitializeFramework (void)
 {
     com::sun::star::uno::Reference<com::sun::star::frame::XController>
         xController (GetController());
     sd::framework::DrawModule::Initialize(xController);
 }
-
 
 } // end of namespace sd
 

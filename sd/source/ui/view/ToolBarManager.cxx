@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ToolBarManager.hxx"
 
 #include "DrawViewShell.hxx"
@@ -66,7 +65,6 @@ private:
     Reference<frame::XLayoutManager> mxLayouter;
 };
 
-
 typedef ::std::vector<OUString> NameList;
 
 /** Store a list of tool bars for each of the tool bar groups.  From
@@ -95,9 +93,6 @@ private:
 
     void MakeRequestedToolBarList (NameList& rToolBars) const;
 };
-
-
-
 
 /** Manage tool bars that are implemented as sub shells of a view shell.
     The typical procedure of updating the sub shells of a view shell is to
@@ -182,9 +177,6 @@ private:
     GroupedShellList maCurrentList;
 };
 
-
-
-
 /** This class concentrates the knowledge about when to show what tool bars
     in one place.
 */
@@ -235,9 +227,6 @@ private:
 };
 
 } // end of anonymous namespace
-
-
-
 
 namespace sd {
 
@@ -343,8 +332,6 @@ private:
     DECL_LINK(SetValidCallback,void*);
 };
 
-
-
 //===== ToolBarManager ========================================================
 
 const OUString ToolBarManager::msToolBar("toolbar");
@@ -363,7 +350,6 @@ const OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
 const OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
 const OUString ToolBarManager::msTableObjectBar("tableobjectbar");
 
-
 ::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
     const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
@@ -375,32 +361,20 @@ const OUString ToolBarManager::msTableObjectBar("tableobjectbar");
     return pManager;
 }
 
-
-
-
 ToolBarManager::ToolBarManager (void)
         : mpImpl()
 {
 }
 
-
-
-
 ToolBarManager::~ToolBarManager (void)
 {
 }
-
-
-
 
 void ToolBarManager::Shutdown (void)
 {
     if (mpImpl.get() != NULL)
         mpImpl.reset();
 }
-
-
-
 
 void ToolBarManager::ResetToolBars (ToolBarGroup eGroup)
 {
@@ -411,9 +385,6 @@ void ToolBarManager::ResetToolBars (ToolBarGroup eGroup)
     }
 }
 
-
-
-
 void ToolBarManager::ResetAllToolBars (void)
 {
     if (mpImpl.get() != NULL)
@@ -422,9 +393,6 @@ void ToolBarManager::ResetAllToolBars (void)
         mpImpl->ResetAllToolBars();
     }
 }
-
-
-
 
 void ToolBarManager::AddToolBar (
     ToolBarGroup eGroup,
@@ -437,9 +405,6 @@ void ToolBarManager::AddToolBar (
     }
 }
 
-
-
-
 void ToolBarManager::AddToolBarShell (
     ToolBarGroup eGroup,
     ShellId nToolBarId)
@@ -451,9 +416,6 @@ void ToolBarManager::AddToolBarShell (
     }
 }
 
-
-
-
 void ToolBarManager::RemoveToolBar (
     ToolBarGroup eGroup,
     const OUString& rsToolBarName)
@@ -464,9 +426,6 @@ void ToolBarManager::RemoveToolBar (
         mpImpl->RemoveToolBar(eGroup,rsToolBarName);
     }
 }
-
-
-
 
 void ToolBarManager::SetToolBar (
     ToolBarGroup eGroup,
@@ -480,9 +439,6 @@ void ToolBarManager::SetToolBar (
     }
 }
 
-
-
-
 void ToolBarManager::SetToolBarShell (
     ToolBarGroup eGroup,
     ShellId nToolBarId)
@@ -495,17 +451,11 @@ void ToolBarManager::SetToolBarShell (
     }
 }
 
-
-
-
 void ToolBarManager::PreUpdate (void)
 {
     if (mpImpl.get()!=NULL)
         mpImpl->PreUpdate();
 }
-
-
-
 
 void ToolBarManager::RequestUpdate (void)
 {
@@ -513,17 +463,11 @@ void ToolBarManager::RequestUpdate (void)
         mpImpl->RequestUpdate();
 }
 
-
-
-
 void ToolBarManager::LockViewShellManager (void)
 {
     if (mpImpl.get() != NULL)
         mpImpl->LockViewShellManager();
 }
-
-
-
 
 void ToolBarManager::LockUpdate (void)
 {
@@ -531,17 +475,11 @@ void ToolBarManager::LockUpdate (void)
         mpImpl->LockUpdate();
 }
 
-
-
-
 void ToolBarManager::UnlockUpdate (void)
 {
     if (mpImpl.get()!=NULL)
         mpImpl->UnlockUpdate();
 }
-
-
-
 
 void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
 {
@@ -552,9 +490,6 @@ void ToolBarManager::MainViewShellChanged (ViewShell::ShellType nShellType)
     }
 }
 
-
-
-
 void ToolBarManager::MainViewShellChanged (const ViewShell& rMainViewShell)
 {
     if (mpImpl.get() != NULL)
@@ -564,9 +499,6 @@ void ToolBarManager::MainViewShellChanged (const ViewShell& rMainViewShell)
     }
 }
 
-
-
-
 void ToolBarManager::SelectionHasChanged (
     const ViewShell& rViewShell,
     const SdrView& rView)
@@ -575,13 +507,11 @@ void ToolBarManager::SelectionHasChanged (
         mpImpl->GetToolBarRules().SelectionHasChanged(rViewShell,rView);
 }
 
-
 void ToolBarManager::ToolBarsDestroyed(void)
 {
     if (mpImpl.get() != NULL)
         mpImpl->ToolBarsDestroyed();
 }
-
 
 //===== ToolBarManager::Implementation =======================================
 
@@ -617,8 +547,6 @@ ToolBarManager::Implementation::Implementation (
         | tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
 }
 
-
-
 /** The order of statements is important.
     First unregister listeners, which may post user events.
     Then remove pending user events.
@@ -636,12 +564,10 @@ ToolBarManager::Implementation::~Implementation (void)
         Application::RemoveUserEvent(mnPendingSetValidCall);
 }
 
-
 void ToolBarManager::Implementation::ToolBarsDestroyed(void)
 {
     maToolBarList.MarkAllToolBarsAsNotActive();
 }
-
 
 void ToolBarManager::Implementation::SetValid (bool bValid)
 {
@@ -677,9 +603,6 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
 {
     ::osl::MutexGuard aGuard(maMutex);
@@ -690,18 +613,12 @@ void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
     mbPreUpdatePending = true;
 }
 
-
-
-
 void ToolBarManager::Implementation::ResetAllToolBars (void)
 {
     SAL_INFO("sd.view", OSL_THIS_FUNC << ": resetting all tool bars");
     for (int i=TBG__FIRST; i<=TBG__LAST; ++i)
         ResetToolBars((ToolBarGroup)i);
 }
-
-
-
 
 void ToolBarManager::Implementation::AddToolBar (
     ToolBarGroup eGroup,
@@ -719,9 +636,6 @@ void ToolBarManager::Implementation::AddToolBar (
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::RemoveToolBar (
     ToolBarGroup eGroup,
     const OUString& rsToolBarName)
@@ -736,9 +650,6 @@ void ToolBarManager::Implementation::RemoveToolBar (
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::AddToolBarShell (
     ToolBarGroup eGroup,
     ShellId nToolBarId)
@@ -751,17 +662,11 @@ void ToolBarManager::Implementation::AddToolBarShell (
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::ReleaseAllToolBarShells (void)
 {
     maToolBarShellList.ReleaseAllShells(GetToolBarRules());
     maToolBarShellList.UpdateShells(mrBase.GetMainViewShell(), mrBase.GetViewShellManager());
 }
-
-
-
 
 void ToolBarManager::Implementation::RequestUpdate (void)
 {
@@ -771,9 +676,6 @@ void ToolBarManager::Implementation::RequestUpdate (void)
             LINK(this,ToolBarManager::Implementation,UpdateCallback));
     }
 }
-
-
-
 
 void ToolBarManager::Implementation::PreUpdate (void)
 {
@@ -807,9 +709,6 @@ void ToolBarManager::Implementation::PreUpdate (void)
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::PostUpdate (void)
 {
     ::osl::MutexGuard aGuard(maMutex);
@@ -841,18 +740,12 @@ void ToolBarManager::Implementation::PostUpdate (void)
     }
 }
 
-
-
-
 void ToolBarManager::Implementation::LockViewShellManager (void)
 {
     if (mpViewShellManagerLock.get() == NULL)
         mpViewShellManagerLock.reset(
             new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
 }
-
-
-
 
 void ToolBarManager::Implementation::LockUpdate (void)
 {
@@ -869,9 +762,6 @@ void ToolBarManager::Implementation::LockUpdate (void)
     ++mnLockCount;
 }
 
-
-
-
 void ToolBarManager::Implementation::UnlockUpdate (void)
 {
     SAL_INFO("sd.view", OSL_THIS_FUNC << ": UnlockUpdate " << mnLockCount);
@@ -884,8 +774,6 @@ void ToolBarManager::Implementation::UnlockUpdate (void)
         Update(mpSynchronousLayouterLock);
     }
 }
-
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void ToolBarManager::Implementation::Update (
@@ -965,13 +853,6 @@ void ToolBarManager::Implementation::Update (
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
-
-
-
-
-
 IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback)
 {
     mnPendingUpdateCall = 0;
@@ -986,9 +867,6 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback)
     }
     return 0;
 }
-
-
-
 
 IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
     sd::tools::EventMultiplexerEvent*,pEvent)
@@ -1015,19 +893,12 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
     return 0;
 }
 
-
-
-
 IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
 {
     mnPendingSetValidCall = 0;
     SetValid(true);
     return 0;
 }
-
-
-
-
 
 OUString ToolBarManager::Implementation::GetToolBarResourceName (
     const OUString& rsBaseName) const
@@ -1036,9 +907,6 @@ OUString ToolBarManager::Implementation::GetToolBarResourceName (
     sToolBarName += rsBaseName;
     return sToolBarName;
 }
-
-
-
 
 bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) const
 {
@@ -1072,13 +940,7 @@ bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) co
     return bValid;
 }
 
-
-
-
 } // end of namespace sd
-
-
-
 
 namespace {
 
@@ -1094,18 +956,12 @@ LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
         mxLayouter->lock();
 }
 
-
-
-
 LayouterLock::~LayouterLock (void)
 {
     SAL_INFO("sd.view", OSL_THIS_FUNC << ": ~LayouterLock " << (mxLayouter.is() ? 1 :0));
     if (mxLayouter.is())
         mxLayouter->unlock();
 }
-
-
-
 
 //===== ToolBarRules ==========================================================
 
@@ -1116,9 +972,6 @@ ToolBarRules::ToolBarRules (
       mpViewShellManager(rpViewShellManager)
 {
 }
-
-
-
 
 void ToolBarRules::Update (ViewShellBase& rBase)
 {
@@ -1132,9 +985,6 @@ void ToolBarRules::Update (ViewShellBase& rBase)
     else
         MainViewShellChanged(ViewShell::ST_NONE);
 }
-
-
-
 
 void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
 {
@@ -1205,9 +1055,6 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
     }
 }
 
-
-
-
 void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
 {
     ::sd::ToolBarManager::UpdateLock aToolBarManagerLock (mpToolBarManager);
@@ -1234,9 +1081,6 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
             break;
     }
 }
-
-
-
 
 void ToolBarRules::SelectionHasChanged (
     const ::sd::ViewShell& rViewShell,
@@ -1303,9 +1147,6 @@ void ToolBarRules::SelectionHasChanged (
         mpToolBarManager->AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_BEZIER_TOOLBOX);
 }
 
-
-
-
 void ToolBarRules::SubShellAdded (
     ::sd::ToolBarManager::ToolBarGroup eGroup,
     sd::ShellId nShellId)
@@ -1335,9 +1176,6 @@ void ToolBarRules::SubShellAdded (
             break;
     }
 }
-
-
-
 
 void ToolBarRules::SubShellRemoved (
     ::sd::ToolBarManager::ToolBarGroup eGroup,
@@ -1369,9 +1207,6 @@ void ToolBarRules::SubShellRemoved (
     }
 }
 
-
-
-
 //===== ToolBarList ===========================================================
 
 ToolBarList::ToolBarList (void)
@@ -1379,9 +1214,6 @@ ToolBarList::ToolBarList (void)
       maActiveToolBars()
 {
 }
-
-
-
 
 void ToolBarList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
 {
@@ -1394,9 +1226,6 @@ void ToolBarList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
         }
     }
 }
-
-
-
 
 void ToolBarList::AddToolBar (
     sd::ToolBarManager::ToolBarGroup eGroup,
@@ -1417,9 +1246,6 @@ void ToolBarList::AddToolBar (
     }
 }
 
-
-
-
 bool ToolBarList::RemoveToolBar (
     sd::ToolBarManager::ToolBarGroup eGroup,
     const OUString& rsName)
@@ -1438,9 +1264,6 @@ bool ToolBarList::RemoveToolBar (
     return false;
 }
 
-
-
-
 void ToolBarList::MakeRequestedToolBarList (NameList& rRequestedToolBars) const
 {
     for (int i=sd::ToolBarManager::TBG__FIRST; i<=sd::ToolBarManager::TBG__LAST; ++i)
@@ -1454,9 +1277,6 @@ void ToolBarList::MakeRequestedToolBarList (NameList& rRequestedToolBars) const
                 ::std::inserter(rRequestedToolBars,rRequestedToolBars.end()));
     }
 }
-
-
-
 
 void ToolBarList::GetToolBarsToActivate (NameList& rToolBars) const
 {
@@ -1474,9 +1294,6 @@ void ToolBarList::GetToolBarsToActivate (NameList& rToolBars) const
     }
 }
 
-
-
-
 void ToolBarList::GetToolBarsToDeactivate (NameList& rToolBars) const
 {
     NameList aRequestedToolBars;
@@ -1493,16 +1310,10 @@ void ToolBarList::GetToolBarsToDeactivate (NameList& rToolBars) const
     }
 }
 
-
-
-
 void ToolBarList::MarkToolBarAsActive (const OUString& rsName)
 {
     maActiveToolBars.push_back(rsName);
 }
-
-
-
 
 void ToolBarList::MarkToolBarAsNotActive (const OUString& rsName)
 {
@@ -1510,16 +1321,10 @@ void ToolBarList::MarkToolBarAsNotActive (const OUString& rsName)
         ::std::find(maActiveToolBars.begin(),maActiveToolBars.end(), rsName));
 }
 
-
-
-
 void ToolBarList::MarkAllToolBarsAsNotActive (void)
 {
     maActiveToolBars.clear();
 }
-
-
-
 
 //===== ToolBarShellList ======================================================
 
@@ -1531,17 +1336,11 @@ ToolBarShellList::ShellDescriptor::ShellDescriptor (
 {
 }
 
-
-
-
 ToolBarShellList::ToolBarShellList (void)
 : maNewList()
 , maCurrentList()
 {
 }
-
-
-
 
 void ToolBarShellList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
 {
@@ -1569,9 +1368,6 @@ void ToolBarShellList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
     while (bLoop);
 }
 
-
-
-
 void ToolBarShellList::AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId)
 {
     // Make sure that the shell is not added twice (and possibly in
@@ -1595,9 +1391,6 @@ void ToolBarShellList::AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::
         maNewList.insert(aDescriptor);
 }
 
-
-
-
 void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
 {
     // Release the currently active tool bars.
@@ -1611,9 +1404,6 @@ void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
     // Clear the list of requested tool bars.
     maNewList.clear();
 }
-
-
-
 
 void ToolBarShellList::UpdateShells (
     const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
@@ -1651,9 +1441,6 @@ void ToolBarShellList::UpdateShells (
         maCurrentList = maNewList;
     }
 }
-
-
-
 
 } // end of anonymous namespace
 

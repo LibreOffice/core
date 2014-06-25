@@ -73,9 +73,6 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
-
-
 #endif // INCLUDED_SD_SOURCE_UI_INC_PRNTOPTS_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

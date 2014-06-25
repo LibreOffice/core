@@ -36,7 +36,6 @@ public:
     virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false ) SAL_OVERRIDE;
 };
 
-
 }
 
 #endif // INCLUDED_SD_INC_UNDO_UNDOFACTORY_HXX

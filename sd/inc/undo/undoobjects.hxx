@@ -70,7 +70,6 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-
 class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
@@ -82,7 +81,6 @@ public:
 private:
     SdrObjectWeakRef mxSdrObject;
 };
-
 
 class UndoObjectSetText : public SdrUndoObjSetText
 {
@@ -99,7 +97,6 @@ private:
     SdrObjectWeakRef mxSdrObject;
 };
 
-
 // Undo for SdrObject::SetUserCall()
 
 class UndoObjectUserCall : public SdrUndoObj
@@ -115,7 +112,6 @@ protected:
     SdrObjUserCall* mpNewUserCall;
     SdrObjectWeakRef mxSdrObject;
 };
-
 
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
@@ -134,7 +130,6 @@ protected:
     SdrObjectWeakRef mxSdrObject;
 };
 
-
 // Restores correct position and size for presentation shapes with user call
 // on undo
 
@@ -150,7 +145,6 @@ protected:
     SdrPageWeakRef mxPage;
 };
 
-
 class UndoGeoObject : public SdrUndoGeoObj
 {
 public:
@@ -163,7 +157,6 @@ protected:
     SdrPageWeakRef mxPage;
     SdrObjectWeakRef mxSdrObject;
 };
-
 
 class UndoAttrObject : public SdrUndoAttrObj
 {

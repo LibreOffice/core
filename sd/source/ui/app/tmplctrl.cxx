@@ -46,15 +46,11 @@ private:
     virtual void    Select() SAL_OVERRIDE;
 };
 
-
-
 SdTemplatePopup_Impl::SdTemplatePopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
-
-
 
 void SdTemplatePopup_Impl::Select()
 {
@@ -70,13 +66,9 @@ SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
 {
 }
 
-
-
 SdTemplateControl::~SdTemplateControl()
 {
 }
-
-
 
 void SdTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -90,14 +82,10 @@ void SdTemplateControl::StateChanged(
     }
 }
 
-
-
 void SdTemplateControl::Paint( const UserDrawEvent&  )
 {
     GetStatusBar().SetItemText( GetId(), msTemplate );
 }
-
-
 
 void SdTemplateControl::Command( const CommandEvent& rCEvt )
 {
@@ -141,7 +129,5 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -601,7 +601,6 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
     return xNode;
 }
 
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,11 +60,7 @@ void GraphicObjectBar::InitInterface_Impl()
 {
 }
 
-
-
 TYPEINIT1( GraphicObjectBar, SfxShell );
-
-
 
 GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,
@@ -83,22 +79,16 @@ GraphicObjectBar::GraphicObjectBar (
     SetName( OUString( "Graphic objectbar" ));
 }
 
-
-
 GraphicObjectBar::~GraphicObjectBar()
 {
     SetRepeatTarget( NULL );
 }
-
-
 
 void GraphicObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     if( mpView )
         SvxGrafAttrHelper::GetGrafAttrState( rSet, *mpView );
 }
-
-
 
 void GraphicObjectBar::Execute( SfxRequest& rReq )
 {
@@ -108,8 +98,6 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
         Invalidate();
     }
 }
-
-
 
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
@@ -127,8 +115,6 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
     if( !bEnable )
         SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
 }
-
-
 
 void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 {

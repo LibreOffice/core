@@ -30,8 +30,6 @@ namespace sd
 class ViewShellBase;
 class AnnotationManagerImpl;
 
-
-
 class AnnotationManager
 {
 public:

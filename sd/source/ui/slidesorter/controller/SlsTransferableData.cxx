@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsTransferableData.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -63,17 +62,11 @@ TransferableData::TransferableData (
         StartListening(*mpViewShell);
 }
 
-
-
-
 TransferableData::~TransferableData (void)
 {
     if (mpViewShell != NULL)
         EndListening(*mpViewShell);
 }
-
-
-
 
 void TransferableData::DragFinished (sal_Int8 nDropAction)
 {
@@ -93,9 +86,6 @@ void TransferableData::DragFinished (sal_Int8 nDropAction)
     */
 }
 
-
-
-
 void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     if (rHint.ISA(SfxSimpleHint) && mpViewShell!=NULL)
@@ -112,14 +102,6 @@ void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
         }
     }
 }
-
-
-
-
-
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

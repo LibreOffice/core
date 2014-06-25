@@ -53,7 +53,6 @@ public:
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception,css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XPresenterHelper
 
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createWindow (

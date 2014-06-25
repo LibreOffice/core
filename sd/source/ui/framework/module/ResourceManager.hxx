@@ -35,7 +35,6 @@ typedef ::cppu::WeakComponentImplHelper1 <
 
 } // end of anonymous namespace.
 
-
 namespace sd { namespace framework {
 
 /** Manage the activation state of one resource depending on the view in the

@@ -24,7 +24,6 @@
 
 namespace sd { namespace sidebar {
 
-
 /** Show the recently used master pages (that are not currently used).
 */
 class RecentMasterPagesSelector

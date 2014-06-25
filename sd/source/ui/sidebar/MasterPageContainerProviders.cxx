@@ -38,15 +38,11 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace sidebar {
 
-
 //===== PagePreviewProvider ===================================================
 
 PagePreviewProvider::PagePreviewProvider (void)
 {
 }
-
-
-
 
 Image PagePreviewProvider::operator () (
     int nWidth,
@@ -69,24 +65,15 @@ Image PagePreviewProvider::operator () (
     return aPreview;
 }
 
-
-
-
 int PagePreviewProvider::GetCostIndex (void)
 {
     return 5;
 }
 
-
-
-
 bool PagePreviewProvider::NeedsPageObject (void)
 {
     return true;
 }
-
-
-
 
 //===== TemplatePreviewProvider ===============================================
 
@@ -94,9 +81,6 @@ TemplatePreviewProvider::TemplatePreviewProvider (const OUString& rsURL)
     : msURL(rsURL)
 {
 }
-
-
-
 
 Image TemplatePreviewProvider::operator() (
     int nWidth,
@@ -111,24 +95,15 @@ Image TemplatePreviewProvider::operator() (
     return Image(ThumbnailView::readThumbnail(msURL));
 }
 
-
-
-
 int TemplatePreviewProvider::GetCostIndex (void)
 {
     return 10;
 }
 
-
-
-
 bool TemplatePreviewProvider::NeedsPageObject (void)
 {
     return false;
 }
-
-
-
 
 //===== TemplatePageObjectProvider =============================================
 
@@ -137,9 +112,6 @@ TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
       mxDocumentShell()
 {
 }
-
-
-
 
 SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocument)
 {
@@ -177,9 +149,6 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     return pPage;
 }
 
-
-
-
 ::sd::DrawDocShell* TemplatePageObjectProvider::LoadDocument (const OUString& sFileName)
 {
     SfxApplication* pSfxApp = SFX_APP();
@@ -194,16 +163,10 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     return PTR_CAST(::sd::DrawDocShell,pShell);
 }
 
-
-
-
 int TemplatePageObjectProvider::GetCostIndex (void)
 {
     return 20;
 }
-
-
-
 
 bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider)
 {
@@ -215,17 +178,11 @@ bool TemplatePageObjectProvider::operator== (const PageObjectProvider& rProvider
         return false;
 }
 
-
-
-
 //===== DefaultPageObjectProvider ==============================================
 
 DefaultPageObjectProvider::DefaultPageObjectProvider (void)
 {
 }
-
-
-
 
 SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocument)
 {
@@ -246,24 +203,15 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
     return pLocalMasterPage;
 }
 
-
-
-
 int DefaultPageObjectProvider::GetCostIndex (void)
 {
     return 15;
 }
 
-
-
-
 bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
 {
     return (dynamic_cast<const DefaultPageObjectProvider*>(&rProvider) != NULL);
 }
-
-
-
 
 //===== ExistingPageProvider ==================================================
 
@@ -272,9 +220,6 @@ ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
 {
 }
 
-
-
-
 SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
 {
     (void)pDocument; // Unused parameter.
@@ -282,16 +227,10 @@ SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
     return mpPage;
 }
 
-
-
-
 int ExistingPageProvider::GetCostIndex (void)
 {
     return 0;
 }
-
-
-
 
 bool ExistingPageProvider::operator== (const PageObjectProvider& rProvider)
 {
@@ -302,7 +241,6 @@ bool ExistingPageProvider::operator== (const PageObjectProvider& rProvider)
     else
         return false;
 }
-
 
 } } // end of namespace sd::sidebar
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PresenterCanvas.hxx"
 #include "facreg.hxx"
 
@@ -49,16 +48,10 @@ Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterCanvas()));
 }
 
-
-
-
 OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterCanvasFactory");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -66,9 +59,6 @@ Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.rendering.Canvas");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== PresenterCustomSprite =================================================
 
@@ -119,7 +109,6 @@ public:
     virtual void SAL_CALL hide (void)
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XCustomSprite
 
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
@@ -136,11 +125,7 @@ private:
         throw (css::lang::DisposedException);
 };
 
-
-
-
 //===== PresenterCanvas =======================================================
-
 
 PresenterCanvas::PresenterCanvas (void)
     : PresenterCanvasInterfaceBase(m_aMutex),
@@ -154,9 +139,6 @@ PresenterCanvas::PresenterCanvas (void)
       mbOffsetUpdatePending(true)
 {
 }
-
-
-
 
 PresenterCanvas::PresenterCanvas (
     const Reference<rendering::XSpriteCanvas>& rxUpdateCanvas,
@@ -182,15 +164,9 @@ PresenterCanvas::PresenterCanvas (
         mpUpdateRequester = CanvasUpdateRequester::Instance(mxUpdateCanvas);
 }
 
-
-
-
 PresenterCanvas::~PresenterCanvas (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterCanvas::disposing (void)
     throw (css::uno::RuntimeException)
@@ -198,9 +174,6 @@ void SAL_CALL PresenterCanvas::disposing (void)
     if (mxWindow.is())
         mxWindow->removeWindowListener(this);
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -260,9 +233,6 @@ void SAL_CALL PresenterCanvas::initialize (
     }
 }
 
-
-
-
 //----- XCanvas ---------------------------------------------------------------
 
 void SAL_CALL PresenterCanvas::clear (void)
@@ -273,9 +243,6 @@ void SAL_CALL PresenterCanvas::clear (void)
     // would clear the whole shared canvas.
 }
 
-
-
-
 void SAL_CALL PresenterCanvas::drawPoint (
     const css::geometry::RealPoint2D& aPoint,
     const css::rendering::ViewState& aViewState,
@@ -285,9 +252,6 @@ void SAL_CALL PresenterCanvas::drawPoint (
     ThrowIfDisposed();
     mxSharedCanvas->drawPoint(aPoint,MergeViewState(aViewState),aRenderState);
 }
-
-
-
 
 void SAL_CALL PresenterCanvas::drawLine (
         const css::geometry::RealPoint2D& aStartPoint,
@@ -300,9 +264,6 @@ void SAL_CALL PresenterCanvas::drawLine (
     mxSharedCanvas->drawLine(aStartPoint,aEndPoint,MergeViewState(aViewState),aRenderState);
 }
 
-
-
-
 void SAL_CALL PresenterCanvas::drawBezier (
         const css::geometry::RealBezierSegment2D& aBezierSegment,
         const css::geometry::RealPoint2D& aEndPoint,
@@ -313,9 +274,6 @@ void SAL_CALL PresenterCanvas::drawBezier (
     ThrowIfDisposed();
     mxSharedCanvas->drawBezier(aBezierSegment,aEndPoint,MergeViewState(aViewState),aRenderState);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::drawPolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
@@ -328,9 +286,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::
         xPolyPolygon, MergeViewState(aViewState), aRenderState);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::strokePolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
@@ -342,9 +297,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::
     return mxSharedCanvas->strokePolyPolygon(
         xPolyPolygon, MergeViewState(aViewState), aRenderState, aStrokeAttributes);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::strokeTexturedPolyPolygon (
@@ -361,9 +313,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
     return mxSharedCanvas->strokeTexturedPolyPolygon(
         xPolyPolygon, MergeViewState(aViewState), aRenderState, aTextures, aStrokeAttributes);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::strokeTextureMappedPolyPolygon(
@@ -387,9 +336,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         aStrokeAttributes);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
         PresenterCanvas::queryStrokeShapes(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
@@ -403,9 +349,6 @@ css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
         xPolyPolygon, MergeViewState(aViewState), aRenderState, aStrokeAttributes);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::fillPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
@@ -418,9 +361,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
     return mxSharedCanvas->fillPolyPolygon(
         xPolyPolygon, MergeViewState(aViewState), aRenderState);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::fillTexturedPolyPolygon(
@@ -436,9 +376,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
     return mxSharedCanvas->fillTexturedPolyPolygon(
         xPolyPolygon, MergeViewState(aViewState), aRenderState, xTextures);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::fillTextureMappedPolyPolygon(
@@ -456,9 +393,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         xPolyPolygon, MergeViewState(aViewState), aRenderState, xTextures, xMapping);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         PresenterCanvas::createFont(
             const css::rendering::FontRequest& aFontRequest,
@@ -472,9 +406,6 @@ css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         aFontRequest, aExtraFontProperties, aFontMatrix);
 }
 
-
-
-
 css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
         PresenterCanvas::queryAvailableFonts(
             const css::rendering::FontInfo& aFilter,
@@ -484,9 +415,6 @@ css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
     ThrowIfDisposed();
     return mxSharedCanvas->queryAvailableFonts(aFilter, aFontProperties);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::drawText(
@@ -502,9 +430,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         aText, xFont, MergeViewState(aViewState), aRenderState, nTextDirection);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::drawTextLayout(
             const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
@@ -516,9 +441,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
     return mxSharedCanvas->drawTextLayout(
         xLayoutetText, MergeViewState(aViewState), aRenderState);
 }
-
-
-
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::drawBitmap(
@@ -534,9 +456,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         xBitmap, MergeViewState(aViewState), aRenderState);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::drawBitmapModulated(
             const css::uno::Reference< css::rendering::XBitmap>& xBitmap,
@@ -551,9 +470,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         xBitmap, MergeViewState(aViewState), aRenderState);
 }
 
-
-
-
 css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
         PresenterCanvas::getDevice (void)
         throw (css::uno::RuntimeException, std::exception)
@@ -561,9 +477,6 @@ css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
     ThrowIfDisposed();
     return mxSharedCanvas->getDevice();
 }
-
-
-
 
 //----- XSpriteCanvas ---------------------------------------------------------
 
@@ -580,9 +493,6 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
     else
         return NULL;
 }
-
-
-
 
 Reference<rendering::XAnimatedSprite> SAL_CALL
     PresenterCanvas::createSpriteFromBitmaps (
@@ -601,9 +511,6 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
     else
         return NULL;
 }
-
-
-
 
 Reference<rendering::XCustomSprite> SAL_CALL
     PresenterCanvas::createCustomSprite (
@@ -629,9 +536,6 @@ Reference<rendering::XCustomSprite> SAL_CALL
         return NULL;
 }
 
-
-
-
 Reference<rendering::XSprite> SAL_CALL
     PresenterCanvas::createClonedSprite (
         const css::uno::Reference< css::rendering::XSprite >& rxOriginal)
@@ -646,9 +550,6 @@ Reference<rendering::XSprite> SAL_CALL
         return mxUpdateCanvas->createClonedSprite(rxOriginal);
     return NULL;
 }
-
-
-
 
 sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     throw (css::uno::RuntimeException, std::exception)
@@ -667,9 +568,6 @@ sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     }
 }
 
-
-
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
@@ -679,9 +577,6 @@ void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
     if (rEvent.Source == mxWindow)
         mxWindow = NULL;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -693,9 +588,6 @@ void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent& rEven
     mbOffsetUpdatePending = true;
 }
 
-
-
-
 void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -703,9 +595,6 @@ void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent& rEvent)
     ThrowIfDisposed();
     mbOffsetUpdatePending = true;
 }
-
-
-
 
 void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException, std::exception)
@@ -715,18 +604,12 @@ void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject& rEvent
     mbOffsetUpdatePending = true;
 }
 
-
-
-
 void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- XBitmap ---------------------------------------------------------------
 
@@ -744,9 +627,6 @@ geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
         return geometry::IntegerSize2D(0,0);
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
     throw (RuntimeException, std::exception)
 {
@@ -756,9 +636,6 @@ sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
     else
         return sal_False;
 }
-
-
-
 
 Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
     const css::geometry::RealSize2D& rNewSize,
@@ -777,11 +654,6 @@ Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
     return NULL;
 }
 
-
-
-
-
-
 rendering::ViewState PresenterCanvas::MergeViewState (
     const rendering::ViewState& rViewState)
 {
@@ -790,9 +662,6 @@ rendering::ViewState PresenterCanvas::MergeViewState (
         maOffset = GetOffset(mxSharedWindow);
     return MergeViewState(rViewState, maOffset);
 }
-
-
-
 
 css::rendering::ViewState PresenterCanvas::MergeViewState (
     const css::rendering::ViewState& rViewState,
@@ -849,9 +718,6 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
     return aViewState;
 }
 
-
-
-
 awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWindow)
 {
     mbOffsetUpdatePending = false;
@@ -871,9 +737,6 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 
     return awt::Point(0, 0);
 }
-
-
-
 
 ::basegfx::B2DRectangle PresenterCanvas::GetClipRectangle (
     const css::geometry::AffineMatrix2D& rViewTransform,
@@ -932,8 +795,6 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 
     return aWindowRectangle;
 }
-
-
 
 Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     const Reference<rendering::XPolyPolygon2D>& rxOriginalClip,
@@ -996,9 +857,6 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     return xPolygon;
 }
 
-
-
-
 void PresenterCanvas::ThrowIfDisposed (void)
     throw (css::lang::DisposedException)
 {
@@ -1009,11 +867,7 @@ void PresenterCanvas::ThrowIfDisposed (void)
     }
 }
 
-
-
-
 //===== PresenterCustomSprite =================================================
-
 
 PresenterCustomSprite::PresenterCustomSprite (
     const rtl::Reference<PresenterCanvas>& rpCanvas,
@@ -1029,15 +883,9 @@ PresenterCustomSprite::PresenterCustomSprite (
 {
 }
 
-
-
-
 PresenterCustomSprite::~PresenterCustomSprite (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterCustomSprite::disposing (void)
     throw (RuntimeException)
@@ -1049,9 +897,6 @@ void SAL_CALL PresenterCustomSprite::disposing (void)
     mpCanvas = rtl::Reference<PresenterCanvas>();
 }
 
-
-
-
 //----- XSprite ---------------------------------------------------------------
 
 void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
@@ -1060,9 +905,6 @@ void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
     ThrowIfDisposed();
     mxSprite->setAlpha(nAlpha);
 }
-
-
-
 
 void SAL_CALL PresenterCustomSprite::move (
     const geometry::RealPoint2D& rNewPos,
@@ -1083,18 +925,12 @@ void SAL_CALL PresenterCustomSprite::move (
     clip(NULL);
 }
 
-
-
-
 void SAL_CALL PresenterCustomSprite::transform (const geometry::AffineMatrix2D& rTransformation)
     throw (lang::IllegalArgumentException,RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->transform(rTransformation);
 }
-
-
-
 
 void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolygon2D>& rxClip)
     throw (RuntimeException, std::exception)
@@ -1106,17 +942,12 @@ void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolyg
     mxSprite->clip(mpCanvas->UpdateSpriteClip(rxClip, maPosition, maSpriteSize));
 }
 
-
-
-
 void SAL_CALL PresenterCustomSprite::setPriority (const double nPriority)
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->setPriority(nPriority);
 }
-
-
 
 void SAL_CALL PresenterCustomSprite::show (void)
     throw (RuntimeException, std::exception)
@@ -1125,18 +956,12 @@ void SAL_CALL PresenterCustomSprite::show (void)
     mxSprite->show();
 }
 
-
-
-
 void SAL_CALL PresenterCustomSprite::hide (void)
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mxSprite->hide();
 }
-
-
-
 
 //----- XCustomSprite ---------------------------------------------------------
 
@@ -1147,11 +972,6 @@ Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
     return mxSprite->getContentCanvas();
 }
 
-
-
-
-
-
 void PresenterCustomSprite::ThrowIfDisposed (void)
     throw (css::lang::DisposedException)
 {
@@ -1161,9 +981,6 @@ void PresenterCustomSprite::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } // end of namespace ::sd::presenter
 

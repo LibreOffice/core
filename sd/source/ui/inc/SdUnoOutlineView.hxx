@@ -24,7 +24,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 
-
 namespace sd {
 
 class OutlineViewShell;
@@ -41,7 +40,6 @@ public:
     virtual ~SdUnoOutlineView (void) throw();
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
 
     // XSelectionSupplier
 
@@ -61,7 +59,6 @@ public:
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
@@ -70,7 +67,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XFastPropertySet
 

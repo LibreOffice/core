@@ -60,7 +60,6 @@ class PageObjectPainter;
 class SelectionPainter;
 class ToolTip;
 
-
 class SlideSorterView
     : public sd::View,
       public ::boost::noncopyable
@@ -270,7 +269,6 @@ private:
     void RequestRearrange (void);
     void Rearrange (void);
 };
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

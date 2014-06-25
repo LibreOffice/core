@@ -355,7 +355,6 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         if( pPickObj )
             aRect = pPickObj->GetLogicRect();
 
-
         pNewMediaObj = new SdrMediaObj( aRect );
 
         bool bIsPres = false;

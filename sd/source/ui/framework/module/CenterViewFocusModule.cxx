@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CenterViewFocusModule.hxx"
 
 #include "framework/ConfigurationController.hxx"
@@ -40,7 +39,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
-
 
 namespace sd { namespace framework {
 
@@ -88,15 +86,9 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
     }
 }
 
-
-
-
 CenterViewFocusModule::~CenterViewFocusModule (void)
 {
 }
-
-
-
 
 void SAL_CALL CenterViewFocusModule::disposing (void)
 {
@@ -107,9 +99,6 @@ void SAL_CALL CenterViewFocusModule::disposing (void)
     mxConfigurationController = NULL;
     mpBase = NULL;
 }
-
-
-
 
 void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -128,9 +117,6 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
         }
     }
 }
-
-
-
 
 void CenterViewFocusModule::HandleNewView (
     const Reference<XConfiguration>& rxConfiguration)
@@ -164,9 +150,6 @@ void CenterViewFocusModule::HandleNewView (
     }
 }
 
-
-
-
 void SAL_CALL CenterViewFocusModule::disposing (
     const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
@@ -179,8 +162,6 @@ void SAL_CALL CenterViewFocusModule::disposing (
             mpBase = NULL;
         }
 }
-
-
 
 } } // end of namespace sd::framework
 

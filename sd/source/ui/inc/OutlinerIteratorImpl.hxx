@@ -120,9 +120,6 @@ protected:
     bool mbDirectionIsForward;
 };
 
-
-
-
 /** Iterator all objects that belong to the current mark list
     a.k.a. selection.  It is assumed that all marked objects belong to the
     same page.  It is further assumed that the mark list does not change
@@ -167,7 +164,6 @@ private:
 
     IteratorImplBase& operator= (const IteratorImplBase& rIterator);
 };
-
 
 /** Iterator for iteration over all objects in a single view.  On reaching
     the last object on the last page (or the first object on the first page)
@@ -224,9 +220,6 @@ private:
     ViewIteratorImpl& operator= (const ViewIteratorImpl&){return *this;};
 };
 
-
-
-
 /** Iterator for iteration over all objects in all views.  It automatically
     switches views when reaching the end/beginning of a view.
 
@@ -255,7 +248,6 @@ private:
     // Don't use this operator.
     DocumentIteratorImpl& operator= (const DocumentIteratorImpl& ){return *this;};
 };
-
 
 } } // end of namespace ::sd::outliner
 

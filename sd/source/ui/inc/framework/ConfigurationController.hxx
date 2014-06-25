@@ -48,9 +48,7 @@ typedef ::cppu::WeakComponentImplHelper2 <
 
 } // end of anonymous namespace.
 
-
 namespace sd { class ViewShellBase; }
-
 
 namespace sd { namespace framework {
 
@@ -127,7 +125,6 @@ public:
         throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
-
     // XConfigurationControllerBroadcaster
 
     virtual void SAL_CALL addConfigurationChangeListener (
@@ -146,7 +143,6 @@ public:
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XConfigurationRequestQueue
 
     virtual sal_Bool SAL_CALL hasPendingRequests (void)
@@ -156,7 +152,6 @@ public:
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeRequest>& rxRequest)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XResourceFactoryManager
 
@@ -178,13 +173,11 @@ public:
         const OUString& sResourceURL)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     /** Use this class instead of calling lock() and unlock() directly in
         order to be exception safe.

@@ -22,9 +22,7 @@
 
 #include <svtools/valueset.hxx>
 
-
 namespace sd { namespace sidebar {
-
 
 /** Adapt the svtools valueset to the needs of the master page controls.
 */

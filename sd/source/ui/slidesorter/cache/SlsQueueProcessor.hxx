@@ -34,19 +34,14 @@
 #include <vcl/timer.hxx>
 #include <boost/function.hpp>
 
-
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
 } } }
-
-
 
 namespace sd { namespace slidesorter { namespace cache {
 
 class BitmapCache;
 class RequestQueue;
-
-
 
 /** This queue processor is timer based, i.e. when an entry is added to the
     queue and the processor is started with Start() in the base class a
@@ -115,9 +110,6 @@ private:
         CacheKey aKey,
         const RequestPriorityClass ePriorityClass);
 };
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

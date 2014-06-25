@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fucon3d.hxx"
 #include <vcl/waitobj.hxx>
 
@@ -53,7 +52,6 @@ namespace sd {
 
 TYPEINIT1( FuConstruct3dObject, FuConstruct );
 
-
 FuConstruct3dObject::FuConstruct3dObject (
     ViewShell*  pViewSh,
     ::sd::Window*       pWin,
@@ -80,7 +78,6 @@ void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
-
 
 E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 {
@@ -338,12 +335,10 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
-
 
 bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -372,14 +367,12 @@ bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
     return FuConstruct::KeyInput(rKEvt);
 }
 
-
 void FuConstruct3dObject::Activate()
 {
     mpView->SetCurrentObj(OBJ_NONE);
 
     FuConstruct::Activate();
 }
-
 
 void FuConstruct3dObject::Deactivate()
 {

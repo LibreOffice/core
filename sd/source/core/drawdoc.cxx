@@ -366,7 +366,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         rLayerAdmin.SetControlLayerName(aControlLayerName);
     }
 
-
 }
 
 // Destructor
@@ -472,7 +471,6 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         pNewStylePool->CopyGraphicSheets(*pOldStylePool);
         pNewStylePool->CopyCellSheets(*pOldStylePool);
         pNewStylePool->CopyTableStyles(*pOldStylePool);
-
 
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
@@ -930,13 +928,10 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
     }
 }
 
-
-
 void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
 {
     mbStartWithPresentation = bStartWithPresentation;
 }
-
 
 void SdDrawDocument::SetExitAfterPresenting( bool bExitAfterPresenting )
 {

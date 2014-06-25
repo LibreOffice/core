@@ -166,7 +166,6 @@ public:
     ::com::sun::star::uno::Any getProperty( sal_Int32 nProperty ) const;
 };
 
-
 enum MS_AttributeNames
 {
     MS_PPT_X, MS_PPT_Y, MS_PPT_W, MS_PPT_H, MS_PPT_C, MS_R, MS_XSHEAR, MS_FILLCOLOR, MS_FILLTYPE,
@@ -474,9 +473,6 @@ static const preset_maping gPresetMaping[] =
     { ::com::sun::star::presentation::EffectPresetClass::EXIT, 56       ,"ooo-exit-flip" },
     { ::com::sun::star::presentation::EffectPresetClass::EXIT, 58       ,"ooo-exit-fold" },
 
-
-
-
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 16     ,"ooo-motionpath-4-point-star" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 5      ,"ooo-motionpath-5-point-star" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 11     ,"ooo-motionpath-6-point-star" },
@@ -541,7 +537,6 @@ static const preset_maping gPresetMaping[] =
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 59     ,"ooo-motionpath-s-curve-1" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 39     ,"ooo-motionpath-s-curve-2" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 45     ,"ooo-motionpath-heartbeat" },
-
 
     { 0,0,0 }
 };

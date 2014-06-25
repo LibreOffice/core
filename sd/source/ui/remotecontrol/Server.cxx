@@ -193,7 +193,6 @@ void RemoteServer::setup()
 #endif
 }
 
-
 void RemoteServer::presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController )
 {

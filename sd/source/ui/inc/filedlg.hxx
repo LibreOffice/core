@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
@@ -28,7 +27,6 @@
 #include "sddllapi.h"
 
 class SdFileDialog_Imp;
-
 
 /******************************************************************************/
 

@@ -31,7 +31,6 @@
 #include "DrawDocShell.hxx"
 #include <boost/scoped_ptr.hpp>
 
-
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     ::Window* pWindow, const SfxItemSet& rInAttrs)
     : ModalDialog(pWindow, "SlideDesignDialog",
@@ -123,7 +122,6 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, m_pCbxCheckMasters->IsChecked() ) );
 }
 
-
 /**
  * Fills ValueSet with bitmaps
  */
@@ -156,7 +154,6 @@ void SdPresLayoutDlg::FillValueSet()
 
     m_pVS->Show();
 }
-
 
 /**
  * DoubleClick handler

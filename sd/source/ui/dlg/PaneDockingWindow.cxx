@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PaneDockingWindow.hxx"
 #include "Window.hxx"
 #include "ViewShellBase.hxx"
@@ -91,13 +90,6 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
     SfxDockingWindow::MouseButtonDown(rEvent);
 }
 
-
-
-
-
-
-
-
 void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
 {
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
@@ -118,9 +110,6 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
                 aValidSizeRange.Max() + nCompensation));
     }
 }
-
-
-
 
 PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation (void) const
 {

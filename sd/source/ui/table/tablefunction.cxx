@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XSelectionFunction.hpp>
@@ -223,8 +222,6 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     }
 }
 
-
-
 void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 {
     bool bIsUIActive = GetDocSh()->IsUIActive();
@@ -246,8 +243,6 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
         }
     }
 }
-
-
 
 void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 {

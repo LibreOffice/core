@@ -26,7 +26,6 @@
 
 namespace accessibility {
 
-
 /** This class makes draw documents in the general view modes
     accessible.  It passes all shapes on the current draw page to a
     children manager and additionally creates a new shape that
@@ -55,7 +54,6 @@ public:
     */
     virtual void Init (void) SAL_OVERRIDE;
 
-
     //=====  IAccessibleViewForwarderListener  ================================
 
     virtual void ViewForwarderChanged (ChangeType aChangeType,
@@ -81,7 +79,6 @@ public:
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //=====  XPropertyChangeListener  =========================================
 
@@ -122,7 +119,6 @@ protected:
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     virtual bool
         implIsSelected( sal_Int32 nAccessibleChildIndex )

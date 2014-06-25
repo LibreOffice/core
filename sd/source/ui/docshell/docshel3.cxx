@@ -106,7 +106,6 @@ static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLa
     }
 }
 
-
 static void lcl_setLanguage( const SdDrawDocument *pDoc, const OUString &rLanguage, bool bLanguageNone = false )
 {
     LanguageType nLang = SvtLanguageTable::GetLanguageType( rLanguage );

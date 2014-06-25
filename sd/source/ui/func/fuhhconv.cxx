@@ -43,7 +43,6 @@
 
 class SfxRequest;
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -53,7 +52,6 @@ namespace sd {
 class ViewShell;
 
 TYPEINIT1( FuHangulHanjaConversion, FuPoor );
-
 
 FuHangulHanjaConversion::FuHangulHanjaConversion (
     ViewShell* pViewSh,
@@ -79,8 +77,6 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     if (pSdOutliner)
        pSdOutliner->PrepareSpelling();
 }
-
-
 
 FuHangulHanjaConversion::~FuHangulHanjaConversion()
 {
@@ -151,7 +147,6 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
     if (mpView != NULL)
         mpView->EndUndo();
 }
-
 
 void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont )
 {

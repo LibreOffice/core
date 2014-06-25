@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsProperties.hxx"
 #include "view/SlideSorterView.hxx"
@@ -32,7 +31,6 @@
 using namespace ::com::sun::star::datatransfer::dnd::DNDConstants;
 
 namespace sd { namespace slidesorter { namespace controller {
-
 
 InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -49,15 +47,9 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
 {
 }
-
-
-
 
 void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 {
@@ -74,9 +66,6 @@ void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
     mbIsOverSourceView = bIsOverSourceView;
 }
 
-
-
-
 void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode eMode)
 {
     if (mbIsForcedShow ||  ! mbIsActive || mbIsReadOnly)
@@ -92,16 +81,10 @@ void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode e
     mpInsertionIndicatorOverlay.reset(new view::InsertionIndicatorOverlay(mrSlideSorter));
 }
 
-
-
-
 void InsertionIndicatorHandler::ForceShow (void)
 {
     mbIsForcedShow = true;
 }
-
-
-
 
 void InsertionIndicatorHandler::ForceEnd (void)
 {
@@ -109,17 +92,11 @@ void InsertionIndicatorHandler::ForceEnd (void)
     End(Animator::AM_Immediate);
 }
 
-
-
-
 void InsertionIndicatorHandler::UpdateIndicatorIcon (const SdTransferable* pTransferable)
 {
     mpInsertionIndicatorOverlay->Create(pTransferable);
     maIconSize = mpInsertionIndicatorOverlay->GetSize();
 }
-
-
-
 
 InsertionIndicatorHandler::Mode InsertionIndicatorHandler::GetModeFromDndAction (
     const sal_Int8 nDndAction)
@@ -131,9 +108,6 @@ InsertionIndicatorHandler::Mode InsertionIndicatorHandler::GetModeFromDndAction 
     else
         return UnknownMode;
 }
-
-
-
 
 void InsertionIndicatorHandler::UpdatePosition (
     const Point& rMouseModelPosition,
@@ -148,22 +122,12 @@ void InsertionIndicatorHandler::UpdatePosition (
     SetPosition(rMouseModelPosition, eMode);
 }
 
-
-
-
 void InsertionIndicatorHandler::UpdatePosition (
     const Point& rMouseModelPosition,
     const sal_Int8 nDndAction)
 {
     UpdatePosition(rMouseModelPosition, GetModeFromDndAction(nDndAction));
 }
-
-
-
-
-
-
-
 
 sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
 {
@@ -172,9 +136,6 @@ sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
     else
         return maInsertPosition.GetIndex();
 }
-
-
-
 
 void InsertionIndicatorHandler::SetPosition (
     const Point& rPoint,
@@ -210,18 +171,12 @@ void InsertionIndicatorHandler::SetPosition (
     }
 }
 
-
-
-
 ::boost::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator (void)
 {
     if ( ! mpInsertAnimator)
         mpInsertAnimator.reset(new view::InsertAnimator(mrSlideSorter));
     return mpInsertAnimator;
 }
-
-
-
 
 bool InsertionIndicatorHandler::IsInsertionTrivial (
     const sal_Int32 nInsertionIndex,
@@ -271,16 +226,10 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (
     return true;
 }
 
-
-
-
 bool InsertionIndicatorHandler::IsInsertionTrivial (const sal_Int8 nDndAction)
 {
     return IsInsertionTrivial(GetInsertionPageIndex(), GetModeFromDndAction(nDndAction));
 }
-
-
-
 
 //===== InsertionIndicatorHandler::ForceShowContext ===========================
 
@@ -290,9 +239,6 @@ InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
 {
     mpHandler->ForceShow();
 }
-
-
-
 
 InsertionIndicatorHandler::ForceShowContext::~ForceShowContext (void)
 {

@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_RULER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_RULER_HXX
 
-
 #include <svx/ruler.hxx>
-
 
 namespace sd {
 

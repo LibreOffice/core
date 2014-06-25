@@ -171,7 +171,6 @@ css::uno::Sequence<OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceN
     throw (css::uno::RuntimeException);
 } }
 
-
 namespace sd { namespace slidesorter {
 css::uno::Reference<css::uno::XInterface> SAL_CALL SlideSorterService_createInstance(
     const css::uno::Reference<css::uno::XComponentContext>& rxContext)

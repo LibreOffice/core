@@ -54,7 +54,6 @@ const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
 
 TYPEINIT1( FuBullet, FuPoor );
 
-
 FuBullet::FuBullet (
     ViewShell* pViewSh,
     ::sd::Window* pWin,

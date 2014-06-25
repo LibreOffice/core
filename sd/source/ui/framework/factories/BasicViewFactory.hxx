@@ -52,9 +52,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
 
 } // end of anonymous namespace.
 
-
-
-
 namespace sd { namespace framework {
 
 /** Factory for the frequently used standard views of the drawing framework:
@@ -80,7 +77,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XViewFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
@@ -91,7 +87,6 @@ public:
     virtual void SAL_CALL releaseResource (
         const css::uno::Reference<css::drawing::framework::XResource>& xView)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XInitialization
 

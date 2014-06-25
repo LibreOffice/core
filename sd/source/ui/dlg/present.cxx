@@ -35,7 +35,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) :
@@ -333,6 +332,5 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
     aCbxAutoLogo->Enable( aRbtAuto->IsChecked() && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
     return( 0L );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

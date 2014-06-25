@@ -89,17 +89,11 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     mpViewShell = pViewShell;
 }
 
-
-
-
 AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
 {
     // At this place we should be disposed.  You may want to add a
     // corresponding assertion into the destructor of a derived class.
 }
-
-
-
 
 void AccessibleDocumentViewBase::Init (void)
 {
@@ -163,9 +157,6 @@ void AccessibleDocumentViewBase::Init (void)
         SetState(AccessibleStateType::EDITABLE);
 }
 
-
-
-
 IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
     VclSimpleEvent*, pEvent)
 {
@@ -225,18 +216,12 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
     return 0;
 }
 
-
-
-
 //=====  IAccessibleViewForwarderListener  ====================================
 
 void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessibleViewForwarder* )
 {
     // Empty
 }
-
-
-
 
 //=====  XAccessibleContext  ==================================================
 
@@ -249,8 +234,6 @@ Reference<XAccessible> SAL_CALL
     return AccessibleContextBase::getAccessibleParent();
 }
 
-
-
 sal_Int32 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount (void)
     throw (uno::RuntimeException, std::exception)
@@ -262,9 +245,6 @@ sal_Int32 SAL_CALL
     else
         return 0;
 }
-
-
-
 
 Reference<XAccessible> SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChild (sal_Int32 nIndex)
@@ -279,9 +259,6 @@ Reference<XAccessible> SAL_CALL
 
     throw lang::IndexOutOfBoundsException ( "no child with index " + OUString::number(nIndex) );
 }
-
-
-
 
 //=====  XAccessibleComponent  ================================================
 
@@ -327,9 +304,6 @@ uno::Reference<XAccessible > SAL_CALL
     return xChildAtPosition;
 }
 
-
-
-
 awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -366,9 +340,6 @@ awt::Rectangle SAL_CALL
         aPixelSize.Y());
 }
 
-
-
-
 awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocation (void)
     throw (uno::RuntimeException, std::exception)
@@ -377,9 +348,6 @@ awt::Point SAL_CALL
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
-
-
-
 
 awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocationOnScreen (void)
@@ -390,9 +358,6 @@ awt::Point SAL_CALL
     ::Point aPixelPoint (maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aLogicalPoint));
     return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
 }
-
-
-
 
 awt::Size SAL_CALL
     AccessibleDocumentViewBase::getSize (void)
@@ -413,9 +378,6 @@ awt::Size SAL_CALL
 
     return awt::Size (aPixelSize.X(), aPixelSize.Y());
 }
-
-
-
 
 //=====  XInterface  ==========================================================
 
@@ -439,9 +401,6 @@ uno::Any SAL_CALL
     return aReturn;
 }
 
-
-
-
 void SAL_CALL
     AccessibleDocumentViewBase::acquire (void)
     throw ()
@@ -449,18 +408,12 @@ void SAL_CALL
     AccessibleContextBase::acquire ();
 }
 
-
-
-
 void SAL_CALL
     AccessibleDocumentViewBase::release (void)
     throw ()
 {
     AccessibleContextBase::release ();
 }
-
-
-
 
 //=====  XServiceInfo  ========================================================
 
@@ -471,9 +424,6 @@ OUString SAL_CALL
     return OUString("AccessibleDocumentViewBase");
 }
 
-
-
-
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -481,10 +431,6 @@ OUString SAL_CALL
     ThrowIfDisposed ();
     return AccessibleContextBase::getSupportedServiceNames ();
 }
-
-
-
-
 
 //=====  XTypeProvider  =======================================================
 
@@ -498,7 +444,6 @@ OUString SAL_CALL
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... get list of types from component base implementation, ...
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
-
 
     // ...and add the additional type for the component, ...
     const uno::Type aLangEventListenerType =
@@ -530,9 +475,6 @@ OUString SAL_CALL
 
     return aTypeList;
 }
-
-
-
 
 void AccessibleDocumentViewBase::impl_dispose()
 {
@@ -584,9 +526,6 @@ void AccessibleDocumentViewBase::impl_dispose()
     maShapeTreeInfo.SetDocumentWindow (NULL);
 }
 
-
-
-
 //=====  XEventListener  ======================================================
 
 void SAL_CALL
@@ -616,9 +555,6 @@ void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyC
     // Empty
 }
 
-
-
-
 //=====  XWindowListener  =====================================================
 
 void SAL_CALL
@@ -633,9 +569,6 @@ void SAL_CALL
         &maViewForwarder);
 }
 
-
-
-
 void SAL_CALL
     AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -647,9 +580,6 @@ void SAL_CALL
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
 }
-
-
-
 
 void SAL_CALL
     AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& )
@@ -663,9 +593,6 @@ void SAL_CALL
         &maViewForwarder);
 }
 
-
-
-
 void SAL_CALL
     AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -677,9 +604,6 @@ void SAL_CALL
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
 }
-
-
-
 
 //=====  XFocusListener  ==================================================
 
@@ -699,9 +623,6 @@ void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEv
         Deactivated ();
 }
 
-
-
-
 //=====  protected internal  ==================================================
 
 // This method is called from the component helper base class while disposing.
@@ -712,9 +633,6 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
     AccessibleContextBase::disposing ();
 }
 
-
-
-
 /// Create a name for this view.
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName (void)
@@ -722,9 +640,6 @@ OUString
 {
     return OUString ("AccessibleDocumentViewBase");
 }
-
-
-
 
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.
@@ -751,24 +666,15 @@ OUString
     return sDescription;
 }
 
-
-
-
 void AccessibleDocumentViewBase::Activated (void)
 {
     // Empty.  Overwrite to do something useful.
 }
 
-
-
-
 void AccessibleDocumentViewBase::Deactivated (void)
 {
     // Empty.  Overwrite to do something useful.
 }
-
-
-
 
 void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     const Reference <XAccessible>& xOLEObject)
@@ -795,9 +701,6 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
             uno::makeAny (mxAccessibleOLEObject),
             uno::Any());
 }
-
-
-
 
 //=====  methods from AccessibleSelectionBase ==================================================
 

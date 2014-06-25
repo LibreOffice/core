@@ -42,7 +42,6 @@ namespace sd {
 
 TYPEINIT1( FuLine, FuPoor );
 
-
 FuLine::FuLine (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -109,7 +108,6 @@ void FuLine::Activate()
 void FuLine::Deactivate()
 {
 }
-
 
 } // end of namespace sd
 

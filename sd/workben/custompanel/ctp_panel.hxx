@@ -32,11 +32,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
 namespace sd { namespace colortoolpanel
 {
-
-
 
     // class SingleColorPanel
     typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::drawing::framework::XView
@@ -81,7 +78,6 @@ namespace sd { namespace colortoolpanel
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xResourceId;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xWindow;
     };
-
 
 } } // namespace sd::colortoolpanel
 

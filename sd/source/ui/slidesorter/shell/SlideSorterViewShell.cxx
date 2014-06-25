@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorterViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
@@ -116,9 +115,6 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
     return pViewShell;
 }
 
-
-
-
 SlideSorterViewShell::SlideSorterViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
@@ -140,9 +136,6 @@ SlideSorterViewShell::SlideSorterViewShell (
 
     pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }
-
-
-
 
 SlideSorterViewShell::~SlideSorterViewShell (void)
 {
@@ -167,10 +160,6 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
     }
     GetFrameView()->Disconnect();
 }
-
-
-
-
 
 void SlideSorterViewShell::Initialize (void)
 {
@@ -200,9 +189,6 @@ void SlideSorterViewShell::Initialize (void)
     }
 }
 
-
-
-
 void SlideSorterViewShell::Init (bool bIsMainViewShell)
 {
     ViewShell::Init(bIsMainViewShell);
@@ -216,9 +202,6 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
     if (mpContentWindow.get() != NULL)
         mpContentWindow->SetViewShell(this);
 }
-
-
-
 
 SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase)
 {
@@ -247,9 +230,6 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
     return pViewShell;
 }
 
-
-
-
 Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController (void)
 {
     Reference<drawing::XDrawSubController> xSubController;
@@ -264,9 +244,6 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
 
     return xSubController;
 }
-
-
-
 
 /** If there is a valid controller then create a new instance of
     <type>AccessibleSlideSorterView</type>.  Otherwise delegate this call
@@ -315,9 +292,6 @@ SlideSorter& SlideSorterViewShell::GetSlideSorter (void) const
     return *mpSlideSorter;
 }
 
-
-
-
 bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
     OSL_ASSERT(mpSlideSorter);
@@ -332,9 +306,6 @@ bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
 
     return bSuccess;
 }
-
-
-
 
 ::svl::IUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
 {
@@ -354,26 +325,17 @@ bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
     }
 }
 
-
-
-
 void SlideSorterViewShell::GetFocus (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetFocusManager().ShowFocus();
 }
 
-
-
-
 void SlideSorterViewShell::LoseFocus (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetFocusManager().HideFocus();
 }
-
-
-
 
 SdPage* SlideSorterViewShell::getCurrentPage(void) const
 {
@@ -382,9 +344,6 @@ SdPage* SlideSorterViewShell::getCurrentPage(void) const
     // we can just use that for now
     return const_cast<SlideSorterViewShell*>(this)->GetActualPage();
 }
-
-
-
 
 SdPage* SlideSorterViewShell::GetActualPage (void)
 {
@@ -415,18 +374,12 @@ SdPage* SlideSorterViewShell::GetActualPage (void)
     return pCurrentPage;
 }
 
-
-
-
 void SlideSorterViewShell::GetMenuState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetSlotManager()->GetMenuState(rSet);
 }
-
-
-
 
 void SlideSorterViewShell::GetClipboardState ( SfxItemSet& rSet)
 {
@@ -435,17 +388,11 @@ void SlideSorterViewShell::GetClipboardState ( SfxItemSet& rSet)
     mpSlideSorter->GetController().GetSlotManager()->GetClipboardState(rSet);
 }
 
-
-
-
 void SlideSorterViewShell::ExecCtrl (SfxRequest& rRequest)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().ExecCtrl(rRequest);
 }
-
-
-
 
 void SlideSorterViewShell::GetCtrlState (SfxItemSet& rSet)
 {
@@ -453,17 +400,11 @@ void SlideSorterViewShell::GetCtrlState (SfxItemSet& rSet)
     mpSlideSorter->GetController().GetCtrlState(rSet);
 }
 
-
-
-
 void SlideSorterViewShell::FuSupport (SfxRequest& rRequest)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().FuSupport(rRequest);
 }
-
-
-
 
 /** We have to handle those slot calls here that need to have access to
     private or protected members and methods of this class.
@@ -492,17 +433,11 @@ void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
     }
 }
 
-
-
-
 void SlideSorterViewShell::GetStatusBarState (SfxItemSet& rSet)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetStatusBarState(rSet);
 }
-
-
-
 
 void SlideSorterViewShell::FuPermanent (SfxRequest& rRequest)
 {
@@ -510,26 +445,17 @@ void SlideSorterViewShell::FuPermanent (SfxRequest& rRequest)
     mpSlideSorter->GetController().FuPermanent(rRequest);
 }
 
-
-
-
 void SlideSorterViewShell::GetAttrState (SfxItemSet& rSet)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetAttrState(rSet);
 }
 
-
-
-
 void SlideSorterViewShell::ExecStatusBar (SfxRequest& rRequest)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().ExecStatusBar(rRequest);
 }
-
-
-
 
 void SlideSorterViewShell::Paint (
     const Rectangle& rBBox,
@@ -540,9 +466,6 @@ void SlideSorterViewShell::Paint (
     if (mpSlideSorter)
         mpSlideSorter->GetController().Paint(rBBox,pWindow);
 }
-
-
-
 
 void SlideSorterViewShell::ArrangeGUIElements (void)
 {
@@ -555,9 +478,6 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
     else
         mbIsArrangeGUIElementsPending = true;
 }
-
-
-
 
 void SlideSorterViewShell::Activate (bool bIsMDIActivate)
 {
@@ -595,26 +515,17 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
         eContext);
 }
 
-
-
-
 void SlideSorterViewShell::Deactivate (bool /*bIsMDIActivate*/)
 {
     // Save Settings - Specifically SlidesPerRow to retrieve it later
     WriteFrameViewData();
 }
 
-
-
-
 SvBorder SlideSorterViewShell::GetBorder (bool )
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetBorder();
 }
-
-
-
 
 void SlideSorterViewShell::Command (
     const CommandEvent& rEvent,
@@ -624,9 +535,6 @@ void SlideSorterViewShell::Command (
     if ( ! mpSlideSorter->GetController().Command (rEvent, pWindow))
         ViewShell::Command (rEvent, pWindow);
 }
-
-
-
 
 void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
 {
@@ -664,9 +572,6 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     }
 }
 
-
-
-
 void SlideSorterViewShell::WriteFrameViewData (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
@@ -698,18 +603,12 @@ void SlideSorterViewShell::WriteFrameViewData (void)
     }
 }
 
-
-
-
 void SlideSorterViewShell::SetZoom (long int )
 {
     // Ignored.
     // The zoom scale is adapted internally to fit a number of columns in
     // the window.
 }
-
-
-
 
 void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 {
@@ -750,18 +649,12 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-
-
-
 void SlideSorterViewShell::UpdateScrollBars (void)
 {
     // Do not call the overwritten method of the base class: We do all the
     // scroll bar setup by ourselves.
     mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars (false);
 }
-
-
-
 
 void SlideSorterViewShell::StartDrag (
     const Point& rDragPt,
@@ -773,18 +666,12 @@ void SlideSorterViewShell::StartDrag (
         pWindow);
 }
 
-
-
-
 void SlideSorterViewShell::DragFinished (
     sal_Int8 nDropAction)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetClipboard().DragFinished (nDropAction);
 }
-
-
-
 
 sal_Int8 SlideSorterViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
@@ -802,9 +689,6 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
         nLayer);
 }
 
-
-
-
 sal_Int8 SlideSorterViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
@@ -821,18 +705,12 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
         nLayer);
 }
 
-
-
-
 ::boost::shared_ptr<SlideSorterViewShell::PageSelection>
     SlideSorterViewShell::GetPageSelection (void) const
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetPageSelector().GetPageSelection();
 }
-
-
-
 
 void SlideSorterViewShell::SetPageSelection (
     const ::boost::shared_ptr<PageSelection>& rSelection)
@@ -841,9 +719,6 @@ void SlideSorterViewShell::SetPageSelection (
     mpSlideSorter->GetController().GetPageSelector().SetPageSelection(rSelection);
 }
 
-
-
-
 void SlideSorterViewShell::AddSelectionChangeListener (
     const Link& rCallback)
 {
@@ -851,17 +726,12 @@ void SlideSorterViewShell::AddSelectionChangeListener (
     mpSlideSorter->GetController().GetSelectionManager()->AddSelectionChangeListener(rCallback);
 }
 
-
-
-
 void SlideSorterViewShell::RemoveSelectionChangeListener (
     const Link& rCallback)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetSelectionManager()->RemoveSelectionChangeListener(rCallback);
 }
-
-
 
 } } // end of namespace ::sd::slidesorter
 

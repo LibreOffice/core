@@ -80,7 +80,6 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     mpView->SetAttributes( *pArgs );
 }
 
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

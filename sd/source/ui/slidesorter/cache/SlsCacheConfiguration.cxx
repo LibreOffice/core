@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsCacheConfiguration.hxx"
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
@@ -67,9 +66,6 @@ Timer CacheConfiguration::maReleaseTimer;
     }
     return rInstancePtr;
 }
-
-
-
 
 CacheConfiguration::CacheConfiguration (void)
 {
@@ -123,9 +119,6 @@ CacheConfiguration::CacheConfiguration (void)
     }
 }
 
-
-
-
 Any CacheConfiguration::GetValue (const OUString& rName)
 {
     Any aResult;
@@ -144,9 +137,6 @@ Any CacheConfiguration::GetValue (const OUString& rName)
     return aResult;
 }
 
-
-
-
 IMPL_LINK_NOARG(CacheConfiguration, TimerCallback)
 {
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
@@ -154,7 +144,6 @@ IMPL_LINK_NOARG(CacheConfiguration, TimerCallback)
     rInstancePtr.reset();
     return 0;
 }
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

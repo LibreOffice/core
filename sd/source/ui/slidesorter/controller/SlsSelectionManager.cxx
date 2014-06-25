@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsSelectionManager.hxx"
 
 #include "SlideSorter.hxx"
@@ -49,7 +48,6 @@
 #include "app.hrc"
 #include "glob.hrc"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
@@ -59,14 +57,12 @@ using namespace ::sd::slidesorter::controller;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-
 class SelectionManager::PageInsertionListener
     : public SfxListener
 {
 public:
 
 };
-
 
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -81,17 +77,11 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 SelectionManager::~SelectionManager (void)
 {
     if (mnAnimationId != Animator::NotAnAnimationId)
         mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
 }
-
-
-
 
 void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 {
@@ -156,9 +146,6 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     mrController.GetFocusManager().SetFocusedPage(nNewCurrentSlide);
 }
 
-
-
-
 void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
@@ -192,9 +179,6 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
     }
 }
 
-
-
-
 void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
@@ -227,9 +211,6 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
-
-
-
 
 void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
 {
@@ -270,9 +251,6 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
     }
 }
 
-
-
-
 void SelectionManager::AddSelectionChangeListener (const Link& rListener)
 {
     if (::std::find (
@@ -284,9 +262,6 @@ void SelectionManager::AddSelectionChangeListener (const Link& rListener)
     }
 }
 
-
-
-
 void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
 {
     maSelectionChangeListeners.erase (
@@ -295,9 +270,6 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
             maSelectionChangeListeners.end(),
             rListener));
 }
-
-
-
 
 sal_Int32 SelectionManager::GetInsertionPosition (void) const
 {
@@ -322,9 +294,6 @@ sal_Int32 SelectionManager::GetInsertionPosition (void) const
     return nInsertionPosition;
 }
 
-
-
-
 void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 {
     if (nInsertionPosition < 0)
@@ -338,10 +307,6 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
     else
         mnInsertionPosition = nInsertionPosition;
 }
-
-
-
-
 
 } } } // end of namespace ::sd::slidesorter
 

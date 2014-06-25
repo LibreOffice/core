@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "NavigatorChildWindow.hxx"
 #include "navigatr.hxx"
 #include "app.hrc"
@@ -27,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <boost/bind.hpp>
-
 
 namespace sd {
 
@@ -46,7 +44,6 @@ void RequestNavigatorUpdate (SfxBindings* pBindings)
             0L);
     }
 }
-
 
 NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,

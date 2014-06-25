@@ -124,7 +124,6 @@ private:
     DECL_LINK(ProcessEvent,void*);
 };
 
-
 } } // end of namespace sd::framework
 
 #endif

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <svx/xtable.hxx>
 #include "sdattr.hxx"
@@ -35,7 +34,6 @@
 #include <svx/f3dchild.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
-
 
 #include "app.hrc"
 #include "strings.hrc"

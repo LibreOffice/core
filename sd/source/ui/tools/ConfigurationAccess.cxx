@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/ConfigurationAccess.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -43,9 +42,6 @@ ConfigurationAccess::ConfigurationAccess (
     Initialize(xProvider, rsRootName, eMode);
 }
 
-
-
-
 ConfigurationAccess::ConfigurationAccess (
     const OUString& rsRootName,
     const WriteMode eMode)
@@ -55,9 +51,6 @@ ConfigurationAccess::ConfigurationAccess (
         configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );
     Initialize(xProvider, rsRootName, eMode);
 }
-
-
-
 
 void ConfigurationAccess::Initialize (
     const Reference<lang::XMultiServiceFactory>& rxProvider,
@@ -98,9 +91,6 @@ void ConfigurationAccess::Initialize (
     }
 }
 
-
-
-
 Any ConfigurationAccess::GetConfigurationNode (
     const OUString& sPathToNode)
 {
@@ -108,9 +98,6 @@ Any ConfigurationAccess::GetConfigurationNode (
         Reference<container::XHierarchicalNameAccess>(mxRoot, UNO_QUERY),
         sPathToNode);
 }
-
-
-
 
 Any ConfigurationAccess::GetConfigurationNode (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
@@ -136,18 +123,12 @@ Any ConfigurationAccess::GetConfigurationNode (
     return Any();
 }
 
-
-
-
 void ConfigurationAccess::CommitChanges (void)
 {
     Reference<util::XChangesBatch> xConfiguration (mxRoot, UNO_QUERY);
     if (xConfiguration.is())
         xConfiguration->commitChanges();
 }
-
-
-
 
 void ConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
@@ -174,9 +155,6 @@ void ConfigurationAccess::ForAll (
     }
 }
 
-
-
-
 void ConfigurationAccess::FillList(
     const Reference<container::XNameAccess>& rxContainer,
     const OUString& rsArgument,
@@ -202,7 +180,6 @@ void ConfigurationAccess::FillList(
     catch (RuntimeException&)
     {}
 }
-
 
 } } // end of namespace sd::tools
 

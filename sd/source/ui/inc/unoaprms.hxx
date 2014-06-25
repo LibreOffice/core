@@ -27,7 +27,6 @@
 #include <svx/svdopath.hxx>
 #include <tools/color.hxx>
 
-
 class SdDrawDocument;
 class SdrObject;
 

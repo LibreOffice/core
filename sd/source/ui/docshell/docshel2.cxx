@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawDocShell.hxx"
 #include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>
@@ -277,7 +276,6 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     return aPreview;
 }
-
 
 /**
  * Checks if the page exists. If so, we force the user to enter a not yet used

@@ -61,7 +61,6 @@ public:
     SearchContext_impl( uno::Reference< drawing::XShapes >  xShapes, SearchContext_impl* pParent = NULL )
         : mxShapes( xShapes ), mnIndex( -1 ), mpParent( pParent ) {}
 
-
     uno::Reference< drawing::XShape > firstShape()
     {
         mnIndex = -1;
@@ -208,7 +207,6 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     SdUnoSearchReplaceDescriptor* pDescr = SdUnoSearchReplaceDescriptor::getImplementation( xDesc );
     if( pDescr == NULL )
         return uno::Reference< container::XIndexAccess > ();
-
 
     sal_Int32 nSequence = 32;
     sal_Int32 nFound    = 0;
@@ -815,7 +813,6 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUS
 void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
 void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
 void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
-
 
 /* ================================================================= */
 

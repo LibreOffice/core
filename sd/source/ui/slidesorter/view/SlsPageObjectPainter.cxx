@@ -38,7 +38,6 @@
 
 using namespace ::drawinglayer::primitive2d;
 
-
 namespace sd { namespace slidesorter { namespace view {
 
 //===== PageObjectPainter =====================================================
@@ -62,14 +61,9 @@ PageObjectPainter::PageObjectPainter (
     mpFocusBorderPainter->AdaptColor(aColor, true);
 }
 
-
-
 PageObjectPainter::~PageObjectPainter (void)
 {
 }
-
-
-
 
 void PageObjectPainter::PaintPageObject (
     OutputDevice& rDevice,
@@ -92,9 +86,6 @@ void PageObjectPainter::PaintPageObject (
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
-
-
-
 
 bool PageObjectPainter::UpdatePageObjectLayouter (void)
 {
@@ -149,9 +140,6 @@ void PageObjectPainter::PaintBackground (
     }
 }
 
-
-
-
 void PageObjectPainter::PaintPreview (
     PageObjectLayouter *pPageObjectLayouter,
     OutputDevice& rDevice,
@@ -177,9 +165,6 @@ void PageObjectPainter::PaintPreview (
         }
     }
 }
-
-
-
 
 Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
@@ -207,9 +192,6 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     }
     return pDevice->GetBitmap(Point(0,0), rSize);
 }
-
-
-
 
 Bitmap PageObjectPainter::GetPreviewBitmap (
     const model::SharedPageDescriptor& rpDescriptor,
@@ -243,9 +225,6 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
         return mpCache->GetPreviewBitmap(pPage,false);
     }
 }
-
-
-
 
 void PageObjectPainter::PaintPageNumber (
     PageObjectLayouter *pPageObjectLayouter,
@@ -299,9 +278,6 @@ void PageObjectPainter::PaintPageNumber (
     rDevice.SetTextColor(aPageNumberColor);
     rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
 }
-
-
-
 
 void PageObjectPainter::PaintTransitionEffect (
     PageObjectLayouter *pPageObjectLayouter,
@@ -496,8 +472,6 @@ void PageObjectPainter::PaintBorder (
             Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
     }
 }
-
-
 
 } } } // end of namespace sd::slidesorter::view
 

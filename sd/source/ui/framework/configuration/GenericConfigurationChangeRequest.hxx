@@ -38,7 +38,6 @@ typedef ::cppu::WeakComponentImplHelper2 <
 
 } // end of anonymous namespace.
 
-
 namespace sd { namespace framework {
 
 /** This implementation of the XConfigurationChangeRequest interface
@@ -73,7 +72,6 @@ public:
 
     virtual ~GenericConfigurationChangeRequest (void) throw();
 
-
     // XConfigurationChangeOperation
 
     /** The requested configuration change is executed on the given
@@ -87,7 +85,6 @@ public:
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XNamed
 

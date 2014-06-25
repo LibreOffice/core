@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUDSPORD_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUDSPORD_HXX
 
-
 #include "fupoor.hxx"
 #include <vcl/pointr.hxx>
 

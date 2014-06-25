@@ -720,7 +720,6 @@ sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
     return nResult;
 }
 
-
 // Finish OnlineSpelling in the background
 
 void SdDrawDocument::StopOnlineSpelling()
@@ -1069,8 +1068,6 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
     return aPageNumValue;
 }
 
-
-
 // Rename layout template
 // Keep in mind that rOldLayoutName contains the _complete_ name of the layout
 // (including ~LT~). This is unlike rNewName.
@@ -1291,7 +1288,6 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
             aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
 
         pItemPool->SetPoolDefaultItem( aAdjust );
-
 
     }
 }

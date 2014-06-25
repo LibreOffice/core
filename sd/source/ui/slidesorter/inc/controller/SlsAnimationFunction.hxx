@@ -30,8 +30,6 @@ namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
 } } }
 
-
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class AnimationBezierFunction
@@ -59,9 +57,6 @@ private:
         const double nV2);
 };
 
-
-
-
 /** Turn a parametric function into one whose y-Values depend on its
     x-Values.  Note a lot of interpolation takes place.  The resulting
     accuracy should be good enough for the purpose of acceleration
@@ -81,9 +76,6 @@ private:
     */
     ::std::vector<double> maY;
 };
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

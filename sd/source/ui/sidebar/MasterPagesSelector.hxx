@@ -49,7 +49,6 @@ namespace sd { namespace sidebar {
 
 class PreviewValueSet;
 
-
 /** Base class of a menu that lets the user select from a list of
     templates or designs that are loaded from files.
 */

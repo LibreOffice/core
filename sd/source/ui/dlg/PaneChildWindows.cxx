@@ -76,9 +76,6 @@ PaneChildWindow::PaneChildWindow (
     }
 }
 
-
-
-
 PaneChildWindow::~PaneChildWindow (void)
 {
     ViewShellBase* pBase = NULL;
@@ -89,11 +86,6 @@ PaneChildWindow::~PaneChildWindow (void)
     if (pBase != NULL)
         framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
 }
-
-
-
-
-
 
 //===== LeftPaneImpressChildWindow ============================================
 
@@ -112,9 +104,6 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         SFX_ALIGN_LEFT)
 {
 }
-
-
-
 
 //===== LeftPaneDrawChildWindow ===============================================
 

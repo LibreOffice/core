@@ -41,7 +41,6 @@
 
 #include <sfx2/sfxdlg.hxx>
 
-
 #include <svx/sdr/contact/displayinfo.hxx>
 
 #include "sdmod.hxx"
@@ -375,7 +374,6 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     return(0);
 }
 
-
 /**
  * virtual methods for option dialog
  */
@@ -461,7 +459,6 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     }
     pRet->Put( aSdOptionsMiscItem );
 
-
     // TP_OPTIONS_SNAP:
     pRet->Put( SdOptionsSnapItem( ATTR_OPTIONS_SNAP, pOptions, pFrameView ) );
 
@@ -494,7 +491,6 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
     pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_WIDTH, nW ) );
     pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_HEIGHT, nH ) );
-
 
     // TP_OPTIONS_PRINT:
     pRet->Put( SdOptionsPrintItem( ATTR_OPTIONS_PRINT, pOptions ) );

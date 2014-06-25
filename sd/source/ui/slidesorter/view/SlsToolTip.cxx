@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsToolTip.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
@@ -45,16 +44,12 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
     maHiddenTimer.SetTimeout(rHelpSettings.GetTipDelay());
 }
 
-
-
-
 ToolTip::~ToolTip (void)
 {
     maShowTimer.Stop();
     maHiddenTimer.Stop();
     Hide();
 }
-
 
 void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 {
@@ -97,8 +92,6 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
     }
 }
 
-
-
 void ToolTip::Show (const bool bNoDelay)
 {
     if (bNoDelay)
@@ -106,9 +99,6 @@ void ToolTip::Show (const bool bNoDelay)
     else
         maShowTimer.Start();
 }
-
-
-
 
 void ToolTip::DoShow (void)
 {
@@ -152,9 +142,6 @@ void ToolTip::DoShow (void)
     }
 }
 
-
-
-
 bool ToolTip::Hide (void)
 {
     if (mnHelpWindowHandle>0)
@@ -166,9 +153,6 @@ bool ToolTip::Hide (void)
     else
         return false;
 }
-
-
-
 
 IMPL_LINK_NOARG(ToolTip, DelayTrigger)
 {

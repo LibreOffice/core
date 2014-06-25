@@ -62,7 +62,6 @@ namespace sd {
 
 TYPEINIT0( FuPoor );
 
-
 FuPoor::FuPoor (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -97,7 +96,6 @@ FuPoor::FuPoor (
     aDelayToScrollTimer.SetTimeout(2000);
 }
 
-
 FuPoor::~FuPoor()
 {
     aDragTimer.Stop();
@@ -108,7 +106,6 @@ FuPoor::~FuPoor()
         delete pDialog;
 }
 
-
 void FuPoor::Activate()
 {
     if (pDialog)
@@ -116,7 +113,6 @@ void FuPoor::Activate()
         pDialog->Show();
     }
 }
-
 
 void FuPoor::Deactivate()
 {
@@ -1085,9 +1081,6 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
             Size(rRect.GetWidth(), rRect.GetWidth()));
     }
 }
-
-
-
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {

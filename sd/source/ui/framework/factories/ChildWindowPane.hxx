@@ -39,7 +39,6 @@ typedef ::cppu::ImplInheritanceHelper1 <
 
 } // end of anonymous namespace.
 
-
 namespace sd { class ViewShellBase; }
 
 namespace sd { namespace framework {
@@ -84,7 +83,6 @@ public:
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
-
 
     // XEventListener
 

@@ -102,7 +102,6 @@ public:
         SAL_CALL getCanvas (void)
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XPane2 -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible (void)
@@ -118,7 +117,6 @@ public:
         const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
@@ -131,12 +129,10 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
 protected:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;

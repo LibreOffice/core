@@ -31,10 +31,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 
-
 TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
-
-
 
 ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,
@@ -120,7 +117,6 @@ void ModifyPageUndoAction::Undo()
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
-
 void ModifyPageUndoAction::Redo()
 {
     // invalidate Selection, there could be objects deleted in this UNDO
@@ -164,17 +160,14 @@ void ModifyPageUndoAction::Redo()
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
-
 ModifyPageUndoAction::~ModifyPageUndoAction()
 {
 }
-
 
 OUString ModifyPageUndoAction::GetComment() const
 {
     return maComment;
 }
-
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
     SdDrawDocument* pDocument,

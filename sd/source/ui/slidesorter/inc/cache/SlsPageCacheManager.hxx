@@ -33,7 +33,6 @@ namespace sd { namespace slidesorter { namespace cache {
 
 class BitmapCache;
 
-
 /** Provide and manage the preview bitmap caches for all slide sorter
     instances.  There is one cache per active slide sorter plus a small
     number of caches that are no longer in use.  The later are kept to speed

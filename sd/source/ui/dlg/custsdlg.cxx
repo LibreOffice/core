@@ -225,7 +225,6 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             m_pLbCustomShows->InsertEntry( pShow->GetName() );
             m_pLbCustomShows->SelectEntry( pShow->GetName() );
 
-
             bModified = true;
         }
     }

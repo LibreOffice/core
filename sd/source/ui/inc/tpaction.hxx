@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
@@ -79,8 +78,6 @@ private:
     std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
-
-
 
     DECL_LINK( ClickSearchHdl, void * );
     DECL_LINK( ClickActionHdl, void * );

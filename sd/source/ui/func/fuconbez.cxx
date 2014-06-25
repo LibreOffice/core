@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include "fuconbez.hxx"
@@ -29,7 +28,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
@@ -52,8 +50,6 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
-
-
 
 FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell* pViewSh,
@@ -87,7 +83,6 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
             maTargets = ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue();
     }
 }
-
 
 bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -138,12 +133,10 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     return(bReturn);
 }
 
-
 bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
-
 
 bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
@@ -232,7 +225,6 @@ bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
     return FuConstruct::KeyInput(rKEvt);
 }
 
-
 void FuConstructBezierPolygon::Activate()
 {
     mpView->EnableExtendedMouseEventDispatcher(true);
@@ -291,15 +283,12 @@ void FuConstructBezierPolygon::Activate()
     FuConstruct::Activate();
 }
 
-
 void FuConstructBezierPolygon::Deactivate()
 {
     mpView->EnableExtendedMouseEventDispatcher(false);
 
     FuConstruct::Deactivate();
 }
-
-
 
 void FuConstructBezierPolygon::SelectionHasChanged()
 {
@@ -309,7 +298,6 @@ void FuConstructBezierPolygon::SelectionHasChanged()
         *mpViewShell,
         *mpView);
 }
-
 
 /**
  * Set current bezier edit mode

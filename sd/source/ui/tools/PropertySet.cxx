@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/PropertySet.hxx"
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
@@ -33,15 +32,9 @@ PropertySet::PropertySet (void)
 {
 }
 
-
-
-
 PropertySet::~PropertySet (void)
 {
 }
-
-
-
 
 void SAL_CALL PropertySet::disposing (void)
 {
@@ -54,9 +47,6 @@ Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo (voi
 {
     return NULL;
 }
-
-
-
 
 void SAL_CALL PropertySet::setPropertyValue (
     const OUString& rsPropertyName,
@@ -86,9 +76,6 @@ void SAL_CALL PropertySet::setPropertyValue (
     }
 }
 
-
-
-
 Any SAL_CALL PropertySet::getPropertyValue (const OUString& rsPropertyName)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
@@ -98,9 +85,6 @@ Any SAL_CALL PropertySet::getPropertyValue (const OUString& rsPropertyName)
 
     return GetPropertyValue(rsPropertyName);
 }
-
-
-
 
 void SAL_CALL PropertySet::addPropertyChangeListener (
     const OUString& rsPropertyName,
@@ -120,9 +104,6 @@ void SAL_CALL PropertySet::addPropertyChangeListener (
             rsPropertyName,
             rxListener));
 }
-
-
-
 
 void SAL_CALL PropertySet::removePropertyChangeListener (
     const OUString& rsPropertyName,
@@ -152,9 +133,6 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
     }
 }
 
-
-
-
 void SAL_CALL PropertySet::addVetoableChangeListener (
     const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
@@ -167,9 +145,6 @@ void SAL_CALL PropertySet::addVetoableChangeListener (
     (void)rsPropertyName;
     (void)rxListener;
 }
-
-
-
 
 void SAL_CALL PropertySet::removeVetoableChangeListener (
     const OUString& rsPropertyName,
@@ -184,11 +159,6 @@ void SAL_CALL PropertySet::removeVetoableChangeListener (
     (void)rxListener;
 }
 
-
-
-
-
-
 void PropertySet::CallListeners (
     const OUString& rsPropertyName,
     const beans::PropertyChangeEvent& rEvent)
@@ -202,9 +172,6 @@ void PropertySet::CallListeners (
             iListener->second->propertyChange(rEvent);
     }
 }
-
-
-
 
 void PropertySet::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)

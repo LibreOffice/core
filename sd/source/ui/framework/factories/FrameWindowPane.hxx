@@ -24,7 +24,6 @@
 
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 
-
 namespace sd { namespace framework {
 
 /** This subclass is not necessary anymore.  We can remove it if that

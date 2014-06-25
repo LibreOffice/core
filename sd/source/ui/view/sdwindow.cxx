@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "Window.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -50,8 +49,6 @@ namespace sd {
 #define ZOOM_MULTIPLICATOR 10000    ///< multiplier to avoid rounding errors
 #define MIN_ZOOM           5        ///< minimal zoom factor
 #define MAX_ZOOM           3000     ///< maximal zoom factor
-
-
 
 Window::Window(::Window* pParent)
     : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
@@ -94,7 +91,6 @@ Window::Window(::Window* pParent)
     EnableRTL(false);
 }
 
-
 Window::~Window (void)
 {
     if (mpViewShell != NULL)
@@ -104,9 +100,6 @@ Window::~Window (void)
             pWindowUpdater->UnregisterWindow (this);
     }
 }
-
-
-
 
 void Window::SetViewShell (ViewShell* pViewSh)
 {
@@ -174,32 +167,15 @@ void Window::CalcMinZoom()
     }
 }
 
-
-
-
 void Window::SetMinZoom (long int nMin)
 {
     mnMinZoom = (sal_uInt16) nMin;
 }
 
-
-
-
-
-
-
-
 void Window::SetMaxZoom (long int nMax)
 {
     mnMaxZoom = (sal_uInt16) nMax;
 }
-
-
-
-
-
-
-
 
 long Window::GetZoom (void) const
 {
@@ -214,10 +190,6 @@ long Window::GetZoom (void) const
     }
 }
 
-
-
-
-
 void Window::Resize()
 {
     ::Window::Resize();
@@ -227,20 +199,17 @@ void Window::Resize()
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-
 void Window::PrePaint()
 {
     if ( mpViewShell )
         mpViewShell->PrePaint();
 }
 
-
 void Window::Paint(const Rectangle& rRect)
 {
     if ( mpViewShell )
         mpViewShell->Paint(rRect, this);
 }
-
 
 void Window::KeyInput(const KeyEvent& rKEvt)
 {
@@ -257,20 +226,17 @@ void Window::KeyInput(const KeyEvent& rKEvt)
     }
 }
 
-
 void Window::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if ( mpViewShell )
         mpViewShell->MouseButtonDown(rMEvt, this);
 }
 
-
 void Window::MouseMove(const MouseEvent& rMEvt)
 {
     if ( mpViewShell )
         mpViewShell->MouseMove(rMEvt, this);
 }
-
 
 void Window::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -280,13 +246,11 @@ void Window::MouseButtonUp(const MouseEvent& rMEvt)
         mpViewShell->MouseButtonUp(rMEvt, this);
 }
 
-
 void Window::Command(const CommandEvent& rCEvt)
 {
     if ( mpViewShell )
         mpViewShell->Command(rCEvt, this);
 }
-
 
 bool Window::Notify( NotifyEvent& rNEvt )
 {
@@ -301,7 +265,6 @@ bool Window::Notify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-
 void Window::RequestHelp(const HelpEvent& rEvt)
 {
     if ( mpViewShell )
@@ -312,21 +275,6 @@ void Window::RequestHelp(const HelpEvent& rEvt)
     else
         ::Window::RequestHelp( rEvt );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Set the position of the upper left corner from the visible area of the
@@ -354,16 +302,10 @@ void Window::SetViewSize(const Size& rSize)
     CalcMinZoom();
 }
 
-
-
-
 void Window::SetCenterAllowed (bool bIsAllowed)
 {
     mbCenterAllowed = bIsAllowed;
 }
-
-
-
 
 long Window::SetZoomFactor(long nZoom)
 {
@@ -558,16 +500,10 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
     return(nNewZoom);
 }
 
-
-
-
 void Window::SetMinZoomAutoCalc (bool bAuto)
 {
     mbMinZoomAutoCalc = bAuto;
 }
-
-
-
 
 /**
  * Calculate and set new MapMode origin.
@@ -620,9 +556,6 @@ void Window::UpdateMapOrigin(bool bInvalidate)
         Invalidate();
 }
 
-
-
-
 void Window::UpdateMapMode (void)
 {
     maWinPos -= maViewOrigin;
@@ -663,9 +596,6 @@ void Window::UpdateMapMode (void)
     aMap.SetOrigin(aNewOrigin);
     SetMapMode(aMap);
 }
-
-
-
 
 /**
  * @returns X position of the visible area as fraction (< 1) of the whole
@@ -780,8 +710,6 @@ void Window::GrabFocus()
     mnTicks      = 0;
     ::Window::GrabFocus ();
 }
-
-
 
 void Window::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -920,10 +848,6 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-
-
-
-
 sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
@@ -940,7 +864,6 @@ sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-
 sal_Int8 Window::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
@@ -953,17 +876,10 @@ sal_Int8 Window::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-
-
-
 void Window::SetUseDropScroll (bool bUseDropScroll)
 {
     mbUseDropScroll = bUseDropScroll;
 }
-
-
-
-
 
 void Window::DropScroll(const Point& rMousePos)
 {
@@ -1006,9 +922,6 @@ void Window::DropScroll(const Point& rMousePos)
             mnTicks ++;
     }
 }
-
-
-
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>

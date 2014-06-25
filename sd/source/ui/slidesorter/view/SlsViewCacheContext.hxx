@@ -56,7 +56,6 @@ private:
     model::SharedPageDescriptor GetDescriptor (cache::CacheKey aKey);
 };
 
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

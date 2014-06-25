@@ -61,7 +61,6 @@ enum IteratorLocation {BEGIN,END,CURRENT};
 */
 enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
 
-
 /** This iterator can be used to iterate over all <type>SdrObject</type>
     objects of one of three set denoted by the <type>IteratorType</type>:
     <ul><li>All objects of the current mark list (selection)
@@ -159,9 +158,6 @@ private:
     /// The implementation object to which most of the methods are forwarded.
     IteratorImplBase* mpIterator;
 };
-
-
-
 
 /** This class wraps the <type>Outliner</type> class and represents it as
     a container of <type>SdrObject</type> objects.  Its main purpose is to
@@ -300,9 +296,6 @@ private:
     OutlinerContainer& operator= (const OutlinerContainer&) {return *this;};
 };
 
-
-
-
 /** Data collection specifying a <type>SdrObject</type> and its position in
     a document and view.
 */
@@ -353,9 +346,7 @@ public:
     EditMode meEditMode;
 };
 
-
 } } // end of namespace ::sd::outliner
-
 
 #endif // _ INCLUDED_SD_INC_OUTLINERITERATOR_HXX
 

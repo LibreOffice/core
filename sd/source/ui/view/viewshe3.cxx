@@ -177,9 +177,6 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     }
 }
 
-
-
-
 /** This method consists basically of three parts:
     1. Process the arguments of the SFX request.
     2. Use the model to create a new page or duplicate an existing one.
@@ -401,7 +398,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
     return pNewPage;
 }
-
 
 } // end of namespace sd
 

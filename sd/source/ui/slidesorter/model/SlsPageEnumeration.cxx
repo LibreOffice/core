@@ -69,9 +69,6 @@ private:
 
 } // end of anonymouse namespace
 
-
-
-
 namespace sd { namespace slidesorter { namespace model {
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -84,7 +81,6 @@ PageEnumeration PageEnumeration::Create (
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 PageEnumeration::PageEnumeration (
     ::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl)
@@ -92,8 +88,6 @@ PageEnumeration::PageEnumeration (
 {
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
-
-
 
 PageEnumeration::PageEnumeration (
     PageEnumeration& rEnumeration,
@@ -110,24 +104,15 @@ PageEnumeration::PageEnumeration (
     }
 }
 
-
-
-
 PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
 : sd::slidesorter::model::Enumeration<sd::slidesorter::model::SharedPageDescriptor>()
 {
     mpImpl = rEnumeration.mpImpl->Clone();
 }
 
-
-
-
 PageEnumeration::~PageEnumeration (void)
 {
 }
-
-
-
 
 PageEnumeration& PageEnumeration::operator= (
     const PageEnumeration& rEnumeration)
@@ -135,8 +120,6 @@ PageEnumeration& PageEnumeration::operator= (
     mpImpl = rEnumeration.mpImpl->Clone();
     return *this;
 }
-
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone (void)
@@ -146,22 +129,15 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
 bool PageEnumeration::HasMoreElements (void) const
 {
     return mpImpl->HasMoreElements();
 }
 
-
-
 SharedPageDescriptor PageEnumeration::GetNextElement (void)
 {
     return mpImpl->GetNextElement();
 }
-
-
-
 
 void PageEnumeration::Rewind (void)
 {
@@ -169,9 +145,6 @@ void PageEnumeration::Rewind (void)
 }
 
 } } } // end of namespace ::sd::slidesorter::model
-
-
-
 
 namespace {
 
@@ -185,9 +158,6 @@ PageEnumerationImpl::PageEnumerationImpl (
     Rewind();
 }
 
-
-
-
 PageEnumerationImpl::PageEnumerationImpl (
     const SlideSorterModel& rModel,
     const PageEnumeration::PagePredicate& rPredicate,
@@ -198,14 +168,9 @@ PageEnumerationImpl::PageEnumerationImpl (
 {
 }
 
-
-
-
 PageEnumerationImpl::~PageEnumerationImpl (void)
 {
 }
-
-
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<Enumeration<SharedPageDescriptor> >
@@ -216,15 +181,10 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
 bool PageEnumerationImpl::HasMoreElements (void) const
 {
     return (mnIndex < mrModel.GetPageCount());
 }
-
-
-
 
 SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
 {
@@ -237,19 +197,12 @@ SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
     return pDescriptor;
 }
 
-
-
-
 void PageEnumerationImpl::Rewind (void)
 {
     // Go to first valid element.
     mnIndex = 0;
     AdvanceToNextValidElement();
 }
-
-
-
-
 
 void PageEnumerationImpl::AdvanceToNextValidElement (void)
 {

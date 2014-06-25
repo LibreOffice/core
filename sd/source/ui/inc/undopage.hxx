@@ -87,7 +87,6 @@ public:
         mnOldPaperBin (nOPaperBin),
         mbOldFullSize (bOFullSize),
 
-
         maNewSize   (rNewSz),
         mnNewLeft   (nNewLft),
         mnNewRight  (nNewRgt),
@@ -162,8 +161,6 @@ public:
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;
 };
-
-
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNDOPAGE_HXX
 

@@ -310,6 +310,4 @@ bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
     return false;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

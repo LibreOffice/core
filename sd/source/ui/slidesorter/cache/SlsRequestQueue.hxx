@@ -27,7 +27,6 @@
 #include <osl/mutex.hxx>
 #include <svx/sdrpageuser.hxx>
 
-
 namespace sd { namespace slidesorter { namespace cache {
 
 class RequestData;
@@ -124,7 +123,6 @@ private:
     */
     int mnMaximumPriority;
 };
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

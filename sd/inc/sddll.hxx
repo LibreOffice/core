@@ -56,7 +56,6 @@ public:
     static void     Init();     // called directly after loading the DLL
 };
 
-
 #endif // INCLUDED_SD_INC_SDDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

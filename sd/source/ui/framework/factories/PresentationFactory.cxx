@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/PresentationFactory.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -35,7 +34,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
-
 
 namespace sd { namespace framework {
 
@@ -60,9 +58,6 @@ public:
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
-
-
 typedef ::cppu::WeakComponentImplHelper1 <XView> PresentationViewInterfaceBase;
 
 /** The PresentationView is not an actual view, it is a marker whose
@@ -86,15 +81,11 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return false; }
 
-
 private:
     Reference<XResourceId> mxResourceId;
 };
 
 } // end of anonymous namespace.
-
-
-
 
 //===== PresentationFactoryProvider service ===================================
 
@@ -104,16 +95,10 @@ Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new PresentationFactoryProvider(rxContext)));
 }
 
-
-
-
 OUString PresentationFactoryProvider_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.PresentationFactoryProvider");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -122,13 +107,9 @@ Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames
     return Sequence<OUString>(&sServiceName, 1);
 }
 
-
-
-
 //===== PresentationFactory ===================================================
 
 const OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
-
 
 PresentationFactory::PresentationFactory (
     const Reference<frame::XController>& rxController)
@@ -148,23 +129,13 @@ PresentationFactory::PresentationFactory (
     }
 }
 
-
-
-
-
 PresentationFactory::~PresentationFactory (void)
 {
 }
 
-
-
-
 void SAL_CALL PresentationFactory::disposing (void)
 {
 }
-
-
-
 
 //----- XViewFactory ----------------------------------------------------------
 
@@ -180,9 +151,6 @@ Reference<XResource> SAL_CALL PresentationFactory::createResource (
 
     return Reference<XResource>();
 }
-
-
-
 
 void SAL_CALL PresentationFactory::releaseResource (
     const Reference<XResource>& rxView)
@@ -205,9 +173,6 @@ void SAL_CALL PresentationFactory::releaseResource (
     }
 }
 
-
-
-
 //===== XConfigurationChangeListener ==========================================
 
 void SAL_CALL PresentationFactory::notifyConfigurationChange (
@@ -216,9 +181,6 @@ void SAL_CALL PresentationFactory::notifyConfigurationChange (
 {
     (void)rEvent;
 }
-
-
-
 
 //===== lang::XEventListener ==================================================
 
@@ -229,12 +191,6 @@ void SAL_CALL PresentationFactory::disposing (
     (void)rEventObject;
 }
 
-
-
-
-
-
-
 void PresentationFactory::ThrowIfDisposed (void) const
     throw (lang::DisposedException)
 {
@@ -244,8 +200,6 @@ void PresentationFactory::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
 
 namespace {
 
@@ -258,22 +212,13 @@ PresentationFactoryProvider::PresentationFactoryProvider (
     (void)rxContext;
 }
 
-
-
-
 PresentationFactoryProvider::~PresentationFactoryProvider (void)
 {
 }
 
-
-
-
 void PresentationFactoryProvider::disposing (void)
 {
 }
-
-
-
 
 // XInitialization
 
@@ -301,10 +246,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
     }
 }
 
-
-
 } // end of anonymous namespace.
-
 
 } } // end of namespace sd::framework
 

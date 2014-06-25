@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsProperties.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -42,15 +41,9 @@ Properties::Properties (void)
 {
 }
 
-
-
-
 Properties::~Properties (void)
 {
 }
-
-
-
 
 void Properties::HandleDataChangeEvent (void)
 {
@@ -62,141 +55,60 @@ void Properties::HandleDataChangeEvent (void)
         = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
-
-
-
-
-
-
-
 void Properties::SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide)
 {
     mbIsHighlightCurrentSlide = bIsHighlightCurrentSlide;
 }
-
-
-
-
-
-
-
 
 void Properties::SetShowSelection (const bool bIsShowSelection)
 {
     mbIsShowSelection = bIsShowSelection;
 }
 
-
-
-
-
-
-
-
 void Properties::SetShowFocus (const bool bIsShowFocus)
 {
     mbIsShowFocus = bIsShowFocus;
 }
-
-
-
-
-
-
-
 
 void Properties::SetCenterSelection (const bool bIsCenterSelection)
 {
     mbIsCenterSelection = bIsCenterSelection;
 }
 
-
-
-
-
-
-
-
 void Properties::SetSmoothSelectionScrolling (const bool bIsSmoothSelectionScrolling)
 {
     mbIsSmoothSelectionScrolling = bIsSmoothSelectionScrolling;
 }
-
-
-
-
-
-
-
 
 void Properties::SetSuspendPreviewUpdatesDuringFullScreenPresentation (const bool bFlag)
 {
     mbIsSuspendPreviewUpdatesDuringFullScreenPresentation = bFlag;
 }
 
-
-
-
-
-
-
-
 void Properties::SetBackgroundColor (const Color& rColor)
 {
     maBackgroundColor = rColor;
 }
-
-
-
-
-
-
 
 void Properties::SetTextColor (const Color& rColor)
 {
     maTextColor = rColor;
 }
 
-
-
-
-
-
-
-
 void Properties::SetSelectionColor (const Color& rColor)
 {
     maSelectionColor = rColor;
 }
-
-
-
-
-
-
-
 
 void Properties::SetHighlightColor (const Color& rColor)
 {
     maHighlightColor = rColor;
 }
 
-
-
-
-
-
-
-
 void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
 {
     mbIsUIReadOnly = bIsUIReadOnly;
 }
-
-
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

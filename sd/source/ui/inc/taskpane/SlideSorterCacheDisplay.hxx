@@ -30,7 +30,6 @@
 //#define USE_SLIDE_SORTER_CACHE_DISPLAY
 #endif
 
-
 #ifdef USE_SLIDE_SORTER_CACHE_DISPLAY
 #include <taskpane/TaskPaneTreeNode.hxx>
 
@@ -41,7 +40,6 @@ class Window;
 
 #include "svx/svdpage.hxx"
 #include "drawdoc.hxx"
-
 
 namespace sd { namespace toolpanel {
 
@@ -155,8 +153,6 @@ void SscdSetVisibility (const SdrModel* pModel, sal_Int32 nIndex, bool bVisible)
         pDisplay->SetPageVisibility(nIndex, bVisible);
 }
 
-
-
 void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
 {
     ::sd::toolpanel::SlideSorterCacheDisplay* pDisplay
@@ -166,8 +162,6 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
         pDisplay->SetUpToDate((pPage->GetPageNum()-1)/2, bUpToDate);
 }
 
-
-
 #define SSCD_SET_REQUEST_CLASS(Page,RequestClass)    \
     SscdSetRequestClass(Page,RequestClass)
 #define SSCD_SET_STATUS(RequestData,Status)     \
@@ -176,7 +170,6 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
     SscdSetVisibility(Model,Index,Visible)
 #define SSCD_SET_UPTODATE(Page,UpToDate) \
     SscdSetUpToDate(Page,UpToDate)
-
 
 }
 

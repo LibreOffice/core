@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/PresentationModule.hxx"
 
 #include "CenterViewFocusModule.hxx"
@@ -28,12 +27,10 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace framework {
 
-
 void PresentationModule::Initialize (Reference<frame::XController>& rxController)
 {
     new sd::framework::CenterViewFocusModule(rxController);
 }
-
 
 } } // end of namespace sd::framework
 

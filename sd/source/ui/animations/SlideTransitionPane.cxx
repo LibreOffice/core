@@ -52,7 +52,6 @@
 
 #include <algorithm>
 
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -60,8 +59,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
-
-
 
 // ::sd::impl::TransitionEffect
 namespace sd
@@ -221,8 +218,6 @@ struct TransitionEffect
 
 } // namespace impl
 } // namespace sd
-
-
 
 // Local Helper Functions
 namespace
@@ -413,8 +408,6 @@ void lcl_FillSoundListBox(
 namespace sd
 {
 
-
-
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,
@@ -494,15 +487,11 @@ SlideTransitionPane::~SlideTransitionPane()
     removeListener();
 }
 
-
 void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
     UpdateLook();
 }
-
-
-
 
 void SlideTransitionPane::UpdateLook (void)
 {
@@ -510,7 +499,6 @@ void SlideTransitionPane::UpdateLook (void)
     mpFT_SPEED->SetBackground(Wallpaper());
     mpFT_SOUND->SetBackground(Wallpaper());
 }
-
 
 void SlideTransitionPane::onSelectionChanged()
 {
@@ -988,7 +976,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked)
 
     return 0;
 }
-
 
 IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked)
 {

@@ -30,7 +30,6 @@ class Window;
 class OutputDevice;
 class SdDrawDocument;
 
-
 namespace sd {
 
 class ViewShell;

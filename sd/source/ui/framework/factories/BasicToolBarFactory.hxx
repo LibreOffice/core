@@ -32,7 +32,6 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper3 <
@@ -63,7 +62,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // ToolBarFactory
 
     virtual css::uno::Reference<com::sun::star::drawing::framework::XResource> SAL_CALL
@@ -78,13 +76,11 @@ public:
                 rxToolBar)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<com::sun::star::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // lang::XEventListener
 

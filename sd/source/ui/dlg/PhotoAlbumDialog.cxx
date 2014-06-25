@@ -125,7 +125,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
-
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
@@ -395,7 +394,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setSize(aPicSize);
                     aPicPos.X = (aPageSize.Width/4 - aPicSize.Width/2);
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2 + aPageSize.Height/2;
-
 
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
@@ -677,7 +675,6 @@ void SdPhotoAlbumDialog::EnableDisableButtons()
     pDownBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
                      pImagesLst->GetSelectEntryPos() < pImagesLst->GetEntryCount()-1);
 }
-
 
 } // end of namespace sd
 

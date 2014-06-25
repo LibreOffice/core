@@ -90,5 +90,4 @@
 #define UNO_NAME_STYLE_FAMILY   "Family"
 #endif
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

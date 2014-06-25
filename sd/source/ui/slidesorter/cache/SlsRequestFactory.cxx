@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsRequestFactory.hxx"
 
 #include "SlsGenericPageCache.hxx"
@@ -28,7 +27,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -59,10 +57,6 @@ void RequestFactory::operator()(
     }
 }
 
-
-
 } } } // end of namespace ::sd::slidesorter::cache
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

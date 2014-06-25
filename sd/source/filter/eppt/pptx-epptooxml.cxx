@@ -1226,7 +1226,6 @@ void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
     }
 }
 
-
 static OUString lcl_GetInitials( const OUString& sName )
 {
     OUStringBuffer sRet;

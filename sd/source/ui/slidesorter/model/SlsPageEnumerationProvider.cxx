@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include <boost/function.hpp>
 
 namespace sd { namespace slidesorter { namespace model {
-
 
 namespace {
 
@@ -38,10 +36,6 @@ public:
     }
 };
 
-
-
-
-
 class SelectedPagesPredicate
 {
 public:
@@ -50,9 +44,6 @@ public:
         return rpDescriptor->HasState(PageDescriptor::ST_Selected);
     }
 };
-
-
-
 
 class VisiblePagesPredicate
 {
@@ -65,17 +56,11 @@ public:
 
 }
 
-
-
-
 PageEnumeration PageEnumerationProvider::CreateAllPagesEnumeration (
     const SlideSorterModel& rModel)
 {
     return PageEnumeration::Create(rModel, AllPagesPredicate());
 }
-
-
-
 
 PageEnumeration PageEnumerationProvider::CreateSelectedPagesEnumeration (
     const SlideSorterModel& rModel)
@@ -85,9 +70,6 @@ PageEnumeration PageEnumerationProvider::CreateSelectedPagesEnumeration (
         SelectedPagesPredicate());
 }
 
-
-
-
 PageEnumeration PageEnumerationProvider::CreateVisiblePagesEnumeration (
     const SlideSorterModel& rModel)
 {
@@ -95,7 +77,6 @@ PageEnumeration PageEnumerationProvider::CreateVisiblePagesEnumeration (
         rModel,
         VisiblePagesPredicate());
 }
-
 
 } } } // end of namespace ::sd::slidesorter::model
 

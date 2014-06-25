@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconuno.hxx"
 #include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
-
 
 #include <svx/fmglob.hxx>
 
@@ -44,7 +42,6 @@
 namespace sd {
 
 TYPEINIT1( FuConstructUnoControl, FuConstruct );
-
 
 FuConstructUnoControl::FuConstructUnoControl (
     ViewShell*  pViewSh,

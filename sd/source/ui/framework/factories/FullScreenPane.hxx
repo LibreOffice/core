@@ -71,9 +71,6 @@ public:
         const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-
-
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
 protected:

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "OutlineViewShellBase.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
@@ -51,9 +50,6 @@ void OutlineViewShellBase::InitFactory()
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
 
-
-
-
 OutlineViewShellBase::OutlineViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
@@ -61,15 +57,9 @@ OutlineViewShellBase::OutlineViewShellBase (
 {
 }
 
-
-
-
 OutlineViewShellBase::~OutlineViewShellBase (void)
 {
 }
-
-
-
 
 } // end of namespace sd
 

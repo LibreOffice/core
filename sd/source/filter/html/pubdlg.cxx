@@ -56,7 +56,6 @@ using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-
 #define NOOFPAGES 6
 
 //ID for the config-data with the HTML-settings
@@ -676,7 +675,6 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     PropertyValue aValue;
 
-
     // Page 2
     aValue.Name = "PublishMode";
 
@@ -726,7 +724,6 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Name = "IndexURL";
     aValue.Value <<= OUString( pPage2_Index->GetText() );
     aProps.push_back( aValue );
-
 
     if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
     {
@@ -1430,7 +1427,6 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aALinkColor  = m_aALinkColor;
     pDesign->m_bUseColor   = pPage6_DocColors->IsChecked();
 
-
     pDesign->m_eScript = pPage2_ASP->IsChecked()?SCRIPT_ASP:SCRIPT_PERL;
     pDesign->m_aCGI = pPage2_CGI->GetText();
     pDesign->m_aURL = pPage2_URL->GetText();
@@ -1558,7 +1554,5 @@ IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl)
 
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

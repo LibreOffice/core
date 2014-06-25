@@ -90,7 +90,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
         meEffect =  presentation::AnimationEffect_NONE;
 }
 
-
 SdAnimationInfo::~SdAnimationInfo()
 {
 }

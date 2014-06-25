@@ -100,7 +100,6 @@ FuSearch::~FuSearch()
         delete pSdOutliner;
 }
 
-
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
@@ -140,8 +139,6 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
         }
     }
 }
-
-
 
 } // end of namespace sd
 

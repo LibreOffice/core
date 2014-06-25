@@ -31,7 +31,6 @@ namespace sd {
 
 TYPEINIT1( FuMeasureDlg, FuPoor );
 
-
 FuMeasureDlg::FuMeasureDlg (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -71,7 +70,6 @@ void FuMeasureDlg::DoExecute( SfxRequest& rReq )
     if( pArgs )
         mpView->SetAttributes( *pArgs );
 }
-
 
 } // end of namespace sd
 

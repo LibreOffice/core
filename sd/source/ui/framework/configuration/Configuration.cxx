@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/Configuration.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -45,11 +44,7 @@ public:
 
 } // end of anonymous namespace
 
-
-
-
 namespace sd { namespace framework {
-
 
 class Configuration::ResourceContainer
     : public ::std::set<Reference<XResourceId>, XResourceIdLess>
@@ -57,9 +52,6 @@ class Configuration::ResourceContainer
 public:
     ResourceContainer (void) {}
 };
-
-
-
 
 //----- Service ---------------------------------------------------------------
 
@@ -70,16 +62,10 @@ Reference<XInterface> SAL_CALL Configuration_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new Configuration(NULL,false)));
 }
 
-
-
-
 OUString Configuration_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.configuration.Configuration");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -87,9 +73,6 @@ Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.drawing.framework.Configuration");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== Configuration =========================================================
 
@@ -103,8 +86,6 @@ Configuration::Configuration (
 {
 }
 
-
-
 Configuration::Configuration (
     const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster,
     bool bBroadcastRequestEvents,
@@ -116,15 +97,9 @@ Configuration::Configuration (
 {
 }
 
-
-
-
 Configuration::~Configuration (void)
 {
 }
-
-
-
 
 void SAL_CALL Configuration::disposing (void)
 {
@@ -132,9 +107,6 @@ void SAL_CALL Configuration::disposing (void)
     mpResourceContainer->clear();
     mxBroadcaster = NULL;
 }
-
-
-
 
 //----- XConfiguration --------------------------------------------------------
 
@@ -156,9 +128,6 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
     }
 }
 
-
-
-
 void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException, std::exception)
 {
@@ -177,9 +146,6 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
         mpResourceContainer->erase(iResource);
     }
 }
-
-
-
 
 Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     const Reference<XResourceId>& rxAnchorId,
@@ -201,7 +167,6 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     {
         if ( ! (*iResource)->isBoundTo(rxAnchorId,eMode))
             continue;
-
 
         if (bFilterResources)
         {
@@ -232,9 +197,6 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     return aResult;
 }
 
-
-
-
 sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
     throw (RuntimeException, std::exception)
 {
@@ -244,9 +206,6 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
     return rxResourceId.is()
         && mpResourceContainer->find(rxResourceId) != mpResourceContainer->end();
 }
-
-
-
 
 //----- XCloneable ------------------------------------------------------------
 
@@ -263,9 +222,6 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone (void)
 
     return Reference<util::XCloneable>(pConfiguration);
 }
-
-
-
 
 //----- XNamed ----------------------------------------------------------------
 
@@ -293,20 +249,11 @@ OUString SAL_CALL Configuration::getName (void)
     return aString;
 }
 
-
-
-
 void SAL_CALL Configuration::setName (const OUString& rsName)
     throw (RuntimeException, std::exception)
 {
     (void)rsName; // rsName is ignored.
 }
-
-
-
-
-
-
 
 void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,
@@ -334,9 +281,6 @@ void Configuration::PostEvent (
     }
 }
 
-
-
-
 void Configuration::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -346,11 +290,6 @@ void Configuration::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
-
-
-
 
 bool AreConfigurationsEquivalent (
     const Reference<XConfiguration>& rxConfiguration1,

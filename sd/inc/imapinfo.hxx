@@ -53,5 +53,4 @@ public:
 
 #endif // INCLUDED_SD_INC_IMAPINFO_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,7 +78,6 @@ class Window;
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
-
 TYPEINIT1( FuPage, FuPoor );
 
 void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
@@ -180,7 +179,6 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                         0);
 
-
     // Retrieve additional data for dialog
 
     SvxShadowItem aShadowItem(SID_ATTR_BORDER_SHADOW);
@@ -191,7 +189,6 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
     aNewAttr.Put( SvxFrameDirectionItem(
         mpDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP,
         EE_PARA_WRITINGDIR ) );
-
 
     // Retrieve page-data for dialog
 
@@ -229,7 +226,6 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         mpPage->IsBackgroundFullSize() : ((SdPage&)mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
-
 
     // Merge ItemSet for dialog
 
@@ -485,7 +481,6 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( !pArgs )
         return;
 
-
     // Set new page-attributes
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
     const SfxPoolItem*  pPoolItem;
@@ -578,13 +573,10 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( bSetPageSizeAndBorder || !mbMasterPage )
         mpDrawViewShell->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
 
-
-
     // if bMasterPage==sal_False then create a background-object for this page with the
     // properties set in the dialog before, but if mbPageBckgrdDeleted==sal_True then
     // the background of this page was set to invisible, so it would be a mistake
     // to create a new background-object for this page !
-
 
     if( mbDisplayBackgroundTabPage )
     {

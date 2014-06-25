@@ -44,7 +44,6 @@
 #include "Window.hxx"
 #include <vcl/svapp.hxx>
 
-
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include "DrawDocShell.hxx"
@@ -63,7 +62,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
-
 
 struct XShapePosCompareHelper
 {
@@ -94,18 +92,12 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     UpdateAccessibleName();
 }
 
-
-
-
 AccessibleDrawDocumentView::~AccessibleDrawDocumentView (void)
 {
     OSL_TRACE ("~AccessibleDrawDocumentView");
     DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
         "~AccessibleDrawDocumentView: object has not been disposed");
 }
-
-
-
 
 void AccessibleDrawDocumentView::Init (void)
 {
@@ -133,9 +125,6 @@ void AccessibleDrawDocumentView::Init (void)
     }
 }
 
-
-
-
 void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
     const IAccessibleViewForwarder* pViewForwarder)
 {
@@ -143,9 +132,6 @@ void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
     if (mpChildrenManager != NULL)
         mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
 }
-
-
-
 
 /**  The page shape is created on every call at the moment (provided that
      every thing goes well).
@@ -200,9 +186,6 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
     return xShape;
 }
 
-
-
-
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL
@@ -219,9 +202,6 @@ sal_Int32 SAL_CALL
 
     return mpChildCount;
 }
-
-
-
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
@@ -310,9 +290,6 @@ void SAL_CALL
             mpChildrenManager->SetInfo (maShapeTreeInfo);
     }
 }
-
-
-
 
 //=====  XPropertyChangeListener  =============================================
 
@@ -415,8 +392,6 @@ void SAL_CALL
     OSL_TRACE ("  done");
 }
 
-
-
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
@@ -425,9 +400,6 @@ OUString SAL_CALL
 {
     return OUString("AccessibleDrawDocumentView");
 }
-
-
-
 
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames (void)
@@ -632,9 +604,6 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName (void)
     return sName;
 }
 
-
-
-
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.
 */
@@ -688,9 +657,6 @@ OUString
     return sDescription;
 }
 
-
-
-
 /** Return selection state of specified child
 */
 bool
@@ -730,9 +696,6 @@ bool
 
     return( bRet );
 }
-
-
-
 
 /** Select or delselect the specified shapes.  The corresponding accessible
     shapes are notified over the selection change listeners registered with
@@ -824,9 +787,6 @@ void
     }
 }
 
-
-
-
 void AccessibleDrawDocumentView::Activated (void)
 {
     if (mpChildrenManager != NULL)
@@ -848,18 +808,12 @@ void AccessibleDrawDocumentView::Activated (void)
     }
 }
 
-
-
-
 void AccessibleDrawDocumentView::Deactivated (void)
 {
     if (mpChildrenManager != NULL)
         mpChildrenManager->RemoveFocus();
     ResetState (AccessibleStateType::FOCUSED);
 }
-
-
-
 
 void AccessibleDrawDocumentView::impl_dispose (void)
 {
@@ -871,8 +825,6 @@ void AccessibleDrawDocumentView::impl_dispose (void)
 
     AccessibleDocumentViewBase::impl_dispose();
 }
-
-
 
 /** This method is called from the component helper base class while
     disposing.

@@ -38,7 +38,6 @@
 
 #include <set>
 
-
 using namespace ::com::sun::star;
 
 namespace sd { namespace sidebar {
@@ -67,9 +66,6 @@ MasterPagesSelector* CurrentMasterPagesSelector::Create (
     return pSelector;
 }
 
-
-
-
 CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     ::Window* pParent,
     SdDrawDocument& rDocument,
@@ -93,9 +89,6 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED);
 }
 
-
-
-
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
     if (mrDocument.GetDocSh() != NULL)
@@ -111,9 +104,6 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
 
-
-
-
 void CurrentMasterPagesSelector::LateInit (void)
 {
     MasterPagesSelector::LateInit();
@@ -127,9 +117,6 @@ void CurrentMasterPagesSelector::LateInit (void)
         OSL_ASSERT(mrDocument.GetDocSh() != NULL);
     }
 }
-
-
-
 
 void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 {
@@ -171,16 +158,10 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
     }
 }
 
-
-
-
 ResId CurrentMasterPagesSelector::GetContextMenuResId (void) const
 {
     return SdResId(RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP);
 }
-
-
-
 
 void CurrentMasterPagesSelector::UpdateSelection (void)
 {
@@ -228,9 +209,6 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     }
 }
 
-
-
-
 void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
 {
     if (nCommandId == SID_DELETE_MASTER_PAGE)
@@ -250,9 +228,6 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
     else
         MasterPagesSelector::ExecuteCommand(nCommandId);
 }
-
-
-
 
 void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
@@ -274,11 +249,6 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 
     MasterPagesSelector::ProcessPopupMenu(rMenu);
 }
-
-
-
-
-
 
 IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     sd::tools::EventMultiplexerEvent*,pEvent)

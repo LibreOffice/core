@@ -167,7 +167,6 @@ public:
     virtual void Cancel() = 0;
 };
 
-
 class SdAbstractDialogFactory
 {
 public:

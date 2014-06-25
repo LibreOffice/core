@@ -53,9 +53,7 @@ private:
     void            LoadSettings();
 };
 
-
 #endif
-
 
 } // end of namespace sd
 

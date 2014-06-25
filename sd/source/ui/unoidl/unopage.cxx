@@ -717,7 +717,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 }
             }
 
-
             throw lang::IllegalArgumentException();
         }
         case WID_LOOP_SOUND:
@@ -1384,7 +1383,6 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
         if(!xShape.is())
             xShape = SvxFmDrawPage::_CreateShape( pObj );
 
-
         if( eKind != PRESOBJ_NONE )
         {
             OUString aShapeType("com.sun.star.presentation.");
@@ -1466,8 +1464,6 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
 
 }
 
-
-
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
@@ -1479,8 +1475,6 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     return aSeq;
 }
 
-
-
 // XLinkTargetSupplier
 Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     throw(uno::RuntimeException, std::exception)
@@ -1488,21 +1482,15 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     return new SdPageLinkTargets( (SdGenericDrawPage*)this );
 }
 
-
-
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-
-
 void SdGenericDrawPage::getBackground( Any& ) throw()
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
-
-
 
 OUString SdGenericDrawPage::getBookmarkURL() const
 {
@@ -1521,7 +1509,6 @@ OUString SdGenericDrawPage::getBookmarkURL() const
 
     return aRet.makeStringAndClear();
 }
-
 
 void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
 {
@@ -1543,7 +1530,6 @@ void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
         }
     }
 }
-
 
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException, std::exception )
@@ -1581,7 +1567,6 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     return xShape;
 }
 
-
 void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGroup )
     throw( uno::RuntimeException, std::exception )
 {
@@ -1599,7 +1584,6 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
 
     GetModel()->SetModified();
 }
-
 
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException, std::exception )
@@ -1633,7 +1617,6 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
 
     return xShape;
 }
-
 
 void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException, std::exception )
@@ -1858,10 +1841,8 @@ Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode() throw
 
     SdPage *pSdPage = static_cast<SdPage*>(SvxFmDrawPage::mpPage);
 
-
     return pSdPage->getAnimationNode();
 }
-
 
 // SdPageLinkTargets
 SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) throw()
@@ -2019,7 +2000,6 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-
 // SdDrawPage
 SdDrawPage::SdDrawPage(  SdXImpressDocument* pModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( pModel, pPage, ImplGetDrawPagePropertySet( pModel->IsImpressDocument(), pPage->GetPageKind() ) )
@@ -2145,7 +2125,6 @@ OUString getPageApiName( SdPage* pPage )
 
     return aPageName;
 }
-
 
 OUString getPageApiNameFromUiName( const OUString& rUIName )
 {
@@ -3103,7 +3082,6 @@ void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
 
     SdGenericDrawPage::remove( xShape );
 }
-
 
 Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
 {

@@ -101,7 +101,6 @@ private:
         SdPage* pPage);
 };
 
-
 } } // end of namespace sd::sidebar
 
 #endif

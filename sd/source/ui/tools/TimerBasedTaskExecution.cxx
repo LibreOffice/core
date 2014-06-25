@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/TimerBasedTaskExecution.hxx"
 #include "tools/AsynchronousTask.hxx"
 #include <tools/time.hxx>
@@ -38,9 +37,6 @@ public:
     }
 };
 
-
-
-
 ::boost::shared_ptr<TimerBasedTaskExecution> TimerBasedTaskExecution::Create (
     const ::boost::shared_ptr<AsynchronousTask>& rpTask,
     sal_uInt32 nMillisecondsBetweenSteps,
@@ -56,17 +52,11 @@ public:
     return pExecution;
 }
 
-
-
-
 void TimerBasedTaskExecution::Release (void)
 {
     maTimer.Stop();
     mpSelf.reset();
 }
-
-
-
 
 //static
 void TimerBasedTaskExecution::ReleaseTask (
@@ -89,9 +79,6 @@ void TimerBasedTaskExecution::ReleaseTask (
     }
 }
 
-
-
-
 TimerBasedTaskExecution::TimerBasedTaskExecution (
     const ::boost::shared_ptr<AsynchronousTask>& rpTask,
     sal_uInt32 nMillisecondsBetweenSteps,
@@ -107,16 +94,10 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
     maTimer.Start();
 }
 
-
-
-
 TimerBasedTaskExecution::~TimerBasedTaskExecution (void)
 {
     maTimer.Stop();
 }
-
-
-
 
 void TimerBasedTaskExecution::SetSelf (
     const ::boost::shared_ptr<TimerBasedTaskExecution>& rpSelf)
@@ -124,9 +105,6 @@ void TimerBasedTaskExecution::SetSelf (
     if (mpTask.get() != NULL)
         mpSelf = rpSelf;
 }
-
-
-
 
 IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
 {
@@ -157,7 +135,6 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
 
     return 0;
 }
-
 
 } } // end of namespace ::sd::tools
 

@@ -210,7 +210,6 @@ isBluez5Available(DBusConnection *pConnection)
     return true;
 }
 
-
 static DBusObject*
 getBluez5Adapter(DBusConnection *pConnection)
 {
@@ -1181,7 +1180,6 @@ void SAL_CALL BluetoothServer::run()
     DBusConnection *pConnection = dbusConnectToNameOnBus();
     if( !pConnection )
         return;
-
 
     // For either implementation we need to poll the dbus fd
     int fd = -1;

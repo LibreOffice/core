@@ -108,8 +108,6 @@ private:
         const sal_Int32 nSelectionCount);
 };
 
-
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

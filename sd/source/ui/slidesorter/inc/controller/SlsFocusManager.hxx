@@ -30,7 +30,6 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 /** This class manages the focus of the slide sorter.  There is the focus

@@ -125,9 +125,6 @@ private:
     OutlinerView* mpOutlineView;
 };
 
-
-
-
 Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
@@ -224,17 +221,11 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
-
-
-
 /// Nothing spectecular in the destructor.
 Outliner::~Outliner (void)
 {
     mpImpl.reset();
 }
-
-
-
 
 /** Prepare find&replace or spellchecking.  This distinguishes between three
     cases:
@@ -286,10 +277,6 @@ void Outliner::PrepareSpelling (void)
     }
     ClearModifyFlag();
 }
-
-
-
-
 
 void Outliner::StartSpelling (void)
 {
@@ -446,9 +433,6 @@ bool Outliner::SpellNextDocument()
     return aResult;
 }
 
-
-
-
 /** Go to next match.
 */
 bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
@@ -530,9 +514,6 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     return bEndOfSearch;
 }
 
-
-
-
 void Outliner::Initialize (bool bDirectionIsForward)
 {
     const bool bIsAtEnd (maObjectIterator == ::sd::outliner::OutlinerContainer(this).end());
@@ -600,9 +581,6 @@ void Outliner::Initialize (bool bDirectionIsForward)
     maLastValidPosition = *::sd::outliner::OutlinerContainer(this).current();
 }
 
-
-
-
 bool Outliner::SearchAndReplaceAll (void)
 {
     // Save the current position to be restored after having replaced all
@@ -650,9 +628,6 @@ bool Outliner::SearchAndReplaceAll (void)
 
     return true;
 }
-
-
-
 
 bool Outliner::SearchAndReplaceOnce (void)
 {
@@ -744,9 +719,6 @@ bool Outliner::SearchAndReplaceOnce (void)
 
     return mbEndOfSearch;
 }
-
-
-
 
 /** Try to detect whether the document or the view (shell) has changed since
     the last time <member>StartSearchAndReplace()</member> has been called.
@@ -920,7 +892,6 @@ void Outliner::RestoreStartPosition()
             if (pDrawViewShell.get() != NULL)
                 SetPage (meStartEditMode, mnStartPageIndex);
 
-
             if (mpStartEditedObject != NULL)
             {
                 // Turn on the text toolbar as it is done in FuText so that
@@ -949,9 +920,6 @@ void Outliner::RestoreStartPosition()
         }
     }
 }
-
-
-
 
 /** The main purpose of this method is to iterate over all shape objects of
     the search area (current selection, current view, or whole document)
@@ -1028,9 +996,6 @@ void Outliner::ProvideNextTextObject (void)
     }
     while ( ! (mbFoundObject || mbEndOfSearch));
 }
-
-
-
 
 void Outliner::EndOfSearch (void)
 {
@@ -1155,17 +1120,11 @@ bool Outliner::ShowWrapArroundDialog (void)
     return bDoWrapArround;
 }
 
-
-
-
 bool Outliner::IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition)
 {
     SdrTextObj* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
     return (pObject != NULL) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
-
-
-
 
 void Outliner::PutTextIntoOutliner()
 {
@@ -1187,9 +1146,6 @@ void Outliner::PutTextIntoOutliner()
         mpTextObj = NULL;
     }
 }
-
-
-
 
 void Outliner::PrepareSpellCheck (void)
 {
@@ -1225,9 +1181,6 @@ void Outliner::PrepareSpellCheck (void)
     }
 }
 
-
-
-
 void Outliner::PrepareSearchAndReplace (void)
 {
     if (HasText( *mpSearchItem ))
@@ -1245,9 +1198,6 @@ void Outliner::PrepareSearchAndReplace (void)
             pOutlinerView->SetSelection (GetSearchStartPosition ());
     }
 }
-
-
-
 
 void Outliner::SetViewMode (PageKind ePageKind)
 {
@@ -1313,9 +1263,6 @@ void Outliner::SetViewMode (PageKind ePageKind)
     }
 }
 
-
-
-
 void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 {
     if ( ! mbRestrictSearchToSelection)
@@ -1331,9 +1278,6 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         }
     }
 }
-
-
-
 
 void Outliner::EnterEditMode (bool bGrabFocus)
 {
@@ -1369,9 +1313,6 @@ void Outliner::EnterEditMode (bool bGrabFocus)
     }
 }
 
-
-
-
 /**
  * SpellChecker: Error link handler
  */
@@ -1384,9 +1325,6 @@ IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
     return 0;
 }
 IMPL_LINK_INLINE_END( Outliner, SpellError, void *, nLang )
-
-
-
 
 ESelection Outliner::GetSearchStartPosition (void)
 {
@@ -1414,9 +1352,6 @@ ESelection Outliner::GetSearchStartPosition (void)
     return aPosition;
 }
 
-
-
-
 bool Outliner::HasNoPreviousMatch (void)
 {
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1427,9 +1362,6 @@ bool Outliner::HasNoPreviousMatch (void)
     // resp. at the end of the text.
     return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ());
 }
-
-
-
 
 bool Outliner::HandleFailedSearch (void)
 {
@@ -1459,7 +1391,6 @@ bool Outliner::HandleFailedSearch (void)
     return bContinueSearch;
 }
 
-
 SdrObject* Outliner::SetObject (
     const ::sd::outliner::IteratorPosition& rPosition)
 {
@@ -1468,9 +1399,6 @@ SdrObject* Outliner::SetObject (
     mnText = rPosition.mnText;
     return rPosition.mxObject.get();
 }
-
-
-
 
 void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
 {
@@ -1501,9 +1429,6 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
     }
 }
 
-
-
-
 void Outliner::HandleChangedSelection (void)
 {
     maMarkListCopy.clear();
@@ -1525,10 +1450,6 @@ void Outliner::HandleChangedSelection (void)
             mbRestrictSearchToSelection = false;
     }
 }
-
-
-
-
 
 void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
         const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
@@ -1558,9 +1479,6 @@ void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLan
     EndConversion();
 }
 
-
-
-
 /** Prepare to do a text conversion on the current text object. This
     includes putting it into edit mode.
 */
@@ -1584,9 +1502,6 @@ void Outliner::PrepareConversion (void)
         SetUpdateMode(false);
     }
 }
-
-
-
 
 void Outliner::BeginConversion (void)
 {
@@ -1617,16 +1532,10 @@ void Outliner::BeginConversion (void)
     ClearModifyFlag();
 }
 
-
-
-
 void Outliner::EndConversion()
 {
     EndSpelling();
 }
-
-
-
 
 bool Outliner::ConvertNextDocument()
 {
@@ -1663,9 +1572,6 @@ bool Outliner::ConvertNextDocument()
 
     return !mbEndOfSearch;
 }
-
-
-
 
 sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 {
@@ -1709,9 +1615,6 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     return nResult;
 }
 
-
-
-
 //===== Outliner::Implementation ==============================================
 
 Outliner::Implementation::Implementation (void)
@@ -1720,9 +1623,6 @@ Outliner::Implementation::Implementation (void)
       mpOutlineView(NULL)
 {
 }
-
-
-
 
 Outliner::Implementation::~Implementation (void)
 {
@@ -1733,13 +1633,6 @@ Outliner::Implementation::~Implementation (void)
         mpOutlineView = NULL;
     }
 }
-
-
-
-
-
-
-
 
 /** We try to create a new OutlinerView only when there is none available,
     either from an OutlinerViewShell or a previous call to
@@ -1804,9 +1697,6 @@ void Outliner::Implementation::ProvideOutlinerView (
         }
     }
 }
-
-
-
 
 void Outliner::Implementation::ReleaseOutlinerView (void)
 {

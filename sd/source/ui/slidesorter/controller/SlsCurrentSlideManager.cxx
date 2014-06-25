@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlideSorter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -38,9 +37,7 @@ using namespace ::com::sun::star::uno;
 
 using namespace ::sd::slidesorter::model;
 
-
 namespace sd { namespace slidesorter { namespace controller {
-
 
 CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -52,15 +49,9 @@ CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     maSwitchPageDelayTimer.SetTimeoutHdl(LINK(this,CurrentSlideManager,SwitchPageCallback));
 }
 
-
-
-
 CurrentSlideManager::~CurrentSlideManager (void)
 {
 }
-
-
-
 
 void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
 {
@@ -73,9 +64,6 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const SdPage* pPage)
     else
         NotifyCurrentSlideChange(-1);
 }
-
-
-
 
 void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 {
@@ -97,9 +85,6 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
     }
 }
 
-
-
-
 void CurrentSlideManager::ReleaseCurrentSlide (void)
 {
     if (mpCurrentSlide.get() != NULL)
@@ -109,16 +94,10 @@ void CurrentSlideManager::ReleaseCurrentSlide (void)
     mnCurrentSlideIndex = -1;
 }
 
-
-
-
 bool CurrentSlideManager::IsCurrentSlideIsValid (void)
 {
     return mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex<mrSlideSorter.GetModel().GetPageCount();
 }
-
-
-
 
 void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
 {
@@ -135,18 +114,12 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
     }
 }
 
-
-
-
 void CurrentSlideManager::SwitchCurrentSlide (
     const sal_Int32 nSlideIndex,
     const bool bUpdateSelection)
 {
     SwitchCurrentSlide(mrSlideSorter.GetModel().GetPageDescriptor(nSlideIndex), bUpdateSelection);
 }
-
-
-
 
 void CurrentSlideManager::SwitchCurrentSlide (
     const SharedPageDescriptor& rpDescriptor,
@@ -192,9 +165,6 @@ void CurrentSlideManager::SwitchCurrentSlide (
     }
 }
 
-
-
-
 void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescriptor& rpDescriptor)
 {
     OSL_ASSERT(rpDescriptor.get() != NULL);
@@ -213,9 +183,6 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
     }
 }
 
-
-
-
 void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescriptor& rpDescriptor)
 {
     OSL_ASSERT(rpDescriptor.get() != NULL);
@@ -232,9 +199,6 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
         }
     }
 }
-
-
-
 
 void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescriptor& rpDescriptor)
 {
@@ -260,20 +224,10 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
     }
 }
 
-
-
-
-
-
-
-
 void CurrentSlideManager::PrepareModelChange (void)
 {
     mpCurrentSlide.reset();
 }
-
-
-
 
 void CurrentSlideManager::HandleModelChange (void)
 {
@@ -284,9 +238,6 @@ void CurrentSlideManager::HandleModelChange (void)
             mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, true);
     }
 }
-
-
-
 
 IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
 {

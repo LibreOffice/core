@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sddll.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -63,12 +62,8 @@ namespace sd {
 
 class ImageButtonHdl;
 
-
-
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
-
-
 
 static BitmapEx loadImageResource( sal_uInt16 nId )
 {
@@ -77,8 +72,6 @@ static BitmapEx loadImageResource( sal_uInt16 nId )
 
     return BitmapEx( aResId );
 }
-
-
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
@@ -103,8 +96,6 @@ static BitmapEx* getButtonImage( int index, bool large )
         return gSmallButtonImages[index].get();
     }
 }
-
-
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 
@@ -158,8 +149,6 @@ private:
     sal_uLong mnTip;
 };
 
-
-
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
@@ -169,14 +158,10 @@ ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSI
 {
 }
 
-
-
 ImageButtonHdl::~ImageButtonHdl()
 {
     HideTip();
 }
-
-
 
 void ImageButtonHdl::HideTip()
 {
@@ -223,16 +208,12 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
     }
 }
 
-
-
 void ImageButtonHdl::onMouseLeave()
 {
     mnHighlightId = -1;
     HideTip();
     Touch();
 }
-
-
 
 void ImageButtonHdl::CreateB2dIAObject()
 {
@@ -277,28 +258,20 @@ void ImageButtonHdl::CreateB2dIAObject()
     }
 }
 
-
-
 bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
-
-
 
 bool ImageButtonHdl::isMarkable() const
 {
     return false;
 }
 
-
-
 Pointer ImageButtonHdl::GetPointer() const
 {
     return Pointer( POINTER_ARROW );
 }
-
-
 
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
 : SmartTag( rView )
@@ -306,13 +279,9 @@ ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlace
 {
 }
 
-
-
 ChangePlaceholderTag::~ChangePlaceholderTag()
 {
 }
-
-
 
 /** returns true if the ChangePlaceholderTag handled the event. */
 bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHdl& rHdl )
@@ -338,8 +307,6 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     return false;
 }
 
-
-
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 {
@@ -358,8 +325,6 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
         return false;
     }
 }
-
-
 
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
@@ -438,28 +403,20 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-
-
 void ChangePlaceholderTag::disposing()
 {
     SmartTag::disposing();
 }
-
-
 
 void ChangePlaceholderTag::select()
 {
     SmartTag::select();
 }
 
-
-
 void ChangePlaceholderTag::deselect()
 {
     SmartTag::deselect();
 }
-
-
 
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
@@ -475,8 +432,6 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
     StartListening( *mrBase.GetDocShell() );
 }
 
-
-
 ViewOverlayManager::~ViewOverlayManager()
 {
     Link aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
@@ -490,8 +445,6 @@ ViewOverlayManager::~ViewOverlayManager()
 
     DisposeTags();
 }
-
-
 
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
@@ -558,8 +511,6 @@ bool ViewOverlayManager::CreateTags()
     return bChanges;
 }
 
-
-
 bool ViewOverlayManager::DisposeTags()
 {
     if( !maTagVector.empty() )
@@ -578,8 +529,6 @@ bool ViewOverlayManager::DisposeTags()
 
     return false;
 }
-
-
 
 IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlideSorterController.hxx"
 
 #include "SlideSorter.hxx"
@@ -93,7 +92,6 @@ using namespace ::basegfx;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-
 SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrModel(mrSlideSorter.GetModel()),
@@ -138,9 +136,6 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
     }
 }
 
-
-
-
 void SlideSorterController::Init (void)
 {
     mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
@@ -166,9 +161,6 @@ void SlideSorterController::Init (void)
     GetSelectionManager()->SelectionHasChanged();
 }
 
-
-
-
 SlideSorterController::~SlideSorterController (void)
 {
     try
@@ -187,9 +179,6 @@ SlideSorterController::~SlideSorterController (void)
     // to shut down cleanly.
 }
 
-
-
-
 void SlideSorterController::Dispose (void)
 {
     mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
@@ -197,9 +186,6 @@ void SlideSorterController::Dispose (void)
     mpSelectionManager.reset();
     mpAnimator->Dispose();
 }
-
-
-
 
 model::SharedPageDescriptor SlideSorterController::GetPageAt (
     const Point& aWindowPosition)
@@ -230,17 +216,11 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
     return pDescriptorAtPoint;
 }
 
-
-
-
 PageSelector& SlideSorterController::GetPageSelector (void)
 {
     OSL_ASSERT(mpPageSelector.get()!=NULL);
     return *mpPageSelector.get();
 }
-
-
-
 
 FocusManager& SlideSorterController::GetFocusManager (void)
 {
@@ -248,17 +228,11 @@ FocusManager& SlideSorterController::GetFocusManager (void)
     return *mpFocusManager.get();
 }
 
-
-
-
 Clipboard& SlideSorterController::GetClipboard (void)
 {
     OSL_ASSERT(mpClipboard.get()!=NULL);
     return *mpClipboard.get();
 }
-
-
-
 
 ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 {
@@ -266,17 +240,11 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
     return *mpScrollBarManager.get();
 }
 
-
-
-
 ::boost::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager (void) const
 {
     OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
     return mpCurrentSlideManager;
 }
-
-
-
 
 ::boost::shared_ptr<SlotManager> SlideSorterController::GetSlotManager (void) const
 {
@@ -284,17 +252,11 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
     return mpSlotManager;
 }
 
-
-
-
 ::boost::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager (void) const
 {
     OSL_ASSERT(mpSelectionManager.get()!=NULL);
     return mpSelectionManager;
 }
-
-
-
 
 ::boost::shared_ptr<InsertionIndicatorHandler>
     SlideSorterController::GetInsertionIndicatorHandler (void) const
@@ -302,9 +264,6 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
     OSL_ASSERT(mpInsertionIndicatorHandler.get()!=NULL);
     return mpInsertionIndicatorHandler;
 }
-
-
-
 
 void SlideSorterController::Paint (
     const Rectangle& rBBox,
@@ -327,32 +286,20 @@ void SlideSorterController::Paint (
     }
 }
 
-
-
-
 void SlideSorterController::FuTemporary (SfxRequest& rRequest)
 {
     mpSlotManager->FuTemporary (rRequest);
 }
-
-
-
 
 void SlideSorterController::FuPermanent (SfxRequest &rRequest)
 {
     mpSlotManager->FuPermanent (rRequest);
 }
 
-
-
-
 void SlideSorterController::FuSupport (SfxRequest &rRequest)
 {
     mpSlotManager->FuSupport (rRequest);
 }
-
-
-
 
 bool SlideSorterController::Command (
     const CommandEvent& rEvent,
@@ -519,16 +466,10 @@ bool SlideSorterController::Command (
     return bEventHasBeenHandled;
 }
 
-
-
-
 void SlideSorterController::LockModelChange (void)
 {
     mnModelChangeLockCount += 1;
 }
-
-
-
 
 void SlideSorterController::UnlockModelChange (void)
 {
@@ -538,9 +479,6 @@ void SlideSorterController::UnlockModelChange (void)
         PostModelChange();
     }
 }
-
-
-
 
 void SlideSorterController::PreModelChange (void)
 {
@@ -560,9 +498,6 @@ void SlideSorterController::PreModelChange (void)
 
     mbPostModelChangePending = true;
 }
-
-
-
 
 void SlideSorterController::PostModelChange (void)
 {
@@ -590,9 +525,6 @@ void SlideSorterController::PostModelChange (void)
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 }
 
-
-
-
 void SlideSorterController::HandleModelChange (void)
 {
     // Ignore this call when the document is not in a valid state, i.e. has
@@ -605,9 +537,6 @@ void SlideSorterController::HandleModelChange (void)
         PreModelChange();
     }
 }
-
-
-
 
 IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 {
@@ -680,9 +609,6 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_True;
 }
 
-
-
-
 void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
 {
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
@@ -741,48 +667,30 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     }
 }
 
-
-
-
 void SlideSorterController::GetStatusBarState (SfxItemSet& rSet)
 {
     mpSlotManager->GetStatusBarState (rSet);
 }
-
-
-
 
 void SlideSorterController::ExecCtrl (SfxRequest& rRequest)
 {
     mpSlotManager->ExecCtrl (rRequest);
 }
 
-
-
-
 void SlideSorterController::GetAttrState (SfxItemSet& rSet)
 {
     mpSlotManager->GetAttrState (rSet);
 }
 
-
-
-
 void SlideSorterController::ExecStatusBar (SfxRequest& )
 {
 }
-
-
-
 
 void SlideSorterController::UpdateAllPages (void)
 {
     // Do a redraw.
     mrSlideSorter.GetContentWindow()->Invalidate();
 }
-
-
-
 
 Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 {
@@ -796,9 +704,6 @@ Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 
     return aContentArea;
 }
-
-
-
 
 Rectangle  SlideSorterController::Rearrange (bool bForce)
 {
@@ -855,26 +760,17 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     return aNewContentArea;
 }
 
-
-
-
 rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 {
     rtl::Reference<FuPoor> xFunc( SelectionFunction::Create(mrSlideSorter, rRequest) );
     return xFunc;
 }
 
-
-
-
 ::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction (void)
 {
     rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
     return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));
 }
-
-
-
 
 void SlideSorterController::PrepareEditModeChange (void)
 {
@@ -909,9 +805,6 @@ void SlideSorterController::PrepareEditModeChange (void)
     }
 }
 
-
-
-
 bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
     bool bResult (false);
@@ -926,9 +819,6 @@ bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
     }
     return bResult;
 }
-
-
-
 
 void SlideSorterController::FinishEditModeChange (void)
 {
@@ -970,9 +860,6 @@ void SlideSorterController::FinishEditModeChange (void)
     }
     mpEditModeChangeMasterPage = NULL;
 }
-
-
-
 
 void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& rsOldName)
 {
@@ -1020,9 +907,6 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
         makeAny(sNewName));
 }
 
-
-
-
 void SlideSorterController::SetDocumentSlides (const Reference<container::XIndexAccess>& rxSlides)
 {
     if (mrModel.GetDocumentSlides() != rxSlides)
@@ -1034,21 +918,11 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
     }
 }
 
-
-
-
-
-
-
-
 VisibleAreaManager& SlideSorterController::GetVisibleAreaManager (void) const
 {
     OSL_ASSERT(mpVisibleAreaManager);
     return *mpVisibleAreaManager;
 }
-
-
-
 
 void SlideSorterController::CheckForMasterPageAssignment (void)
 {
@@ -1067,9 +941,6 @@ void SlideSorterController::CheckForMasterPageAssignment (void)
     }
 }
 
-
-
-
 void SlideSorterController::CheckForSlideTransitionAssignment (void)
 {
     if (mrModel.GetPageCount()%2==0)
@@ -1087,9 +958,6 @@ void SlideSorterController::CheckForSlideTransitionAssignment (void)
     }
 }
 
-
-
-
 //===== SlideSorterController::ModelChangeLock ================================
 
 SlideSorterController::ModelChangeLock::ModelChangeLock (
@@ -1099,16 +967,10 @@ SlideSorterController::ModelChangeLock::ModelChangeLock (
     mpController->LockModelChange();
 }
 
-
-
-
 SlideSorterController::ModelChangeLock::~ModelChangeLock (void)
 {
     Release();
 }
-
-
-
 
 void SlideSorterController::ModelChangeLock::Release (void)
 {

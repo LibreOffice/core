@@ -64,7 +64,6 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
         RemoveTabPage( "RID_SVXPAGE_AREA" );
 }
 
-
 void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

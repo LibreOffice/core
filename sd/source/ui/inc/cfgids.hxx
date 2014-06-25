@@ -53,7 +53,6 @@
 #define RID_DRAW_GRAF_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 30)
 #define RID_DRAW_MEDIA_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 31)
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

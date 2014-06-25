@@ -20,12 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
 
-
-
 namespace sd { namespace toolpanel
 {
-
-
 
     /** PanelId
         List of top level panels that can be shown in the task pane.
@@ -42,7 +38,6 @@ namespace sd { namespace toolpanel
     };
 
     PanelId GetStandardPanelId( const OUString& i_rTaskPanelResourceURL );
-
 
 } } // namespace sd::toolpanel
 

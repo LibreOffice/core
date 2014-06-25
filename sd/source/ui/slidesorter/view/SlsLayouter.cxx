@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -220,7 +219,6 @@ protected:
         InsertPosition& rPosition) const;
 };
 
-
 /** The vertical layouter has one column and as many rows as there are
     pages.
 */
@@ -243,7 +241,6 @@ protected:
         const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
 
-
 /** The horizontal layouter has one row and as many columns as there are
     pages.
 */
@@ -265,7 +262,6 @@ protected:
         const Size& rWindowSize,
         const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
-
 
 /** The number of columns of the grid layouter is defined via a control in
     the slide sorter tool bar.  The number of rows is calculated from the
@@ -293,9 +289,6 @@ protected:
         const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
 
-
-
-
 //===== Layouter ==============================================================
 
 Layouter::Layouter (
@@ -306,23 +299,14 @@ Layouter::Layouter (
 {
 }
 
-
-
-
 Layouter::~Layouter (void)
 {
 }
-
-
-
 
 ::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter (void) const
 {
     return mpImplementation->mpPageObjectLayouter;
 }
-
-
-
 
 void Layouter::SetColumnCount (
     sal_Int32 nMinimalColumnCount,
@@ -334,9 +318,6 @@ void Layouter::SetColumnCount (
         mpImplementation->mnMaximalColumnCount = nMaximalColumnCount;
     }
 }
-
-
-
 
 bool Layouter::Rearrange (
     const Orientation eOrientation,
@@ -357,24 +338,15 @@ sal_Int32 Layouter::GetColumnCount (void) const
     return mpImplementation->mnColumnCount;
 }
 
-
-
-
 sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
 {
     return mpImplementation->GetIndex(nRow,nColumn,true);
 }
 
-
-
-
 Size Layouter::GetPageObjectSize (void) const
 {
     return mpImplementation->maPageObjectSize;
 }
-
-
-
 
 Rectangle Layouter::GetPageObjectBox (
     const sal_Int32 nIndex,
@@ -383,16 +355,10 @@ Rectangle Layouter::GetPageObjectBox (
     return mpImplementation->GetPageObjectBox(nIndex, bIncludeBorderAndGap);
 }
 
-
-
-
 Rectangle Layouter::GetTotalBoundingBox (void) const
 {
     return mpImplementation->GetTotalBoundingBox();
 }
-
-
-
 
 InsertPosition Layouter::GetInsertPosition (
     const Point& rModelPosition,
@@ -411,32 +377,20 @@ InsertPosition Layouter::GetInsertPosition (
     return aPosition;
 }
 
-
-
-
 Range Layouter::GetValidHorizontalSizeRange (void) const
 {
     return mpImplementation->GetValidHorizontalSizeRange();
 }
-
-
-
 
 Range Layouter::GetValidVerticalSizeRange (void) const
 {
     return mpImplementation->GetValidVerticalSizeRange();
 }
 
-
-
-
 Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
 {
     return mpImplementation->GetRangeOfVisiblePageObjects(aVisibleArea);
 }
-
-
-
 
 sal_Int32 Layouter::GetIndexAtPoint (
     const Point& rPosition,
@@ -457,9 +411,6 @@ sal_Int32 Layouter::GetIndexAtPoint (
     return mpImplementation->GetIndex(nRow,nColumn,bClampToValidRange);
 }
 
-
-
-
 //===== Layouter::Implementation ==============================================
 
 Layouter::Implementation* Layouter::Implementation::Create (
@@ -474,9 +425,6 @@ Layouter::Implementation* Layouter::Implementation::Create (
         default: return new GridImplementation(rImplementation);
     }
 }
-
-
-
 
 Layouter::Implementation::Implementation (
     const SharedSdWindow& rpWindow,
@@ -508,9 +456,6 @@ Layouter::Implementation::Implementation (
 {
 }
 
-
-
-
 Layouter::Implementation::Implementation (const Implementation& rImplementation)
     : mpWindow(rImplementation.mpWindow),
       mnRequestedLeftBorder(rImplementation.mnRequestedLeftBorder),
@@ -539,15 +484,9 @@ Layouter::Implementation::Implementation (const Implementation& rImplementation)
 {
 }
 
-
-
-
 Layouter::Implementation::~Implementation (void)
 {
 }
-
-
-
 
 bool Layouter::Implementation::Rearrange (
     const Size& rWindowSize,
@@ -601,9 +540,6 @@ bool Layouter::Implementation::Rearrange (
     return true;
 }
 
-
-
-
 sal_Int32 Layouter::Implementation::GetRowAtPosition (
     sal_Int32 nYPosition,
     bool bIncludeBordersAndGaps,
@@ -639,9 +575,6 @@ sal_Int32 Layouter::Implementation::GetRowAtPosition (
 
     return nRow;
 }
-
-
-
 
 sal_Int32 Layouter::Implementation::GetColumnAtPosition (
     sal_Int32 nXPosition,
@@ -682,9 +615,6 @@ sal_Int32 Layouter::Implementation::GetColumnAtPosition (
     }
     return nColumn;
 }
-
-
-
 
 sal_Int32 Layouter::Implementation::ResolvePositionInGap (
     sal_Int32 nDistanceIntoGap,
@@ -739,9 +669,6 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
 
     return nIndex;
 }
-
-
-
 
 void Layouter::Implementation::CalculateGeometricPosition (
     InsertPosition& rPosition,
@@ -860,9 +787,6 @@ void Layouter::Implementation::CalculateGeometricPosition (
     }
 }
 
-
-
-
 Rectangle Layouter::Implementation::GetInnerBoundingBox (
     model::SlideSorterModel& rModel,
     const sal_Int32 nIndex) const
@@ -881,9 +805,6 @@ Rectangle Layouter::Implementation::GetInnerBoundingBox (
             PageObjectLayouter::ModelCoordinateSystem, true);
 }
 
-
-
-
 Range Layouter::Implementation::GetValidHorizontalSizeRange (void) const
 {
     return Range(
@@ -891,18 +812,12 @@ Range Layouter::Implementation::GetValidHorizontalSizeRange (void) const
         mnLeftBorder + maMaximalSize.Width() + mnRightBorder);
 }
 
-
-
-
 Range Layouter::Implementation::GetValidVerticalSizeRange (void) const
 {
     return Range(
         mnTopBorder + maMinimalSize.Height() + mnBottomBorder,
         mnTopBorder + maMaximalSize.Height() + mnBottomBorder);
 }
-
-
-
 
 Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
 {
@@ -915,9 +830,6 @@ Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const Rectangle& a
     // slides outside (left or right of) the given area.
     return Range(GetIndex(nRow0,nCol0,true), GetIndex(nRow1,nCol1,true));
 }
-
-
-
 
 Size Layouter::Implementation::GetTargetSize (
     const Size& rWindowSize,
@@ -966,9 +878,6 @@ Size Layouter::Implementation::GetTargetSize (
     return aTargetSize;
 }
 
-
-
-
 sal_Int32 Layouter::Implementation::GetIndex (
     const sal_Int32 nRow,
     const sal_Int32 nColumn,
@@ -991,9 +900,6 @@ sal_Int32 Layouter::Implementation::GetIndex (
         return -1;
 }
 
-
-
-
 Rectangle Layouter::Implementation::GetPageObjectBox (
     const sal_Int32 nIndex,
     const bool bIncludeBorderAndGap) const
@@ -1008,9 +914,6 @@ Rectangle Layouter::Implementation::GetPageObjectBox (
         return aBoundingBox;
 }
 
-
-
-
 Rectangle Layouter::Implementation::GetPageObjectBox (
     const sal_Int32 nRow,
     const sal_Int32 nColumn) const
@@ -1024,10 +927,6 @@ Rectangle Layouter::Implementation::GetPageObjectBox (
             + (nRow>0 ? nRow : 0) * mnVerticalGap),
         maPageObjectSize);
 }
-
-
-
-
 
 Rectangle Layouter::Implementation::AddBorderAndGap (
     const Rectangle& rBoundingBox,
@@ -1054,9 +953,6 @@ Rectangle Layouter::Implementation::AddBorderAndGap (
         aBoundingBox.Bottom() += mnVerticalGap/2;
     return aBoundingBox;
 }
-
-
-
 
 Rectangle Layouter::Implementation::GetTotalBoundingBox (void) const
 {
@@ -1085,9 +981,6 @@ Rectangle Layouter::Implementation::GetTotalBoundingBox (void) const
         );
 }
 
-
-
-
 void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
     const Point& rModelPosition,
     InsertPosition& rPosition) const
@@ -1104,9 +997,6 @@ void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
         (nRow >= mnMaxRowCount));
 }
 
-
-
-
 //===== HorizontalImplementation ================================================
 
 HorizontalImplementation::HorizontalImplementation (const Implementation& rImplementation)
@@ -1114,16 +1004,10 @@ HorizontalImplementation::HorizontalImplementation (const Implementation& rImple
 {
 }
 
-
-
-
 Layouter::Orientation HorizontalImplementation::GetOrientation (void) const
 {
     return Layouter::HORIZONTAL;
 }
-
-
-
 
 void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
 {
@@ -1134,9 +1018,6 @@ void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSi
     mnRowCount = 1;
 }
 
-
-
-
 void HorizontalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
 {
     mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
@@ -1144,18 +1025,12 @@ void HorizontalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindo
     mnMaxRowCount = 1;
 }
 
-
-
-
 Size HorizontalImplementation::CalculateTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize) const
 {
     return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, false, true);
 }
-
-
-
 
 void HorizontalImplementation::CalculateLogicalInsertPosition (
     const Point& rModelPosition,
@@ -1173,9 +1048,6 @@ void HorizontalImplementation::CalculateLogicalInsertPosition (
         (nColumn >= mnMaxColumnCount));
 }
 
-
-
-
 //===== VerticalImplementation ================================================
 
 VerticalImplementation::VerticalImplementation (const Implementation& rImplementation)
@@ -1183,16 +1055,10 @@ VerticalImplementation::VerticalImplementation (const Implementation& rImplement
 {
 }
 
-
-
-
 Layouter::Orientation VerticalImplementation::GetOrientation (void) const
 {
     return Layouter::VERTICAL;
 }
-
-
-
 
 void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
 {
@@ -1204,18 +1070,12 @@ void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize
 
 }
 
-
-
-
 void VerticalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
 {
     mnMaxRowCount = (rWindowSize.Height() - mnTopBorder - mnBottomBorder)
         / (maPageObjectSize.Height()  + mnVerticalGap);
     mnMaxColumnCount = 1;
 }
-
-
-
 
 Size VerticalImplementation::CalculateTargetSize (
     const Size& rWindowSize,
@@ -1224,18 +1084,12 @@ Size VerticalImplementation::CalculateTargetSize (
     return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, false);
 }
 
-
-
-
 void VerticalImplementation::CalculateLogicalInsertPosition (
     const Point& rModelPosition,
     InsertPosition& rPosition) const
 {
     return CalculateVerticalLogicalInsertPosition(rModelPosition, rPosition);
 }
-
-
-
 
 //===== GridImplementation ================================================
 
@@ -1246,24 +1100,15 @@ GridImplementation::GridImplementation (
 {
 }
 
-
-
-
 GridImplementation::GridImplementation (const Implementation& rImplementation)
     : Implementation(rImplementation)
 {
 }
 
-
-
-
 Layouter::Orientation GridImplementation::GetOrientation (void) const
 {
     return Layouter::GRID;
 }
-
-
-
 
 void GridImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
 {
@@ -1278,9 +1123,6 @@ void GridImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
     mnRowCount = (mnPageCount + mnColumnCount-1)/mnColumnCount;
 }
 
-
-
-
 void GridImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
 {
     mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
@@ -1289,19 +1131,12 @@ void GridImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
         / (maPageObjectSize.Height()  + mnVerticalGap);
 }
 
-
-
-
-
 Size GridImplementation::CalculateTargetSize (
     const Size& rWindowSize,
     const Size& rPreviewModelSize) const
 {
     return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, true);
 }
-
-
-
 
 void GridImplementation::CalculateLogicalInsertPosition (
     const Point& rModelPosition,
@@ -1341,9 +1176,6 @@ void GridImplementation::CalculateLogicalInsertPosition (
     }
 }
 
-
-
-
 //===== InsertPosition ========================================================
 
 InsertPosition::InsertPosition (void)
@@ -1358,9 +1190,6 @@ InsertPosition::InsertPosition (void)
       maTrailingOffset(0,0)
 {
 }
-
-
-
 
 InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition)
 {
@@ -1379,9 +1208,6 @@ InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition
     return *this;
 }
 
-
-
-
 bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
 {
     // Do not compare the geometrical information (maLocation).
@@ -1393,16 +1219,10 @@ bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
         && mbIsExtraSpaceNeeded==rInsertPosition.mbIsExtraSpaceNeeded;
 }
 
-
-
-
 bool InsertPosition::operator!= (const InsertPosition& rInsertPosition) const
 {
     return !operator==(rInsertPosition);
 }
-
-
-
 
 void InsertPosition::SetLogicalPosition (
     const sal_Int32 nRow,
@@ -1420,9 +1240,6 @@ void InsertPosition::SetLogicalPosition (
     mbIsExtraSpaceNeeded = bIsExtraSpaceNeeded;
 }
 
-
-
-
 void InsertPosition::SetGeometricalPosition(
     const Point aLocation,
     const Point aLeadingOffset,
@@ -1432,8 +1249,6 @@ void InsertPosition::SetGeometricalPosition(
     maLeadingOffset = aLeadingOffset;
     maTrailingOffset = aTrailingOffset;
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::namespace
 

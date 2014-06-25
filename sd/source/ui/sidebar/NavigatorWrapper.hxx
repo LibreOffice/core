@@ -23,7 +23,6 @@
 #include <vcl/ctrl.hxx>
 #include "navigatr.hxx"
 
-
 class SfxBindings;
 namespace sd { class ViewShellBase; }
 
@@ -61,7 +60,6 @@ private:
 
     void UpdateNavigator (void);
 };
-
 
 } } // end of namespace sd::sidebar
 

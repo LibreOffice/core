@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxids.hrc>
 
 //-> Fonts & Items
@@ -41,7 +40,6 @@
 #include <editeng/eeitem.hxx>
 
 #include "bulmaper.hxx"
-
 
 #define GetWhich(nSlot) rSet.GetPool()->GetWhich( nSlot )
 

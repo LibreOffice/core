@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "model/SlideSorterModel.hxx"
 
 #include "SlideSorter.hxx"
@@ -101,9 +100,6 @@ namespace {
     }
 }
 
-
-
-
 SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
     : maMutex(),
       mrSlideSorter(rSlideSorter),
@@ -114,31 +110,19 @@ SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 SlideSorterModel::~SlideSorterModel (void)
 {
     ClearDescriptorList ();
 }
 
-
-
-
 void SlideSorterModel::Init (void)
 {
 }
-
-
-
 
 void SlideSorterModel::Dispose (void)
 {
     ClearDescriptorList ();
 }
-
-
-
 
 SdDrawDocument* SlideSorterModel::GetDocument (void)
 {
@@ -147,9 +131,6 @@ SdDrawDocument* SlideSorterModel::GetDocument (void)
     else
          return NULL;
 }
-
-
-
 
 bool SlideSorterModel::SetEditMode (EditMode eEditMode)
 {
@@ -163,24 +144,10 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
     return bEditModeChanged;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 sal_Int32 SlideSorterModel::GetPageCount (void) const
 {
     return maPageDescriptors.size();
 }
-
-
-
 
 SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
     const sal_Int32 nPageIndex,
@@ -206,9 +173,6 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
 
     return pDescriptor;
 }
-
-
-
 
 sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSlide) const
 {
@@ -259,9 +223,6 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
     return  -1;
 }
 
-
-
-
 sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
 {
     if (pPage == NULL)
@@ -300,9 +261,6 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
     return  -1;
 }
 
-
-
-
 sal_uInt16 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
 {
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nIndex));
@@ -311,9 +269,6 @@ sal_uInt16 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
     else
         return mxSlides->getCount()*2+1;
 }
-
-
-
 
 /** For now this method uses a trivial algorithm: throw away all descriptors
     and create them anew (on demand).  The main problem that we are facing
@@ -360,9 +315,6 @@ void SlideSorterModel::Resync (void)
     CheckModel(*this);
 }
 
-
-
-
 void SlideSorterModel::ClearDescriptorList (void)
 {
     DescriptorContainer aDescriptors;
@@ -389,9 +341,6 @@ void SlideSorterModel::ClearDescriptorList (void)
     }
 }
 
-
-
-
 void SlideSorterModel::SynchronizeDocumentSelection (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -405,9 +354,6 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
     }
 }
 
-
-
-
 void SlideSorterModel::SynchronizeModelSelection (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -420,13 +366,6 @@ void SlideSorterModel::SynchronizeModelSelection (void)
         pDescriptor->SetState(PageDescriptor::ST_Selected, bIsSelected);
     }
 }
-
-
-
-
-
-
-
 
 void SlideSorterModel::SetDocumentSlides (
     const Reference<container::XIndexAccess>& rxSlides)
@@ -485,17 +424,11 @@ void SlideSorterModel::SetDocumentSlides (
     mrSlideSorter.GetController().GetSlotManager()->NotifyEditModeChange();
 }
 
-
-
-
 Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides (void) const
 {
     ::osl::MutexGuard aGuard (maMutex);
     return mxSlides;
 }
-
-
-
 
 void SlideSorterModel::UpdatePageList (void)
 {
@@ -543,9 +476,6 @@ void SlideSorterModel::UpdatePageList (void)
     mrSlideSorter.GetController().SetDocumentSlides(xPages);
 }
 
-
-
-
 void SlideSorterModel::AdaptSize (void)
 {
     if (mxSlides.is())
@@ -553,9 +483,6 @@ void SlideSorterModel::AdaptSize (void)
     else
         maPageDescriptors.resize(0);
 }
-
-
-
 
 bool SlideSorterModel::IsReadOnly (void) const
 {
@@ -565,9 +492,6 @@ bool SlideSorterModel::IsReadOnly (void) const
     else
         return true;
 }
-
-
-
 
 void SlideSorterModel::SaveCurrentSelection (void)
 {
@@ -580,9 +504,6 @@ void SlideSorterModel::SaveCurrentSelection (void)
             pDescriptor->HasState(PageDescriptor::ST_Selected));
     }
 }
-
-
-
 
 Region SlideSorterModel::RestoreSelection (void)
 {
@@ -600,9 +521,6 @@ Region SlideSorterModel::RestoreSelection (void)
     }
     return aRepaintRegion;
 }
-
-
-
 
 bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
 {
@@ -627,9 +545,6 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
 
     return true;
 }
-
-
-
 
 void SlideSorterModel::InsertSlide (SdPage* pPage)
 {
@@ -660,9 +575,6 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
     // Update page indices.
     UpdateIndices(nIndex+1);
 }
-
-
-
 
 void SlideSorterModel::DeleteSlide (const SdPage* pPage)
 {
@@ -698,9 +610,6 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
     }
 }
 
-
-
-
 void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
 {
     for (sal_Int32 nDescriptorIndex=0,nCount=maPageDescriptors.size();
@@ -725,9 +634,6 @@ void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
     }
 }
 
-
-
-
 SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
 {
     SdDrawDocument* pModel = const_cast<SlideSorterModel*>(this)->GetDocument();
@@ -741,7 +647,6 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
     else
         return NULL;
 }
-
 
 } } } // end of namespace ::sd::slidesorter::model
 

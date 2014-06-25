@@ -39,15 +39,9 @@ AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape (
 {
 }
 
-
-
-
 AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 {
 }
-
-
-
 
 //=====  XServiceInfo  ========================================================
 
@@ -57,9 +51,6 @@ OUString SAL_CALL
 {
     return OUString("AccessiblePresentationGraphicShape");
 }
-
-
-
 
 /// Set this object's name if is different to the current name.
 OUString
@@ -83,9 +74,6 @@ OUString
 
     return sName;
 }
-
-
-
 
 OUString
     AccessiblePresentationGraphicShape::CreateAccessibleDescription (void)

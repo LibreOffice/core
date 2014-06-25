@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BasicPaneFactory.hxx"
 #include "facreg.hxx"
 
@@ -32,7 +31,6 @@
 #include "DrawDocShell.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <boost/bind.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -55,7 +53,6 @@ namespace {
 
 namespace sd { namespace framework {
 
-
 /** Store URL, XPane reference and (local) PaneId for every pane factory
     that is registered at the PaneController.
 */
@@ -76,7 +73,6 @@ public:
     bool ComparePane (const Reference<XResource>& rxPane) { return mxPane==rxPane; }
 };
 
-
 class BasicPaneFactory::PaneContainer
     : public ::std::vector<PaneDescriptor>
 {
@@ -84,24 +80,16 @@ public:
     PaneContainer (void) {}
 };
 
-
-
 Reference<XInterface> SAL_CALL BasicPaneFactory_createInstance (
     const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new BasicPaneFactory(rxContext)));
 }
 
-
-
-
 OUString BasicPaneFactory_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.BasicPaneFactory");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -109,9 +97,6 @@ Sequence<OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.drawing.framework.BasicPaneFactory");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== PaneFactory ===========================================================
 
@@ -125,16 +110,9 @@ BasicPaneFactory::BasicPaneFactory (
 {
 }
 
-
-
-
-
 BasicPaneFactory::~BasicPaneFactory (void)
 {
 }
-
-
-
 
 void SAL_CALL BasicPaneFactory::disposing (void)
 {
@@ -161,9 +139,6 @@ void SAL_CALL BasicPaneFactory::disposing (void)
         }
     }
 }
-
-
-
 
 void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException, std::exception)
@@ -244,9 +219,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
     }
 }
 
-
-
-
 //===== XPaneFactory ==========================================================
 
 Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
@@ -314,10 +286,6 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     return xPane;
 }
 
-
-
-
-
 void SAL_CALL BasicPaneFactory::releaseResource (
     const Reference<XResource>& rxPane)
     throw (RuntimeException, std::exception)
@@ -369,9 +337,6 @@ void SAL_CALL BasicPaneFactory::releaseResource (
     }
 }
 
-
-
-
 //===== XConfigurationChangeListener ==========================================
 
 void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
@@ -380,9 +345,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 {
 	// FIXME: nothing to do
 }
-
-
-
 
 //===== lang::XEventListener ==================================================
 
@@ -411,11 +373,6 @@ void SAL_CALL BasicPaneFactory::disposing (
     }
 }
 
-
-
-
-
-
 Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)
 {
@@ -429,9 +386,6 @@ Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     return xPane;
 }
 
-
-
-
 Reference<XResource> BasicPaneFactory::CreateFullScreenPane (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<XResourceId>& rxPaneId)
@@ -444,9 +398,6 @@ Reference<XResource> BasicPaneFactory::CreateFullScreenPane (
 
     return xPane;
 }
-
-
-
 
 Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
@@ -501,7 +452,6 @@ void BasicPaneFactory::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
 
 } } // end of namespace sd::framework
 

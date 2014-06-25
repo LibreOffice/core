@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/module.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>

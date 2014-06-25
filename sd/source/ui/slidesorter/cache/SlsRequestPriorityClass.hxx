@@ -22,7 +22,6 @@
 
 namespace sd { namespace slidesorter { namespace cache {
 
-
 /** Each request for a preview creation has a priority.  This enum defines
     the available priorities.  The special values MIN__CLASS and MAX__CLASS
     are/can be used for validation and have to be kept up-to-date.
@@ -40,7 +39,6 @@ enum RequestPriorityClass
 
     MAX__CLASS = NOT_VISIBLE
 };
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

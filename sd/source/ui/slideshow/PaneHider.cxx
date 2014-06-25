@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PaneHider.hxx"
 
 #include "ViewShell.hxx"
@@ -81,9 +80,6 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
     }
 }
 
-
-
-
 PaneHider::~PaneHider (void)
 {
     if (mxConfiguration.is() && mxConfigurationController.is())
@@ -99,7 +95,6 @@ PaneHider::~PaneHider (void)
         }
     }
 }
-
 
 } // end of namespace sd
 

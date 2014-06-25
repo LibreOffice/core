@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsPageSelector.hxx"
 
 #include "SlideSorter.hxx"
@@ -40,12 +39,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/shared_ptr.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
-
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -65,9 +62,6 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
     CountSelectedPages ();
 }
 
-
-
-
 void PageSelector::SelectAllPages (void)
 {
     VisibleAreaManager::TemporaryDisabler aDisabler (mrSlideSorter);
@@ -77,9 +71,6 @@ void PageSelector::SelectAllPages (void)
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         SelectPage(nPageIndex);
 }
-
-
-
 
 void PageSelector::DeselectAllPages (void)
 {
@@ -95,9 +86,6 @@ void PageSelector::DeselectAllPages (void)
     mnSelectedPageCount = 0;
     mpSelectionAnchor.reset();
 }
-
-
-
 
 void PageSelector::GetCoreSelection (void)
 {
@@ -130,9 +118,6 @@ void PageSelector::GetCoreSelection (void)
     }
 }
 
-
-
-
 void PageSelector::SetCoreSelection (void)
 {
     model::PageEnumeration aAllPages (
@@ -144,18 +129,12 @@ void PageSelector::SetCoreSelection (void)
     }
 }
 
-
-
-
 void PageSelector::SelectPage (int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get() != NULL)
         SelectPage(pDescriptor);
 }
-
-
-
 
 void PageSelector::SelectPage (const SdPage* pPage)
 {
@@ -164,9 +143,6 @@ void PageSelector::SelectPage (const SdPage* pPage)
     if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
         SelectPage(pDescriptor);
 }
-
-
-
 
 void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 {
@@ -191,9 +167,6 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
     }
 }
 
-
-
-
 void PageSelector::DeselectPage (
     int nPageIndex,
     const bool bUpdateCurrentPage)
@@ -202,9 +175,6 @@ void PageSelector::DeselectPage (
     if (pDescriptor.get() != NULL)
         DeselectPage(pDescriptor, bUpdateCurrentPage);
 }
-
-
-
 
 void PageSelector::DeselectPage (
     const SharedPageDescriptor& rpDescriptor,
@@ -229,9 +199,6 @@ void PageSelector::DeselectPage (
     }
 }
 
-
-
-
 void PageSelector::CheckConsistency (void) const
 {
     int nSelectionCount (0);
@@ -252,9 +219,6 @@ void PageSelector::CheckConsistency (void) const
     }
 }
 
-
-
-
 bool PageSelector::IsPageSelected (int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
@@ -264,24 +228,10 @@ bool PageSelector::IsPageSelected (int nPageIndex)
         return false;
 }
 
-
-
-
 int PageSelector::GetPageCount (void) const
 {
     return mrModel.GetPageCount();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 void PageSelector::CountSelectedPages (void)
 {
@@ -295,9 +245,6 @@ void PageSelector::CountSelectedPages (void)
     }
 }
 
-
-
-
 void PageSelector::EnableBroadcasting (void)
 {
     if (mnBroadcastDisableLevel > 0)
@@ -309,16 +256,10 @@ void PageSelector::EnableBroadcasting (void)
     }
 }
 
-
-
-
 void PageSelector::DisableBroadcasting (void)
 {
     mnBroadcastDisableLevel ++;
 }
-
-
-
 
 ::boost::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection (void) const
 {
@@ -336,9 +277,6 @@ void PageSelector::DisableBroadcasting (void)
     return pSelection;
 }
 
-
-
-
 void PageSelector::SetPageSelection (
     const ::boost::shared_ptr<PageSelection>& rpSelection,
     const bool bUpdateCurrentPage)
@@ -349,9 +287,6 @@ void PageSelector::SetPageSelection (
     if (bUpdateCurrentPage)
         UpdateCurrentPage();
 }
-
-
-
 
 void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 {
@@ -402,9 +337,6 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
     }
 }
 
-
-
-
 //===== PageSelector::UpdateLock ==============================================
 
 PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
@@ -413,17 +345,11 @@ PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
     ++mpSelector->mnUpdateLockCount;
 }
 
-
-
-
 PageSelector::UpdateLock::UpdateLock (PageSelector& rSelector)
     : mpSelector(&rSelector)
 {
     ++mpSelector->mnUpdateLockCount;
 }
-
-
-
 
 PageSelector::UpdateLock::~UpdateLock (void)
 {
@@ -443,9 +369,6 @@ void PageSelector::UpdateLock::Release (void)
     }
 }
 
-
-
-
 //===== PageSelector::BroadcastLock ==============================================
 
 PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
@@ -454,17 +377,11 @@ PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
     mrSelector.DisableBroadcasting();
 }
 
-
-
-
 PageSelector::BroadcastLock::BroadcastLock (PageSelector& rSelector)
     : mrSelector(rSelector)
 {
     mrSelector.DisableBroadcasting();
 }
-
-
-
 
 PageSelector::BroadcastLock::~BroadcastLock (void)
 {

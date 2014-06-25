@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsRequestQueue.hxx"
 
 #include <set>
@@ -74,7 +73,6 @@ public:
     RequestPriorityClass meClass;
 };
 
-
 class RequestQueue::Container
     : public ::std::set<
         Request,
@@ -82,11 +80,7 @@ class RequestQueue::Container
 {
 };
 
-
-
-
 //=====  GenericRequestQueue  =================================================
-
 
 RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
     : maMutex(),
@@ -97,16 +91,10 @@ RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
 {
 }
 
-
-
-
 RequestQueue::~RequestQueue (void)
 {
     Clear();
 }
-
-
-
 
 void RequestQueue::AddRequest (
     CacheKey aKey,
@@ -191,9 +179,6 @@ bool RequestQueue::RemoveRequest (
     return bRequestWasRemoved;
 }
 
-
-
-
 void RequestQueue::ChangeClass (
     CacheKey aKey,
     RequestPriorityClass eNewRequestClass)
@@ -214,9 +199,6 @@ void RequestQueue::ChangeClass (
     }
 }
 
-
-
-
 CacheKey RequestQueue::GetFront (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -228,9 +210,6 @@ CacheKey RequestQueue::GetFront (void)
     return mpRequestQueue->begin()->maKey;
 }
 
-
-
-
 RequestPriorityClass RequestQueue::GetFrontPriorityClass (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -241,9 +220,6 @@ RequestPriorityClass RequestQueue::GetFrontPriorityClass (void)
 
     return mpRequestQueue->begin()->meClass;
 }
-
-
-
 
 void RequestQueue::PopFront (void)
 {
@@ -267,17 +243,11 @@ void RequestQueue::PopFront (void)
     }
 }
 
-
-
-
 bool RequestQueue::IsEmpty (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
     return mpRequestQueue->empty();
 }
-
-
-
 
 void RequestQueue::Clear (void)
 {
@@ -294,13 +264,6 @@ void RequestQueue::Clear (void)
     mnMaximumPriority = 1;
 }
 
-
-
-
-
-
 } } } // end of namespace ::sd::slidesorter::cache
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,7 +56,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-
 //=====  internal  ============================================================
 
 AccessibleOutlineView::AccessibleOutlineView (
@@ -93,12 +92,10 @@ AccessibleOutlineView::AccessibleOutlineView (
     }
 }
 
-
 AccessibleOutlineView::~AccessibleOutlineView (void)
 {
     OSL_TRACE ("~AccessibleOutlineView");
 }
-
 
 void AccessibleOutlineView::Init (void)
 {
@@ -108,7 +105,6 @@ void AccessibleOutlineView::Init (void)
     AccessibleDocumentViewBase::Init ();
 }
 
-
 void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
     const IAccessibleViewForwarder* pViewForwarder)
 {
@@ -116,7 +112,6 @@ void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
 
     UpdateChildren();
 }
-
 
 //=====  XAccessibleContext  ==================================================
 
@@ -129,7 +124,6 @@ sal_Int32 SAL_CALL
     // forward
     return maTextHelper.GetChildCount();
 }
-
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
@@ -196,7 +190,6 @@ OUString SAL_CALL
 {
     return OUString("AccessibleOutlineView");
 }
-
 
 //=====  XEventListener  ======================================================
 
@@ -274,7 +267,6 @@ void SAL_CALL
     OSL_TRACE ("  done");
 }
 
-
 /// Create a name for this view.
 OUString
     AccessibleOutlineView::CreateAccessibleName (void)
@@ -284,7 +276,6 @@ OUString
 
     return SD_RESSTR(SID_SD_A11Y_I_OUTLINEVIEW_N);
 }
-
 
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.

@@ -48,7 +48,6 @@ private:
 
 } } // end of namespace sd::sidebar
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

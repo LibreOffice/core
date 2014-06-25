@@ -61,7 +61,6 @@ AccessibleShape*
         ::com::sun::star::drawing::XShape>& rxShape
         );
 
-
 } // end of namespace accessibility
 
 #endif

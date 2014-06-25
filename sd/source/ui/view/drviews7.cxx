@@ -1406,13 +1406,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
     //             disable, if there only Bitmap or Metafiles marked
     // Menuoption: Format->Area, Format->Line
     //             disabled, if the marked objects not able to handle
     //             these attributes
-
 
     bool bSingleGraphicSelected = false;
 
@@ -1521,7 +1519,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_OBJECT_CROP);
         rSet.DisableItem (SID_ATTR_GRAF_CROP);
     }
-
 
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
@@ -1742,8 +1739,6 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     svx::FontworkBar::getState( mpDrawView, rSet );
 }
 
-
-
 void DrawViewShell::GetState (SfxItemSet& rSet)
 {
     // Iterate over all requested items in the set.
@@ -1766,9 +1761,6 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-
-
 
 void DrawViewShell::Execute (SfxRequest& rReq)
 {

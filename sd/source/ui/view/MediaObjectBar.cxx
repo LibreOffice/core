@@ -72,14 +72,10 @@ MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SetName(SD_RESSTR(RID_DRAW_MEDIA_TOOLBOX));
 }
 
-
-
 MediaObjectBar::~MediaObjectBar()
 {
     SetRepeatTarget( NULL );
 }
-
-
 
 void MediaObjectBar::GetState( SfxItemSet& rSet )
 {
@@ -114,8 +110,6 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-
 
 void MediaObjectBar::Execute( SfxRequest& rReq )
 {

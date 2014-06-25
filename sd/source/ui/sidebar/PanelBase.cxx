@@ -19,10 +19,7 @@
 
 #include "TableDesignPanel.hxx"
 
-
-
 namespace sd { namespace sidebar {
-
 
 PanelBase::PanelBase (
     ::Window* pParentWindow,
@@ -39,9 +36,6 @@ PanelBase::PanelBase (
 #endif
 }
 
-
-
-
 PanelBase::~PanelBase (void)
 {
     OSL_TRACE("deleting wrapped control at %p", mpWrappedControl.get());
@@ -49,18 +43,11 @@ PanelBase::~PanelBase (void)
     OSL_TRACE("deleting PanelBase at %p from parent %p", this, GetParent());
 }
 
-
-
-
-
 void PanelBase::Dispose (void)
 {
     OSL_TRACE("PanelBase::DisposeL: deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
 }
-
-
-
 
 css::ui::LayoutSize PanelBase::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
@@ -70,9 +57,6 @@ css::ui::LayoutSize PanelBase::GetHeightForWidth (const sal_Int32 /*nWidth*/)
     return css::ui::LayoutSize(nHeight,nHeight,nHeight);
 }
 
-
-
-
 void PanelBase::Resize (void)
 {
     if (ProvideWrappedControl())
@@ -81,9 +65,6 @@ void PanelBase::Resize (void)
         mpWrappedControl->SetOutputSizePixel(aNewSize);
     }
 }
-
-
-
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible> PanelBase::CreateAccessibleObject (
@@ -96,18 +77,12 @@ void PanelBase::Resize (void)
         return NULL;
 }
 
-
-
-
 void PanelBase::SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar)
 {
     mxSidebar = rxSidebar;
     if (mxSidebar.is() && mpWrappedControl!=0)
         mxSidebar->requestLayout();
 }
-
-
-
 
 bool PanelBase::ProvideWrappedControl (void)
 {

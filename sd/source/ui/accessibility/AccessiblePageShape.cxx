@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
-
 namespace accessibility {
 
 //=====  internal  ============================================================
@@ -51,24 +50,15 @@ AccessiblePageShape::AccessiblePageShape (
     // has to be called from this constructor's caller.
 }
 
-
-
-
 AccessiblePageShape::~AccessiblePageShape (void)
 {
     OSL_TRACE ("~AccessiblePageShape");
 }
 
-
-
-
 void AccessiblePageShape::Init (void)
 {
     AccessibleShape::Init ();
 }
-
-
-
 
 //=====  XAccessibleContext  ==================================================
 
@@ -78,9 +68,6 @@ sal_Int32 SAL_CALL
 {
     return 0;
 }
-
-
-
 
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
@@ -92,9 +79,6 @@ uno::Reference<XAccessible> SAL_CALL
     throw lang::IndexOutOfBoundsException ("page shape has no children",
         static_cast<uno::XWeak*>(this));
 }
-
-
-
 
 //=====  XAccessibleComponent  ================================================
 
@@ -141,7 +125,6 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
-
             // Clip with parent (with coordinates relative to itself).
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
@@ -162,9 +145,6 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
 
     return aBoundingBox;
 }
-
-
-
 
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -188,9 +168,6 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
     }
     return nColor;
 }
-
-
-
 
 /** Extract the background color from the Background property of eithe the
     draw page or its master page.
@@ -242,9 +219,6 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     return nColor;
 }
 
-
-
-
 //=====  XServiceInfo  ========================================================
 
 OUString SAL_CALL
@@ -255,9 +229,6 @@ OUString SAL_CALL
     return OUString("AccessiblePageShape");
 }
 
-
-
-
 ::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessiblePageShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -265,9 +236,6 @@ OUString SAL_CALL
     ThrowIfDisposed ();
     return AccessibleShape::getSupportedServiceNames();
 }
-
-
-
 
 //=====  lang::XEventListener  ================================================
 
@@ -278,9 +246,6 @@ void SAL_CALL
     ThrowIfDisposed ();
     AccessibleShape::disposing (aEvent);
 }
-
-
-
 
 //=====  XComponent  ==========================================================
 
@@ -301,9 +266,6 @@ void AccessiblePageShape::dispose (void)
     AccessibleContextBase::dispose ();
 }
 
-
-
-
 //=====  protected internal  ==================================================
 
 OUString
@@ -312,9 +274,6 @@ OUString
 {
     return OUString ("PageShape");
 }
-
-
-
 
 OUString
     AccessiblePageShape::CreateAccessibleName (void)
@@ -338,9 +297,6 @@ OUString
     return CreateAccessibleBaseName()+": "+sCurrentSlideName;
 }
 
-
-
-
 OUString
     AccessiblePageShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -348,8 +304,6 @@ OUString
     return OUString ("Page Shape");
 }
 
-
 } // end of namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

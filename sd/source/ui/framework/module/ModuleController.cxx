@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/ModuleController.hxx"
 
 #include "tools/ConfigurationAccess.hxx"
@@ -39,9 +38,6 @@ namespace sd { namespace framework {
 static const sal_uInt32 snFactoryPropertyCount (2);
 static const sal_uInt32 snStartupPropertyCount (1);
 
-
-
-
 class ModuleController::ResourceToFactoryMap
     : public ::boost::unordered_map<
     OUString,
@@ -51,7 +47,6 @@ class ModuleController::ResourceToFactoryMap
 public:
     ResourceToFactoryMap (void) {}
 };
-
 
 class ModuleController::LoadedFactoryContainer
     : public ::boost::unordered_map<
@@ -63,10 +58,6 @@ public:
     LoadedFactoryContainer (void) {}
 };
 
-
-
-
-
 Reference<XInterface> SAL_CALL ModuleController_createInstance (
     const Reference<XComponentContext>& rxContext)
         throw (css::uno::Exception, std::exception)
@@ -74,16 +65,10 @@ Reference<XInterface> SAL_CALL ModuleController_createInstance (
     return Reference<XInterface>(ModuleController::CreateInstance(rxContext), UNO_QUERY);
 }
 
-
-
-
 OUString ModuleController_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.module.ModuleController");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -114,9 +99,6 @@ ModuleController::~ModuleController (void) throw()
 {
 }
 
-
-
-
 void SAL_CALL ModuleController::disposing (void)
 {
     // Break the cyclic reference back to DrawController object
@@ -124,9 +106,6 @@ void SAL_CALL ModuleController::disposing (void)
     mpResourceToFactoryMap.reset();
     mxController.clear();
 }
-
-
-
 
 void ModuleController::LoadFactories (const Reference<XComponentContext>& rxContext)
 {
@@ -152,9 +131,6 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-
-
 
 void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
 {
@@ -185,9 +161,6 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     }
 }
 
-
-
-
 void ModuleController::InstantiateStartupServices (void)
 {
     try
@@ -210,9 +183,6 @@ void ModuleController::InstantiateStartupServices (void)
         OSL_TRACE("ERROR in ModuleController::InstantiateStartupServices");
     }
 }
-
-
-
 
 void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 {
@@ -245,9 +215,6 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
         OSL_TRACE("ERROR in ModuleController::ProcessStartupServices");
     }
 }
-
-
-
 
 //----- XModuleController -----------------------------------------------------
 
@@ -293,9 +260,6 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     }
 }
 
-
-
-
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
@@ -314,7 +278,6 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
         {}
     }
 }
-
 
 } } // end of namespace sd::framework
 

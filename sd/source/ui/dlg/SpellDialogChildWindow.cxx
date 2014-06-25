@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SpellDialogChildWindow.hxx"
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
@@ -36,7 +35,6 @@ SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
 #include <Outliner.hxx>
 #include "drawdoc.hxx"
 
-
 namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
@@ -51,9 +49,6 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     ProvideOutliner();
 }
 
-
-
-
 SpellDialogChildWindow::~SpellDialogChildWindow (void)
 {
     if (mpSdOutliner != NULL)
@@ -63,28 +58,15 @@ SpellDialogChildWindow::~SpellDialogChildWindow (void)
         delete mpSdOutliner;
 }
 
-
-
-
-
-
-
-
 SfxChildWinInfo SpellDialogChildWindow::GetInfo (void) const
 {
     return ::svx::SpellDialogChildWindow::GetInfo();
 }
 
-
-
-
 void SpellDialogChildWindow::InvalidateSpellDialog (void)
 {
     ::svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
-
-
-
 
 ::svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
@@ -111,9 +93,6 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
     return aResult;
 }
 
-
-
-
 void SpellDialogChildWindow::ApplyChangedSentence (
     const ::svx::SpellPortions& rChanged, bool bRecheck )
 {
@@ -127,9 +106,6 @@ void SpellDialogChildWindow::ApplyChangedSentence (
     }
 }
 
-
-
-
 void SpellDialogChildWindow::GetFocus (void)
 {
     // In order to detect a cursor movement we could compare the
@@ -139,15 +115,9 @@ void SpellDialogChildWindow::GetFocus (void)
     // in the SdOutliner class.
 }
 
-
-
-
 void SpellDialogChildWindow::LoseFocus()
 {
 }
-
-
-
 
 void SpellDialogChildWindow::ProvideOutliner (void)
 {
@@ -197,8 +167,6 @@ void SpellDialogChildWindow::ProvideOutliner (void)
         }
     }
 }
-
-
 
 } // end of namespace ::sd
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BasicViewFactory.hxx"
 
 #include "framework/ViewShellWrapper.hxx"
@@ -51,9 +50,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-
 namespace sd { namespace framework {
-
 
 Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
     const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
@@ -61,16 +58,10 @@ Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new BasicViewFactory(rxContext)));
 }
 
-
-
-
 OUString BasicViewFactory_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.BasicViewFactory");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -78,9 +69,6 @@ Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.drawing.framework.BasicViewFactory");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== ViewDescriptor ========================================================
 
@@ -96,10 +84,6 @@ public:
     { return rpDescriptor->mxView.get() == rxView.get(); }
 };
 
-
-
-
-
 //===== BasicViewFactory::ViewShellContainer ==================================
 
 class BasicViewFactory::ViewShellContainer
@@ -109,16 +93,12 @@ public:
     ViewShellContainer (void) {};
 };
 
-
 class BasicViewFactory::ViewCache
     : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
 {
 public:
     ViewCache (void) {};
 };
-
-
-
 
 //===== ViewFactory ===========================================================
 
@@ -136,15 +116,9 @@ BasicViewFactory::BasicViewFactory (
     (void)rxContext;
 }
 
-
-
-
 BasicViewFactory::~BasicViewFactory (void)
 {
 }
-
-
-
 
 void SAL_CALL BasicViewFactory::disposing (void)
 {
@@ -173,9 +147,6 @@ void SAL_CALL BasicViewFactory::disposing (void)
     }
     mpViewShellContainer.reset();
 }
-
-
-
 
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
@@ -233,9 +204,6 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     return xView;
 }
 
-
-
-
 void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
     throw(RuntimeException, std::exception)
 {
@@ -287,9 +255,6 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
     }
 }
 
-
-
-
 void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException, std::exception)
 {
@@ -330,9 +295,6 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         }
     }
 }
-
-
-
 
 ::boost::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     const Reference<XResourceId>& rxViewId,
@@ -378,9 +340,6 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 
     return pDescriptor;
 }
-
-
-
 
 ::boost::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
@@ -461,9 +420,6 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     return pViewShell;
 }
 
-
-
-
 void BasicViewFactory::ReleaseView (
     const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor,
     bool bDoNotCache)
@@ -503,9 +459,6 @@ void BasicViewFactory::ReleaseView (
     }
 }
 
-
-
-
 bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor)
 {
     bool bIsCacheable (false);
@@ -538,9 +491,6 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
 
     return bIsCacheable;
 }
-
-
-
 
 ::boost::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromCache (
     const Reference<XResourceId>& rxViewId,
@@ -581,9 +531,6 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
 
     return pDescriptor;
 }
-
-
-
 
 void BasicViewFactory::ActivateCenterView (
     const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor)

@@ -41,7 +41,6 @@ ClientView::ClientView(
 {
 }
 
-
 ClientView::~ClientView()
 {
 }
@@ -71,7 +70,6 @@ void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::
 {
     DrawView::CompleteRedraw(pOutDev, rReg, pRedirector);
 }
-
 
 } // end of namespace sd
 

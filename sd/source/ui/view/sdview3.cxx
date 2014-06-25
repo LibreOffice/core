@@ -77,9 +77,7 @@
 #include <svx/xbtmpit.hxx>
 #include <boost/scoped_ptr.hpp>
 
-
 // - Namespaces -
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -914,7 +912,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     // try to get the replacement image from the clipboard
                     Graphic aGraphic;
                     sal_uLong nGrFormat = 0;
-
 
                     // insert replacement image ( if there is one ) into the object helper
                     if ( nGrFormat )

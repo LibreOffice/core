@@ -155,7 +155,6 @@ public:
         !!!! This should only be called by the SdShowWindow !!!!*/
     bool pause( bool bPause );
 
-
     // settings
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
     bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();

@@ -116,7 +116,6 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         aRead += aRet;
     }
 
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

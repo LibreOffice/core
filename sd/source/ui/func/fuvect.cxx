@@ -23,7 +23,6 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svdedtv.hxx>
 
-
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"

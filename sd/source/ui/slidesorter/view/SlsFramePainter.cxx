@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/bmpacc.hxx>
-
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -51,15 +49,9 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     }
 }
 
-
-
-
 FramePainter::~FramePainter (void)
 {
 }
-
-
-
 
 void FramePainter::PaintFrame (
     OutputDevice& rDevice,
@@ -79,9 +71,6 @@ void FramePainter::PaintFrame (
     maBottom.PaintSide(rDevice, rBox.BottomLeft(), rBox.BottomRight(), maBottomLeft, maBottomRight);
     maCenter.PaintCenter(rDevice,rBox);
 }
-
-
-
 
 void FramePainter::AdaptColor (
     const Color aNewColor,
@@ -111,9 +100,6 @@ void FramePainter::AdaptColor (
     maBottom.maBitmap.Replace(aSourceColor, aNewColor, 0);
     maBottomRight.maBitmap.Replace(aSourceColor, aNewColor, 0);
 }
-
-
-
 
 //===== FramePainter::OffsetBitmap ============================================
 
@@ -161,9 +147,6 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     }
 }
 
-
-
-
 void FramePainter::OffsetBitmap::PaintCorner (
     OutputDevice& rDevice,
     const Point& rAnchor) const
@@ -171,9 +154,6 @@ void FramePainter::OffsetBitmap::PaintCorner (
     if ( ! maBitmap.IsEmpty())
         rDevice.DrawBitmapEx(rAnchor+maOffset, maBitmap);
 }
-
-
-
 
 void FramePainter::OffsetBitmap::PaintSide (
     OutputDevice& rDevice,
@@ -233,9 +213,6 @@ void FramePainter::OffsetBitmap::PaintSide (
     }
 }
 
-
-
-
 void FramePainter::OffsetBitmap::PaintCenter (
     OutputDevice& rDevice,
     const Rectangle& rBox) const
@@ -250,8 +227,6 @@ void FramePainter::OffsetBitmap::PaintCenter (
                     std::min(aBitmapSize.Height(), rBox.Bottom()-nY+1)),
                 maBitmap);
 }
-
-
 
 } } } // end of namespace sd::slidesorter::view
 

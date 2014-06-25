@@ -446,7 +446,6 @@ public:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
-
     class Implementation;
 
 protected:
@@ -589,9 +588,6 @@ private:
     */
     void SetupRulers (void);
 };
-
-
-
 
 SdrView* ViewShell::GetDrawView (void) const
 {

@@ -29,7 +29,6 @@ namespace sd {
 
 class View;
 
-
 /** Handle clipboard related tasks for the draw view.
 */
 class ViewClipboard

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -39,7 +38,6 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/clipfmtitem.hxx>
-
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/fmshell.hxx>
@@ -80,9 +78,7 @@ namespace sd {
 
 bool DrawViewShell::mbPipette = false;
 
-
 // - ScannerEventListener -
-
 
 class ScannerEventListener : public ::cppu::WeakImplHelper1< lang::XEventListener >
 {
@@ -101,20 +97,15 @@ public:
     void                    ParentDestroyed() { mpParent = NULL; }
 };
 
-
-
 ScannerEventListener::~ScannerEventListener()
 {
 }
-
-
 
 void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception)
 {
     if( mpParent )
         mpParent->ScannerEvent( rEventObject );
 }
-
 
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
     : ViewShell (pFrame, pParentWindow, rViewShellBase)
@@ -138,7 +129,6 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
     doShow();
 }
-
 
 DrawViewShell::~DrawViewShell()
 {
@@ -382,18 +372,12 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
-
-
-
 void DrawViewShell::Init (bool bIsMainViewShell)
 {
     ViewShell::Init(bIsMainViewShell);
 
     StartListening (*GetDocSh());
 }
-
-
-
 
 void DrawViewShell::Shutdown (void)
 {
@@ -405,9 +389,6 @@ void DrawViewShell::Shutdown (void)
         GetDrawView()->SetAnimationMode(SDR_ANIMATION_DISABLE);
     }
 }
-
-
-
 
 css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController (void)
 {
@@ -425,9 +406,6 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
     return xSubController;
 }
 
-
-
-
 bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
     // DrawViewShells can not be relocated to a new parent window at the
@@ -435,9 +413,6 @@ bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
     // parent window that is already in use.
     return pParentWindow==GetParentWindow();
 }
-
-
-
 
 /**
  * check if we have to draw a polyline
@@ -584,7 +559,6 @@ void DrawViewShell::SetupPage (Size &rSize,
     GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
-
 
 void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
@@ -785,8 +759,6 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
 }
 
-
-
 void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
@@ -818,16 +790,11 @@ void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
         mpAnnotationManager->ExecuteAnnotation( rRequest );
 }
 
-
-
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
     if( mpAnnotationManager.get() )
         mpAnnotationManager->GetAnnotationState( rItemSet );
 }
-
-
-
 
 ::rtl::OUString DrawViewShell::GetSidebarContextName (void) const
 {
@@ -852,7 +819,6 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
             mpDrawView->GetMarkedObjectList(),
             eViewType));
 }
-
 
 } // end of namespace sd
 

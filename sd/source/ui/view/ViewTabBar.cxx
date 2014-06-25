@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewTabBar.hxx"
 
 #include "ViewShell.hxx"
@@ -135,15 +134,9 @@ ViewTabBar::ViewTabBar (
     }
 }
 
-
-
-
 ViewTabBar::~ViewTabBar (void)
 {
 }
-
-
-
 
 void ViewTabBar::disposing (void)
 {
@@ -180,13 +173,6 @@ void ViewTabBar::disposing (void)
 
     mxController = NULL;
 }
-
-
-
-
-
-
-
 
 ::Window* ViewTabBar::GetAnchorWindow(
     const Reference<XResourceId>& rxViewTabBarId,
@@ -250,9 +236,6 @@ void ViewTabBar::disposing (void)
     return pWindow;
 }
 
-
-
-
 //----- XConfigurationChangeListener ------------------------------------------
 
 void SAL_CALL  ViewTabBar::notifyConfigurationChange (
@@ -267,9 +250,6 @@ void SAL_CALL  ViewTabBar::notifyConfigurationChange (
     }
 }
 
-
-
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL ViewTabBar::disposing(
@@ -283,9 +263,6 @@ void SAL_CALL ViewTabBar::disposing(
     }
 }
 
-
-
-
 //----- XTabBar ---------------------------------------------------------------
 
 void SAL_CALL ViewTabBar::addTabBarButtonAfter (
@@ -297,17 +274,12 @@ void SAL_CALL ViewTabBar::addTabBarButtonAfter (
     AddTabBarButton(rButton, rAnchor);
 }
 
-
-
-
 void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton);
 }
-
-
 
 void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -316,9 +288,6 @@ void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
     RemoveTabBarButton(rButton);
 }
 
-
-
-
 sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -326,18 +295,12 @@ sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     return HasTabBarButton(rButton);
 }
 
-
-
-
 Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     return GetTabBarButtons();
 }
-
-
-
 
 //----- XResource -------------------------------------------------------------
 
@@ -347,17 +310,11 @@ Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId (void)
     return mxViewTabBarId;
 }
 
-
-
-
 sal_Bool SAL_CALL ViewTabBar::isAnchorOnly (void)
     throw (RuntimeException, std::exception)
 {
     return false;
 }
-
-
-
 
 //----- XUnoTunnel ------------------------------------------------------------
 
@@ -384,11 +341,6 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 
     return nResult;
 }
-
-
-
-
-
 
 bool ViewTabBar::ActivatePage (void)
 {
@@ -443,9 +395,6 @@ bool ViewTabBar::ActivatePage (void)
     return false;
 }
 
-
-
-
 int ViewTabBar::GetHeight (void)
 {
     int nHeight (0);
@@ -466,9 +415,6 @@ int ViewTabBar::GetHeight (void)
 
     return nHeight;
 }
-
-
-
 
 void ViewTabBar::AddTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton,
@@ -497,17 +443,11 @@ void ViewTabBar::AddTabBarButton (
     AddTabBarButton(rButton,nIndex);
 }
 
-
-
-
 void ViewTabBar::AddTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton)
 {
     AddTabBarButton(rButton, maTabBarButtons.size());
 }
-
-
-
 
 void ViewTabBar::AddTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton,
@@ -525,9 +465,6 @@ void ViewTabBar::AddTabBarButton (
     }
 }
 
-
-
-
 void ViewTabBar::RemoveTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton)
 {
@@ -543,9 +480,6 @@ void ViewTabBar::RemoveTabBarButton (
         }
     }
 }
-
-
-
 
 bool ViewTabBar::HasTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton)
@@ -564,9 +498,6 @@ bool ViewTabBar::HasTabBarButton (
     return bResult;
 }
 
-
-
-
 ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
     ViewTabBar::GetTabBarButtons (void)
 {
@@ -579,9 +510,6 @@ bool ViewTabBar::HasTabBarButton (
 
     return aList;
 }
-
-
-
 
 void ViewTabBar::UpdateActiveButton (void)
 {
@@ -603,9 +531,6 @@ void ViewTabBar::UpdateActiveButton (void)
         }
     }
 }
-
-
-
 
 void ViewTabBar::UpdateTabBarButtons (void)
 {
@@ -631,9 +556,6 @@ void ViewTabBar::UpdateTabBarButtons (void)
     mpTabPage->Hide();
 }
 
-
-
-
 //===== TabBarControl =========================================================
 
 TabBarControl::TabBarControl (
@@ -643,9 +565,6 @@ TabBarControl::TabBarControl (
       mpViewTabBar(rpViewTabBar)
 {
 }
-
-
-
 
 void TabBarControl::Paint (const Rectangle& rRect)
 {
@@ -664,9 +583,6 @@ void TabBarControl::Paint (const Rectangle& rRect)
     SetFillColor (aOriginalFillColor);
     SetLineColor (aOriginalLineColor);
 }
-
-
-
 
 void TabBarControl::ActivatePage (void)
 {

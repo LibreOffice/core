@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsCacheCompactor.hxx"
 
 #include "SlsBitmapCompressor.hxx"
@@ -52,9 +51,6 @@ protected:
     virtual void Run (void) SAL_OVERRIDE { /* Do nothing */ };
 };
 
-
-
-
 /** This implementation of the CacheCompactor interface class uses one of
     several bitmap compression algorithms to reduce the number of the bytes
     of the off-screen previews in the bitmap cache.  See the documentation
@@ -76,7 +72,6 @@ protected:
 private:
     ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;
 };
-
 
 } // end of anonymous namespace
 
@@ -121,17 +116,11 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-
-
-
 void CacheCompactor::RequestCompaction (void)
 {
     if ( ! mbIsCompactionRunning && ! maCompactionTimer.IsActive())
         maCompactionTimer.Start();
 }
-
-
-
 
 CacheCompactor::CacheCompactor(
     BitmapCache& rCache,
@@ -144,9 +133,6 @@ CacheCompactor::CacheCompactor(
     maCompactionTimer.SetTimeoutHdl(LINK(this,CacheCompactor,CompactionCallback));
 
 }
-
-
-
 
 IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
 {
@@ -167,13 +153,7 @@ IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
     return 1;
 }
 
-
-
-
 } } } // end of namespace ::sd::slidesorter::cache
-
-
-
 
 namespace {
 
@@ -187,9 +167,6 @@ CacheCompactionByCompression::CacheCompactionByCompression (
       mpCompressor(rpCompressor)
 {
 }
-
-
-
 
 void CacheCompactionByCompression::Run (void)
 {
@@ -215,7 +192,6 @@ void CacheCompactionByCompression::Run (void)
         SAL_INFO("sd.sls", OSL_THIS_FUNC << ":    there are now " << mrCache.GetSize() << " bytes occupied");
     }
 }
-
 
 } // end of anonymous namespace
 

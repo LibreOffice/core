@@ -82,5 +82,4 @@ const sal_uInt32 SdUDInventor=sal_uInt32('S')*0x00000001+
 
 #endif // _ INCLUDED_SD_INC_GLOB_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

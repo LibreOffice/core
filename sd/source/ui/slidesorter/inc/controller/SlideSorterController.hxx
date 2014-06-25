@@ -153,7 +153,6 @@ public:
     };
     friend class ModelChangeLock;
 
-
     /** Handle a change of the model, that is, handle the removal and
         insertion of whole pages or a change of the edit mode.
 

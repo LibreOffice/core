@@ -149,7 +149,6 @@ private:
         ResourceIdVector& rS2minusS1,
         ResourceIdVector& rS1andS2);
 
-
     /** Copy the resources given in rSource to the list of resources
         specified by rTarget.  Resources bound to the ones in rSource,
         either directly or indirectly, are copied as well.

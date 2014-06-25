@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewClipboard.hxx"
 
 #include "DrawDocShell.hxx"
@@ -42,15 +41,9 @@ ViewClipboard::ViewClipboard (::sd::View& rView)
 {
 }
 
-
-
-
 ViewClipboard::~ViewClipboard (void)
 {
 }
-
-
-
 
 void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
 {
@@ -62,9 +55,6 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
     else
         InsertSlides (rTransferable, DetermineInsertPosition (rTransferable));
 }
-
-
-
 
 SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
 {
@@ -120,9 +110,6 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
     return pFirstMasterPage;
 }
 
-
-
-
 void ViewClipboard::AssignMasterPage (
     const SdTransferable& rTransferable,
     SdPage* pMasterPage)
@@ -169,9 +156,6 @@ void ViewClipboard::AssignMasterPage (
         );
 }
 
-
-
-
 sal_uInt16 ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
@@ -191,9 +175,6 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
 
     return nInsertPos;
 }
-
-
-
 
 sal_uInt16 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
@@ -253,7 +234,6 @@ sal_uInt16 ViewClipboard::InsertSlides (
 
     return nInsertPgCnt;
 }
-
 
 } // end of namespace ::sd
 

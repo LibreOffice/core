@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/IconCache.hxx"
 
 #include "sdresid.hxx"
@@ -48,8 +47,6 @@ private:
 
 IconCache* IconCache::Implementation::mpInstance = NULL;
 
-
-
 Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 {
     Image aResult;
@@ -64,9 +61,6 @@ Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
         aResult = iImage->second;
     return aResult;
 }
-
-
-
 
 //===== IconCache =============================================================
 
@@ -96,24 +90,15 @@ IconCache& IconCache::Instance (void)
     return *Implementation::mpInstance;
 }
 
-
-
-
 Image IconCache::GetIcon (sal_uInt16 nResourceId)
 {
     return mpImpl->GetIcon (nResourceId);
 }
 
-
-
-
 IconCache::IconCache (void)
     : mpImpl (new Implementation())
 {
 }
-
-
-
 
 IconCache::~IconCache (void)
 {

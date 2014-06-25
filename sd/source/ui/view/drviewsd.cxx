@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 
 #include <svx/svxids.hrc>
@@ -30,7 +29,6 @@
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
-
 
 #include "app.hrc"
 
@@ -158,7 +156,6 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
         break;
     }
 }
-
 
 void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {

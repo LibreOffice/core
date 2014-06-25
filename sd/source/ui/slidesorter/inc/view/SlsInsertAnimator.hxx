@@ -28,7 +28,6 @@ namespace sd { namespace slidesorter { namespace view {
 
 class InsertPosition;
 
-
 /** Animate the positions of page objects to make room at the insert
     position while a move or copy operation takes place.
 */
@@ -56,7 +55,6 @@ private:
     class Implementation;
     ::boost::shared_ptr<Implementation> mpImplementation;
 };
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

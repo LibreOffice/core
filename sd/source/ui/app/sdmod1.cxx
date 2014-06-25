@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/lckbitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -67,7 +66,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
@@ -90,9 +88,7 @@ private:
     ::boost::shared_ptr<SvMemoryStream> mpStream;
 };
 
-
 } //end of anonymous namespace
-
 
 void SdModule::Execute(SfxRequest& rReq)
 {
@@ -256,7 +252,6 @@ void SdModule::Execute(SfxRequest& rReq)
     }
 }
 
-
 void SdModule::OutlineToImpress (SfxRequest& rRequest)
 {
     const SfxItemSet* pSet = rRequest.GetArgs();
@@ -319,7 +314,6 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
     rRequest.IsDone();
 }
-
 
 static bool bOnce = false;
 
@@ -457,7 +451,6 @@ IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
     }
     return 0;
 }
-
 
 void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument)
 {
@@ -908,9 +901,6 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
     }
 }
 
-
-
-
 //===== OutlineToImpressFinalize ==============================================
 
 namespace {
@@ -979,9 +969,6 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     }
 }
 
-
-
-
 void OutlineToImpressFinalizer::operator() (bool)
 {
     // Fetch the new outline view shell.
@@ -1015,14 +1002,12 @@ void OutlineToImpressFinalizer::operator() (bool)
         pOutlineShell->UpdatePreview(pPage, true);
     }
 
-
     // Undo-Stack needs to be cleared, else the user may remove the
     // only drawpage and this is a state we cannot handle ATM.
     ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
     if( pDocShell )
         pDocShell->ClearUndoBuffer();
 }
-
 
 } // end of anonymous namespace
 

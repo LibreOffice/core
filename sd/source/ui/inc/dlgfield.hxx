@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
-
 
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
@@ -56,8 +54,6 @@ public:
     SvxFieldData*       GetField();
     SfxItemSet          GetItemSet();
 };
-
-
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 

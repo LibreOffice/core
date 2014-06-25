@@ -187,7 +187,6 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
                         AddTile( pRAcc, aNewMtf, nCountX * nTileX, nCountY * nTileY, nRestX, nRestY );
                 }
 
-
                 aTmp.ReleaseAccess( pRAcc );
 
                 for( size_t n = 0, nCount = rMtf.GetActionSize(); n < nCount; n++ )

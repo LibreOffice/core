@@ -36,7 +36,6 @@ namespace sd { namespace tools {
 class EventMultiplexer;
 } }
 
-
 namespace sd {
 
 class ViewShellBase;

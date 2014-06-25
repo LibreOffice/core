@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsInsertAnimator.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsAnimationFunction.hxx"
@@ -49,7 +48,6 @@ public:
 protected:
     ~AnimatorAccess() {}
 };
-
 
 /** Controller of the position offsets of all page objects in one row or one
     column.
@@ -105,7 +103,6 @@ private:
 };
 typedef ::boost::shared_ptr<PageObjectRun> SharedPageObjectRun;
 
-
 Point Blend (const Point& rPointA, const Point& rPointB, const double nT)
 {
     return Point(
@@ -114,8 +111,6 @@ Point Blend (const Point& rPointA, const Point& rPointB, const double nT)
 }
 
 } // end of anonymous namespace
-
-
 
 class InsertAnimator::Implementation : public AnimatorAccess
 {
@@ -151,10 +146,6 @@ private:
     RunContainer::const_iterator FindRun (const sal_Int32 nRunIndex) const;
 };
 
-
-
-
-
 //===== InsertAnimator ========================================================
 
 InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
@@ -162,24 +153,15 @@ InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 void InsertAnimator::SetInsertPosition (const InsertPosition& rInsertPosition)
 {
     mpImplementation->SetInsertPosition(rInsertPosition, controller::Animator::AM_Animated);
 }
 
-
-
-
 void InsertAnimator::Reset (const controller::Animator::AnimationMode eMode)
 {
     mpImplementation->SetInsertPosition(InsertPosition(), eMode);
 }
-
-
-
 
 //===== InsertAnimator::Implementation ========================================
 
@@ -193,16 +175,10 @@ InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
 {
 }
 
-
-
-
 InsertAnimator::Implementation::~Implementation (void)
 {
     SetInsertPosition(InsertPosition(), controller::Animator::AM_Immediate);
 }
-
-
-
 
 void InsertAnimator::Implementation::SetInsertPosition (
     const InsertPosition& rInsertPosition,
@@ -228,9 +204,6 @@ void InsertAnimator::Implementation::SetInsertPosition (
         pCurrentRun->UpdateOffsets(rInsertPosition, mrView.GetLayouter());
     }
 }
-
-
-
 
 SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     view::Layouter& rLayouter,
@@ -279,9 +252,6 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
         return SharedPageObjectRun();
 }
 
-
-
-
 InsertAnimator::Implementation::RunContainer::const_iterator
     InsertAnimator::Implementation::FindRun (const sal_Int32 nRunIndex) const
 {
@@ -294,9 +264,6 @@ InsertAnimator::Implementation::RunContainer::const_iterator
             nRunIndex));
 }
 
-
-
-
 void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjectRun> pRun)
 {
     if (pRun)
@@ -308,10 +275,6 @@ void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjec
         OSL_ASSERT(pRun);
     }
 }
-
-
-
-
 
 void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun)
 {
@@ -333,10 +296,6 @@ void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageOb
         OSL_ASSERT(pRun);
     }
 }
-
-
-
-
 
 //===== PageObjectRun =========================================================
 
@@ -361,9 +320,6 @@ PageObjectRun::PageObjectRun (
     maStartOffset.resize(nEndIndex - nStartIndex + 1);
     maEndOffset.resize(nEndIndex - nStartIndex + 1);
 }
-
-
-
 
 PageObjectRun::~PageObjectRun (void)
 {
@@ -400,9 +356,6 @@ void PageObjectRun::UpdateOffsets(
     }
 }
 
-
-
-
 void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMode)
 {
     mnLocalInsertIndex = -1;
@@ -432,9 +385,6 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
         mrAnimatorAccess.RemoveRun(shared_from_this());
 }
 
-
-
-
 void PageObjectRun::RestartAnimation (void)
 {
     // Stop the current animation.
@@ -454,9 +404,6 @@ void PageObjectRun::RestartAnimation (void)
             ::boost::ref(mrAnimatorAccess),
             shared_from_this()));
 }
-
-
-
 
 void PageObjectRun::operator () (const double nGlobalTime)
 {
@@ -493,9 +440,6 @@ void PageObjectRun::operator () (const double nGlobalTime)
     // visualized when the mouse leaves the window during drag-and-drop.
     mrAnimatorAccess.GetContentWindow()->Flush();
 }
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

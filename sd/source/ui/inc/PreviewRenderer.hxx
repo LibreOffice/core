@@ -26,7 +26,6 @@
 #include <svl/listener.hxx>
 #include <memory>
 
-
 class OutputDevice;
 class SdPage;
 class VirtualDevice;
@@ -35,7 +34,6 @@ namespace sd {
 
 class DrawDocShell;
 class DrawView;
-
 
 class PreviewRenderer
     : public SfxListener

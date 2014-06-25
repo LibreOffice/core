@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/IdleDetection.hxx"
 
 #include "ViewShell.hxx"
@@ -34,7 +33,6 @@ using namespace ::com::sun::star;
 
 namespace sd { namespace tools {
 
-
 sal_Int32 IdleDetection::GetIdleState (const ::Window* pWindow)
 {
     sal_Int32 nResult (CheckInputPending() | CheckSlideShowRunning());
@@ -43,9 +41,6 @@ sal_Int32 IdleDetection::GetIdleState (const ::Window* pWindow)
     return nResult;
 }
 
-
-
-
 sal_Int32 IdleDetection::CheckInputPending (void)
 {
     if (Application::AnyInput(VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD | VCL_INPUT_PAINT))
@@ -53,9 +48,6 @@ sal_Int32 IdleDetection::CheckInputPending (void)
     else
         return IDET_IDLE;
 }
-
-
-
 
 sal_Int32 IdleDetection::CheckSlideShowRunning (void)
 {
@@ -100,9 +92,6 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
 
     return eResult;
 }
-
-
-
 
 sal_Int32 IdleDetection::CheckWindowPainting (const ::Window& rWindow)
 {

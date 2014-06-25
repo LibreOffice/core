@@ -187,7 +187,6 @@ public:
      */
     bool                    IsNewPageNameValid( OUString & rInOutPageName, bool bResetStringIfStandardName = false );
 
-
     /** Return the reference device for the current document.  When the
         inherited implementation returns a device then this is passed to the
         caller.  Otherwise the returned value depends on the printer

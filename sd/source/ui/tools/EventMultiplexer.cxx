@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "EventMultiplexer.hxx"
 
 #include "MutexOwner.hxx"
@@ -85,7 +84,6 @@ public:
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //===== beans::XPropertySetListener =======================================
     virtual void SAL_CALL
         propertyChange (
@@ -112,7 +110,6 @@ public:
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
@@ -161,10 +158,8 @@ private:
     DECL_LINK(SlideSorterSelectionChangeListener, void*);
 };
 
-
 const char aCurrentPagePropertyName[] = "CurrentPage";
 const char aEditModePropertyName[] = "IsMasterPageMode";
-
 
 //===== EventMultiplexer ======================================================
 
@@ -173,9 +168,6 @@ EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
 {
     mpImpl->acquire();
 }
-
-
-
 
 EventMultiplexer::~EventMultiplexer (void)
 {
@@ -197,18 +189,12 @@ EventMultiplexer::~EventMultiplexer (void)
     }
 }
 
-
-
-
 void EventMultiplexer::AddEventListener (
     Link& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->AddEventListener (rCallback, aEventTypes);
 }
-
-
-
 
 void EventMultiplexer::RemoveEventListener (
     Link& rCallback,
@@ -217,9 +203,6 @@ void EventMultiplexer::RemoveEventListener (
     mpImpl->RemoveEventListener (rCallback, aEventTypes);
 }
 
-
-
-
 void EventMultiplexer::MultiplexEvent(
     EventMultiplexerEvent::EventId eEventId,
     void* pUserData )
@@ -227,9 +210,6 @@ void EventMultiplexer::MultiplexEvent(
     EventMultiplexerEvent aEvent (mpImpl->GetViewShellBase(), eEventId, pUserData);
     mpImpl->CallListeners(aEvent);
 }
-
-
-
 
 //===== EventMultiplexer::Implementation ======================================
 
@@ -298,17 +278,11 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     }
 }
 
-
-
-
 EventMultiplexer::Implementation::~Implementation (void)
 {
     DBG_ASSERT( !mbListeningToFrame,
         "sd::EventMultiplexer::Implementation::~Implementation(), disposing was not called!" );
 }
-
-
-
 
 void EventMultiplexer::Implementation::ReleaseListeners (void)
 {
@@ -346,9 +320,6 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
     }
 }
 
-
-
-
 void EventMultiplexer::Implementation::AddEventListener (
     Link& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
@@ -369,9 +340,6 @@ void EventMultiplexer::Implementation::AddEventListener (
     }
 }
 
-
-
-
 void EventMultiplexer::Implementation::RemoveEventListener (
     Link& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
@@ -390,9 +358,6 @@ void EventMultiplexer::Implementation::RemoveEventListener (
             maListeners.erase (iListener);
     }
 }
-
-
-
 
 void EventMultiplexer::Implementation::ConnectToController (void)
 {
@@ -456,9 +421,6 @@ void EventMultiplexer::Implementation::ConnectToController (void)
     }
 }
 
-
-
-
 void EventMultiplexer::Implementation::DisconnectFromController (void)
 {
     if (mbListeningToController)
@@ -507,9 +469,6 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
     }
 }
 
-
-
-
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL EventMultiplexer::Implementation::disposing (
@@ -534,9 +493,6 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
     }
 }
 
-
-
-
 //=====  beans::XPropertySetListener  =========================================
 
 void SAL_CALL EventMultiplexer::Implementation::propertyChange (
@@ -559,9 +515,6 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
             CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_NORMAL);
     }
 }
-
-
-
 
 //===== frame::XFrameActionListener  ==========================================
 
@@ -595,9 +548,6 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
         }
 }
 
-
-
-
 //===== view::XSelectionChangeListener ========================================
 
 void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
@@ -606,9 +556,6 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
 {
     CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
 }
-
-
-
 
 //===== drawing::framework::XConfigurationChangeListener ==================
 
@@ -682,17 +629,11 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
 
 }
 
-
-
-
 void SAL_CALL EventMultiplexer::Implementation::disposing (void)
 {
     CallListeners (EventMultiplexerEvent::EID_DISPOSING);
     ReleaseListeners();
 }
-
-
-
 
 void EventMultiplexer::Implementation::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
@@ -704,9 +645,6 @@ void EventMultiplexer::Implementation::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 void EventMultiplexer::Implementation::Notify (
     SfxBroadcaster&,
@@ -752,9 +690,6 @@ void EventMultiplexer::Implementation::Notify (
     }
 }
 
-
-
-
 void EventMultiplexer::Implementation::CallListeners (
     EventMultiplexerEvent::EventId eId,
     void* pUserData)
@@ -762,9 +697,6 @@ void EventMultiplexer::Implementation::CallListeners (
     EventMultiplexerEvent aEvent (mrBase, eId, pUserData);
     CallListeners(aEvent);
 }
-
-
-
 
 void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
@@ -778,17 +710,11 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     }
 }
 
-
-
-
 IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener)
 {
     CallListeners (EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
     return 0;
 }
-
-
-
 
 //===== EventMultiplexerEvent =================================================
 

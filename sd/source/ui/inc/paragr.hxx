@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 
 /**
@@ -39,6 +38,5 @@ public:
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

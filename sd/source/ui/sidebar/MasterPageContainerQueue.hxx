@@ -28,7 +28,6 @@
 
 namespace sd { namespace sidebar {
 
-
 /** The queue stores and processes all requests from a MasterPageContainer
     for the creation of previews.
     The order of request processing and its timing is controlled by a

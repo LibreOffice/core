@@ -138,9 +138,6 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     return bSuccess;
 }
 
-
-
-
 IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 {
     if( ! pDialog )
@@ -153,9 +150,6 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 
     return long(pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }
-
-
-
 
 void DrawViewShell::ModifyLayer (
     SdrLayer* pLayer,

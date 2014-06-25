@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FrameWindowPane.hxx"
 
 using namespace ::com::sun::star;
@@ -33,22 +32,15 @@ FrameWindowPane::FrameWindowPane (
 {
 }
 
-
-
-
 FrameWindowPane::~FrameWindowPane (void) throw()
 {
 }
-
-
-
 
 sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly (void)
     throw (RuntimeException, std::exception)
 {
     return false;
 }
-
 
 } } // end of namespace sd::framework
 

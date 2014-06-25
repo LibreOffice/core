@@ -36,7 +36,6 @@ namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
 
-
 class SelectionFunction
     : public FuPoor,
       private ::boost::noncopyable

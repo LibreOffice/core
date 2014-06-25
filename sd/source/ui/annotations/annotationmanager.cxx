@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sddll.hxx"
 
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -102,11 +101,7 @@ using namespace ::com::sun::star::office;
 
 namespace sd {
 
-
-
 extern TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation );
-
-
 
 SfxItemPool* GetAnnotationPool()
 {
@@ -123,8 +118,6 @@ SfxItemPool* GetAnnotationPool()
     return mpAnnotationPool;
 }
 
-
-
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
@@ -132,8 +125,6 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
 
     return 0;
 }
-
-
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
@@ -178,8 +169,6 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     return sRet;
 }
 
-
-
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 : AnnotationManagerImplBase( m_aMutex )
 , mrBase( rViewShellBase )
@@ -191,8 +180,6 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
     if( pOptions )
         mbShowAnnotations = pOptions->IsShowComments();
 }
-
-
 
 void AnnotationManagerImpl::init()
 {
@@ -217,8 +204,6 @@ void AnnotationManagerImpl::init()
     {
     }
 }
-
-
 
 // WeakComponentImplHelper1
 void SAL_CALL AnnotationManagerImpl::disposing ()
@@ -245,8 +230,6 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
     mxView.clear();
     mxCurrentPage.clear();
 }
-
-
 
 // XEventListener
 void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -276,8 +259,6 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     }
 }
 
-
-
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
 {
     switch( rReq.GetSlot() )
@@ -303,15 +284,11 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     }
 }
 
-
-
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
 {
     ShowAnnotations(true);
     InsertAnnotation();
 }
-
-
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
 {
@@ -359,8 +336,6 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
 
     UpdateTags();
 }
-
-
 
 void AnnotationManagerImpl::InsertAnnotation()
 {
@@ -439,8 +414,6 @@ void AnnotationManagerImpl::InsertAnnotation()
     }
 }
 
-
-
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 {
     Reference< XAnnotation > xAnnotation;
@@ -451,7 +424,6 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
     }
-
 
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
     if( pTextApi )
@@ -505,8 +477,6 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         SelectAnnotation( xAnnotation, true );
     }
 }
-
-
 
 void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotation )
 {
@@ -584,8 +554,6 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         mpDoc->EndUndo();
 }
 
-
-
 void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 {
     SdPage* pCurrentPage = GetCurrentPage();
@@ -629,8 +597,6 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
         rSet.DisableItem( SID_NEXT_POSTIT );
     }
 }
-
-
 
 void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 {
@@ -739,15 +705,11 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     while( true );
 }
 
-
-
 void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
 {
     mxSelectedAnnotation = rTag.GetAnnotation();
     invalidateSlots();
 }
-
-
 
 void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
 {
@@ -757,8 +719,6 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
         invalidateSlots();
     }
 }
-
-
 
 void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
 {
@@ -777,8 +737,6 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
         }
     }
 }
-
-
 
 void AnnotationManagerImpl::GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
 {
@@ -799,8 +757,6 @@ void AnnotationManagerImpl::invalidateSlots()
         pBindings->Invalidate( SID_REDO );
     }
 }
-
-
 
 void AnnotationManagerImpl::onSelectionChanged()
 {
@@ -894,8 +850,6 @@ void AnnotationManagerImpl::CreateTags()
     }
 }
 
-
-
 void AnnotationManagerImpl::DisposeTags()
 {
     if( !maTagVector.empty() )
@@ -911,8 +865,6 @@ void AnnotationManagerImpl::DisposeTags()
     }
 }
 
-
-
 void AnnotationManagerImpl::addListener()
 {
     Link aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
@@ -924,15 +876,11 @@ void AnnotationManagerImpl::addListener()
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
 }
 
-
-
 void AnnotationManagerImpl::removeListener()
 {
     Link aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
-
-
 
 IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
@@ -1088,8 +1036,6 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     }
 }
 
-
-
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
@@ -1202,8 +1148,6 @@ SdPage* AnnotationManagerImpl::GetCurrentPage()
 {
     return mrBase.GetMainViewShell()->getCurrentPage();
 }
-
-
 
 AnnotationManager::AnnotationManager( ViewShellBase& rViewShellBase )
 : mxImpl( new AnnotationManagerImpl( rViewShellBase ) )

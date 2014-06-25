@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "LayerTabBar.hxx"
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
-
 
 #include "sdattr.hxx"
 #include "sdmod.hxx"
@@ -41,7 +39,6 @@
 #include "drawview.hxx"
 #include "undolayer.hxx"
 
-
 namespace sd {
 
 /**
@@ -57,7 +54,6 @@ LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
     SetMaxPageWidth( 150 );
     SetHelpId( HID_SD_TABBAR_LAYERS );
 }
-
 
 LayerTabBar::LayerTabBar (
     DrawViewShell* pViewSh,
@@ -121,7 +117,6 @@ void LayerTabBar::DoubleClick()
         pDispatcher->Execute( SID_MODIFYLAYER, SFX_CALLMODE_SYNCHRON );
     }
 }
-
 
 /**
  * AcceptDrop-Event
@@ -303,17 +298,11 @@ void LayerTabBar::ActivatePage()
     }
 }
 
-
-
-
 void LayerTabBar::SendActivatePageEvent (void)
 {
     CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
         reinterpret_cast<void*>(GetCurPageId()));
 }
-
-
-
 
 void LayerTabBar::SendDeactivatePageEvent (void)
 {

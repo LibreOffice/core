@@ -119,7 +119,6 @@ TextObjectBar::TextObjectBar (
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }
 
-
 TextObjectBar::~TextObjectBar()
 {
     SetRepeatTarget(NULL);
@@ -229,7 +228,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 }
             }
             break;
-
 
             case SID_STYLE_APPLY:
             case SID_STYLE_FAMILY2:
@@ -428,7 +426,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets aquired
 
-
     // these are disabled in outline-mode
     if (!mpViewShell || !mpViewShell->ISA(DrawViewShell))
     {
@@ -599,7 +596,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 void TextObjectBar::Command( const CommandEvent& )
 {
 }
-
 
 } // end of namespace sd
 

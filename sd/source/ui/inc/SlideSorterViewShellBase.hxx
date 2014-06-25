@@ -22,7 +22,6 @@
 
 #include "ImpressViewShellBase.hxx"
 
-
 namespace sd {
 
 /** This class exists to be able to register a factory that creates a

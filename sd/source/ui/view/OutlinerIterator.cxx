@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "OutlinerIterator.hxx"
 #include "OutlinerIteratorImpl.hxx"
 #include <svx/svditer.hxx>
@@ -34,7 +33,6 @@
 #include "Window.hxx"
 
 namespace sd { namespace outliner {
-
 
 //===== IteratorPosition ======================================================
 
@@ -77,9 +75,6 @@ bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
         && mePageKind == aPosition.mePageKind
         && meEditMode == aPosition.meEditMode;
 }
-
-
-
 
 //===== Iterator ==============================================================
 
@@ -177,7 +172,6 @@ Iterator OutlinerContainer::current (void)
 {
     return CreateIterator (CURRENT);
 }
-
 
 Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 {
@@ -366,9 +360,6 @@ sal_Int32 OutlinerContainer::GetPageIndex (
     return nPageIndex;
 }
 
-
-
-
 //===== IteratorImplBase ====================================================
 
 IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
@@ -428,9 +419,6 @@ const IteratorPosition& IteratorImplBase::GetPosition (void)
     return maPosition;
 }
 
-
-
-
 IteratorImplBase* IteratorImplBase::Clone (IteratorImplBase* pObject) const
 {
     if (pObject != NULL)
@@ -443,14 +431,10 @@ IteratorImplBase* IteratorImplBase::Clone (IteratorImplBase* pObject) const
     return pObject;
 }
 
-
-
 void IteratorImplBase::Reverse (void)
 {
     mbDirectionIsForward = ! mbDirectionIsForward;
 }
-
-
 
 //===== SelectionIteratorImpl ===========================================
 
@@ -477,7 +461,6 @@ IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
             mrObjectList, mnObjectIndex, mpDocument, mpViewShellWeak, mbDirectionIsForward);
     return pIterator;
 }
-
 
 void SelectionIteratorImpl::GotoNextText (void)
 {
@@ -527,7 +510,6 @@ void SelectionIteratorImpl::GotoNextText (void)
     }
 }
 
-
 const IteratorPosition& SelectionIteratorImpl::GetPosition (void)
 {
     maPosition.mxObject = mrObjectList.at(mnObjectIndex);
@@ -535,12 +517,10 @@ const IteratorPosition& SelectionIteratorImpl::GetPosition (void)
     return maPosition;
 }
 
-
 bool SelectionIteratorImpl::operator== (const IteratorImplBase& rIterator) const
 {
     return rIterator.IsEqual (*this, SELECTION);
 }
-
 
 bool SelectionIteratorImpl::IsEqual (
     const IteratorImplBase& rIterator,
@@ -557,9 +537,6 @@ bool SelectionIteratorImpl::IsEqual (
         return false;
 }
 
-
-
-
 //===== ViewIteratorImpl ================================================
 
 ViewIteratorImpl::ViewIteratorImpl (
@@ -574,9 +551,6 @@ ViewIteratorImpl::ViewIteratorImpl (
 {
     SetPage (nPageIndex);
 }
-
-
-
 
 ViewIteratorImpl::ViewIteratorImpl (
     sal_Int32 nPageIndex,
@@ -593,15 +567,9 @@ ViewIteratorImpl::ViewIteratorImpl (
     SetPage (nPageIndex);
 }
 
-
-
-
 ViewIteratorImpl::~ViewIteratorImpl (void)
 {
 }
-
-
-
 
 IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
@@ -627,8 +595,6 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 
     return pIterator;
 }
-
-
 
 void ViewIteratorImpl::GotoNextText(void)
 {
@@ -677,9 +643,6 @@ void ViewIteratorImpl::GotoNextText(void)
             maPosition.mnText = pTextObj->getTextCount() - 1;
     }
 }
-
-
-
 
 void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 {
@@ -737,9 +700,6 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 
 }
 
-
-
-
 void ViewIteratorImpl::Reverse (void)
 {
     IteratorImplBase::Reverse ();
@@ -763,9 +723,6 @@ void ViewIteratorImpl::Reverse (void)
         maPosition.mxObject.reset(mpObjectIterator->Next());
 }
 
-
-
-
 //===== DocumentIteratorImpl ============================================
 
 DocumentIteratorImpl::DocumentIteratorImpl (
@@ -783,14 +740,8 @@ DocumentIteratorImpl::DocumentIteratorImpl (
         mnPageCount = pDocument->GetMasterSdPageCount(ePageKind);
 }
 
-
-
-
 DocumentIteratorImpl::~DocumentIteratorImpl (void)
 {}
-
-
-
 
 IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
 {
@@ -802,9 +753,6 @@ IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
     // Finish the cloning.
     return ViewIteratorImpl::Clone (pIterator);
 }
-
-
-
 
 void DocumentIteratorImpl::GotoNextText (void)
 {
@@ -885,7 +833,6 @@ void DocumentIteratorImpl::GotoNextText (void)
             SetPage (nPageCount);
     }
 }
-
 
 } } // end of namespace ::sd::outliner
 

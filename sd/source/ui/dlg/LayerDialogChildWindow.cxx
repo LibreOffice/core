@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "LayerDialogChildWindow.hxx"
 #include <sfx2/dockwin.hxx>
 #include "app.hrc"
@@ -33,13 +32,11 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(LayerDialogChildWindow, SID_LAYER_DIALOG_WIN)
 #include "LayerDialog.hrc"
 #include "LayerDialogContent.hxx"
 
-
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include <sfx2/dispatch.hxx>
 
 namespace sd {
-
 
 LayerDialogChildWindow::LayerDialogChildWindow (
     ::Window* _pParent,
@@ -63,13 +60,9 @@ LayerDialogChildWindow::LayerDialogChildWindow (
     pContent->Initialize(pInfo);
 }
 
-
-
 LayerDialogChildWindow::~LayerDialogChildWindow (void)
 {
 }
-
-
 
 } // end of namespace sd
 

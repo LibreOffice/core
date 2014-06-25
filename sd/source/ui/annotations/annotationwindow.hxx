@@ -72,7 +72,6 @@ public:
     virtual void    GetFocus() SAL_OVERRIDE;
 };
 
-
 class AnnotationWindow : public FloatingWindow
 {
     private:

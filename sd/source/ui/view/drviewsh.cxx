@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 #include <svl/aeitem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
-
 
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>

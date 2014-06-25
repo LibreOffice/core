@@ -28,24 +28,20 @@ using namespace ::com::sun::star;
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
 
-
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
     SfxEnumItem( ATTR_DIA_EFFECT, (sal_uInt16)eFE )
 {
 }
-
 
 DiaEffectItem::DiaEffectItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_EFFECT, rIn )
 {
 }
 
-
 SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* ) const
 {
     return new DiaEffectItem( *this );
 }
-
 
 SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
@@ -59,24 +55,20 @@ SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
 
-
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
     SfxEnumItem( ATTR_DIA_SPEED, (sal_uInt16)eFS )
 {
 }
-
 
 DiaSpeedItem::DiaSpeedItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_SPEED, rIn )
 {
 }
 
-
 SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* ) const
 {
     return new DiaSpeedItem( *this );
 }
-
 
 SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
@@ -95,18 +87,15 @@ DiaAutoItem::DiaAutoItem( PresChange eChange ) :
 {
 }
 
-
 DiaAutoItem::DiaAutoItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_AUTO, rIn )
 {
 }
 
-
 SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
 {
     return new DiaAutoItem( *this );
 }
-
 
 SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
@@ -120,24 +109,19 @@ SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );
 
-
 DiaTimeItem::DiaTimeItem( sal_uInt32 nValue ) :
         SfxUInt32Item( ATTR_DIA_TIME, nValue )
 {
 }
-
 
 SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* ) const
 {
     return new DiaTimeItem( *this );
 }
 
-
 bool DiaTimeItem::operator==( const SfxPoolItem& rItem ) const
 {
     return( ( (DiaTimeItem&) rItem ).GetValue() == GetValue() );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

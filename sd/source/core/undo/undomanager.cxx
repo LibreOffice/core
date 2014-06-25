@@ -49,14 +49,10 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg /* = sal_
     }
 }
 
-
 void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
 {
     mpLinkedUndoManager = pLinkedUndoManager;
 }
-
-
-
 
 void UndoManager::ClearLinkedRedoActions (void)
 {

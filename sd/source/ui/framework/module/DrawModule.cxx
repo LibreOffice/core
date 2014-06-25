@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/DrawModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -28,11 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-
 namespace sd { namespace framework {
-
-
 
 void DrawModule::Initialize (Reference<frame::XController>& rxController)
 {
@@ -42,7 +37,6 @@ void DrawModule::Initialize (Reference<frame::XController>& rxController)
         FrameworkHelper::msLeftDrawPaneURL);
     new ToolBarModule(rxController);
 }
-
 
 } } // end of namespace sd::framework
 

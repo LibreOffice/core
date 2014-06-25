@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unmovss.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
@@ -88,6 +87,5 @@ OUString SdMoveStyleSheetsUndoAction::GetComment() const
 {
     return OUString();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

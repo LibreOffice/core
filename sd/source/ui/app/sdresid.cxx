@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sdmod.hxx"
 #include "sdresid.hxx"
 #include <sal/types.h>
@@ -27,6 +26,5 @@ SdResId::SdResId(sal_uInt16 nId) :
     ResId(nId, *SD_MOD()->GetResMgr())
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,8 +29,6 @@
 
 #include <sfx2/app.hxx>
 
-
-
 #include "sdattr.hxx"
 
 #include "View.hxx"
@@ -73,7 +71,6 @@ CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
     m_pLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
     m_pBtnSetViewData->SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
     m_pBtnSetDefault->SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
-
 
     FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
@@ -295,7 +292,6 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
 
     return 0;
 }
-
 
 } // end of namespace sd
 

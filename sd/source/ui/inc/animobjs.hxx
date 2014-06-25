@@ -31,7 +31,6 @@
 #include <svx/dlgctrl.hxx>
 #include <sfx2/progress.hxx>
 
-
 #include <vcl/lstbox.hxx>
 
 #include "sdresid.hxx"
@@ -45,8 +44,6 @@ namespace sd {
 class AnimationControllerItem;
 class View;
 
-
-
 enum BitmapAdjustment
 {
     BA_LEFT_UP,
@@ -59,8 +56,6 @@ enum BitmapAdjustment
     BA_RIGHT,
     BA_RIGHT_DOWN
 };
-
-
 
 class SdDisplay : public Control
 {
@@ -79,8 +74,6 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
-
-
 
 class AnimationWindow : public SfxDockingWindow
 {
@@ -129,7 +122,6 @@ private:
 
     HelpButton      aBtnHelp;
 
-
     ::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
     static const size_t EMPTY_FRAMELIST = ULONG_MAX;
@@ -147,7 +139,6 @@ private:
     AnimationControllerItem*    pControllerItem;
 
     ScopeLock       maPlayLock;
-
 
     DECL_LINK( ClickFirstHdl, void * );
     DECL_LINK( ClickStopHdl, void * );

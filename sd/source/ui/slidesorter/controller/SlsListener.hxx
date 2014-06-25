@@ -46,7 +46,6 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 typedef cppu::WeakComponentImplHelper4<
@@ -99,7 +98,6 @@ public:
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //=====  document::XEventListener  ========================================
     virtual void SAL_CALL

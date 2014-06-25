@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawViewShell.hxx"
 
 #include <sfx2/viewfrm.hxx>
@@ -181,7 +180,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
-
 
                 if( GetDocSh() && (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED))
                     GetDocSh()->SetModified();
@@ -479,7 +477,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         break;
     }
 }
-
 
 void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
@@ -853,7 +850,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                                             AddUndoAction(pUndoGroup);
 }
 
-
 void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
@@ -1007,7 +1003,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     rSet.Put( aPointItem );
     rSet.Put( aProtect );
 }
-
 
 void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {

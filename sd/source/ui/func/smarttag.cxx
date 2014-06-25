@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewShell.hxx"
 #include "smarttag.hxx"
 #include "Window.hxx"
@@ -25,8 +24,6 @@
 
 namespace sd
 {
-
-
 
 SmartTag::SmartTag( ::sd::View& rView )
 : mrView( rView )
@@ -36,13 +33,9 @@ SmartTag::SmartTag( ::sd::View& rView )
     mrView.getSmartTags().add( xThis );
 }
 
-
-
 SmartTag::~SmartTag()
 {
 }
-
-
 
 bool SmartTag::MouseButtonDown( const MouseEvent&, SmartHdl&  )
 {
@@ -67,30 +60,19 @@ bool SmartTag::Command( const CommandEvent& /*rCEvt*/ )
     return false;
 }
 
-
-
 void SmartTag::addCustomHandles( SdrHdlList& /*rHandlerList*/ )
 {
 }
-
-
 
 void SmartTag::select()
 {
     mbSelected = true;
 }
 
-
-
 void SmartTag::deselect()
 {
     mbSelected = false;
 }
-
-
-
-
-
 
 void SmartTag::disposing()
 {
@@ -98,61 +80,43 @@ void SmartTag::disposing()
     mrView.getSmartTags().remove( xThis );
 }
 
-
-
 bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
 {
     return false;
 }
-
-
 
 sal_uLong SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
-
-
 sal_uLong SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }
-
-
 
 bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
     return false;
 }
 
-
-
 bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, bool /*bUnmark*/ )
 {
     return false;
 }
 
-
-
 void SmartTag::CheckPossibilities()
 {
 }
-
-
 
 SmartTagSet::SmartTagSet( View& rView )
 : mrView( rView )
 {
 }
 
-
-
 SmartTagSet::~SmartTagSet()
 {
 }
-
-
 
 void SmartTagSet::add( const SmartTagReference& xTag )
 {
@@ -165,8 +129,6 @@ void SmartTagSet::add( const SmartTagReference& xTag )
     if( xTag == mxSelectedTag )
         mxSelectedTag.clear();
 }
-
-
 
 void SmartTagSet::remove( const SmartTagReference& xTag )
 {
@@ -182,8 +144,6 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
         mxSelectedTag.clear();
 }
 
-
-
 void SmartTagSet::Dispose()
 {
     std::set< SmartTagReference > aSet;
@@ -194,8 +154,6 @@ void SmartTagSet::Dispose()
     mxMouseOverTag.clear();
     mxSelectedTag.clear();
 }
-
-
 
 void SmartTagSet::select( const SmartTagReference& xTag )
 {
@@ -214,8 +172,6 @@ void SmartTagSet::select( const SmartTagReference& xTag )
     }
 }
 
-
-
 void SmartTagSet::deselect()
 {
     if( mxSelectedTag.is() )
@@ -226,8 +182,6 @@ void SmartTagSet::deselect()
         mrView.updateHandles();
     }
 }
-
-
 
 bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -253,8 +207,6 @@ bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
     return false;
 }
 
-
-
 bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
 {
     if( mxSelectedTag.is() )
@@ -271,11 +223,8 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-
     return false;
 }
-
-
 
 bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -295,8 +244,6 @@ bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
 
     return false;
 }
-
-
 
 /** returns true if the SmartTag consumes this event. */
 bool SmartTagSet::Command( const CommandEvent& rCEvt )
@@ -327,8 +274,6 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
     return false;
 }
 
-
-
 void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
 {
     if( !maSet.empty() )
@@ -337,8 +282,6 @@ void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
             (*aIter++)->addCustomHandles( rHandlerList );
     }
 }
-
-
 
 /** returns true if the currently selected smart tag has
     a special context, returned in rContext. */
@@ -350,16 +293,12 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
         return false;
 }
 
-
 // support point editing
-
 
 bool SmartTagSet::HasMarkablePoints() const
 {
     return GetMarkablePointCount() != 0 ? sal_True : sal_False;
 }
-
-
 
 sal_uLong SmartTagSet::GetMarkablePointCount() const
 {
@@ -368,14 +307,10 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
     return 0;
 }
 
-
-
 bool SmartTagSet::HasMarkedPoints() const
 {
     return GetMarkedPointCount() != 0 ? sal_True : sal_False;
 }
-
-
 
 sal_uLong SmartTagSet::GetMarkedPointCount() const
 {
@@ -385,16 +320,12 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
         return 0;
 }
 
-
-
 bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
 
     return pSmartHdl && pSmartHdl->isMarkable();
 }
-
-
 
 bool SmartTagSet::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
@@ -404,8 +335,6 @@ bool SmartTagSet::MarkPoint(SdrHdl& rHdl, bool bUnmark )
     return false;
 }
 
-
-
 bool SmartTagSet::MarkPoints(const Rectangle* pRect, bool bUnmark)
 {
     if( mxSelectedTag.is() )
@@ -413,15 +342,11 @@ bool SmartTagSet::MarkPoints(const Rectangle* pRect, bool bUnmark)
     return false;
 }
 
-
-
 void SmartTagSet::CheckPossibilities()
 {
     if( mxSelectedTag.is() )
         mxSelectedTag->CheckPossibilities();
 }
-
-
 
 SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
 : SdrHdl( rPnt, eNewKind )
@@ -430,15 +355,11 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Poi
     SetObj( pObject );
 }
 
-
-
 SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
 : SdrHdl( rPnt, eNewKind )
 , mxTag( xTag )
 {
 }
-
-
 
 bool SmartHdl::isMarkable() const
 {

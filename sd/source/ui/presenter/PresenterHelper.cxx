@@ -50,17 +50,11 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterHelper(rxContext)));
 }
 
-
-
-
 OUString PresenterHelperService_getImplementationName (void)
     throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterHelper");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -68,9 +62,6 @@ Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (voi
     static const OUString sServiceName("com.sun.star.drawing.PresenterHelper");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== PresenterHelper =======================================================
 
@@ -81,14 +72,9 @@ PresenterHelper::PresenterHelper (
 {
 }
 
-
-
 PresenterHelper::~PresenterHelper (void)
 {
 }
-
-
-
 
 //----- XInitialize -----------------------------------------------------------
 
@@ -97,9 +83,6 @@ void SAL_CALL PresenterHelper::initialize (const Sequence<Any>& rArguments)
 {
     (void)rArguments;
 }
-
-
-
 
 //----- XPaneHelper ----------------------------------------------------
 
@@ -151,9 +134,6 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     return xWindow;
 }
 
-
-
-
 Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
     const Reference<rendering::XSpriteCanvas>& rxUpdateCanvas,
     const Reference<awt::XWindow>& rxUpdateWindow,
@@ -179,9 +159,6 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
             rxSharedWindow,
             rxWindow);
 }
-
-
-
 
 Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
     const Reference<awt::XWindow>& rxWindow,
@@ -219,9 +196,6 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
         throw RuntimeException();
 }
 
-
-
-
 void SAL_CALL PresenterHelper::toTop (
     const Reference<awt::XWindow>& rxWindow)
     throw (css::uno::RuntimeException, std::exception)
@@ -233,8 +207,6 @@ void SAL_CALL PresenterHelper::toTop (
         pWindow->SetZOrder(NULL, WINDOW_ZORDER_LAST);
     }
 }
-
-
 
 namespace {
 
@@ -464,10 +436,6 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     return NULL;
 }
 
-
-
-
-
 void SAL_CALL PresenterHelper::captureMouse (
     const Reference<awt::XWindow>& rxWindow)
     throw (RuntimeException, std::exception)
@@ -482,9 +450,6 @@ void SAL_CALL PresenterHelper::captureMouse (
     }
 }
 
-
-
-
 void SAL_CALL PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWindow)
     throw (RuntimeException, std::exception)
 {
@@ -497,9 +462,6 @@ void SAL_CALL PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWi
         pWindow->ReleaseMouse();
     }
 }
-
-
-
 
 awt::Rectangle PresenterHelper::getWindowExtentsRelative (
     const Reference<awt::XWindow>& rxChildWindow,
@@ -516,8 +478,6 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
     else
         return awt::Rectangle();
 }
-
-
 
 } } // end of namespace ::sd::presenter
 

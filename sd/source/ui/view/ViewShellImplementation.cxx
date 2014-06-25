@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ViewShellImplementation.hxx"
 
 #include "sdpage.hxx"
@@ -72,9 +71,6 @@ ViewShell::Implementation::Implementation (ViewShell& rViewShell)
 {
 }
 
-
-
-
 ViewShell::Implementation::~Implementation (void)
 {
     if ( ! mpUpdateLockForMouse.expired())
@@ -88,9 +84,6 @@ ViewShell::Implementation::~Implementation (void)
         }
     }
 }
-
-
-
 
 void ViewShell::Implementation::ProcessModifyPageSlot (
     SfxRequest& rRequest,
@@ -286,9 +279,6 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     }
 }
 
-
-
-
 sal_uInt16 ViewShell::Implementation::GetViewId (void)
 {
     switch (mrViewShell.GetShellType())
@@ -320,9 +310,6 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
     }
 }
 
-
-
-
 SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog (void)
 {
     SvxIMapDlg* pDialog = NULL;
@@ -332,8 +319,6 @@ SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog (void)
         pDialog = dynamic_cast<SvxIMapDlg*>(pChildWindow->GetWindow());
     return pDialog;
 }
-
-
 
 //===== ToolBarManagerLock ====================================================
 
@@ -352,9 +337,6 @@ class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
     return pLock;
 }
 
-
-
-
 ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
     const ::boost::shared_ptr<ToolBarManager>& rpManager)
     : mpLock(new ToolBarManager::UpdateLock(rpManager)),
@@ -366,9 +348,6 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
     maTimer.SetTimeout(100);
     maTimer.Start();
 }
-
-
-
 
 IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
 {
@@ -385,9 +364,6 @@ IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
     return 0;
 }
 
-
-
-
 void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
 {
     // If possible then release the lock now.  Otherwise try again when the
@@ -397,9 +373,6 @@ void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
         mpSelf.reset();
     }
 }
-
-
-
 
 ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock (void)
 {

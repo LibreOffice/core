@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -104,7 +103,6 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 using namespace ::osl;
@@ -159,8 +157,6 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
         }
     }
 }
-
-
 
 const sal_Int32 WID_MODEL_LANGUAGE           =  1;
 const sal_Int32 WID_MODEL_TABSTOP            =  2;
@@ -610,7 +606,6 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
         {
             xRet = uno::Reference< container::XIndexAccess >(document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ), uno::UNO_QUERY);
 
-
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
             DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );
             if( xCont.is() )
@@ -692,7 +687,6 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
     uno::Reference< drawing::XDrawPage > xDrawPage;
     return xDrawPage;
 }
-
 
 // XDrawPagesSupplier
 uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages()
@@ -1893,8 +1887,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     pOut->SetMapMode( MAP_100TH_MM );
                     pOut->IntersectClipRegion( aVisArea );
 
-
-
                     uno::Reference< frame::XModel > xModel;
                     rSelection >>= xModel;
 
@@ -2327,9 +2319,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
     }
 }
 
-
 // class SdDrawPagesAccess
-
 
 SdDrawPagesAccess::SdDrawPagesAccess( SdXImpressDocument& rMyModel )  throw()
 :   mpModel( &rMyModel)
@@ -2583,9 +2573,7 @@ void SAL_CALL SdDrawPagesAccess::removeEventListener( const uno::Reference< lang
     OSL_FAIL( "not implemented!" );
 }
 
-
 // class SdMasterPagesAccess
-
 
 SdMasterPagesAccess::SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw()
 :   mpModel(&rMyModel)
@@ -2835,9 +2823,7 @@ uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames
     return aSeq;
 }
 
-
 // class SdDocLinkTargets
-
 
 SdDocLinkTargets::SdDocLinkTargets( SdXImpressDocument& rMyModel ) throw()
 : mpModel( &rMyModel )

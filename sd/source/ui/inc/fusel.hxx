@@ -27,7 +27,6 @@
 class SdrHdl;
 class SdrObject;
 
-
 namespace sd {
 
 class FuSelection

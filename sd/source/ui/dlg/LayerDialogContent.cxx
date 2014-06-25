@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "LayerDialogContent.hxx"
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -45,8 +44,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-
-
 LayerDialogContent::LayerDialogContent (
     SfxBindings* pInBindings,
     SfxChildWindow *pCW,
@@ -66,23 +63,14 @@ LayerDialogContent::LayerDialogContent (
     maLayerTabBar.Show();
 }
 
-
-
-
 LayerDialogContent::~LayerDialogContent (void)
 {
 }
-
-
-
 
 bool LayerDialogContent::Close (void)
 {
     return SfxDockingWindow::Close();
 }
-
-
-
 
 void LayerDialogContent::Resize (void)
 {
@@ -91,7 +79,6 @@ void LayerDialogContent::Resize (void)
         Size(GetSizePixel().Width(), 17));
     SfxDockingWindow::Resize();
 }
-
 
 } // end of namespace sd
 

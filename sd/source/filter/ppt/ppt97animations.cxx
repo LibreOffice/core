@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ppt97animations.hxx"
 
 #include <svx/svdobj.hxx>
@@ -32,8 +31,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 using namespace ::com::sun::star;
-
-
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
@@ -52,8 +49,6 @@ void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
     rIn.ReadUChar( nUnknown1 );
     rIn.ReadUChar( nUnknown2 );
 }
-
-
 
 #define MEMBER_CONSTRUCTOR_LIST() \
     m_aAtom() \
@@ -186,7 +181,6 @@ bool Ppt97Animation::GetSpecialTextIterationDelay( double& rfTextIterationDelay 
     }
     return bRet;
 }
-
 
 void Ppt97Animation::SetDimColor( sal_Int32 nDimColor )
 {

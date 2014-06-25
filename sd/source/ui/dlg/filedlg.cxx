@@ -42,8 +42,6 @@
 #include "strings.hrc"
 #include <vcl/graphicfilter.hxx>
 
-
-
 // -----------      SdFileDialog_Imp        ---------------------------
 
 class SdFileDialog_Imp : public sfx2::FileDialogHelper
@@ -76,7 +74,6 @@ public:
     virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) SAL_OVERRIDE;
 };
 
-
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
@@ -98,7 +95,6 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
             break;
     }
 }
-
 
 IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
 {
@@ -167,7 +163,6 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
 {
     SolarMutexGuard aGuard;
@@ -180,7 +175,6 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
         maUpdateTimer.Start();
         return 0L;
     }
-
 
     if( mxControlAccess.is() )
     {
@@ -223,7 +217,6 @@ void SdFileDialog_Imp::CheckSelectionState()
         }
     }
 }
-
 
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     bool        bUsableSelection    ) :
@@ -272,14 +265,11 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
     }
 }
 
-
-
 SdFileDialog_Imp::~SdFileDialog_Imp()
 {
     if( mnPlaySoundEvent )
         Application::RemoveUserEvent( mnPlaySoundEvent );
 }
-
 
 ErrCode SdFileDialog_Imp::Execute()
 {
@@ -289,9 +279,7 @@ ErrCode SdFileDialog_Imp::Execute()
     return FileDialogHelper::Execute();
 }
 
-
 // -----------      SdOpenSoundFileDialog       -----------------------
-
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
@@ -323,23 +311,19 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 #endif
 }
 
-
 SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
 {
 }
-
 
 ErrCode SdOpenSoundFileDialog::Execute()
 {
     return mpImpl->Execute();
 }
 
-
 OUString SdOpenSoundFileDialog::GetPath() const
 {
     return mpImpl->GetPath();
 }
-
 
 void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {

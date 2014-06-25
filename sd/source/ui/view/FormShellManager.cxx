@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FormShellManager.hxx"
 
 #include "EventMultiplexer.hxx"
@@ -48,7 +47,6 @@ private:
 
 } // end of anonymous namespace
 
-
 FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
       mpFormShell(NULL),
@@ -69,9 +67,6 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     RegisterAtCenterPane();
 }
 
-
-
-
 FormShellManager::~FormShellManager (void)
 {
     SetFormShell(NULL);
@@ -88,9 +83,6 @@ FormShellManager::~FormShellManager (void)
             mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell,mpSubShellFactory);
     }
 }
-
-
-
 
 void FormShellManager::SetFormShell (FmFormShell* pFormShell)
 {
@@ -134,13 +126,6 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
     }
 }
 
-
-
-
-
-
-
-
 void FormShellManager::RegisterAtCenterPane (void)
 {
     ViewShell* pShell = mrBase.GetMainViewShell().get();
@@ -171,9 +156,6 @@ void FormShellManager::RegisterAtCenterPane (void)
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
 }
 
-
-
-
 void FormShellManager::UnregisterAtCenterPane (void)
 {
     if (mpMainViewShellWindow != NULL)
@@ -201,9 +183,6 @@ void FormShellManager::UnregisterAtCenterPane (void)
     mpSubShellFactory.reset();
 }
 
-
-
-
 IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
 {
     // The form shell has been activated.  To give it priority in reacting to
@@ -220,9 +199,6 @@ IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
 
     return 0;
 }
-
-
-
 
 IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiplexerEvent*, pEvent)
 {
@@ -250,9 +226,6 @@ IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiple
 
     return 0;
 }
-
-
-
 
 IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
 {
@@ -295,9 +268,6 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
     return 0;
 }
 
-
-
-
 void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
@@ -318,10 +288,6 @@ void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-
-
-
-
 //===== FormShellManagerFactory ===============================================
 
 namespace {
@@ -333,9 +299,6 @@ FormShellManagerFactory::FormShellManagerFactory (
       mrFormShellManager(rManager)
 {
 }
-
-
-
 
 FmFormShell* FormShellManagerFactory::CreateShell (
     ::sd::ShellId nId,
@@ -353,9 +316,6 @@ FmFormShell* FormShellManagerFactory::CreateShell (
 
     return pShell;
 }
-
-
-
 
 void FormShellManagerFactory::ReleaseShell (SfxShell* pShell)
 {

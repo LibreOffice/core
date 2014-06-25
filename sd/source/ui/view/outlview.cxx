@@ -152,7 +152,6 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
     maBulletFont.SetOutline(false);
     maBulletFont.SetShadow(false);
 
-
     Reference<XFrame> xFrame (mrOutlineViewShell.GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);
 
     const OUString aSlotURL( ".uno:ShowSlide" );
@@ -421,7 +420,6 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
             nTarget = 0;
         }
     }
-
 
     // the "example" page is the previous page - if it is available
     if (nTarget > 0)
@@ -1042,7 +1040,6 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     return GetOutlineTextObject(pPage);
 }
 
-
 /** updates draw model with all changes from outliner model */
 bool OutlineView::PrepareClose(bool)
 {
@@ -1231,7 +1228,6 @@ IMPL_LINK_INLINE_START( OutlineView, IndentingPagesHdl, OutlinerView *, pOutline
     return RemovingPagesHdl(pOutlinerView);
 }
 IMPL_LINK_INLINE_END( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
-
 
 /** returns the first slide that is selected in the outliner or where
     the cursor is located */

@@ -51,13 +51,9 @@ SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  )
     pSnapFrames->Show();
 }
 
-
-
 SdTpOptionsSnap::~SdTpOptionsSnap()
 {
 }
-
-
 
 bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {
@@ -82,8 +78,6 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
     return true;
 }
 
-
-
 void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
@@ -104,8 +98,6 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
     pCbxRotate->GetClickHdl().Call(0);
 }
-
-
 
 SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
                 const SfxItemSet* rAttrs )
@@ -128,13 +120,9 @@ SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rIn
     get( m_pCbxMoveOutline, "moveoutline");
 }
 
-
-
 SdTpOptionsContents::~SdTpOptionsContents()
 {
 }
-
-
 
 bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 {
@@ -158,8 +146,6 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
     return( bModified );
 }
 
-
-
 void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 {
     SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs->
@@ -178,8 +164,6 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxDragStripes->SaveValue();
     m_pCbxHandlesBezier->SaveValue();
 }
-
-
 
 SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
                 const SfxItemSet* rAttrs )
@@ -320,7 +304,6 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
             SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
             m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FUNIT_TWIP );
 
-
             if( nWidth != 0 && nHeight != 0 )
             {
                 m_pMtrFldInfo1->SetUnit( eFUnit );
@@ -337,8 +320,6 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         }
     }
 }
-
-
 
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
@@ -361,8 +342,6 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 
     return( LEAVE_PAGE );
 }
-
-
 
 bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 {
@@ -430,8 +409,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 
     return( bModified );
 }
-
-
 
 void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
@@ -511,14 +488,11 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-
-
 SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SdTpOptionsMisc( pWindow, *rAttrs ) );
 }
-
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
@@ -534,7 +508,6 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
     }
     return 0;
 }
-
 
 void SdTpOptionsMisc::SetImpressMode (void)
 {
@@ -568,14 +541,10 @@ void    SdTpOptionsMisc::SetDrawMode()
     m_pCbxUsePrinterMetrics->SetPosPixel (m_pCbxCompatibility->GetPosPixel());
 }
 
-
-
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
     return OUString::number(nX) + OUString(TOKEN) + OUString::number(nY);
 }
-
-
 
 bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {

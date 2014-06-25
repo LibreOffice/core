@@ -92,7 +92,6 @@ SdActionDlg::SdActionDlg (
     SetTabPage( pNewPage );
 }
 
-
 /**
  *  Action-TabPage
  */
@@ -140,13 +139,9 @@ SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
     ClickActionHdl( this );
 }
 
-
-
 SdTPAction::~SdTPAction()
 {
 }
-
-
 
 void SdTPAction::SetView( const ::sd::View* pSdView )
 {
@@ -170,8 +165,6 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
         OSL_FAIL("sd::SdTPAction::SetView(), no docshell or viewshell?");
     }
 }
-
-
 
 void SdTPAction::Construct()
 {
@@ -263,8 +256,6 @@ void SdTPAction::Construct()
 
 }
 
-
-
 bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
@@ -307,8 +298,6 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
 
     return( bModified );
 }
-
-
 
 void SdTPAction::Reset( const SfxItemSet* rAttrs )
 {
@@ -357,13 +346,9 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     m_pEdtSound->SaveValue();
 }
 
-
-
 void SdTPAction::ActivatePage( const SfxItemSet& )
 {
 }
-
-
 
 int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
@@ -373,15 +358,11 @@ int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return( LEAVE_PAGE );
 }
 
-
-
 SfxTabPage* SdTPAction::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTPAction( pWindow, rAttrs ) );
 }
-
-
 
 void SdTPAction::UpdateTree()
 {
@@ -392,8 +373,6 @@ void SdTPAction::UpdateTree()
         bTreeUpdated = true;
     }
 }
-
-
 
 void SdTPAction::OpenFileDialog()
 {
@@ -462,7 +441,6 @@ void SdTPAction::OpenFileDialog()
                 SFX2_RESSTR(STR_SFX_FILTERNAME_ALL),
                 OUString("*.*"));
 
-
             if( aFileDialog.Execute() == ERRCODE_NONE )
             {
                 aFile = aFileDialog.GetPath();
@@ -474,16 +452,12 @@ void SdTPAction::OpenFileDialog()
     }
 }
 
-
-
 IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
 {
     OpenFileDialog();
 
     return( 0L );
 }
-
-
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
 {
@@ -543,7 +517,6 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
 
             m_pBtnSeek->Hide();
             break;
-
 
         case presentation::ClickAction_DOCUMENT:
             m_pLbTree->Hide();
@@ -660,15 +633,11 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
     return( 0L );
 }
 
-
-
 IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 {
     m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
     return( 0L );
 }
-
-
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 {
@@ -718,8 +687,6 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
     return( 0L );
 }
 
-
-
 presentation::ClickAction SdTPAction::GetActualClickAction()
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
@@ -730,8 +697,6 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
     return( eCA );
 }
 
-
-
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
     std::vector<com::sun::star::presentation::ClickAction>::const_iterator pIter =
@@ -740,8 +705,6 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
     if ( pIter != maCurrentActions.end() )
         m_pLbAction->SelectEntryPos( pIter-maCurrentActions.begin() );
 }
-
-
 
 void SdTPAction::SetEditText( OUString const & rStr )
 {
@@ -803,8 +766,6 @@ void SdTPAction::SetEditText( OUString const & rStr )
             break;
     }
 }
-
-
 
 OUString SdTPAction::GetEditText( bool bFullDocDestination )
 {
@@ -870,8 +831,6 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
 
     return( aStr );
 }
-
-
 
 sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {

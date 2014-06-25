@@ -26,7 +26,6 @@
 
 namespace sd { namespace framework {
 
-
 /** The ChangeRequestQueue stores the pending requests for changes to the
     requested configuration.  It is the task of the
     ChangeRequestQueueProcessor to process these requests.
@@ -40,7 +39,6 @@ public:
     */
     ChangeRequestQueue (void);
 };
-
 
 } } // end of namespace sd::framework
 

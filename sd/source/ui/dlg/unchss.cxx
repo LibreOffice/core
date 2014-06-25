@@ -31,9 +31,7 @@
 #include "stlsheet.hxx"
 #include "glob.hrc"
 
-
 TYPEINIT1(StyleSheetUndoAction, SdUndoAction);
-
 
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                                            SfxStyleSheet* pTheStyleSheet,
@@ -94,7 +92,6 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     aComment = aComment.replaceFirst("$", aName);
 }
 
-
 void StyleSheetUndoAction::Undo()
 {
     SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
@@ -106,7 +103,6 @@ void StyleSheetUndoAction::Undo()
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
-
 
 void StyleSheetUndoAction::Redo()
 {
@@ -120,13 +116,11 @@ void StyleSheetUndoAction::Redo()
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
 
-
 StyleSheetUndoAction::~StyleSheetUndoAction()
 {
     delete pNewSet;
     delete pOldSet;
 }
-
 
 OUString StyleSheetUndoAction::GetComment() const
 {

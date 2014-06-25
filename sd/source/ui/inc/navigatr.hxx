@@ -55,8 +55,6 @@ class Menu;
 class SdNavigatorControllerItem;
 class SdPageNameControllerItem;
 
-
-
 class NavDocInfo
 {
 public:
@@ -79,8 +77,6 @@ private:
     bool            bActive : 1;
     ::sd::DrawDocShell* mpDocShell;
 };
-
-
 
 class SdNavigatorWin
     : public Window
@@ -116,7 +112,6 @@ public:
 protected:
     virtual void                Resize() SAL_OVERRIDE;
     virtual bool                Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-
 
 private:
     friend class ::sd::NavigatorChildWindow;
@@ -168,9 +163,6 @@ public:
     void                        FreshEntry( );
 };
 
-
-
-
 /**
  * ControllerItem for Navigator
  */
@@ -188,8 +180,6 @@ private:
     SdNavigatorWin* pNavigatorWin;
     const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
-
-
 
 /**
  * ControllerItem for Navigator to show the page in the TreeLB

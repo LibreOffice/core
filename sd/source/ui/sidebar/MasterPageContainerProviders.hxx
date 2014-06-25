@@ -29,9 +29,7 @@ class SdPage;
 namespace sd { class PreviewRenderer; }
 namespace sd { class DrawDocShell; }
 
-
 namespace sd { namespace sidebar {
-
 
 /** Interface for a provider of page objects.  It is used by the
     MasterPageDescriptor to create master page objects on demand.
@@ -61,9 +59,6 @@ public:
 protected:
     ~PageObjectProvider() {}
 };
-
-
-
 
 class PreviewProvider
 {
@@ -99,9 +94,6 @@ protected:
     ~PreviewProvider() {}
 };
 
-
-
-
 /** Provide previews of existing page objects by rendering them.
 */
 class PagePreviewProvider : public PreviewProvider
@@ -114,9 +106,6 @@ public:
     virtual bool NeedsPageObject (void) SAL_OVERRIDE;
 private:
 };
-
-
-
 
 /** Provide master page objects for template documents for which only the
     URL is given.
@@ -135,9 +124,6 @@ private:
     ::sd::DrawDocShell* LoadDocument (const OUString& sFileName);
 };
 
-
-
-
 /** Provide previews for template documents by loading the thumbnails from
     the documents.
 */
@@ -153,9 +139,6 @@ private:
     OUString msURL;
 };
 
-
-
-
 /** Create an empty default master page.
 */
 class DefaultPageObjectProvider : public PageObjectProvider
@@ -167,8 +150,6 @@ public:
     virtual int GetCostIndex (void) SAL_OVERRIDE;
     virtual bool operator== (const PageObjectProvider& rProvider) SAL_OVERRIDE;
 };
-
-
 
 /** This implementation of the PageObjectProvider simply returns an already
     existing master page object.

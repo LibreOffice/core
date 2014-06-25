@@ -33,8 +33,6 @@ namespace sd {
 class DrawDocShell;
 }
 
-
-
 class SdPresLayoutDlg
     : public ModalDialog
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsPageObjectLayouter.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
@@ -92,15 +91,9 @@ PageObjectLayouter::PageObjectLayouter (
         aIconSize);
 }
 
-
-
-
 PageObjectLayouter::~PageObjectLayouter(void)
 {
 }
-
-
-
 
 Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     Size& rPageObjectSize,

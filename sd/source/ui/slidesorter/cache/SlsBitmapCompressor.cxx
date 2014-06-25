@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsBitmapCompressor.hxx"
 
 #include <tools/stream.hxx>
@@ -26,7 +25,6 @@
 #include <vcl/pngwrite.hxx>
 
 namespace sd { namespace slidesorter { namespace cache {
-
 
 //===== NoBitmapCompression ===================================================
 
@@ -45,8 +43,6 @@ public:
     virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
 };
 
-
-
 ::boost::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
 {
     return ::boost::shared_ptr<BitmapReplacement>(new DummyReplacement(rBitmap));
@@ -57,16 +53,10 @@ Bitmap NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) co
     return dynamic_cast<const DummyReplacement&>(rBitmapData).maPreview;
 }
 
-
-
-
 bool NoBitmapCompression::IsLossless (void) const
 {
     return true;
 }
-
-
-
 
 //===== CompressionByDeletion =================================================
 
@@ -75,9 +65,6 @@ bool NoBitmapCompression::IsLossless (void) const
     return ::boost::shared_ptr<BitmapReplacement>();
 }
 
-
-
-
 Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
 {
     // Return a NULL pointer.  This will eventually lead to a request for
@@ -85,16 +72,10 @@ Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
     return Bitmap();
 }
 
-
-
-
 bool CompressionByDeletion::IsLossless (void) const
 {
     return false;
 }
-
-
-
 
 //===== ResolutionReduction ===================================================
 
@@ -135,9 +116,6 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize (void
     return ::boost::shared_ptr<BitmapReplacement>(pResult);
 }
 
-
-
-
 Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) const
 {
     Bitmap aResult;
@@ -155,19 +133,12 @@ Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) co
     return aResult;
 }
 
-
-
-
 bool ResolutionReduction::IsLossless (void) const
 {
     return false;
 }
 
-
-
-
 //===== PNGCompression ========================================================
-
 
 class PngCompression::PngReplacement : public BitmapReplacement
 {
@@ -190,9 +161,6 @@ public:
     }
 };
 
-
-
-
 ::boost::shared_ptr<BitmapReplacement> PngCompression::Compress (const Bitmap& rBitmap) const
 {
     ::vcl::PNGWriter aWriter (rBitmap);
@@ -207,9 +175,6 @@ public:
 
     return ::boost::shared_ptr<BitmapReplacement>(pResult);
 }
-
-
-
 
 Bitmap PngCompression::Decompress (
     const BitmapReplacement& rBitmapData) const
@@ -226,16 +191,10 @@ Bitmap PngCompression::Decompress (
     return aResult;
 }
 
-
-
-
 bool PngCompression::IsLossless (void) const
 {
     return true;
 }
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

@@ -58,7 +58,6 @@ private:
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
 };
 
-
 } // end of namespace sd
 
 #endif

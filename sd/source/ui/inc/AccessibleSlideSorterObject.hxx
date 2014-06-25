@@ -39,14 +39,12 @@ class SlideSorter;
 
 namespace accessibility {
 
-
 typedef ::cppu::PartialWeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleComponent,
     ::com::sun::star::lang::XServiceInfo > AccessibleSlideSorterObjectBase;
-
 
 /** This class makes page objects of the slide sorter accessible.
 */
@@ -101,7 +99,6 @@ public:
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
@@ -158,7 +155,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception) SAL_OVERRIDE;
 
-
     //=====  XAccessibleComponent  ================================================
 
     virtual sal_Bool SAL_CALL containsPoint (
@@ -191,8 +187,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -212,7 +206,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
 private:
     ::com::sun::star::uno::Reference<
@@ -237,8 +230,6 @@ private:
     */
     bool IsDisposed (void);
 };
-
-
 
 } // end of namespace ::accessibility
 

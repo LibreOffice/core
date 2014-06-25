@@ -27,7 +27,6 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-
 /** In contrast to the Layouter that places page objects in the view, the
     PageObjectLayouter places the parts of individual page objects like page
     number area, borders, preview.
@@ -143,7 +142,6 @@ private:
         const sal_Int32 nPageNumberAreaWidth,
         const sal_Int32 nFocusIndicatorWidth);
 };
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

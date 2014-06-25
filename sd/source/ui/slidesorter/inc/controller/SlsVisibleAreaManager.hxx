@@ -27,7 +27,6 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-
 /** Manage requests for scrolling page objects into view.
 */
 class VisibleAreaManager
@@ -86,7 +85,6 @@ private:
     void MakeVisible (void);
     ::boost::optional<Point> GetRequestedTopLeft (void) const;
 };
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

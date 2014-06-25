@@ -35,7 +35,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper3 <
@@ -45,7 +44,6 @@ typedef ::cppu::WeakComponentImplHelper3 <
     > BasicPaneFactoryInterfaceBase;
 
 } // end of anonymous namespace.
-
 
 namespace sd {
 
@@ -73,13 +71,11 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XResourceFactory
 
@@ -93,13 +89,11 @@ public:
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // lang::XEventListener
 

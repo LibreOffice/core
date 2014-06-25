@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/localfilehelper.hxx>
 #include <tools/errinf.hxx>
 #include <vcl/msgbox.hxx>
@@ -39,22 +38,16 @@
 #include "htmlex.hxx"
 #include "sdhtmlfilter.hxx"
 
-
 // - SdPPTFilter -
-
 
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
 
-
-
 SdHTMLFilter::~SdHTMLFilter()
 {
 }
-
-
 
 bool SdHTMLFilter::Export()
 {

@@ -111,7 +111,6 @@ public:
     */
     bool IsOnlyPreviewTriggersMouseOver (void) const { return mbIsOnlyPreviewTriggersMouseOver;}
 
-
 private:
     bool mbIsHighlightCurrentSlide;
     bool mbIsShowSelection;

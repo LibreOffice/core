@@ -56,9 +56,6 @@ public:
     OUString msPath;
 };
 
-
-
-
 /** Functor that compares two TemplateEntries based on their titles
 */
 class TemplateEntryCompare
@@ -70,9 +67,6 @@ public:
 private:
     ::boost::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
 };
-
-
-
 
 /** Representation of a template or layout folder.
 */
@@ -94,9 +88,6 @@ private:
     bool mbSortingEnabled;
     ::boost::scoped_ptr<TemplateEntryCompare> mpEntryCompare;
 };
-
-
-
 
 /** This class scans the template folders for impress templates.  There are
     two ways to use this class.

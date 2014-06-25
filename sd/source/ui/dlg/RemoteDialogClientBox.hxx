@@ -58,16 +58,13 @@ struct ClientBoxEntry
     bool            m_bActive       :1;
     ClientInfo*     m_pClientInfo;
 
-
     ClientBoxEntry( ClientInfo* pClientInfo );
    ~ClientBoxEntry();
 
 };
 
-
 // class ExtensionBox_Impl
 class ClientBox;
-
 
 class ClientRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
@@ -77,7 +74,6 @@ public:
 
     ClientRemovedListener( ClientBox *pParent ) { m_pParent = pParent; }
    virtual ~ClientRemovedListener();
-
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
@@ -128,13 +124,11 @@ class ClientBox:
     bool            HandleCursorKey( sal_uInt16 nKeyCode );
     void            DeleteRemoved();
 
-
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
 
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
     void checkIndex(sal_Int32 pos) const;
-
 
 public:
                     ClientBox( Window* pParent, WinBits nStyle );
@@ -159,7 +153,6 @@ public:
     void            SetHyperlinkHdl( const Link& rLink ){ m_aClickHdl = rLink; }
     void    RecalcAll();
     void            RemoveUnlocked();
-
 
     void    selectEntry( const long nPos );
     long            addEntry( ClientInfo* pClientInfo );

@@ -45,17 +45,14 @@ class DrawDocShell;
 class ViewShellBase;
 }
 
-
 namespace sd { namespace tools {
 class EventMultiplexerEvent;
 } }
-
 
 namespace sd { namespace sidebar {
 
 class ControlFactory;
 class SidebarViewShell;
-
 
 class LayoutMenu
     : public ValueSet,

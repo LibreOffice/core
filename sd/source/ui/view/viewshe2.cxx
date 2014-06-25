@@ -475,7 +475,6 @@ void ViewShell::InvalidateWindows()
         mpContentWindow->Invalidate();
 }
 
-
 /**
  * Draw a selection rectangle with the ?provided pen on all split windows.
  */
@@ -658,8 +657,6 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
     SetZoom(nZoom);
 }
 
-
-
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
     SfxViewShell* pViewShell = GetViewShell();
@@ -694,8 +691,6 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     }
 }
 
-
-
 bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
     bool bReturn = false;
@@ -714,17 +709,11 @@ bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
     return(bReturn);
 }
 
-
-
-
 void ViewShell::SetFrameView (FrameView* pNewFrameView)
 {
     mpFrameView = pNewFrameView;
     ReadFrameViewData (mpFrameView);
 }
-
-
-
 
 /*************************************************************************
 |*
@@ -736,8 +725,6 @@ void ViewShell::ReadFrameViewData(FrameView*)
 {
 }
 
-
-
 /*************************************************************************
 |*
 |* Write actual views data to FrameView
@@ -747,7 +734,6 @@ void ViewShell::ReadFrameViewData(FrameView*)
 void ViewShell::WriteFrameViewData()
 {
 }
-
 
 bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
@@ -932,13 +918,11 @@ void ViewShell::ReadUserData(const OUString&)
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-
 void ViewShell::WriteUserData(OUString&)
 {
     // writing of our data is always done in WriteFrameViewData()
     WriteFrameViewData();
 }
-
 
 /**
  * Switch ruler on/off
@@ -976,7 +960,6 @@ void ViewShell::SetRuler(bool bRuler)
         GetViewShell()->InvalidateBorder();
 }
 
-
 sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
@@ -987,7 +970,6 @@ sal_Int8 ViewShell::AcceptDrop (
     ::sd::View* pView = GetView();
     return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
-
 
 sal_Int8 ViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
@@ -1019,7 +1001,6 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 
     mpFrameView->WriteUserDataSequence( rSequence, bBrowse );
 }
-
 
 void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {

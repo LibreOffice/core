@@ -31,9 +31,6 @@ class CancelButton;
 class HelpButton;
 namespace sd {
 
-
-
-
 // property handles
 const sal_Int32 nHandleSound = 0;
 const sal_Int32 nHandleHasAfterEffect = 1;
@@ -97,8 +94,6 @@ const sal_Int32 nPropertyTypeTransparency = 19;
 const sal_Int32 nPropertyTypeFontStyle = 20;
 const sal_Int32 nPropertyTypeScale = 21;
 
-
-
 class PropertySubControl
 {
 public:
@@ -123,8 +118,6 @@ protected:
     sal_Int32           mnType;
 };
 
-
-
 class PropertyControl : public ListBox
 {
 public:
@@ -139,8 +132,6 @@ public:
 private:
     PropertySubControl* mpSubControl;
 };
-
-
 
 class CustomAnimationDurationTabPage;
 class CustomAnimationEffectTabPage;

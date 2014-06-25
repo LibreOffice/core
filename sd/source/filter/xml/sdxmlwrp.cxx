@@ -163,10 +163,7 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
     return &gServices[ (bImport ? 2 : 0) + ((nStoreVer == SOFFICE_FILEFORMAT_60) ? 4 : 0) + (bDraw ? 1 : 0 ) ];
 }
 
-
-
 // - SdXMLWrapper -
-
 
 SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
     SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
@@ -413,8 +410,6 @@ sal_Int32 ReadThroughComponent(
     return SD_XML_READERROR;
 }
 
-
-
 bool SdXMLFilter::Import( ErrCode& nError )
 {
     sal_uInt32  nRet = 0;
@@ -423,19 +418,13 @@ bool SdXMLFilter::Import( ErrCode& nError )
     Reference< uno::XComponentContext > rxContext =
             comphelper::getProcessComponentContext();
 
-
-
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
     pDoc->EnableUndo(false);
     pDoc->NewOrLoadCompleted( NEW_DOC );
     pDoc->CreateFirstPages();
     pDoc->StopWorkStartupDelay();
 
-
-
     mxModel->lockControllers();
-
-
 
     /** property map for import info set */
     PropertyMapEntry const aImportInfoMap[] =
@@ -489,8 +478,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-
-
     Reference< io::XActiveDataSource > xSource;
     Reference< XInterface > xPipe;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
@@ -499,8 +486,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
-
-
 
     // try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
@@ -535,9 +520,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-
     // get the input stream (storage or stream)
-
 
     SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
@@ -584,8 +567,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     if (SDXMLMODE_Organizer == meFilterMode)
         xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
-
-
 
     if( 0 == nRet )
     {
@@ -644,7 +625,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
@@ -680,7 +660,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
                 nRet = 0;
         }
     }
-
 
     // clear unused named items from item pool
 
@@ -784,8 +763,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
     return nRet == 0;
 }
 
-
-
 bool SdXMLFilter::Export()
 {
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
@@ -846,7 +823,6 @@ bool SdXMLFilter::Export()
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
-
 
         SvtSaveOptions aSaveOpt;
         OUString sUsePrettyPrinting("UsePrettyPrinting");

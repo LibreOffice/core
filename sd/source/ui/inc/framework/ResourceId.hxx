@@ -35,9 +35,6 @@ typedef ::cppu::WeakImplHelper2 <
 
 } // end of anonymous namespace.
 
-
-
-
 namespace sd { namespace framework {
 
 /** Implementation of the css::drawing::framework::ResourceId

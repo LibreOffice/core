@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <osl/module.hxx>
@@ -31,9 +30,7 @@
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
 
-
 // - Namespaces -
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -62,9 +59,7 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
 #endif
 
-
 // - SdPPTFilter -
-
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
@@ -72,14 +67,10 @@ SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, boo
 {
 }
 
-
-
 SdPPTFilter::~SdPPTFilter()
 {
     delete pBas;    // deleting the compressed basic storage
 }
-
-
 
 bool SdPPTFilter::Import()
 {
@@ -130,8 +121,6 @@ bool SdPPTFilter::Import()
 
     return bRet;
 }
-
-
 
 bool SdPPTFilter::Export()
 {

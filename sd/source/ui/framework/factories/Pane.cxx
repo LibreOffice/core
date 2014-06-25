@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/Pane.hxx"
 
 #include <vcl/svapp.hxx>
@@ -30,7 +29,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-
 
 namespace sd { namespace framework {
 
@@ -45,24 +43,15 @@ Pane::Pane (
 {
 }
 
-
-
-
 Pane::~Pane (void)
 {
 }
-
-
-
 
 void Pane::disposing (void)
 {
     mxWindow = NULL;
     mpWindow = NULL;
 }
-
-
-
 
 ::Window* Pane::GetWindow (void)
 {
@@ -71,10 +60,6 @@ void Pane::disposing (void)
     else
         return NULL;
 }
-
-
-
-
 
 //----- XPane -----------------------------------------------------------------
 
@@ -85,9 +70,6 @@ Reference<awt::XWindow> SAL_CALL Pane::getWindow (void)
 
     return mxWindow;
 }
-
-
-
 
 Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
     throw (RuntimeException, std::exception)
@@ -100,9 +82,6 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
 
     return mxCanvas;
 }
-
-
-
 
 //----- XPane2 ----------------------------------------------------------------
 
@@ -118,9 +97,6 @@ sal_Bool SAL_CALL Pane::isVisible (void)
         return false;
 }
 
-
-
-
 void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
     throw (RuntimeException, std::exception)
 {
@@ -130,9 +106,6 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
     if (pWindow != NULL)
         pWindow->Show(bIsVisible);
 }
-
-
-
 
 Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
     throw (RuntimeException, std::exception)
@@ -145,9 +118,6 @@ Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
         return NULL;
 }
 
-
-
-
 void SAL_CALL Pane::setAccessible (
     const Reference<css::accessibility::XAccessible>& rxAccessible)
     throw (RuntimeException, std::exception)
@@ -157,9 +127,6 @@ void SAL_CALL Pane::setAccessible (
     if (pWindow != NULL)
         pWindow->SetAccessible(rxAccessible);
 }
-
-
-
 
 //----- XResource -------------------------------------------------------------
 
@@ -171,17 +138,11 @@ Reference<XResourceId> SAL_CALL Pane::getResourceId (void)
     return mxPaneId;
 }
 
-
-
-
 sal_Bool SAL_CALL Pane::isAnchorOnly (void)
     throw (RuntimeException, std::exception)
 {
     return true;
 }
-
-
-
 
 //----- XUnoTunnel ------------------------------------------------------------
 
@@ -209,11 +170,6 @@ sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
     return nResult;
 }
 
-
-
-
-
-
 Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     throw (RuntimeException)
 {
@@ -230,9 +186,6 @@ Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     return xCanvas;
 }
 
-
-
-
 void Pane::ThrowIfDisposed (void) const
     throw (lang::DisposedException)
 {
@@ -242,7 +195,6 @@ void Pane::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
 
 } } // end of namespace sd::framework
 

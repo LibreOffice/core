@@ -30,7 +30,6 @@ class Window;
 
 namespace accessibility {
 
-
 /** This class makes the Impress outline view accessible.
 
     Please see the documentation of the base class for further
@@ -55,7 +54,6 @@ public:
     /** Complete the initialization begun in the constructor.
     */
     virtual void Init (void) SAL_OVERRIDE;
-
 
     //=====  IAccessibleViewForwarderListener  ================================
 
@@ -107,7 +105,6 @@ public:
     virtual void SAL_CALL
         propertyChange (const ::com::sun::star::beans::PropertyChangeEvent& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
 protected:
 

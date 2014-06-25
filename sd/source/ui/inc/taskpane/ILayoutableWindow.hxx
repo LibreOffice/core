@@ -27,7 +27,6 @@ class Window;
 
 namespace sd { namespace toolpanel {
 
-
 class ILayouter
 {
 public:
@@ -39,8 +38,6 @@ public:
 protected:
     ~ILayouter() {}
 };
-
-
 
 /** This interface has to be implemented by windows that want to be
     layouted by a SubToolPanel or ScrollablePanel object.
@@ -89,8 +86,6 @@ public:
     */
     virtual sal_Int32 GetMinimumWidth (void) = 0;
 };
-
-
 
 } } // end of namespace ::sd::toolpanel
 

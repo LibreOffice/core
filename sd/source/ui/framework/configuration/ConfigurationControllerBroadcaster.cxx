@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationControllerBroadcaster.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -37,9 +36,6 @@ ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
 {
 }
 
-
-
-
 void ConfigurationControllerBroadcaster::AddListener(
     const Reference<XConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
@@ -57,9 +53,6 @@ void ConfigurationControllerBroadcaster::AddListener(
     aDescriptor.maUserData = rUserData;
     maListenerMap[rsEventType].push_back(aDescriptor);
 }
-
-
-
 
 void ConfigurationControllerBroadcaster::RemoveListener(
     const Reference<XConfigurationChangeListener>& rxListener)
@@ -83,9 +76,6 @@ void ConfigurationControllerBroadcaster::RemoveListener(
         }
     }
 }
-
-
-
 
 void ConfigurationControllerBroadcaster::NotifyListeners (
     const ListenerList& rList,
@@ -117,9 +107,6 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     }
 }
 
-
-
-
 void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationChangeEvent& rEvent)
 {
     // Notify the specialized listeners.
@@ -143,9 +130,6 @@ void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationCha
     }
 }
 
-
-
-
 void ConfigurationControllerBroadcaster::NotifyListeners (
     const OUString& rsEventType,
     const Reference<XResourceId>& rxResourceId,
@@ -163,10 +147,6 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     {
     }
 }
-
-
-
-
 
 void ConfigurationControllerBroadcaster::DisposeAndClear (void)
 {
@@ -211,9 +191,6 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
         }
     }
 }
-
-
-
 
 } } // end of namespace sd::framework
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/numitem.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
@@ -221,15 +220,11 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
     }
 }
 
-
-
 // Dtor
 ImplSdPPTImport::~ImplSdPPTImport()
 {
     delete pStData;
 }
-
-
 
 // Import
 bool ImplSdPPTImport::Import()
@@ -541,7 +536,6 @@ bool ImplSdPPTImport::Import()
     Scale( aVisAreaSize );
     pDocShell->SetVisArea( Rectangle( Point(), aVisAreaSize ) );
 
-
     // create master pages:
 
     SfxProgress* pStbMgr = new SfxProgress( pDocShell, SD_RESSTR( STR_POWERPOINT_IMPORT ),
@@ -600,7 +594,6 @@ bool ImplSdPPTImport::Import()
                         aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                     }
 
-
                     // create layoutstylesheets, set layoutname and stylesheet
                     // (only on standard and not pages)
 
@@ -620,7 +613,6 @@ bool ImplSdPPTImport::Import()
                     aLayoutName += SD_LT_SEPARATOR;
                     aLayoutName += SD_RESSTR( STR_LAYOUT_OUTLINE );
                     pPage->SetLayoutName( aLayoutName );
-
 
                     // set stylesheets
                     if ( pPage->GetPageKind() == PK_STANDARD )
@@ -825,7 +817,6 @@ bool ImplSdPPTImport::Import()
                 }
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
-
 
                 // background object
                 pObj = pMPage->GetObj( 0 );
@@ -1446,8 +1437,6 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
     }
 }
 
-
-
 // Import of pages
 struct Ppt97AnimationStlSortHelper
 {
@@ -1836,8 +1825,6 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
     rStCtrl.Seek( nFilePosMerk );
 }
 
-
-
 // import of sounds
 
 // Not only the sounds are imported as string, they are also inserted to
@@ -2010,8 +1997,6 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
     }
     return aRetVal;
 }
-
-
 
 // import of objects
 void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName )
@@ -2676,7 +2661,6 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     return pObj;
 }
 
-
 bool
 ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
 {
@@ -2689,7 +2673,6 @@ ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Ref
     }
     return false;
 }
-
 
 // exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(

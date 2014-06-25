@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "model/SlsPageDescriptor.hxx"
 
 #include "sdpage.hxx"
@@ -32,7 +31,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 namespace sd {  namespace slidesorter { namespace model {
-
 
 PageDescriptor::PageDescriptor (
     const Reference<drawing::XDrawPage>& rxPage,
@@ -63,36 +61,15 @@ PageDescriptor::PageDescriptor (
     }
 }
 
-
-
-
 PageDescriptor::~PageDescriptor (void)
 {
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
 {
     mnIndex = nNewIndex;
     maVisualState.mnPageId = nNewIndex;
 }
-
-
-
 
 bool PageDescriptor::UpdateMasterPage (void)
 {
@@ -108,9 +85,6 @@ bool PageDescriptor::UpdateMasterPage (void)
         return false;
 }
 
-
-
-
 bool PageDescriptor::UpdateTransitionFlag (void)
 {
     bool bHasSlideTransition (false);
@@ -124,9 +98,6 @@ bool PageDescriptor::UpdateTransitionFlag (void)
     else
         return false;
 }
-
-
-
 
 bool PageDescriptor::HasState (const State eState) const
 {
@@ -158,9 +129,6 @@ bool PageDescriptor::HasState (const State eState) const
             return false;
     }
 }
-
-
-
 
 bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
 {
@@ -220,13 +188,6 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
     return bModified;
 }
 
-
-
-
-
-
-
-
 bool PageDescriptor::GetCoreSelection (void)
 {
     if (mpPage!=NULL && mpPage->IsSelected() != mbIsSelected)
@@ -234,9 +195,6 @@ bool PageDescriptor::GetCoreSelection (void)
     else
         return false;
 }
-
-
-
 
 void PageDescriptor::SetCoreSelection (void)
 {
@@ -251,9 +209,6 @@ void PageDescriptor::SetCoreSelection (void)
     }
 }
 
-
-
-
 Rectangle PageDescriptor::GetBoundingBox (void) const
 {
     Rectangle aBox (maBoundingBox);
@@ -261,9 +216,6 @@ Rectangle PageDescriptor::GetBoundingBox (void) const
     aBox.Move(aOffset.X(), aOffset.Y());
     return aBox;
 }
-
-
-
 
 Point PageDescriptor::GetLocation (const bool bIgnoreOffset) const
 {
@@ -273,15 +225,10 @@ Point PageDescriptor::GetLocation (const bool bIgnoreOffset) const
         return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
 }
 
-
-
-
 void PageDescriptor::SetBoundingBox (const Rectangle& rBoundingBox)
 {
     maBoundingBox = rBoundingBox;
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::model
 

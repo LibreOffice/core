@@ -33,7 +33,6 @@ public:
     ~LocalResource (void) { FreeResource(); }
 };
 
-
 } } } // end of namespace ::sd::slidesorter::view
 
 #endif

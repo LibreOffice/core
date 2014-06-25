@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconcs.hxx"
 #include <svx/svdpagv.hxx>
-
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -73,7 +71,6 @@ namespace sd {
 
 TYPEINIT1( FuConstructCustomShape, FuConstruct );
 
-
 FuConstructCustomShape::FuConstructCustomShape (
         ViewShell*          pViewSh,
         ::sd::Window*       pWin,
@@ -109,7 +106,6 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
         ToolBarManager::msDrawingObjectToolBar);
 }
 
-
 bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -143,12 +139,10 @@ bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-
 bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
-
 
 bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -178,7 +172,6 @@ bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
     return FuConstruct::KeyInput(rKEvt);
 }
-
 
 void FuConstructCustomShape::Activate()
 {
@@ -238,7 +231,6 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                     pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                                 }
                                 bAttributesAppliedFromGallery = true;
-
 
     /*
                                 com::sun::star::uno::Any aAny;

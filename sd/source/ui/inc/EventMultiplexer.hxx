@@ -138,7 +138,6 @@ public:
         const void* pUserData);
 };
 
-
 /** This convenience class makes it easy to listen to various events that
     originally are broadcasted via different channels.
 

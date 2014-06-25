@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CanvasUpdateRequester.hxx"
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -34,9 +33,6 @@ class CanvasUpdateRequester::Deleter
 public:
     void operator() (CanvasUpdateRequester* pObject) { delete pObject; }
 };
-
-
-
 
 //===== CanvasUpdateRequester =================================================
 
@@ -59,9 +55,6 @@ CanvasUpdateRequester::RequesterMap CanvasUpdateRequester::maRequesterMap;
     return pRequester;
 }
 
-
-
-
 CanvasUpdateRequester::CanvasUpdateRequester (
     const Reference<rendering::XSpriteCanvas>& rxCanvas)
     : mxCanvas(rxCanvas),
@@ -75,17 +68,11 @@ CanvasUpdateRequester::CanvasUpdateRequester (
     }
 }
 
-
-
-
 CanvasUpdateRequester::~CanvasUpdateRequester (void)
 {
     if (mnUserEventId != 0)
         Application::RemoveUserEvent(mnUserEventId);
 }
-
-
-
 
 void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 {
@@ -100,8 +87,6 @@ void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
     }
 }
 
-
-
 IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
 {
     mnUserEventId = 0;
@@ -112,7 +97,6 @@ IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
     }
     return 0;
 }
-
 
 } } // end of namespace ::sd::presenter
 

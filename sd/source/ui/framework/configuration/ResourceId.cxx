@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/ResourceId.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "tools/SdGlobalResourceContainer.hxx"
@@ -51,16 +50,10 @@ Reference<XInterface> SAL_CALL ResourceId_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new ::sd::framework::ResourceId()));
 }
 
-
-
-
 OUString ResourceId_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.ResourceId");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -68,9 +61,6 @@ Sequence<OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     static const OUString sServiceName("com.sun.star.drawing.framework.ResourceId");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
 
 //===== ResourceId ============================================================
 
@@ -83,9 +73,6 @@ ResourceId::ResourceId (void)
 {
 }
 
-
-
-
 ResourceId::ResourceId (
     const std::vector<OUString>& rResourceURLs)
     : ResourceIdInterfaceBase(),
@@ -94,9 +81,6 @@ ResourceId::ResourceId (
 {
     ParseResourceURL();
 }
-
-
-
 
 ResourceId::ResourceId (
     const OUString& rsResourceURL)
@@ -110,9 +94,6 @@ ResourceId::ResourceId (
     ParseResourceURL();
 }
 
-
-
-
 ResourceId::ResourceId (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
@@ -124,9 +105,6 @@ ResourceId::ResourceId (
     maResourceURLs[1] = rsAnchorURL;
     ParseResourceURL();
 }
-
-
-
 
 ResourceId::ResourceId (
     const OUString& rsResourceURL,
@@ -143,16 +121,10 @@ ResourceId::ResourceId (
     ParseResourceURL();
 }
 
-
-
-
 ResourceId::~ResourceId (void)
 {
     mpURL.reset();
 }
-
-
-
 
 OUString SAL_CALL
     ResourceId::getResourceURL (void)
@@ -163,9 +135,6 @@ OUString SAL_CALL
     else
         return OUString();
 }
-
-
-
 
 util::URL SAL_CALL
     ResourceId::getFullResourceURL (void)
@@ -189,18 +158,12 @@ util::URL SAL_CALL
     return aURL;
 }
 
-
-
-
 sal_Bool SAL_CALL
     ResourceId::hasAnchor (void)
     throw (RuntimeException, std::exception)
 {
     return maResourceURLs.size()>1;
 }
-
-
-
 
 Reference<XResourceId> SAL_CALL
     ResourceId::getAnchor (void)
@@ -217,9 +180,6 @@ Reference<XResourceId> SAL_CALL
     return Reference<XResourceId>(rResourceId.get());
 }
 
-
-
-
 Sequence<OUString> SAL_CALL
     ResourceId::getAnchorURLs (void)
     throw (RuntimeException, std::exception)
@@ -235,9 +195,6 @@ Sequence<OUString> SAL_CALL
     else
         return Sequence<OUString>();
 }
-
-
-
 
 OUString SAL_CALL
     ResourceId::getResourceTypePrefix (void)
@@ -260,9 +217,6 @@ OUString SAL_CALL
     else
         return OUString();
 }
-
-
-
 
 sal_Int16 SAL_CALL
     ResourceId::compareTo (const Reference<XResourceId>& rxResourceId)
@@ -300,9 +254,6 @@ sal_Int16 SAL_CALL
 
     return nResult;
 }
-
-
-
 
 sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
 {
@@ -345,9 +296,6 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
 
     return nResult;
 }
-
-
-
 
 sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResourceId>& rxId) const
 {
@@ -394,9 +342,6 @@ sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResource
     return nResult;
 }
 
-
-
-
 sal_Bool SAL_CALL
     ResourceId::isBoundTo (
         const Reference<XResourceId>& rxResourceId,
@@ -425,9 +370,6 @@ sal_Bool SAL_CALL
     }
 }
 
-
-
-
 sal_Bool SAL_CALL
     ResourceId::isBoundToURL (
         const OUString& rsAnchorURL,
@@ -437,18 +379,12 @@ sal_Bool SAL_CALL
     return IsBoundToAnchor(&rsAnchorURL, NULL, eMode);
 }
 
-
-
-
 Reference<XResourceId> SAL_CALL
     ResourceId::clone (void)
     throw(RuntimeException, std::exception)
 {
     return new ResourceId(maResourceURLs);
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -480,11 +416,6 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
     }
     ParseResourceURL();
 }
-
-
-
-
-
 
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be
@@ -533,9 +464,6 @@ bool ResourceId::IsBoundToAnchor (
     return true;
 }
 
-
-
-
 bool ResourceId::IsBoundToAnchor (
     const ::std::vector<OUString>& rAnchorURLs,
     AnchorBindingMode eMode) const
@@ -564,9 +492,6 @@ bool ResourceId::IsBoundToAnchor (
     return true;
 }
 
-
-
-
 void ResourceId::ParseResourceURL (void)
 {
     ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
@@ -592,7 +517,6 @@ void ResourceId::ParseResourceURL (void)
             maResourceURLs[0] = mpURL->Main;
     }
 }
-
 
 } } // end of namespace sd::framework
 

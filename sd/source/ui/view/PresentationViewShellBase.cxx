@@ -60,9 +60,6 @@ void PresentationViewShellBase::InitFactory()
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
 
-
-
-
 PresentationViewShellBase::PresentationViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
@@ -82,14 +79,9 @@ PresentationViewShellBase::PresentationViewShellBase (
     }
 }
 
-
-
-
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
-
-
 
 void PresentationViewShellBase::InitializeFramework (void)
 {

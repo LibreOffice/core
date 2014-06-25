@@ -26,7 +26,6 @@ class SdDrawDocument;
 class SdPage;
 class SfxItemSet;
 
-
 // SdBackgroundObjUndoAction
 class SdBackgroundObjUndoAction : public SdUndoAction
 {

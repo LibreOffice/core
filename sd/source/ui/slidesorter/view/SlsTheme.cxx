@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "view/SlsTheme.hxx"
 #include "SlsResource.hxx"
 #include "controller/SlsProperties.hxx"
@@ -34,8 +33,6 @@ namespace sd { namespace slidesorter { namespace view {
 
 const static ColorData Black = 0x000000;
 const static ColorData White = 0xffffff;
-
-
 
 ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
 {
@@ -62,9 +59,6 @@ ColorData HGBAdapt (
         nNewBrightness>=0 ? nNewBrightness : nBrightness);
 }
 
-
-
-
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maPageBackgroundColor(COL_WHITE),
@@ -87,9 +81,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
     Update(rpProperties);
 }
-
-
-
 
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
@@ -137,9 +128,6 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     }
 }
 
-
-
-
 ::boost::shared_ptr<Font> Theme::GetFont (
     const FontType eType,
     const OutputDevice& rDevice)
@@ -178,9 +166,6 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     return pFont;
 }
 
-
-
-
 ColorData Theme::GetColor (const ColorType eType)
 {
     if (eType>=0 && sal_uInt32(eType)<maColor.size())
@@ -188,9 +173,6 @@ ColorData Theme::GetColor (const ColorType eType)
     else
         return 0;
 }
-
-
-
 
 ColorData Theme::GetGradientColor (
     const GradientColorType eType,
@@ -208,9 +190,6 @@ ColorData Theme::GetGradientColor (
         case Base: return rDescriptor.maBaseColor;
     }
 }
-
-
-
 
 void Theme::SetGradient (
     const GradientColorType eType,
@@ -243,9 +222,6 @@ void Theme::SetGradient (
     rGradient.mnBorderOffset2 = nBorderEndOffset;
 }
 
-
-
-
 const BitmapEx& Theme::GetIcon (const IconType eType)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
@@ -257,9 +233,6 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
     }
 }
 
-
-
-
 Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 {
     if (eType>=0 && size_t(eType)<maGradients.size())
@@ -270,9 +243,6 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
         return maGradients[0];
     }
 }
-
-
-
 
 void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
 {
@@ -286,9 +256,6 @@ void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
         OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
     }
 }
-
-
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

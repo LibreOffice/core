@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 #include "app.hrc"
 
 #include "Outliner.hxx"
@@ -511,7 +510,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     }
 
 }
-
 
 } // end of namespace sd
 

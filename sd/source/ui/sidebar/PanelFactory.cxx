@@ -61,8 +61,6 @@ namespace {
 
 Reference<lang::XEventListener> mxControllerDisposeListener;
 
-
-
 // ----- Service functions ----------------------------------------------------
 
 Reference<XInterface> SAL_CALL PanelFactory_createInstance (
@@ -71,16 +69,10 @@ Reference<XInterface> SAL_CALL PanelFactory_createInstance (
     return Reference<XInterface>(static_cast<XWeak*>(new PanelFactory(rxContext)));
 }
 
-
-
-
 ::rtl::OUString PanelFactory_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("org.openoffice.comp.Draw.framework.PanelFactory");
 }
-
-
-
 
 Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -88,9 +80,6 @@ Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
     static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.PanelFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
-
-
-
 
 //----- PanelFactory --------------------------------------------------------
 
@@ -100,22 +89,13 @@ PanelFactory::PanelFactory(
 {
 }
 
-
-
-
 PanelFactory::~PanelFactory (void)
 {
 }
 
-
-
-
 void SAL_CALL PanelFactory::disposing (void)
 {
 }
-
-
-
 
 // XUIElementFactory
 
@@ -193,9 +173,6 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         pControl,
         aLayoutSize);
 }
-
-
-
 
 } } // end of namespace sd::sidebar
 

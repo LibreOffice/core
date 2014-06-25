@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "cache/SlsPageCacheManager.hxx"
 
 #include "SlsBitmapCache.hxx"
@@ -55,9 +54,6 @@ public:
     } };
 };
 
-
-
-
 /** Collection of data that is stored for the inactive, recently used
     caches.
 */
@@ -76,17 +72,11 @@ public:
     {}
 };
 
-
-
-
 /** The list of recently used caches is organized as queue.  When elements
     are added the list is shortened to the maximally allowed number of
     elements by removing the least recently used elements.
 */
 typedef ::std::deque<RecentlyUsedCacheDescriptor> RecentlyUsedQueue;
-
-
-
 
 /** Compare the caches by preview size.  Those that match the given size
     come first, then, regardless of the given size, the largest ones before
@@ -116,7 +106,6 @@ private:
 
 } // end of anonymous namespace
 
-
 namespace sd { namespace slidesorter { namespace cache {
 
 /** Container for the active caches.
@@ -143,7 +132,6 @@ public:
     };
 };
 
-
 /** The recently used caches are stored in one queue for each document.
 */
 class PageCacheManager::RecentlyUsedPageCaches
@@ -153,16 +141,11 @@ public:
     RecentlyUsedPageCaches (void) {};
 };
 
-
-
-
 class PageCacheManager::Deleter
 {
 public:
     void operator() (PageCacheManager* pObject) { delete pObject; }
 };
-
-
 
 //===== PageCacheManager ====================================================
 
@@ -186,9 +169,6 @@ public:
     return pInstance;
 }
 
-
-
-
 PageCacheManager::PageCacheManager (void)
     : mpPageCaches(new PageCacheContainer()),
       mpRecentlyUsedPageCaches(new RecentlyUsedPageCaches()),
@@ -196,15 +176,9 @@ PageCacheManager::PageCacheManager (void)
 {
 }
 
-
-
-
 PageCacheManager::~PageCacheManager (void)
 {
 }
-
-
-
 
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
     DocumentKey pDocument,
@@ -237,9 +211,6 @@ PageCacheManager::~PageCacheManager (void)
 
     return pResult;
 }
-
-
-
 
 void PageCacheManager::Recycle (
     const ::boost::shared_ptr<Cache>& rpCache,
@@ -276,9 +247,6 @@ void PageCacheManager::Recycle (
     }
 }
 
-
-
-
 void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 {
     PageCacheContainer::iterator iCache (::std::find_if(
@@ -295,9 +263,6 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
         mpPageCaches->erase(iCache);
     }
 }
-
-
-
 
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
     const ::boost::shared_ptr<Cache>& rpCache,
@@ -340,9 +305,6 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
     return pResult;
 }
 
-
-
-
 bool PageCacheManager::InvalidatePreviewBitmap (
     DocumentKey pDocument,
     const SdrPage* pKey)
@@ -372,9 +334,6 @@ bool PageCacheManager::InvalidatePreviewBitmap (
     return bHasChanged;
 }
 
-
-
-
 void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
 {
     if (pDocument == NULL)
@@ -398,9 +357,6 @@ void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
     }
 }
 
-
-
-
 void PageCacheManager::InvalidateAllCaches (void)
 {
     // Iterate over all caches that are currently in use and invalidate
@@ -414,18 +370,12 @@ void PageCacheManager::InvalidateAllCaches (void)
     mpRecentlyUsedPageCaches->clear();
 }
 
-
-
-
 void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 {
     PageCacheContainer::iterator iCache;
     for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end(); ++iCache)
         iCache->second->ReleaseBitmap(pPage);
 }
-
-
-
 
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
     DocumentKey pDocument,
@@ -450,9 +400,6 @@ void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
     return pCache;
 }
 
-
-
-
 void PageCacheManager::PutRecentlyUsedCache(
     DocumentKey pDocument,
     const Size& rPreviewSize,
@@ -473,8 +420,6 @@ void PageCacheManager::PutRecentlyUsedCache(
             iQueue->second.pop_back();
     }
 }
-
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

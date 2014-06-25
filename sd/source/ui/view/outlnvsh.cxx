@@ -169,9 +169,6 @@ void OutlineViewShell::Construct(DrawDocShell* )
     GetActiveWindow()->SetUniqueId( HID_SDOUTLINEVIEWSHELL );
 }
 
-
-
-
 Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (void)
 {
     Reference<drawing::XDrawSubController> xSubController;
@@ -186,7 +183,6 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (vo
 
     return xSubController;
 }
-
 
 /**
  * Default constructor, windows must not center themselves automatically
@@ -220,7 +216,6 @@ OutlineViewShell::OutlineViewShell (
     doShow();
 }
 
-
 OutlineViewShell::~OutlineViewShell()
 {
     DisposeFunctions();
@@ -237,18 +232,12 @@ OutlineViewShell::~OutlineViewShell()
     }
 }
 
-
-
-
 void OutlineViewShell::Shutdown (void)
 {
     ViewShell::Shutdown();
 
     PrepareClose();
 }
-
-
-
 
 /**
  * Paint method: the event gets forwarded from pWindow to the Viewshell
@@ -282,7 +271,6 @@ void OutlineViewShell::ArrangeGUIElements ()
     if (pWindow != NULL)
     {
         pWindow->SetMinZoomAutoCalc(false);
-
 
         // change OuputArea of the OutlinerView
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
@@ -335,24 +323,15 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
     }
 }
 
-
-
-
 void OutlineViewShell::AddWindow (::sd::Window* pWin)
 {
     pOlView->AddWindowToPaintView(pWin);
 }
 
-
-
-
 void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 {
     pOlView->DeleteWindowFromPaintView(pWin);
 }
-
-
-
 
 /**
  * Activate(): during the first invocation the fields get updated
@@ -742,7 +721,6 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
         SetOldFunction(GetCurrentFunction());
     }
 }
-
 
 IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 {
@@ -1172,7 +1150,6 @@ bool OutlineViewShell::PrepareClose( bool bUI )
     return pOlView == NULL || pOlView->PrepareClose(bUI);
 }
 
-
 /**
  * Zoom with zoom factor. Inform OutlinerView
  */
@@ -1285,8 +1262,6 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
     pOlView->SetActualPage(pLastPage);
 }
 
-
-
 /**
  * Write actual views data to FrameView
  */
@@ -1306,14 +1281,12 @@ void OutlineViewShell::WriteFrameViewData()
         mpFrameView->SetSelectedPage((pActualPage->GetPageNum() - 1) / 2);
 }
 
-
 /**
  * Handle SfxRequests for the StatusBar
  */
 void OutlineViewShell::ExecStatusBar(SfxRequest&)
 {
 }
-
 
 void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
@@ -1348,7 +1321,6 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
             rSet.Put( aZoomItem );
         }
     }
-
 
     // page view and layout
 
@@ -1415,7 +1387,6 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
 }
 
-
 void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
@@ -1446,8 +1417,6 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 
     }
 }
-
-
 
 bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -1486,7 +1455,6 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     return(bReturn);
 }
 
-
 /**
  * Return text of the selection
  */
@@ -1513,7 +1481,6 @@ OUString OutlineViewShell::GetSelectionText(bool bCompleteWords)
     return (aStrSelection);
 }
 
-
 /**
  * Is something selected?
  */
@@ -1533,7 +1500,6 @@ bool OutlineViewShell::HasSelection(bool bText) const
 
     return bReturn;
 }
-
 
 /**
  * Status of Attribute-Items
@@ -1635,9 +1601,6 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
     rSet.Put( aAllSet, false );
 }
 
-
-
-
 void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     // first the base classes
@@ -1657,8 +1620,6 @@ void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin
     if( GetActualPage() != pLastPage )
         Invalidate( SID_PREVIEW_STATE );
 }
-
-
 
 SdPage* OutlineViewShell::getCurrentPage() const
 {
@@ -1686,7 +1647,6 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
         SetCurrentPage(pPage);
     }
 }
-
 
 bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 {
@@ -1768,7 +1728,6 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
     return bNewObject;
 }
-
 
 bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 {
@@ -1874,7 +1833,6 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 
     return bNewObject;
 }
-
 
 /**
  * Fill Outliner from Stream
@@ -1986,9 +1944,6 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
     return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
 }
 
-
-
-
 void OutlineViewShell::GetState (SfxItemSet& rSet)
 {
     // Iterate over all requested items in the set.
@@ -2011,9 +1966,6 @@ void OutlineViewShell::GetState (SfxItemSet& rSet)
     }
 }
 
-
-
-
 void OutlineViewShell::SetCurrentPage (SdPage* pPage)
 {
     // Adapt the selection of the model.
@@ -2029,7 +1981,6 @@ void OutlineViewShell::SetCurrentPage (SdPage* pPage)
 
     pOlView->SetActualPage(pPage);
 }
-
 
 } // end of namespace sd
 

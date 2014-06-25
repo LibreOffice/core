@@ -31,7 +31,6 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class Command;

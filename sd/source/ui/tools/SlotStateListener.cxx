@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/SlotStateListener.hxx"
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -33,7 +32,6 @@ using namespace ::rtl;
 
 namespace sd { namespace tools {
 
-
 SlotStateListener::SlotStateListener (
     Link& rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
@@ -47,16 +45,10 @@ SlotStateListener::SlotStateListener (
     ObserveSlot(rSlotName);
 }
 
-
-
-
 SlotStateListener::~SlotStateListener (void)
 {
     ReleaseListeners();
 }
-
-
-
 
 void SlotStateListener::SetCallback (const Link& rCallback)
 {
@@ -64,9 +56,6 @@ void SlotStateListener::SetCallback (const Link& rCallback)
 
     maCallback = rCallback;
 }
-
-
-
 
 void SlotStateListener::ConnectToDispatchProvider (
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider)
@@ -80,9 +69,6 @@ void SlotStateListener::ConnectToDispatchProvider (
 
     mxDispatchProviderWeak = rxDispatchProvider;
 }
-
-
-
 
 void SlotStateListener::ObserveSlot (const OUString& rSlotName)
 {
@@ -101,18 +87,12 @@ void SlotStateListener::ObserveSlot (const OUString& rSlotName)
     }
 }
 
-
-
-
 void SlotStateListener::disposing (void)
 {
     ReleaseListeners();
     mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(NULL);
     maCallback = Link();
 }
-
-
-
 
 util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
 {
@@ -124,9 +104,6 @@ util::URL SlotStateListener::MakeURL (const OUString& rSlotName) const
 
     return aURL;
 }
-
-
-
 
 uno::Reference<frame::XDispatch>
     SlotStateListener::GetDispatch (const util::URL& rURL) const
@@ -140,9 +117,6 @@ uno::Reference<frame::XDispatch>
     return xDispatch;
 }
 
-
-
-
 void SlotStateListener::statusChanged (
     const frame::FeatureStateEvent& rState)
     throw (uno::RuntimeException, std::exception)
@@ -152,9 +126,6 @@ void SlotStateListener::statusChanged (
     if (maCallback.IsSet())
         maCallback.Call(&sSlotName);
 }
-
-
-
 
 void SlotStateListener::ReleaseListeners (void)
 {
@@ -173,9 +144,6 @@ void SlotStateListener::ReleaseListeners (void)
     }
 }
 
-
-
-
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL SlotStateListener::disposing (
@@ -183,9 +151,6 @@ void SAL_CALL SlotStateListener::disposing (
     throw (uno::RuntimeException, std::exception)
 {
 }
-
-
-
 
 void SlotStateListener::ThrowIfDisposed (void)
     throw (lang::DisposedException)
@@ -196,9 +161,6 @@ void SlotStateListener::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } // end of namespace ::sd::tools
 

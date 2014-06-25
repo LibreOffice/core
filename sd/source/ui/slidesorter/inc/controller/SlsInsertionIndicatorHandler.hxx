@@ -25,18 +25,15 @@
 #include "view/SlsLayouter.hxx"
 #include "sdxfer.hxx"
 
-
 namespace sd { namespace slidesorter { class SlideSorter; } }
 namespace sd { namespace slidesorter { namespace view {
 class InsertAnimator;
 class InsertionIndicatorOverlay;
 } } }
 
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class Transferable;
-
 
 /** Manage the visibility and location of the insertion indicator.  Its
     actual display is controlled by the InsertionIndicatorOverlay.
@@ -137,7 +134,6 @@ private:
     void ForceShow (void);
     void ForceEnd (void);
 };
-
 
 } } } // end of namespace ::sd::slidesorter::controller
 

@@ -55,7 +55,6 @@ class ViewShell;
 class Window;
 class ViewClipboard;
 
-
 // SdViewRedrawRec
 struct SdViewRedrawRec
 {
@@ -295,7 +294,6 @@ private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
 };
-
 
 SdDrawDocument& View::GetDoc (void) const
 {

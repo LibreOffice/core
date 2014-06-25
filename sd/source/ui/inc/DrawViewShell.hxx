@@ -509,7 +509,6 @@ private:
     ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
 };
 
-
 } // end of namespace sd
 
 #endif

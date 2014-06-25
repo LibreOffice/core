@@ -261,7 +261,6 @@ Reference< XGraphicProvider > ButtonSetImpl::getGraphicProvider()
     return mxGraphicProvider;
 }
 
-
 ButtonSet::ButtonSet()
 : mpImpl( new ButtonSetImpl() )
 {

@@ -25,12 +25,9 @@
 
 namespace cssu = ::com::sun::star::uno;
 
-
 namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
-
 namespace sd { namespace sidebar {
-
 
 /** Show the master pages currently used by a SdDrawDocument.
 */

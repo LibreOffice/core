@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SlsQueueProcessor.hxx"
 #include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
 
 namespace sd { namespace slidesorter { namespace cache {
-
 
 //=====  QueueProcessor  ======================================================
 
@@ -64,16 +62,9 @@ QueueProcessor::QueueProcessor (
     maTimer.SetTimeout (mnTimeBetweenHighPriorityRequests);
 }
 
-
-
-
-
 QueueProcessor::~QueueProcessor (void)
 {
 }
-
-
-
 
 void QueueProcessor::Start (int nPriorityClass)
 {
@@ -89,25 +80,16 @@ void QueueProcessor::Start (int nPriorityClass)
     }
 }
 
-
-
-
 void QueueProcessor::Stop (void)
 {
     if (maTimer.IsActive())
         maTimer.Stop();
 }
 
-
-
-
 void QueueProcessor::Pause (void)
 {
     mbIsPaused = true;
 }
-
-
-
 
 void QueueProcessor::Resume (void)
 {
@@ -116,15 +98,9 @@ void QueueProcessor::Resume (void)
         Start(mrQueue.GetFrontPriorityClass());
 }
 
-
-
-
 void QueueProcessor::Terminate (void)
 {
 }
-
-
-
 
 void QueueProcessor::SetPreviewSize (
     const Size& rPreviewSize,
@@ -134,17 +110,11 @@ void QueueProcessor::SetPreviewSize (
     mbDoSuperSampling = bDoSuperSampling;
 }
 
-
-
-
 IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl)
 {
     ProcessRequests();
     return 1;
 }
-
-
-
 
 void QueueProcessor::ProcessRequests (void)
 {
@@ -181,9 +151,6 @@ void QueueProcessor::ProcessRequests (void)
             Start(mrQueue.GetFrontPriorityClass());
     }
 }
-
-
-
 
 void QueueProcessor::ProcessOneRequest (
     CacheKey aKey,
@@ -224,7 +191,6 @@ void QueueProcessor::SetBitmapCache (
 {
     mpCache = rpCache;
 }
-
 
 } } } // end of namespace ::sd::slidesorter::cache
 

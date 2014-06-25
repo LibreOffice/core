@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BasicToolBarFactory.hxx"
 
 #include "ViewTabBar.hxx"
@@ -35,23 +34,16 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
-
 Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
     const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return static_cast<XWeak*>(new BasicToolBarFactory(rxContext));
 }
 
-
-
-
 OUString BasicToolBarFactory_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.framework.BasicToolBarFactory");
 }
-
-
-
 
 Sequence<OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
@@ -59,10 +51,6 @@ Sequence<OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
     const OUString sServiceName("com.sun.star.drawing.framework.BasicToolBarFactory");
     return Sequence<OUString>(&sServiceName, 1);
 }
-
-
-
-
 
 //===== BasicToolBarFactory ===================================================
 
@@ -76,23 +64,14 @@ BasicToolBarFactory::BasicToolBarFactory (
     (void)rxContext;
 }
 
-
-
-
 BasicToolBarFactory::~BasicToolBarFactory (void)
 {
 }
-
-
-
 
 void SAL_CALL BasicToolBarFactory::disposing (void)
 {
     Shutdown();
 }
-
-
-
 
 void BasicToolBarFactory::Shutdown (void)
 {
@@ -106,9 +85,6 @@ void BasicToolBarFactory::Shutdown (void)
         mxConfigurationController = NULL;
     }
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -162,9 +138,6 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
     }
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL BasicToolBarFactory::disposing (
@@ -174,9 +147,6 @@ void SAL_CALL BasicToolBarFactory::disposing (
     if (rEventObject.Source == mxConfigurationController)
         mxConfigurationController = NULL;
 }
-
-
-
 
 //===== XPaneFactory ==========================================================
 
@@ -195,13 +165,8 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     else
         throw lang::IllegalArgumentException();
 
-
     return xToolBar;
 }
-
-
-
-
 
 void SAL_CALL BasicToolBarFactory::releaseResource (
     const Reference<XResource>& rxToolBar)
@@ -214,9 +179,6 @@ void SAL_CALL BasicToolBarFactory::releaseResource (
         xComponent->dispose();
 }
 
-
-
-
 void BasicToolBarFactory::ThrowIfDisposed (void) const
     throw (lang::DisposedException)
 {
@@ -226,9 +188,6 @@ void BasicToolBarFactory::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
-
 
 } } // end of namespace sd::framework
 

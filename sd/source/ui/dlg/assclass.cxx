@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <vcl/ctrl.hxx>
 
@@ -65,7 +64,6 @@ bool Assistent::NextPage()
     return false;
 }
 
-
 bool Assistent::PreviousPage()
 {
     if(mnCurrentPage>1)
@@ -79,7 +77,6 @@ bool Assistent::PreviousPage()
     }
     return false;
 }
-
 
 bool Assistent::GotoPage(const int nPageToGo)
 {
@@ -116,7 +113,6 @@ bool Assistent::GotoPage(const int nPageToGo)
     return false;
 }
 
-
 bool Assistent::IsLastPage() const
 {
     if(mnCurrentPage == mnPages)
@@ -129,7 +125,6 @@ bool Assistent::IsLastPage() const
     return nPage > mnPages;
 }
 
-
 bool Assistent::IsFirstPage() const
 {
     if(mnCurrentPage == 1)
@@ -141,7 +136,6 @@ bool Assistent::IsFirstPage() const
 
     return nPage == 0;
 }
-
 
 bool Assistent::IsEnabled( int nPage ) const
 {

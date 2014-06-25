@@ -47,7 +47,6 @@ namespace sd {
 
 TYPEINIT1( FuExpandPage, FuPoor );
 
-
 FuExpandPage::FuExpandPage (
     ViewShell* pViewSh,
     ::sd::Window* pWin,

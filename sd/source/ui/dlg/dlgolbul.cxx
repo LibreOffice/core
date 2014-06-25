@@ -178,7 +178,6 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
 // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
-
     if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
     {
         SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
