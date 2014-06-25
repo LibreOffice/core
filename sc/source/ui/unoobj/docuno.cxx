@@ -241,10 +241,10 @@ ScPrintUIOptions::ScPrintUIOptions()
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("pages", OUString(aStrings.GetString(0)), OUString());
 
     // create a bool option for empty pages
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("includeemptypages", OUString( aStrings.GetString( 1 ) ),
-                                                  ".HelpID:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox",
-                                                  "IsIncludeEmptyPages",
-                                                  ! bSuppress);
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("suppressemptypages", OUString( aStrings.GetString( 1 ) ),
+                                                  ".HelpID:vcl:PrintDialog:IsSuppressEmptyPages:CheckBox",
+                                                  "IsSuppressEmptyPages",
+                                                  bSuppress);
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
@@ -325,9 +325,9 @@ void ScPrintUIOptions::SetDefaults()
                             aPropertyValue.Value <<= nContent;
                             aUIProp[nPropPos].Value <<= aPropertyValue;
                         }
-                        else if ( aPropertyValue.Name == "IsIncludeEmptyPages" )
+                        else if ( aPropertyValue.Name == "IsSuppressEmptyPages" )
                         {
-                            ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, ! bSuppress );
+                            ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, bSuppress );
                             aUIProp[nPropPos].Value <<= aPropertyValue;
                         }
                     }
@@ -766,7 +766,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     // defaults when no options are passed: all sheets, include empty pages
     bool bSelectedSheetsOnly = false;
-    bool bIncludeEmptyPages = true;
+    bool bSuppressEmptyPages = true;
 
     bool bHasPrintContent = false;
     sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
@@ -779,9 +779,9 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         {
             rOptions[i].Value >>= bSelectedSheetsOnly;
         }
-        else if ( rOptions[i].Name == "IsIncludeEmptyPages" )
+        else if ( rOptions[i].Name == "IsSuppressEmptyPages" )
         {
-            rOptions[i].Value >>= bIncludeEmptyPages;
+            rOptions[i].Value >>= bSuppressEmptyPages;
         }
         else if ( rOptions[i].Name == "PageRange" )
         {
@@ -910,7 +910,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     }
 
     ScPrintOptions aNewOptions;
-    aNewOptions.SetSkipEmpty( !bIncludeEmptyPages );
+    aNewOptions.SetSkipEmpty( bSuppressEmptyPages );
     aNewOptions.SetAllSheets( !bSelectedSheetsOnly );
     rStatus.SetOptions( aNewOptions );
 
