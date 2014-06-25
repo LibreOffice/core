@@ -44,7 +44,9 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 		msbuild.exe libgltf.vcxproj \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) \
-			/p:VisualStudioVersion=11.0) \
+				/p:VisualStudioVersion=11.0) \
+			$(if $(filter 100,$(VCVER)),/p:PlatformToolset=v100 \
+				/p:VisualStudioVersion=10.0) \
 			'/p:AdditionalIncludeDirectories=$(subst $(gb_SPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
 			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_GLEW),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,glew))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
