@@ -57,7 +57,6 @@ namespace oox { namespace ppt {
         }
     }
 
-
     ContextHandlerRef AnimVariantContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
         switch( aElementToken )
@@ -96,8 +95,6 @@ namespace oox { namespace ppt {
 
         return this;
     }
-
-
 
 } }
 

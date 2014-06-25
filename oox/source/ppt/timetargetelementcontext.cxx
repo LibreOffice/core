@@ -34,8 +34,6 @@ using namespace ::oox::core;
 
 namespace oox { namespace ppt {
 
-
-
     // CT_TLShapeTargetElement
     class ShapeTargetElementContext
         : public FragmentHandler2
@@ -94,15 +92,12 @@ namespace oox { namespace ppt {
         ShapeTargetElement & maShapeTarget;
     };
 
-
-
     TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2& rParent, const AnimTargetElementPtr & pValue )
         : FragmentHandler2( rParent ),
             mpTarget( pValue )
     {
         OSL_ENSURE( mpTarget, "no valid target passed" );
     }
-
 
     TimeTargetElementContext::~TimeTargetElementContext( ) throw( )
     {
@@ -149,7 +144,6 @@ namespace oox { namespace ppt {
 
         return this;
     }
-
 
 } }
 

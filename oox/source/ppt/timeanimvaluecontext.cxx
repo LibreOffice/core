@@ -36,11 +36,9 @@ namespace oox { namespace ppt {
     {
     }
 
-
     TimeAnimValueListContext::~TimeAnimValueListContext( )
     {
     }
-
 
     void TimeAnimValueListContext::onEndElement()
     {
@@ -49,7 +47,6 @@ namespace oox { namespace ppt {
             mbInValue = false;
         }
     }
-
 
     ::oox::core::ContextHandlerRef TimeAnimValueListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
@@ -78,7 +75,6 @@ namespace oox { namespace ppt {
 
         return this;
     }
-
 
 } }
 

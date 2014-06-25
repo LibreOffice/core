@@ -27,13 +27,9 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -61,8 +57,6 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUS
 }
 
 } // namespace
-
-
 
 StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     mxInStream( rxInStream ),
@@ -102,12 +96,10 @@ bool StorageBase::isRootStorage() const
     return implIsStorage() && maStorageName.isEmpty();
 }
 
-
 Reference< XStorage > StorageBase::getXStorage() const
 {
     return implGetXStorage();
 }
-
 
 OUString StorageBase::getPath() const
 {
@@ -257,8 +249,6 @@ StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreat
         rxSubStrg = implOpenSubStorage( rElementName, bCreateMissing );
     return rxSubStrg;
 }
-
-
 
 } // namespace oox
 

@@ -26,8 +26,6 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
@@ -36,8 +34,6 @@ namespace {
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
 
 } // namespace
-
-
 
 BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
     BinaryStreamBase( Reference< XSeekable >( rxOutStrm, UNO_QUERY ).is() ),
@@ -137,8 +133,6 @@ BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, bool b
         writeUnicodeArray( rString, bAllowNulChars );
 }
 
-
-
 SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
     SequenceSeekableStream( rData )
@@ -161,8 +155,6 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size
         mnPos += nBytes;
     }
 }
-
-
 
 } // namespace oox
 

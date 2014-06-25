@@ -30,7 +30,6 @@
 
 namespace oox { namespace ppt {
 
-
     /** CT_TLTimeCondition */
     class CondContext
         : public TimeNodeContext
@@ -46,8 +45,6 @@ namespace oox { namespace ppt {
         ::com::sun::star::animations::Event  maEvent;
         AnimationCondition &                 maCond;
     };
-
-
 
     /** CT_TLTimeConditionList */
     class CondListContext
@@ -65,7 +62,6 @@ namespace oox { namespace ppt {
     private:
         AnimationConditionList     & maConditions;
     };
-
 
 } }
 

@@ -24,7 +24,6 @@
 
 namespace oox { namespace ppt {
 
-
     /** CT_BuildList */
     class BuildListContext
         : public ::oox::core::FragmentHandler2
@@ -41,9 +40,6 @@ namespace oox { namespace ppt {
         bool              mbInBldGraphic;
         bool              mbBuildAsOne;
     };
-
-
-
 
 } }
 

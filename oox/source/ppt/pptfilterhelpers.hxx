@@ -24,7 +24,6 @@
 
 namespace oox { namespace ppt {
 
-
 //BEGIN CUT&PASTE from sd pptanimations.hxx
     // conversion of MS to OOo attributes.
     enum MS_AttributeNames
@@ -69,7 +68,6 @@ namespace oox { namespace ppt {
     };
     //END CUT&PASTE
 
-
     // BEGIN CUT&PASTE from sd pptanimations.hxx
     struct transition
     {
@@ -83,11 +81,9 @@ namespace oox { namespace ppt {
     };
     // END CUT&PASTE
 
-
     // BEGIN CUT&PASTE from sd pptinanimation.cxx
     bool convertMeasure( OUString& rString );
     // END CUT&PASTE from sd pptinanimation.cxx
-
 
 } }
 

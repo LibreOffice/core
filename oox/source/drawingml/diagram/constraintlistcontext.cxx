@@ -36,7 +36,6 @@ ConstraintListContext::ConstraintListContext( ContextHandler2Helper& rParent,
     OSL_ENSURE( pNode, "Node must NOT be NULL" );
 }
 
-
 ConstraintListContext::~ConstraintListContext()
 {
 }
@@ -71,7 +70,6 @@ ConstraintListContext::onCreateContext( ::sal_Int32 aElement,
 
     return this;
 }
-
 
 } }
 

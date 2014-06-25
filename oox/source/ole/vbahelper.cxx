@@ -24,11 +24,7 @@
 namespace oox {
 namespace ole {
 
-
-
 using namespace ::com::sun::star::uno;
-
-
 
 bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData, BinaryInputStream& rInStrm )
 {
@@ -56,8 +52,6 @@ bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, const OUStrin
     }
     return false;
 }
-
-
 
 } // namespace ole
 } // namespace oox

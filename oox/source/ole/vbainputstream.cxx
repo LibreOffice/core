@@ -23,8 +23,6 @@
 namespace oox {
 namespace ole {
 
-
-
 namespace {
 
 const sal_uInt8 VBASTREAM_SIGNATURE         = 1;
@@ -35,8 +33,6 @@ const sal_uInt16 VBACHUNK_COMPRESSED        = 0x8000;
 const sal_uInt16 VBACHUNK_LENMASK           = 0x0FFF;
 
 } // namespace
-
-
 
 VbaInputStream::VbaInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -207,8 +203,6 @@ bool VbaInputStream::updateChunk()
     mnChunkPos = 0;
     return !mbEof;
 }
-
-
 
 } // namespace ole
 } // namespace oox

@@ -82,7 +82,6 @@ namespace oox { namespace ppt {
         return this;
     }
 
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

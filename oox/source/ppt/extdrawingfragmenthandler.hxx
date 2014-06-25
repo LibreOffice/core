@@ -18,7 +18,6 @@
 
 namespace oox { namespace ppt {
 
-
 class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:

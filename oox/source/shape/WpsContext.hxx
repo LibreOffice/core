@@ -37,7 +37,6 @@ protected:
     css::uno::Reference<css::drawing::XShape> mxShape;
 };
 
-
 }
 }
 

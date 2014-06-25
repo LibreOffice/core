@@ -58,7 +58,6 @@ ShapeContext::~ShapeContext()
         mpMasterShapePtr->addChild( mpShapePtr );
 }
 
-
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( getBaseToken( aElementToken ) )
@@ -127,7 +126,6 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
 
     return this;
 }
-
 
 } }
 

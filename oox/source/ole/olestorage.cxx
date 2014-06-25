@@ -38,16 +38,12 @@
 namespace oox {
 namespace ole {
 
-
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -84,8 +80,6 @@ private:
     Reference< XSeekable > mxSeekable;
     OUString            maElementName;
 };
-
-
 
 OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,
         const Reference< XNameContainer >& rxStorage, const OUString& rElementName ) :
@@ -169,8 +163,6 @@ void OleOutputStream::ensureConnected() const throw( NotConnectedException )
 
 } // namespace
 
-
-
 OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     StorageBase( rxInStream, bBaseStreamAccess ),
@@ -213,8 +205,6 @@ OleStorage::OleStorage( const OleStorage& rParentStorage,
 OleStorage::~OleStorage()
 {
 }
-
-
 
 void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
 {
@@ -389,8 +379,6 @@ void OleStorage::implCommit() const
     {
     }
 }
-
-
 
 } // namespace ole
 } // namespace oox

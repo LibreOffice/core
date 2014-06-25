@@ -24,8 +24,6 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 
@@ -35,20 +33,13 @@ const sal_Int32 PROGRESS_RANGE      = 1000000;
 
 } // namespace
 
-
-
 IProgressBar::~IProgressBar()
 {
 }
 
-
-
 ISegmentProgressBar::~ISegmentProgressBar()
 {
 }
-
-
-
 
 ProgressBar::ProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     mxIndicator( rxIndicator ),
@@ -77,8 +68,6 @@ void ProgressBar::setPosition( double fPosition )
         mxIndicator->setValue( static_cast< sal_Int32 >( mfPosition * PROGRESS_RANGE ) );
 }
 
-
-
 namespace prv {
 
 class SubSegment : public ISegmentProgressBar
@@ -99,8 +88,6 @@ private:
     double              mfPosition;
     double              mfFreeStart;
 };
-
-
 
 SubSegment::SubSegment( IProgressBar& rParentProgress, double fStartPos, double fLength ) :
     mrParentProgress( rParentProgress ),
@@ -139,8 +126,6 @@ ISegmentProgressBarRef SubSegment::createSegment( double fLength )
 
 } // namespace prv
 
-
-
 SegmentProgressBar::SegmentProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     maProgress( rxIndicator, rText ),
     mfFreeStart( 0.0 )
@@ -170,8 +155,6 @@ ISegmentProgressBarRef SegmentProgressBar::createSegment( double fLength )
     mfFreeStart += fLength;
     return xSegment;
 }
-
-
 
 } // namespace oox
 

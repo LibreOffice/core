@@ -274,7 +274,6 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     mEngine.reset(engine);
     StandardEncryptionInfo& info = engine->getInfo();
 
-
     rStream >> info.header.flags;
     if( getFlag( info.header.flags, ENCRYPTINFO_EXTERNAL ) )
         return false;

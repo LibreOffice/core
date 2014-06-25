@@ -33,8 +33,6 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-
-
 // CT_TextParagraph
 class TextParagraphContext : public ContextHandler2
 {
@@ -47,15 +45,12 @@ protected:
     TextParagraph& mrParagraph;
 };
 
-
 TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara )
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
 {
     mbEnableTrimSpace = false;
 }
-
-
 
 ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
@@ -102,15 +97,12 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     return 0;
 }
 
-
 RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr pRunPtr )
 : ContextHandler2( rParent )
 , mpRunPtr( pRunPtr )
 , mbIsInText( false )
 {
 }
-
-
 
 void RegularTextRunContext::onEndElement( )
 {
@@ -130,8 +122,6 @@ void RegularTextRunContext::onEndElement( )
     }
 }
 
-
-
 void RegularTextRunContext::onCharacters( const OUString& aChars )
 {
     if( mbIsInText )
@@ -139,8 +129,6 @@ void RegularTextRunContext::onCharacters( const OUString& aChars )
         mpRunPtr->getText() += aChars;
     }
 }
-
-
 
 ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs)
 {
@@ -163,15 +151,11 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     return this;
 }
 
-
-
 TextBodyContext::TextBodyContext( ContextHandler2Helper& rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
 , mrTextBody( rTextBody )
 {
 }
-
-
 
 ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
@@ -198,8 +182,6 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
 
     return 0;
 }
-
-
 
 } }
 

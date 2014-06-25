@@ -40,8 +40,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 namespace cssc = ::com::sun::star::chart;
 
 using namespace ::com::sun::star;
@@ -53,8 +51,6 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-
-
 namespace {
 
 struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_Int32 > >
@@ -62,8 +58,6 @@ struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_In
     inline explicit     TitleKey( ObjectType eObjType, sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 )
                             { first = eObjType; second.first = nMainIdx; second.second = nSubIdx; }
 };
-
-
 
 /** A helper structure to store all data related to title objects. Needed for
     the conversion of manual title positions that needs the old Chart1 API.
@@ -103,8 +97,6 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
     }
 }
 
-
-
 /*  The following local functions implement getting the XShape interface of all
     supported title objects (chart and axes). This needs some effort due to the
     design of the old Chart1 API used to access these objects. */
@@ -143,8 +135,6 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 } // namespace
 
-
-
 struct ConverterData
 {
     typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
@@ -164,8 +154,6 @@ struct ConverterData
                             const awt::Size& rChartSize );
                         ~ConverterData();
 };
-
-
 
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
@@ -209,8 +197,6 @@ ConverterData::~ConverterData()
     {
     }
 }
-
-
 
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
@@ -295,8 +281,6 @@ void ConverterRoot::convertTitlePositions()
     }
 }
 
-
-
 namespace {
 
 /** Returns a position value in the chart area in 1/100 mm. */
@@ -349,8 +333,6 @@ double lclCalcRelSize( double fPos, double fSize, sal_Int32 nSizeMode )
 }
 
 } // namespace
-
-
 
 LayoutConverter::LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel ) :
     ConverterBase< LayoutModel >( rParent, rModel )
@@ -429,8 +411,6 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
     }
     return false;
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

@@ -35,13 +35,9 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -58,8 +54,6 @@ struct AxesSetModel
     inline explicit     AxesSetModel() {}
     inline              ~AxesSetModel() {}
 };
-
-
 
 /** Axes set converter. This is a helper class for the plot area converter. */
 class AxesSetConverter : public ConverterBase< AxesSetModel >
@@ -91,8 +85,6 @@ private:
     bool                mbWall3dChart;
     bool                mbPieChart;
 };
-
-
 
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),
@@ -194,8 +186,6 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
 
 } // namespace
 
-
-
 View3DConverter::View3DConverter( const ConverterRoot& rParent, View3DModel& rModel ) :
     ConverterBase< View3DModel >( rParent, rModel )
 {
@@ -270,8 +260,6 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     aPropSet.setProperty( PROP_D3DSceneLightDirection2, cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
 
-
-
 WallFloorConverter::WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel ) :
     ConverterBase< WallFloorModel >( rParent, rModel )
 {
@@ -297,8 +285,6 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     }
 }
 
-
-
 DataTableConverter::DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel ) :
         ConverterBase< DataTableModel >( rParent, rModel )
 {
@@ -318,8 +304,6 @@ void DataTableConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     if (mrModel.mbShowOutline)
         aPropSet.setProperty( PROP_DataTableOutline, mrModel.mbShowOutline );
 }
-
-
 
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
     ConverterBase< PlotAreaModel >( rParent, rModel ),
@@ -458,8 +442,6 @@ void PlotAreaConverter::convertPositionFromModel()
     {
     }
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

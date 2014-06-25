@@ -27,7 +27,6 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-
 // CT_DiagramDefinition
 DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rParent,
                                                     const AttributeList& rAttributes,
@@ -45,7 +44,6 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rPare
     mpLayout->setMinVer( sValue );
     mpLayout->setUniqueId( rAttributes.getString( XML_uniqueId ).get() );
 }
-
 
 DiagramDefinitionContext::~DiagramDefinitionContext()
 {
@@ -91,7 +89,6 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
 
     return this;
 }
-
 
 } }
 

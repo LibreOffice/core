@@ -68,8 +68,6 @@ using namespace ::com::sun::star::text;
 namespace oox {
 namespace vml {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
@@ -78,14 +76,10 @@ using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
 
-
-
 namespace {
 
 const sal_Int32 VML_SHAPETYPE_PICTUREFRAME  = 75;
 const sal_Int32 VML_SHAPETYPE_HOSTCONTROL   = 201;
-
-
 
 awt::Point lclGetAbsPoint( const awt::Point& rRelPoint, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
@@ -111,8 +105,6 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
 
 } // namespace
 
-
-
 ShapeTypeModel::ShapeTypeModel():
     mbAutoHeight( false ),
     mbVisible( true )
@@ -131,8 +123,6 @@ void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
     moGraphicPath.assignIfUsed( rSource.moGraphicPath );
     moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
 }
-
-
 
 ShapeType::ShapeType( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -210,8 +200,6 @@ awt::Rectangle ShapeType::getRelRectangle() const
         nWidth, nHeight );
 }
 
-
-
 ClientData::ClientData() :
     mnObjType( XML_TOKEN_INVALID ),
     mnTextHAlign( XML_Left ),
@@ -239,8 +227,6 @@ ClientData::ClientData() :
 {
 }
 
-
-
 ShapeModel::ShapeModel()
 {
 }
@@ -260,8 +246,6 @@ ClientData& ShapeModel::createClientData()
     mxClientData.reset( new ClientData );
     return *mxClientData;
 }
-
-
 
 ShapeBase::ShapeBase( Drawing& rDrawing ) :
     ShapeType( rDrawing )
@@ -451,8 +435,6 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }
-
-
 
 SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
     ShapeBase( rDrawing ),
@@ -739,8 +721,6 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
     return xShape;
 }
 
-
-
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.RectangleShape" )
 {
@@ -773,14 +753,10 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
     return xShape;
 }
 
-
-
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.EllipseShape" )
 {
 }
-
-
 
 PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.PolyLineShape" )
@@ -836,8 +812,6 @@ awt::Rectangle LineShape::getRelRectangle() const
     aShapeRect.Height = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.Y;
     return aShapeRect;
 }
-
-
 
 BezierShape::BezierShape(Drawing& rDrawing)
     : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
@@ -939,8 +913,6 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-
-
 CustomShape::CustomShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.CustomShape" )
 {
@@ -963,8 +935,6 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
     }
     return xShape;
 }
-
-
 
 ComplexShape::ComplexShape( Drawing& rDrawing ) :
     CustomShape( rDrawing )
@@ -1056,8 +1026,6 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
 
-
-
 GroupShape::GroupShape( Drawing& rDrawing ) :
     ShapeBase( rDrawing ),
     mxChildren( new ShapeContainer( rDrawing ) )
@@ -1137,8 +1105,6 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         lcl_SetRotation(aPropertySet, maTypeModel.maRotation.toInt32());
     return xGroupShape;
 }
-
-
 
 } // namespace vml
 } // namespace oox

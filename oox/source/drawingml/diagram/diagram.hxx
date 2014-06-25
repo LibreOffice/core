@@ -65,7 +65,6 @@ struct Connection
 
 typedef std::vector< Connection > Connections;
 
-
 /** A point
  */
 struct Point
@@ -152,12 +151,8 @@ typedef std::vector< Point >        Points;
 class LayoutNode;
 typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 
-
-
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
 typedef css::uno::Sequence< css::uno::Sequence< css::uno::Any > > DiagramRelsMap;
-
-
 
 class DiagramData
 {
@@ -199,10 +194,6 @@ private:
 };
 
 typedef boost::shared_ptr< DiagramData > DiagramDataPtr;
-
-
-
-
 
 class DiagramLayout
 {
@@ -250,8 +241,6 @@ private:
 
 typedef boost::shared_ptr< DiagramLayout > DiagramLayoutPtr;
 
-
-
 struct DiagramStyle
 {
     ShapeStyleRef maFillStyle;
@@ -273,8 +262,6 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
-
-
 
 class Diagram
 {
@@ -309,7 +296,6 @@ private:
     DiagramDomMap                  maMainDomMap;
     DiagramRelsMap                 maDataRelsMap;
 };
-
 
 typedef boost::shared_ptr< Diagram > DiagramPtr;
 

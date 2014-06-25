@@ -24,9 +24,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-
 namespace oox { namespace drawingml {
-
 
     // CT_EmbeddedWAVAudioFile
     void getEmbeddedWAVAudioFile( const Relations& rRelations,
@@ -39,7 +37,6 @@ namespace oox { namespace drawingml {
         aAudio.mbBuiltIn = attribs.getBool( XML_builtIn, false );
         aAudio.msName = xAttribs->getOptionalValue( XML_name );
     }
-
 
 } }
 

@@ -27,8 +27,6 @@ using namespace ::oox::core;
 namespace oox {
 namespace drawingml {
 
-
-
 ThemeFragmentHandler::ThemeFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rTheme ) :
     FragmentHandler2( rFilter, rFragmentPath ),
     mrTheme( rTheme )
@@ -70,8 +68,6 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
     }
     return 0;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

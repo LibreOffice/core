@@ -126,7 +126,6 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     }
 }
 
-
 TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 {
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
@@ -134,7 +133,6 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap.setProperty( PROP_ParaLineSpacing, maLineSpacing.toLineSpacing());
     else
         rPropertyMap.setProperty( PROP_ParaLineSpacing, ::com::sun::star::style::LineSpacing( ::com::sun::star::style::LineSpacingMode::PROP, 100 ));
-
 
     ::std::list< TabStop >::size_type nTabCount = maTabList.size();
     if( nTabCount != 0 )
@@ -158,8 +156,6 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     if( mrTextParagraphProperties.getParaAdjust() )
         rPropertyMap.setProperty( PROP_ParaAdjust, mrTextParagraphProperties.getParaAdjust().get());
 }
-
-
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

@@ -38,7 +38,6 @@
 #include "oox/drawingml/clrschemecontext.hxx"
 #include "oox/ppt/pptimport.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

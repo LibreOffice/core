@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <functional>
 #include <boost/bind.hpp>
 
@@ -86,12 +85,10 @@ void DiagramData::dump()
                   boost::bind( &dgm::Point::dump, _1 ) );
 }
 
-
 void Diagram::setData( const DiagramDataPtr & pData)
 {
     mpData = pData;
 }
-
 
 void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
 {
@@ -143,11 +140,9 @@ static sal_Int32 calcDepth( const OUString& rNodeName,
     return 0;
 }
 
-
 void Diagram::build(  )
 {
     // build name-object maps
-
 
 #if OSL_DEBUG_LEVEL > 1
     std::ofstream output("/tmp/tree.dot");
@@ -422,7 +417,6 @@ void loadDiagram( ShapePtr& pShape,
 
         pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
                 xRefDataModel->getFragmentPath(), "image" );
-
 
         // Pass the info to pShape
         for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();

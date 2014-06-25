@@ -227,7 +227,6 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
     return this;
 }
 
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

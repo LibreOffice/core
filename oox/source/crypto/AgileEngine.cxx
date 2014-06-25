@@ -41,7 +41,6 @@ AgileEngine::AgileEngine() :
 AgileEngine::~AgileEngine()
 {}
 
-
 Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
 {
     if (rInfo.keyBits == 128 && rInfo.cipherAlgorithm == "AES" && rInfo.cipherChaining == "ChainingModeCBC")
@@ -207,7 +206,6 @@ bool AgileEngine::encrypt(
 {
     return false; // Agile encrypting is not supported for now
 }
-
 
 } // namespace core
 } // namespace oox

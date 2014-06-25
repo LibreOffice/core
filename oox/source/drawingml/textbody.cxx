@@ -29,7 +29,6 @@ using namespace ::com::sun::star::frame;
 
 namespace oox { namespace drawingml {
 
-
 TextBody::TextBody()
 {
 }

@@ -26,7 +26,6 @@ namespace oox { namespace ppt {
 
     // BEGIN CUT&PASTE from sd pptanimations.hxx
 
-
     static const transition gTransitions[] =
     {
         { "wipe(up)", ::com::sun::star::animations::TransitionType::BARWIPE, ::com::sun::star::animations::TransitionSubType::TOPTOBOTTOM, true },
@@ -85,7 +84,6 @@ namespace oox { namespace ppt {
 
         return NULL;
     }
-
 
     bool convertMeasure( OUString& rString )
     {
@@ -187,7 +185,6 @@ namespace oox { namespace ppt {
         }
         return bRet;
     }
-
 
 } }
 

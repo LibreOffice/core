@@ -27,13 +27,9 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -63,8 +59,6 @@ private:
 private:
     BinaryInputStream*  mpInStrm;
 };
-
-
 
 UnoBinaryInputStream::UnoBinaryInputStream( BinaryInputStream& rInStrm ) :
     mpInStrm( &rInStrm )
@@ -112,8 +106,6 @@ void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)
 }
 
 } // namespace
-
-
 
 TextInputStream::TextInputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
 {
@@ -219,8 +211,6 @@ void TextInputStream::init( const Reference< XComponentContext >& rxContext, con
     mcPendingChar = 0;
     mxTextStrm = createXTextInputStream( rxContext, rxInStrm, eTextEnc );
 }
-
-
 
 } // namespace oox
 

@@ -87,7 +87,6 @@ bool PowerPointImport::importDocument() throw()
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
     return importFragment( xPresentationFragmentHandler );
 
-
 }
 
 bool PowerPointImport::exportDocument() throw()

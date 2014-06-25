@@ -37,8 +37,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
@@ -47,8 +45,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 using ::oox::core::XmlFilterBase;
-
-
 
 namespace {
 
@@ -115,8 +111,6 @@ static const AutoFormatPatternEntry spAutoFormatPattern4[] =
 #undef AUTOFORMAT_PATTERN_COLOR
 #undef AUTOFORMAT_PATTERN_COLORMOD
 #undef AUTOFORMAT_PATTERN_END
-
-
 
 struct AutoFormatEntry
 {
@@ -409,8 +403,6 @@ const AutoFormatEntry* lclGetAutoFormatEntry( const AutoFormatEntry* pEntries, s
     return 0;
 }
 
-
-
 struct AutoTextEntry
 {
     sal_Int32           mnFirstStyleIdx;    /// First chart style index.
@@ -459,8 +451,6 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
             return pEntries;
     return 0;
 }
-
-
 
 /** Property identifiers for common chart objects, to be used in ShapePropertyInfo. */
 static const sal_Int32 spnCommonPropIds[] =
@@ -520,8 +510,6 @@ static const ShapePropertyInfo saLinearPropInfo( spnLinearPropIds, false, true, 
 /** Property info for filled data series, to be used in ShapePropertyMap. */
 static const ShapePropertyInfo saFilledPropInfo( spnFilledPropIds, false, true, true, true );
 
-
-
 /** Contains information about formatting of a specific chart object type. */
 struct ObjectTypeFormatEntry
 {
@@ -574,8 +562,6 @@ static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 #undef TYPEFORMAT_FRAME
 #undef TYPEFORMAT_LINE
 
-
-
 void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptionsModel& rPicOptions )
 {
     bool bStacked = (rPicOptions.mnPictureFormat == XML_stack) || (rPicOptions.mnPictureFormat == XML_stackScale);
@@ -584,11 +570,7 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
 
 } // namespace
 
-
-
 struct ObjectFormatterData;
-
-
 
 class DetailFormatterBase
 {
@@ -616,8 +598,6 @@ protected:
     ColorPatternVec     maColorPattern;     /// Different cycling colors for data series.
 };
 
-
-
 class LineFormatter : public DetailFormatterBase
 {
 public:
@@ -634,8 +614,6 @@ public:
 private:
     LinePropertiesPtr   mxAutoLine;         /// Automatic line properties.
 };
-
-
 
 class FillFormatter : public DetailFormatterBase
 {
@@ -655,8 +633,6 @@ private:
     FillPropertiesPtr   mxAutoFill;         /// Automatic fill properties.
 };
 
-
-
 class EffectFormatter : public DetailFormatterBase
 {
 public:
@@ -670,8 +646,6 @@ public:
                             const ModelRef< Shape >& rxShapeProp,
                             sal_Int32 nSeriesIdx ) const;
 };
-
-
 
 class TextFormatter : public DetailFormatterBase
 {
@@ -693,8 +667,6 @@ public:
 private:
     TextCharacterPropertiesPtr mxAutoText;  /// Automatic text properties.
 };
-
-
 
 /** Formatter for a specific object type. */
 class ObjectTypeFormatter
@@ -742,8 +714,6 @@ private:
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
 };
 
-
-
 struct ObjectFormatterData
 {
     typedef RefMap< ObjectType, ObjectTypeFormatter > ObjectTypeFormatterMap;
@@ -764,8 +734,6 @@ struct ObjectFormatterData
 
     ObjectTypeFormatter* getTypeFormatter( ObjectType eObjType );
 };
-
-
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     mrData( rData ),
@@ -857,8 +825,6 @@ sal_Int32 DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 
     return aColor.getColor( mrData.mrFilter.getGraphicHelper() );
 }
 
-
-
 LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
@@ -885,8 +851,6 @@ void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aLineProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), getPhColor( nSeriesIdx ) );
 }
 
-
-
 FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
@@ -911,8 +875,6 @@ void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aFillProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), 0, getPhColor( nSeriesIdx ) );
 }
 
-
-
 EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
@@ -921,8 +883,6 @@ EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEn
 void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ ) const
 {
 }
-
-
 
 namespace {
 
@@ -973,8 +933,6 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
     convertFormatting( rPropSet, lclGetTextProperties( rxTextProp ) );
 }
 
-
-
 ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace ) :
     maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
     maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ) ),
@@ -1020,8 +978,6 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
     rPropSet.setProperties( aPropMap );
 }
 
-
-
 ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mrFilter( rFilter ),
     maModelObjHelper( Reference< XMultiServiceFactory >( rxChartDoc, UNO_QUERY ) ),
@@ -1049,8 +1005,6 @@ ObjectTypeFormatter* ObjectFormatterData::getTypeFormatter( ObjectType eObjType 
     OSL_ENSURE( maTypeFormatters.has( eObjType ), "ObjectFormatterData::getTypeFormatter - unknown object type" );
     return maTypeFormatters.get( eObjType ).get();
 }
-
-
 
 ObjectFormatter::ObjectFormatter( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mxData( new ObjectFormatterData( rFilter, rxChartDoc, rChartSpace ) )
@@ -1161,8 +1115,6 @@ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

@@ -31,8 +31,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 
-
-
 namespace
 {
 class lcl_ColorPropertySetInfo : public ::cppu::WeakImplHelper1<
@@ -81,8 +79,6 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
 }
 
 } // anonymous namespace
-
-
 
 namespace oox
 {

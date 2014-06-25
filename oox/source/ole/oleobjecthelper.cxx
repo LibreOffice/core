@@ -32,8 +32,6 @@
 namespace oox {
 namespace ole {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::embed;
@@ -41,16 +39,12 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-
-
 OleObjectInfo::OleObjectInfo() :
     mbLinked( false ),
     mbShowAsIcon( false ),
     mbAutoUpdate( false )
 {
 }
-
-
 
 OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maEmbeddedObjScheme( "vnd.sun.star.EmbeddedObject:" ),
@@ -123,8 +117,6 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     }
     return bRet;
 }
-
-
 
 } // namespace ole
 } // namespace oox

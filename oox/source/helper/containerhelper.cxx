@@ -28,13 +28,9 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -47,8 +43,6 @@ struct ValueRangeComp
 };
 
 } // namespace
-
-
 
 void ValueRangeSet::insert( const ValueRange& rRange )
 {
@@ -79,8 +73,6 @@ void ValueRangeSet::insert( const ValueRange& rRange )
         maRanges.insert( aIt, rRange );
     }
 }
-
-
 
 OUString ContainerHelper::getUnusedName(
         const Reference< XNameAccess >& rxNameAccess, const OUString& rSuggestedName,
@@ -146,8 +138,6 @@ OUString ContainerHelper::insertByUnusedName(
     insertByName( rxNameContainer, aNewName, rObject );
     return aNewName;
 }
-
-
 
 } // namespace oox
 

@@ -30,12 +30,8 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-
-
 
 TextContext::TextContext( ContextHandler2Helper& rParent, TextModel& rModel ) :
     ContextBase< TextModel >( rParent, rModel )
@@ -79,8 +75,6 @@ void TextContext::onCharacters( const OUString& rChars )
     }
 }
 
-
-
 TitleContext::TitleContext( ContextHandler2Helper& rParent, TitleModel& rModel ) :
     ContextBase< TitleModel >( rParent, rModel )
 {
@@ -114,8 +108,6 @@ ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const Attri
     }
     return 0;
 }
-
-
 
 LegendContext::LegendContext( ContextHandler2Helper& rParent, LegendModel& rModel ) :
     ContextBase< LegendModel >( rParent, rModel )
@@ -151,8 +143,6 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
     }
     return 0;
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

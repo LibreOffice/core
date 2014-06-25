@@ -29,8 +29,6 @@
 namespace oox {
 namespace drawingml {
 
-
-
 namespace {
 
 /** Global storage for predefined color values used in OOXML file formats. */
@@ -43,8 +41,6 @@ struct PresetColorsPool
 
     explicit            PresetColorsPool();
 };
-
-
 
 PresetColorsPool::PresetColorsPool() :
     maDmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
@@ -143,16 +139,10 @@ PresetColorsPool::PresetColorsPool() :
         maVmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
 }
 
-
-
 struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
-
-
 
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
-
-
 
 inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRgb )
 {
@@ -201,8 +191,6 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
 }
 
 } // namespace
-
-
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -339,7 +327,6 @@ void Color::clearTransformations()
     maInteropTransformations.realloc(0);
     clearTransparence();
 }
-
 
 OUString Color::getColorTransformationName( sal_Int32 nElement )
 {
@@ -761,8 +748,6 @@ void Color::toHsl() const
             OSL_FAIL( "Color::toHsl - unexpected color mode" );
     }
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

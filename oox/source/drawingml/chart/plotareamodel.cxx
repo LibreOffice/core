@@ -23,8 +23,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 View3DModel::View3DModel() :
     mnDepthPercent( 100 ),
     mnPerspective( 30 ),
@@ -36,8 +34,6 @@ View3DModel::~View3DModel()
 {
 }
 
-
-
 WallFloorModel::WallFloorModel()
 {
 }
@@ -45,8 +41,6 @@ WallFloorModel::WallFloorModel()
 WallFloorModel::~WallFloorModel()
 {
 }
-
-
 
 DataTableModel::DataTableModel() :
         mbShowHBorder(false),
@@ -59,8 +53,6 @@ DataTableModel::~DataTableModel()
 {
 }
 
-
-
 PlotAreaModel::PlotAreaModel()
 {
 }
@@ -68,8 +60,6 @@ PlotAreaModel::PlotAreaModel()
 PlotAreaModel::~PlotAreaModel()
 {
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

@@ -40,7 +40,6 @@
 
 #include <cstdio>
 
-
 using namespace sax_fastparser;
 using namespace oox::vml;
 using namespace com::sun::star;

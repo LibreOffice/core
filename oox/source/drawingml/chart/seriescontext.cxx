@@ -29,13 +29,9 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-
-
 
 namespace {
 
@@ -91,8 +87,6 @@ void lclDataLabelSharedCharacters( ContextHandler2& rContext, const OUString& rC
 
 } // namespace
 
-
-
 DataLabelContext::DataLabelContext( ContextHandler2Helper& rParent, DataLabelModel& rModel ) :
     ContextBase< DataLabelModel >( rParent, rModel )
 {
@@ -121,8 +115,6 @@ void DataLabelContext::onCharacters( const OUString& rChars )
 {
     lclDataLabelSharedCharacters( *this, rChars, mrModel );
 }
-
-
 
 DataLabelsContext::DataLabelsContext( ContextHandler2Helper& rParent, DataLabelsModel& rModel ) :
     ContextBase< DataLabelsModel >( rParent, rModel )
@@ -153,8 +145,6 @@ void DataLabelsContext::onCharacters( const OUString& rChars )
 {
     lclDataLabelSharedCharacters( *this, rChars, mrModel );
 }
-
-
 
 PictureOptionsContext::PictureOptionsContext( ContextHandler2Helper& rParent, PictureOptionsModel& rModel ) :
     ContextBase< PictureOptionsModel >( rParent, rModel )
@@ -190,8 +180,6 @@ ContextHandlerRef PictureOptionsContext::onCreateContext( sal_Int32 nElement, co
     }
     return 0;
 }
-
-
 
 ErrorBarContext::ErrorBarContext( ContextHandler2Helper& rParent, ErrorBarModel& rModel ) :
     ContextBase< ErrorBarModel >( rParent, rModel )
@@ -232,8 +220,6 @@ ContextHandlerRef ErrorBarContext::onCreateContext( sal_Int32 nElement, const At
     return 0;
 }
 
-
-
 TrendlineLabelContext::TrendlineLabelContext( ContextHandler2Helper& rParent, TrendlineLabelModel& rModel ) :
     ContextBase< TrendlineLabelModel >( rParent, rModel )
 {
@@ -261,8 +247,6 @@ ContextHandlerRef TrendlineLabelContext::onCreateContext( sal_Int32 nElement, co
     }
     return 0;
 }
-
-
 
 TrendlineContext::TrendlineContext( ContextHandler2Helper& rParent, TrendlineModel& rModel ) :
     ContextBase< TrendlineModel >( rParent, rModel )
@@ -318,8 +302,6 @@ void TrendlineContext::onCharacters( const OUString& rChars )
     if( isCurrentElement( C_TOKEN( name ) ) )
         mrModel.maName = rChars;
 }
-
-
 
 DataPointContext::DataPointContext( ContextHandler2Helper& rParent, DataPointModel& rModel ) :
     ContextBase< DataPointModel >( rParent, rModel )
@@ -377,8 +359,6 @@ ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
-
-
 SeriesContextBase::SeriesContextBase( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     ContextBase< SeriesModel >( rParent, rModel )
 {
@@ -425,8 +405,6 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-
-
 AreaSeriesContext::AreaSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -460,8 +438,6 @@ ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const 
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 BarSeriesContext::BarSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
@@ -507,8 +483,6 @@ ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const A
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 BubbleSeriesContext::BubbleSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -553,8 +527,6 @@ ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, cons
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 LineSeriesContext::LineSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -596,8 +568,6 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 PieSeriesContext::PieSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -630,8 +600,6 @@ ContextHandlerRef PieSeriesContext::onCreateContext( sal_Int32 nElement, const A
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 RadarSeriesContext::RadarSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
@@ -669,8 +637,6 @@ ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 ScatterSeriesContext::ScatterSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
@@ -713,8 +679,6 @@ ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, con
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 SurfaceSeriesContext::SurfaceSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
     SeriesContextBase( rParent, rModel )
 {
@@ -740,8 +704,6 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

@@ -23,8 +23,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 TextModel::TextModel()
 {
 }
@@ -32,8 +30,6 @@ TextModel::TextModel()
 TextModel::~TextModel()
 {
 }
-
-
 
 TitleModel::TitleModel() :
     mbOverlay( false )
@@ -44,8 +40,6 @@ TitleModel::~TitleModel()
 {
 }
 
-
-
 LegendModel::LegendModel() :
     mnPosition( XML_r ),
     mbOverlay( false )
@@ -55,8 +49,6 @@ LegendModel::LegendModel() :
 LegendModel::~LegendModel()
 {
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

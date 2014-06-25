@@ -306,7 +306,6 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
 
 } // namespace
 
-
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
     // try the plain input stream
@@ -440,8 +439,6 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     aMediaDescriptor >> rMediaDescSeq;
     return aFilterName;
 }
-
-
 
 } // namespace core
 } // namespace oox

@@ -38,8 +38,6 @@ TextListStyleContext::~TextListStyleContext()
 {
 }
 
-
-
 ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
@@ -72,8 +70,6 @@ ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken
 
     return this;
 }
-
-
 
 } }
 

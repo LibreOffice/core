@@ -31,7 +31,6 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-
 LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs,
     LineProperties& rLineProperties ) throw()
 : ContextHandler2( rParent )
