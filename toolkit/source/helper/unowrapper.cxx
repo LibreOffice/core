@@ -234,7 +234,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pChild = pNextChild;
     }
 
-    // ::com::sun::star::chaos::System-Windows suchen...
+    // System-Windows suchen...
     Window* pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
     if ( pOverlap )
     {

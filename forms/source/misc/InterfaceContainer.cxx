@@ -488,7 +488,7 @@ void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >
                 _rxOutStream->writeObject(xObj);
             else
             {
-                // ::com::sun::star::chaos::Error
+                // Error
             }
         }
 

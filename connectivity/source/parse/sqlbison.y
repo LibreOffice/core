@@ -4753,7 +4753,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 
 void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank)
 {
-	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
+	OSL_ENSURE(pLiteral->isRule(), "This is no Rule");
 	OSL_ENSURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");
 	OSQLParseNode* pTemp = pLiteral;
 	OUStringBuffer aValue(pLiteral->getChild(0)->getTokenValue());
