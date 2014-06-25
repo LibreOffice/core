@@ -3717,10 +3717,10 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                             for( i = 1 ; i < nArgCount ; i++ )
                             {
                                 SbxVariable* pVar = refArgv->Get( i );
-                                const OUString& rName = refArgv->GetAlias( i );
-                                if( !rName.isEmpty() )
+                                OUString aName = refArgv->GetAlias(i);
+                                if (!aName.isEmpty())
                                 {
-                                    pNames[i] = rName;
+                                    pNames[i] = aName;
                                 }
                                 pArg->Put( pVar, nCurPar++ );
                             }
@@ -3774,15 +3774,15 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 for( i = 1 ; i < nArgCount ; i++ )
                 {
                     SbxVariable* pVar = refArgv->Get( i );
-                    const OUString& rName = refArgv->GetAlias( i );
-                    if( !rName.isEmpty() )
+                    OUString aName = refArgv->GetAlias(i);
+                    if (!aName.isEmpty())
                     {
                         // nCurPar is set to the found parameter
                         sal_uInt16 j = 1;
                         const SbxParamInfo* pParam = pInfo->GetParam( j );
                         while( pParam )
                         {
-                            if( pParam->aName.equalsIgnoreAsciiCase( rName ) )
+                            if( pParam->aName.equalsIgnoreAsciiCase( aName ) )
                             {
                                 nCurPar = j;
                                 break;
