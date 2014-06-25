@@ -40,8 +40,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
     svx \
     svxcore \
 	test \
-    tl \
     tk \
+    tl \
     ucbhelper \
 	unotest \
     utl \
@@ -77,13 +77,13 @@ $(eval $(call gb_CppunitTest_use_components,sc_tableautoformatfield,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
+    scripting/source/basprov/basprov \
+    scripting/util/scriptframe \
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \

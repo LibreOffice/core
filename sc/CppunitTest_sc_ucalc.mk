@@ -92,17 +92,17 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_ucalc))
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
     framework/util/fwk \
-    i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
+    i18npool/util/i18npool \
     sax/source/expatwrap/expwrap \
+    scaddins/source/analysis/analysis \
+    scaddins/source/datefunc/date \
+    scaddins/source/pricing/pricing \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
     uui/util/uui \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    scaddins/source/pricing/pricing \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))

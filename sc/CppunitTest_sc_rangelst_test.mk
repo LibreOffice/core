@@ -52,8 +52,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_rangelst_test, \
     svx \
     svxcore \
 	test \
-    tl \
     tk \
+    tl \
     ucbhelper \
 	unotest \
     utl \
@@ -80,8 +80,8 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_rangelst_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_rangelst_test,\
     basic/util/sb \
-    chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
+    chart2/source/controller/chartcontroller \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
@@ -95,15 +95,15 @@ $(eval $(call gb_CppunitTest_use_components,sc_rangelst_test,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
+    scaddins/source/analysis/analysis \
+    scaddins/source/datefunc/date \
+    scripting/source/basprov/basprov \
+    scripting/util/scriptframe \
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
-    scaddins/source/analysis/analysis \
-    scaddins/source/datefunc/date \
-    scripting/source/basprov/basprov \
-    scripting/util/scriptframe \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
