@@ -183,7 +183,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
         {
-            std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+            std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
             for( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];

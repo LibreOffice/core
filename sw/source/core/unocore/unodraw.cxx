@@ -521,7 +521,7 @@ sal_Int32 SwXDrawPage::getCount(void) throw( uno::RuntimeException, std::excepti
     {
         ((SwXDrawPage*)this)->GetSvxPage();
 
-        std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+        std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
         if (aTextBoxes.empty())
             return pDrawPage->getCount();
@@ -541,7 +541,7 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     ((SwXDrawPage*)this)->GetSvxPage();
-    std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     if (aTextBoxes.empty())
         return pDrawPage->getByIndex( nIndex );
     else

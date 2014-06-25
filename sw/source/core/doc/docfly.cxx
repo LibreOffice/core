@@ -78,7 +78,7 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     sal_uInt16 nCount = 0;
     const SwNodeIndex* pIdx;
 
-    std::list<SwFrmFmt*> aTextBoxes;
+    std::set<SwFrmFmt*> aTextBoxes;
     if (bIgnoreTextBoxes)
         aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
 
@@ -130,7 +130,7 @@ SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType, bool bIgnoreTextB
     const SwNodeIndex* pIdx;
     sal_uInt16 nCount = 0;
 
-    std::list<SwFrmFmt*> aTextBoxes;
+    std::set<SwFrmFmt*> aTextBoxes;
     if (bIgnoreTextBoxes)
         aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
 
