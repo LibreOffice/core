@@ -70,6 +70,7 @@ private:
     Window& m_rEventHandler;
     bool m_bVisible;
     Point m_aLastMousePos;
+    bool m_bIsOrbitMode;
 };
 
 } // namespace ogl

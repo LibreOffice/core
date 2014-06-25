@@ -1,0 +1,43 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-24 16:53:41.030163890 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-24 16:53:44.406163746 +0200
+@@ -1848,8 +1848,6 @@
+ 
+ void RenderScene::startAnimation()
+ {
+-    if (bAerialView)
+-        return;
+     this->mAnimationPlay = true;
+     mCurrentTime = 0;
+     mUpdateTimeOut = 0;
+@@ -1858,8 +1856,6 @@
+ 
+ void RenderScene::stopAnimation()
+ {
+-    if (bAerialView)
+-        return;
+     if (pScene->getSkinSize() != 0)
+     {
+         this->mAnimationPlay = false;
+@@ -1874,10 +1870,6 @@
+     roCameraY = glm::mat4(1.0);
+     pCamera->AerialViewY = 0.0;
+     bAerialView = false;
+-    if (bAnimation)
+-    {
+-        startAnimation();
+-    }
+     if (IsAerialMode)
+     {
+         pScene->setUseCameraInJson(true);
+@@ -1897,10 +1889,6 @@
+     roCameraX = glm::mat4(1.0);
+     roCameraY = glm::mat4(1.0);
+     //Stop animation.
+-    if (pScene->getSkinSize() != 0)
+-    {
+-        this->mAnimationPlay = false;
+-    }
+     bAerialView = true;
+     if (pScene->getUseCameraInJson())
+     {
