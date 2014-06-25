@@ -56,7 +56,6 @@ else
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& autoreconf \
 		&& ./configure \
 			--with-pic \
 			--disable-debug \

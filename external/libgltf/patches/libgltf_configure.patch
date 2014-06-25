@@ -1,0 +1,102 @@
+diff -ur libgltf.org/configure libgltf/configure
+--- libgltf.org/configure	2014-06-25 18:41:32.470228670 +0200
++++ libgltf/configure	2014-06-25 18:42:03.922227337 +0200
+@@ -15581,15 +15581,18 @@
+ # =========
+ # Find boost
+ # =========
++save_CPPFLAGS=$CPPFLAGS
++CPPFLAGS="$CPPFLAGS $BOOST_CFLAGS"
+ 
+ ac_fn_cxx_check_header_mongrel "$LINENO" "boost/property_tree/json_parser.hpp" "ac_cv_header_boost_property_tree_json_parser_hpp" "$ac_includes_default"
+ if test "x$ac_cv_header_boost_property_tree_json_parser_hpp" = xyes; then :
+-  BOOST_CFLAGS=
++
+ else
+   as_fn_error $? "boost/property_tree/json_parser.hpp not found. install boost" "$LINENO" 5
+ fi
+ 
+ 
++CPPFLAGS=$save_CPPFLAGS
+ 
+ 
+ # =========
+@@ -15685,14 +15688,17 @@
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
++ save_CPPFLAGS=$CPPFLAGS
++ CPPFLAGS="$CPPFLAGS $GLEW_CFLAGS"
+  ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glew.h" "ac_cv_header_GL_glew_h" "$ac_includes_default"
+ if test "x$ac_cv_header_GL_glew_h" = xyes; then :
+-  GLEW_CFLAGS=
++
+ else
+   as_fn_error $? "GL/glew.h not found. install glew" "$LINENO" 5
+ fi
+ 
+ 
++ CPPFLAGS=$save_CPPFLAGS
+ 
+ fi
+ 
+@@ -15707,14 +15713,17 @@
+ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ 
++save_CPPFLAGS=$CPPFLAGS
++CPPFLAGS="$CPPFLAGS $GLM_CFLAGS"
+ ac_fn_cxx_check_header_mongrel "$LINENO" "glm/glm.hpp" "ac_cv_header_glm_glm_hpp" "$ac_includes_default"
+ if test "x$ac_cv_header_glm_glm_hpp" = xyes; then :
+-  GLM_CFLAGS=
++
+ else
+   as_fn_error $? "glm/glm.hpp not found. install glm" "$LINENO" 5
+ fi
+ 
+ 
++CPPFLAGS=$save_CPPFLAGS
+ ac_ext=cpp
+ ac_cpp='$CXXCPP $CPPFLAGS'
+ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+diff -ur libgltf.org/configure.ac libgltf/configure.ac
+--- libgltf.org/configure.ac	2014-06-25 18:41:32.470228670 +0200
++++ libgltf/configure.ac	2014-06-25 18:41:41.186228300 +0200
+@@ -36,16 +36,22 @@
+ # =========
+ # Find boost
+ # =========
+-AC_CHECK_HEADER(boost/property_tree/json_parser.hpp, [BOOST_CFLAGS=],
++save_CPPFLAGS=$CPPFLAGS
++CPPFLAGS="$CPPFLAGS $BOOST_CFLAGS"
++AC_CHECK_HEADER(boost/property_tree/json_parser.hpp, [],
+  [AC_MSG_ERROR(boost/property_tree/json_parser.hpp not found. install boost)], [])
++CPPFLAGS=$save_CPPFLAGS
+ AC_SUBST([BOOST_CFLAGS])
+ 
+ # =========
+ # Find glew
+ # =========
+ PKG_CHECK_MODULES(GLEW, [glew >= 1.9.0], [] [
+- AC_CHECK_HEADER(GL/glew.h, [GLEW_CFLAGS=],
++ save_CPPFLAGS=$CPPFLAGS
++ CPPFLAGS="$CPPFLAGS $GLEW_CFLAGS"
++ AC_CHECK_HEADER(GL/glew.h, [],
+  [AC_MSG_ERROR(GL/glew.h not found. install glew)], [])
++ CPPFLAGS=$save_CPPFLAGS
+ ])
+ AC_SUBST([GLEW_CFLAGS])
+ AC_SUBST([GLEW_LIBS])
+@@ -54,8 +60,11 @@
+ # Find glm
+ # =========
+ AC_LANG_PUSH([C++])
+-AC_CHECK_HEADER([glm/glm.hpp], [GLM_CFLAGS=],
++save_CPPFLAGS=$CPPFLAGS
++CPPFLAGS="$CPPFLAGS $GLM_CFLAGS"
++AC_CHECK_HEADER([glm/glm.hpp], [],
+  [AC_MSG_ERROR([glm/glm.hpp not found. install glm])], [])
++CPPFLAGS=$save_CPPFLAGS
+ AC_LANG_POP([C++])
+ AC_SUBST([GLM_CFLAGS])
+ 
