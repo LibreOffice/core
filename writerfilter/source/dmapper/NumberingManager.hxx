@@ -263,6 +263,9 @@ public:
 
     // Mapping methods
     void CreateNumberingRules( );
+
+    // Dispose the NumPicBullets
+    void DisposeNumPicBullets( );
 };
 
 } }
