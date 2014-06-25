@@ -52,7 +52,9 @@
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -2213,7 +2215,7 @@ void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
     format to the XPropertySet
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
-                            uno::Reference< beans::XPropertySet >& xPropertySet )
+                            uno::Reference< beans::XPropertySet >& xPropertySet, bool bDetectFormat )
 {
     OUString sFormatString = lcl_ParseFormat( rCommand );
     // find \h - hijri/luna calendar todo: what about saka/era calendar?
@@ -2229,8 +2231,18 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     //get the number formatter and convert the string to a format value
     try
     {
+        sal_Int32 nKey = 0;
         uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
-        sal_Int32 nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
+        if( bDetectFormat )
+        {
+            uno::Reference< util::XNumberFormatter> xFormatter( ::com::sun::star::util::NumberFormatter::create( m_xComponentContext ), uno::UNO_QUERY_THROW );
+            xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
+            nKey = xFormatter->detectNumberFormat( 0, rCommand );
+         }
+        else
+        {
+            nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
+        }
         xPropertySet->setPropertyValue(
             PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NUMBER_FORMAT),
             uno::makeAny( nKey ));
@@ -2795,8 +2807,11 @@ void DomainMapper_Impl::handleAuthor
             uno::Reference< beans::XPropertySet >( xFieldInterface,
                 uno::UNO_QUERY_THROW);
         if( bIsCustomField )
+        {
             xFieldProperties->setPropertyValue(
                 rPropNameSupplier.GetName(PROP_NAME), uno::makeAny(rFirstParam));
+            pContext->SetCustomField( xFieldProperties );
+        }
         else
         {
             if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
@@ -4034,7 +4049,12 @@ void DomainMapper_Impl::PopFieldContext()
             CloseFieldCommand();
 
         if (!pContext->GetResult().isEmpty())
-            SetFieldResult(pContext->GetResult());
+        {
+           uno::Reference< beans::XPropertySet > xFieldProperties = pContext->GetCustomField();
+           if(xFieldProperites.is())
+              SetNumberFormat( pContext->GetResult(), xFieldProperties, true );
+           SetFieldResult( pContext->GetResult() );
+         }
 
         //insert the field, TC or TOC
         uno::Reference< text::XTextAppend >  xTextAppend;
