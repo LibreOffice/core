@@ -784,7 +784,7 @@ StringArray SCSTR_PRINT_OPTIONS
     ItemList [en-US] =
     {
         < "Pages"; >;
-        < "~Include output of empty pages"; >;
+        < "~Suppress output of empty pages"; >;
         < "Print content"; >;
         < "~All sheets"; >;
         < "~Selected sheets"; >;
