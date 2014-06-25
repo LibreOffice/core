@@ -924,7 +924,6 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     return pStream;
 }
 
-
 XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
     : XmlFilterBase( rCC ),
       mpRoot( NULL )

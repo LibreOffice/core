@@ -73,7 +73,6 @@ private:
     DECL_LINK(HighlightHandle, CheckBox*);
     DECL_LINK(OKBtnHdl, PushButton*);
 
-
 protected:
 
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
@@ -90,7 +89,6 @@ public:
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;
 
 };
-
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_HIGHRED_HXX
 

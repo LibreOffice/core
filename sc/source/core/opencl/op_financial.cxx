@@ -363,7 +363,6 @@ void OpDISC::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 
-
 void OpINTRATE::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
@@ -2210,7 +2209,6 @@ void OpAccrintm::GenSlidingWindowFunction(
     funs.insert(IsLeapYear);
 }
 
-
 void OpYield::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -2232,7 +2230,6 @@ void OpYield::GenSlidingWindowFunction(
     ss << "double tmp004;\n\t";
     ss << "double tmp005;\n\t";
     ss << "double tmp006;\n\t";
-
 
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -4481,7 +4478,6 @@ void OpYielddisc::GenSlidingWindowFunction(
     ss << "double tmp002;\n\t";
     ss << "double tmp003;\n\t";
     ss << "double tmp004;\n\t";
-
 
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();

@@ -27,7 +27,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 SharedStringsFragment::SharedStringsFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )

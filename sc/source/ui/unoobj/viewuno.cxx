@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
@@ -712,7 +711,6 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
     if (bRet)
         return bRet;
-
 
     ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xInterface );
     uno::Reference<drawing::XShapes> xShapeColl( xInterface, uno::UNO_QUERY );
@@ -1791,7 +1789,6 @@ void ScTabViewObj::SelectionChanged()
         mbPendingSelectionChanged = true;
     }
 }
-
 
 //  XPropertySet (View-Optionen)
 //! auch an der Applikation anbieten?

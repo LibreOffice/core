@@ -25,7 +25,6 @@
 class ScDocShell;
 class ScRange;
 
-
 class ScOutlineDocFunc
 {
 private:

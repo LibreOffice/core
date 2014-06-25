@@ -31,7 +31,6 @@
 
 class ScViewData;
 
-
 enum ScConflictAction
 {
     SC_CONFLICT_ACTION_NONE,
@@ -43,7 +42,6 @@ typedef ::std::vector< sal_uLong > ScChangeActionList;
 
 // struct ScConflictsListEntry
 
-
 struct ScConflictsListEntry
 {
     ScConflictAction    meConflictAction;
@@ -54,11 +52,9 @@ struct ScConflictsListEntry
     bool                HasOwnAction( sal_uLong nOwnAction ) const;
 };
 
-
 typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
 
 // class ScConflictsListHelper
-
 
 class ScConflictsListHelper
 {
@@ -76,7 +72,6 @@ public:
 };
 
 // class ScConflictsFinder
-
 
 class ScConflictsFinder
 {
@@ -102,7 +97,6 @@ public:
 
 // class ScConflictsResolver
 
-
 class ScConflictsResolver
 {
 private:
@@ -118,7 +112,6 @@ public:
 };
 
 // class ScConflictsDlg
-
 
 class ScConflictsDlg : public ModalDialog
 {

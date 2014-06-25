@@ -71,14 +71,11 @@
 #include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
 
-
 using namespace com::sun::star;
 
 #define SCDRAWTRANS_TYPE_EMBOBJ         1
 #define SCDRAWTRANS_TYPE_DRAWMODEL      2
 #define SCDRAWTRANS_TYPE_DOCUMENT       3
-
-
 
 ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :
@@ -97,7 +94,6 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
     //  check what kind of objects are contained
 
-
     SdrPage* pPage = pModel->GetPage(0);
     if (pPage)
     {
@@ -107,7 +103,6 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
         {
 
             //  OLE object
-
 
             sal_uInt16 nSdrObjKind = pObject->GetObjIdentifier();
             if (nSdrObjKind == OBJ_OLE2)
@@ -124,9 +119,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                 // aOleData is initialized later
             }
 
-
             //  Graphic object
-
 
             if (nSdrObjKind == OBJ_GRAF)
             {
@@ -135,9 +128,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                     bGrIsBit = true;
             }
 
-
             //  URL button
-
 
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
@@ -199,9 +190,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
         }
     }
 
-
     //  get size for object descriptor
-
 
     // #i71538# use complete SdrViews
     // SdrExchangeView aView(pModel);
@@ -219,7 +208,6 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
     aObjDesc.maSize = aSrcSize;
     PrepareOLE( aObjDesc );
-
 
     // remember a unique ID of the source document
 
@@ -729,9 +717,7 @@ void ScDrawTransferObj::CreateOLEData()
     aOleData = TransferableDataHelper(pEmbedTransfer);
 }
 
-
 //  initialize aDocShellRef with a live document from the ClipDoc
-
 
 void ScDrawTransferObj::InitDocShell()
 {
@@ -811,6 +797,5 @@ sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::S
         nRet = TransferableHelper::getSomething(rId);
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

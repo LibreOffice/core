@@ -40,9 +40,7 @@ namespace oox { namespace ole {
 namespace oox {
 namespace xls {
 
-
 // DrawingML
-
 
 class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
@@ -122,9 +120,7 @@ private:
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
 };
 
-
 // VML
-
 
 class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {

@@ -27,10 +27,8 @@
 #include "csvruler.hxx"
 #include "csvgrid.hxx"
 
-
 class ListBox;
 class ScAsciiOptions;
-
 
 /* ============================================================================
 Position: Positions between the characters (the dots in the ruler).
@@ -61,7 +59,6 @@ private:
     sal_Int32                   mnFixedWidth;       /// Cached total width for fixed width mode.
 
     bool                        mbFixedMode;        /// false = Separators, true = Fixed width.
-
 
 public:
     explicit                    ScCsvTableBox( Window* pParent, WinBits nBits );
@@ -140,7 +137,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
 
 #endif
 

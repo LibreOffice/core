@@ -181,7 +181,6 @@ private:
 
     VolatileType meVolatileType;
 
-
     /// Merge global and document specific settings.
     void MergeCalcConfig();
 

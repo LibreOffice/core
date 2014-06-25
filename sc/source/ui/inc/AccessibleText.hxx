@@ -38,7 +38,6 @@ class EditTextObject;
 class ScCsvViewForwarder;
 class ScAccessibleCell;
 
-
 class ScAccessibleTextData : public SfxListener
 {
 public:
@@ -65,7 +64,6 @@ private:
     ScCellEditSource* GetOriginalSource() { return NULL; }
 };
 
-
 class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
                                      public ScCellTextData
 {
@@ -80,7 +78,6 @@ public:
     virtual void                SetDoUpdate(bool bValue) SAL_OVERRIDE { ScCellTextData::SetDoUpdate(bValue); }
     virtual bool                IsDirty() const SAL_OVERRIDE { return ScCellTextData::IsDirty(); }
 };
-
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -116,7 +113,6 @@ private:
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
 };
 
-
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
@@ -147,7 +143,6 @@ protected:
     bool                       mbIsCloned;
 };
 
-
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
@@ -168,7 +163,6 @@ private:
 
     bool mbEditEngineCreated;
 };
-
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -195,7 +189,6 @@ private:
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
-
 
 class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -225,7 +218,6 @@ private:
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
-
 
 class ScAccessibleHeaderTextData : public ScAccessibleTextData
 {
@@ -257,7 +249,6 @@ private:
     SvxAdjust               meAdjust;
 };
 
-
 class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
@@ -287,7 +278,6 @@ private:
     bool                    mbMarkNote;
     bool                    mbDataValid;
 };
-
 
 class ScAccessibleCsvTextData : public ScAccessibleTextData
 {
@@ -324,7 +314,6 @@ public:
     virtual void                SetDoUpdate( bool /* bValue */ ) SAL_OVERRIDE {}
     virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 };
-
 
 #endif
 

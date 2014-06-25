@@ -206,7 +206,6 @@ private:
 
 };
 
-
 typedef ::boost::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
 
 #endif

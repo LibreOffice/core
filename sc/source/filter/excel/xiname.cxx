@@ -27,7 +27,6 @@
 
 // *** Implementation ***
 
-
 XclImpName::TokenStrmData::TokenStrmData( XclImpStream& rStrm ) :
     mrStrm(rStrm), mnStrmPos(0), mnStrmSize(0) {}
 

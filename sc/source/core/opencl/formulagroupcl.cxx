@@ -62,7 +62,6 @@ using namespace formula;
 
 namespace sc { namespace opencl {
 
-
 /// Map the buffer used by an argument and do necessary argument setting
 size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 {
@@ -1699,7 +1698,6 @@ public:
     }
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "less"; }
 };
-
 
 class OpGreater: public Binary {
 public:

@@ -229,7 +229,6 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
     return pData;
 }
 
-
 void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemoveAutoFilter )
 {
     if (pDBCollection && bRemoveAutoFilter)
@@ -324,7 +323,6 @@ ScDPCollection* ScDocument::GetDPCollection()
     return pDPCollection;
 }
 
-
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (!pDPCollection)
@@ -354,13 +352,11 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
     return NULL;
 }
 
-
 void ScDocument::StopTemporaryChartLock()
 {
     if( apTemporaryChartLock.get() )
         apTemporaryChartLock->StopLocking();
 }
-
 
 void ScDocument::SetChartListenerCollection(
             ScChartListenerCollection* pNewChartListenerCollection,
@@ -449,7 +445,6 @@ formula::FormulaGrammar::AddressConvention ScDocument::GetAddressConvention() co
 {
     return formula::FormulaGrammar::extractRefConvention(eGrammar);
 }
-
 
 void ScDocument::SetGrammar( formula::FormulaGrammar::Grammar eGram )
 {
@@ -960,7 +955,6 @@ void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
         pUnoRefUndoList->Add( nId, rOldRanges );
 }
 
-
 void ScDocument::UpdateReference(
     sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
@@ -1361,7 +1355,6 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeep
     return 0;
 }
 
-
 void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -1425,9 +1418,7 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
-
 
 bool ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
@@ -1483,9 +1474,7 @@ bool ScDocument::GetFilterEntries(
     return false;
 }
 
-
 //  GetFilterEntriesArea - Eintraege fuer Filter-Dialog
-
 
 bool ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
@@ -1501,9 +1490,7 @@ bool ScDocument::GetFilterEntriesArea(
     return false;
 }
 
-
 //  GetDataEntries - Eintraege fuer Auswahlliste-Listbox (keine Zahlen / Formeln)
-
 
 bool ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
@@ -1542,15 +1529,12 @@ bool ScDocument::GetDataEntries(
     return bRet;
 }
 
-
 //  GetFormulaEntries - Eintraege fuer Formel-AutoEingabe
-
 
 bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
 
     //  Bereichsnamen
-
 
     if ( pRangeName )
     {
@@ -1559,9 +1543,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
-
     //  Datenbank-Bereiche
-
 
     if ( pDBCollection )
     {
@@ -1571,9 +1553,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
-
     //  Inhalte von Beschriftungsbereichen
-
 
     ScRangePairList* pLists[2];
     pLists[0] = GetColNameRanges();
@@ -1602,8 +1582,6 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 
     return true;
 }
-
-
 
 void ScDocument::GetEmbedded( ScRange& rRange ) const
 {
@@ -1654,7 +1632,6 @@ void ScDocument::ResetEmbedded()
     bIsEmbedded = false;
     aEmbedRange = ScRange();
 }
-
 
 /** Similar to ScViewData::AddPixelsWhile(), but add height twips and only
     while result is less than nStopTwips.
@@ -1757,7 +1734,6 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
         else
             bEnd = true;
     }
-
 
     nSize = 0;
     nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);

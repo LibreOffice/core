@@ -164,7 +164,6 @@ void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > xDataSo
     }
 }
 
-
 void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument > xChartDoc, std::vector<OUString>& rRangeRep)
 {
     uno::Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
@@ -552,6 +551,5 @@ void ScDrawView::SetMarkedOriginalSize()
     else
         delete pUndoGroup;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

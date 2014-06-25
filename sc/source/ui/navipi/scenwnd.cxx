@@ -31,9 +31,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-
 // class ScScenarioWindow ------------------------------------------------
-
 
 ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
@@ -194,9 +192,7 @@ void ScScenarioListBox::DeleteScenario( bool bQueryBox )
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
 }
 
-
 // class ScScenarioWindow ------------------------------------------------
-
 
 ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)
@@ -282,6 +278,5 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
     aSize.Height() -= 4;
     aEdComment.SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

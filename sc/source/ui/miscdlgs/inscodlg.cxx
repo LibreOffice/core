@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "inscodlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
@@ -111,7 +107,6 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     mpBtnLink->Check( ( ScInsertContentsDlg::nPreviousChecks2             & INS_CONT_LINK  ) != 0);
 
     DisableChecks( mpBtnInsAll->IsChecked() );
-
 
     mpBtnInsAll->SetClickHdl( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
     mpBtnLink->SetClickHdl( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
@@ -271,7 +266,6 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
             mpRbMoveNone->Check(true);
     }
 }
-
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {

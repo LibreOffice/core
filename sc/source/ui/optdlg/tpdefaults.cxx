@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "tpdefaults.hxx"
@@ -16,7 +15,6 @@
 #include "scmod.hxx"
 #include "defaultsoptions.hxx"
 #include "document.hxx"
-
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
     SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", &rCoreSet)
@@ -46,7 +44,6 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 
     SCTAB nTabCount = static_cast<SCTAB>(m_pEdNSheets->GetValue());
     OUString aSheetPrefix = m_pEdSheetPrefix->GetText();
-
 
     if ( m_pEdNSheets->IsValueChangedFromSaved()
          || m_pEdSheetPrefix->GetSavedValue() != aSheetPrefix )
@@ -117,7 +114,6 @@ void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
     maOldPrefixValue = pEdit->GetText();
 }
 
-
 IMPL_LINK_NOARG(ScTpDefaultsOptions, NumModifiedHdl)
 {
     CheckNumSheets();
@@ -135,6 +131,5 @@ IMPL_LINK( ScTpDefaultsOptions, PrefixEditOnFocusHdl, Edit*, pEdit )
     OnFocusPrefixInput(pEdit);
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

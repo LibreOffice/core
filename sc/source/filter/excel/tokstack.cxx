@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tokstack.hxx"
 #include "compiler.hxx"
 #include "global.hxx"
@@ -30,7 +29,6 @@
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 
-
 TokenStack::TokenStack( sal_uInt16 nNewSize )
 {
     pStack = new TokenId[ nNewSize ];
@@ -39,19 +37,14 @@ TokenStack::TokenStack( sal_uInt16 nNewSize )
     nSize = nNewSize;
 }
 
-
 TokenStack::~TokenStack()
 {
     delete[] pStack;
 }
 
-
-
-
 // !ACHTUNG!: nach Aussen hin beginnt die Nummerierung mit 1!
 // !ACHTUNG!: SC-Token werden mit einem Offset nScTokenOff abgelegt
 //              -> Unterscheidung von anderen Token
-
 
 TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     mrStringPool(rSPool)
@@ -106,7 +99,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     Reset();
 }
 
-
 TokenPool::~TokenPool()
 {
     sal_uInt16 n;
@@ -144,7 +136,6 @@ TokenPool::~TokenPool()
     delete pScToken;
 }
 
-
 /** Returns the new number of elements, or 0 if overflow. */
 static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
 {
@@ -160,7 +151,6 @@ static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
         nNew = 0;
     return static_cast<sal_uInt16>(nNew);
 }
-
 
 bool TokenPool::GrowString( void )
 {
@@ -186,13 +176,11 @@ bool TokenPool::GrowString( void )
     return true;
 }
 
-
 bool TokenPool::GrowDouble( void )
 {
     sal_uInt16 nP_DblNew = lcl_canGrow( nP_Dbl);
     if (!nP_DblNew)
         return false;
-
 
     double* pP_DblNew = new (::std::nothrow) double[ nP_DblNew ];
     if (!pP_DblNew)
@@ -208,7 +196,6 @@ bool TokenPool::GrowDouble( void )
     return true;
 }
 
-
 /* TODO: in case we had FormulaTokenArray::AddError() */
 #if 0
 void TokenPool::GrowError( void )
@@ -216,7 +203,6 @@ void TokenPool::GrowError( void )
     sal_uInt16 nP_ErrNew = lcl_canGrow( nP_Err);
     if (!nP_ErrNew)
         return false;
-
 
     sal_uInt16*     pP_ErrNew = new (::std::nothrow) sal_uInt16[ nP_ErrNew ];
     if (!pP_ErrNew)
@@ -232,7 +218,6 @@ void TokenPool::GrowError( void )
     return true;
 }
 #endif
-
 
 bool TokenPool::GrowTripel( sal_uInt16 nByMin )
 {
@@ -258,13 +243,11 @@ bool TokenPool::GrowTripel( sal_uInt16 nByMin )
     return true;
 }
 
-
 bool TokenPool::GrowId( void )
 {
     sal_uInt16 nP_IdNew = lcl_canGrow( nP_Id);
     if (!nP_IdNew)
         return false;
-
 
     sal_uInt16* pP_IdNew = new (::std::nothrow) sal_uInt16[ nP_IdNew ];
     if (!pP_IdNew)
@@ -280,13 +263,11 @@ bool TokenPool::GrowId( void )
     return true;
 }
 
-
 bool TokenPool::GrowElement( void )
 {
     sal_uInt16 nElementNew = lcl_canGrow( nElement);
     if (!nElementNew)
         return false;
-
 
     sal_uInt16* pElementNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
     E_TYPE* pTypeNew = new (::std::nothrow) E_TYPE[ nElementNew ];
@@ -317,7 +298,6 @@ bool TokenPool::GrowElement( void )
     return true;
 }
 
-
 bool TokenPool::GrowExt( void )
 {
     sal_uInt16 nNewSize = lcl_canGrow( nP_Ext);
@@ -337,7 +317,6 @@ bool TokenPool::GrowExt( void )
     return true;
 }
 
-
 bool TokenPool::GrowNlf( void )
 {
     sal_uInt16 nNewSize = lcl_canGrow( nP_Nlf);
@@ -356,7 +335,6 @@ bool TokenPool::GrowNlf( void )
     nP_Nlf = nNewSize;
     return true;
 }
-
 
 bool TokenPool::GrowMatrix( void )
 {
@@ -537,7 +515,6 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
     return bRet;
 }
 
-
 bool TokenPool::GetElementRek( const sal_uInt16 nId )
 {
 #ifdef DBG_UTIL
@@ -564,7 +541,6 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
 #endif
         return false;
     }
-
 
     bool bRet = true;
     sal_uInt16      nAnz = pSize[ nId ];
@@ -603,13 +579,11 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
             pScToken->AddOpCode( ( DefTokenId ) ( *pAkt - nScTokenOff ) );
     }
 
-
 #ifdef DBG_UTIL
     m_nRek--;
 #endif
     return bRet;
 }
-
 
 void TokenPool::operator >>( TokenId& rId )
 {
@@ -627,7 +601,6 @@ void TokenPool::operator >>( TokenId& rId )
     nElementAkt++;          // Startwerte fuer naechste Folge
     nP_IdLast = nP_IdAkt;
 }
-
 
 const TokenId TokenPool::Store( const double& rDouble )
 {
@@ -652,12 +625,10 @@ const TokenId TokenPool::Store( const double& rDouble )
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
-
 const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 {
     return StoreName(nIndex, true);
 }
-
 
 const TokenId TokenPool::Store( const OUString& rString )
 {
@@ -667,11 +638,9 @@ const TokenId TokenPool::Store( const OUString& rString )
         if (!GrowElement())
             return (const TokenId) nElementAkt+1;
 
-
     if( nP_StrAkt >= nP_Str )
         if (!GrowString())
             return (const TokenId) nElementAkt+1;
-
 
     pElement[ nElementAkt ] = nP_StrAkt;    // Index in String-Array
     pType[ nElementAkt ] = T_Str;           // Typinfo String eintragen
@@ -696,7 +665,6 @@ const TokenId TokenPool::Store( const OUString& rString )
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
-
 const TokenId TokenPool::Store( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
@@ -720,7 +688,6 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
 
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
-
 
 const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 {
@@ -752,7 +719,6 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
-
 const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
 {
     if( nElementAkt >= nElement )
@@ -779,7 +745,6 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
 
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
-
 
 const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 {
@@ -918,7 +883,6 @@ void TokenPool::Reset( void )
     maExtCellRefs.clear();
     maExtAreaRefs.clear();
 }
-
 
 bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 {

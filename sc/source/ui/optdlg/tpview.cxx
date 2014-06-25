@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scitems.hxx"
@@ -35,7 +34,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -143,7 +141,6 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
         bRet = true;
     }
-
 
     return bRet;
 }
@@ -256,7 +253,6 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
     else if ( pRowColHeaderCB  == pBtn )   eOption = VOPT_HEADER;
 
     pLocalOptions->SetOption( eOption, bChecked );
-
 
     return 0;
 }
@@ -380,7 +376,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
 
     m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
 
-
     for ( sal_uInt16 i = 0; i < aUnitArr.Count(); ++i )
     {
         OUString sMetric = aUnitArr.GetStringByPos( i );
@@ -487,7 +482,6 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
         bRet = true;
     }
 
-
     if(m_pExpRefCB->IsValueChangedFromSaved())
     {
         rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
@@ -584,7 +578,6 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SC_INPUT_FMT_EXPAND, false, &pItem))
         m_pFormatCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
-
     if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SC_INPUT_REF_EXPAND, false, &pItem))
         m_pExpRefCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
@@ -599,7 +592,6 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 
     if( SFX_ITEM_SET == rCoreSet->GetItemState( SID_SC_INPUT_LEGACY_CELL_SELECTION, false, &pItem ) )
         m_pLegacyCellSelectionCB->Check( ( (const SfxBoolItem*)pItem)->GetValue() );
-
 
     m_pAlignCB    ->SaveValue();
     m_pAlignLB    ->SaveValue();
@@ -651,6 +643,5 @@ IMPL_LINK( ScTpLayoutOptions, AlignHdl, CheckBox*, pBox )
     m_pAlignLB->Enable(pBox->IsChecked());
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

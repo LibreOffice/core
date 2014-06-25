@@ -429,7 +429,6 @@ private:
 
     typedef ::boost::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
-
     typedef ::boost::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
     typedef ::boost::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
@@ -853,7 +852,6 @@ private:
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, AutoTimer*);
 };
-
 
 #endif
 

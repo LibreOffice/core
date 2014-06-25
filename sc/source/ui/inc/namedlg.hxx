@@ -39,7 +39,6 @@
 class ScViewData;
 class ScDocument;
 
-
 //logic behind the manage names dialog
 class ScNameDlg : public ScAnyRefDlg, public ScRangeManagerTable::InitListener
 {

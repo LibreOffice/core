@@ -29,7 +29,6 @@
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 
-
 class OutputDevice;
 class ScDocument;
 class ScPatternAttr;
@@ -91,7 +90,6 @@ public:
     Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
 };
 
-
 class ScEditAttrTester
 {
     ScEditEngineDefaulter* pEngine;
@@ -108,7 +106,6 @@ public:
     const SfxItemSet&   GetAttribs() const      { return *pEditAttrs; }
 };
 
-
 // construct pool before constructing EditEngine, destroy pool after EditEngine
 class ScEnginePoolHelper
 {
@@ -123,7 +120,6 @@ protected:
                     ScEnginePoolHelper( const ScEnginePoolHelper& rOrg );
     virtual         ~ScEnginePoolHelper();
 };
-
 
 class SC_DLLPUBLIC ScEditEngineDefaulter : public ScEnginePoolHelper, public EditEngine
 {
@@ -181,7 +177,6 @@ public:
     void            RepeatDefaults();
 };
 
-
 // 1/100 mm
 class SC_DLLPUBLIC ScTabEditEngine : public ScEditEngineDefaulter
 {
@@ -193,7 +188,6 @@ public:
                     SfxItemPool* pEnginePool,
                     SfxItemPool* pTextObjectPool = NULL );
 };
-
 
 struct ScHeaderFieldData
 {
@@ -209,7 +203,6 @@ struct ScHeaderFieldData
 
     ScHeaderFieldData();
 };
-
 
 // for field commands (or just fields?) in a table
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
@@ -228,7 +221,6 @@ public:
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 ) SAL_OVERRIDE;
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 };
-
 
 // for headers/footers with fields
 class SC_DLLPUBLIC ScHeaderEditEngine : public ScEditEngineDefaulter
@@ -257,8 +249,6 @@ public:
 
 //  SvxFieldData derivations were moved to Svx (comment can be deleted?)
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

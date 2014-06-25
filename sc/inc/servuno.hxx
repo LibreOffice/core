@@ -25,7 +25,6 @@
 
 class ScDocShell;
 
-
 //! AutoFormat here or global??????
 
 #define SC_SERVICE_SHEET        0
@@ -87,7 +86,6 @@ class ScDocShell;
 #define SC_SERVICE_VBAOBJECTPROVIDER   40
 #define SC_SERVICE_VBACODENAMEPROVIDER   41
 #define SC_SERVICE_VBAGLOBALS   42
-
 
 #define SC_SERVICE_COUNT        44
 #define SC_SERVICE_INVALID      USHRT_MAX

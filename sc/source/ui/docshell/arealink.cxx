@@ -482,7 +482,6 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     return bCanDo;
 }
 
-
 IMPL_LINK_NOARG(ScAreaLink, RefreshHdl)
 {
     return long(

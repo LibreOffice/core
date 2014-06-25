@@ -98,7 +98,6 @@ private:
 };
 typedef tools::SvRef<ScRangeList> ScRangeListRef;
 
-
 // RangePairList:
 //    aRange[0]: actual range,
 //    aRange[1]: data for that range, e.g. Rows belonging to a ColName
@@ -136,7 +135,6 @@ typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 
 extern "C"
 int SAL_CALL ScRangePairList_QsortNameCompare( const void*, const void* );
-
 
 #endif
 

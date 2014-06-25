@@ -48,7 +48,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-
 namespace {
 
 /** Stores the number format used in Calc for an Excel built-in number format. */

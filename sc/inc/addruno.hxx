@@ -27,7 +27,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
 class ScAddressConversionObj : public ::cppu::WeakImplHelper2<
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo >,

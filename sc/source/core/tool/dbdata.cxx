@@ -802,10 +802,6 @@ ScDBCollection::ScDBCollection(ScDocument* pDocument) :
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}
 
-
-
-
-
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
     // First, search the global named db ranges.

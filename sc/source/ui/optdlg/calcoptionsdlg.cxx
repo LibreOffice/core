@@ -188,7 +188,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
 
-
 SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, bool bValue) const
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
@@ -260,7 +259,6 @@ void ScCalcOptionsDialog::fillOpenclList()
 }
 
 #endif
-
 
 namespace {
 void addOption( SvTreeList* pModel, OptionString* pItem )
@@ -630,6 +628,5 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, DeviceSelHdl)
     SelectedDeviceChanged();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

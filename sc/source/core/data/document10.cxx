@@ -239,7 +239,6 @@ void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
     maCalcConfig = rConfig;
 }
 
-
 void ScDocument::PreprocessRangeNameUpdate()
 {
     sc::EndListeningContext aEndListenCxt(*this);

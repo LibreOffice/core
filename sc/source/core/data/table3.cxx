@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
@@ -220,7 +219,6 @@ struct ScSortInfo
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
 // END OF STATIC DATA -----------------------------------------------------
-
 
 class ScSortInfoArray : boost::noncopyable
 {
@@ -500,7 +498,6 @@ bool ScTable::IsSortCollatorGlobal() const
             pSortCollator == ScGlobal::GetCaseCollator();
 }
 
-
 void ScTable::InitSortCollator( const ScSortParam& rPar )
 {
     if ( !rPar.aCollatorLocale.Language.isEmpty() )
@@ -517,7 +514,6 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
             ScGlobal::GetCollator());
     }
 }
-
 
 void ScTable::DestroySortCollator()
 {
@@ -1210,7 +1206,6 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
         pTab->SetPattern( nCol, nRow, aNewPattern, true );
     }
 }
-
 
 // at least MSC needs this at linkage level to be able to use it in a template
 typedef struct lcl_ScTable_DoSubTotals_RowEntry
@@ -2639,8 +2634,6 @@ bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& r
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }
-
-
 
 sal_uLong ScTable::GetCellCount() const
 {

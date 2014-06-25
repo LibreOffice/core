@@ -22,7 +22,6 @@
 #include <vcl/settings.hxx>
 #include "AccessibleCsvControl.hxx"
 
-
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
     mnPosOffset( 0 ),
@@ -57,7 +56,6 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
     return nRet;
 }
 
-
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
@@ -79,7 +77,6 @@ ScCsvControl::~ScCsvControl()
     if( mpAccessible )
         mpAccessible->dispose();
 }
-
 
 // event handling -------------------------------------------------------------
 
@@ -137,7 +134,6 @@ void ScCsvControl::AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32
         mpAccessible->SendRemoveColumnEvent( nFirstColumn, nLastColumn );
 }
 
-
 // repaint helpers ------------------------------------------------------------
 
 void ScCsvControl::Repaint( bool bInvalidate )
@@ -160,7 +156,6 @@ void ScCsvControl::EnableRepaint( bool bInvalidate )
     Repaint( bInvalidate );
 }
 
-
 // command handling -----------------------------------------------------------
 
 void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
@@ -168,7 +163,6 @@ void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPa
     maCmd.Set( eType, nParam1, nParam2 );
     maCmdHdl.Call( this );
 }
-
 
 // layout helpers -------------------------------------------------------------
 
@@ -252,7 +246,6 @@ sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
     return (nY - GetHdrHeight()) / GetLineHeight() + GetFirstVisLine();
 }
 
-
 // static helpers -------------------------------------------------------------
 
 void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
@@ -297,7 +290,6 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
     return MOVE_NONE;
 }
 
-
 // accessibility --------------------------------------------------------------
 
 ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
@@ -306,6 +298,5 @@ ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
     mxAccessible = mpAccessible;
     return mxAccessible;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

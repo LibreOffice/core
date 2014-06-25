@@ -34,8 +34,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-
-
 ExternalSheetDataContext::ExternalSheetDataContext(
         WorkbookFragmentBase& rFragment, const Reference< XExternalSheetCache >& rxSheetCache )
     : WorkbookContextBase(rFragment)

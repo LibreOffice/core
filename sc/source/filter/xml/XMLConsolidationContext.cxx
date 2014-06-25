@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #include "XMLConsolidationContext.hxx"
 #include "document.hxx"
 #include "rangeutl.hxx"
@@ -29,7 +27,6 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
-
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,

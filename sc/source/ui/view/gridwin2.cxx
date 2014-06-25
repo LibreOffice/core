@@ -239,7 +239,6 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
 //  Data Pilot interaction
 
-
 void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 {
     OSL_ENSURE(pDragDPObj, "pDragDPObj missing");
@@ -1051,6 +1050,5 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     else
         pViewData->GetView()->ResetTimer();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

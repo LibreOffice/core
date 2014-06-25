@@ -21,7 +21,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <svx/fmshell.hxx>
@@ -94,9 +93,7 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 
 using namespace com::sun::star;
 
-
 // ---  Public-Funktionen
-
 
 void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 {
@@ -675,7 +672,6 @@ void ScTabView::RemoveHintWindow()
     mpInputHintWindow.reset();
 }
 
-
 // find window that should not be over the cursor
 static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
 {
@@ -708,16 +704,13 @@ static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
     return NULL;
 }
 
-
     //  Bildschirm an Cursorposition anpassen
-
 
 void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                 const ScSplitPos* pWhich )
 {
 
     //  aktiven Teil umschalten jetzt hier
-
 
     ScSplitPos eActive = aViewData.GetActivePart();
     ScHSplitPos eActiveX = WhichH(eActive);
@@ -737,9 +730,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             eActiveY = SC_SPLIT_BOTTOM;
         }
 
-
     //  eigentliches Align
-
 
     if ( eMode != SC_FOLLOW_NONE )
     {
@@ -770,7 +761,6 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         bool bForceNew = false;     // force new calculation of JUMP position (vertical only)
 
         // VisibleCellsY == CellsAtY( GetPosY( eWhichY ), 1, eWhichY )
-
 
         //  falls z.B. Suchen-Dialog offen ist, Cursor nicht hinter den Dialog stellen
         //  wenn moeglich, die Zeile mit dem Cursor oberhalb oder unterhalb des Dialogs
@@ -838,7 +828,6 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 }
             }
         }
-
 
         SCsCOL nNewDeltaX = nDeltaX;
         SCsROW nNewDeltaY = nDeltaY;
@@ -943,9 +932,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         if ( nNewDeltaY != nDeltaY ) ScrollY( nNewDeltaY - nDeltaY, eAlignY );
     }
 
-
     //  nochmal aktiven Teil umschalten
-
 
     if (bHFix)
         if (eActiveX == SC_SPLIT_RIGHT && nCurX < (SCsCOL)aViewData.GetFixPosX())
@@ -981,9 +968,7 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
     return bRet;
 }
 
-
     //  MoveCursor - mit Anpassung des Bildausschnitts
-
 
 void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
@@ -1250,7 +1235,6 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> hoch/runter
     }
 }
 
-
 bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 {
     const KeyCode& rKCode = rKeyEvent.GetKeyCode();
@@ -1324,7 +1308,6 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 
     return false;
 }
-
 
         // naechste/vorherige nicht geschuetzte Zelle
 void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
@@ -1538,7 +1521,6 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
     SetTabNo( nTab, false, bExtendSelection );
     PaintExtras();
 }
-
 
 //  SetTabNo    - angezeigte Tabelle
 
@@ -1769,9 +1751,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 }
 
-
 //  Paint-Funktionen - nur fuer diese View
-
 
 void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow )
 {
@@ -2281,7 +2261,6 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
             pColOutline[eWhich]->Invalidate();
     }
 }
-
 
 //  PaintLeft - linke Kontrollelemente neu zeichnen
 

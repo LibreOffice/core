@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "inscldlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
 
 static sal_uInt8 nInsItemChecked=0;
 

@@ -65,7 +65,6 @@ class ValueSetter : public ArrayVisitor
 public:
     virtual bool processValue( const css::uno::Any& aValue, const css::uno::Reference< css::table::XCell >& xCell ) = 0;
 
-
 };
 
 class ValueGetter : public ArrayVisitor
@@ -279,7 +278,6 @@ public:
     OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XDefaultProperty
         OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("Value"); }
-
 
 // #TODO completely rewrite ScVbaRange, its become a hackfest
 // it needs to be closer to ScCellRangeBase in that the underlying

@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 }}}
 
-
 class ScFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
@@ -56,7 +55,6 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
         impl_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext )
             throw (com::sun::star::uno::Exception);
-
 
     // XExtendedFilterDetect
 

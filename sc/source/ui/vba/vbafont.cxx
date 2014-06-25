@@ -58,7 +58,6 @@ ScVbaFont::~ScVbaFont()
 {
 }
 
-
 static uno::Reference< beans::XPropertySet > lcl_TextProperties( uno::Reference< table::XCell >& xIf ) throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xTxtRange( xIf, uno::UNO_QUERY_THROW );
@@ -243,7 +242,6 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExcep
             ScVbaFont_BASE::setColorIndex( _colorindex );
 }
 
-
 uno::Any SAL_CALL
 ScVbaFont::getColorIndex() throw ( uno::RuntimeException, std::exception )
 {
@@ -252,7 +250,6 @@ ScVbaFont::getColorIndex() throw ( uno::RuntimeException, std::exception )
             return aNULL();
     return ScVbaFont_BASE::getColorIndex();
 }
-
 
 void  SAL_CALL
 ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException, std::exception )
@@ -263,7 +260,6 @@ ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::Runtime
         "setStandardFontSize not supported" );
 }
 
-
 uno::Any SAL_CALL
 ScVbaFont::getStandardFontSize() throw ( uno::RuntimeException, std::exception )
 {
@@ -272,14 +268,12 @@ ScVbaFont::getStandardFontSize() throw ( uno::RuntimeException, std::exception )
     // return uno::Any();
 }
 
-
 void  SAL_CALL
 ScVbaFont::setStandardFont( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException, std::exception )
 {
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException("setStandardFont not supported" );
 }
-
 
 uno::Any SAL_CALL
 ScVbaFont::getStandardFont() throw ( uno::RuntimeException, std::exception )
@@ -319,7 +313,6 @@ ScVbaFont::setFontStyle( const uno::Any& aValue ) throw( uno::RuntimeException, 
     setBold( uno::makeAny( bBold ) );
     setItalic( uno::makeAny( bItalic ) );
 }
-
 
 uno::Any SAL_CALL
 ScVbaFont::getFontStyle() throw ( uno::RuntimeException, std::exception )

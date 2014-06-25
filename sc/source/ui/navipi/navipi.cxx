@@ -76,9 +76,7 @@ void ScNavigatorDlg::ReleaseFocus()
     }
 }
 
-
 //  class ColumnEdit
-
 
 ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   SpinField   ( pParent, rResId ),
@@ -128,7 +126,6 @@ void ColumnEdit::LoseFocus()
     EvalText();
 }
 
-
 void ColumnEdit::Up()
 {
     nCol++;
@@ -157,7 +154,6 @@ void ColumnEdit::Last()
     nCol = NumToAlpha( SCNAV_MAXCOL, aStr );
     SetText( aStr );
 }
-
 
 void ColumnEdit::EvalText()
 {
@@ -253,9 +249,7 @@ SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, OUString& rStr )
     return nColNo;
 }
 
-
 //  class RowEdit
-
 
 RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   NumericField( pParent, rResId ),
@@ -301,9 +295,7 @@ void RowEdit::ExecuteRow()
         rDlg.SetCurrentCell( nCol-1, nRow-1 );
 }
 
-
 //  class ScDocListBox
-
 
 ScDocListBox::ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId )
     :   ListBox ( pParent, rResId ),
@@ -323,9 +315,7 @@ void ScDocListBox::Select()
     rDlg.aLbEntries.SelectDoc( aDocName );
 }
 
-
 //  class CommandToolBox
-
 
 CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     :   ToolBox ( pParent, rResId ),
@@ -476,9 +466,7 @@ void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
-
 //  class ScNavigatorSettings
-
 
 ScNavigatorSettings::ScNavigatorSettings() :
     maExpandedVec( SC_CONTENT_COUNT, false ),
@@ -487,9 +475,7 @@ ScNavigatorSettings::ScNavigatorSettings() :
 {
 }
 
-
 //  class ScNavigatorDlgWrapper
-
 
 SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
@@ -559,9 +545,7 @@ void ScNavigatorDialogWrapper::Resizing( Size& rSize )
     ((ScNavigatorDlg*)GetWindow())->Resizing(rSize);
 }
 
-
 // class ScNavigatorPI
-
 
 #define CTRL_ITEMS 4
 
@@ -1210,7 +1194,6 @@ void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
         pNav->SetFloatingSize( aFloating );
     }
 }
-
 
 //      Dokumente fuer Dropdown-Listbox
 

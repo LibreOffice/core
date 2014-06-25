@@ -36,7 +36,6 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-
 #include "dbdocfun.hxx"
 #include "docsh.hxx"
 #include "globstr.hrc"
@@ -189,9 +188,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( &rDoc, nTab, nTab );
 
-
     //  get data from database into import document
-
 
     try
     {
@@ -215,7 +212,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             {
 
                 //  set source parameters
-
 
                 sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
                             ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
@@ -250,7 +246,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         {
 
             //  get column descriptions
-
 
             long nColCount = 0;
             uno::Reference<sdbc::XResultSetMetaData> xMeta;
@@ -398,9 +393,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         OSL_FAIL("Unexpected exception in database");
     }
 
-
     //  test for cell protection
-
 
     bool bKeepFormat = !bAddrInsert && pDBData->IsKeepFmt();
     bool bMoveCells = !bAddrInsert && pDBData->IsDoSize();
@@ -446,9 +439,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
     }
 
-
     //  copy data from import doc into real document
-
 
     if ( bSuccess )
     {
@@ -486,9 +477,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             pImportDoc->ApplyPatternAreaTab( 0,0,MAXCOL,MAXROW, nTab, aPattern );
         }
 
-
         //  copy old data for undo
-
 
         SCCOL nUndoEndCol = std::max( nEndCol, rParam.nCol2 );       // rParam = old end
         SCROW nUndoEndRow = std::max( nEndRow, rParam.nRow2 );
@@ -526,9 +515,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                         nCopyFlags, false, pUndoDoc );
         }
 
-
         //  move new data
-
 
         if (bMoveCells)
         {
@@ -659,6 +646,5 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     return bSuccess;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

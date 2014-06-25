@@ -32,7 +32,6 @@
 
 #define SC_RTFTWIPTOL 10        // 10 Twips tolerance when determining columns
 
-
 ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
         mnCurPos(0),
@@ -50,14 +49,12 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
     pInsDefault = new ScRTFCellDefault( pPool );
 }
 
-
 ScRTFParser::~ScRTFParser()
 {
     delete pInsDefault;
     delete pColTwips;
     maDefaultList.clear();
 }
-
 
 sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
@@ -90,7 +87,6 @@ sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
     return nErr;
 }
 
-
 void ScRTFParser::EntryEnd( ScEEParseEntry* pE, const ESelection& aSel )
 {
     // Paragraph -2 strips the attached empty paragraph
@@ -99,13 +95,11 @@ void ScRTFParser::EntryEnd( ScEEParseEntry* pE, const ESelection& aSel )
     pE->aSel.nEndPos = pEdit->GetTextLen( aSel.nEndPara - 1 );
 }
 
-
 inline void ScRTFParser::NextRow()
 {
     if ( nRowMax < ++nRowCnt )
         nRowMax = nRowCnt;
 }
-
 
 bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
@@ -130,7 +124,6 @@ bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
     }
     return false;
 }
-
 
 void ScRTFParser::ColAdjust()
 {
@@ -160,7 +153,6 @@ void ScRTFParser::ColAdjust()
         pColTwips->clear();
     }
 }
-
 
 IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
 {
@@ -244,7 +236,6 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
     mnCurPos = 0;
     OSL_ENSURE( pActDefault, "NewCellRow: pActDefault==0" );
 }
-
 
 /*
     SW:

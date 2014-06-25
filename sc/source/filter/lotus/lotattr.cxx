@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "lotattr.hxx"
 
 #include <boost/bind.hpp>
@@ -35,9 +34,7 @@
 #include "root.hxx"
 #include "scitems.hxx"
 
-
 using namespace ::com::sun::star;
-
 
 LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
     : pPattAttr(p)
@@ -76,7 +73,6 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot):
     pWhite = new SvxColorItem( Color( COL_WHITE ), ATTR_FONT_COLOR );
 }
 
-
 LotAttrCache::~LotAttrCache()
 {
     for( sal_uInt16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
@@ -87,7 +83,6 @@ LotAttrCache::~LotAttrCache()
 
     delete[] pColTab;
 }
-
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 {
@@ -157,7 +152,6 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     return *pNewPatt;
 }
 
-
 void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& aBL )
 {
     nLine &= 0x03;
@@ -224,7 +218,6 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
     }
 }
 
-
 void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum )
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
@@ -254,7 +247,6 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
 }
-
 
 void LotAttrTable::Apply( const SCTAB nTabNum )
 {

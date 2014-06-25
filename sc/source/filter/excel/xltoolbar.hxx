@@ -66,7 +66,6 @@ public:
     bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     OUString GetName() { return tb.getName().getString(); }
 
-
 };
 
 class CTBS : public TBBase
@@ -106,7 +105,6 @@ public:
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
     ScCTB* GetCustomizationData( const OUString& name );
 };
-
 
 #endif // INCLUDED_SC_SOURCE_FILTER_EXCEL_XLTOOLBAR_HXX
 

@@ -143,9 +143,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 {
 }
 
-
 //  class ScOptSolverDlg
-
 
 ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocShell* pDocSh, ScAddress aCursorPos )
@@ -510,7 +508,6 @@ bool ScOptSolverDlg::IsRefInputMode() const
 {
     return mpEdActive != NULL;
 }
-
 
 // Handler:
 

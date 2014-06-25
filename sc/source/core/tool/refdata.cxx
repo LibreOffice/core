@@ -41,7 +41,6 @@ void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rP
     SetAddress(rAdr, rPos);
 }
 
-
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
 {
     Flags.bColRel = false;
@@ -98,18 +97,15 @@ void ScSingleRefData::SetColDeleted( bool bVal )
     Flags.bColDeleted = bVal;
 }
 
-
 void ScSingleRefData::SetRowDeleted( bool bVal )
 {
     Flags.bRowDeleted = bVal;
 }
 
-
 void ScSingleRefData::SetTabDeleted( bool bVal )
 {
     Flags.bTabDeleted = bVal;
 }
-
 
 bool ScSingleRefData::IsDeleted() const
 {
@@ -288,7 +284,6 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
 
     return *this;
 }
-
 
 ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
 {

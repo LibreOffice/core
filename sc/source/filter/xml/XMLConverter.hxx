@@ -34,7 +34,6 @@
 class ScDocument;
 class DateTime;
 
-
 class ScXMLConverter
 {
 public:

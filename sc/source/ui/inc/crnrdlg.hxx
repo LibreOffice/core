@@ -30,7 +30,6 @@
 class ScViewData;
 class ScDocument;
 
-
 class ScColRowNameRangesDlg : public ScAnyRefDlg
 {
 public:

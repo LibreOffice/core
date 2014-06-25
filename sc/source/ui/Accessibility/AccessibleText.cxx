@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -43,7 +42,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>
 #include <vcl/svapp.hxx>
-
 
 class ScViewForwarder : public SvxViewForwarder
 {
@@ -963,7 +961,6 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
     return pDocSh;
 }
 
-
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone)
     :
     mpViewForwarder(NULL),
@@ -1237,7 +1234,6 @@ void ScAccessibleEditLineTextData::EndEdit()
     mpEditView = NULL;
 }
 
-
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
@@ -1311,7 +1307,6 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
         pDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
     return pDocSh;
 }
-
 
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -1643,7 +1638,6 @@ SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
         mpViewForwarder = new ScPreviewNoteViewForwarder(mpViewShell, maCellPos, mbMarkNote);
     return mpViewForwarder;
 }
-
 
 // CSV import =================================================================
 

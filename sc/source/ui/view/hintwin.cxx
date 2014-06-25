@@ -64,11 +64,9 @@ ScHintWindow::ScHintWindow( Window* pParent, const OUString& rTit, const OUStrin
     SetOutputSizePixel( aWinSize );
 }
 
-
 ScHintWindow::~ScHintWindow()
 {
 }
-
 
 void ScHintWindow::Paint( const Rectangle& /* rRect */ )
 {

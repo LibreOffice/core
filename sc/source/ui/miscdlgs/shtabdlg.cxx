@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include <vcl/msgbox.hxx>
 
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
 
 ScShowTabDlg::ScShowTabDlg(Window* pParent)
     : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")

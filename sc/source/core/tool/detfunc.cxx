@@ -1144,8 +1144,6 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
     return nResult;
 }
 
-
-
 bool ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();

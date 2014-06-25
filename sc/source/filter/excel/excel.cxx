@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -141,7 +140,6 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
     return eRet;
 }
-
 
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, bool bBiff8, rtl_TextEncoding eNach )

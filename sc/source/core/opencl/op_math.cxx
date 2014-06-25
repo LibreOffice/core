@@ -285,7 +285,6 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-
 void OpCoth::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {

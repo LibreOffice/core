@@ -68,7 +68,6 @@ private:
     bool            bShow;
 };
 
-
 class ScUndoMakeOutline: public ScSimpleUndo
 {
 public:
@@ -94,7 +93,6 @@ private:
     bool            bColumns;
     bool            bMake;
 };
-
 
 class ScUndoOutlineLevel: public ScSimpleUndo
 {
@@ -123,7 +121,6 @@ private:
     sal_uInt16      nLevel;
 };
 
-
 class ScUndoOutlineBlock: public ScSimpleUndo
 {
 public:
@@ -150,7 +147,6 @@ private:
     bool            bShow;
 };
 
-
 class ScUndoRemoveAllOutlines: public ScSimpleUndo
 {
 public:
@@ -175,7 +171,6 @@ private:
     ScOutlineTable* pUndoTable;
 };
 
-
 class ScUndoAutoOutline: public ScSimpleUndo
 {
 public:
@@ -199,7 +194,6 @@ private:
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
 };
-
 
 class ScUndoSubTotals: public ScDBFuncUndo
 {
@@ -230,7 +224,6 @@ private:
     ScDBCollection* pUndoDB;
 };
 
-
 class ScUndoSort: public ScDBFuncUndo
 {
 public:
@@ -256,7 +249,6 @@ private:
     bool            bDestArea;
     ScRange         aDestRange;
 };
-
 
 class ScUndoQuery: public ScDBFuncUndo
 {
@@ -288,7 +280,6 @@ private:
     bool            bDoSize;
 };
 
-
 class ScUndoAutoFilter: public ScDBFuncUndo
 {
 private:
@@ -311,7 +302,6 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
-
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
@@ -331,7 +321,6 @@ private:
     ScDBCollection* pUndoColl;
     ScDBCollection* pRedoColl;
 };
-
 
 class ScUndoImportData: public ScSimpleUndo
 {
@@ -363,7 +352,6 @@ private:
     SCCOL           nFormulaCols;
     bool            bRedoFilled;
 };
-
 
 class ScUndoRepeatDB: public ScSimpleUndo
 {
@@ -398,7 +386,6 @@ private:
     bool            bQuerySize;
 };
 
-
 class ScUndoDataPilot: public ScSimpleUndo
 {
 public:
@@ -423,7 +410,6 @@ private:
     ScDPObject*     pNewDPObject;
     bool            bAllowMove;
 };
-
 
 class ScUndoConsolidate: public ScSimpleUndo
 {
@@ -452,7 +438,6 @@ private:
     ScOutlineTable*     pUndoTab;
     ScDBData*           pUndoData;
 };
-
 
 class ScUndoChartData: public ScSimpleUndo
 {
@@ -523,7 +508,6 @@ private:
     void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
-
 
 #endif
 

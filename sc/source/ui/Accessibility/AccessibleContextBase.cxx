@@ -50,7 +50,6 @@ ScAccessibleContextBase::ScAccessibleContextBase(
 {
 }
 
-
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
     if (!IsDefunc() && !rBHelper.bInDispose)

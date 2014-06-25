@@ -24,12 +24,10 @@
 #include <svtools/tabbar.hxx>
 #include <svtools/transfer.hxx>
 
-
 class ScViewData;
 
 //  initial size
 #define SC_TABBAR_DEFWIDTH      270
-
 
 class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHelper
 {

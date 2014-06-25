@@ -26,7 +26,6 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 
-
 enum ScTabOpErr
 {
     TABOPERR_NOFORMULA = 1,

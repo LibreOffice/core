@@ -32,7 +32,6 @@ public:
     virtual css::uno::Any getValueEvent() = 0;
 };
 
-
 class ScVbaPropValue : public PropValueImpl_BASE
 {
     PropListener* m_pListener;

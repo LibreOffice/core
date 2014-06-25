@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
 
-
 #include <sfx2/ctrlitem.hxx>
-
 
 class ScNavigatorDlg;
 
@@ -39,7 +37,6 @@ protected:
 private:
     ScNavigatorDlg& rNavigatorDlg;
 };
-
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVCITEM_HXX
 

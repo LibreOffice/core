@@ -20,7 +20,6 @@
 #include "csvruler.hxx"
 #include "AccessibleCsvControl.hxx"
 
-
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -30,11 +29,8 @@
 
 using namespace com::sun::star::uno;
 
-
-
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 #define FIXED_WIDTH_LIST    "FixedWidthList"
-
 
 static void load_FixedWidthList(ScCsvSplits &aSplits)
 {
@@ -107,7 +103,6 @@ ScCsvRuler::~ScCsvRuler()
 {
     save_FixedWidthList( maSplits );
 }
-
 
 // common ruler handling ------------------------------------------------------
 
@@ -247,7 +242,6 @@ void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
     Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
 
-
 // split handling -------------------------------------------------------------
 
 sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
@@ -350,7 +344,6 @@ void ScCsvRuler::MoveCurrSplitRel( ScMoveMode eDir )
             MoveCurrSplit( nNewPos );
     }
 }
-
 
 // event handling -------------------------------------------------------------
 
@@ -517,7 +510,6 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
     mnPosMTStart = CSV_POS_INVALID;
 }
 
-
 // painting -------------------------------------------------------------------
 
 void ScCsvRuler::Paint( const Rectangle& )
@@ -654,13 +646,11 @@ void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
     SetPointer( Pointer( HasSplit( nPos ) ? POINTER_HSPLIT : POINTER_ARROW ) );
 }
 
-
 // accessibility ==============================================================
 
 ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
 {
     return new ScAccessibleCsvRuler( *this );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

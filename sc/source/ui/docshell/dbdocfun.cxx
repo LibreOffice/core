@@ -485,7 +485,6 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
-
     //      ausfuehren
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
@@ -989,7 +988,6 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                     new ScUndoQuery( &rDocShell, nTab, rQueryParam, pUndoDoc, pUndoDB,
                                         pOld, bDoSize, pAdvSource ) );
     }
-
 
     if (bCopy)
     {
@@ -1738,6 +1736,5 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

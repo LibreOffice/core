@@ -112,7 +112,6 @@ using namespace ::com::sun::star;
 #define SC_PREVIEW_SIZE_X   10000
 #define SC_PREVIEW_SIZE_Y   12400
 
-
 void ScDocShell::Execute( SfxRequest& rReq )
 {
     //  SID_SC_RANGE (Range),
@@ -541,7 +540,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rReq.Ignore();
             }
             break;
-
 
         case SID_AUTO_STYLE:
             OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
@@ -1105,7 +1103,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
     }
 }
 
-
 void UpdateAcceptChangesDialog()
 {
     //  update "accept changes" dialog
@@ -1181,7 +1178,6 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQuer
         bDone = true;
     return bDone;
 }
-
 
 void ScDocShell::DoRecalc( bool bApi )
 {
@@ -1849,10 +1845,8 @@ void ScDocShell::GetSbxState( SfxItemSet &rSet )
     //  SID_TABLES_GET (Tables),
     //  SID_PIVOT_GET (DataPilotTables) - removed (old Basic)
 
-
         //  Wenn hier Slots von der View-Shell executed werden, muss auch der
         //  GetState weitergeleitet werden!
-
 
     ScTabViewShell* pVisibleSh = GetBestViewShell();        // sichtbare View
     if ( pVisibleSh )
@@ -1997,7 +1991,6 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
     rVal = (long) ( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
 }
-
 
 }
 

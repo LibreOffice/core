@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "scitems.hxx"
 #include <svx/numinf.hxx>
@@ -41,7 +38,6 @@
 #include <editeng/flstitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
@@ -176,7 +172,6 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         }
     }
 }
-
 
 const SfxItemSet* ScStyleDlg::GetRefreshedSet()
 {

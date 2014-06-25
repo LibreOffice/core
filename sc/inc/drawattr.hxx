@@ -22,7 +22,6 @@
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>
 
-
 class SvxDrawToolItem : public SfxEnumItem
 {
 public:
@@ -31,7 +30,6 @@ public:
                                 SfxEnumItem( rDrawToolItem ){}
 
         SvxDrawToolItem(sal_uInt16 nWhichP) : SfxEnumItem(nWhichP){}
-
 
     virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE
                                     {return((sal_uInt16)SVX_SNAP_DRAW_TEXT);}
@@ -45,6 +43,5 @@ public:
             }
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

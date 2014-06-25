@@ -30,19 +30,16 @@
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
 
-
 namespace svtools { class ColorConfig; }
 class EditEngine;
 class ScEditEngineDefaulter;
 class ScAsciiOptions;
 class ScAccessibleCsvControl;
 
-
 const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
 const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
 
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
-
 
 /** This struct contains the state of one table column. */
 struct ScCsvColState
@@ -69,9 +66,7 @@ inline void ScCsvColState::Select( bool bSel )
     if( bSel ) mnFlags |= CSV_COLFLAG_SELECT; else mnFlags &= ~CSV_COLFLAG_SELECT;
 }
 
-
 typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
-
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
@@ -110,7 +105,6 @@ private:
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
     sal_uInt32                  mnMTCurrCol;        /// Current column of mouse tracking.
     bool                        mbMTSelecting;      /// Mouse tracking: true = select, false = deselect.
-
 
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
@@ -333,7 +327,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
 
 #endif
 

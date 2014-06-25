@@ -377,8 +377,6 @@ ScRange DataStream::GetRange() const
     return aRange;
 }
 
-
-
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, const sal_uInt32 nSettings)
 {

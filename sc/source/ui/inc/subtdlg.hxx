@@ -33,8 +33,6 @@ private:
     DECL_LINK( RemoveHdl, PushButton * );
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_SUBTDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

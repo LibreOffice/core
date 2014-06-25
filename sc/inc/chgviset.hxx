@@ -96,7 +96,6 @@ public:
     void                SetTheLastDateTime(const DateTime& aDateTime) {aLastDateTime=aDateTime;}
     const DateTime&     GetTheLastDateTime()const {return aLastDateTime;}
 
-
     bool                HasAuthor() const {return bIsAuthor;}
     void                SetHasAuthor(bool nFlag) {bIsAuthor=nFlag;}
 
@@ -113,7 +112,6 @@ public:
 
     bool                IsEveryoneButMe() const {return bEveryoneButMe;}
     void                SetEveryoneButMe(bool nFlag) {bEveryoneButMe=nFlag;}
-
 
     bool                HasRange() const {return bIsRange;}
     void                SetHasRange(bool nFlag) {bIsRange=nFlag;}

@@ -33,7 +33,6 @@ class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;
 
-
 ///  how to treat COL_AUTO in GetFont:
 
 enum ScAutoFontColorMode
@@ -46,7 +45,6 @@ enum ScAutoFontColorMode
     SC_AUTOCOL_IGNOREBACK,  ///< like DISPLAY, but ignore stored background color (use configured color)
     SC_AUTOCOL_IGNOREALL    ///< like DISPLAY, but ignore stored font and background colors
 };
-
 
 class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
 {
@@ -133,7 +131,6 @@ public:
     sal_uInt8                   GetRotateDir( const SfxItemSet* pCondSet ) const;
 };
 
-
 class ScFontToSubsFontConverter_AutoPtr
 {
             FontToSubsFontConverter h;
@@ -167,7 +164,6 @@ public:
             operator FontToSubsFontConverter() const
                                     { return h; }
 };
-
 
 #endif
 

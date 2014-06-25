@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconrec.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -31,7 +30,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 
 #include "scresid.hxx"
-
 
 /*************************************************************************
 |*

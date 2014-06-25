@@ -46,7 +46,6 @@ public:
     inline sal_uLong                GetChildSelected() const { return mnChildSelected; }
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

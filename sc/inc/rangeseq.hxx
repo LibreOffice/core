@@ -56,7 +56,6 @@ public:
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
-
 class ScApiTypeConversion
 {
 public:
@@ -75,7 +74,6 @@ public:
 
 };
 
-
 class ScSequenceToMatrix
 {
 public:
@@ -90,7 +88,6 @@ public:
     static  ScMatrixRef CreateMixedMatrix( const com::sun::star::uno::Any & rAny );
 
 };
-
 
 class ScByteSequenceToString
 {

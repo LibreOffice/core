@@ -491,7 +491,6 @@ void ScPatternAttr::GetFont(
     GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
 }
 
-
 void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
 {
     //  Items auslesen
@@ -730,7 +729,6 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     if( pEditSet )
         FillToEditItemSet( *pEditSet, GetItemSet(), pCondSet );
 }
-
 
 void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet )
 {
@@ -1116,7 +1114,6 @@ const OUString* ScPatternAttr::GetStyleName() const
     return pName ? pName : ( pStyle ? &pStyle->GetName() : NULL );
 }
 
-
 void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
 {
     if (pNewStyle)
@@ -1193,7 +1190,6 @@ bool ScPatternAttr::IsSymbolFont() const
     else
         return false;
 }
-
 
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {
@@ -1286,6 +1282,5 @@ sal_uInt8 ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
 
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

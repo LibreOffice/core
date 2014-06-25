@@ -82,7 +82,6 @@ const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
 
 // STATIC DATA -----------------------------------------------------------
 
-
 class ScDrawStringsVars
 {
     ScOutputData*       pOutput;                // Verbindung
@@ -392,10 +391,8 @@ void ScDrawStringsVars::SetPattern(
 
     aMetric = pFmtDevice->GetFontMetric();
 
-
     //  Wenn auf dem Drucker das Leading 0 ist, gibt es Probleme
     //  -> Metric vom Bildschirm nehmen (wie EditEngine!)
-
 
     if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
     {
@@ -822,9 +819,7 @@ double ScOutputData::GetStretch()
     }
 }
 
-
 //  output strings
-
 
 static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
 {
@@ -1236,7 +1231,6 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
     // construct the rectangles using logical left/right values (justify is called at the end)
 
-
     //  rAlignRect is the single cell or merged area, used for alignment.
 
     rParam.maAlignRect.Left() = nCellPosX;
@@ -1494,9 +1488,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                 bool bDoCell = false;
                 bool bNeedEdit = false;
 
-
                 //  Part of a merged cell?
-
 
                 bool bOverlapped = (pInfo->bHOverlapped || pInfo->bVOverlapped);
                 if ( bOverlapped )
@@ -1516,9 +1508,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         bMergeEmpty = true;
                 }
 
-
                 //  Rest of a long text further to the left?
-
 
                 if ( bEmpty && !bMergeEmpty && nX < nX1 && !bOverlapped )
                 {
@@ -1535,9 +1525,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                     }
                 }
 
-
                 //  Rest of a long text further to the right?
-
 
                 if ( bEmpty && !bMergeEmpty && nX == nX2 && !bOverlapped )
                 {
@@ -1556,16 +1544,12 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                     }
                 }
 
-
                 //  normal visible cell
-
 
                 if (!bEmpty)
                     bDoCell = true;
 
-
                 //  don't output the cell that's being edited
-
 
                 if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
                     bDoCell = false;
@@ -1579,9 +1563,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         bDoCell = false;
                 }
 
-
                 //  output the cell text
-
 
                 ScRefCellValue aCell;
                 if (bDoCell)
@@ -1878,9 +1860,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         bVClip = true;
                     }
 
-
                     //      horizontalen Platz testen
-
 
                     bool bRightAdjusted = false;        // to correct text width calculation later
                     bool bNeedEditEngine = false;
@@ -2226,7 +2206,6 @@ static long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, long 
     else
         return rEngine.GetTextHeight();
 }
-
 
 void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
             long nLeftM, long nTopM, long nRightM, long nBottomM,
@@ -2787,9 +2766,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     OutputAreaParam aAreaParam;
 
-
     //  Initial page size - large for normal text, cell size for automatic line breaks
-
 
     Size aPaperSize = Size( 1000000, 1000000 );
     if (rParam.mbBreak)
@@ -2822,9 +2799,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     else
         rParam.mpEngine->SetPaperSize(aPaperSize);
 
-
     //  Fill the EditEngine (cell attributes and text)
-
 
     // default alignment for asian vertical mode is top-right
     if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
@@ -2847,9 +2822,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-
     //  Get final output area using the calculated width
-
 
     long nEngineWidth, nEngineHeight;
     rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
@@ -3290,9 +3263,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     OutputAreaParam aAreaParam;
 
-
     //  Initial page size - large for normal text, cell size for automatic line breaks
-
 
     Size aPaperSize = Size( 1000000, 1000000 );
     if (rParam.mbBreak)
@@ -3315,9 +3286,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     else
         rParam.mpEngine->SetPaperSize(aPaperSize);
 
-
     //  Fill the EditEngine (cell attributes and text)
-
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
@@ -3336,9 +3305,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-
     //  Get final output area using the calculated width
-
 
     long nEngineWidth, nEngineHeight;
     rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
@@ -3556,9 +3523,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
     OutputAreaParam aAreaParam;
 
-
     //  Initial page size - large for normal text, cell size for automatic line breaks
-
 
     Size aPaperSize = Size( 1000000, 1000000 );
     if (rParam.hasLineBreak())
@@ -3581,9 +3546,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     else
         rParam.mpEngine->SetPaperSize(aPaperSize);
 
-
     //  Fill the EditEngine (cell attributes and text)
-
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
@@ -3602,9 +3565,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-
     //  Get final output area using the calculated width
-
 
     long nEngineWidth, nEngineHeight;
     rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
@@ -3829,9 +3790,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     OutputAreaParam aAreaParam;
 
-
     //  Initial page size - large for normal text, cell size for automatic line breaks
-
 
     Size aPaperSize = Size( 1000000, 1000000 );
     //  call GetOutputArea with nNeeded=0, to get only the cell width
@@ -3862,9 +3821,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     else
         rParam.mpEngine->SetPaperSize(aPaperSize);
 
-
     //  Fill the EditEngine (cell attributes and text)
-
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
@@ -3883,9 +3840,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-
     //  Get final output area using the calculated width
-
 
     long nEngineWidth, nEngineHeight;
     rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
@@ -4191,9 +4146,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     OutputAreaParam aAreaParam;
 
-
     //  Initial page size - large for normal text, cell size for automatic line breaks
-
 
     Size aPaperSize = Size( 1000000, 1000000 );
     //  call GetOutputArea with nNeeded=0, to get only the cell width
@@ -4224,9 +4177,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     else
         rParam.mpEngine->SetPaperSize(aPaperSize);
 
-
     //  Fill the EditEngine (cell attributes and text)
-
 
     // default alignment for asian vertical mode is top-right
     if ( rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
@@ -4249,9 +4200,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-
     //  Get final output area using the calculated width
-
 
     long nEngineWidth, nEngineHeight;
     rParam.getEngineSize(rParam.mpEngine, nEngineWidth, nEngineHeight);
@@ -4667,7 +4616,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
         if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
             nRotMax = pRowInfo[nRotY].nRotMaxCol;
-
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;

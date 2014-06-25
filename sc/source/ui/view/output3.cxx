@@ -247,5 +247,4 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
         DrawSelectiveObjects( nLayer );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

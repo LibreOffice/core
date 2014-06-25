@@ -766,7 +766,6 @@ FltError ImportExcel::Read( void )
     return eLastErr;
 }
 
-
 FltError ImportExcel8::Read( void )
 {
 #ifdef EXC_INCL_DUMPER
@@ -978,7 +977,6 @@ FltError ImportExcel8::Read( void )
             }
             break;
 
-
             // prefetch for workbook globals
             case EXC_STATE_GLOBALS_PRE:
             {
@@ -1018,7 +1016,6 @@ FltError ImportExcel8::Read( void )
                 }
             }
             break;
-
 
             // workbook globals
             case EXC_STATE_GLOBALS:
@@ -1078,7 +1075,6 @@ FltError ImportExcel8::Read( void )
 
             }
             break;
-
 
             // prefetch for worksheet
             case EXC_STATE_SHEET_PRE:
@@ -1145,7 +1141,6 @@ FltError ImportExcel8::Read( void )
                 }
             }
             break;
-
 
             // worksheet
             case EXC_STATE_SHEET:
@@ -1236,7 +1231,6 @@ FltError ImportExcel8::Read( void )
                 }
             }
             break;
-
 
             default:;
         }

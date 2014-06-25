@@ -79,10 +79,7 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
-
 //  Data operations
-
-
 
 long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,

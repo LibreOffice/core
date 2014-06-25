@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "chart2uno.hxx"
 #include "miscuno.hxx"
 #include "document.hxx"
@@ -1016,7 +1015,6 @@ ScChart2DataProvider::~ScChart2DataProvider()
         m_pDocument->RemoveUnoObject( *this);
 }
 
-
 void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
@@ -1087,7 +1085,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
     return xResult;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
-
 
 /**
  * Check the current list of reference tokens, and add the upper left
@@ -2325,7 +2322,6 @@ ScChart2DataProvider::getPropertySetInfo() throw( uno::RuntimeException, std::ex
     return aRef;
 }
 
-
 void SAL_CALL ScChart2DataProvider::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
             throw( beans::UnknownPropertyException,
@@ -2341,7 +2337,6 @@ void SAL_CALL ScChart2DataProvider::setPropertyValue(
     else
         throw beans::UnknownPropertyException();
 }
-
 
 uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
         const OUString& rPropertyName)
@@ -2361,7 +2356,6 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
     return aRet;
 }
 
-
 void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*xListener*/)
@@ -2370,7 +2364,6 @@ void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
 {
     OSL_FAIL( "Not yet implemented" );
 }
-
 
 void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
@@ -2381,7 +2374,6 @@ void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
     OSL_FAIL( "Not yet implemented" );
 }
 
-
 void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/)
@@ -2390,7 +2382,6 @@ void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
 {
     OSL_FAIL( "Not yet implemented" );
 }
-
 
 void SAL_CALL ScChart2DataProvider::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
@@ -2410,13 +2401,11 @@ ScChart2DataSource::ScChart2DataSource( ScDocument* pDoc)
         m_pDocument->AddUnoObject( *this);
 }
 
-
 ScChart2DataSource::~ScChart2DataSource()
 {
     if ( m_pDocument )
         m_pDocument->RemoveUnoObject( *this);
 }
-
 
 void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
@@ -2426,7 +2415,6 @@ void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         m_pDocument = NULL;
     }
 }
-
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
 ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException, std::exception)
@@ -2956,7 +2944,6 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( m_pDocument && pHint && pHint->ISA( SfxSimpleHint ) &&
@@ -3015,7 +3002,6 @@ void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
 {
     maFileIds.erase(nFileId);
 }
-
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     throw (uno::RuntimeException, std::exception)
@@ -3475,7 +3461,6 @@ ScChart2DataSequence::getPropertySetInfo() throw( uno::RuntimeException, std::ex
     return aRef;
 }
 
-
 void SAL_CALL ScChart2DataSequence::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
             throw( beans::UnknownPropertyException,
@@ -3506,7 +3491,6 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
         throw beans::UnknownPropertyException();
     // TODO: support optional properties
 }
-
 
 uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rPropertyName)
     throw(beans::UnknownPropertyException,
@@ -3548,7 +3532,6 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
     return aRet;
 }
 
-
 void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*xListener*/)
@@ -3558,7 +3541,6 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
 }
-
 
 void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
@@ -3570,7 +3552,6 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
     OSL_FAIL( "Not yet implemented" );
 }
 
-
 void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/)
@@ -3580,7 +3561,6 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
 }
-
 
 void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,

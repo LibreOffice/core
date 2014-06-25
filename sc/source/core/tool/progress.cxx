@@ -33,7 +33,6 @@
 
 using namespace com::sun::star;
 
-
 static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = NULL;
 sal_uLong       ScProgress::nGlobalRange = 0;
@@ -45,7 +44,6 @@ sal_uLong       ScProgress::nInterpretProgress = 0;
 bool            ScProgress::bAllowInterpretProgress = true;
 ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
-
 
 static bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
 {
@@ -116,12 +114,10 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
     }
 }
 
-
 ScProgress::ScProgress() :
         pProgress( NULL )
 {   // DummyInterpret
 }
-
 
 ScProgress::~ScProgress()
 {
@@ -134,7 +130,6 @@ ScProgress::~ScProgress()
         bGlobalNoUserBreak = true;
     }
 }
-
 
 void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
 {

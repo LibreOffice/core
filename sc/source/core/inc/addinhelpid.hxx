@@ -43,7 +43,6 @@ public:
     OString                GetHelpId( const OUString& rFuncName ) const;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

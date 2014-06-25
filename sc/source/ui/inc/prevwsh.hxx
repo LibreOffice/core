@@ -36,7 +36,6 @@ struct ScHeaderFieldData;
 class ScPreviewLocationData;
 class CommandEvent;
 
-
 class ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;

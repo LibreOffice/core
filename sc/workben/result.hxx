@@ -24,15 +24,12 @@
 #include <rtl/ustring.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
-
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
 typedef boost::ptr_vector<XResultListenerPtr> XResultListenerArr_Impl;
-
 
 class ScAddInResult : public cppu::WeakImplHelper1<
                                 com::sun::star::sheet::XVolatileResult>
@@ -55,7 +52,6 @@ public:
     virtual void SAL_CALL addResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

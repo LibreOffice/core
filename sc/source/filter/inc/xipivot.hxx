@@ -28,9 +28,7 @@
 class ScDPSaveData;
 class ScDPSaveDimension;
 
-
 // Pivot cache
-
 
 /** Represents a data item in a pivot cache. */
 class XclImpPCItem : public XclPCItem
@@ -108,7 +106,6 @@ public:
 
     /** Inserts grouping information of this field into the passed ScDPSaveData. */
     void                ConvertGroupField( ScDPSaveData& rSaveData, const ScfStringVec& rVisNames ) const;
-
 
 private:
     /** Inserts standard grouping information of this field into the passed ScDPSaveData. */
@@ -197,9 +194,7 @@ private:
 
 typedef boost::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
 
-
 // Pivot table
-
 
 class XclImpPivotTable;
 
@@ -276,7 +271,6 @@ public:
     void                AddDataFieldInfo( const XclPTDataFieldInfo& rDataInfo );
     void                ConvertDataField( ScDPSaveData& rSaveData ) const;
 
-
 private:
     ScDPSaveDimension*  ConvertRCPField( ScDPSaveData& rSaveData ) const;
     void                ConvertFieldInfo( ScDPSaveDimension& rSaveDim ) const;
@@ -347,7 +341,6 @@ public:
 
     void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
 
-
 private:
     typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;
 
@@ -370,7 +363,6 @@ private:
 };
 
 typedef boost::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
-
 
 /** The main class for pivot table import.
 

@@ -24,7 +24,6 @@
 #include <tools/link.hxx>
 #include "scdllapi.h"
 
-
 class ScOptionsUtil
 {
 public:
@@ -33,7 +32,6 @@ public:
 
     static bool     IsMetricSystem();
 };
-
 
 //  ConfigItem for classes that use items from several sub trees
 
@@ -63,6 +61,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

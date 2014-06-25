@@ -28,7 +28,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 TableFragment::TableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
     mrTable( getTables().createTable() )

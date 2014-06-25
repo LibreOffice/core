@@ -110,7 +110,6 @@ protected:
 
     virtual void RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
-
 public:
     SC_DLLPUBLIC ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);

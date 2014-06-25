@@ -36,7 +36,6 @@ using namespace ::oox;
 
 // *** Helper classes ***
 
-
 /** Represents an internal defined name, supports writing it to a NAME record. */
 class XclExpName : public XclExpRecord, protected XclExpRoot
 {
@@ -56,7 +55,6 @@ public:
         @param bVBasic  true = Visual Basic macro, false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
     void                SetMacroCall( bool bVBasic, bool bFunc );
-
 
     /** Sets the name's symbol value
         @param sValue   the name's symbolic value */
@@ -185,9 +183,7 @@ private:
     size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
 };
 
-
 // *** Implementation ***
-
 
 XclExpName::XclExpName( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpRecord( EXC_ID_NAME ),

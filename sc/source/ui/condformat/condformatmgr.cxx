@@ -146,7 +146,6 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
-
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {
     m_pCtrlManager->DeleteSelection();

@@ -20,7 +20,6 @@ StartListeningContext::StartListeningContext(
     ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet) :
     mrDoc(rDoc), mpSet(pSet) {}
 
-
 ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
     return mpSet->getBlockPosition(nTab, nCol);
@@ -39,8 +38,6 @@ void EndListeningContext::setPositionDelta( const ScAddress& rDelta )
 {
     maPosDelta = rDelta;
 }
-
-
 
 ScAddress EndListeningContext::getOldPosition( const ScAddress& rPos ) const
 {

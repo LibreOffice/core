@@ -55,7 +55,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
-
 typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;
 
 class ScVbaHPageBreak :  public ScVbaHPageBreak_BASE

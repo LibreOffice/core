@@ -182,7 +182,6 @@ static void lcl_ReverseTwipsToMM( Rectangle& rRect )
     ReverseTwipsToMM( rRect.Bottom() );
 }
 
-
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
                  NULL,                          // SfxItemPool* Pool
@@ -1076,9 +1075,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
             aTopLeft.Y() += aMove.Y();
     }
 
-
         //      Detektiv-Pfeile: Zellpositionen anpassen
-
 
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
@@ -1791,7 +1788,6 @@ void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor
     pAnchor->maEndOffset = rAnchor.maEndOffset;
 }
 
-
 void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
 {
     ScDrawObjData aAnchor;
@@ -1838,7 +1834,6 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
         rAnchor.maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
 
 }
-
 
 void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
 {
@@ -1975,7 +1970,6 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
             // ggf. Unshear:
             if ( rGeo.nShearWink )
                 ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
-
 
             if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
                 aGraphSize = rCmpWnd.PixelToLogic( rGraphic.GetPrefSize(),

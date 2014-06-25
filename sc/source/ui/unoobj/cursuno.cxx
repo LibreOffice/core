@@ -481,5 +481,4 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
     return aTotalSeq;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

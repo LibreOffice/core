@@ -21,7 +21,6 @@
 #include "document.hxx"
 #include "editutil.hxx"
 
-
 ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
                 const ScRange& rRangeP )
             :
@@ -33,12 +32,10 @@ ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
 {
 }
 
-
 ScExportBase::~ScExportBase()
 {
     delete pEditEngine;
 }
-
 
 bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
@@ -47,7 +44,6 @@ bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
     pDoc->GetPrintArea( nTab, nEndCol, nEndRow, true );
     return TrimDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
-
 
 bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
@@ -62,7 +58,6 @@ bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
         ::std::numeric_limits<SCROW>::max();
 }
 
-
 bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
 {
     if ( !pDoc->HasTable( nTab ) || !pDoc->IsVisible( nTab ) )
@@ -72,13 +67,11 @@ bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
     return !GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-
 ScFieldEditEngine& ScExportBase::GetEditEngine() const
 {
     if ( !pEditEngine )
         ((ScExportBase*)this)->pEditEngine = new ScFieldEditEngine(pDoc, pDoc->GetEditPool());
     return *pEditEngine;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

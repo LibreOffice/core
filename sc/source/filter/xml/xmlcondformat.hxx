@@ -75,7 +75,6 @@ public:
 
     virtual ~ScXMLColorScaleFormatContext() {}
 
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
@@ -97,7 +96,6 @@ public:
                         ScConditionalFormat* pFormat);
 
     virtual ~ScXMLDataBarFormatContext() {}
-
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -125,7 +123,6 @@ public:
                         ScConditionalFormat* pFormat);
 
     virtual ~ScXMLIconSetFormatContext() {}
-
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

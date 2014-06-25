@@ -808,7 +808,6 @@ ScXMLAutoStylePoolP::~ScXMLAutoStylePoolP()
 {
 }
 
-
 void ScXMLStyleExport::exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle )
@@ -1159,7 +1158,6 @@ bool XmlScPropHdl_PrintContent::exportXML(
 
     return bRetval;
 }
-
 
 XmlScPropHdl_JustifyMethod::~XmlScPropHdl_JustifyMethod()
 {

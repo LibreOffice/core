@@ -239,8 +239,6 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceNa
     return aRet;
 }
 
-
-
 ScNameToIndexAccess::ScNameToIndexAccess( const com::sun::star::uno::Reference<
                                             com::sun::star::container::XNameAccess>& rNameObj ) :
     xNameAccess( rNameObj )
@@ -288,7 +286,5 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 {
     return getCount() > 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

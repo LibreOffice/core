@@ -42,15 +42,12 @@
 class ScAutoFormatFieldObj;
 class ScAutoFormatObj;
 
-
 #define SC_AFMTOBJ_INVALID  USHRT_MAX
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     ScAutoFormatsObj_CreateInstance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory >& );
-
 
 class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::container::XNameContainer,
@@ -124,7 +121,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScAutoFormatObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::container::XIndexAccess,
@@ -232,7 +228,6 @@ public:
                                     ::com::sun::star::uno::XInterface> xObj );
 };
 
-
 class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper2<
                                 ::com::sun::star::beans::XPropertySet,
                                 ::com::sun::star::lang::XServiceInfo >,
@@ -298,7 +293,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

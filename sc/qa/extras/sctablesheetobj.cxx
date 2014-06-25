@@ -54,7 +54,6 @@ ScTableSheetObj::ScTableSheetObj():
 {
 }
 
-
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
     OUString aFileURL;

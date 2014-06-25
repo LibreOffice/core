@@ -48,7 +48,6 @@ ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterfa
         msStyleName = mxStyle->getName();
 }
 
-
 void SAL_CALL
 ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
@@ -131,7 +130,6 @@ ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::Runtime
         nReturnType = excel::XlFormatConditionType::xlCellValue;
     return nReturnType;
 }
-
 
 ::sal_Int32
 ScVbaFormatCondition::Operator( sal_Bool bVal ) throw (script::BasicErrorException )

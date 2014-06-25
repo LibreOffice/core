@@ -64,7 +64,6 @@ void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
             *pDest = *pSource;
 }
 
-
 void SAL_CALL
 ScVbaWorkbook::ResetColors(  ) throw (::script::BasicErrorException, ::uno::RuntimeException, std::exception)
 {

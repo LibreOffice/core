@@ -84,7 +84,6 @@ static OUString lcl_GetVbaTabName( SCTAB n )
     return aRet;
 }
 
-
 static void lcl_AddBookviews( XclExpRecordList<>& aRecList, ExcTable& self )
 {
     aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_bookViews ) );
@@ -131,7 +130,6 @@ static void lcl_AddScenariosAndFilters( XclExpRecordList<>& aRecList, const XclE
     aRecList.AppendRecord( rRoot.GetFilterManager().CreateRecord( nScTab ) );
 }
 
-
 ExcTable::ExcTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnScTab( SCTAB_GLOBAL ),
@@ -140,7 +138,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot ) :
     mxNoteList( new XclExpNoteList )
 {
 }
-
 
 ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
@@ -151,19 +148,16 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
 {
 }
 
-
 ExcTable::~ExcTable()
 {
     delete pTabNames;
 }
-
 
 void ExcTable::Add( XclExpRecordBase* pRec )
 {
     OSL_ENSURE( pRec, "-ExcTable::Add(): pRec is NULL!" );
     aRecList.AppendNewRecord( pRec );
 }
-
 
 void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 {
@@ -322,7 +316,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
     }
 
-
     if( GetBiff() <= EXC_BIFF5 )
     {
         // Bundlesheet
@@ -397,7 +390,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     Add( new ExcEof );
 }
 
-
 void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
@@ -432,7 +424,6 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
         FillAsXmlTable( nCodeNameIdx );
         return;
     }
-
 
     // WSBOOL needs data from page settings, create it here, add it later
     boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
@@ -653,7 +644,6 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     Add( new ExcEof );
 }
 
-
 void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
@@ -675,7 +665,6 @@ void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
     }
 }
 
-
 void ExcTable::Write( XclExpStream& rStrm )
 {
     SetCurrScTab( mnScTab );
@@ -683,7 +672,6 @@ void ExcTable::Write( XclExpStream& rStrm )
         mxCellTable->Finalize();
     aRecList.Save( rStrm );
 }
-
 
 void ExcTable::WriteXml( XclExpXmlStream& rStrm )
 {
@@ -714,7 +702,6 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     }
 }
 
-
 ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     aHeader( rRoot ),
@@ -722,13 +709,11 @@ ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
 {
 }
 
-
 ExcDocument::~ExcDocument()
 {
     maTableList.RemoveAllRecords();    //! for the following assertion
     delete pExpChangeTrack;
 }
-
 
 void ExcDocument::ReadDoc( void )
 {
@@ -766,7 +751,6 @@ void ExcDocument::ReadDoc( void )
             pExpChangeTrack = new XclExpChangeTrack( GetRoot() );
     }
 }
-
 
 void ExcDocument::Write( SvStream& rSvStrm )
 {

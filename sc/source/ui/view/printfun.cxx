@@ -312,7 +312,6 @@ void ScPrintFunc::GetPrintState( ScPrintState& rState )
     rState.nDocPages    = nDocPages;
 }
 
-
 bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
 {
     rRange = aLastSourceRange;
@@ -390,7 +389,6 @@ static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         }
     }
 }
-
 
 //          output to Device (static)
 //
@@ -592,9 +590,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
 
-
 //          Printing
-
 
 static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 {
@@ -854,7 +850,6 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     lcl_FillHFParam( aFtr, pFooterSet );
 
-
     // Compile Table-/Area-Params from single Items
 
     // TabPage "Table"
@@ -934,9 +929,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     aTableParam.bForceBreaks = pOptions && pOptions->GetForceBreaks();
 
-
     // TabPage "Parts":
-
 
     //! walk throuch all PrintAreas of the table !!!
     const ScRange*  pPrintArea = pDoc->GetPrintRange( nPrintTab, 0 );
@@ -1020,9 +1013,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         nRepeatStartRow = nRepeatEndRow = SCROW_REPEAT_NONE;
     }
 
-
             //  Split pages
-
 
     if (!bState)
     {
@@ -1943,7 +1934,6 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, bool bDoPrint, ScPr
                      (long)(aPageSize.Height() * nScaleY * 100 / nZoom))));
     }
 
-
     //      adjust aPageRect for left/right page
 
     Rectangle aTempRect = Rectangle( Point(), aPageSize );
@@ -2012,7 +2002,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
                 Size((long)(aPageSize.Width() * nScaleX * 100 / nZoom),
                      (long)(aPageSize.Height() * nScaleY * 100 / nZoom))));
     }
-
 
     //      adjust aPageRect for left/right page
 
@@ -2373,10 +2362,8 @@ void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
     aTableParam.bNullVals = false;
 }
 
-
 //  UpdatePages is only called from outside to set the breaks correctly for viewing
 //  - always without UserArea
-
 
 bool ScPrintFunc::UpdatePages()
 {
@@ -2581,9 +2568,7 @@ void ScPrintFunc::ApplyPrintSettings()
 
         //  Configure Printer to Printing
 
-
         Size aEnumSize = aPageSize;
-
 
         pPrinter->SetOrientation( bLandscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT );
         if ( bLandscape )
@@ -2611,7 +2596,6 @@ void ScPrintFunc::ApplyPrintSettings()
         pPrinter->SetPaperBin( nPaperBin );
     }
 }
-
 
 //  rPageRanges   = range for all tables
 //  nStartPage    = rPageRanges starts at nStartPage
@@ -3011,10 +2995,8 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
         maPageRows.resize(nRealCnt+1, ScPageRowEntry());
     }
 
-
     //  Page alignment/splitting after breaks in Col/RowFlags
     //  Of several breaks in a hidden area, only one counts.
-
 
     nPagesX = 0;
     nPagesY = 0;

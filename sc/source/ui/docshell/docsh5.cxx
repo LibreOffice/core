@@ -66,9 +66,7 @@ using com::sun::star::uno::UNO_QUERY;
 using ::std::auto_ptr;
 using ::std::vector;
 
-
 //  former viewfunc/dbfunc methods
-
 
 void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
 {
@@ -366,7 +364,6 @@ void ScDocShell::CancelAutoDBRange()
         pOldAutoDBRange = NULL;
     }
 }
-
 
         //  Hoehen anpassen
         //! mit docfunc zusammenfassen
@@ -985,7 +982,6 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
 
     return true;
 }
-
 
 IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
 {

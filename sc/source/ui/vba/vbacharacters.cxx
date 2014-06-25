@@ -21,7 +21,6 @@
 #include "vbaglobals.hxx"
 #include "vbafont.hxx"
 
-
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -90,7 +89,6 @@ ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) thro
     throw uno::RuntimeException("Not Implemented" );
 }
 
-
 // Methods
 void SAL_CALL
 ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeException, std::exception)
@@ -105,7 +103,6 @@ ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException, std::exception)
     // of the cell be deleted from the parent ( range )
     m_xSimpleText->setString(OUString());
 }
-
 
 OUString
 ScVbaCharacters::getServiceImplName()

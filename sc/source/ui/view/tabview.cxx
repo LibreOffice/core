@@ -141,7 +141,6 @@ void ScCornerButton::DataChanged( const DataChangedEvent& rDCEvt )
     Invalidate();
 }
 
-
 void ScCornerButton::Resize()
 {
     Invalidate();
@@ -234,7 +233,6 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
 {
     Init();
 }
-
 
 void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 {
@@ -540,9 +538,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     else
         nBarX = nBarY = 0;
 
-
         //      Splitter auswerten
-
 
     long nLeftSize   = nSizeX;
     long nRightSize  = 0;
@@ -654,7 +650,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         pRowBar[SC_SPLIT_BOTTOM]->Hide();
     }
 
-
                                             // Grid-Windows
 
     if (bInner)
@@ -677,9 +672,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 Point(nSplitPosX,nPosY), Size(nRightSize,nTopSize), nTotalWidth, bLayoutRTL );
     }
 
-
                 //  Scrollbars updaten
-
 
     if (!bInUpdateHeader)
     {
@@ -858,7 +851,6 @@ double ScTabView::GetRelTabBarWidth() const
     return 0.0;
 }
 
-
 ScGridWindow* ScTabView::GetActiveWin()
 {
     ScSplitPos ePos = aViewData.GetActivePart();
@@ -873,14 +865,12 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
             pGridWin[i]->SetPointer( rPointer );
 }
 
-
 void ScTabView::ActiveGrabFocus()
 {
     ScSplitPos ePos = aViewData.GetActivePart();
     if (pGridWin[ePos])
         pGridWin[ePos]->GrabFocus();
 }
-
 
 ScSplitPos ScTabView::FindWindow( Window* pWindow ) const
 {
@@ -1417,9 +1407,7 @@ void ScTabView::UpdateShow()
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = false;
 
-
         //  Windows anlegen
-
 
     if (bShowH && !pGridWin[SC_SPLIT_BOTTOMRIGHT])
     {
@@ -1454,9 +1442,7 @@ void ScTabView::UpdateShow()
         pRowBar[SC_SPLIT_TOP] = new ScRowBar( pFrameWin, &aViewData, SC_SPLIT_TOP,
                                                 &aHdrFunc, pHdrSelEng );
 
-
         //  Windows anzeigen
-
 
     ShowHide( &aHScrollLeft, bHScrollMode );
     ShowHide( &aHScrollRight, bShowH && bHScrollMode );
@@ -1482,7 +1468,6 @@ void ScTabView::UpdateShow()
 
     ShowHide( pColBar[SC_SPLIT_RIGHT], bShowH && bHeader );
     ShowHide( pRowBar[SC_SPLIT_TOP], bShowV && bHeader );
-
 
     //! neue Gridwindows eintragen
 }

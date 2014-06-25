@@ -187,7 +187,6 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
         // Ausgabe des Zelltextes:
 
-
         OUString  cellString;
         bool    bNumFormat  = pCurData->GetIncludeValueFormat();
         sal_uLong   nNum;
@@ -252,7 +251,6 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 
-
             // Ausrichtung:
 
             eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
@@ -305,11 +303,9 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
-
             // vertikal (immer zentrieren):
 
             aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
-
 
             // horizontal
 
@@ -353,7 +349,6 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                     aPos.X() += nRightX;
                 }
             }
-
 
             aScriptedText.DrawText( aPos );
 

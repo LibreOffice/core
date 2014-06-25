@@ -24,7 +24,6 @@
 
 #include <vector>
 
-
 class ScDocument;
 class ScRange;
 class ScRangeList;

@@ -41,7 +41,6 @@
 
 #include <tools/shl.hxx>
 
-
 #include "globstr.hrc"
 
 extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
@@ -55,7 +54,6 @@ void ScDocument::StartListeningArea( const ScRange& rRange,
     if ( pBASM )
         pBASM->StartListeningArea( rRange, pListener );
 }
-
 
 void ScDocument::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener
@@ -201,7 +199,6 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
     }
 }
 
-
 void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint )
 {
     if ( !pBASM )
@@ -249,7 +246,6 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
 
     }
 }
-
 
 void ScDocument::DelBroadcastAreasInRange( const ScRange& rRange )
 {
@@ -323,7 +319,6 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     nFormulaCodeInTree += pCell->GetCode()->GetCodeLen();
 }
 
-
 void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
@@ -358,12 +353,10 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     }
 }
 
-
 bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 {
     return pCell->GetPrevious() || pFormulaTree == pCell;
 }
-
 
 void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSetAllDirty )
 {
@@ -475,7 +468,6 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     mpFormulaGroupCxt.reset();
 }
 
-
 void ScDocument::ClearFormulaTree()
 {
     ScFormulaCell* pCell;
@@ -488,7 +480,6 @@ void ScDocument::ClearFormulaTree()
             RemoveFromFormulaTree( pCell );
     }
 }
-
 
 void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 {
@@ -505,7 +496,6 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
     pEOFormulaTrack = pCell;
     ++nFormulaTrackCount;
 }
-
 
 void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
@@ -529,12 +519,10 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     }
 }
 
-
 bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
 {
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
-
 
 /*
     Der erste wird gebroadcastet,
@@ -598,7 +586,6 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
     }
     OSL_ENSURE( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
 }
-
 
 void ScDocument::StartAllListeners()
 {

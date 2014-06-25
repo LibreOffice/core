@@ -36,12 +36,10 @@
 #include <svl/smplhint.hxx>
 #include "attrib.hxx"
 
-
 #include <vcl/svapp.hxx>
 
 #include "globstr.hrc"
 #include "sc.hrc"
-
 
 TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 

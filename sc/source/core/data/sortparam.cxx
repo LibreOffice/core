@@ -23,7 +23,6 @@
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
 
-
 ScSortParam::ScSortParam()
 {
     Clear();

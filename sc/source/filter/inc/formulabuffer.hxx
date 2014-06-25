@@ -138,7 +138,6 @@ public:
     void SetSheetCount( SCTAB nSheets );
 };
 
-
 }}
 
 #endif

@@ -44,9 +44,7 @@ Export of cell tables including row and column description.
 - Merged cell ranges.
 ============================================================================ */
 
-
 // Helper records for cell records
-
 
 /** Represents a STRING record that contains the result of a string formula. */
 class XclExpStringRec : public XclExpRecord
@@ -273,9 +271,7 @@ private:
     XclExpTableopList   maTableopList;  /// List of all TABLEOP records.
 };
 
-
 // Cell records
-
 
 /** The base class of all cell records. */
 class XclExpCellBase : public XclExpRecord
@@ -587,9 +583,7 @@ private:
     ScfInt32Vec         maRkValues;     /// The cell values.
 };
 
-
 // Rows and Columns
-
 
 class ScOutlineArray;
 
@@ -958,9 +952,7 @@ private:
     XclExpDimensions    maDimensions;       /// DIMENSIONS record for used area.
 };
 
-
 // Cell Table
-
 
 class XclExpNote;
 class XclExpMergedcells;

@@ -43,7 +43,6 @@ class ScDocument;
 
 class ExcelToSc;
 
-
 class ImportTyp
 {
 protected:
@@ -189,7 +188,6 @@ protected:
     void                    Formula4( void );               // 0x0406       -> excform.cxx
     void                    Bof4( void );                   // 0x0409
     void                    Bof5( void );                   // 0x0809
-
 
     void Formula(
         const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla);

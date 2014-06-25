@@ -75,7 +75,6 @@ ScMessagePool::ScMessagePool()
     SetSecondaryPool( pDocPool );
 }
 
-
 ScMessagePool::~ScMessagePool()
 {
     Delete();
@@ -88,7 +87,6 @@ ScMessagePool::~ScMessagePool()
 
     SfxItemPool::Free(pDocPool);
 }
-
 
 SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {

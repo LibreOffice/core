@@ -114,5 +114,4 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -859,7 +859,6 @@ void Font::finalizeImport()
     }
 }
 
-
 bool Font::needsRichTextFormat() const
 {
     return maApiData.mnEscapement != API_ESCAPE_NONE;
@@ -1719,7 +1718,6 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
     }
     return rModel.mbUsed;
 }
-
 
 PatternFillModel::PatternFillModel( bool bDxf ) :
     mnPattern( XML_none ),

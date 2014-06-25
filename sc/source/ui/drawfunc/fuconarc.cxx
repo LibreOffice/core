@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconarc.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
@@ -216,6 +215,5 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
 
     return pObj;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

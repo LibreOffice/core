@@ -95,10 +95,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
     }
 
-
     //  Pseudo-Slots von Draw-Toolbox auswerten
     //! wird das ueberhaupt noch gebraucht ?????
-
 
     if (nNewId == SID_INSERT_DRAW && pArgs)
     {

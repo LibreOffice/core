@@ -98,7 +98,6 @@ void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
 {
 }
 
-
 OUString ScTabViewShell::GetDescription() const
 {
     return OUString(" ** Test ** ");
@@ -217,6 +216,5 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

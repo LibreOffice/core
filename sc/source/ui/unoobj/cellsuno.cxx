@@ -953,7 +953,6 @@ const ::editeng::SvxBorderLine* ScHelperFunctions::GetBorderLine(
     return lcl_getBorderLine( rLine, rStruct);
 }
 
-
 namespace {
 template<typename TableBorderType>
 void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBorderType& rBorder )
@@ -987,7 +986,6 @@ void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner
     lcl_fillBoxItems( rOuter, rInner, rBorder);
 }
 
-
 void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine )
 {
     // Convert from Twips to 1/100mm.
@@ -999,7 +997,6 @@ void ScHelperFunctions::FillBorderLine( table::BorderLine2& rStruct, const ::edi
 {
     rStruct = SvxBoxItem::SvxLineToLine( pLine, true);
 }
-
 
 namespace {
 template<typename TableBorderItem>
@@ -5636,9 +5633,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     if (xPropSet.is())
         lcl_CopyProperties( aImpl, *(beans::XPropertySet*)xPropSet.get() );
 
-
     //  ausfuehren...
-
 
     if (pDocSh)
     {
@@ -9438,9 +9433,7 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-
 //  Fill the list of formats from the document
-
 
 // hash code to access the range lists by ScPatternAttr pointer
 struct ScPatternHashCode

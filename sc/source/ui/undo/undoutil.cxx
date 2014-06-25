@@ -51,7 +51,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
     }
 }
 
-
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScAddress& rBlockStart,
                                 const ScAddress& rBlockEnd )
@@ -59,7 +58,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
     MarkSimpleBlock( pDocShell, rBlockStart.Col(), rBlockStart.Row(), rBlockStart.Tab(),
                                 rBlockEnd.Col(), rBlockEnd.Row(), rBlockEnd.Tab() );
 }
-
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScRange& rRange )
@@ -96,7 +94,6 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
 
     return pRet;
 }
-
 
 void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
                                 const ScRange& rRange )

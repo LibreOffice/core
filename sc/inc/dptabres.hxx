@@ -142,10 +142,8 @@ struct ScDPRelativePos
     ScDPRelativePos( long nBase, long nDir );
 };
 
-
 //  aggregated data
 //! separate header file?
-
 
 //  Possible values for the nCount member:
 //  (greater than 0 counts the collected values)
@@ -192,9 +190,7 @@ public:
 #endif
 };
 
-
 //  Row and grand total state, passed down (column total is at result member)
-
 
 class ScDPRowTotals
 {
@@ -213,9 +209,7 @@ public:
     void SetInColRoot(bool bSet) { bIsInColRoot = bSet; }
 };
 
-
 //  results for a hierarchy dimension
-
 
 class ScDPResultDimension;
 class ScDPDataDimension;

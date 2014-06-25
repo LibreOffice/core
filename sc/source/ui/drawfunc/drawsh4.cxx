@@ -31,7 +31,6 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 
-
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrObject*    pObj        = NULL;

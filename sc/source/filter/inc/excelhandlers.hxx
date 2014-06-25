@@ -26,7 +26,6 @@
 namespace oox {
 namespace xls {
 
-
 /** Context handler derived from the WorkbookHelper helper class.
 
     Used to import contexts in global workbook fragments.
@@ -74,7 +73,6 @@ public:
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
 };
-
 
 /** Base class for all BIFF context handlers.
 

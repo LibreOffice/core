@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/decoview.hxx>
@@ -25,9 +24,7 @@
 #include <vcl/settings.hxx>
 #include "cbutton.hxx"
 
-
 //  class ScDDComboBoxButton
-
 
 ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
     :   pOut( pOutputDevice )
@@ -81,7 +78,6 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 
     aInnerRect=aDecoView.DrawButton( aBtnRect, nButtonStyle );
 
-
     aInnerRect.Left()   += 1;
     aInnerRect.Top()    += 1;
     aInnerRect.Right()  -= 1;
@@ -94,7 +90,6 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     aInnerRect.Bottom()= aInnerCenter.Y() + (aInnerSize.Width()>>1);
 
     ImpDrawArrow( aInnerRect, bState );
-
 
     // restore old state
     pOut->EnableMapMode( bOldEnable );
@@ -151,7 +146,5 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
     pOut->DrawLine( Point( aCenter.X() - aSize3.Width(), aPos1.Y()+1 ),
                     Point( aCenter.X() + aSize3.Width(), aPos1.Y()+1 ) );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

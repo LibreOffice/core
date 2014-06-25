@@ -44,7 +44,6 @@ class ScDocument;
 #define FLT_DATE_BETWEEN    4
 #define FLT_DATE_SAVE       5
 
-
 class ScViewEntryPtr
 {
 private:
@@ -91,7 +90,6 @@ typedef long LExpNum;
 
 //@ Expand entrys are ambiguous and therefore removed
 //DECLARE_TABLE( ScChgTrackExps, LExpNum)
-
 
 class ScAcceptChgDlg : public SfxModelessDialog
 {
@@ -217,7 +215,6 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 
 };
-
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 

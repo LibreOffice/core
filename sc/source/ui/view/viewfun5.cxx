@@ -21,7 +21,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 
-
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 
@@ -104,9 +103,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     TransferableDataHelper aDataHelper( rxTransferable );
     bool bRet = false;
 
-
     //  handle individual formats
-
 
     if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE ||
          nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE ||
@@ -740,6 +737,5 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

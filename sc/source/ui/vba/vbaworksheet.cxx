@@ -363,7 +363,6 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException, std::exceptio
         throw uno::RuntimeException("Sheet Name does not exist." );
 }
 
-
 void
 ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeException, std::exception)
 {
@@ -598,7 +597,6 @@ ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno
     xNewSheet->Activate();
 }
 
-
 void
 ScVbaWorksheet::Paste( const uno::Any& Destination, const uno::Any& /*Link*/ ) throw (uno::RuntimeException, std::exception)
 {
@@ -655,7 +653,6 @@ ScVbaWorksheet::getPrevious() throw (uno::RuntimeException, std::exception)
 {
     return getSheetAtOffset(-1);
 }
-
 
 void
 ScVbaWorksheet::Protect( const uno::Any& Password, const uno::Any& /*DrawingObjects*/, const uno::Any& /*Contents*/, const uno::Any& /*Scenarios*/, const uno::Any& /*UserInterfaceOnly*/ ) throw (uno::RuntimeException, std::exception)
@@ -919,7 +916,6 @@ ScVbaWorksheet::Evaluate( const OUString& Name ) throw (uno::RuntimeException, s
     return uno::Any( Range( uno::Any( Name ), aVoid ) );
 }
 
-
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL
 ScVbaWorksheet::getIntrospection(  ) throw (uno::RuntimeException, std::exception)
 {
@@ -1021,7 +1017,6 @@ ScVbaWorksheet::getControlShape( const OUString& sName )
     }
     return uno::Any();
 }
-
 
 OUString
 ScVbaWorksheet::getServiceImplName()

@@ -29,7 +29,6 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-
 typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;
 
 class ScVbaPivotTables : public ScVbaPivotTables_BASE
@@ -43,7 +42,6 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-
 
     // XPivotTables
 

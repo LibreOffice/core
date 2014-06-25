@@ -32,7 +32,6 @@
 
     // class ScVbaGlobals
 
-
 typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 
     class ScVbaGlobals : public ScVbaGlobals_BASE
@@ -77,7 +76,6 @@ typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > Sc
     virtual css::uno::Reference< ov::excel::XApplication > SAL_CALL getExcel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL getDebug() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XMultiServiceFactory
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

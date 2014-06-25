@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "formel.hxx"
 
 _ScRangeListTabs::_ScRangeListTabs()
@@ -27,7 +26,6 @@ _ScRangeListTabs::_ScRangeListTabs()
 _ScRangeListTabs::~_ScRangeListTabs()
 {
 }
-
 
 void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab, const bool b )
 {
@@ -189,7 +187,6 @@ void ConverterBase::Reset()
     aStack.Reset();
 }
 
-
 ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
     ConverterBase(rSPool, nNewBuffer)
 {
@@ -210,7 +207,6 @@ void ExcelConverterBase::Reset()
     ConverterBase::Reset();
     aEingPos.Set( 0, 0, 0 );
 }
-
 
 LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffers ) :
     ConverterBase(rSPool, nNewBuffers),

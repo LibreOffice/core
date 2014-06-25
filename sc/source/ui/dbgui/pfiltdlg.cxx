@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/waitobj.hxx>
@@ -408,9 +407,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     return *pOutItem;
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -550,6 +547,5 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,6 @@
 
 #include <svl/style.hxx>
 
-
 class ScStyleSheet;
 class ScDocument;
 

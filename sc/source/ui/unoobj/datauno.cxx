@@ -126,8 +126,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
     return aDBRangePropertyMap_Impl;
 }
 
-
-
 SC_SIMPLE_SERVICE_INFO( ScConsolidationDescriptor, "ScConsolidationDescriptor", "com.sun.star.sheet.ConsolidationDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScDatabaseRangesObj, "ScDatabaseRangesObj", "com.sun.star.sheet.DatabaseRanges" )
 SC_SIMPLE_SERVICE_INFO( ScFilterDescriptorBase, "ScFilterDescriptorBase", "com.sun.star.sheet.SheetFilterDescriptor" )
@@ -2253,7 +2251,6 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aN
     return NULL;
 }
 
-
 void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
                                         const table::CellRangeAddress& aRange )
                                         throw(uno::RuntimeException, std::exception)
@@ -2479,6 +2476,5 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
     else
         return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

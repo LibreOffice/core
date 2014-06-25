@@ -143,7 +143,6 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 //      FID_DELETE_CELL
 //      FID_VALIDATION
 
-
 void ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData& rViewData   = GetViewData();
@@ -454,7 +453,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
 }
-
 
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
@@ -794,6 +792,5 @@ void ScTabViewShell::GetDrawOptState( SfxItemSet& rSet )
     aBool.SetWhich( SID_HELPLINES_MOVE );
     rSet.Put( aBool );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

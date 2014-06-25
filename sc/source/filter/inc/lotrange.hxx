@@ -142,5 +142,4 @@ inline void LotusRangeList::SetEing( const SCCOL nCol, const SCROW nRow )
 
 #endif
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

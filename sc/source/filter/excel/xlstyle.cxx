@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xlstyle.hxx"
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -328,7 +327,6 @@ void XclFontData::SetFontEncoding( rtl_TextEncoding eFontEnc )
     // convert text encoding identifier to Windows character set
     mnCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontEnc );
 }
-
 
 void XclFontData::SetScPosture( FontItalic eScPosture )
 {

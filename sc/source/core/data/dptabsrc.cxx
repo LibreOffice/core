@@ -805,7 +805,6 @@ void ScDPSource::CreateRes_Impl()
 
     ScDPTableData::CalcInfo aInfo;
 
-
     //  LateInit (initialize only those rows/children that are used) can be used unless
     //  any data dimension needs reference values from column/row dimensions
     bool bLateInit = true;
@@ -997,7 +996,6 @@ void ScDPSource::CreateRes_Impl()
     ScDPRowTotals aTotals;
     pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
 }
-
 
 void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList )
 {
@@ -1426,12 +1424,10 @@ bool ScDPDimension::getIsDataLayoutDimension() const
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
 }
 
-
 void ScDPDimension::setFunction(sal_uInt16 nNew)
 {
     nFunction = nNew;
 }
-
 
 void ScDPDimension::setUsedHierarchy(long /* nNew */)
 {
@@ -1457,7 +1453,6 @@ uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone() throw(uno
 {
     return CreateCloneObject();
 }
-
 
 const ScDPItemData& ScDPDimension::GetSelectedData()
 {
@@ -2195,7 +2190,6 @@ uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
     return aSubTotals;
 }
 
-
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
@@ -2431,7 +2425,6 @@ sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::e
 
 // end of XNameAccess implementation
 
-
 long ScDPMembers::getMinMembers() const
 {
     // used in lcl_CountMinMembers
@@ -2625,7 +2618,6 @@ const OUString* ScDPMember::GetLayoutName() const
     return mpLayoutName.get();
 }
 
-
 OUString ScDPMember::GetNameStr() const
 {
     const ScDPItemData* pData = GetItemData();
@@ -2643,8 +2635,6 @@ void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::R
 {
     OSL_FAIL("not implemented");        //! exception?
 }
-
-
 
 // XPropertySet
 
@@ -2710,7 +2700,6 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
-
 
 const ScDPCache* ScDPSource::GetCache()
 {

@@ -128,7 +128,6 @@ void CompileFormulaContext::updateTabNames()
     }
 }
 
-
 void CompileFormulaContext::setGrammar( formula::FormulaGrammar::Grammar eGram )
 {
     bool bUpdate = (meGram != eGram);
@@ -136,8 +135,6 @@ void CompileFormulaContext::setGrammar( formula::FormulaGrammar::Grammar eGram )
     if (bUpdate)
         updateTabNames();
 }
-
-
 
 }
 

@@ -24,7 +24,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-
 #include "global.hxx"
 
 class ScInsertCellDlg : public ModalDialog
@@ -42,8 +41,6 @@ public:
     InsCellCmd GetInsCellCmd() const;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSCLDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,9 +25,6 @@
 namespace oox {
 namespace xls {
 
-
-
-
 namespace prv {
 
 BiffInputRecordBuffer::BiffInputRecordBuffer( BinaryInputStream& rInStrm ) :

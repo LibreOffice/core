@@ -47,7 +47,6 @@ protected:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
-
 /// The dialog's content for a row, not yet parsed
 struct ScOptConditionRow
 {
@@ -201,7 +200,6 @@ private:
     DECL_LINK( SelectHdl, void* );
 };
 
-
 class ScSolverProgressDialog : public ModelessDialog
 {
     FixedText* m_pFtTime;
@@ -232,7 +230,6 @@ class ScSolverSuccessDialog : public ModalDialog
 public:
     ScSolverSuccessDialog( Window* pParent, const OUString& rSolution );
 };
-
 
 #endif
 

@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include "global.hxx"
 
-
 #include "scui_def.hxx"
 
 class ScInsertContentsDlg : public ModalDialog
@@ -92,8 +91,6 @@ private:
     DECL_LINK( LinkBtnHdl, void* );
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSCODLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

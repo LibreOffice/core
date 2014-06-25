@@ -30,7 +30,6 @@ public:
     static bool SafeDiv( double& fVal1, double fVal2);
 };
 
-
 struct ScFunctionData                   // to calculate single functions
 {
     ScSubTotalFunc  eFunc;
@@ -42,8 +41,6 @@ struct ScFunctionData                   // to calculate single functions
         eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

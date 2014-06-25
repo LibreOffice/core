@@ -67,7 +67,6 @@ ScFormulaResult::~ScFormulaResult()
         mpToken->DecRef();
 }
 
-
 void ScFormulaResult::ResetToDefaults()
 {
     mnError = 0;

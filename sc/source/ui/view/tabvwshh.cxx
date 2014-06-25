@@ -269,5 +269,4 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
     return true;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

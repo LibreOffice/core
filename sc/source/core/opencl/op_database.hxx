@@ -12,7 +12,6 @@
 
 #include "opbase.hxx"
 
-
 namespace sc { namespace opencl {
 
 class OpDmax: public CheckVariables
@@ -102,7 +101,6 @@ public:
              const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dcount2"; }
 };
-
 
 }}
 

@@ -472,7 +472,6 @@ size_t ScOrcusStyles::commit_font()
     return 0;
 }
 
-
 // fill
 
 void ScOrcusStyles::set_fill_count(size_t /*n*/)
@@ -496,7 +495,6 @@ size_t ScOrcusStyles::commit_fill()
 {
     return 0;
 }
-
 
 // border
 
@@ -523,7 +521,6 @@ size_t ScOrcusStyles::commit_border()
 {
     return 0;
 }
-
 
 // cell protection
 void ScOrcusStyles::set_cell_hidden(bool /*b*/)
@@ -568,7 +565,6 @@ size_t ScOrcusStyles::commit_cell_style_xf()
     return 0;
 }
 
-
 // cell xf
 
 void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
@@ -580,7 +576,6 @@ size_t ScOrcusStyles::commit_cell_xf()
 {
     return 0;
 }
-
 
 // xf (cell format) - used both by cell xf and cell style xf.
 
@@ -620,7 +615,6 @@ void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignmen
 void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t /*align*/)
 {
 }
-
 
 // cell style entry
 // not needed for now for gnumeric

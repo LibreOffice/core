@@ -45,7 +45,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const sal_uInt32 BIFF12_DEFNAME_HIDDEN      = 0x00000001;

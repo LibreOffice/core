@@ -73,7 +73,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoDeleteCells: public ScMoveUndo
 {
 public:
@@ -102,7 +101,6 @@ private:
     void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
 };
-
 
 class ScUndoDeleteMulti: public ScMoveUndo
 {
@@ -135,7 +133,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoCut: public ScBlockUndo
 {
 public:
@@ -164,7 +161,6 @@ private:
     void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
-
 
 struct ScUndoPasteOptions
 {
@@ -219,7 +215,6 @@ private:
     void SetChangeTrack();
 };
 
-
 class ScUndoDragDrop: public ScMoveUndo
 {
 public:
@@ -253,7 +248,6 @@ private:
 
     void            SetChangeTrack();
 };
-
 
 class ScUndoDeleteContents: public ScSimpleUndo
 {
@@ -291,7 +285,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoFillTable: public ScSimpleUndo
 {
 public:
@@ -328,7 +321,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoSelectionAttr: public ScSimpleUndo
 {
 public:
@@ -364,7 +356,6 @@ private:
     void            DoChange( const bool bUndo );
     void            ChangeEditData( const bool bUndo );
 };
-
 
 class ScUndoWidthOrHeight: public ScSimpleUndo
 {
@@ -403,7 +394,6 @@ private:
     SdrUndoAction*  pDrawUndo;
 };
 
-
 class ScUndoAutoFill: public ScBlockUndo
 {
 public:
@@ -439,7 +429,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoMerge: public ScSimpleUndo
 {
 public:
@@ -464,7 +453,6 @@ private:
     void            DoChange( bool bUndo ) const;
 };
 
-
 class ScUndoAutoFormat: public ScBlockUndo
 {
 public:
@@ -488,7 +476,6 @@ private:
     bool            bSize;
     sal_uInt16      nFormatNo;
 };
-
 
 class ScUndoReplace: public ScSimpleUndo
 {
@@ -519,7 +506,6 @@ private:
 
             void    SetChangeTrack();
 };
-
 
 class ScUndoTabOp: public ScSimpleUndo
 {
@@ -552,7 +538,6 @@ private:
     ScRefAddress    theColCell;
     ScTabOpParam::Mode meMode;
 };
-
 
 class ScUndoConversion : public ScSimpleUndo
 {
@@ -661,7 +646,6 @@ private:
     ScRange maRange;
 };
 
-
 class ScUndoUseScenario: public ScSimpleUndo
 {
 public:
@@ -685,7 +669,6 @@ private:
     ScMarkData      aMarkData;
     OUString        aName;
 };
-
 
 class ScUndoSelectionStyle: public ScSimpleUndo
 {
@@ -715,7 +698,6 @@ private:
     void            DoChange( const bool bUndo );
 };
 
-
 class ScUndoRefreshLink: public ScSimpleUndo
 {
 public:
@@ -735,7 +717,6 @@ private:
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
 };
-
 
 class ScUndoEnterMatrix: public ScBlockUndo
 {
@@ -762,7 +743,6 @@ private:
 
     void            SetChangeTrack();
 };
-
 
 class ScUndoInsertAreaLink : public ScSimpleUndo
 {
@@ -791,7 +771,6 @@ private:
     sal_uLong           nRefreshDelay;
 };
 
-
 class ScUndoRemoveAreaLink : public ScSimpleUndo
 {
 public:
@@ -818,7 +797,6 @@ private:
     ScRange         aRange;
     sal_uLong           nRefreshDelay;
 };
-
 
 class ScUndoUpdateAreaLink : public ScSimpleUndo        //! also change BlockUndo?
 {
@@ -864,7 +842,6 @@ private:
     void            DoChange( const bool bUndo ) const;
 };
 
-
 class ScUndoIndent: public ScBlockUndo
 {
 public:
@@ -885,7 +862,6 @@ private:
     ScDocument*     pUndoDoc;
     bool            bIsIncrement;
 };
-
 
 class ScUndoTransliterate: public ScBlockUndo
 {
@@ -908,7 +884,6 @@ private:
     sal_Int32       nTransliterationType;
 };
 
-
 class ScUndoClearItems: public ScBlockUndo
 {
 public:
@@ -930,7 +905,6 @@ private:
     sal_uInt16*         pWhich;
 };
 
-
 class ScUndoRemoveBreaks: public ScSimpleUndo
 {
 public:
@@ -950,7 +924,6 @@ private:
     SCTAB           nTab;
     ScDocument*     pUndoDoc;
 };
-
 
 class ScUndoRemoveMerge: public ScBlockUndo
 {
@@ -974,7 +947,6 @@ private:
     ScCellMergeOption maOption;
     ScDocument*     pUndoDoc;
 };
-
 
 class ScUndoBorder: public ScBlockUndo
 {
@@ -1000,7 +972,6 @@ private:
     SvxBoxItem*     pOuter;
     SvxBoxInfoItem* pInner;
 };
-
 
 #endif
 

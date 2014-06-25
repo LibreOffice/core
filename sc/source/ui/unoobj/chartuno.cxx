@@ -789,6 +789,4 @@ uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo() throw
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

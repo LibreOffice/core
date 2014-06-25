@@ -337,9 +337,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
     return nRet;
 }
 
-
 //  -------------- Iterator ----------------------------------------------
-
 
 ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :
     pArray( pNewArray ),
@@ -369,7 +367,5 @@ bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
     ++nPos;
     return true;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

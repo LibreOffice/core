@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
@@ -51,7 +48,6 @@
 #include "scresid.hxx"
 #include "document.hxx"
 #include <boost/scoped_ptr.hpp>
-
 
 // AutoFormat-Dialog:
 
@@ -143,9 +139,7 @@ void ScAutoFormatDlg::UpdateChecks()
     m_pBtnAdjust->Check( pData->GetIncludeWidthHeight() );
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 {
@@ -367,7 +361,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
                         m_pBtnCancel->SetText( aStrClose );
                         bCoreDataChanged = true;
                     }
-
 
                     SelFmtHdl( 0 );
                     bOk = true;

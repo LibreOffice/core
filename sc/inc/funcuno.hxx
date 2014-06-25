@@ -29,12 +29,10 @@
 class ScDocument;
 class ScDocOptions;
 
-
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     ScFunctionAccess_CreateInstance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory >& );
-
 
 class ScTempDocCache
 {
@@ -135,7 +133,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

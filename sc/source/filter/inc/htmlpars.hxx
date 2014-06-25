@@ -38,9 +38,7 @@ const sal_uInt32 SC_HTML_FONTSIZES = 7;        // wie Export, HTML-Options
 const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_SMALL = 1;    // single table
 const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_LARGE = 10;   // nested
 
-
 // BASE class for HTML parser classes
-
 
 class ScHTMLTable;
 
@@ -97,7 +95,6 @@ public:
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;
 };
 
-
 typedef o3tl::sorted_vector<sal_uLong> ScHTMLColOffset;
 
 struct ScHTMLTableStackEntry
@@ -147,7 +144,6 @@ struct ScHTMLAdjustStackEntry
                             {}
 };
 typedef ::std::stack< ScHTMLAdjustStackEntry* > ScHTMLAdjustStack;
-
 
 class EditEngine;
 class ScDocument;
@@ -226,9 +222,7 @@ public:
     virtual const ScHTMLTable*  GetGlobalTable() const SAL_OVERRIDE;
 };
 
-
 // HTML DATA QUERY PARSER
-
 
 /** Declares the orientation in or for a table: column or row. */
 enum ScHTMLOrient { tdCol = 0 , tdRow = 1 };
@@ -646,7 +640,6 @@ private:
     ScHTMLTableId       mnUnusedId;         /// First unused table identifier.
     bool                mbTitleOn;          /// true = Inside of <title> </title>.
 };
-
 
 #endif
 

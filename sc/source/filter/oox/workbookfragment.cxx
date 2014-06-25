@@ -378,7 +378,6 @@ void WorkbookFragment::finalizeImport()
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
 
-
     /*  Create fragments for all sheets, before importing them. Needed to do
         some preprocessing in the fragment constructors, e.g. loading the table
         fragments for all sheets that are needed before the cell formulas are

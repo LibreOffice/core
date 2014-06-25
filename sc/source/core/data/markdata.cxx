@@ -216,7 +216,6 @@ SCTAB ScMarkData::GetLastSelected() const
     return 0;
 }
 
-
 void ScMarkData::SetSelectedTabs(const MarkedTabsType& rTabs)
 {
     MarkedTabsType aTabs(rTabs.begin(), rTabs.end());
@@ -557,7 +556,5 @@ ScMarkData::const_iterator ScMarkData::end() const
 {
     return maTabMarked.end();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,7 +61,6 @@ typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
     , com::sun::star::container::XNameAccess
     > SelectedSheets_BASE;
 
-
 class SelectedSheetsEnum : public Enumeration_BASE
 {
 public:
@@ -88,7 +87,6 @@ public:
         // #FIXME needs ThisWorkbook as parent
         return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( uno::Reference< XHelperInterface >(), m_xContext, *(m_it++), m_xModel ) ) );
     }
-
 
 };
 
@@ -184,7 +182,6 @@ public:
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
     }
-
 
 };
 
@@ -499,7 +496,6 @@ ScVbaWindow::getDisplayGridlines() throw (uno::RuntimeException, std::exception)
     getControllerProps()->getPropertyValue( sName ) >>= bGrid;
     return bGrid;
 }
-
 
 void SAL_CALL
 ScVbaWindow::setDisplayGridlines( sal_Bool _displaygridlines ) throw (uno::RuntimeException, std::exception)

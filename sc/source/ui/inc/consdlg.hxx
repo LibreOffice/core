@@ -33,7 +33,6 @@ class ScDocument;
 class ScRangeUtil;
 class ScAreaData;
 
-
 class ScConsolidateDlg : public ScAnyRefDlg
 {
 public:

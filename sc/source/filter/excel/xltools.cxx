@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 #include <math.h>
 #include <sal/mathconf.h>
@@ -37,7 +36,6 @@
 #include "xistream.hxx"
 #include "xiroot.hxx"
 #include "xltools.hxx"
-
 
 // GUID import/export
 

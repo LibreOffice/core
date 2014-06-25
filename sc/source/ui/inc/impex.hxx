@@ -159,7 +159,6 @@ public:
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };
 
-
 inline bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
@@ -177,7 +176,6 @@ inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
     rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
 }
-
 
 // Helper class for importing clipboard strings as streams.
 class ScImportStringStream : public SvMemoryStream

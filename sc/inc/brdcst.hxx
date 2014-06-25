@@ -49,7 +49,6 @@ public:
     const ScRange&  GetRange() const { return aNewRange; }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

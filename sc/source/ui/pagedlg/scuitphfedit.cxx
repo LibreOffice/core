@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scitems.hxx"
@@ -54,9 +53,7 @@
 
 static ScEditWindow* pActiveEdWnd = NULL;
 
-
 // class ScHFEditPage
-
 
 ScHFEditPage::ScHFEditPage( Window*             pParent,
                             const SfxItemSet&   rCoreAttrs,
@@ -90,7 +87,6 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     get(m_pFtNone,"labelSTR_HF_NONE_IN_BRACKETS");
     get(m_pFtCreatedBy,"labelSTR_HF_CREATED_BY");
     get(m_pFtCustomized,"labelSTR_HF_CUSTOMIZED");
-
 
     //! use default style from current document?
     //! if font color is used, header/footer background color must be set
@@ -347,7 +343,6 @@ void ScHFEditPage::SetSelectDefinedList()
                 }
             }
             break;
-
 
             //TODO
             case ePagesEntry:
@@ -745,9 +740,7 @@ void ScHFEditPage::ClearTextAreas()
     m_pWndRight->Invalidate();
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 {
@@ -832,9 +825,7 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
     return 0;
 }
 
-
 // class ScRightHeaderEditPage
-
 
 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -846,9 +837,7 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, *rCoreSet ) ); };
 
-
 // class ScLeftHeaderEditPage
-
 
 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -860,9 +849,7 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
 SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, *rCoreSet ) ); };
 
-
 // class ScRightFooterEditPage
-
 
 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -874,9 +861,7 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, *rCoreSet ) ); };
 
-
 // class ScLeftFooterEditPage
-
 
 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,

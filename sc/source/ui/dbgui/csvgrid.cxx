@@ -44,7 +44,6 @@
 #include "editutil.hxx"
 // *** edit engine ***
 
-
 struct Func_SetType
 {
     sal_Int32                   mnType;
@@ -60,7 +59,6 @@ struct Func_Select
     inline void                 operator()( ScCsvColState& rState ) const
         { rState.Select( mbSelect ); }
 };
-
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
@@ -263,7 +261,6 @@ void ScCsvGrid::InitSizeData()
     maGridDev.SetOutputSizePixel( maWinSize );
     InvalidateGfx();
 }
-
 
 // split handling -------------------------------------------------------------
 
@@ -571,7 +568,6 @@ void ScCsvGrid::ExecutePopup( const Point& rPos )
         Execute( CSVCMD_SETCOLUMNTYPE, maPopup.GetItemPos( nItemId ) );
 }
 
-
 // selection handling ---------------------------------------------------------
 
 bool ScCsvGrid::IsSelected( sal_uInt32 nColIndex ) const
@@ -711,7 +707,6 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
     Execute( CSVCMD_MOVEGRIDCURSOR, GetColumnPos( nColIndex ) );
 }
 
-
 // cell contents --------------------------------------------------------------
 
 void ScCsvGrid::ImplSetTextLineSep(
@@ -814,7 +809,6 @@ const OUString& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) 
 
     return rStrVec[ nColIndex ];
 }
-
 
 // event handling -------------------------------------------------------------
 
@@ -1003,7 +997,6 @@ void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32
     InitColors();
     Repaint();
 }
-
 
 // painting -------------------------------------------------------------------
 
@@ -1352,7 +1345,6 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
     }
 }
 
-
 // accessibility ==============================================================
 
 ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
@@ -1361,6 +1353,5 @@ ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
     pControl->Init();
     return pControl.release();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

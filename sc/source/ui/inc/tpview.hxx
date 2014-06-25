@@ -78,7 +78,6 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-
 };
 
 class ScDocument;
@@ -129,7 +128,6 @@ public:
     void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 
 };
-
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPVIEW_HXX
 

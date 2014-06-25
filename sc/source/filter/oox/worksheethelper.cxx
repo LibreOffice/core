@@ -91,7 +91,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-
 namespace {
 
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
@@ -101,7 +100,6 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
 }
 
 } // namespace
-
 
 ColumnModel::ColumnModel() :
     maRange( -1 ),
@@ -202,7 +200,6 @@ void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
     static const sal_Int32 spnErrorStyles[] = { XML_stop, XML_warning, XML_information };
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
-
 
 class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
 {
@@ -915,7 +912,6 @@ void WorksheetGlobals::UpdateRowProgress( const CellRangeAddress& rUsedArea, sal
     }
 }
 
-
 void WorksheetGlobals::initializeWorksheetImport()
 {
     // set default cell style for unused cells
@@ -1359,7 +1355,6 @@ void WorksheetGlobals::finalizeDrawings()
     }
 }
 
-
 WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
     WorkbookHelper( rSheetGlob ),
     mrSheetGlob( rSheetGlob )
@@ -1618,7 +1613,6 @@ void WorksheetHelper::createSharedFormulaMapEntry(
 {
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
-
 
 } // namespace xls
 } // namespace oox

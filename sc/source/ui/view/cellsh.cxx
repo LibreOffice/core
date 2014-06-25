@@ -74,7 +74,6 @@ void ScCellShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_CELLS));
 }
 
-
 ScCellShell::ScCellShell(ScViewData* pData) :
     ScFormatShell(pData),
     pImpl( new CellShell_Impl() ),
@@ -1066,7 +1065,5 @@ void ScCellShell::GetState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

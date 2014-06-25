@@ -171,7 +171,6 @@ public:
 
     void                WriteXml( XclExpXmlStream& rStrm ) const;
 
-
 private:
     /** Returns true, if the flag field should be written. */
     bool                IsWriteFlags() const;

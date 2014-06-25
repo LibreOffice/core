@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XMLTrackedChangesContext.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
@@ -38,7 +37,6 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
-
 
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {

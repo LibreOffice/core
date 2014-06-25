@@ -121,7 +121,6 @@ ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
     return getWorkbook( mxContext, xDoc, mxParent );
 }
 
-
 uno::Any SAL_CALL
 ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException, std::exception)
 {
@@ -241,7 +240,6 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 
         OUString sFormat;
         sal_Int16 nFormat = 0; // default indicator
-
 
         if ( Format.hasValue() )
         {

@@ -52,7 +52,6 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
 {
 }
 
-
 LOTUS_ROOT::~LOTUS_ROOT()
 {
     delete pRangeNames;
@@ -60,7 +59,6 @@ LOTUS_ROOT::~LOTUS_ROOT()
     delete pFontBuff;
     delete pAttrTable;
 }
-
 
 static osl::Mutex aLotImpSemaphore;
 
@@ -85,7 +83,6 @@ ImportLotus::~ImportLotus()
     // no need 4 pLotusRoot anymore
     aLotImpSemaphore.release();
 }
-
 
 void ImportLotus::Bof( void )
 {
@@ -114,7 +111,6 @@ void ImportLotus::Bof( void )
     }
 }
 
-
 bool ImportLotus::BofFm3( void )
 {
     sal_uInt16  nFileCode, nFileSub;
@@ -124,7 +120,6 @@ bool ImportLotus::BofFm3( void )
 
     return ( nFileCode == 0x8007 && ( nFileSub == 0x0000 || nFileSub == 0x00001 ) );
 }
-
 
 void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
@@ -157,7 +152,6 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
     }
 }
 
-
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
     OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
@@ -184,7 +178,6 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     }
 }
 
-
 void ImportLotus::Userrange( void )
 {
     sal_uInt16      nRangeType;
@@ -202,7 +195,6 @@ void ImportLotus::Userrange( void )
     pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
 }
 
-
 void ImportLotus::Errcell( void )
 {
     ScAddress   aA;
@@ -215,7 +207,6 @@ void ImportLotus::Errcell( void )
     pD->SetString(aA, "#ERR!", &aParam);
 }
 
-
 void ImportLotus::Nacell( void )
 {
     ScAddress   aA;
@@ -227,7 +218,6 @@ void ImportLotus::Nacell( void )
     pD->EnsureTable(aA.Tab());
     pD->SetString(aA, "#NA!", &aParam);
 }
-
 
 void ImportLotus::Labelcell( void )
 {
@@ -245,7 +235,6 @@ void ImportLotus::Labelcell( void )
     pD->SetString(aA, aLabel, &aParam);
 }
 
-
 void ImportLotus::Numbercell( void )
 {
     ScAddress   aAddr;
@@ -258,7 +247,6 @@ void ImportLotus::Numbercell( void )
     pD->SetValue(aAddr, fVal);
 }
 
-
 void ImportLotus::Smallnumcell( void )
 {
     ScAddress   aAddr;
@@ -270,7 +258,6 @@ void ImportLotus::Smallnumcell( void )
     pD->EnsureTable(aAddr.Tab());
     pD->SetValue(aAddr, SnumToDouble(nVal));
 }
-
 
 ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
 {
@@ -298,12 +285,10 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     return NULL;
 }
 
-
 void ImportLotus::Read( OUString &r )
 {
     ScfTools::AppendCString( *pIn, r, eQuellChar );
 }
-
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
@@ -339,7 +324,6 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
     }
 }
 
-
 void ImportLotus::NamedSheet( void )
 {
     sal_uInt16  nLTab;
@@ -353,7 +337,6 @@ void ImportLotus::NamedSheet( void )
     else
         pD->InsertTab( static_cast<SCTAB> (nLTab), aName );
 }
-
 
 void ImportLotus::Font_Face( void )
 {
@@ -370,7 +353,6 @@ void ImportLotus::Font_Face( void )
     pLotusRoot->pFontBuff->SetName( nNum, aName );
 }
 
-
 void ImportLotus::Font_Type( void )
 {
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
@@ -381,7 +363,6 @@ void ImportLotus::Font_Type( void )
     }
 }
 
-
 void ImportLotus::Font_Ysize( void )
 {
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
@@ -391,7 +372,6 @@ void ImportLotus::Font_Ysize( void )
         pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
     }
 }
-
 
 void ImportLotus::_Row( const sal_uInt16 nRecLen )
 {

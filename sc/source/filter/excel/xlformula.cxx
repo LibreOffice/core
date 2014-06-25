@@ -381,7 +381,6 @@ static const XclFunctionInfo saFuncTable_8[] =
     { ocEuroConvert,        255,    4,  6,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, "EUROCONVERT" }
 };
 
-
 #define EXC_FUNCENTRY_V_VR( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
@@ -405,7 +404,6 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocWorkday_MS,         255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
     EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" )
 };
-
 
 #define EXC_FUNCENTRY_V_VR_IMPORT( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
@@ -571,7 +569,6 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_RX(         ocXor,           1,  MX, 0,  "XOR" )
 };
 
-
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
@@ -584,7 +581,6 @@ static const XclFunctionInfo saFuncTable_Odf[] =
 };
 
 #undef EXC_FUNCENTRY_ODF
-
 
 #define EXC_FUNCENTRY_OOO( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \

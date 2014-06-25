@@ -49,8 +49,6 @@ public:
     sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

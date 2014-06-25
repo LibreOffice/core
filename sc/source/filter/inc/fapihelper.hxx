@@ -194,7 +194,6 @@ public:
         @param rValues  The related property values. */
     void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< css::uno::Any >& rValues );
 
-
 private:
     css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
     css::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
@@ -253,7 +252,6 @@ public:
 
     /** Writes all values to the passed property set. */
     void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
-
 
 private:
     /** Returns a pointer to the next Any to be written to. */

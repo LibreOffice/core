@@ -13,7 +13,6 @@
 #include "interpre.hxx"
 #include "compiler.hxx"
 
-
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
     : mnFormatType(0)
@@ -64,7 +63,6 @@ sal_uInt16 ScSimpleFormulaCalculator::GetErrCode()
         return nErr;
     return maResult.GetResultError();
 }
-
 
 double ScSimpleFormulaCalculator::GetValue()
 {

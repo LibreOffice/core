@@ -67,7 +67,6 @@ static bool lcl_IsURLButton( SdrObject* pObject )
     return bRet;
 }
 
-
 ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView )
 {
     ScSelectionTransferObj* pRet = NULL;
@@ -139,7 +138,6 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
 
     return pRet;
 }
-
 
 ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionTransferMode eNewMode ) :
     pView( pSource ),
@@ -338,14 +336,12 @@ void ScSelectionTransferObj::CreateDrawData()
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             ScDrawView::CheckOle( rMarkList, bAnyOle, bOneOle );
 
-
             ScDocShellRef aDragShellRef;
             if (bAnyOle)
             {
                 aDragShellRef = new ScDocShell; // Without Ref the DocShell does not live
                 aDragShellRef->DoInitNew(NULL);
             }
-
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
             SdrModel* pModel = pDrawView->GetMarkedObjModel();
@@ -436,6 +432,5 @@ void ScSelectionTransferObj::ObjectReleased()
 
     TransferableHelper::ObjectReleased();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

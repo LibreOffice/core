@@ -59,12 +59,10 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
     SetDispatcherLock( true ); // Modal-Modus einschalten
 }
 
-
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     SetDispatcherLock( false ); // Modal-Modus einschalten
 }
-
 
 void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 {
@@ -72,12 +70,10 @@ void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
     rWinInfo.bVisible=bAutoReOpen;
 }
 
-
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
     m_pEdAssign->SetText(rStr);
 }
-
 
 void ScSimpleRefDlg::Init()
 {
@@ -85,7 +81,6 @@ void ScSimpleRefDlg::Init()
     m_pBtnCancel->SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
     bCloseFlag=false;
 }
-
 
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
@@ -128,7 +123,6 @@ bool ScSimpleRefDlg::Close()
     CancelBtnHdl(m_pBtnCancel);
     return true;
 }
-
 
 void ScSimpleRefDlg::SetActive()
 {
@@ -198,7 +192,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
@@ -209,7 +202,5 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
     aUnoLink.Call( &aResult );
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

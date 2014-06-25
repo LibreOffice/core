@@ -49,9 +49,7 @@ class CommandEvent;
 
 struct ESelection;
 
-
 //  ScInputHandler
-
 
 class ScInputHandler : boost::noncopyable
 {
@@ -266,7 +264,6 @@ public:
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 };
 
-
 //  ScInputHdlState
 
 class ScInputHdlState
@@ -302,6 +299,5 @@ private:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

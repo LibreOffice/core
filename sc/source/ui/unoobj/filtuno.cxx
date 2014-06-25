@@ -32,7 +32,6 @@
 #include "docsh.hxx"
 #include "globstr.hrc"
 
-
 #include "sc.hrc"
 #include "scabstdlg.hxx"
 #include <i18nlangtag/lang.h>
@@ -41,7 +40,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <boost/scoped_ptr.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace rtl;
@@ -56,7 +54,6 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 #define SC_UNONAME_FILTERNAME       "FilterName"
 #define SC_UNONAME_FILTEROPTIONS    "FilterOptions"
 #define SC_UNONAME_INPUTSTREAM      "InputStream"
-
 
 #define DBF_CHAR_SET                "CharSet"
 #define DBF_SEP_PATH_IMPORT         "Office.Calc/Dialogs/DBFImport"

@@ -72,7 +72,6 @@
 #include "markdata.hxx"
 #include "markarr.hxx"
 
-
 #define ScFormatShell
 #define TableFont
 #define FormatForSelection
@@ -256,7 +255,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         return;
     }
-
 
     SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
@@ -1251,7 +1249,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     }
 }
 
-
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
@@ -2162,11 +2159,9 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     SfxItemState eState;
 //  const SfxPoolItem* pItem;
 
-
     // eigene Kontrolle ueber RadioButton-Funktionalitaet:
 
     // Unterstreichung
-
 
     eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE, true );
     if ( eState == SFX_ITEM_DONTCARE )
@@ -2192,9 +2187,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( nId, true ) );
     }
 
-
     // horizontale Ausrichtung
-
 
     const SvxHorJustifyItem* pHorJustify = NULL;
     const SvxVerJustifyItem* pVerJustify = NULL;
@@ -2265,9 +2258,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         bJustifyStd = false;
     }
 
-
     // vertikale Ausrichtung
-
 
     nWhich = 0;
     aBoolItem.SetValue( true );
@@ -2327,7 +2318,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         aBoolItem.SetWhich( SID_ALIGNCENTERVER ); rSet.Put( aBoolItem );
     }
 }
-
 
 void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 {
@@ -2559,7 +2549,6 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
 
 void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
 {

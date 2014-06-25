@@ -19,7 +19,6 @@
 
 #include <editeng/eeitem.hxx>
 
-
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
@@ -107,9 +106,6 @@
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
-
-
-
 
 ScResId::ScResId( sal_uInt16 nId ) :
     ResId( nId, *SC_MOD()->GetResMgr() )

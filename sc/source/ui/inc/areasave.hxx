@@ -27,7 +27,6 @@
 class ScDocument;
 class ScAreaLink;
 
-
 class ScAreaLinkSaver
 {
 private:
@@ -50,7 +49,6 @@ public:
     void InsertNewLink( ScDocument* pDoc );
 };
 
-
 class ScAreaLinkSaveCollection
 {
     typedef ::boost::ptr_vector<ScAreaLinkSaver> DataType;
@@ -59,7 +57,6 @@ public:
     ScAreaLinkSaveCollection();
     ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r );
     ~ScAreaLinkSaveCollection();
-
 
     bool        IsEqual( const ScDocument* pDoc ) const;
     void Restore( ScDocument* pDoc );
@@ -72,7 +69,6 @@ public:
     size_t size() const;
     void push_back(ScAreaLinkSaver* p);
 };
-
 
 #endif
 

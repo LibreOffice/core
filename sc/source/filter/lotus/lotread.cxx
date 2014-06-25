@@ -25,9 +25,7 @@
 #include "lotattr.hxx"
 #include "fprogressbar.hxx"
 
-
 class ScFormulaCell;
-
 
 FltError ImportLotus::Read()
 {
@@ -226,7 +224,6 @@ FltError ImportLotus::Read()
 
     return eRet;
 }
-
 
 FltError ImportLotus::Read( SvStream& rIn )
 {

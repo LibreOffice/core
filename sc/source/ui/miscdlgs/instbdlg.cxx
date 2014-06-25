@@ -227,7 +227,6 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 
 // Handler:
 
-
 IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 {
     nTableCount = static_cast<SCTAB>(m_pNfCount->GetValue());
@@ -249,7 +248,6 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
     DoEnable_Impl();
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 {

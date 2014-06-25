@@ -34,7 +34,6 @@ typedef  boost::unordered_map< OUString,
 sal_Int32, OUStringHash,
 ::std::equal_to< OUString > > NameIndexHash;
 
-
 static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
 {
     return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
@@ -216,13 +215,11 @@ ScVbaWindows::getElementType() throw (uno::RuntimeException)
     return cppu::UnoType<excel::XWindows>::get();
 }
 
-
 void SAL_CALL
 ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWorkbook*/, const uno::Any& /*SyncHorizontal*/, const uno::Any& /*SyncVertical*/ ) throw (uno::RuntimeException, std::exception)
 {
     //#TODO #FIXME see what can be done for an implementation here
 }
-
 
 OUString
 ScVbaWindows::getServiceImplName()

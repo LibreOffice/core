@@ -408,7 +408,6 @@ void ScDPObject::SetHeaderLayout (bool bUseGrid)
     mbHeaderLayout = bUseGrid;
 }
 
-
 void ScDPObject::SetOutRange(const ScRange& rRange)
 {
     aOutRange = rRange;
@@ -1677,9 +1676,7 @@ bool ScDPObject::ParseFilters(
     std::vector<OUString> aFieldNames;    // column/row/data fields
     std::vector< uno::Sequence<OUString> > aFieldValues;
 
-
     // get all the field and item names
-
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
@@ -1744,9 +1741,7 @@ bool ScDPObject::ParseFilters(
         }
     }
 
-
     // compare and build filters
-
 
     SCSIZE nDataFields = aDataNames.size();
     SCSIZE nFieldCount = aFieldNames.size();
@@ -2465,7 +2460,6 @@ bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
     return bRet;
 }
 
-
 //  convert old pivot tables into new datapilot tables
 
 namespace {
@@ -3146,7 +3140,6 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
             return xRowSet;
         }
 
-
         //  set source parameters
 
         uno::Any aAny;
@@ -3617,9 +3610,6 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     maTables.push_back(pDPObj);
     return true;
 }
-
-
-
 
 ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const
 {

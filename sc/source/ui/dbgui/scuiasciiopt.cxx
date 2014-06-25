@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "global.hxx"
@@ -40,9 +39,7 @@
 //! TODO make dynamic
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
-
 using namespace com::sun::star::uno;
-
 
 // Defines - CSV Import Preserve Options
 #define FIXED_WIDTH         "FixedWidth"
@@ -452,12 +449,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
     }
 }
 
-
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
     delete[] mpRowPosArray;
 }
-
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 {
@@ -526,7 +521,6 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 
     return bRet;
 }
-
 
 void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
@@ -622,7 +616,6 @@ void ScImportAsciiDlg::UpdateVertical()
     if (mpDatStream)
         mpDatStream->SetStreamCharSet(meCharSet);
 }
-
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {

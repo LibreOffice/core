@@ -29,7 +29,6 @@
 class ScFormulaCell;
 class ScRangeList;
 
-
 class ExcelToSc : public ExcelConverterBase, protected XclImpRoot
 {
 protected:
@@ -42,7 +41,6 @@ protected:
                                         // Token Umsetzung
     XclFunctionProvider maFuncProv;
     const XclBiff       meBiff;
-
 
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
@@ -83,12 +81,10 @@ public:
     void                ReadExtensionMemArea( XclImpStream& aIn );
 };
 
-
 inline bool ExcelToSc::IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 )
 {
     return ( nCol1 == 0x00 ) && ( nCol2 == 0xFF );
 }
-
 
 inline bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
 {
@@ -139,13 +135,10 @@ public:
     virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen ) SAL_OVERRIDE;
 };
 
-
 inline bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 )
 {
     return ( nRow1 == 0x0000 ) && ( nRow2 == 0xFFFF );
 }
-
-
 
 #endif
 

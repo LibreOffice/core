@@ -38,7 +38,6 @@
 
 using ::std::vector;
 
-
 // struct ScImportParam:
 
 ScImportParam::ScImportParam() :
@@ -102,7 +101,6 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
 
     //! nQuerySh und pConnection sind gleich ?
 }
-
 
 // struct ScConsolidateParam:
 
@@ -204,7 +202,6 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
     }
 }
 
-
 // struct ScSolveParam
 
 ScSolveParam::ScSolveParam()
@@ -264,7 +261,6 @@ bool ScSolveParam::operator==( const ScSolveParam& r ) const
 
     return bEqual;
 }
-
 
 // struct ScTabOpParam
 

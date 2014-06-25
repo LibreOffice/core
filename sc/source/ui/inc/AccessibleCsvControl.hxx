@@ -31,7 +31,6 @@
 #include <comphelper/uno3.hxx>
 #include "AccessibleContextBase.hxx"
 
-
 class ScCsvControl;
 namespace utl { class AccessibleStateSetHelper; }
 
@@ -120,7 +119,6 @@ protected:
     /** Converts the control-relative position to an absolute screen position. */
     Point implGetAbsPos( const Point& rPos ) const;
 };
-
 
 class ScCsvRuler;
 
@@ -291,7 +289,6 @@ private:
     /** Returns the last character index with equal formatting as at nApiPos. */
     sal_Int32 implGetLastEqualFormatted( sal_Int32 nApiPos );
 };
-
 
 class ScCsvGrid;
 
@@ -535,7 +532,6 @@ private:
     ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
 };
 
-
 /** Accessible class representing a cell of the CSV grid control. */
 class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
 {
@@ -636,7 +632,6 @@ private:
     /** Creates the edit source the text helper needs. */
     ::std::auto_ptr< SvxEditSource > implCreateEditSource();
 };
-
 
 #endif
 

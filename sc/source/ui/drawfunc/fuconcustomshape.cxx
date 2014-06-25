@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconcustomshape.hxx"
 #include <editeng/svxenum.hxx>
 #include <svx/gallery.hxx>

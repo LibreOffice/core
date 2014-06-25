@@ -66,7 +66,6 @@ ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
     return cppu::UnoType<excel::XFormatCondition>::get();
 }
 
-
 uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
@@ -190,13 +189,11 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     return xFormatCondition;
 }
 
-
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaFormatConditions::createEnumeration() throw (uno::RuntimeException)
 {
     return new EnumWrapper( m_xIndexAccess, mxRangeParent, mxContext, mxStyles, this, mxParentRangePropertySet  );
 }
-
 
 void
 ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )

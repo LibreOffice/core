@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "tpsubt.hxx"
 #include "scresid.hxx"
 #include "subtdlg.hxx"
-
 
 ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SubTotalDialog",

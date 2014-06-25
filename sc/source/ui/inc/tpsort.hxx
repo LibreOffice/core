@@ -42,7 +42,6 @@ class ScViewData;
 class ScSortDlg;
 struct ScSortParam;
 
-
 // Sort Criteria
 
 class ScTabPageSortFields : public SfxTabPage
@@ -97,7 +96,6 @@ private:
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
 };
-
 
 // Sort Options
 

@@ -33,7 +33,6 @@ public:
     static bool        WarningOnPassword( SfxMedium& rMedium );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

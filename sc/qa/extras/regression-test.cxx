@@ -70,7 +70,6 @@ public:
 
 };
 
-
 void ScChartRegressionTest::test()
 {
     OUString aFileName;

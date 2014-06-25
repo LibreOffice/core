@@ -32,7 +32,6 @@
 
 //  class ScTabOpDlg
 
-
 ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
                         const ScRefAddress& rCursorPos )
@@ -224,7 +223,6 @@ static bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
     return bRet;
 }
 
-
 // Handler:
 
 IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
@@ -329,7 +327,5 @@ IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

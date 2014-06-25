@@ -25,7 +25,6 @@
 
 class OutputDevice;
 
-
 class ScDDComboBoxButton
 {
 public:
@@ -66,8 +65,6 @@ protected:
     Size    aBtnSize;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_CBUTTON_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -189,7 +189,6 @@ ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
 {
 }
 
-
 bool ScTableProtectionImpl::isProtectedWithPass() const
 {
     if (!mbProtected)
@@ -219,7 +218,6 @@ void ScTableProtectionImpl::setPassword(const OUString& aPassText)
         maPassHash = Sequence<sal_Int8>();
     }
 }
-
 
 bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
@@ -351,7 +349,6 @@ void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhanc
     maEnhancedProtection = rProt;
 }
 
-
 bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pDoc,
         const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
@@ -458,7 +455,6 @@ bool ScTableProtectionImpl::isSelectionEditable( const ScRangeList& rRangeList )
     }
     return true;
 }
-
 
 ScDocProtection::ScDocProtection() :
     mpImpl(new ScTableProtectionImpl(static_cast<SCSIZE>(ScDocProtection::NONE)))

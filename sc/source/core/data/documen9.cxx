@@ -307,7 +307,6 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     return false;
 }
 
-
 void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 {
     if (!pDrawLayer)
@@ -333,7 +332,6 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
         pObject = aIter.Next();
     }
 }
-
 
 bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {

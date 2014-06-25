@@ -115,9 +115,7 @@ public:
     bool IsDateDimension() const { return mbDateDimension;}
 };
 
-
 //  proxy implementation of ScDPTableData to add grouped items
-
 
 class ScDPGroupTableData : public ScDPTableData
 {
@@ -187,7 +185,6 @@ public:
     virtual void Dump() const;
 #endif
 };
-
 
 #endif
 

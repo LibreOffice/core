@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svddef.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
@@ -344,7 +343,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-
     if (!bIsInDragMode)
     {
         pWindow->CaptureMouse();
@@ -616,7 +614,6 @@ void FuText::Activate()
     FuConstruct::Activate();
 }
 
-
 /*************************************************************************
 |*
 |* Function deaktivieren
@@ -629,7 +626,6 @@ void FuText::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
     StopEditMode();
 }
-
 
 /*************************************************************************
 |*

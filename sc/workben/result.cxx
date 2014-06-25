@@ -107,6 +107,4 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
     release();
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

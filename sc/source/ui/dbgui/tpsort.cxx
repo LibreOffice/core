@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/msgbox.hxx>
@@ -205,7 +204,6 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
 
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
             maSortKeyItems[i].m_pBtnUp->Check();
-
 
         maSortKeyItems[0].EnableField();
         maSortKeyItems[1].EnableField();
@@ -433,9 +431,7 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
     maSortKeyItems[nItem].m_pLbSort->SelectEntryPos( 0 );
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
@@ -479,9 +475,7 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-
 // Sort option Tab Page:
-
 
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )
@@ -553,7 +547,6 @@ void ScTabPageSortOptions::Init()
     pDoc      = pViewData ? pViewData->GetDocument() : NULL;
 
     OSL_ENSURE( pViewData, "ViewData not found! :-/" );
-
 
     if ( pViewData && pDoc )
     {
@@ -825,7 +818,6 @@ void ScTabPageSortOptions::FillUserSortListBox()
     }
 }
 
-
 // Handler:
 
 IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
@@ -948,6 +940,5 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
     m_pLbAlgorithm->SetUpdateMode( true );
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

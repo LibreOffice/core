@@ -56,9 +56,7 @@ enum ScValidErrorStyle
     SC_VALERR_MACRO
 };
 
-
 // Entry for validation (only one condition exists)
-
 
 class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
@@ -170,9 +168,7 @@ private:
     bool IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 };
 
-
 //  list of contitions:
-
 
 struct CompareScValidationDataPtr
 {

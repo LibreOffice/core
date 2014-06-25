@@ -41,7 +41,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const sal_uInt8 BIFF12_TOP10FILTER_TOP              = 0x01;

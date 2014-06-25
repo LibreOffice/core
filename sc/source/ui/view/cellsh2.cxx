@@ -1042,7 +1042,6 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 }
                 break;
 
-
                 //in case of Redlining and multiselection disable
             case SID_SORT_ASCENDING:
             case SID_SORT_DESCENDING:

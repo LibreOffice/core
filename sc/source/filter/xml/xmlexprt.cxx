@@ -427,7 +427,6 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_createInsta
     return (cppu::OWeakObject*)new ScXMLExport(comphelper::getComponentContext(rSMgr), ScXMLOasisExport_Settings_getImplementationName(), EXPORT_SETTINGS|EXPORT_OASIS);
 }
 
-
 class ScXMLShapeExport : public XMLShapeExport
 {
 public:
@@ -459,7 +458,6 @@ sal_Int16 ScXMLExport::GetFieldUnit()
                 css::sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
     return xProperties->getMetric();
 }
-
 
 // #110680#
 ScXMLExport::ScXMLExport(
@@ -551,7 +549,6 @@ ScXMLExport::ScXMLExport(
         sElemP = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
     }
 }
-
 
 ScXMLExport::~ScXMLExport()
 {
@@ -4887,7 +4884,6 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     }
     GetChangeTrackViewSettings(rProps);
 }
-
 
 void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {

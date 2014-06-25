@@ -179,7 +179,6 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
 }
 
-
 class RangePageBreaksEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference<container::XIndexAccess > m_xIndexAccess;

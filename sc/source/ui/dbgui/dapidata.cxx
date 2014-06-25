@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -41,7 +38,6 @@ using namespace com::sun::star;
 #include "dapitype.hrc"
 #include "miscuno.hxx"
 #include "dpsdbtab.hxx"
-
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0
@@ -184,6 +180,5 @@ void ScDataPilotDatabaseDlg::FillObjects()
         OSL_FAIL("exception in database");
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

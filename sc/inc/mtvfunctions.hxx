@@ -192,7 +192,6 @@ ParseElements1(
         else
             rFuncElse(it->type, nTopRow, nDataSize);
 
-
         if (bLastBlock)
             break;
     }

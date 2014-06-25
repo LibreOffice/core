@@ -241,9 +241,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
 sal_uInt16 ScGetFontWorkId();
 
-
 //          Funktionen auf Drawing-Objekten
-
 
 void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 {
@@ -699,6 +697,5 @@ ScDrawView* ScDrawShell::GetDrawView()
 {
     return pViewData->GetView()->GetScDrawView();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,7 +74,6 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
     Init( nPossDir );
 }
 
-
 ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
@@ -180,7 +179,6 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
     bStartValFlag = false;
 }
 
-
 bool ScFillSeriesDlg::CheckStartVal()
 {
     bool bValOk = false;
@@ -199,7 +197,6 @@ bool ScFillSeriesDlg::CheckStartVal()
     return bValOk;
 }
 
-
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
@@ -207,7 +204,6 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
-
 
 bool ScFillSeriesDlg::CheckEndVal()
 {
@@ -228,7 +224,6 @@ bool ScFillSeriesDlg::CheckEndVal()
 }
 
 // Handler:
-
 
 IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 {
@@ -265,7 +260,6 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
     }
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 {
@@ -314,6 +308,5 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

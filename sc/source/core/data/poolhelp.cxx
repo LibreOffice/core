@@ -118,5 +118,4 @@ void ScPoolHelper::SourceDocumentGone()
         pFormTable->SetColorLink( Link() );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

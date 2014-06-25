@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <svx/algitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -49,7 +48,6 @@ FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDo
     return aEx.Write();
 }
 
-
 ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rRangeP )
             :
             ScExportBase( rStrmP, pDocP, rRangeP ),
@@ -57,12 +55,10 @@ ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rR
 {
 }
 
-
 ScRTFExport::~ScRTFExport()
 {
     delete [] pCellX;
 }
-
 
 sal_uLong ScRTFExport::Write()
 {
@@ -80,7 +76,6 @@ sal_uLong ScRTFExport::Write()
     rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
     return rStrm.GetError();
 }
-
 
 void ScRTFExport::WriteTab( SCTAB nTab )
 {
@@ -103,7 +98,6 @@ void ScRTFExport::WriteTab( SCTAB nTab )
     }
     rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
 }
-
 
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
@@ -157,7 +151,6 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     }
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
 }
-
 
 void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 {

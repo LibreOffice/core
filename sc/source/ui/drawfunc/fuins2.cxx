@@ -212,7 +212,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
     OUString aIconMediaType;
     uno::Reference< io::XInputStream > xIconMetaFile;
 
-
     sal_uInt16 nSlot = rReq.GetSlot();
     SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
@@ -484,7 +483,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         if(bAutomaticMark)
             pViewSh->GetViewData().GetView()->Unmark();
     }
-
 
     // adapted old code
     pView->UnmarkAll();
@@ -837,6 +835,5 @@ void FuInsertChartFromFile::Deactivate()
 {
     FuPoor::Deactivate();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

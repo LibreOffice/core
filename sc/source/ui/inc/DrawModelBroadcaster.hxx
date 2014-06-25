@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DRAWMODELBROADCASTER_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DRAWMODELBROADCASTER_HXX
 
-
 #include <svl/lstner.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase1.hxx>

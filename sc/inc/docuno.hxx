@@ -352,7 +352,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScDrawPagesObj : public cppu::WeakImplHelper2<
                                 com::sun::star::drawing::XDrawPages,
                                 com::sun::star::lang::XServiceInfo>,
@@ -398,7 +397,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScTableSheetsObj : public cppu::WeakImplHelper5<
                                 com::sun::star::sheet::XSpreadsheets2,
@@ -510,7 +508,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScTableColumnsObj : public cppu::WeakImplHelper5<
                                 com::sun::star::table::XTableColumns,
                                 com::sun::star::container::XEnumerationAccess,
@@ -618,7 +615,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScTableRowsObj : public cppu::WeakImplHelper4<
                                 com::sun::star::table::XTableRows,
                                 com::sun::star::container::XEnumerationAccess,
@@ -714,7 +710,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScSpreadsheetSettingsObj : public cppu::WeakImplHelper2<
                                     com::sun::star::beans::XPropertySet,
                                     com::sun::star::lang::XServiceInfo>,
@@ -778,7 +773,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScAnnotationsObj : public cppu::WeakImplHelper3<
                                 com::sun::star::sheet::XSheetAnnotations,
                                 com::sun::star::container::XEnumerationAccess,
@@ -831,7 +825,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScScenariosObj : public cppu::WeakImplHelper4<
                                 com::sun::star::sheet::XScenarios,
@@ -897,7 +890,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

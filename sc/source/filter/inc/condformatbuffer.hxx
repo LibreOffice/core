@@ -141,8 +141,6 @@ private:
     OUString maIconSetType;
 };
 
-
-
 /** Represents a single rule in a conditional formatting. */
 class CondFormatRule : public WorksheetHelper
 {

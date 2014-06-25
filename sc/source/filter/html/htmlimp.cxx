@@ -42,7 +42,6 @@
 #include "ftools.hxx"
 #include "tokenarray.hxx"
 
-
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
@@ -99,14 +98,12 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
         mpParser = new ScHTMLQueryParser( mpEngine, pDocP );
 }
 
-
 ScHTMLImport::~ScHTMLImport()
 {
     // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
     // Ist gewaehrleistet, da ScEEImport Basisklasse ist
     delete (ScHTMLParser*) mpParser;        // vor EditEngine!
 }
-
 
 void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange )
 {

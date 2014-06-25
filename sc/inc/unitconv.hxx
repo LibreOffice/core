@@ -43,7 +43,6 @@ public:
         const OUString& rFromUnit, const OUString& rToUnit );
 };
 
-
 class ScUnitConverter : public boost::noncopyable
 {
     typedef boost::ptr_map<OUString, ScUnitConverterData> MapType;
@@ -56,7 +55,6 @@ public:
     bool GetValue(
         double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const;
 };
-
 
 #endif
 

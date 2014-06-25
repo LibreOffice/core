@@ -24,12 +24,10 @@
 
 #include <vector>
 
-
 /** Constant for an invalid vector index. */
 const sal_uInt32 CSV_VEC_NOTFOUND   = SAL_MAX_UINT32;
 /** Constant for an invalid ruler position. */
 const sal_Int32 CSV_POS_INVALID     = -1;
-
 
 /** A vector of column splits that supports inserting, removing and moving splits. */
 class ScCsvSplits
@@ -81,7 +79,6 @@ private:
     /** Returns the vector index of an iterator. */
     sal_uInt32                  GetIterIndex( const_iterator aIter ) const;
 };
-
 
 #endif
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -572,7 +571,6 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
     }
 }
 
-
 void ScDocument::SetChartRangeList( const OUString& rChartName,
             const ScRangeListRef& rNewRangeListRef )
 {
@@ -617,7 +615,6 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
         }
     }
 }
-
 
 bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -782,6 +779,5 @@ void ScDocument::AddOLEObjectToCollection(const OUString& rName)
 
     rNonOleObjects.insert(rName);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

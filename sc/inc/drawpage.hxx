@@ -22,7 +22,6 @@
 
 #include <svx/fmpage.hxx>
 
-
 class ScDrawLayer;
 
 class ScDrawPage: public FmFormPage
@@ -34,8 +33,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

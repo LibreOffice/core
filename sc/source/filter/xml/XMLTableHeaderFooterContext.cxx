@@ -33,7 +33,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
 
-
 TYPEINIT1( XMLTableHeaderFooterContext, SvXMLImportContext );
 
 XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

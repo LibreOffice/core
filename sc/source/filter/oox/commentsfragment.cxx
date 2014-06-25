@@ -26,7 +26,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 CommentsFragment::CommentsFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )
 {

@@ -81,7 +81,6 @@ private:
     std::vector<XclObj*> maObjs;
 };
 
-
 // --- class XclObj --------------------------------------------------
 
 class XclTxo;
@@ -176,11 +175,9 @@ public:
     void                        ProcessEscherObj( const XclExpRoot& rRoot,
                                     const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
 
-
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // --- class XclObjDropDown ------------------------------------------
 
@@ -196,7 +193,6 @@ public:
                                 XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, bool bFilt );
     virtual                     ~XclObjDropDown();
 };
-
 
 // --- class XclTxo --------------------------------------------------
 
@@ -227,7 +223,6 @@ private:
     sal_uInt8                   mnVerAlign;     /// Vertical alignment.
 };
 
-
 // --- class XclObjOle -----------------------------------------------
 
 class XclObjOle : public XclObj
@@ -246,7 +241,6 @@ public:
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // --- class XclObjAny -----------------------------------------------
 
 class XclObjAny : public XclObj
@@ -262,7 +256,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
                                 GetShape() const { return mxShape; }
 
-
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
@@ -272,7 +265,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
                                 mxShape;
 };
-
 
 // --- class ExcBof8_Base --------------------------------------------
 
@@ -291,7 +283,6 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
 
-
 // --- class ExcBofW8 ------------------------------------------------
 // Header Record fuer WORKBOOKS
 
@@ -301,7 +292,6 @@ public:
                                 ExcBofW8();
 };
 
-
 // --- class ExcBof8 -------------------------------------------------
 // Header Record fuer WORKSHEETS
 
@@ -310,7 +300,6 @@ class ExcBof8 : public ExcBof8_Base
 public:
                                 ExcBof8();
 };
-
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
@@ -331,7 +320,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // --- class XclObproj -----------------------------------------------
 
 class XclObproj : public ExcRecord
@@ -340,7 +328,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // ---- class XclCodename --------------------------------------------
 
@@ -355,7 +342,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // ---- Scenarios ----------------------------------------------------
 // - ExcEScenarioCell           a cell of a scenario range
@@ -443,7 +429,6 @@ private:
     sal_uInt16      mnOptions;      /// Encoded sheet protection options.
 };
 
-
 /** Represents one EnhancedProtection feature in a FEAT record.
     To be written only if such feature exists. */
 class XclExpSheetEnhancedProtection : public XclExpRecord
@@ -474,7 +459,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 class XclIteration : public ExcRecord
 {
 private:
@@ -490,7 +474,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 class XclDelta : public ExcRecord
 {
 private:
@@ -505,7 +488,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 class XclRefmode : public XclExpBoolRecord
 {
@@ -608,7 +590,6 @@ class XclExpBookExt : public XclExpDummyRecord
 public:
     explicit XclExpBookExt();
 };
-
 
 #endif // _XCL97REC_HXX
 

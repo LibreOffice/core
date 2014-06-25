@@ -29,7 +29,6 @@
 
 class ScTable;
 
-
 class ScOutlineEntry
 {
     SCCOLROW    nStart;
@@ -140,7 +139,6 @@ public:
     void RemoveAll();
 };
 
-
 class ScOutlineTable
 {
 private:
@@ -164,7 +162,6 @@ public:
     bool                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
 };
 
-
 class ScSubOutlineIterator
 {
 private:
@@ -186,6 +183,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

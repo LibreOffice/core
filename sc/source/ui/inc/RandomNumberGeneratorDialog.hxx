@@ -84,5 +84,4 @@ private:
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,6 @@ TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
 //      modify style (cell or page style)
 
-
 ScStyleSaveData::ScStyleSaveData() :
     pItems( NULL )
 {
@@ -283,6 +282,5 @@ bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

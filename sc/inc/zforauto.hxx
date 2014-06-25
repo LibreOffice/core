@@ -23,10 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
 
-
 class SvStream;
 class SvNumberFormatter;
-
 
 class ScNumFormatAbbrev
 {
@@ -58,6 +56,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

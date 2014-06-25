@@ -375,9 +375,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
     bIsInPaint = false;
 }
 
-
 //  Draw  ----------------------------------------------------------------
-
 
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
 {
@@ -859,10 +857,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( pNoteMarker )
         pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
 
-
     //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
     //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
-
 
     OSL_ENSURE(nPaintCount, "nPaintCount falsch");
     --nPaintCount;
@@ -1126,7 +1122,6 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 
             nRow = pThisRowInfo->nRowNo;
-
 
             for (nCol=nX1; nCol<=nX2; nCol++)
             {

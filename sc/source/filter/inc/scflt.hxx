@@ -591,7 +591,6 @@ struct Sc10ChartTypeData
     sal_Char        Reserved[4646];
 };
 
-
 // FontAttribut
 class Sc10FontData : public ScDataObject
 {
@@ -614,7 +613,6 @@ public:
     virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10FontData(*this); }
 };
 
-
 // Font-Collection
 class Sc10FontCollection : public ScCollection
 {
@@ -627,7 +625,6 @@ public:
 private:
     using               ScCollection::At;
 };
-
 
 //BereichsDaten
 class Sc10NameData : public ScDataObject
@@ -650,7 +647,6 @@ public :
     virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10NameData(*this); }
 };
 
-
 // Bereichs-Collection
 class Sc10NameCollection : public ScCollection
 {
@@ -663,7 +659,6 @@ Sc10NameData*           At(sal_uInt16 nIndex) { return (Sc10NameData*)ScCollecti
 private:
     using               ScCollection::At;
 };
-
 
 // Vorlage-Daten
 class Sc10PatternData : public ScDataObject
@@ -703,7 +698,6 @@ public:
 virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10PatternData(*this); }
 };
 
-
 // Vorlage-Collection
 class Sc10PatternCollection : public ScCollection
 {
@@ -716,7 +710,6 @@ public:
 private:
     using               ScCollection::At;
 };
-
 
 // DatenBank-Daten
 class Sc10DataBaseData : public ScDataObject
@@ -733,7 +726,6 @@ public:
 virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10DataBaseData(*this); }
 };
 
-
 // DatenBank-Collection
 class Sc10DataBaseCollection : public ScCollection
 {
@@ -747,7 +739,6 @@ public:
 private:
     using               ScCollection::At;
 };
-
 
 class Sc10PageData : public ScDataObject
 {
@@ -770,7 +761,6 @@ public:
 private:
     using               ScCollection::At;
 };
-
 
 class ScfStreamProgressBar;
 

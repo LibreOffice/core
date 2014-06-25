@@ -278,7 +278,6 @@ void ScExportTest::testConditionalFormatExportXLSX()
         testCondFile(aCSVPath, &rDoc, 1);
     }
 
-
     xDocSh->DoClose();
 }
 

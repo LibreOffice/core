@@ -327,7 +327,6 @@ std::string GetBinomDistPMF =
 "   }\n"
 "}\n";
 
-
 std::string lcl_GetBinomDistRangeDecl =
     "double lcl_GetBinomDistRange(double n, \n"
 "double xs, double xe, double fFactor, double p, double q);";
@@ -363,7 +362,6 @@ std::string GetLogGamma =
 "   return lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log(fZ);\n"
 "}\n";
 
-
 std::string GetChiDistDecl = "double GetChiDist(double fX, double fDF);\n";
 std::string GetChiDist =
 "double GetChiDist(double fX, double fDF)\n"
@@ -373,7 +371,6 @@ std::string GetChiDist =
 "   else\n"
 "       return GetUpRegIGamma( fDF*pow(2.0,-1.0), fX*pow(2.0,-1.0));\n"
 "}\n";
-
 
 std::string GetChiSqDistCDFDecl =
 "double GetChiSqDistCDF(double fX, double fDF);\n";
@@ -385,7 +382,6 @@ std::string GetChiSqDistCDF =
 "   else\n"
 "       return GetLowRegIGamma( fDF*pow(2.0,-1.0), fX*pow(2.0,-1.0));\n"
 "}\n";
-
 
 std::string GetChiSqDistPDFDecl=
 "double GetChiSqDistPDF(double fX, double fDF);\n";
@@ -425,7 +421,6 @@ std::string GetChiSqDistPDF =
 "   }\n"
 "    return fValue;\n"
 "}\n";
-
 
 std::string lcl_IterateInverseBetaInvDecl =
 "static double lcl_IterateInverseBetaInv(double fp, double fAlpha, \n"
@@ -523,7 +518,6 @@ std::string lcl_IterateInverseBetaInv =
 "   }\n"
 "   return fRx;\n"
 "}\n";
-
 
 std::string lcl_IterateInverseChiInvDecl =
 "static double lcl_IterateInverseChiInv"
@@ -1545,4 +1539,3 @@ std::string rtl_math_erfc_rd =
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

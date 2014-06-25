@@ -1188,7 +1188,6 @@ private:
     /** Returns the size of the progress bar shown while processing all objects. */
     sal_Size            GetProgressSize() const;
 
-
 private:
     typedef ::std::map< sal_uInt16, OUString >          DefObjNameMap;
     typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;

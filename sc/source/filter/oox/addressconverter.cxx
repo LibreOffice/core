@@ -36,7 +36,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 //! TODO: this limit may change, is there a way to obtain it via API?
@@ -67,7 +66,6 @@ const sal_Int32 BIFF8_MAXROW        = 65535;
 const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
 } // namespace
-
 
 CellAddress ApiCellRangeList::getBaseAddress() const
 {

@@ -95,7 +95,6 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
@@ -171,7 +170,6 @@ ScChartListener::~ScChartListener()
             pRefMgr->removeLinkListener(*itr, mpExtRefListener.get());
     }
 }
-
 
 void ScChartListener::SetUno(
         const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
@@ -468,9 +466,6 @@ bool ScChartListenerCollection::hasListeners() const
 {
     return !maListeners.empty();
 }
-
-
-
 
 OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
 {

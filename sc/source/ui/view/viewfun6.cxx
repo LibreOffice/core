@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>

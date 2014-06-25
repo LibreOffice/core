@@ -20,7 +20,6 @@
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 
-
 OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)

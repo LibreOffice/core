@@ -49,7 +49,6 @@
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
-
 #include <string.h>
 
 #include "global.hxx"
@@ -140,19 +139,16 @@ void ExcRecord::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-
 //--------------------------------------------------------- class ExcEmptyRec -
 
 void ExcEmptyRec::Save( XclExpStream& /*rStrm*/ )
 {
 }
 
-
 sal_uInt16 ExcEmptyRec::GetNum() const
 {
     return 0;
 }
-
 
 sal_Size ExcEmptyRec::GetLen() const
 {
@@ -166,7 +162,6 @@ void ExcDummyRec::Save( XclExpStream& rStrm )
     rStrm.Write( GetData(), GetLen() );        // raw write mode
 }
 
-
 sal_uInt16 ExcDummyRec::GetNum( void ) const
 {
     return 0x0000;
@@ -179,12 +174,10 @@ void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16)(bVal ? 0x0001 : 0x0000);
 }
 
-
 sal_Size ExcBoolRecord::GetLen( void ) const
 {
     return 2;
 }
-
 
 //--------------------------------------------------------- class ExcBof_Base -
 
@@ -204,18 +197,15 @@ ExcBof::ExcBof( void )
     nVers = 0x0500;
 }
 
-
 void ExcBof::SaveCont( XclExpStream& rStrm )
 {
     rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
 
-
 sal_uInt16 ExcBof::GetNum( void ) const
 {
     return 0x0809;
 }
-
 
 sal_Size ExcBof::GetLen( void ) const
 {
@@ -229,7 +219,6 @@ ExcBofW::ExcBofW( void )
     nDocType = 0x0005;
     nVers = 0x0500;
 }
-
 
 void ExcBofW::SaveCont( XclExpStream& rStrm )
 {
@@ -253,7 +242,6 @@ sal_uInt16 ExcEof::GetNum( void ) const
     return 0x000A;
 }
 
-
 sal_Size ExcEof::GetLen( void ) const
 {
     return 0;
@@ -265,7 +253,6 @@ sal_Size ExcDummy_00::GetLen( void ) const
 {
     return nMyLen;
 }
-
 
 const sal_uInt8* ExcDummy_00::GetData( void ) const
 {
@@ -279,18 +266,15 @@ sal_Size ExcDummy_040::GetLen( void ) const
     return nMyLen;
 }
 
-
 const sal_uInt8* ExcDummy_040::GetData( void ) const
 {
     return pMyData;
 }
 
-
 sal_Size ExcDummy_041::GetLen( void ) const
 {
     return nMyLen;
 }
-
 
 const sal_uInt8* ExcDummy_041::GetData( void ) const
 {
@@ -306,12 +290,10 @@ Exc1904::Exc1904( ScDocument& rDoc )
     bDateCompatibility = pDate && !( *pDate == Date( 30, 12, 1899 ));
 }
 
-
 sal_uInt16 Exc1904::GetNum( void ) const
 {
     return 0x0022;
 }
-
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -342,7 +324,6 @@ ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
 {
 }
 
-
 ExcBundlesheetBase::ExcBundlesheetBase() :
     m_nStrPos( STREAM_SEEK_TO_END ),
     m_nOwnPos( STREAM_SEEK_TO_END ),
@@ -350,7 +331,6 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
     nTab( SCTAB_GLOBAL )
 {
 }
-
 
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
@@ -360,12 +340,10 @@ void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
     rStrm.EnableEncryption();
 }
 
-
 sal_uInt16 ExcBundlesheetBase::GetNum( void ) const
 {
     return 0x0085;
 }
-
 
 ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
@@ -375,7 +353,6 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     aName = OUStringToOString(sTabName, rRootData.pER->GetTextEncoding());
 }
 
-
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
     m_nOwnPos = rStrm.GetSvStreamPos();
@@ -384,12 +361,10 @@ void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
     rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars
 }
 
-
 sal_Size ExcBundlesheet::GetLen() const
 {
     return 7 + std::min( aName.getLength(), (sal_Int32) 255 );
 }
-
 
 //--------------------------------------------------------- class ExcDummy_02 -
 
@@ -458,7 +433,6 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->endElement( XML_sheetPr );
 }
-
 
 // XclExpWindowProtection ===============================================================
 
@@ -551,7 +525,6 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         }
     }
 }
-
 
 XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
     XclExpRecord(EXC_ID_PASSWORD, 2),

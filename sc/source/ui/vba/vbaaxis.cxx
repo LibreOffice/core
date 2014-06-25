@@ -466,7 +466,6 @@ ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto ) throw (script:
     }
 }
 
-
 sal_Bool SAL_CALL
 ScVbaAxis::getMaximumScaleIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {

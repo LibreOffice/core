@@ -202,7 +202,6 @@ ScVbaValidation::setErrorMessage( const OUString& _errormessage ) throw (uno::Ru
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-
 void SAL_CALL
 ScVbaValidation::Delete(  ) throw (uno::RuntimeException, std::exception)
 {

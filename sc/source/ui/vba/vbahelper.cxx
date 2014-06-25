@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -58,7 +57,6 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 #define POINTTO100THMILLIMETERFACTOR 35.27778
-
 
 namespace ooo
 {
@@ -180,7 +178,6 @@ implnPaste()
     }
 }
 
-
 void
 implnCopy()
 {
@@ -254,7 +251,6 @@ getCurrentDocument() throw (uno::RuntimeException)
     {
         basicChosen = pParent;
     }
-
 
     uno::Any aModel;
     SbxVariable *pCompVar = basicChosen->Find( "ThisComponent", SbxCLASS_OBJECT );
@@ -519,7 +515,6 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
     }
     return sString;
 }
-
 
 OUString
 ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator)

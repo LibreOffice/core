@@ -128,7 +128,6 @@ uno::Reference<uno::XInterface> ScTestAddIn_CreateInstance(
     return xInst;
 }
 
-
 // XAddIn
 
 UString ScTestAddIn::getProgrammaticFuntionName(const UString& aDisplayName)

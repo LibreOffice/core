@@ -61,7 +61,6 @@ enum EXCIMPFORMAT { EIF_AUTO, EIF_BIFF5, EIF_BIFF8, EIF_BIFF_LE4 };
 enum ExportFormatLotus { ExpWK1, ExpWK3, ExpWK4 };
 enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpBiff8, Exp2007Xml };
 
-
 // options for DIF im-/export (combine with '|')
 #define SC_DIFOPT_PLAIN     0x00000000
 #define SC_DIFOPT_DATE      0x00000001

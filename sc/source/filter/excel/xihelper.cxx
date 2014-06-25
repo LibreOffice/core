@@ -811,7 +811,6 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-
 sal_uInt16 XclImpCachedValue::GetScError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;

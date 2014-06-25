@@ -50,7 +50,6 @@ static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxVie
     return uno::Reference<view::XSelectionSupplier>();
 }
 
-
 ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh )
 {

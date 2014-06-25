@@ -52,7 +52,6 @@ const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
 const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
 
-
 // helpers
 
 namespace
@@ -62,7 +61,6 @@ namespace
         return COL_TRANSPARENT;
     }
 } // end of anonymous namespace
-
 
 // namespace open
 
@@ -656,7 +654,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     }
 }
 
-
 void CellAppearancePropertyPanel::SetStyleIcon()
 {
     const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
@@ -785,7 +782,6 @@ void CellAppearancePropertyPanel::UpdateControlState()
         mpTBLineStyle->Disable();
     }
 }
-
 
 // namespace close
 

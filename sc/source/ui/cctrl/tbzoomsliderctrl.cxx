@@ -35,9 +35,7 @@
 #include "scitems.hxx"
 #include "printfun.hxx"
 
-
 // class ScZoomSliderControl ---------------------------------------
-
 
 SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 
@@ -133,7 +131,6 @@ const long nSliderXOffset   = 20;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
-
 sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
 {
     Size aSliderWindowSize = GetOutputSizePixel();
@@ -218,7 +215,6 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     }
     return nRect;
 }
-
 
 ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom ):

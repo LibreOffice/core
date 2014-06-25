@@ -80,7 +80,6 @@ struct ScDPServiceDesc
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
 
-
 class SC_DLLPUBLIC ScDPObject
 {
 private:
@@ -260,7 +259,6 @@ public:
     void DumpCache() const;
 #endif
 };
-
 
 class ScDPCollection
 {

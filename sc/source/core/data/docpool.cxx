@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 
 #include <boost/static_assert.hpp>
@@ -606,7 +605,6 @@ void ScDocumentPool::DeleteVersionMaps()
 //  Die Differenz zwischen SC_MAX_POOLREF und SC_SAFE_POOLREF ist ein wenig groesser
 //  als noetig, um zu erkennen, wenn der RefCount aus Versehen doch "normal" veraendert
 //  wird (Assertions).
-
 
 const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {

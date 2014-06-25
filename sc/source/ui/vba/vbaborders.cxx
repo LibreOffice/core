@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel;
 
-
 typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
 
@@ -404,7 +403,6 @@ ScVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeEx
     return createCollectionObject( m_xIndexAccess->getByIndex( nIndex ) );
 }
 
-
 uno::Any SAL_CALL ScVbaBorders::getColor() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 count = getCount();
@@ -544,7 +542,6 @@ void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight ) throw (uno::Run
         xBorder->setWeight( _weight );
     }
 }
-
 
 OUString
 ScVbaBorders::getServiceImplName()

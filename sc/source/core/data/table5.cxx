@@ -55,7 +55,6 @@ using ::std::set;
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
-
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 {
     if ( pDocument->IsImportingXML() )
@@ -1243,7 +1242,5 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

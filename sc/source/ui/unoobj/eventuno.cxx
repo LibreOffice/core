@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "eventuno.hxx"
 #include "miscuno.hxx"
 #include "docsh.hxx"

@@ -46,7 +46,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
-
 namespace {
 
 /** Extracts a sheet index from the specified element of the passed sequence.

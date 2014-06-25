@@ -171,7 +171,6 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                 && (mpLbFunctions->GetEntryCount() > 0),
                 "Non-initialized Lists" );
 
-
     if (  (nGroupNo > 3) || (nGroupNo == 0)
         || (mpLbGroup->GetEntryCount() == 0)
         || (mpLbColumns->GetEntryCount() == 0)
@@ -334,9 +333,7 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
     }
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 {
@@ -379,7 +376,6 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
     return 0;
 }
 
-
 // Derived Group TabPages:
 
 SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
@@ -406,7 +402,6 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), *rArgSet ))
 void ScTpSubTotalGroup1::Reset( const SfxItemSet* rArgSet ) { RESET(1); }
 void ScTpSubTotalGroup2::Reset( const SfxItemSet* rArgSet ) { RESET(2); }
@@ -418,7 +413,6 @@ bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(1);
 bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(2); }
 bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3); }
 #undef FILL
-
 
 // Optionen-Tabpage:
 
@@ -539,7 +533,6 @@ void ScTpSubTotalOptions::FillUserSortListBox()
             pLbUserDef->InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }
-
 
 // Handler:
 

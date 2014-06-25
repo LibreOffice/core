@@ -41,7 +41,4 @@ void ScDBFunc::UpdateCharts( bool bAllCharts )
         ErrorMessage(STR_NOCHARTATCURSOR);
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

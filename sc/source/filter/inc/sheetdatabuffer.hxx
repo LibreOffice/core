@@ -92,7 +92,6 @@ private:
     sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
 };
 
-
 /** Manages the cell contents and cell formatting of a sheet.
  */
 class SheetDataBuffer : public WorksheetHelper
@@ -147,7 +146,6 @@ public:
         @param nNumFmtId  If set, overrides number format of the cell XF. */
     void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
 
-
     /** Final processing after the sheet has been imported. */
     void                finalizeImport();
 
@@ -182,7 +180,6 @@ private:
     /** Stores cell range address and settings of a table operation. */
     typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, DataTableModel > TableOperation;
     typedef ::std::list< TableOperation > TableOperationList;
-
 
     /** Stores information about a range of rows with equal cell formatting. */
     struct XfIdRowRange

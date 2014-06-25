@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef SC_DLLIMPLEMENTATION
 #undef SC_DLLIMPLEMENTATION
 #endif
-
 
 #include "dpgroupdlg.hxx"
 #include "scresid.hxx"
@@ -147,7 +145,6 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     aDate += static_cast< sal_Int32 >( fValue );
     mpEdValue->SetDate( aDate );
 }
-
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
     ModalDialog     ( pParent, "PivotTableGroupByNumber", "modules/scalc/ui/groupbynumber.ui" ),

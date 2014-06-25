@@ -23,9 +23,7 @@
 
 // STATIC DATA
 
-
 //      Daten pro Tabelle
-
 
 ScPrintSaverTab::ScPrintSaverTab() :
     mpRepeatCol(NULL),
@@ -68,9 +66,7 @@ bool ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
         (maPrintRanges == rCmp.maPrintRanges);
 }
 
-
 //      Daten fuer das ganze Dokument
-
 
 ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
     nTabCount( nCount )

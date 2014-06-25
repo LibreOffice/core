@@ -27,7 +27,6 @@
 class ScTabView;
 class ScViewData;
 
-
 class ScViewSelectionEngine : public SelectionEngine
 {
 private:
@@ -39,7 +38,6 @@ public:
     ScSplitPos      GetWhich() const            { return eWhich; }
     void            SetWhich(ScSplitPos eNew)   { eWhich = eNew; }
 };
-
 
 class ScViewFunctionSet : public FunctionSet            // View (Gridwin / keyboard)
 {
@@ -75,8 +73,6 @@ public:
     bool            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScroll );
 };
 
-
-
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers
 {
 private:
@@ -103,7 +99,6 @@ public:
 
     void            SetAnchorFlag(bool bSet)    { bAnchor = bSet; }
 };
-
 
 class ScHeaderSelectionEngine : public SelectionEngine
 {

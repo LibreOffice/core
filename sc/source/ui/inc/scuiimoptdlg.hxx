@@ -23,7 +23,6 @@
 #include <vcl/layout.hxx>
 #include "imoptdlg.hxx"
 
-
 class ScDelimiterTable;
 
 class ScImportOptionsDlg : public ModalDialog

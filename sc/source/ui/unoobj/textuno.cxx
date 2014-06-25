@@ -174,7 +174,6 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
     return pRet;
 }
 
-
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : NULL),
@@ -252,7 +251,6 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
     mpTextObj = rEditEngine.CreateTextObject();
     bDataValid = false;
 }
-
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :

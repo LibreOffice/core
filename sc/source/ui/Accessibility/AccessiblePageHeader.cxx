@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessiblePageHeader.hxx"
 #include "AccessiblePageHeaderArea.hxx"
 #include "AccessibilityHints.hxx"

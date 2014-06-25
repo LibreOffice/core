@@ -65,7 +65,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-
 CellModel::CellModel() :
     mnCellType( XML_TOKEN_INVALID ),
     mnXfId( -1 ),
@@ -527,7 +526,6 @@ bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nRow, sal_Int32 nXfId )
     }
     return false;
 }
-
 
 SheetDataBuffer::MergedRange::MergedRange( const CellRangeAddress& rRange ) :
     maRange( rRange ),

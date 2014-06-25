@@ -350,7 +350,6 @@ public:
     }
 };
 
-
 class ScVbaRangeAreas : public ScVbaCollectionBaseImpl
 {
     bool mbIsRows;
@@ -492,7 +491,6 @@ const ScRangeList& ScVbaRange::getScRangeList( const uno::Reference< excel::XRan
     throw uno::RuntimeException("Cannot obtain VBA range implementation object" );
 }
 
-
 class NumFormatHelper
 {
     uno::Reference< util::XNumberFormatsSupplier > mxSupplier;
@@ -548,7 +546,6 @@ public:
             if ( eState == SFX_ITEM_DONTCARE )
                 return OUString();
         }
-
 
         uno::Reference< beans::XPropertySet > xNumberProps( getNumberProps(), uno::UNO_QUERY_THROW );
         OUString aFormatString;
@@ -692,7 +689,6 @@ public:
     }
 };
 
-
 const static OUString ISVISIBLE(   "IsVisible");
 const static OUString POSITION(   "Position");
 const static OUString EQUALS( "=" );
@@ -800,7 +796,6 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
     return isExtracted;
 
 }
-
 
 class CellValueGetter : public ValueGetter
 {
@@ -954,7 +949,6 @@ public:
     }
 
 };
-
 
 class Dim2ArrayValueGetter : public ArrayVisitor
 {
@@ -1240,7 +1234,6 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
     }
     return true;
 }
-
 
 ScVbaRange*
 getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
@@ -1533,7 +1526,6 @@ ScVbaRange::getValue() throw (uno::RuntimeException, std::exception)
 
 }
 
-
 void
 ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFireEvent ) throw (uno::RuntimeException)
 {
@@ -1618,7 +1610,6 @@ ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (uno::Runti
         if( bFireEvent ) fireChangeEvent();
         return;
     }
-
 
     uno::Reference< sheet::XSheetOperation > xSheetOperation(mxRange, uno::UNO_QUERY_THROW);
     xSheetOperation->clearContents( nFlags );
@@ -1878,7 +1869,6 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
 
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-
 
     for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
     {
@@ -3376,7 +3366,6 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
         else
             throw uno::RuntimeException("Illegal Key param" );
 
-
 }
 
 void SAL_CALL
@@ -4116,7 +4105,6 @@ ScVbaRange::getLeft() throw (uno::RuntimeException, std::exception)
     return uno::makeAny( lcl_hmmToPoints( aPoint.X ) );
 }
 
-
 uno::Any SAL_CALL
 ScVbaRange::getTop() throw (uno::RuntimeException, std::exception)
 {
@@ -4126,7 +4114,6 @@ ScVbaRange::getTop() throw (uno::RuntimeException, std::exception)
     awt::Point aPoint= getPosition();
     return uno::makeAny( lcl_hmmToPoints( aPoint.Y ) );
 }
-
 
 uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
 {
@@ -4466,7 +4453,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         }
         xFiltProps->setPropertyValue( "ContainsHeader", uno::Any( bHasColHeader ) );
     }
-
 
     sal_Int32 nField = 0; // *IS* 1 based
     OUString sCriteria1;

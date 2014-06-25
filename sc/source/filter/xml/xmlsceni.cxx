@@ -34,7 +34,6 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
         sal_uInt16 nPrfx,

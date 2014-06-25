@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECONTEXTBASE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECONTEXTBASE_HXX
 
@@ -35,7 +34,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-
 
 #include <svl/lstner.hxx>
 #include <cppuhelper/compbase5.hxx>
@@ -325,7 +323,6 @@ private:
     */
     sal_Int16 maRole;
 };
-
 
 #endif
 

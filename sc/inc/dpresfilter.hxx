@@ -17,7 +17,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 
-
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
 }}}}

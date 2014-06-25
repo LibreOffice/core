@@ -968,7 +968,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     bool mbImportStyles;
     bool mbHasNewCondFormatData;
 
-
 protected:
 
     // This method is called after the namespace map has been updated, but

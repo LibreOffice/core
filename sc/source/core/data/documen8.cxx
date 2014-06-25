@@ -1184,7 +1184,6 @@ SfxBindings* ScDocument::GetViewBindings()
         return NULL;
 }
 
-
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );

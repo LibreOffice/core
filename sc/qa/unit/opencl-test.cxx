@@ -1209,7 +1209,6 @@ void ScOpenclTest::testFinacialSYDFormula()
     xDocShRes->DoClose();
 }
 
-
 void ScOpenclTest::testFinacialIRRFormula()
 {
     if (!detectOpenCLDevice())
@@ -3421,7 +3420,6 @@ void ScOpenclTest::testMathFormulaArcTan2()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
 
 //[AMLOEXT-148]
 void ScOpenclTest::testStatisticalFormulaChiSqInv()

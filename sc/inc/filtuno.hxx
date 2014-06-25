@@ -32,12 +32,10 @@ namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
-
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     ScFilterOptionsObj_CreateInstance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory >& );
-
 
 class ScFilterOptionsObj : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::beans::XPropertyAccess,
@@ -96,7 +94,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

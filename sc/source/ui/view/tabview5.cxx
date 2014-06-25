@@ -55,7 +55,6 @@ using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-
 void ScTabView::Init()
 {
     /*  RTL layout of the view windows is done manually, because it depends on
@@ -645,6 +644,5 @@ void ScTabView::ResetBrushDocument()
         SetActivePointer( Pointer( POINTER_ARROW ) );   // switch pointers also when ended with escape key
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

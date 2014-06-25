@@ -34,7 +34,6 @@ namespace datastreams {
     class ReaderThread;
 }
 
-
 class DataStream : boost::noncopyable
 {
 public:

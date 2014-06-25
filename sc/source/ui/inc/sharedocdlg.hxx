@@ -30,7 +30,6 @@ class ScDocShell;
 
 // class ScShareDocumentDlg
 
-
 class ScShareDocumentDlg : public ModalDialog
 {
 private:

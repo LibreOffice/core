@@ -27,7 +27,6 @@ namespace xls {
 
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const sal_Int32 BIFF12_RECONNECT_AS_REQUIRED            = 1;

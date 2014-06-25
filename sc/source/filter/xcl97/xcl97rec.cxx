@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
@@ -175,7 +174,6 @@ static bool IsVmlObject( const XclObj *rObj )
     }
 }
 
-
 static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 {
     sal_Int32 nNumVml = 0;
@@ -187,7 +185,6 @@ static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 
     return nNumVml;
 }
-
 
 static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
 {
@@ -229,7 +226,6 @@ static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, 
     rStrm.PopStream();
 }
 
-
 static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
 {
     if( GetVmlObjectCount( rList ) == 0 )
@@ -270,7 +266,6 @@ static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_In
     rStrm.PopStream();
 }
 
-
 void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
 {
     if( pSolverContainer )
@@ -282,7 +277,6 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
     SaveDrawingMLObjects( *this, rStrm, mnDrawingMLCount );
     SaveVmlObjects( *this, rStrm, mnVmlCount );
 }
-
 
 void XclExpObjList::ResetCounters()
 {
@@ -496,7 +490,6 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
 {
     EscherPropertyContainer aPropOpt;
 
-
     lcl_FillProps( aPropOpt, pCaption, bVisible );
 
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
@@ -544,7 +537,6 @@ protected:
     using VMLExport::EndShape;
     virtual void        EndShape( sal_Int32 nShapeElement ) SAL_OVERRIDE;
 };
-
 
 VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption,
                                         bool bVisible, Rectangle &aFrom, Rectangle &aTo )
@@ -616,7 +608,6 @@ void XclObjComment::SaveXml( XclExpXmlStream& rStrm )
     VmlCommentExporter aCommentExporter( rStrm.GetCurrentStream(), maScPos, mpCaption.get(), mbVisible, maFrom, maTo );
     aCommentExporter.AddSdrObject( *mpCaption );
 }
-
 
 // --- class XclObjDropDown ------------------------------------------
 
@@ -963,7 +954,6 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             aRange.aEnd.Col()-1, aRange.aEnd.Row()-1,
             nTab );
 
-
     pDrawing->startElement( FSNS( XML_xdr, XML_from ),
             FSEND );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aStart.Col() );
@@ -1005,7 +995,6 @@ GetEditAs( XclObjAny& rObj )
     return "absolute";
 }
 
-
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
     // ignore group shapes at the moment, we don't process them correctly
@@ -1041,18 +1030,15 @@ void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
             << nFileHistory << nLowestBiffVer;
 }
 
-
 sal_uInt16 ExcBof8_Base::GetNum() const
 {
     return 0x0809;
 }
 
-
 sal_Size ExcBof8_Base::GetLen() const
 {
     return 16;
 }
-
 
 // --- class ExcBof8 -------------------------------------------------
 
@@ -1061,14 +1047,12 @@ ExcBof8::ExcBof8()
     nDocType = 0x0010;
 }
 
-
 // --- class ExcBofW8 ------------------------------------------------
 
 ExcBofW8::ExcBofW8()
 {
     nDocType = 0x0005;
 }
-
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
@@ -1078,15 +1062,11 @@ ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB _nTab ) :
 {
 }
 
-
 ExcBundlesheet8::ExcBundlesheet8( const OUString& rString ) :
     ExcBundlesheetBase(),
     sUnicodeName( rString )
 {
 }
-
-
-
 
 void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
@@ -1098,12 +1078,10 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
     rStrm << nGrbit << GetName();
 }
 
-
 sal_Size ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
     return 8 + GetName().GetBufferSize();
 }
-
 
 void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1131,12 +1109,10 @@ sal_uInt16 XclObproj::GetNum() const
     return 0x00D3;
 }
 
-
 sal_Size XclObproj::GetLen() const
 {
     return 0;
 }
-
 
 // ---- class XclCodename --------------------------------------------
 
@@ -1144,18 +1120,15 @@ XclCodename::XclCodename( const OUString& r ) : aName( r )
 {
 }
 
-
 void XclCodename::SaveCont( XclExpStream& rStrm )
 {
     rStrm << aName;
 }
 
-
 sal_uInt16 XclCodename::GetNum() const
 {
     return 0x01BA;
 }
-
 
 sal_Size XclCodename::GetLen() const
 {
@@ -1191,7 +1164,6 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
             XML_val,    XclXmlUtils::ToOString( sText ).getStr(),
             FSEND );
 }
-
 
 ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
@@ -1320,7 +1292,6 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 
     rWorkbook->endElement( XML_scenario );
 }
-
 
 ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) :
         nActive( 0 )
@@ -1506,24 +1477,20 @@ void XclCalccount::SaveCont( XclExpStream& rStrm )
     rStrm << nCount;
 }
 
-
 XclCalccount::XclCalccount( const ScDocument& rDoc )
 {
     nCount = rDoc.GetDocOptions().GetIterCount();
 }
-
 
 sal_uInt16 XclCalccount::GetNum() const
 {
     return 0x000C;
 }
 
-
 sal_Size XclCalccount::GetLen() const
 {
     return 2;
 }
-
 
 void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1532,30 +1499,25 @@ void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-
 void XclIteration::SaveCont( XclExpStream& rStrm )
 {
     rStrm << nIter;
 }
-
 
 XclIteration::XclIteration( const ScDocument& rDoc )
 {
     nIter = rDoc.GetDocOptions().IsIter()? 1 : 0;
 }
 
-
 sal_uInt16 XclIteration::GetNum() const
 {
     return 0x0011;
 }
 
-
 sal_Size XclIteration::GetLen() const
 {
     return 2;
 }
-
 
 void XclIteration::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -1563,7 +1525,6 @@ void XclIteration::SaveXml( XclExpXmlStream& rStrm )
             XML_iterate, XclXmlUtils::ToPsz( nIter == 1 ),
             FSEND );
 }
-
 
 void XclDelta::SaveCont( XclExpStream& rStrm )
 {
@@ -1575,18 +1536,15 @@ XclDelta::XclDelta( const ScDocument& rDoc )
     fDelta = rDoc.GetDocOptions().GetIterEps();
 }
 
-
 sal_uInt16 XclDelta::GetNum() const
 {
     return 0x0010;
 }
 
-
 sal_Size XclDelta::GetLen() const
 {
     return 8;
 }
-
 
 void XclDelta::SaveXml( XclExpXmlStream& rStrm )
 {

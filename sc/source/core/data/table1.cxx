@@ -394,7 +394,6 @@ void ScTable::SetLoadingRTL( bool bSet )
     bLoadingRTL = bSet;
 }
 
-
 void ScTable::SetTabBgColor(const Color& rColor)
 {
     if (aTabBgColor != rColor)
@@ -902,7 +901,6 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
         }
     }
 }
-
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
@@ -1944,7 +1942,6 @@ void ScTable::AddPrintRange( const ScRange& rNew )
     InvalidatePageBreaks();
 }
 
-
 void ScTable::SetPrintEntireSheet()
 {
     if( !IsPrintEntireSheet() )
@@ -2072,13 +2069,11 @@ ScRefCellValue ScTable::VisibleDataCellIterator::next()
     return ScRefCellValue();
 }
 
-
 void ScTable::SetAnonymousDBData(ScDBData* pDBData)
 {
     delete pDBDataNoName;
     pDBDataNoName = pDBData;
 }
-
 
 sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
 {

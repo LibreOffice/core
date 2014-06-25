@@ -266,7 +266,6 @@ void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
     pParam->bDuplicate = true;
 }
 
-
 ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
     ScDBRangeBase(pDoc, INTERNAL), maRange(rRange)
 {
@@ -275,7 +274,6 @@ ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
 ScDBInternalRange::~ScDBInternalRange()
 {
 }
-
 
 SCCOL ScDBInternalRange::getColSize() const
 {

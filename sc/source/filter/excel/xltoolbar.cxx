@@ -417,7 +417,6 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
         // such menus will be dealt with when they are encountered
         // as part of importing the appropriate MenuSpecific toolbar control )
 
-
         if ( !(*it).IsMenuToolbar() )
         {
             if ( !(*it).ImportCustomToolBar( *this, helper ) )

@@ -313,7 +313,6 @@ public:
     bool IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const;
     bool IsRef2D( const ScComplexRefData& rRefData, bool bCheck3DFlag ) const;
 
-
 private:
     const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
     inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( mxData->maTokVec.size() ); }
@@ -448,7 +447,6 @@ private:
     void                AppendExt( sal_uInt16 nData );
     void                AppendExt( double fData );
     void                AppendExt( const OUString& rString );
-
 
 private:
     typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;

@@ -495,7 +495,6 @@ public:
                                     const ScDocument * pDoc, SCTAB nTabNo );
 };
 
-
 inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
 {
     long nRet = (long)( nTwips * nFactor );

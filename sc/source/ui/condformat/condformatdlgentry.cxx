@@ -124,7 +124,6 @@ void ScCondFrmtEntry::Deselect()
     SetHeight();
 }
 
-
 IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 {
     OUString aFormula = pEdit->GetText();
@@ -141,7 +140,6 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
     }
     return 0;
 }
-
 
 //condition
 

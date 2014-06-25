@@ -27,7 +27,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 PivotTableFieldContext::PivotTableFieldContext( WorksheetFragmentBase& rFragment, PivotTableField& rTableField ) :
     WorksheetContextBase( rFragment ),
     mrTableField( rTableField )

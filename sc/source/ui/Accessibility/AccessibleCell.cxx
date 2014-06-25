@@ -21,7 +21,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include "AccessibleText.hxx"
 #include "AccessibleDocument.hxx"
 #include "tabvwsh.hxx"

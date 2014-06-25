@@ -47,7 +47,6 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
     return ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach, nDifOption );
 }
 
-
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const rtl_TextEncoding eCharSet, sal_uInt32 nDifOption )
 {
@@ -295,6 +294,5 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     return eRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
@@ -308,10 +307,8 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "ooo.vba.VBAGlobals",          SC_SERVICE_VBAGLOBALS },
 };
 
-
 //  old service names that were in 567 still work in createInstance,
 //  in case some macro is still using them
-
 
 static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {
@@ -364,11 +361,7 @@ static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_EXT_TIMEFIELD
     };
 
-
-
-
 //  alles static
-
 
 sal_uInt16 ScServiceProvider::GetProviderType(const OUString& rServiceName)
 {
@@ -649,6 +642,5 @@ uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
     }
     return aRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

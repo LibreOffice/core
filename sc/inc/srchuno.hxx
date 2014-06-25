@@ -26,9 +26,7 @@
 #include <svl/itemprop.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-
 class SvxSearchItem;
-
 
 class ScCellSearchObj : public cppu::WeakImplHelper3<
                                 com::sun::star::util::XReplaceDescriptor,
@@ -115,7 +113,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

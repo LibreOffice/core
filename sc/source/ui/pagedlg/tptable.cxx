@@ -30,7 +30,6 @@
 #include "sc.hrc"
 #include "pagedlg.hrc"
 
-
 // Static Data
 
 static const sal_uInt16 pPageTableRanges[] =
@@ -66,7 +65,6 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       bool              bIsChecked,
                       bool              bSavedValue );
 
-
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
 #define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
@@ -80,7 +78,6 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define SC_TPTABLE_SCALE_PERCENT    0
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
-
 
 ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
@@ -432,7 +429,6 @@ static bool lcl_PutScaleItem( sal_uInt16               nWhich,
 
     return bDataChanged;
 }
-
 
 static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,

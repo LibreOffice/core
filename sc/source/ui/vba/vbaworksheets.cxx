@@ -52,13 +52,11 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > SheetEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > SheetCollectionHelper_BASE;
 // a map ( or hashmap ) wont do as we need also to preserve the order
 // (as added ) of the items
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
-
 
 // #FIXME #TODO the implementation of the Sheets collections sucks,
 // e.g. there is no support for tracking sheets added/removed from the collection
@@ -390,7 +388,6 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException,
         else
             rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), true );
     }
-
 
 }
 

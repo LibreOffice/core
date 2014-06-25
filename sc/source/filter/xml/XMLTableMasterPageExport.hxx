@@ -53,7 +53,6 @@ public:
     virtual ~XMLTableMasterPageExport();
 };
 
-
 #endif  //  _XMLOFF_XMLTABLEMASTERPAGEEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

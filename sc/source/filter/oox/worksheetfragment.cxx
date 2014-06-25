@@ -51,7 +51,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-
 namespace {
 
 const sal_uInt16 BIFF_COLINFO_HIDDEN        = 0x0001;
@@ -128,7 +127,6 @@ void DataValidationsContext::onEndElement()
         mxValModel.reset();
     }
 }
-
 
 ContextHandlerRef DataValidationsContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {

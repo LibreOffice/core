@@ -325,7 +325,6 @@ bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
     return rTarget.ISA(ScTabViewTarget);
 }
 
-
 ScUndoEnterValue::ScUndoEnterValue(
     ScDocShell* pNewDocShell, const ScAddress& rNewPos,
     const ScCellValue& rUndoCell, double nVal ) :

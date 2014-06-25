@@ -160,7 +160,6 @@ private:
     void            ReleaseFocus_Impl();
 };
 
-
 class ScInputBarGroup;
 
 class ScMultiTextWnd : public ScTextWnd
@@ -233,7 +232,6 @@ private:
     DECL_LINK( Impl_ScrollHdl, void* );
 
 };
-
 
 class ScInputWindow : public ToolBox                        // Parent toolbox
 {
@@ -310,7 +308,6 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(ScInputWindowWrapper);
 };
-
 
 #endif
 

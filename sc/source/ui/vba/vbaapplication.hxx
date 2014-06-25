@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 
-
 #include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

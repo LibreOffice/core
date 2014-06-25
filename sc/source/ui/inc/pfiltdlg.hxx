@@ -95,7 +95,6 @@ private:
     DECL_LINK( CheckBoxHdl,  CheckBox* );
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

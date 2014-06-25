@@ -235,7 +235,6 @@ public:
     }
 };
 
-
 }
 
 bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)

@@ -446,7 +446,6 @@ private:
     SCROW           FindNextNonEmptyRow();
 };
 
-
 /** Row-wise value iterator. */
 class ScHorizontalValueIterator
 {
@@ -480,7 +479,6 @@ public:
 
 //  returns all areas with non-default formatting (horizontal)
 
-
 class ScHorizontalAttrIterator
 {
 private:
@@ -506,9 +504,7 @@ public:
     const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow );
 };
 
-
 //  returns non-empty cells and areas with formatting (horizontal)
-
 
 class SC_DLLPUBLIC ScUsedAreaIterator
 {
@@ -595,8 +591,6 @@ private:
     const ::std::vector<TabRanges>* mpTabRangesArray;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -106,7 +106,6 @@ static SCSIZE nBcaSlots = initSlotDistribution( aSlotDistribution, nBcaSlotsRow)
 // Ensure that all static variables are initialized with this one call.
 #endif
 
-
 ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
     aTmpSeekBroadcastArea( ScRange()),
@@ -115,7 +114,6 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
     mbInBroadcastIteration( false)
 {
 }
-
 
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
@@ -132,7 +130,6 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
             delete pArea;
     }
 }
-
 
 bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
 {
@@ -155,7 +152,6 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
     }
     return false;
 }
-
 
 bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener, ScBroadcastArea*& rpArea )
@@ -199,7 +195,6 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
     return bNewArea;
 }
 
-
 void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 {
     OSL_ENSURE( pArea, "InsertListeningArea: pArea NULL");
@@ -208,7 +203,6 @@ void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
     if (aBroadcastAreaTbl.insert( pArea).second)
         pArea->IncRef();
 }
-
 
 // If rpArea != NULL then no listeners are stopped, only the area is removed
 // and the reference count decremented.
@@ -245,14 +239,12 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     }
 }
 
-
 ScBroadcastAreas::const_iterator ScBroadcastAreaSlot::FindBroadcastArea(
         const ScRange& rRange ) const
 {
     aTmpSeekBroadcastArea.UpdateRange( rRange);
     return aBroadcastAreaTbl.find( &aTmpSeekBroadcastArea);
 }
-
 
 bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 {
@@ -286,7 +278,6 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
     return bIsBroadcasted;
 }
 
-
 bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint)
 {
@@ -319,7 +310,6 @@ bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
     return bIsBroadcasted;
 }
 
-
 void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 {
     if (aBroadcastAreaTbl.empty())
@@ -343,7 +333,6 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
             ++aIter;
     }
 }
-
 
 void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
         const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
@@ -389,7 +378,6 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
     }
 }
 
-
 void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
 {
     ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.find( pArea));
@@ -403,7 +391,6 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
         pArea->DecRef();
     }
 }
-
 
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
@@ -428,7 +415,6 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
         }
     }
 }
-
 
 void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
 {
@@ -476,7 +462,6 @@ void ScBroadcastAreaSlot::FinallyEraseAreas()
     pBASM->FinallyEraseAreas( this);
 }
 
-
 // --- ScBroadcastAreaSlotMachine -------------------------------------
 
 ScBroadcastAreaSlotMachine::TableSlots::TableSlots()
@@ -484,7 +469,6 @@ ScBroadcastAreaSlotMachine::TableSlots::TableSlots()
     ppSlots = new ScBroadcastAreaSlot* [ nBcaSlots ];
     memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
 }
-
 
 ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 {
@@ -496,7 +480,6 @@ ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
     delete [] ppSlots;
 }
 
-
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
     pBCAlways( NULL ),
@@ -506,7 +489,6 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     nInBulkBroadcast( 0 )
 {
 }
-
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
@@ -520,7 +502,6 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
     // this stage there's nothing we can do anymore.
     SAL_WARN_IF( !maAreasToBeErased.empty(), "sc", "ScBroadcastAreaSlotMachine::dtor: maAreasToBeErased not empty");
 }
-
 
 inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         const ScAddress& rAddress ) const
@@ -546,7 +527,6 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
     return nBcaSlots - 1;
 }
 
-
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
         SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak ) const
 {
@@ -556,7 +536,6 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
     rRowBreak = ComputeSlotOffset(
         ScAddress( rRange.aStart.Col(), rRange.aEnd.Row(), 0 ) ) - rStart;
 }
-
 
 inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot** & pp,
         SCSIZE & nStart, ScBroadcastAreaSlot** const & ppSlots, SCSIZE const & nRowBreak )
@@ -574,7 +553,6 @@ inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
         nBreak = nOff + nRowBreak;
     }
 }
-
 
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener )
@@ -622,7 +600,6 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         }
     }
 }
-
 
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener )
@@ -676,7 +653,6 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
     }
 }
 
-
 bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
 {
     const ScAddress& rAddress = rHint.GetAddress();
@@ -704,7 +680,6 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
     }
 }
 
-
 bool ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint ) const
 {
@@ -728,7 +703,6 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
     }
     return bBroadcasted;
 }
-
 
 void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         const ScRange& rRange )
@@ -765,7 +739,6 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         }
     }
 }
-
 
 // for all affected: remove, chain, update range, insert, and maybe delete
 void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
@@ -942,12 +915,10 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
     pEOUpdateChain = NULL;
 }
 
-
 void ScBroadcastAreaSlotMachine::EnterBulkBroadcast()
 {
     ++nInBulkBroadcast;
 }
-
 
 void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
 {
@@ -958,25 +929,21 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
     }
 }
 
-
 bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.insert( pArea ).second;
 }
-
 
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.erase( pArea );
 }
 
-
 void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
         ScBroadcastAreas::iterator& rIter )
 {
     maAreasToBeErased.push_back( ::std::make_pair( pSlot, rIter));
 }
-
 
 void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
 {

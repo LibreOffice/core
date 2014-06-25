@@ -79,7 +79,6 @@ private:
     void            DoChange( const ScPatternAttr* pWhichPattern, const ::boost::shared_ptr<EditTextObject>& pEditData ) const;
 };
 
-
 class ScUndoEnterData: public ScSimpleUndo
 {
 public:
@@ -121,7 +120,6 @@ private:
     void            DoChange() const;
     void            SetChangeTrack();
 };
-
 
 class ScUndoEnterValue: public ScSimpleUndo
 {
@@ -339,7 +337,6 @@ private:
     ScAddress       aPos;
     SdrUndoAction*  pDrawUndo;
 };
-
 
 class ScUndoRangeNames: public ScSimpleUndo
 {

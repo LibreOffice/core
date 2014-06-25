@@ -171,7 +171,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScNamedRangesObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRanges,
                             ::com::sun::star::container::XEnumerationAccess,
@@ -338,7 +337,6 @@ public:
     virtual                 ~ScLocalNamedRangesObj();
 };
 
-
 class ScLabelRangeObj : public ::cppu::WeakImplHelper2<
                             ::com::sun::star::sheet::XLabelRange,
                             ::com::sun::star::lang::XServiceInfo >,
@@ -377,7 +375,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScLabelRangesObj : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::sheet::XLabelRanges,
@@ -428,7 +425,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

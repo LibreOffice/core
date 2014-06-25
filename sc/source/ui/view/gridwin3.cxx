@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -43,7 +42,6 @@
 #include "userdat.hxx"
 #include "unitconv.hxx"
 #include <svx/svdpage.hxx>
-
 
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "appluno.hxx"
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -684,7 +683,6 @@ uno::Sequence<OUString> ScFunctionListObj::getSupportedServiceNames_Static()
     return aRet;
 }
 
-
 static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
 {
     rDesc.initArgumentInfo();   // full argument info is needed
@@ -896,8 +894,5 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
     }
     return false;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

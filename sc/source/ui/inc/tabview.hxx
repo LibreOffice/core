@@ -62,7 +62,6 @@ namespace chart2 { namespace data {
 
 #define SC_FORCEMODE_NONE   0xff
 
-
 //      Help - Window
 
 class ScCornerButton : public Window
@@ -82,7 +81,6 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
-
 
 class ScTabView : boost::noncopyable
 {
@@ -245,7 +243,6 @@ public:
     bool            HasHintWindow() const;
     void            RemoveHintWindow();
     void            TestHintWindow();
-
 
     DECL_LINK(      TabBarResize, void* );
     /** Sets an absolute tab bar width (in pixels). */
@@ -462,7 +459,6 @@ public:
     void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
     void            KillEditView( bool bNoPaint );
     void            UpdateEditView();
-
 
                                     //  Blocks
 

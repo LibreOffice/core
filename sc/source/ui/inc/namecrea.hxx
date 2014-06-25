@@ -38,7 +38,6 @@ public:
     sal_uInt16          GetFlags() const;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAMECREA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -596,7 +596,6 @@ ScDPLabelData* ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
     return &maPivotParameters.maLabelArray[nColumn];
 }
 
-
 void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)
 {
     return mpListBoxData->PushDataFieldNames(rDataFieldNames);

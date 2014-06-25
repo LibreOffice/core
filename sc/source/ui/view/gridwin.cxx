@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 
 #include <memory>
@@ -421,7 +420,6 @@ static bool lcl_GetHyperlinkCell(
 
     return bFound;
 }
-
 
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
 ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
@@ -1925,9 +1923,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
     }
 
-
             //      scenario selection
-
 
     ScRange aScenRange;
     if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
@@ -1936,9 +1932,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-
             //      Doppelklick angefangen ?
-
 
     // StopMarking kann aus DrawMouseButtonDown gerufen werden
 
@@ -1953,9 +1947,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             nMouseStatus = SC_GM_TABDOWN;
     }
 
-
             //      Links in Edit-Zellen
-
 
     bool bAlt = rMEvt.IsMod2();
     if ( !bAlt && rMEvt.IsLeft() &&
@@ -1966,9 +1958,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-
             //      Gridwin - SelectionEngine
-
 
     if ( rMEvt.IsLeft() )
     {
@@ -2187,9 +2177,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if (bRefMode)
         pScMod->EndReference();
 
-
         //  Giesskannen-Modus (Gestalter)
-
 
     if (pScMod->GetIsWaterCan())
     {
@@ -2241,9 +2229,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
-
             //      double click (only left button)
-
 
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
     if ( bDouble && !bRefMode && nMouseStatus == SC_GM_DBLDOWN && !pScMod->IsRefDialogOpen() )
@@ -2326,9 +2312,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
-
             //      Links in edit cells
-
 
     bool bAlt = rMEvt.IsMod2();
     if ( !bAlt && !bRefMode && !bDouble && nMouseStatus == SC_GM_URLDOWN )
@@ -2411,9 +2395,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-
             //      Gridwin - SelectionEngine
-
 
     //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
     //  sal_True for any call, so IsLeft must be checked here, too.
@@ -3747,7 +3729,6 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     if ( pViewData->GetDocShell()->IsReadOnly() )
         return DND_ACTION_NONE;
 
-
     sal_Int8 nRet = DND_ACTION_NONE;
 
     if (rData.pCellTransfer)
@@ -4013,7 +3994,6 @@ static sal_uLong lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransfer
     return nFormatId;
 }
 
-
 sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
 {
     // hide drop marker
@@ -4066,7 +4046,6 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             pTransObj->GetNonFilteredRows());   // copy/link: no filtered rows
     ScRange aDest( nDestPosX, nDestPosY, nThisTab,
                    nDestPosX + nSizeX - 1, nDestPosY + nSizeY - 1, nThisTab );
-
 
     /* NOTE: AcceptPrivateDrop() already checked for filtered conditions during
      * dragging and adapted drawing of the selection frame. We check here
@@ -4443,7 +4422,6 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
@@ -4754,7 +4732,6 @@ void ScGridWindow::GetFocus()
     if (pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusGotHint(eWhich, GetAccessible()));
 
-
     if ( !SC_MOD()->IsFormulaMode() )
     {
         pViewShell->UpdateInputHandler();
@@ -4778,7 +4755,6 @@ void ScGridWindow::LoseFocus()
 
     Window::LoseFocus();
 }
-
 
 bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                                 sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY)
@@ -5342,7 +5318,6 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     }
     aLogicEdit.Bottom() = aLogicEdit.Top() + nTextHeight;
 
-
     Point aLogicClick = PixelToLogic(rPos,aEditMode);
     if ( aLogicEdit.IsInside(aLogicClick) )
     {
@@ -5437,7 +5412,6 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
             pDoc->MarkScenario( i, nTab, aMarks, false, SC_SCENARIO_SHOWFRAME );
         ScRangeList aRanges;
         aMarks.FillRangeListWithMarks( &aRanges, false );
-
 
         size_t nRangeCount = aRanges.size();
         for (size_t j=0;  j< nRangeCount; ++j)
@@ -5766,7 +5740,6 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
         Rectangle aRect( aClipStartScrPos, Size(nSizeXPix, nSizeYPix) );
 
-
         Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
 
         Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
@@ -5794,9 +5767,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     std::vector<Rectangle> aPixelRects;
 
-
     //  determine the cursor rectangles in pixels (moved from ScGridWindow::DrawCursor)
-
 
     SCTAB nTab = pViewData->GetTabNo();
     SCCOL nX = pViewData->GetCurX();
@@ -5971,9 +5942,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
     DeleteAutoFillOverlay();
 
-
     //  get the AutoFill handle rectangle in pixels
-
 
     if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&
          !pViewData->HasEditView(eWhich) && pViewData->IsActive() )
@@ -6048,9 +6017,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
     DeleteDragRectOverlay();
 
-
     //  get the rectangles in pixels (moved from DrawDragRect)
-
 
     if ( bDragRect || bPagebreakDrawn )
     {
@@ -6224,9 +6191,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 
     DeleteShrinkOverlay();
 
-
     //  get the rectangle in pixels
-
 
     Rectangle aPixRect;
     ScRange aRange;

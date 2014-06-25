@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #include "XMLCellRangeSourceContext.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -28,14 +26,12 @@
 
 using namespace ::com::sun::star;
 
-
 ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
     nColumns( 0 ),
     nRows( 0 ),
     nRefresh( 0 )
 {
 }
-
 
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,

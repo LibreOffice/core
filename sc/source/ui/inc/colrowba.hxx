@@ -58,7 +58,6 @@ public:
             bool        UseNumericHeader() const;
 };
 
-
 class ScRowBar : public ScHeaderControl
 {
     ScViewData*              pViewData;

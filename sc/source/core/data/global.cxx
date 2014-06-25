@@ -45,7 +45,6 @@
 #include <ctype.h>
 #include <numeric>
 
-
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/processfactory.hxx>
@@ -79,7 +78,6 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "editutil.hxx"
-
 
 tools::SvRef<ScDocShell>*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
@@ -128,7 +126,6 @@ long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
 static sal_uInt16 nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
-
 
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
@@ -195,7 +192,6 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
     }
     return pEnglishFormatter;
 }
-
 
 bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
@@ -568,7 +564,6 @@ void ScGlobal::SetClipDocName( const OUString& rNew )
     *pStrClipDocName = rNew;
 }
 
-
 void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 {
     if (!pPool)
@@ -741,7 +736,6 @@ ScUnitConverter* ScGlobal::GetUnitConverter()
 
     return pUnitConverter;
 }
-
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
             sal_Unicode c )
@@ -1060,9 +1054,6 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
             rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
     }
 }
-
-
-
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {

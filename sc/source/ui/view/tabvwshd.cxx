@@ -30,7 +30,6 @@
 #include "sc.hrc"
 #include <gridwin.hxx>
 
-
 // STATIC DATA -----------------------------------------------------------
 
 //!         Parent-Window fuer Dialoge
@@ -68,7 +67,5 @@ Window* ScTabViewShell::GetDialogParent()
 
     return GetActiveWin();      // for normal views, too
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

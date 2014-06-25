@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
 
-
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
@@ -55,8 +54,6 @@ private:
     DECL_LINK( EnableHdl, CheckBox * );
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_SCENDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

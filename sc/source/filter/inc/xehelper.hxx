@@ -411,7 +411,6 @@ private:
     XclExpUrlHelper();
 };
 
-
 class ScMatrix;
 
 /** Contains cached values in a 2-dimensional array. */

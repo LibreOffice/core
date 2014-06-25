@@ -41,7 +41,6 @@ TYPEINIT1(ScTablesHint,         SfxHint);
 TYPEINIT1(ScEditViewHint,       SfxHint);
 TYPEINIT1(ScIndexHint,          SfxHint);
 
-
 /**
  * Status update for entry field
  */
@@ -100,8 +99,6 @@ void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRa
     mpMisspellRanges = pRanges;
 }
 
-
-
 // ScPaintHint was moved to schints.cxx
 
 /**
@@ -140,7 +137,6 @@ ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress&
 ScEditViewHint::~ScEditViewHint()
 {
 }
-
 
 /**
  * Data for the sorting dialog
@@ -199,7 +195,6 @@ bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMembe
     rVal = com::sun::star::uno::Any();
     return true;
 }
-
 
 /**
  * Data for the Filter dialog
@@ -288,7 +283,6 @@ SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
     return new ScQueryItem( *this );
 }
 
-
 /**
  * Data for the SubTotal dialog
  */
@@ -347,7 +341,6 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nM
     return true;
 }
 
-
 /**
  * Transporter for the UserLIst dialog
  */
@@ -391,7 +384,6 @@ bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     return bEqual;
 }
 
-
 SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
 {
     return new ScUserListItem( *this );
@@ -402,7 +394,6 @@ void ScUserListItem::SetUserList( const ScUserList& rUserList )
     delete pUserList;
     pUserList = new ScUserList( rUserList );
 }
-
 
 /**
  * Data for the Consolidate dialog
@@ -533,7 +524,6 @@ SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 {
     return new ScSolveItem( *this );
 }
-
 
 /**
  * Data for the TabOp dialog

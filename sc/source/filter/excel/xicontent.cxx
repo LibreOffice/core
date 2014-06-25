@@ -64,7 +64,6 @@
 using ::com::sun::star::uno::Sequence;
 using ::std::auto_ptr;
 
-
 // Shared string table ========================================================
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
@@ -760,7 +759,6 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         // Not enough bytes left in the record.  Bail out.
         return;
 
-
     // first formula
     // string list is single tStr token with NUL separators -> replace them with LF
     rStrm.SetNulSubstChar( '\n' );
@@ -846,7 +844,6 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     if ( !bIsValid )
         // No valid validation found.  Bail out.
         return;
-
 
     // first range for base address for relative references
     const ScRange& rScRange = *aScRanges.front();    // aScRanges is not empty

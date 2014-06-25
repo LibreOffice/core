@@ -41,7 +41,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
     XclExpRoot( rExpData )
@@ -53,12 +52,10 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     pExcDoc = new ExcDocument( *this );
 }
 
-
 ExportBiff5::~ExportBiff5()
 {
     delete pExcDoc;
 }
-
 
 FltError ExportBiff5::Write()
 {
@@ -121,7 +118,6 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
 {
     pExcRoot->eDateiTyp = Biff8;
 }
-
 
 ExportBiff8::~ExportBiff8()
 {

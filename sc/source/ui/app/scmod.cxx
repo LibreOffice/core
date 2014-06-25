@@ -207,7 +207,6 @@ ScModule::~ScModule()
     DeleteCfg(); // Called from Exit()
 }
 
-
 void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 )
 {
     if ( p == pColorConfig || p == pAccessOptions )
@@ -615,7 +614,6 @@ void ScModule::GetState( SfxItemSet& rSet )
     }
 }
 
-
 void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 {
     if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
@@ -631,7 +629,6 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
     }
 }
 
-
 void ScModule::ResetDragObject()
 {
     mpDragData->pCellTransfer = NULL;
@@ -643,7 +640,6 @@ void ScModule::ResetDragObject()
     mpDragData->aJumpTarget = OUString();
     mpDragData->aJumpText = OUString();
 }
-
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
@@ -670,7 +666,6 @@ void ScModule::SetDragJump(
     mpDragData->aJumpTarget = rTarget;
     mpDragData->aJumpText = rText;
 }
-
 
 void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
@@ -1012,14 +1007,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
-
     // DefaultsOptions
     if (rOptSet.HasItem(SID_SCDEFAULTSOPTIONS, &pItem))
     {
         const ScDefaultsOptions& rOpt = ((const ScTpDefaultsItem*)pItem)->GetDefaultsOptions();
         SetDefaultsOptions( rOpt );
     }
-
 
     // FormulaOptions
     if (rOptSet.HasItem(SID_SCFORMULAOPTIONS, &pItem))
@@ -1049,7 +1042,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pDocSh->SetDocumentModified();
         }
     }
-
 
     // ViewOptions
     if (rOptSet.HasItem(SID_SCVIEWOPTIONS, &pItem))
@@ -1081,7 +1073,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pBindings->Invalidate(SID_HELPLINES_MOVE);
         }
     }
-
 
     // GridOptions
     // Evaluate after ViewOptions, as GridOptions is a member of ViewOptions
@@ -1196,7 +1187,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pBindings->Invalidate( SID_AUTOSPELL_CHECK );
     }
 
-
     // InputOptions
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
@@ -1255,7 +1245,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         pInputCfg->SetLegacyCellSelection( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = true;
     }
-
 
     // PrintOptions
     if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
@@ -1459,8 +1448,6 @@ void ScModule::SetRefInputHdl( ScInputHandler* pNew )
 {
     pRefInputHandler = pNew;
 }
-
-
 
 void ScModule::InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd )
 {
@@ -2052,7 +2039,6 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                     rInpOpt.GetReplaceCellsWarn() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION,
                     rInpOpt.GetLegacyCellSelection() ) );
-
 
         // RID_SC_TP_PRINT
         pRet->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, GetPrintOptions() ) );

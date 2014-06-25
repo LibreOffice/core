@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 
-
 #include <sfx2/objsh.hxx>
 
 #include <sfx2/docfac.hxx>
@@ -436,10 +435,8 @@ public:
     virtual bool    SetProtectionPassword( const OUString &rPassword ) SAL_OVERRIDE;
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) SAL_OVERRIDE;
 
-
     void SnapVisArea( Rectangle& rRect ) const;
 };
-
 
 void UpdateAcceptChangesDialog();
 
@@ -509,8 +506,6 @@ namespace HelperNotifyChanges
     }
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 ConnectionContext::ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection ) :
     WorkbookContextBase( rParent ),
     mrConnection( rConnection )

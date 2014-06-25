@@ -58,7 +58,6 @@ void ScInterpreter::ScFilterXML()
             return;
         }
 
-
         boost::shared_ptr<xmlXPathContext> pXPathCtx( xmlXPathNewContext(pDoc.get()),
                 xmlXPathFreeContext );
 

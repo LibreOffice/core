@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star { namespace sdbc {
     class XRow;
 } } } }
 
-
 class ScDatabaseDocUtil
 {
 public:

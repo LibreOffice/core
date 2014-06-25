@@ -129,9 +129,7 @@ public:
 
 }
 
-
 // function objects for sorting of the column and row members:
-
 
 class ScDPRowMembersOrder
 {
@@ -314,10 +312,6 @@ ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPRe
     maRowVisible.push_back(-1);
     maRowSorted.push_back(-1);
 }
-
-
-
-
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
@@ -891,7 +885,6 @@ bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
         return false;
 }
 
-
 ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
     if (nDim < static_cast<long>(maDimMembers.size()) && maDimMembers[nDim])
@@ -919,7 +912,6 @@ ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDi
     maDimMembers[nDim] = pResultMembers;
     return maDimMembers[nDim];
 }
-
 
 ScDPResultMember::ScDPResultMember(
     const ScDPResultData* pData, const ScDPParentDimData& rParentDimData, bool bForceSub ) :
@@ -2315,9 +2307,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         long nRowPos = 0;
                         long nColPos = 0;
 
-
                         //  find the reference field in column or row dimensions
-
 
                         if ( bRefDimInRow )     //  look in row dimensions
                         {
@@ -2399,9 +2389,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
                             bNoDetailsInRef = true;             // pSelectDim is then already NULL
 
-
                         //  get the member for the reference item and do the calculation
-
 
                         if ( bRunningTotal )
                         {
@@ -2551,7 +2539,6 @@ void ScDPDataMember::UpdateRunningTotals(
 
                         //  set total values when they are encountered (always before their use)
 
-
                         ScDPAggData* pColTotalData = pRefMember->GetColTotal( nMemberMeasure );
                         ScDPAggData* pRowTotalData = rTotals.GetRowTotal( nMemberMeasure );
                         ScDPAggData* pGrandTotalData = rTotals.GetGrandTotal( nMemberMeasure );
@@ -2567,9 +2554,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         if ( rTotals.IsInColRoot() && pColTotalData )
                             pColTotalData->SetAuxiliary( fTotalValue );
 
-
                         //  find relation to total values
-
 
                         switch ( eRefType )
                         {

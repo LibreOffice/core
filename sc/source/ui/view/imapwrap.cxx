@@ -57,5 +57,4 @@ const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg )
     return pDlg->GetImageMap();
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

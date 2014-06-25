@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABSPLIT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABSPLIT_HXX
 
-
 #include <vcl/split.hxx>
 
 class ScViewData;

@@ -541,7 +541,6 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
         mbDeleteCondFormat = false;
     }
 
-
 }
 
 void XMLTableStyleContext::FillPropertySet(
@@ -925,7 +924,6 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
     else
         return -1;
 }
-
 
 TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 

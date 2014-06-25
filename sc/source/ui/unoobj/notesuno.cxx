@@ -90,7 +90,6 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-
 // XChild
 
 uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno::RuntimeException, std::exception)

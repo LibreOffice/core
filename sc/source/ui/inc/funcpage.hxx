@@ -37,7 +37,6 @@ class ScFuncDesc;
 
 #define LRU_MAX 10
 
-
 class ScListBox : public ListBox
 {
 protected:
@@ -48,8 +47,6 @@ protected:
 public:
                     ScListBox( Window* pParent, const ResId& rResId );
 };
-
-
 
 class ScFuncPage : public TabPage
 {
@@ -65,7 +62,6 @@ private:
 
     const ScFuncDesc*   aLRUList[LRU_MAX];
 
-
                     DECL_LINK( SelHdl, ListBox* );
                     DECL_LINK( DblClkHdl, ListBox* );
 
@@ -73,7 +69,6 @@ protected:
 
     void            UpdateFunctionList();
     void            InitLRUList();
-
 
 public:
 
@@ -97,7 +92,6 @@ public:
     const Link&     GetSelectHdl() const { return aSelectionLink; }
 
 };
-
 
 #endif
 

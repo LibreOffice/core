@@ -322,5 +322,4 @@ IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod)
     return 0;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

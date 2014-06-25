@@ -100,7 +100,6 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
 
 // STATIC DATA ---------------------------------------------------------------
 
-
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -160,7 +159,6 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     return bAnyChanged;
 }
 
-
 bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -198,14 +196,12 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
     return bChanged;
 }
 
-
 enum ScAutoSum
 {
     ScAutoSumNone = 0,
     ScAutoSumData,
     ScAutoSumSum
 };
-
 
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
@@ -228,7 +224,6 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
     }
     return ScAutoSumNone;
 }
-
 
 #define SC_AUTOSUM_MAXCOUNT     20
 
@@ -835,7 +830,6 @@ void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* p
         UpdatePageBreakData( true );    // for PageBreak-Mode
 }
 
-
 void ScViewFunc::DeletePageBreak( bool bColumn, bool bRecord, const ScAddress* pPos,
                                     bool bSetModified )
 {
@@ -1002,7 +996,6 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     pDocSh->SetDocumentModified();
 }
 
-
 //  Merge cells
 
 bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
@@ -1018,7 +1011,6 @@ bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
     else
         return false;
 }
-
 
 bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bCenter )
 {
@@ -1114,7 +1106,6 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bC
     return bOk;
 }
 
-
 bool ScViewFunc::TestRemoveMerge()
 {
     bool bMerged = false;
@@ -1127,7 +1118,6 @@ bool ScViewFunc::TestRemoveMerge()
     }
     return bMerged;
 }
-
 
 static bool lcl_extendMergeRange(ScCellMergeOption& rOption, const ScRange& rRange)
 {
@@ -1446,7 +1436,6 @@ void ScViewFunc::TransliterateText( sal_Int32 nType )
     }
 }
 
-
 //  AutoFormat
 
 ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
@@ -1469,7 +1458,6 @@ ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
     }
     return pData;
 }
-
 
 void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, bool bRecord )
 {
@@ -1802,7 +1790,6 @@ void ScViewFunc::TabOp( const ScTabOpParam& rParam, bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-
 void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags )
 {
@@ -1824,7 +1811,6 @@ void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
     }
 }
 
-
 void ScViewFunc::ExtendScenario()
 {
     ScEditableTester aTester( this );
@@ -1842,7 +1828,6 @@ void ScViewFunc::ExtendScenario()
     aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);
 }
-
 
 void ScViewFunc::UseScenario( const OUString& rName )
 {
@@ -1866,7 +1851,6 @@ bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, bool bRecord )
 
     return bSuccess;
 }
-
 
 //  Insert tables
 
@@ -1917,7 +1901,6 @@ bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
     }
 }
 
-
 bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -1948,7 +1931,6 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
         return false;
     }
 }
-
 
 bool ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
 {
@@ -2108,7 +2090,6 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
                                             pUndoDoc, pUndoData ));
     }
 
-
     if (bDelDone)
     {
         if ( nNewTab >= rDoc.GetTableCount() )
@@ -2125,7 +2106,6 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
 
-
         SfxApplication* pSfxApp = SFX_APP();                                // Navigator
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
@@ -2139,7 +2119,6 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     return bDelDone;
 }
 
-
 bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
 {
     //  order Table/Name is inverted for DocFunc
@@ -2152,7 +2131,6 @@ bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
     }
     return bSuccess;
 }
-
 
 bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 {
@@ -2186,7 +2164,6 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
 
     pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, aPos, nRefresh, false, false );
 }
-
 
 void ScViewFunc::InsertTableLink( const OUString& rFile,
                                     const OUString& rFilter, const OUString& rOptions,
@@ -2315,7 +2292,6 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
             rBindings.Invalidate( SID_LINKS );
         }
     }
-
 
     if (bUndo)
     {
@@ -2697,7 +2673,6 @@ void ScViewFunc::MoveTable(
     }
 }
 
-
 void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -2734,7 +2709,6 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
         pDocSh->SetDocumentModified();
     }
 }
-
 
 void ScViewFunc::HideTable( const ScMarkData& rMark )
 {
@@ -2784,7 +2758,6 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
     }
 }
 
-
 void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
 {
     ScEditableTester aTester( this );
@@ -2819,7 +2792,6 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
         pViewShell->TabKeyInput( KeyEvent( *(pChar++), KeyCode() ) );
 }
 
-
 void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
                                   const SvxBorderLine* pDestLine,
                                   const SvxBorderLine* pSrcLine,
@@ -2842,7 +2814,6 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
     }
 }
 
-
 #define SET_LINE_ATTRIBUTES(LINE,BOXLINE) \
     pBoxLine = aBoxItem.Get##LINE();                                \
     if ( pBoxLine )                                                 \
@@ -2855,7 +2826,6 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
         else                                                        \
             aBoxItem.SetLine( NULL, BOXLINE );                      \
     }
-
 
 void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                          bool bColorOnly )
@@ -2898,7 +2868,6 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
                                             ATTR_PATTERN_END ));
-
 
             const SvxBorderLine*    pBoxLine = NULL;
             SvxBorderLine           aLine;
@@ -2977,6 +2946,5 @@ void ScViewFunc::SetValidation( const ScValidationData& rNew )
 
     ApplyAttr( aItem );         // with Paint and Undo...
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

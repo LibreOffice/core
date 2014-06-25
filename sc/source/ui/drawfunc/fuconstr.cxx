@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdotext.hxx>
@@ -363,6 +362,5 @@ void FuConstruct::Deactivate()
 {
     FuDraw::Deactivate();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

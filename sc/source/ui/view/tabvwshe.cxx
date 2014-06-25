@@ -345,7 +345,4 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
     }
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

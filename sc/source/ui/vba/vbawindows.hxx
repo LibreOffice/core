@@ -27,7 +27,6 @@
 #include "excelvbahelper.hxx"
 #include <vbahelper/vbacollectionimpl.hxx>
 
-
 typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 
 class ScVbaWindows : public ScVbaWindows_BASE
@@ -39,7 +38,6 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-
 
     // XWindows
     virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const css::uno::Any& ActiveWorkbook, const css::uno::Any& SyncHorizontal, const css::uno::Any& SyncVertical ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

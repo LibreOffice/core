@@ -434,7 +434,6 @@ void ScDPGroupDimension::SetDateDimension()
     mbDateDimension = true;
 }
 
-
 ScDPNumGroupDimension::ScDPNumGroupDimension() : mbDateDimension(false) {}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
@@ -455,7 +454,6 @@ void ScDPNumGroupDimension::DisposeData()
     aGroupInfo = ScDPNumGroupInfo();
     maMemberEntries.clear();
 }
-
 
 ScDPNumGroupDimension::~ScDPNumGroupDimension()
 {
@@ -493,7 +491,6 @@ ScDPGroupTableData::~ScDPGroupTableData()
 {
     delete[] pNumGroups;
 }
-
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
 {

@@ -365,7 +365,6 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
     return &aFooterStyleMap;
 }
 
-
 //  Index-Access auf die Style-Typen: 0 = Cell, 1 = Page
 
 #define SC_STYLE_FAMILY_COUNT 2
@@ -1991,6 +1990,5 @@ uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                       : OUString(SCCELLSTYLE_SERVICE);
     return aRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

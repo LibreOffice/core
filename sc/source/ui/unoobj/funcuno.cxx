@@ -498,9 +498,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     ScCompiler aCompiler(pDoc,aAdr);
     aCompiler.SetGrammar(pDoc->GetGrammar());
 
-
     //  find function
-
 
     ScTokenArray aTokenArr;
     if ( !lcl_AddFunctionToken( aTokenArr, aName,aCompiler ) )
@@ -509,16 +507,12 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         throw container::NoSuchElementException();
     }
 
-
     //  set options (null date, etc.)
-
 
     if ( pOptions )
         pDoc->SetDocOptions( *pOptions );
 
-
     //  add arguments to token array
-
 
     bool bArgErr = false;
     bool bOverflow = false;
@@ -621,9 +615,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     aTokenArr.AddOpCode(ocClose);
     aTokenArr.AddOpCode(ocStop);
 
-
     //  execute formula
-
 
     uno::Any aRet;
     if ( !bArgErr && !bOverflow && nDocRow <= MAXROWCOUNT )
@@ -682,6 +674,5 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
     return aRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
