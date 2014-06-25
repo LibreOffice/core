@@ -40,9 +40,6 @@
 
 namespace oox {
 
-
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -50,8 +47,6 @@ using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -61,8 +56,6 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 }
 
 } // namespace
-
-
 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
@@ -159,7 +152,6 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
 }
 
 // Device info and device dependent unit conversion ---------------------------
-
 
 sal_Int32 GraphicHelper::convertScreenPixelXToHmm( double fPixelX ) const
 {
@@ -335,8 +327,6 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
     }
     return aSizeHmm;
 }
-
-
 
 } // namespace oox
 

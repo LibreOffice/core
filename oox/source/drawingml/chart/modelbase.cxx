@@ -25,7 +25,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
 NumberFormat::NumberFormat() :
     mbSourceLinked( true )
 {
@@ -37,8 +36,6 @@ void NumberFormat::setAttributes( const AttributeList& rAttribs )
     // default is 'false', not 'true' as specified
     mbSourceLinked = rAttribs.getBool( XML_sourceLinked, false );
 }
-
-
 
 LayoutModel::LayoutModel() :
     mfX( 0.0 ),
@@ -57,8 +54,6 @@ LayoutModel::LayoutModel() :
 LayoutModel::~LayoutModel()
 {
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

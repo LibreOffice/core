@@ -32,7 +32,6 @@ WpsContext::~WpsContext()
 {
 }
 
-
 oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs)
 {
     switch (getBaseToken(nElementToken))

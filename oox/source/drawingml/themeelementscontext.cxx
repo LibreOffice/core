@@ -35,8 +35,6 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox {
 namespace drawingml {
 
-
-
 class FillStyleListContext : public ContextHandler2
 {
 public:
@@ -69,8 +67,6 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-
-
 class LineStyleListContext : public ContextHandler2
 {
 public:
@@ -97,8 +93,6 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
     }
     return 0;
 }
-
-
 
 class EffectStyleListContext : public ContextHandler2
 {
@@ -131,8 +125,6 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     }
     return 0;
 }
-
-
 
 class FontSchemeContext : public ContextHandler2
 {
@@ -192,8 +184,6 @@ void FontSchemeContext::onEndElement()
     }
 }
 
-
-
 ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper& rParent, Theme& rTheme ) :
     ContextHandler2( rParent ),
     mrTheme( rTheme )
@@ -225,8 +215,6 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
     }
     return 0;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

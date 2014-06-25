@@ -84,8 +84,6 @@ public:
 
 };
 
-
-
 } // namespace core
 } // namespace oox
 

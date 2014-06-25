@@ -36,8 +36,6 @@
 namespace oox {
 namespace ole {
 
-
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
@@ -337,8 +335,6 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
         OSL_FAIL( "VbaModule::createModule - cannot insert module into library" );
     }
 }
-
-
 
 } // namespace ole
 } // namespace oox

@@ -31,8 +31,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
@@ -40,8 +38,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-
-
 
 static const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
 static const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
@@ -84,8 +80,6 @@ static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
     aBuffer.append( API_TOKEN_ARRAY_CLOSE );
     return aBuffer.makeStringAndClear();
 }
-
-
 
 ChartConverter::ChartConverter()
 {
@@ -151,8 +145,6 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
 
     return 0;
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

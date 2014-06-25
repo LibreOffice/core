@@ -33,15 +33,10 @@
 namespace oox {
 namespace core {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-
-
-
 
 namespace {
 
@@ -67,8 +62,6 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
 }
 
 } // namespace
-
-
 
 FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mrNamespaceMap( StaticNamespaceMap::get() ),
@@ -170,8 +163,6 @@ sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )
 
     return 0;
 }
-
-
 
 } // namespace core
 } // namespace oox

@@ -25,8 +25,6 @@
 namespace oox {
 namespace ole {
 
-
-
 AxFontData::AxFontData() :
     mnFontEffects( 0 ),
     mnFontHeight( 160 ),
@@ -110,8 +108,6 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
         return importStdFont( rInStrm );
     return false;
 }
-
-
 
 } // namespace ole
 } // namespace oox

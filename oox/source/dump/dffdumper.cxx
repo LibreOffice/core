@@ -24,9 +24,6 @@
 namespace oox {
 namespace dump {
 
-
-
-
 namespace {
 
 const sal_uInt16 DFF_ID_BSE                 = 0xF007;   /// BLIP store entry.
@@ -47,8 +44,6 @@ const sal_uInt16 DFF_OPT_COMPLEX            = 0x8000;
 const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 } // namespace
-
-
 
 bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
@@ -275,8 +270,6 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     writeEmptyItem( "#prop" );
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
-
-
 
 } // namespace dump
 } // namespace oox

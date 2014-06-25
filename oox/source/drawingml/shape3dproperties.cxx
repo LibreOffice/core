@@ -46,7 +46,6 @@ using ::oox::core::XmlFilterBase;
 namespace oox {
 namespace drawingml {
 
-
 OUString Shape3DProperties::getCameraPrstName( sal_Int32 nElement )
 {
     switch( nElement )
@@ -405,8 +404,6 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAtt
     aSeq.realloc( nSize );
     return aSeq;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

@@ -30,9 +30,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-
 namespace oox { namespace ppt {
-
 
     SoundActionContext::SoundActionContext( FragmentHandler2& rParent, PropertyMap & aProperties ) throw()
     : FragmentHandler2( rParent )
@@ -43,11 +41,9 @@ namespace oox { namespace ppt {
     {
     }
 
-
     SoundActionContext::~SoundActionContext() throw()
     {
     }
-
 
     void SoundActionContext::onEndElement()
     {
@@ -70,7 +66,6 @@ namespace oox { namespace ppt {
             }
         }
     }
-
 
     ::oox::core::ContextHandlerRef SoundActionContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
@@ -99,8 +94,6 @@ namespace oox { namespace ppt {
 
         return this;
     }
-
-
 
 } }
 

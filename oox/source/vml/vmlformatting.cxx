@@ -35,8 +35,6 @@
 namespace oox {
 namespace vml {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::geometry;
 
@@ -50,8 +48,6 @@ using ::com::sun::star::drawing::PolygonFlags;
 using ::com::sun::star::drawing::PolygonFlags_NORMAL;
 using ::com::sun::star::drawing::PolygonFlags_CONTROL;
 
-
-
 namespace {
 
 bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& rValue )
@@ -63,8 +59,6 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 }
 
 } // namespace
-
-
 
 bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
         const OUString& rValue, sal_Unicode cSep )
@@ -497,8 +491,6 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
     }
 }
 
-
-
 namespace {
 
 sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int64 nDefValue )
@@ -620,16 +612,12 @@ sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
 
 } // namespace
 
-
-
 void StrokeArrowModel::assignUsed( const StrokeArrowModel& rSource )
 {
     moArrowType.assignIfUsed( rSource.moArrowType );
     moArrowWidth.assignIfUsed( rSource.moArrowWidth );
     moArrowLength.assignIfUsed( rSource.moArrowLength );
 }
-
-
 
 void StrokeModel::assignUsed( const StrokeModel& rSource )
 {
@@ -670,8 +658,6 @@ void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper
 
     aLineProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
-
-
 
 void FillModel::assignUsed( const FillModel& rSource )
 {
@@ -808,8 +794,6 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
 
     aFillProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
-
-
 
 ShadowModel::ShadowModel()
         : mbHasShadow(false)

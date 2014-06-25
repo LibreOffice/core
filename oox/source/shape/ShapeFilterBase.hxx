@@ -30,8 +30,6 @@
 namespace oox {
 namespace shape {
 
-
-
 class ShapeFilterBase : public core::XmlFilterBase
 {
 public:
@@ -69,8 +67,6 @@ private:
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;
 };
-
-
 
 } // namespace shape
 } // namespace oox

@@ -152,7 +152,6 @@ XmlStream::Tag::Tag( int t, const AttributeList& a )
 {
 }
 
-
 XmlStream::Tag::operator bool() const
 {
     return token != XML_TOKEN_INVALID;
@@ -317,7 +316,6 @@ void XmlStream::handleUnexpectedTag()
     }
     skipElementInternal( currentToken(), false ); // otherwise skip the entire element
 }
-
 
 void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
 {

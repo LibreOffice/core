@@ -34,7 +34,6 @@ namespace oox { namespace ppt {
         MS_AttributeNames type;
     };
 
-
     /** CT_TLCommonBehaviorData */
     class CommonBehaviorContext
         : public TimeNodeContext
@@ -58,7 +57,6 @@ namespace oox { namespace ppt {
         std::list< Attribute > maAttributes;
         OUString   msCurrentAttribute;
     };
-
 
 } }
 

@@ -37,8 +37,6 @@ using namespace ::com::sun::star::beans;
 namespace oox {
 namespace drawingml {
 
-
-
 void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
 {
     // overwrite all properties exisiting in rSourceProps
@@ -196,8 +194,6 @@ float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
 {
     return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

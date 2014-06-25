@@ -24,12 +24,8 @@
 
 namespace oox {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
-
-
 
 BinaryStreamBase::~BinaryStreamBase()
 {
@@ -56,8 +52,6 @@ void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos 
         seek( nStrmPos + nSkipSize );
     }
 }
-
-
 
 BinaryXSeekableStream::BinaryXSeekableStream( const Reference< XSeekable >& rxSeekable ) :
     BinaryStreamBase( mxSeekable.is() ),
@@ -114,8 +108,6 @@ void BinaryXSeekableStream::close()
     mbEof = true;
 }
 
-
-
 SequenceSeekableStream::SequenceSeekableStream( const StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
     mpData( &rData ),
@@ -147,8 +139,6 @@ void SequenceSeekableStream::close()
     mpData = 0;
     mbEof = true;
 }
-
-
 
 } // namespace oox
 

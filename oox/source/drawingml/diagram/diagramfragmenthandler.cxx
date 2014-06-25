@@ -50,7 +50,6 @@ void SAL_CALL DiagramDataFragmentHandler::endDocument()
 
 }
 
-
 ContextHandlerRef
 DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
                                              const AttributeList& )
@@ -65,8 +64,6 @@ DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
 
     return this;
 }
-
-
 
 DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
@@ -88,7 +85,6 @@ void SAL_CALL DiagramLayoutFragmentHandler::endDocument()
 
 }
 
-
 ContextHandlerRef
 DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
                                                const AttributeList& rAttribs )
@@ -103,8 +99,6 @@ DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
 
     return this;
 }
-
-
 
 DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
                                                               const OUString& rFragmentPath,
@@ -163,7 +157,6 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
     return 0;
 }
 
-
 void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttribs )
 {
     if( getCurrentElement() == DGM_TOKEN( styleLbl ) )
@@ -172,8 +165,6 @@ void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttrib
         maStyleEntry = mrStylesMap[maStyleName];
     }
 }
-
-
 
 void DiagramQStylesFragmentHandler::onEndElement( )
 {
@@ -231,7 +222,6 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
     return 0;
 }
 
-
 void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )
 {
     if( getCurrentElement() == DGM_TOKEN(styleLbl) )
@@ -246,7 +236,6 @@ void ColorFragmentHandler::onEndElement( )
     if( getCurrentElement() == DGM_TOKEN(styleLbl) )
         mrColorsMap[maColorName] = maColorEntry;
 }
-
 
 } }
 

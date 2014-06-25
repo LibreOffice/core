@@ -28,7 +28,6 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-
 // CT_ShapeStyle
 
 ShapeStyleContext::ShapeStyleContext( ContextHandler2Helper& rParent, Shape& rShape )

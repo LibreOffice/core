@@ -43,8 +43,6 @@ void ClrMap::setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken )
     maClrMap[ nClrToken ] = nMappedClrToken;
 }
 
-
-
 ClrScheme::ClrScheme()
 {
 }

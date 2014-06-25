@@ -25,7 +25,6 @@
 
 namespace oox { namespace drawingml {
 
-
 class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
@@ -39,8 +38,6 @@ private:
 
     DiagramDataPtr	mpDataPtr;
 };
-
-
 
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
 {

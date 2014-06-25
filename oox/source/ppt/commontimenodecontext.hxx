@@ -44,7 +44,6 @@ namespace oox { namespace ppt {
         ::com::sun::star::uno::Reference< ::com::sun::star::animations::XIterateContainer > mxIter;
     };
 
-
 } }
 
 #endif

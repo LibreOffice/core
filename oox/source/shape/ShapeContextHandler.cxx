@@ -57,7 +57,6 @@ ShapeContextHandler_createInstance( const uno::Reference< uno::XComponentContext
     return static_cast< ::cppu::OWeakObject* >( new ShapeContextHandler(context) );
 }
 
-
 ShapeContextHandler::ShapeContextHandler
 (uno::Reference< uno::XComponentContext > const & context) :
 mnStartToken(0), m_xContext(context)

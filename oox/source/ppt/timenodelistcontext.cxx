@@ -104,7 +104,6 @@ namespace oox { namespace ppt {
         sal_Int32 three;
     };
 
-
     /** CT_TLMediaNodeAudio
             CT_TLMediaNodeVideo */
     class MediaNodeContext
@@ -163,7 +162,6 @@ namespace oox { namespace ppt {
         bool mbIsNarration;
         bool mbFullScrn;
     };
-
 
     /** CT_TLSetBehavior
      */
@@ -316,7 +314,6 @@ namespace oox { namespace ppt {
                 }
             }
 
-
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
@@ -334,7 +331,6 @@ namespace oox { namespace ppt {
         OUString msCommand;
         sal_Int32 maType;
     };
-
 
     /** CT_TLTimeNodeSequence
      */
@@ -359,7 +355,6 @@ namespace oox { namespace ppt {
             {
             }
 
-
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
@@ -382,7 +377,6 @@ namespace oox { namespace ppt {
         bool mbConcurrent;
         sal_Int32 mnNextAc, mnPrevAc;
     };
-
 
     /** CT_TLTimeNodeParallel
      *  CT_TLTimeNodeExclusive
@@ -414,7 +408,6 @@ namespace oox { namespace ppt {
     protected:
 
     };
-
 
     /** CT_TLAnimateColorBehavior */
     class AnimColorContext
@@ -452,7 +445,6 @@ namespace oox { namespace ppt {
                         mpNode->setBy( m_byColor.get() );
                 }
             }
-
 
             virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
@@ -502,7 +494,6 @@ namespace oox { namespace ppt {
                 return this;
             }
 
-
     private:
         sal_Int32 mnColorSpace;
         sal_Int32 mnDir;
@@ -511,7 +502,6 @@ namespace oox { namespace ppt {
         oox::drawingml::Color maToClr;
         oox::drawingml::Color maFromClr;
     };
-
 
     /** CT_TLAnimateBehavior */
     class AnimContext
@@ -563,7 +553,6 @@ namespace oox { namespace ppt {
                 mnValueType = xAttribs->getOptionalValueToken( XML_valueType, 0 );
             }
 
-
         virtual ~AnimContext() throw ()
             {
                 ::std::list< TimeAnimationValue >::iterator iter, end;
@@ -599,7 +588,6 @@ namespace oox { namespace ppt {
                 }
             }
 
-
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
@@ -618,7 +606,6 @@ namespace oox { namespace ppt {
         sal_Int32              mnValueType;
         TimeAnimationValueList maTavList;
     };
-
 
     /** CT_TLAnimateScaleBehavior */
     class AnimScaleContext
@@ -704,7 +691,6 @@ namespace oox { namespace ppt {
         bool mbZoomContents;
     };
 
-
     /** CT_TLAnimateRotationBehavior */
     class AnimRotContext
         : public TimeNodeContext
@@ -756,8 +742,6 @@ namespace oox { namespace ppt {
             }
     };
 
-
-
     /** CT_TLAnimateMotionBehavior */
     class AnimMotionContext
         : public TimeNodeContext
@@ -800,7 +784,6 @@ namespace oox { namespace ppt {
         virtual ~AnimMotionContext( ) throw()
             {
             }
-
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
@@ -858,7 +841,6 @@ namespace oox { namespace ppt {
         sal_Int32 mnAngle;
     };
 
-
     /** CT_TLAnimateEffectBehavior */
     class AnimEffectContext
         : public TimeNodeContext
@@ -882,11 +864,9 @@ namespace oox { namespace ppt {
                 }
             }
 
-
         virtual ~AnimEffectContext( ) throw()
             {
             }
-
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
@@ -908,8 +888,6 @@ namespace oox { namespace ppt {
         OUString msFilter;
         OUString msPrList;
     };
-
-
 
     TimeNodeContext * TimeNodeContext::makeContext(
             FragmentHandler2& rParent, sal_Int32  aElement,
@@ -962,7 +940,6 @@ namespace oox { namespace ppt {
         return pCtx;
     }
 
-
     TimeNodeContext::TimeNodeContext( FragmentHandler2& rParent, sal_Int32 aElement,
             const Reference< XFastAttributeList >& /*xAttribs*/,
             const TimeNodePtr & pNode ) throw()
@@ -972,12 +949,10 @@ namespace oox { namespace ppt {
     {
     }
 
-
     TimeNodeContext::~TimeNodeContext( ) throw()
     {
 
     }
-
 
     TimeNodeListContext::TimeNodeListContext( FragmentHandler2& rParent, TimeNodePtrList & aList )
         throw()
@@ -986,11 +961,9 @@ namespace oox { namespace ppt {
     {
     }
 
-
     TimeNodeListContext::~TimeNodeListContext( ) throw()
     {
     }
-
 
     ::oox::core::ContextHandlerRef TimeNodeListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
@@ -1051,7 +1024,6 @@ namespace oox { namespace ppt {
 
         return pContext ? pContext : this;
     }
-
 
 } }
 

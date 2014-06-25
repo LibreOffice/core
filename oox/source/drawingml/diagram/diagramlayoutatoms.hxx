@@ -32,7 +32,6 @@
 #include "oox/drawingml/shape.hxx"
 #include "diagram.hxx"
 
-
 namespace oox { namespace drawingml {
 
 class DiagramLayout;
@@ -194,7 +193,6 @@ private:
 
 typedef boost::shared_ptr< ForEachAtom > ForEachAtomPtr;
 
-
 class ConditionAtom
     : public LayoutAtom
 {
@@ -220,7 +218,6 @@ private:
 };
 
 typedef boost::shared_ptr< ConditionAtom > ConditionAtomPtr;
-
 
 /** "choose" statements. Atoms will be tested in order. */
 class ChooseAtom

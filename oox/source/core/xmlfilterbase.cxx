@@ -214,8 +214,6 @@ XmlFilterBase::~XmlFilterBase()
     mxImpl->maFastParser.setDocumentHandler( 0 );
 }
 
-
-
 void XmlFilterBase::importDocumentProperties()
 {
     Reference< XMultiServiceFactory > xFactory( getComponentContext()->getServiceManager(), UNO_QUERY );
@@ -780,8 +778,6 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 {
     return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
-
-
 
 } // namespace core
 } // namespace oox

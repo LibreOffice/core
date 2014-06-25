@@ -18,8 +18,6 @@
 namespace oox {
 namespace drawingml {
 
-
-
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
     moShadowDist.assignIfUsed( rSourceProps.moShadowDist );
@@ -83,8 +81,6 @@ css::beans::PropertyValue Effect::getEffect()
 
     return pRet;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

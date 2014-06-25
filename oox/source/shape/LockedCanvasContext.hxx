@@ -37,7 +37,6 @@ protected:
     oox::drawingml::ShapePtr mpShape;
 };
 
-
 }
 }
 

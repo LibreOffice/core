@@ -28,15 +28,10 @@
 namespace oox {
 namespace core {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-
-
-
 
 namespace prv {
 
@@ -58,8 +53,6 @@ public:
 private:
     RecordParser*           mpParser;
 };
-
-
 
 void Locator::dispose()
 {
@@ -94,8 +87,6 @@ OUString SAL_CALL Locator::getSystemId() throw( RuntimeException, std::exception
     return mpParser->getInputSource().maSystemId;
 }
 
-
-
 class ContextStack
 {
 public:
@@ -117,8 +108,6 @@ private:
     FragmentHandlerRef  mxHandler;
     ContextInfoVec      maStack;
 };
-
-
 
 ContextStack::ContextStack( FragmentHandlerRef xHandler ) :
     mxHandler( xHandler )
@@ -162,8 +151,6 @@ void ContextStack::popContext()
 }
 
 } // namespace prv
-
-
 
 namespace {
 
@@ -212,8 +199,6 @@ bool lclReadNextRecord( sal_Int32& ornRecId, StreamDataSequence& orData, BinaryI
 }
 
 } // namespace
-
-
 
 RecordParser::RecordParser()
 {
@@ -334,8 +319,6 @@ const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
     RecordInfoMap::const_iterator aIt = maEndMap.find( nRecId );
     return (aIt == maEndMap.end()) ? 0 : &aIt->second;
 }
-
-
 
 } // namespace core
 } // namespace oox

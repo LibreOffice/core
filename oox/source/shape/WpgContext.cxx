@@ -30,7 +30,6 @@ WpgContext::~WpgContext()
 {
 }
 
-
 oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& /*rAttribs*/)
 {
     switch (getBaseToken(nElementToken))

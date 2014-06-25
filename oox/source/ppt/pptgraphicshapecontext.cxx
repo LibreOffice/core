@@ -196,7 +196,6 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
     return GraphicShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

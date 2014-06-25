@@ -25,7 +25,6 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-
 namespace oox { namespace drawingml {
 
     TextSpacingContext::TextSpacingContext( ContextHandler2Helper& rParent, TextSpacing & aSpacing )

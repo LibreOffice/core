@@ -44,8 +44,6 @@
 namespace oox {
 namespace ole {
 
-
-
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XForm;
 using ::com::sun::star::awt::XControlModel;
@@ -70,8 +68,6 @@ using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;
 
-
-
 namespace {
 
 const sal_uInt32 OLE_COLORTYPE_MASK         = 0xFF000000;
@@ -82,7 +78,6 @@ const sal_uInt32 OLE_COLORTYPE_SYSCOLOR     = 0x80000000;
 
 const sal_uInt32 OLE_PALETTECOLOR_MASK      = 0x0000FFFF;
 const sal_uInt32 OLE_SYSTEMCOLOR_MASK       = 0x0000FFFF;
-
 
 /** Swaps the red and blue component of the passed color. */
 inline sal_uInt32 lclSwapRedBlue( sal_uInt32 nColor )
@@ -95,8 +90,6 @@ inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
 {
     return static_cast< sal_Int32 >( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
-
-
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
 
@@ -197,8 +190,6 @@ GUIDCNamePairMap& classIdToGUIDCNamePairMap::get()
     return theInst.mnIdToGUIDCNamePairMap;
 }
 
-
-
 template< typename Type >
 void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
 {
@@ -210,8 +201,6 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
 }
 
 } // namespace
-
-
 
 StdFontInfo::StdFontInfo() :
     mnHeight( 0 ),
@@ -230,8 +219,6 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
     mnFlags( nFlags )
 {
 }
-
-
 
 sal_Int32 OleHelper::decodeOleColor(
         const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
@@ -547,7 +534,6 @@ bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
 
         SvStorageStreamRef pContents = xOleStg->OpenSotStream( OUString("contents"));
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
-
 
         SvStorageStreamRef pClsStrm = xOleStg->OpenSotStream(OUString("\1CompObj"));
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );

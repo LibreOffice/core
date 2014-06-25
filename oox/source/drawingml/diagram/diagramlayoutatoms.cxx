@@ -40,7 +40,6 @@ using namespace ::oox::core;
 
 namespace oox { namespace drawingml {
 
-
 IteratorAttr::IteratorAttr( )
     : mnAxis( 0 )
     , mnCnt( -1 )
@@ -62,8 +61,6 @@ void IteratorAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
     mnStep = attr.getInteger( XML_step, 1 );
 }
 
-
-
 ConditionAttr::ConditionAttr()
     : mnFunc( 0 )
     , mnArg( 0 )
@@ -71,7 +68,6 @@ ConditionAttr::ConditionAttr()
 {
 
 }
-
 
 void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
 {
@@ -82,7 +78,6 @@ void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr 
     msVal = xAttr->getOptionalValue( XML_val );
 }
 
-
 void LayoutAtom::dump(int level)
 {
     OSL_TRACE( "level = %d - %s of type %s", level,
@@ -92,7 +87,6 @@ void LayoutAtom::dump(int level)
     std::for_each( pChildren.begin(), pChildren.end(),
                    boost::bind( &LayoutAtom::dump, _1, level + 1 ) );
 }
-
 
 ForEachAtom::ForEachAtom(const Reference< XFastAttributeList >& xAttributes)
 {
@@ -506,10 +500,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     return false;
 }
 
-
-
 // Visitation
-
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {

@@ -46,7 +46,6 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 
-
 using ::com::sun::star::beans::NamedValue;
 
 namespace oox { namespace ppt {
@@ -82,7 +81,6 @@ static const convert_subtype gConvertArray[] =
     {  528, "in-from-screen-center" },
     {  0, 0 }
 };
-
 
 struct preset_maping
 {
@@ -229,9 +227,6 @@ static const preset_maping gPresetMaping[] =
     { ::com::sun::star::presentation::EffectPresetClass::EXIT, 56       ,"ooo-exit-flip" },
     { ::com::sun::star::presentation::EffectPresetClass::EXIT, 58       ,"ooo-exit-fold" },
 
-
-
-
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 16     ,"ooo-motionpath-4-point-star" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 5      ,"ooo-motionpath-5-point-star" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 11     ,"ooo-motionpath-6-point-star" },
@@ -296,7 +291,6 @@ static const preset_maping gPresetMaping[] =
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 59     ,"ooo-motionpath-s-curve-1" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 39     ,"ooo-motionpath-s-curve-2" },
     { ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH, 45     ,"ooo-motionpath-heartbeat" },
-
 
     { 0,0,0 }
 };
@@ -597,11 +591,9 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         xAttribs->getOptionalValue( XML_tmFilter );
     }
 
-
     CommonTimeNodeContext::~CommonTimeNodeContext( ) throw ( )
     {
     }
-
 
     void CommonTimeNodeContext::onEndElement()
     {
@@ -610,7 +602,6 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             mbIterate = false;
         }
     }
-
 
     ::oox::core::ContextHandlerRef CommonTimeNodeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {

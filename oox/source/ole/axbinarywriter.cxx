@@ -13,15 +13,11 @@
 namespace oox {
 namespace ole {
 
-
-
 namespace {
 
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
 } // namespace
-
-
 
 AxAlignedOutputStream::AxAlignedOutputStream( BinaryOutputStream& rOutStrm ) :
     BinaryStreamBase( false ),
@@ -88,8 +84,6 @@ void AxAlignedOutputStream::align( size_t nSize )
     pad( static_cast< sal_Int32 >( (nSize - (mnStrmPos % nSize)) % nSize ) );
 }
 
-
-
 namespace {
 
 void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt32 nSize, bool bArrayString )
@@ -99,8 +93,6 @@ void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt
 }
 
 } // namespace
-
-
 
 AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
 {
@@ -117,8 +109,6 @@ bool AxBinaryPropertyWriter::StringProperty::writeProperty( AxAlignedOutputStrea
     lclWriteString( rOutStrm, mrValue, mnSize, false );
     return true;
 }
-
-
 
 AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bool b64BitPropFlags ) :
     maOutStrm( rOutStrm ),
@@ -211,8 +201,6 @@ bool AxBinaryPropertyWriter::startNextProperty( bool bSkip )
     mnNextProp <<= 1;
     return true;
 }
-
-
 
 } // namespace exp
 } // namespace ole

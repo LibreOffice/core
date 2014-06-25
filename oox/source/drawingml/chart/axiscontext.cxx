@@ -28,12 +28,8 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::ContextHandler2Helper;
-
-
 
 AxisDispUnitsContext::AxisDispUnitsContext( ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel ) :
     ContextBase< AxisDispUnitsModel >( rParent, rModel )
@@ -78,8 +74,6 @@ ContextHandlerRef AxisDispUnitsContext::onCreateContext( sal_Int32 nElement, con
     }
     return 0;
 }
-
-
 
 AxisContextBase::AxisContextBase( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     ContextBase< AxisModel >( rParent, rModel )
@@ -166,8 +160,6 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
     return 0;
 }
 
-
-
 CatAxisContext::CatAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
 {
@@ -208,8 +200,6 @@ ContextHandlerRef CatAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 DateAxisContext::DateAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
 {
@@ -249,8 +239,6 @@ ContextHandlerRef DateAxisContext::onCreateContext( sal_Int32 nElement, const At
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-
-
 SerAxisContext::SerAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
 {
@@ -273,8 +261,6 @@ ContextHandlerRef SerAxisContext::onCreateContext( sal_Int32 nElement, const Att
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 ValAxisContext::ValAxisContext( ContextHandler2Helper& rParent, AxisModel& rModel ) :
     AxisContextBase( rParent, rModel )
@@ -303,8 +289,6 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

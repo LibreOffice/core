@@ -48,8 +48,6 @@ using ::com::sun::star::geometry::IntegerRectangle2D;
 namespace oox {
 namespace drawingml {
 
-
-
 namespace {
 
 Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties& aBlipProps, Reference< XGraphic > xGraphic,
@@ -105,7 +103,6 @@ Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > xGraphic, s
     return xGraphic;
 }
 
-
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 {
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
@@ -159,8 +156,6 @@ const awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const R
 
 } // namespace
 
-
-
 void GradientFillProperties::assignUsed( const GradientFillProperties& rSourceProps )
 {
     if( !rSourceProps.maGradientStops.empty() )
@@ -174,16 +169,12 @@ void GradientFillProperties::assignUsed( const GradientFillProperties& rSourcePr
     moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
 }
 
-
-
 void PatternFillProperties::assignUsed( const PatternFillProperties& rSourceProps )
 {
     maPattFgColor.assignIfUsed( rSourceProps.maPattFgColor );
     maPattBgColor.assignIfUsed( rSourceProps.maPattBgColor );
     moPattPreset.assignIfUsed( rSourceProps.moPattPreset );
 }
-
-
 
 void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
 {
@@ -207,8 +198,6 @@ void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
     maDuotoneColors[1].assignIfUsed( rSourceProps.maDuotoneColors[1] );
     maEffect.assignUsed( rSourceProps.maEffect );
 }
-
-
 
 void FillProperties::assignUsed( const FillProperties& rSourceProps )
 {
@@ -528,8 +517,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     }
 }
 
-
-
 void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
@@ -800,8 +787,6 @@ sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
     SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectToken - unexpected token name" );
     return XML_none;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

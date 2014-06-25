@@ -150,7 +150,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 {}
 
-
 Shape::~Shape()
 {
 }
@@ -215,7 +214,6 @@ void Shape::setServiceName( const sal_Char* pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
 }
 
-
 const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
 {
     ShapeStyleRefMap::const_iterator aIt = maShapeStyleRefs.find( nRefType );
@@ -251,7 +249,6 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
 
-
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
                 if( !SvtFilterOptions::Get().IsSmartArt2Shape() )
@@ -270,12 +267,10 @@ void Shape::setLockedCanvas(bool bLockedCanvas)
     mbLockedCanvas = bLockedCanvas;
 }
 
-
 void Shape::setWps(bool bWps)
 {
     mbWps = bWps;
 }
-
 
 void Shape::setTextBox(bool bTextBox)
 {
@@ -506,7 +501,6 @@ Reference< XShape > Shape::createAndInsert(
     {
         // now set transformation for this object
         HomogenMatrix3 aMatrix;
-
 
         aMatrix.Line1.Column1 = aTransformation.get(0,0);
         aMatrix.Line1.Column2 = aTransformation.get(0,1);
@@ -1170,8 +1164,6 @@ void Shape::setTextBody(const TextBodyPtr & pTextBody)
 {
     mpTextBody = pTextBody;
 }
-
-
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {

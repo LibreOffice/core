@@ -245,7 +245,6 @@ void BulletList::setBulletSize(sal_Int16 nSize)
     mnSize <<= nSize;
 }
 
-
 void BulletList::setFontSize(sal_Int16 nSize)
 {
     mnFontSize <<= nSize;

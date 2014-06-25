@@ -25,7 +25,6 @@ GrabBagStack::GrabBagStack(const OUString& aName)
 GrabBagStack::~GrabBagStack()
 {}
 
-
 bool GrabBagStack::isStackEmpty()
 {
     return mStack.empty();

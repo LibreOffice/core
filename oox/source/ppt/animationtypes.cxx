@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "animationtypes.hxx"
 
 #include <com/sun/star/animations/Timing.hpp>
@@ -44,7 +43,6 @@ Any GetTime(  const OUString & val )
     }
     return aDuration;
 }
-
 
 // ST_TLTimeAnimateValueTime
 Any GetTimeAnimateValueTime( const OUString & val )

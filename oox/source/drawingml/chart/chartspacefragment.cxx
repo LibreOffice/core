@@ -29,11 +29,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using namespace ::oox::core;
-
-
 
 ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, ChartSpaceModel& rModel ) :
     FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel ),
@@ -117,8 +113,6 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
     }
     return 0;
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

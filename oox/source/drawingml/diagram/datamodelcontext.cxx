@@ -76,7 +76,6 @@ private:
     dgm::Connections& mrConnection;
 };
 
-
 // CT_presLayoutVars
 class PresLayoutVarsContext
     : public ContextHandler2
@@ -129,7 +128,6 @@ public:
 private:
     dgm::Point& mrPoint;
 };
-
 
 // CT_prSet
 class PropertiesContext
@@ -197,7 +195,6 @@ private:
     dgm::Point& mrPoint;
 };
 
-
 // CL_Pt
 class PtContext
     : public ContextHandler2
@@ -219,7 +216,6 @@ public:
         if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
             mrPoint.msCnxId = rAttribs.getString( XML_cxnId ).get();
     }
-
 
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
@@ -255,8 +251,6 @@ public:
 private:
     dgm::Point& mrPoint;
 };
-
-
 
 // CT_PtList
 class PtListContext
@@ -330,8 +324,6 @@ private:
     DiagramDataPtr mpDataModel;
 };
 
-
-
 DataModelContext::DataModelContext( ContextHandler2Helper& rParent,
                                     const DiagramDataPtr & pDataModel )
     : ContextHandler2( rParent )
@@ -339,7 +331,6 @@ DataModelContext::DataModelContext( ContextHandler2Helper& rParent,
 {
     OSL_ENSURE( pDataModel, "Data Model must not be NULL" );
 }
-
 
 DataModelContext::~DataModelContext()
 {

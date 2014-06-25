@@ -1647,7 +1647,6 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         return;
     }
 
-
     // export dataseries for current chart-type
     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
@@ -1797,7 +1796,6 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                                 exportSeriesValues( xValues, XML_xVal );
                         }
                     }
-
 
                     if( eChartType == chart::TYPEID_BUBBLE )
                     {
@@ -2222,7 +2220,6 @@ void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
         }
     }
 
-
     _exportAxis( xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, aAxisIdPair );
 }
 
@@ -2556,7 +2553,6 @@ void ChartExport::exportDataLabels(
 
         sal_Int32 nElem = 0;
 
-
         uno::Reference< beans::XPropertySet > xPropSet;
         if(nSeriesLength != 0)
         {
@@ -2578,8 +2574,6 @@ void ChartExport::exportDataLabels(
             if (GetProperty( xPropSet, "Label"))
                mAny >>= aTempLabel;
         }
-
-
 
         for( nElem = 1; nElem < nSeriesLength; ++nElem)
         {
@@ -2647,7 +2641,6 @@ void ChartExport::exportDataLabels(
                        {
                            pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,aLabel.ShowNumber ? "1": "0", FSEND);
                        }
-
 
                        if(aTempLabel.ShowCategoryName != aLabel.ShowCategoryName)
                        {

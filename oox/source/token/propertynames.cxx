@@ -21,8 +21,6 @@
 
 namespace oox {
 
-
-
 PropertyNameVector::PropertyNameVector()
 {
     static const sal_Char* sppcPropertyNames[] =
@@ -37,8 +35,6 @@ PropertyNameVector::PropertyNameVector()
     for( size_t nIndex = 0; nIndex < nArraySize; ++nIndex )
         push_back( OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
 }
-
-
 
 } // namespace oox
 

@@ -35,8 +35,6 @@ using namespace ::com::sun::star::style;
 namespace oox {
 namespace drawingml {
 
-
-
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
 {
@@ -68,15 +66,11 @@ double GetPositiveFixedPercentage( const OUString& sValue )
     return fPercent;
 }
 
-
-
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
 awt::Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
     return awt::Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
 }
-
-
 
 /** converts the ST_TextFontSize to point */
 float GetTextSize( const OUString& sValue )
@@ -87,7 +81,6 @@ float GetTextSize( const OUString& sValue )
         fRet = static_cast< float >( static_cast< double >( nRet ) / 100.0 );
     return fRet;
 }
-
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
 sal_Int32 GetTextSpacingPoint( const OUString& sValue )
@@ -383,8 +376,6 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
-
-
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
 awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
 {
@@ -398,8 +389,6 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     range.end = xAttributes->getOptionalValue( XML_end ).toInt32();
     return range;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

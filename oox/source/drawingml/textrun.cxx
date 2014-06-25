@@ -173,7 +173,6 @@ sal_Int32 TextRun::insertAt(
     return nCharHeight;
 }
 
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,7 +11,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.hxx>
 
-
 namespace oox { namespace ppt {
 
 void CommentAuthorList::setValues(const CommentAuthorList& list)

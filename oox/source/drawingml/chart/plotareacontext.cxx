@@ -30,12 +30,8 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-
-
 
 View3DContext::View3DContext( ContextHandler2Helper& rParent, View3DModel& rModel ) :
     ContextBase< View3DModel >( rParent, rModel )
@@ -80,8 +76,6 @@ ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-
-
 WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorModel& rModel ) :
     ContextBase< WallFloorModel >( rParent, rModel )
 {
@@ -109,9 +103,6 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
     }
     return 0;
 }
-
-
-
 
 DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableModel& rModel ) :
     ContextBase< DataTableModel >( rParent, rModel )
@@ -143,9 +134,6 @@ ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const A
     }
     return 0;
 }
-
-
-
 
 PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
     ContextBase< PlotAreaModel >( rParent, rModel )
@@ -208,8 +196,6 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
     }
     return 0;
 }
-
-
 
 } // namespace chart
 } // namespace drawingml

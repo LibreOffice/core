@@ -50,7 +50,6 @@ using namespace ::oox::core;
 namespace oox {
 namespace drawingml {
 
-
 // CT_Picture
 
 GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
@@ -98,7 +97,6 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
 
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
-
 
 // CT_GraphicalObjectFrameContext
 
@@ -218,8 +216,6 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
     return 0;
 }
 
-
-
 DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 {
@@ -263,8 +259,6 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-
-
 ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
     ShapeContext( rParent, ShapePtr(), rxShape ),
     mrChartShapeInfo( rxShape->setChartType( bEmbedShapes ) )
@@ -279,8 +273,6 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
     }
     return 0;
 }
-
-
 
 } // namespace drawingml
 } // namespace oox

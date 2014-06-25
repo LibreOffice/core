@@ -17,8 +17,6 @@
 namespace oox {
 namespace drawingml {
 
-
-
 struct EffectShadowProperties
 {
     OptValue< sal_Int64 > moShadowDist;
@@ -30,8 +28,6 @@ struct EffectShadowProperties
     void                assignUsed( const EffectShadowProperties& rSourceProps );
 };
 
-
-
 struct Effect
 {
     OUString msName;
@@ -40,8 +36,6 @@ struct Effect
 
     css::beans::PropertyValue getEffect();
 };
-
-
 
 struct EffectProperties
 {
@@ -58,8 +52,6 @@ struct EffectProperties
                             PropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
-
-
 
 } // namespace drawingml
 } // namespace oox

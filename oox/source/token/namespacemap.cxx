@@ -21,8 +21,6 @@
 
 namespace oox {
 
-
-
 NamespaceMap::NamespaceMap()
 {
     static const struct NamespaceUrl { sal_Int32 mnId; const sal_Char* mpcUrl; } spNamespaceUrls[] =
@@ -47,6 +45,5 @@ NamespaceMap::NamespaceMap()
 }
 
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
