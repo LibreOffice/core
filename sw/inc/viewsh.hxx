@@ -441,7 +441,7 @@ public:
     inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
 
-    // Selection of  Draw ::com::sun::star::script::Engine has been changed.
+    // Selection of  Draw Engine has been changed.
     virtual void DrawSelChanged();
 
     SwPagePreviewLayout* PagePreviewLayout();
