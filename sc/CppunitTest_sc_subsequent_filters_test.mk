@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_ure,sc_subsequent_filters_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_subsequent_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
+	basic/util/sb \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
     comphelper/util/comphelp \
