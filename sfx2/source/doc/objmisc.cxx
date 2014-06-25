@@ -910,7 +910,6 @@ OUString SfxObjectShell::GetTitle
     }
     else
     {
-        // ::com::sun::star::util::URL-Versions
         if ( nMaxLength >= SFX_TITLE_MAXLEN )
         {
             OUString aComplete( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

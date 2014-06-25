@@ -404,7 +404,7 @@ public:
         return mxExtHandler;
     }
 
-    // Get original ::com::sun::star::util::URL.
+    // Get original URL.
     const OUString& GetOrigFileName() const { return msOrigFileName; }
 
     // Get (const) namespace map.
