@@ -479,6 +479,37 @@ void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence
     }
 }
 
+/**
+ * Insert a new data series to chart type at position after specified series
+ * position.
+ *
+ * @param xChartType chart type that contains data series.
+ * @param xSeries insertion position.  The new series will be inserted after
+ *                this one.
+ * @param xNewSeries new data series to insert.
+ */
+void addNewSeriesToContainer(
+    const Reference<XChartType>& xChartType,
+    const Reference<XDataSeries>& xSeries,
+    const Reference<XDataSeries>& xNewSeries )
+{
+    Reference<XDataSeriesContainer> xSeriesCnt(xChartType, uno::UNO_QUERY_THROW);
+    std::vector<Reference<XDataSeries> > aSeries = SequenceToVector(xSeriesCnt->getDataSeries());
+
+    std::vector<Reference<XDataSeries> >::iterator aIt =
+        std::find( aSeries.begin(), aSeries.end(), xSeries);
+
+    if( aIt == aSeries.end())
+        // if we have no series we insert at the first position.
+        aIt = aSeries.begin();
+    else
+        // vector::insert inserts before, so we have to advance
+        ++aIt;
+
+    aSeries.insert(aIt, xNewSeries);
+    xSeriesCnt->setDataSeries(ContainerToSequence(aSeries));
+}
+
 }
 
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
@@ -561,21 +592,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
         // add new series to container
         if( xNewSeries.is())
-        {
-            Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY_THROW );
-            ::std::vector< Reference< XDataSeries > > aSeries(
-                SequenceToVector( xSeriesCnt->getDataSeries()));
-            ::std::vector< Reference< XDataSeries > >::iterator aIt =
-                  ::std::find( aSeries.begin(), aSeries.end(), xSeries );
-            if( aIt == aSeries.end())
-                // if we have no series we insert at the first position.
-                aIt = aSeries.begin();
-            else
-                // vector::insert inserts before, so we have to advance
-                ++aIt;
-            aSeries.insert( aIt, xNewSeries );
-            xSeriesCnt->setDataSeries( ContainerToSequence( aSeries ));
-        }
+            addNewSeriesToContainer(xChartType, xSeries, xNewSeries);
 
         ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
