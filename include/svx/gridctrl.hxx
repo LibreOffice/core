@@ -63,7 +63,7 @@ enum GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any  m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
+    ::com::sun::star::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
     DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
     bool                        m_bIsNew;

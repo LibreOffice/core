@@ -722,19 +722,19 @@ private:
     // <BODY>-Tag auswerten: Hintergrund-Grafiken und -Farben setzen (htmlgrin.cxx)
     void InsertBodyOptions();
 
-    // Einfuegen von Links und ::com::sun::star::text::Bookmarks (htmlgrin.cxx)
+    // Einfuegen von Links und Bookmarks (htmlgrin.cxx)
 
-    // <A>-Tag auswerten: einen Link bzw. eine ::com::sun::star::text::Bookmark einfuegen
+    // <A>-Tag auswerten: einen Link bzw. eine Bookmark einfuegen
     void NewAnchor();
     void EndAnchor();
 
-    // eine ::com::sun::star::text::Bookmark einfuegen
+    // eine Bookmark einfuegen
     void InsertBookmark( const OUString& rName );
 
     void InsertCommentText( const sal_Char *pTag = 0 );
     void InsertComment( const OUString& rName, const sal_Char *pTag = 0 );
 
-    // sind im aktuellen Absatz ::com::sun::star::text::Bookmarks vorhanden?
+    // sind im aktuellen Absatz Bookmarks vorhanden?
     bool HasCurrentParaBookmarks( bool bIgnoreStack=false ) const;
 
     // Einfuegen von Script/Basic-Elementen
