@@ -241,7 +241,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                         UNO_QUERY );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
                     std::vector< OUString > vEmbeddedImageURLs;
-                    GraphicObject::InspectForGraphicObjectImageURL( xDialogModel,  vEmbeddedImageURLs );
+                    GraphicObject::InspectForGraphicObjectImageURL( Reference<XInterface>(xDialogModel, UNO_QUERY),  vEmbeddedImageURLs );
                     if ( !vEmbeddedImageURLs.empty() )
                     {
                         // Export the images to the storage

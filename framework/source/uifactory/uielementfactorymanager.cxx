@@ -453,7 +453,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     {
         OUString aModuleId;
         if ( xFrame.is() && xManager.is() )
-            aModuleId = xManager->identify( xFrame );
+            aModuleId = xManager->identify( Reference<XInterface>( xFrame, UNO_QUERY ) );
 
         Reference< XUIElementFactory > xUIElementFactory = getFactory( ResourceURL, aModuleId );
         if ( xUIElementFactory.is() )
