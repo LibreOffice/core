@@ -52,7 +52,6 @@ SwChartDataProvider * DocumentChartDataProviderManager::GetChartDataProvider( bo
     }
     return maChartDataProviderImplRef.get();
 }
-}
 
 void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const SwTable *pTable )
 {

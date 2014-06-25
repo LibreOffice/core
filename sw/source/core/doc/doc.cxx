@@ -25,6 +25,7 @@
 #include <DocumentChartDataProviderManager.hxx>
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentListItemsManager.hxx>
+#include <DocumentListsManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -314,6 +315,17 @@ IDocumentListItems const & SwDoc::getIDocumentListItems() const
 IDocumentListItems & SwDoc::getIDocumentListItems()
 {
     return *m_pDocumentListItemsManager;
+}
+
+//IDocumentListsAccess
+IDocumentListsAccess const & SwDoc::getIDocumentListsAccess() const
+{
+    return *m_pDocumentListsManager;
+}
+
+IDocumentListsAccess & SwDoc::getIDocumentListsAccess()
+{
+    return *m_pDocumentListsManager;
 }
 
 /* Implementations the next Interface here */

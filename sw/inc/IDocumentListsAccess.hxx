@@ -37,6 +37,7 @@ class IDocumentListsAccess
         virtual SwList* createListForListStyle( const OUString& rListStyleName ) = 0;
         virtual SwList* getListForListStyle( const OUString& rListStyleName ) const = 0;
         virtual void deleteListForListStyle( const OUString& rListStyleName ) = 0;
+        virtual void deleteListsByDefaultListStyle( const OUString& rListStyleName ) = 0;
         // #i91400#
         virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
                                                  const OUString& rNewListStyleName ) = 0;

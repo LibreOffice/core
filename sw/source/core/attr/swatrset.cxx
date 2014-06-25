@@ -21,6 +21,7 @@
 #include <charfmt.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
+#include <IDocumentListsAccess.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -339,9 +340,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 const OUString& sListId =
                         dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
                 if ( !sListId.isEmpty() &&
-                     !pDstDoc->getListByName( sListId ) )
+                     !pDstDoc->getIDocumentListsAccess().getListByName( sListId ) )
                 {
-                    const SwList* pList = pSrcDoc->getListByName( sListId );
+                    const SwList* pList = pSrcDoc->getIDocumentListsAccess().getListByName( sListId );
                     // copy list style, if needed
                     const OUString sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
@@ -371,10 +372,10 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     // check again, if list exist, because <SwDoc::MakeNumRule(..)>
                     // could have also created it.
                     if ( pNewListIdItem == 0 &&
-                         !pDstDoc->getListByName( sListId ) )
+                         !pDstDoc->getIDocumentListsAccess().getListByName( sListId ) )
                     {
                         // copy list
-                        pDstDoc->createList( sListId, sDefaultListStyleName );
+                        pDstDoc->getIDocumentListsAccess().createList( sListId, sDefaultListStyleName );
                     }
                 }
             }

@@ -25,6 +25,7 @@
 #include <ftnidx.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentListsAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
@@ -48,7 +49,6 @@
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
 #include <list.hxx>
-#include <listfunc.hxx>
 #include <switerator.hxx>
 #include <comphelper/string.hxx>
 
@@ -105,7 +105,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     mpOutlineRule->SetRuleType( OUTLINE_RULE );
-    mpOutlineRule->SetName(SwNumRule::GetOutlineRuleName(), *this);
+    mpOutlineRule->SetName(SwNumRule::GetOutlineRuleName(), getIDocumentListsAccess());
 
     // assure that the outline numbering rule is an automatic rule
     mpOutlineRule->SetAutoRule( true );
@@ -874,7 +874,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             else
             {
                 // create new list and apply its list id
-                const SwList* pNewList = createList( OUString(), pNewOrChangedNumRule->GetName() );
+                const SwList* pNewList = getIDocumentListsAccess().createList( OUString(), pNewOrChangedNumRule->GetName() );
                 OSL_ENSURE( pNewList,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
@@ -1027,28 +1027,8 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
             BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PSEUDO,
                                     SFX_STYLESHEET_ERASED);
 
-        deleteListForListStyle( rName );
-        {
-            // delete further list, which have the deleted list style as default list style
-            std::vector< SwList* > aListsForDeletion;
-            tHashMapForLists::iterator aListIter = maLists.begin();
-            while ( aListIter != maLists.end() )
-            {
-                SwList* pList = (*aListIter).second;
-                if ( pList->GetDefaultListStyleName() == rName )
-                {
-                    aListsForDeletion.push_back( pList );
-                }
-
-                ++aListIter;
-            }
-            while ( !aListsForDeletion.empty() )
-            {
-                SwList* pList = aListsForDeletion.back();
-                aListsForDeletion.pop_back();
-                deleteList( pList->GetListId() );
-            }
-        }
+        getIDocumentListsAccess().deleteListForListStyle( rName );
+        getIDocumentListsAccess().deleteListsByDefaultListStyle( rName );
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const OUString aTmpName( rName );
@@ -1100,7 +1080,7 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
         SwNumRule::tTxtNodeList aTxtNodeList;
         pNumRule->GetTxtNodeList( aTxtNodeList );
 
-        pNumRule->SetName( rNewName, *this );
+        pNumRule->SetName( rNewName, getIDocumentListsAccess() );
 
         SwNumRuleItem aItem(rNewName);
 
@@ -1251,7 +1231,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                     if ( aListStyleData.pReplaceNumRule == 0 )
                     {
                         aListStyleData.pReplaceNumRule = new SwNumRule(*pRule);
-                        aListStyleData.pReplaceNumRule->SetName( GetUniqueNumRuleName(), *this );
+                        aListStyleData.pReplaceNumRule->SetName( GetUniqueNumRuleName(), getIDocumentListsAccess() );
                         aListStyleData.bCreateNewList = true;
                     }
 
@@ -2152,7 +2132,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     maNumRuleMap[pRule->GetName()] = pRule;
     pRule->SetNumRuleMap(&maNumRuleMap);
 
-    createListForListStyle( pRule->GetName() );
+    getIDocumentListsAccess().createListForListStyle( pRule->GetName() );
 }
 
 sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
@@ -2165,7 +2145,7 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
     {
         pNew = new SwNumRule( *pCpy );
 
-        pNew->SetName( GetUniqueNumRuleName( &rName ), *this );
+        pNew->SetName( GetUniqueNumRuleName( &rName ), getIDocumentListsAccess() );
 
         if( pNew->GetName() != rName )
         {
@@ -2296,7 +2276,7 @@ void SwDoc::MarkListLevel( const OUString& sListId,
                            const int nListLevel,
                            const bool bValue )
 {
-    SwList* pList = getListByName( sListId );
+    SwList* pList = getIDocumentListsAccess().getListByName( sListId );
 
     if ( pList )
     {
@@ -2365,177 +2345,5 @@ void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOu
     }
 }
 
-// implementation of interface IDocumentListsAccess
-SwList* SwDoc::createList( const OUString& rListId,
-                           const OUString& sDefaultListStyleName )
-{
-    OUString sListId = rListId;
-    if ( sListId.isEmpty() )
-    {
-        sListId = listfunc::CreateUniqueListId( *this );
-    }
-
-    if ( getListByName( sListId ) )
-    {
-        OSL_FAIL( "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
-        return 0;
-    }
-
-    SwNumRule* pDefaultNumRuleForNewList = FindNumRulePtr( sDefaultListStyleName );
-    if ( !pDefaultNumRuleForNewList )
-    {
-        OSL_FAIL( "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
-        return 0;
-    }
-
-    SwList* pNewList = new SwList( sListId, *pDefaultNumRuleForNewList, GetNodes() );
-    maLists[sListId] = pNewList;
-
-    return pNewList;
-}
-
-void SwDoc::deleteList( const OUString& sListId )
-{
-    SwList* pList = getListByName( sListId );
-    if ( pList )
-    {
-        maLists.erase( sListId );
-        delete pList;
-    }
-}
-
-SwList* SwDoc::getListByName( const OUString& sListId ) const
-{
-    SwList* pList = 0;
-
-    boost::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
-                                            aListIter = maLists.find( sListId );
-    if ( aListIter != maLists.end() )
-    {
-        pList = (*aListIter).second;
-    }
-
-    return pList;
-}
-
-SwList* SwDoc::createListForListStyle( const OUString& sListStyleName )
-{
-    if ( sListStyleName.isEmpty() )
-    {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
-        return 0;
-    }
-
-    if ( getListForListStyle( sListStyleName ) )
-    {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
-        return 0;
-    }
-
-    SwNumRule* pNumRule = FindNumRulePtr( sListStyleName );
-    if ( !pNumRule )
-    {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
-        return 0;
-    }
-
-    OUString sListId( pNumRule->GetDefaultListId() ); // can be empty String
-    if ( getListByName( sListId ) )
-    {
-        sListId = OUString();
-    }
-    SwList* pNewList = createList( sListId, sListStyleName );
-    maListStyleLists[sListStyleName] = pNewList;
-    pNumRule->SetDefaultListId( pNewList->GetListId() );
-
-    return pNewList;
-}
-
-SwList* SwDoc::getListForListStyle( const OUString& sListStyleName ) const
-{
-    SwList* pList = 0;
-
-    boost::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
-                            aListIter = maListStyleLists.find( sListStyleName );
-    if ( aListIter != maListStyleLists.end() )
-    {
-        pList = (*aListIter).second;
-    }
-
-    return pList;
-}
-
-void SwDoc::deleteListForListStyle( const OUString& sListStyleName )
-{
-    OUString sListId;
-    {
-        SwList* pList = getListForListStyle( sListStyleName );
-        OSL_ENSURE( pList,
-                "<SwDoc::deleteListForListStyle(..)> - misusage of method: no list found for given list style name" );
-        if ( pList )
-        {
-            sListId = pList->GetListId();
-        }
-    }
-    if ( !sListId.isEmpty() )
-    {
-        maListStyleLists.erase( sListStyleName );
-        deleteList( sListId );
-    }
-}
-
-void SwDoc::trackChangeOfListStyleName( const OUString& sListStyleName,
-                                        const OUString& sNewListStyleName )
-{
-    SwList* pList = getListForListStyle( sListStyleName );
-    OSL_ENSURE( pList,
-            "<SwDoc::changeOfListStyleName(..)> - misusage of method: no list found for given list style name" );
-
-    if ( pList != 0 )
-    {
-        maListStyleLists.erase( sListStyleName );
-        maListStyleLists[sNewListStyleName] = pList;
-    }
-}
-
-namespace listfunc
-{
-    const OUString MakeListIdUnique( const SwDoc& rDoc,
-                                   const OUString& aSuggestedUniqueListId )
-    {
-        long nHitCount = 0;
-        OUString aTmpStr = aSuggestedUniqueListId;
-        while ( rDoc.getListByName( aTmpStr ) )
-        {
-            ++nHitCount;
-            aTmpStr = aSuggestedUniqueListId;
-            aTmpStr += OUString::number( nHitCount );
-        }
-
-        return aTmpStr;
-    }
-    const OUString CreateUniqueListId( const SwDoc& rDoc )
-    {
-        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
-
-        if (bHack)
-        {
-            static sal_Int64 nIdCounter = SAL_CONST_INT64(7000000000);
-            return MakeListIdUnique( rDoc, OUString( "list" + OUString::number(nIdCounter++) ) );
-        }
-        else
-        {
-            // #i92478#
-            OUString aNewListId( "list" );
-            // #o12311627#
-            static rtlRandomPool s_RandomPool( rtl_random_createPool() );
-            sal_Int64 n;
-            rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-            aNewListId += OUString::number( (n < 0 ? -n : n) );
-
-            return MakeListIdUnique( rDoc, aNewListId );
-        }
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

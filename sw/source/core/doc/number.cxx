@@ -881,7 +881,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
         {
             const SwTxtNode* pTxtNode = *aIter;
             // #i111681# - applying patch from cmc
-            SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
+            SwList* pList = pTxtNode->GetDoc()->getIDocumentListsAccess().getListByName( pTxtNode->GetListId() );
             OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
             if ( pList )
             {
@@ -995,7 +995,7 @@ void SwNumRule::Validate()
     for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
     {
         const SwTxtNode* pTxtNode = *aIter;
-        aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
+        aLists.insert( pTxtNode->GetDoc()->getIDocumentListsAccess().getListByName( pTxtNode->GetListId() ) );
     }
     std::for_each( aLists.begin(), aLists.end(),
                    std::mem_fun( &SwList::ValidateListTree ) );

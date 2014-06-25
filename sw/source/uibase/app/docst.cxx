@@ -62,6 +62,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentListsAccess.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
@@ -1068,7 +1069,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
                 SwNumRule aRule( *pCurRule );
                 // #i91400#
                 aRule.SetName( pStyle->GetNumRule()->GetName(),
-                               *(pCurrWrtShell->GetDoc()) );
+                               pCurrWrtShell->GetDoc()->getIDocumentListsAccess() );
                 pCurrWrtShell->ChgNumRuleFmts( aRule );
             }
         }
@@ -1211,7 +1212,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                 OUString sOrigRule( aRule.GetName() );
                 // #i91400#
                 aRule.SetName( pStyle->GetNumRule()->GetName(),
-                               *(pCurrWrtShell->GetDoc()) );
+                               pCurrWrtShell->GetDoc()->getIDocumentListsAccess() );
                 pCurrWrtShell->ChgNumRuleFmts( aRule );
 
                 pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );

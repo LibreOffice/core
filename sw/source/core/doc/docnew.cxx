@@ -94,6 +94,7 @@
 #include <DocumentTimerManager.hxx>
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentListItemsManager.hxx>
+#include <DocumentListsManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -102,7 +103,6 @@
 #include <pausethreadstarting.hxx>
 #include <numrule.hxx>
 #include <list.hxx>
-#include <listfunc.hxx>
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx>
@@ -204,6 +204,7 @@ SwDoc::SwDoc()
     m_pDocumentTimerManager( new ::sw::DocumentTimerManager( *this ) ),
     m_pDocumentLinksAdministrationManager( new ::sw::DocumentLinksAdministrationManager( *this ) ),
     m_pDocumentListItemsManager( new ::sw::DocumentListItemsManager() ),
+    m_pDocumentListsManager( new ::sw::DocumentListsManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -234,8 +235,6 @@ SwDoc::SwDoc()
     mpURLStateChgd( 0 ),
     mpNumberFormatter( 0 ),
     mpNumRuleTbl( new SwNumRuleTbl ),
-    maLists(),
-    maListStyleLists(),
     mpRedlineTbl( new SwRedlineTbl ),
     mpExtraRedlineTbl ( new SwExtraRedlineTbl ),
     mpAutoFmtRedlnComment( 0 ),
@@ -616,18 +615,6 @@ SwDoc::~SwDoc()
     delete mpDfltGrfFmtColl;
     delete mpNumRuleTbl;
 
-    {
-        for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
-                                                    aListIter = maLists.begin();
-              aListIter != maLists.end();
-              ++aListIter )
-        {
-            delete (*aListIter).second;
-        }
-        maLists.clear();
-    }
-    maListStyleLists.clear();
-
     disposeXForms(); // #i113606#, dispose the XForms objects
 
     delete mpNumberFormatter;
@@ -742,18 +729,6 @@ void SwDoc::ClearDoc()
     BOOST_FOREACH( SwNumRule* pNumRule, *mpNumRuleTbl )
         delete pNumRule;
     mpNumRuleTbl->clear();
-    // #i114725#,#i115828#
-    {
-        for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
-                                                    aListIter = maLists.begin();
-              aListIter != maLists.end();
-              ++aListIter )
-        {
-            delete (*aListIter).second;
-        }
-        maLists.clear();
-    }
-    maListStyleLists.clear();
 
     // creation of new outline numbering rule
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),

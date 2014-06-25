@@ -31,10 +31,6 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
-
-#include <IDocumentListsAccess.hxx>
-class SwList;
-
 #include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -187,6 +183,7 @@ class SwPrintData;
 class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
+class SwList;
 class IDocumentUndoRedo;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;
@@ -195,6 +192,7 @@ class IDocumentChartDataProviderAccess;
 class IDocumentTimerAccess;
 class IDocumentLinksAdministration;
 class IDocumentListItems;
+class IDocumentListsAccess;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -211,6 +209,7 @@ namespace sw {
     class DocumentTimerManager;
     class DocumentLinksAdministrationManager;
     class DocumentListItemsManager;
+    class DocumentListsManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -257,7 +256,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentState,
     public IDocumentLayoutAccess,
     public IDocumentOutlineNodes,
-    public IDocumentListsAccess,
     public IDocumentExternalData
 {
 
@@ -292,6 +290,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
     const ::boost::scoped_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
     const ::boost::scoped_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
+    const ::boost::scoped_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -340,12 +339,6 @@ class SW_DLLPUBLIC SwDoc :
 
     // Hash map to find numrules by name
     mutable boost::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
-
-    typedef boost::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
-    // container to hold the lists of the text document
-    tHashMapForLists maLists;
-    // relation between list style and its default list
-    tHashMapForLists maListStyleLists;
 
     SwRedlineTbl        *mpRedlineTbl;           //< List of all Ranged Redlines.
     SwExtraRedlineTbl   *mpExtraRedlineTbl;      //< List of all Extra Redlines.
@@ -780,15 +773,8 @@ public:
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
 
     // IDocumentListsAccess
-    virtual SwList* createList( const OUString& rListId,
-                                const OUString& rDefaultListStyleName ) SAL_OVERRIDE;
-    virtual void deleteList( const OUString& rListId ) SAL_OVERRIDE;
-    virtual SwList* getListByName( const OUString& rListId ) const SAL_OVERRIDE;
-    virtual SwList* createListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
-    virtual SwList* getListForListStyle( const OUString& rListStyleName ) const SAL_OVERRIDE;
-    virtual void deleteListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
-    virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
-                                             const OUString& rNewListStyleName ) SAL_OVERRIDE;
+    IDocumentListsAccess const & getIDocumentListsAccess() const;
+    IDocumentListsAccess & getIDocumentListsAccess();
 
     // IDocumentExternalData
     virtual void setExternalData(::sw::tExternalDataType eType,

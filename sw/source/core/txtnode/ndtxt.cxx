@@ -52,6 +52,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentListsAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <fldbas.hxx>
@@ -2539,7 +2540,7 @@ bool SwTxtNode::HasMarkedLabel() const
     if ( IsInList() )
     {
         bResult =
-            GetDoc()->getListByName( GetListId() )->IsListLevelMarked( GetActualListLevel() );
+            GetDoc()->getIDocumentListsAccess().getListByName( GetListId() )->IsListLevelMarked( GetActualListLevel() );
     }
 
     return bResult;
@@ -4030,14 +4031,14 @@ void SwTxtNode::AddToList()
     const OUString sListId = GetListId();
     if (!sListId.isEmpty())
     {
-        SwList* pList = GetDoc()->getListByName( sListId );
+        SwList* pList = GetDoc()->getIDocumentListsAccess().getListByName( sListId );
         if ( pList == 0 )
         {
             // Create corresponding list.
             SwNumRule* pNumRule = GetNumRule();
             if ( pNumRule )
             {
-                pList = GetDoc()->createList( sListId, GetNumRule()->GetName() );
+                pList = GetDoc()->getIDocumentListsAccess().createList( sListId, GetNumRule()->GetName() );
             }
         }
         OSL_ENSURE( pList != 0,

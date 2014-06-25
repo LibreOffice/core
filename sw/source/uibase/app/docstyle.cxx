@@ -1039,7 +1039,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 else
                 {
                     // #i91400#
-                    ((SwNumRule*)pNumRule)->SetName( rStr, rDoc );
+                    ((SwNumRule*)pNumRule)->SetName( rStr, rDoc.getIDocumentListsAccess() );
                     rDoc.SetModified();
 
                     bChg = true;
@@ -1943,7 +1943,7 @@ void SwDocStyleSheet::Create()
                 if( aName.isEmpty() )
                 {
                     // #i91400#
-                    pRule->SetName( aName, rDoc );
+                    pRule->SetName( aName, rDoc.getIDocumentListsAccess() );
                 }
                 pNumRule = pRule;
             }
