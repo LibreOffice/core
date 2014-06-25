@@ -79,7 +79,6 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
                     // new methods
-
     virtual SCCOLROW    GetPos() const = 0;                         // current position (Scrolling)
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const = 0;      // width / height (Pixel)
     virtual OUString  GetEntryText( SCCOLROW nEntryNo ) const = 0;
