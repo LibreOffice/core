@@ -99,10 +99,11 @@ class BackingWindow
 
     void setupButton( PushButton* pButton );
     //Template Manager
-    void OnTemplateImport ();
-    void OnFolderNew ();
-    void OnFolderDelete ();
-    void OnRegionState (const ThumbnailViewItem *pItem);
+    void OnTemplateOpen ();
+    //void OnTemplateImport ();
+    //void OnFolderNew ();
+    //void OnFolderDelete ();
+    //void OnRegionState (const ThumbnailViewItem *pItem);
 
     void dispatchURL( const OUString& i_rURL,
                       const OUString& i_rTarget = OUString( "_default" ),
@@ -119,6 +120,8 @@ class BackingWindow
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXTemplateHdl, void*);
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
+    DECL_LINK(DoubleClickHdl, void*);
 
     void initControls();
 
