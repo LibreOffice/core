@@ -143,7 +143,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >  GetCurrentFieldValue() const;
 
-    //      Zeichnen eines Feldes an einer Position, ist ein ::com::sun::star::sdbcx::View gesetzt
+    //      Zeichnen eines Feldes an einer Position, ist ein View gesetzt
     //      uebernimmt dieser das Zeichnen, z.B. fuer CheckBoxen
     void    Paint(OutputDevice& rDev,
                   const Rectangle& rRect,

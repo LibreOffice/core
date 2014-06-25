@@ -78,7 +78,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     OUString     m_sNone;
 
-    SwView       &rView; // search per active, avoid ::com::sun::star::sdbcx::View
+    SwView       &rView; // search per active, avoid View
     SwFldMgr     *pMgr;      // pointer to save the include
     SelectionType eType;
 

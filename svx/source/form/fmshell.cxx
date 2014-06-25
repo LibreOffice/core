@@ -653,7 +653,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
         {
-            if (!m_pFormView)   // setzen der ::com::sun::star::sdbcx::View Forcieren
+            if (!m_pFormView)   // setzen der View Forcieren
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
             GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);

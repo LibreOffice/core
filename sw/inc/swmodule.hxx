@@ -57,7 +57,7 @@ struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
 #define VIEWOPT_DEST_TEXT       1
 #define VIEWOPT_DEST_WEB        2
-#define VIEWOPT_DEST_VIEW_ONLY  3 //ViewOptions are set only at ::com::sun::star::sdbcx::View, not at the appl.
+#define VIEWOPT_DEST_VIEW_ONLY  3 //ViewOptions are set only at View, not at the appl.
 
 namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager2;
@@ -260,7 +260,7 @@ inline void SwModule::SetLngSvcEvtListener(
     xLngSvcEvtListener = xLstnr;
 }
 
-//    Access to SwModule, the ::com::sun::star::sdbcx::View and the shell.
+//    Access to SwModule, the View and the shell.
 
 #define SW_MOD() ( *(SwModule**) GetAppData(SHL_WRITER))
 
