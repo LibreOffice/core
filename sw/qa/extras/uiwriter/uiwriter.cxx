@@ -44,6 +44,7 @@ public:
     void testShapeTextboxSelect();
     void testShapeTextboxDelete();
     void testCp1000071();
+    void testShapeTextboxVertadjust();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testShapeTextboxSelect);
     CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST(testCp1000071);
+    CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -358,6 +360,16 @@ void SwUiWriterTest::testCp1000071()
     CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTbl[ 1 ]->Start()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTbl[ 1 ]->End()->nNode.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTbl[ 1 ]->End()->nContent.GetIndex());
+}
+
+void SwUiWriterTest::testShapeTextboxVertadjust()
+{
+    SwDoc* pDoc = createDoc("shape-textbox-vertadjust.odt");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwFrmFmt* pFmt = static_cast<SwDrawContact*>(pObject->GetUserCall())->GetFmt();
+    // This was SDRTEXTVERTADJUST_TOP.
+    CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFmt->GetTextVertAdjust().GetValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

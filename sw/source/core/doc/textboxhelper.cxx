@@ -279,7 +279,7 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
     return aRet;
 }
 
-void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& /*rValue*/)
+void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& rValue)
 {
     if (rPropertyName == "CustomShapeGeometry")
     {
@@ -294,6 +294,8 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyNa
             syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
         }
     }
+    else if (rPropertyName == UNO_NAME_TEXT_VERT_ADJUST)
+        syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0, rValue);
 }
 
 void SwTextBoxHelper::getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, css::uno::Any& rValue)
@@ -411,6 +413,9 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                 aPropertyName = UNO_NAME_CHAIN_NEXT_NAME;
                 break;
             }
+            break;
+        case RES_TEXT_VERT_ADJUST:
+            aPropertyName = UNO_NAME_TEXT_VERT_ADJUST;
             break;
         }
 
