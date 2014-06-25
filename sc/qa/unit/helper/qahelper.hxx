@@ -50,11 +50,12 @@
 #define ODS      0
 #define XLS      1
 #define XLSX     2
-#define CSV      3
-#define HTML     4
-#define LOTUS123 5
-#define DIF      6
-#define XLS_XML  7
+#define XLSM     3
+#define CSV      4
+#define HTML     5
+#define LOTUS123 6
+#define DIF      7
+#define XLS_XML  8
 
 enum StringType { PureString, FormulaValue, StringValue };
 

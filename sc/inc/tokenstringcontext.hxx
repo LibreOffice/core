@@ -46,7 +46,7 @@ struct SC_DLLPUBLIC TokenStringContext
     TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
 };
 
-class CompileFormulaContext
+class SC_DLLPUBLIC CompileFormulaContext
 {
     ScDocument* mpDoc;
     formula::FormulaGrammar::Grammar meGram;
