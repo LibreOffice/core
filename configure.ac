@@ -8057,14 +8057,18 @@ if test $enable_python = system; then
         case $with_macosx_sdk in
         10.6)
             python_version=2.6;;
-        10.7|10.8)
+        10.7|10.8|10.9|10.10)
             python_version=2.7;;
         *)
             # ???
             python_version=2.7;;
         esac
         PYTHON=python$python_version
-        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
+        if test -d "$MACOSX_SDK_PATH/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"; then
+            PYTHON_CFLAGS="-I$MACOSX_SDK_PATH/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
+        else
+            AC_MSG_ERROR([Could not find: $MACOSX_SDK_PATH/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}])
+        fi
         PYTHON_LIBS="-framework Python"
     fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
