@@ -52,6 +52,7 @@
 #include "DrawController.hxx"
 #include "customshowlist.hxx"
 #include <boost/bind.hpp>
+#include "unopage.hxx"
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::com::sun::star::container::XIndexAccess;
@@ -66,8 +67,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing::framework;
-
-extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace {
     /** This local version of the work window overloads DataChanged() so that it

@@ -127,6 +127,7 @@
 #include "graphhelp.hxx"
 #include "appbaslib.hxx"
 #include "appdata.hxx"
+#include <objstor.hxx>
 
 #include "../appl/app.hrc"
 

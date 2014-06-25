@@ -34,6 +34,7 @@
 #include <editeng/unoforou.hxx>
 #include <editeng/unofored.hxx>
 #include <editeng/outlobj.hxx>
+#include <unofored_internal.hxx>
 
 using namespace ::com::sun::star;
 
@@ -242,8 +243,6 @@ bool SvxOutlinerForwarder::IsValid() const
     // while in the middle of an update
     return rOutliner.GetUpdateMode();
 }
-
-extern sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 
 sal_uInt16 SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {

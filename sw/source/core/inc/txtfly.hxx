@@ -16,11 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_TXTFLY_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_TXTFLY_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 
 #include "swtypes.hxx"
 #include "swrect.hxx"
+#include <fmtsrndenum.hxx>
+#include <txttypes.hxx>
+#include <vector>
 
 class OutputDevice;
 class SwCntntFrm;
@@ -31,25 +34,24 @@ class SwTxtPaintInfo;
 class SwFmt;
 class TextRanger;
 class SwAnchoredObject;
+class SwTxtFrm;
+class SwDrawTextInfo;
+class SwContourCache;
 
-#include <fmtsrndenum.hxx>
-
-#include <vector>
 typedef std::vector< SwAnchoredObject* > SwAnchoredObjList;
 
 enum PAGESIDE { LEFT_SIDE, RIGHT_SIDE, DONTKNOW_SIDE };
 
-class SwDrawTextInfo;
-class SwContourCache;
 /** Contour-cache global variable, initialized/destroyed in txtinit.cxx
     and needed in txtfly.cxx by text wrapping.
   */
 extern SwContourCache *pContourCache;
-class SwTxtFrm;
 
 #define POLY_CNT 20
 #define POLY_MIN 5
 #define POLY_MAX 4000
+
+void ClrContourCache( const SdrObject *pObj );
 
 class SwContourCache
 {

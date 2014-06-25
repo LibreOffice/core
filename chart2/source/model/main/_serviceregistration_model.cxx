@@ -35,6 +35,7 @@
 #include "XMLFilter.hxx"
 
 #include "_serviceregistration_charttypes.hxx"
+#include "charttoolsdllapi.hxx"
 
 static const struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
 {
@@ -174,8 +175,6 @@ static const struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
 // component exports
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartcore_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {

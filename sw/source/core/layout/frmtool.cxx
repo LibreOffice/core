@@ -67,9 +67,6 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawdoc.hxx>
 
-// ftnfrm.cxx:
-void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
-
 using namespace ::com::sun::star;
 
 bool bObjsDirect = true;

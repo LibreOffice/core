@@ -49,6 +49,7 @@
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
+#include <swuiexp.hxx>
 
 namespace {
     /// Converts a ranges array to a list containing one entry for each
@@ -110,11 +111,6 @@ namespace {
         return pNewRanges;
     }
 
-}
-
-namespace swui
-{
-    SwAbstractDialogFactory * GetFactory();
 }
 
 static long lUserW = 5669; // 10 cm

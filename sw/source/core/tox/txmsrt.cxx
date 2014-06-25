@@ -41,9 +41,7 @@
 
 #include <comcore.hrc>
 #include <numrule.hxx>
-
-extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
-                           const SwTxtNode& rBehindNd, sal_Int32 nSttPos );
+#include <reffld.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

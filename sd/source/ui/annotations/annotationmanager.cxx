@@ -101,8 +101,6 @@ using namespace ::com::sun::star::office;
 
 namespace sd {
 
-extern TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation );
-
 SfxItemPool* GetAnnotationPool()
 {
     static SfxItemPool* mpAnnotationPool = 0;

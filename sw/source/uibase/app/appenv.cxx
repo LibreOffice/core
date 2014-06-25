@@ -67,6 +67,7 @@
 #include "swabstdlg.hxx"
 #include "envelp.hrc"
 #include "envimg.hxx"
+#include <appenv.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

@@ -83,5 +83,12 @@ void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
+extern "C" void privateSnippetExecutorGeneral();
+extern "C" void privateSnippetExecutorVoid();
+extern "C" void privateSnippetExecutorHyper();
+extern "C" void privateSnippetExecutorFloat();
+extern "C" void privateSnippetExecutorDouble();
+extern "C" void privateSnippetExecutorClass();
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

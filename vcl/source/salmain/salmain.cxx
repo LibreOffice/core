@@ -24,6 +24,7 @@
 #include "sal/main.h"
 #include "tools/extendapplicationenvironment.hxx"
 #include "vcl/vclmain.hxx"
+#include "vcl/svmain.hxx"
 
 #include "salinst.hxx"
 

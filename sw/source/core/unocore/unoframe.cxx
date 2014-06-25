@@ -137,9 +137,7 @@
 #include <svx/xfltrit.hxx>
 #include <swunohelper.hxx>
 #include <drawdoc.hxx>
-
-// from fefly1.cxx
-extern bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
+#include <fefly.hxx>
 
 using namespace ::com::sun::star;
 

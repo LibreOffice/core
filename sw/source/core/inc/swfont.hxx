@@ -43,6 +43,8 @@ const sal_Unicode CH_TAB   = '\t';  // \t
 const sal_Unicode CH_PAR    = 0xB6;     // paragraph
 const sal_Unicode CH_BULLET = 0xB7;     // centered dot
 
+sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat );
+
 class SwSubFont : public SvxFont
 {
     friend class SwFont;

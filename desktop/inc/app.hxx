@@ -192,6 +192,8 @@ class Desktop : public Application
 OUString GetURL_Impl(
     const OUString& rName, boost::optional< OUString > const & cwdUrl );
 
+OUString ReplaceStringHookProc(const OUString& rStr);
+
 }
 
 #endif // INCLUDED_DESKTOP_INC_APP_HXX

@@ -122,7 +122,7 @@ static sal_Int32 getShapeIndex( const Reference< XShape >& xShape )
         return -1;
 }
 
-OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true )
+OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText )
 {
     OUString aDescription;
     Reference< XPropertySet > xSet( xShape, UNO_QUERY );

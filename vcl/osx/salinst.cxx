@@ -30,6 +30,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/svmain.hxx"
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
@@ -46,7 +47,6 @@
 #include "print.h"
 #include "impbmp.hxx"
 #include "salimestatus.hxx"
-#include "svmain.hxx"
 
 #include <comphelper/processfactory.hxx>
 

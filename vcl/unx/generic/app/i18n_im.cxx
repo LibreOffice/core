@@ -41,8 +41,9 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
-using namespace vcl;
 #include "unx/i18n_cb.hxx"
+
+using namespace vcl;
 
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work

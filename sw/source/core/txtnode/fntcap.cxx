@@ -31,6 +31,7 @@
 #include <breakit.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
+#include <fntcap.hxx>
 
 using namespace ::com::sun::star::i18n;
 

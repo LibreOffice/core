@@ -20,8 +20,7 @@
 #include "svdoutlinercache.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-
-extern SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel );
+#include <svx/svdetc.hxx>
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 :   mpModel( pModel ),

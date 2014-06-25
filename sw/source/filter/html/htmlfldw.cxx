@@ -33,6 +33,7 @@
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
 #include <rtl/strbuf.hxx>
+#include <css1atr.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -59,7 +60,6 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFmt )
     return pFmtStr;
 }
 
-extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                                  const SwTxtNode& rTxtNd, sal_Int32 nFldPos )
 {

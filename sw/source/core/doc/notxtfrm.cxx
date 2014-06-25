@@ -74,10 +74,9 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <txtfly.hxx>
 
 using namespace com::sun::star;
-
-extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 inline bool GetRealURL( const SwGrfNode& rNd, OUString& rTxt )
 {

@@ -33,6 +33,7 @@
 #include "localizationmgr.hxx"
 #include "propbrw.hxx"
 #include "objdlg.hxx"
+#include "managelang.hxx"
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
@@ -862,9 +863,6 @@ bool DialogWindow::SaveDialog()
 
     return bDone;
 }
-
-extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
-                             const ::com::sun::star::lang::Locale& rLocaleRight );
 
 std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
     ( const Sequence< lang::Locale >& aFirstSeq, const Sequence< lang::Locale >& aSecondSeq )

@@ -55,6 +55,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
+#include "drtxtob.hxx"
 #include <boost/scoped_ptr.hpp>
 
 #include "sc.hrc"
@@ -238,8 +239,6 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
             OSL_FAIL("falscher Slot");
     }
 }
-
-sal_uInt16 ScGetFontWorkId();
 
 //          Funktionen auf Drawing-Objekten
 
