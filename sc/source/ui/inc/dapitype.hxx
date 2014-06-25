@@ -50,7 +50,6 @@ private:
     DECL_LINK( RadioClickHdl, RadioButton * );
 };
 
-
 class ScDataPilotServiceDlg : public ModalDialog
 {
 private:
@@ -81,8 +80,6 @@ public:
     OUString  GetParPass() const;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

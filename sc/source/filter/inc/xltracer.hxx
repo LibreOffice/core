@@ -69,7 +69,6 @@ struct XclTracerDetails
     const sal_Char*             mpProblem;      /// Description of problem
 };
 
-
 /** This class wraps an MSFilterTracer to create trace logs for import/export filters. */
 class XclTracer
 {
@@ -107,7 +106,6 @@ private:
     /** array of flags corresponding to each entry in the XclTracerDetails table. */
     BoolVec                     maFirstTimes;
 };
-
 
 #endif
 

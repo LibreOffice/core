@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XclImpChangeTrack.hxx"
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
@@ -29,7 +28,6 @@
 #include "xilink.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
-
 
 // class XclImpChangeTrack
 
@@ -496,7 +494,6 @@ void XclImpChangeTrack::Apply()
         GetDoc().SetChangeViewSettings( aSettings );
     }
 }
-
 
 // class XclImpChTrFmlConverter
 

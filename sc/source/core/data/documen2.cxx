@@ -294,14 +294,12 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
             formula::FormulaGrammar::CONV_OOO);
 }
 
-
 void ScDocument::SetDocVisible( bool bSet )
 {
     //  called from view ctor - only for a visible document,
     //  each new sheet's RTL flag is initialized from the locale
     bIsVisible = bSet;
 }
-
 
 sal_uInt32 ScDocument::GetDocumentID() const
 {
@@ -311,7 +309,6 @@ sal_uInt32 ScDocument::GetDocumentID() const
     nCrc = rtl_crc32( nCrc, &pShell, sizeof(SfxObjectShell*) );
     return nCrc;
 }
-
 
 void ScDocument::StartChangeTracking()
 {
@@ -333,7 +330,6 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
     EndChangeTracking();
     pChangeTrack = pTrack;
 }
-
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
@@ -367,7 +363,6 @@ void ScDocument::SetExpandRefs( bool bVal )
 {
     bExpandRefs = bVal;
 }
-
 
 void ScDocument::StartTrackTimer()
 {
@@ -542,7 +537,6 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     }
     return *pNoteEngine;
 }
-
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
@@ -1391,7 +1385,6 @@ void ScDocument::SetPreviewFont( SfxItemSet* pFont )
     delete pPreviewFont;
     pPreviewFont = pFont;
 }
-
 
 void  ScDocument::SetPreviewSelection( ScMarkData& rSel )
 {

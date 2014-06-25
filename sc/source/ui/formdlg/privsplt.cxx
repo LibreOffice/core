@@ -65,7 +65,6 @@ ScPrivatSplit::ScPrivatSplit(Window* pParent, const ResId& rResId,
     SetPointer(aWinPointer);
 }
 
-
 /*************************************************************************
 #*  Member:     MouseButtonDown
 #*------------------------------------------------------------------------
@@ -336,7 +335,6 @@ void ScPrivatSplit::MoveSplitTo(Point aPos)
     CtrModified();
 }
 
-
 void ScPrivatSplit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -402,6 +400,5 @@ void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
     else
         Window::DataChanged( rDCEvt );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

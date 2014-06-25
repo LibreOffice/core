@@ -42,7 +42,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
 
-
 namespace {
 
 // OBJ record -----------------------------------------------------------------
@@ -86,9 +85,7 @@ const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
 } // namespace
 
-
 // Model structures for BIFF OBJ record data
-
 
 BiffObjLineModel::BiffObjLineModel() :
     mnColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
@@ -107,7 +104,6 @@ BiffObjFillModel::BiffObjFillModel() :
 }
 
 // BIFF drawing objects
-
 
 BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
@@ -364,9 +360,7 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
     aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-
 // BIFF drawing page
-
 
 BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Reference< XDrawPage >& rxDrawPage ) :
     WorksheetHelper( rHelper ),

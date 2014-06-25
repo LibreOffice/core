@@ -68,7 +68,6 @@
 #include <editeng/borderline.hxx>
 #include <unotools/syslocale.hxx>
 
-
 // Without sc.hrc: error C2679: binary '=' : no operator defined which takes a
 // right-hand operand of type 'const class String (__stdcall *)(class ScResId)'
 // at
@@ -81,7 +80,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/strbuf.hxx>
-
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -108,7 +106,6 @@ const sal_uInt16 ScHTMLExport::nCellSpacing = 0;
 const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-
 // Macros for HTML export
 
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
@@ -126,8 +123,6 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
-
-
 FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
         const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions )
@@ -137,7 +132,6 @@ FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString
     rNonConvertibleChars = aEx.GetNonConvertibleChars();
     return nErr;
 }
-
 
 static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 {
@@ -156,7 +150,6 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     aByteStr.append('"');
     return aByteStr.makeStringAndClear();
 }
-
 
 static void lcl_AddStamp( OUString& rStr, const OUString& rName,
     const ::com::sun::star::util::DateTime& rDateTime,
@@ -186,7 +179,6 @@ static void lcl_AddStamp( OUString& rStr, const OUString& rName,
     else
         rStr += "???";
 }
-
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
@@ -263,12 +255,10 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     }
 }
 
-
 ScHTMLExport::~ScHTMLExport()
 {
     aGraphList.clear();
 }
-
 
 sal_uInt16 ScHTMLExport::GetFontSizeNumber( sal_uInt16 nHeight )
 {
@@ -290,7 +280,6 @@ const char* ScHTMLExport::GetFontSizeCss( sal_uInt16 nHeight )
     return pFontSizeCss[ nSize-1 ];
 }
 
-
 sal_uInt16 ScHTMLExport::ToPixel( sal_uInt16 nVal )
 {
     if( nVal )
@@ -303,7 +292,6 @@ sal_uInt16 ScHTMLExport::ToPixel( sal_uInt16 nVal )
     return nVal;
 }
 
-
 Size ScHTMLExport::MMToPixel( const Size& rSize )
 {
     Size aSize( rSize );
@@ -315,7 +303,6 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
         aSize.Height() = 1;
     return aSize;
 }
-
 
 sal_uLong ScHTMLExport::Write()
 {
@@ -330,7 +317,6 @@ sal_uLong ScHTMLExport::Write()
 
     return rStrm.GetError();
 }
-
 
 void ScHTMLExport::WriteHeader()
 {
@@ -350,7 +336,6 @@ void ScHTMLExport::WriteHeader()
         SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, xDocProps,
             sIndent, eDestEnc, &aNonConvertibleChars );
         OUT_LF();
-
 
         if (!xDocProps->getPrintedBy().isEmpty())
         {
@@ -401,7 +386,6 @@ void ScHTMLExport::WriteHeader()
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
 }
 
-
 void ScHTMLExport::WriteOverview()
 {
     if ( nUsedTables > 1 )
@@ -434,7 +418,6 @@ void ScHTMLExport::WriteOverview()
         IncIndent(-1); TAG_OFF( OOO_STRING_SVTOOLS_HTML_center ); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_parabreak );
     }
 }
-
 
 const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 {
@@ -482,7 +465,6 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     }
     return rSet;
 }
-
 
 OString ScHTMLExport::BorderToStyle(const char* pBorderName,
         const SvxBorderLine* pLine, bool& bInsertSemicolon)
@@ -634,7 +616,6 @@ void ScHTMLExport::WriteBody()
 
     TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
 }
-
 
 void ScHTMLExport::WriteTables()
 {
@@ -834,7 +815,6 @@ void ScHTMLExport::WriteTables()
             OUT_COMMENT( OUString("**************************************************************************") );
     }
 }
-
 
 void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -1070,7 +1050,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
     if ( bUnderline )   TAG_ON( OOO_STRING_SVTOOLS_HTML_underline );
 
-
     if ( bSetFont )
     {
         OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_font);
@@ -1175,7 +1154,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tabledata );
 }
 
-
 bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 {
     bool bFields = false;
@@ -1237,7 +1215,6 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     }
     return bFields;
 }
-
 
 bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         const OUString& rTargetNm, bool bFileToFile )
@@ -1308,7 +1285,6 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
     return bRet;
 }
 
-
 void ScHTMLExport::MakeCIdURL( OUString& rURL )
 {
     if( aCId.isEmpty() )
@@ -1323,7 +1299,6 @@ void ScHTMLExport::MakeCIdURL( OUString& rURL )
 
     rURL = "cid:" + aLastName + "." + aCId;
 }
-
 
 void ScHTMLExport::IncIndent( short nVal )
 {

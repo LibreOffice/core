@@ -36,7 +36,6 @@ class ScDocument;
  */
 #define MIN_NO_CODES_PER_PROGRESS_UPDATE 100
 
-
 class SC_DLLPUBLIC ScProgress
 {
 private:
@@ -146,7 +145,6 @@ public:
                                     return 0;
                                 }
 };
-
 
 #endif
 

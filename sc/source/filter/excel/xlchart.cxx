@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xlchart.hxx"
 
 #include <com/sun/star/container/XNameContainer.hpp>

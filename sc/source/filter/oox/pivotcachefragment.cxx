@@ -30,7 +30,6 @@ namespace xls {
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-
 PivotCacheFieldContext::PivotCacheFieldContext( WorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :
     WorkbookContextBase( rFragment ),
     mrCacheField( rCacheField )
@@ -314,7 +313,6 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
         ++mnColIdx;
     }
 }
-
 
 namespace {
 

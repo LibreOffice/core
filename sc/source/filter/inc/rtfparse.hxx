@@ -75,7 +75,6 @@ public:
     virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL ) SAL_OVERRIDE;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

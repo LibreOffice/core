@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "lotfntbf.hxx"
 
 #include "scitems.hxx"
@@ -80,7 +79,6 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
     }
 }
 
-
 void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const OUString& rName )
 {
     OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetName(): Array too small!" );
@@ -94,14 +92,12 @@ void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const OUString& rName )
     }
 }
 
-
 void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight )
 {
     OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array too small!" );
     if( nIndex < nSize )
         pData[ nIndex ].Height( *( new SvxFontHeightItem( ( sal_uLong ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
 }
-
 
 void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
 {
@@ -115,7 +111,6 @@ void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
             MakeFont( pEntry );
     }
 }
-
 
 void LotusFontBuffer::MakeFont( ENTRY* pEntry )
 {

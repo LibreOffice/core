@@ -69,7 +69,4 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
     return nFound;
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

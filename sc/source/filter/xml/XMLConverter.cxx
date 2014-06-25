@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XMLConverter.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/datetime.hxx>
@@ -32,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
-
 
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
@@ -100,7 +98,6 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
     return SUBTOTAL_FUNC_NONE;
 }
 
-
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
         const sheet::GeneralFunction eFunction,
@@ -157,7 +154,6 @@ void ScXMLConverter::GetStringFromFunction(
     ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
 }
 
-
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     const OUString& rString )
 {
@@ -171,7 +167,6 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
         return sheet::DataPilotFieldOrientation_DATA;
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
-
 
 void ScXMLConverter::GetStringFromOrientation(
     OUString& rString,
@@ -204,7 +199,6 @@ void ScXMLConverter::GetStringFromOrientation(
     ScRangeStringConverter::AssignString( rString, sOrientStr, bAppendStr );
 }
 
-
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
 {
     if( IsXMLToken(rString, XML_FROM_SAME_TABLE ) )
@@ -232,7 +226,6 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUSt
         return false;
     return true;
 }
-
 
 void ScXMLConverter::GetStringFromDetObjType(
         OUString& rString,
@@ -286,7 +279,6 @@ void ScXMLConverter::GetStringFromDetOpType(
     ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
 }
 
-
 void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
@@ -317,7 +309,6 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
     OSL_ENSURE(nCountBraces == 0, "there are some braces still open");
     sFormula = sBuffer.makeStringAndClear();
 }
-
 
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {

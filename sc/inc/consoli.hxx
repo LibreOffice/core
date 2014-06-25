@@ -32,7 +32,6 @@ struct ScReferenceEntry             // without constructor !
     SCTAB   nTab;
 };
 
-
 //!     Use delta value for data?
 
 class ScReferenceList           // without constructor !
@@ -53,7 +52,6 @@ public:
     void                    AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
 };
 
-
 //  Sequence:
 //      1)  create ScConsData
 //      2)  Parameter (Size/Flags)
@@ -62,7 +60,6 @@ public:
 //      5)  AddData for all areas
 //          perhaps AddName after each area
 //      6)  OutputToDocument
-
 
 //! Use structure ScDocument if a certain size is exceeded?
 
@@ -112,8 +109,6 @@ public:
     SCROW       GetInsertCount() const;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

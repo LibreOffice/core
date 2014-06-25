@@ -222,7 +222,6 @@ enum ScDocumentMode
         SCDOCMODE_UNDO
     };
 
-
 struct ScDocStat
 {
     OUString  aDocName;
@@ -314,7 +313,6 @@ private:
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
     ::std::auto_ptr<ScMacroManager> mpMacroMgr;
-
 
     // mutable for lazy construction
     mutable ::std::auto_ptr< ScFormulaParserPool >
@@ -760,7 +758,6 @@ public:
         @return  true = DDE link found and matrix set. */
     bool            SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults );
 
-
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }
     SC_DLLPUBLIC ScDrawLayer* GetDrawLayer() { return pDrawLayer;  }
@@ -1116,7 +1113,6 @@ public:
     SC_DLLPUBLIC bool           GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
                                         SCROW& rEndRow, bool bNotes = true ) const;
     void            InvalidateTableArea();
-
 
     SC_DLLPUBLIC bool           GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const;
 
@@ -1868,7 +1864,6 @@ public:
                                             const ScRange& rRange,
                                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-
     void                StartListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener );
     void                EndListeningCell( const ScAddress& rAddress,
@@ -2163,6 +2158,5 @@ inline void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
 }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

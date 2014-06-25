@@ -31,7 +31,6 @@ class ScStyleSheetPool;
 class SvNumberFormatter;
 class SfxItemPool;
 
-
 class ScPoolHelper : public salhelper::SimpleReferenceObject
 {
 private:

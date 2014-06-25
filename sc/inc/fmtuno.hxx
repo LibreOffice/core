@@ -49,7 +49,6 @@ class ScTableConditionalEntry;
 class ScConditionalFormat;
 class ScValidationData;
 
-
 struct ScCondFormatEntryItem
 {
     css::uno::Sequence< css::sheet::FormulaToken > maTokens1;
@@ -321,7 +320,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scitems.hxx"
@@ -95,6 +94,5 @@ IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

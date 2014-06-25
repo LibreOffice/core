@@ -24,7 +24,6 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 
-
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 
@@ -35,7 +34,6 @@ enum ScSolverErr
         SOLVERR_INVALID_VARIABLE,
         SOLVERR_INVALID_TARGETVALUE
     };
-
 
 class ScSolverDlg : public ScAnyRefDlg
 {
@@ -87,6 +85,5 @@ private:
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,7 +89,6 @@ private:
     ModuleCellMap maCells;
 };
 
-
 ScMacroManager::ScMacroManager(ScDocument* pDoc) :
     mpDepTracker(new ScUserMacroDepTracker),
     mpDoc(pDoc)

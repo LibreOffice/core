@@ -152,7 +152,6 @@ ScMyMoveAction::~ScMyMoveAction()
         delete pMoveRanges;
 }
 
-
 ScMyContentAction::ScMyContentAction()
     : ScMyBaseAction(SC_CAT_CONTENT),
     pCellInfo(NULL)

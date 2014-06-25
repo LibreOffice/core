@@ -372,7 +372,6 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-
 void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 {
     while(dTmp<0)

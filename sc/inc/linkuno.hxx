@@ -154,7 +154,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScSheetLinksObj : public cppu::WeakImplHelper4<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::container::XEnumerationAccess,
@@ -208,7 +207,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScAreaLinkObj : public cppu::WeakImplHelper4<
                             com::sun::star::sheet::XAreaLink,
@@ -316,7 +314,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScAreaLinksObj : public cppu::WeakImplHelper3<
                             com::sun::star::sheet::XAreaLinks,
                             com::sun::star::container::XEnumerationAccess,
@@ -368,7 +365,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 //! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
 
@@ -434,7 +430,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScDDELinksObj : public cppu::WeakImplHelper4<
                             com::sun::star::container::XEnumerationAccess,

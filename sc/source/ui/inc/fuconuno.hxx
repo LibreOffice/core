@@ -22,7 +22,6 @@
 
 #include "fuconstr.hxx"
 
-
 /** Draw Control */
 class FuConstUnoControl : public FuConstruct
 {

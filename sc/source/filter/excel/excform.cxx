@@ -42,7 +42,6 @@ using ::std::vector;
 const sal_uInt16 ExcelToSc::nRowMask = 0x3FFF;
 const sal_uInt16 ExcelToSc::nLastInd = 399;
 
-
 void ImportExcel::Formula25()
 {
     XclAddress aXclPos;
@@ -78,12 +77,10 @@ void ImportExcel::Formula25()
     Formula( aXclPos, nXF, nFormLen, fCurVal, bShrFmla );
 }
 
-
 void ImportExcel::Formula3()
 {
     Formula4();
 }
-
 
 void ImportExcel::Formula4()
 {
@@ -98,7 +95,6 @@ void ImportExcel::Formula4()
 
     Formula( aXclPos, nXF, nFormLen, fCurVal, false );
 }
-
 
 void ImportExcel::Formula(
     const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla)
@@ -182,7 +178,6 @@ void ImportExcel::Formula(
     GetXFRangeBuffer().SetXF(aScPos, nXF);
 }
 
-
 ExcelToSc::ExcelToSc( XclImpRoot& rRoot ) :
     ExcelConverterBase(rRoot.GetDocImport().getDoc().GetSharedStringPool(), 512),
     XclImpRoot( rRoot ),
@@ -202,7 +197,6 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
     aPool >> aStack;
     pErgebnis = aPool[ aStack.Get() ];
 }
-
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte after the additional content (eg
@@ -896,7 +890,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
     return eRet;
 }
-
 
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
@@ -1606,7 +1599,6 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     aPool >> aStack;
 }
 
-
 void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData &rSRD, const bool bName )
 {
     if( bName )
@@ -1657,7 +1649,6 @@ void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData 
             rSRD.SetAbsTab(GetCurrScTab() + rSRD.Tab());
     }
 }
-
 
 const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 {
@@ -1742,7 +1733,6 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
     rCell.SetErrCode( nInd );
 }
 
-
 void ExcelToSc::SetComplCol( ScComplexRefData &rCRD )
 {
     ScSingleRefData &rSRD = rCRD.Ref2;
@@ -1751,7 +1741,6 @@ void ExcelToSc::SetComplCol( ScComplexRefData &rCRD )
     else
         rSRD.SetAbsCol(MAXCOL);
 }
-
 
 void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 {

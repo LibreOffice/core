@@ -181,7 +181,6 @@ private:
     StringType meStringType;
 };
 
-
 class conditional_format_handler
 {
 public:

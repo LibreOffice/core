@@ -28,7 +28,6 @@
 class ScDocShell;
 class ScMarkData;
 
-
 /** Possible types of selection for print functions */
 
 enum ScPrintSelectionMode
@@ -39,7 +38,6 @@ enum ScPrintSelectionMode
     SC_PRINTSEL_RANGE,
     SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS
 };
-
 
 /** Stores the selection in the ScPrintFuncCache so it is only used
     for the same selection again. */
@@ -65,7 +63,6 @@ public:
     const ScPrintOptions& GetOptions() const { return aOptions; }
 };
 
-
 /** The range that is printed on a page (excluding repeated columns/rows),
     and its position on the page, used to find hyperlink targets. */
 
@@ -81,7 +78,6 @@ struct ScPrintPageLocation
     ScPrintPageLocation( long nP, const ScRange& rRange, const Rectangle& rRect ) :
         nPage(nP), aCellRange(rRange), aRectangle(rRect) {}
 };
-
 
 /** Stores the data for printing that is needed from several sheets,
     so it doesn't have to be calculated for rendering each page. */

@@ -163,7 +163,6 @@ struct ValidationModel
     void                setBiffErrorStyle( sal_uInt8 nErrorStyle );
 };
 
-
 class WorksheetGlobals;
 typedef ::boost::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
 
@@ -315,7 +314,6 @@ public:
 private:
     WorksheetGlobals&   mrSheetGlob;
 };
-
 
 } // namespace xls
 } // namespace oox

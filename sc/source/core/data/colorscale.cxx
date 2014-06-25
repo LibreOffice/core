@@ -280,7 +280,6 @@ bool ScColorScaleEntry::NeedsRepaint() const
     return false;
 }
 
-
 void ScColorScaleEntry::SetColor(const Color& rColor)
 {
     maColor = rColor;
@@ -338,7 +337,6 @@ void ScColorScaleEntry::SetType( ScColorScaleEntryType eType )
         mpListener.reset();
     }
 }
-
 
 double ScColorScaleFormat::GetMinValue() const
 {
@@ -841,7 +839,6 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     double nMin = getMin(nValMin, nValMax);
     double nMax = getMax(nValMin, nValMax);
 
-
     double nValue = mpDoc->GetValue(rAddr);
 
     ScDataBarInfo* pInfo = new ScDataBarInfo();
@@ -907,7 +904,6 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
                 pInfo->mnLength = (nValue-nMinPositive)/(nMax-nMinPositive)*100;
         }
     }
-
 
     // set color
     if(mpFormatData->mbNeg && nValue < 0)

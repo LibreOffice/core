@@ -227,7 +227,6 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalSingleRefToken(*this); }
 };
 
-
 class ScExternalDoubleRefToken : public ScToken
 {
     sal_uInt16                  mnFileId;
@@ -269,7 +268,6 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalNameToken(*this); }
 };
 
-
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
 class ScJumpMatrixToken : public ScToken
@@ -287,7 +285,6 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScJumpMatrixToken(*this); }
 };
 
-
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
 class ScRefListToken : public ScToken
@@ -304,7 +301,6 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScRefListToken(*this); }
 };
-
 
 class SC_DLLPUBLIC ScEmptyCellToken : public ScToken
 {
@@ -326,7 +322,6 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScEmptyCellToken(*this); }
 };
-
 
 /**  Transports the result from the interpreter to the formula cell. */
 class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
@@ -355,7 +350,6 @@ public:
     inline formula::FormulaConstTokenRef     GetUpperLeftToken() const   { return xUpperLeft; }
     void Assign( const ScMatrixCellResultToken & r );
 };
-
 
 /** Stores the matrix result at the formula cell, additionally the range the
     matrix formula occupies. */
@@ -405,7 +399,6 @@ public:
         formula dimension. */
     void ResetResult();
 };
-
 
 class SC_DLLPUBLIC ScHybridCellToken : public ScToken
 {

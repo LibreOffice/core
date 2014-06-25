@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "scitems.hxx"
 #include <svl/eitem.hxx>
@@ -30,7 +27,6 @@
 #include "globstr.hrc"
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
-
 
 //  macros from docsh4.cxx
 //! use SIDs?
@@ -203,6 +199,5 @@ void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 
     ((ScHFEditPage&)rPage).SetNumType(eNumType);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

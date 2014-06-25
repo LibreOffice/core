@@ -33,7 +33,6 @@
 class ScViewData;
 class ScDocument;
 
-
 class ScSimpleRefDlg: public ScAnyRefDlg
 {
 private:
@@ -62,7 +61,6 @@ private:
 
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );
-
 
 protected:
 

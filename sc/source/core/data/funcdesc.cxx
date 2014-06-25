@@ -46,7 +46,6 @@ private:
     sal_uInt16 GetNum();
 };
 
-
 class ScResourcePublisher : public Resource
 {
 private:
@@ -59,9 +58,7 @@ public:
 
 };
 
-
 // class ScFuncDesc:
-
 
 ScFuncDesc::ScFuncDesc() :
         pFuncName       (NULL),
@@ -382,9 +379,7 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
     return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) < 0);
 }
 
-
 // class ScFunctionList:
-
 
 ScFunctionList::ScFunctionList() :
         nMaxFuncNameLen ( 0 )
@@ -612,9 +607,7 @@ const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
     return pDesc;
 }
 
-
 // class ScFunctionCategory:
-
 
 sal_uInt32 ScFunctionCategory::getCount() const
 {
@@ -646,9 +639,7 @@ sal_uInt32 ScFunctionCategory::getNumber() const
     return m_nCategory;
 }
 
-
 // class ScFunctionMgr:
-
 
 ScFunctionMgr::ScFunctionMgr() :
     pFuncList( ScGlobal::GetStarCalcFunctionList() )
@@ -817,9 +808,7 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
     return 0;
 }
 
-
 // class ScFuncRes:
-
 
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)

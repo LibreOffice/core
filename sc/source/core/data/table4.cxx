@@ -477,9 +477,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if ( (nFillCount == 0) || !ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2) )
         return;
 
-
     //  Detect direction
-
 
     bool bVertical = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP);
     bool bPositive = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_RIGHT);
@@ -555,9 +553,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (pProgress)
         nProgress = pProgress->GetState();
 
-
     //  execute
-
 
     sal_uLong nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
@@ -626,7 +622,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             pCondFormat->AddRange(aRange);
                         }
                     }
-
 
                     break;
                 }
@@ -1429,7 +1424,6 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     //  Detect direction
 
-
     bool bVertical = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP);
     bool bPositive = (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_RIGHT);
 
@@ -1507,9 +1501,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (pProgress)
         nProgress = pProgress->GetState();
 
-
     //  execute
-
 
     sal_uLong nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
@@ -1813,7 +1805,6 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         FillSeries(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir,
                     eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, true, pProgress);
 }
-
 
 void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo)

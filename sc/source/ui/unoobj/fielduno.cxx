@@ -31,7 +31,6 @@
 #include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 
-
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editeng.hxx>
@@ -144,7 +143,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 }
 
 }
-
 
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
@@ -1186,7 +1184,6 @@ SvxFieldItem ScEditFieldObj::CreateFieldItem()
     OSL_ENSURE( !mpEditSource, "CreateFieldItem mit eingefuegtem Feld" );
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
-
 
 void ScEditFieldObj::DeleteField()
 {

@@ -44,7 +44,6 @@
 
 const sal_uInt16 ROWINFO_MAX = 1024;
 
-
 enum FillInfoLinePos
     {
         FILP_TOP,
@@ -52,7 +51,6 @@ enum FillInfoLinePos
         FILP_LEFT,
         FILP_RIGHT
     };
-
 
 //  aehnlich wie in output.cxx
 
@@ -450,7 +448,6 @@ void ScDocument::FillInfo(
                     SCSIZE  nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
 
-
                     do
                     {
                         nThisRow=pThisAttrArr->pData[nIndex].nRow;              // Ende des Bereichs
@@ -613,7 +610,6 @@ void ScDocument::FillInfo(
                     }
                     while ( nIndex < pThisAttrArr->nCount && nThisRow < nYExtra );
 
-
                     if (pMarkData && pMarkData->IsMultiMarked())
                     {
                         //  Blockmarken
@@ -743,7 +739,6 @@ void ScDocument::FillInfo(
     //  bedingte Formatierung Ende
 
                 //      Daten von zusammengefassten Zellen anpassen
-
 
     if (bAnyMerged)
     {
@@ -951,7 +946,6 @@ void ScDocument::FillInfo(
 
     rTabInfo.mnArrCount = sal::static_int_cast<sal_uInt16>(nArrCount);
     rTabInfo.mbPageMode = bPageMode;
-
 
     // *** create the frame border array ***
 

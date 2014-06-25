@@ -94,7 +94,6 @@ struct ScEEParseEntry
     }
 };
 
-
 class EditEngine;
 
 typedef std::map<SCCOL, sal_uInt16> ColWidthsMap;

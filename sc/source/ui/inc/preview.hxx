@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PREVIEW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PREVIEW_HXX
 
-
 #include <vcl/window.hxx>
 #include "printfun.hxx"
 #include "markdata.hxx"
@@ -134,7 +133,6 @@ public:
     void    SetPageMargins( bool bVal )  { bPageMargin = bVal; }
     void    DrawInvert( long nDragPos, sal_uInt16 nFlags );
     void    DragMove( long nDragMovePos, sal_uInt16 nFlags );
-
 
     const ScPreviewLocationData& GetLocationData();
 

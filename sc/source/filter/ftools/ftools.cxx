@@ -42,7 +42,6 @@
 
 #include <stdio.h>
 
-
 // ScFilterTools::ReadLongDouble()
 
 double ScfTools::ReadLongDouble( SvStream& rStrm )

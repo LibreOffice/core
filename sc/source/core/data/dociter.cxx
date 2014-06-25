@@ -931,14 +931,10 @@ bool ScCellIterator::getCurrent()
     return false;
 }
 
-
 OUString ScCellIterator::getString()
 {
     return maCurCell.getString(mpDoc);
 }
-
-
-
 
 ScCellValue ScCellIterator::getCellValue() const
 {
@@ -965,7 +961,6 @@ ScCellValue ScCellIterator::getCellValue() const
 
     return aRet;
 }
-
 
 bool ScCellIterator::hasString() const
 {
@@ -1217,7 +1212,6 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
             break;  // for
     }
 }
-
 
 bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         SCROW& nFoundRow, bool bSearchForEqualAfterMismatch,
@@ -1880,7 +1874,6 @@ bool ScQueryCellIterator::BinarySearch()
     }
 }
 
-
 ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
     pDoc( pDocument ),
@@ -2480,7 +2473,6 @@ bool ScUsedAreaIterator::GetNext()
 
     return bFound;
 }
-
 
 ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1,

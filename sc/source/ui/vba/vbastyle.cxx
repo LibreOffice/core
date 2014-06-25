@@ -41,7 +41,6 @@ lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XMod
     return xStyleProps;
 }
 
-
 void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorException )
 {
     if (!mxModel.is() )
@@ -81,7 +80,6 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
         DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
-
 
 sal_Bool SAL_CALL
 ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException, std::exception)

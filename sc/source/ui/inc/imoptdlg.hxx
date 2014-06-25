@@ -99,7 +99,6 @@ public:
     bool        bSaveFormulas;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_IMOPTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

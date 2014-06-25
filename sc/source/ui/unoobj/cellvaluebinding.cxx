@@ -31,10 +31,8 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-
 namespace calc
 {
-
 
 #define PROP_HANDLE_BOUND_CELL  1
 
@@ -67,7 +65,6 @@ namespace calc
     }
 #endif
 
-
     OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, bool _bListPos )
         :OCellValueBinding_Base( m_aMutex )
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
@@ -90,7 +87,6 @@ namespace calc
         // which probably maps to the cell being locked
     }
 
-
     OCellValueBinding::~OCellValueBinding( )
     {
         if ( !OCellValueBinding_Base::rBHelper.bDisposed )
@@ -100,12 +96,9 @@ namespace calc
         }
     }
 
-
     IMPLEMENT_FORWARD_XINTERFACE2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
 
-
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
-
 
     void SAL_CALL OCellValueBinding::disposing()
     {
@@ -121,18 +114,15 @@ namespace calc
         // for the cell)
     }
 
-
     Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
-
     ::cppu::IPropertyArrayHelper& SAL_CALL OCellValueBinding::getInfoHelper()
     {
         return *OCellValueBinding_PABase::getArrayHelper();
     }
-
 
     ::cppu::IPropertyArrayHelper* OCellValueBinding::createArrayHelper( ) const
     {
@@ -140,7 +130,6 @@ namespace calc
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
-
 
     void SAL_CALL OCellValueBinding::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
@@ -153,7 +142,6 @@ namespace calc
         if ( xCellAddress.is() )
             _rValue <<= xCellAddress->getCellAddress( );
     }
-
 
     Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  ) throw (RuntimeException, std::exception)
     {
@@ -185,7 +173,6 @@ namespace calc
         return aTypes;
     }
 
-
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException, std::exception)
     {
         checkDisposed( );
@@ -201,7 +188,6 @@ namespace calc
 
         return false;
     }
-
 
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException, std::exception)
     {
@@ -287,7 +273,6 @@ namespace calc
         }
         return aReturn;
     }
-
 
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException, std::exception)
     {
@@ -418,7 +403,6 @@ namespace calc
         }
     }
 
-
     void OCellValueBinding::checkDisposed( ) const
     {
         if ( OCellValueBinding_Base::rBHelper.bInDispose || OCellValueBinding_Base::rBHelper.bDisposed )
@@ -426,14 +410,12 @@ namespace calc
             // TODO: is it worth having an error message here?
     }
 
-
     void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
             throw RuntimeException();
             // TODO: error message
     }
-
 
     void OCellValueBinding::checkValueType( const Type& _rType ) const
     {
@@ -476,13 +458,11 @@ namespace calc
            m_aModifyListeners.addInterface( _rxListener );
     }
 
-
     void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException, std::exception)
     {
        if ( _rxListener.is() )
            m_aModifyListeners.removeInterface( _rxListener );
     }
-
 
     void OCellValueBinding::notifyModified()
     {
@@ -507,12 +487,10 @@ namespace calc
         }
     }
 
-
     void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
     {
         notifyModified();
     }
-
 
     void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
     {
@@ -524,7 +502,6 @@ namespace calc
             m_xCellText.clear();
         }
     }
-
 
     void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
     {
@@ -610,6 +587,5 @@ namespace calc
     }
 
 }   // namespace calc
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

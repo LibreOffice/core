@@ -25,7 +25,6 @@
 #include "biffhelper.hxx"
 #include "biffcodec.hxx"
 
-
 namespace oox {
 namespace xls {
 
@@ -280,7 +279,6 @@ public:
             False = NUL characters are replaced by question marks (default).
      */
     OUString     readUniString( bool bAllowNulChars = false );
-
 
 private:
     /** Initializes all members after base stream has been sought to new record. */

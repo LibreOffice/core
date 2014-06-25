@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIASCIIOPT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIASCIIOPT_HXX
 
-
 #include "asciiopt.hxx"
 #include <svx/langbox.hxx>
 
@@ -96,7 +95,6 @@ private:
     /** Enables or disables all separator checkboxes and edit fields. */
     void                        SetupSeparatorCtrls();
 
-
     bool                        GetLine( sal_uLong nLine, OUString &rText );
     void                        UpdateVertical();
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
@@ -109,7 +107,6 @@ private:
                                 DECL_LINK(UpdateTextHdl, void *);
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox* );
 };
-
 
 inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)
 {

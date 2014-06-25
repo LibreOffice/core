@@ -55,7 +55,6 @@
 #include "editutil.hxx"
 #include "patattr.hxx"
 
-
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
@@ -238,7 +237,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     OUString  aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
 
-
     // Zellformatvorlagen:
 
     // 1. Standard
@@ -272,9 +270,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 //    if ( eCtl == LANGUAGE_THAI )
 //        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
 
-
     // 2. Ergebnis
-
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -286,9 +282,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
     pSet->Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
-
     // 3. Ergebnis1
-
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT1 ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -297,9 +291,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG1 );
 
-
     // 4. Ueberschrift
-
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -313,9 +305,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
     pSet->Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
 
-
     // 5. Ueberschrift1
-
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
                                     SFX_STYLE_FAMILY_PARA,
@@ -326,11 +316,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     pSet->Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
 
-
     // Seitenformat-Vorlagen:
 
     // 1. Standard
-
 
     pSheet = (ScStyleSheet*) &Make( aStrStandard,
                                     SFX_STYLE_FAMILY_PAGE,
@@ -345,7 +333,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-
     // Kopfzeile:
     // [leer][\TABELLE\][leer]
 
@@ -357,7 +344,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHeaderItem->SetRightArea ( *pEmptyTxtObj );
     pSet->Put( *pHeaderItem );
     DELETEZ( pTxtObj );
-
 
     // Fusszeile:
     // [leer][Seite \SEITE\][leer]
@@ -373,9 +359,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pFooterItem );
     DELETEZ( pTxtObj );
 
-
     // 2. Report
-
 
     pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_REPORT ),
                                     SFX_STYLE_FAMILY_PAGE,
@@ -407,7 +391,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
 
-
     // Kopfzeile:
     // [\TABELLE\ (\DATEI\)][leer][\DATUM\, \ZEIT\]
 
@@ -429,7 +412,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     DELETEZ( pTxtObj );
     pSet->Put( *pHeaderItem );
 
-
     // Fusszeile:
     // [leer][Seite: \SEITE\ / \SEITEN\][leer]
 
@@ -446,7 +428,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pFooterItem->SetRightArea ( *pEmptyTxtObj );
     pSet->Put( *pFooterItem );
     DELETEZ( pTxtObj );
-
 
     DELETEZ( pEmptyTxtObj );
     DELETEZ( pHeaderItem );

@@ -20,7 +20,6 @@
 //  Bemerkung:  Variablen nicht ueber Headerfile, Module muessen sich
 //              selbst per extern ihre Sachen besorgen!
 
-
 #include "scitems.hxx"
 #include "scmem.h"
 #include <svx/algitem.hxx>
@@ -52,7 +51,6 @@ bool MemNew( void )
 
     return true;
 }
-
 
 void MemDelete( void )
 {

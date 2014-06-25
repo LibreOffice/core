@@ -230,16 +230,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
     return *pTableRowCellAttrTokenMap;
 }
 
-
-
-
-
-
-
-
-
-
-
 // NB: virtually inherit so we can multiply inherit properly
 //     in ScXMLFlatDocContext_Impl
 class ScXMLDocContext_Impl : public virtual SvXMLImportContext
@@ -301,7 +291,6 @@ SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
 }
 
 ScXMLFlatDocContext_Impl::~ScXMLFlatDocContext_Impl() { }
-
 
 SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -426,7 +415,6 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
 
     return *pDocElemTokenMap;
 }
-
 
 const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
 {
@@ -1944,7 +1932,6 @@ void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )
     mpPostProcessData = p;
 }
 
-
 sc::PivotTableSources& ScXMLImport::GetPivotTableSources()
 {
     if (!mpPivotSources)
@@ -3325,7 +3312,6 @@ void ScXMLImport::LockSolarMutex()
     }
     ++nSolarMutexLocked;
 }
-
 
 void ScXMLImport::UnlockSolarMutex()
 {

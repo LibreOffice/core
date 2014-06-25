@@ -406,7 +406,6 @@ void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, Rectangle& aRect
     printf("expected right %ld actual %ld\n", aRect.Top(), aSnap.Top() );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Top(), aSnap.Top(), TOLERANCE ) );
 
-
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
     printf("expected startrow %" SAL_PRIdINT32 " actual %" SAL_PRIdINT32 "\n", aAnchor.maStart.Row(), pData->maStart.Row()  );

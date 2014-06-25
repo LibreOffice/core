@@ -85,7 +85,6 @@ class LotusRangeList;
 class LotusFontBuffer;
 class LotAttrTable;
 
-
 struct LOTUS_ROOT
 {
     ScDocument*         pDoc;

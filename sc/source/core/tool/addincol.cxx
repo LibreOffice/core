@@ -1346,7 +1346,6 @@ ScUnoAddInCall::~ScUnoAddInCall()
     // pFuncData is deleted with ScUnoAddInCollection
 }
 
-
 ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
 {
     if ( pFuncData )
@@ -1698,6 +1697,5 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 nErrCode = errNoValue;          //! code for error in return type???
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

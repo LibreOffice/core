@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <time.h>
 
 #include "attrib.hxx"
@@ -215,6 +214,5 @@ IMPL_LINK_NOARG(ScAutoStyleList, TimerHdl)
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

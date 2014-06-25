@@ -323,7 +323,6 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
         maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importEmbeddedGraphicObject( aPicturePath );
 }
 
-
 enum HFPortionId
 {
     HF_LEFT,
@@ -860,8 +859,6 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
         maFontModel = getStyles().getDefaultFontModel();
     }
 }
-
-
 
 PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
     mnLeftPropId( nLeftPropId ),

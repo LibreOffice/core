@@ -36,10 +36,8 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-
 class ScDocShell;
 class ScChartObj;
-
 
 class ScChartsObj : public cppu::WeakImplHelper4<
                             com::sun::star::table::XTableCharts,
@@ -106,7 +104,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 typedef ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::table::XTableChart,

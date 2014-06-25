@@ -49,7 +49,6 @@
 #define SC_RASTERSUBY                       21
 #define SC_RASTERSYNC                       22
 
-
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
 

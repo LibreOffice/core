@@ -514,7 +514,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-
         case SID_SELECTALL:
             {
                 pTabViewShell->SelectAll();
@@ -706,7 +705,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_SHOW, 0 );
             rReq.Done();
             break;
-
 
         case SID_CELL_FORMAT_RESET:
             {

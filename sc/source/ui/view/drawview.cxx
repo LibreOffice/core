@@ -566,7 +566,6 @@ bool ScDrawView::SdrBeginTextEdit(
     return bRet;
 }
 
-
 SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 {
     const SdrEndTextEditKind eRet = FmFormView::SdrEndTextEdit( bDontDeleteReally );
@@ -586,7 +585,6 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 
     return eRet;
 }
-
 
 void ScDrawView::ModelHasChanged()
 {

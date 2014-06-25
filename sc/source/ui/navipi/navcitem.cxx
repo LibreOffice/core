@@ -27,7 +27,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
@@ -89,7 +88,6 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             //  gar nix mehr, wird ueber SFX_HINT_DOCCHANGED erledigt
 
             break;
-
 
         case SID_SELECT_SCENARIO:
             rNavigatorDlg.aWndScenarios.NotifyState( pItem );

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 #include <editeng/adjustitem.hxx>
 #include <svx/drawitem.hxx>
@@ -264,6 +263,5 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         rSet.Set(aViewAttr);
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

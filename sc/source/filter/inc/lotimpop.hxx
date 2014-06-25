@@ -31,7 +31,6 @@
 class ScFormulaCell;
 class LotusFontBuffer;
 
-
 class ImportLotus : public ImportTyp
 {
 private:
@@ -56,7 +55,6 @@ private:
                                                             // 0x001b   27 special
     void                NamedSheet( void );                 //          14000
     void                RowPresentation( sal_uInt16 nRecLen );  //           2007
-
 
     // in FM?-Datei
     void                Font_Face( void );                  // 174
@@ -86,7 +84,6 @@ public:
     FltError            Read( SvStream& );                  // special for *.fm3-Dateien
 };
 
-
 inline void ImportLotus::Read( ScAddress& rAddr )
 {
     sal_uInt16 nRow;
@@ -99,55 +96,46 @@ inline void ImportLotus::Read( ScAddress& rAddr )
     rAddr.SetCol( static_cast<SCCOL>(nByte) );
 }
 
-
 inline void ImportLotus::Read( ScRange& rRange )
 {
     Read( rRange.aStart );
     Read( rRange.aEnd );
 }
 
-
 inline void ImportLotus::Read( sal_Char& r )
 {
     pIn->ReadChar( r );
 }
-
 
 inline void ImportLotus::Read( sal_uInt8& r )
 {
     pIn->ReadUChar( r );
 }
 
-
 inline void ImportLotus::Read( sal_uInt16& r )
 {
     pIn->ReadUInt16( r );
 }
-
 
 inline void ImportLotus::Read( sal_Int16& r )
 {
     pIn->ReadInt16( r );
 }
 
-
 inline void ImportLotus::Read( sal_uInt32& r )
 {
     pIn->ReadUInt32( r );
 }
-
 
 inline void ImportLotus::Read( double& r )
 {
     r = ScfTools::ReadLongDouble( *pIn );
 }
 
-
 inline void ImportLotus::Read( LotAttrWK3& r )
 {
     pIn->ReadUChar( r.nFont ).ReadUChar( r.nFontCol ).ReadUChar( r.nBack ).ReadUChar( r.nLineStyle );
 }
-
 
 inline void ImportLotus::Skip( const sal_uInt16 n )
 {

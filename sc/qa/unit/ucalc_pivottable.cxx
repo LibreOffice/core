@@ -643,7 +643,6 @@ void Test::testPivotTableFilters()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);

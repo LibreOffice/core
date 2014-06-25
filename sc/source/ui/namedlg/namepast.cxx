@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "namepast.hxx"
 #include "scresid.hxx"
@@ -28,7 +25,6 @@
 #include "miscdlgs.hrc"
 #include "rangenam.hxx"
 #include "viewdata.hxx"
-
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
@@ -104,6 +100,5 @@ bool ScNamePasteDlg::IsAllSelected() const
 {
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

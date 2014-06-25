@@ -46,7 +46,6 @@
 
 using namespace formula;
 
-
 ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
     mpDoc(pDoc)
 {
@@ -1774,8 +1773,6 @@ void ScCondDateFormatEntry::SetDateType( condformat::ScCondFormatDateType eType 
 {
     meType = eType;
 }
-
-
 
 void ScCondDateFormatEntry::SetStyleName( const OUString& rStyleName )
 {

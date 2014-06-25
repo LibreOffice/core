@@ -55,7 +55,6 @@ private:
     DECL_LINK( RadioHdl, RadioButton* );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

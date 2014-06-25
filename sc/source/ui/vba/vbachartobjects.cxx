@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <ooo/vba/excel/XlChartType.hpp>
 
-
 #include "vbachartobjects.hxx"
 #include "vbachartobject.hxx"
 #include "vbaglobals.hxx"
@@ -34,7 +33,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
-
 
 class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 {
@@ -50,7 +48,6 @@ public:
         return uno::makeAny(  uno::Reference< excel::XChartObject > ( new ScVbaChartObject(  m_xParent, m_xContext, xTableChart, xDrawPageSupplier ) ) );
     }
 };
-
 
 ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, css::uno::Reference< css::container::XIndexAccess >( _xTableCharts, css::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier( _xDrawPageSupplier )
 {

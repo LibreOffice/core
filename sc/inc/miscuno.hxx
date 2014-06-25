@@ -73,7 +73,6 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
                             lang::WrappedTargetException, uno::RuntimeException, std::exception)    \
     { OSL_FAIL("not implemented"); }
 
-
 #define SC_QUERYINTERFACE(x)    \
     if (rType == getCppuType((const uno::Reference<x>*)0))  \
     { return uno::makeAny(uno::Reference<x>(this)); }
@@ -84,7 +83,6 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
 #define SC_QUERY_MULTIPLE(x,y)  \
     if (rType == getCppuType((const uno::Reference<x>*)0))  \
     { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
-
 
 class ScIndexEnumeration : public cppu::WeakImplHelper2<
                                 com::sun::star::container::XEnumeration,

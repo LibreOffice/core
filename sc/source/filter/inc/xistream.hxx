@@ -34,9 +34,7 @@ Input stream class for Excel import
 - Decryption
 ============================================================================ */
 
-
 // Decryption
-
 
 class XclImpDecrypter;
 typedef boost::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
@@ -153,9 +151,7 @@ private:
     ::std::vector< sal_uInt8 > maVerifierHash;
 };
 
-
 // Stream
-
 
 /** This class represents an Excel stream position.
     @descr  It contains the relevant data for a stream position inside of a record

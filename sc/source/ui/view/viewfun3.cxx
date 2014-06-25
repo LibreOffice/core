@@ -72,9 +72,7 @@ using namespace com::sun::star;
 
 // STATIC DATA ---------------------------------------------------------------
 
-
 //  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
-
 
 //      C U T
 
@@ -434,7 +432,6 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
     return NULL;
 }
 
-
 //      P A S T E
 
 void ScViewFunc::PasteDraw()
@@ -765,9 +762,7 @@ static bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL 
     return false;
 }
 
-
 //      Einfuegen auf Tabelle:
-
 
 //  internes Paste
 
@@ -1208,10 +1203,8 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     rMark.SetMarkArea( aUserRange );
     MarkDataChanged();
 
-
         //  Aus Clipboard kopieren,
         //  wenn gerechnet werden soll, Originaldaten merken
-
 
     boost::scoped_ptr<ScDocument> pMixDoc;
     if (nFunction)
@@ -1958,6 +1951,5 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         pDocSh->UpdateOle(&GetViewData());
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

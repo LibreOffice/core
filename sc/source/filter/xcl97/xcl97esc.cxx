@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -108,14 +107,12 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
     InsertPersistOffset( mnNextKey, 0 );
 }
 
-
 XclEscherEx::~XclEscherEx()
 {
     OSL_ENSURE( !aStack.empty(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
 }
-
 
 sal_uInt32 XclEscherEx::InitNextDffFragment()
 {
@@ -347,7 +344,6 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     return pCurrAppData;
 }
 
-
 void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 {
     // own escher data created? -> never delete such objects
@@ -394,7 +390,6 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
     if( nAdditionalText == 3 )
         nAdditionalText = 0;
 }
-
 
 EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
 {
@@ -530,7 +525,6 @@ void XclEscherClientData::WriteData( EscherEx& rEx ) const
     rEx.AddAtom( 0, ESCHER_ClientData );
 }
 
-
 // --- class XclEscherClientTextbox -------------------------------------
 
 XclEscherClientTextbox::XclEscherClientTextbox( const XclExpRoot& rRoot,
@@ -541,7 +535,6 @@ XclEscherClientTextbox::XclEscherClientTextbox( const XclExpRoot& rRoot,
         pXclObj( pObj )
 {
 }
-
 
 void XclEscherClientTextbox::WriteData( EscherEx& /*rEx*/ ) const
 {

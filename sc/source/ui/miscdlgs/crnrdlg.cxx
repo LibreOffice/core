@@ -35,7 +35,6 @@ const sal_uLong nEntryDataDelim = 2;
 
 //  class ScColRowNameRangesDlg
 
-
 /*************************************************************************
 #*  Member:     ScColRowNameRangesDlg
 #*------------------------------------------------------------------------
@@ -91,7 +90,6 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     Init();
 }
 
-
 /*************************************************************************
 #*  Member:     ~ScColRowNameRangesDlg
 #*------------------------------------------------------------------------
@@ -109,7 +107,6 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
 }
-
 
 /*************************************************************************
 #*  Member:     Init
@@ -187,7 +184,6 @@ void ScColRowNameRangesDlg::Init()
 
     Range1SelectHdl( 0 );
 }
-
 
 /*************************************************************************
 #*  Member:     SetColRowData
@@ -288,7 +284,6 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     }
 }
 
-
 /*************************************************************************
 #*  Member:     AdjustColRowData
 #*------------------------------------------------------------------------
@@ -363,7 +358,6 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
     pEdAssign2->SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
 }
 
-
 /*************************************************************************
 #*  Member:     SetReference
 #*------------------------------------------------------------------------
@@ -399,7 +393,6 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
     }
 }
 
-
 /*************************************************************************
 #*  Member:     Close
 #*------------------------------------------------------------------------
@@ -418,7 +411,6 @@ bool ScColRowNameRangesDlg::Close()
 {
     return DoClose( ScColRowNameRangesDlgWrapper::GetChildWindowId() );
 }
-
 
 /*************************************************************************
 #*  Member:     SetActive
@@ -452,7 +444,6 @@ void ScColRowNameRangesDlg::SetActive()
 
     RefInputDone();
 }
-
 
 /*************************************************************************
 #*  Member:     UpdateNames
@@ -580,7 +571,6 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->Invalidate();
 }
 
-
 /*************************************************************************
 #*  Member:     UpdateRangeData
 #*------------------------------------------------------------------------
@@ -630,7 +620,6 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColNam
     pRbAssign2->Enable();
 }
 
-
 /*************************************************************************
 #*  Member:     IsRefInputMode
 #*------------------------------------------------------------------------
@@ -651,9 +640,7 @@ bool ScColRowNameRangesDlg::IsRefInputMode() const
     return (pEdActive != NULL);
 }
 
-
 // Handler:
-
 
 /*************************************************************************
 #*  Handler:    OkBtnHdl
@@ -688,7 +675,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl)
     return 0;
 }
 
-
 /*************************************************************************
 #*  Handler:    CancelBtnHdl
 #*------------------------------------------------------------------------
@@ -709,7 +695,6 @@ IMPL_LINK_NOARG_INLINE_START(ScColRowNameRangesDlg, CancelBtnHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScColRowNameRangesDlg, CancelBtnHdl)
-
 
 /*************************************************************************
 #*  Handler:    AddBtnHdl
@@ -782,7 +767,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
     }
     return 0;
 }
-
 
 /*************************************************************************
 #*  Handler:    RemoveBtnHdl
@@ -859,7 +843,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
     }
     return 0;
 }
-
 
 /*************************************************************************
 #*  Handler:    Range1SelectHdl
@@ -946,7 +929,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     return 0;
 }
 
-
 /*************************************************************************
 #*  Handler:    Range1DataModifyHdl
 #*------------------------------------------------------------------------
@@ -995,7 +977,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
     return 0;
 }
 
-
 /*************************************************************************
 #*  Handler:    Range2DataModifyHdl
 #*------------------------------------------------------------------------
@@ -1031,7 +1012,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
     }
     return 0;
 }
-
 
 /*************************************************************************
 #*  Handler:    ColClickHdl
@@ -1069,7 +1049,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
     return 0;
 }
 
-
 /*************************************************************************
 #*  Handler:    RowClickHdl
 #*------------------------------------------------------------------------
@@ -1106,7 +1085,6 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
     return 0;
 }
 
-
 IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 {
     if( (pCtrl == (Control*)pEdAssign) || (pCtrl == (Control*)pRbAssign) )
@@ -1121,7 +1099,6 @@ IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseFocusHdl)
 {

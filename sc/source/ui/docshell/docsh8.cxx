@@ -152,7 +152,6 @@ namespace
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 
-
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
 bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
@@ -198,7 +197,6 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 
     return bRet;
 }
-
 
 bool ScDocShell::KillFile( const INetURLObject& rURL )
 {

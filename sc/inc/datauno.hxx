@@ -71,7 +71,6 @@ public:
     static com::sun::star::sheet::GeneralFunction SubTotalToGeneral( ScSubTotalFunc eSubTotal );
 };
 
-
 //  ImportDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
 
 class ScImportDescriptor
@@ -99,7 +98,6 @@ public:
                     const ScSortParam& rParam );
     static long GetPropertyCount();
 };
-
 
 //  ScSubTotalDescriptorBase - base class for SubTotalDescriptor stand alone and in DB area (context?)
 
@@ -209,7 +207,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 //  ScSubTotalDescriptor - dummy container to use with XImportTarget
 
 class ScSubTotalDescriptor : public ScSubTotalDescriptorBase
@@ -229,7 +226,6 @@ public:
     void                    SetParam( const ScSubTotalParam& rNew );
 };
 
-
 //  ScRangeSubTotalDescriptor - SubTotalDescriptor of a data base area
 
 class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
@@ -245,7 +241,6 @@ public:
     virtual void            GetData( ScSubTotalParam& rParam ) const SAL_OVERRIDE;
     virtual void            PutData( const ScSubTotalParam& rParam ) SAL_OVERRIDE;
 };
-
 
 class ScSubTotalFieldObj : public cppu::WeakImplHelper2<
                                 com::sun::star::sheet::XSubTotalField,
@@ -278,7 +273,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScConsolidationDescriptor : public cppu::WeakImplHelper2<
                                         com::sun::star::sheet::XConsolidationDescriptor,
@@ -327,7 +321,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 //  ScFilterDescriptorBase - base class for FilterDescriptor
 //                           stand alone, in a DB area (or context?) and in the DataPilot
@@ -428,7 +421,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 //  ScFilterDescriptor - dummy container to use with XFilterable
 
 class ScFilterDescriptor : public ScFilterDescriptorBase
@@ -449,7 +441,6 @@ public:
     const ScQueryParam&     GetParam() const    { return aStoredParam; }
 };
 
-
 //  ScRangeFilterDescriptor - FilterDescriptor of a data base area
 
 class ScRangeFilterDescriptor : public ScFilterDescriptorBase
@@ -466,7 +457,6 @@ public:
     virtual void            PutData( const ScQueryParam& rParam ) SAL_OVERRIDE;
 };
 
-
 //  ScDataPilotFilterDescriptor - FilterDescriptor of a DataPilotDescriptors
 
 class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
@@ -482,7 +472,6 @@ public:
     virtual void            GetData( ScQueryParam& rParam ) const SAL_OVERRIDE;
     virtual void            PutData( const ScQueryParam& rParam ) SAL_OVERRIDE;
 };
-
 
 class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
                                 com::sun::star::sheet::XDatabaseRange,
@@ -599,7 +588,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
                                 com::sun::star::sheet::XDatabaseRanges,

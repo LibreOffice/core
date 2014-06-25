@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "compressedarray.hxx"
 #include "address.hxx"
 
@@ -35,7 +34,6 @@ ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue,
     pData[0].aValue = rValue;
     pData[0].nEnd = nMaxAccess;
 }
-
 
 template< typename A, typename D >
 ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D* pDataArray,
@@ -63,13 +61,11 @@ ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D* pDataArray,
     Resize( nCount);
 }
 
-
 template< typename A, typename D >
 ScCompressedArray<A,D>::~ScCompressedArray()
 {
     delete[] pData;
 }
-
 
 template< typename A, typename D >
 void ScCompressedArray<A,D>::Resize( size_t nNewLimit)
@@ -83,7 +79,6 @@ void ScCompressedArray<A,D>::Resize( size_t nNewLimit)
         pData = pNewData;
     }
 }
-
 
 template< typename A, typename D >
 size_t ScCompressedArray<A,D>::Search( A nAccess ) const
@@ -115,7 +110,6 @@ size_t ScCompressedArray<A,D>::Search( A nAccess ) const
     }
     return (bFound ? static_cast<size_t>(i) : (nAccess < 0 ? 0 : nCount-1));
 }
-
 
 template< typename A, typename D >
 void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
@@ -243,7 +237,6 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
     }
 }
 
-
 template< typename A, typename D >
 void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nStart,
         A nEnd, long nSourceDy )
@@ -262,7 +255,6 @@ void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A n
         j = nRegionEnd;
     }
 }
-
 
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::Insert( A nStart, size_t nAccessCount )
@@ -285,7 +277,6 @@ const D& ScCompressedArray<A,D>::Insert( A nStart, size_t nAccessCount )
     } while (++nIndex < nCount);
     return rValue;
 }
-
 
 template< typename A, typename D >
 void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
@@ -323,7 +314,6 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
     pData[nCount-1].nEnd = nMaxAccess;
 }
 
-
 // === ScBitMaskCompressedArray ==============================================
 
 template< typename A, typename D >
@@ -352,7 +342,6 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     } while (nIndex < this->nCount);
 }
 
-
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
         const D& rValueToOr )
@@ -378,7 +367,6 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
             ++nIndex;
     } while (nIndex < this->nCount);
 }
-
 
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::CopyFromAnded(

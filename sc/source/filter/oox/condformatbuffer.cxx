@@ -63,7 +63,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const sal_Int32 BIFF12_CFRULE_TYPE_CELLIS           = 1;
@@ -1191,7 +1190,6 @@ void ExtCfRule::importCfvo( const AttributeList& rAttribs )
     mnRuleType = CFVO;
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
-
 
 } // namespace xls
 } // namespace oox

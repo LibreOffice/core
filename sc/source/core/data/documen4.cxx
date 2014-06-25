@@ -49,7 +49,6 @@
 
 using namespace formula;
 
-
 /** (Goal Seek) Find a value of x that is a root of f(x)
 
     This function is used internally for the goal seek operation.  It uses the
@@ -702,9 +701,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         return fVal;
 }
 
-
 //          bedingte Formate und Gueltigkeitsbereiche
-
 
 sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
 {
@@ -867,7 +864,6 @@ void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
         maTabs[nTab]->SetCondFormList(pList);
 }
 
-
 const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 {
     if ( pValidationList )
@@ -914,7 +910,6 @@ void ScDocument::SetDetOpList(ScDetOpList* pNew)
 #define SC_DOCCOMP_MINGOOD  128
 #define SC_DOCCOMP_COLUMNS  10
 #define SC_DOCCOMP_ROWS     100
-
 
 sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCROW nOtherRow, SCTAB nOtherTab,
@@ -1016,7 +1011,6 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         nMinGood = SC_DOCCOMP_MINGOOD;
     }
     bool bUseTotal = bColumns && !pTranslate;       // nur beim ersten Durchgang
-
 
     SCCOLROW nOtherRow = 0;
     sal_uInt16 nComp;
@@ -1152,9 +1146,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             bInFill = true;
     }
 
-
     //  Tabellen in der gefundenen Reihenfolge vergleichen
-
 
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {
@@ -1235,7 +1227,6 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             {
                 //  bleibt bei pOtherCols, pOtherRows
             }
-
 
             //  Change-Actions erzeugen
             //  1) Spalten von rechts
@@ -1352,7 +1343,5 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

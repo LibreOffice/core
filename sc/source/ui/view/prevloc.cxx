@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/outdev.hxx>
 
 #include "prevloc.hxx"
@@ -278,7 +277,6 @@ static ScPreviewLocationEntry* lcl_GetEntryByAddress( const boost::ptr_list<ScPr
     return NULL;
 }
 
-
 Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
 {
     const double nScaleX = HMM_PER_TWIPS;
@@ -535,9 +533,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         }
     }
 
-
     //  get column info
-
 
     SCCOL nColCount = 0;
     SCCOL nCol;
@@ -605,9 +601,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     else
         rInfo.SetColInfo( 0, NULL );
 
-
     //  get row info
-
 
     SCROW nRowCount = 0;
     if ( bHasHeaderRow )
@@ -674,9 +668,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     else
         rInfo.SetRowInfo( 0, NULL );
 
-
     //  limit to visible area
-
 
     rInfo.SetTab( nTab );
     rInfo.LimitToArea( rVisiblePixel );

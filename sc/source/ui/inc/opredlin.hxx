@@ -43,7 +43,6 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     OUString            aAuthorStr;
     DECL_LINK(ColorHdl, void *);
 
-
 public:
 
     ScRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
@@ -55,6 +54,5 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

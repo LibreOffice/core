@@ -155,4 +155,3 @@ ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

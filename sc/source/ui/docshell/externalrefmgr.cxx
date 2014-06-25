@@ -274,7 +274,6 @@ void ScExternalRefCache::Table::setReferenced( bool bReferenced )
         meReferenced = (bReferenced ? REFERENCED_MARKED : UNREFERENCED);
 }
 
-
 bool ScExternalRefCache::Table::isReferenced() const
 {
     return meReferenced != UNREFERENCED;
@@ -1102,7 +1101,6 @@ void ScExternalRefCache::addCacheDocToReferenced( sal_uInt16 nFileId )
         maReferenced.checkAllDocs();
     }
 }
-
 
 void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
 {

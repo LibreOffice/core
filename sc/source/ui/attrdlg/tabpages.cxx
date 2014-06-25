@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
 
 #include "global.hxx"
 #include "document.hxx"
@@ -38,9 +36,7 @@ static const sal_uInt16 pProtectionRanges[] =
     0
 };
 
-
 // Zellschutz-Tabpage:
-
 
 ScTabPageProtection::ScTabPageProtection(Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "CellProtectionPage",

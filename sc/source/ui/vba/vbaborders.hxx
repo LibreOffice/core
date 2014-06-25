@@ -26,7 +26,6 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 #include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
@@ -44,7 +43,6 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-
 
     // XBorders
 

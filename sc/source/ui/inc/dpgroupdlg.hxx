@@ -42,7 +42,6 @@ public:
 protected:
     ~ScDPGroupEditHelper() {}
 
-
 private:
     virtual bool        ImplGetValue( double& rfValue ) const = 0;
     virtual void        ImplSetValue( double fValue ) = 0;
@@ -89,7 +88,6 @@ private:
     DateField*          mpEdValue;
     Date                maNullDate;
 };
-
 
 class ScDPNumGroupDlg : public ModalDialog
 {

@@ -21,7 +21,6 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <ooo/vba/excel/XPivotTable.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 

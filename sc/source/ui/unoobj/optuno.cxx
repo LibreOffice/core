@@ -28,7 +28,6 @@
 
 using namespace com::sun::star;
 
-
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =

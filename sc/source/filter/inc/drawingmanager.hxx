@@ -35,9 +35,7 @@ namespace xls {
 
 const sal_uInt16 BIFF_OBJ_INVALID_ID        = 0;
 
-
 // Model structures for BIFF OBJ record data
-
 
 /** This structure contains line formatting attributes from an OBJ record. */
 struct BiffObjLineModel
@@ -61,9 +59,7 @@ struct BiffObjFillModel
     explicit            BiffObjFillModel();
 };
 
-
 // BIFF drawing objects
-
 
 class BiffDrawingBase;
 class BiffDrawingObjectBase;
@@ -153,9 +149,7 @@ private:
     bool                mbCustomDff;    /// True = recreate UNO shape in DFF import (BIFF8 only).
 };
 
-
 // BIFF drawing page
-
 
 /** Base class for a container for all objects on a drawing page (in a
     spreadsheet or in an embedded chart object).

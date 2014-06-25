@@ -45,7 +45,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimensionSaveData;
 class ScDPTableData;
 
-
 // classes to save Data Pilot settings
 
 class ScDPSaveMember
@@ -89,7 +88,6 @@ public:
     void Dump(int nIndent = 0) const;
 #endif
 };
-
 
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r );
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r );
@@ -230,7 +228,6 @@ public:
     void Dump(int nIndent = 0) const;
 #endif
 };
-
 
 class ScDPSaveData
 {

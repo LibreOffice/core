@@ -303,7 +303,6 @@ struct XclObjAnchor : public XclRange
                             const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
 };
 
-
 inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )
 {
     sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;

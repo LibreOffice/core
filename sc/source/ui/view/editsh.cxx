@@ -80,7 +80,6 @@
 
 using namespace ::com::sun::star;
 
-
 TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
@@ -401,7 +400,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     rReq.AppendItem( aFontItem );
                     rReq.AppendItem( aStringItem );
                     rReq.Done();
-
 
                 }
 
@@ -1031,9 +1029,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
     }
 
-
     //  anwenden
-
 
     EditEngine* pEngine = pEditView->GetEditEngine();
     bool bOld = pEngine->GetUpdateMode();

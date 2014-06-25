@@ -86,7 +86,6 @@ std::string atan2Content =
 "    return a;\n"
 "}\n";
 
-
 #endif // INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

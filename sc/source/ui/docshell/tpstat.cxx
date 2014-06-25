@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "document.hxx"
@@ -27,7 +26,6 @@
 #include "tpstat.hxx"
 
 // Dokumentinfo-Tabpage:
-
 
 SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet* rSet )
 {
@@ -68,6 +66,5 @@ bool ScDocStatPage::FillItemSet( SfxItemSet* /* rSet */ )
 void ScDocStatPage::Reset( const SfxItemSet* /* rSet */ )
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

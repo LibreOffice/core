@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
 #include <sfx2/bindings.hxx>
@@ -193,7 +192,6 @@ void ScFunctionDockWin::InitLRUList()
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-
     sal_Int32  nSelPos   = aCatBox.GetSelectEntryPos();
 
     if(nSelPos == 0)
@@ -223,7 +221,6 @@ void ScFunctionDockWin::UpdateLRUList()
     }
 }
 
-
 /*************************************************************************
 #*  Member:     SetSize
 #*------------------------------------------------------------------------
@@ -252,7 +249,6 @@ void ScFunctionDockWin::SetSize()
         case SFX_ALIGN_BOTTOM:
         case SFX_ALIGN_TOOLBOXTOP:
         case SFX_ALIGN_TOOLBOXBOTTOM:
-
 
                         nNewDockMode=1;
                         if(nDockMode!=nNewDockMode)
@@ -333,7 +329,6 @@ void ScFunctionDockWin::SetLeftRightSize()
         Range aYRange(3*aTxtSize.Height()+aFuncList.GetPosPixel().Y(),
                     GetOutputSizePixel().Height()-2*aTxtSize.Height());
         aPrivatSplit.SetYRange(aYRange);
-
 
         if(aOldSize.Width()!=aNewSize.Width())
             SetMyWidthLeRi(aNewSize);
@@ -642,7 +637,6 @@ bool ScFunctionDockWin::Close()
     return true;
 }
 
-
 /*************************************************************************
 #*  Member:     CheckAlignment
 #*------------------------------------------------------------------------
@@ -722,7 +716,6 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
 void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
 }
-
 
 /*************************************************************************
 #*  Member:     Resize
@@ -928,7 +921,6 @@ void ScFunctionDockWin::DoEnter()
             pShellWnd->GrabFocus();
     }
 
-
 }
 
 /*************************************************************************
@@ -959,7 +951,6 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
         SetDescription();
     }
 
-
     //SetSize();
     return 0;
 }
@@ -986,7 +977,6 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     {
         DoEnter();          // Uebernimmt die Eingabe
     }
-
 
     return 0;
 }
@@ -1022,7 +1012,6 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFiFuncDesc.SetPosPixel(aFDTopLeft);
         aFiFuncDesc.SetSizePixel(aFDSize);
     }
-
 
     return 0;
 }
@@ -1121,6 +1110,5 @@ void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
         UseSplitterInitPos();           //  set initial splitter position if necessary
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

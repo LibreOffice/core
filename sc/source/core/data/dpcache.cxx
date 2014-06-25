@@ -829,7 +829,6 @@ size_t ScDPCache::GetGroupFieldCount() const
     return maGroupFields.size();
 }
 
-
 SCROW ScDPCache::GetDataSize() const
 {
     OSL_ENSURE(mnDataSize <= GetRowCount(), "Data size should never be larger than the row count.");
@@ -907,7 +906,6 @@ void ScDPCache::RemoveReference(ScDPObject* pObj) const
     if (maRefObjects.empty())
         mpDoc->GetDPCollection()->RemoveCache(this);
 }
-
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 {
@@ -1147,7 +1145,6 @@ SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex) const
 }
 
 ;
-
 
 #if DEBUG_PIVOT_TABLE
 

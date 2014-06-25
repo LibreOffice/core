@@ -136,7 +136,6 @@ class ScSpreadsheetSettings : public cppu::WeakImplHelper3<
 private:
     SfxItemPropertySet      aPropSet;
 
-
     bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
     sal_Int16 getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException);
     void setProperty(const OUString& aPropertyName, bool p1) throw (css::uno::RuntimeException)
@@ -281,7 +280,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScRecentFunctionsObj : public cppu::WeakImplHelper2<
                                         com::sun::star::sheet::XRecentFunctions,
                                         com::sun::star::lang::XServiceInfo>
@@ -310,7 +308,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScFunctionListObj : public cppu::WeakImplHelper4<
                                         com::sun::star::sheet::XFunctionDescriptions,

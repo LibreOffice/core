@@ -64,7 +64,6 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
     }
 }
 
-
 void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
@@ -116,7 +115,6 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         }
     }
 }
-
 
 void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 {
@@ -178,7 +176,6 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
     }
 }
 
-
 void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
             const OString& rImgOptions, sal_uLong nXOutFlags )
 {
@@ -234,6 +231,5 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
         rStrm.WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

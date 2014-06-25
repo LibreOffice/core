@@ -128,20 +128,17 @@ inline ScAddress ScBigAddress::MakeAddress() const
     return ScAddress( nColA, nRowA, nTabA );
 }
 
-
 inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr )
 {
     rStream.WriteInt32( rAdr.nCol ).WriteInt32( rAdr.nRow ).WriteInt32( rAdr.nTab );
     return rStream;
 }
 
-
 inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr )
 {
     rStream.ReadInt32( rAdr.nCol ).ReadInt32( rAdr.nRow ).ReadInt32( rAdr.nTab );
     return rStream;
 }
-
 
 class ScBigRange
 {
@@ -199,7 +196,6 @@ public:
     friend inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange );
 };
 
-
 inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
 {
     return
@@ -208,7 +204,6 @@ inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
         aStart.Tab() <= rAddr.Tab() && rAddr.Tab() <= aEnd.Tab();
 }
 
-
 inline bool ScBigRange::In( const ScBigRange& r ) const
 {
     return
@@ -216,7 +211,6 @@ inline bool ScBigRange::In( const ScBigRange& r ) const
         aStart.Row() <= r.aStart.Row() && r.aEnd.Row() <= aEnd.Row() &&
         aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
 }
-
 
 inline bool ScBigRange::Intersects( const ScBigRange& r ) const
 {
@@ -227,14 +221,12 @@ inline bool ScBigRange::Intersects( const ScBigRange& r ) const
         );
 }
 
-
 inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange )
 {
     WriteScBigAddress( rStream, rRange.aStart );
     WriteScBigAddress( rStream, rRange.aEnd );
     return rStream;
 }
-
 
 inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange )
 {

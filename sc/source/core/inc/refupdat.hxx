@@ -71,7 +71,6 @@ public:
         const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

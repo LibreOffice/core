@@ -58,7 +58,6 @@ using ::com::sun::star::sheet::DataPilotFieldReference;
 
 // Pivot cache
 
-
 namespace {
 
 // constants to track occurrence of specific data types
@@ -899,9 +898,7 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
     }
 }
 
-
 // Pivot table
-
 
 namespace {
 

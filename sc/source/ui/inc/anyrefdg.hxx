@@ -126,7 +126,6 @@ private:
 
     DECL_LINK( UpdateFocusHdl, void* );
 
-
 protected:
     virtual bool        DoClose( sal_uInt16 nId );
 
@@ -170,7 +169,6 @@ public:
     inline  bool        CanInputStart( const formula::RefEdit *pEdit );
     inline  bool        CanInputDone( bool bForced );
 };
-
 
 class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
 {
@@ -246,7 +244,6 @@ ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, 
 {
 }
 
-
 template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
 
@@ -270,7 +267,6 @@ public:
     ScAnyRefModalDlg(Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 };
-
 
 template<class TDerived, class TBase, bool bBindRef = true>
 struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
@@ -311,7 +307,6 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
     {
     }
 };
-
 
 inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
 {

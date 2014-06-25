@@ -49,7 +49,6 @@
 //! das muss als Konstante in irgendeine idl-Datei!!!!
 #define TEXTCONTROLCHAR_PARAGRAPH_BREAK         0
 
-
 class MyFixedText : public FixedText
 {
 protected:
@@ -157,7 +156,6 @@ void ScTestListener::selectionChanged(const EventObject& aEvent)
     String aStr = OUStringToString( xCells->getAddress(), CHARSET_SYSTEM );
     pFixedText->SetText(aStr);
 }
-
 
 extern "C" Window* SAL_CALL CreateWindow( Window *pParent, const String& rParam )
 {
@@ -381,7 +379,6 @@ void lcl_DoCount()
     }
 }
 
-
 void lcl_GlobalCell()
 {
     if ( xGlobalCell )
@@ -391,7 +388,6 @@ void lcl_GlobalCell()
         xGlobalCell->setFormula( StringToOUString( aStr, CHARSET_SYSTEM ) );
     }
 }
-
 
 void lcl_Annotations( FixedText& aTimeText )
 {
@@ -455,7 +451,6 @@ void lcl_Annotations( FixedText& aTimeText )
         }
     }
 }
-
 
 void lcl_Cursor( FixedText& aTimeText )
 {
@@ -583,7 +578,6 @@ void lcl_Cursor( FixedText& aTimeText )
     }
 }
 
-
 void lcl_Cells( FixedText& aTimeText )
 {
     aTimeText.SetText( "..." );
@@ -632,7 +626,6 @@ void lcl_Cells( FixedText& aTimeText )
 
         sal_uLong nEnd = Time::GetSystemTicks();
         aTimeText.SetText(String(nCount)+String(" ")+String(nEnd-nStart)+String(" ms"));
-
 
 //      if (xLock)
 //          xLock->removeActionLock();
@@ -1735,7 +1728,6 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
     }
     return 0;
 }
-
 
 IMPL_LINK_NOARG(MyWindow, TabHdl)
 {

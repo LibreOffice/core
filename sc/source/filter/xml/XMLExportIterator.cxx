@@ -55,7 +55,6 @@ void ScMyIteratorBase::UpdateAddress( table::CellAddress& rCellAddress )
     }
 }
 
-
 bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
     if( aAddress.Tab() != aShape.aAddress.Tab() )
@@ -182,7 +181,6 @@ bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
     else
         return (aCellRange.StartColumn < aRange.aCellRange.StartColumn);
 }
-
 
 ScMyMergedRangesContainer::ScMyMergedRangesContainer()
     : aRangeList()
@@ -692,7 +690,6 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
         aCell.pNote = pNote;
     }
 }
-
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     uno::Reference<sheet::XSpreadsheet>& rxTable)

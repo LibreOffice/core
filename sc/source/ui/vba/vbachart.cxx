@@ -380,7 +380,6 @@ try
                 break;
         }
 
-
         switch (_nChartType)
         {
                 case xlConeColClustered:
@@ -953,7 +952,6 @@ ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _
     }
 }
 
-
 sal_Int32
 ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw (script::BasicErrorException)
 {
@@ -1014,7 +1012,6 @@ ScVbaChart::assignDiagramAttributes()
     xTwoAxisYSupplier.set( mxDiagramPropertySet, uno::UNO_QUERY_THROW );
 }
 
-
 uno::Reference< beans::XPropertySet >
 ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( script::BasicErrorException, uno::RuntimeException )
 {
@@ -1046,7 +1043,6 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) thro
         }
     return xAxisProps;
 }
-
 
 OUString
 ScVbaChart::getServiceImplName()

@@ -164,7 +164,6 @@ public:
     virtual void SyncForGrid( SdrObject* pObj );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

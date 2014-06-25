@@ -519,9 +519,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
-
                     //  OLE: aktivieren
-
 
                     if (nSdrObjKind == OBJ_OLE2)
                     {
@@ -533,7 +531,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                         }
                     }
-
 
                     //  Edit text
                     //  not in UNO controls
@@ -612,7 +609,6 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 {
     return FuDraw::KeyInput(rKEvt);
 }
-
 
 /*************************************************************************
 |*

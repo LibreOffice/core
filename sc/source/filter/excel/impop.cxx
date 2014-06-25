@@ -85,10 +85,8 @@
 
 using namespace ::com::sun::star;
 
-
 const double ImportExcel::fExcToTwips =
     ( double ) TWIPS_PER_CHAR / 256.0;
-
 
 ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
 {
@@ -96,17 +94,14 @@ ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
     pD = pDoc;
 }
 
-
 ImportTyp::~ImportTyp()
 {
 }
-
 
 FltError ImportTyp::Read()
 {
     return eERR_INTERN;
 }
-
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
@@ -156,7 +151,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     aDocOpt.SetLookUpColRowNames( false );      // default: no natural language refs
     pD->SetDocOptions( aDocOpt );
 }
-
 
 ImportExcel::~ImportExcel( void )
 {
@@ -409,12 +403,10 @@ void ImportExcel::ReadRk()
     }
 }
 
-
 void ImportExcel::Window1()
 {
     GetDocViewSettings().ReadWindow1( maStrm );
 }
-
 
 void ImportExcel::Row25( void )
 {
@@ -446,7 +438,6 @@ void ImportExcel::Row25( void )
     }
 }
 
-
 void ImportExcel::Bof2( void )
 {
     sal_uInt16 nSubType;
@@ -462,14 +453,12 @@ void ImportExcel::Bof2( void )
         pExcRoot->eDateiTyp = Biff2;
 }
 
-
 void ImportExcel::Eof( void )
 {
     //  POST: darf nur nach einer GUELTIGEN Tabelle gerufen werden!
     EndSheet();
     IncCurrScTab();
 }
-
 
 void ImportExcel::SheetPassword( void )
 {
@@ -478,7 +467,6 @@ void ImportExcel::SheetPassword( void )
 
     GetRoot().GetSheetProtectBuffer().ReadPasswordHash( aIn, GetCurrScTab() );
 }
-
 
 void ImportExcel::Externsheet( void )
 {
@@ -489,7 +477,6 @@ void ImportExcel::Externsheet( void )
     mnLastRefIdx = pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }
 
-
 void ImportExcel:: WinProtection( void )
 {
     if (GetRoot().GetBiff() != EXC_BIFF8)
@@ -497,7 +484,6 @@ void ImportExcel:: WinProtection( void )
 
     GetRoot().GetDocProtectBuffer().ReadWinProtect( aIn );
 }
-
 
 void ImportExcel::Columndefault( void )
 {// Default Cell Attributes
@@ -523,7 +509,6 @@ void ImportExcel::Columndefault( void )
             pColRowBuff->HideCol( nCol );
     }
 }
-
 
 void ImportExcel::Array25( void )
 {
@@ -560,7 +545,6 @@ void ImportExcel::Array25( void )
     }
 }
 
-
 void ImportExcel::Rec1904( void )
 {
     sal_uInt16  n1904;
@@ -575,7 +559,6 @@ void ImportExcel::Rec1904( void )
         pD->GetFormatTable()->ChangeNullDate( 1, 1, 1904 );
     }
 }
-
 
 void ImportExcel::Externname25( void )
 {
@@ -601,7 +584,6 @@ void ImportExcel::Externname25( void )
     }
 }
 
-
 void ImportExcel::Colwidth( void )
 {// Column Width
     sal_uInt8   nColFirst, nColLast;
@@ -617,7 +599,6 @@ void ImportExcel::Colwidth( void )
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
 }
 
-
 void ImportExcel::Defrowheight2( void )
 {
     sal_uInt16 nDefHeight;
@@ -625,7 +606,6 @@ void ImportExcel::Defrowheight2( void )
     nDefHeight &= 0x7FFF;
     pColRowBuff->SetDefHeight( nDefHeight, EXC_DEFROW_UNSYNCED );
 }
-
 
 void ImportExcel::SheetProtect( void )
 {
@@ -656,12 +636,10 @@ void ImportExcel::Codepage( void )
     SetCodePage( maStrm.ReaduInt16() );
 }
 
-
 void ImportExcel::Ixfe( void )
 {
     maStrm >> mnIxfeIndex;
 }
-
 
 void ImportExcel::DefColWidth( void )
 {
@@ -676,11 +654,9 @@ void ImportExcel::DefColWidth( void )
     pColRowBuff->SetDefWidth( nScWidth );
 }
 
-
 void ImportExcel::Builtinfmtcnt( void )
 {
 }
-
 
 void ImportExcel::Colinfo( void )
 {// Column Formatting Information
@@ -708,7 +684,6 @@ void ImportExcel::Colinfo( void )
     pColRowBuff->SetDefaultXF( nColFirst, nColLast, nXF );
 }
 
-
 void ImportExcel::Wsbool( void )
 {
     sal_uInt16 nFlags;
@@ -719,7 +694,6 @@ void ImportExcel::Wsbool( void )
 
     GetPageSettings().SetFitToPages( ::get_flag( nFlags, EXC_WSBOOL_FITTOPAGE ) );
 }
-
 
 void ImportExcel::Boundsheet( void )
 {
@@ -754,7 +728,6 @@ void ImportExcel::Boundsheet( void )
     nBdshtTab++;
 }
 
-
 void ImportExcel::Country( void )
 {
     sal_uInt16 nUICountry, nDocCountry;
@@ -771,7 +744,6 @@ void ImportExcel::Country( void )
         SetUILanguage( eLanguage );
 }
 
-
 void ImportExcel::ReadUsesElfs()
 {
     if( maStrm.ReaduInt16() != 0 )
@@ -781,7 +753,6 @@ void ImportExcel::ReadUsesElfs()
         GetDoc().SetDocOptions( aDocOpt );
     }
 }
-
 
 void ImportExcel::Hideobj( void )
 {
@@ -818,18 +789,15 @@ void ImportExcel::Hideobj( void )
     pD->SetViewOptions( aOpts );
 }
 
-
 void ImportExcel::Bundleheader( void )
 {
 }
-
 
 void ImportExcel::Standardwidth( void )
 {
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
     pColRowBuff->SetDefWidth( nScWidth, true );
 }
-
 
 void ImportExcel::Shrfmla( void )
 {
@@ -888,7 +856,6 @@ void ImportExcel::Shrfmla( void )
     mpLastFormula->mpCell = pCell;
 }
 
-
 void ImportExcel::Mulrk( void )
 {
     XclAddress aXclPos;
@@ -910,7 +877,6 @@ void ImportExcel::Mulrk( void )
     }
 }
 
-
 void ImportExcel::Mulblank( void )
 {
     XclAddress aXclPos;
@@ -927,7 +893,6 @@ void ImportExcel::Mulblank( void )
             GetXFRangeBuffer().SetBlankXF( aScPos, nXF );
     }
 }
-
 
 void ImportExcel::Rstring( void )
 {
@@ -957,7 +922,6 @@ void ImportExcel::Rstring( void )
     }
 }
 
-
 void ImportExcel::Cellmerging()
 {
     XclImpAddressConverter& rAddrConv = GetAddressConverter();
@@ -975,7 +939,6 @@ void ImportExcel::Cellmerging()
     }
 }
 
-
 void ImportExcel::Olesize( void )
 {
     XclRange aXclOleSize( ScAddress::UNINITIALIZED );
@@ -985,7 +948,6 @@ void ImportExcel::Olesize( void )
     SCTAB nScTab = GetCurrScTab();
     GetAddressConverter().ConvertRange( maScOleSize, aXclOleSize, nScTab, nScTab, false );
 }
-
 
 void ImportExcel::Row34( void )
 {
@@ -1016,7 +978,6 @@ void ImportExcel::Row34( void )
     }
 }
 
-
 void ImportExcel::Bof3( void )
 {
     sal_uInt16 nSubType;
@@ -1034,7 +995,6 @@ void ImportExcel::Bof3( void )
     else                            // #i51490# Excel interprets invalid indexes as worksheet
         pExcRoot->eDateiTyp = Biff3;
 }
-
 
 void ImportExcel::Array34( void )
 {
@@ -1062,11 +1022,9 @@ void ImportExcel::Array34( void )
     }
 }
 
-
 void ImportExcel::Externname34( void )
 {
 }
-
 
 void ImportExcel::Defrowheight345( void )
 {
@@ -1074,7 +1032,6 @@ void ImportExcel::Defrowheight345( void )
     maStrm >> nFlags >> nDefHeight;
     pColRowBuff->SetDefHeight( nDefHeight, nFlags );
 }
-
 
 void ImportExcel::TableOp( void )
 {
@@ -1151,7 +1108,6 @@ void ImportExcel::TableOp( void )
     }
 }
 
-
 void ImportExcel::Bof4( void )
 {
     sal_uInt16 nSubType;
@@ -1168,7 +1124,6 @@ void ImportExcel::Bof4( void )
     else                            // #i51490# Excel interprets invalid indexes as worksheet
         pExcRoot->eDateiTyp = Biff4;
 }
-
 
 void ImportExcel::Bof5( void )
 {
@@ -1210,7 +1165,6 @@ void ImportExcel::EndSheet( void )
     FinalizeTable();
 }
 
-
 void ImportExcel::NewTable( void )
 {
     SCTAB nTab = GetCurrScTab();
@@ -1238,12 +1192,10 @@ void ImportExcel::NewTable( void )
     pRowOutlineBuff = pNewItem->GetRowOutline();
 }
 
-
 const ScTokenArray* ImportExcel::ErrorToFormula( bool bErrOrVal, sal_uInt8 nError, double& rVal )
 {
     return pFormConv->GetBoolErr( XclTools::ErrorToEnum( rVal, bErrOrVal, nError ) );
 }
-
 
 void ImportExcel::AdjustRowHeight()
 {
@@ -1254,7 +1206,6 @@ void ImportExcel::AdjustRowHeight()
     if( ScModelObj* pDocObj = GetDocModelObj() )
         pDocObj->UpdateAllRowHeights();
 }
-
 
 void ImportExcel::PostDocLoad( void )
 {

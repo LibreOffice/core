@@ -208,7 +208,6 @@ void ScNameDlg::CheckForEmptyTable()
         m_pEdName->Enable();
         m_pLbScope->Enable();
 
-
         m_pBtnCriteria->Enable();
         m_pBtnPrintArea->Enable();
         m_pBtnColHeader->Enable();
@@ -315,7 +314,6 @@ void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
         UpdateChecks(pData);
     }
 }
-
 
 bool ScNameDlg::AddPushed()
 {

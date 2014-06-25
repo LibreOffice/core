@@ -106,7 +106,6 @@ private:
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

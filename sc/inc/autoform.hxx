@@ -23,7 +23,6 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
     Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
     Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc
     eingelesen/geschrieben.
@@ -248,7 +247,6 @@ public:
     bool    Save( SvStream& rStream, sal_uInt16 fileVersion );
 };
 
-
 class SC_DLLPUBLIC ScAutoFormatData
 {
 private:
@@ -345,7 +343,6 @@ public:
     iterator begin();
     iterator end();
 };
-
 
 #endif
 

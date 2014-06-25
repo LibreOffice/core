@@ -86,7 +86,6 @@ public:
     const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const { return mpMisspellRanges;}
 };
 
-
 #define SC_TAB_INSERTED     1
 #define SC_TAB_DELETED      2
 #define SC_TAB_MOVED        3
@@ -143,7 +142,6 @@ public:
     sal_uInt16          GetId() const           { return nId; }
     sal_uInt16          GetIndex() const        { return nIndex; }
 };
-
 
 // Parameter item for the sort dialog:
 

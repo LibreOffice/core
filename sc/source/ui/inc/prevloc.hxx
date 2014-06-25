@@ -80,7 +80,6 @@ public:
     void    LimitToArea( const Rectangle& rPixelArea );
 };
 
-
 class ScPreviewLocationData
 {
     OutputDevice* pWindow;

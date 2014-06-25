@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 
 #include "scitems.hxx"
@@ -91,7 +90,6 @@ using com::sun::star::frame::XFrame;
 using com::sun::star::frame::XController;
 using com::sun::star::beans::XPropertySet;
 
-
 enum ScNameInputType
 {
     SC_NAME_INPUT_CELL,
@@ -106,7 +104,6 @@ enum ScNameInputType
     SC_MANAGE_NAMES
 };
 
-
 ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
     : Window ( pParent, nStyle )
 {
@@ -117,9 +114,7 @@ ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
     }
 }
 
-
 //  class ScInputWindowWrapper
-
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
@@ -157,9 +152,7 @@ static bool lcl_isExperimentalMode()
     return true;
 }
 
-
 //  class ScInputWindow
-
 
 static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
 {
@@ -902,8 +895,6 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ToolBox::MouseButtonUp( rMEvt );
 }
 
-
-
 ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
         aMultiTextWnd        ( this, pViewSh ),
@@ -1026,12 +1017,10 @@ void ScInputBarGroup::StartEditEngine()
     aMultiTextWnd.StartEditEngine();
 }
 
-
 void ScInputBarGroup::MakeDialogEditView()
 {
     aMultiTextWnd.MakeDialogEditView();
 }
-
 
 EditView* ScInputBarGroup::GetEditView()
 {
@@ -1151,9 +1140,6 @@ void ScInputBarGroup::TextGrabFocus()
 {
     aMultiTextWnd.TextGrabFocus();
 }
-
-
-
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
     :
@@ -1349,7 +1335,6 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
     pEditView->SetVisArea(aVisArea);
 }
 
-
 void ScMultiTextWnd::InitEditEngine()
 {
     ScFieldEditEngine* pNew;
@@ -1450,8 +1435,6 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
     SetScrollBarRange();
     DoScroll();
 }
-
-
 
 ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
@@ -1719,7 +1702,6 @@ void ScTextWnd::UpdateAutoCorrFlag()
             pEditEngine->SetControlWord( nControl );
     }
 }
-
 
 void ScTextWnd::StartEditEngine()
 {
@@ -2065,9 +2047,7 @@ void ScTextWnd::TextGrabFocus()
     GrabFocus();
 }
 
-
 // Position window
-
 
 ScPosWnd::ScPosWnd( Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),

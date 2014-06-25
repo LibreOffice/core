@@ -24,7 +24,6 @@
 #include <svl/hint.hxx>
 #include "rangelst.hxx"
 
-
 struct ScUnoRefEntry
 {
     sal_Int64   nObjectId;
@@ -70,7 +69,6 @@ public:
     sal_Int64   GetObjectId() const         { return aEntry.nObjectId; }
     const ScRangeList& GetRanges() const    { return aEntry.aRanges; }
 };
-
 
 #endif
 

@@ -105,7 +105,6 @@ private:
 
 private:
 
-
     /** Specifies how cell positions from CellAnchorModel have to be processed. */
     enum CellAnchorType
     {

@@ -267,7 +267,6 @@ public:
 
     bool importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler, oox::core::FastParser& rParser );
 
-
     // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 
     /** Returns the BIFF type in binary filter. */

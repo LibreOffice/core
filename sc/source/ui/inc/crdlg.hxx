@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CRDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CRDLG_HXX
 
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>

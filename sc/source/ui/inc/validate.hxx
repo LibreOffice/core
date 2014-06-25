@@ -172,7 +172,6 @@ public:
     bool Close() SAL_OVERRIDE;
 };
 
-
 /** The tab page "Criteria" from the Validation dialog. */
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
@@ -257,7 +256,6 @@ public:
     void            SetupRefDlg();
     void            RemoveRefDlg();
 };
-
 
 class ScTPValidationHelp : public SfxTabPage
 {

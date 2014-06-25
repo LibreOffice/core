@@ -56,7 +56,6 @@ public:
     virtual void SAL_CALL Insert( const OUString& String ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;

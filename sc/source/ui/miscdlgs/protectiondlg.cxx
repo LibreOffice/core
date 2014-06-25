@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "protectiondlg.hxx"
 #include "scresid.hxx"
 #include "tabprotection.hxx"
@@ -25,14 +24,12 @@
 #include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 
-
 // The order must match that of the list box.
 static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
 };
 static const sal_uInt16 nOptionCount = sizeof(aOptions) / sizeof (aOptions[0]);
-
 
 ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent)
     : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )

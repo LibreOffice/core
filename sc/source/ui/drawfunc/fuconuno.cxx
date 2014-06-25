@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -183,6 +182,5 @@ SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, co
 
     return pObj;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

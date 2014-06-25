@@ -80,7 +80,6 @@ static const sal_uInt16 pTypeList[SC_CONTENT_COUNT] =
 
 bool ScContentTree::bIsInDrag = false;
 
-
 ScDocShell* ScContentTree::GetManualOrCurrent()
 {
     ScDocShell* pSh = NULL;
@@ -111,9 +110,7 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
     return pSh;
 }
 
-
 //          ScContentTree
-
 
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),

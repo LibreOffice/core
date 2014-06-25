@@ -41,7 +41,6 @@
 
 #include <limits>
 
-
 #define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
                                    ScGlobal::GetRscString(rid) ).Execute()
 
@@ -160,7 +159,6 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 }
 
-
 ScFilterDlg::~ScFilterDlg()
 {
     delete pOptionsMgr;
@@ -170,7 +168,6 @@ ScFilterDlg::~ScFilterDlg()
     pTimer->Stop();
     delete pTimer;
 }
-
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -382,7 +379,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 //  SFX_APPWINDOW->Disable(false);      //! general method in ScAnyRefDlg
 }
 
-
 bool ScFilterDlg::Close()
 {
     if (pViewData)
@@ -404,7 +400,6 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         pEdCopyArea->SetRefString( aRefStr );
     }
 }
-
 
 void ScFilterDlg::SetActive()
 {
@@ -609,7 +604,6 @@ void ScFilterDlg::ClearValueList( size_t nList )
     }
 }
 
-
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
@@ -661,14 +655,12 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     return pOutItem;
 }
 
-
 bool ScFilterDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }
 
 // Handler:
-
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {
@@ -733,7 +725,6 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
     return 0;
 }
-
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -989,7 +980,6 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
     //  Column headers:
@@ -1027,7 +1017,6 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 
     return 0;
 }
-
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -1112,7 +1101,6 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     }
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl)
 {

@@ -29,7 +29,6 @@
 #include "charthelper.hxx"
 #include "rangelst.hxx"
 
-
 class SdrModel;
 class ScDocShell;
 class INetBookmark;

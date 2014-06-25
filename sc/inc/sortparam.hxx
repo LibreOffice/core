@@ -62,7 +62,6 @@ struct SC_DLLPUBLIC ScSortParam
     OUString aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;
 
-
     ScSortParam();
     ScSortParam( const ScSortParam& r );
     /// SubTotals sort
@@ -78,7 +77,6 @@ struct SC_DLLPUBLIC ScSortParam
 
     inline sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
 };
-
 
 #endif // INCLUDED_SC_INC_SORTPARAM_HXX
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <boost/shared_ptr.hpp>
 #include <comphelper/string.hxx>
 
@@ -186,9 +185,7 @@ void ScHTMLStyles::insertProp(
     pProps->insert(PropsType::value_type(aProp, aValue));
 }
 
-
 // BASE class for HTML parser classes
-
 
 ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScEEParser( pEditEngine ),
@@ -202,8 +199,6 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
 ScHTMLParser::~ScHTMLParser()
 {
 }
-
-
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
@@ -233,7 +228,6 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
     MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
     MakeColNoRef( pColOffset, 0, 0, 0, 0 );
 }
-
 
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
@@ -266,7 +260,6 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
         delete pTables;
     }
 }
-
 
 sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
@@ -315,12 +308,10 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
     return nErr;
 }
 
-
 const ScHTMLTable* ScHTMLLayoutParser::GetGlobalTable() const
 {
     return 0;
 }
-
 
 void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
 {
@@ -336,7 +327,6 @@ void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
     pActEntry->aSel.nEndPara = pActEntry->aSel.nStartPara;
     pActEntry->aSel.nEndPos = pActEntry->aSel.nStartPos;
 }
-
 
 void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
 {
@@ -354,7 +344,6 @@ void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
     }
 }
 
-
 void ScHTMLLayoutParser::NextRow( ImportInfo* pInfo )
 {
     if ( bInCell )
@@ -365,7 +354,6 @@ void ScHTMLLayoutParser::NextRow( ImportInfo* pInfo )
     nColOffset = nColOffsetStart;
     bFirstRow = false;
 }
-
 
 bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         SCCOL* pCol, sal_uInt16 nOffsetTol )
@@ -392,7 +380,6 @@ bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffse
     return false;
 }
 
-
 void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
         sal_uInt16& nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
@@ -411,7 +398,6 @@ void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
     }
 }
 
-
 void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         sal_uInt16 nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
@@ -427,7 +413,6 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOff
             pOffset->insert( nOffset + nWidth );
     }
 }
-
 
 void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOldOffset,
             sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol )
@@ -466,7 +451,6 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
     }
 }
 
-
 void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
     if ( ValidCol(pE->nCol) )
@@ -501,7 +485,6 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
             xLockedList->Join( aRange );
     }
 }
-
 
 void ScHTMLLayoutParser::Adjust()
 {
@@ -654,7 +637,6 @@ void ScHTMLLayoutParser::Adjust()
     }
 }
 
-
 sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
 {
     if ( pE->nWidth )
@@ -668,7 +650,6 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
         return nOff2 - pE->nOffset;
     return 0;
 }
-
 
 void ScHTMLLayoutParser::SetWidths()
 {
@@ -820,7 +801,6 @@ void ScHTMLLayoutParser::SetWidths()
     }
 }
 
-
 void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
 {
     if ( pE->nCol == SCCOL_MAX )
@@ -848,7 +828,6 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     if ( nTableWidth < nColOffset - nColOffsetStart )
         nTableWidth = nColOffset - nColOffsetStart;
 }
-
 
 void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
 {
@@ -901,7 +880,6 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     NewActEntry( pActEntry ); // New free flying pActEntry
 }
 
-
 IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
 {
     switch ( pInfo->eState )
@@ -948,7 +926,6 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
     return 0;
 }
 
-
 // Greatest common divisor (Euclid)
 // Special case: 0 and something gives 1
 static SCROW lcl_GGT( SCROW a, SCROW b )
@@ -965,7 +942,6 @@ static SCROW lcl_GGT( SCROW a, SCROW b )
     return ((a != 0) ? a : b);
 }
 
-
 // Lowest common multiple: a * b / GCD(a,b)
 static SCROW lcl_KGV( SCROW a, SCROW b )
 {
@@ -974,7 +950,6 @@ static SCROW lcl_KGV( SCROW a, SCROW b )
     else
         return (b / lcl_GGT(a,b)) * a;
 }
-
 
 void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
 {
@@ -1069,7 +1044,6 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY) );
 }
 
-
 void ScHTMLLayoutParser::TableRowOn( ImportInfo* pInfo )
 {
     if ( nColCnt > nColCntStart )
@@ -1077,19 +1051,16 @@ void ScHTMLLayoutParser::TableRowOn( ImportInfo* pInfo )
     nColOffset = nColOffsetStart;
 }
 
-
 void ScHTMLLayoutParser::TableRowOff( ImportInfo* pInfo )
 {
     NextRow( pInfo );
 }
-
 
 void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 {
     if ( bInCell )
         CloseEntry( pInfo ); // Only if it really was one
 }
-
 
 void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 {
@@ -1201,7 +1172,6 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
     pLocalColOffset = new ScHTMLColOffset;
     MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
 }
-
 
 void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
 {
@@ -1362,7 +1332,6 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
     }
 }
 
-
 void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 {
     ScHTMLImage* pImage = new ScHTMLImage;
@@ -1457,7 +1426,6 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     }
 }
 
-
 void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 {
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
@@ -1476,7 +1444,6 @@ void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
         }
     }
 }
-
 
 sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
 {
@@ -1498,7 +1465,6 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
     }
 }
 
-
 void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 {
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
@@ -1516,7 +1482,6 @@ void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
     }
 }
 
-
 bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
 {
     ESelection& rSel = pActEntry->aSel;
@@ -1524,7 +1489,6 @@ bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
         rSel.nStartPara <= pInfo->aSelection.nEndPara &&
         pEdit->GetTextLen( rSel.nStartPara ) == 0;
 }
-
 
 void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 {
@@ -1579,7 +1543,6 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
         }
     }
 }
-
 
 void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 {
@@ -1751,9 +1714,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         nLastToken = pInfo->nToken;
 }
 
-
 // HTML DATA QUERY PARSER
-
 
 template< typename Type >
 inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )

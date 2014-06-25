@@ -43,7 +43,6 @@ using namespace ::com::sun::star::sheet::ReferenceFlags;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 sal_uInt16 lclReadFmlaSize( BiffInputStream& rStrm, BiffType eBiff, const sal_uInt16* pnFmlaSize )
@@ -1906,7 +1905,6 @@ private:
     bool                pushBiffExtName( sal_Int32 nRefId, sal_uInt16 nNameId );
     bool                pushBiffFunction( sal_uInt16 nFuncId );
     bool                pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nParamCount );
-
 
 private:
     typedef bool (BiffFormulaParserImpl::*ImportTokenFunc)( BiffInputStream& );

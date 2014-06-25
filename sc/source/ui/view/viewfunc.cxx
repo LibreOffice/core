@@ -88,7 +88,6 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
     }
 }
 
-
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
     bFormatValid( false )
@@ -660,9 +659,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // #i97726# always get text for "repeat" of undo action
         aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
-
         //      undo
-
 
         EditTextObject* pUndoData = NULL;
         ScUndoEnterData::ValuesType aOldValues;
@@ -681,9 +678,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             pUndoData = rData.Clone();
         }
 
-
         //      enter data
-
 
         if (bCommon)
             rDoc.ApplyPattern(nCol,nRow,nTab,*pCellAttrs);         //! undo
@@ -870,11 +865,9 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
     }
 }
 
-
 //  apply attribute - undo OK
 //
 //  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
-
 
 void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                                   const SfxItemSet* pOldSet,
@@ -1013,7 +1006,6 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
 
     // CellContentChanged is called in ApplySelectionPattern
 }
-
 
 //  patterns and borders
 
@@ -1312,7 +1304,6 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
 
     if ( !pStyleSheet) return;
 
-
     ScViewData& rViewData   = GetViewData();
     ScDocShell* pDocSh      = rViewData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
@@ -1399,11 +1390,9 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
     StartFormatArea();
 }
 
-
 void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-
 
     ScViewData& rViewData   = GetViewData();
     ScDocument* pDoc        = rViewData.GetDocument();
@@ -1430,7 +1419,6 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 {
     if ( !pStyleSheet) return;
-
 
     ScViewData& rViewData   = GetViewData();
     ScDocument* pDoc        = rViewData.GetDocument();
@@ -2161,7 +2149,6 @@ void ScViewFunc::SetWidthOrHeight(
         }
         rDoc.SetDrawPageSize(nTab);
     }
-
 
     if (!bOutline)
         DELETEZ(pUndoTab);

@@ -1445,7 +1445,6 @@ void ScColumn::MixData(
     CellStorageModified();
 }
 
-
 ScAttrIterator* ScColumn::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const
 {
     return new ScAttrIterator( pAttrArray, nStartRow, nEndRow );
@@ -1485,7 +1484,6 @@ void ScColumn::StartAllListeners()
     StartAllListenersHandler aFunc(pDocument);
     sc::ProcessFormula(maCells, aFunc);
 }
-
 
 void ScColumn::StartNeededListeners()
 {
@@ -2118,9 +2116,7 @@ public:
 
 }
 
-
 // GetDataEntries - Strings from continuous Section around nRow
-
 
 // DATENT_MAX      - max. number of entries in list for auto entry
 // DATENT_SEARCH   - max. number of cells that get transparent - new: only count Strings
@@ -2270,7 +2266,6 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 
     aFunc.commitCells(*this);
 }
-
 
 void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
 {
@@ -2527,7 +2522,6 @@ sal_uInt16 ScColumn::GetErrCode( SCROW nRow ) const
     return const_cast<ScFormulaCell*>(p)->GetErrCode();
 }
 
-
 bool ScColumn::HasStringData( SCROW nRow ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
@@ -2547,7 +2541,6 @@ bool ScColumn::HasStringData( SCROW nRow ) const
 
     return false;
 }
-
 
 bool ScColumn::HasValueData( SCROW nRow ) const
 {

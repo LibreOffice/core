@@ -103,7 +103,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScStyleFamilyObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::container::XNameContainer,
                             ::com::sun::star::container::XIndexAccess,
@@ -195,7 +194,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScStyleObj : public ::cppu::WeakImplHelper7<
                     ::com::sun::star::style::XStyle,

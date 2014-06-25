@@ -36,7 +36,6 @@ bool SubTotal::SafePlus(double& fVal1, double fVal2)
     return bOk;
 }
 
-
 bool SubTotal::SafeMult(double& fVal1, double fVal2)
 {
     bool bOk = true;
@@ -49,7 +48,6 @@ bool SubTotal::SafeMult(double& fVal1, double fVal2)
     }
     return bOk;
 }
-
 
 bool SubTotal::SafeDiv(double& fVal1, double fVal2)
 {

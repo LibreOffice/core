@@ -23,7 +23,6 @@
 
 class ScXMLImport;
 
-
 class ScXMLLabelRangesContext : public SvXMLImportContext
 {
 private:
@@ -46,7 +45,6 @@ public:
                                     ) SAL_OVERRIDE;
     virtual void                EndElement() SAL_OVERRIDE;
 };
-
 
 class ScXMLLabelRangeContext : public SvXMLImportContext
 {

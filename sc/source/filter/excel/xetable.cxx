@@ -37,12 +37,9 @@
 
 using namespace ::oox;
 
-
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
-
 // Helper records for cell records
-
 
 XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult ) :
     XclExpRecord( EXC_ID3_STRING ),
@@ -522,9 +519,7 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
     return xRec;
 }
 
-
 // Cell records
-
 
 XclExpCellBase::XclExpCellBase(
         sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
@@ -1329,9 +1324,7 @@ void XclExpRkCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
     rStrm << maRkValues[ nRelCol ];
 }
 
-
 // Rows and Columns
-
 
 XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) :
         mpScOLArray( 0 ),
@@ -2163,7 +2156,6 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
     RowMap::iterator itrBlkStart = maRowMap.begin(), itrBlkEnd = maRowMap.begin();
     sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : itrBeg->second->GetXclRow();
 
-
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         // find end of row block
@@ -2205,7 +2197,6 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_sheetData );
 }
 
-
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
     RowMap::iterator itr = maRowMap.begin();
@@ -2230,9 +2221,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
 
 }
 
-
 // Cell Table
-
 
 XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

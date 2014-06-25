@@ -29,7 +29,6 @@
 
 class ScDocShell;
 
-
 class ScDocDefaultsObj : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::beans::XPropertySet,
                             ::com::sun::star::beans::XPropertyState,
@@ -116,7 +115,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

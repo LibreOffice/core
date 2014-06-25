@@ -23,13 +23,11 @@
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>
 
-
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 
 #include "uiitems.hxx"
-
 
 class ScDocumentPool;
 

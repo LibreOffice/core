@@ -18,7 +18,6 @@
 #include <formula/vectortoken.hxx>
 #include <sstream>
 
-
 using namespace formula;
 
 namespace sc { namespace opencl {

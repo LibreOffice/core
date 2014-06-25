@@ -410,7 +410,6 @@ bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& 
     return true;
 }
 
-
 #if DEBUG_PIVOT_TABLE
 using std::cout;
 using std::endl;

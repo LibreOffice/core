@@ -53,8 +53,6 @@ void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
     mnTabEnd = nEnd;
 }
 
-
-
 void CopyFromClipContext::setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     mnDestCol1 = nCol1;
@@ -73,28 +71,20 @@ CopyFromClipContext::Range CopyFromClipContext::getDestRange() const
     return aRet;
 }
 
-
-
-
 void CopyFromClipContext::setDeleteFlag( sal_uInt16 nFlag )
 {
     mnDeleteFlag = nFlag;
 }
-
-
 
 void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
 {
     mpCondFormatList = pCondFormatList;
 }
 
-
-
 void CopyFromClipContext::setSingleCellPattern( const ScPatternAttr* pAttr )
 {
     mpSinglePattern = pAttr;
 }
-
 
 void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
 {
@@ -105,10 +95,6 @@ void CopyFromClipContext::setTableProtected( bool b )
 {
     mbTableProtected = b;
 }
-
-
-
-
 
 bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 {
@@ -122,8 +108,6 @@ CopyToClipContext::CopyToClipContext(
     ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
 
 CopyToClipContext::~CopyToClipContext() {}
-
-
 
 CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
 CopyToDocContext::~CopyToDocContext() {}

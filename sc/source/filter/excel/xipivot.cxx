@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xipivot.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
@@ -62,9 +61,7 @@ using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::std::vector;
 
-
 // Pivot cache
-
 
 XclImpPCItem::XclImpPCItem( XclImpStream& rStrm )
 {
@@ -876,9 +873,7 @@ bool XclImpPivotCache::IsValid() const
     return maSrcRange.IsValid();
 }
 
-
 // Pivot table
-
 
 XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
     mpCacheField( pCacheField )

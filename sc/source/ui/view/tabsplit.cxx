@@ -31,7 +31,6 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     EnableRTL( false );
 }
 
-
 ScTabSplitter::~ScTabSplitter()
 {
 }
@@ -71,7 +70,6 @@ void ScTabSplitter::Splitting( Point& rSplitPos )
     else
         rSplitPos.Y() = aNew.Y();
 }
-
 
 void ScTabSplitter::SetFixed(bool bSet)
 {

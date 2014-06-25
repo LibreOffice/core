@@ -170,7 +170,6 @@ public:
     void                Show( sal_uInt16 nFlags ) SAL_OVERRIDE { if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_REFFACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

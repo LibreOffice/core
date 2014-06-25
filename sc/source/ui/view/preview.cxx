@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <svtools/colorcfg.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/sizeitem.hxx>
@@ -84,7 +83,6 @@ static long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, std::vector<long>
     return nDisplayStart;
 }
 
-
 ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh ) :
     Window( pParent ),
     nPageNo( 0 ),
@@ -143,7 +141,6 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
         nRight[i] = 0;                  // initialized with actual positions when markers are drawn
 }
 
-
 ScPreview::~ScPreview()
 {
     delete pDrawView;
@@ -184,7 +181,6 @@ void ScPreview::UpdateDrawView()        // nTab must be right
     }
 }
 
-
 void ScPreview::TestLastPage()
 {
     if (nPageNo >= nTotalPages)
@@ -218,7 +214,6 @@ void ScPreview::TestLastPage()
         }
     }
 }
-
 
 void ScPreview::CalcPages()
 {
@@ -298,7 +293,6 @@ void ScPreview::CalcPages()
     DoInvalidate();
 }
 
-
 void ScPreview::RecalcPages()                   // only nPageNo is changed
 {
     if (!bValid)
@@ -340,7 +334,6 @@ void ScPreview::RecalcPages()                   // only nPageNo is changed
 
     DoInvalidate();
 }
-
 
 void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 {
@@ -653,7 +646,6 @@ void ScPreview::Command( const CommandEvent& rCEvt )
         Window::Command( rCEvt );
 }
 
-
 void ScPreview::KeyInput( const KeyEvent& rKEvt )
 {
     //  The + and - keys can't be configured as accelerator entries, so they must be handled directly
@@ -682,7 +674,6 @@ void ScPreview::KeyInput( const KeyEvent& rKEvt )
         Window::KeyInput(rKEvt);
 }
 
-
 const ScPreviewLocationData& ScPreview::GetLocationData()
 {
     if ( !pLocationData )
@@ -699,7 +690,6 @@ const ScPreviewLocationData& ScPreview::GetLocationData()
     return *pLocationData;
 }
 
-
 void ScPreview::DataChanged(bool bNewTime)
 {
     if (bNewTime)
@@ -712,7 +702,6 @@ void ScPreview::DataChanged(bool bNewTime)
     InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
-
 
 OUString ScPreview::GetPosString()
 {
@@ -730,7 +719,6 @@ OUString ScPreview::GetPosString()
 
     return aString;
 }
-
 
 void ScPreview::SetZoom(sal_uInt16 nNewZoom)
 {
@@ -760,7 +748,6 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
     }
 }
 
-
 void ScPreview::SetPageNo( long nPage )
 {
     nPageNo = nPage;
@@ -769,7 +756,6 @@ void ScPreview::SetPageNo( long nPage )
     InvalidateLocationData( SC_HINT_DATACHANGED );
     Invalidate();
 }
-
 
 long ScPreview::GetFirstPage(SCTAB nTabP)
 {
@@ -797,7 +783,6 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
     return nPage;
 }
 
-
 static Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
 {
     OUString aName = pDoc->GetPageStyle( nTab );
@@ -814,7 +799,6 @@ static Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
         return Size();
     }
 }
-
 
 sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
 {
@@ -850,7 +834,6 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
         return nZoom;
 }
 
-
 void ScPreview::SetXOffset( long nX )
 {
     if ( aOffset.X() == nX )
@@ -877,7 +860,6 @@ void ScPreview::SetXOffset( long nX )
     Paint(Rectangle());
 }
 
-
 void ScPreview::SetYOffset( long nY )
 {
     if ( aOffset.Y() == nY )
@@ -903,7 +885,6 @@ void ScPreview::SetYOffset( long nY )
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
     Paint(Rectangle());
 }
-
 
 void ScPreview::DoInvalidate()
 {
@@ -1075,7 +1056,6 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
         if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
         {
             SetPointer( Pointer( POINTER_ARROW ) );
-
 
             ScDocument& rDoc = pDocShell->GetDocument();
             OUString aOldName = rDoc.GetPageStyle( nTab );

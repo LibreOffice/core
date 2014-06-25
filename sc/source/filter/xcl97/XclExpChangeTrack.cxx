@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #include <stdio.h>
 #include <sot/storage.hxx>
 #include "XclExpChangeTrack.hxx"
@@ -54,7 +52,6 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
             rDateTime.GetNanoSec() );
     return OString( sBuf );
 }
-
 
 // local functions
 

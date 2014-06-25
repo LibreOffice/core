@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 
-
 #include "address.hxx"
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -74,7 +73,6 @@ private:
     bool            bRenameTable:1;
     bool            mbEverEdited:1;
 
-
     void    Init            ();
     void    InitBtnRename   ();
     void    InitDocListBox  ();
@@ -85,6 +83,5 @@ private:
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

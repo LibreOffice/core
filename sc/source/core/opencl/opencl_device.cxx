@@ -24,7 +24,6 @@
 
 #include "opencl_device.hxx"
 
-
 #define INPUTSIZE  15360
 #define OUTPUTSIZE 15360
 

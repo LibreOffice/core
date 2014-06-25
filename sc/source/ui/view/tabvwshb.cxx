@@ -492,7 +492,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     }
 }
 
-
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);

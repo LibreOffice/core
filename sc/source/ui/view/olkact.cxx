@@ -45,6 +45,4 @@ void DeActivateOlk( ScViewData* /* pViewData */ )
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

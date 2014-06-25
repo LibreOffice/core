@@ -11,7 +11,6 @@
 
 #include <algorithm>
 
-
 class ThreadPool::ThreadWorker : public salhelper::Thread
 {
     ThreadPool    *mpPool;
@@ -57,7 +56,6 @@ public:
 
         return pRet;
     }
-
 
     // Why a condition per worker thread - you may ask.
     //

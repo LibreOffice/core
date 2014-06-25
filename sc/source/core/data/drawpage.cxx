@@ -41,5 +41,4 @@ ScDrawPage::~ScDrawPage()
     return static_cast<cppu::OWeakObject*>( new ScPageObj( this ) );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

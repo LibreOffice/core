@@ -1500,7 +1500,6 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
     return mbPossibleErrorCell || ( mbCheckWithCompilerForError && GetScImport().IsFormulaErrorConstant(*maStringValue) );
 }
 
-
 void ScXMLTableRowCellContext::EndElement()
 {
     HasSpecialCaseFormulaText();

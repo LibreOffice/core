@@ -47,7 +47,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
 // reference helpers ==========================================================
 
 BinSingleRef2d::BinSingleRef2d() :
@@ -920,7 +919,6 @@ static const FunctionData saFuncTableOOoLO[] =
     // Other functions.
     { "ORG.OPENOFFICE.CONVERT",     "ORG.OPENOFFICE.CONVERT",   NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
-
 
 const sal_Unicode API_TOKEN_OPEN            = '(';
 const sal_Unicode API_TOKEN_CLOSE           = ')';

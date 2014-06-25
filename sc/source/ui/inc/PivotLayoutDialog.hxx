@@ -131,7 +131,6 @@ public:
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
 };
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 #endif

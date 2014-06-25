@@ -34,7 +34,6 @@
 class ScTokenArray;
 class NameBuffer;
 
-
 class StringHashEntry
 {
 private:
@@ -52,17 +51,14 @@ public:
     inline bool     operator ==( const StringHashEntry& ) const;
 };
 
-
 inline StringHashEntry::StringHashEntry( void )
 {
 }
-
 
 inline StringHashEntry::StringHashEntry( const OUString& r ) : aString( r )
 {
     nHash = MakeHashCode( r );
 }
-
 
 inline void StringHashEntry::operator =( const sal_Char* p )
 {
@@ -70,20 +66,17 @@ inline void StringHashEntry::operator =( const sal_Char* p )
     nHash = MakeHashCode( aString );
 }
 
-
 inline void StringHashEntry::operator =( const OUString& r )
 {
     aString = r;
     nHash = MakeHashCode( r );
 }
 
-
 inline void StringHashEntry::operator =( const StringHashEntry& r )
 {
     nHash = r.nHash;
     aString = r.aString;
 }
-
 
 inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 {
@@ -113,12 +106,10 @@ inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
     nBase = 0;
 }
 
-
 inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 {
     nBase = nNewBase;
 }
-
 
 inline const OUString* NameBuffer::Get ( sal_uInt16 n ) const
 {
@@ -128,7 +119,6 @@ inline const OUString* NameBuffer::Get ( sal_uInt16 n ) const
     return &(maHashes[n]->aString);
 }
 
-
 inline sal_uInt16 NameBuffer::GetLastIndex () const
 {
     int size = maHashes.size() + nBase;
@@ -137,7 +127,6 @@ inline sal_uInt16 NameBuffer::GetLastIndex () const
 
     return static_cast<sal_uInt16>( size );
 }
-
 
 inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
 {
@@ -196,7 +185,6 @@ public:
     bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
 };
 
-
 inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRange )
 {
     ScComplexRefData        aCRD;
@@ -212,7 +200,6 @@ inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRa
 
     Add( rName, aCRD );
 }
-
 
 class ExtSheetBuffer : public ExcRoot
 {
@@ -259,11 +246,9 @@ public:
     void            Reset( void );
 };
 
-
 inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 {
 }
-
 
 struct ExtName
 {
@@ -276,7 +261,6 @@ struct ExtName
     bool            IsDDE( void ) const;
     bool            IsOLE( void ) const;
 };
-
 
 class ExtNameBuff : protected XclImpRoot
 {
@@ -298,8 +282,6 @@ private:
     ExtNameMap      maExtNames;
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

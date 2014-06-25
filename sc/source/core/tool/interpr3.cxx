@@ -249,9 +249,7 @@ double ScInterpreter::gauss(double x)
         return nVal;
 }
 
-
 //  #i26836# new gaussinv implementation by Martin Eitzenberger <m.eitzenberger@unix.net>
-
 
 double ScInterpreter::gaussinv(double x)
 {

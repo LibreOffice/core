@@ -55,16 +55,13 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-
 using namespace formula;
 using namespace com::sun::star;
 
 ScDocument* ScFormulaDlg::pDoc = NULL;
 ScAddress ScFormulaDlg::aCursorPos;
 
-
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
-
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
@@ -292,17 +289,14 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
     }
 
-
     return pHdl;
 }
-
 
 bool ScFormulaDlg::Close()
 {
     DoEnter(false);
     return true;
 }
-
 
 //                          Funktionen fuer rechte Seite
 

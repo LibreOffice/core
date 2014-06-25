@@ -28,7 +28,6 @@ namespace xls {
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler2;
 
-
 WorkbookFragmentBase::WorkbookFragmentBase(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
@@ -42,7 +41,6 @@ WorksheetFragmentBase::WorksheetFragmentBase(
     WorksheetHelper( rHelper )
 {
 }
-
 
 BiffContextHandler::~BiffContextHandler()
 {

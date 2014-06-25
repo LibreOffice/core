@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-
 struct ScUnoListenerEntry
 {
     ::com::sun::star::uno::Reference<
@@ -47,7 +46,6 @@ struct ScUnoListenerEntry
         aEvent( rE )
     {}
 };
-
 
 /** ScUnoListenerCalls stores notifications to XModifyListener that can't be processed
     during BroadcastUno and calls them together at the end.

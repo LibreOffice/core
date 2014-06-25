@@ -100,7 +100,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 {
     ScModule*           pScMod      = SC_MOD();
@@ -139,7 +138,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
     {
 
         //  insert / delete cells / rows / columns
-
 
         case FID_INS_ROW:
             pTabViewShell->InsertCells(INS_INSROWS);
@@ -313,9 +311,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-
         //  delete contents from cells
-
 
         case SID_DELETE_CONTENTS:
             pTabViewShell->DeleteContents( IDF_CONTENTS );
@@ -408,9 +404,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-
         //  fill...
-
 
         case FID_FILL_TO_BOTTOM:
             pTabViewShell->FillSimple( FILL_TO_BOTTOM );
@@ -642,7 +636,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
 
-
                     OUString aStartStr;
 
                     //  suggest default Startvalue only, when just 1 row or column
@@ -653,7 +646,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         pDoc->GetInputString( nStartCol, nStartRow, nStartTab, aStartStr);
                         pDoc->GetValue( nStartCol, nStartRow, nStartTab, fStartVal );
-
 
                         if(eFillDir==FILL_TO_BOTTOM && nStartRow < nEndRow )
                         {
@@ -1017,7 +1009,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
 
-
         case SID_OUTLINE_HIDE:
             if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                     GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
@@ -1220,7 +1211,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
             }
             break;
-
 
         //  Clipboard
 
@@ -1601,9 +1591,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
-
         //  other
-
 
         case FID_INS_ROWBRK:
             pTabViewShell->InsertPageBreak( false );
@@ -2024,7 +2012,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 pScMod->SetRefDialog( nId, false );
 
-
             }
             break;
 
@@ -2061,7 +2048,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
             }
             break;
-
 
         case SID_TABOP:
             if (pReqArgs)
@@ -2432,8 +2418,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
             }
             break;
-
-
 
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");

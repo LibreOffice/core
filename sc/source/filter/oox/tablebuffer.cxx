@@ -34,7 +34,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
-
 TableModel::TableModel() :
     mnId( -1 ),
     mnType( XML_worksheet ),

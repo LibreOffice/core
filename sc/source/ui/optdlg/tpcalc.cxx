@@ -132,7 +132,6 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     CheckClickHdl(m_pBtnIterate);
 }
 
-
 bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
@@ -183,7 +182,6 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
     return nReturn;
 }
-
 
 // Handler:
 
@@ -238,6 +236,5 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

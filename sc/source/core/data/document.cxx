@@ -300,7 +300,6 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
         maTabs[nTab]->SetAnonymousDBData(pDBData);
 }
 
-
 bool ScDocument::ValidTabName( const OUString& rName )
 {
     if (rName.isEmpty())
@@ -340,7 +339,6 @@ bool ScDocument::ValidTabName( const OUString& rName )
     return true;
 }
 
-
 bool ScDocument::ValidNewTabName( const OUString& rName ) const
 {
     bool bValid = ValidTabName(rName);
@@ -354,7 +352,6 @@ bool ScDocument::ValidNewTabName( const OUString& rName ) const
         }
     return bValid;
 }
-
 
 void ScDocument::CreateValidTabName(OUString& rName) const
 {
@@ -564,7 +561,6 @@ bool ScDocument::InsertTab(
     return bValid;
 }
 
-
 bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
             bool bExternalDocument, bool bNamesValid )
 {
@@ -654,7 +650,6 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
     return bValid;
 }
 
-
 bool ScDocument::DeleteTab( SCTAB nTab )
 {
     bool bValid = false;
@@ -739,7 +734,6 @@ bool ScDocument::DeleteTab( SCTAB nTab )
     }
     return bValid;
 }
-
 
 bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
@@ -831,7 +825,6 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
     return bValid;
 }
 
-
 bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRef */,
         bool bExternalDocument )
 {
@@ -872,14 +865,12 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRe
     return bValid;
 }
 
-
 void ScDocument::SetVisible( SCTAB nTab, bool bVisible )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()))
         if (maTabs[nTab])
             maTabs[nTab]->SetVisible(bVisible);
 }
-
 
 bool ScDocument::IsVisible( SCTAB nTab ) const
 {
@@ -890,7 +881,6 @@ bool ScDocument::IsVisible( SCTAB nTab ) const
     return false;
 }
 
-
 bool ScDocument::IsStreamValid( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab] )
@@ -899,19 +889,16 @@ bool ScDocument::IsStreamValid( SCTAB nTab ) const
     return false;
 }
 
-
 void ScDocument::SetStreamValid( SCTAB nTab, bool bSet, bool bIgnoreLock )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetStreamValid( bSet, bIgnoreLock );
 }
 
-
 void ScDocument::LockStreamValid( bool bLock )
 {
     mbStreamValidLocked = bLock;
 }
-
 
 bool ScDocument::IsPendingRowHeights( SCTAB nTab ) const
 {
@@ -921,13 +908,11 @@ bool ScDocument::IsPendingRowHeights( SCTAB nTab ) const
     return false;
 }
 
-
 void ScDocument::SetPendingRowHeights( SCTAB nTab, bool bSet )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetPendingRowHeights( bSet );
 }
-
 
 void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
 {
@@ -973,7 +958,6 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
     }
 }
 
-
 bool ScDocument::IsLayoutRTL( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab] )
@@ -982,14 +966,12 @@ bool ScDocument::IsLayoutRTL( SCTAB nTab ) const
     return false;
 }
 
-
 bool ScDocument::IsNegativePage( SCTAB nTab ) const
 {
     //  Negative page area is always used for RTL layout.
     //  The separate method is used to find all RTL handling of drawing objects.
     return IsLayoutRTL( nTab );
 }
-
 
 /* ----------------------------------------------------------------------------
     used search area:
@@ -999,7 +981,6 @@ bool ScDocument::IsNegativePage( SCTAB nTab ) const
     GetPrintArea - intended for character objects,
                     sweeps attributes all the way to bottom / right
 ---------------------------------------------------------------------------- */
-
 
 bool ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
 {
@@ -1011,7 +992,6 @@ bool ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
     rEndRow = 0;
     return false;
 }
-
 
 bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
 {
@@ -1084,7 +1064,6 @@ void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
         maTabs[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
-
 void ScDocument::LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow )
 {
@@ -1092,7 +1071,6 @@ void ScDocument::LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
         if (maTabs[nTab])
             maTabs[nTab]->LimitChartArea( rStartCol, rStartRow, rEndCol, rEndRow );
 }
-
 
 void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
 {
@@ -1126,7 +1104,6 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     }
     rRangeList = aNew;
 }
-
 
 static void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )
 {
@@ -1163,7 +1140,6 @@ static bool lcl_GetNextTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, con
     }
     return false;
 }
-
 
 bool ScDocument::CanInsertRow( const ScRange& rRange ) const
 {
@@ -1310,7 +1286,6 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     return bRet;
 }
 
-
 bool ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertRow( rRange.aStart.Col(), rRange.aStart.Tab(),
@@ -1318,7 +1293,6 @@ bool ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
                       rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1),
                       pRefUndoDoc );
 }
-
 
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
@@ -1402,7 +1376,6 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-
 void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
 {
     DeleteRow( rRange.aStart.Col(), rRange.aStart.Tab(),
@@ -1410,7 +1383,6 @@ void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, bool
                rRange.aStart.Row(), static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1),
                pRefUndoDoc, pUndoOutline );
 }
-
 
 bool ScDocument::CanInsertCol( const ScRange& rRange ) const
 {
@@ -1511,7 +1483,6 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
     return bRet;
 }
 
-
 bool ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertCol( rRange.aStart.Row(), rRange.aStart.Tab(),
@@ -1519,7 +1490,6 @@ bool ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
                       rRange.aStart.Col(), static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1),
                       pRefUndoDoc );
 }
-
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
                                 SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
@@ -1601,7 +1571,6 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     pChartListenerCollection->UpdateDirtyCharts();
 }
 
-
 void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
 {
     DeleteCol( rRange.aStart.Row(), rRange.aStart.Tab(),
@@ -1610,10 +1579,8 @@ void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool
                pRefUndoDoc, pUndoOutline );
 }
 
-
 //  fuer Area-Links: Zellen einuegen/loeschen, wenn sich der Bereich veraendert
 //  (ohne Paint)
-
 
 static void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
                             ScRange& rColRange, bool& rInsCol, bool& rDelCol,
@@ -1662,7 +1629,6 @@ static void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
         rDelRow = true;
     }
 }
-
 
 bool ScDocument::HasPartOfMerged( const ScRange& rRange )
 {
@@ -1763,7 +1729,6 @@ bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
     return bOk;
 }
 
-
 void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear )
 {
     if (bClear)
@@ -1796,7 +1761,6 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear
     }
 }
 
-
 void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2,
                             const ScMarkData& rMark, sal_uInt16 nDelFlag)
@@ -1811,7 +1775,6 @@ void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
                 maTabs[i]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag);
     SetAutoCalc( bOldAutoCalc );
 }
-
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
@@ -1828,7 +1791,6 @@ void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
     }
 }
 
-
 void ScDocument::DeleteAreaTab( const ScRange& rRange, sal_uInt16 nDelFlag )
 {
     for ( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); nTab++ )
@@ -1836,7 +1798,6 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, sal_uInt16 nDelFlag )
                        rRange.aEnd.Col(),   rRange.aEnd.Row(),
                        nTab, nDelFlag );
 }
-
 
 void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo, bool bRowInfo )
@@ -1871,7 +1832,6 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
     }
 }
 
-
 void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo, bool bRowInfo )
 {
@@ -1900,7 +1860,6 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     }
 }
 
-
 void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowInfo )
 {
     if (bIsUndo)
@@ -1923,7 +1882,6 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
     }
 }
 
-
 void ScDocument::SetCutMode( bool bVal )
 {
     if (bIsClip)
@@ -1933,7 +1891,6 @@ void ScDocument::SetCutMode( bool bVal )
         OSL_FAIL("SetCutMode without bIsClip");
     }
 }
-
 
 bool ScDocument::IsCutMode()
 {
@@ -1945,7 +1902,6 @@ bool ScDocument::IsCutMode()
         return false;
     }
 }
-
 
 void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
@@ -1973,7 +1929,6 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         pDestDoc->SetAutoCalc( bOldAutoCalc );
     }
 }
-
 
 void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
@@ -2005,7 +1960,6 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     }
 }
 
-
 void ScDocument::CopyToDocument(const ScRange& rRange,
                             sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags)
@@ -2031,7 +1985,6 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
     }
     pDestDoc->SetAutoCalc( bOldAutoCalc );
 }
-
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
                             sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
@@ -2230,7 +2183,6 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         pClipDoc->GetClipParam().mbCutMode = false;
     }
 }
-
 
 void ScDocument::TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, bool bAsLink )
 {
@@ -2456,7 +2408,6 @@ bool ScDocument::IsClipboardSource() const
             xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
 
-
 void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, sal_uInt16 nInsFlag )
@@ -2471,7 +2422,6 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                 maTabs[*itr]->StartListeningInArea(aCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
-
 
 void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
@@ -2581,7 +2531,6 @@ void ScDocument::CopyBlockFromClip(
     }
 }
 
-
 void ScDocument::CopyNonFilteredFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow )
@@ -2628,7 +2577,6 @@ void ScDocument::CopyNonFilteredFromClip(
     }
     rClipStartRow = nSourceRow;
 }
-
 
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                 sal_uInt16 nInsFlag,
@@ -2929,7 +2877,6 @@ void ScDocument::SetClipArea( const ScRange& rArea, bool bCut )
     }
 }
 
-
 void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered)
 {
     if (!bIsClip)
@@ -2982,7 +2929,6 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
     }
 }
 
-
 void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
 {
     if (bIsClip)
@@ -2999,7 +2945,6 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
         OSL_FAIL("GetClipStart: No Clip");
     }
 }
-
 
 bool ScDocument::HasClipFilteredRows()
 {
@@ -3022,7 +2967,6 @@ bool ScDocument::HasClipFilteredRows()
     return false;
 }
 
-
 void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool bSkipEmpty,
                                     ScDocument* pSrcDoc )
 {
@@ -3042,7 +2986,6 @@ void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool 
             nFunction, bSkipEmpty, pSrcTab);
     }
 }
-
 
 void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                                 sal_uInt16 nFlags, sal_uInt16 nFunction,
@@ -3107,7 +3050,6 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
     }
 }
 
-
 void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                                 sal_uInt16 nFlags, sal_uInt16 nFunction,
                                 bool bSkipEmpty, bool bAsLink )
@@ -3169,7 +3111,6 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         OSL_FAIL("wrong table");
     }
 }
-
 
 bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                             ScSetStringParam* pParam )
@@ -3376,7 +3317,6 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
     return nErr;
 }
 
-
 void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const
 {
     if (TableExists(nTab))
@@ -3486,7 +3426,6 @@ void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
     }
 }
 
-
 void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3494,7 +3433,6 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rForm
     else
         rFormula = OUString();
 }
-
 
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const
 {
@@ -3520,7 +3458,6 @@ CellType ScDocument::GetCellType( const ScAddress& rPos ) const
     return CELLTYPE_NONE;
 }
 
-
 void ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab,
         CellType& rCellType ) const
 {
@@ -3537,7 +3474,6 @@ bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     else
         return false;
 }
-
 
 bool ScDocument::HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
@@ -3570,7 +3506,6 @@ bool ScDocument::HasStringCells( const ScRange& rRange ) const
     return false;
 }
 
-
 bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
@@ -3582,7 +3517,6 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     }
     return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
 }
-
 
 void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
@@ -3605,7 +3539,6 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     SetAutoCalc( bOldAutoCalc );
 }
 
-
 void ScDocument::SetDirty( const ScRange& rRange )
 {
     bool bOldAutoCalc = GetAutoCalc();
@@ -3618,7 +3551,6 @@ void ScDocument::SetDirty( const ScRange& rRange )
     }
     SetAutoCalc( bOldAutoCalc );
 }
-
 
 void ScDocument::SetTableOpDirty( const ScRange& rRange )
 {
@@ -3654,7 +3586,6 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     mpFormulaGroupCxt.reset();
 }
 
-
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
     if ( !aTableOpList.empty() )
@@ -3675,7 +3606,6 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
     }
 }
 
-
 void ScDocument::CalcAll()
 {
     ClearFormulaContext();
@@ -3691,7 +3621,6 @@ void ScDocument::CalcAll()
     ClearFormulaTree();
 }
 
-
 void ScDocument::CompileAll()
 {
     sc::CompileFormulaContext aCxt(this);
@@ -3703,7 +3632,6 @@ void ScDocument::CompileAll()
     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
     SetAllFormulasDirty(aFormulaDirtyCxt);
 }
-
 
 void ScDocument::CompileXML()
 {
@@ -3787,7 +3715,6 @@ void ScDocument::CalcAfterLoad()
     }
 }
 
-
 sal_uInt16 ScDocument::GetErrCode( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
@@ -3795,7 +3722,6 @@ sal_uInt16 ScDocument::GetErrCode( const ScAddress& rPos ) const
         return maTabs[nTab]->GetErrCode( rPos );
     return 0;
 }
-
 
 void ScDocument::ResetChanged( const ScRange& rRange )
 {
@@ -3806,7 +3732,6 @@ void ScDocument::ResetChanged( const ScRange& rRange )
         if (maTabs[nTab])
             maTabs[nTab]->ResetChanged(rRange);
 }
-
 
 //  Spaltenbreiten / Zeilenhoehen   --------------------------------------
 
@@ -3828,7 +3753,6 @@ void ScDocument::SetRowHeight( SCROW nRow, SCTAB nTab, sal_uInt16 nNewHeight )
         maTabs[nTab]->SetRowHeight( nRow, nNewHeight );
 }
 
-
 void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nNewHeight )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3848,7 +3772,6 @@ void ScDocument::SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bo
         maTabs[nTab]->SetManualHeight( nStartRow, nEndRow, bManual );
 }
 
-
 sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3856,7 +3779,6 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     OSL_FAIL("wrong table number");
     return 0;
 }
-
 
 sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 {
@@ -3866,7 +3788,6 @@ sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
     return 0;
 }
 
-
 sal_uInt16 ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3874,7 +3795,6 @@ sal_uInt16 ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
     OSL_FAIL("Wrong table number");
     return 0;
 }
-
 
 sal_uInt16 ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 {
@@ -3884,7 +3804,6 @@ sal_uInt16 ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-
 sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3893,7 +3812,6 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero 
     return 0;
 }
 
-
 sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3901,7 +3819,6 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, S
     OSL_FAIL("Wrong sheet number");
     return 0;
 }
-
 
 sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
@@ -3950,7 +3867,6 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-
 sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3959,7 +3875,6 @@ sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-
 sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3967,7 +3882,6 @@ sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero )
     OSL_FAIL("wrong table number");
     return 0;
 }
-
 
 sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                        double nPPTX, double nPPTY,
@@ -3982,7 +3896,6 @@ sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice*
     return 0;
 }
 
-
 long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
@@ -3996,7 +3909,6 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     return 0;
 }
 
-
 bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
     ScTable* pTab = FetchTable(nTab);
@@ -4005,7 +3917,6 @@ bool ScDocument::SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow, 
 
     return pTab->SetOptimalHeight(rCxt, nStartRow, nEndRow);
 }
-
 
 void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark )
 {
@@ -4030,13 +3941,11 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
 
 //  Spalten-/Zeilen-Flags   ----------------------------------------------
 
-
 void ScDocument::ShowCol(SCCOL nCol, SCTAB nTab, bool bShow)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->ShowCol( nCol, bShow );
 }
-
 
 void ScDocument::ShowRow(SCROW nRow, SCTAB nTab, bool bShow)
 {
@@ -4044,13 +3953,11 @@ void ScDocument::ShowRow(SCROW nRow, SCTAB nTab, bool bShow)
         maTabs[nTab]->ShowRow( nRow, bShow );
 }
 
-
 void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, bool bShow)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->ShowRows( nRow1, nRow2, bShow );
 }
-
 
 void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, sal_uInt8 nNewFlags )
 {
@@ -4058,13 +3965,11 @@ void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, sal_uInt8 nNewFlags )
         maTabs[nTab]->SetRowFlags( nRow, nNewFlags );
 }
 
-
 void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt8 nNewFlags )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetRowFlags( nStartRow, nEndRow, nNewFlags );
 }
-
 
 sal_uInt8 ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
@@ -4269,7 +4174,6 @@ void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool
     maTabs[nTab]->SetRowFiltered(nStartRow, nEndRow, bFiltered);
 }
 
-
 SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
@@ -4319,7 +4223,6 @@ SCROW ScDocument::GetLastFlaggedRow( SCTAB nTab ) const
     return 0;
 }
 
-
 SCCOL ScDocument::GetLastChangedCol( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -4333,7 +4236,6 @@ SCROW ScDocument::GetLastChangedRow( SCTAB nTab ) const
         return maTabs[nTab]->GetLastChangedRow();
     return 0;
 }
-
 
 SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 {
@@ -4454,16 +4356,13 @@ void ScDocument::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SC
         maTabs[nTab]->StripHidden( rX1, rY1, rX2, rY2 );
 }
 
-
 void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab )
 {
     if ( ValidTab(nTab) && maTabs[nTab] )
         maTabs[nTab]->ExtendHidden( rX1, rY1, rX2, rY2 );
 }
 
-
 //  Attribute   ----------------------------------------------------------
-
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
@@ -4507,21 +4406,17 @@ const ScPatternAttr* ScDocument::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow
     return NULL;
 }
 
-
-
 void ScDocument::ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, const SfxPoolItem& rAttr )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->ApplyAttr( nCol, nRow, rAttr );
 }
 
-
 void ScDocument::ApplyPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->ApplyPattern( nCol, nRow, rAttr );
 }
-
 
 void ScDocument::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow,
@@ -4535,7 +4430,6 @@ void ScDocument::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
         if (maTabs[*itr])
             maTabs[*itr]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray );
 }
-
 
 void ScDocument::ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, const ScPatternAttr& rAttr )
@@ -4585,14 +4479,12 @@ void ScDocument::RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sa
     maTabs[nTab]->RemoveCondFormatData(rRange, nIndex);
 }
 
-
 void ScDocument::ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScStyleSheet& rStyle)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
             maTabs[nTab]->ApplyStyle( nCol, nRow, rStyle );
 }
-
 
 void ScDocument::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow,
@@ -4606,7 +4498,6 @@ void ScDocument::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,
             maTabs[*itr]->ApplyStyleArea( nStartCol, nStartRow, nEndCol, nEndRow, rStyle );
 }
 
-
 void ScDocument::ApplyStyleAreaTab( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, const ScStyleSheet& rStyle)
 {
@@ -4614,7 +4505,6 @@ void ScDocument::ApplyStyleAreaTab( SCCOL nStartCol, SCROW nStartRow,
         if (maTabs[nTab])
             maTabs[nTab]->ApplyStyleArea( nStartCol, nStartRow, nEndCol, nEndRow, rStyle );
 }
-
 
 void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
 {
@@ -4636,7 +4526,6 @@ void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkDat
     }
 }
 
-
 void ScDocument::ApplySelectionLineStyle( const ScMarkData& rMark,
                     const SvxBorderLine* pLine, bool bColorOnly )
 {
@@ -4650,7 +4539,6 @@ void ScDocument::ApplySelectionLineStyle( const ScMarkData& rMark,
             maTabs[*itr]->ApplySelectionLineStyle( rMark, pLine, bColorOnly );
 }
 
-
 const ScStyleSheet* ScDocument::GetStyle( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -4658,7 +4546,6 @@ const ScStyleSheet* ScDocument::GetStyle( SCCOL nCol, SCROW nRow, SCTAB nTab ) c
     else
         return NULL;
 }
-
 
 const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) const
 {
@@ -4706,7 +4593,6 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
     return bEqual ? pStyle : NULL;
 }
 
-
 void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
@@ -4724,7 +4610,6 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
         ScDetectiveFunc::UpdateAllComments( *this );
     }
 }
-
 
 bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const
 {
@@ -4766,7 +4651,6 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllSt
     return rStyle.GetUsage() == ScStyleSheet::USED;
 }
 
-
 bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
 {
@@ -4777,7 +4661,6 @@ bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
     OSL_FAIL("ApplyFlags: wrong table");
     return false;
 }
-
 
 bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
@@ -4790,7 +4673,6 @@ bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
     return false;
 }
 
-
 void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
                                 bool bPutToPool )
 {
@@ -4799,7 +4681,6 @@ void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPattern
             maTabs[nTab]->SetPattern( nCol, nRow, rAttr, bPutToPool );
 }
 
-
 void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
                                 bool bPutToPool )
 {
@@ -4807,7 +4688,6 @@ void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetPattern( rPos, rAttr, bPutToPool );
 }
-
 
 ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )
 {
@@ -4841,14 +4721,12 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
         return new ScPatternAttr( GetPool() );      // empty
 }
 
-
 const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark, bool bDeep )
 {
     delete pSelectionAttr;
     pSelectionAttr = CreateSelectionPattern( rMark, bDeep );
     return pSelectionAttr;
 }
-
 
 void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
                                     SvxBoxItem&     rLineOuter,
@@ -4892,7 +4770,6 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetValid( VALID_HORI,   ( aFlags.nHori != SC_LINE_DONTCARE ) );
     rLineInner.SetValid( VALID_VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
-
 
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const
@@ -5058,7 +4935,6 @@ bool ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     return false;
 }
 
-
 void ScDocument::LockTable(SCTAB nTab)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -5069,7 +4945,6 @@ void ScDocument::LockTable(SCTAB nTab)
     }
 }
 
-
 void ScDocument::UnlockTable(SCTAB nTab)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -5079,7 +4954,6 @@ void ScDocument::UnlockTable(SCTAB nTab)
         OSL_FAIL("wrong table number");
     }
 }
-
 
 bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
@@ -5103,7 +4977,6 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         *pOnlyNotBecauseOfMatrix = false;
     return false;
 }
-
 
 bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
@@ -5155,7 +5028,6 @@ bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
 
     return bOk;
 }
-
 
 bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow,
@@ -5221,7 +5093,6 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
 
     return true;
 }
-
 
 bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
@@ -5305,7 +5176,6 @@ bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
     return bFound;
 }
 
-
 bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol,  SCROW& rEndRow,
                               SCTAB nTab, bool bRefresh )
@@ -5326,7 +5196,6 @@ bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 
     return bFound;
 }
-
 
 bool ScDocument::ExtendMerge( ScRange& rRange, bool bRefresh )
 {
@@ -5495,7 +5364,6 @@ bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     }
 }
 
-
 bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
@@ -5508,7 +5376,6 @@ bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return false;
     }
 }
-
 
 void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                                       const SvxBoxItem* pLineOuter,
@@ -5534,7 +5401,6 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
     }
 }
 
-
 void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
                                     const SvxBoxItem* pLineOuter,
                                     const SvxBoxInfoItem* pLineInner )
@@ -5547,7 +5413,6 @@ void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
                                          rRange.aStart.Col(), rRange.aStart.Row(),
                                          rRange.aEnd.Col(),   rRange.aEnd.Row() );
 }
-
 
 void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray )
 {
@@ -5580,7 +5445,6 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     }
 }
 
-
 void ScDocument::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
@@ -5589,7 +5453,6 @@ void ScDocument::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark
         if (maTabs[*itr])
             maTabs[*itr]->ChangeSelectionIndent( bIncrement, rMark );
 }
-
 
 void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
@@ -5600,7 +5463,6 @@ void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData
             maTabs[*itr]->ClearSelectionItems( pWhich, rMark );
 }
 
-
 void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
@@ -5609,7 +5471,6 @@ void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, 
         if (maTabs[*itr])
             maTabs[*itr]->DeleteSelection(nDelFlag, rMark, bBroadcast);
 }
-
 
 void ScDocument::DeleteSelectionTab(
     SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
@@ -5622,12 +5483,10 @@ void ScDocument::DeleteSelectionTab(
     }
 }
 
-
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
     return (ScPatternAttr*) &xPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN);
 }
-
 
 ScDocumentPool* ScDocument::GetPool()
 {
@@ -5638,7 +5497,6 @@ ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
     return xPoolHelper->GetStylePool();
 }
-
 
 SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, ScDirection eDir )
@@ -5657,13 +5515,11 @@ SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB
         return 0;
 }
 
-
 void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->FindAreaPos( rCol, rRow, eDirection );
 }
-
 
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
@@ -5677,7 +5533,6 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX,
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->GetNextPos( rCol, rRow, nMovX, nMovY, bMarked, bUnprotected, aCopyMark );
 }
-
 
 //  Datei-Operationen
 
@@ -5698,7 +5553,6 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet();
 }
 
-
 void ScDocument::StylesToNames()
 {
     ScPatternAttr::pDoc = this;
@@ -5715,7 +5569,6 @@ void ScDocument::StylesToNames()
     }
     ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
 }
-
 
 sal_uLong ScDocument::GetCellCount() const
 {
@@ -5741,20 +5594,17 @@ sal_uLong ScDocument::GetCodeCount() const
     return nCodeCount;
 }
 
-
 void ScDocument::PageStyleModified( SCTAB nTab, const OUString& rNewName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->PageStyleModified( rNewName );
 }
 
-
 void ScDocument::SetPageStyle( SCTAB nTab, const OUString& rName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetPageStyle( rName );
 }
-
 
 const OUString ScDocument::GetPageStyle( SCTAB nTab ) const
 {
@@ -5763,7 +5613,6 @@ const OUString ScDocument::GetPageStyle( SCTAB nTab ) const
 
     return OUString();
 }
-
 
 void ScDocument::SetPageSize( SCTAB nTab, const Size& rSize )
 {
@@ -5779,7 +5628,6 @@ Size ScDocument::GetPageSize( SCTAB nTab ) const
     OSL_FAIL("invalid tab");
     return Size();
 }
-
 
 void ScDocument::SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
 {
@@ -5814,14 +5662,12 @@ bool ScDocument::HasManualBreaks( SCTAB nTab ) const
     return false;
 }
 
-
 void ScDocument::GetDocStat( ScDocStat& rDocStat )
 {
     rDocStat.nTableCount = GetTableCount();
     rDocStat.aDocName    = aDocName;
     rDocStat.nCellCount  = GetCellCount();
 }
-
 
 bool ScDocument::HasPrintRange()
 {
@@ -5835,12 +5681,10 @@ bool ScDocument::HasPrintRange()
     return bResult;
 }
 
-
 bool ScDocument::IsPrintEntireSheet( SCTAB nTab ) const
 {
     return (ValidTab(nTab) ) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsPrintEntireSheet();
 }
-
 
 sal_uInt16 ScDocument::GetPrintRangeCount( SCTAB nTab )
 {
@@ -5850,7 +5694,6 @@ sal_uInt16 ScDocument::GetPrintRangeCount( SCTAB nTab )
     return 0;
 }
 
-
 const ScRange* ScDocument::GetPrintRange( SCTAB nTab, sal_uInt16 nPos )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
@@ -5858,7 +5701,6 @@ const ScRange* ScDocument::GetPrintRange( SCTAB nTab, sal_uInt16 nPos )
 
     return NULL;
 }
-
 
 const ScRange* ScDocument::GetRepeatColRange( SCTAB nTab )
 {
@@ -5868,7 +5710,6 @@ const ScRange* ScDocument::GetRepeatColRange( SCTAB nTab )
     return NULL;
 }
 
-
 const ScRange* ScDocument::GetRepeatRowRange( SCTAB nTab )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
@@ -5877,13 +5718,11 @@ const ScRange* ScDocument::GetRepeatRowRange( SCTAB nTab )
     return NULL;
 }
 
-
 void ScDocument::ClearPrintRanges( SCTAB nTab )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->ClearPrintRanges();
 }
-
 
 void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 {
@@ -5891,13 +5730,11 @@ void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
         maTabs[nTab]->AddPrintRange( rNew );
 }
 
-
 void ScDocument::SetPrintEntireSheet( SCTAB nTab )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetPrintEntireSheet();
 }
-
 
 void ScDocument::SetRepeatColRange( SCTAB nTab, const ScRange* pNew )
 {
@@ -5905,13 +5742,11 @@ void ScDocument::SetRepeatColRange( SCTAB nTab, const ScRange* pNew )
         maTabs[nTab]->SetRepeatColRange( pNew );
 }
 
-
 void ScDocument::SetRepeatRowRange( SCTAB nTab, const ScRange* pNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetRepeatRowRange( pNew );
 }
-
 
 ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const
 {
@@ -5923,7 +5758,6 @@ ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const
     return pNew;
 }
 
-
 void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 {
     SCTAB nCount = rSaver.GetTabCount();
@@ -5931,7 +5765,6 @@ void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
         if (maTabs[i])
             maTabs[i]->RestorePrintRanges( rSaver.GetTabData(i) );
 }
-
 
 bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 {
@@ -6078,7 +5911,6 @@ void ScDocument::EnableUndo( bool bVal )
 
     mbUndoEnabled = bVal;
 }
-
 
 void ScDocument::EnableUserInteraction( bool bVal )
 {

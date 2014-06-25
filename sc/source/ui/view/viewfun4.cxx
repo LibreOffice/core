@@ -86,7 +86,6 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
     {
         HideAllCursors();
 
-
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetViewData().GetTabNo();
@@ -619,7 +618,6 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     Graphic aGraphic;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-
     if (!rGraphicFilter.ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
     {
@@ -780,6 +778,5 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
     }
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

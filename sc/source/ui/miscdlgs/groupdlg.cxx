@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "groupdlg.hxx"
 #include "scresid.hxx"
-
 
 ScGroupDlg::ScGroupDlg(Window* pParent, bool bUngroup, bool bRows)
     : ModalDialog(pParent,

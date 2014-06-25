@@ -29,7 +29,6 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <svx/svxerr.hxx>
 
-
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

@@ -444,5 +444,4 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     rReq.Done();
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

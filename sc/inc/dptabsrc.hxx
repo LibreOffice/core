@@ -71,7 +71,6 @@ class ScDPResultData;
 class ScDPItemData;
 class ScDPTableData;
 
-
 //  implementation of DataPilotSource using ScDPTableData
 
 class ScDPDimensions;
@@ -82,7 +81,6 @@ class ScDPLevels;
 class ScDPLevel;
 class ScDPMembers;
 class ScDPMember;
-
 
 class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::sheet::XDimensionsSupplier,
@@ -818,7 +816,6 @@ public:
     bool isVisible() const { return bVisible;}
     bool getShowDetails() const { return bShowDet;}
 };
-
 
 #endif
 

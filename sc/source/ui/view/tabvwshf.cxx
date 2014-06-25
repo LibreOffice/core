@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <boost/scoped_ptr.hpp>
 
 #include "scitems.hxx"
@@ -386,7 +385,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             aName = pDlg->GetInputString();
 
-
                             switch ( nSlot )
                             {
                                 case FID_TAB_APPEND:
@@ -505,7 +503,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SCTAB nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData().GetMarkData();
                     SCTAB       nTabSelCount = rMark.GetSelectCount();
-
 
                     if(nTableCount==nTabSelCount)
                     {
@@ -910,6 +907,5 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,8 +52,6 @@ private:
     sal_uInt16 m_nSheetId;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_STYLEDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

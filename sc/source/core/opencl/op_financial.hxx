@@ -294,7 +294,6 @@ public:
      virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& ) SAL_OVERRIDE;
 };
 
-
 class OpSLN: public Normal
 {
 public:

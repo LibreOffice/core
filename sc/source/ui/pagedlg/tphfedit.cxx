@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
@@ -47,7 +46,6 @@
 #include "scabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
 
-
 // STATIC DATA -----------------------------------------------------------
 static ScEditWindow* pActiveEdWnd = NULL;
 
@@ -68,9 +66,7 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     }
 }
 
-
 // class ScEditWindow
-
 
 ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
     :   Control( pParent, nBits ),
@@ -188,7 +184,6 @@ void ScEditWindow::SetCharAttriutes()
     SfxViewShell*       pViewSh = SfxViewShell::Current();
 
     ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-
 
     OSL_ENSURE( pDocSh,  "Current DocShell not found" );
     OSL_ENSURE( pViewSh, "Current ViewShell not found" );
@@ -350,8 +345,6 @@ void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
     pPopupMenu=pPopUp;
 }
 
-
-
 void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if(!aTimer.IsActive())
@@ -417,6 +410,5 @@ IMPL_LINK_NOARG(ScExtIButton, TimerHdl)
     StartPopup();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -277,7 +277,6 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     return bLoaded;
 }
 
-
 namespace {
 
 void testRangeNameImpl(ScDocument& rDoc)

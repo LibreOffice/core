@@ -272,7 +272,6 @@ public:
                 ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

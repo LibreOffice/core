@@ -165,7 +165,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                     ss << "[rowNum];\n";
                     ss << "}";
 
-
                 }
                 else
                 {
@@ -179,8 +178,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                     vSubArguments[1+j]->GenStringDeclRef(ss);
                     ss << "[rowNum];\n";
                     ss << "}";
-
-
 
                 }
             }
@@ -260,7 +257,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                     vSubArguments[1+j]->GenStringDeclRef(ss);
                     ss << "[rowNum];\n";
                 }
-
 
             }
             ss << "    return tmp;\n";

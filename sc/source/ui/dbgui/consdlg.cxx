@@ -36,7 +36,6 @@
 
 #define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
 
-
 class ScAreaData
 {
 public:
@@ -58,7 +57,6 @@ public:
     OUString  aStrArea;
     bool  bIsDbArea;
 };
-
 
 ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                     const SfxItemSet&   rArgSet )
@@ -177,7 +175,6 @@ void ScConsolidateDlg::Init()
     else
         pEdDestArea->SetText(OUString());
 
-
     // Use the ScAreaData helper class to save those range names from the
     // RangeNames and database ranges that appear in the ListBoxes.
 
@@ -237,7 +234,6 @@ void ScConsolidateDlg::FillAreaLists()
     }
 }
 
-
 // Handover of a range within a table that has been selected by the mouse.
 // This range is then shown in the reference window as new selection.
 
@@ -265,12 +261,10 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-
 bool ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
-
 
 void ScConsolidateDlg::SetActive()
 {
@@ -290,12 +284,10 @@ void ScConsolidateDlg::SetActive()
     RefInputDone();
 }
 
-
 void ScConsolidateDlg::Deactivate()
 {
     bDlgLostFocus = true;
 }
-
 
 bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
@@ -328,7 +320,6 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
     return bEditOk;
 }
 
-
 // Handler:
 
 IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
@@ -348,7 +339,6 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
     }
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
 {
@@ -408,7 +398,6 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
         Close(); // no area defined -> Cancel
     return 0;
 }
-
 
 IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 {
@@ -475,7 +464,6 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-
 IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
 {
     if ( pLb == pLbConsAreas )
@@ -518,7 +506,6 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
     return 0;
 }
 
-
 IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
     if ( pEd == pEdDataArea )
@@ -537,7 +524,6 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
     }
     return 0;
 }
-
 
 // TODO: generalize!
 // Resource of the ListBox and these two conversion methods are also in

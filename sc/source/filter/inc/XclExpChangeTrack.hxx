@@ -29,7 +29,6 @@
 #include "ftools.hxx"
 #include "excrecds.hxx"
 
-
 // XclExpUserBView - one UserBView record for each user
 
 class XclExpUserBView : public ExcRecord
@@ -48,7 +47,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // XclExpUserBViewList - list of UserBView records
 
@@ -76,7 +74,6 @@ public:
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // XclExpUsersViewBegin - begin of view block (one per sheet)
 
 class XclExpUsersViewBegin : public ExcRecord
@@ -93,7 +90,6 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
 
-
 // XclExpUsersViewEnd - end of view block (one per sheet)
 
 class XclExpUsersViewEnd : public ExcRecord
@@ -105,7 +101,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // dummy record for "User Names" stream
 
@@ -119,7 +114,6 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
 
-
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0198 : public ExcRecord
@@ -131,7 +125,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // dummy record for "User Names" stream
 
@@ -145,7 +138,6 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
 
-
 // dummy record for "User Names" stream
 
 class XclExpChTr0x0197 : public ExcRecord
@@ -157,7 +149,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // dummy record without content
 
@@ -174,7 +165,6 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
 
-
 // dummy record for "Revision Log" stream
 
 class XclExpChTr0x0195 : public ExcRecord
@@ -188,7 +178,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
 
 // dummy record for "Revision Log" stream
 
@@ -214,7 +203,6 @@ inline XclExpChTr0x0194::XclExpChTr0x0194( const ScChangeTrack& rChangeTrack ) :
 {
 }
 
-
 // XclExpChTrHeader - header record, includes action count
 
 class XclExpChTrHeader : public ExcRecord
@@ -237,7 +225,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // XclExpChTrInfo - header of action group of a user
 
@@ -273,7 +260,6 @@ inline XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime
     memcpy( aGUID, pGUID, 16 );
 }
 
-
 // XclExpChTrTabIdBuffer - buffer for tab id's
 
 class XclExpChTrTabIdBuffer
@@ -301,7 +287,6 @@ public:
                                     { memcpy( pDest, pBuffer, sizeof(sal_uInt16) * GetBufferCount() ); }
 };
 
-
 // XclExpChTrTabId - tab id record
 
 class XclExpChTrTabId : public ExcRecord
@@ -328,7 +313,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // XclExpChTrAction - base class for action records
 
@@ -425,7 +409,6 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
     rStrm << GetTabId( nTab );
 }
 
-
 // XclExpChTrData - cell content itself
 
 struct XclExpChTrData
@@ -451,7 +434,6 @@ struct XclExpChTrData
                                     XclExpStream& rStrm,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
 };
-
 
 // XclExpChTrCellContent - changed cell content
 
@@ -486,7 +468,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // XclExpChTrInsert - insert/delete columns/rows
 
 class XclExpChTrInsert : public XclExpChTrAction
@@ -515,7 +496,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // XclExpChTrInsertTab - insert table
 
 class XclExpChTrInsertTab : public XclExpChTrAction, protected XclExpRoot
@@ -538,7 +518,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // XclExpChTrMoveRange - move cell range
 
@@ -566,7 +545,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 // XclExpChTr0x019A - additional data for delete action
 
 class XclExpChTr0x014A : public XclExpChTrInsert
@@ -583,7 +561,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // XclExpChangeTrack - exports the "Revision Log" stream
 

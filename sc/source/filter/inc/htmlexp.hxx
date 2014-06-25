@@ -88,7 +88,6 @@ struct ScHTMLGraphEntry
     {}
 };
 
-
 #define SC_HTML_FONTSIZES 7
 const short nIndentMax = 23;
 

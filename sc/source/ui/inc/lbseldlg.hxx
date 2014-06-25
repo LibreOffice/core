@@ -20,12 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX
 
-
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <vcl/button.hxx>
-
 
 #include <vcl/dialog.hxx>
 
@@ -42,8 +40,6 @@ public:
     OUString GetSelectEntry() const;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,6 @@
 static const sal_Char pStrFix[] = "FIX";
 static const sal_Char pStrMrg[] = "MRG";
 
-
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
     aFieldSeps      ( OUString(';') ),
@@ -48,7 +47,6 @@ ScAsciiOptions::ScAsciiOptions() :
     pColFormat      ( NULL )
 {
 }
-
 
 ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
@@ -80,13 +78,11 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     }
 }
 
-
 ScAsciiOptions::~ScAsciiOptions()
 {
     delete[] pColStart;
     delete[] pColFormat;
 }
-
 
 void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat )
 {
@@ -112,7 +108,6 @@ void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, con
     }
 }
 
-
 void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
     delete[] pColStart;
@@ -133,7 +128,6 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
     }
 }
 
-
 ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 {
     SetColInfo( rCpy.nInfoCount, rCpy.pColStart, rCpy.pColFormat );
@@ -149,7 +143,6 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 
     return *this;
 }
-
 
 bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
@@ -287,7 +280,6 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options
 }
-
 
 OUString ScAsciiOptions::WriteToString() const
 {

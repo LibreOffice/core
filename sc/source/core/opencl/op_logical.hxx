@@ -12,7 +12,6 @@
 
 #include "opbase.hxx"
 
-
 namespace sc { namespace opencl {
 
 class OpAnd: public Normal

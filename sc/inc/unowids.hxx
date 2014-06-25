@@ -22,7 +22,6 @@
 
 #include "scitems.hxx"
 
-
 //  WIDs for uno property maps,
 //  never stored in files
 
@@ -73,7 +72,6 @@
 #define SC_WID_UNO_NAMES            ( SC_WID_UNO_START + 42 )
 #define SC_WID_UNO_TBLBORD2         ( SC_WID_UNO_START + 43 )
 #define SC_WID_UNO_END              ( SC_WID_UNO_START + 43 )
-
 
 inline bool IsScUnoWid( sal_uInt16 nWid )
 {

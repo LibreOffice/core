@@ -189,5 +189,4 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
     return nDisplayStart;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

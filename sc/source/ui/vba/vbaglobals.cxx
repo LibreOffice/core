@@ -34,9 +34,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-
 // ScVbaGlobals
-
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
 
@@ -58,7 +56,6 @@ ScVbaGlobals::~ScVbaGlobals()
     OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
 }
 
-
 // XGlobals
 
 uno::Reference<excel::XApplication >
@@ -69,7 +66,6 @@ ScVbaGlobals::getApplication() throw (uno::RuntimeException)
         mxApplication.set( new ScVbaApplication( mxContext) );
        return mxApplication;
 }
-
 
 uno::Reference<excel::XApplication > SAL_CALL
 ScVbaGlobals::getExcel() throw (uno::RuntimeException, std::exception)
@@ -89,7 +85,6 @@ ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException, std::exception)
 // FIXME check if this is correct/desired behavior
     throw uno::RuntimeException( "No activeWorkbook available" );
 }
-
 
 uno::Reference< excel::XWindow > SAL_CALL
 ScVbaGlobals::getActiveWindow() throw (uno::RuntimeException, std::exception)
@@ -214,7 +209,6 @@ ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException, std::
     return getApplication()->getActiveSheet()->Rows( aIndex );
 
 }
-
 
 uno::Any SAL_CALL
 ScVbaGlobals::getDebug() throw (uno::RuntimeException, std::exception)

@@ -86,10 +86,7 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 //          Outliner
-
 
 //  Outline-Gruppierung erzeugen
 
@@ -359,9 +356,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-
 //          Teilergebnisse
-
 
 void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                             const ScSortParam* pForceNewSort )
@@ -533,9 +528,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     }
 }
 
-
 //          Consolidate
-
 
 void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
 {
@@ -544,9 +537,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
     SetTabNo( rParam.nTab, true );
 }
 
-
 //          Pivot
-
 
 static OUString lcl_MakePivotTabName( const OUString& rPrefix, SCTAB nNumber )
 {
@@ -2068,9 +2059,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pMgr->LeaveListAction();
 }
 
-
 //          DB-Operationen (Sortieren, Filtern, Teilergebnisse) wiederholen
-
 
 void ScDBFunc::RepeatDB( bool bRecord )
 {

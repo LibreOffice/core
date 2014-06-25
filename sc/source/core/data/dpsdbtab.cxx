@@ -85,7 +85,6 @@ long ScDatabaseDPData::GetColumnCount()
     return GetCacheTable().getColSize();
 }
 
-
 OUString ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
@@ -159,6 +158,5 @@ void ScDatabaseDPData::ReloadCacheTable()
     aCacheTable.clear();
     CreateCacheTable();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

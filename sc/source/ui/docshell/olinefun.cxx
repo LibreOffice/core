@@ -27,7 +27,6 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 
-
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {
     if ( pBindings )
@@ -751,7 +750,5 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     return true;        //! immer ???
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

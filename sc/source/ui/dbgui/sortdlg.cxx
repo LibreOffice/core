@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
 
 #include <vcl/msgbox.hxx>
 #include "tpsort.hxx"
@@ -34,7 +32,6 @@ ScSortDlg::ScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
     AddTabPage("criteria",  ScTabPageSortFields::Create,  0);
     AddTabPage("options", ScTabPageSortOptions::Create, 0);
 }
-
 
 ScSortWarningDlg::ScSortWarningDlg(Window* pParent,
     const OUString& rExtendText, const OUString& rCurrentText)
@@ -65,6 +62,5 @@ IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
     }
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

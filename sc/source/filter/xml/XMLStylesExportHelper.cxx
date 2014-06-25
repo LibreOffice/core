@@ -678,12 +678,10 @@ sal_Int32 ScRowFormatRanges::GetMaxRows() const
     return nMaxRows;
 }
 
-
 void ScRowFormatRanges::Sort()
 {
     aRowFormatRanges.sort();
 }
-
 
 ScMyFormatRange::ScMyFormatRange()
     : nStyleNameIndex(-1)

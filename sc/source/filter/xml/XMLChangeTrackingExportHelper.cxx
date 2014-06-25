@@ -279,7 +279,6 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
     }
 }
 
-
 void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, const OUString& sValue)
 {
     OSL_ASSERT(rCell.meType == CELLTYPE_VALUE);

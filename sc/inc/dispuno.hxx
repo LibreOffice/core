@@ -27,18 +27,15 @@
 #include "global.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>
 
-
 namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterception;
 } } } }
 
 class ScTabViewShell;
 
-
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XStatusListener > XStatusListenerRef;
 typedef boost::ptr_vector<XStatusListenerRef> XStatusListenerArr_Impl;
-
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
                                         com::sun::star::frame::XDispatchProviderInterceptor,
@@ -97,7 +94,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScDispatch : public cppu::WeakImplHelper2<
                                     com::sun::star::frame::XDispatch,
                                     com::sun::star::view::XSelectionChangeListener >,
@@ -139,7 +135,6 @@ public:
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

@@ -59,7 +59,6 @@ public:
     SCROW   GetMarkEnd( SCROW nRow, bool bUp ) const;
 };
 
-
 class ScMarkArrayIter                   // iterate over selected range
 {
     const ScMarkArray*  pArray;

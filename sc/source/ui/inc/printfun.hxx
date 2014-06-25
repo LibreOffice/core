@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 
-
 #include "pagepar.hxx"
 #include "editutil.hxx"
 
@@ -49,7 +48,6 @@ class FmFormView;
 #define PRINT_HEADER_HEIGHT         (12.8 * TWIPS_PER_POINT)
 #define PRINT_HEADER_FONTHEIGHT     200
 
-
                                             // Settings for headers/footers
 struct ScPrintHFParam
 {
@@ -67,7 +65,6 @@ struct ScPrintHFParam
     const SvxBrushItem* pBack;
     const SvxShadowItem* pShadow;
 };
-
 
 struct ScPrintState                         //  Save Variables from ScPrintFunc
 {

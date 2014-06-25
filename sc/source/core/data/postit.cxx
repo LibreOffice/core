@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "postit.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -48,7 +47,6 @@
 #include "detfunc.hxx"
 
 #include <utility>
-
 
 namespace {
 
@@ -509,13 +507,10 @@ ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const
     return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
 }
 
-
-
 void ScPostIt::SetDate( const OUString& rDate )
 {
     maNoteData.maDate = rDate;
 }
-
 
 void ScPostIt::SetAuthor( const OUString& rAuthor )
 {
@@ -568,7 +563,6 @@ void ScPostIt::SetText( const ScAddress& rPos, const OUString& rText )
         maNoteData.mpCaption->SetText( rText );
 }
 
-
 SdrCaptionObj* ScPostIt::GetOrCreateCaption( const ScAddress& rPos ) const
 {
     CreateCaptionFromInitData( rPos );
@@ -591,7 +585,6 @@ void ScPostIt::ShowCaption( const ScAddress& rPos, bool bShow )
     if( maNoteData.mpCaption )
         ScCaptionUtil::SetCaptionLayer( *maNoteData.mpCaption, bShow );
 }
-
 
 void ScPostIt::ShowCaptionTemp( const ScAddress& rPos, bool bShow )
 {

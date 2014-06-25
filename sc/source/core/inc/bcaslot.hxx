@@ -204,7 +204,6 @@ public:
     void                UpdateRemoveArea( ScBroadcastArea* pArea );
     void                UpdateInsert( ScBroadcastArea* pArea );
 
-
     bool                IsInBroadcastIteration() const { return mbInBroadcastIteration; }
 
     /** Erase an area from set and delete it if last reference, or if
@@ -217,7 +216,6 @@ public:
 
     void GetAllListeners( const ScRange& rRange, std::vector<sc::AreaListener>& rListeners );
 };
-
 
 /**
     BroadcastAreaSlots and their management, once per document.
@@ -313,7 +311,6 @@ public:
 
     std::vector<sc::AreaListener> GetAllListeners( const ScRange& rRange );
 };
-
 
 class ScBulkBroadcast
 {

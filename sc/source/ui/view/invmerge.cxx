@@ -44,7 +44,6 @@ void ScInvertMerger::Flush()
 
         // also join vertically if there are non-adjacent columns involved
 
-
         size_t nComparePos = 0;
         while ( nComparePos < pRects->size() )
         {
@@ -160,6 +159,5 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

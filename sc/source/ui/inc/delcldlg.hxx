@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DELCLDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DELCLDLG_HXX
 
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-
 
 #include "global.hxx"
 
@@ -42,8 +40,6 @@ public:
     DelCellCmd GetDelCellCmd() const;
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_DELCLDLG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,6 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 
-
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell )
     : SfxTabDialog(pParent, "CharDialog",

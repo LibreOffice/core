@@ -115,5 +115,4 @@ void ScTbxInsertCtrl::Select( sal_Bool /* bMod1 */ )
         pDispatch->Execute(nLastSlotId);
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

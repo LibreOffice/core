@@ -2140,7 +2140,6 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
     return bOk;
 }
 
-
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
     ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange, true);

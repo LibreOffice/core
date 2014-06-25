@@ -25,9 +25,7 @@
 class ScOutlineEntry;
 class ScOutlineArray;
 
-
 enum ScOutlineMode { SC_OUTLINE_HOR, SC_OUTLINE_VER };
-
 
 /** The window left of or above the spreadsheet containing the outline groups
     and controls to expand/collapse them. */
@@ -223,7 +221,6 @@ protected:
 public:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
-
 
 #endif
 

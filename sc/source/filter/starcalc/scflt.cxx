@@ -78,7 +78,6 @@ using namespace com::sun::star;
 
 const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
-
 /** Those strings are used with SC10TOSTRING() and strcmp() and such, hence
     need to be 0-terminated. */
 static void lcl_ReadFixedString( SvStream& rStream, void* pData, size_t nLen )
@@ -93,14 +92,12 @@ static void lcl_ReadFixedString( SvStream& rStream, void* pData, size_t nLen )
     }
 }
 
-
 static void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 {
     lcl_ReadFixedString( rStream, &rFileHeader.CopyRight, sizeof(rFileHeader.CopyRight));
     rStream.ReadUInt16( rFileHeader.Version );
     rStream.Read(&rFileHeader.Reserved, sizeof(rFileHeader.Reserved));
 }
-
 
 static void lcl_ReadTabProtect(SvStream& rStream, Sc10TableProtect& rProtect)
 {
@@ -109,14 +106,12 @@ static void lcl_ReadTabProtect(SvStream& rStream, Sc10TableProtect& rProtect)
     rStream.ReadUChar( rProtect.Protect );
 }
 
-
 static void lcl_ReadSheetProtect(SvStream& rStream, Sc10SheetProtect& rProtect)
 {
     lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
     rStream.ReadUInt16( rProtect.Flags );
     rStream.ReadUChar( rProtect.Protect );
 }
-
 
 static void lcl_ReadRGB(SvStream& rStream, Sc10Color& rColor)
 {
@@ -126,20 +121,17 @@ static void lcl_ReadRGB(SvStream& rStream, Sc10Color& rColor)
     rStream.ReadUChar( rColor.Red );
 }
 
-
 static void lcl_ReadPalette(SvStream& rStream, Sc10Color* pPalette)
 {
     for (sal_uInt16 i = 0; i < 16; i++)
         lcl_ReadRGB(rStream, pPalette[i]);
 }
 
-
 static void lcl_ReadValueFormat(SvStream& rStream, Sc10ValueFormat& rFormat)
 {
     rStream.ReadUChar( rFormat.Format );
     rStream.ReadUChar( rFormat.Info );
 }
-
 
 static void lcl_ReadLogFont(SvStream& rStream, Sc10LogFont& rFont)
 {
@@ -159,7 +151,6 @@ static void lcl_ReadLogFont(SvStream& rStream, Sc10LogFont& rFont)
     lcl_ReadFixedString( rStream, &rFont.lfFaceName, sizeof(rFont.lfFaceName));
 }
 
-
 static void lcl_ReadBlockRect(SvStream& rStream, Sc10BlockRect& rBlock)
 {
     rStream.ReadInt16( rBlock.x1 );
@@ -167,7 +158,6 @@ static void lcl_ReadBlockRect(SvStream& rStream, Sc10BlockRect& rBlock)
     rStream.ReadInt16( rBlock.x2 );
     rStream.ReadInt16( rBlock.y2 );
 }
-
 
 static void lcl_ReadHeadFootLine(SvStream& rStream, Sc10HeadFootLine& rLine)
 {
@@ -183,7 +173,6 @@ static void lcl_ReadHeadFootLine(SvStream& rStream, Sc10HeadFootLine& rLine)
     rStream.ReadUInt16( rLine.FrameColor );
     rStream.ReadUInt16( rLine.Reserved );
 }
-
 
 static void lcl_ReadPageFormat(SvStream& rStream, Sc10PageFormat& rFormat)
 {
@@ -217,7 +206,6 @@ static void lcl_ReadPageFormat(SvStream& rStream, Sc10PageFormat& rFormat)
     rStream.Read(&rFormat.Reserved, sizeof(rFormat.Reserved));
 }
 
-
 static void lcl_ReadGraphHeader(SvStream& rStream, Sc10GraphHeader& rHeader)
 {
     rStream.ReadUChar( rHeader.Typ );
@@ -237,7 +225,6 @@ static void lcl_ReadGraphHeader(SvStream& rStream, Sc10GraphHeader& rHeader)
     rStream.Read(&rHeader.Reserved, sizeof(rHeader.Reserved));
 }
 
-
 static void lcl_ReadImageHeaer(SvStream& rStream, Sc10ImageHeader& rHeader)
 {
     lcl_ReadFixedString( rStream, &rHeader.FileName, sizeof(rHeader.FileName));
@@ -250,7 +237,6 @@ static void lcl_ReadImageHeaer(SvStream& rStream, Sc10ImageHeader& rHeader)
     rStream.ReadUInt32( rHeader.Size );
 }
 
-
 static void lcl_ReadChartHeader(SvStream& rStream, Sc10ChartHeader& rHeader)
 {
     rStream.ReadInt16( rHeader.MM );
@@ -258,7 +244,6 @@ static void lcl_ReadChartHeader(SvStream& rStream, Sc10ChartHeader& rHeader)
     rStream.ReadInt16( rHeader.yExt );
     rStream.ReadUInt32( rHeader.Size );
 }
-
 
 static void lcl_ReadChartSheetData(SvStream& rStream, Sc10ChartSheetData& rSheetData)
 {
@@ -287,7 +272,6 @@ static void lcl_ReadChartSheetData(SvStream& rStream, Sc10ChartSheetData& rSheet
     rStream.ReadInt16( rSheetData.DataY2 );
     rStream.Read(&rSheetData.Reserved, sizeof(rSheetData.Reserved));
 }
-
 
 static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeData)
 {
@@ -351,7 +335,6 @@ static double lcl_PascalToDouble(sal_Char* tp6)
         ldexp ((s ? -1.0 : 1.0), be - (129+39)));
 }
 
-
 static void lcl_ChangeColor( sal_uInt16 nIndex, Color& rColor )
 {
     ColorData aCol;
@@ -385,7 +368,6 @@ static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
     return aName;
 }
 
-
 template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStream& rStream )
 {
     T* pData = new (::std::nothrow) T( rStream);
@@ -402,9 +384,7 @@ template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStrea
     return nError;
 }
 
-
 // Font
-
 
 Sc10FontData::Sc10FontData(SvStream& rStream)
     : Height(0)
@@ -444,9 +424,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
   }
 }
 
-
 // Benannte-Bereiche
-
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -464,7 +442,6 @@ Sc10NameData::Sc10NameData(SvStream& rStream)
     Reference[nLen] = 0;
     rStream.Read(Reserved, sizeof(Reserved));
 }
-
 
 Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     ScCollection (4, 4),
@@ -487,7 +464,6 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     nError = errUnknownID;
   }
 }
-
 
 // Vorlagen
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
@@ -539,9 +515,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
 }
 
-
 // Datenbank
-
 
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
@@ -578,7 +552,6 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
     DataBaseRec.QueryValue2 = ScfTools::ReadLongDouble(rStream);
 }
 
-
 Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   ScCollection (4, 4),
   nError     (0)
@@ -602,7 +575,6 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   }
 }
 
-
 bool Sc10LogFont::operator==( const Sc10LogFont& rData ) const
 {
     return !strcmp( lfFaceName, rData.lfFaceName )
@@ -621,12 +593,10 @@ bool Sc10LogFont::operator==( const Sc10LogFont& rData ) const
         && lfPitchAndFamily == rData.lfPitchAndFamily;
 }
 
-
 bool Sc10Color::operator==( const Sc10Color& rColor ) const
 {
     return ((Red == rColor.Red) && (Green == rColor.Green) && (Blue == rColor.Blue));
 }
-
 
 bool Sc10HeadFootLine::operator==( const Sc10HeadFootLine& rData ) const
 {
@@ -642,7 +612,6 @@ bool Sc10HeadFootLine::operator==( const Sc10HeadFootLine& rData ) const
         && FrameColor == rData.FrameColor
         && Reserved == rData.Reserved;
 }
-
 
 bool Sc10PageFormat::operator==( const Sc10PageFormat& rData ) const
 {
@@ -675,7 +644,6 @@ bool Sc10PageFormat::operator==( const Sc10PageFormat& rData ) const
         && !memcmp( &PrintArea, &rData.PrintArea, sizeof(PrintArea) );
 }
 
-
 sal_uInt16 Sc10PageCollection::InsertFormat( const Sc10PageFormat& rData )
 {
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -686,7 +654,6 @@ sal_uInt16 Sc10PageCollection::InsertFormat( const Sc10PageFormat& rData )
 
     return nCount-1;
 }
-
 
 static inline sal_uInt8 GetMixedCol( const sal_uInt8 nB, const sal_uInt8 nF, const sal_uInt16 nFak )
 {
@@ -702,7 +669,6 @@ static inline Color GetMixedColor( const Color& rFore, const Color& rBack, sal_u
                     GetMixedCol( rBack.GetGreen(), rFore.GetGreen(), nFact ),
                     GetMixedCol( rBack.GetBlue(), rFore.GetBlue(), nFact ) );
 }
-
 
 void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 {
@@ -907,7 +873,6 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         pSet->Put(SfxBoolItem( ATTR_PAGE_HORCENTER, pPage->HorCenter ));
         pSet->Put(SfxBoolItem( ATTR_PAGE_VERCENTER, pPage->VerCenter ));
 
-
         // Area-Parameter:
 
         {
@@ -918,7 +883,6 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 pRepeatCol = new ScRange( static_cast<SCCOL> (pPage->ColRepeatStart), 0, 0 );
             if ( pPage->RowRepeatStart >= 0 )
                 pRepeatRow = new ScRange( 0, static_cast<SCROW> (pPage->RowRepeatStart), 0 );
-
 
             if ( pRepeatRow || pRepeatCol )
             {
@@ -935,7 +899,6 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             delete pRepeatRow;
             delete pRepeatCol;
         }
-
 
         // Table-Parameter:
 
@@ -955,7 +918,6 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 
     delete pEmptyObject;
 }
-
 
 ScDataObject* Sc10PageData::Clone() const
 {
@@ -977,7 +939,6 @@ Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
     pPrgrsBar = NULL;
 }
 
-
 Sc10Import::~Sc10Import()
 {
     pDoc->CalcAfterLoad();
@@ -991,7 +952,6 @@ Sc10Import::~Sc10Import()
     OSL_ENSURE( pPrgrsBar == NULL,
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
-
 
 sal_uLong Sc10Import::Import()
 {
@@ -1034,7 +994,6 @@ sal_uLong Sc10Import::Import()
     return nError;
 }
 
-
 void Sc10Import::LoadFileHeader()
 {
     Sc10FileHeader FileHeader;
@@ -1055,7 +1014,6 @@ void Sc10Import::LoadFileHeader()
     }
 }
 
-
 void Sc10Import::LoadFileInfo()
 {
     Sc10FileInfo FileInfo;
@@ -1075,7 +1033,6 @@ void Sc10Import::LoadEditStateInfo()
     // Achtung Cursorposition und Offset der Tabelle Uebertragen (soll man das machen??)
 }
 
-
 void Sc10Import::LoadProtect()
 {
     lcl_ReadSheetProtect(rStream, SheetProtect);
@@ -1087,7 +1044,6 @@ void Sc10Import::LoadProtect()
     pDoc->SetDocProtection(&aProtection);
 }
 
-
 void Sc10Import::LoadViewColRowBar()
 {
     bool bViewColRowBar;
@@ -1096,7 +1052,6 @@ void Sc10Import::LoadViewColRowBar()
     aSc30ViewOpt.SetOption( VOPT_HEADER, bViewColRowBar );
 }
 
-
 void Sc10Import::LoadScrZoom()
 {
     // Achtung Zoom ist leider eine 6Byte TP real Zahl (keine Ahnung wie die Umzusetzen ist)
@@ -1104,7 +1059,6 @@ void Sc10Import::LoadScrZoom()
     rStream.Read(cZoom, sizeof(cZoom));
     nError = rStream.GetError();
 }
-
 
 void Sc10Import::LoadPalette()
 {
@@ -1116,7 +1070,6 @@ void Sc10Import::LoadPalette()
     nError = rStream.GetError();
 }
 
-
 void Sc10Import::LoadFontCollection()
 {
     pFontCollection = new Sc10FontCollection(rStream);
@@ -1124,14 +1077,12 @@ void Sc10Import::LoadFontCollection()
         nError = pFontCollection->GetError();
 }
 
-
 void Sc10Import::LoadNameCollection()
 {
     pNameCollection = new Sc10NameCollection(rStream);
     if (!nError)
         nError = pNameCollection->GetError();
 }
-
 
 void Sc10Import::ImportNameCollection()
 {
@@ -1145,7 +1096,6 @@ void Sc10Import::ImportNameCollection()
                 pDoc, SC10TOSTRING(pName->Name), SC10TOSTRING(pName->Reference)));
     }
 }
-
 
 void Sc10Import::LoadPatternCollection()
 {
@@ -1380,7 +1330,6 @@ void Sc10Import::LoadPatternCollection()
     } // for (i = 0; i < GetCount()
 }
 
-
 void Sc10Import::LoadDataBaseCollection()
 {
     pDataBaseCollection = new Sc10DataBaseCollection(rStream);
@@ -1404,7 +1353,6 @@ void Sc10Import::LoadDataBaseCollection()
             //TODO: or can this fail (and need delete pNewData)?
     }
 }
-
 
 void Sc10Import::LoadTables()
 {
@@ -1454,7 +1402,6 @@ void Sc10Import::LoadTables()
             nLen = sizeof(TabName) - 1;
         TabName[nLen] = 0;
 
-
         rStream.ReadUInt16( Display );
 
         if ( Tab == (sal_Int16)nShowTab )
@@ -1484,7 +1431,6 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_CHART, eObjMode );
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
-
 
         rStream.ReadUChar( Visible );
 
@@ -1621,7 +1567,6 @@ void Sc10Import::LoadTables()
     aPageCollection.PutToDoc( pDoc );
 }
 
-
 void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
 {
     LoadColAttr(Col, Tab);
@@ -1705,7 +1650,6 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
         pPrgrsBar->Progress();
     }
 }
-
 
 void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 {
@@ -2157,7 +2101,6 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
   }
 }
 
-
 void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 {
     // rAttr is not reused, otherwise we'd have to delete [] rAttr.pData;
@@ -2181,7 +2124,6 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
         }
     }
 }
-
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
 {
@@ -2324,7 +2266,6 @@ void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& n
      break;
   }
 }
-
 
 void Sc10Import::LoadObjects()
 {

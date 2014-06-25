@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleDocumentPagePreview.hxx"
 #include "AccessiblePreviewTable.hxx"
 #include "AccessiblePageHeader.hxx"
@@ -63,7 +62,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 typedef std::list< uno::Reference< XAccessible > > ScXAccList;
-
 
 struct ScAccNote
 {
@@ -211,7 +209,6 @@ void ScNotesChildren::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
         mnParagraphs += AddNotes(rData, rVisRect, true, maNotes);
     }
 }
-
 
 struct ScParaFound
 {

@@ -199,7 +199,6 @@ public:
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
 
-
 private:
     ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
 };

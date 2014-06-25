@@ -79,8 +79,6 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
-
-
 void ScQueryEntry::SetQueryByEmpty()
 {
     eOp = SC_EQUAL;

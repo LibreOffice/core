@@ -73,5 +73,4 @@ SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) throw()
     return pRet;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

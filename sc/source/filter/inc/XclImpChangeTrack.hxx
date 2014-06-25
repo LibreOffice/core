@@ -26,12 +26,10 @@
 #include "excform.hxx"
 #include "imp_op.hxx"
 
-
 struct ScCellValue;
 class ScChangeAction;
 class ScChangeTrack;
 class XclImpChTrFmlConverter;
-
 
 struct XclImpChTrRecHeader
 {
@@ -147,7 +145,6 @@ inline void XclImpChangeTrack::ReadString( OUString& rString )
 {
     rString = pStrm->ReadUniString();
 }
-
 
 // derived class for special 3D ref handling
 

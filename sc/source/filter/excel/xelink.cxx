@@ -36,9 +36,7 @@ using ::std::find_if;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 
-
 // *** Helper classes ***
-
 
 // External names =============================================================
 
@@ -609,9 +607,7 @@ private:
     XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
 };
 
-
 // *** Implementation ***
-
 
 // Excel sheet indexes ========================================================
 
@@ -1370,7 +1366,6 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl, Xcl
     SetRecSize( 2 + maUrlEncoded.GetSize() );
 }
 
-
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
@@ -1970,7 +1965,6 @@ bool XclExpLinkManagerImpl5::InsertEuroTool(
      return false;
 }
 
-
 bool XclExpLinkManagerImpl5::InsertDde(
         sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/,
         const OUString& /*rApplic*/, const OUString& /*rTopic*/, const OUString& /*rItem*/ )
@@ -2171,7 +2165,6 @@ bool XclExpLinkManagerImpl8::InsertEuroTool(
     }
     return false;
 }
-
 
 bool XclExpLinkManagerImpl8::InsertDde(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,

@@ -660,7 +660,6 @@ void ScUndoSubTotals::Undo()
         rDoc.InsertRow( 0,nTab, MAXCOL,nTab, nNewEndRow+1, static_cast<SCSIZE>(aParam.nRow2-nNewEndRow) );
     }
 
-
     // Original Outline table
     rDoc.SetOutlineTable( nTab, pUndoTable );
 
@@ -1379,7 +1378,6 @@ bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
     else
         return false;       // Address book
 }
-
 
 ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,

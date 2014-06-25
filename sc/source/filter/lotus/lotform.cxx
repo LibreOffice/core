@@ -174,7 +174,6 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         }
     }
 
-
     // Spezialfaelle...
     if( eOc == ocGetYear )
     {
@@ -269,7 +268,6 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
         rSRD.SetAbsRow(static_cast<SCROW>(nRow));
 }
 
-
 void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
 {
     sal_uInt8           nTab, nCol;
@@ -289,13 +287,11 @@ void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
     rSRD.SetAddress(ScAddress(nCol, nRow, nTab), aEingPos);
 }
 
-
 void LotusToSc::IncToken( TokenId &rParam )
 {
     aPool << ocOpen << rParam << nAddToken;
     rParam = aPool.Store();
 }
-
 
 void LotusToSc::DecToken( TokenId &rParam )
 {
@@ -303,13 +299,11 @@ void LotusToSc::DecToken( TokenId &rParam )
     rParam = aPool.Store();
 }
 
-
 void LotusToSc::NegToken( TokenId &rParam )
 {
     aPool << ocNegSub << ocOpen << rParam << ocClose;
     rParam = aPool.Store();
 }
-
 
 void LotusToSc::Reset( const ScAddress& rEingPos )
 {
@@ -326,7 +320,6 @@ void LotusToSc::Reset( const ScAddress& rEingPos )
     n0Token = aPool.Store( 0.0 );
 }
 
-
 LotusToSc::LotusToSc( SvStream &rStream, svl::SharedStringPool& rSPool, rtl_TextEncoding e, bool b ) :
     LotusConverterBase(rStream, rSPool, 128)
 {
@@ -335,10 +328,8 @@ LotusToSc::LotusToSc( SvStream &rStream, svl::SharedStringPool& rSPool, rtl_Text
     bWK123 = b;
 }
 
-
 typedef FUNC_TYPE ( FuncType1 ) ( sal_uInt8 );
 typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
-
 
 ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     const FORMULA_TYPE /*eFT*/ )
@@ -625,7 +616,6 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     return ConvOK;
 }
 
-
 FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
 {
     static const FUNC_TYPE pType[ 256 ] =
@@ -889,7 +879,6 @@ FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
     };
     return pType[ nIndex ];
 }
-
 
 DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
 {
@@ -1156,7 +1145,6 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
     return pToken[ nIndex ];
 }
 
-
 FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
 {
     static const FUNC_TYPE pType[ 256 ] =
@@ -1420,7 +1408,6 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
     };
     return pType[ nIndex ];
 }
-
 
 DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
 {
@@ -1687,7 +1674,6 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
     return pToken[ nIndex ];
 }
 
-
 const sal_Char* GetAddInName( const sal_uInt8 n )
 {
     static const sal_Char*  pNames[ 256 ] =
@@ -1952,7 +1938,6 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
 
     return pNames[ n ];
 }
-
 
 static DefTokenId lcl_KnownAddIn( const OString& rTest )
 {

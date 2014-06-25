@@ -24,12 +24,10 @@
 #include "root.hxx"
 #include "xeroot.hxx"
 
-
 class ScDocument;
 class ScPatternAttr;
 class ScFormulaCell;
 class ExcDocument;
-
 
 class ExportTyp
 {
@@ -64,7 +62,6 @@ public:
     FltError            Write() SAL_OVERRIDE;
 };
 
-
 class ExportBiff8 : public ExportBiff5
 {
 public:
@@ -72,8 +69,6 @@ public:
     virtual             ~ExportBiff8();
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

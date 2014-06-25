@@ -66,9 +66,7 @@ struct ScStylePair
 
 // STATIC DATA -----------------------------------------------------------
 
-
 //  Ole
-
 
 void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
@@ -214,15 +212,12 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         SetVisAreaOrSize( aNewArea, true ); // hier muss auch der Start angepasst werden
 }
 
-
 //  Style-Krempel fuer Organizer etc.
-
 
 SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {
     return (SfxStyleSheetBasePool*)aDocument.GetStyleSheetPool();
 }
-
 
 //  nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)
 //  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
@@ -335,7 +330,6 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     UpdateAllRowHeights();
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );      // Paint
 }
-
 
 void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 {

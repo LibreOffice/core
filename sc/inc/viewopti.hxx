@@ -130,7 +130,6 @@ private:
     ScViewOptions   theOptions;
 };
 
-
 // CfgItem for View options
 
 class ScViewCfg : public ScViewOptions
@@ -152,7 +151,6 @@ public:
 
     void            SetOptions( const ScViewOptions& rNew );
 };
-
 
 #endif
 

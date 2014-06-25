@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmllabri.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -25,7 +24,6 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
-
 
 ScXMLLabelRangesContext::ScXMLLabelRangesContext(
         ScXMLImport& rImport,
@@ -65,7 +63,6 @@ SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
 void ScXMLLabelRangesContext::EndElement()
 {
 }
-
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,

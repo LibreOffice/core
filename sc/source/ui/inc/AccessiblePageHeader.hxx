@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPAGEHEADER_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEPAGEHEADER_HXX
 
@@ -98,7 +97,6 @@ private:
 
     void AddChild(const EditTextObject* pArea, sal_uInt32 nIndex, SvxAdjust eAdjust);
 };
-
 
 #endif
 

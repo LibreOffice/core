@@ -96,7 +96,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-
 // STATIC DATA -----------------------------------------------------------
 
 IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
@@ -161,7 +160,6 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 
     return bChanged;
 }
-
 
 bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 {
@@ -1113,7 +1111,6 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
     return bRet;
 }
 
-
 static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const OUString& rText, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
@@ -1340,7 +1337,6 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 
     return true;
 }
-
 
 bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                 bool bRecord, bool bApi )
@@ -2275,9 +2271,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
     }
 
-
     //      ausfuehren
-
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
 
@@ -2639,9 +2633,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     sal_uInt16 nDestExt = 0;
     rDocShell.UpdatePaintExt( nDestExt, nDestCol,nDestRow,nDestTab, nDestEndCol,nDestEndRow,nDestEndTab );
 
-
     //  ausfuehren
-
 
     ScDocument* pUndoDoc = NULL;
     ScDocument* pRefUndoDoc = NULL;
@@ -2727,7 +2719,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         positions (e.g. if source and destination range overlaps).*/
     rDoc.CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~(IDF_OBJECTS),
                         NULL, pClipDoc, true, false, bIncludeFiltered );
-
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -2855,7 +2846,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     return true;
 }
 
-
 uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, OUString& sCodeName )
 {
     uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
@@ -2954,7 +2944,6 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
     }
 }
 
-
 bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi )
 {
     bool bSuccess = false;
@@ -2963,7 +2952,6 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument& rDoc = rDocShell.GetDocument();
-
 
     // Strange loop, also basic is loaded too early ( InsertTable )
     // is called via the xml import for sheets in described in ODF
@@ -3513,7 +3501,6 @@ bool ScDocFunc::SetWidthOrHeight(
 
     return bSuccess;
 }
-
 
 bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
                                 bool bRecord, bool bSetModified, bool /* bApi */ )
@@ -4519,7 +4506,6 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
 
     ScRange aSourceArea = rRange;
     ScRange aDestArea   = rRange;
-
 
     switch (eDir)
     {

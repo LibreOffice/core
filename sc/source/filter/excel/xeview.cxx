@@ -26,7 +26,6 @@
 
 using namespace ::oox;
 
-
 // Workbook view settings records =============================================
 
 XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot )
@@ -514,6 +513,5 @@ void XclExpTabViewSettings::WriteTabBgColor( XclExpStream& rStrm ) const
     if ( !maData.IsDefaultTabBgColor() )
         XclExpTabBgColor( maData ).Save( rStrm );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

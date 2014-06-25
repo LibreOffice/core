@@ -62,7 +62,6 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
-
 const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
 const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
 const sal_uInt16 nCellRole          = AccessibleRole::TEXT;
@@ -98,7 +97,6 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
     ScAccessibleContextBase::disposing();
 }
 
-
 // XAccessibleComponent -------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& /* rPoint */ )
@@ -121,7 +119,6 @@ void SAL_CALL ScAccessibleCsvControl::grabFocus() throw( RuntimeException, std::
     ensureAlive();
     implGetControl().GrabFocus();
 }
-
 
 // events ---------------------------------------------------------------------
 
@@ -168,7 +165,6 @@ void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn *
 {
     OSL_FAIL( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
 }
-
 
 // helpers --------------------------------------------------------------------
 
@@ -259,7 +255,6 @@ Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 {
     return rPos + implGetControl().GetWindowExtentsRelative( NULL ).TopLeft();
 }
-
 
 // Ruler ======================================================================
 
@@ -403,7 +398,6 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleSta
     }
     return pStateSet;
 }
-
 
 // XAccessibleText ------------------------------------------------------------
 
@@ -702,7 +696,6 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
     return false;
 }
 
-
 // XInterface -----------------------------------------------------------------
 
 Any SAL_CALL ScAccessibleCsvRuler::queryInterface( const ::com::sun::star::uno::Type& rType )
@@ -722,14 +715,12 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
     ScAccessibleCsvControl::release();
 }
 
-
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString( RULER_IMPL_NAME );
 }
-
 
 // XTypeProvider --------------------------------------------------------------
 
@@ -745,7 +736,6 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw(
     return css::uno::Sequence<sal_Int8>();
 }
 
-
 // events ---------------------------------------------------------------------
 
 void ScAccessibleCsvRuler::SendCaretEvent()
@@ -760,7 +750,6 @@ void ScAccessibleCsvRuler::SendCaretEvent()
         CommitChange( aEvent );
     }
 }
-
 
 // helpers --------------------------------------------------------------------
 
@@ -848,7 +837,6 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
     return nApiPos;
 }
 
-
 // Grid =======================================================================
 
 /** Converts a grid columnm index to an API column index. */
@@ -872,7 +860,6 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 {
     implDispose();
 }
-
 
 // XAccessibleComponent -------------------------------------------------------
 
@@ -963,7 +950,6 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     return pStateSet;
 }
-
 
 // XAccessibleTable -----------------------------------------------------------
 
@@ -1126,7 +1112,6 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildInd
     return implGetColumn( nChildIndex );
 }
 
-
 // XAccessibleSelection -------------------------------------------------------
 
 void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -1200,7 +1185,6 @@ void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int32 nSelectedC
         implSelectColumn( nColumn, false );
 }
 
-
 // XInterface -----------------------------------------------------------------
 
 Any SAL_CALL ScAccessibleCsvGrid::queryInterface( const ::com::sun::star::uno::Type& rType )
@@ -1220,14 +1204,12 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
     ScAccessibleCsvControl::release();
 }
 
-
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString( GRID_IMPL_NAME );
 }
-
 
 // XTypeProvider --------------------------------------------------------------
 
@@ -1243,7 +1225,6 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( 
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 // events ---------------------------------------------------------------------
 
@@ -1303,7 +1284,6 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
         CommitChange( aEvent );
     }
 }
-
 
 // helpers --------------------------------------------------------------------
 
@@ -1393,7 +1373,6 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
     return aCellStr;
 }
 
-
 ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const
 {
     return new ScAccessibleCsvCell( implGetGrid(), implGetCellText( nRow, nColumn ), nRow, nColumn );
@@ -1423,7 +1402,6 @@ void SAL_CALL ScAccessibleCsvCell::disposing()
     SetEditSource( SvxEditSourcePtr( NULL ) );
     ScAccessibleCsvControl::disposing();
 }
-
 
 // XAccessibleComponent -------------------------------------------------------
 

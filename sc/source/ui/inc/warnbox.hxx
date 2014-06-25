@@ -22,7 +22,6 @@
 
 #include <vcl/msgbox.hxx>
 
-
 /** Message box with warning image and "Do not show again" checkbox. */
 class ScCbWarningBox : public WarningBox
 {
@@ -42,7 +41,6 @@ public:
     virtual void                DisableDialog();
 };
 
-
 /** Warning box for "Replace cell contents?". */
 class ScReplaceWarnBox : public ScCbWarningBox
 {
@@ -54,7 +52,6 @@ public:
     /** Sets the configuration key "ReplaceCellsWarning" to false. */
     virtual void                DisableDialog() SAL_OVERRIDE;
 };
-
 
 #endif
 

@@ -76,7 +76,6 @@ RootData::~RootData()
     delete pPrintTitles;
 }
 
-
 XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
     maLevels(0, nNewSize, 0),
     mpOutlineArray(NULL),

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scuiimoptdlg.hxx"
@@ -28,9 +27,7 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
-
 // ScDelimiterTable
-
 
 class ScDelimiterTable
 {
@@ -99,9 +96,7 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
     return aStrDel;
 }
 
-
 // ScImportOptionsDlg
-
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,

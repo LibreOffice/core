@@ -28,7 +28,6 @@
 #define SCCFG_INPUT             (SFX_ITEMTYPE_SC_BEGIN + 8)
 #define SCCFG_NAVIPI            (SFX_ITEMTYPE_SC_BEGIN + 9)
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

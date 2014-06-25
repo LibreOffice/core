@@ -40,7 +40,6 @@
 #define ScDrawFormShell
 #include "scslots.hxx"
 
-
 SFX_IMPL_INTERFACE(ScDrawFormShell, ScDrawShell, ScResId(SCSTR_DRAWFORMSHELL))
 
 void ScDrawFormShell::InitInterface_Impl()

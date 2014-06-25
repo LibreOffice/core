@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "lookupcache.hxx"
 #include "document.hxx"
 #include "queryentry.hxx"
@@ -72,11 +71,9 @@ ScLookupCache::ScLookupCache( ScDocument * pDoc, const ScRange & rRange ) :
 {
 }
 
-
 ScLookupCache::~ScLookupCache()
 {
 }
-
 
 ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress ) const
@@ -94,7 +91,6 @@ ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
     return FOUND;
 }
 
-
 bool ScLookupCache::insert( const ScAddress & rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress,
         const bool bAvailable )
@@ -108,7 +104,6 @@ bool ScLookupCache::insert( const ScAddress & rResultAddress,
 
     return bInserted;
 }
-
 
 void ScLookupCache::Notify( const SfxHint& rHint )
 {

@@ -149,9 +149,7 @@ namespace calc
 #endif
     };
 
-
 }   // namespace calc
-
 
 #endif // INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLVALUEBINDING_HXX
 

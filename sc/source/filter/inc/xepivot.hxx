@@ -33,9 +33,7 @@ class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
 
-
 // Pivot cache
-
 
 /** Represents a data item in a pivot cache containing data of any type. */
 class XclExpPCItem : public XclExpRecord, public XclPCItem
@@ -235,9 +233,7 @@ private:
     bool                mbValid;            /// true = The cache is valid for export.
 };
 
-
 // Pivot table
-
 
 class XclExpPivotTable;
 
@@ -279,7 +275,6 @@ public:
       */
     sal_uInt16          GetFieldIndex() const { return maFieldInfo.mnCacheIdx; }
 
-
     /** Returns the index of the last inserted data info struct. */
     sal_uInt16          GetLastDataInfoIndex() const;
 
@@ -306,7 +301,6 @@ public:
 
     /** Writes the entire pivot table field. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-
 
 private:
     /** Returns an item by its name. */
@@ -358,7 +352,6 @@ public:
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
-
 private:
     /** Returns a pivot table field by its name. */
     XclExpPTField*      GetFieldAcc( const OUString& rName );
@@ -395,7 +388,6 @@ private:
     void                WriteQsiSxTag( XclExpStream& rStrm ) const;
     /** Writes the SX_AUTOFORMAT records with the autoformat id and header layout */
     void                WriteSxViewEx9( XclExpStream& rStrm ) const;
-
 
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;

@@ -30,7 +30,6 @@ class ScDocument;
 
 #include "scui_def.hxx"
 
-
 class ScFillSeriesDlg : public ModalDialog
 {
 public:

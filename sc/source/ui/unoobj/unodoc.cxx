@@ -52,5 +52,4 @@ uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

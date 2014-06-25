@@ -840,6 +840,4 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAutoFormatFieldObj )
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

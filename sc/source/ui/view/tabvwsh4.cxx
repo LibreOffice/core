@@ -862,7 +862,6 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
         pPageBreakShell->SetRepeatTarget( &aTarget );
     }
 
-
     if ( eOST!=eCurOST || bForce )
     {
         bool bCellBrush = false;    // "format paint brush" allowed for cells
@@ -1059,7 +1058,6 @@ IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated)
     return 0;
 }
 
-
 //  GetMySubShell / SetMySubShell: altes Verhalten simulieren,
 //  dass es nur eine SubShell gibt (nur innerhalb der 5 eignenen SubShells)
 
@@ -1081,7 +1079,6 @@ SfxShell* ScTabViewShell::GetMySubShell() const
     }
     return NULL;        // keine von meinen dabei
 }
-
 
 bool ScTabViewShell::IsDrawTextShell() const
 {
@@ -1567,7 +1564,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     pAccessibilityBroadcaster(NULL), \
     mbInSwitch(false)
 
-
 void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 {
     SfxApplication* pSfxApp  = SFX_APP();
@@ -1766,9 +1762,6 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     SetBorderPixel( aBorder );
 }
 
-
-
-
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
@@ -1920,7 +1913,6 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
         pNavSettings = new ScNavigatorSettings;
     return pNavSettings;
 }
-
 
 void ScTabViewShell::ExecTbx( SfxRequest& rReq )
 {

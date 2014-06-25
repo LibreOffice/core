@@ -33,7 +33,6 @@ namespace xls {
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;

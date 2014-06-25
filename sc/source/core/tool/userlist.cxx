@@ -27,7 +27,6 @@
 
 #include <boost/bind.hpp>
 
-
 namespace {
 
 class FindByName : public ::std::unary_function<ScUserListData::SubStr, bool>
@@ -315,7 +314,6 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 {
     return !operator==( r );
 }
-
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {

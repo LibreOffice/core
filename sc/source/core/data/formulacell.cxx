@@ -80,24 +80,20 @@ using std::deque;
 
 typedef SCCOLROW(*DimensionSelector)(const ScAddress&, const ScSingleRefData&);
 
-
 static SCCOLROW lcl_GetCol(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Col();
 }
-
 
 static SCCOLROW lcl_GetRow(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Row();
 }
 
-
 static SCCOLROW lcl_GetTab(const ScAddress& rPos, const ScSingleRefData& rData)
 {
     return rData.toAbs(rPos).Tab();
 }
-
 
 /** Check if both references span the same range in selected dimension.
  */
@@ -109,7 +105,6 @@ lcl_checkRangeDimension(
     return aWhich(rPos, rRef1.Ref1) == aWhich(rPos, rRef2.Ref1) &&
         aWhich(rPos, rRef1.Ref2) == aWhich(rPos, rRef2.Ref2);
 }
-
 
 static bool
 lcl_checkRangeDimensions(
@@ -130,7 +125,6 @@ lcl_checkRangeDimensions(
     }
     return false;
 }
-
 
 /** Check if references in given reference list can possibly
     form a range. To do that, two of their dimensions must be the same.
@@ -217,7 +211,6 @@ lcl_checkIfAdjacent(
     return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
 }
 
-
 static void
 lcl_fillRangeFromRefList(
     const ScAddress& aPos, const deque<ScToken*>& rReferences, ScRange& rRange)
@@ -229,7 +222,6 @@ lcl_fillRangeFromRefList(
             SingleDoubleRefProvider(*rReferences.back()).Ref2);
     rRange.aEnd = aEnd.toAbs(aPos);
 }
-
 
 static bool
 lcl_refListFormsOneRange(
@@ -276,7 +268,6 @@ lcl_refListFormsOneRange(
     }
     return false;
 }
-
 
 bool lcl_isReference(const FormulaToken& rToken)
 {
@@ -1001,8 +992,6 @@ void ScFormulaCell::SetNeedsDirty( bool bVar )
 
 void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
 
-
-
 void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
@@ -1274,7 +1263,6 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         pDocument->PutInFormulaTree(this);
 }
 
-
 void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
 {
     bool bNewCompiled = false;
@@ -1336,12 +1324,10 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
     // No SetDirty yet, as no all Listeners are known yet (only in SetDirtyAfterLoad)
 }
 
-
 bool ScFormulaCell::MarkUsedExternalReferences()
 {
     return pCode && pDocument->MarkUsedExternalReferences(*pCode, aPos);
 }
-
 
 void ScFormulaCell::Interpret()
 {
@@ -1574,7 +1560,6 @@ void ScFormulaCell::Interpret()
         } while (bIterationFromRecursion || bResumeIteration);
     }
 }
-
 
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
@@ -1899,7 +1884,6 @@ void ScFormulaCell::SetCompile( bool bVal )
     bCompile = bVal;
 }
 
-
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
 {
     ScMatrixFormulaCellToken* pMat = aResult.GetMatrixFormulaCellTokenNonConst();
@@ -1913,7 +1897,6 @@ void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
         SetDirty( bDirtyFlag );
     }
 }
-
 
 void ScFormulaCell::GetMatColsRows( SCCOL & nCols, SCROW & nRows ) const
 {
@@ -1931,7 +1914,6 @@ void ScFormulaCell::SetInChangeTrack( bool bVal )
 {
     bInChangeTrack = bVal;
 }
-
 
 void ScFormulaCell::Notify( const SfxHint& rHint )
 {
@@ -2312,7 +2294,6 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
     }
     return false;
 }
-
 
 /*
  Edge-Values:
@@ -3381,15 +3362,10 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-
-
 void ScFormulaCell::SetChanged(bool b)
 {
     bChanged = b;
 }
-
-
-
 
 void ScFormulaCell::SetCode( ScTokenArray* pNew )
 {
@@ -3397,7 +3373,6 @@ void ScFormulaCell::SetCode( ScTokenArray* pNew )
     delete pCode;
     pCode = pNew; // takes ownership.
 }
-
 
 void ScFormulaCell::SetRunning( bool bVal )
 {
@@ -3511,7 +3486,6 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
 #endif
     return mxGroup;
 }
-
 
 void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 {
@@ -4040,6 +4014,5 @@ void ScFormulaCell::SyncSharedCode()
 
     pCode = mxGroup->mpCode;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

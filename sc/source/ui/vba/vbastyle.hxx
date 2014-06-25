@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "vbaformat.hxx"
 
-
 typedef ScVbaFormat< ov::excel::XStyle > ScVbaStyle_BASE;
 
 class ScVbaStyle : public ScVbaStyle_BASE

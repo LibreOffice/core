@@ -55,14 +55,12 @@ rtl_TextEncoding        eCharVon;
 extern ScDocument*  pDoc;           // Aufhaenger zum Dokumentzugriff
 ScDocument*         pDoc;
 
-
 extern OPCODE_FKT   pOpFkt[ FKT_LIMIT ];
                                     // -> optab.cxx, Tabelle moeglicher Opcodes
 extern OPCODE_FKT   pOpFkt123[ FKT_LIMIT123 ];
                                     // -> optab.cxx, Table of possible Opcodes
 
 LOTUS_ROOT*         pLotusRoot = NULL;
-
 
 std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
@@ -222,6 +220,5 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, rtl_Text
 
     return generate_Opcodes( aStream, *pDoc, aPrgrsBar, eTyp );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

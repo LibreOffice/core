@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <algorithm>
 #include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
@@ -56,7 +55,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
-
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
@@ -1139,7 +1137,6 @@ Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 ScDPObject* ScDataPilotTableObj::GetDPObject() const
 {
@@ -3503,8 +3500,5 @@ void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener(
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

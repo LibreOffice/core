@@ -32,7 +32,6 @@
 #include "globalnames.hxx"
 #include "dbnamdlg.hxx"
 
-
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 #define ABS_DREF          ABS_SREF \
@@ -44,7 +43,6 @@ class DBSaveData;
 static DBSaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
-
 
 //  class DBSaveData
 
@@ -85,8 +83,6 @@ private:
     bool        bDirty:1;
 };
 
-
-
 void DBSaveData::Save()
 {
     aArea   = rCurArea;
@@ -97,7 +93,6 @@ void DBSaveData::Save()
     bStrip  = rBtnStrip.IsChecked();
     bDirty  = true;
 }
-
 
 void DBSaveData::Restore()
 {
@@ -164,12 +159,10 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     SynFocusTimer.Start();
 }
 
-
 ScDbNameDlg::~ScDbNameDlg()
 {
     DELETEZ( pSaveObj );
 }
-
 
 void ScDbNameDlg::Init()
 {
@@ -248,7 +241,6 @@ void ScDbNameDlg::Init()
     NameModifyHdl( 0 );
 }
 
-
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
     OUStringBuffer aBuf;
@@ -268,7 +260,6 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     }
     m_pFTOperations->SetText(aBuf.makeStringAndClear());
 }
-
 
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
@@ -290,7 +281,6 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         pSaveObj->Save();
     }
 }
-
 
 bool ScDbNameDlg::Close()
 {
@@ -368,15 +358,12 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
     m_pOptions->Enable();
 }
 
-
 bool ScDbNameDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }
 
-
 // Handler:
-
 
 IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
 {

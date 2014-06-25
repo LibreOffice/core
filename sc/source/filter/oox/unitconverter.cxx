@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 
-
 namespace {
 
 const double MM100_PER_INCH         = 2540.0;

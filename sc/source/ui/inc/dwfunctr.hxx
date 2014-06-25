@@ -95,7 +95,6 @@ protected:
     virtual void    ToggleFloatingMode() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment,
                                 SfxChildAlignment eAlign) SAL_OVERRIDE;
 
@@ -117,6 +116,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLEHEADERFOOTERCONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLEHEADERFOOTERCONTEXT_HXX
 
-
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
@@ -100,7 +99,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 };
-
 
 #endif
 

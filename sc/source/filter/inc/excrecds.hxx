@@ -27,7 +27,6 @@
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 
-
 #include <vector>
 #include "olinetab.hxx"
 #include "filter.hxx"
@@ -63,7 +62,6 @@ private:
     virtual void            WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
 //--------------------------------------------------------- class ExcEmptyRec -
 
 class ExcEmptyRec : public ExcRecord
@@ -87,7 +85,6 @@ public:
     virtual const sal_uInt8*        GetData() const = 0;    // byte data must contain header and body
 };
 
-
 //------------------------------------------------------- class ExcBoolRecord -
 // stores bool as 16bit val ( 0x0000 | 0x0001 )
 
@@ -107,7 +104,6 @@ public:
     virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
-
 //--------------------------------------------------------- class ExcBof_Base -
 
 class ExcBof_Base : public ExcRecord
@@ -121,7 +117,6 @@ protected:
 public:
                             ExcBof_Base( void );
 };
-
 
 //-------------------------------------------------------------- class ExcBof -
 // Header Record fuer WORKSHEETS
@@ -137,7 +132,6 @@ public:
     virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
-
 //------------------------------------------------------------- class ExcBofW -
 // Header Record fuer WORKBOOKS
 
@@ -152,7 +146,6 @@ public:
     virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
-
 //-------------------------------------------------------------- class ExcEof -
 
 class ExcEof : public ExcRecord
@@ -162,7 +155,6 @@ public:
     virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
     virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
-
 
 //--------------------------------------------------------- class ExcDummy_00 -
 // INTERFACEHDR to FNGROUPCOUNT (see excrecds.cxx)
@@ -214,7 +206,6 @@ private:
     sal_uInt16  mnHash;
 };
 
-
 //-------------------------------------------------------- class ExcDummy_04x -
 // PASSWORD to BOOKBOOL (see excrecds.cxx), no 1904
 
@@ -238,7 +229,6 @@ public:
     virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
-
 //------------------------------------------------------------- class Exc1904 -
 
 class Exc1904 : public ExcBoolRecord
@@ -251,7 +241,6 @@ public:
 private:
     bool                    bDateCompatibility;
 };
-
 
 //------------------------------------------------------ class ExcBundlesheet -
 
@@ -299,7 +288,6 @@ public:
     virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
-
 /** This record contains the Windows country IDs for the UI and document language. */
 class XclExpCountry : public XclExpRecord
 {
@@ -313,7 +301,6 @@ private:
     /** Writes the body of the COUNTRY record. */
     virtual void                WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
 
 // XclExpWsbool ===============================================================
 
@@ -340,7 +327,6 @@ private:
     bool mbFitToPage;
     Color maTabColor;
 };
-
 
 class XclExpFiltermode : public XclExpEmptyRecord
 {
@@ -466,7 +452,6 @@ private:
 
     XclExpTabFilterMap  maFilterMap;
 };
-
 
 #endif
 

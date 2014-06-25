@@ -27,11 +27,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-
 #include "sharedocdlg.hxx"
 #include "scresid.hxx"
 #include "viewdata.hxx"
-
 
 using namespace ::com::sun::star;
 
@@ -69,9 +67,7 @@ public:
     }
 };
 
-
 // class ScShareDocumentDlg
-
 
 ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")

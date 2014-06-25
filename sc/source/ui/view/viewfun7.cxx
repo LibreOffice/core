@@ -54,7 +54,6 @@ bool bPasteIsMove = false;
 
 using namespace com::sun::star;
 
-
 static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 {
     SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );

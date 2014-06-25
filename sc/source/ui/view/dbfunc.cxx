@@ -46,9 +46,7 @@ ScDBFunc::~ScDBFunc()
 {
 }
 
-
 //      auxiliary functions
-
 
 void ScDBFunc::GotoDBArea( const OUString& rDBName )
 {
@@ -238,9 +236,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     }
 }
 
-
 //      main functions
-
 
 // Sort
 
@@ -340,7 +336,6 @@ void ScDBFunc::ToggleAutoFilter()
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
     pDBData->GetQueryParam( aParam );
-
 
     SCCOL  nCol;
     SCROW  nRow = aParam.nRow1;

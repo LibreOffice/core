@@ -41,13 +41,10 @@ ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
 {
 }
 
-
-
 SCCOLROW ScOutlineEntry::GetEnd() const
 {
     return nStart+nSize-1;
 }
-
 
 void ScOutlineEntry::Move( SCsCOLROW nDelta )
 {
@@ -288,7 +285,6 @@ bool ScOutlineArray::Insert(
 
     return true;
 }
-
 
 bool ScOutlineArray::FindTouchedLevel(
     SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const
@@ -864,7 +860,6 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
     return pEntry;                  // nSubLevel gueltig, wenn pEntry != 0
 }
 
-
 size_t ScSubOutlineIterator::LastEntry() const
 {
     if (nSubEntry == 0)
@@ -895,6 +890,5 @@ void ScSubOutlineIterator::DeleteLast()
     std::advance(it, nSubEntry);
     rColl.erase(it);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

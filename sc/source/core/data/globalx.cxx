@@ -36,11 +36,9 @@
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-
 
 void ScGlobal::InitAddIns()
 {
@@ -117,7 +115,6 @@ void ScGlobal::InitAddIns()
         }
     }
 }
-
 
 OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {

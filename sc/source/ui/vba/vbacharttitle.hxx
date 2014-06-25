@@ -22,7 +22,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XChartTitle.hpp>
 
-
 typedef TitleImpl< cppu::WeakImplHelper1< ov::excel::XChartTitle > > ChartTitleBase;
 
 class ScVbaChartTitle : public ChartTitleBase

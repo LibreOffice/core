@@ -923,7 +923,6 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     return bDone;
 }
 
-
 sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     const uno::Sequence<beans::PropertyValue>& rOptions)
         throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -2376,7 +2375,6 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
     return aRet;
 }
 
-
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
@@ -3823,7 +3821,5 @@ sal_Bool SAL_CALL ScScenariosObj::hasByName( const OUString& aName )
     SCTAB nIndex;
     return GetScenarioIndex_Impl( aName, nIndex );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

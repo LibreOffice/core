@@ -502,7 +502,6 @@ ScVbaApplication::Names( const css::uno::Any& aIndex ) throw ( uno::RuntimeExcep
     return uno::Any( xNames->Item( aIndex, uno::Any() ) );
 }
 
-
 uno::Reference< excel::XWorksheet > SAL_CALL
 ScVbaApplication::getActiveSheet() throw (uno::RuntimeException, std::exception)
 {
@@ -922,7 +921,6 @@ ScVbaApplication::getPathSeparator() throw (uno::RuntimeException, std::exceptio
 {
     return OUString( (sal_Unicode) SAL_PATHDELIMITER );
 }
-
 
 // Helpers for Intersect and Union
 

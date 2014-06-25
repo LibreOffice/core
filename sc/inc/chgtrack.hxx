@@ -51,7 +51,6 @@ private:
     sal_uInt16              nLastUserIndex;
     ColorData               nColor;
 
-
 public:
     ScActionColorChanger( const ScChangeTrack& rTrack );
     ~ScActionColorChanger() {}

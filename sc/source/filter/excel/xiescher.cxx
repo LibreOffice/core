@@ -1923,7 +1923,6 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
     aPropSet.SetBoolProperty( "EnableVisible", rDrawObj.IsVisible() );
     aPropSet.SetBoolProperty( "Printable", rDrawObj.IsPrintable() );
 
-
     // virtual call for type specific processing
     DoProcessControl( aPropSet );
 }
@@ -3210,7 +3209,6 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
     mbHasCtrlForm( false )
 {
 }
-
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),

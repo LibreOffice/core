@@ -27,10 +27,8 @@
 
 #include <cppuhelper/implbase4.hxx>
 
-
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScTestAddIn_CreateInstance(
     const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& );
-
 
 class ScTestAddIn : public cppu::WeakImplHelper4<
                         com::sun::star::sheet::XAddIn,
@@ -88,7 +86,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

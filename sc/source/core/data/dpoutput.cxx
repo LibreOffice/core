@@ -259,7 +259,6 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     else
         aBox.SetLine(&aLine,  BOX_LINE_BOTTOM);
 
-
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
     aBoxInfo.SetValid(VALID_VERT,false );
     if ( bHori )
@@ -860,7 +859,6 @@ void ScDPOutput::FieldCell(
         pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
     }
 
-
     lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME );
 }
 
@@ -1228,7 +1226,6 @@ void ScDPOutput::SetHeaderLayout(bool bUseGrid)
     mbHeaderLayout = bUseGrid;
     bSizesValid = false;
 }
-
 
 namespace {
 
@@ -1811,6 +1808,5 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
 
     return false;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

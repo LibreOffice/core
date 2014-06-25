@@ -42,9 +42,7 @@
 
 static const sal_Unicode cDelimiter = ',';
 
-
 // Benutzerdefinierte Listen:
-
 
 ScTpUserLists::ScTpUserLists( Window*               pParent,
                               const SfxItemSet&     rCoreAttrs )
@@ -439,9 +437,7 @@ void ScTpUserLists::RemoveList( size_t nList )
     }
 }
 
-
 // Handler:
-
 
 IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 {
@@ -607,7 +603,6 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
             aMsg += mpLbLists->GetEntry( nRemovePos );
             aMsg += aStrQueryRemove.getToken( 1, '#' );
-
 
             if ( RET_YES == QueryBox( this,
                                       WinBits( WB_YES_NO | WB_DEF_YES ),

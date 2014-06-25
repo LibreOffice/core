@@ -113,7 +113,6 @@ public:
     virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
-
 //  EditSource with a shared forwarder for all children of one text object
 
 class ScSimpleEditSource : public SvxEditSource

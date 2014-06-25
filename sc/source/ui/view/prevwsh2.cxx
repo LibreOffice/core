@@ -70,6 +70,4 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         pPreview->DataChanged(true);
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

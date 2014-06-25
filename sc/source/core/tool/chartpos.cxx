@@ -342,7 +342,6 @@ const ScChartPositionMap* ScChartPositioner::GetPositionMap()
     return pPositionMap;
 }
 
-
 void ScChartPositioner::CreatePositionMap()
 {
     if ( eGlue == SC_CHARTGLUE_NA && pPositionMap )
@@ -361,9 +360,7 @@ void ScChartPositioner::CreatePositionMap()
     SCROW nRow, nRow1, nRow2;
     SCTAB nTab, nTab1, nTab2;
 
-
     //  real size (without hidden rows/columns)
-
 
     SCSIZE nColCount = 0;
     SCSIZE nRowCount = 0;
@@ -480,7 +477,6 @@ void ScChartPositioner::CreatePositionMap()
     delete pCols;
 }
 
-
 ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             SCCOL nColAdd, SCROW nRowAdd, ColumnMap& rCols ) :
         ppData( new ScAddress* [ nChartCols * nChartRows ] ),
@@ -569,7 +565,6 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         }
     }
 }
-
 
 ScChartPositionMap::~ScChartPositionMap()
 {

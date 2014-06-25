@@ -21,7 +21,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <comphelper/servicedecl.hxx>
 
-
 // component exports
 
 using namespace ::com::sun::star;

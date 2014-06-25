@@ -171,7 +171,6 @@ protected:
     void                ConvertSheetLinks(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
     inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
     /** Returns the Excel token array of the source range, or 0, if no link present. */

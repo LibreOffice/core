@@ -29,7 +29,6 @@
 
 class ScXMLImport;
 
-
 struct ScMyImpDetectiveObj
 {
     ScRange                     aSourceRange;
@@ -40,7 +39,6 @@ struct ScMyImpDetectiveObj
 };
 
 typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
-
 
 struct ScMyImpDetectiveOp
 {
@@ -75,7 +73,6 @@ public:
     bool                        GetFirstOp( ScMyImpDetectiveOp& rDetOp );
 };
 
-
 class ScXMLDetectiveContext : public SvXMLImportContext
 {
 private:
@@ -100,7 +97,6 @@ public:
                                     ) SAL_OVERRIDE;
     virtual void                EndElement() SAL_OVERRIDE;
 };
-
 
 class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 {
@@ -130,7 +126,6 @@ public:
     virtual void                EndElement() SAL_OVERRIDE;
 };
 
-
 class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
@@ -156,7 +151,6 @@ public:
                                     ) SAL_OVERRIDE;
     virtual void                EndElement() SAL_OVERRIDE;
 };
-
 
 #endif
 

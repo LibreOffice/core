@@ -28,7 +28,6 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSolver; }
 } } }
 
-
 class ScSolverUtil
 {
 public:

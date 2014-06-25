@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <math.h>
 
 #include <svl/zforlist.hxx>
@@ -46,7 +45,6 @@ const sal_Unicode pKeyFALSE[]   = { 'F', 'A', 'L', 'S', 'E', 0 };
 const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
 const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
-
 
 FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const rtl_TextEncoding eVon, sal_uInt32 nDifOption )
@@ -121,7 +119,6 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         }
 
     }
-
 
     if( eTopic == T_DATA )
     {   // Ab hier kommen die Daten
@@ -233,7 +230,6 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         return eERR_OK;
 }
 
-
 DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e )
     : fVal(0.0)
     , nVector(0)
@@ -256,7 +252,6 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
     else
         pNumFormatter = rDoc.GetFormatTable();
 }
-
 
 TOPIC DifParser::GetNextTopic( void )
 {
@@ -400,7 +395,6 @@ TOPIC DifParser::GetNextTopic( void )
 
     return eRet;
 }
-
 
 static void lcl_DeEscapeQuotesDif( OUString& rString )
 {
@@ -607,7 +601,6 @@ DATASET DifParser::GetNextDataset( void )
     return eRet;
 }
 
-
 const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32& rRet )
 {
     // eat leading whitespace, not specified, but seen in the wild
@@ -635,7 +628,6 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
 
     return pStart;
 }
-
 
 bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
 {
@@ -843,7 +835,6 @@ void DifColumn::SetLogical( SCROW nRow )
     }
 }
 
-
 void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 {
     OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row too big!" );
@@ -869,7 +860,6 @@ void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
         pAkt = NULL;
 }
 
-
 void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 {
     pAkt = new ENTRY;
@@ -879,13 +869,11 @@ void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
     aEntries.push_back(pAkt);
 }
 
-
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& rPattAttr )
 {
     for (boost::ptr_vector<ENTRY>::const_iterator it = aEntries.begin(); it != aEntries.end(); ++it)
         rDoc.ApplyPatternAreaTab( nCol, it->nStart, nCol, it->nEnd, nTab, rPattAttr );
 }
-
 
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
@@ -905,7 +893,6 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
     }
 }
 
-
 DifAttrCache::DifAttrCache( const bool bNewPlain )
 {
     bPlain = bNewPlain;
@@ -913,7 +900,6 @@ DifAttrCache::DifAttrCache( const bool bNewPlain )
     for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
         ppCols[ nCnt ] = NULL;
 }
-
 
 DifAttrCache::~DifAttrCache()
 {
@@ -947,7 +933,6 @@ void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_u
 
     ppCols[ nCol ]->SetNumFormat( nRow, nNumFormat );
 }
-
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {

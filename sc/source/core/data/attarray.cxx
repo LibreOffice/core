@@ -49,7 +49,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
 using ::editeng::SvxBorderLine;
 
 ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
@@ -76,7 +75,6 @@ ScAttrArray::~ScAttrArray()
 
     delete[] pData;
 }
-
 
 #if OSL_DEBUG_LEVEL > 1
 void ScAttrArray::TestData() const
@@ -138,7 +136,6 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
     pData[0].nRow = MAXROW;
     pData[0].pPattern = pNewPattern;
 }
-
 
 bool ScAttrArray::Concat(SCSIZE nPos)
 {
@@ -208,7 +205,6 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
     return bFound;
 }
 
-
 const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
 {
     SCSIZE i;
@@ -217,7 +213,6 @@ const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
     else
         return NULL;
 }
-
 
 const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
         SCROW& rEndRow, SCROW nRow ) const
@@ -568,7 +563,6 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
 #endif
 }
 
-
 void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
@@ -641,7 +635,6 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
     TestData();
 #endif
 }
-
 
     // const cast, otherwise it will be too inefficient/complicated
 #define SET_LINECOLOR(dest,c)                    \
@@ -786,7 +779,6 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 #undef SET_LINECOLOR
 #undef SET_LINE
 
-
 void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -915,7 +907,6 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
     }
 }
 
-
 void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                                     ScMergePatternState& rState, bool bDeep ) const
 {
@@ -995,7 +986,6 @@ static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pN
     return true;              // another line -> don't care
 }
 
-
 static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                                 ScLineFlags& rFlags, const ScPatternAttr* pPattern,
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
@@ -1059,7 +1049,6 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
     }
 }
 
-
 void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                     ScLineFlags& rFlags,
                     SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const
@@ -1094,9 +1083,7 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
     }
 }
 
-
 // apply border
-
 
 // ApplyFrame - on an entry into the array
 
@@ -1171,7 +1158,6 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
         return true;
     }
 }
-
 
 void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight )
@@ -1425,7 +1411,6 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
     return bFound;
 }
 
-
 bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
 {
     bool bFound = false;
@@ -1493,7 +1478,6 @@ void ScAttrArray::DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow)
     SetPatternAreaSafe( nStartRow, nEndRow, pDocument->GetDefPattern(), true );
 }
 
-
 void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                         const ScPatternAttr* pWantedPattern, bool bDefault )
 {
@@ -1549,7 +1533,6 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
     }
 }
 
-
 bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
 {
     const ScPatternAttr* pOldPattern;
@@ -1585,7 +1568,6 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
 
     return bChanged;
 }
-
 
 bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
 {
@@ -1623,7 +1605,6 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags 
     return bChanged;
 }
 
-
 void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich )
 {
     const ScPatternAttr* pOldPattern;
@@ -1654,7 +1635,6 @@ void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* 
         nThisRow = pData[nIndex-1].nRow+1;
     }
 }
-
 
 void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement )
 {
@@ -1716,7 +1696,6 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         }
     }
 }
-
 
 SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
 {
@@ -1783,7 +1762,6 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
     }
 }
 
-
 bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle,
         bool bGatherAllStyles ) const
 {
@@ -1809,7 +1787,6 @@ bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle,
     return bIsUsed;
 }
 
-
 bool ScAttrArray::IsEmpty() const
 {
     if (nCount == 1)
@@ -1822,7 +1799,6 @@ bool ScAttrArray::IsEmpty() const
     else
         return false;
 }
-
 
 bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 {
@@ -1920,7 +1896,6 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFu
     return bFound;
 }
 
-
 bool ScAttrArray::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 {
     SCSIZE nIndex;
@@ -1938,7 +1913,6 @@ bool ScAttrArray::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 
     return bFound;
 }
-
 
 bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
                                     SCROW nStartRow, SCROW nEndRow ) const
@@ -1976,7 +1950,6 @@ bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
     return bEqual;
 }
 
-
 bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW nEndRow ) const
 {
     // summarised with IsVisibleEqual
@@ -2013,7 +1986,6 @@ bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW 
     return bEqual;
 }
 
-
 bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 {
     // Horizontal aggregate are not allowed to be moved out; if whole summary,
@@ -2041,7 +2013,6 @@ bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
     return bTest;
 }
 
-
 bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
 {
     // if 1st row pushed out is vertically overlapped, summary would be broken
@@ -2058,7 +2029,6 @@ bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
 
     return true;
 }
-
 
 void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
 {
@@ -2108,7 +2078,6 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
 }
 
-
 void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
     bool bFirst=true;
@@ -2156,7 +2125,6 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     RemoveFlags( MAXROW-nSize+1, MAXROW, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
 }
 
-
 void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
 {
     ScDocumentPool* pDocPool = pDocument->GetPool();
@@ -2167,7 +2135,6 @@ void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
     nCount -= nEndIndex-nStartIndex+1;
 }
 
-
 void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
 {
     RemoveAreaMerge( nStartRow, nEndRow );  // remove from combined flags
@@ -2177,7 +2144,6 @@ void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
     else
         DeleteAreaSafe( nStartRow, nEndRow );  // leave merge flags
 }
-
 
 void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
 {
@@ -2220,7 +2186,6 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
     }
 }
 
-
 // move within a document
 
 void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray)
@@ -2238,7 +2203,6 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
     }
     DeleteArea(nStartRow, nEndRow);
 }
-
 
 // copy between documents (Clipboard)
 
@@ -2305,7 +2269,6 @@ void ScAttrArray::CopyArea(
     }
 }
 
-
 // leave flags
 // summarized with CopyArea
 
@@ -2348,7 +2311,6 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
         nDestStart = std::max((long)nDestStart, (long)(pData[i].nRow + nDy + 1));
     }
 }
-
 
 SCsROW ScAttrArray::SearchStyle(
     SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
@@ -2412,7 +2374,6 @@ SCsROW ScAttrArray::SearchStyle(
 
     return nRow;
 }
-
 
 bool ScAttrArray::SearchStyleRange(
     SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,

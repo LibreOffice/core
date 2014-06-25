@@ -394,7 +394,6 @@ ScDBQueryParamBase::~ScDBQueryParamBase()
 {
 }
 
-
 ScDBQueryParamInternal::ScDBQueryParamInternal() :
     ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),
     ScQueryParamTable()

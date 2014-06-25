@@ -41,8 +41,6 @@ ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r ) :
 
 ScUnitConverterData::~ScUnitConverterData() {}
 
-
-
 OUString ScUnitConverterData::BuildIndexString(
     const OUString& rFromUnit, const OUString& rToUnit )
 {

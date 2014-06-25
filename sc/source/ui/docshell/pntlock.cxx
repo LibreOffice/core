@@ -40,5 +40,4 @@ void ScPaintLockData::AddRange( const ScRange& rRange, sal_uInt16 nP )
     nParts |= nP;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

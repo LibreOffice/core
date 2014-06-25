@@ -24,7 +24,6 @@
 #include <osl/module.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 typedef ScAbstractDialogFactory* (SAL_CALL *ScFuncPtrCreateDialogFactory)();
 
 #ifndef DISABLE_DYNLOADING

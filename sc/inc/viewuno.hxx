@@ -126,7 +126,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 //  ScViewPaneObj for direct use (including OWeakObject)
 
 class ScViewPaneObj : public ScViewPaneBase, public cppu::OWeakObject

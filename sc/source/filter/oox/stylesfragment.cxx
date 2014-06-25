@@ -26,7 +26,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-
 IndexedColorsContext::IndexedColorsContext( WorkbookFragmentBase& rFragment ) :
     WorkbookContextBase( rFragment )
 {

@@ -702,9 +702,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
     }
 }
 
-
 // Function/Range names etc. as Tip help
-
 
 //  The other types are defined in ScDocument::GetFormulaEntries
 void ScInputHandler::GetFormulaData()
@@ -1196,7 +1194,6 @@ void ScInputHandler::PasteFunctionData()
         pActiveView->ShowCursor();
 }
 
-
 // Calculate selection and display as tip help
 static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
@@ -1397,7 +1394,6 @@ void ScInputHandler::SkipClosingPar()
     --nAutoPar;
 }
 
-
 // Auto input
 
 void ScInputHandler::GetColData()
@@ -1551,7 +1547,6 @@ void ScInputHandler::NextAutoEntry( bool bBack )
     if (pActiveView)
         pActiveView->ShowCursor();
 }
-
 
 // Highlight parentheses
 void ScInputHandler::UpdateParenthesis()
@@ -2244,9 +2239,7 @@ void ScInputHandler::InvalidateAttribs()
     }
 }
 
-
 // --------------- public methods --------------------------------------------
-
 
 void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
 {
@@ -3653,7 +3646,6 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
     return bRet;
 }
 
-
 /**
  * Methods for FunctionAutoPilot:
  * InputGetSelection, InputSetSelection, InputReplaceSelection, InputGetFormulaStr
@@ -3754,7 +3746,6 @@ void ScInputHandler::InputTurnOffWinEngine()
 
     bInOwnChange = false;
 }
-
 
 /**
  * ScInputHdlState

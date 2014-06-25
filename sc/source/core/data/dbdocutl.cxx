@@ -192,5 +192,4 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
     }
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

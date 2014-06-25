@@ -36,9 +36,7 @@
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-
 //  class ScHighlightChgDlg
-
 
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData)
@@ -92,7 +90,6 @@ void ScHighlightChgDlg::Init()
             m_pFilterCtr->InsertAuthor(*it);
     }
 
-
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
 
     if(pViewSettings!=NULL)
@@ -133,7 +130,6 @@ void ScHighlightChgDlg::Init()
     HighlightHandle(m_pHighlightBox);
 }
 
-
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
@@ -148,7 +144,6 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         m_pFilterCtr->SetRange(aRefStr);
     }
 }
-
 
 bool ScHighlightChgDlg::Close()
 {

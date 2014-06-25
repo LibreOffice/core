@@ -90,7 +90,6 @@ private:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) SAL_OVERRIDE;
     virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) SAL_OVERRIDE;
 
-
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
                             sal_uInt8* pnDestData,

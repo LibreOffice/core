@@ -23,7 +23,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <editeng/langitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>

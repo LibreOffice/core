@@ -267,7 +267,6 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
     long aWidthOffSet = aHeightOffSet;
 
-
     if (!GetPageSize( aPageSize ))
         return;
 
@@ -1204,6 +1203,5 @@ ScDocument& ScPreviewShell::GetDocument()
 {
     return pDocShell->GetDocument();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

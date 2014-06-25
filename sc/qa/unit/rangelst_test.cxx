@@ -78,7 +78,6 @@ public:
     CPPUNIT_TEST(testInsertCol);
     CPPUNIT_TEST_SUITE_END();
 
-
 private:
     ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;

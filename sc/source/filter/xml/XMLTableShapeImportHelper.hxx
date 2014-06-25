@@ -42,14 +42,12 @@ public:
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
             com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes) SAL_OVERRIDE;
 
-
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const bool bTempOnTable) { bOnTable = bTempOnTable; }
     void SetAnnotation(ScXMLAnnotationContext* pAnnotation) { pAnnotationContext = pAnnotation; }
 
     ScXMLAnnotationContext* GetAnnotationContext() const    { return pAnnotationContext; }
 };
-
 
 #endif
 

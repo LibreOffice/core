@@ -27,7 +27,6 @@ class ScAnnotationShapeObj : public UnoApiTest, apitest::XText
 public:
     ScAnnotationShapeObj();
 
-
     virtual void setUp();
     virtual void tearDown();
     virtual uno::Reference<uno::XInterface> init();
@@ -113,6 +112,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ScAnnotationShapeObj);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

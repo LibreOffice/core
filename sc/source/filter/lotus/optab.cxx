@@ -20,7 +20,6 @@
 #include "op.h"
 #include "optab.h"
 
-
 // Bearbeitungsfunktion sal_Char *X( sal_Char * )
 OPCODE_FKT pOpFkt[ FKT_LIMIT ] =
 {                       //  Code
@@ -127,7 +126,6 @@ OPCODE_FKT pOpFkt[ FKT_LIMIT ] =
     OP_HiddenCols,      //  100
 };
 
-
 OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ] =
 {                       //  Code
     OP_BOF123,              //    0
@@ -232,6 +230,5 @@ OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ] =
     NI,                 //   99
     NI      //  100
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

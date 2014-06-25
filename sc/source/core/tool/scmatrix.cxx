@@ -314,7 +314,6 @@ void ScMatrixImpl::SetImmutable(bool bVal)
     mbCloneIfConst = bVal;
 }
 
-
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
@@ -2243,4 +2242,3 @@ void ScMatrix::Dump() const
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

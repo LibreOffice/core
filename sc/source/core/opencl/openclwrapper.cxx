@@ -179,7 +179,6 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
 
-
     // grab the handles to all of the devices in the context.
     boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,

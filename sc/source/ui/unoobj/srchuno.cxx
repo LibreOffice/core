@@ -241,7 +241,4 @@ ScCellSearchObj* ScCellSearchObj::getImplementation(
     return pRet;
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

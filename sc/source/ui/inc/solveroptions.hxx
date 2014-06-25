@@ -67,7 +67,6 @@ public:
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties();
 };
 
-
 class ScSolverIntegerDialog : public ModalDialog
 {
     VclFrame*     m_pFrame;

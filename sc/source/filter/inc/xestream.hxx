@@ -236,9 +236,6 @@ private:
     bool                mbValid;
 };
 
-
-
-
 // `s.GetChar(0) != 0` needed because some strings on export only contain NULL.
 #define XESTRING_TO_PSZ(s) \
     (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : NULL)

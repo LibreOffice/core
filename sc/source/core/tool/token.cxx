@@ -138,7 +138,6 @@ sal_Int32 ScRawToken::GetStrLen( const sal_Unicode* pStr )
     return sal::static_int_cast<sal_Int32>( p - pStr );
 }
 
-
 void ScRawToken::SetOpCode( OpCode e )
 {
     eOp   = e;
@@ -285,7 +284,6 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     nRefCnt = 0;
 }
 
-
 bool ScRawToken::IsValidReference() const
 {
     switch (eType)
@@ -302,7 +300,6 @@ bool ScRawToken::IsValidReference() const
     }
     return false;
 }
-
 
 sal_uInt16 ScRawToken::sbyteOffset()
 {
@@ -358,7 +355,6 @@ ScRawToken* ScRawToken::Clone() const
     p->bRaw = false;
     return p;
 }
-
 
 FormulaToken* ScRawToken::CreateToken() const
 {
@@ -436,7 +432,6 @@ FormulaToken* ScRawToken::CreateToken() const
 #undef IF_NOT_OPCODE_ERROR
 }
 
-
 void ScRawToken::Delete()
 {
     if ( bRaw )
@@ -453,7 +448,6 @@ void ScRawToken::Delete()
         }
     }
 }
-
 
 // --- class ScToken --------------------------------------------------------
 
@@ -515,7 +509,6 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
     else
         return *this == _rToken;     // else normal operator==
 }
-
 
 bool ScToken::Is3DRef() const
 {
@@ -725,7 +718,6 @@ ScMatrix* ScToken::GetMatrix()
     return NULL;
 }
 
-
 ScJumpMatrix* ScToken::GetJumpMatrix() const
 {
     OSL_FAIL( "ScToken::GetJumpMatrix: virtual dummy called" );
@@ -744,8 +736,6 @@ ScRefList* ScToken::GetRefList()
 }
 
 // real implementations of virtual functions
-
-
 
 const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
@@ -1178,9 +1168,6 @@ bool ScHybridCellToken::operator==( const FormulaToken& r ) const
         mfDouble == r.GetDouble() && maString == r.GetString() &&
         maFormula == static_cast<const ScHybridCellToken &>(r).GetFormula();
 }
-
-
-
 
 bool ScTokenArray::AddFormulaToken(
     const css::sheet::FormulaToken& rToken, svl::SharedStringPool& rSPool, formula::ExternalReferenceHelper* pExtRef)
@@ -1675,8 +1662,6 @@ void ScTokenArray::GenHash()
     mnHashValue = nHash;
 }
 
-
-
 bool ScTokenArray::IsInvariant() const
 {
     FormulaToken** p = pCode;
@@ -1991,7 +1976,6 @@ FormulaToken* ScTokenArray::MergeArray( )
     return AddMatrix( pArray );
 }
 
-
 FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
 {
     if (!pCode || !nLen)
@@ -2223,7 +2207,6 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     }
     return false;
 }
-
 
 void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
         const ScAddress& rNewPos )
@@ -3122,7 +3105,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
     sc::RefUpdateResult aRes;
 
-
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
     for (; p != pEnd; ++p)
@@ -3994,6 +3976,5 @@ void ScTokenArray::Dump() const
     }
 }
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

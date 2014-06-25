@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xechart.hxx"
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -1697,7 +1696,6 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
     aCurveProp.GetProperty(bIsForceIntercept,  EXC_CHPROP_FORCE_INTERCEPT);
     if (bIsForceIntercept)
         aCurveProp.GetProperty(maData.mfIntercept, EXC_CHPROP_INTERCEPT_VALUE);
-
 
     // line formatting
     XclChDataPointPos aPointPos( nSeriesIdx );

@@ -31,7 +31,6 @@
 
 #include "address.hxx"
 
-
 typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 
 class ScVbaWorksheets : public ScVbaWorksheets_BASE
@@ -51,7 +50,6 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-
 
     // XWorksheets
     virtual css::uno::Any SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

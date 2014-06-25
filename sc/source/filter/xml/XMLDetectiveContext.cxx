@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #include "XMLDetectiveContext.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -33,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
-
 
 ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
     aSourceRange(),
@@ -61,7 +58,6 @@ bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
     aDetectiveOpList.erase( aItr );
     return true;
 }
-
 
 ScXMLDetectiveContext::ScXMLDetectiveContext(
         ScXMLImport& rImport,
@@ -103,7 +99,6 @@ SvXMLImportContext *ScXMLDetectiveContext::CreateChildContext(
 void ScXMLDetectiveContext::EndElement()
 {
 }
-
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScXMLImport& rImport,
@@ -182,7 +177,6 @@ void ScXMLDetectiveHighlightedContext::EndElement()
     if( bValid )
         pDetectiveObjVec->push_back( aDetectiveObj );
 }
-
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,

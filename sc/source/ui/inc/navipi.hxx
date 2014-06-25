@@ -31,7 +31,6 @@
 #include "content.hxx"
 #include <svtools/svmedit.hxx>
 
-
 class ScTabViewShell;
 class ScViewData;
 class ScArea;
@@ -51,9 +50,7 @@ enum NavListMode { NAV_LMODE_NONE       = 0x4000,
                    NAV_LMODE_DOCS       = 0x800,
                    NAV_LMODE_SCENARIOS  = 0x400 };
 
-
 // class ScScenarioListBox -----------------------------------------------
-
 
 class ScScenarioListBox : public ListBox
 {
@@ -92,7 +89,6 @@ private:
     ScenarioList        maEntries;
 };
 
-
 // class ScScenarioWindow ------------------------------------------------
 
 class ScScenarioWindow : public Window
@@ -115,7 +111,6 @@ private:
     ScScenarioListBox   aLbScenario;
     MultiLineEdit       aEdComment;
 };
-
 
 //  class ColumnEdit
 
@@ -208,9 +203,7 @@ private:
     ScNavigatorDlg& rDlg;
 };
 
-
 //  class ScNavigatorDlg
-
 
 class ScNavigatorDlg : public Window, public SfxListener
 {

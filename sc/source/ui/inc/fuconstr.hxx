@@ -22,7 +22,6 @@
 
 #include "fudraw.hxx"
 
-
 /** Draw rectangle */
 class FuConstruct : public FuDraw
 {

@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include <vcl/msgbox.hxx>
 
@@ -69,10 +66,6 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
 ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
-
-
-
-
 
 void ScMoveTableDlg::GetTabNameString( OUString& rString ) const
 {
@@ -254,7 +247,6 @@ void ScMoveTableDlg::InitDocListBox()
     pLbDoc->InsertEntry(msNewDoc);
     pLbDoc->SelectEntryPos( nSelPos );
 }
-
 
 // Handler:
 

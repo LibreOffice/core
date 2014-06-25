@@ -26,7 +26,6 @@
 
 class ScXMLImport;
 
-
 class ScXMLConsolidationContext : public SvXMLImportContext
 {
 private:
@@ -57,7 +56,6 @@ public:
                                     ) SAL_OVERRIDE;
     virtual void                EndElement() SAL_OVERRIDE;
 };
-
 
 #endif
 

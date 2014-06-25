@@ -169,7 +169,6 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
-
 sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if ( XmlFilterBase::filter( rDescriptor ) )

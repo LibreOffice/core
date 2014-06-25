@@ -271,7 +271,6 @@ std::string DateToDays_new=
 "    return nDays;\n"
 "}\n";
 
-
 std::string GetNullDateDecl=
 "int GetNullDate(void);\n";
 
@@ -512,13 +511,11 @@ std::string getDaysInYearRange=
 ";\n"
 "}\n";
 
-
 std::string getDiffDecl=
 "int getDiff(int rFrom,int rTo,int fDay,int fMonth,int fYear,int fbLastDayMode,"
 "int fbLastDay,int fb30Days,int fbUSMode,int fnDay,int tDay,int tMonth,"
 "int tYear,int tbLastDayMode,int tbLastDay,int tb30Days,"
 "int tbUSMode,int tnDay);\n";
-
 
 std::string getDiff=
 "int getDiff(int rFrom,int rTo,int fDay,int fMonth,int fYear,int fbLastDayMode,"
@@ -580,7 +577,6 @@ std::string getDiff=
 
 std::string lcl_GetcoupdaybsDecl=
 "int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase);\n";
-
 
 std::string lcl_Getcoupdaybs=
 "int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase)\n"
@@ -837,10 +833,8 @@ std::string setDay=
 "    }\n"
 "}\n";
 
-
 std::string coupdaysDecl=
 "double coupdays(int nSettle,int nMat,int nFreq,int nBase);\n";
-
 
 std::string coupdays=
 "double coupdays(int nSettle,int nMat,int nFreq,int nBase)\n"
@@ -886,7 +880,6 @@ std::string coupdaybs_new=
 
 std::string coupdaysncDecl=
 "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase);\n";
-
 
 std::string coupdaysnc=
     "double coupdaysnc( int nSettle,int nMat,int nFreq,int nBase)\n"
@@ -1009,7 +1002,6 @@ std::string getPrice_Decl=
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase );\n";
 
-
 std::string getPrice_=
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase )\n"
@@ -1031,7 +1023,6 @@ std::string getPrice_=
 std::string getPrice_new_Decl=
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
     "double fRedemp, int nFreq, int nBase );\n";
-
 
 std::string getPrice_new=
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
@@ -1244,11 +1235,9 @@ std::string GetYearFrac=
   "  return (double)( nDayDiff ) / (nDaysInYear);\n"
 "}\n";
 
-
 std::string GetYieldmatDecl=
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase );\n";
-
 
 std::string GetYieldmat=
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
@@ -1380,7 +1369,6 @@ std::string GetDiffDate360_=
 std::string GetDiffDate360Decl=
 "int GetDiffDate360( int nNullDate, int nDate1, int nDate2,"
 "bool bUSAMethod);\n";
-
 
 std::string GetDiffDate360=
 "int GetDiffDate360( int nNullDate, int nDate1, int nDate2,"

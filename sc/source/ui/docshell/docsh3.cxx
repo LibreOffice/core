@@ -127,7 +127,6 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
                 continue;
         }
 
-
         if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
         {
                                                 //! Abfrage auf versteckte Spalten/Zeilen!
@@ -801,7 +800,6 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     //  Die gemeinsamen Aktionen davor interessieren ueberhaupt nicht
 
     //! Abfrage, ob die Dokumente vor dem Change-Tracking gleich waren !!!
-
 
     const ScChangeAction* pFirstMergeAction = pSourceAction;
     const ScChangeAction* pFirstSearchAction = pThisAction;

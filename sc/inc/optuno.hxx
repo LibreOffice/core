@@ -36,7 +36,6 @@
 #define PROP_UNO_STANDARDDEC    11
 #define PROP_UNO_REGEXENABLED   12
 
-
 class ScDocOptionsHelper
 {
 public:
@@ -51,7 +50,6 @@ public:
                                     const SfxItemPropertyMap& rPropMap,
                                     const OUString& PropertyName );
 };
-
 
 //  empty doc object to supply only doc options
 
@@ -80,7 +78,6 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

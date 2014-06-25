@@ -149,8 +149,6 @@ public:
     inline  bool                IsStackedGroup() const  { return bStackedGroup; }
 };
 
-
-
 // --- class XclEscherClientData -------------------------------------
 
 class XclEscherClientData : public EscherExClientRecord_Base
@@ -159,7 +157,6 @@ public:
                         XclEscherClientData() {}
     virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
 };
-
 
 // --- class XclEscherClientTextbox ----------------------------------
 

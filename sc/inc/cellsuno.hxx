@@ -122,7 +122,6 @@ typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener > XModifyListenerRef;
 typedef boost::ptr_vector<XModifyListenerRef> XModifyListenerArr_Impl;
 
-
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
 //                                and ScCellRangeObj  (without access by index)
 
@@ -502,7 +501,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
                         public com::sun::star::sheet::XSheetCellRangeContainer,
                         public com::sun::star::container::XNameContainer,
@@ -611,7 +609,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XCellRangeAddressable,
@@ -838,7 +835,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 //! really derive cell from range?
 
 class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
@@ -1012,7 +1008,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XSpreadsheet,
@@ -1280,7 +1275,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScTableColumnObj : public ScCellRangeObj,
                          public com::sun::star::container::XNamed
 {
@@ -1334,7 +1328,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScTableRowObj : public ScCellRangeObj
 {
 private:
@@ -1370,7 +1363,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 class ScCellsObj : public cppu::WeakImplHelper2<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::lang::XServiceInfo >,
@@ -1403,7 +1395,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScCellsEnumeration : public cppu::WeakImplHelper2<
                                 com::sun::star::container::XEnumeration,
@@ -1486,7 +1477,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 class ScCellFormatsEnumeration : public cppu::WeakImplHelper2<
                                     com::sun::star::container::XEnumeration,
@@ -1605,7 +1595,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 #endif
 

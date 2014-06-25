@@ -118,7 +118,6 @@ void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStr
     aConfig.text_qualifier = '"';
     aConfig.trim_cell_value = false;
 
-
     std::string aContent;
     loadFile(aFileName, aContent);
     orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);

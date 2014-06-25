@@ -30,7 +30,6 @@ namespace xls {
 
 class BiffInputStream;
 
-
 /** A vector of com.sun.star.table.CellRangeAddress elements and additional
     functionality. */
 class ApiCellRangeList : public ::std::vector< ::com::sun::star::table::CellRangeAddress >
@@ -159,7 +158,6 @@ enum BiffTargetType
     BIFF_TARGETTYPE_DDE_OLE,        /// DDE server/topic or OLE class/target.
     BIFF_TARGETTYPE_UNKNOWN         /// Unknown/unsupported target type.
 };
-
 
 /** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
@@ -552,7 +550,6 @@ public:
                             const BinRangeList& rBinRanges,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
-
 
 private:
     void                initializeMaxPos(

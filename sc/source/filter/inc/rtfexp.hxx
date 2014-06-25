@@ -22,7 +22,6 @@
 
 #include "expbase.hxx"
 
-
 class ScRTFExport : public ScExportBase
 {
     sal_uLong*              pCellX;     // kumulierte Zellbreiten einer Tabelle
@@ -38,7 +37,6 @@ public:
 
     sal_uLong               Write();
 };
-
 
 #endif // INCLUDED_SC_SOURCE_FILTER_INC_RTFEXP_HXX
 

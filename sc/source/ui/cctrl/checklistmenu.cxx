@@ -428,7 +428,6 @@ void ScMenuFloatingWindow::drawAllMenuItems()
     }
 }
 
-
 void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
 {
     if (nPos >= maMenuItems.size())
@@ -471,7 +470,6 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
 
     fireMenuHighlightedEvent();
 }
-
 
 void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
 {
@@ -652,7 +650,6 @@ void ScMenuFloatingWindow::setName(const OUString& rName)
     maName = rName;
 }
 
-
 void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 {
     if (nPos == MENU_NOT_SELECTED)
@@ -728,7 +725,6 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
     sal_uInt16 nH = maMenuItems[nPos].mbSeparator ? nSepHeight : nMenuItemHeight;
     rSize = Size(aWndSize.Width() - nLeftMargin*2, nH);
 }
-
 
 size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
 {
@@ -833,7 +829,6 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
     if (mpParentMenu)
         mpParentMenu->terminateAllPopupMenus();
 }
-
 
 ScCheckListMenuWindow::Config::Config() :
     mbAllowEmptySet(true), mbRTL(false)

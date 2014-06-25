@@ -70,7 +70,6 @@ class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
 class ScDataPilotItemObj;
 
-
 class ScDataPilotConversion
 {
 public:

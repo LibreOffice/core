@@ -35,7 +35,6 @@ namespace
         > PanelFactoryInterfaceBase;
 }
 
-
 class ScPanelFactory
     : private ::boost::noncopyable,
       private ::cppu::BaseMutex,
@@ -59,7 +58,6 @@ public:
             css::lang::IllegalArgumentException,
             cssu::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
-
 
 } } // end of namespace sc::sidebar
 

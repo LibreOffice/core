@@ -22,22 +22,15 @@ RowHeightContext::RowHeightContext(
 
 RowHeightContext::~RowHeightContext() {}
 
-
-
-
-
-
 void RowHeightContext::setExtraHeight( sal_uInt16 nH )
 {
     mnExtraHeight = nH;
 }
 
-
 void RowHeightContext::setForceAutoSize( bool b )
 {
     mbForceAutoSize = b;
 }
-
 
 }
 

@@ -36,23 +36,19 @@
 
 #include <boost/bind.hpp>
 
-
 using namespace css;
 using namespace cssu;
 using ::rtl::OUString;
-
 
 namespace sc { namespace sidebar {
 
 #define IMPLEMENTATION_NAME "org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"
 #define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
 
-
 ::rtl::OUString SAL_CALL ScPanelFactory::getImplementationName (void)
 {
     return OUString(IMPLEMENTATION_NAME);
 }
-
 
 cssu::Reference<cssu::XInterface> SAL_CALL ScPanelFactory::createInstance(
     const uno::Reference<lang::XMultiServiceFactory>& )
@@ -62,7 +58,6 @@ cssu::Reference<cssu::XInterface> SAL_CALL ScPanelFactory::createInstance(
     return xService;
 }
 
-
 cssu::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void)
 {
     cssu::Sequence<OUString> aServiceNames (1);
@@ -71,17 +66,14 @@ cssu::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void
 
 }
 
-
 ScPanelFactory::ScPanelFactory (void)
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
-
 ScPanelFactory::~ScPanelFactory (void)
 {
 }
-
 
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,

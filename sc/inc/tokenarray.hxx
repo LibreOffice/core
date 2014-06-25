@@ -75,7 +75,6 @@ public:
     /// Exactly and only one valid range (no #REF!s)
     bool IsValidReference( ScRange& rRange, const ScAddress& rPos ) const;
 
-
                             /** Determines the extent of direct adjacent
                                 references. Only use with real functions, e.g.
                                 GetOuterFuncOpCode() == ocSum ! */

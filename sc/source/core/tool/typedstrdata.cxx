@@ -104,9 +104,6 @@ bool ScTypedStrData::IsStrData() const
     return meStrType != Value;
 }
 
-
-
-
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}
 

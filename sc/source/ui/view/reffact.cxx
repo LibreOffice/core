@@ -123,9 +123,7 @@ IMPL_CHILD_CTOR( ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 
 IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 
-
 // ScSimpleRefDlgWrapper
-
 
 static bool         bScSimpleRefFlag;
 static long         nScSimpleRefHeight;
@@ -182,7 +180,6 @@ void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, bool bSet)
     }
 }
 
-
 void ScSimpleRefDlgWrapper::SetAutoReOpen(bool bFlag)
 {
     bAutoReOpen=bFlag;
@@ -229,9 +226,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
     }
 }
 
-
 // ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell
-
 
 ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
                                             sal_uInt16 nId,
@@ -265,12 +260,9 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
     }
 }
 
-
 // ScHighlightChgDlgWrapper
 
-
 IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
-
 
 namespace
 {

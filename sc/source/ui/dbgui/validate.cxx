@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef SC_DLLIMPLEMENTATION
 #undef SC_DLLIMPLEMENTATION
 #endif
@@ -72,14 +71,12 @@
 #define SC_VALIDDLG_DATA_VALIDRANGE   6
 #define SC_VALIDDLG_DATA_INVALIDRANGE 7
 
-
 static const sal_uInt16 pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
     0
 };
-
 
 ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
@@ -272,7 +269,6 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringLis
     if( rFmlaStr.isEmpty() )
         rFmlaStr = "\"\"";
 }
-
 
 /** Converts formula with strings separated by semicolons to line feed separated string.
     @descr  Keeps all empty strings. Ignores all empty tokens (multiple semicolons).
@@ -643,7 +639,6 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
     m_pCbSort->Enable( m_pCbShow->IsChecked() );
     return 0;
 }
-
 
 // Input Help Page
 

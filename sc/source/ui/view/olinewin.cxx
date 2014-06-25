@@ -900,7 +900,6 @@ void ScOutlineWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-
 // mouse ----------------------------------------------------------------------
 
 void ScOutlineWindow::StartMouseTracking( size_t nLevel, size_t nEntry )
@@ -969,7 +968,6 @@ void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
 // keyboard -------------------------------------------------------------------
 
 void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
@@ -1018,6 +1016,5 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
         default:            Window::KeyInput( rKEvt );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

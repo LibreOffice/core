@@ -51,9 +51,7 @@ TYPEINIT1(ScDoubleItem,         SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 
-
 //      General Help Function
-
 
 bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
 {
@@ -86,7 +84,6 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
 //      Item - Implementierungen
 
 // Merge
-
 
 ScMergeAttr::ScMergeAttr():
     SfxPoolItem(ATTR_MERGE),
@@ -143,9 +140,7 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) con
     return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
 }
 
-
 // MergeFlag
-
 
 ScMergeFlagAttr::ScMergeFlagAttr():
     SfxInt16Item(ATTR_MERGE_FLAG, 0)
@@ -171,9 +166,7 @@ bool ScMergeFlagAttr::HasPivotPopupButton() const
     return (GetValue() & SC_MF_BUTTON_POPUP) != 0;
 }
 
-
 // Protection
-
 
 ScProtectionAttr::ScProtectionAttr():
     SfxPoolItem(ATTR_PROTECTION),
@@ -396,9 +389,7 @@ bool ScProtectionAttr::SetHidePrint( bool bHPrint)
     return true;
 }
 
-
 //      ScRangeItem - Tabellenbereich
-
 
 bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -445,9 +436,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
     return ePres;
 }
 
-
 //      ScTableListItem - List from Tables (-numbers)
-
 
 ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
     :   SfxPoolItem ( rCpy.Which() ),
@@ -463,7 +452,6 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
     else
         pTabArr = NULL;
 }
-
 
 ScTableListItem::~ScTableListItem()
 {
@@ -558,7 +546,6 @@ SfxItemPresentation ScTableListItem::GetPresentation
 }
 
 //      ScPageHFItem - Dates from the Head and Foot lines
-
 
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
@@ -809,7 +796,6 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
     return pItem;
 }
 
-
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
     delete pLeftArea;
@@ -840,9 +826,7 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
     }
 }
 
-
 //  ScViewObjectModeItem - Display Mode of View Objects
-
 
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
     : SfxEnumItem( nWhichP, VOBJ_MODE_SHOW )
@@ -949,9 +933,7 @@ SfxPoolItem* ScViewObjectModeItem::Create(
     }
 }
 
-
 //      double
-
 
 ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
     :   SfxPoolItem ( nWhichP ),
@@ -995,7 +977,6 @@ SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) co
 ScDoubleItem::~ScDoubleItem()
 {
 }
-
 
 ScPageScaleToItem::ScPageScaleToItem() :
     SfxPoolItem( ATTR_PAGE_SCALETO ),
@@ -1130,7 +1111,6 @@ ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
     return new ScCondFormatItem(maIndex);
 }
 
-
 void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )
 {
     maIndex.push_back(nIndex);
@@ -1140,6 +1120,5 @@ void ScCondFormatItem::SetCondFormatData( const std::vector<sal_uInt32>& rIndex 
 {
     maIndex = rIndex;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

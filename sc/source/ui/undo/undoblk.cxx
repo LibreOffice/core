@@ -324,7 +324,6 @@ bool ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
     return rTarget.ISA(ScTabViewTarget);
 }
 
-
 ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
                                 DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
@@ -737,7 +736,6 @@ bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return rTarget.ISA(ScTabViewTarget);
 }
-
 
 ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
                 ScRange aRange, ScAddress aOldEnd, const ScMarkData& rMark,
@@ -1497,7 +1495,6 @@ bool ScUndoConditionalFormat::CanRepeat(SfxRepeatTarget& ) const
 {
     return false;
 }
-
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,

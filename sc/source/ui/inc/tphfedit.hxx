@@ -96,7 +96,6 @@ private:
     Link                aObjectSelectLink;
 };
 
-
 class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:

@@ -26,7 +26,6 @@
 
 #define MINSIZE 80
 
-
 static OUString createEntryString(const ScRangeNameLine& rLine)
 {
     OUString aRet = rLine.aName + "\t" + rLine.aExpression + "\t" + rLine.aScope;
@@ -303,6 +302,5 @@ IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl)
     CheckForFormulaString();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

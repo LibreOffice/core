@@ -18,7 +18,6 @@
 #include <formula/vectortoken.hxx>
 #include <sstream>
 
-
 namespace sc { namespace opencl {
 
 void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,

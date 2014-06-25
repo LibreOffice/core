@@ -82,7 +82,6 @@ private:
     DECL_LINK( BtnCopyResultHdl,    CheckBox* );
 };
 
-
 #endif // INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

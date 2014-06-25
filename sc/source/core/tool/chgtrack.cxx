@@ -553,12 +553,10 @@ OUString ScChangeAction::GetRefString(
     return aBuf.makeStringAndClear();
 }
 
-
 void ScChangeAction::SetUser( const OUString& r )
 {
     aUser = r;
 }
-
 
 void ScChangeAction::SetComment( const OUString& rStr )
 {
@@ -874,7 +872,6 @@ bool ScChangeActionDel::IsTabDeleteCol() const
         p = p->GetNext();
     return p && p->GetType() == SC_CAT_DELETE_TABS;
 }
-
 
 ScChangeActionDelMoveEntry* ScChangeActionDel::AddCutOffMove(
     ScChangeActionMove* pMove, short nFrom, short nTo )
@@ -1442,8 +1439,6 @@ void ScChangeActionContent::GetNewString( OUString& rStr, const ScDocument* pDoc
 {
     GetValueString(rStr, maNewValue, maNewCell, pDoc);
 }
-
-
 
 void ScChangeActionContent::GetDescription(
     OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
@@ -2201,7 +2196,6 @@ void ScChangeTrack::Clear()
     Init();
 }
 
-
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
@@ -2237,7 +2231,6 @@ void ScChangeTrack::SetUser( const OUString& rUser )
     maUser = rUser;
     maUserCollection.insert(maUser);
 }
-
 
 void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
         sal_uLong nStartAction )

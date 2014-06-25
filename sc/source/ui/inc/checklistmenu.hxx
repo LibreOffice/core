@@ -186,7 +186,6 @@ private:
     ScMenuFloatingWindow* mpParentMenu;
 };
 
-
 class ScCheckListBox : public SvTreeListBox
 {
     SvLBoxButtonData*   mpCheckButton;

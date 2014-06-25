@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <svl/undo.hxx>
 #include <unotools/textsearch.hxx>
@@ -52,7 +51,6 @@
 #define RD_SPECIAL_CONTENT      1
 #define RD_SPECIAL_VISCONTENT   2
 
-
 //  class ScRedlinData
 
 ScRedlinData::ScRedlinData()
@@ -78,7 +76,6 @@ ScRedlinData::~ScRedlinData()
     bIsRejectable=false;
     bIsAcceptable=false;
 }
-
 
 //  class ScAcceptChgDlg
 
@@ -290,7 +287,6 @@ OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
     }
     return pStr;
 }
-
 
 bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 {
@@ -760,7 +756,6 @@ bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 
     return SfxModelessDialog::PreNotify(rNEvt);
 }
-
 
 void ScAcceptChgDlg::UpdateView()
 {
@@ -1410,7 +1405,6 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
     return (sal_uLong) true;
 }
 
-
 void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction,
                                    sal_uLong nEndAction, sal_uLong /* nPos */)
 {
@@ -1434,7 +1428,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         {
             pScChangeAction=pChanges->GetAction(i);
             if(pScChangeAction==NULL) continue;
-
 
             switch(pScChangeAction->GetState())
             {
@@ -1523,7 +1516,6 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
             nAction=pEntryData->nActionNo;
 
             if(nStartAction<=nAction && nAction<=nEndAction) bRemove=true;
-
 
         }
         SvTreeListEntry* pPrevEntry = pTheView->Prev(pEntry);
@@ -1749,7 +1741,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 
         sal_uInt16 nCommand=aPopup.Execute( this, GetPointerPosPixel() );
 
-
         if(nCommand)
         {
             if(nCommand==SC_CHANGES_COMMENT)
@@ -1950,7 +1941,6 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
                     nCompare = -1;
             }
         }
-
 
     }
     return nCompare;

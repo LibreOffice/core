@@ -52,9 +52,7 @@
 
 using namespace formula;
 
-
 //  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
-
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                     const OUString& rExpr1, const OUString& rExpr2,
@@ -417,7 +415,6 @@ bool ScValidationData::DoError( Window* pParent, const OUString& rInput,
     return ( eErrorStyle == SC_VALERR_STOP || nRet == RET_CANCEL );
 }
 
-
 bool ScValidationData::IsDataValid(
     const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const
 {
@@ -429,7 +426,6 @@ bool ScValidationData::IsDataValid(
 
     if (rTest[0] == '=')   // formulas do not pass the validity test
         return false;
-
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
 
@@ -909,7 +905,6 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
 
     return bIsValid;
 }
-
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {

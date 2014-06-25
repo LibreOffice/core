@@ -28,9 +28,7 @@ ScDataObject::~ScDataObject()
 {
 }
 
-
 // Collection
-
 
 static void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
 {
@@ -74,8 +72,6 @@ ScCollection::~ScCollection()
     lcl_DeleteScDataObjects( pItems, nCount );
 }
 
-
-
 bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
     if ((nCount < MAXCOLLECTIONSIZE) && (nIndex <= nCount) && pItems)
@@ -111,7 +107,6 @@ ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
     else
         return NULL;
 }
-
 
 ScCollection& ScCollection::operator=( const ScCollection& r )
 {

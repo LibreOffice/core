@@ -27,7 +27,6 @@
 
 class ScAccessibleCsvControl;
 
-
 /** A ruler control for the CSV import dialog. Supports setting and moving
     splits (which divide lines of data into several columns). */
 class SC_DLLPUBLIC ScCsvRuler : public ScCsvControl
@@ -52,7 +51,6 @@ private:
     Size                        maWinSize;          /// Size of the control.
     Rectangle                   maActiveRect;       /// The active area of the ruler.
     sal_Int32                   mnSplitSize;        /// Size of a split circle.
-
 
 public:
     explicit                    ScCsvRuler( ScCsvControl& rParent );
@@ -179,7 +177,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
 
 #endif
 

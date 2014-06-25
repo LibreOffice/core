@@ -75,7 +75,6 @@
 
 using namespace com::sun::star;
 
-
 ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     mrDocShell(rDocSh),
     rDoc(rDocSh.GetDocument()),
@@ -985,7 +984,5 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

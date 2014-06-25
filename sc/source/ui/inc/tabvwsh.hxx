@@ -89,7 +89,6 @@ enum ObjectSelectionType
     OST_Media
 };
 
-
 class ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
@@ -151,7 +150,6 @@ private:
     bool                    bActiveEditSh;
 
     bool                    bFormShellAtTop;            // does the FormShell need to be on top?
-
 
     bool                    bDontSwitch;                // Don't turn off EditShell
     bool                    bInFormatDialog;            // for GetSelectionText
@@ -315,7 +313,6 @@ public:
     bool            GetDontSwitch(){return bDontSwitch;}
     void            SetDontSwitch(bool bFlag){bDontSwitch=bFlag;}
 
-
     void            SetAuditShell( bool bActive );
     void            SetDrawFormShell( bool bActive );
     void            SetEditShell(EditView* pView, bool bActive );
@@ -323,7 +320,6 @@ public:
     void            SetChartShell( bool bActive );
     void            SetGraphicShell( bool bActive );
     void            SetMediaShell( bool bActive );
-
 
     void            SetDrawShellOrSub();
     void            SetCurSubShell( ObjectSelectionType eOST, bool bForce = false );
@@ -423,7 +419,6 @@ public:
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
 };
-
 
 #endif
 

@@ -27,12 +27,10 @@
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-
 class ScAccessibleCsvControl;
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 } } } }
-
 
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;
@@ -64,7 +62,6 @@ const sal_uInt8 SC_COL_YMD              = 5;
 const sal_uInt8 SC_COL_SKIP             = 9;
 const sal_uInt8 SC_COL_ENGLISH          = 10;
 
-
 /** Exported data of a column (data used in the dialog). */
 struct ScCsvExpData
 {
@@ -78,7 +75,6 @@ struct ScCsvExpData
 
 typedef ::std::vector< ScCsvExpData > ScCsvExpDataVec;
 
-
 /** Specifies which element should be used to perform an action. */
 enum ScMoveMode
 {
@@ -90,7 +86,6 @@ enum ScMoveMode
     MOVE_PREVPAGE,              /// Previous page relative to current context.
     MOVE_NEXTPAGE               /// Next page relative to current context.
 };
-
 
 /** Flags for comparison of old and new control layout data. */
 typedef sal_uInt32 ScCsvDiff;
@@ -110,7 +105,6 @@ const ScCsvDiff CSV_DIFF_GRIDCURSOR     = 0x00000200;
 const ScCsvDiff CSV_DIFF_HORIZONTAL     = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_HDRWIDTH | CSV_DIFF_CHARWIDTH;
 const ScCsvDiff CSV_DIFF_VERTICAL       = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_HDRHEIGHT | CSV_DIFF_LINEHEIGHT;
 const ScCsvDiff CSV_DIFF_CURSOR         = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
-
 
 /** A structure containing all layout data valid for both ruler and data grid
     (i.e. scroll position or column width). */
@@ -156,7 +150,6 @@ inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rD
     return !(rData1 == rData2);
 }
 
-
 /** Enumeration of possible commands to change any settings of the CSV controls.
     @descr  Controls have to send commands instead of changing their settings directly.
     This helps to keep the different controls consistent to each other.
@@ -200,7 +193,6 @@ enum ScCsvCmdType
     CSVCMD_REMOVEALLSPLITS      /// Remove all splits. [-]
 };
 
-
 /** Data for a CSV control command. The stored position data is aways character based,
     it's never a column index (required for internal consistency). */
 class ScCsvCmd
@@ -226,7 +218,6 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
     meType = eType; mnParam1 = nParam1; mnParam2 = nParam2;
 }
 
-
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
 class SC_DLLPUBLIC ScCsvControl : public Control
 {
@@ -245,7 +236,6 @@ private:
     XAccessibleRef              mxAccessible;       /// The accessible object of the control.
     ScAccessibleCsvControl*     mpAccessible;       /// Pointer to the accessible implementation object.
     bool                        mbValidGfx;         /// Content of virtual devices valid?
-
 
 public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
@@ -397,7 +387,6 @@ protected:
     /** Derived classes create a new accessible object here. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() = 0;
 };
-
 
 #endif
 

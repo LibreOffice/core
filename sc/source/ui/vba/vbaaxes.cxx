@@ -58,7 +58,6 @@ public:
         }
 };
 
-
 uno::Reference< excel::XAxis >
 ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno::Reference< uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( uno::RuntimeException, script::BasicErrorException )
 {

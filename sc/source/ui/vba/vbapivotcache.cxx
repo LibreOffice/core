@@ -18,7 +18,6 @@
  */
 #include "vbapivotcache.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 

@@ -26,7 +26,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
     class XBreakIterator;
 } } } }
 
-
 class ScScriptTypeData
 {
 public:
@@ -37,6 +36,5 @@ public:
 };
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

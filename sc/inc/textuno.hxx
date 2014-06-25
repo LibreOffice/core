@@ -50,11 +50,9 @@ class ScHeaderFooterTextObj;
 
 struct ScHeaderFieldData;
 
-
 #define SC_HDFT_LEFT    0
 #define SC_HDFT_CENTER  1
 #define SC_HDFT_RIGHT   2
-
 
 //  ScHeaderFooterContentObj is a dumb container which must be re-written into
 //  the page template using setPropertyValue
@@ -107,7 +105,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
@@ -238,7 +235,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 //  derived cursor objects for getImplementation and getText/getStart/getEnd
 
 //! uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
@@ -330,9 +326,7 @@ public:
                                     com::sun::star::uno::XInterface> xObj );
 };
 
-
 // ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead
-
 
 //  ScEditEngineTextObj for formatted cell content that is not inserted in a cell or header/footer
 //  (used for XML export of change tracking contents)
@@ -360,7 +354,6 @@ public:
     void                SetText( const EditTextObject& rTextObject );
     EditTextObject*     CreateTextObject();
 };
-
 
 //  ScCellTextData: shared data between sub objects of a cell text object
 
@@ -408,7 +401,6 @@ public:
                 ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
         virtual         ~ScCellTextObj() throw();
 };
-
 
 #endif
 

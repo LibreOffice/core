@@ -40,7 +40,6 @@
 
 // class ScHFPage
 
-
 ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
 
     :   SvxHFPage   ( pParent, rSet, nSetId ),
@@ -138,9 +137,7 @@ void ScHFPage::DeactivatePage()
 {
 }
 
-
 // Handler:
-
 
 IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 {
@@ -153,7 +150,6 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 
     return 0;
 }
-
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
@@ -181,7 +177,6 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         sal_uInt16 nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
                             ? RID_SCDLG_HFED_HEADER
                             : RID_SCDLG_HFED_FOOTER;
-
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -237,9 +232,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     return 0;
 }
 
-
 // class ScHeaderPage
-
 
 ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_HEADERSET )
@@ -256,9 +249,7 @@ const sal_uInt16* ScHeaderPage::GetRanges()
     return SvxHeaderPage::GetRanges();
 }
 
-
 // class ScFooterPage
-
 
 ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_FOOTERSET )
@@ -274,6 +265,5 @@ const sal_uInt16* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

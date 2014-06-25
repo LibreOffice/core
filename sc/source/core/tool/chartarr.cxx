@@ -147,9 +147,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCSIZE nCol;
     SCSIZE nRow;
 
-
         //  real size (without hidden rows/columns)
-
 
     SCCOL nColAdd = HasRowHeaders() ? 1 : 0;
     SCROW nRowAdd = HasColHeaders() ? 1 : 0;
@@ -264,7 +262,6 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                     pMemChart->SetData( nCol, nRow, DBL_MIN );
         }
 
-
         //  Column Header
 
         for (nCol=0; nCol<nColCount; nCol++)
@@ -285,7 +282,6 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             }
             pMemChart->SetColText( nCol, aString);
         }
-
 
         //  Row Header
 
@@ -376,9 +372,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
         //TODO: Label when gaps
 
-
         //  Column header
-
 
         SCCOL nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
@@ -403,9 +397,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             pMemChart->SetColText( nCol, aString);
         }
 
-
         //  Row header
-
 
         SCROW nPosRow = 0;
         for ( nRow = 0; nRow < nRowCount; nRow++ )

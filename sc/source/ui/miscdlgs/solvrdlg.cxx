@@ -181,7 +181,6 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
     return pDoc->GetFormatTable()->IsNumberFormat( rStrVal, n1, n2 );
 }
 
-
 // Handler:
 
 IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
@@ -265,6 +264,5 @@ IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl)
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

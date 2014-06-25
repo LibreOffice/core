@@ -25,7 +25,6 @@
 #include "rtfparse.hxx"
 #include "ftools.hxx"
 
-
 FltError ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
 {
     ScRTFImport aImp( pDoc, rRange );
@@ -41,13 +40,11 @@ ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, cons
     return new ScRTFImport( pDoc, rRange );
 }
 
-
 ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
     ScEEImport( pDocP, rRange )
 {
     mpParser = new ScRTFParser( mpEngine );
 }
-
 
 ScRTFImport::~ScRTFImport()
 {

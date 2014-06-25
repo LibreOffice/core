@@ -725,7 +725,6 @@ void ScViewData::SetPagebreakMode( bool bSet )
     RefreshZoom();
 }
 
-
 ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) const
 {
     ScMarkType eMarkType = SC_MARK_NONE;
@@ -754,7 +753,6 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
     }
     return eMarkType;
 }
-
 
 ScMarkType ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const
@@ -2220,7 +2218,6 @@ void ScViewData::WriteUserData(OUString& rData)
             {
                 cTabSep = OUString(SC_NEW_TABSEP);        // in order to not kill a 3.1-version
             }
-
 
             rData += OUString::number( maTabData[i]->nCurX ) + cTabSep +
                      OUString::number( maTabData[i]->nCurY ) + cTabSep +

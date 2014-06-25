@@ -20,7 +20,6 @@
 #include "XMLConverter.hxx"
 #include "stylehelper.hxx"
 
-
 ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName):
     SvXMLImportContext( rImport, nPrfx, rLName )

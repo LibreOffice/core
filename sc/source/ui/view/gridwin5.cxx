@@ -54,7 +54,6 @@
 #include "global.hxx"
 #include "globstr.hrc"
 
-
 bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 {
     bool bDone = false;
@@ -382,7 +381,6 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     //Option not set, so prefix STR_CLICKHYPERLINK
                     aHelpText = aClickHlinkStr + aHelpText;
                 }
-
 
                 ScDocument* pDoc = pViewData->GetDocument();
                 SCsCOL nPosX;

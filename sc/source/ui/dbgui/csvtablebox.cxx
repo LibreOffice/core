@@ -183,7 +183,6 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
     }
 }
 
-
 // cell contents --------------------------------------------------------------
 
 void ScCsvTableBox::SetUniStrings(
@@ -205,7 +204,6 @@ void ScCsvTableBox::SetUniStrings(
     EnableRepaint();
 }
 
-
 // column settings ------------------------------------------------------------
 
 void ScCsvTableBox::InitTypes( const ListBox& rListBox )
@@ -224,7 +222,6 @@ void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
     else
         maGrid.FillColumnDataSep( rOptions );
 }
-
 
 // event handling -------------------------------------------------------------
 
@@ -409,7 +406,6 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-
 // accessibility --------------------------------------------------------------
 
 ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
@@ -422,6 +418,5 @@ ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
 {
     return NULL;    // not used, see CreateAccessible()
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

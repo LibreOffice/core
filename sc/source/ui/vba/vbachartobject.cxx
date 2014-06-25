@@ -83,7 +83,6 @@ ScVbaChartObject::setName( const OUString& sName ) throw (css::uno::RuntimeExcep
     xNamedShape->setName(sName);
 }
 
-
 OUString SAL_CALL
 ScVbaChartObject::getName() throw (css::uno::RuntimeException, std::exception)
 {

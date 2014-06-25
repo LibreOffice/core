@@ -23,7 +23,6 @@
 
 #include"vbaassistant.hxx"
 
-
 using namespace com::sun::star;
 using namespace ooo::vba;
 
@@ -61,7 +60,6 @@ void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn ) throw (uno::RuntimeException
 {
     setVisible( bOn );
 }
-
 
 ::sal_Int32 SAL_CALL
 ScVbaAssistant::getTop() throw (css::uno::RuntimeException, std::exception)

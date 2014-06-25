@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
@@ -73,14 +72,12 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     mpEngine->EnableUndo( false );
 }
 
-
 ScEEImport::~ScEEImport()
 {
     // Sequence important, or else we crash in some dtor!
     // Is guaranteed as ScEEImport is base class
     delete mpEngine; // After Parser!
 }
-
 
 sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 {
@@ -109,7 +106,6 @@ sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 
     return nErr;
 }
-
 
 void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
@@ -474,7 +470,6 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         delete pProgress;
 }
 
-
 bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
 {
     if ( !pE->maImageList.size() )
@@ -537,7 +532,6 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseE
     }
     return bHasGraphics;
 }
-
 
 void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
@@ -606,7 +600,6 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-
 ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
@@ -623,7 +616,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
     NewActEntry( NULL );
 }
 
-
 ScEEParser::~ScEEParser()
 {
     delete pActEntry;
@@ -634,7 +626,6 @@ ScEEParser::~ScEEParser()
     SfxItemPool::Free(pDocPool);
     SfxItemPool::Free(pPool);
 }
-
 
 void ScEEParser::NewActEntry( ScEEParseEntry* pE )
 {   // New free-flying pActEntry

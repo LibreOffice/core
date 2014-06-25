@@ -55,7 +55,6 @@ public:
 
 };
 
-
 ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
@@ -81,7 +80,6 @@ ScVbaNames::getScDocument()
     ScViewData& rViewData = pTabViewShell->GetViewData();
     return rViewData.GetDocument();
 }
-
 
 css::uno::Any
 ScVbaNames::Add( const css::uno::Any& Name ,
@@ -267,6 +265,5 @@ ScVbaNames::getServiceNames()
     }
     return aServiceNames;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

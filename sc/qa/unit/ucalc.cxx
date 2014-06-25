@@ -1218,7 +1218,6 @@ void Test::testValueIterator()
         }
     }
 
-
     m_pDoc->DeleteTab(0);
 }
 
@@ -3451,7 +3450,6 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("After Redo, note again on Sheet2.C2, string cell content",
             m_pDoc->GetNote(ScAddress(2, 0, 0))->GetText() == m_pDoc->GetNote(ScAddress(2, 1, 1))->GetText());
 
-
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -4138,7 +4136,6 @@ void Test::testMergedCells()
     m_pDoc->DeleteTab(0);
 }
 
-
 void Test::testRenameTable()
 {
     //test set rename table
@@ -4196,7 +4193,6 @@ void Test::testSetBackgroundColor()
     getDocShell().GetDocFunc().SetTabBgColor(0,aColor,false, true);
     CPPUNIT_ASSERT_MESSAGE("the correct color is not set",
                            m_pDoc->GetTabBgColor(0) == aColor);
-
 
     Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
     aColor.SetColor(COL_BLUE);//set BLUE
@@ -4702,7 +4698,6 @@ void Test::testFindAreaPosVertical()
     m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_UP);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), nCol);
-
 
     m_pDoc->DeleteTab(0);
 }
@@ -6144,7 +6139,6 @@ void Test::testCondCopyPaste()
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
     CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
-
 
     m_pDoc->DeleteTab(0);
 }

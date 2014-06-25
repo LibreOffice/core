@@ -88,7 +88,6 @@ private:
     bool                mbInRecord;
 };
 
-
 class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
 {
 public:

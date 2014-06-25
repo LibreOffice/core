@@ -169,7 +169,6 @@ static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 #define ScDocShell
 #include "scslots.hxx"
 
-
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 
 void ScDocShell::InitInterface_Impl()
@@ -314,7 +313,6 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                                     aDocURLBuffer.append(*pNameBuffer); // If escaped quote: only quote in the name
                                 ++pNameBuffer;
                             }
-
 
                             if( *pNameBuffer == SC_COMPILER_FILE_TAB_SEP )  // after the last quote of the docname should be the # char
                             {
@@ -1503,7 +1501,6 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 
-
     // invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
@@ -1554,7 +1551,6 @@ bool ScDocShell::LoadExternal( SfxMedium& rMed )
     return false;
 }
 
-
 ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
     : mrDocShell( rDocShell)
 {
@@ -1591,7 +1587,6 @@ ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
         }
     }
 }
-
 
 bool ScDocShell::Save()
 {
@@ -1672,7 +1667,6 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
             return false;
     }
 
-
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
@@ -1696,7 +1690,6 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-
 bool ScDocShell::IsInformationLost()
 {
     //FIXME: If we have time build a correct own way how to handle this
@@ -1716,7 +1709,6 @@ sal_Int32 lcl_ScDocShell_GetColWidthInChars( sal_uInt16 nWidth )
 
     return sal_Int32( f );
 }
-
 
 void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
         SCTAB nTab, SCCOL nCol, bool bValue, SvxCellHorJustify eHorJust )
@@ -1770,7 +1762,6 @@ void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
     }
     rStr = aString;
 }
-
 
 void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
         const ScDocument& rDoc, SCTAB nTab, SCCOL nCol )
@@ -2452,7 +2443,6 @@ bool ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
     return SfxObjectShell::SaveCompleted( xStor );
 }
 
-
 bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 {
     bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
@@ -2461,7 +2451,6 @@ bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
     Broadcast( SfxSimpleHint( SC_HINT_DOC_SAVED ) );
     return bRet;
 }
-
 
 bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
 {
@@ -2500,7 +2489,6 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
     }
     return bSlotExecutable;
 }
-
 
 bool ScDocShell::PrepareClose( bool bUI )
 {
@@ -2567,7 +2555,6 @@ void ScDocShell::PrepareReload()
     //  Thus: Disconnect the DDE Links of the old Document before Reload
     aDocument.GetDocLinkManager().disconnectDdeLinks();
 }
-
 
 OUString ScDocShell::GetOwnFilterName()
 {
@@ -2777,7 +2764,6 @@ void ScDocShell::SetModified( bool bModified )
     }
 }
 
-
 void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
 {
     //  BroadcastUno must also happen right away with pPaintLockData
@@ -2880,7 +2866,6 @@ void ScDocShell::SetInUndo(bool bSet)
     bIsInUndo = bSet;
 }
 
-
 void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 {
     SfxPrinter* pPrinter = GetPrinter();
@@ -2893,7 +2878,6 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
             rDocStat.nPageCount = sal::static_int_cast<sal_uInt16>( rDocStat.nPageCount +
                 (sal_uInt16) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
 }
-
 
 SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
                                          Window *pParent, const SfxItemSet &rSet )
@@ -3077,7 +3061,6 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
     rDoc.EnableIdle(false);
 }
 
-
 ScDocShellModificator::~ScDocShellModificator()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -3086,7 +3069,6 @@ ScDocShellModificator::~ScDocShellModificator()
         rDocShell.SetDocumentModified();    // last one shuts off the lights
     rDoc.EnableIdle(bIdleEnabled);
 }
-
 
 void ScDocShellModificator::SetDocumentModified()
 {
@@ -3114,7 +3096,6 @@ bool ScDocShell::IsChangeRecording() const
     return pChangeTrack != NULL;
 }
 
-
 bool ScDocShell::HasChangeRecordProtection() const
 {
     bool bRes = false;
@@ -3123,7 +3104,6 @@ bool ScDocShell::HasChangeRecordProtection() const
         bRes = pChangeTrack->IsProtected();
     return bRes;
 }
-
 
 void ScDocShell::SetChangeRecording( bool bActivate )
 {
@@ -3151,7 +3131,6 @@ void ScDocShell::SetChangeRecording( bool bActivate )
             pBindings->InvalidateAll(false);
     }
 }
-
 
 bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
@@ -3185,7 +3164,6 @@ bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
 
     return bRes;
 }
-
 
 bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
 {

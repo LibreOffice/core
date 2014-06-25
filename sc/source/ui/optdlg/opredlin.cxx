@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include <svx/dlgutil.hxx>
@@ -157,7 +156,6 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     m_pInsertColorLB->SetUpdateMode( true );
     m_pRemoveColorLB->SetUpdateMode( true );
 
-
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
     sal_uLong nColor = aAppOptions.GetTrackContentColor();
@@ -172,13 +170,11 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     else
         m_pMoveColorLB->SelectEntry(Color(nColor));
 
-
     nColor = aAppOptions.GetTrackInsertColor();
     if (nColor == COL_TRANSPARENT)
         m_pInsertColorLB->SelectEntryPos(0);
     else
         m_pInsertColorLB->SelectEntry(Color(nColor));
-
 
     nColor = aAppOptions.GetTrackDeleteColor();
     if (nColor == COL_TRANSPARENT)
@@ -187,7 +183,6 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
         m_pRemoveColorLB->SelectEntry(Color(nColor));
 
 }
-
 
 IMPL_LINK_NOARG(ScRedlineOptionsTabPage, ColorHdl)
 {

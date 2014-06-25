@@ -346,5 +346,4 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
     return aRet;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

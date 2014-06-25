@@ -884,7 +884,6 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
     }
 }
 
-
 SdrPage* ScChildrenShapes::GetDrawPage() const
 {
     SCTAB nTab(mpAccessibleDocument->getVisibleTable());
@@ -1267,7 +1266,6 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
                     pShape->bSelectable = true;
             }
         }
-
 
         if (!xSelectionSupplier.is())
             throw uno::RuntimeException();
@@ -1884,7 +1882,6 @@ OUString SAL_CALL
 
     if (aFileName.isEmpty())
         aFileName = pObjSh->GetTitle(SFX_TITLE_APINAME);
-
 
     if (!aFileName.isEmpty())
     {

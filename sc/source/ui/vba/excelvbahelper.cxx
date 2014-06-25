@@ -156,7 +156,6 @@ implnPaste( const uno::Reference< frame::XModel>& xModel )
     }
 }
 
-
 void
 implnCopy( const uno::Reference< frame::XModel>& xModel )
 {

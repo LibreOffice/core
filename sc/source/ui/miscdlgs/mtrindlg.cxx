@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
                                     const OString&  sDialogName,
@@ -85,7 +81,6 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 
     return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
 }
-
 
 // Handler:
 

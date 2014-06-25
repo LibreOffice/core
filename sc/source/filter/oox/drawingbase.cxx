@@ -32,7 +32,6 @@ namespace xls {
 using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
 
-
 namespace {
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */

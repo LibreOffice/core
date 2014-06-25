@@ -444,7 +444,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         }
         break;
 
-
         default:
         OSL_FAIL( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
         break;

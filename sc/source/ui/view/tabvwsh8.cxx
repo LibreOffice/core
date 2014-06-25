@@ -23,7 +23,6 @@
 #include "tabvwsh.hxx"
 #include "document.hxx"
 
-
 void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
 {
     if ( pLine )
@@ -78,6 +77,5 @@ void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
     ForceMove();
     SfxViewShell::UIDeactivated( pClient );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

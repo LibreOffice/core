@@ -4,7 +4,6 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file license.txt)
 
-
 #include "clew.h"
 
 //! \file clew.c
@@ -111,7 +110,6 @@ PFNCLENQUEUEWAITFOREVENTS           __clewEnqueueWaitForEvents          = NULL;
 PFNCLENQUEUEBARRIER                 __clewEnqueueBarrier                = NULL;
 PFNCLGETEXTENSIONFUNCTIONADDRESS    __clewGetExtensionFunctionAddress   = NULL;
 #endif  //  CLCC_GENERATE_DOCUMENTATION
-
 
 //! \brief Unloads OpenCL dynamic library, should not be called directly
 static void clewExit(void)

@@ -42,7 +42,6 @@ struct XclPaperSize
 #define MM2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0 + 0.5))
 #define TWIPS2MM( v )      ((long)((v - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0))
 
-
 static const XclPaperSize pPaperSizeTable[] =
 {
 /*  0*/ { PAPER_USER,       0,                  0                   },  // undefined

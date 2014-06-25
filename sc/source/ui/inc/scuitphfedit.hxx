@@ -22,7 +22,6 @@
 
 #include "tphfedit.hxx"
 
-
 enum ScHFEntryId
 {
     eNoneEntry  ,

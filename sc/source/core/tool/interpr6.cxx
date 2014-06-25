@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "interpre.hxx"
 #include "columnspanset.hxx"
 #include "column.hxx"
@@ -747,12 +746,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     return fRes;
 }
 
-
 void ScInterpreter::ScSumSQ()
 {
     PushDouble( IterateParameters( ifSUMSQ ) );
 }
-
 
 void ScInterpreter::ScSum()
 {
@@ -890,12 +887,10 @@ void ScInterpreter::ScSum()
     PushDouble(fRes);
 }
 
-
 void ScInterpreter::ScProduct()
 {
     PushDouble( IterateParameters( ifPRODUCT ) );
 }
-
 
 void ScInterpreter::ScAverage( bool bTextAsZero )
 {
@@ -1053,7 +1048,6 @@ void ScInterpreter::ScCount()
 
     PushDouble(nCount);
 }
-
 
 void ScInterpreter::ScCount2()
 {

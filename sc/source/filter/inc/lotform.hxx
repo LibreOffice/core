@@ -56,7 +56,6 @@ enum FUNC_TYPE
     // fuer 'Problemfaelle' beim Import
 };
 
-
 class LotusToSc : public LotusConverterBase
 {
 private:
@@ -98,7 +97,6 @@ private:
     using               LotusConverterBase::Reset;
 };
 
-
 inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
 {
     // erster Teil
@@ -107,7 +105,6 @@ inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
     // zweiter Teil
     ReadSRD( rCRD.Ref2, nRelBit >> 3 );
 }
-
 
 inline void LotusToSc::SetWK3( void )
 {

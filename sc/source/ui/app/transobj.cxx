@@ -21,7 +21,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/justifyitem.hxx>
 
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
@@ -124,9 +123,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 {
     OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
 
-
     // get aBlock from clipboard doc
-
 
     SCCOL nCol1;
     SCROW nRow1;
@@ -580,7 +577,6 @@ ScMarkData ScTransferObj::GetSourceMarkData()
     return aMarkData;
 }
 
-
 //  initialize aDocShellRef with a live document from the ClipDoc
 
 // #i123405# added parameter to allow size calculation without limitation
@@ -693,7 +689,6 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         nPosY += rDestDoc.GetRowHeight( 0, nStartY-1, 0 );
         nPosX = (long) ( nPosX * HMM_PER_TWIPS );
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
-
 
         aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
         aPaperSize.Height() *= 2;
@@ -859,6 +854,5 @@ sal_Int64 SAL_CALL ScTransferObj::getSomething( const com::sun::star::uno::Seque
         nRet = TransferableHelper::getSomething(rId);
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

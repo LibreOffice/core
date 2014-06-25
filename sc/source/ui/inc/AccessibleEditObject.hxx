@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEEDITOBJECT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEEDITOBJECT_HXX
 
@@ -201,7 +200,6 @@ private:
     ScDocument *m_pScDoc;
     ScAddress m_curCellAddress;
 
-
     ///=====  XAccessibleComponent  ============================================
     virtual sal_Int32 SAL_CALL getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -211,7 +209,6 @@ private:
 
     sal_Int32 GetFgBgColor(  const rtl::OUString &strPropColor) ;
 };
-
 
 #endif
 

@@ -476,7 +476,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_SIZE://XXX ???
             break;
 
-
         case SID_PRINTPREVIEW:
             {
                 if ( !pThisFrame->GetFrame().IsInPlace() )          // nicht bei OLE
@@ -557,7 +556,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 rReq.Done ();
             }
             break;
-
 
         case FID_TOGGLESYNTAX:
             {
@@ -858,7 +856,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         }
         break;
 
-
         case SID_OUTLINE_DELETEALL:
             RemoveAllOutlines();
             rReq.Done();
@@ -868,7 +865,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             AutoOutline();
             rReq.Done();
             break;
-
 
         case SID_WINDOW_SPLIT:
             {
@@ -1026,7 +1022,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 rBindings.Invalidate( FID_PROTECT_DOC );
             }
             break;
-
 
         case FID_PROTECT_TABLE:
         {

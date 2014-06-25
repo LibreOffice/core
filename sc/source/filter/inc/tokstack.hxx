@@ -58,7 +58,6 @@ struct TokenId
 struct ScComplexRefData;
 class TokenStack;
 
-
 enum E_TYPE
 {
     T_Id,       // Id-Folge
@@ -76,7 +75,6 @@ enum E_TYPE
     T_ExtRefA,
     T_Error     // fuer Abfrage im Fehlerfall
 };
-
 
 class TokenPool
 {
@@ -226,7 +224,6 @@ public:
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
-
 class TokenStack
     // Stack fuer Token-Ids: Id 0 sollte reserviert bleiben als
     //  fehlerhafte Id, da z.B. Get() im Fehlerfall 0 liefert
@@ -247,7 +244,6 @@ class TokenStack
         inline const TokenId        Get( void );
 };
 
-
 inline const TokenId TokenStack::Get( void )
 {
     OSL_ENSURE( nPos > 0,
@@ -266,7 +262,6 @@ inline const TokenId TokenStack::Get( void )
     return nRet;
 }
 
-
 inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 {// Element auf Stack
     OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stack overflow" );
@@ -279,7 +274,6 @@ inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
     return *this;
 }
 
-
 inline void TokenStack::operator >>( TokenId& rId )
 {// Element von Stack
     OSL_ENSURE( nPos > 0,
@@ -291,12 +285,10 @@ inline void TokenStack::operator >>( TokenId& rId )
     }
 }
 
-
 inline void TokenStack::Reset( void )
 {
     nPos = 0;
 }
-
 
 inline TokenPool& TokenPool::operator <<( const TokenId nId )
 {
@@ -316,7 +308,6 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
     return *this;
 }
 
-
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
     OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
@@ -332,7 +323,6 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
     return *this;
 }
 
-
 inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 {
     if( nP_IdAkt >= nP_Id )
@@ -345,14 +335,12 @@ inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
     return *this;
 }
 
-
 inline void TokenPool::operator >>( TokenStack& rStack )
 {
     TokenId nId;
     *this >> nId;
     rStack << nId;
 }
-
 
 inline const TokenId TokenPool::Store( void )
 {
@@ -361,18 +349,15 @@ inline const TokenId TokenPool::Store( void )
     return nId;
 }
 
-
 inline const TokenId TokenPool::Store( const sal_Int16 nWert )
 {
     return Store( ( double ) nWert );
 }
 
-
 inline const TokenId TokenPool::LastId( void ) const
 {
     return ( TokenId ) nElementAkt; // stimmt, da Ausgabe mit Offset 1!
 }
-
 
 const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 {
@@ -389,7 +374,6 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
     return pScToken;
 }
 
-
 inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 {
     E_TYPE nRet;
@@ -403,7 +387,6 @@ inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 
     return nRet;
 }
-
 
 #endif
 

@@ -33,9 +33,7 @@ extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
 // STATIC DATA -----------------------------------------------------------
 
-
 // ---  Referenz-Eingabe / Fill-Cursor
-
 
 void ScTabView::HideTip()
 {
@@ -495,7 +493,5 @@ void ScTabView::InterpretVisible()
     // #i65047# repaint during the above loop may have set the bNeedsRepaint flag
     CheckNeedsRepaint();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

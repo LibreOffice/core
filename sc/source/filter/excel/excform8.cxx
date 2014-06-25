@@ -85,7 +85,6 @@ ExcelToSc8::ExcelToSc8( XclImpRoot& rRoot ) :
 {
 }
 
-
 ExcelToSc8::~ExcelToSc8()
 {
 }
@@ -839,7 +838,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 ScSingleRefData &rR1 = aCRD.Ref1;
                 ScSingleRefData &rR2 = aCRD.Ref2;
 
-
                 rR1.SetAbsTab(nTabFirst);
                 rR2.SetAbsTab(nTabLast);
                 rR1.SetFlag3D(true);
@@ -919,7 +917,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
     return eRet;
 }
-
 
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
@@ -1436,7 +1433,6 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
             rSRD.SetAbsRow(nRow);
     }
 }
-
 
 // stream seeks to first byte after <nLen>
 bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )

@@ -82,7 +82,6 @@ using ::std::auto_ptr;
 
 //-----------------------------static data -----------------
 
-
 // Funktionen fuer den Zugriff auf das Document
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
@@ -103,7 +102,6 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
         }
     }
 }
-
 
 void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
@@ -129,7 +127,6 @@ void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
     }
 }
 
-
 bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 {
     if ( rRange.aStart == rRange.aEnd )
@@ -147,7 +144,6 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     }
     return false;
 }
-
 
 sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell )
 {
@@ -170,7 +166,6 @@ sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellVa
     SetError(nErr);
     return nFormat;
 }
-
 
 /// Only ValueCell, formula cells already store the result rounded.
 double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
@@ -657,7 +652,6 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return true;
 }
 
-
 bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     sal_uInt8* pCellArr)
@@ -754,7 +748,6 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     *pCount = nCount;
     return true;
 }
-
 
 bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
@@ -916,7 +909,6 @@ void ScInterpreter::Push( FormulaToken& r )
     }
 }
 
-
 void ScInterpreter::PushTempToken( FormulaToken* p )
 {
     if ( sp >= MAXSTACK )
@@ -948,7 +940,6 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
     }
 }
 
-
 void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
 {
     p->IncRef();
@@ -969,13 +960,11 @@ void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
     }
 }
 
-
 void ScInterpreter::PushTempToken( const FormulaToken& r )
 {
     if (!IfErrorPushError())
         PushTempTokenWithoutError( r.Clone());
 }
-
 
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr )
@@ -1024,7 +1013,6 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     }
 }
 
-
 // Simply throw away TOS.
 
 void ScInterpreter::Pop()
@@ -1034,7 +1022,6 @@ void ScInterpreter::Pop()
     else
         SetError(errUnknownStackVariable);
 }
-
 
 // Simply throw away TOS and set error code, used with ocIsError et al.
 
@@ -1050,7 +1037,6 @@ void ScInterpreter::PopError()
         SetError(errUnknownStackVariable);
 }
 
-
 FormulaTokenRef ScInterpreter::PopToken()
 {
     if (sp)
@@ -1065,7 +1051,6 @@ FormulaTokenRef ScInterpreter::PopToken()
         SetError(errUnknownStackVariable);
     return NULL;
 }
-
 
 double ScInterpreter::PopDouble()
 {
@@ -1093,7 +1078,6 @@ double ScInterpreter::PopDouble()
         SetError( errUnknownStackVariable);
     return 0.0;
 }
-
 
 svl::SharedString ScInterpreter::PopString()
 {
@@ -1123,7 +1107,6 @@ svl::SharedString ScInterpreter::PopString()
     return svl::SharedString::getEmptyString();
 }
 
-
 void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 {
     SCCOL nCol;
@@ -1132,13 +1115,11 @@ void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
     SingleRefToVars( rRef, nCol, nRow, nTab);
 }
 
-
 void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 {
     ValidateRef( rRef.Ref1);
     ValidateRef( rRef.Ref2);
 }
-
 
 void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 {
@@ -1149,7 +1130,6 @@ void ScInterpreter::ValidateRef( const ScRefList & rRefList )
         ValidateRef( *it);
     }
 }
-
 
 void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         SCCOL & rCol, SCROW & rRow, SCTAB & rTab )
@@ -1177,7 +1157,6 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         SetError( errNoRef ), rTab = 0;
 }
 
-
 void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 {
     if( sp )
@@ -1201,7 +1180,6 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
     else
         SetError( errUnknownStackVariable);
 }
-
 
 void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 {
@@ -1232,7 +1210,6 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
     else
         SetError( errUnknownStackVariable);
 }
-
 
 void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
@@ -1316,7 +1293,6 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SetError( errUnknownStackVariable);
 }
 
-
 void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
         ScRange & rRange, bool bDontCheckForTableOp )
 {
@@ -1333,7 +1309,6 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
             SetError( errIllegalParameter );
     }
 }
-
 
 void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList )
 {
@@ -1379,7 +1354,6 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
     else
         SetError( errUnknownStackVariable);
 }
-
 
 void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
 {
@@ -1610,7 +1584,6 @@ bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
     return false;
 }
 
-
 void ScInterpreter::PopDoubleRefPushMatrix()
 {
     if ( GetStackType() == svDoubleRef )
@@ -1625,12 +1598,10 @@ void ScInterpreter::PopDoubleRefPushMatrix()
         SetError( errNoRef );
 }
 
-
 ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
 {
     return new ScTokenMatrixMap;
 }
-
 
 bool ScInterpreter::ConvertMatrixParameters()
 {
@@ -1792,7 +1763,6 @@ bool ScInterpreter::ConvertMatrixParameters()
     return false;
 }
 
-
 ScMatrixRef ScInterpreter::PopMatrix()
 {
     if( sp )
@@ -1906,7 +1876,6 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
         SetError( errUnknownStackVariable);
 }
 
-
 void ScInterpreter::PushDouble(double nVal)
 {
     TreatDoubleError( nVal );
@@ -1914,13 +1883,11 @@ void ScInterpreter::PushDouble(double nVal)
         PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
 
-
 void ScInterpreter::PushInt(int nVal)
 {
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
-
 
 void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
@@ -1944,7 +1911,6 @@ void ScInterpreter::PushString( const svl::SharedString& rString )
         PushTempTokenWithoutError( new FormulaStringToken( rString ) );
 }
 
-
 void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if (!IfErrorPushError())
@@ -1954,7 +1920,6 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
         PushTempTokenWithoutError( new ScSingleRefToken( aRef ) );
     }
 }
-
 
 void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
@@ -1967,7 +1932,6 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     }
 }
 
-
 void ScInterpreter::PushExternalSingleRef(
     sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
@@ -1978,7 +1942,6 @@ void ScInterpreter::PushExternalSingleRef(
         PushTempTokenWithoutError( new ScExternalSingleRefToken(nFileId, rTabName, aRef)) ;
     }
 }
-
 
 void ScInterpreter::PushExternalDoubleRef(
     sal_uInt16 nFileId, const OUString& rTabName,
@@ -2017,7 +1980,6 @@ void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
     PushTempTokenWithoutError( new ScMatrixToken( pMat ) );
 }
 
-
 void ScInterpreter::PushError( sal_uInt16 nError )
 {
     SetError( nError );     // only sets error if not already set
@@ -2029,36 +1991,30 @@ void ScInterpreter::PushParameterExpected()
     PushError( errParameterExpected);
 }
 
-
 void ScInterpreter::PushIllegalParameter()
 {
     PushError( errIllegalParameter);
 }
-
 
 void ScInterpreter::PushIllegalArgument()
 {
     PushError( errIllegalArgument);
 }
 
-
 void ScInterpreter::PushNA()
 {
     PushError( NOTAVAILABLE);
 }
-
 
 void ScInterpreter::PushNoValue()
 {
     PushError( errNoValue);
 }
 
-
 bool ScInterpreter::IsMissing()
 {
     return sp && pStack[sp - 1]->GetType() == svMissing;
 }
-
 
 StackVar ScInterpreter::GetRawStackType()
 {
@@ -2074,7 +2030,6 @@ StackVar ScInterpreter::GetRawStackType()
     }
     return eRes;
 }
-
 
 StackVar ScInterpreter::GetStackType()
 {
@@ -2093,7 +2048,6 @@ StackVar ScInterpreter::GetStackType()
     return eRes;
 }
 
-
 StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
 {
     StackVar eRes;
@@ -2107,7 +2061,6 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
         eRes = svUnknown;
     return eRes;
 }
-
 
 bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
@@ -2292,7 +2245,6 @@ double ScInterpreter::GetDouble()
     return nVal;
 }
 
-
 double ScInterpreter::GetDoubleWithDefault(double nDefault)
 {
     bool bMissing = IsMissing();
@@ -2301,7 +2253,6 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
         nResultVal = nDefault;
     return nResultVal;
 }
-
 
 svl::SharedString ScInterpreter::GetString()
 {
@@ -2473,7 +2424,6 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
     return nMatValType;
 }
 
-
 void ScInterpreter::ScDBGet()
 {
     bool bMissingField = false;
@@ -2510,7 +2460,6 @@ void ScInterpreter::ScDBGet()
     else
         PushString(aValue.maString);
 }
-
 
 void ScInterpreter::ScExternal()
 {
@@ -3078,7 +3027,6 @@ void ScInterpreter::ScExternal()
     }
 }
 
-
 void ScInterpreter::ScMissing()
 {
     PushTempToken( new FormulaMissingToken );
@@ -3629,7 +3577,6 @@ void ScInterpreter::ScDBArea()
         PushError( errNoName);
 }
 
-
 void ScInterpreter::ScColRowNameAuto()
 {
     ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
@@ -3713,7 +3660,6 @@ void ScInterpreter::ScColRowNameAuto()
 
 // --- internals ------------------------------------------------------------
 
-
 void ScInterpreter::ScTTT()
 {   // Temporaerer Test-Tanz, zum auspropieren von Funktionen etc.
     sal_uInt8 nParamCount = GetByte();
@@ -3724,7 +3670,6 @@ void ScInterpreter::ScTTT()
         Pop();
     PushError(errNoValue);
 }
-
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
         const ScAddress& rPos, ScTokenArray& r )
@@ -4368,7 +4313,6 @@ StackVar ScInterpreter::Interpret()
             else
                 pJumpMatrix = NULL;
         } while ( bGotResult );
-
 
 // Functions that evaluate an error code and directly set nGlobalError to 0,
 // usage: switch( OpCode ) { CASE_OCERRFUNC statements; }

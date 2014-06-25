@@ -80,7 +80,6 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange(strWildcardVariable1Range, pVariable1Iterator->get());
     aTemplate.autoReplaceRange(strWildcardVariable2Range, pVariable2Iterator->get());
 
-
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_UNDO_NAME));
     aOutput.newLine();
 

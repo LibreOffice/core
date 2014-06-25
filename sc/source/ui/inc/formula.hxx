@@ -40,9 +40,7 @@ class ScInputHandler;
 class ScDocShell;
 class ScFormulaCell;
 
-
 typedef ScTabViewShell* PtrTabViewShell;
-
 
 class ScFormulaDlg : public formula::FormulaDlg,
                      public IAnyRefDialog

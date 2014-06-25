@@ -2801,7 +2801,6 @@ void XclImpChTypeGroup::ReadChDataFormat( XclImpStream& rStrm )
         mxGroupFmt = xDataFmt;
 }
 
-
 void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
         Reference< XDataSeries > xSeries, sal_Int32 nApiAxesSetIdx ) const
 {

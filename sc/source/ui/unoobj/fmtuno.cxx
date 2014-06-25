@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <boost/bind.hpp>
 
 #include <vcl/svapp.hxx>
@@ -1026,8 +1025,5 @@ ScTableValidationObj* ScTableValidationObj::getImplementation(
         pRet = reinterpret_cast<ScTableValidationObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

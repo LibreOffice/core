@@ -98,7 +98,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoDeleteTab: public ScMoveUndo
 {
 public:
@@ -125,7 +124,6 @@ private:
     void            SetChangeTrack();
 };
 
-
 class ScUndoRenameTab: public ScSimpleUndo
 {
 public:
@@ -151,7 +149,6 @@ private:
 
     void DoChange( SCTAB nTab, const OUString& rName ) const;
 };
-
 
 class ScUndoMoveTab: public ScSimpleUndo
 {
@@ -181,7 +178,6 @@ private:
 
     void DoChange( bool bUndo ) const;
 };
-
 
 class ScUndoCopyTab: public ScSimpleUndo
 {
@@ -268,7 +264,6 @@ private:
     SdrUndoAction* pDrawUndo;
 };
 
-
 class ScUndoImportTab : public ScSimpleUndo
 {
 public:
@@ -293,7 +288,6 @@ private:
 
     void DoChange() const;
 };
-
 
 class ScUndoRemoveLink : public ScSimpleUndo
 {
@@ -323,7 +317,6 @@ private:
 
     void DoChange( bool bLink ) const;
 };
-
 
 class ScUndoShowHideTab : public ScSimpleUndo
 {
@@ -401,7 +394,6 @@ private:
     void    DoProtect(bool bProtect);
 };
 
-
 class ScUndoPrintRange : public ScSimpleUndo
 {
 public:
@@ -424,7 +416,6 @@ private:
 
     void DoChange( bool bUndo );
 };
-
 
 class ScUndoScenarioFlags: public ScSimpleUndo
 {
@@ -458,7 +449,6 @@ private:
     sal_uInt16  nNewFlags;
 };
 
-
 class ScUndoRenameObject: public ScSimpleUndo
 {
 public:
@@ -483,7 +473,6 @@ private:
 
     SdrObject*  GetObject();
 };
-
 
 class ScUndoLayoutRTL : public ScSimpleUndo
 {

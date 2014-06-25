@@ -3625,7 +3625,6 @@ vSubArguments)
     ss << "}\n";
 }
 
-
 void OpFisherInv::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -4053,7 +4052,6 @@ void OpPearson::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
-
 void OpGammaLn::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
@@ -4476,7 +4474,6 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 
-
 void OpCritBinom::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
@@ -4591,7 +4588,6 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
-
 
 void OpRsq::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
@@ -5093,7 +5089,6 @@ void OpVariationen2::GenSlidingWindowFunction(
     ss << "    return tmp;\n";
     ss << "}\n";
 }
-
 
 void OpPhi::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string &sSymName,
@@ -7020,7 +7015,6 @@ void OpBinomdist::GenSlidingWindowFunction(
     ss << "   }\n";
     ss << "}\n";
 }
-
 
 void OpChiSqDist::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)

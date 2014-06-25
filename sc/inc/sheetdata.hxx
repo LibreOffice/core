@@ -30,7 +30,6 @@
 class ScAddress;
 class SvXMLNamespaceMap;
 
-
 struct ScStreamEntry
 {
     sal_Int32   mnStartOffset;

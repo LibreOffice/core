@@ -24,7 +24,6 @@
 
 class ScXMLImport;
 
-
 struct ScMyImpCellRangeSource
 {
     OUString             sSourceStr;
@@ -37,7 +36,6 @@ struct ScMyImpCellRangeSource
 
                                 ScMyImpCellRangeSource();
 };
-
 
 class ScXMLCellRangeSourceContext : public SvXMLImportContext
 {
@@ -62,7 +60,6 @@ public:
                                     ) SAL_OVERRIDE;
     virtual void                EndElement() SAL_OVERRIDE;
 };
-
 
 #endif
 

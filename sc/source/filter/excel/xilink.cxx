@@ -38,7 +38,6 @@ using ::std::vector;
 
 // *** Helper classes ***
 
-
 // Cached external cells ======================================================
 
 /**
@@ -212,9 +211,7 @@ private:
     XclImpSupbookList   maSupbookList;      /// List of external documents.
 };
 
-
 // *** Implementation ***
-
 
 // Excel sheet indexes ========================================================
 
@@ -543,7 +540,6 @@ XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
     maXclPos( rXclPos )
 {
 }
-
 
 // Sheet in an external document ==============================================
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
@@ -182,7 +181,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             break;
                     }
 
-
                     return;
 
                 }
@@ -290,7 +288,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 }
                             }
                         }
-
 
                     }
                     else
@@ -416,7 +413,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, false );
-
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(

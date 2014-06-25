@@ -211,7 +211,6 @@ class ScXMLExport : public SvXMLExport
     void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
 
-
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
     void AddStyleFromCells(

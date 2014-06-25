@@ -13,7 +13,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > MenuBarEnumeration_BASE;
 
 class MenuBarEnumeration : public MenuBarEnumeration_BASE

@@ -70,7 +70,6 @@ class ScPrivatSplit : public Control
         const Link&     GetCtrModifiedHdl() const { return aCtrModifiedLink; }
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

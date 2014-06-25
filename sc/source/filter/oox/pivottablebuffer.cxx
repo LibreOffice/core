@@ -58,7 +58,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star;
 
-
 namespace {
 
 const sal_Int32 OOX_PT_DATALAYOUTFIELD              = -2;           /// Placeholder index of data layout field.

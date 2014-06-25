@@ -49,7 +49,6 @@ const sal_uInt16 SC_AREASDLG_RR_NONE    = 0;
 const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
 const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
-
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
@@ -85,7 +84,6 @@ static void printAddressFlags(sal_uInt16 nFlag)
     if ((nFlag & SCR_ABS_3D        ) == SCR_ABS_3D        )  printf("SCR_ABS_3D       \n");
 }
 #endif
-
 
 //  class ScPrintAreasDlg
 
@@ -137,7 +135,6 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
     //SFX_APPWINDOW->Enable();
 }
 
-
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
     // Extra-Data an ListBox-Entries abraeumen
@@ -151,12 +148,10 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
     }
 }
 
-
 bool ScPrintAreasDlg::Close()
 {
     return DoClose( ScPrintAreasDlgWrapper::GetChildWindowId() );
 }
-
 
 bool ScPrintAreasDlg::IsTableLocked() const
 {
@@ -165,7 +160,6 @@ bool ScPrintAreasDlg::IsTableLocked() const
 
     return true;
 }
-
 
 void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
 {
@@ -198,7 +192,6 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
     }
 }
 
-
 void ScPrintAreasDlg::AddRefEntry()
 {
     if ( pRefInputEdit == pEdPrintArea )
@@ -215,12 +208,10 @@ void ScPrintAreasDlg::AddRefEntry()
     }
 }
 
-
 void ScPrintAreasDlg::Deactivate()
 {
     bDlgLostFocus = true;
 }
-
 
 void ScPrintAreasDlg::SetActive()
 {
@@ -239,7 +230,6 @@ void ScPrintAreasDlg::SetActive()
 
     RefInputDone();
 }
-
 
 void ScPrintAreasDlg::Impl_Reset()
 {
@@ -264,7 +254,6 @@ void ScPrintAreasDlg::Impl_Reset()
 
     Impl_FillLists();
 
-
     // Druckbereich
 
     aStrRange = "";
@@ -285,12 +274,10 @@ void ScPrintAreasDlg::Impl_Reset()
     }
     pEdPrintArea->SetText( aStrRange );
 
-
     // Wiederholungszeile
 
     lcl_GetRepeatRangeString(pRepeatRowRange, pDoc, true, aStrRange);
     pEdRepeatRow->SetText( aStrRange );
-
 
     // Wiederholungsspalte
 
@@ -307,7 +294,6 @@ void ScPrintAreasDlg::Impl_Reset()
     pEdRepeatRow->SaveValue();
     pEdRepeatCol->SaveValue();
 }
-
 
 bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
@@ -326,7 +312,6 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 
     return bDataChanged;
 }
-
 
 bool ScPrintAreasDlg::Impl_CheckRefStrings()
 {
@@ -390,7 +375,6 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
     return bOk;
 }
 
-
 void ScPrintAreasDlg::Impl_FillLists()
 {
 
@@ -415,7 +399,6 @@ void ScPrintAreasDlg::Impl_FillLists()
     }
 
     pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new OUString( aStrRange ) );
-
 
     // Ranges holen und in ListBoxen merken
 
@@ -465,7 +448,6 @@ void ScPrintAreasDlg::Impl_FillLists()
 
 // Handler:
 
-
 IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 {
     if ( pBtnOk == pBtn )
@@ -477,9 +459,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
             SfxStringItem   aRepeatCol( FN_PARAM_3, aStr );
 
-
             // Druckbereich veraendert?
-
 
             // first try the list box, if "Entite sheet" is selected
             bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
@@ -492,11 +472,9 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
                 bDataChanged |= Impl_GetItem( pEdPrintArea, aPrintArea );
             }
 
-
             // Wiederholungszeile veraendert?
 
             bDataChanged |= Impl_GetItem( pEdRepeatRow, aRepeatRow );
-
 
             // Wiederholungsspalte veraendert?
 
@@ -519,7 +497,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 
     return 0;
 }
-
 
 IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 {
@@ -544,7 +521,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 
     return 0;
 }
-
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 {
@@ -581,7 +557,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 
     return 0;
 }
-
 
 IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 {

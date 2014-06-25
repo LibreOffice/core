@@ -41,7 +41,6 @@
 #include "scabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
 
-
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
 {
@@ -134,6 +133,5 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
             pOutView->PasteSpecial();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

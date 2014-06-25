@@ -254,6 +254,4 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SvLinkSource::NotifyDataChanged();
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

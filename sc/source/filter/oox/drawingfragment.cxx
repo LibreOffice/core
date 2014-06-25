@@ -295,9 +295,7 @@ void DrawingFragment::onEndElement()
     }
 }
 
-
 // VML
-
 
 namespace {
 

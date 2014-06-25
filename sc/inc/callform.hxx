@@ -86,7 +86,6 @@ public:
     bool getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
-
 class FuncCollection
 {
     typedef boost::ptr_map<OUString, FuncData> MapType;
@@ -104,7 +103,6 @@ public:
     const_iterator begin() const;
     const_iterator end() const;
 };
-
 
 bool InitExternalFunc(const OUString& rModuleName);
 void ExitExternalFunc();

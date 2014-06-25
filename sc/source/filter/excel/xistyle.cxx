@@ -735,7 +735,6 @@ void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) c
     ScfTools::PutItem( rItemSet, ScProtectionAttr( mbLocked, mbHidden ), bSkipPoolDefs );
 }
 
-
 void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 {
     mnHorAlign = ::extract_value< sal_uInt8 >( nFlags, 0, 3 );
@@ -1068,7 +1067,6 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
         ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
     }
 }
-
 
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
     XclXFBase( true ),      // default is cell XF

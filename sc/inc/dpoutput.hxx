@@ -139,7 +139,6 @@ public:
             com::sun::star::uno::XInterface>& xDim );
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

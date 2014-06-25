@@ -33,7 +33,6 @@ class ScDocShell;
 class SvxUnoText;
 class ScPostIt;
 
-
 class ScAnnotationObj : public cppu::WeakImplHelper5<
                             com::sun::star::container::XChild,
                             com::sun::star::text::XSimpleText,

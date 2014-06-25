@@ -737,9 +737,7 @@ const sal_uInt16 EXC_ID_CHPLOTGROWTH            = 0x1064;
 const sal_uInt16 EXC_ID_CHSERINDEX              = 0x1065;
 const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 
-
 // Structs and classes
-
 
 // Common =====================================================================
 

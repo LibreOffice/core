@@ -206,7 +206,6 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                 {
                     bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
 
-
                     if(pToken->GetType()==formula::svSingleRef || bDoubleRef)
                     {
                         ScRange aRange;
@@ -443,7 +442,6 @@ namespace
         }
     }
 }
-
 
 void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
@@ -716,8 +714,6 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
     }
 }
 
-
-
 static void lcl_InvalidateWindows()
 {
     TypeId aType(TYPE(ScDocShell));
@@ -750,7 +746,6 @@ static void lcl_InvalidateWindows()
     }
 }
 
-
 static void lcl_HideAllReferences()
 {
     TypeId aScType = TYPE(ScTabViewShell);
@@ -762,10 +757,8 @@ static void lcl_HideAllReferences()
     }
 }
 
-
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
-
 
 ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( rWindow ),
@@ -936,7 +929,6 @@ void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
 {
     m_aHelper.RefInputStart( pEdit, pButton );
 }
-
 
 void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {

@@ -60,8 +60,6 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     return bRet;
 }
 
-
-
 void ScDocShell::SetEmpty(bool bSet)
 {
     bIsEmpty = bSet;
@@ -146,11 +144,9 @@ void ScDocShell::Activate()
 {
 }
 
-
 void ScDocShell::Deactivate()
 {
 }
-
 
 ScDrawLayer* ScDocShell::MakeDrawLayer()
 {

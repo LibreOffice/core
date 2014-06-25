@@ -81,7 +81,6 @@ private:
     sal_Unicode mnDecSep;
 };
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -161,7 +161,6 @@ public:
         @return  true = Sheet index in nScTab is valid. */
     bool                CheckScTab( SCTAB nScTab, bool bWarn );
 
-
 protected:
     XclTracer&          mrTracer;       /// Tracer for invalid addresses.
     ScAddress           maMaxPos;       /// Default maximum position.

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLEDOCUMENT_HXX
 
@@ -65,7 +64,6 @@ public:
         ScSplitPos eSplitPos);
 
     virtual void Init() SAL_OVERRIDE;
-
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 protected:
@@ -337,7 +335,6 @@ public:
 protected:
     void SwitchViewFireFocus() SAL_OVERRIDE;
 };
-
 
 #endif
 

@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-
 #include "nameuno.hxx"
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
@@ -208,7 +207,6 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     }
 }
 
-
 OUString SAL_CALL ScNamedRangeObj::getName() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -346,7 +344,6 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
     }
 }
 
-
 // XCellRangeSource
 
 uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
@@ -442,7 +439,6 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
     return aRet;
 }
 
-
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
@@ -490,7 +486,6 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         pDocShell = NULL;       // became invalid
     }
 }
-
 
 // sheet::XNamedRanges
 
@@ -1209,7 +1204,5 @@ sal_Bool SAL_CALL ScLabelRangesObj::hasElements() throw(uno::RuntimeException, s
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

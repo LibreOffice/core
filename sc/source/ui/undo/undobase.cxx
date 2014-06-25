@@ -34,7 +34,6 @@
 #include <rowheightcontext.hxx>
 #include <column.hxx>
 
-
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
 TYPEINIT1(ScMultiBlockUndo, ScSimpleUndo);

@@ -316,7 +316,6 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
     }
 }
 
-
 }} // end of namespace ::sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

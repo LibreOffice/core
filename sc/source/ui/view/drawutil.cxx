@@ -24,7 +24,6 @@
 #include "global.hxx"
 #include "viewdata.hxx"
 
-
 void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             OutputDevice* pDev,
@@ -86,6 +85,5 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     rScaleX.ReduceInaccurate( 25 );
     rScaleY.ReduceInaccurate( 25 );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

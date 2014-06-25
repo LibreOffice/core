@@ -187,7 +187,6 @@ public:
     }
 };
 
-
 namespace {
 
 /** Future Record Type header.
@@ -202,7 +201,6 @@ bool readFrtHeader( XclImpStream& rStrm, sal_uInt16 nRecordID )
 
 }
 
-
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
 {
@@ -211,11 +209,9 @@ ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
 }
 
-
 ImportExcel8::~ImportExcel8()
 {
 }
-
 
 void ImportExcel8::Calccount( void )
 {
@@ -224,14 +220,12 @@ void ImportExcel8::Calccount( void )
     pD->SetDocOptions( aOpt );
 }
 
-
 void ImportExcel8::Precision( void )
 {
     ScDocOptions aOpt = pD->GetDocOptions();
     aOpt.SetCalcAsShown( aIn.ReaduInt16() == 0 );
     pD->SetDocOptions( aOpt );
 }
-
 
 void ImportExcel8::Delta( void )
 {
@@ -240,14 +234,12 @@ void ImportExcel8::Delta( void )
     pD->SetDocOptions( aOpt );
 }
 
-
 void ImportExcel8::Iteration( void )
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
     pD->SetDocOptions( aOpt );
 }
-
 
 void ImportExcel8::Boundsheet( void )
 {
@@ -281,7 +273,6 @@ void ImportExcel8::Boundsheet( void )
     nBdshtTab++;
 }
 
-
 void ImportExcel8::Scenman( void )
 {
     sal_uInt16              nLastDispl;
@@ -292,12 +283,10 @@ void ImportExcel8::Scenman( void )
     maScenList.nLastScenario = nLastDispl;
 }
 
-
 void ImportExcel8::Scenario( void )
 {
     maScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
 }
-
 
 void ImportExcel8::Labelsst( void )
 {
@@ -317,7 +306,6 @@ void ImportExcel8::Labelsst( void )
     }
 }
 
-
 void ImportExcel8::FeatHdr( void )
 {
     if (!readFrtHeader( aIn, 0x0867))
@@ -334,7 +322,6 @@ void ImportExcel8::FeatHdr( void )
 
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
-
 
 void ImportExcel8::Feat( void )
 {
@@ -383,7 +370,6 @@ void ImportExcel8::Feat( void )
 
     GetSheetProtectBuffer().AppendEnhancedProtection( aProt, GetCurrScTab() );
 }
-
 
 void ImportExcel8::ReadBasic( void )
 {
@@ -438,14 +424,12 @@ void ImportExcel8::ReadBasic( void )
     }
 }
 
-
 void ImportExcel8::EndSheet( void )
 {
     ImportExcel::EndSheet();
     GetCondFormatManager().Apply();
     GetValidationManager().Apply();
 }
-
 
 void ImportExcel8::PostDocLoad( void )
 {
@@ -497,7 +481,6 @@ void ImportExcel8::LoadDocumentProperties()
         }
     }
 }
-
 
 // autofilter
 

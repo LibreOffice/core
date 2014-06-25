@@ -14,22 +14,15 @@ namespace sc {
 RefHint::RefHint( Type eType ) : SfxSimpleHint(SC_HINT_REFERENCE), meType(eType) {}
 RefHint::~RefHint() {}
 
-
 RefMovedHint::RefMovedHint( const ScRange& rRange, const ScAddress& rMove ) :
     RefHint(Moved), maRange(rRange), maMoveDelta(rMove) {}
 
 RefMovedHint::~RefMovedHint() {}
 
-
-
 RefColReorderHint::RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
     RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
 
 RefColReorderHint::~RefColReorderHint() {}
-
-
-
-
 
 }
 

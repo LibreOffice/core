@@ -313,7 +313,6 @@ IMPL_LINK( ScRandomNumberGeneratorDialog, OkClicked, PushButton*, /*pButton*/ )
     return 0;
 }
 
-
 IMPL_LINK( ScRandomNumberGeneratorDialog, ApplyClicked, PushButton*, /*pButton*/ )
 {
     SelectGeneratorAndGenerateNumbers();

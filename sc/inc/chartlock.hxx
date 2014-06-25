@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_CHARTLOCK_HXX
 #define INCLUDED_SC_INC_CHARTLOCK_HXX
 
-
 #include <vcl/timer.hxx>
 
 #include <cppuhelper/weakref.hxx>
@@ -73,7 +72,6 @@ private:
     ScTemporaryChartLock();
     ScTemporaryChartLock( const ScTemporaryChartLock& );
 };
-
 
 #endif
 

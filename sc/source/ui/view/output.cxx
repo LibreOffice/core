@@ -84,7 +84,6 @@ static const ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
 
-
 // Helper class for color assignment to avoid repeated lookups for the same user
 
 ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :
@@ -140,7 +139,6 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
         nColor = nAuthorColor[nLastUserIndex];
     }
 }
-
 
 ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             ScTableInfo& rTabInfo, ScDocument* pNewDoc,
@@ -700,7 +698,6 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
     return pBackground;
 }
 
-
 static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
                     SCCOL nX1, SCCOL nX2, bool bShowProt, bool bPagebreakMode )
 {
@@ -1249,7 +1246,6 @@ void ScOutputData::DrawClear()
     }
 }
 
-
 // Lines
 
 long lclGetSnappedX( OutputDevice& rDev, long nPosX, bool bSnapPixel )
@@ -1312,7 +1308,6 @@ void ScOutputData::DrawFrame()
         nInitPosX += nMirrorW - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
-
 
     // *** set column and row sizes of the frame border array ***
 
@@ -1389,7 +1384,6 @@ void ScOutputData::DrawFrame()
     mpDev->SetDrawMode(nOldDrawMode);
 }
 
-
 // Line below the cell
 
 static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
@@ -1444,7 +1438,6 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
     else
         return pNextTop;
 }
-
 
 static long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
 {

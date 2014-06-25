@@ -255,7 +255,6 @@ public:
     bool            InsertTable( const OUString& rName, SCTAB nTabNr, bool bRecord = true );
     bool            InsertTables(std::vector<OUString>& aNames, SCTAB nTab, SCTAB nCount, bool bRecord = true);
 
-
     bool            AppendTable( const OUString& rName, bool bRecord = true );
 
     bool            DeleteTable( SCTAB nTabNr, bool bRecord = true );
@@ -344,7 +343,6 @@ protected:
                                      const ::editeng::SvxBorderLine* pDestLine,
                                      const ::editeng::SvxBorderLine* pSrcLine,
                                      bool                 bColor );
-
 
 private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,

@@ -72,7 +72,4 @@ const EditTextObject* ScEditDataArray::Item::GetNewData() const
     return mpNewData.get();
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

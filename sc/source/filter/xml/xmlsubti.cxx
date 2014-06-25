@@ -53,7 +53,6 @@
 
 using namespace com::sun::star;
 
-
 ScXMLTabProtectionData::ScXMLTabProtectionData() :
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),

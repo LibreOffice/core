@@ -22,7 +22,6 @@
 
 using namespace com::sun::star;
 
-
 bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeName )
 {
     uno::Sequence<beans::PropertyValue> aProps;
@@ -46,7 +45,6 @@ bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeNam
 
     return false;
 }
-
 
 XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
     mpDoc( pDoc ),

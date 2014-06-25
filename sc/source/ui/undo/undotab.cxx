@@ -723,7 +723,6 @@ bool ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-
 ScUndoTabColor::ScUndoTabColor(
     ScDocShell* pNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
     ScSimpleUndo( pNewDocShell )

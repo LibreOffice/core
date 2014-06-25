@@ -20,12 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
-
-
 
 class ScDocStatPage: public SfxTabPage
 {

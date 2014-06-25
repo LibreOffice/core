@@ -47,7 +47,6 @@ public:
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "MROUND"; }
 };
 
-
 class OpCsc: public Normal
 {
 public:
