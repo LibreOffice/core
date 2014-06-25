@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/libgltf_configure.patch \
+	external/libgltf/patches/remove_config_h_in_dependencies.patch \
 	external/libgltf/patches/init_scene_set_handle.patch \
 	external/libgltf/patches/extend_get_bitmap_for_rgba_ones.patch \
 	external/libgltf/patches/wrong_duration_caused_by_uninitialized_member.patch \
