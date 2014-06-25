@@ -1764,7 +1764,7 @@ void SwTxtNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
 //In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
 bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND);
+    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
 //In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:
@@ -1773,7 +1773,7 @@ bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 //Font Bold of Wertern, CJK and CTL;
 bool lcl_IsIgnoredCharFmtForBullets(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich ==  RES_CHRATR_POSTURE || nWhich ==  RES_CHRATR_WEIGHT
+    return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_POSTURE || nWhich == RES_CHRATR_WEIGHT
         || nWhich == RES_CHRATR_CJK_POSTURE || nWhich == RES_CHRATR_CJK_WEIGHT
         || nWhich == RES_CHRATR_CTL_POSTURE || nWhich == RES_CHRATR_CTL_WEIGHT);
 }
