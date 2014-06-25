@@ -24,23 +24,20 @@ $(eval $(call gb_ExternalProject_use_externals,libgltf,\
 
 ifeq ($(COM),MSC)
 
-AdditionalIncludes :=
+libgltf_AdditionalIncludes :=
 
 ifeq ($(SYSTEM_BOOST),)
-AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,boost)"
-AdditionalIncludes += "$(SRCDIR)/config_host"
+libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,boost)"
+libgltf_AdditionalIncludes += "$(SRCDIR)/config_host"
 endif
 
 ifeq ($(SYSTEM_GLEW),)
-AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glew)/include"
+libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glew)/include"
 endif
 
 ifeq ($(SYSTEM_GLM),)
-AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glm)"
+libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glm)"
 endif
-
-empty :=
-space := $(empty) $(empty)
 
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
@@ -48,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) \
 			/p:VisualStudioVersion=11.0) \
-			'/p:AdditionalIncludeDirectories=$(subst $(space),;,$(subst /,\,$(strip $(AdditionalIncludes))))' \
+			'/p:AdditionalIncludeDirectories=$(subst $(gb_SPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
 			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_GLEW),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,glew))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
 
