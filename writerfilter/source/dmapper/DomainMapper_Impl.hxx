@@ -128,6 +128,7 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xCustomField;
     OUString                                                                 m_sHyperlinkURL;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
@@ -147,6 +148,8 @@ public:
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
     bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetCustomField() const { return m_xCustomField; }
+    void    SetCustomField( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCustomField ) { m_xCustomField = xCustomField; }
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
     void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > xTextField) { m_xTextField = xTextField;}
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >      GetFormField() const { return m_xFormField;}
@@ -400,7 +403,7 @@ private:
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const OUString& rCommand,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropertySet );
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropertySet, bool bDetectFormat = false );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     FindOrCreateFieldMaster( const sal_Char* pFieldMasterService,
                                                             const OUString& rFieldMasterName )
