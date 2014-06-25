@@ -18,6 +18,10 @@ $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
     gtk \
 ))
 
+$(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
+    libreofficekitgtk \
+))
+
 $(eval $(call gb_Executable_use_static_libraries,gtktiledviewer,\
     libreofficekit \
 ))
