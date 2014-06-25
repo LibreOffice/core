@@ -859,9 +859,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
 {
     bool bRetval(false);
 
-#ifdef DBG_UTIL
     const sal_uInt16 nStartCount(GetBitCount());
-#endif
 
     if(basegfx::fTools::equalZero(rScaleX) || basegfx::fTools::equalZero(rScaleY))
     {
@@ -874,6 +872,22 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
         // no scale
         bRetval = true;
     }
+
+    //fdo#33455
+    //
+    //If we start with a 1 bit image, then after scaling it in any mode except
+    //BMP_SCALE_FAST we have a a 24bit image which is perfectly correct, but we
+    //are going to down-shift it to mono again and Bitmap::ImplMakeMono just
+    //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
+    //will default to black/white and the colors mapped to which ever is closer
+    //to black/white
+    //
+    //So the easiest thing to do to retain the colors of 1 bit bitmaps is to
+    //just use the fast scale rather than attempting to count unique colors in
+    //the other converters and pass all the info down through
+    //Bitmap::ImplMakeMono
+    if (nStartCount == 1 && nScaleFlag != BMP_SCALE_NONE)
+        nScaleFlag = BMP_SCALE_FAST;
 
     switch(nScaleFlag)
     {
@@ -894,7 +908,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
         }
         case BMP_SCALE_SUPER :
         {
-            if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
+            if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
                 // fallback to ImplScaleFast
                 bRetval = ImplScaleFast( rScaleX, rScaleY );
@@ -936,13 +950,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
         }
     }
 
-#ifdef DBG_UTIL
-    if(bRetval && nStartCount != GetBitCount())
-    {
-        OSL_ENSURE(false, "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
-    }
-#endif
-
+    OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
 }
 
