@@ -189,7 +189,7 @@ protected:
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     SwDoc                   *mpDoc;          ///< The document; never 0.
 
-    sal_uInt16 mnStartAction; ///< != 0 if at least one ::com::sun::star::chaos::Action is active.
+    sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
     bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
 

@@ -877,7 +877,7 @@ public:
 
     // From now on this interface has to be used for Flys.
     // pAnchorPos must be set, if they are not attached to pages AND
-    // ::com::sun::star::chaos::Anchor is not already set at valid CntntPos
+    // Anchor is not already set at valid CntntPos
     // in FlySet/FrmFmt.
     /* new parameter bCalledFromShell
 
@@ -1359,7 +1359,7 @@ public:
     sal_uInt16 FindNumRule( const OUString& rName ) const;
     SwNumRule* FindNumRulePtr( const OUString& rName ) const;
 
-    // Deletion only possible if ::com::sun::star::chaos::Rule is not used!
+    // Deletion only possible if Rule is not used!
     bool RenameNumRule(const OUString & aOldName, const OUString & aNewName,
                            bool bBroadcast = false);
     bool DelNumRule( const OUString& rName, bool bBroadCast = false );

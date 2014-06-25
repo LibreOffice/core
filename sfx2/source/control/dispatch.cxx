@@ -496,7 +496,7 @@ void SfxDispatcher::Pop
     }
     else
     {
-        // Remember ::com::sun::star::chaos::Action
+        // Remember Action
         pImp->aToDoStack.push_front( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if (pImp->bFlushed)
         {

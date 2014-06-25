@@ -120,9 +120,9 @@ namespace connectivity
                                                         // or OUString in case of
                                                         // OUString, INT, etc.
         SQLNodeType                     m_eNodeType;    // see above
-        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule())
+        sal_uInt32                      m_nNodeID;      // Rule ID (if IsRule())
                                                         // or Token ID (if !IsRule())
-                                            // ::com::sun::star::chaos::Rule IDs and Token IDs can't
+                                            // Rule IDs and Token IDs can't
                                             // be distinguished by their values,
                                             // IsRule has to be used for that!
     public:
