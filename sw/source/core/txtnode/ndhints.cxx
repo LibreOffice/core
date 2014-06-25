@@ -27,8 +27,6 @@
 #include <set>
 #endif
 
-inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
-
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
@@ -149,7 +147,6 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
         if(!(cond)) \
         { \
             SAL_WARN("sw.core", text); \
-            DumpHints(m_HintStarts, m_HintEnds); \
             (const_cast<SwpHintsArray*>(this))->Resort(); \
             return false; \
         }
