@@ -53,6 +53,7 @@
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <ndsect.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,

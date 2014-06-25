@@ -23,10 +23,9 @@
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
-
-sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uLong , sal_uLong  );
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ) ),
@@ -940,8 +939,6 @@ bool GraphicDescriptor::ImpDetectMET( SvStream&, bool )
 
     return bRet;
 }
-
-extern bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen);
 
 bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 {

@@ -47,11 +47,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <swuiexp.hxx>
 
-namespace swui
-{
-    SwAbstractDialogFactory * GetFactory();
-}
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     : SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0,

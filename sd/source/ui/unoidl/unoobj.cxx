@@ -85,8 +85,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
 
-extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
-
 typedef std::map<sal_uIntPtr, SfxExtItemPropertySetInfo*> SdExtPropertySetInfoCache;
 static SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
 static SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;

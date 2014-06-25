@@ -72,6 +72,13 @@ struct __cxa_eh_globals
 
 }
 
+extern "C" void privateSnippetExecutorGeneral();
+extern "C" void privateSnippetExecutorVoid();
+extern "C" void privateSnippetExecutorHyper();
+extern "C" void privateSnippetExecutorFloat();
+extern "C" void privateSnippetExecutorDouble();
+extern "C" void privateSnippetExecutorClass();
+
 extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
 
 namespace CPPU_CURRENT_NAMESPACE

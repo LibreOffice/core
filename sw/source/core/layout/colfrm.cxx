@@ -28,9 +28,7 @@
 #include "rootfrm.hxx"
 #include "sectfrm.hxx"
 #include "switerator.hxx"
-
-// ftnfrm.cxx:
-void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
+#include "ftnfrm.hxx"
 
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )

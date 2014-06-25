@@ -37,13 +37,21 @@ using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
+namespace
+{
+    class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};
+}
+
 namespace cppu
 {
 
 /** Shared mutex for implementation helper initialization.
     Not for public use.
 */
-::osl::Mutex & SAL_CALL getImplHelperInitMutex(void);
+::osl::Mutex & SAL_CALL getImplHelperInitMutex(void)
+{
+    return theImplHelperInitMutex::get();
+}
 
 
 static inline void checkInterface( Type const & rType )

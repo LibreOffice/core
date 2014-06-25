@@ -24,6 +24,9 @@
 
 int rsc2_main(int, char**);
 
+// Entry point declaration for modules rscpp and rsc2
+extern "C" int rscpp_main(int, char**);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

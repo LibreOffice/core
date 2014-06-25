@@ -21,7 +21,6 @@
 #define INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
 
 #include <sal/config.h>
-
 #include <sal/types.h>
 
 class SfxItemPool;
@@ -29,6 +28,9 @@ class SfxMedium;
 class SfxObjectShell;
 
 sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
+
+void SetTemplate_Impl( const OUString&, const OUString&, SfxObjectShell* );
+
 
 #endif
 

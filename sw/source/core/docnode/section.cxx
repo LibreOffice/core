@@ -57,6 +57,7 @@
 #include <switerator.hxx>
 #include <svl/smplhint.hxx>
 #include <algorithm>
+#include <ndsect.hxx>
 
 using namespace ::com::sun::star;
 
@@ -673,8 +674,6 @@ SwSection * SwSectionFmt::GetSection() const
 {
     return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
 }
-
-extern void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
 // Do not destroy all Frms in aDepend (Frms are recognized with a PTR_CAST).
 void SwSectionFmt::DelFrms()

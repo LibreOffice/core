@@ -72,14 +72,6 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::script::provider;
-using namespace ::com::sun::star::container;
 #include <basic/sbuno.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
@@ -130,8 +122,19 @@ using namespace ::com::sun::star::container;
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
 #include <openflag.hxx>
+#include <objstor.hxx>
+#include <appopen.hxx>
 
 #include <boost/scoped_ptr.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::provider;
+using namespace ::com::sun::star::container;
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
@@ -1155,7 +1158,6 @@ bool SfxObjectShell::IsLoadingFinished() const
     return ( pImp->nLoadedFlags == SFX_LOADED_ALL );
 }
 
-void impl_addToModelCollection(const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel);
 void SfxObjectShell::InitOwnModel_Impl()
 {
     if ( !pImp->bModelInitialized )
@@ -1284,8 +1286,6 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     }
 }
 
-
-extern void SetTemplate_Impl( const OUString&, const OUString&, SfxObjectShell* );
 
 void SfxObjectShell::TemplateDisconnectionAfterLoad()
 {

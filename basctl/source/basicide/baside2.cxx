@@ -18,6 +18,7 @@
  */
 
 #include "baside2.hxx"
+#include "baside3.hxx"
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
@@ -505,8 +506,6 @@ bool ModulWindow::SaveBasicSource()
 
     return bDone;
 }
-
-extern bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
 
 bool ModulWindow::ImportDialog()
 {

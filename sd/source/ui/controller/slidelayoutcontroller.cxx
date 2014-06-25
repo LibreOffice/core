@@ -50,6 +50,7 @@
 #include "sdresid.hxx"
 #include "pres.hxx"
 #include "slidelayoutcontroller.hxx"
+#include "ViewShellBase.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -61,8 +62,6 @@ using namespace ::com::sun::star::beans;
 
 namespace sd
 {
-
-extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {

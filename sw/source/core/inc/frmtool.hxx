@@ -43,12 +43,16 @@ class OutputDevice;
 class Graphic;
 class GraphicAttr;
 class SwPageDesc;
+class SwFrmFmts;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
 #define BROWSE_HEIGHT 56700L * 10L // 10 Meters
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
+
+void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
+                       SwFrm *pFrm, SwPageFrm *pPage );
 
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background

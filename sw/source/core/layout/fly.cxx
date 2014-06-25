@@ -61,6 +61,7 @@
 #include "switerator.hxx"
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
+#include <txtfly.hxx>
 
 using namespace ::com::sun::star;
 

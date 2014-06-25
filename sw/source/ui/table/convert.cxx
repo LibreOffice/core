@@ -35,11 +35,7 @@
 #include "table.hrc"
 #include "swabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
-
-namespace swui
-{
-    SwAbstractDialogFactory * GetFactory();
-}
+#include <swuiexp.hxx>
 
 //keep the state of the buttons on runtime
 static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used

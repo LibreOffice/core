@@ -41,6 +41,7 @@
 #include "viewopt.hxx"
 #include "wrtsh.hxx"
 #include "wview.hxx"
+#include "textsh.hxx"
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
@@ -94,8 +95,6 @@
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 
 using namespace ::com::sun::star;
-
-extern void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 /// @returns : the language for the selected text that is set for the
 ///     specified attribute (script type).

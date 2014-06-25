@@ -31,6 +31,8 @@ typedef struct _oslSecurityImpl {
     char m_buffer[1]; /* should be a C99 flexible array member */
 } oslSecurityImpl;
 
+sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
+
 #ifdef __cplusplus
 }
 #endif

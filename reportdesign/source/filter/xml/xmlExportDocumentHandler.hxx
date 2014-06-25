@@ -29,9 +29,13 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <comphelper/uno3.hxx>
+#include <xmloff/xmltoken.hxx>
 
 namespace rptxml
 {
+
+OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
+
 typedef ::cppu::WeakAggImplHelper3< ::com::sun::star::xml::sax::XDocumentHandler
                                 ,   ::com::sun::star::lang::XInitialization
                                 ,   ::com::sun::star::lang::XServiceInfo>   ExportDocumentHandler_BASE;

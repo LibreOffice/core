@@ -42,11 +42,9 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <vprint.hxx>
 
 using namespace ::com::sun::star;
-
-SwPageFrm const*
-sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
 
 // OD 12.12.2002 #103492#
 SwPagePreviewLayout* SwViewShell::PagePreviewLayout()

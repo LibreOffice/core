@@ -31,6 +31,8 @@
 // create object from user-type  (+StringID+StringID)
 SbxObject* createUserTypeImpl( const OUString& rClassName );
 
+SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

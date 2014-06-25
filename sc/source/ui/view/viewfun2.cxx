@@ -95,9 +95,6 @@ using ::editeng::SvxBorderLine;
 using ::std::vector;
 using ::std::auto_ptr;
 
-// helper func defined in docfunc.cxx
-void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
-
 // STATIC DATA ---------------------------------------------------------------
 
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )

@@ -53,6 +53,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <tools/diagnose_ex.h>
+#include "persistence.hxx"
 
 using namespace ::com::sun::star;
 
