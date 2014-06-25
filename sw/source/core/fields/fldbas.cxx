@@ -394,7 +394,7 @@ OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) cons
             if (GetTypeId() == TYP_AUTHORITY)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-                m_Cache = pAuthorityField->ConditionalExpand(eField);
+                m_Cache = pAuthorityField->ExpandCitation(eField);
             }
             else
                 m_Cache = Expand();
