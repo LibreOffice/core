@@ -49,6 +49,7 @@
 #include "dpshttab.hxx"
 #include <scopetools.hxx>
 #include <columnspanset.hxx>
+#include <tokenstringcontext.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -175,6 +176,7 @@ public:
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
     void testCopyMergedNumberFormats();
+    void testVBAUserFunctionXLSM();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -254,6 +256,7 @@ public:
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
     CPPUNIT_TEST(testCopyMergedNumberFormats);
+//  CPPUNIT_TEST(testVBAUserFunctionXLSM); // TODO : Macro not working in unit test. Get this to work.
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2592,6 +2595,31 @@ void ScFiltersTest::testCopyMergedNumberFormats()
     CPPUNIT_ASSERT_EQUAL(aStrB1, aCopyDoc.GetString(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(aStrC1, aCopyDoc.GetString(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(aStrD1, aCopyDoc.GetString(ScAddress(3,0,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testVBAUserFunctionXLSM()
+{
+    ScDocShellRef xDocSh = loadDoc("vba-user-function.", XLSM);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // A1 contains formula with user-defined function, and the function is defined in VBA.
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+
+    sc::CompileFormulaContext aCxt(&rDoc);
+    OUString aFormula = pFC->GetFormula(aCxt);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=MYFUNC()"), aFormula);
+
+    // Check the formula state after the load.
+    sal_uInt16 nErrCode = pFC->GetErrCode();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), nErrCode);
+
+    // Check the result.
+    CPPUNIT_ASSERT_EQUAL(42.0, rDoc.GetValue(ScAddress(0,0,0)));
 
     xDocSh->DoClose();
 }

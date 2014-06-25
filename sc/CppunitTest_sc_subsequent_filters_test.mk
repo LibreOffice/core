@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
     sal \
     salhelper \
     sax \
+    sb \
     sc \
     scqahelper \
     sfx \
@@ -43,12 +44,14 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
     svt \
     svx \
     svxcore \
+    subsequenttest \
 	test \
     tl \
     tk \
     ucbhelper \
 	unotest \
     utl \
+    vbahelper \
     vcl \
     xo \
 	$(gb_UWINAPI) \
