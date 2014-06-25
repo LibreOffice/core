@@ -9,7 +9,7 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="buttons">ok</property>
-    <property name="text" translatable="yes">Readonly content cannot be changed.</property>
+    <property name="text" translatable="yes">Write protected sections cannot be changed.</property>
     <property name="secondary_text" translatable="yes">No modifications will be accepted.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
