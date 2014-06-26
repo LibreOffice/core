@@ -56,6 +56,9 @@ typedef ::cppu::WeakComponentImplHelper7<
     CachedDataSequence_Base;
 }
 
+/**
+ * This sequence object does store actual values within, hence "cached".
+ */
 class CachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,

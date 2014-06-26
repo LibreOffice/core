@@ -61,6 +61,16 @@ typedef ::cppu::WeakComponentImplHelper8<
     UncachedDataSequence_Base;
 }
 
+/**
+ * This sequence object does NOT store actual sequence data.  Instead, it
+ * references a column inside the internal data table (represented by class
+ * InternalData) via range representation string.  The range representation
+ * string ends with a numeric value that indicates the column index within
+ * the internal data table.
+ *
+ * <p>A range representation can be either '0', '1', '2', ..., or 'label 1',
+ * 'label 2', ....</p>
+ */
 class UncachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
