@@ -377,6 +377,10 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
+    // We specifically need to set the visible range here -- by default it is
+    // set in UpdateVisibleRange which however uses the viewdata, which is
+    // completely irrelevant for tiled rendering.
+    maVisibleRange.set( nX1, nY1, nX2, nY2 );
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
     bIsInPaint = false;
 }
