@@ -300,16 +300,6 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     return bOk;
 }
 
-void SwDocShell::BeforeLoading(SfxMedium&, const ::rtl::OUString&)
-{
-    if (mpDoc == NULL)
-    {
-        return;
-    }
-
-    mpDoc->RemoveAllFmtLanguageDependencies();
-}
-
 // Saving the Default-Format, Stg present
 bool SwDocShell::Save()
 {

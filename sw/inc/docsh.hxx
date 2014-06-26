@@ -143,12 +143,6 @@ protected:
     /// override to update text fields
     virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
-    // override <SfxObjectShell>'s method which is called in
-    // <SfxObjectShell::ImportFrom(..)>.
-    // <SfxObjectShell::ImportFrom(..)> is used by current import of Microsoft
-    // Word documents in OOXML file format.
-    virtual void BeforeLoading(SfxMedium&, const ::rtl::OUString&) SAL_OVERRIDE;
-
 public:
     using SotObject::GetInterface;
 

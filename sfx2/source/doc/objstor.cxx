@@ -2177,8 +2177,6 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 {
     OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
-    BeforeLoading(rMedium, aFilterName);
-
     uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     uno::Reference < lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
@@ -2286,8 +2284,6 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                 }
             }
         }
-        AfterLoading(rMedium, aFilterName);
-
         return bRtn;
         }
         catch (const packages::zip::ZipIOException&)

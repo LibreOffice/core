@@ -177,15 +177,6 @@ private:
                                                   // sal_False := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
-
-protected:
-    // methods called in implementation of <ImportFrom(..)>
-    virtual void BeforeLoading(SfxMedium&,
-                               const OUString&) {}
-
-    virtual void AfterLoading(SfxMedium&,
-                              const OUString&) {}
-
 private:
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
