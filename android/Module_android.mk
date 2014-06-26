@@ -13,6 +13,7 @@ ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,android,\
 	CustomTarget_lo4android \
+	CustomTarget_lo_android \
 	CustomTarget_android_desktop \
 ))
 
