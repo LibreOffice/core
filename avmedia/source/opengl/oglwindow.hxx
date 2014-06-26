@@ -71,6 +71,7 @@ private:
     bool m_bVisible;
     com::sun::star::media::ZoomLevel meZoomLevel;
     Point m_aLastMousePos;
+    bool m_bIsOrbitMode;
 };
 
 } // namespace ogl

@@ -1,0 +1,12 @@
+diff -ur libgltf.org/Makefile.in libgltf/Makefile.in
+--- libgltf.org/Makefile.in	2014-06-25 23:16:52.417528674 +0200
++++ libgltf/Makefile.in	2014-06-25 23:16:56.493528501 +0200
+@@ -419,7 +419,7 @@
+ stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
+ 	@rm -f stamp-h1
+ 	cd $(top_builddir) && $(SHELL) ./config.status config.h
+-$(srcdir)/config.h.in:  $(am__configure_deps) 
++$(srcdir)/config.h.in: 
+ 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
+ 	rm -f stamp-h1
+ 	touch $@
