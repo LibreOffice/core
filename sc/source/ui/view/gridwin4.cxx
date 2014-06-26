@@ -29,6 +29,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/settings.hxx>
 
+#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
 
@@ -388,17 +389,32 @@ Size ScGridWindow::GetDataAreaSize()
 
     SCTAB nTab = pViewData->GetTabNo();
 
+    // Actual data area
     pDoc->ShrinkToDataArea( nTab,
                             nStartCol, nStartRow, nEndCol, nEndRow );
 
+    // Drawing layer area -- is completely independent of the data area.
+    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+    SdrView* pDrawView = pTabViewShell->GetSdrView();
+    SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    SdrPage* pPage = pPageView->GetPage();
+    Rectangle aDrawDataArea = pPage->GetAllObjBoundRect();
+    // Draw layer works in 100th mm, whereas we're working with TWIPs.
+    aDrawDataArea.SetPos( aDrawDataArea.TopLeft() * 1440 / 2540 );
+    aDrawDataArea.SetSize( Size( aDrawDataArea.GetSize().Width() * 1440 / 2540,
+                                 aDrawDataArea.GetSize().Height() * 1440 / 2540 ) );
+
+    // We specifically keep iterating until we have covered both the
+    // data area AND the drawing layer area. We also make sure that
+    // we return an area corresponding to a whole number of cells.
     long nX = 0;
-    for ( SCCOL i = 0; i <= nEndCol; i++ )
+    for ( SCCOL i = 0; i <= nEndCol || nX < aDrawDataArea.Right(); i++ )
     {
         nX += pDoc->GetColWidth( i, nTab );
     }
 
     long nY = 0;
-    for ( SCROW i = 0; i <= nEndRow; i++ )
+    for ( SCROW i = 0; i <= nEndRow || nY < aDrawDataArea.Bottom(); i++ )
     {
         nY += pDoc->GetRowHeight( i, nTab );
     }
