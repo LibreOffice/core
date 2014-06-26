@@ -2337,7 +2337,6 @@ double implGetDateOfFirstDayInFirstWeek
 
     double dBaseDate;
     implDateSerial( nYear, 1, 1, dBaseDate );
-    double dRetDate = dBaseDate;
 
     sal_Int16 nWeekDay0101 = implGetWeekDay( dBaseDate );
     sal_Int16 nDayDiff = nWeekDay0101 - nFirstDay;
@@ -2350,7 +2349,7 @@ double implGetDateOfFirstDayInFirstWeek
         if( nThisWeeksDaysInYearCount < nFirstWeekMinDays )
             nDayDiff -= 7;
     }
-    dRetDate = dBaseDate - nDayDiff;
+    double dRetDate = dBaseDate - nDayDiff;
     return dRetDate;
 }
 

@@ -117,20 +117,15 @@ void UpdateHandler::enableControls( short nCtrlState )
     if ( nCtrlState == mnLastCtrlState )
         return;
 
-    bool bEnableControl;
-
-    short nCurStateVal = nCtrlState;
-    short nOldStateVal = mnLastCtrlState;
-
     // the help button should always be the last button in the
     // enum list und must never be disabled
     for ( int i=0; i<HELP_BUTTON; i++ )
     {
-        nCurStateVal = (short)(nCtrlState >> i);
-        nOldStateVal = (short)(mnLastCtrlState >> i);
+        short nCurStateVal = (short)(nCtrlState >> i);
+        short nOldStateVal = (short)(mnLastCtrlState >> i);
         if ( ( nCurStateVal & 0x01 ) != ( nOldStateVal & 0x01 ) )
         {
-            bEnableControl = ( ( nCurStateVal & 0x01 ) == 0x01 );
+            bool bEnableControl = ( ( nCurStateVal & 0x01 ) == 0x01 );
             setControlProperty( msButtonIDs[i], "Enabled", uno::Any( bEnableControl ) );
         }
     }

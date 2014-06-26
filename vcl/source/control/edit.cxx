@@ -1018,12 +1018,11 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
     if( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
     {
         // draw the inner part by painting the whole control using its border window
-        Window *pControl = this;
         Window *pBorder = GetWindow( WINDOW_BORDER );
         if( pBorder == this )
         {
             // we have no border, use parent
-            pControl = mbIsSubEdit ? GetParent() : this;
+            Window *pControl = mbIsSubEdit ? GetParent() : this;
             pBorder = pControl->GetWindow( WINDOW_BORDER );
             if( pBorder == this )
                 pBorder = GetParent();

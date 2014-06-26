@@ -1830,7 +1830,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         case presentation::ClickAction_PREVPAGE:
                         {
-                            sal_uLong nPage = nSdPage;
+                            sal_uLong nPage;
+
                             if (nSdPage == 0)
                                 nPage = 0;
                             else

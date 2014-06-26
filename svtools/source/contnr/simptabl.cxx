@@ -163,10 +163,10 @@ void SvSimpleTable::SetTabs()
         if ( nPrivTabCount > aHeaderBar.GetItemCount() )
             nPrivTabCount = aHeaderBar.GetItemCount();
 
-        sal_uInt16 i, nNewSize = static_cast< sal_uInt16 >( GetTab(0) ), nPos = 0;
+        sal_uInt16 i, nPos = 0;
         for ( i = 1; i < nPrivTabCount; ++i )
         {
-            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
+            sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
             nPos = (sal_uInt16)GetTab(i);
         }
@@ -185,7 +185,6 @@ void SvSimpleTable::Paint( const Rectangle& rRect )
     SvHeaderTabListBox::Paint(rRect );
 
     sal_uInt16 nPrivTabCount = TabCount();
-    sal_uInt16 nNewSize = ( nPrivTabCount > 0 ) ? (sal_uInt16)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
     nOldPos=nOffset;
@@ -201,7 +200,7 @@ void SvSimpleTable::Paint( const Rectangle& rRect )
         sal_uInt16 nPos = 0;
         for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
-            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
+            sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
             nPos= static_cast< sal_uInt16 >( GetTab(i) );
         }
