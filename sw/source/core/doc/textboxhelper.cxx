@@ -320,6 +320,8 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyNa
     }
     else if (rPropertyName == UNO_NAME_TEXT_VERT_ADJUST)
         syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_AUTOGROWHEIGHT)
+        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, rValue);
 }
 
 void SwTextBoxHelper::getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, css::uno::Any& rValue)
@@ -398,8 +400,16 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             }
             break;
         case RES_FRM_SIZE:
-            aPropertyName = UNO_NAME_SIZE;
-            bAdjustSize = true;
+            switch (nMemberId)
+            {
+            case MID_FRMSIZE_IS_AUTO_HEIGHT:
+                aPropertyName = UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT;
+                break;
+            default:
+                aPropertyName = UNO_NAME_SIZE;
+                bAdjustSize = true;
+                break;
+            }
             break;
         case RES_ANCHOR:
             switch (nMemberId)
