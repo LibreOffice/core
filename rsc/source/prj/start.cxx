@@ -235,7 +235,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     bool bSetSrs = false;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
-        if( '-' == **ppStr )
+        if (strcmp(*ppStr, "-isystem") == 0)
+        {
+            // ignore "-isystem" and following arg
+            if (i < aCmdLine.GetCount() - 1)
+            {
+                ++ppStr;
+                ++i;
+            }
+        }
+        else if (strncmp(*ppStr, "-isystem", strlen("-isystem")) == 0)
+        {
+            // ignore args starting with "-isystem"
+        }
+        else if( '-' == **ppStr )
         {
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
