@@ -229,6 +229,9 @@ bool BitmapPalette::IsGreyPalette() const
 
 Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 {
+    if (this == &rBitmap)
+        return *this;
+
     maPrefSize = rBitmap.maPrefSize;
     maPrefMapMode = rBitmap.maPrefMapMode;
 

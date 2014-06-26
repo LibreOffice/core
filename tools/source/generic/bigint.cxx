@@ -616,6 +616,9 @@ BigInt::operator double() const
 
 BigInt& BigInt::operator=( const BigInt& rBigInt )
 {
+    if (this == &rBigInt)
+        return *this;
+
     if ( rBigInt.bIsBig )
         memcpy( (void*)this, (const void*)&rBigInt, sizeof( BigInt ) );
     else

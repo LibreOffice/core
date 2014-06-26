@@ -521,6 +521,9 @@ Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
 
 PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
 {
+    if (this == &rPolyPoly)
+        return *this;
+
     DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
     rPolyPoly.mpImplPolyPolygon->mnRefCount++;
