@@ -76,9 +76,7 @@ public:
     void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
     tVecVecAny getComplexColumnLabels() const { return m_aColumnLabels;}
 
-#if OSL_DEBUG_LEVEL > 1
-    void traceData() const;
-#endif
+    void dump() const;
 
 private: //methods
     /** resizes the data if at least one of the given dimensions is larger than
