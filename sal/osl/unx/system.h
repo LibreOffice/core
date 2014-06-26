@@ -402,8 +402,10 @@ struct passwd *getpwent_r(struct passwd *pwd, char *buffer,  int buflen);
 extern struct spwd *getspnam_r(const char *name, struct spwd *result,
                                char *buffer, int buflen);
 
+#if !defined MACOSX
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
+#endif
 #endif /* !defined FREEBSD || (__FreeBSD_version < 500112) */
 #if !defined(FREEBSD) || (__FreeBSD_version < 601103)
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
