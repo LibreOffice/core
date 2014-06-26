@@ -6410,7 +6410,7 @@ void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCapt
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
     SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    svl::GridPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1, CALC_DEBUG_OUTPUT != 0);
     for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
