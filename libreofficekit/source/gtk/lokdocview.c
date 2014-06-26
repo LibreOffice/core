@@ -22,8 +22,9 @@ static void lok_docview_init( LOKDocView* pDocView );
 void lcl_onDestroy( LOKDocView* pDocView, gpointer pData )
 {
     (void) pData;
-    pDocView->pDocument->pClass->destroy( pDocView->pDocument );
-    pDocView->pDocument = 0;
+    if ( pDocView->pDocument )
+        pDocView->pDocument->pClass->destroy( pDocView->pDocument );
+    pDocView->pDocument = NULL;
 }
 
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
@@ -139,15 +140,22 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     if ( pDocView->pDocument )
     {
         pDocView->pDocument->pClass->destroy( pDocView->pDocument );
-        pDocView->pDocument = 0;
+        pDocView->pDocument = NULL;
     }
 
     pDocView->pDocument = pDocView->pOffice->pClass->documentLoad( pDocView->pOffice,
-                                                           pPath );
+                                                                   pPath );
+    if ( !pDocView->pDocument )
+    {
+        // FIXME: should have a GError parameter and populate it.
+        char *pError = pDocView->pOffice->pClass->getError( pDocView->pOffice );
+        fprintf( stderr, "Error opening document '%s'\n", pError );
+        return FALSE;
+    }
+    else
+        renderDocument( pDocView );
 
-    renderDocument( pDocView );
-
-    return FALSE;
+    return TRUE;
 }
 
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
