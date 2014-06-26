@@ -23,13 +23,36 @@
 #include <sal/config.h>
 #include <map>
 #include <rtl/ref.hxx>
-
+#include <node.hxx>
 
 namespace configmgr {
 
-class Node;
+typedef std::map< OUString, rtl::Reference< Node > > NodeMapImpl;
+class NodeMap
+{
+    NodeMapImpl aImpl;
+  public:
+    typedef NodeMapImpl::iterator iterator;
+    typedef NodeMapImpl::const_iterator const_iterator;
+    typedef NodeMapImpl::value_type value_type;
 
-typedef std::map< OUString, rtl::Reference< Node > > NodeMap;
+     NodeMap() {}
+    ~NodeMap() {}
+    void clear() { aImpl.clear(); }
+    bool empty() { return aImpl.empty(); }
+    void erase(const iterator &it) { aImpl.erase(it); }
+    void erase(const OUString &aStr) { aImpl.erase(aStr); }
+    iterator find(const OUString &aStr) { return aImpl.find( aStr ); }
+
+    const_iterator find(const OUString &aStr) const { return aImpl.find( aStr ); }
+    rtl::Reference<Node> &operator[](const OUString &aStr) { return aImpl[aStr]; }
+    iterator begin() { return aImpl.begin(); }
+    const_iterator begin() const { return aImpl.begin(); }
+
+    iterator end() { return aImpl.end(); }
+    const_iterator end() const { return aImpl.end(); }
+    std::pair<iterator,bool> insert(const value_type &vt) { return aImpl.insert(vt); }
+};
 
 void cloneNodeMap(NodeMap const & source, NodeMap * target);
 

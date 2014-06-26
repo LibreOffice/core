@@ -25,10 +25,9 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include "nodemap.hxx"
-
-
 namespace configmgr {
+
+class NodeMap;
 
 class Node: public salhelper::SimpleReferenceObject {
 public:
