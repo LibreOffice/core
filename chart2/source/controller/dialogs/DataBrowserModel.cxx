@@ -61,8 +61,10 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace
-{
+namespace chart {
+
+namespace {
+
 OUString lcl_getRole(
     const Reference< chart2::data::XDataSequence > & xSeq )
 {
@@ -85,9 +87,9 @@ OUString lcl_getRole(
 OUString lcl_getUIRoleName(
     const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
-    OUString aResult = ::chart::DataSeriesHelper::getRole(xLSeq);
+    OUString aResult = DataSeriesHelper::getRole(xLSeq);
     if( !aResult.isEmpty())
-        aResult = ::chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
+        aResult = DialogModel::ConvertRoleFromInternalToUI(aResult);
     return aResult;
 }
 
@@ -114,8 +116,7 @@ bool lcl_SequenceOfSeriesIsShared(
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
         for( sal_Int32 i=0; i<aLSeq.getLength(); ++i )
-            if( aLSeq[i].is() &&
-                ::chart::DataSeriesHelper::getRole(aLSeq[i]).equals( aValuesRole ))
+            if (aLSeq[i].is() && DataSeriesHelper::getRole(aLSeq[i]).equals(aValuesRole))
             {
                 // getValues().is(), because lcl_getRole checked that already
                 bResult = (aValuesRep == aLSeq[i]->getValues()->getSourceRangeRepresentation());
@@ -196,11 +197,11 @@ private:
 struct lcl_RolesOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
     lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
-        m_aRole(::chart::DataSeriesHelper::getRole(xLSeq)) {}
+        m_aRole(DataSeriesHelper::getRole(xLSeq)) {}
 
     bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
     {
-        return ::chart::DataSeriesHelper::getRole(xLSeq).equals(m_aRole);
+        return DataSeriesHelper::getRole(xLSeq).equals(m_aRole);
     }
 private:
     OUString m_aRole;
@@ -214,13 +215,10 @@ bool lcl_ShowCategories( const Reference< chart2::XDiagram > & /* xDiagram */ )
 
 bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )
 {
-    return ! ::chart::DiagramHelper::isCategoryDiagram( xDiagram );
+    return !DiagramHelper::isCategoryDiagram(xDiagram);
 }
 
 } // anonymous namespace
-
-namespace chart
-{
 
 struct DataBrowserModel::tDataColumn
 {
