@@ -457,6 +457,9 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
 
 XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 {
+    if (this == &rXPoly)
+        return *this;
+
     pImpXPolygon->CheckPointDelete();
 
     rXPoly.pImpXPolygon->nRefCount++;
