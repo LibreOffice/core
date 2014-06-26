@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_export, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,chart2_export,\
+    -I$(SRCDIR)/chart2/inc \
     $$(INCLUDE) \
 ))
 

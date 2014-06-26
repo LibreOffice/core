@@ -436,7 +436,7 @@ void Chart2ExportTest::testErrorBarXLSX()
 
         // test that y error bars are there
         Reference< beans::XPropertySet > xErrorBarYProps;
-        xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+        xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
         testErrorBar(xErrorBarYProps);
     }
 
@@ -453,7 +453,7 @@ void Chart2ExportTest::testErrorBarXLSX()
 
         // test that y error bars are there
         Reference< beans::XPropertySet > xErrorBarYProps;
-        xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+        xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
         testErrorBar(xErrorBarYProps);
     }
 }
@@ -832,7 +832,7 @@ void Chart2ExportTest::testErrorBarDataRangeODS()
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
-    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
     uno::Any aAny = xErrorBarYProps->getPropertyValue("ErrorBarRangePositive");
     CPPUNIT_ASSERT(aAny.hasValue());
     OUString aPosRange;

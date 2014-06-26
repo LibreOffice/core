@@ -89,7 +89,7 @@ void Chart2ImportTest::Fdo60083()
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
-    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
     {
         sal_Int32 nErrorBarStyle;
@@ -121,7 +121,7 @@ void Chart2ImportTest::Fdo60083()
 
     // test that x error bars are not imported
     Reference< beans::XPropertySet > xErrorBarXProps;
-    xPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
+    xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarXProps;
     CPPUNIT_ASSERT(!xErrorBarXProps.is());
 }
 
@@ -139,7 +139,7 @@ void Chart2ImportTest::testErrorBarRange()
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
-    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
 
     sal_Int32 nErrorBarStyle;
@@ -169,7 +169,7 @@ void Chart2ImportTest::testErrorBarFormatting()
 
     // test that y error bars are there
     Reference< beans::XPropertySet > xErrorBarYProps;
-    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    xPropSet->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
 
     util::Color aColor(0);

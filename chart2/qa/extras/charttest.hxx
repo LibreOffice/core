@@ -49,6 +49,8 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 
+#include <unonames.hxx>
+
 #include <iostream>
 
 #include <libxml/xmlwriter.h>

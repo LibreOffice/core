@@ -25,6 +25,8 @@
 #include "servicenames_charttypes.hxx"
 #include "DiagramHelper.hxx"
 #include "AxisIndexDefines.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -1363,9 +1365,9 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                             OUString errorBar;
 
                             if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
-                                errorBar = "ErrorBarX";
+                                errorBar = CHART_UNONAME_ERRORBAR_X;
                             else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
-                                errorBar = "ErrorBarY";
+                                errorBar = CHART_UNONAME_ERRORBAR_Y;
                             else
                                 errorBar = "ErrorBarZ";
 
