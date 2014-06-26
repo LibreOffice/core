@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <vector>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -27,8 +29,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <unicode/tblcoll.h>
-
-U_CAPI void U_EXPORT2 uprv_free(void *mem);
 
 using namespace ::rtl;
 
@@ -117,17 +117,18 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);    // UChar != sal_Unicode in MinGW
 
     if (U_SUCCESS(status)) {
-
-        int32_t len = 0;
-        uint8_t *data = coll->cloneRuleData(len, status);
-
-        if (U_SUCCESS(status) && data != NULL)
-            data_write(argv[2], argv[3], data, len);
+        std::vector<uint8_t> data;
+        int32_t len = coll->cloneBinary(0, 0, status);
+        if (status == U_BUFFER_OVERFLOW_ERROR) {
+            data.resize(len);
+            status = U_ZERO_ERROR;
+            len = coll->cloneBinary(data.empty() ? 0 : &data[0], len, status);
+        }
+        if (U_SUCCESS(status))
+            data_write(argv[2], argv[3], data.empty() ? 0 : &data[0], len);
         else {
             printf("Could not get rule data from collator\n");
         }
-
-    if (data) uprv_free(data);
     } else {
         printf("\nRule parsering error\n");
     }
