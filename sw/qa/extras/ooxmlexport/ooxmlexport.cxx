@@ -3615,6 +3615,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
                 "/word/embeddings/oleObject1.xlsb");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
+{
+    // The problem was that text after TOC field was missing if footer reference  comes in field.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    // Data was lost from this paragraph.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:t", "Abstract");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
 {
     // This UT for DOCX embedded with excel work sheet.

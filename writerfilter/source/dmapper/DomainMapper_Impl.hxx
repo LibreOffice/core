@@ -317,6 +317,7 @@ private:
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
     bool                                                                            m_bStartTOC;
+    bool                                                                            m_bStartTOCHeaderFooter;
     /// If we got any text that is the pre-rendered result of the TOC field.
     bool                                                                            m_bStartedTOC;
     bool                                                                            m_bStartIndex;
