@@ -13,11 +13,11 @@ ifeq ($(OS),LINUX)
 
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     StaticLibrary_libreofficekit \
-    Library_libreofficekitgtk \
 ))
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
+    Library_libreofficekitgtk \
     Executable_gtktiledviewer \
 ))
 endif # ($(ENABLE_GTK),)
