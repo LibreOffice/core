@@ -951,6 +951,7 @@ public:
     void ForgetNoteCaptions( const ScRangeList& rRanges );
 
     ScAddress GetNotePosition( size_t nIndex ) const;
+    ScAddress GetNotePosition( size_t nIndex, SCTAB nTab ) const;
     SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
 
     SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
