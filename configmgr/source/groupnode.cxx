@@ -59,7 +59,7 @@ int GroupNode::getMandatory() const {
 GroupNode::GroupNode(GroupNode const & other, bool keepTemplateName):
     Node(other), extensible_(other.extensible_), mandatory_(other.mandatory_)
 {
-    cloneNodeMap(other.members_, &members_);
+    other.members_.cloneInto(&members_);
     if (keepTemplateName) {
         templateName_ = other.templateName_;
     }

@@ -31,6 +31,9 @@ typedef std::map< OUString, rtl::Reference< Node > > NodeMapImpl;
 class NodeMap
 {
     NodeMapImpl aImpl;
+    NodeMap(const NodeMap &rMap) :
+        aImpl(rMap.aImpl) {}
+
   public:
     typedef NodeMapImpl::iterator iterator;
     typedef NodeMapImpl::const_iterator const_iterator;
@@ -39,7 +42,7 @@ class NodeMap
      NodeMap() {}
     ~NodeMap() {}
     void clear() { aImpl.clear(); }
-    bool empty() { return aImpl.empty(); }
+    bool empty() const { return aImpl.empty(); }
     void erase(const iterator &it) { aImpl.erase(it); }
     void erase(const OUString &aStr) { aImpl.erase(aStr); }
     iterator find(const OUString &aStr) { return aImpl.find( aStr ); }
@@ -52,9 +55,10 @@ class NodeMap
     iterator end() { return aImpl.end(); }
     const_iterator end() const { return aImpl.end(); }
     std::pair<iterator,bool> insert(const value_type &vt) { return aImpl.insert(vt); }
-};
 
-void cloneNodeMap(NodeMap const & source, NodeMap * target);
+    rtl::Reference< Node > findNode(int layer, OUString const & name) const;
+    void cloneInto(NodeMap * target) const;
+};
 
 }
 

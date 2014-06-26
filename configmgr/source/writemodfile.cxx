@@ -568,7 +568,7 @@ void writeModFile(
     {
         writeModifications(
             components, tmp.handle, "", rtl::Reference< Node >(), j->first,
-            Data::findNode(Data::NO_LAYER, data.getComponents(), j->first),
+            data.getComponents().findNode(Data::NO_LAYER, j->first),
             j->second);
     }
     writeData_(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</oor:items>\n"));

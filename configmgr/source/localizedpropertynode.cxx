@@ -50,7 +50,7 @@ LocalizedPropertyNode::LocalizedPropertyNode(
     LocalizedPropertyNode const & other):
     Node(other), staticType_(other.staticType_), nillable_(other.nillable_)
 {
-    cloneNodeMap(other.members_, &members_);
+    other.members_.cloneInto(&members_);
 }
 
 LocalizedPropertyNode::~LocalizedPropertyNode() {}

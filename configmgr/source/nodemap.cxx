@@ -29,13 +29,21 @@
 
 namespace configmgr {
 
-void cloneNodeMap(NodeMap const & source, NodeMap * target) {
+void NodeMap::cloneInto(NodeMap * target) const
+{
     assert(target != 0 && target->empty());
-    NodeMap clone(source);
-    for (NodeMap::iterator i(clone.begin()); i != clone.end(); ++i) {
+    NodeMapImpl clone(aImpl);
+    for (NodeMapImpl::iterator i(clone.begin()); i != clone.end(); ++i) {
         i->second = i->second->clone(true);
     }
-    std::swap(clone, *target);
+    std::swap(clone, target->aImpl);
+}
+
+rtl::Reference< Node > NodeMap::findNode(int layer, OUString const & name) const
+{
+    const_iterator i(aImpl.find(name));
+    return i == end() || i->second->getLayer() > layer
+        ? rtl::Reference< Node >() : i->second;
 }
 
 }

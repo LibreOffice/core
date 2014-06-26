@@ -357,7 +357,7 @@ void Components::removeExtensionXcuFile(
             rtl::Reference< Node > node;
             for (Path::const_iterator j(i->begin()); j != i->end(); ++j) {
                 parent = node;
-                node = Data::findNode(Data::NO_LAYER, *map, *j);
+                node = map->findNode(Data::NO_LAYER, *j);
                 if (!node.is()) {
                     break;
                 }

@@ -291,8 +291,8 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         }
     }
     rtl::Reference< Node > node(
-        Data::findNode(
-            valueParser_.getLayer(), data_.getComponents(), componentName_));
+        data_.getComponents().findNode(valueParser_.getLayer(),
+                                       componentName_));
     if (!node.is()) {
         SAL_WARN(
             "configmgr",
@@ -788,7 +788,7 @@ void XcuParser::handleGroupNode(
         }
     }
     rtl::Reference< Node > child(
-        Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
+        group->getMembers().findNode(valueParser_.getLayer(), name));
     if (!child.is()) {
         SAL_WARN(
             "configmgr",
