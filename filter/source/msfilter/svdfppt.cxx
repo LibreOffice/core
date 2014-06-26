@@ -6052,10 +6052,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         }
     }
 
-    sal_uInt32 nIsBullet2, _nTextOfs, _nBulletOfs, nHardAttribute = 0;
-    GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
-    nHardAttribute += GetAttrib( PPT_ParaAttr_TextOfs, _nTextOfs, nDestinationInstance ) ? 1 : 0;
-    nHardAttribute += GetAttrib( PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance ) ? 1 : 0;
+    sal_uInt32 nIsBullet2, _nTextOfs, _nBulletOfs;
+    GetAttrib(PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance);
+    GetAttrib(PPT_ParaAttr_TextOfs, _nTextOfs, nDestinationInstance);
+    GetAttrib(PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance);
     if ( !nIsBullet2 )
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );

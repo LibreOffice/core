@@ -666,7 +666,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
             // flush line
             if (nSize >= 70)
             {
-                nSize += psp::appendStr ("\n", pEncodingVector + nSize);
+                psp::appendStr ("\n", pEncodingVector + nSize);
                 psp::WritePS (pOutFile, pEncodingVector);
                 nSize = 0;
             }
