@@ -136,7 +136,7 @@ bool checkOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutput
     bool bResult = true;
     const ScAddress& s = aOutRange.aStart;
     const ScAddress& e = aOutRange.aEnd;
-    SheetPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
+    svl::GridPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1, CALC_DEBUG_OUTPUT != 0);
     SCROW nOutRowSize = e.Row() - s.Row() + 1;
     SCCOL nOutColSize = e.Col() - s.Col() + 1;
     for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
