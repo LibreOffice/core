@@ -3084,7 +3084,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
         case cssc::ErrorBarStyle::FROM_DATA:
             return "cust";
         default:
-            assert(false); // can't happen
+            assert(false && "can't happen");
     }
     return NULL;
 }

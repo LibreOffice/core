@@ -82,7 +82,7 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
-    assert(!m_strName.isEmpty());    //name should not be null.
+    assert(!m_strName.isEmpty() && "name should not be null.");
     if( !m_strName.isEmpty() )
         pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:

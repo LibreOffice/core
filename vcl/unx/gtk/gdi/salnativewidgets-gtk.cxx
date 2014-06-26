@@ -824,7 +824,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         }
     }
 
-    assert(gdkDrawable); //rhbz#1050162
+    assert(gdkDrawable && "rhbz#1050162");
     if (gdkDrawable == 0)
         return false;
 

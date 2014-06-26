@@ -81,14 +81,14 @@ namespace basegfx
         // data access read only
         const BPixel& getBPixel(sal_uInt32 nIndex) const
         {
-            assert(nIndex < mnCount); //Access out of range
+            assert(nIndex < mnCount && "Access out of range");
             return mpContent[nIndex];
         }
 
         // data access read/write
         BPixel& getBPixel(sal_uInt32 nIndex)
         {
-            assert(nIndex < mnCount); //Access out of range
+            assert(nIndex < mnCount && "Access out of range");
             return mpContent[nIndex];
         }
     };

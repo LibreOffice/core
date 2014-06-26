@@ -135,7 +135,7 @@ OUString showDirection(
     case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
         return OUString("[inout]");
     default:
-        assert(false); for (;;) { std::abort(); } // this cannot happen
+        assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
 }
 
@@ -193,7 +193,7 @@ void checkMap(
             }
             switch (entA->getSort()) {
             case unoidl::Entity::SORT_MODULE:
-                assert(false); // this cannot happen
+                assert(false && "this cannot happen");
             case unoidl::Entity::SORT_ENUM_TYPE:
                 {
                     rtl::Reference<unoidl::EnumTypeEntity> ent2A(

@@ -248,7 +248,7 @@ void scanMap(
                 .first);
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_MODULE:
-                assert(false); // this cannot happen
+                assert(false && "this cannot happen");
             case unoidl::Entity::SORT_ENUM_TYPE:
             case unoidl::Entity::SORT_CONSTANT_GROUP:
                 break;
@@ -609,7 +609,7 @@ void writeEntity(
             static_cast<unoidl::PublishableEntity *>(i->second.entity.get()));
         switch (ent->getSort()) {
         case unoidl::Entity::SORT_MODULE:
-            assert(false); // this cannot happen
+            assert(false && "this cannot happen");
         case unoidl::Entity::SORT_ENUM_TYPE:
             {
                 rtl::Reference<unoidl::EnumTypeEntity> ent2(

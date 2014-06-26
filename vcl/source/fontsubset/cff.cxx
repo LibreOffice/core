@@ -977,7 +977,7 @@ void CffSubsetterContext::convertOneTypeOp( void)
             read2push();
         } else {
             popAll2Write( nType2Op);
-            assert( false); // TODO?
+            assert(false && "TODO?");
         }
         break;
     }

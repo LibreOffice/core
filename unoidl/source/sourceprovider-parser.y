@@ -100,7 +100,7 @@ OUString flagName(unoidl::detail::SourceProviderFlags flag) {
     case unoidl::detail::FLAG_TRANSIENT:
         return OUString("transient");
     default:
-        assert(false); for (;;) { std::abort(); } // this cannot happen
+        assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
 }
 
@@ -480,7 +480,7 @@ Found findEntity(
                                             argT = unoidl::detail::SourceProviderType::TYPE_INTERFACE;
                                             break;
                                         case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                                            assert(false); // this cannot happen
+                                            assert(false && "this cannot happen");
                                         }
                                         argType
                                             = unoidl::detail::SourceProviderType(
@@ -725,7 +725,7 @@ Found findEntity(
                             n, e);
                         break;
                     case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                        assert(false); // this cannot happen
+                        assert(false && "this cannot happen");
                     }
                 }
             } else {
@@ -789,7 +789,7 @@ Found findEntity(
                          + " that is not a polymorphic struct type template"));
                     return FOUND_ERROR;
                 case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                    assert(false); // this cannot happen
+                    assert(false && "this cannot happen");
                 }
             }
             if (typedefedType != 0) {
@@ -1954,7 +1954,7 @@ typedefDefn:
               case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                  assert(false); // this cannot happen
+                  assert(false && "this cannot happen");
               default:
                   assert(t.entity->entity.is() || t.entity->pad.is());
                   unpub
@@ -1973,7 +1973,7 @@ typedefDefn:
           }
           break;
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
-          assert(false); // this cannot happen
+          assert(false && "this cannot happen");
       default:
           break;
       }
@@ -3924,7 +3924,7 @@ type:
                       ok = true;
                       break;
                   case unoidl::Entity::SORT_TYPEDEF:
-                      assert(false); // this cannot happen
+                      assert(false && "this cannot happen");
                       // fall through
                   default:
                       break;
@@ -3946,7 +3946,7 @@ type:
                   ok = true;
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-                  assert(false); // this cannot happen
+                  assert(false && "this cannot happen");
               }
               if (!ok) {
                   error(@1, yyscanner, "non-type entity " + name);
@@ -4020,7 +4020,7 @@ type:
       case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
           break;
       case unoidl::detail::SourceProviderEntity::KIND_MODULE:
-          assert(false); // this cannot happen
+          assert(false && "this cannot happen");
       }
       if (!ok) {
           error(@1, yyscanner, "non-type entity " + name);
@@ -4110,7 +4110,7 @@ OUString SourceProviderType::getName() const {
             return n + ">";
         }
     default:
-        assert(false); for (;;) { std::abort(); } // this cannot happen
+        assert(false && "this cannot happen"); for (;;) { std::abort(); }
     }
 }
 
