@@ -237,8 +237,8 @@ Reference< chart2::data::XLabeledDataSequence >
     return aResultVec;
 }
 
-Reference< chart2::data::XDataSource >
-    getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
+std::vector<Reference<css::chart2::data::XLabeledDataSequence> >
+getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& aSeries )
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
 
@@ -253,8 +253,14 @@ Reference< chart2::data::XDataSource >
         }
     }
 
+    return aSeqVec;
+}
+
+Reference< chart2::data::XDataSource >
+    getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
+{
     return Reference< chart2::data::XDataSource >(
-        new DataSource( ContainerHelper::ContainerToSequence( aSeqVec )));
+        new DataSource(ContainerHelper::ContainerToSequence(getAllDataSequences(aSeries))));
 }
 
 namespace

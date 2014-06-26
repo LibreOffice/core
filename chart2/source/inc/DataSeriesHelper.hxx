@@ -75,6 +75,11 @@ OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
                                const OUString& aRole,
                                bool bMatchPrefix = false );
 
+OOO_DLLPUBLIC_CHARTTOOLS
+std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
+getAllDataSequences(
+    const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& aSeries );
+
 /** Retrieves all data sequences found in the given data series and puts them
     into a data source.  The order of sequences will match the order of the data
     series.

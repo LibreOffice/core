@@ -186,9 +186,10 @@ struct lcl_RepresentationsOfLSeqMatch : public ::std::unary_function< Reference<
     {}
     bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
     {
-        return (xLSeq.is() &&
-                xLSeq->getValues().is() &&
-                (xLSeq->getValues()->getSourceRangeRepresentation() == m_aValuesRep ));
+        if (!xLSeq.is() || !xLSeq->getValues().is())
+            return false;
+
+        return xLSeq->getValues()->getSourceRangeRepresentation() == m_aValuesRep;
     }
 private:
     OUString m_aValuesRep;
@@ -475,42 +476,55 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
 
     //delete sequences from internal data provider that are not used anymore
     //but do not delete sequences that are still in use by the remaining series
-    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-    Reference< chart2::data::XDataSource > xSourceOfDeletedSeries( xSeries, uno::UNO_QUERY );
-    if( xDataProvider.is() && xSourceOfDeletedSeries.is())
-    {
-        ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequencesOfDeletedSeries( xSourceOfDeletedSeries->getDataSequences() );
-        Reference< chart2::XDataSeriesContainer > xSeriesCnt( getHeaderForSeries( xSeries ).m_xChartType, uno::UNO_QUERY );
-        if( xSeriesCnt.is())
-        {
-            Reference< chart2::data::XDataSource > xRemainingDataSource( DataSeriesHelper::getDataSource( xSeriesCnt->getDataSeries() ) );
-            if( xRemainingDataSource.is() )
-            {
-                ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aRemainingSeq( ContainerHelper::SequenceToVector( xRemainingDataSource->getDataSequences() ) );
-                for( sal_Int32 i=0; i<aSequencesOfDeletedSeries.getLength(); ++i )
-                {
-                    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aHitIt(
-                        ::std::find_if( aRemainingSeq.begin(), aRemainingSeq.end(),
-                            lcl_RepresentationsOfLSeqMatch( aSequencesOfDeletedSeries[i] )));
-                    // if not used by the remaining series this sequence can be deleted
-                    if( aHitIt == aRemainingSeq.end() )
-                        aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeletedSeries[i] ) );
-                }
-            }
-        }
 
-        // delete unnecessary sequences of the internal data
-        // iterate using greatest index first, so that deletion does not
-        // shift other sequences that will be deleted later
-        ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
-        for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
-                 aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
-        {
-            if( *aIt != -1 )
-                xDataProvider->deleteSequence( *aIt );
-        }
+    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+    Reference< chart2::data::XDataSource > xSourceOfDeleted( xSeries, uno::UNO_QUERY );
+    if (!xDataProvider.is() || !xSourceOfDeleted.is())
+    {
+        // Something went wrong.  Bail out.
+        updateFromModel();
+        return;
     }
+
+    Reference<chart2::XDataSeriesContainer> xSeriesCnt(
+        getHeaderForSeries(xSeries).m_xChartType, uno::UNO_QUERY);
+    if (!xSeriesCnt.is())
+    {
+        // Unexpected happened.  Bail out.
+        updateFromModel();
+        return;
+    }
+
+    // Collect all the remaining data sequences in the same chart type. The
+    // deleted data series is already gone by this point.
+    std::vector<Reference<chart2::data::XLabeledDataSequence> > aAllDataSeqs =
+        DataSeriesHelper::getAllDataSequences(xSeriesCnt->getDataSeries());
+
+    // Check if the sequences to be deleted are still referenced by any of
+    // the other data series.  If not, mark them for deletion.
+    std::vector<sal_Int32> aSequenceIndexesToDelete;
+    Sequence<Reference<chart2::data::XLabeledDataSequence> > aSequencesOfDeleted = xSourceOfDeleted->getDataSequences();
+    for (sal_Int32 i = 0; i < aSequencesOfDeleted.getLength(); ++i)
+    {
+        std::vector<Reference<chart2::data::XLabeledDataSequence> >::const_iterator aHitIt(
+            ::std::find_if( aAllDataSeqs.begin(), aAllDataSeqs.end(),
+                lcl_RepresentationsOfLSeqMatch( aSequencesOfDeleted[i] )));
+        // if not used by the remaining series this sequence can be deleted
+        if( aHitIt == aAllDataSeqs.end() )
+            aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeleted[i] ) );
+    }
+
+    // delete unnecessary sequences of the internal data
+    // iterate using greatest index first, so that deletion does not
+    // shift other sequences that will be deleted later
+    ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
+    for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
+             aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
+    {
+        if( *aIt != -1 )
+            xDataProvider->deleteSequence( *aIt );
+    }
+
     updateFromModel();
 }
 
