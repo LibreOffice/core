@@ -445,6 +445,32 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
     copyBits ( aPosAry, 0 );
 }
 
+namespace
+{
+    void setForeBack(XGCValues& rValues, const SalColormap& rColMap, const SalBitmap& rSalBitmap)
+    {
+        rValues.foreground = rColMap.GetWhitePixel();
+        rValues.background = rColMap.GetBlackPixel();
+
+        //fdo#33455 and fdo#80160 handle 1 bit depth pngs with palette entries
+        //to set fore/back colors
+        SalBitmap& rBitmap = const_cast<SalBitmap&>(rSalBitmap);
+        if (const BitmapBuffer* pBitmapBuffer = rBitmap.AcquireBuffer(true))
+        {
+            const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
+            if (rPalette.GetEntryCount() == 2)
+            {
+                const BitmapColor aWhite(rPalette[rPalette.GetBestIndex(Color(COL_WHITE))]);
+                rValues.foreground = rColMap.GetPixel(ImplColorToSal(aWhite));
+
+                const BitmapColor aBlack(rPalette[rPalette.GetBestIndex(Color(COL_BLACK))]);
+                rValues.background = rColMap.GetPixel(ImplColorToSal(aBlack));
+            }
+            rBitmap.ReleaseBuffer(pBitmapBuffer, true);
+        }
+    }
+}
+
 void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     const SalDisplay*   pSalDisp = GetDisplay();
@@ -460,24 +486,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSa
     {
         // set foreground/background values for 1Bit bitmaps
         XGetGCValues( pXDisp, aGC, nValues, &aOldVal );
-
-        aNewVal.foreground = rColMap.GetWhitePixel();
-        aNewVal.background = rColMap.GetBlackPixel();
-
-        //fdo#33455 handle 1 bit depth pngs with palette entries
-        //to set fore/back colors
-        if (const BitmapBuffer* pBitmapBuffer = const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(true))
-        {
-            const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
-            if (rPalette.GetEntryCount() == 2)
-            {
-                const BitmapColor aBlack( rPalette[rPalette.GetBestIndex( Color( COL_BLACK ) )] );
-                const BitmapColor aWhite( rPalette[rPalette.GetBestIndex( Color( COL_WHITE ) )] );
-                aNewVal.foreground = rColMap.GetPixel(ImplColorToSal(aWhite));
-                aNewVal.background = rColMap.GetPixel(ImplColorToSal(aBlack));
-            }
-        }
-
+        setForeBack(aNewVal, rColMap, rSalBitmap);
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
@@ -530,13 +539,12 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect& rPosAry,
     {
         GC                  aTmpGC;
         XGCValues           aValues;
-        const SalColormap&  rColMap = pSalDisp->GetColormap( m_nXScreen );
-        const int           nBlack = rColMap.GetBlackPixel(), nWhite = rColMap.GetWhitePixel();
+        setForeBack(aValues, pSalDisp->GetColormap(m_nXScreen), rSalBitmap);
         const int           nValues = GCFunction | GCForeground | GCBackground;
         SalTwoRect          aTmpRect( rPosAry ); aTmpRect.mnDestX = aTmpRect.mnDestY = 0;
 
         // draw paint bitmap in pixmap #1
-        aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
+        aValues.function = GXcopy;
         aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
         static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, m_nXScreen, nDepth, aTmpRect, aTmpGC );
         DBG_TESTTRANS( aFG );
