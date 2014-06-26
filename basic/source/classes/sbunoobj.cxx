@@ -2597,10 +2597,12 @@ SbxInfo* SbUnoMethod::GetInfo()
 
 const Sequence<ParamInfo>& SbUnoMethod::getParamInfos( void )
 {
-    if( !pParamInfoSeq && m_xUnoMethod.is() )
+    if (!pParamInfoSeq)
     {
-        Sequence<ParamInfo> aTmp = m_xUnoMethod->getParameterInfos() ;
-        pParamInfoSeq = new Sequence<ParamInfo>( aTmp );
+        Sequence<ParamInfo> aTmp;
+        if (m_xUnoMethod.is())
+            aTmp = m_xUnoMethod->getParameterInfos();
+        pParamInfoSeq = new Sequence<ParamInfo>(aTmp);
     }
     return *pParamInfoSeq;
 }
