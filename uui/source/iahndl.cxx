@@ -447,6 +447,10 @@ UUIInteractionHelper::handleRequest_impl(
 
         uno::Any aAnyRequest(rRequest->getRequest());
 
+        // TODO delete
+        if ( handleAuthFallbackRequest( rRequest ) )
+            return true;
+
         script::ModuleSizeExceededRequest aModSizeException;
         if (aAnyRequest >>= aModSizeException )
         {
@@ -823,12 +827,13 @@ UUIInteractionHelper::handleRequest_impl(
             return true;
         }
 
-
-
         // Handle requests which do not have a plain string representation.
 
         if (!bObtainErrorStringOnly)
         {
+            if ( handleAuthFallbackRequest( rRequest ) )
+                return true;
+
             if ( handleAuthenticationRequest( rRequest ) )
                 return true;
 

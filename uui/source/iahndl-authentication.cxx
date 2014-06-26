@@ -39,6 +39,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 
+#include "authfallbackdlg.hxx"
 #include "ids.hrc"
 #include "getcontinuations.hxx"
 #include "passwordcontainer.hxx"
@@ -742,6 +743,16 @@ UUIInteractionHelper::handlePasswordRequest(
     }
 
     return false;
+}
+
+bool
+UUIInteractionHelper::handleAuthFallbackRequest(
+    uno::Reference< task::XInteractionRequest > const & rRequest)
+{
+    Window * pParent = getParentProperty();
+    AuthFallbackDlg *dlg = new AuthFallbackDlg(pParent, "instructions", "url");
+    dlg->Execute( );
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

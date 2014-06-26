@@ -300,6 +300,11 @@ private:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_rRequest,
                 const OUString& i_rServiceName
             ) const;
+
+    bool
+    handleAuthFallbackRequest(
+        com::sun::star::uno::Reference<
+            com::sun::star::task::XInteractionRequest > const & rRequest);
 };
 
 class ErrorResource: private Resource
