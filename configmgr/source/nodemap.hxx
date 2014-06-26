@@ -30,34 +30,41 @@ namespace configmgr {
 typedef std::map< OUString, rtl::Reference< Node > > NodeMapImpl;
 class NodeMap
 {
-    NodeMapImpl aImpl;
+    NodeMapImpl maImpl;
+
     NodeMap(const NodeMap &rMap) :
-        aImpl(rMap.aImpl) {}
+        maImpl(rMap.maImpl) { clearCache(); }
 
   public:
     typedef NodeMapImpl::iterator iterator;
     typedef NodeMapImpl::const_iterator const_iterator;
     typedef NodeMapImpl::value_type value_type;
 
-     NodeMap() {}
+     NodeMap() { clearCache(); }
     ~NodeMap() {}
-    void clear() { aImpl.clear(); }
-    bool empty() const { return aImpl.empty(); }
-    void erase(const iterator &it) { aImpl.erase(it); }
-    void erase(const OUString &aStr) { aImpl.erase(aStr); }
-    iterator find(const OUString &aStr) { return aImpl.find( aStr ); }
+    bool empty() const { return maImpl.empty(); }
+    iterator find(const OUString &aStr) { return maImpl.find( aStr ); }
 
-    const_iterator find(const OUString &aStr) const { return aImpl.find( aStr ); }
-    rtl::Reference<Node> &operator[](const OUString &aStr) { return aImpl[aStr]; }
-    iterator begin() { return aImpl.begin(); }
-    const_iterator begin() const { return aImpl.begin(); }
+    const_iterator find(const OUString &aStr) const { return maImpl.find( aStr ); }
+    iterator begin() { return maImpl.begin(); }
+    const_iterator begin() const { return maImpl.begin(); }
 
-    iterator end() { return aImpl.end(); }
-    const_iterator end() const { return aImpl.end(); }
-    std::pair<iterator,bool> insert(const value_type &vt) { return aImpl.insert(vt); }
+    iterator end() { return maImpl.end(); }
+    const_iterator end() const { return maImpl.end(); }
+
+    rtl::Reference<Node> &operator[](const OUString &aStr) { return maImpl[aStr]; clearCache(); }
+    std::pair<iterator,bool> insert(const value_type &vt) { return maImpl.insert(vt); clearCache(); }
+    void clear() { maImpl.clear(); clearCache(); }
+    void erase(const iterator &it) { maImpl.erase(it); clearCache(); }
+    void erase(const OUString &aStr) { maImpl.erase(aStr); clearCache(); }
 
     rtl::Reference< Node > findNode(int layer, OUString const & name) const;
     void cloneInto(NodeMap * target) const;
+
+private:
+    // We get a large number of repeated identical lookups.
+    mutable const_iterator maCache;
+    void clearCache() { maCache = maImpl.end(); }
 };
 
 }

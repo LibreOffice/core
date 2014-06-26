@@ -32,16 +32,20 @@ namespace configmgr {
 void NodeMap::cloneInto(NodeMap * target) const
 {
     assert(target != 0 && target->empty());
-    NodeMapImpl clone(aImpl);
+    NodeMapImpl clone(maImpl);
     for (NodeMapImpl::iterator i(clone.begin()); i != clone.end(); ++i) {
         i->second = i->second->clone(true);
     }
-    std::swap(clone, target->aImpl);
+    std::swap(clone, target->maImpl);
+    target->clearCache();
 }
 
 rtl::Reference< Node > NodeMap::findNode(int layer, OUString const & name) const
 {
-    const_iterator i(aImpl.find(name));
+    const_iterator i;
+    if (maCache == end() || maCache->first != name)
+        maCache = const_cast< NodeMap *>(this)->maImpl.find(name);
+    i = maCache;
     return i == end() || i->second->getLayer() > layer
         ? rtl::Reference< Node >() : i->second;
 }
