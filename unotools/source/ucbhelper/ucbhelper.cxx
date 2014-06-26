@@ -99,7 +99,7 @@ std::vector<OUString> getContents(OUString const & url) {
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -133,7 +133,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -154,7 +154,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -173,7 +173,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -195,7 +195,7 @@ bool utl::UCBContentHelper::GetTitle(
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -217,7 +217,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -274,7 +274,7 @@ bool utl::UCBContentHelper::MakeFolder(
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -306,7 +306,7 @@ sal_Int64 utl::UCBContentHelper::GetSize(OUString const & url) {
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -335,7 +335,7 @@ bool utl::UCBContentHelper::IsYounger(
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());
@@ -425,7 +425,7 @@ bool utl::UCBContentHelper::IsSubPath(
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
-        assert(false); // this cannot happen
+        assert(false && "this cannot happen");
         throw;
     } catch (css::uno::Exception const &) {
         css::uno::Any e(cppu::getCaughtException());

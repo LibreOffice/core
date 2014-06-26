@@ -593,7 +593,7 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
         nDstLinestep = -nDstLinestep;
     }
 
-    assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight); // not sure about that?
+    assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight && "not sure about that?");
     for (int y = rDstBuffer.mnHeight; --y >= 0;)
     {
         ImplBlendLines<8>( aDstLine, rSrcLine, aMskLine, rDstBuffer.mnWidth );

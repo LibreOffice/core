@@ -199,7 +199,7 @@ void OSection::init()
 {
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
     ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
-    assert(pModel); //"No model set at the report definition!"
+    assert(pModel && "No model set at the report definition!");
     if ( pModel )
     {
         uno::Reference<report::XSection> const xSection(this);

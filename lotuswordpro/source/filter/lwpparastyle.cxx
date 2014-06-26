@@ -611,14 +611,12 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
     LwpObjectID& rTabRackID = pTabOverRide->GetTabRackID();
     if(rTabRackID.IsNull())
     {
-        //assert(false);
         return;
     }
 
     LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(rTabRackID.obj().get());
     if(!pTabRack)
     {
-        //assert(false);
         return;
     }
 

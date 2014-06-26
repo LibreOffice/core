@@ -626,7 +626,7 @@ void Application::InitSettings()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    assert(!pSVData->maAppData.mpSettings);     // initialization should not happen twice!
+    assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
     pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
     pSVData->maAppData.mpSettings = new AllSettings();

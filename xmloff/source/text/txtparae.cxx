@@ -794,7 +794,6 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         }
         OUString sParent; // AutoStyles should not have parents!
         sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
-        // assert(!sName.isEmpty()); // AutoStyle could not be found
         rbHasAutoStyle = true;
     }
 
@@ -1068,7 +1067,7 @@ void XMLTextParagraphExport::exportListChange(
          rPrevInfo.BelongsToSameList( rNextInfo ) &&
          rPrevInfo.GetLevel() >= rNextInfo.GetLevel() )
     {
-        assert(pListElements && pListElements->size() >= 2); //list elements missing
+        assert(pListElements && pListElements->size() >= 2 && "list elements missing");
         bEndElement = pListElements && pListElements->size() >= 2;
     }
 
