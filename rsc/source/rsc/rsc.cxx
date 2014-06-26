@@ -100,7 +100,20 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
 #endif
-        if( '-' == **ppStr )
+        if (strcmp(*ppStr, "-isystem") == 0)
+        {
+            // ignore "-isystem" and following arg
+            if (i < aCmdLine.GetCount() - 1)
+            {
+                ++ppStr;
+                ++i;
+            }
+        }
+        else if (strncmp(*ppStr, "-isystem", strlen("-isystem")) == 0)
+        {
+            // ignore args starting with "-isystem"
+        }
+        else if( '-' == **ppStr )
         {
             if( !rsc_stricmp( (*ppStr) + 1, "h" )
               || !strcmp( (*ppStr) + 1, "?" ) )

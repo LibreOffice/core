@@ -217,7 +217,19 @@ dooptions(int argc, char** argv)
         for (i = j = 1; i < argc; i++) {
             arg = ap = argv[i];
 
-            if (*ap++ != '-' || *ap == EOS)
+            if (strcmp(arg, "-isystem") == 0)
+            {
+                // ignore "-isystem" and following arg
+                if (i < argc)
+                {
+                    ++i;
+                }
+            }
+            else if (strncmp(arg, "-isystem", strlen("-isystem")) == 0)
+            {
+                // ignore args starting with "-isystem"
+            }
+            else if (*ap++ != '-' || *ap == EOS)
             {
                     argv[j++] = argv[i];
             }
