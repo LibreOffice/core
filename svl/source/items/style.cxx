@@ -426,6 +426,10 @@ sal_uInt16 SfxStyleSheetIterator::Count()
     {
         n = (sal_uInt16) pBasePool->mIndexedStyleSheets->GetNumberOfStyleSheets();
     }
+    else if(nMask == SFXSTYLEBIT_ALL)
+    {
+        n = static_cast<sal_uInt16>(pBasePool->mIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).size());
+    }
     else
     {
         DoesStyleMatchStyleSheetPredicate predicate(this);
@@ -440,6 +444,15 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
     if( IsTrivialSearch())
     {
         retval = pBasePool->mIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
+        nAktPosition = nIdx;
+    }
+    else if(nMask == SFXSTYLEBIT_ALL)
+    {
+        rtl::Reference< SfxStyleSheetBase > ref =
+        pBasePool->mIndexedStyleSheets->GetStyleSheetByPosition(
+                pBasePool->mIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).at(nIdx))
+                ;
+        retval = ref.get();
         nAktPosition = nIdx;
     }
     else
@@ -464,7 +477,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
 
 SfxStyleSheetBase* SfxStyleSheetIterator::First()
 {
-    return operator[](0);
+    if (Count() != 0) {
+        return operator[](0);
+    }
+    else {
+        return NULL;
+    }
 }
 
 
@@ -480,6 +498,17 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
         {
             nAktPosition = newPosition;
             retval = pBasePool->mIndexedStyleSheets->GetStyleSheetByPosition(nAktPosition).get();
+        }
+    }
+    else if(nMask == SFXSTYLEBIT_ALL)
+    {
+        unsigned newPosition = nAktPosition +1;
+        const std::vector<unsigned>& familyVector = pBasePool->mIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily);
+        if (familyVector.size() > newPosition)
+        {
+            nAktPosition = newPosition;
+            unsigned stylePosition = familyVector.at(newPosition);
+            retval = pBasePool->mIndexedStyleSheets->GetStyleSheetByPosition(stylePosition).get();
         }
     }
     else

@@ -12,6 +12,7 @@
 
 #include <sal/types.h>
 
+#include <rsc/rscsfx.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -156,10 +157,15 @@ public:
     GetNthStyleSheetThatMatchesPredicate(unsigned n, StyleSheetPredicate& predicate,
             unsigned startAt = 0);
 
+    /** Get the positions of the style sheets which belong to a certain family.
+     */
+    const std::vector<unsigned>&
+    GetStyleSheetPositionsByFamily(SfxStyleFamily) const;
+
 private:
     /** Register the position of a styleName in the index */
     void
-    Register(const rtl::OUString& styleName, unsigned pos);
+    Register(const SfxStyleSheetBase& style, unsigned pos);
 
     typedef std::vector<rtl::Reference<SfxStyleSheetBase> > VectorType;
     /** Vector with the stylesheets to allow for index-based access.
@@ -174,6 +180,8 @@ private:
 
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;
+
+    std::vector<std::vector<unsigned> > mStyleSheetPositionsByFamily;
 };
 
 } /* namespace svl */
