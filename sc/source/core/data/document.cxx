@@ -6097,6 +6097,32 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
     return ScAddress(ScAddress::INITIALIZE_INVALID);
 }
 
+ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
+{
+    for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+    {
+        size_t nColNoteCount = GetNoteCount(nTab, nCol);
+        if (!nColNoteCount)
+            continue;
+
+        if (nIndex >= nColNoteCount)
+        {
+            nIndex -= nColNoteCount;
+            continue;
+        }
+
+        SCROW nRow = GetNotePosition(nTab, nCol, nIndex);
+        if (nRow >= 0)
+            return ScAddress(nCol, nRow, nTab);
+
+        OSL_FAIL("note not found");
+        return ScAddress(ScAddress::INITIALIZE_INVALID);
+    }
+
+    OSL_FAIL("note not found");
+    return ScAddress(ScAddress::INITIALIZE_INVALID);
+}
+
 SCROW ScDocument::GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const
 {
     const ScTable* pTab = FetchTable(nTab);
