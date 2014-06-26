@@ -59,12 +59,9 @@ namespace svx
         using namespace ::com::sun::star::datatransfer;
         Reference<XTransferable> &transfer = const_cast<Reference<XTransferable> &>(_rData.GetTransferable());
         XTransferable *pInterface = transfer.get();
-        OXFormsTransferable *pThis = dynamic_cast<OXFormsTransferable *>(pInterface);
-        DBG_ASSERT(pThis,"XTransferable is NOT an OXFormsTransferable???");
-        return pThis->m_aDescriptor;
+        OXFormsTransferable& rThis = dynamic_cast<OXFormsTransferable&>(*pInterface);
+        return rThis.m_aDescriptor;
     }
-
-
 
 }   // namespace svx
 
