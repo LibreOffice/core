@@ -2238,8 +2238,8 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
                 pRet = static_cast<const SwPageFrm*>( GetNext() );
             }
         }
-        OSL_ENSURE( pRet,
-                "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
+        assert(pRet &&
+                "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash.");
     }
     return *pRet;
 }

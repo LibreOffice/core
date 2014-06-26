@@ -1297,8 +1297,6 @@ sal_Int32 SdrTableObj::CheckTextHit(const Point& rPnt) const
     return 0;
 }
 
-
-
 SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const Cell& rCell ) const
 {
     if( mpImpl && (mpImpl->getCell( mpImpl->maEditPos ).get() == &rCell) )
@@ -1307,37 +1305,26 @@ SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const Cell& rCell ) const
         return 0;
 }
 
-
-
-
 const TableLayouter& SdrTableObj::getTableLayouter() const
 {
-    OSL_ENSURE(mpImpl && mpImpl->mpLayouter, "getTableLayouter() error: no mpImpl or mpLayouter (!)");
+    assert(mpImpl && mpImpl->mpLayouter && "getTableLayouter() error: no mpImpl or mpLayouter (!)");
     return *(mpImpl->mpLayouter);
 }
-
-
 
 bool SdrTableObj::IsAutoGrowHeight() const
 {
     return true;
 }
 
-
-
 bool SdrTableObj::IsAutoGrowWidth() const
 {
     return true;
 }
 
-
-
 bool SdrTableObj::HasText() const
 {
     return true;
 }
-
-
 
 bool SdrTableObj::IsTextEditActive( const CellPos& rPos )
 {

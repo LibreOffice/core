@@ -162,14 +162,16 @@ namespace drawinglayer
             // data read access
             const SdrText& getSdrText() const
             {
-                OSL_ENSURE(mpSdrText, "Access to text of default version of ImpSdrTextAttribute (!)");
+                assert(mpSdrText && "Access to text of default version of ImpSdrTextAttribute (!)");
                 return *mpSdrText;
             }
+
             const OutlinerParaObject& getOutlinerParaObject() const
             {
-                OSL_ENSURE(mpOutlinerParaObject, "Access to OutlinerParaObject of default version of ImpSdrTextAttribute (!)");
+                assert(mpOutlinerParaObject && "Access to OutlinerParaObject of default version of ImpSdrTextAttribute (!)");
                 return *mpOutlinerParaObject;
             }
+
             bool isContour() const { return mbContour; }
             bool isFitToSize() const { return mbFitToSize; }
             bool isAutoFit() const { return mbAutoFit; }

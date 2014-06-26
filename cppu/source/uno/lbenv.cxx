@@ -512,7 +512,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
     uno_ExtEnvironment * pEnv, void *** pppInterfaces, sal_Int32 * pnLen,
     uno_memAlloc memAlloc )
 {
-    OSL_ENSURE( pEnv && pppInterfaces && pnLen && memAlloc, "### null ptr!" );
+    assert(pEnv && pppInterfaces && pnLen && memAlloc && "### null ptr!");
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::MutexGuard guard( that->mutex );

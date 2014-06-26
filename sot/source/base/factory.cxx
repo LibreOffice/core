@@ -192,7 +192,7 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
 *************************************************************************/
 void * SotFactory::CreateInstance( SotObject ** ppObj ) const
 {
-    DBG_ASSERT( pCreateFunc, "SotFactory::CreateInstance: pCreateFunc == 0" );
+    assert(pCreateFunc && "SotFactory::CreateInstance: pCreateFunc == 0");
     return pCreateFunc( ppObj );
 }
 

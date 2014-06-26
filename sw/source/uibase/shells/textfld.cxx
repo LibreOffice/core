@@ -135,10 +135,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     default:
                     {
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+                        assert(pFact && "SwAbstractDialogFactory fail!");
 
                         boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
-                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        assert(pDlg && "Dialogdiet fail!");
                         pDlg->Execute();
                     }
                 }
@@ -427,9 +427,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bool bTravel = false;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "Dialogdiet fail!");
+                    assert(pFact && "Dialogdiet fail!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
-                    OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
+                    assert(fnGetRange && "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
@@ -472,9 +472,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bTravel |= bNext || bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact2, "Dialogdiet fail!");
+                    assert(pFact2 && "Dialogdiet fail!");
                     boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
-                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                    assert(pDlg && "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
                     OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
@@ -534,9 +534,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 else
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "Dialogdiet fail!");
+                    assert(pFact && "Dialogdiet fail!");
                     boost::scoped_ptr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
-                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                    assert(pDlg && "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetScriptType();
