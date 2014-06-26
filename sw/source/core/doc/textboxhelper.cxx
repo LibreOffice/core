@@ -15,6 +15,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
+#include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <unocoll.hxx>
@@ -29,10 +30,12 @@
 #include <mvsave.hxx>
 
 #include <editeng/unoprnms.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/itemiter.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -292,6 +295,27 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyNa
             Rectangle aRectangle(pObject->GetSnapRect());
             syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
             syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
+        }
+
+        if (SwFrmFmt* pFmt = findTextBox(pShape))
+        {
+            comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
+            // That would be the btLr text direction which we don't support at a frame level, so do it at a character level.
+            if (aCustomShapeGeometry.find("TextPreRotateAngle") != aCustomShapeGeometry.end() && aCustomShapeGeometry["TextPreRotateAngle"].get<sal_Int32>() == -270)
+            {
+                if (const SwNodeIndex* pNodeIndex = pFmt->GetCntnt().GetCntntIdx())
+                {
+                    SwPaM aPaM(*pFmt->GetDoc()->GetNodes()[pNodeIndex->GetIndex() + 1], 0);
+                    aPaM.SetMark();
+                    if (SwTxtNode* pMark = pFmt->GetDoc()->GetNodes()[pNodeIndex->GetNode().EndOfSectionIndex() - 1]->GetTxtNode())
+                    {
+                        aPaM.GetMark()->nNode = *pMark;
+                        aPaM.GetMark()->nContent.Assign(pMark, pMark->GetTxt().getLength());
+                        SvxCharRotateItem aItem(900, false, RES_CHRATR_ROTATE);
+                        pFmt->GetDoc()->InsertPoolItem(aPaM, aItem, 0);
+                    }
+                }
+            }
         }
     }
     else if (rPropertyName == UNO_NAME_TEXT_VERT_ADJUST)
