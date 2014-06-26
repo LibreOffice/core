@@ -1,0 +1,47 @@
+--- a/b/boost/boost/spirit/home/classic/debug/impl/parser_names.ipp
++++ a/b/boost/boost/spirit/home/classic/debug/impl/parser_names.ipp
+@@ -95,7 +95,7 @@
+ //  from numerics.hpp
+     template <typename T, int Radix, unsigned MinDigits, int MaxDigits>
+     inline std::string
+-    parser_name(uint_parser<T, Radix, MinDigits, MaxDigits> const& p)
++    parser_name(uint_parser<T, Radix, MinDigits, MaxDigits> const&)
+     {
+         BOOST_SPIRIT_SSTREAM stream;
+         stream << Radix << ", " << MinDigits << ", " << MaxDigits;
+@@ -106,7 +106,7 @@
+ 
+     template <typename T, int Radix, unsigned MinDigits, int MaxDigits>
+     inline std::string
+-    parser_name(int_parser<T, Radix, MinDigits, MaxDigits> const& p)
++    parser_name(int_parser<T, Radix, MinDigits, MaxDigits> const&)
+     {
+         BOOST_SPIRIT_SSTREAM stream;
+         stream << Radix << ", " << MinDigits << ", " << MaxDigits;
+@@ -117,7 +117,7 @@
+ 
+     template <typename T, typename RealPoliciesT>
+     inline std::string
+-    parser_name(real_parser<T, RealPoliciesT> const& p)
++    parser_name(real_parser<T, RealPoliciesT> const&)
+     {
+         return std::string("real_parser");
+     }
+@@ -218,7 +218,7 @@
+ //  from parser.hpp
+     template <typename DerivedT>
+     inline std::string
+-    parser_name(parser<DerivedT> const& p)
++    parser_name(parser<DerivedT> const&)
+     {
+         return std::string("parser");
+     }
+@@ -227,7 +227,7 @@
+ //  from primitives.hpp
+     template <typename DerivedT>
+     inline std::string
+-    parser_name(char_parser<DerivedT> const &p)
++    parser_name(char_parser<DerivedT> const &)
+     {
+         return std::string("char_parser");
+     }
