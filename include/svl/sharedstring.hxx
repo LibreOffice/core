@@ -34,18 +34,18 @@ public:
     bool operator== ( const SharedString& r ) const;
     bool operator!= ( const SharedString& r ) const;
 
-    OUString getString() const { return mpData ? OUString(mpData) : OUString();}
+    OUString getString() const;
 
-    rtl_uString* getData() { return mpData;}
-    const rtl_uString* getData() const { return mpData;}
+    rtl_uString* getData();
+    const rtl_uString* getData() const;
 
-    rtl_uString* getDataIgnoreCase() { return mpDataIgnoreCase;}
-    const rtl_uString* getDataIgnoreCase() const { return mpDataIgnoreCase;}
+    rtl_uString* getDataIgnoreCase();
+    const rtl_uString* getDataIgnoreCase() const;
 
-    bool isValid() const { return mpData != NULL;}
-    bool isEmpty() const { return mpData == NULL || mpData->length == 0;}
+    bool isValid() const;
+    bool isEmpty() const;
 
-    sal_Int32 getLength() const { return mpData ? mpData->length : 0;}
+    sal_Int32 getLength() const;
 };
 
 }
