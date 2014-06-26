@@ -392,7 +392,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
@@ -418,7 +418,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
@@ -441,7 +441,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
@@ -573,7 +573,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
             bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
 
-            bool bShowPos, bShowNeg;
+            bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
             if( bOldHasErrorBar &&
@@ -704,7 +704,7 @@ void StatisticsItemConverter::FillSpecialItem(
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
-                double fPos, fNeg;
+                double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
                 rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
             }
@@ -718,7 +718,7 @@ void StatisticsItemConverter::FillSpecialItem(
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
-                double fPos, fNeg;
+                double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
                 rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
             }
@@ -732,7 +732,7 @@ void StatisticsItemConverter::FillSpecialItem(
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
-                double fPos, fNeg;
+                double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
                 rOutItemSet.Put( SvxDoubleItem( fPos, nWhichId ));
             }
@@ -746,7 +746,7 @@ void StatisticsItemConverter::FillSpecialItem(
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
             if( xErrorBarProp.is())
             {
-                double fPos, fNeg;
+                double fPos(0.0), fNeg(0.0);
                 lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
                 rOutItemSet.Put( SvxDoubleItem( fNeg, nWhichId ));
             }
@@ -836,7 +836,7 @@ void StatisticsItemConverter::FillSpecialItem(
             SvxChartIndicate eIndicate = CHINDICATE_BOTH;
             if( xErrorBarProp.is())
             {
-                bool bShowPos, bShowNeg;
+                bool bShowPos(false), bShowNeg(false);
                 lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
                 if( bShowPos )
