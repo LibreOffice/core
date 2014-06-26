@@ -10,11 +10,12 @@
 #include "authfallbackdlg.hxx"
 
 #include <vcl/msgbox.hxx>
+#include <iostream>
 
 using namespace boost;
 
 AuthFallbackDlg::AuthFallbackDlg( Window* pParent ) :
-    ModalDialog( pParent, "AuthFallbackDlg", "svt/ui/authfallback.ui" )
+    ModalDialog( pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui" )
 {
     get( m_pTVInstructions, "instructions" );
     get( m_pEDUrl, "url" );
@@ -29,7 +30,7 @@ AuthFallbackDlg::AuthFallbackDlg( Window* pParent ) :
 AuthFallbackDlg::AuthFallbackDlg( Window* pParent, 
         const OUString& instructions,
         const OUString& url ) :
-    ModalDialog( pParent, "AuthFallbackDlg", "svt/ui/authfallback.ui" )
+    ModalDialog( pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui" )
 {
     get( m_pTVInstructions, "instructions" );
     get( m_pEDUrl, "url" );
@@ -38,13 +39,14 @@ AuthFallbackDlg::AuthFallbackDlg( Window* pParent,
     get( m_pBTCancel, "cancel" );
 
     m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
-    m_pBTOk->Enable( false );
+    m_pBTCancel->SetClickHdl( LINK( this, AuthFallbackDlg, CancelHdl) );
+    m_pBTOk->Enable( true );
 
     m_pTVInstructions->SetText( instructions );
     m_pEDUrl->SetText( url );
 }
 
-AuthFallbackDlg::~AuthFallbackDlg()
+AuthFallbackDlg::~AuthFallbackDlg( )
 {
 }
 
@@ -54,5 +56,8 @@ IMPL_LINK ( AuthFallbackDlg,  OKHdl, Button *, EMPTYARG )
     return 1;
 }
 
-
-
+IMPL_LINK ( AuthFallbackDlg,  CancelHdl, Button *, EMPTYARG )
+{
+    EndDialog( RET_CANCEL );
+    return 0;
+}

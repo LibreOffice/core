@@ -23,8 +23,8 @@ private :
     VclMultiLineEdit* m_pTVInstructions;
     Edit* m_pEDUrl;
     Edit* m_pEDCode;
-    OKButton* m_pBTOk;
-    CancelButton* m_pBTCancel;
+    PushButton* m_pBTOk;
+    PushButton* m_pBTCancel;
 
 public :
 
@@ -38,6 +38,7 @@ public :
 private:
 
     DECL_LINK ( OKHdl, Button * );
+    DECL_LINK ( CancelHdl, Button * );
 };
 
 #endif // INCLUDED_SVTOOLS_AUTHFALLBACKDLG_HXX
