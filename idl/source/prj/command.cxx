@@ -316,6 +316,18 @@ SvCommand::SvCommand( int argc, char ** argv )
                     while(SyntaxStrings[j])
                         printf("%s\n",SyntaxStrings[j++]);
                 }
+                else if (aParam == "isystem")
+                {
+                    // ignore "-isystem" and following arg
+                    if (i < aList.size())
+                    {
+                        ++i;
+                    }
+                }
+                else if (aParam.startsWith("isystem"))
+                {
+                    // ignore args starting with "-isystem"
+                }
                 else if( aParam.startsWithIgnoreAsciiCase( "i" ) )
                 { // define include paths
                     OUString aName( aParam.copy( 1 ) );
