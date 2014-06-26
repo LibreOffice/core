@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/no_animation_in_orbit_mode.patch \
 	external/libgltf/patches/walkthrough_mode_affects_orbit_mode_unexpectedly.patch \
 	external/libgltf/patches/move_fps_closer_to_the_corner.patch \
+	external/libgltf/patches/compiler_error_fixes.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
