@@ -63,7 +63,6 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) -I$(BUILDDIR)/config_$(gb_Side)" \
 			GLEW_CFLAGS="$(if $(SYSTEM_GLEW),$(GLEW_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glew)/include)" \
 			GLM_CFLAGS="$(if $(SYSTEM_GLM),$(GLM_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glm))" \
-			$(if $(filter WNT,$(OS)),,CC="$(CC) -fPIC") \
 		&& $(MAKE) \
 	)
 
