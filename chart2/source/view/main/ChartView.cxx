@@ -165,22 +165,25 @@ public:
     virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) SAL_OVERRIDE;
     virtual void scroll(long nDelta) SAL_OVERRIDE;
     virtual void contextDestroyed() SAL_OVERRIDE;
+
+    void updateOpenGLWindow();
 private:
     ChartView* mpView;
     bool mbContextDestroyed;
+    OpenGLWindow* mpWindow;
 };
 
 GL2DRenderer::GL2DRenderer(ChartView* pView):
     mpView(pView),
-    mbContextDestroyed(false)
+    mbContextDestroyed(false),
+    mpWindow(mpView->mrChartModel.getOpenGLWindow())
 {
 }
 
 GL2DRenderer::~GL2DRenderer()
 {
-    OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
-    if(!mbContextDestroyed &&pWindow)
-        pWindow->setRenderer(NULL);
+    if(!mbContextDestroyed && mpWindow)
+        mpWindow->setRenderer(NULL);
 }
 
 void GL2DRenderer::update()
@@ -203,6 +206,27 @@ void GL2DRenderer::scroll(long )
 void GL2DRenderer::contextDestroyed()
 {
     mbContextDestroyed = true;
+}
+
+void GL2DRenderer::updateOpenGLWindow()
+{
+    if(mbContextDestroyed)
+        return;
+
+    OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
+    if(pWindow != mpWindow)
+    {
+        if(mpWindow)
+        {
+            mpWindow->setRenderer(NULL);
+        }
+
+        if(pWindow)
+        {
+            pWindow->setRenderer(this);
+        }
+    }
+    mpWindow = pWindow;
 }
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
@@ -3254,6 +3278,11 @@ void ChartView::createShapes3D()
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 
     m_pGL3DPlotter->render();
+}
+
+void ChartView::updateOpenGLWindow()
+{
+    mp2DRenderer->updateOpenGLWindow();
 }
 
 } //namespace chart
