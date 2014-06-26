@@ -1075,7 +1075,7 @@ void SvxLightCtl3D::CheckSelection()
 
     if(bSelectionValid)
     {
-        double fHor, fVer;
+        double fHor(0.0), fVer(0.0);
         maLightControl.GetPosition(fHor, fVer);
         maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
         maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
@@ -1084,7 +1084,7 @@ void SvxLightCtl3D::CheckSelection()
 
 void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
 {
-    double fHor, fVer;
+    double fHor(0.0), fVer(0.0);
 
     maLightControl.GetPosition(fHor, fVer);
     fHor += fDeltaHor;
@@ -1275,7 +1275,7 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress)
 
 IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)
 {
-    double fHor, fVer;
+    double fHor(0.0), fVer(0.0);
 
     maLightControl.GetPosition(fHor, fVer);
     maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );

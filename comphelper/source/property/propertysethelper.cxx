@@ -218,7 +218,7 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& Prop
 
     aEntries[1] = NULL;
 
-    PropertyState aState;
+    PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
     _getPropertyStates( (const PropertyMapEntry**)aEntries, &aState );
 
     return aState;

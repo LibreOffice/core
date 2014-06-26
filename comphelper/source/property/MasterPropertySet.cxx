@@ -353,7 +353,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
     if( aIter == mpInfo->maMap.end())
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
-    PropertyState aState;
+    PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
 
     if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
     {
