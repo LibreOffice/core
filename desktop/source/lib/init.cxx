@@ -321,6 +321,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             pMap = (const ExtensionMap*) aWriterExtensionMap;
             break;
         case LOK_DOCTYPE_OTHER:
+        default:
             return false;
         }
 
