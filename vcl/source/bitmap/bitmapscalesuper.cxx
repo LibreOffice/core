@@ -925,7 +925,7 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 nSumB /= nTotalWeightY;
             }
 
-            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumR, (sal_uInt8)nSumB);
+            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
             pWAcc->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
