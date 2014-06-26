@@ -55,6 +55,8 @@
 #include "galtheme.hrc"
 #include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -100,7 +102,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 
 bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
-    SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
     bool        bRet = false;
 
     if( pOStm )
@@ -133,8 +135,6 @@ bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, Galle
             pEntry->eObjKind = rObj.GetObjKind();
             bRet = true;
         }
-
-        delete pOStm;
     }
 
     return bRet;
@@ -146,7 +146,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
     if( pEntry )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
 
         if( pIStm )
         {
@@ -178,8 +178,6 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
                     pSgaObj->ImplUpdateURL( pEntry->aURL );
                 }
             }
-
-            delete pIStm;
         }
     }
 
@@ -200,15 +198,15 @@ void GalleryTheme::ImplWrite()
         if( FileExists( aPathURL ) || CreateDir( aPathURL ) )
         {
 #ifdef UNX
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_COPY_ON_SYMLINK | STREAM_TRUNC );
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_COPY_ON_SYMLINK | STREAM_TRUNC ));
 #else
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
 #endif
 
             if( pOStm )
             {
                 WriteGalleryTheme( *pOStm, *this );
-                delete pOStm;
+                pOStm.reset();
             }
 
             ImplSetModified( false );
@@ -251,12 +249,11 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     // read next possible number
     if( FileExists( aInfoFileURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
 
         if( pIStm )
         {
             pIStm->ReadUInt32( nNextNumber );
-            delete pIStm;
         }
     }
 
@@ -317,12 +314,11 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     while( bExists );
 
     // write updated number
-    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
 
     if( pOStm )
     {
         pOStm->WriteUInt32( nNextNumber );
-        delete pOStm;
     }
 
     return aNewURL;
@@ -385,12 +381,11 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
         // update title of new object if necessary
         if (rObj.GetTitle().isEmpty())
         {
-            SgaObject* pOldObj = ImplReadSgaObject(pFoundEntry);
+            boost::scoped_ptr<SgaObject> pOldObj(ImplReadSgaObject(pFoundEntry));
 
             if (pOldObj)
             {
                 ((SgaObject&) rObj).SetTitle( pOldObj->GetTitle() );
-                delete pOldObj;
             }
         }
         else if (rObj.GetTitle() == "__<empty>__")
@@ -551,19 +546,17 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
                     if ( GalleryGraphicImport( aURL, aGraphic, aFormat ) )
                     {
-                        SgaObject* pNewObj;
+                        boost::scoped_ptr<SgaObject> pNewObj;
 
                         if ( SGA_OBJ_INET == pEntry->eObjKind )
-                            pNewObj = (SgaObject*) new SgaObjectINet( aGraphic, aURL, aFormat );
+                            pNewObj.reset((SgaObject*) new SgaObjectINet( aGraphic, aURL, aFormat ));
                         else if ( aGraphic.IsAnimated() )
-                            pNewObj = (SgaObject*) new SgaObjectAnim( aGraphic, aURL, aFormat );
+                            pNewObj.reset((SgaObject*) new SgaObjectAnim( aGraphic, aURL, aFormat ));
                         else
-                            pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, aURL, aFormat );
+                            pNewObj.reset((SgaObject*) new SgaObjectBmp( aGraphic, aURL, aFormat ));
 
                         if( !InsertObject( *pNewObj ) )
                             pEntry->mbDelete = true;
-
-                        delete pNewObj;
                     }
                     else
                         pEntry->mbDelete = true; // set delete flag
@@ -615,26 +608,25 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         DBG_ASSERT( aInURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
         DBG_ASSERT( aTmpURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-        SvStream* pTmpStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+        boost::scoped_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
 
         if( pIStm && pTmpStm )
         {
             for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
             {
                 pEntry = aObjectList[ i ];
-                SgaObject* pObj;
+                boost::scoped_ptr<SgaObject> pObj;
 
                 switch( pEntry->eObjKind )
                 {
-                    case( SGA_OBJ_BMP ):    pObj = new SgaObjectBmp();      break;
-                    case( SGA_OBJ_ANIM ):   pObj = new SgaObjectAnim();     break;
-                    case( SGA_OBJ_INET ):   pObj = new SgaObjectINet();     break;
-                    case( SGA_OBJ_SVDRAW ): pObj = new SgaObjectSvDraw();   break;
-                    case (SGA_OBJ_SOUND):   pObj = new SgaObjectSound();    break;
+                case( SGA_OBJ_BMP ):    pObj.reset(new SgaObjectBmp());      break;
+                case( SGA_OBJ_ANIM ):   pObj.reset(new SgaObjectAnim());     break;
+                case( SGA_OBJ_INET ):   pObj.reset(new SgaObjectINet());     break;
+                case( SGA_OBJ_SVDRAW ): pObj.reset(new SgaObjectSvDraw());   break;
+                case (SGA_OBJ_SOUND):   pObj.reset(new SgaObjectSound());    break;
 
                     default:
-                        pObj = NULL;
                     break;
                 }
 
@@ -644,7 +636,6 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                     ReadSgaObject( *pIStm, *pObj);
                     pEntry->nOffset = pTmpStm->Tell();
                     WriteSgaObject( *pTmpStm, *pObj );
-                    delete pObj;
                 }
             }
         }
@@ -653,8 +644,8 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             OSL_FAIL( "File(s) could not be opened" );
         }
 
-        delete pIStm;
-        delete pTmpStm;
+        pIStm.reset();
+        pTmpStm.reset();
 
         CopyFile( aTmpURL, aInURL );
         KillFile( aTmpURL );
@@ -689,7 +680,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 
     if( FileExists( rURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
 
         if( pIStm )
         {
@@ -728,7 +719,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                         if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
                             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
                         {
-                            VersionCompat* pCompat = new VersionCompat( *pIStm, STREAM_READ );
+                            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( *pIStm, STREAM_READ ));
 
                             pIStm->ReadUInt32( nThemeId );
 
@@ -736,8 +727,6 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                             {
                                 pIStm->ReadCharAsBool( bThemeNameFromResource );
                             }
-
-                            delete pCompat;
                         }
                     }
                 }
@@ -747,8 +736,6 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                                               bReadOnly, false, nThemeId,
                                               bThemeNameFromResource );
             }
-
-            delete pIStm;
         }
     }
 
@@ -888,7 +875,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         }
 
         const INetURLObject aURL( ImplCreateUniqueURL( SGA_OBJ_BMP, nExportFormat ) );
-        SvStream*           pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+        boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
 
         if( pOStm )
         {
@@ -912,7 +899,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
                     bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
             }
 
-            delete pOStm;
+            pOStm.reset();
         }
 
         if( bRet )
@@ -1100,27 +1087,25 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
 {
     Graphic         aGraphic;
     OUString        aFormat;
-    SgaObject*      pNewObj = NULL;
+    boost::scoped_ptr<SgaObject> pNewObj;
     const sal_uInt16    nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
     bool            bRet = false;
 
     if( nImportRet != SGA_IMPORT_NONE )
     {
         if ( SGA_IMPORT_INET == nImportRet )
-            pNewObj = (SgaObject*) new SgaObjectINet( aGraphic, rURL, aFormat );
+            pNewObj.reset((SgaObject*) new SgaObjectINet( aGraphic, rURL, aFormat ));
         else if ( aGraphic.IsAnimated() )
-            pNewObj = (SgaObject*) new SgaObjectAnim( aGraphic, rURL, aFormat );
+            pNewObj.reset((SgaObject*) new SgaObjectAnim( aGraphic, rURL, aFormat ));
         else
-            pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat );
+            pNewObj.reset((SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat ));
     }
 #if HAVE_FEATURE_AVMEDIA
     else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO?*/ ) )
-        pNewObj = (SgaObject*) new SgaObjectSound( rURL );
+        pNewObj.reset((SgaObject*) new SgaObjectSound( rURL ));
 #endif
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
         bRet = true;
-
-    delete pNewObj;
 
     return bRet;
 }
@@ -1181,7 +1166,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
     if( rxTransferable.is() )
     {
         TransferableDataHelper  aDataHelper( rxTransferable );
-        Graphic*                pGraphic = NULL;
+        boost::scoped_ptr<Graphic> pGraphic;
 
         if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
         {
@@ -1237,7 +1222,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                 nFormat = FORMAT_BITMAP;
 
             if( nFormat && aDataHelper.GetGraphic( nFormat, aGraphic ) )
-                pGraphic = new Graphic( aGraphic );
+                pGraphic.reset(new Graphic( aGraphic ));
         }
 
         if( pGraphic )
@@ -1270,8 +1255,6 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
 
             if( !bRet )
                 bRet = InsertGraphic( *pGraphic, nInsertPos );
-
-            delete pGraphic;
         }
     }
 
@@ -1359,21 +1342,20 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
 
     const long      nReservePos = rOStm.Tell();
-    VersionCompat*  pCompat = new VersionCompat( rOStm, STREAM_WRITE, 2 );
+    boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, STREAM_WRITE, 2 ));
 
     rOStm.WriteUInt32( (sal_uInt32) GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
 
-    delete pCompat;
+    pCompat.reset();
 
     // Fill the rest of the buffer.
     const long  nRest = std::max( 512L - ( (long) rOStm.Tell() - nReservePos ), 0L );
 
     if( nRest )
     {
-        char* pReserve = new char[ nRest ];
-        memset( pReserve, 0, nRest );
-        rOStm.Write( pReserve, nRest );
-        delete[] pReserve;
+        boost::scoped_array<char> pReserve(new char[ nRest ]);
+        memset( pReserve.get(), 0, nRest );
+        rOStm.Write( pReserve.get(), nRest );
     }
 
     return rOStm;
@@ -1490,7 +1472,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
         {
-            VersionCompat*  pCompat = new VersionCompat( rIStm, STREAM_READ );
+            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, STREAM_READ ));
             sal_uInt32      nTemp32;
             bool            bThemeNameFromResource = false;
 
@@ -1502,7 +1484,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             }
 
             SetId( nTemp32, bThemeNameFromResource );
-            delete pCompat;
         }
     }
     else
