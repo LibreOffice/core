@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_0079a8fc",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3401,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-26T08:48:18Z",
+      "side": 1,
+      "message": "Any reason to only set this for Clang and not also for GCC proper (in case the day comes earlier that GCC switches to C99 by default than the day that we get rid of the MSVC-inflicted restriction to C89 in our code base)?",
+      "revId": "08b1b3bfe80052363479a0e28bac98b9be407cc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
