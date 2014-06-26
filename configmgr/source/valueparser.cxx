@@ -359,7 +359,7 @@ bool ValueParser::endElement() {
                     if (i == members.end()) {
                         pLVNode = new LocalizedValueNode(layer_);
                         members.insert(
-                            NodeMap::value_type(localizedName_, pLVNode));
+                            NodeMap::value_type(localizedName_, pLVNode ));
                     } else {
                         pLVNode = static_cast< LocalizedValueNode * >(i->second.get());
                     }
