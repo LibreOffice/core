@@ -7241,7 +7241,23 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         ;;
 
     darwin*)
-        JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers ${ISYSTEM}$FRAMEWORKSHOME/JavaVM/Headers"
+        if test -d "$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers"; then
+            JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers"
+        fi
+        if test -d "$FRAMEWORKSHOME/JavaVM/Headers"; then
+            if test -z "$JAVAINC"; then
+                JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM/Headers"
+            else
+                JAVAINC="$JAVAINC ${ISYSTEM}$FRAMEWORKSHOME/JavaVM/Headers"
+            fi
+        fi
+        if test -d "$FRAMEWORKSHOME/JavaVM.framework/Headers"; then
+            if test -z "$JAVAINC"; then
+                JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Headers"
+            else
+                JAVAINC="$JAVAINC ${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Headers"
+            fi
+        fi
         if test -d "$JAVA_HOME/include/darwin"; then
             JAVAINC="-I$JAVA_HOME/include  -I$JAVA_HOME/include/darwin"
         fi
