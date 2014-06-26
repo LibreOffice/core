@@ -16,27 +16,64 @@
 
 using rtl::OUString;
 
+
+namespace {
+const size_t NUMBER_OF_FAMILIES = 6;
+size_t family_to_index(SfxStyleFamily family)
+{
+    switch (family) {
+    case SFX_STYLE_FAMILY_CHAR:
+        return 0;
+    case SFX_STYLE_FAMILY_PARA:
+        return 1;
+    case SFX_STYLE_FAMILY_FRAME:
+        return 2;
+    case SFX_STYLE_FAMILY_PAGE:
+        return 3;
+    case SFX_STYLE_FAMILY_PSEUDO:
+        return 4;
+    case SFX_STYLE_FAMILY_ALL:
+        return 5;
+    }
+    assert(false); // only for compiler warning. all cases are handled in the switch
+    return 0;
+}
+}
+
 namespace svl {
 
 IndexedStyleSheets::IndexedStyleSheets()
-{;}
+{
+    for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
+        mStyleSheetPositionsByFamily.push_back(std::vector<unsigned>());
+    }
+;}
 
 
 void
-IndexedStyleSheets::Register(const rtl::OUString& name, unsigned pos)
+IndexedStyleSheets::Register(const SfxStyleSheetBase& style, unsigned pos)
 {
-    mPositionsByName.insert(std::make_pair(name, pos));
+    mPositionsByName.insert(std::make_pair(style.GetName(), pos));
+    size_t position = family_to_index(style.GetFamily());
+    mStyleSheetPositionsByFamily.at(position).push_back(pos);
+    size_t positionForFamilyAll = family_to_index(SFX_STYLE_FAMILY_ALL);
+    mStyleSheetPositionsByFamily.at(positionForFamilyAll).push_back(pos);
 }
 
 void
 IndexedStyleSheets::Reindex()
 {
     mPositionsByName.clear();
+    mStyleSheetPositionsByFamily.clear();
+    for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
+        mStyleSheetPositionsByFamily.push_back(std::vector<unsigned>());
+    }
+
     unsigned i = 0;
     for (VectorType::const_iterator it = mStyleSheets.begin();
                                     it != mStyleSheets.end(); ++it) {
         SfxStyleSheetBase* p = it->get();
-        Register(p->GetName(), i);
+        Register(*p, i);
         ++i;
     }
 }
@@ -53,7 +90,7 @@ IndexedStyleSheets::AddStyleSheet(rtl::Reference< SfxStyleSheetBase > style)
     if (!HasStyleSheet(style)) {
         mStyleSheets.push_back(style);
         // since we just added an element to the vector, we can safely do -1 as it will always be >= 1
-        Register(style->GetName(), mStyleSheets.size()-1);
+        Register(*style, mStyleSheets.size()-1);
     }
 }
 
@@ -205,6 +242,13 @@ IndexedStyleSheets::FindPositionsByPredicate(StyleSheetPredicate& predicate) con
         }
     }
     return r;
+}
+
+const std::vector<unsigned>&
+IndexedStyleSheets::GetStyleSheetPositionsByFamily(SfxStyleFamily e) const
+{
+    size_t position = family_to_index(e);
+    return mStyleSheetPositionsByFamily.at(position);
 }
 
 } /* namespace svl */

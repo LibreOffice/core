@@ -21,8 +21,8 @@ using namespace svl;
 class MockedStyleSheet : public SfxStyleSheetBase
 {
     public:
-    MockedStyleSheet(const rtl::OUString& name)
-    : SfxStyleSheetBase(name, NULL, SFX_STYLE_FAMILY_CHAR, 0)
+    MockedStyleSheet(const rtl::OUString& name, SfxStyleFamily fam = SFX_STYLE_FAMILY_CHAR)
+    : SfxStyleSheetBase(name, NULL, fam, 0)
     {;}
 
 };
@@ -36,6 +36,7 @@ class IndexedStyleSheetsTest : public CppUnit::TestFixture
     void RemovingStyleSheetWhichIsNotAvailableHasNoEffect();
     void StyleSheetsCanBeRetrievedByTheirName();
     void KnowsThatItStoresAStyleSheet();
+    void PositionCanBeQueriedByFamily();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(IndexedStyleSheetsTest);
@@ -47,6 +48,7 @@ class IndexedStyleSheetsTest : public CppUnit::TestFixture
     CPPUNIT_TEST(RemovingStyleSheetWhichIsNotAvailableHasNoEffect);
     CPPUNIT_TEST(StyleSheetsCanBeRetrievedByTheirName);
     CPPUNIT_TEST(KnowsThatItStoresAStyleSheet);
+    CPPUNIT_TEST(PositionCanBeQueriedByFamily);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -151,6 +153,27 @@ void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
             true, iss.HasStyleSheet(sheet2));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Does not find style sheet which is not stored and has the same name as a stored.",
             false, iss.HasStyleSheet(sheet4));
+}
+
+void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
+{
+    rtl::OUString name1("name1");
+    rtl::OUString name2("name2");
+    rtl::OUString name3("name3");
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1, SFX_STYLE_FAMILY_CHAR));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2, SFX_STYLE_FAMILY_PARA));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name3, SFX_STYLE_FAMILY_CHAR));
+
+    IndexedStyleSheets iss;
+    iss.AddStyleSheet(sheet1);
+    iss.AddStyleSheet(sheet2);
+    iss.AddStyleSheet(sheet3);
+
+    const std::vector<unsigned>& v = iss.GetStyleSheetPositionsByFamily(SFX_STYLE_FAMILY_CHAR);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Separation by family works.", static_cast<size_t>(2), v.size());
+
+    const std::vector<unsigned>& w = iss.GetStyleSheetPositionsByFamily(SFX_STYLE_FAMILY_ALL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
 
 }
 
