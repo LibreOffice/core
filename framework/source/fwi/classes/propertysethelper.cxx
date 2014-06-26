@@ -194,7 +194,6 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     {
         // SAFE ->
         aWriteLock.reset();
-        bLocked = true;
     }
 
     bool bWillBeChanged = (aCurrentValue != aValue);
@@ -212,7 +211,6 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     if (m_bReleaseLockOnCall)
     {
         aWriteLock.clear();
-        bLocked = false;
         // <- SAFE
     }
 
