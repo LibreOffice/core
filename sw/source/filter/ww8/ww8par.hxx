@@ -1216,10 +1216,12 @@ private:
     boost::shared_ptr<SwPaM> mpTableEndPaM;
     WW8PLCFx_Cp_FKP* pFirstTablePap;
 
-    // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
-    bool mbLoadingTOCCache;
-    // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
-    bool mbLoadingTOCHyperlink;
+    // Indicate that currently on loading a TOX, managed by Read_F_TOX() and End_Field()
+    bool mbLoadingTOXCache;
+    int mnEmbeddedTOXLevel;
+
+    // Indicate that current on loading a hyperlink, which is inside a TOX; Managed by Read_F_Hyperlink() and End_Field()
+    bool mbLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* mpPosAfterTOC;
 
@@ -1289,12 +1291,10 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( sal_uInt16 nId );
-    // --> OD 2010-05-06 #i103711#
-    // --> OD 2010-05-11 #i105414#
+
     void NewAttr( const SfxPoolItem& rAttr,
                   const bool bFirstLineOfStSet = false,
                   const bool bLeftIndentSet = false );
-    // <--
 
     bool GetFontParams(sal_uInt16, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
