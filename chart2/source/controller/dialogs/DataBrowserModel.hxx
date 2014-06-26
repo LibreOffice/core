@@ -143,6 +143,8 @@ public:
 private:
     void updateFromModel();
 
+    void removeComplexCategoryLevel( sal_Int32 nAtColumnIndex );
+
     void addErrorBarRanges(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xDataSeries,

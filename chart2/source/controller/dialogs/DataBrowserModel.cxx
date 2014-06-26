@@ -440,32 +440,38 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
     updateFromModel();
 }
 
+void DataBrowserModel::removeComplexCategoryLevel( sal_Int32 nAtColumnIndex )
+{
+    //delete a category column if there is more than one level (in case of a single column we do not get here)
+    OSL_ENSURE(nAtColumnIndex>0, "wrong index for categories deletion" );
+
+    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+    if (!xDataProvider.is())
+        return;
+
+    m_apDialogModel->startControllerLockTimer();
+    ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+    xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
+
+    updateFromModel();
+}
+
 void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 {
     OSL_ASSERT( m_apDialogModel.get());
-    if (static_cast<size_t>(nAtColumnIndex) >= m_aColumns.size())
+    if (nAtColumnIndex < 0 || static_cast<size_t>(nAtColumnIndex) >= m_aColumns.size())
+        // Out of bound.
         return;
 
-    Reference< chart2::XDataSeries > xSeries( m_aColumns[nAtColumnIndex].m_xDataSeries );
-    if (!xSeries.is())
+    if (isCategoriesColumn(nAtColumnIndex))
     {
-        //delete a category column if there is more than one level (in case of a single column we do not get here)
-        OSL_ENSURE(nAtColumnIndex>0, "wrong index for categories deletion" );
-
-        Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-        if (!xDataProvider.is())
-            return;
-
-        m_apDialogModel->startControllerLockTimer();
-        ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
-        xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
-        updateFromModel();
-
+        removeComplexCategoryLevel(nAtColumnIndex);
         return;
     }
 
-    m_apDialogModel->deleteSeries(
-        xSeries, getHeaderForSeries( xSeries ).m_xChartType );
+    const Reference<chart2::XDataSeries>& xSeries = m_aColumns[nAtColumnIndex].m_xDataSeries;
+
+    m_apDialogModel->deleteSeries(xSeries, getHeaderForSeries(xSeries).m_xChartType);
 
     //delete sequences from internal data provider that are not used anymore
     //but do not delete sequences that are still in use by the remaining series
