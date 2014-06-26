@@ -56,7 +56,7 @@ struct GridPrinter::Impl
     bool mbPrint;
 
     Impl( size_t nRows, size_t nCols, bool bPrint ) :
-        maMatrix(nRows, nCols), mbPrint(bPrint) {}
+        maMatrix(nRows, nCols, OUString()), mbPrint(bPrint) {}
 };
 
 GridPrinter::GridPrinter( size_t nRows, size_t nCols, bool bPrint ) :
