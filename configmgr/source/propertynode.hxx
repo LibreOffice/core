@@ -48,6 +48,7 @@ public:
     com::sun::star::uno::Any getValue(Components & components);
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
+    com::sun::star::uno::Any *getValuePtr(int layer);
 
     void setExternal(int layer, OUString const & descriptor);
 
