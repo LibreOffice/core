@@ -214,6 +214,11 @@ public:
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
 protected:
+
+    //FIXME(matteocam)
+    // whether the text object has a successor in a chain
+    bool mbChained;
+
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen

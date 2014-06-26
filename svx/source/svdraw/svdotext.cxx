@@ -97,6 +97,7 @@ SdrTextObj::SdrTextObj()
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
 
+    mbChained = false;
     mbInEditMode = false;
     mbTextHidden = false;
     mbTextAnimationAllowed = true;
@@ -124,6 +125,7 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
+    mbChained = false;
     mbInEditMode = false;
     mbTextHidden = false;
     mbTextAnimationAllowed = true;
@@ -149,6 +151,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
 
+    mbChained = false;
     mbInEditMode = false;
     mbTextHidden = false;
     mbTextAnimationAllowed = true;
@@ -176,6 +179,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
+    mbChained = false;
     mbInEditMode = false;
     mbTextHidden = false;
     mbTextAnimationAllowed = true;
