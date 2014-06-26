@@ -159,7 +159,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     sal_uInt16 nMask = 0;
-                    if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+                    if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -185,7 +185,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+                if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -201,7 +201,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -421,14 +421,14 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                         case SFX_STYLE_FAMILY_FRAME:
                         {
-                            SwFrmFmt* pFrm = pWrtShell->GetCurFrmFmt();
+                            SwFrmFmt* pFrm = mpWrtShell->GetCurFrmFmt();
                             if( pFrm )
                                 aParam = pFrm->GetName();
                         }
                         break;
                         case SFX_STYLE_FAMILY_CHAR:
                         {
-                            SwCharFmt* pChar = pWrtShell->GetCurCharFmt();
+                            SwCharFmt* pChar = mpWrtShell->GetCurCharFmt();
                             if( pChar )
                                 aParam = pChar->GetName();
                         }
@@ -624,7 +624,7 @@ sal_uInt16 SwDocShell::Edit(
     SfxStyleSheetBase *pStyle = 0;
 
     sal_uInt16 nRet = nMask;
-    bool bModified = pDoc->IsModified();
+    bool bModified = mpDoc->IsModified();
 
     if( bNew )
     {
@@ -643,12 +643,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwTxtFmtColl* pColl = pWrtShell->FindTxtFmtCollByName( rParent );
+                    SwTxtFmtColl* pColl = mpWrtShell->FindTxtFmtCollByName( rParent );
                     if(!pColl)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                         if(USHRT_MAX != nId)
-                            pColl =  pWrtShell->GetTxtCollFromPool( nId );
+                            pColl =  mpWrtShell->GetTxtCollFromPool( nId );
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
@@ -666,7 +666,7 @@ sal_uInt16 SwDocShell::Edit(
                 }
                 else
                 {
-                    SwTxtFmtColl* pColl = pWrtShell->GetCurTxtFmtColl();
+                    SwTxtFmtColl* pColl = mpWrtShell->GetCurTxtFmtColl();
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     if( pColl )
                         pDStyle->PresetParent( pColl->GetName() );
@@ -677,12 +677,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwCharFmt* pCFmt = pWrtShell->FindCharFmtByName( rParent );
+                    SwCharFmt* pCFmt = mpWrtShell->FindCharFmtByName( rParent );
                     if(!pCFmt)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         if(USHRT_MAX != nId)
-                            pCFmt =  pWrtShell->GetCharFmtFromPool( nId );
+                            pCFmt =  mpWrtShell->GetCharFmtFromPool( nId );
                     }
 
                     pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
@@ -690,7 +690,7 @@ sal_uInt16 SwDocShell::Edit(
                 }
                 else
                 {
-                    SwCharFmt* pCFmt = pWrtShell->GetCurCharFmt();
+                    SwCharFmt* pCFmt = mpWrtShell->GetCurCharFmt();
                     pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
                         if( pCFmt )
                             pDStyle->PresetParent( pCFmt->GetName() );
@@ -701,12 +701,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwFrmFmt* pFFmt = pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
+                    SwFrmFmt* pFFmt = mpWrtShell->GetDoc()->FindFrmFmtByName( rParent );
                     if(!pFFmt)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
                         if(USHRT_MAX != nId)
-                            pFFmt =  pWrtShell->GetFrmFmtFromPool( nId );
+                            pFFmt =  mpWrtShell->GetFrmFmtFromPool( nId );
                     }
                     pDStyle->GetFrmFmt()->SetDerivedFrom( pFFmt );
                     pDStyle->PresetParent( rParent );
@@ -761,7 +761,7 @@ sal_uInt16 SwDocShell::Edit(
         // In HTML mode, we do not always have a printer. In order to show
         // the correct page size in the Format - Page dialog, we have to
         // get one here.
-        SwWrtShell* pCurrShell = ( pActShell ? pActShell : pWrtShell );
+        SwWrtShell* pCurrShell = ( pActShell ? pActShell : mpWrtShell );
         if( ( HTMLMODE_ON & nHtmlMode ) &&
             !pCurrShell->getIDocumentDeviceAccess()->getPrinter( false ) )
             pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess()->getPrinter( true ) );
@@ -773,7 +773,7 @@ sal_uInt16 SwDocShell::Edit(
         assert( pFact );
         boost::scoped_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, sPage,
-                                                    pActShell ? pActShell : pWrtShell, bNew));
+                                                    pActShell ? pActShell : mpWrtShell, bNew));
         assert( pDlg );
         ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), mxBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
@@ -787,11 +787,11 @@ sal_uInt16 SwDocShell::Edit(
             if( bNew )
             {
                 GetWrtShell()->Undo(1);
-                pDoc->GetIDocumentUndoRedo().ClearRedo();
+                mpDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 
             if( !bModified )
-                pDoc->ResetModified();
+                mpDoc->ResetModified();
         }
 
         nRet = aApplyStyleHelper.getRet();
@@ -820,15 +820,15 @@ sal_uInt16 SwDocShell::Edit(
             ::ConvertAttrGenToChar(xTmp->GetItemSet(), CONV_ATTR_STD);
         }
         if(SFX_STYLE_FAMILY_PAGE == nFamily)
-            pView->InvalidateRulerPos();
+            mpView->InvalidateRulerPos();
 
         if( bNew )
             mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
-        pDoc->SetModified();
+        mpDoc->SetModified();
         if( !bModified )        // Bug 57028
         {
-            pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+            mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
         GetWrtShell()->EndAllAction();
     }
@@ -938,7 +938,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
 {
     assert( GetWrtShell() );
 
-    SwEditWin& rEdtWin = pView->GetEditWin();
+    SwEditWin& rEdtWin = mpView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
     bool bWaterCan = !(pApply && pApply->eType != 0);
 
@@ -982,7 +982,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
     else
         aTemplate.eType = 0;
 
-    pView->GetEditWin().SetApplyTemplate(aTemplate);
+    mpView->GetEditWin().SetApplyTemplate(aTemplate);
 
     return nFamily;
 }
@@ -1247,27 +1247,27 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
-        if( pWrtShell )
+            ((SwDocShell&)rSource).mpDoc->SetFixFields(false, NULL);
+        if( mpWrtShell )
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
             // which pushes a bunch of SfxShells that are not cleared
             // (for unknown reasons) when closing the document, causing crash;
             // setting bNoInterrupt appears to avoid the problem.
             ::comphelper::FlagRestorationGuard g(bNoInterrupt, true);
-            pWrtShell->StartAllAction();
-            pDoc->ReplaceStyles( *((SwDocShell&)rSource).pDoc );
-            pWrtShell->EndAllAction();
+            mpWrtShell->StartAllAction();
+            mpDoc->ReplaceStyles( *((SwDocShell&)rSource).mpDoc );
+            mpWrtShell->EndAllAction();
         }
         else
         {
-            bool bModified = pDoc->IsModified();
-            pDoc->ReplaceStyles( *((SwDocShell&)rSource).pDoc );
-            if( !bModified && pDoc->IsModified() && !pView )
+            bool bModified = mpDoc->IsModified();
+            mpDoc->ReplaceStyles( *((SwDocShell&)rSource).mpDoc );
+            if( !bModified && mpDoc->IsModified() && !mpView )
             {
                 // the View is created later, but overwrites the Modify-Flag.
                 // Undo doesn't work anymore anyways.
-                pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
             }
         }
     }
