@@ -1910,6 +1910,39 @@ endef
 endif # SYSTEM_MSPUB
 
 
+ifneq ($(SYSTEM_PAGEMAKER),)
+
+define gb_LinkTarget__use_pagemaker
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(PAGEMAKER_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(PAGEMAKER_LIBS))
+
+endef
+gb_ExternalProject__use_pagemaker :=
+
+else # !SYSTEM_PAGEMAKER
+
+define gb_LinkTarget__use_pagemaker
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libpagemaker)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libpagemaker)/src/lib/.libs/libpagemaker-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libpagemaker)
+
+endef
+define gb_ExternalProject__use_pagemaker
+$(call gb_ExternalProject_use_external_project,$(1),libpagemaker)
+
+endef
+
+endif # SYSTEM_PAGEMAKER
+
+
 ifneq ($(SYSTEM_VISIO),)
 
 define gb_LinkTarget__use_visio

@@ -29,20 +29,20 @@ import stat
 import sys
 import threading, Queue
 try:
-    from urllib.request import urlopen
+from urllib.request import urlopen
 except:
-    from urllib import urlopen
+from urllib import urlopen
 try:
-    import xmlrpc.client as xmlrpclib
+import xmlrpc.client as xmlrpclib
 except:
-    import xmlrpclib
+import xmlrpclib
 from xml.dom import minidom
 from xml.sax.saxutils import escape
 
 def urlopen_retry(url):
-    maxretries = 3
-    for i in range(maxretries + 1):
-        try:
+maxretries = 3
+for i in range(maxretries + 1):
+    try:
             return urlopen(url)
         except IOError as e:
             print("caught IOError: " + str(e))

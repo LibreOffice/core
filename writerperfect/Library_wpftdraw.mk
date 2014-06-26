@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	mspub \
 	mwaw \
 	odfgen \
+	pagemaker \
 	revenge \
 	visio \
 	wpg \
@@ -60,6 +61,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/ImportFilterBase \
 	writerperfect/source/draw/MSPUBImportFilter \
 	writerperfect/source/draw/MWAWDrawImportFilter \
+	writerperfect/source/draw/PageMakerImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \
 	writerperfect/source/draw/wpftdraw_genericfilter \
