@@ -414,7 +414,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     sal_uLong nTblStt = pTblNd->GetIndex(), nTblEnd = pTblNd->EndOfSectionIndex();
 
     const SwFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
+    for( size_t n = 0; n < rFrmFmtTbl.size(); ++n )
     {
         SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -541,7 +541,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     pTblNd->GetTable().GetTabLines().insert( pTblNd->GetTable().GetTabLines().begin(), pLine );
 
     const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-    for( sal_uInt16 n = rSavedData.size(); n; )
+    for( size_t n = rSavedData.size(); n; )
     {
         const SwTblToTxtSave* pSave = &rSavedData[ --n ];
         // if the start node was merged with last from prev. cell,
@@ -730,7 +730,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         pTNd->DelFrms();
         SwTable& rTbl = pTNd->GetTable();
-        for( sal_uInt16 n = pDelBoxes->size(); n; )
+        for( size_t n = pDelBoxes->size(); n; )
         {
             SwTableBox* pBox = rTbl.GetTblBox( (*pDelBoxes)[ --n ] );
             if( pBox )
@@ -920,8 +920,6 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
 
 void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 {
-    sal_uInt16 n;
-
     bModifyBox = bMdfyBox;
 
     // first, get back attributes of TableFrmFormat
@@ -947,15 +945,15 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
-    for( n = aSets.size(); n; --n )
+    for( size_t n = aSets.size(); n; --n )
         aFrmFmts.push_back( pFmt );
 
-    sal_uInt16 nLnCnt = nLineCount;
-    if( USHRT_MAX == nLnCnt )
-        nLnCnt = rTbl.GetTabLines().size();
+    const size_t nLnCnt = ( USHRT_MAX == nLineCount )
+        ? rTbl.GetTabLines().size()
+        : nLineCount;
 
     _SaveLine* pLn = pLine;
-    for( n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
+    for( size_t n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
     {
         if( !pLn )
         {
@@ -978,8 +976,6 @@ void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
 void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
                             bool bRestoreChart )
 {
-    sal_uInt16 n;
-
     _FndBox aTmpBox( 0, 0 );
     aTmpBox.DelFrms( rTbl );
 
@@ -1000,20 +996,21 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
-    for( n = aSets.size(); n; --n )
+    for( size_t n = aSets.size(); n; --n )
         aFrmFmts.push_back( pFmt );
 
     pLine->CreateNew( rTbl, aParent, *this );
     aFrmFmts.clear();
 
     // add new lines, delete old ones
-    sal_uInt16 nOldLines = nLineCount;
-    if( USHRT_MAX == nLineCount )
-        nOldLines = rTbl.GetTabLines().size();
+    const size_t nOldLines = ( USHRT_MAX == nLineCount )
+        ? rTbl.GetTabLines().size()
+        : nLineCount;
 
     SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
     SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
-    for( n = 0; n < aParent.GetTabLines().size(); ++n )
+    size_t n = 0;
+    for( ; n < aParent.GetTabLines().size(); ++n )
     {
         SwTableLine* pLn = aParent.GetTabLines()[ n ];
         pLn->SetUpper( 0 );
@@ -1023,8 +1020,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
 
             // TL_CHART2: notify chart about boxes to be removed
             const SwTableBoxes &rBoxes = pOld->GetTabBoxes();
-            sal_uInt16 nBoxes = rBoxes.size();
-            for (sal_uInt16 k = 0;  k < nBoxes;  ++k)
+            const size_t nBoxes = rBoxes.size();
+            for (size_t k = 0; k < nBoxes;  ++k)
             {
                 SwTableBox *pBox = rBoxes[k];
                 if (pPCD)
@@ -1041,11 +1038,11 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
     if( n < nOldLines )
     {
         // remove remaining lines...
-        for (sal_uInt16 k1 = 0; k1 < nOldLines - n;  ++k1)
+        for (size_t k1 = 0; k1 < nOldLines - n; ++k1)
         {
             const SwTableBoxes &rBoxes = rTbl.GetTabLines()[n + k1]->GetTabBoxes();
-            sal_uInt16 nBoxes = rBoxes.size();
-            for (sal_uInt16 k2 = 0;  k2 < nBoxes;  ++k2)
+            const size_t nBoxes = rBoxes.size();
+            for (size_t k2 = 0; k2 < nBoxes; ++k2)
             {
                 SwTableBox *pBox = rBoxes[k2];
                 // TL_CHART2: notify chart about boxes to be removed
@@ -1133,7 +1130,7 @@ _SaveLine::_SaveLine( _SaveLine* pPrev, const SwTableLine& rLine, _SaveTable& rS
 
     pBox = new _SaveBox( 0, *rLine.GetTabBoxes()[ 0 ], rSTbl );
     _SaveBox* pBx = pBox;
-    for( sal_uInt16 n = 1; n < rLine.GetTabBoxes().size(); ++n )
+    for( size_t n = 1; n < rLine.GetTabBoxes().size(); ++n )
         pBx = new _SaveBox( pBx, *rLine.GetTabBoxes()[ n ], rSTbl );
 }
 
@@ -1148,7 +1145,7 @@ void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
     rSTbl.NewFrmFmt( &rLine, 0, nItemSet, rLine.GetFrmFmt() );
 
     _SaveBox* pBx = pBox;
-    for( sal_uInt16 n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->pNext )
+    for( size_t n = 0; n < rLine.GetTabBoxes().size(); ++n, pBx = pBx->pNext )
     {
         if( !pBx )
         {
@@ -1214,7 +1211,7 @@ _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
         Ptrs.pLine = new _SaveLine( 0, *rBox.GetTabLines()[ 0 ], rSTbl );
 
         _SaveLine* pLn = Ptrs.pLine;
-        for( sal_uInt16 n = 1; n < rBox.GetTabLines().size(); ++n )
+        for( size_t n = 1; n < rBox.GetTabLines().size(); ++n )
             pLn = new _SaveLine( pLn, *rBox.GetTabLines()[ n ], rSTbl );
     }
 }
@@ -1241,7 +1238,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
         else
         {
             _SaveLine* pLn = Ptrs.pLine;
-            for( sal_uInt16 n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->pNext )
+            for( size_t n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->pNext )
             {
                 if( !pLn )
                 {
@@ -1697,7 +1694,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
         // restore sections
-        for( sal_uInt16 n = pDelSects->size(); n; )
+        for( size_t n = pDelSects->size(); n; )
         {
             SwUndoSaveSection* pSave = &(*pDelSects)[ --n ];
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
@@ -1790,7 +1787,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // Remove boxes from table structure
-    for( sal_uInt16 n = 0; n < aDelBoxes.size(); ++n )
+    for( size_t n = 0; n < aDelBoxes.size(); ++n )
     {
         SwTableBox* pCurrBox = aDelBoxes[n];
         SwTableBoxes* pTBoxes = &pCurrBox->GetUpper()->GetTabBoxes();
@@ -1963,7 +1960,6 @@ CHECKTABLE(pTblNd->GetTable())
 
     SwSelBoxes aSelBoxes;
     SwTxtFmtColl* pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-    sal_uInt16 n;
 
     std::set<sal_uLong>::iterator it;
     for (it = m_Boxes.begin(); it != m_Boxes.end(); ++it)
@@ -1983,7 +1979,7 @@ CHECKTABLE(pTblNd->GetTable())
     SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
     // 2. deleted the inserted boxes
     // delete nodes (from last to first)
-    for( n = aNewSttNds.size(); n; )
+    for( size_t n = aNewSttNds.size(); n; )
     {
         // remove box from table structure
         sal_uLong nIdx = aNewSttNds[ --n ];
@@ -1999,7 +1995,7 @@ CHECKTABLE(pTblNd->GetTable())
                     *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
 
             // this was the separator -> restore moved ones
-            for( sal_uInt16 i = pMoves->size(); i; )
+            for( size_t i = pMoves->size(); i; )
             {
                 SwTxtNode* pTxtNd = 0;
                 sal_Int32 nDelPos = 0;
@@ -2429,7 +2425,7 @@ void SwUndoTblCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     _DEBUG_REDLINE( &rDoc )
 
     SwTableNode* pTblNd = 0;
-    for( sal_uInt16 n = pArr->size(); n; )
+    for( size_t n = pArr->size(); n; )
     {
         _UndoTblCpyTbl_Entry* pEntry = &(*pArr)[ --n ];
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
@@ -2580,7 +2576,7 @@ void SwUndoTblCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwTableNode* pTblNd = 0;
-    for( sal_uInt16 n = 0; n < pArr->size(); ++n )
+    for( size_t n = 0; n < pArr->size(); ++n )
     {
         _UndoTblCpyTbl_Entry* pEntry = &(*pArr)[ n ];
         sal_uLong nSttPos = pEntry->nBoxIdx + pEntry->nOffset;
@@ -3104,13 +3100,14 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
 {
-    sal_uInt16 nO   = rArr.size(), nM, nU = 0;
+    size_t nO = rArr.size();
+    size_t nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
-            nM = nU + ( nO - nU ) / 2;
+            const size_t nM = nU + ( nO - nU ) / 2;
             if ( rArr[nM] == nIdx )
             {
                 OSL_FAIL( "Index already exists. This should never happen." );
