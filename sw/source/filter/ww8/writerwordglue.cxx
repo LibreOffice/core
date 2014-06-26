@@ -728,7 +728,8 @@ namespace sw
             sal_uInt8 nRet =
                 rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
             rtl_TextEncoding enc2 = rtl_getTextEncodingFromWindowsCharset(nRet);
-            if (!(CanEncode(rFontName, enc2) && CanEncode(rAltName, enc2)))
+            if (!rtl_isOctetTextEncoding(enc2) /* check to avoid asserts */ ||
+                !(CanEncode(rFontName, enc2) && CanEncode(rAltName, enc2)))
             {
                 static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
                 const s_fallbacks [] = {
