@@ -1267,11 +1267,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 if( pColl != &pColl->GetNextTxtFmtColl() )
                     pCColl->SetNextTxtFmtColl( pColl->GetNextTxtFmtColl() );
 
-                //pCColl->SetOutlineLevel( pColl->GetOutlineLevel() );//#outline level,zhaojianwei
                 if( pColl->IsAssignedToListLevelOfOutlineStyle())
                     pCColl->AssignToListLevelOfOutlineStyle(pColl->GetAssignedOutlineStyleLevel());
                 else
-                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();//<--end,zhaojianwei
+                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();
 
 
 

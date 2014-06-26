@@ -196,21 +196,21 @@ void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
 /// update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
 {
-    if ( !pDoc ) return;
+    if ( !mpDoc ) return;
 
     bool bUnlockView(true);
-    if ( pWrtShell ) {
-        bUnlockView = !pWrtShell->IsViewLocked();
-        pWrtShell->LockView( sal_True );    // lock visible section
-        pWrtShell->StartAllAction();
+    if ( mpWrtShell ) {
+        bUnlockView = !mpWrtShell->IsViewLocked();
+        mpWrtShell->LockView( sal_True );   // lock visible section
+        mpWrtShell->StartAllAction();
     }
 
-    pDoc->DocInfoChgd();
+    mpDoc->DocInfoChgd();
 
-    if ( pWrtShell ) {
-        pWrtShell->EndAllAction();
+    if ( mpWrtShell ) {
+        mpWrtShell->EndAllAction();
         if ( bUnlockView ) {
-            pWrtShell->LockView( sal_False );
+            mpWrtShell->LockView( sal_False );
         }
     }
 }
@@ -242,13 +242,13 @@ void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventP
 
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if( !pDoc )
+    if( !mpDoc )
     {
         return ;
     }
 
 #ifdef FUTURE_VBA
-    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = mpDoc->GetVbaEventProcessor();
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 #endif
@@ -274,16 +274,16 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( nAction )
     {
         sal_Bool bUnlockView = sal_True; //initializing prevents warning
-        if( pWrtShell )
+        if( mpWrtShell )
         {
-            bUnlockView = !pWrtShell->IsViewLocked();
-            pWrtShell->LockView( sal_True );    //lock visible section
-            pWrtShell->StartAllAction();
+            bUnlockView = !mpWrtShell->IsViewLocked();
+            mpWrtShell->LockView( sal_True );   //lock visible section
+            mpWrtShell->StartAllAction();
         }
         switch( nAction )
         {
         case 2:
-            pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
+            mpDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
 
         // own action for event LOADFINISHED in order to avoid a modified document.
@@ -294,23 +294,23 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
                     EnableSetModified( sal_False );
-                const bool bIsDocModified = pDoc->IsModified();
+                const bool bIsDocModified = mpDoc->IsModified();
 
-                pDoc->DocInfoChgd( );
+                mpDoc->DocInfoChgd( );
 
                 if ( !bIsDocModified )
-                    pDoc->ResetModified();
+                    mpDoc->ResetModified();
                 if ( bResetModified )
                     EnableSetModified( sal_True );
             }
             break;
         }
 
-        if( pWrtShell )
+        if( mpWrtShell )
         {
-            pWrtShell->EndAllAction();
+            mpWrtShell->EndAllAction();
             if( bUnlockView )
-                pWrtShell->LockView( sal_False );
+                mpWrtShell->LockView( sal_False );
         }
     }
 }
@@ -327,9 +327,9 @@ sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
         EndListening( *this );
 
 #ifdef FUTURE_VBA
-    if( pDoc && IsInPrepareClose() )
+    if( mpDoc && IsInPrepareClose() )
     {
-        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = mpDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
@@ -388,7 +388,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 
         // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
-              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
+              const_cast<const SwDoc *>(mpDoc)->GetPageDesc(0).GetName() ==
               rOldName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eOldFamily &&
                 rOldName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
@@ -399,7 +399,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         sal_uInt16 nMySrchMask = pMyPool->GetSearchMask();
 
         SfxStyleSheetBase* pExist;
-        if( ::FindPhyStyle( *pDoc, rOldName, eOldFamily ) )
+        if( ::FindPhyStyle( *mpDoc, rOldName, eOldFamily ) )
         {
             // Bug 20365: nur uebernehmen, wenn das gewuenscht ist!
             if( ERRCODE_BUTTON_OK != ErrorHandler::HandleError(
@@ -439,7 +439,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
             // gesondert behandeln!!
             SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
             SwPageDesc* pCpyDsc = (SwPageDesc*)((SwDocStyleSheet*)pHisSheet)->GetPageDesc();
-            pDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
+            mpDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
         }
         else
             // die neue Vorlage mit den Attributen fuellen
@@ -539,7 +539,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         pMyPool->SetSearchMask( eMyOldFamily, nMySrchMask );
 
         // Model geaendert
-        ASSERT(pDoc, "Doc fehlt");
+        ASSERT(mpDoc, "Doc fehlt");
         GetDoc()->SetModified();
 
         bRet = sal_True;
@@ -587,7 +587,7 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
 
         // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
-              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
+              const_cast<const SwDoc *>(mpDoc)->GetPageDesc(0).GetName()
               == aName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eFamily &&
                 aName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
@@ -629,7 +629,7 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
 
 
     // Model geaendert
-    ASSERT(pDoc, "Doc fehlt");
+    ASSERT(mpDoc, "Doc fehlt");
     GetDoc()->SetModified();
 
     return bRet;
@@ -1031,7 +1031,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 xDocSh->DoInitNew( 0 );
 
                 sal_Bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
+                mpDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {
                     WriterRef xWrt;
@@ -1175,24 +1175,24 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_MAIL_PREPAREEXPORT:
         {
             //pWrtShell is not set in page preview
-            if(pWrtShell)
-                pWrtShell->StartAllAction();
-            pDoc->UpdateFlds( NULL, false );
-            pDoc->EmbedAllLinks();
-            pDoc->RemoveInvisibleContent();
-            if(pWrtShell)
-                pWrtShell->EndAllAction();
+            if(mpWrtShell)
+                mpWrtShell->StartAllAction();
+            mpDoc->UpdateFlds( NULL, false );
+            mpDoc->EmbedAllLinks();
+            mpDoc->RemoveInvisibleContent();
+            if(mpWrtShell)
+                mpWrtShell->EndAllAction();
         }
         break;
 
         case SID_MAIL_EXPORT_FINISHED:
         {
-                if(pWrtShell)
-                    pWrtShell->StartAllAction();
+                if(mpWrtShell)
+                    mpWrtShell->StartAllAction();
                 //try to undo the removal of invisible content
-                pDoc->RestoreInvisibleContent();
-                if(pWrtShell)
-                    pWrtShell->EndAllAction();
+                mpDoc->RestoreInvisibleContent();
+                if(mpWrtShell)
+                    mpWrtShell->EndAllAction();
         }
         break;
         case FN_NEW_HTML_DOC:
@@ -1333,7 +1333,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     /////////////////////////////////////////////////////////////////////
 
                         bool    bOutline[MAXLEVEL] = {false};
-                        const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
+                        const SwOutlineNodes& rOutlNds = mpDoc->GetNodes().GetOutLineNds();
                         if( rOutlNds.Count() )
                         {
                             int nLevel;
@@ -1345,7 +1345,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 }
                         }
 
-                        const sal_uInt16 nStyleCount = pDoc->GetTxtFmtColls()->Count();
+                        const sal_uInt16 nStyleCount = mpDoc->GetTxtFmtColls()->Count();
                         Sequence<OUString> aListBoxEntries( MAXLEVEL + nStyleCount);
                         OUString* pEntries = aListBoxEntries.getArray();
                         sal_Int32   nIdx = 0 ;
@@ -1361,7 +1361,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         for(sal_uInt16 i = 0; i < nStyleCount; ++i)
                         {
                             SwTxtFmtColl &rTxtColl =
-                                *pDoc->GetTxtFmtColls()->GetObject( i );
+                                *mpDoc->GetTxtFmtColls()->GetObject( i );
                             if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                             {
                                 pEntries[nIdx++] = sStyle + rTxtColl.GetName();
@@ -1443,17 +1443,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if ( bCreateByOutlineLevel )    //add by zhaojianwei
                         {
                             bDone = bCreateHtml         //#outline level,removed by zhaojianwei
-                                ? pDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
-                                : pDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
+                                ? mpDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
+                                : mpDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
                         }
                         else
                         {
                             const SwTxtFmtColl* pSplitColl = 0;
                             if ( aTemplateName.Len() )
-                                pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
+                                pSplitColl = mpDoc->FindTxtFmtCollByName(aTemplateName);
                             bDone = bCreateHtml         //#outline level,removed by zhaojianwei
-                                ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                                : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
+                                ? mpDoc->GenerateHTMLDoc( aFileName, pSplitColl )
+                                : mpDoc->GenerateGlobalDoc( aFileName, pSplitColl );
                         }
                         //<-end,zhaojianwei
                         if( bDone )
@@ -1515,7 +1515,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
                     pCurrView = dynamic_cast<SwView*>( pViewShell );
                 }
-                pDoc->GetNumberFormatter(sal_True)->SetYear2000(nYear2K);
+                mpDoc->GetNumberFormatter(sal_True)->SetYear2000(nYear2K);
             }
         break;
 
@@ -1531,7 +1531,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
                                 uno::Any & rValue )
 {
-    return pDoc->GetData( rItem, rMimeType, rValue );
+    return mpDoc->GetData( rItem, rMimeType, rValue );
 }
 
 
@@ -1542,7 +1542,7 @@ long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
 long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
                             const uno::Any & rValue )
 {
-    return pDoc->SetData( rItem, rMimeType, rValue );
+    return mpDoc->SetData( rItem, rMimeType, rValue );
 }
 
 
@@ -1552,7 +1552,7 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {
-    return pDoc->CreateLinkSource( rItem );
+    return mpDoc->CreateLinkSource( rItem );
 }
 
 /*--------------------------------------------------------------------
@@ -1593,20 +1593,20 @@ void SwDocShell::SetModified( sal_Bool bSet )
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {
-         if (!pDoc->IsInCallModified() )
+         if (!mpDoc->IsInCallModified() )
          {
             EnableSetModified( sal_False );
             if( bSet )
             {
-                sal_Bool bOld = pDoc->IsModified();
-                pDoc->SetModified();
+                sal_Bool bOld = mpDoc->IsModified();
+                mpDoc->SetModified();
                 if( !bOld )
                 {
-                    pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                    mpDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
                 }
             }
             else
-                pDoc->ResetModified();
+                mpDoc->ResetModified();
 
             EnableSetModified( sal_True );
          }
@@ -1699,7 +1699,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Loschen des Basics hat nicht geklappt" );
         }
     }
-    sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
+    sal_Bool bWasBrowseMode = mpDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
@@ -1710,7 +1710,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     AddLink();
     //#116402# update font list when new document is created
     UpdateFontList();
-    pDoc->set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
+    mpDoc->set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
 
@@ -1731,7 +1731,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
     // the URLs of the linked graphics correctly resolved.
-    SwReloadFromHtmlReader aReader( aMed, rMedname, pDoc );
+    SwReloadFromHtmlReader aReader( aMed, rMedname, mpDoc );
     // <--
     aReader.Read( *ReadHTML );
 
@@ -1754,7 +1754,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     if(bModified && !IsReadOnly())
         SetModified();
     else
-        pDoc->ResetModified();
+        mpDoc->ResetModified();
 }
 
 sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
@@ -1820,13 +1820,13 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
         // insert the styles!
         if( bUnoCall )
         {
-            SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfContent(), -1 );
+            SwNodeIndex aIdx( mpDoc->GetNodes().GetEndOfContent(), -1 );
             pPam = new SwPaM( aIdx );
             pReader = new SwReader( aMed, rURL, *pPam );
         }
         else
         {
-            pReader = new SwReader( aMed, rURL, *pWrtShell->GetCrsr() );
+            pReader = new SwReader( aMed, rURL, *mpWrtShell->GetCrsr() );
         }
 
         pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );
@@ -1837,14 +1837,14 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
 
         if( bUnoCall )
         {
-            UnoActionContext aAction( pDoc );
+            UnoActionContext aAction( mpDoc );
             nErr = pReader->Read( *pRead );
         }
         else
         {
-            pWrtShell->StartAllAction();
+            mpWrtShell->StartAllAction();
             nErr = pReader->Read( *pRead );
-            pWrtShell->EndAllAction();
+            mpWrtShell->EndAllAction();
         }
         delete pPam;
         delete pReader;

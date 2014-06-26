@@ -204,8 +204,16 @@ private:
     sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
                                 bIsTmp :1;          // temp. Storage
         sal_Bool        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
-    virtual void BeforeLoading( SfxMedium&, const ::rtl::OUString &, const ::rtl::OUString & ){};
-    virtual void AfterLoading( SfxMedium&, const ::rtl::OUString &, const ::rtl::OUString & ){};
+
+protected:
+    // methods called in implementation of <ImportFrom(..)>
+    virtual void BeforeLoading( SfxMedium&, const ::rtl::OUString &, const ::rtl::OUString & )
+    {
+    };
+
+    virtual void AfterLoading( SfxMedium&, const ::rtl::OUString &, const ::rtl::OUString & )
+    {
+    };
 
 private:
 //#if 0 // _SOLAR__PRIVATE

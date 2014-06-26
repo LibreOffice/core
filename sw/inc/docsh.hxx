@@ -64,26 +64,28 @@ void SW_DLLPRIVATE InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
-    SwDoc*                  pDoc;           // Document
-    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     // Durchreiche fuer Formate
-    FontList*               pFontList;      // aktuelle FontListe
+    SwDoc* mpDoc; // Document
+
+    rtl::Reference< SfxStyleSheetBasePool > mxBasePool; // Durchreiche fuer Formate
+
+    FontList* mpFontList; // aktuelle FontListe
+    bool mbInUpdateFontList; //prevent nested calls of UpdateFontList
 
     // Nix geht ohne die WrtShell (historische Gruende)
     // RuekwaertsPointer auf die View (historische Gruende)
     // Dieser gilt solange bis im Activate ein neuer gesetzt wird
     // oder dieser im Dtor der View geloescht wird
     //
-    SwView*                 pView;
-    SwWrtShell*             pWrtShell;
+    SwView* mpView;
+    SwWrtShell* mpWrtShell;
 
-    Timer                   aFinishedTimer; // Timer fuers ueberpriefen der
-                                            // Grafik-Links. Sind alle da,
-                                            // dann ist Doc voll. geladen
+    Timer aFinishedTimer;   // Timer fuers ueberpriefen der
+                            // Grafik-Links. Sind alle da,
+                            // dann ist Doc voll. geladen
 
-    //SvPersistRef            xOLEChildList;  // fuers RemoveOLEObjects
-    comphelper::EmbeddedObjectContainer*    pOLEChildList;
-    sal_Int16               nUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
-    bool                    bInUpdateFontList; //prevent nested calls of UpdateFontList
+    comphelper::EmbeddedObjectContainer* mpOLEChildList;
+    sal_Int16 mnUpdateDocMode; // contains the com::sun::star::document::UpdateDocMode
+
     // Methoden fuer den Zugriff aufs Doc
     SW_DLLPRIVATE void                  AddLink();
     SW_DLLPRIVATE void                  RemoveLink();
@@ -95,8 +97,8 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     SW_DLLPRIVATE virtual sal_Bool Load( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool LoadFrom( SfxMedium& rMedium );
-    SW_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
-    SW_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
+    SW_DLLPRIVATE virtual sal_Bool ConvertFrom( SfxMedium &rMedium );
+    SW_DLLPRIVATE virtual sal_Bool ConvertTo( SfxMedium &rMedium );
     SW_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
@@ -153,6 +155,10 @@ protected:
     /// override to update text fields
     virtual void                DoFlushDocInfo();
 
+    // override <SfxObjectShell>'s method which is called in <SfxObjectShell::ImportFrom(..)>.
+    // <SfxObjectShell::ImportFrom(..)> is used by current import of Microsoft Word documents in OOXML file format.
+    virtual void BeforeLoading( SfxMedium&, const ::rtl::OUString &, const ::rtl::OUString & );
+
 public:
     using SotObject::GetInterface;
 
@@ -195,8 +201,8 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     // Doc rausreichen aber VORSICHT
-    inline SwDoc*                   GetDoc() { return pDoc; }
-    inline const SwDoc*             GetDoc() const { return pDoc; }
+    inline SwDoc*                   GetDoc() { return mpDoc; }
+    inline const SwDoc*             GetDoc() const { return mpDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
@@ -229,12 +235,12 @@ public:
 
     // View setzen fuer Aktionen ueber Shell
     void          SetView(SwView* pVw);
-    const SwView *GetView() const { return pView; }
-    SwView       *GetView()       { return pView; }
+    const SwView *GetView() const { return mpView; }
+    SwView       *GetView()       { return mpView; }
 
     // Zugriff auf die zur SwView gehoerige SwWrtShell
-          SwWrtShell *GetWrtShell()       { return pWrtShell; }
-    const SwWrtShell *GetWrtShell() const { return pWrtShell; }
+          SwWrtShell *GetWrtShell()       { return mpWrtShell; }
+    const SwWrtShell *GetWrtShell() const { return mpWrtShell; }
 
     // fuer die Core - die kennt die DocShell aber keine WrtShell!
           SwFEShell *GetFEShell();
@@ -287,7 +293,7 @@ public:
     // Doc aus Html-Source neu laden
     void    ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView );
 
-    sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
+    sal_Int16   GetUpdateDocMode() const {return mnUpdateDocMode;}
 
     void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
 
