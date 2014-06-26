@@ -1336,9 +1336,10 @@ private:
     bool bReadTable;
     boost::shared_ptr<SwPaM> mpTableEndPaM;
     // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
-    bool mbLoadingTOCCache;
+    bool mbLoadingTOXCache;
+    int mnEmbeddedTOXLevel;
     // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
-    bool mbLoadingTOCHyperlink;
+    bool mbLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* mpPosAfterTOC;
 

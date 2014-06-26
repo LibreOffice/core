@@ -495,42 +495,50 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             }
         }
         break;
-            // Doing corresponding status management for TOC field, index field, hyperlink field and page reference field
+            // Doing corresponding status management for TOX field, index field, hyperlink field and page reference field
             case 13://TOX
             case 8://index
-                if (mbLoadingTOCCache)
+                if (mbLoadingTOXCache)
                 {
-                    maTOXEndCps.insert(nCP);
-                    mbLoadingTOCCache = false;
-                    if ( pPaM->End() &&
-                         pPaM->End()->nNode.GetNode().GetTxtNode() &&
-                         pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0 )
+                    if (mnEmbeddedTOXLevel > 0)
                     {
-                            JoinNode(*pPaM);
+                        JoinNode(*pPaM);
+                        --mnEmbeddedTOXLevel;
                     }
                     else
                     {
+                        maTOXEndCps.insert(nCP);
+                        mbLoadingTOXCache = false;
+                        if ( pPaM->End() &&
+                             pPaM->End()->nNode.GetNode().GetTxtNode() &&
+                             pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0 )
+                        {
+                            JoinNode(*pPaM);
+                        }
+                        else
+                        {
                             mbCareLastParaEndInToc = true;
-                    }
+                        }
 
-                    if (mpPosAfterTOC)
-                    {
-                        *pPaM = *mpPosAfterTOC;
-                        delete mpPosAfterTOC;
-                        mpPosAfterTOC = 0;
+                        if (mpPosAfterTOC)
+                        {
+                            *pPaM = *mpPosAfterTOC;
+                            delete mpPosAfterTOC;
+                            mpPosAfterTOC = 0;
+                        }
                     }
                 }
                 break;
-            case 37://REF
-                if (mbLoadingTOCCache && !mbLoadingTOCHyperlink)
+            case 37: //REF
+                if (mbLoadingTOXCache && !mbLoadingTOXHyperlink)
                 {
                     pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
                 }
                 break;
             case 88:
-                if (mbLoadingTOCHyperlink)
-                    mbLoadingTOCHyperlink = false;
-                pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
+                if (mbLoadingTOXHyperlink)
+                    mbLoadingTOXHyperlink = false;
+                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_INETFMT);
                 break;
             case 36:
             case 68:
@@ -2027,13 +2035,13 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 
     const OUString sName(GetMappedBookmark(sOrigName));
 
-    // loading page reference field in TOC
-    if (mbLoadingTOCCache )
+    // loading page reference field in TOX
+    if (mbLoadingTOXCache)
     {
         // insert page ref representation as plain text --> return FLD_TEXT
         // if there is no hyperlink settings for current toc and referenced bookmark is available,
         // assign link to current ref area
-        if ( !mbLoadingTOCHyperlink && !sName.isEmpty() )
+        if (!mbLoadingTOXHyperlink && !sName.isEmpty())
         {
             // #i120879# add cross reference bookmark name prefix, if it
             // matches internal TOC bookmark naming convention
@@ -2817,7 +2825,17 @@ static sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 {
-    mbLoadingTOCCache = true;
+    if (!mbLoadingTOXCache)
+    {
+        mbLoadingTOXCache = true;
+    }
+    else
+    {
+        // Embedded TOX --> continue reading its content, but no further TOX
+        // field
+        ++mnEmbeddedTOXLevel;
+        return FLD_TEXT;
+    }
 
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
@@ -3398,9 +3416,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                             pReffedStck->aReferencedTOCBookmarks.insert( sMark );
                         }
 
-                        if (mbLoadingTOCCache)
+                        if (mbLoadingTOXCache)
                         {
-                            mbLoadingTOCHyperlink = true;//on loading a TOC field nested hyperlink field
+                            mbLoadingTOXHyperlink = true; //on loading a TOC field nested hyperlink field
                         }
                     }
                     break;
@@ -3426,9 +3444,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     if( !sMark.isEmpty() )
         ( sURL += "#" ) += sMark;
 
-    SwFmtINetFmt aURL( sURL, sTarget );
+    SwFmtINetFmt aURL(sURL, sTarget);
     // If on loading TOC field, change the default style into the "index link"
-    if (mbLoadingTOCCache)
+    if (mbLoadingTOXCache)
     {
         OUString sLinkStyle("Index Link");
         sal_uInt16 nPoolId =
