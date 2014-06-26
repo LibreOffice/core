@@ -287,7 +287,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 
         if (m_eRedlingMode != RL_NONE)
         {
-            bool bProtection;
+            bool bProtection(false);
             QueryRecordChangesProtectionState( m_eRedlingMode, bProtection );
 
             m_pProtectPB->Enable( !bIsReadonly );
