@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 // Load Document
 void  SwDocShell::InitDraw()
 {
-    SdrModel *pDrDoc = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    SdrModel *pDrDoc = mpDoc->getIDocumentDrawModelAccess().GetDrawModel();
     if( pDrDoc )
     {
         // create Lists and Tables DocShell's ItemSet

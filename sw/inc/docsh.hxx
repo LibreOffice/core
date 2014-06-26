@@ -54,24 +54,24 @@ class IDocumentChartDataProviderAccess;
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
-    SwDoc*                  pDoc;                           ///< Document.
+    SwDoc*                  mpDoc;                          ///< Document.
     rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     ///< Passing through for formats.
-    FontList*               pFontList;                      ///< Current Fontlist.
+    FontList*               mpFontList;                     ///< Current Fontlist.
+    bool                    mbInUpdateFontList; ///< prevent nested calls of UpdateFontList
 
     /** For "historical reasons" nothing can be done without the WrtShell.
      Back-pointer on View (again "for historical reasons").
      Back-pointer is valid until in Activate a new one is set
      or until it is deleted in the View's Dtor. */
 
-    SwView*                 pView;
-    SwWrtShell*             pWrtShell;
+    SwView*                 mpView;
+    SwWrtShell*             mpWrtShell;
 
     Timer                   aFinishedTimer; /**< Timer for checking graphics-links.
                                              If all are present, the doc is loaded completely. */
 
-    comphelper::EmbeddedObjectContainer*    pOLEChildList;
-    sal_Int16               nUpdateDocMode;    ///< contains the com::sun::star::document::UpdateDocMode
-    bool                    bInUpdateFontList; ///< prevent nested calls of UpdateFontList
+    comphelper::EmbeddedObjectContainer*    mpOLEChildList;
+    sal_Int16               mnUpdateDocMode;    ///< contains the com::sun::star::document::UpdateDocMode
     bool                    bIsATemplate;      ///< prevent nested calls of UpdateFontList
 
     /// Methods for access to doc.
@@ -143,6 +143,12 @@ protected:
     /// override to update text fields
     virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
+    // override <SfxObjectShell>'s method which is called in
+    // <SfxObjectShell::ImportFrom(..)>.
+    // <SfxObjectShell::ImportFrom(..)> is used by current import of Microsoft
+    // Word documents in OOXML file format.
+    virtual void BeforeLoading(SfxMedium&, const ::rtl::OUString&) SAL_OVERRIDE;
+
 public:
     using SotObject::GetInterface;
 
@@ -190,8 +196,8 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     /// returns Doc. But be careful!
-    inline SwDoc*                   GetDoc() { return pDoc; }
-    inline const SwDoc*             GetDoc() const { return pDoc; }
+    inline SwDoc*                   GetDoc() { return mpDoc; }
+    inline const SwDoc*             GetDoc() const { return mpDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
@@ -207,12 +213,12 @@ public:
 
     /// Set View for actions via Shell.
     void          SetView(SwView* pVw);
-    const SwView *GetView() const { return pView; }
-    SwView       *GetView()       { return pView; }
+    const SwView *GetView() const { return mpView; }
+    SwView       *GetView()       { return mpView; }
 
     /// Accress to the SwWrtShell belonging to SwView.
-          SwWrtShell *GetWrtShell()       { return pWrtShell; }
-    const SwWrtShell *GetWrtShell() const { return pWrtShell; }
+          SwWrtShell *GetWrtShell()       { return mpWrtShell; }
+    const SwWrtShell *GetWrtShell() const { return mpWrtShell; }
 
     /// For Core - it knows the DocShell but not the WrtShell!
           SwFEShell *GetFEShell();
@@ -263,7 +269,7 @@ public:
     /// Re-read Doc from Html-source.
     void    ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView );
 
-    sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
+    sal_Int16   GetUpdateDocMode() const {return mnUpdateDocMode;}
 
     void ToggleBrowserMode(bool bOn, SwView* pView);
 
