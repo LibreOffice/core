@@ -26,12 +26,6 @@
 #include <tools/date.hxx>
 #include <sal/log.hxx>
 
-#ifdef  MACOSX
-extern "C" {
-struct tm *localtime_r(const time_t *timep, struct tm *buffer);
-}
-#endif
-
 static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                              31, 31, 30, 31, 30, 31 };
 
