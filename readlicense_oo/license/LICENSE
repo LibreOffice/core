@@ -1079,13 +1079,13 @@ libgltf
    The following software may be included in this product: libgltf. Use
    of any of this software is governed by the terms of the license below:
 
-   License for libgltf except trackbal.h and trackball.cpp source files:
+   License for libgltf except trackball.h and trackball.cpp source files:
 
    MPL 2
 
    See MPL Version 2 below
 
-   License for trackbal.h and trackball.cpp source files:
+   License for trackball.h and trackball.cpp source files:
 
    (c) Copyright 1993, 1994, Silicon Graphics, Inc.
    ALL RIGHTS RESERVED
