@@ -179,14 +179,6 @@ bool Data::equalTemplateNames(
     }
 }
 
-rtl::Reference< Node > Data::findNode(
-    int layer, NodeMap const & map, OUString const & name)
-{
-    NodeMap::const_iterator i(map.find(name));
-    return i == map.end() || i->second->getLayer() > layer
-        ? rtl::Reference< Node >() : i->second;
-}
-
 Data::Data(): root_(new RootNode) {}
 
 rtl::Reference< Node > Data::resolvePathRepresentation(
@@ -298,7 +290,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
 rtl::Reference< Node > Data::getTemplate(
     int layer, OUString const & fullName) const
 {
-    return findNode(layer, templates, fullName);
+    return templates.findNode(layer, fullName);
 }
 
 NodeMap & Data::getComponents() const {

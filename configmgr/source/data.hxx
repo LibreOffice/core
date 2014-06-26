@@ -67,9 +67,6 @@ struct Data: private boost::noncopyable {
     static bool equalTemplateNames(
         OUString const & shortName, OUString const & longName);
 
-    static rtl::Reference< Node > findNode(
-        int layer, NodeMap const & map, OUString const & name);
-
     Data();
 
     rtl::Reference< Node > resolvePathRepresentation(

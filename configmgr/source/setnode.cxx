@@ -95,7 +95,7 @@ SetNode::SetNode(SetNode const & other, bool keepTemplateName):
     additionalTemplateNames_(other.additionalTemplateNames_),
     mandatory_(other.mandatory_)
 {
-    cloneNodeMap(other.members_, &members_);
+    other.members_.cloneInto(&members_);
     if (keepTemplateName) {
         templateName_ = other.templateName_;
     }
