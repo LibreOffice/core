@@ -343,10 +343,6 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     if (!xChartType.is())
         return;
 
-    sal_Int32 nOffset = 0;
-    if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
-        nOffset = getCategoryColumnCount();
-
     // Get shared sequences of current series.  Normally multiple data series
     // only share "values-x" sequences. (TODO: simplify this logic).
     Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
@@ -367,7 +363,6 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         Sequence<Reference<chart2::data::XLabeledDataSequence> > aLSequences = xSource->getDataSequences();
         sal_Int32 nSeqIdx = 0;
         sal_Int32 nSeqSize = aLSequences.getLength();
-        nStartCol -= (nOffset - 1); // ???
         for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
         {
             lcl_tSharedSeqVec::const_iterator aSharedIt(
