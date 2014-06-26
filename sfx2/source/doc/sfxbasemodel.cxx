@@ -1790,6 +1790,9 @@ OUString getFilterProvider( SfxMedium& rMedium )
 
 void setUpdatePickList( SfxMedium* pMedium )
 {
+    if (!pMedium)
+        return;
+
     bool bHidden = false;
     SFX_ITEMSET_ARG(pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, false);
     if (pHidItem)
@@ -1829,7 +1832,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
             nError = ERRCODE_IO_GENERAL;
 
-        handleLoadError(nError, pMedium);
+        pMedium = handleLoadError(nError, pMedium);
         setUpdatePickList(pMedium);
         return;
     }
@@ -1917,7 +1920,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
     m_pData->m_pObjectShell->ResetError();
 
-    handleLoadError(nError, pMedium);
+    pMedium = handleLoadError(nError, pMedium);
     loadCmisProperties();
     setUpdatePickList(pMedium);
 
@@ -2662,11 +2665,13 @@ void SfxBaseModel::loadCmisProperties( )
     }
 }
 
-void SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
+SfxMedium* SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
 {
     if (!nError)
+    {
         // No error condition.
-        return;
+        return pMedium;
+    }
 
     bool bSilent = false;
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, false);
@@ -2689,6 +2694,7 @@ void SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
         // for whatever reason document now has another medium
         OSL_FAIL("Document has rejected the medium?!");
         delete pMedium;
+        pMedium = NULL;
     }
 
     if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
@@ -2698,6 +2704,8 @@ void SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
             "SfxBaseModel::handleLoadError: 0x" + OUString::number(nError, 16),
             Reference< XInterface >(), nError);
     }
+
+    return pMedium;
 }
 
 
