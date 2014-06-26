@@ -21,6 +21,7 @@
 #include "fmtautofmt.hxx"
 #include "fmtcntnt.hxx"
 #include "fmtornt.hxx"
+#include "fmtfsize.hxx"
 #include "charfmt.hxx"
 #include "frmfmt.hxx"
 #include "fmtanchr.hxx"
@@ -413,6 +414,8 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_FRM_SIZE:
             {
                 pWhich = "frame size";
+                const SwFmtFrmSize* pSize = static_cast<const SwFmtFrmSize*>(pItem);
+                oValue = "height size type: " + OString::number(pSize->GetHeightSizeType()) + ", width size type: " + OString::number(pSize->GetWidthSizeType());
                 break;
             }
             case RES_VERT_ORIENT:
