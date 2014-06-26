@@ -1471,7 +1471,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara );
 
 static void lcl_DelLine( SwTableLine* pLine, _DelTabPara* pPara )
 {
-    OSL_ENSURE( pPara, "The parameters are missing!" );
+    assert(pPara && "The parameters are missing!");
     _DelTabPara aPara( *pPara );
     for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
              it != pLine->GetTabBoxes().end(); ++it)
@@ -1483,7 +1483,7 @@ static void lcl_DelLine( SwTableLine* pLine, _DelTabPara* pPara )
 
 static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
 {
-    OSL_ENSURE( pDelPara, "The parameters are missing" );
+    assert(pDelPara && "The parameters are missing");
 
     // Delete the Box's Lines
     if( !pBox->GetTabLines().empty() )
