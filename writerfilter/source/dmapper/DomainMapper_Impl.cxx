@@ -155,6 +155,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_bStartTOC(false),
+        m_bStartTOCHeaderFooter(false),
         m_bStartedTOC(false),
         m_bTOCPageRef(false),
         m_nSymboldata(-1),
@@ -1316,22 +1317,29 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
             {
                 if (m_bStartTOC)
                 {
-                    m_bStartedTOC = true;
-                    uno::Reference< text::XTextCursor > xTOCTextCursor;
-                    xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
-                    xTOCTextCursor->gotoEnd(false);
-                    if (xTOCTextCursor.is())
+                    if(m_bInHeaderFooterImport && !m_bStartTOCHeaderFooter)
                     {
-                        xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
-                        xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+                        xTextRange = xTextAppend->appendTextPortion(rString, pValues);
                     }
                     else
                     {
-                        xTextRange = xTextAppend->appendTextPortion(rString, pValues);
-                        xTOCTextCursor = xTextAppend->createTextCursor();
-                        xTOCTextCursor->gotoRange(xTextRange->getEnd(), false);
+                        m_bStartedTOC = true;
+                        uno::Reference< text::XTextCursor > xTOCTextCursor;
+                        xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+                        xTOCTextCursor->gotoEnd(false);
+                        if (xTOCTextCursor.is())
+                        {
+                            xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
+                            xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+                        }
+                        else
+                        {
+                            xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+                            xTOCTextCursor = xTextAppend->createTextCursor();
+                            xTOCTextCursor->gotoRange(xTextRange->getEnd(), false);
+                        }
+                        m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
                     }
-                    m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
                 }
                 else
                     xTextRange = xTextAppend->appendTextPortion(rString, pValues);
@@ -2885,6 +2893,8 @@ void DomainMapper_Impl::handleToc
 {
     OUString sValue;
     m_bStartTOC = true;
+    if(m_bInHeaderFooterImport)
+        m_bStartTOCHeaderFooter = true;
     bool bTableOfFigures = false;
     bool bHyperlinks = false;
     bool bFromOutline = false;
@@ -3839,6 +3849,8 @@ void DomainMapper_Impl::PopFieldContext()
                         xTOCMarkerCursor->goLeft(1,sal_True);
                         xTOCMarkerCursor->setString(OUString());
                     }
+                    if(m_bInHeaderFooterImport && m_bStartTOCHeaderFooter)
+                        m_bStartTOCHeaderFooter = false;
                 }
                 else
                 {
