@@ -197,6 +197,7 @@ public:
                   std::exception) SAL_OVERRIDE;
 
     void setViewDirty();
+    void updateOpenGLWindow();
 
 private: //methods
     ChartView();
