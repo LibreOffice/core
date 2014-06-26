@@ -322,14 +322,14 @@ void DataPointProperties::AddPropertiesToVector(
 
     // statistics
     rOutProperties.push_back(
-        Property( "ErrorBarX",
+        Property( CHART_UNONAME_ERRORBAR_X,
                   PROP_DATAPOINT_ERROR_BAR_X,
                   // XPropertySet supporting service ErrorBar
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
-        Property( "ErrorBarY",
+        Property( CHART_UNONAME_ERRORBAR_Y,
                   PROP_DATAPOINT_ERROR_BAR_Y,
                   // XPropertySet supporting service ErrorBar
                   cppu::UnoType<beans::XPropertySet>::get(),

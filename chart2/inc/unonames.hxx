@@ -19,6 +19,8 @@
 #define CHART_UNONAME_CURVE_RESOLUTION      "CurveResolution"
 #define CHART_UNONAME_NUMFMT                "NumberFormat"
 #define CHART_UNONAME_LINK_TO_SRC_NUMFMT    "LinkNumberFormatToSource"
+#define CHART_UNONAME_ERRORBAR_X            "ErrorBarX"
+#define CHART_UNONAME_ERRORBAR_Y            "ErrorBarY"
 
 #endif
 

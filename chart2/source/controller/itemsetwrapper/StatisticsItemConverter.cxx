@@ -29,6 +29,7 @@
 #include "StatisticsHelper.hxx"
 
 #include "GraphicPropertyItemConverter.hxx"
+#include <unonames.hxx>
 
 #include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
@@ -57,7 +58,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
     if( xProp.is())
         try
         {
-        ( xProp->getPropertyValue( bYError ? OUString( "ErrorBarY" ) : OUString("ErrorBarX") ) >>= xResult );
+        ( xProp->getPropertyValue( bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X) ) >>= xResult );
         }
         catch( const uno::Exception & ex )
         {
@@ -368,7 +369,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( !xErrorBarProp.is() )
                 {
                     xErrorBarProp = lcl_GetDefaultErrorBar();
-                    GetPropertySet()->setPropertyValue( bYError ? OUString( "ErrorBarY" ) : OUString("ErrorBarX"),
+                    GetPropertySet()->setPropertyValue( bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X),
                                                         uno::makeAny( xErrorBarProp ));
                 }
 

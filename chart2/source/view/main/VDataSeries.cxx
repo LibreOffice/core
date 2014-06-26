@@ -831,7 +831,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getXErrorBarProperties( sal_I
 
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
     if( xPointProp.is() )
-        xPointProp->getPropertyValue("ErrorBarX") >>= xErrorBarProp;
+        xPointProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp;
     return xErrorBarProp;
 }
 
@@ -841,7 +841,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getYErrorBarProperties( sal_I
 
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
     if( xPointProp.is() )
-        xPointProp->getPropertyValue("ErrorBarY") >>= xErrorBarProp;
+        xPointProp->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp;
     return xErrorBarProp;
 }
 

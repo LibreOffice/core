@@ -25,6 +25,7 @@
 #include "DiagramHelper.hxx"
 #include "ErrorBar.hxx"
 #include "StatisticsHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
@@ -184,7 +185,7 @@ protected:
         if(!xSeriesPropertySet.is())
             return 0;
         uno::Reference< beans::XPropertySet > xErrorBarProperties;
-        xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties;
+        xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties;
         if( !xErrorBarProperties.is() )
         {
             // todo: use a valid context
@@ -193,7 +194,7 @@ protected:
             xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(false) );
             xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(false) );
             xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(::com::sun::star::chart::ErrorBarStyle::NONE) );
-            xSeriesPropertySet->setPropertyValue( "ErrorBarY" , uno::makeAny( xErrorBarProperties ) );
+            xSeriesPropertySet->setPropertyValue( CHART_UNONAME_ERRORBAR_Y , uno::makeAny( xErrorBarProperties ) );
         }
         return xErrorBarProperties;
     }
@@ -231,7 +232,7 @@ double WrappedConstantErrorLowProperty::getValueFromSeries( const Reference< bea
     double aRet = 0.0;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "NegativeError" ) >>= aRet;
@@ -285,7 +286,7 @@ double WrappedConstantErrorHighProperty::getValueFromSeries( const Reference< be
     double aRet = 0.0;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
@@ -380,7 +381,7 @@ WrappedErrorCategoryProperty::~WrappedErrorCategoryProperty()
     ::com::sun::star::chart::ChartErrorCategory aRet = ::com::sun::star::chart::ChartErrorCategory_NONE;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
         xErrorBarProperties->getPropertyValue( "ErrorBarStyle" ) >>= nStyle;
@@ -481,7 +482,7 @@ double WrappedPercentageErrorProperty::getValueFromSeries( const Reference< bean
     double aRet = 0.0;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         if( ::com::sun::star::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
@@ -535,7 +536,7 @@ double WrappedErrorMarginProperty::getValueFromSeries( const Reference< beans::X
     double aRet = 0.0;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         if( ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
@@ -586,7 +587,7 @@ WrappedErrorIndicatorProperty::~WrappedErrorIndicatorProperty()
     ::com::sun::star::chart::ChartErrorIndicatorType aRet = ::com::sun::star::chart::ChartErrorIndicatorType_NONE;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         bool bPositive = false;
         bool bNegative = false;
@@ -659,7 +660,7 @@ sal_Int32 WrappedErrorBarStyleProperty::getValueFromSeries( const Reference< bea
     sal_Int32 nRet = ::com::sun::star::chart::ErrorBarStyle::NONE;
     m_aDefaultValue >>= nRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
         xErrorBarProperties->getPropertyValue( "ErrorBarStyle" ) >>= nRet;
     }
@@ -709,7 +710,7 @@ OUString WrappedErrorBarRangePositiveProperty::getValueFromSeries( const Referen
     m_aDefaultValue >>= aRet;
     uno::Reference< chart2::data::XDataSource > xErrorBarDataSource;
     if( xSeriesPropertySet.is() &&
-        ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarDataSource ) &&
+        ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarDataSource ) &&
         xErrorBarDataSource.is())
     {
         uno::Reference< chart2::data::XDataSequence > xSeq(
@@ -776,7 +777,7 @@ OUString WrappedErrorBarRangeNegativeProperty::getValueFromSeries( const Referen
     m_aDefaultValue >>= aRet;
     uno::Reference< chart2::data::XDataSource > xErrorBarDataSource;
     if( xSeriesPropertySet.is() &&
-        ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarDataSource ) &&
+        ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarDataSource ) &&
         xErrorBarDataSource.is())
     {
         uno::Reference< chart2::data::XDataSequence > xSeq(
@@ -920,7 +921,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
             break;
         case PROPERTY_SET_TYPE_ERROR_BAR:
             if( xSeriesPropertySet.is())
-                xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xResult;
+                xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xResult;
             break;
         case PROPERTY_SET_TYPE_MEAN_VALUE:
             if( xRegCnt.is() )

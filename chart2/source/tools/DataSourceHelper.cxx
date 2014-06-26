@@ -28,6 +28,7 @@
 #include "PropertyHelper.hxx"
 #include "CachedDataSequence.hxx"
 #include "LabeledDataSequence.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -81,7 +82,7 @@ void lcl_addErrorBarRanges(
     try
     {
         uno::Reference< beans::XPropertySet > xErrorBarProp;
-        if( ( xSeriesProp->getPropertyValue( "ErrorBarY") >>= xErrorBarProp ) &&
+        if( ( xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp ) &&
             xErrorBarProp.is())
         {
             sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
@@ -94,7 +95,7 @@ void lcl_addErrorBarRanges(
             }
         }
 
-        if( ( xSeriesProp->getPropertyValue("ErrorBarX") >>= xErrorBarProp ) && xErrorBarProp.is())
+        if( ( xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp ) && xErrorBarProp.is())
         {
             sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
             if( ( xErrorBarProp->getPropertyValue("ErrorBarStyle") >>= eStyle ) &&

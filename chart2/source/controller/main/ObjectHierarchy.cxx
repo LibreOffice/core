@@ -30,6 +30,7 @@
 #include "DataSeriesHelper.hxx"
 #include "LegendHelper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include <unonames.hxx>
 
 #include <map>
 #include <algorithm>
@@ -468,7 +469,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                             Reference< beans::XPropertySet > xErrorBarProp;
                             if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue( "ErrorBarY") >>= xErrorBarProp) &&
+                                (xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
                                 sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
@@ -482,7 +483,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             }
 
                             if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue( "ErrorBarX") >>= xErrorBarProp) &&
+                                (xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
                                 sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
