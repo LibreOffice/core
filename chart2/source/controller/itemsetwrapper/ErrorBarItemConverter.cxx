@@ -198,7 +198,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
 
             if( ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
@@ -216,7 +216,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
 
             if( ! ::rtl::math::approxEqual( fPos, fValue ))
@@ -234,7 +234,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             double fValue =
                 static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
 
             if( ! ::rtl::math::approxEqual( fNeg, fValue ))
@@ -256,7 +256,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
             bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
 
-            bool bShowPos, bShowNeg;
+            bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
             if( ( bShowPos != bNewIndPos ||
@@ -369,7 +369,7 @@ void ErrorBarItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_PERCENT:
         {
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
             rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
         }
@@ -377,7 +377,7 @@ void ErrorBarItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_BIGERROR:
         {
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
             rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
         }
@@ -385,7 +385,7 @@ void ErrorBarItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_CONSTPLUS:
         {
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
             rOutItemSet.Put( SvxDoubleItem( fPos, nWhichId ));
         }
@@ -393,7 +393,7 @@ void ErrorBarItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_CONSTMINUS:
         {
-            double fPos, fNeg;
+            double fPos(0.0), fNeg(0.0);
             lcl_getErrorValues( GetPropertySet(), fPos, fNeg );
             rOutItemSet.Put( SvxDoubleItem( fNeg, nWhichId ));
         }
@@ -402,7 +402,7 @@ void ErrorBarItemConverter::FillSpecialItem(
         case SCHATTR_STAT_INDICATE:
         {
             SvxChartIndicate eIndicate = CHINDICATE_BOTH;
-            bool bShowPos, bShowNeg;
+            bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( GetPropertySet(), bShowPos, bShowNeg );
 
             if( bShowPos )

@@ -680,6 +680,8 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
 {
     sal_Int32 rlb32, rub32;
     bool bRet = GetDim32( n, rlb32, rub32 );
+    rub = (short)rub32;
+    rlb = (short)rlb32;
     if( bRet )
     {
         if( rlb32 < -SBX_MAXINDEX || rub32 > SBX_MAXINDEX )
@@ -687,8 +689,6 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
             SetError( SbxERR_BOUNDS );
             return false;
         }
-        rub = (short)rub32;
-        rlb = (short)rlb32;
     }
     return bRet;
 }
@@ -753,9 +753,7 @@ void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
     SbxArray::Put32( p, Offset32( pIdx ) );
 }
 
-
 // Element-Number with the help of Parameter-Array
-
 sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 {
 #ifndef DISABLE_SCRIPTING
@@ -793,7 +791,7 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadInt16( nDimension );
     for( short i = 0; i < nDimension && rStrm.GetError() == SVSTREAM_OK; i++ )
     {
-        sal_Int16 lb, ub;
+        sal_Int16 lb(0), ub(0);
         rStrm.ReadInt16( lb ).ReadInt16( ub );
         AddDim( lb, ub );
     }
@@ -807,7 +805,7 @@ bool SbxDimArray::StoreData( SvStream& rStrm ) const
     {
         short lb, ub;
         GetDim( i, lb, ub );
-        rStrm.WriteInt16( (sal_Int16) lb ).WriteInt16( (sal_Int16) ub );
+        rStrm.WriteInt16( lb ).WriteInt16( ub );
     }
     return SbxArray::StoreData( rStrm );
 }
