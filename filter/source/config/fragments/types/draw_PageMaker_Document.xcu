@@ -1,0 +1,12 @@
+        <node oor:name="draw_PageMaker_Document" oor:op="replace" >
+            <prop oor:name="DetectService"><value>org.libreoffice.comp.Draw.PageMakerImportFilter</value></prop>
+            <prop oor:name="URLPattern"/>
+            <prop oor:name="Extensions"><value>p65 pm pm6 pmd</value></prop>
+            <prop oor:name="MediaType"><value>application/x-pagemaker</value></prop>
+            <prop oor:name="Preferred"><value>true</value></prop>
+            <prop oor:name="PreferredFilter"><value>PageMaker Document</value></prop>
+            <prop oor:name="UIName">
+                <value>Adobe PageMaker</value>
+            </prop>
+            <prop oor:name="ClipboardFormat"/>
+        </node>

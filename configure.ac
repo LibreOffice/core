@@ -7771,6 +7771,11 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.1])
 
 dnl ===================================================================
+dnl Check for system libpagemaker
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libpagemaker],[PAGEMAKER],[libpagemaker-0.0])
+
+dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])

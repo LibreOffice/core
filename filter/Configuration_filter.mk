@@ -624,6 +624,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw_Mac_Works \
 	draw_MacPaint \
 	draw_SuperPaint \
+	draw_PageMaker_Document \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -645,6 +646,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	Mac_Works_Draw \
 	MacPaint_Draw \
 	SuperPaint_Draw \
+	PageMakerDocument \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\

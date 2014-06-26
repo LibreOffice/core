@@ -33,6 +33,7 @@
 #include "CMXImportFilter.hxx"
 #include "MSPUBImportFilter.hxx"
 #include "MWAWDrawImportFilter.hxx"
+#include "PageMakerImportFilter.hxx"
 #include "FreehandImportFilter.hxx"
 #include "VisioImportFilter.hxx"
 #include "WPGImportFilter.hxx"
@@ -49,6 +50,10 @@ static cppu::ImplementationEntry const services[] = {
     { &FreehandImportFilter_createInstance,
       &FreehandImportFilter_getImplementationName,
       &FreehandImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &PageMakerImportFilter_createInstance,
+      &PageMakerImportFilter_getImplementationName,
+      &PageMakerImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { &MSPUBImportFilter_createInstance,
       &MSPUBImportFilter_getImplementationName,
