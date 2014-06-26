@@ -40,7 +40,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:helpid="20369"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:helpid="21420"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="20335"/>

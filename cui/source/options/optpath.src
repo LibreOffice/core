@@ -87,10 +87,6 @@ String RID_SVXSTR_KEY_TEMP_PATH
 {
     Text [ en-US ] = "Temporary files";
 };
-String RID_SVXSTR_KEY_PLUGINS_PATH
-{
-    Text [ en-US ] = "Plug-ins";
-};
 String RID_SVXSTR_KEY_FAVORITES_DIR
 {
     Text [ en-US ] = "Folder Bookmarks";

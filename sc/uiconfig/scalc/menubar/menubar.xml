@@ -219,7 +219,6 @@
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject"/>
-                    <menu:menuitem menu:id=".uno:InsertPlugin"/>
                     <menu:menuitem menu:id=".uno:InsertSound"/>
                     <menu:menuitem menu:id=".uno:InsertVideo"/>
                     <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>

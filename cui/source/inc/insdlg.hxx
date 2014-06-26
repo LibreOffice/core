@@ -92,26 +92,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
 };
 
-class SvInsertPlugInDialog : public InsertObjectDialog_Impl
-{
-private:
-    Edit* m_pEdFileurl;
-    PushButton* m_pBtnFileurl;
-    VclMultiLineEdit* m_pEdPluginsOptions;
-    INetURLObject* m_pURL;
-    OUString m_aCommands;
-
-    DECL_LINK(BrowseHdl, void *);
-    OUString GetPlugInFile() const { return m_pEdFileurl->GetText(); }
-    OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
-
-public:
-    SvInsertPlugInDialog(Window* pParent,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
-    virtual ~SvInsertPlugInDialog();
-    virtual short Execute() SAL_OVERRIDE;
-};
-
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:

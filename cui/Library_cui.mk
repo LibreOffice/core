@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/newtabledlg \
     cui/source/dialogs/passwdomdlg \
     cui/source/dialogs/pastedlg \
-    cui/source/dialogs/plfilter \
     cui/source/dialogs/postdlg \
     cui/source/dialogs/scriptdlg \
     cui/source/dialogs/sdrcelldlg \

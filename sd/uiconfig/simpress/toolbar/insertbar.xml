@@ -32,6 +32,5 @@
     <toolbar:toolbaritem xlink:href=".uno:InsertMath"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"   />
-    <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false"/>
     <toolbar:toolbarseparator/>
 </toolbar:toolbar>

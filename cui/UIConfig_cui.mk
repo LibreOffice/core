@@ -85,7 +85,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/iconselectordialog \
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \
-	cui/uiconfig/ui/insertplugin \
 	cui/uiconfig/ui/insertrowcolumn \
 	cui/uiconfig/ui/javaclasspathdialog \
 	cui/uiconfig/ui/javastartparametersdialog \
@@ -115,7 +114,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optasianpage \
 	cui/uiconfig/ui/optbasicidepage \
-	cui/uiconfig/ui/optbrowserpage \
 	cui/uiconfig/ui/optctlpage \
 	cui/uiconfig/ui/optchartcolorspage \
 	cui/uiconfig/ui/optemailpage \
