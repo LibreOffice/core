@@ -4352,6 +4352,12 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
         sFileExtension = "pptx";
     }
+    else if(sProgID == "PowerPoint.ShowMacroEnabled.12")
+    {
+        sMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "pptm";
+    }
     else if( sProgID.startsWith("PowerPoint.Show") )
     {
         sMediaType = "application/vnd.ms-powerpoint";
@@ -4363,6 +4369,18 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
        sFileExtension = "sldx";
+    }
+    else if( sProgID == "PowerPoint.SlideMacroEnabled.12" )
+    {
+       sMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
+       sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       sFileExtension = "sldm";
+    }
+    else if( sProgID == "Word.DocumentMacroEnabled.12" )
+    {
+        sMediaType = "application/vnd.ms-word.document.macroEnabled.12";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "docm";
     }
     else
     {

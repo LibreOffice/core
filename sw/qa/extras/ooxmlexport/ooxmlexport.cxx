@@ -3629,6 +3629,45 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
                 "/word/embeddings/oleObject1.xlsm");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-word.document.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.docm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.presentation.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.pptm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.slide.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.sldm");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
