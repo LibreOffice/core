@@ -291,9 +291,9 @@ public:
         : m_isInContent(i_isInContent) { }
     virtual ::sfx2::XmlIdRegistry& GetRegistry() SAL_OVERRIDE
     {
-    // N.B. for Clipboard, m_pReg is initialized by registering this as copy in
-    // RegisterAsCopyOf; it is only cleared by OriginNoLongerInBusinessAnymore
-        OSL_ENSURE(m_pReg, "no m_pReg in MetadatableClipboard ?");
+        // N.B. for Clipboard, m_pReg is initialized by registering this as copy in
+        // RegisterAsCopyOf; it is only cleared by OriginNoLongerInBusinessAnymore
+        assert(m_pReg && "no m_pReg in MetadatableClipboard ?");
         return *m_pReg;
     }
     virtual bool IsInClipboard() const SAL_OVERRIDE { return true; }

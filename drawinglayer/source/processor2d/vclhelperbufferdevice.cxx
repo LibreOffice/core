@@ -347,14 +347,14 @@ namespace drawinglayer
 
     VirtualDevice& impBufferDevice::getContent()
     {
-        OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
+        assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
         return *mpContent;
     }
 
     VirtualDevice& impBufferDevice::getMask()
     {
-        OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
-        if(!mpMask)
+        assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
+        if (!mpMask)
         {
             mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 1);
             mpMask->SetMapMode(mpContent->GetMapMode());

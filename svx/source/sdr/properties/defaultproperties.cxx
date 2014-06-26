@@ -85,7 +85,7 @@ namespace sdr
                 ((DefaultProperties*)this)->ForceDefaultAttributes();
             }
 
-            DBG_ASSERT(mpItemSet, "Could not create an SfxItemSet(!)");
+            assert(mpItemSet && "Could not create an SfxItemSet(!)");
 
             return *mpItemSet;
         }

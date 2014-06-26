@@ -220,12 +220,14 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
 // Stream-specific
 SvStream& Writer::Strm()
 {
-    OSL_ENSURE( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    assert(m_pImpl->m_pStream && "Oh-oh. Writer with no Stream!");
     return *m_pImpl->m_pStream;
 }
 
 void Writer::SetStream(SvStream *const pStream)
-{ m_pImpl->m_pStream = pStream; }
+{
+    m_pImpl->m_pStream = pStream;
+}
 
 SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
 {
