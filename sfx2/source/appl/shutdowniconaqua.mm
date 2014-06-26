@@ -399,7 +399,7 @@ void aqua_init_systray()
 
     // disable shutdown
     pShutdownIcon->SetVeto( true );
-    pShutdownIcon->addTerminateListener();
+    ShutdownIcon::addTerminateListener();
     
     if( ! pDefMenu )
     {
