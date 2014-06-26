@@ -22,6 +22,14 @@
 #include "Strings.hrc"
 
 #include <rtl/math.hxx>
+#if OSL_DEBUG_LEVEL > 1
+#define DEBUG_INTERNAL_DATA 1
+#endif
+
+#ifdef DEBUG_INTERNAL_DATA
+#include <svl/gridprinter.hxx>
+#endif
+
 #include <algorithm>
 #include <iterator>
 
@@ -223,6 +231,8 @@ void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< 
         enlargeData( nColumnIndex+1, 0 );
     }
     m_aColumnLabels[nColumnIndex]=rComplexLabel;
+
+    dump();
 }
 
 void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::Any >& rComplexLabel )
@@ -351,9 +361,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< uno::Any >(1) );
 
-#if OSL_DEBUG_LEVEL > 1
-    traceData();
-#endif
+    dump();
 }
 
 sal_Int32 InternalData::appendColumn()
@@ -403,9 +411,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< uno::Any > (1));
 
-#if OSL_DEBUG_LEVEL > 1
-    traceData();
-#endif
+    dump();
 }
 
 void InternalData::deleteColumn( sal_Int32 nAtIndex )
@@ -439,9 +445,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 1
-    traceData();
-#endif
+    dump();
 }
 
 void InternalData::deleteRow( sal_Int32 nAtIndex )
@@ -479,9 +483,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 1
-    traceData();
-#endif
+    dump();
 }
 
 
@@ -507,21 +509,32 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
         enlargeData( nNewColumnCount, 0 );
 }
 
-
-#if OSL_DEBUG_LEVEL > 1
-void InternalData::traceData() const
+#ifdef DEBUG_INTERNAL_DATA
+void InternalData::dump() const
 {
-    OSL_TRACE( "InternalData: Data in rows" );
-
-    for( sal_Int32 i=0; i<m_nRowCount; ++i )
+    // Header
+    svl::GridPrinter aPrinter(1, m_nColumnCount, true);
+    for (sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol)
     {
-        tDataType aSlice( m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
-        for( sal_Int32 j=0; j<m_nColumnCount; ++j )
-            OSL_TRACE( "%lf ", aSlice[j] );
-        OSL_TRACE( "\n" );
+        OUString aStr;
+        if (m_aColumnLabels[nCol][0] >>= aStr)
+            aPrinter.set(0, nCol, aStr);
     }
-    OSL_TRACE( "\n" );
+    aPrinter.print("Header");
+
+    aPrinter.resize(m_nRowCount, m_nColumnCount);
+
+    for (sal_Int32 nRow = 0; nRow < m_nRowCount; ++nRow)
+    {
+        tDataType aSlice( m_aData[ ::std::slice( nRow*m_nColumnCount, m_nColumnCount, 1 ) ] );
+        for (sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol)
+            aPrinter.set(nRow, nCol, OUString::number(aSlice[nCol]));
+    }
+
+    aPrinter.print("Column data");
 }
+#else
+void InternalData::dump() const {}
 #endif
 
 } //  namespace chart
