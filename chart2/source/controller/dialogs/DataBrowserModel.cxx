@@ -222,25 +222,21 @@ bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagr
 
 struct DataBrowserModel::tDataColumn
 {
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >                m_xDataSeries;
-    sal_Int32                                                      m_nIndexInDataSeries;
-    OUString                                                       m_aUIRoleName;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > m_xLabeledDataSequence;
-    eCellType                                                  m_eCellType;
-    sal_Int32                                                  m_nNumberFormatKey;
+    uno::Reference<chart2::XDataSeries>  m_xDataSeries;
+    sal_Int32                            m_nIndexInDataSeries;
+    OUString                             m_aUIRoleName;
+    uno::Reference<chart2::data::XLabeledDataSequence> m_xLabeledDataSequence;
+    eCellType                                          m_eCellType;
+    sal_Int32                                          m_nNumberFormatKey;
 
     // default CTOR
     tDataColumn() : m_nIndexInDataSeries( -1 ), m_eCellType( TEXT ), m_nNumberFormatKey( 0 ) {}
     // "full" CTOR
     tDataColumn(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        const uno::Reference<chart2::XDataSeries> & xDataSeries,
         sal_Int32 nIndexInDataSeries,
         const OUString& aUIRoleName,
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence >  xLabeledDataSequence,
+        const uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledDataSequence,
         eCellType aCellType,
         sal_Int32 nNumberFormatKey ) :
             m_xDataSeries( xDataSeries ),
