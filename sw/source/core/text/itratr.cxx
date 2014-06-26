@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
-    OSL_ENSURE( pHt && pFnt, "No attribute of font available for change");
+    assert(pHt && pFnt && "No attribute of font available for change");
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, true );
     else
@@ -71,7 +71,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
-    OSL_ENSURE( pHt && pFnt, "No attribute of font available for reset");
+    assert(pHt && pFnt && "No attribute of font available for reset");
     // get top from stack after removing pHt
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, false );

@@ -1254,13 +1254,11 @@ default     unknown     !=      sal_True            -           -           -
 dontcare    unknown     !=      sal_True            -           -           -
 unknown     unknown     !=      sal_True            -           -           -
 */
-
-
 static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
                             const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2,
                             bool bIgnoreDefaults )
 {
-    DBG_ASSERT( ppFnd1 != 0, "Merging to 0-Item" );
+    assert(ppFnd1 != 0 && "Merging to 0-Item");
 
     // 1. Item ist default?
     if ( !*ppFnd1 )
@@ -1320,8 +1318,6 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
         }
     }
 }
-
-
 
 void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
 {

@@ -482,7 +482,7 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin)
 
 void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 {
-    DBG_ASSERT(pOldWin, "SdrPaintView::DeleteWindowFromPaintView: No OutputDevice(!)");
+    assert(pOldWin && "SdrPaintView::DeleteWindowFromPaintView: No OutputDevice(!)");
     SdrPaintWindow* pCandidate = FindPaintWindow(*pOldWin);
 
     if(pCandidate)
