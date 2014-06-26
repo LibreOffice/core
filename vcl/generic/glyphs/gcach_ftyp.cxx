@@ -1804,7 +1804,6 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
                 case 1:     // Single Substitution Format 1
                     {
                         const sal_uInt16 nDeltaGlyphId = GetUShort( pSubLookup );
-                        pSubLookup += 2;
                         for(; it != aSubstVector.end(); ++it )
                             (*it).second = (*it).first + nDeltaGlyphId;
                     }
