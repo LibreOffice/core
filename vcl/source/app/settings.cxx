@@ -2108,6 +2108,10 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if ( !xContext.is() )
         return;
 
+    // don't burn time loading images we don't need.
+    if ( Application::IsHeadlessModeEnabled() )
+        return;
+
     // read from the configuration
     OUString aPersona( officecfg::Office::Common::Misc::Persona::get( xContext ) );
     OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) );
