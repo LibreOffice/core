@@ -334,7 +334,7 @@ You will also need the Android SDK as full "make" also builds a couple
 of Android apps where the upper layer is written in Java.
 
 Use the "android" tool from the SDK to install the SDK Tools, SDK
-Platform Tools, the API 14 SDK Platform and the Android Support
+Platform Tools, the API 15 SDK Platform and the Android Support
 Library. If you want to run the Android apps in the emulator, you of
 course need an appropriate system image for that.
 
