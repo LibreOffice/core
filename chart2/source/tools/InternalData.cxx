@@ -516,6 +516,9 @@ void InternalData::dump() const
     svl::GridPrinter aPrinter(1, m_nColumnCount, true);
     for (sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol)
     {
+        if (m_aColumnLabels[nCol].empty())
+            continue;
+
         OUString aStr;
         if (m_aColumnLabels[nCol][0] >>= aStr)
             aPrinter.set(0, nCol, aStr);
