@@ -33,6 +33,10 @@ LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any const & value):
     Node(layer), value_(value)
 {}
 
+LocalizedValueNode::LocalizedValueNode(int layer):
+    Node(layer)
+{}
+
 rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
     return new LocalizedValueNode(*this);
 }
@@ -42,9 +46,11 @@ OUString LocalizedValueNode::getTemplateName() const {
 }
 
 
-void LocalizedValueNode::setValue(int layer, css::uno::Any const & value) {
+void LocalizedValueNode::setValue(int layer, css::uno::Any const & value)
+{
     setLayer(layer);
-    value_ = value;
+    if (&value != &value_)
+        value_ = value;
 }
 
 LocalizedValueNode::LocalizedValueNode(LocalizedValueNode const & other):

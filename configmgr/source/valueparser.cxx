@@ -345,62 +345,63 @@ bool ValueParser::endElement() {
     switch (state_) {
     case STATE_TEXT:
         {
-            css::uno::Any value;
+            css::uno::Any *pValue = NULL;
+
+            switch (node_->kind()) {
+            case Node::KIND_PROPERTY:
+                pValue = static_cast< PropertyNode * >(node_.get())->getValuePtr(layer_);
+                break;
+            case Node::KIND_LOCALIZED_PROPERTY:
+                {
+                    NodeMap & members = node_->getMembers();
+                    NodeMap::iterator i(members.find(localizedName_));
+                    LocalizedValueNode *pLVNode;
+                    if (i == members.end()) {
+                        pLVNode = new LocalizedValueNode(layer_);
+                        members.insert(
+                            NodeMap::value_type(localizedName_, pLVNode));
+                    } else {
+                        pLVNode = static_cast< LocalizedValueNode * >(i->second.get());
+                    }
+                    pValue = pLVNode->getValuePtr(layer_);
+                }
+                break;
+            default:
+                assert(false); // this cannot happen
+                return false;
+            }
+
             if (items_.empty()) {
-                value = parseValue(separator_, pad_.get(), type_);
+                *pValue = parseValue(separator_, pad_.get(), type_);
                 pad_.clear();
             } else {
                 switch (type_) {
                 case TYPE_BOOLEAN_LIST:
-                    value = convertItems< sal_Bool >();
+                    *pValue = convertItems< sal_Bool >();
                     break;
                 case TYPE_SHORT_LIST:
-                    value = convertItems< sal_Int16 >();
+                    *pValue = convertItems< sal_Int16 >();
                     break;
                 case TYPE_INT_LIST:
-                    value = convertItems< sal_Int32 >();
+                    *pValue = convertItems< sal_Int32 >();
                     break;
                 case TYPE_LONG_LIST:
-                    value = convertItems< sal_Int64 >();
+                    *pValue = convertItems< sal_Int64 >();
                     break;
                 case TYPE_DOUBLE_LIST:
-                    value = convertItems< double >();
+                    *pValue = convertItems< double >();
                     break;
                 case TYPE_STRING_LIST:
-                    value = convertItems< OUString >();
+                    *pValue = convertItems< OUString >();
                     break;
                 case TYPE_HEXBINARY_LIST:
-                    value = convertItems< css::uno::Sequence< sal_Int8 > >();
+                    *pValue = convertItems< css::uno::Sequence< sal_Int8 > >();
                     break;
                 default:
                     assert(false); // this cannot happen
                     break;
                 }
                 items_.clear();
-            }
-            switch (node_->kind()) {
-            case Node::KIND_PROPERTY:
-                static_cast< PropertyNode * >(node_.get())->setValue(
-                    layer_, value);
-                break;
-            case Node::KIND_LOCALIZED_PROPERTY:
-                {
-                    NodeMap & members = node_->getMembers();
-                    NodeMap::iterator i(members.find(localizedName_));
-                    if (i == members.end()) {
-                        members.insert(
-                            NodeMap::value_type(
-                                localizedName_,
-                                new LocalizedValueNode(layer_, value)));
-                    } else {
-                        static_cast< LocalizedValueNode * >(i->second.get())->
-                            setValue(layer_, value);
-                    }
-                }
-                break;
-            default:
-                assert(false); // this cannot happen
-                break;
             }
             separator_ = OString();
             node_.clear();

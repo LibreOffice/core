@@ -69,6 +69,13 @@ void PropertyNode::setValue(int layer, css::uno::Any const & value) {
     externalDescriptor_ = "";
 }
 
+com::sun::star::uno::Any *PropertyNode::getValuePtr(int layer)
+{
+    setLayer(layer);
+    externalDescriptor_ = "";
+    return &value_;
+}
+
 void PropertyNode::setExternal(int layer, OUString const & descriptor) {
     assert(!descriptor.isEmpty());
     setLayer(layer);

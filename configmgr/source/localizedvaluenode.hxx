@@ -32,13 +32,19 @@ namespace configmgr {
 
 class LocalizedValueNode: public Node {
 public:
+    LocalizedValueNode(int layer);
     LocalizedValueNode(int layer, com::sun::star::uno::Any const & value);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
     virtual OUString getTemplateName() const SAL_OVERRIDE;
 
-    com::sun::star::uno::Any getValue() const { return value_;}
+    com::sun::star::uno::Any  getValue() const { return value_;}
+    com::sun::star::uno::Any *getValuePtr(int layer)
+    {
+        setLayer(layer);
+        return &value_;
+    }
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
 
