@@ -701,6 +701,7 @@ public:
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
+    void                importAlignment(const AttributeList& rAttribs);
 
     /** Imports the DXF record from the passed stream. */
     void                importDxf( SequenceInputStream& rStrm );

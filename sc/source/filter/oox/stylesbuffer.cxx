@@ -2353,6 +2353,12 @@ void Dxf::importNumFmt( const AttributeList& rAttribs )
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
+void Dxf::importAlignment(const AttributeList& rAttribs)
+{
+    mxAlignment.reset(new Alignment(*this));
+    mxAlignment->importAlignment(rAttribs);
+}
+
 void Dxf::importDxf( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;

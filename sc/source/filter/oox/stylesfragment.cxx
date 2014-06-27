@@ -147,8 +147,8 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
                 case XLS_TOKEN( fill ):         return new FillContext( *this, mxDxf->createFill() );
 
                 case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );        break;
-#if 0
                 case XLS_TOKEN( alignment ):    mxDxf->importAlignment( rAttribs );     break;
+#if 0
                 case XLS_TOKEN( protection ):   mxDxf->importProtection( rAttribs );    break;
 #endif
             }
