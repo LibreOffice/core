@@ -81,6 +81,13 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
                 !rUnitConverter.convertMeasureToCore( nVal, aToken ) )
                 break;
 
+            // fdo#80009 such nonsense could be written via WW8 import fdo#77454
+            if (abs(nVal) > 400000)
+            {
+                SAL_INFO("xmloff.style", "ignoring excessive clip " << aToken);
+                nVal = 0;
+            }
+
             switch( nPos )
             {
             case 0: aCrop.Top = nVal;   break;
