@@ -159,8 +159,6 @@ public:
 
     void    selectEntry( const long nPos );
     long            addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
-    void            updateEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
-    void            removeEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
     void            clearEntries();
 
     void            prepareChecking();

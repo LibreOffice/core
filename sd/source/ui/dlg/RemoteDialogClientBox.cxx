@@ -49,8 +49,6 @@ ClientBoxEntry::ClientBoxEntry( ::boost::shared_ptr<ClientInfo> pClientInfo ) :
 ClientBoxEntry::~ClientBoxEntry()
 {}
 
-// ClientRemovedListener
-
 void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException, std::exception )
 {
@@ -96,10 +94,6 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
         m_nStdHeight = nIconHeight;
     m_nStdHeight += GetTextHeight() + TOP_OFFSET;
 
-//     nIconHeight = ICON_HEIGHT + 2*TOP_OFFSET + 1;
-//     if ( m_nStdHeight < nIconHeight )
-//         m_nStdHeight = nIconHeight;
-
     m_nActiveHeight = m_nStdHeight;
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -135,13 +129,6 @@ ClientBox::~ClientBox()
         DeleteRemoved();
 
     m_bInDelete = true;
-
-    typedef std::vector< TClientBoxEntry >::iterator ITER;
-
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-//         (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
-    }
 
     m_vEntries.clear();
 
@@ -295,17 +282,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
     // FIXME: draw bluetooth or wifi icon
      Point aPos( rRect.TopLeft() );
-//     aPos += Point( TOP_OFFSET, TOP_OFFSET );
-//     Image aImage;
-//     if ( ! pEntry->m_aIcon )
-//         aImage = m_aDefaultImage;
-//     else
-//         aImage = pEntry->m_aIcon;
-//     Size aImageSize = aImage.GetSizePixel();
-//     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
-//         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
-//     else
-//         DrawImage( aPos, Size( ICON_WIDTH, ICON_HEIGHT ), aImage );
 
     // Setup fonts
     Font aStdFont( GetFont() );
@@ -365,14 +341,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         aBtnPos.Move( 20, 0 );
         m_aDeauthoriseButton.SetPosPixel( aBtnPos );
         m_aDeauthoriseButton.Show( bAlreadyAuthorised );
-
-//         long nExtraHeight = 0;
-
-//         if ( pEntry->m_bHasButtons )
-//             nExtraHeight = m_nExtraHeight;
-
-//         DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
-//                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     }
     else
     {
@@ -644,8 +612,6 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
 long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 {
     long         nPos = 0;
-//     PackageState eState = m_pManager->getPackageState( xPackage );
-//     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
     TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
 
@@ -669,23 +635,6 @@ long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 //             OSL_FAIL( "ClientBox::addEntry(): Will not add duplicate entries"  );
 //         }
     }
-
-    //Related: rhbz#702833 Only add a Listener if we're adding a new entry, to
-    //keep in sync with removeEventListener logic
-    if (bNewEntryInserted)
-    {
-
-        //         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
-    }
-
-//     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-//     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
-//     pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
-//     pEntry->m_bNew        = m_bInCheckMode;
-//     pEntry->m_bMissingLic = bLicenseMissing;
-
-//     if ( bLicenseMissing )
-//         pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
 
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
