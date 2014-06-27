@@ -35,7 +35,6 @@
 
 #include <osl/thread.h>
 #include <osl/process.h>
-#include <osl/module.h>
 #include <osl/mutex.hxx>
 
 #include "unx/kde/kdedata.hxx"
@@ -202,7 +201,7 @@ void KDEData::Init()
  **********************************************************************/
 
 extern "C" {
-    VCLPLUG_KDE_PUBLIC SalInstance* create_SalInstance( oslModule )
+    VCLPLUG_KDE_PUBLIC SalInstance* create_SalInstance()
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

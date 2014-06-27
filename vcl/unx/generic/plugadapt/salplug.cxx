@@ -33,7 +33,7 @@
 #include <unistd.h>
 
 extern "C" {
-typedef SalInstance*(*salFactoryProc)( oslModule pModule);
+typedef SalInstance*(*salFactoryProc)();
 }
 
 static oslModule pCloseModule = NULL;
@@ -63,7 +63,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         salFactoryProc aProc = (salFactoryProc)osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" );
         if( aProc )
         {
-            pInst = aProc( aMod );
+            pInst = aProc();
             SAL_INFO(
                 "vcl.plugadapt",
                 "sal plugin " << aModule << " produced instance " << pInst);
