@@ -227,7 +227,7 @@ bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* p
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
-    sal_uInt16 nRet = pDlg->Execute();
+    const short nRet = pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
     pDlg.reset();
