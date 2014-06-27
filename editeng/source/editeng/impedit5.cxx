@@ -700,24 +700,22 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 const SfxItemSet& ImpEditEngine::GetParaAttribs( sal_Int32 nPara ) const
 {
     const ContentNode* pNode = aEditDoc.GetObject( nPara );
-    DBG_ASSERT( pNode, "Node not found: GetParaAttribs" );
+    assert(pNode && "Node not found: GetParaAttribs");
     return pNode->GetContentAttribs().GetItems();
 }
 
 bool ImpEditEngine::HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
     const ContentNode* pNode = aEditDoc.GetObject( nPara );
-    DBG_ASSERT( pNode, "Node not found: HasParaAttrib" );
-
+    assert(pNode && "Node not found: HasParaAttrib");
     return pNode->GetContentAttribs().HasItem( nWhich );
 }
 
 const SfxPoolItem& ImpEditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
-    const ContentNode* pNode = aEditDoc.GetObject( nPara );
-    DBG_ASSERT( pNode, "Node not found: GetParaAttrib" );
-
-    return pNode->GetContentAttribs().GetItem( nWhich );
+    const ContentNode* pNode = aEditDoc.GetObject(nPara);
+    assert(pNode && "Node not found: GetParaAttrib");
+    return pNode->GetContentAttribs().GetItem(nWhich);
 }
 
 void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const

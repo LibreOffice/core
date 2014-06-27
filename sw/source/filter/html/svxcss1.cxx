@@ -1342,7 +1342,7 @@ static void ParseCSS1_column_count( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo &rPropInfo,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     if ( pExpr->GetType() == CSS1_NUMBER )
     {
@@ -1359,7 +1359,7 @@ static void ParseCSS1_direction( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& /*rPropInfo*/,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nDir;
     switch( pExpr->GetType() )

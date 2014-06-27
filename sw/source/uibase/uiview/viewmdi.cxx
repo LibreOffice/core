@@ -565,25 +565,25 @@ void SwView::SetActMark(sal_Int32 nSet)
 
 void SwView::ShowHScrollbar(bool bShow)
 {
-    OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
+    assert(m_pHScrollbar && "Scrollbar invalid");
     m_pHScrollbar->ExtendedShow(bShow);
 }
 
 bool SwView::IsHScrollbarVisible()const
 {
-    OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
+    assert(m_pHScrollbar && "Scrollbar invalid");
     return m_pHScrollbar->IsVisible( false ) || m_pHScrollbar->IsAuto();
 }
 
 void SwView::ShowVScrollbar(bool bShow)
 {
-    OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
+    assert(m_pVScrollbar && "Scrollbar invalid");
     m_pVScrollbar->ExtendedShow(bShow);
 }
 
 bool SwView::IsVScrollbarVisible()const
 {
-    OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
+    assert(m_pVScrollbar && "Scrollbar invalid");
     return m_pVScrollbar->IsVisible( false );
 }
 
