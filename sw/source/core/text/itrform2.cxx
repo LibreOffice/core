@@ -894,6 +894,13 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
                         {
                             pPor = new SwFieldFormDropDownPortion(sw::mark::ExpandFieldmark(pBM));
                         }
+                        /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
+                         * Otherwise file will crash on open.
+                         */
+                        else if (pBM->GetFieldname( ) == ODF_FORMTEXT)
+                        {
+                            pPor = new SwFieldMarkPortion();
+                        }
                         else
                         {
                             assert( false );        // unknown type...
