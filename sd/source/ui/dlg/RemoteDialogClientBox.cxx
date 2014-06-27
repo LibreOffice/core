@@ -343,6 +343,14 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         aBtnPos.Move( 20, 0 );
         m_aDeauthoriseButton.SetPosPixel( aBtnPos );
         m_aDeauthoriseButton.Show( bAlreadyAuthorised );
+        if ( bAlreadyAuthorised )
+        {
+            m_aDeauthoriseButton.GetFocus();
+        }
+        else
+        {
+            m_aPinBox.GetFocus();
+        }
     }
     else
     {
