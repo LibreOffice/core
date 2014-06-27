@@ -390,8 +390,8 @@ void ImpEditEngine::FormatDoc()
                         pPP->GetLines().Reset();
                     }
                 }
-                // FIXME(matteocam)
-                //bGrow = true;
+
+                bGrow = true;
                 if ( IsCallParaInsertedOrDeleted() )
                     GetEditEnginePtr()->ParagraphHeightChanged( nPara );
                 pParaPortion->SetMustRepaint( false );
