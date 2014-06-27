@@ -1050,7 +1050,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     return true;
 }
 
-bool WW8AttributeOutput::EndURL()
+bool WW8AttributeOutput::EndURL(bool const)
 {
     // hyperlinks only in WW8
     if ( !m_rWW8Export.bWrtWW8 )
@@ -1192,7 +1192,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     }
                     if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
                     {
-                        if ( m_rExport.AttrOutput().EndURL() )
+                        if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
                             --nRet;
                     }
                     break;
