@@ -634,6 +634,12 @@ DECLARE_RTFEXPORT_TEST(testFdo77600, "fdo77600.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 3), "CharFontName"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
+{
+    // Problem was that after export, the page break was missing, so this was 1.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
