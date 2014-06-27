@@ -1437,7 +1437,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
     return true;
 }
 
-bool DocxAttributeOutput::EndURL()
+bool DocxAttributeOutput::EndURL(bool const)
 {
     m_closeHyperlinkInThisRun = true;
     return true;

@@ -95,7 +95,7 @@ public:
     virtual bool StartURL( const OUString& rUrl, const OUString& rTarget );
 
     /// Output URL end.
-    virtual bool EndURL();
+    virtual bool EndURL(bool isAtEndOfParagraph) SAL_OVERRIDE;
 
     virtual void FieldVanish( const OUString& rTxt, ww::eField eType );
 
@@ -557,11 +557,6 @@ private:
      */
     bool m_bWroteCellInfo;
 
-    /*
-     * If we had a field result in the URL.
-     */
-    bool m_bHadFieldResult;
-
     /// If we ended a table row without starting a new one.
     bool m_bTableRowEnded;
 
@@ -574,8 +569,6 @@ private:
     bool m_bInRun;
 
     unsigned int m_nPostitFieldsMaxId;
-
-    bool m_bInURL;
 
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
