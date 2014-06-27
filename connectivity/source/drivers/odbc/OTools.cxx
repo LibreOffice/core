@@ -415,6 +415,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     case SQL_WLONGVARCHAR:
     {
         SQLWCHAR waCharArray[2048];
+        BOOST_STATIC_ASSERT(sizeof(waCharArray) % sizeof(SQLWCHAR) == 0);
         rtl_TextEncoding nSQLWCHAREncoding = RTL_TEXTENCODING_UCS2;
         BOOST_STATIC_ASSERT(sizeof(SQLWCHAR) == 2 || sizeof(SQLWCHAR) == 4);
         if(sizeof(SQLWCHAR) == 4)

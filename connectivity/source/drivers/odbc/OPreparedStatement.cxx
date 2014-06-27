@@ -359,6 +359,8 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     }
     else
     {
+        assert(getOwnConnection()->getTextEncoding() != RTL_TEXTENCODING_UCS2 &&
+               getOwnConnection()->getTextEncoding() != RTL_TEXTENCODING_UCS4);
         OString sOData(
             OUStringToOString(_sData, getOwnConnection()->getTextEncoding()));
         nCharLen = nByteLen = sOData.getLength();
