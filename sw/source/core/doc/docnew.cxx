@@ -106,6 +106,7 @@
 #include <DocumentExternalDataManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
+#include <wrtsh.hxx>
 
 #include <cmdid.h>
 
@@ -902,7 +903,8 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     SfxObjectShell* pRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
     {
-        // it could happen that DoInitNew creates model, that increases the refcount of the object
+        // it could happen that DoInitNew creates model,
+        // that increases the refcount of the object
         pRetShell->DoInitNew();
     }
 
@@ -914,14 +916,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
-    // copy content
-    pRet->Paste( *this );
-
-    if ( bCallInitNew ) {
-        // delete leading page / initial content from target document
-        SwNodeIndex aDeleteIdx( pRet->GetNodes().GetEndOfExtras(), 2 );
-        pRet->GetNodes().Delete( aDeleteIdx, 1 );
-    }
+    pRet->Append(*this, 0, NULL, bCallInitNew);
 
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
@@ -931,27 +926,65 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return pRetShell;
 }
 
-// copy document content - code from SwFEShell::Paste( SwDoc* )
-void SwDoc::Paste( const SwDoc& rSource )
+// appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
+void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
+                    SwPageDesc* pTargetPageDesc, bool bDeletePrevious )
 {
-    // GetEndOfExtras + 1 = StartOfContent
+    // GetEndOfExtras + 1 = StartOfContent == no content node!
+    // this prevents CopyRange to merge any starting text nodes of the first
+    // source paragraph!
+    // additionally it ensures, that we have at least two nodes in the SwPaM.
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 1 );
-    SwPaM aCpyPam( aSourceIdx ); // DocStart
+    SwNodeIndex aSourceEndIdx( rSource.GetNodes().GetEndOfContent(), -1 );
+    SwPaM aCpyPam( aSourceIdx );
 
+    if ( aSourceEndIdx.GetNode().IsTxtNode() ) {
+        aCpyPam.SetMark();
+        // moves to the last content node before EOC; for single paragraph
+        // documents this would result in [n, n], which is considered empty
+        aCpyPam.Move( fnMoveForward, fnGoDoc );
+    }
+    else
+        aCpyPam = SwPaM( aSourceIdx, aSourceEndIdx );
+
+    SwWrtShell* pTargetShell = GetDocShell()->GetWrtShell();
+    sal_uInt16 nPhysPageNumber = 0;
+    if ( pTargetShell ) {
+        pTargetShell->StartAllAction();
+
+        // Otherwise we have to handle SwDummySectionNodes as first node
+        if ( pTargetPageDesc ) {
+            OUString name = pTargetPageDesc->GetName();
+            pTargetShell->InsertPageBreak( &name, nStartPageNumber );
+        }
+
+        // -1 for the page break + -1, becauce it's an offset
+        nPhysPageNumber = pTargetShell->GetPhyPageNum() - 2;
+        if (bDeletePrevious)
+            nPhysPageNumber--;
+
+        // We always start on an odd physical page number
+        if (1 == nPhysPageNumber % 2)
+            nPhysPageNumber++;
+    }
+
+    // -1, otherwise aFixupIdx would move to new EOC
+    SwNodeIndex aFixupIdx( GetNodes().GetEndOfContent(), -1 );
+
+    // append at the end of document / content
     SwNodeIndex aTargetIdx( GetNodes().GetEndOfContent() );
     SwPaM aInsertPam( aTargetIdx );
 
-    aCpyPam.SetMark();
-    aCpyPam.Move( fnMoveForward, fnGoDoc );
 
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     this->getIDocumentFieldsAccess().LockExpFlds();
 
     {
+        // **
+        // ** refer to SwFEShell::Paste, if you change the following code **
+        // **
+
         SwPosition& rInsPos = *aInsertPam.GetPoint();
-        //find out if the clipboard document starts with a table
-        bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
-        SwPosition aInsertPosition( rInsPos );
 
         {
             SwNodeIndex aIndexBefore(rInsPos.nNode);
@@ -967,31 +1000,67 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
 
-            // No need to update the rsid, as this is an empty doc
+            // Update the rsid of each pasted text node
+            SwNodes &rDestNodes = GetNodes();
+            sal_uLong const nEndIdx = aPaM.End()->nNode.GetIndex();
+
+            for (sal_uLong nIdx = aPaM.Start()->nNode.GetIndex();
+                    nIdx <= nEndIdx; ++nIdx)
+            {
+                SwTxtNode *const pTxtNode = rDestNodes[nIdx]->GetTxtNode();
+                if ( pTxtNode )
+                    UpdateParRsid( pTxtNode );
+            }
         }
 
-        //TODO: Is this necessary here? SaveTblBoxCntnt( &rInsPos );
-        if(/*bIncludingPageFrames && */bStartWithTable)
         {
-            //remove the paragraph in front of the table
-            SwPaM aPara(aInsertPosition);
-            this->getIDocumentContentOperations().DelFullPara(aPara);
-        }
-        //additionally copy page bound frames
-        if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->size() )
-        {
-            for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->size(); ++i )
-            {
-                const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
-                    SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
-                    {
-                        aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
+            sal_uInt16 iDelNodes = 0;
+            SwNodeIndex aDelIdx( aFixupIdx );
+
+            // update the PageDesc format item
+            if ( nStartPageNumber || pTargetPageDesc ) {
+                // Changes the index of aFixupIdx
+                SwTxtNode *aTxtNd = dynamic_cast<  SwTxtNode* >( GetNodes().GoNext(&aFixupIdx) );
+                if ( aTxtNd ) {
+                    SfxPoolItem *pNewItem = aTxtNd->GetAttr( RES_PAGEDESC ).Clone();
+                    SwFmtPageDesc *aDesc = dynamic_cast< SwFmtPageDesc* >( pNewItem );
+                    if ( aDesc ) {
+                        if ( nStartPageNumber )
+                            aDesc->SetNumOffset( nStartPageNumber );
+                        if ( pTargetPageDesc )
+                            aDesc->RegisterToPageDesc( *pTargetPageDesc );
+                        aTxtNd->SetAttr( *aDesc );
                     }
-                    else
-                        continue;
-                    this->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                    delete pNewItem;
+                }
+                iDelNodes++;
             }
+
+            if ( bDeletePrevious )
+                iDelNodes++;
+
+            if ( iDelNodes ) {
+                // delete leading empty page(s), e.g. from InsertPageBreak or
+                // new SwDoc. this has to be done before copying the page bound
+                // frames, otherwise the drawing layer gets confused.
+                if ( pTargetShell )
+                    pTargetShell->SttEndDoc( false );
+                aDelIdx -= (iDelNodes - 1);
+                GetNodes().Delete( aDelIdx, iDelNodes );
+            }
+        }
+
+        // finally copy page bound frames
+        const SwFrmFmts *pSpzFrmFmts = rSource.GetSpzFrmFmts();
+        for ( sal_uInt16 i = 0; i < pSpzFrmFmts->size(); ++i )
+        {
+            const SwFrmFmt& rCpyFmt = *(*pSpzFrmFmts)[i];
+            SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+            if (FLY_AT_PAGE != aAnchor.GetAnchorId())
+                continue;
+            if ( nPhysPageNumber )
+                aAnchor.SetPageNum( aAnchor.GetPageNum() + nPhysPageNumber );
+            this->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
 
@@ -999,6 +1068,9 @@ void SwDoc::Paste( const SwDoc& rSource )
 
     getIDocumentFieldsAccess().UnlockExpFlds();
     getIDocumentFieldsAccess().UpdateFlds(NULL, false);
+
+    if ( pTargetShell )
+        pTargetShell->EndAllAction();
 }
 
 sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const
