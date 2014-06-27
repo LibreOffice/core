@@ -47,9 +47,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-//impl in envimg.cxx
-extern SW_DLLPUBLIC OUString MakeSender();
-
 SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {

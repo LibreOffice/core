@@ -84,8 +84,6 @@ using namespace com::sun::star::uno;
 #include <ctype.h>
 #include <errno.h>
 
-SbxVariable* getDefaultProp( SbxVariable* pRef );
-
 #include "sbobjmod.hxx"
 
 #ifdef WNT

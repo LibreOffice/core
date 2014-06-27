@@ -47,8 +47,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
-OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw();
-
 enum XMLUserDefinedTransformerAction
 {
     XML_ETACTION_DOCUMENT=XML_ETACTION_USER_DEFINED,

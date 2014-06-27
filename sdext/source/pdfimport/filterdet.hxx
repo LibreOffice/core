@@ -94,12 +94,6 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
                        sal_uInt32           nBytes,
                        const OUString& rChkSum );
 
-bool getPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                  OUString&                                                                     o_rPwd,
-                  bool                                                                               bFirstTry,
-                  const OUString&                                                               i_rDocName
-                  );
-
 }
 
 #endif

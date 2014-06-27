@@ -218,7 +218,6 @@ eval()
     int     skip;       /* For short-circuit testing    */
     int     value[NEXP];    /* Value stack          */
     OPTAB       opstack[NEXP];  /* Operand stack        */
-    extern int  *evaleval(int *, int, int);    /* Does actual evaluation   */
     valp = value;
     opp = opstack;
     opp->op = OP_END;       /* Mark bottom of stack     */

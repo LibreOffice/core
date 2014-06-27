@@ -51,8 +51,6 @@ class TabBar;
 class BaseWindow;
 class LocalizationMgr;
 
-bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
-
 class Shell :
     public SfxViewShell,
     public DocumentEventListener

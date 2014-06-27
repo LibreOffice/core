@@ -19,6 +19,7 @@
 
 
 #include "filterdet.hxx"
+#include "inc/pdfihelper.hxx"
 #include "inc/pdfparse.hxx"
 
 #include <osl/diagnose.h>

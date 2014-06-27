@@ -27,6 +27,7 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
+#include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>

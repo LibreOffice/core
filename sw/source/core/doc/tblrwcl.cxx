@@ -159,8 +159,6 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 
 #ifdef DBG_UTIL
 
-void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
-
 #define CHECKBOXWIDTH                                           \
     {                                                           \
         SwTwips nSize = GetFrmFmt()->GetFrmSize().GetWidth();   \

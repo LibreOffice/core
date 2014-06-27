@@ -162,29 +162,6 @@ namespace canvas
                               ::com::sun::star::uno::XInterface >&                  xIf,
                           ::sal_Int16                                               nArgPos );
 
-        /** Verify that the given point contains valid floating point
-            values.
-
-            @param rPoint
-            Point to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws an lang::IllegalArgumentException, if anything is wrong
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
-                          const char*                                       pStr,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::uno::XInterface >&          xIf,
-                          ::sal_Int16                                       nArgPos );
-
         /** Verify that the given rectangle contains valid floating
             point values.
 
