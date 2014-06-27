@@ -22,8 +22,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
 
-extern Status XCloseIM(XIM);
-
 #ifndef XIMCallback1
 typedef int (*XIMProc1)(XIC, XPointer, XPointer);
 typedef struct {
