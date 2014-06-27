@@ -896,7 +896,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // in case of creating a single resulting file this has to be created here
             SwWrtShell* pTargetShell = 0;
             SwDoc* pTargetDoc = 0;
-            SwNodes* pTargetNodes = 0;
 
             // the shell will be explicitly closed at the end of the method, but it is
             // still more safe to use SfxObjectShellLock here
@@ -908,6 +907,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             String sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
+
             if(bAsSingleFile || rMergeDescriptor.bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
@@ -921,7 +921,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
                 pTargetShell = pTargetView->GetWrtShellPtr();
                 pTargetDoc = pTargetShell->GetDoc();
-                pTargetNodes = &pTargetDoc->GetNodes();
+
                 //copy the styles from the source to the target document
                 pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, sal_True );
                 //determine the page style and number used at the start of the source document
@@ -1061,66 +1061,32 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
 
                                 // insert the document into the target document
-                                rWorkShell.SttEndDoc(sal_False);
-                                rWorkShell.SttEndDoc(sal_True);
-                                rWorkShell.SelAll();
-                                pTargetShell->SwCrsrShell::SttEndDoc( sal_False );
-                                //#i72517# the headers and footers are still those from the source - update in case of fields inside header/footer
-                                if( !nDocNo && bPageStylesWithHeaderFooter )
-                                    pTargetShell->GetView().GetDocShell()->_LoadStyles( *rWorkShell.GetView().GetDocShell(), sal_True );
+
                                 //#i72517# put the styles to the target document
                                 //if the source uses headers or footers each new copy need to copy a new page styles
+                                SwPageDesc* pTargetPageDesc;
                                 if(bPageStylesWithHeaderFooter)
                                 {
                                     //create a new pagestyle
                                     //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
-                                    SwPageDesc* pSourcePageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
                                     String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                                    pTargetDoc->MakePageDesc( sNewPageDescName );
-                                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                                    if(pSourcePageDesc && pTargetPageDesc)
+                                    pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
+                                    const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+
+                                    if(pWorkPageDesc && pTargetPageDesc)
                                     {
-                                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
+                                        pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, false );
                                         sModifiedStartingPageDesc = sNewPageDescName;
-                                        lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                                        lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                                     }
                                 }
-
-                                if(nDocNo > 1)
-                                    pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
                                 else
-                                    pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
-                                OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+                                    pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
-                                //#i51359# add a second paragraph in case there's only one
-                                bool para_added = false;
-                                {
-                                    SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
-                                    SwPosition aTestPos( aIdx );
-                                    SwCursor aTestCrsr(aTestPos,0,false);
-                                    if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
-                                    {
-                                        //append a paragraph
-                                        pWorkDoc->AppendTxtNode( aTestPos );
-                                        para_added = true;
-                                    }
-                                }
-                                pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+                                pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
 
-                                if ( para_added ) {
-                                    // Move cursor to the start or Delete will assert because
-                                    // of the cursors SwIndex ref on the deleting node.
-                                    pTargetShell->SttEndDoc( sal_True );
-                                    SwNodeIndex aTargetIdx( pTargetNodes->GetEndOfContent(), -1 );
-                                    pTargetNodes->Delete( aTargetIdx, 1 );
-                                }
-
-                                //convert fields in page styles (header/footer - has to be done after the first document has been pasted
-                                if(1 == nDocNo)
-                                {
-                                    pTargetShell->CalcLayout();
-                                    pTargetShell->ConvertFieldsToText();
-                                }
+                                // #i72820# calculate layout to be able to find the correct page index
+                                pTargetShell->CalcLayout();
                             }
                             else
                             {
@@ -2796,7 +2762,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
         SwWrtShell* pTargetShell = pTargetView->GetWrtShellPtr();
         SwDoc* pTargetDoc = pTargetShell->GetDoc();
-        SwNodes* pTargetNodes = &pTargetDoc->GetNodes();
+
+        pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), true );
 
         // #i63806#
         const SwPageDesc* pSourcePageDesc = rSourceShell.FindPageDescByName( sStartingPageDesc );
@@ -2875,21 +2842,16 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
 
             // insert the document into the target document
-            rWorkShell.SttEndDoc(sal_False);
-            rWorkShell.SttEndDoc(sal_True);
-            rWorkShell.SelAll();
-            pTargetShell->SttEndDoc(sal_False);
 
             //#i63806# put the styles to the target document
             //if the source uses headers or footers each new copy need to copy a new page styles
+            SwPageDesc* pTargetPageDesc;
             if(bPageStylesWithHeaderFooter)
             {
                 //create a new pagestyle
                 //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
-
                 String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
-                SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
                 const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
 
                 if(pWorkPageDesc && pTargetPageDesc)
@@ -2899,50 +2861,20 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                 }
             }
-            if(nDocNo == 1 || bPageStylesWithHeaderFooter)
-                pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), sal_True );
-            if(nDocNo > 1)
-                pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
             else
-                pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
+                pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
             sal_uInt16 nPageCountBefore = pTargetShell->GetPageCnt();
             OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
-            bool para_added = false;
-
-            //#i51359# add a second paragraph in case there's only one
-            {
-                SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
-                SwPosition aTestPos( aIdx );
-                SwCursor aTestCrsr( aTestPos, 0, false );
-                if ( !aTestCrsr.MovePara(fnParaNext, fnParaStart) )
-                {
-                    //append a paragraph
-                    pWorkDoc->AppendTxtNode( aTestPos );
-                    para_added = true;
-                }
-            }
 
 #ifdef DBG_UTIL
             if ( nDocNo <= MAX_DOC_DUMP )
                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
-            pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+            pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
 
-            if ( para_added ) {
-                // Move cursor to the start or Delete will assert because
-                // of the cursors SwIndex ref on the deleting node.
-                pTargetShell->SttEndDoc( sal_True );
-                SwNodeIndex aTargetIdx( pTargetNodes->GetEndOfContent(), -1 );
-                pTargetNodes->Delete( aTargetIdx, 1 );
-            }
-
-            //convert fields in page styles (header/footer - has to be done after the first document has been pasted
-            if(1 == nDocNo)
-            {
-                pTargetShell->CalcLayout();
-                pTargetShell->ConvertFieldsToText();
-            }
+            // #i72820# calculate layout to be able to find the correct page index
+            pTargetShell->CalcLayout();
 #ifdef DBG_UTIL
             if ( nDocNo <= MAX_DOC_DUMP )
                 lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
@@ -2951,8 +2883,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             // add the document info to the config item
             SwDocMergeInfo aMergeInfo;
             aMergeInfo.nStartPageInTarget = nPageCountBefore;
-            //#i72820# calculate layout to be able to find the correct page index
-            pTargetShell->CalcLayout();
             aMergeInfo.nEndPageInTarget = pTargetShell->GetPageCnt();
             aMergeInfo.nDBRow = nStartRow;
             rMMConfig.AddMergedDocument( aMergeInfo );

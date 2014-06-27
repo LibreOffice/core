@@ -1344,8 +1344,10 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
             !rRg.aStart.GetNode().IsSectionNode() &&
             !aTmpI.GetNode().IsEndNode() )
         {
+            // If the range starts with a SwStartNode, it isn't copied
+            sal_uInt16 offset = (rRg.aStart.GetNode().GetNodeType() != ND_STARTNODE) ? 1 : 0;
             OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
-                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex(),
+                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex() - 1 + offset,
                     "An insufficient number of nodes were copied!" );
         }
     }

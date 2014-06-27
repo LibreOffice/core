@@ -692,7 +692,6 @@ private:
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, bool, bool );
 
      void InitTOXTypes();
-     void   Paste( const SwDoc& );
      bool DeleteAndJoinImpl(SwPaM&, const bool);
      bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImpl(SwPaM&, const bool unused = false);
@@ -2063,7 +2062,10 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
+
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+    void Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
+                 SwPageDesc* pTargetPageDesc, bool bDeletePrevious = false );
 
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)

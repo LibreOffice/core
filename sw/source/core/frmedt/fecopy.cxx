@@ -1029,6 +1029,10 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
 
+            // **
+            // ** Update SwDoc::Append, if you change the following code **
+            // **
+
             // find out if the clipboard document starts with a table
             bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
             SwPosition aInsertPosition( rInsPos );
