@@ -1366,8 +1366,22 @@ static bool acceptableWheelScrollTarget(const Window *pMouseWindow)
     return (pMouseWindow && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
 }
 
+//If the last event at the same absolute screen position was handled by a
+//different window then reuse that window if the event occurs within 1/2 a
+//second, i.e. so scrolling down something like the calc sidebar that contains
+//widgets that respond to wheel events will continue to send the event to the
+//scrolling widget in favour of the widget that happens to end up under the
+//mouse.
+static bool shouldReusePreviousMouseWindow(const SalWheelMouseEvent& rPrevEvt, const SalWheelMouseEvent& rEvt)
+{
+    return (rEvt.mnX == rPrevEvt.mnX && rEvt.mnY == rPrevEvt.mnY && rEvt.mnTime-rPrevEvt.mnTime < 500/*ms*/);
+}
+
 static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
+    static SalWheelMouseEvent aPreviousEvent;
+    static Window *pPreviousWindow;
+
     ImplDelData aDogTag( pWindow );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -1431,6 +1445,16 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         pMouseWindow = pMouseWindow->GetParent();
     }
 
+    // avoid the problem that scrolling via wheel to this point brings a widget
+    // under the mouse that also accepts wheel commands, so stick with the old
+    // widget if the time gap is very small
+    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pPreviousWindow))
+    {
+        pMouseWindow = pPreviousWindow;
+    }
+
+    aPreviousEvent = rEvt;
+
     if (acceptableWheelScrollTarget(pMouseWindow) && pMouseWindow->IsEnabled())
     {
         // transform coordinates to float window frame coordinates
@@ -1440,6 +1464,8 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
                                pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
         bRet = ImplCallWheelCommand( pMouseWindow, aRelMousePos, &aWheelData );
     }
+
+    pPreviousWindow = !bRet ? pMouseWindow : NULL;
 
     // if the command was not handled try the focus window
     if ( bRet )

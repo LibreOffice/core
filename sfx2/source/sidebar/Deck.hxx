@@ -100,11 +100,8 @@ private:
     ::boost::scoped_ptr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange,void*);
-    bool ProcessWheelEvent (
-        CommandEvent* pCommandEvent,
-        NotifyEvent& rEvent);
+    bool ProcessWheelEvent(CommandEvent* pCommandEvent);
 };
-
 
 } } // end of namespace sfx2::sidebar
 
