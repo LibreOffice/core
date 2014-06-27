@@ -28,7 +28,7 @@ libgltf_AdditionalIncludes :=
 
 ifeq ($(SYSTEM_BOOST),)
 libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,boost)"
-libgltf_AdditionalIncludes += "$(SRCDIR)/config_host"
+libgltf_AdditionalIncludes += "$(BUILDDIR)/config_$(gb_Side)"
 endif
 
 ifeq ($(SYSTEM_GLEW),)
