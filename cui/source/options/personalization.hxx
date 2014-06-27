@@ -30,9 +30,11 @@ private:
     RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
     PushButton *m_pSelectPersona;           ///< Let the user select in the 'own' case
     PushButton *m_vDefaultPersonaImages[3]; ///< Buttons to show the default persona images
+    PushButton *m_vExtensionPersonas[3];    ///< Buttons to show the last 3 personas installed via extensions
     OUString m_aPersonaSettings;            ///< Header and footer images + color to be set in the settings.
 
     std::vector<OUString> m_vDefaultPersonaSettings;
+    std::vector<OUString> m_vExtensionPersonaSettings;
 
 public:
     ::rtl::Reference< SearchAndParseThread > m_rApplyThread;

@@ -14,6 +14,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/urlobj.hxx>
@@ -31,6 +33,7 @@
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::beans;
 
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
@@ -241,6 +244,15 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     get( m_vDefaultPersonaImages[2], "default3" );
     m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
 
+    get( m_vExtensionPersonas[0], "extension1" );
+    m_vExtensionPersonas[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vExtensionPersonas[1], "extension2" );
+    m_vExtensionPersonas[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vExtensionPersonas[2], "extension3" );
+    m_vExtensionPersonas[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
     LoadDefaultImages();
 }
 
@@ -273,7 +285,6 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
 
     // write
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
     officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
     batch->commit();
@@ -316,6 +327,8 @@ void SvxPersonalizationTabPage::SetPersonaSettings( const OUString aPersonaSetti
 
 void SvxPersonalizationTabPage::LoadDefaultImages()
 {
+    // Load the pre saved personas
+
     OUString gallery( "" );
     gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
     gallery += "/gallery/personas/";
@@ -344,6 +357,38 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         Bitmap aBmp = aGraphic.GetBitmap();
         m_vDefaultPersonaImages[nIndex]->Show();
         m_vDefaultPersonaImages[nIndex++]->SetModeImage( Image( aBmp ) );
+    }
+
+    // See if any extensions are used to install personas. If yes, load them.
+
+    css::uno::Sequence<OUString> installedPersonas( officecfg::Office::Common::Misc::PersonasList::get()->getElementNames() );
+    sal_Int32 nLength = installedPersonas.getLength();
+    sal_Int32 nCount = 0;
+    nIndex = 0;
+
+    if( nLength == 0 )
+        return;
+
+    if( nLength > 3 )
+        nIndex = nLength - 3;
+
+    for( ; nIndex < nLength; nIndex++ )
+    {
+        Reference< XPropertySet > xPropertySet( officecfg::Office::Common::Misc::PersonasList::get()->getByName( installedPersonas[nIndex] ), UNO_QUERY_THROW );
+        Any aValue = xPropertySet->getPropertyValue( "PersonaPreview" );
+        OUString aPreviewFile;
+        aValue >>= aPreviewFile;
+        INetURLObject aURLObj( aPreviewFile );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        Bitmap aBmp = aGraphic.GetBitmap();
+        m_vExtensionPersonas[nCount]->Show();
+        m_vExtensionPersonas[nCount++]->SetModeImage( Image( aBmp ) );
+
+        aValue = xPropertySet->getPropertyValue( "PersonaSettings" );
+        OUString sPersonaSettings;
+        aValue >>= sPersonaSettings;
+        rtl::Bootstrap::expandMacros( sPersonaSettings );
+        m_vExtensionPersonaSettings.push_back( sPersonaSettings );
     }
 }
 
@@ -381,6 +426,13 @@ IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
         if( pButton == m_vDefaultPersonaImages[nIndex] )
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
     }
+
+    for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
+    {
+        if( pButton == m_vExtensionPersonas[nIndex] )
+            m_aPersonaSettings = m_vExtensionPersonaSettings[nIndex];
+    }
+
     return 0;
 }
 

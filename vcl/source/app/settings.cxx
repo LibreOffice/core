@@ -2158,7 +2158,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
             rtl::Bootstrap::expandMacros( gallery );
             gallery += "/user/gallery/personas/";
         }
-        else if (aPersona == "default")
+        else if ( aPersona == "default" && !aPersonaSettings.startsWith( "vnd.sun.star.expand" ) )
         {
             gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
             gallery += "/gallery/personas/";
