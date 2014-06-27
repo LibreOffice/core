@@ -114,7 +114,7 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
     return  SvtResId( nResStr ).toString() + aUndoStr;
 }
 
-sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
+void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
 {
     SwUndoComments_t comments;
     switch( eDoType )
@@ -135,7 +135,6 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
         buf += comments[i] + "\n";
     }
     rStrs.SetString(buf);
-    return static_cast<sal_uInt16>(comments.size());
 }
 
 OUString SwWrtShell::GetRepeatString() const
