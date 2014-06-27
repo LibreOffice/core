@@ -94,7 +94,7 @@ public:
     virtual bool StartURL(const OUString& rUrl, const OUString& rTarget) SAL_OVERRIDE;
 
     /// Output URL end.
-    virtual bool EndURL() SAL_OVERRIDE;
+    virtual bool EndURL(bool isAtEndOfParagraph) SAL_OVERRIDE;
 
     virtual void FieldVanish(const OUString& rTxt, ww::eField eType) SAL_OVERRIDE;
 
@@ -573,11 +573,6 @@ private:
      */
     bool m_bWroteCellInfo;
 
-    /*
-     * If we had a field result in the URL.
-     */
-    bool m_bHadFieldResult;
-
     /// If we ended a table row without starting a new one.
     bool m_bTableRowEnded;
 
@@ -588,8 +583,6 @@ private:
     bool m_bSingleEmptyRun;
 
     bool m_bInRun;
-
-    bool m_bInURL;
 
     /// Maps ID's to postit fields, used in atrfstart/end and atnref.
     std::map<sal_uInt16, const SwPostItField*> m_aPostitFields;

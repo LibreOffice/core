@@ -80,7 +80,7 @@ public:
     virtual bool StartURL( const OUString &rUrl, const OUString &rTarget ) SAL_OVERRIDE;
 
     /// Output URL end.
-    virtual bool EndURL() SAL_OVERRIDE;
+    virtual bool EndURL(bool) SAL_OVERRIDE;
 
     virtual void FieldVanish( const OUString& rTxt, ww::eField eType ) SAL_OVERRIDE;
 

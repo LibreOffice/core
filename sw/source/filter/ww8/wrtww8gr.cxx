@@ -511,7 +511,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     //Added for i120568,the hyperlink info within a graphic whose anchor type is
     //"As character" will be exported to ensure the fidelity
     if( bURLStarted )
-        m_pAttrOutput->EndURL();
+        m_pAttrOutput->EndURL(false);
 }
 
 GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
