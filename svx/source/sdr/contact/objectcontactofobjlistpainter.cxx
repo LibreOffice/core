@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 namespace sdr
@@ -127,14 +127,13 @@ namespace sdr
                     // if there is something to show, use a vclProcessor to render it
                     if(xPrimitiveSequence.hasElements())
                     {
-                        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                             *pTargetDevice,
-                            getViewInformation2D());
+                            getViewInformation2D()));
 
                         if(pProcessor2D)
                         {
                             pProcessor2D->process(xPrimitiveSequence);
-                            delete pProcessor2D;
                         }
                     }
                 }

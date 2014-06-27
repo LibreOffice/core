@@ -28,7 +28,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 using namespace com::sun::star;
@@ -86,7 +86,7 @@ namespace drawinglayer
         Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            SdrBlockTextPrimitive2D* pBlockText = 0;
+            boost::scoped_ptr<SdrBlockTextPrimitive2D> pBlockText;
             basegfx::B2DRange aTextRange;
             double fTextX((getStart().getX() + getEnd().getX()) * 0.5);
             double fTextY((getStart().getX() + getEnd().getX()) * 0.5);
@@ -125,7 +125,7 @@ namespace drawinglayer
                 }
 
                 // create primitive and get text range
-                pBlockText = new SdrBlockTextPrimitive2D(
+                pBlockText.reset(new SdrBlockTextPrimitive2D(
                     &rTextAttribute.getSdrText(),
                     rTextAttribute.getOutlinerParaObject(),
                     aTextMatrix,
@@ -135,7 +135,7 @@ namespace drawinglayer
                     false,
                     false,
                     false,
-                    false);
+                    false));
 
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
@@ -421,7 +421,7 @@ namespace drawinglayer
                 // apply to existing text primitive
                 SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
                 OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
-                delete pBlockText;
+                pBlockText.reset();
 
                 // add to local primitives
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(pNewBlockText));

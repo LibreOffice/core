@@ -37,6 +37,7 @@
 #include <svx/unoapi.hxx>
 
 #include "eventhandler.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -284,14 +285,13 @@ namespace sdr
                 pOutDev->SetLayoutMode(0); // reset, default is no BiDi/RTL
 
                 // create renderer
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor2D =
+                boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                        rTargetOutDev, getViewInformation2D());
+                        rTargetOutDev, getViewInformation2D()));
 
                 if(pProcessor2D)
                 {
                     pProcessor2D->process(xPrimitiveSequence);
-                    delete pProcessor2D;
                 }
             }
 
