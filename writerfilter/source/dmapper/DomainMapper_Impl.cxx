@@ -4053,7 +4053,7 @@ void DomainMapper_Impl::PopFieldContext()
         if (!pContext->GetResult().isEmpty())
         {
            uno::Reference< beans::XPropertySet > xFieldProperties = pContext->GetCustomField();
-           if(xFieldProperites.is())
+           if(xFieldProperties.is())
               SetNumberFormat( pContext->GetResult(), xFieldProperties, true );
            SetFieldResult( pContext->GetResult() );
          }
