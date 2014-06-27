@@ -317,6 +317,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     sal_Int32 nCharLen;
     sal_Int32 nByteLen;
     void *pData;
+    OString sOData;
     if (useWChar)
     {
         /*
@@ -332,23 +333,27 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          * and the established API that most drivers implement.
          * As wchar is often 32 bits, this differs from C-style strings of wchar!
          *
+         * On MacOS X, the "W" variants use wchar_t, which is UCS4
+         *
          * Our internal OUString storage is always UTF-16, so no conversion to do here.
          */
-        BOOST_STATIC_ASSERT( sizeof(sal_Unicode) == 2 );
-        BOOST_STATIC_ASSERT( sizeof(SQLWCHAR)    == 2 );
-        nCharLen = _sData.getLength();
-        nByteLen = nCharLen * sizeof(sal_Unicode);
-        pData = allocBindBuf(parameterIndex, nByteLen);
-        memcpy(pData, _sData.getStr(), nByteLen);
+        rtl_TextEncoding nSQLWCHAREncoding = RTL_TEXTENCODING_UCS2;
+        if( sizeof(SQLWCHAR) == 4 )
+        {
+            nSQLWCHAREncoding = RTL_TEXTENCODING_UCS4;
+        }
+
+        sOData = OUStringToOString(_sData, nSQLWCHAREncoding);
+        nByteLen = sOData.getLength();
+        nCharLen = nByteLen / sizeof(SQLWCHAR);
     }
     else
     {
-        OString sOData( OUStringToOString(_sData, getOwnConnection()->getTextEncoding()) );
-        nCharLen = sOData.getLength();
-        nByteLen = nCharLen;
-        pData = allocBindBuf(parameterIndex, nByteLen);
-        memcpy(pData, sOData.getStr(), nByteLen);
+        sOData = OUStringToOString(_sData, getOwnConnection()->getTextEncoding());
+        nCharLen = nByteLen = sOData.getLength();
     }
+    pData = allocBindBuf(parameterIndex, nByteLen);
+    memcpy(pData, sOData.getStr(), nByteLen);
 
     setParameter( parameterIndex, _nType, nCharLen, _nScale, pData, nByteLen, nByteLen );
 }
