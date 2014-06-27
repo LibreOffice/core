@@ -1040,19 +1040,6 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(
     return Sequence< OUString >( &sName, 1 );
 }
 
-
-template <class TYPE>
-bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
-{
-    TYPE tValue;
-    if (_rNewValueTest >>= tValue)
-    {
-        _rConvertedValue <<= tValue;
-        return true;
-    }
-}
-
-
 sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

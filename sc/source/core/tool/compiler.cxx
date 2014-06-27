@@ -3986,21 +3986,6 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
     return true;
 }
 
-template< typename T, typename S >
-static S lcl_adjval( S& n, T pos, T max, bool bRel )
-{
-    max++;
-    if( bRel )
-        n = sal::static_int_cast<S>( n + pos );
-    if( n < 0 )
-        n = sal::static_int_cast<S>( n + max );
-    else if( n >= max )
-        n = sal::static_int_cast<S>( n - max );
-    if( bRel )
-        n = sal::static_int_cast<S>( n - pos );
-    return n;
-}
-
 // reference of named range with relative references
 
 void ScCompiler::SetRelNameReference()

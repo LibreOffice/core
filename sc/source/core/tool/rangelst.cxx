@@ -581,30 +581,6 @@ bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
     return false;
 }
 
-/**
- * Check if the deleting range cuts the test range in the middle, to
- * separate it into exactly two pieces.
- *
- * Either
- * +--------+    +--+-+--+
- * |        |    |  |x|  |
- * +--------+    |  |x|  |
- * |xxxxxxxx| or |  |x|  |
- * +--------+    |  |x|  |
- * |        |    |  |x|  |
- * +--------+    +--+-+--+
- * where xxx is the deleted region.
- */
-template<typename X, typename Y>
-bool checkForTwoRangesCase2(
-   X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
-{
-    if (nY1 < nDeleteY1 && nDeleteY2 < nY2 && nDeleteX1 <= nX1 && nX2 <= nDeleteX2)
-        return true;
-
-    return false;
-}
-
 bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRange>& rNewRanges )
 {
     const ScAddress& rDelStart = rDeleteRange.aStart;

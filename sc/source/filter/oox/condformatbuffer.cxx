@@ -116,14 +116,6 @@ const sal_uInt16 BIFF12_CFRULE_ABOVEAVERAGE         = 0x0004;
 const sal_uInt16 BIFF12_CFRULE_BOTTOM               = 0x0008;
 const sal_uInt16 BIFF12_CFRULE_PERCENT              = 0x0010;
 
-template< typename Type >
-void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString& rPropName, const Type& rValue )
-{
-    orProps.push_back( PropertyValue() );
-    orProps.back().Name = rPropName;
-    orProps.back().Value <<= rValue;
-}
-
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_type, OUString() );

@@ -129,63 +129,6 @@ static void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-static bool lcl_MoveRefPart( R& rRef1Val, bool& rRef1Del, bool bDo1,
-                      R& rRef2Val, bool& rRef2Del, bool bDo2,
-                      U nStart, U nEnd, S nDelta, U nMask )
-{
-    if ( nDelta )
-    {
-        bool bDel, bCut1, bCut2;
-        bDel = bCut1 = bCut2 = false;
-        S n;
-        if (bDo1 && bDo2)
-        {
-            if ( nDelta < 0 )
-            {
-                n = nStart + nDelta;
-                if ( n <= rRef1Val && rRef1Val < nStart
-                  && n <= rRef2Val && rRef2Val < nStart )
-                    bDel = true;
-            }
-            else
-            {
-                n = nEnd + nDelta;
-                if ( nEnd < rRef1Val && rRef1Val <= n
-                  && nEnd < rRef2Val && rRef2Val <= n )
-                    bDel = true;
-            }
-        }
-        if ( bDel )
-        {   // move deleted along
-            rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
-            rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
-        }
-        else
-        {
-            if (bDo1)
-            {
-                if ( rRef1Del )
-                    rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
-                else
-                    bCut1 = lcl_MoveStart( rRef1Val, nStart, nDelta, nMask );
-            }
-            if (bDo2)
-            {
-                if ( rRef2Del )
-                    rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
-                else
-                    bCut2 = lcl_MoveEnd( rRef2Val, nStart, nDelta, nMask );
-            }
-        }
-        if ( bDel || (bCut1 && bCut2) )
-            rRef1Del = rRef2Del = true;
-        return bDel || bCut1 || bCut2 || rRef1Del || rRef2Del;
-    }
-    else
-        return false;
-}
-
-template< typename R, typename S, typename U >
 bool IsExpand( R n1, R n2, U nStart, S nD )
 {   //! vor normalem Move...
     return

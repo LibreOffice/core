@@ -34,24 +34,6 @@ namespace pcr
     using namespace ::com::sun::star::xsd;
     using namespace ::com::sun::star::beans;
 
-
-    //= helper
-
-
-    template< typename INTERFACE, typename ARGUMENT >
-    void setSave( INTERFACE* pObject, void ( SAL_CALL INTERFACE::*pSetter )( ARGUMENT ), ARGUMENT _rArg )
-    {
-        try
-        {
-            (pObject->*pSetter)( _rArg );
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "XSDDataType: setSave: caught an exception!" );
-        }
-    }
-
-
     template< typename INTERFACE, typename ARGUMENT >
     ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
     {
@@ -66,25 +48,6 @@ namespace pcr
         }
         return aReturn;
     }
-
-    template< typename FACETTYPE >
-    FACETTYPE getFacet( const Reference< XPropertySet >& _rxFacets, const OUString& _rFacetName )
-    {
-        FACETTYPE aReturn;
-        try
-        {
-            OSL_VERIFY( _rxFacets->getPropertyValue( _rFacetName ) >>= aReturn );
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "XSDDataType: getFacet: caught an exception!" );
-        }
-        return aReturn;
-    }
-
-
-    //= XSDDataType
-
 
     XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
         :m_xDataType( _rxDataType )
