@@ -462,12 +462,17 @@ bool SfxObjectShell::Close()
         if ( pImp->bClosing )
         {
             // remove from Document list
-            SfxApplication *pSfxApp = SfxGetpApp();
-            SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
-            SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
-            if ( it != rDocs.end() )
-                rDocs.erase( it );
-            pImp->bInList = false;
+            // If there is no App, there is no document to remove
+            // no need to call GetOrCreate here
+            SfxApplication *pSfxApp = SfxApplication::Get();
+            if(pSfxApp)
+            {
+                SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
+                SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
+                if ( it != rDocs.end() )
+                    rDocs.erase( it );
+                pImp->bInList = false;
+            }
         }
     }
 
@@ -501,7 +506,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
     bool          bOnlyVisible
 )
 {
-    SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
+    SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // seach for a SfxDocument of the specified type
     for ( sal_uInt16 nPos = 0; nPos < rDocs.size(); ++nPos )
@@ -528,7 +533,7 @@ SfxObjectShell* SfxObjectShell::GetNext
     bool                    bOnlyVisible
 )
 {
-    SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
+    SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // refind the specified predecessor
     sal_uInt16 nPos;
@@ -607,7 +612,7 @@ bool SfxObjectShell::PrepareClose
         }
     }
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
 
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
@@ -712,7 +717,7 @@ BasicManager* SfxObjectShell::GetBasicManager() const
     {
         pBasMgr = lcl_getBasicManagerForDocument( *this );
         if ( !pBasMgr )
-            pBasMgr = SFX_APP()->GetBasicManager();
+            pBasMgr = SfxGetpApp()->GetBasicManager();
     }
     catch (const css::ucb::ContentCreationException& e)
     {
@@ -793,7 +798,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 
     SAL_WARN("sfx.doc", "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?");
 #endif
-    return SFX_APP()->GetDialogContainer();
+    return SfxGetpApp()->GetDialogContainer();
 }
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
@@ -814,7 +819,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
     }
     SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
 #endif
-    return SFX_APP()->GetBasicContainer();
+    return SfxGetpApp()->GetBasicContainer();
 }
 
 StarBASIC* SfxObjectShell::GetBasic() const
@@ -961,7 +966,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // but we should have filtered quite some unnecessary calls already.
 
 #ifndef DISABLE_SCRIPTING
-    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+    BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager();
     rTheCurrentComponent = _rxComponent;
     if ( pAppMgr )
     {
@@ -1156,11 +1161,11 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
     if ( i_fromInitNew )
     {
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
     }
     else
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
     }
 }
 
