@@ -463,7 +463,7 @@ ScVbaApplication::Windows( const uno::Any& aIndex  ) throw (uno::RuntimeExceptio
 void SAL_CALL
 ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::exception)
 {
-    StarBASIC* pBasic = SFX_APP()->GetBasic();
+    StarBASIC* pBasic = SfxGetpApp()->GetBasic();
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
@@ -1238,7 +1238,7 @@ ScVbaApplication::getDisplayFormulaBar()
     if ( pViewShell )
     {
         SfxBoolItem sfxFormBar( FID_TOGGLEINPUTLINE);
-        SfxAllItemSet reqList(  SFX_APP()->GetPool() );
+        SfxAllItemSet reqList(  SfxGetpApp()->GetPool() );
         reqList.Put( sfxFormBar );
 
         pViewShell->GetState( reqList );
@@ -1257,7 +1257,7 @@ ScVbaApplication::setDisplayFormulaBar( sal_Bool _displayformulabar )
     if ( pViewShell && ( _displayformulabar !=  getDisplayFormulaBar() ) )
     {
         SfxBoolItem sfxFormBar( FID_TOGGLEINPUTLINE, _displayformulabar);
-        SfxAllItemSet reqList(  SFX_APP()->GetPool() );
+        SfxAllItemSet reqList(  SfxGetpApp()->GetPool() );
         SfxRequest aReq( FID_TOGGLEINPUTLINE, 0, reqList );
         pViewShell->Execute( aReq );
     }
@@ -1266,7 +1266,7 @@ ScVbaApplication::setDisplayFormulaBar( sal_Bool _displayformulabar )
 uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException, std::exception )
 {
-    StarBASIC* pBasic = SFX_APP()->GetBasic();
+    StarBASIC* pBasic = SfxGetpApp()->GetBasic();
     SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( OUString("FuncCaller"), SbxCLASS_METHOD );
     uno::Any aRet;
     if ( pMeth )

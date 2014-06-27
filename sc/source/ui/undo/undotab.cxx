@@ -377,7 +377,7 @@ void ScUndoDeleteTab::Undo()
     {
         pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
     }
-    SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+    SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -448,7 +448,7 @@ void ScUndoRenameTab::DoChange( SCTAB nTabP, const OUString& rName ) const
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.RenameTab( nTabP, rName );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -556,7 +556,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
         }
     }
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -617,7 +617,7 @@ void ScUndoCopyTab::DoChange() const
     if (pViewShell)
         pViewShell->SetTabNo((*mpOldTabs)[0],true);
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
@@ -836,7 +836,7 @@ void ScUndoMakeScenario::Undo()
     if (pViewShell)
         pViewShell->SetTabNo( nSrcTab, true );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
@@ -860,7 +860,7 @@ void ScUndoMakeScenario::Redo()
     if (pViewShell)
         pViewShell->SetTabNo( nDestTab, true );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 }
 
 void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
@@ -915,7 +915,7 @@ void ScUndoImportTab::DoChange() const
         }
     }
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
     pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                 PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
 }
@@ -1140,7 +1140,7 @@ void ScUndoShowHideTab::DoChange( bool bShowP ) const
             pViewShell->SetTabNo(nTab,true);
     }
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     pDocShell->SetDocumentModified();
 }
 
@@ -1425,7 +1425,7 @@ void ScUndoScenarioFlags::Undo()
         pViewShell->UpdateInputHandler();
 
     if ( aOldName != aNewName )
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 }
 
 void ScUndoScenarioFlags::Redo()
@@ -1442,7 +1442,7 @@ void ScUndoScenarioFlags::Redo()
         pViewShell->UpdateInputHandler();
 
     if ( aOldName != aNewName )
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 }
 
 void ScUndoScenarioFlags::Repeat(SfxRepeatTarget& /* rTarget */)

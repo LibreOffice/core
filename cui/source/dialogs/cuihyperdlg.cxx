@@ -117,7 +117,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     // create itemset for tabpages
-    mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
+    mpItemSet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
                                SID_HYPERLINK_SETLINK );
 
     SvxHyperlinkItem aItem;
@@ -197,7 +197,7 @@ void SvxHpLinkDlg::Move()
         Size aDlgSize ( GetSizePixel () );
 
         // Size of Office-Main-Window
-        Size aWindowSize( SFX_APP()->GetTopWindow()->GetSizePixel() );
+        Size aWindowSize( SfxGetpApp()->GetTopWindow()->GetSizePixel() );
 
         // Size of Extrawindow
         Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
@@ -239,7 +239,7 @@ void SvxHpLinkDlg::Move()
 
 IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
 {
-    SfxItemSet aItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
+    SfxItemSet aItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
                          SID_HYPERLINK_SETLINK );
 
     SvxHyperlinkTabPageBase* pCurrentPage = (SvxHyperlinkTabPageBase*)

@@ -140,7 +140,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
         OSL_TRACE( "%s", aTmp.getStr() );
     }
 #endif
-    SFX_APP()->Broadcast( aHint );
+    SfxGetpApp()->Broadcast( aHint );
     if ( xRef.Is() )
         xRef->Broadcast( aHint );
     delete this;

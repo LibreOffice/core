@@ -190,7 +190,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         aOptions = *pNewOptions;
 
     //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
-    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     if (!aOptions.isEmpty())
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
@@ -507,7 +507,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, const SfxF
         const OUString& rOptions )
 {
     // Always create SfxItemSet so ScDocShell can set options.
-    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 

@@ -316,7 +316,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
 void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 {
-    SvxMacroItem aItem ( SFX_APP()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
+    SvxMacroItem aItem ( SfxGetpApp()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
     ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
     if ( !pInfo->GetMacro().isEmpty() )
     {
@@ -327,7 +327,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     }
 
     // create empty itemset for macro-dlg
-    boost::scoped_ptr<SfxItemSet> pItemSet(new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 ));
+    boost::scoped_ptr<SfxItemSet> pItemSet(new SfxItemSet(SfxGetpApp()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 ));
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);

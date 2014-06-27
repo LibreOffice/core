@@ -662,7 +662,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxBoolItem aDdeConnect(SID_DDE_RECONNECT_ONLOAD, false);
 
             // #i14200# (DDE-link crashes wordprocessor)
-            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
             aArgs.Put(aReferer);
             aArgs.Put(aTarget);
             aArgs.Put(aHidden);

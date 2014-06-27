@@ -221,7 +221,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             ,m_bHasForms(false)
 {
     m_pImpl->acquire();
-    SetPool( &SFX_APP()->GetPool() );
+    SetPool( &SfxGetpApp()->GetPool() );
     SetName( OUString("Form") );
 
     SetView(m_pFormView);

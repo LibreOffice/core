@@ -302,14 +302,14 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
 
 void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, SfxTbxCtrlFactory* pFact)
 {
-    SFX_APP()->RegisterToolBoxControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, pFact );
 }
 
 SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule* pMod  )
 {
     SolarMutexGuard aGuard;
 
-    SfxApplication *pApp = SFX_APP();
+    SfxApplication *pApp = SfxGetpApp();
 
     SfxSlotPool *pSlotPool;
     if ( pMod )
@@ -1130,7 +1130,7 @@ SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
-    FloatingWindow( SFX_APP()->GetTopWindow(), nBits )
+    FloatingWindow( SfxGetpApp()->GetTopWindow(), nBits )
     , m_bFloating( false )
     , m_bCascading( false )
     , m_nId( nId )
@@ -1148,7 +1148,7 @@ SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
     const Reference< XFrame >& rFrame,
     const ResId &rId ) :
-    FloatingWindow( SFX_APP()->GetTopWindow(), rId )
+    FloatingWindow( SfxGetpApp()->GetTopWindow(), rId )
     , m_bFloating( false )
     , m_bCascading( false )
     , m_nId( nId )

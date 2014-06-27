@@ -62,7 +62,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
 
     Window* pTopWindow = 0;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
-            (0 != (pTopWindow = SFX_APP()->GetTopWindow())))
+            (0 != (pTopWindow = SfxGetpApp()->GetTopWindow())))
     {
         Size aParentSize( pTopWindow->GetSizePixel() );
         Size aDlgSize ( GetSizePixel () );

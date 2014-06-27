@@ -1627,7 +1627,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchron
         EnterHandler();
         bFormulaMode = false;
         pRefViewSh = NULL;
-        SFX_APP()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
@@ -2118,7 +2118,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
 void ScInputHandler::UpdateFormulaMode()
 {
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
 
     bool bIsFormula = !bProtected && pEngine->GetParagraphCount() == 1;
     if (bIsFormula)
@@ -2362,7 +2362,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
     bool bMatrix = ( nBlockMode == SC_ENTER_MATRIX );
 
-    SfxApplication* pSfxApp     = SFX_APP();
+    SfxApplication* pSfxApp     = SfxGetpApp();
     EditTextObject* pObject     = NULL;
     ScPatternAttr*  pCellAttrs  = NULL;
     bool            bForget     = false; // Remove due to validity?
@@ -2712,7 +2712,7 @@ void ScInputHandler::CancelHandler()
             pExecuteSh->ActiveGrabFocus();
         }
         bFormulaMode = false;
-        SFX_APP()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
@@ -3436,7 +3436,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     }
 
                     if (bStopEditing)
-                        SFX_APP()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
+                        SfxGetpApp()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
                     //  As long as the content is not edited, turn off online spelling.
                     //  Online spelling is turned back on in StartTable, after setting

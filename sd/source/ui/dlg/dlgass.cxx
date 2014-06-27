@@ -1406,7 +1406,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
     OUString aDocFile = GetDocFileName();
     OUString aLayoutFile = GetLayoutFileName();
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     sal_uLong lErr;
     bool bChangeMaster = !aLayoutFile.isEmpty();
 
@@ -1468,14 +1468,14 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         }
         else
         {
-            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
+            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, OUString() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
-            const SfxViewFrameItem* pRet = PTR_CAST( SfxViewFrameItem, SFX_APP()->ExecuteSlot( aReq ) );
+            const SfxViewFrameItem* pRet = PTR_CAST( SfxViewFrameItem, SfxGetpApp()->ExecuteSlot( aReq ) );
 
             if ( pRet && pRet->GetFrame() && pRet->GetFrame()->GetObjectShell() )
                 xDocShell = pRet->GetFrame()->GetObjectShell();

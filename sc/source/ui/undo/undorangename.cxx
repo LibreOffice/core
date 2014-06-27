@@ -80,7 +80,7 @@ void ScUndoAllRangeNames::DoChange(const boost::ptr_map<OUString, ScRangeName>& 
     rDoc.SetAllRangeNames(rNames);
     rDoc.PostprocessRangeNameUpdate();
 
-    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeData, SCTAB nTab) :
@@ -109,7 +109,7 @@ void ScUndoAddRangeData::Undo()
         pRangeName = rDoc.GetRangeName( mnTab );
     }
     pRangeName->erase(*mpRangeData);
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 
 }
 
@@ -126,7 +126,7 @@ void ScUndoAddRangeData::Redo()
         pRangeName = rDoc.GetRangeName( mnTab );
     }
     pRangeName->insert(new ScRangeData(*mpRangeData));
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }
 
 void ScUndoAddRangeData::Repeat(SfxRepeatTarget& /*rTarget*/)

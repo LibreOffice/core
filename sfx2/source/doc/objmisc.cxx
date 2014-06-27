@@ -366,7 +366,7 @@ void SfxObjectShell::ModifyChanged()
     Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
-    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(STR_EVENT_MODIFYCHANGED), this ) );
+    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(STR_EVENT_MODIFYCHANGED), this ) );
 }
 
 
@@ -486,7 +486,7 @@ void SfxObjectShell::SetModalMode_Impl( bool bModal )
     if ( !pImp->bModalMode != !bModal )
     {
         // Central count
-        sal_uInt16 &rDocModalCount = SFX_APP()->Get_Impl()->nDocModalMode;
+        sal_uInt16 &rDocModalCount = SfxGetpApp()->Get_Impl()->nDocModalMode;
         if ( bModal )
             ++rDocModalCount;
         else
@@ -728,7 +728,7 @@ void SfxObjectShell::SetTitle
       && !IsDocShared() )
         return;
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
 
     // If possible relase the unnamed number.
     if ( pImp->bIsNamedVisible && USHRT_MAX != pImp->nVisualDocumentNumber )
@@ -972,7 +972,7 @@ void SfxObjectShell::SetNamedVisibility_Impl()
         pImp->bIsNamedVisible = true;
         if ( !HasName() && USHRT_MAX == pImp->nVisualDocumentNumber && pImp->aTitle.isEmpty() )
         {
-            pImp->nVisualDocumentNumber = SFX_APP()->GetFreeIndex();
+            pImp->nVisualDocumentNumber = SfxGetpApp()->GetFreeIndex();
             Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
         }
     }
@@ -1018,7 +1018,7 @@ void SfxObjectShell::SetProgress_Impl
 
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
     if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame().IsClosing_Impl() )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
@@ -1447,7 +1447,7 @@ void AutoReloadTimer_Impl::Timeout()
             return;
         }
 
-        SfxAllItemSet aSet( SFX_APP()->GetPool() );
+        SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
         aSet.Put( SfxBoolItem( SID_AUTOLOAD, true ) );
         if ( !aUrl.isEmpty() )
             aSet.Put(  SfxStringItem( SID_FILE_NAME, aUrl ) );
@@ -1475,7 +1475,7 @@ ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
     const OUString& rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
-    SfxApplication* pApp = SFX_APP();
+    SfxApplication* pApp = SfxGetpApp();
     if( pApp->GetName() != rBasic )
     {
         if ( !AdjustMacroMode( OUString() ) )

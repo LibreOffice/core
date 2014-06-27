@@ -439,7 +439,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     if ( pDefaultNameItem )
         aReq.AppendItem( *pDefaultNameItem );
 
-    SFX_APP()->ExecuteSlot( aReq );
+    SfxGetpApp()->ExecuteSlot( aReq );
     const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
     if ( pItem )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
@@ -831,7 +831,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
                 SolarMutexGuard aGuard;
-                Window *pWindow = SFX_APP()->GetTopWindow();
+                Window *pWindow = SfxGetpApp()->GetTopWindow();
 
                 WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_NO_HYPERLINKS ));
                 aSecurityWarningBox.SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
@@ -840,7 +840,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             }
 
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
-            SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+            SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
             if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {

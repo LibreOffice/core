@@ -422,7 +422,7 @@ SfxDispatcher::~SfxDispatcher()
         *pImp->pInCallAliveFlag = false;
 
     // Get bindings and application
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     SfxBindings* pBindings = GetBindings();
 
     // When not flushed, revive the bindings
@@ -472,7 +472,7 @@ void SfxDispatcher::Pop
     bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
     bool bPush = (nMode & SFX_SHELL_PUSH) == SFX_SHELL_PUSH;
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
 
     SAL_INFO(
         "sfx.control",
@@ -792,7 +792,7 @@ void SfxDispatcher::DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew )
 {
     SFX_STACK(SfxDispatcher::DoDeactivate);
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
 
     if ( bMDI )
     {
@@ -1092,7 +1092,7 @@ const SfxPoolItem* SfxDispatcher::Execute
         pReq->SetModifier( nModi );
         if( pInternalArgs && *pInternalArgs)
         {
-            SfxAllItemSet aSet( SFX_APP()->GetPool() );
+            SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
             for ( const SfxPoolItem **pArg = pInternalArgs; *pArg; ++pArg )
                 aSet.Put( **pArg );
             pReq->SetInternalArgs_Impl( aSet );
@@ -1249,7 +1249,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
                 const SfxSlot *pSlot = aSvr.GetSlot();
                 SfxShell *pSh = GetShell(aSvr.GetShellLevel());
 
-                DBG( SfxApplication *pSfxApp = SFX_APP() );
+                DBG( SfxApplication *pSfxApp = SfxGetpApp() );
                 DBG( pSfxApp->EnterAsynchronCall_Impl() );
 
                 // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
@@ -1312,7 +1312,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     if ( !pImp->pFrame )
         return;
 
-    SFX_APP();  // -Wall is this required???
+    SfxGetpApp();  // -Wall is this required???
     SfxDispatcher *pDisp = this;
     bool bUpdate = bForce;
     while ( pDisp && pDisp->pImp->pFrame )
@@ -1413,7 +1413,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
 void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
-    SFX_APP();
+    SfxGetpApp();
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
     bool bIsActive = false;
     bool bIsTaskActive = false;
@@ -1604,7 +1604,7 @@ void SfxDispatcher::FlushImpl()
         return;
     }
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
 
     // Re-build the true stack in the first round
     std::deque<SfxToDo_Impl> aToDoCopy;
@@ -2112,7 +2112,7 @@ bool SfxDispatcher::_FillState
 
 SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos )
 {
-    SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
+    SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
 
@@ -2138,7 +2138,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
 
 void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Point *pPos )
 {
-    SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
+    SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
 
@@ -2337,7 +2337,7 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
         }
     }
 
-    if ( !SFX_APP()->IsDowning() )
+    if ( !SfxGetpApp()->IsDowning() )
     {
         pImp->bUpdated = false;
         pImp->pCachedServ1 = 0;

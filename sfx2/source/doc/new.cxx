@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
             Window *pParent = Application::GetDefDialogParent();
             Application::SetDefDialogParent( pAntiImpl );
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
-            SfxApplication *pSfxApp = SFX_APP();
+            SfxApplication *pSfxApp = SfxGetpApp();
             sal_uIntPtr lErr;
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );

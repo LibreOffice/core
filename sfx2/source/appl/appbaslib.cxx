@@ -160,8 +160,8 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    SFX_APP()->GetBasicManager();
-    return SFX_APP()->GetDialogContainer();
+    SfxGetpApp()->GetBasicManager();
+    return SfxGetpApp()->GetDialogContainer();
 }
 
 
@@ -172,8 +172,8 @@ com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    SFX_APP()->GetBasicManager();
-    return SFX_APP()->GetBasicContainer();
+    SfxGetpApp()->GetBasicManager();
+    return SfxGetpApp()->GetBasicContainer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

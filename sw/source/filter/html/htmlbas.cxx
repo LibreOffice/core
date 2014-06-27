@@ -260,7 +260,7 @@ void SwHTMLWriter::OutBasic()
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
     // nur das DocumentBasic schreiben
-    if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
+    if( !pBasicMan || pBasicMan == SfxGetpApp()->GetBasicManager() )
     {
         return;
     }

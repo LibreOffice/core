@@ -1727,7 +1727,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         nCurX = static_cast<SCCOL>(aSpans[0].mnStart);
     SetCursor( nCurX, nCurY );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 //  delete contents
@@ -2784,7 +2784,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         rDoc.PostprocessRangeNameUpdate();
 
         aModificator.SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
     }
 
     delete pNewEntry;       // if it wasn't inserted

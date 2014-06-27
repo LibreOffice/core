@@ -585,8 +585,8 @@ namespace svx
             SfxSlotId nSlotId( aFeature->first );
             #if OSL_DEBUG_LEVEL > 0
                 OUString sUnoSlotName;
-                if ( SFX_APP() )
-                    sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotId );
+                if ( SfxGetpApp() )
+                    sUnoSlotName = lcl_getUnoSlotName( *SfxGetpApp(), nSlotId );
                 else
                     sUnoSlotName = "<unknown>";
                 OString sUnoSlotNameAscii( "\"" );
@@ -739,7 +739,7 @@ namespace svx
                         sError += "\n  WhichID: "; sError += OString::number( nWhich );
                         sError += "\n  UNO name: ";
 
-                        OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
+                        OUString sUnoSlotName = lcl_getUnoSlotName( *SfxGetpApp(), nSlotForItemSet );
                         if ( !sUnoSlotName.isEmpty() )
                             sError += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                         else
@@ -1275,7 +1275,7 @@ namespace svx
             ControlFeatures& _rDispatchers )
     {
         Reference< XDispatchProvider > xProvider( _rxControl, UNO_QUERY );
-        SfxApplication* pApplication = SFX_APP();
+        SfxApplication* pApplication = SfxGetpApp();
         DBG_ASSERT( pApplication, "FmTextControlShell::fillFeatureDispatchers: no SfxApplication!" );
         if ( xProvider.is() && pApplication )
         {

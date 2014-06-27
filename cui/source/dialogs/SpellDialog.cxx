@@ -495,7 +495,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
         SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
         0
     };
-    SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
+    SfxItemSet aSet( SfxGetpApp()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
     SfxSingleTabDialog* pDlg =
         new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui");

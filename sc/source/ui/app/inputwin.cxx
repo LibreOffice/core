@@ -2063,12 +2063,12 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
 
     FillRangeNames();
 
-    StartListening( *SFX_APP() ); // For Navigator rangename updates
+    StartListening( *SfxGetpApp() ); // For Navigator rangename updates
 }
 
 ScPosWnd::~ScPosWnd()
 {
-    EndListening( *SFX_APP() );
+    EndListening( *SfxGetpApp() );
 
     HideTip();
 

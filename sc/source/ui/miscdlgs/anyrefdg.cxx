@@ -611,7 +611,7 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
 
 bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 {
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
 
     SetDispatcherLock( false );         //! here and in dtor ?
 

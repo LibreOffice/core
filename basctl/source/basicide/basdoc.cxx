@@ -49,7 +49,7 @@ void basctl_DocShell::InitInterface_Impl()
 DocShell::DocShell()
     :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
 {
-    SetPool( &SFX_APP()->GetPool() );
+    SetPool( &SfxGetpApp()->GetPool() );
     SetBaseModel( new SIDEModel(this) );
 }
 

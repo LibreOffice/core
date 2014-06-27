@@ -165,7 +165,7 @@ void ScTabViewShell::Activate(bool bMDI)
 
         if ( bFirstActivate )
         {
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
+            SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
             bFirstActivate = false;
 
             // ReadExtOptions (view settings from Excel import) must also be done
@@ -1566,7 +1566,7 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 {
-    SfxApplication* pSfxApp  = SFX_APP();
+    SfxApplication* pSfxApp  = SfxGetpApp();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     bReadOnly = pDocSh->IsReadOnly();
@@ -1819,7 +1819,7 @@ ScTabViewShell::~ScTabViewShell()
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     EndListening(*pDocSh);
     EndListening(*GetViewFrame());
-    EndListening(*SFX_APP());           // #i62045# #i62046# needed now - SfxViewShell no longer does it
+    EndListening(*SfxGetpApp());           // #i62045# #i62046# needed now - SfxViewShell no longer does it
 
     SC_MOD()->ViewShellGone(this);
 

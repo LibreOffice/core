@@ -686,7 +686,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         // ~CntItemPool:
         if (pDispatcher)
         {
-            SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
+            SfxAllItemSet aInternalSet( SfxGetpApp()->GetPool() );
             if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
                 aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
@@ -742,9 +742,9 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             }
             else
             {
-                eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
+                eMapUnit = GetCoreMetric( SfxGetpApp()->GetPool(), GetId() );
                 // AppDispatcher
-                SfxAllItemSet aSet( SFX_APP()->GetPool() );
+                SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
                 TransformParameters( GetId(), lNewArgs, aSet );
 
                 if ( aSet.Count() )
@@ -756,7 +756,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
                 if ( SfxApplication::Get() )
                 {
-                    SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
+                    SfxDispatcher* pAppDispat = SfxGetpApp()->GetAppDispatcher_Impl();
                     if ( pAppDispat )
                     {
                         const SfxPoolItem* pState=0;

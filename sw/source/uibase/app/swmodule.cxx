@@ -197,7 +197,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
     rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
 
-    StartListening( *SFX_APP() );
+    StartListening( *SfxGetpApp() );
 
     // OD 14.02.2003 #107424# - init color configuration
     // member <pColorConfig> is created and the color configuration is applied
@@ -226,7 +226,7 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 SwModule::~SwModule()
 {
     delete pErrorHdl;
-    EndListening( *SFX_APP() );
+    EndListening( *SfxGetpApp() );
 }
 
 void SwModule::CreateLngSvcEvtListener()

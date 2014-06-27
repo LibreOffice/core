@@ -642,7 +642,7 @@ void SfxTabDialog::Start_Impl()
             nActPage = nAppPageId;
         else
         {
-            sal_uInt16 nAutoTabPageId = SFX_APP()->Get_Impl()->nAutoTabPageId;
+            sal_uInt16 nAutoTabPageId = SfxGetpApp()->Get_Impl()->nAutoTabPageId;
             if ( nAutoTabPageId )
                 nActPage = nAutoTabPageId;
         }
@@ -925,7 +925,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 
 {
     SAL_WARN( "sfx.dialog", "CreateInputItemSet not implemented" );
-    return new SfxAllItemSet( SFX_APP()->GetPool() );
+    return new SfxAllItemSet( SfxGetpApp()->GetPool() );
 }
 
 
@@ -1162,7 +1162,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
     DBG_ASSERT( pImpl->aData.size(), "no Pages registered" );
-    SFX_APP();
+    SfxGetpApp();
 
     // Tab Page schon da?
     SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
@@ -1260,7 +1260,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
-    SFX_APP();
+    SfxGetpApp();
     SfxTabPage *pPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     DBG_ASSERT( pPage, "no active Page" );
     if (!pPage)

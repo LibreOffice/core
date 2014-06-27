@@ -179,7 +179,7 @@ ScFunctionAccess::ScFunctionAccess() :
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )
 {
-    StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
+    StartListening( *SfxGetpApp() );       // for SFX_HINT_DEINITIALIZING
 }
 
 ScFunctionAccess::~ScFunctionAccess()

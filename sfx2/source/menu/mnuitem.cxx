@@ -252,7 +252,7 @@ void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 
 void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
 {
-    SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterMenuControl_Impl( pMod, pFact );
 }
 
 SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
@@ -260,7 +260,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
     if ( aSlotType )
     {
-        SfxApplication *pApp = SFX_APP();
+        SfxApplication *pApp = SfxGetpApp();
         SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
         SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
         if ( pMod )

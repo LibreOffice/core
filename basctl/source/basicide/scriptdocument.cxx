@@ -372,7 +372,7 @@ namespace basctl
         try
         {
             if ( isApplication() )
-                xContainer.set( _eType == E_SCRIPTS ? SFX_APP()->GetBasicContainer() : SFX_APP()->GetDialogContainer(), UNO_QUERY_THROW );
+                xContainer.set( _eType == E_SCRIPTS ? SfxGetpApp()->GetBasicContainer() : SfxGetpApp()->GetDialogContainer(), UNO_QUERY_THROW );
             else
             {
                 xContainer.set(
@@ -430,7 +430,7 @@ namespace basctl
                 return NULL;
 
             if ( isApplication() )
-                return SFX_APP()->GetBasicManager();
+                return SfxGetpApp()->GetBasicManager();
 
             return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
         }
@@ -1088,7 +1088,7 @@ namespace basctl
 
     ScriptDocument ScriptDocument::getDocumentForBasicManager( const BasicManager* _pManager )
     {
-        if ( _pManager == SFX_APP()->GetBasicManager() )
+        if ( _pManager == SfxGetpApp()->GetBasicManager() )
             return getApplicationScriptDocument();
 
         docs::Documents aDocuments;
@@ -1100,7 +1100,7 @@ namespace basctl
             )
         {
             const BasicManager* pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( doc->xModel );
-            if  (   ( pDocBasicManager != SFX_APP()->GetBasicManager() )
+            if  (   ( pDocBasicManager != SfxGetpApp()->GetBasicManager() )
                 &&  ( pDocBasicManager == _pManager )
                 )
             {

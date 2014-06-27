@@ -3156,7 +3156,7 @@ void ScInterpreter::ScMacro()
     }
     else
     {
-        aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
+        aBasicStr = SfxGetpApp()->GetName();               // Applikationsbasic
     }
     //  Parameter-Array zusammenbauen
 

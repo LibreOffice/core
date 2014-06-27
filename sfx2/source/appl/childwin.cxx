@@ -200,7 +200,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 
     // First search for ChildWindow in SDT; "Overloading has to be realized
     // by using ChildWindowContext
-    SfxApplication *pApp = SFX_APP();
+    SfxApplication *pApp = SfxGetpApp();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
@@ -418,7 +418,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
 {
     SfxChildWindowContext *pCon = NULL;
     SfxChildWinFactory* pFact=0;
-    SfxApplication *pApp = SFX_APP();
+    SfxApplication *pApp = SfxGetpApp();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
     SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
     if ( pMod )
@@ -748,12 +748,12 @@ bool SfxChildWindow::CanGetFocus() const
 
 void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)
 {
-    SFX_APP()->RegisterChildWindowContext_Impl( pMod, nId, pFact );
+    SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, pFact );
 }
 
 void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, SfxChildWinFactory* pFact)
 {
-    SFX_APP()->RegisterChildWindow_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterChildWindow_Impl( pMod, pFact );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

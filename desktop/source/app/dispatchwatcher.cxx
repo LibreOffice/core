@@ -92,7 +92,7 @@ static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFla
     }
     else
     {
-        SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags, 0 );
+        SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags, 0 );
     }
 
     if( pSfxFilter )

@@ -1414,7 +1414,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
     {
         // create an itemset if there is no
         if( !rpSet )
-            rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+            rpSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
 
         // the item should remain only if it was set by the dialog
         rpSet->ClearItem( SID_SELECTION );
@@ -1707,7 +1707,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     // we still need a matcher to convert UI names to filter names
     if ( rFactory.isEmpty() )
     {
-        SfxApplication *pSfxApp = SFX_APP();
+        SfxApplication *pSfxApp = SfxGetpApp();
         mpMatcher = &pSfxApp->GetFilterMatcher();
         mbDeleteMatcher = false;
     }
@@ -1994,7 +1994,7 @@ void FileDialogHelper_Impl::saveConfig()
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
     }
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     pSfxApp->SetLastDir_Impl( getPath() );
 }
 
@@ -2002,7 +2002,7 @@ namespace
 {
     static OUString getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken )
     {
-        SfxApplication *pSfxApp = SFX_APP();
+        SfxApplication *pSfxApp = SfxGetpApp();
         OUString sPath = pSfxApp->GetLastDir_Impl();
 
         if ( sPath.isEmpty() )

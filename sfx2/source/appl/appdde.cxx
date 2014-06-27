@@ -129,7 +129,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
         OUString sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
         if( sNm == sTmp.toAsciiLowerCase() )
         {
-            SFX_APP()->AddDdeTopic( pShell );
+            SfxGetpApp()->AddDdeTopic( pShell );
             bRet = true;
             break;
         }
@@ -148,7 +148,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
 
             SfxBoolItem aSilent(SID_SILENT, sal_True);
-            SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
+            SfxDispatcher* pDispatcher = SfxGetpApp()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
                     &aName, &aNewView,
@@ -159,7 +159,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
                 0 != ( pShell = ((SfxViewFrameItem*)pRet)
                     ->GetFrame()->GetObjectShell() ) )
             {
-                SFX_APP()->AddDdeTopic( pShell );
+                SfxGetpApp()->AddDdeTopic( pShell );
                 bRet = true;
             }
         }
@@ -192,7 +192,7 @@ OUString ImplDdeService::Topics()
 
 bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 {
-    return SFX_APP()->DdeExecute( *pStr );
+    return SfxGetpApp()->DdeExecute( *pStr );
 }
 #endif
 

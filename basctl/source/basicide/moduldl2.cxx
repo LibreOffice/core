@@ -576,9 +576,9 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
     if (pButton == m_pEditButton)
     {
-        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-        SFX_APP()->ExecuteSlot( aRequest );
+        SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
         SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();

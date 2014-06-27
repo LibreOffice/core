@@ -36,7 +36,7 @@ namespace sfx2 { namespace sidebar {
 
 Theme& Theme::GetCurrentTheme()
 {
-    return SFX_APP()->GetSidebarTheme();
+    return SfxGetpApp()->GetSidebarTheme();
 }
 
 Theme::Theme()

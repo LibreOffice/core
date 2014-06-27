@@ -213,7 +213,7 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
                 bOther = ( &pFrame->GetFrame() != this );
             }
 
-            SFX_APP()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur, GetController() ) );
+            SfxGetpApp()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur, GetController() ) );
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked
@@ -518,13 +518,13 @@ bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
 {
-    SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
+    SfxFrameArr_Impl& rArr = *SfxGetpApp()->Get_Impl()->pTopFrames;
     rArr.push_back( pFrame );
 }
 
 void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 {
-    SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
+    SfxFrameArr_Impl& rArr = *SfxGetpApp()->Get_Impl()->pTopFrames;
     SfxFrameArr_Impl::iterator it = std::find( rArr.begin(), rArr.end(), pFrame );
     if ( it != rArr.end() )
         rArr.erase( it );
@@ -955,7 +955,7 @@ const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Ref
 {
     i_rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, i_rTargetFrame ) );
     i_rSet.ClearItem( SID_TARGETNAME );
-    return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
+    return SfxGetpApp()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

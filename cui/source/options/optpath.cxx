@@ -513,7 +513,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
             SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
             aDlgOpt.Delete();
             // Reset also last used dir in the sfx application instance
-            SfxApplication *pSfxApp = SFX_APP();
+            SfxApplication *pSfxApp = SfxGetpApp();
             pSfxApp->ResetLastDir();
 
             // Set configuration flag to notify file picker that it's necessary

@@ -199,7 +199,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         pOptions->StoreConfig();
 
         // Saves the configuration IMMEDIATELY
-        // SFX_APP()->SaveConfiguration();
+        // SfxGetpApp()->SaveConfiguration();
         WriteFrameViewData();
 
         mpFrameView->Update( pOptions );

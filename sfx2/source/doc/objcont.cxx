@@ -527,7 +527,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
         if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
             OUString aFoundName;
-            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
+            if( SfxGetpApp()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
             {
                 INetURLObject aObj( rFileName );
                 xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );

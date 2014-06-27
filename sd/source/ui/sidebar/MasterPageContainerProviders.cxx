@@ -151,7 +151,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
 
 ::sd::DrawDocShell* TemplatePageObjectProvider::LoadDocument (const OUString& sFileName)
 {
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
     SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
     pSet->Put (SfxBoolItem (SID_TEMPLATE, true));
     pSet->Put (SfxBoolItem (SID_PREVIEW, true));

@@ -1335,7 +1335,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (m_nPageCnt != nCnt)   // notify Basic
                 {
                     m_nPageCnt = nCnt;
-                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), false);
+                    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), false);
                 }
             }
             break;
@@ -2418,7 +2418,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
     else
     {
         // call documents and template dialog
-        SfxApplication* pSfxApp = SFX_APP();
+        SfxApplication* pSfxApp = SfxGetpApp();
         Window* pTopWin = pSfxApp->GetTopWindow();
         boost::scoped_ptr<SvtDocumentTemplateDialog> pDocTemplDlg(new SvtDocumentTemplateDialog( pTopWin ));
         pDocTemplDlg->SelectTemplateFolder();

@@ -614,7 +614,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     aArgs[ 0 ] <<= pDocShell->GetModel();
                     xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( OUString( "ooo.vba.excel.Globals" ), aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
-                    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                    BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager();
                     if ( pAppMgr )
                         pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
 

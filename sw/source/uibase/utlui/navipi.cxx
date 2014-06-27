@@ -811,7 +811,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentTree.SetFont(aFont);
     aGlobalTree.SetFont(aFont);
 
-    StartListening(*SFX_APP());
+    StartListening(*SfxGetpApp());
     if ( pCreateView )
         StartListening(*pCreateView);
     SfxImageManager* pImgMan = SfxImageManager::GetImageManager( SW_MOD() );
@@ -861,7 +861,7 @@ SwNavigationPI::~SwNavigationPI()
             pView->GetDocShell()->SetReadOnlyUI(false);
     }
 
-    EndListening(*SFX_APP());
+    EndListening(*SfxGetpApp());
 
     SfxImageManager* pImgMan = SfxImageManager::GetImageManager( SW_MOD() );
     pImgMan->ReleaseToolBox(&aContentToolBox);

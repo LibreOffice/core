@@ -2352,7 +2352,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         setRelativeFileName(nFileId, aStr);
     }
 
-    SfxItemSet* pSet = new SfxAllItemSet(SFX_APP()->GetPool());
+    SfxItemSet* pSet = new SfxAllItemSet(SfxGetpApp()->GetPool());
     if (!aOptions.isEmpty())
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
 

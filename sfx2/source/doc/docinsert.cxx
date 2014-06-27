@@ -87,7 +87,7 @@ SfxMedium* DocumentInserter::CreateMedium()
         OUString sURL(m_pURLList[0]);
         pMedium = new SfxMedium(
                 sURL, SFX_STREAM_READONLY,
-                SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
+                SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
         pMedium->UseInteractionHandler( true );
         SfxFilterMatcher* pMatcher = NULL;
         if ( !m_sDocFactory.isEmpty() )
@@ -102,7 +102,7 @@ SfxMedium* DocumentInserter::CreateMedium()
         else
             DELETEZ( pMedium );
 
-        if ( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
+        if ( pMedium && CheckPasswd_Impl( 0, SfxGetpApp()->GetPool(), pMedium ) == ERRCODE_ABORT )
             pMedium = NULL;
 
         DELETEZ( pMatcher );
@@ -120,7 +120,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
         {
             SfxMedium* pMedium = new SfxMedium(
                     *i, SFX_STREAM_READONLY,
-                    SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
+                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
             pMedium->UseInteractionHandler( true );
 
@@ -132,7 +132,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
             else
                 DELETEZ( pMedium );
 
-            if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) != ERRCODE_ABORT )
+            if( pMedium && CheckPasswd_Impl( 0, SfxGetpApp()->GetPool(), pMedium ) != ERRCODE_ABORT )
                 pMediumList->push_back( pMedium );
             else
                 delete pMedium;
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
     if ( xCtrlAccess.is() )
     {
         // always create a new itemset
-        m_pItemSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+        m_pItemSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
 
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (

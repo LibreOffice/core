@@ -188,7 +188,7 @@ uno::Reference< frame::XModel >
 getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
-    SbxObject* pBasic = dynamic_cast< SbxObject* > ( SFX_APP()->GetBasic() );
+    SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxGetpApp()->GetBasic() );
     SbxObject* basicChosen =  pBasic ;
     if ( basicChosen == NULL)
     {
@@ -372,7 +372,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
         pViewFrame = pViewShell->GetViewFrame();
     if ( pViewFrame )
     {
-        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
 
         SfxBoolItem sfxCollate( SID_PRINT_COLLATE, bCollate );
         aArgs.Put( sfxCollate, sfxCollate.Which() );

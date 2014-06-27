@@ -520,7 +520,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                 if ( !aFilterName.isEmpty() )
                 {
-                    const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
+                    const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
                     if ( pFilter )
                     {

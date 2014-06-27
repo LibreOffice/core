@@ -305,7 +305,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         if ( pObject->GetParent() )
             aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
         else
-            aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
+            aBasicStr = SfxGetpApp()->GetName();               // Applikationsbasic
 
         //  Parameter fuer Makro
         SbxArrayRef refPar = new SbxArray;

@@ -367,7 +367,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 {
                     pDlg->Execute();
                     rBindings.Invalidate( nSlot );
-                    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+                    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
                     rReq.Done();
                 }
             }

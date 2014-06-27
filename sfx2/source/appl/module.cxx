@@ -127,7 +127,7 @@ void SfxModule::Construct_Impl()
 {
     if( !bDummy )
     {
-        SfxApplication *pApp = SFX_APP();
+        SfxApplication *pApp = SfxGetpApp();
         SfxModuleArr_Impl& rArr = GetModules_Impl();
         SfxModule* pPtr = (SfxModule*)this;
         rArr.push_back( pPtr );
@@ -151,7 +151,7 @@ SfxModule::~SfxModule()
 {
     if( !bDummy )
     {
-        if ( SFX_APP()->Get_Impl() )
+        if ( SfxGetpApp()->Get_Impl() )
         {
             // The module will be destroyed before the Deinitialize,
             // so remove from the array

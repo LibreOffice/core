@@ -395,7 +395,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
         if ( !aMacroName.isEmpty() )
         {
             if ( aLibrary == "application" )
-                aLibrary = SFX_APP()->GetName();
+                aLibrary = SfxGetpApp()->GetName();
             else
                 aLibrary = "";
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
@@ -448,7 +448,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                     if ( aBasMgrName == "." )
                         aLibrary = pDoc->GetTitle();
                     else
-                        aLibrary = SFX_APP()->GetName();
+                        aLibrary = SfxGetpApp()->GetName();
 
                     // Get the macro name
                     aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
@@ -462,7 +462,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         else if ( !aMacroName.isEmpty() )
         {
             aScript = OUString( MACRO_PRFIX  );
-            if ( aLibrary != SFX_APP()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
+            if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
                 aScript += OUString('.');
 
             aScript += OUString('/');

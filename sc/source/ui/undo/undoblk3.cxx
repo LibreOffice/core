@@ -1526,7 +1526,7 @@ void ScUndoInsertAreaLink::Undo()
     if (pLink)
         pLinkManager->Remove( pLink );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
 void ScUndoInsertAreaLink::Redo()
@@ -1542,7 +1542,7 @@ void ScUndoInsertAreaLink::Redo()
     pLink->Update();
     pLink->SetInCreate( false );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
 void ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
@@ -1591,7 +1591,7 @@ void ScUndoRemoveAreaLink::Undo()
     pLink->Update();
     pLink->SetInCreate( false );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
 void ScUndoRemoveAreaLink::Redo()
@@ -1604,7 +1604,7 @@ void ScUndoRemoveAreaLink::Redo()
     if (pLink)
         pLinkManager->Remove( pLink );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
 void ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)

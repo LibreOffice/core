@@ -101,7 +101,7 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, bool bOne_, const SfxItemSet*
         SetCharFont( aTmpFont );
     }
 
-    CreateOutputItemSet( pSet ? *pSet->GetPool() : SFX_APP()->GetPool() );
+    CreateOutputItemSet( pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool() );
 }
 
 

@@ -103,7 +103,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
 
     StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
-    StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
+    StartListening(*SfxGetpApp());     // for SC_HINT_AREAS_CHANGED
 }
 
 ScServerObject::~ScServerObject()
@@ -121,7 +121,7 @@ void ScServerObject::Clear()
         pTemp->GetDocument().EndListeningArea( aRange, &aForwarder );
         pTemp->GetDocument().GetLinkManager()->RemoveServer( this );
         EndListening(*pTemp);
-        EndListening(*SFX_APP());
+        EndListening(*SfxGetpApp());
     }
 }
 
@@ -156,7 +156,7 @@ bool ScServerObject::GetData(
         EndListeningAll();
         pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
-        StartListening(*SFX_APP());
+        StartListening(*SfxGetpApp());
         bRefreshListener = false;
     }
 
@@ -206,7 +206,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         {
             pDocSh = NULL;
-            EndListening(*SFX_APP());
+            EndListening(*SfxGetpApp());
             //  don't access DocShell anymore for EndListening etc.
         }
     }

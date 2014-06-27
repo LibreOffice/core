@@ -513,7 +513,7 @@ void ScUndoDeleteCells::Undo()
     BeginUndo();
     DoChange( true );
     EndUndo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     // Selection not until EndUndo
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -536,7 +536,7 @@ void ScUndoDeleteCells::Redo()
     BeginRedo();
     DoChange( false);
     EndRedo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -695,7 +695,7 @@ void ScUndoDeleteMulti::Undo()
     //! since no data for selection exist
 
     EndUndo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDeleteMulti::Redo()
@@ -722,7 +722,7 @@ void ScUndoDeleteMulti::Redo()
     DoChange();
 
     EndRedo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
@@ -1073,7 +1073,7 @@ void ScUndoPaste::Undo()
     if (!maBlockRanges.empty())
         ShowTable(*maBlockRanges.front());
     EndUndo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoPaste::Redo()
@@ -1084,7 +1084,7 @@ void ScUndoPaste::Redo()
     DoChange( false );
     EnableDrawAdjust( &rDoc, true );                 //! include in ScBlockUndo?
     EndRedo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
@@ -1291,7 +1291,7 @@ void ScUndoDragDrop::Undo()
     }
 
     EndUndo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDragDrop::Redo()
@@ -1375,7 +1375,7 @@ void ScUndoDragDrop::Redo()
     EnableDrawAdjust( &rDoc, true );             //! include in ScBlockUndo?
 
     EndRedo();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)

@@ -1325,7 +1325,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     }
 
     // you realize what is needed often (saves Code and execution time)
-    SFX_APP();
+    SfxGetpApp();
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -2431,7 +2431,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
     }
 
     SfxChildWinFactory* pFact=0;
-    SfxApplication *pApp = SFX_APP();
+    SfxApplication *pApp = SfxGetpApp();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )

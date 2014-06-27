@@ -1135,7 +1135,7 @@ void ScUndoDBData::Undo()
     rDoc.CompileDBFormula( false );    // CompileFormulaString
     rDoc.SetAutoCalc( bOldAutoCalc );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
 
     EndUndo();
 }
@@ -1153,7 +1153,7 @@ void ScUndoDBData::Redo()
     rDoc.CompileDBFormula( false );    // CompileFormulaString
     rDoc.SetAutoCalc( bOldAutoCalc );
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
 
     EndRedo();
 }
@@ -1974,7 +1974,7 @@ void ScUndoDataForm::Undo()
         DoChange( true );
         ShowTable( aBlockRange );
         EndUndo();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDataForm::Redo()
@@ -1985,7 +1985,7 @@ void ScUndoDataForm::Redo()
         DoChange( false );
         EnableDrawAdjust( &rDoc, true );                                 //! include in ScBlockUndo?
         EndRedo();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void ScUndoDataForm::Repeat(SfxRepeatTarget& /*rTarget*/)

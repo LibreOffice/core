@@ -339,7 +339,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, false );
             if ( pItem && pItem->GetValue() )
             {
-                SfxApplication* pApp = SFX_APP();
+                SfxApplication* pApp = SfxGetpApp();
                 SfxAllItemSet aSet( pApp->GetPool() );
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
@@ -494,7 +494,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
                         if ( RET_YES == aBox.Execute() )
                         {
-                            SfxApplication* pApp = SFX_APP();
+                            SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
                             SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, false );
@@ -546,7 +546,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // despite this is not!
             if ( !pSh || !pSh->CanReload_Impl() )
                 break;
-            SfxApplication* pApp = SFX_APP();
+            SfxApplication* pApp = SfxGetpApp();
             SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem,
                             SID_FORCERELOAD, false);
             if(  pForceReloadItem && !pForceReloadItem->GetValue() &&
@@ -815,7 +815,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // Propagate document closure.
-                    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
+                    SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
                 }
 
                 // Record as done
@@ -1131,7 +1131,7 @@ bool SfxViewFrame::Close()
 
 void SfxViewFrame::DoActivate( bool bUI, SfxViewFrame* pOldFrame )
 {
-    SFX_APP();
+    SfxGetpApp();
 
     pDispatcher->DoActivate_Impl( bUI, pOldFrame );
 
@@ -1152,7 +1152,7 @@ void SfxViewFrame::DoActivate( bool bUI, SfxViewFrame* pOldFrame )
 
 void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
 {
-    SFX_APP();
+    SfxGetpApp();
     pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
 
     // If this ViewFrame has got a parent and this is not a parent of the
@@ -1384,7 +1384,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->aMargin = Size( -1, -1 );
     pImp->pWindow = 0;
 
-    SetPool( &SFX_APP()->GetPool() );
+    SetPool( &SfxGetpApp()->GetPool() );
     pDispatcher = new SfxDispatcher(this);
     if ( !GetBindings().GetDispatcher() )
         GetBindings().SetDispatcher( pDispatcher );
@@ -1395,7 +1395,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 
     if ( pObjSh )
     {
-        pDispatcher->Push( *SFX_APP() );
+        pDispatcher->Push( *SfxGetpApp() );
         SfxModule* pModule = xObjSh->GetModule();
         if( pModule )
             pDispatcher->Push( *pModule );
@@ -1410,12 +1410,12 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     }
     else
     {
-        pDispatcher->Push( *SFX_APP() );
+        pDispatcher->Push( *SfxGetpApp() );
         pDispatcher->Push( *this );
         pDispatcher->Flush();
     }
 
-    SfxViewFrameArr_Impl &rViewArr = SFX_APP()->GetViewFrames_Impl();
+    SfxViewFrameArr_Impl &rViewArr = SfxGetpApp()->GetViewFrames_Impl();
     rViewArr.push_back( this );
 }
 
@@ -1469,7 +1469,7 @@ SfxViewFrame::~SfxViewFrame()
         GetFrame().SetCurrentViewFrame_Impl( NULL );
 
     // Unregister from the Frame List.
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
     SfxViewFrameArr_Impl::iterator it = std::find( rFrames.begin(), rFrames.end(), this );
     rFrames.erase( it );
@@ -1503,7 +1503,7 @@ void SfxViewFrame::KillDispatcher_Impl()
 
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SfxApplication::Get() ? SFX_APP()->Get_Impl()->pViewFrame : NULL;
+    return SfxApplication::Get() ? SfxGetpApp()->Get_Impl()->pViewFrame : NULL;
 }
 
 
@@ -1514,7 +1514,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
     bool                    bOnlyIfVisible
 )
 {
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // search for a SfxDocument of the specified type
@@ -1539,7 +1539,7 @@ SfxViewFrame* SfxViewFrame::GetNext
     bool                    bOnlyIfVisible
 )
 {
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // refind the specified predecessor
@@ -2175,7 +2175,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
         return false;
     }
 
-    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().size() == SFX_APP()->GetViewShells_Impl().size(), "Inconsistent view arrays!" );
+    DBG_ASSERT( SfxGetpApp()->GetViewFrames_Impl().size() == SfxGetpApp()->GetViewShells_Impl().size(), "Inconsistent view arrays!" );
     return true;
 }
 
@@ -2566,10 +2566,10 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
     if ( sMacro.isEmpty() )
         return;
 
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
     SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pSfxApp->GetPool() );
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );
-    const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot( aReq );
+    const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot( aReq );
     OUString aScriptURL;
     if ( pRet )
         aScriptURL = ((SfxStringItem*)pRet)->GetValue();
@@ -2637,7 +2637,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibCont;
         if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
-            xLibCont = SFX_APP()->GetBasicContainer();
+            xLibCont = SfxGetpApp()->GetBasicContainer();
         }
         else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
         {
@@ -3275,7 +3275,7 @@ void SfxViewFrame::UpdateDocument_Impl()
 
 void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 {
-    SFX_APP()->SetViewFrame_Impl( pFrame );
+    SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
 

@@ -327,7 +327,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
         pItems = new SfxMenuControl[nCount];
 
     // remember some values
-    SFX_APP();
+    SfxGetpApp();
     const int bOleServer = sal_False;
     const int bMac = sal_False;
     SvtMenuOptions aOptions;

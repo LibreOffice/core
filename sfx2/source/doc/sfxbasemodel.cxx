@@ -1091,7 +1091,7 @@ void SAL_CALL SfxBaseModel::connectController( const Reference< frame::XControll
         pViewFrame->UpdateDocument_Impl();
         const OUString sDocumentURL = GetObjectShell()->GetMedium()->GetName();
         if ( !sDocumentURL.isEmpty() )
-            SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
+            SfxGetpApp()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
     }
 }
 
@@ -1572,10 +1572,10 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             }
         }
 
-        SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+        SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
         TransformParameters( nSlotId, aArgs, *pParams );
 
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
 
         bool bRet = false;
 
@@ -1616,7 +1616,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "successful saving."  ) );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCDONE), m_pData->m_pObjectShell ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCDONE), m_pData->m_pObjectShell ) );
         }
         else
         {
@@ -1624,7 +1624,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             m_pData->m_pObjectShell->StoreLog();
 
             // write the contents of the logger to the file
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCFAILED), m_pData->m_pObjectShell ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCFAILED), m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException(
                 "SfxBaseModel::storeSelf: 0x" + OUString::number(nErrCode, 16),
@@ -1904,7 +1904,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     {
         // file recovery: restore original filter
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, false );
-        SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
         m_pData->m_pObjectShell->SetModified(true);
@@ -3006,10 +3006,10 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
     if ( !bSaved && m_pData->m_pObjectShell )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOC : STR_EVENT_SAVEASDOC ),
+        SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOC : STR_EVENT_SAVEASDOC ),
                                                 m_pData->m_pObjectShell ) );
 
-        SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+        SfxAllItemSet *aParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
         aParams->Put( SfxStringItem( SID_FILE_NAME, sURL ) );
         if ( bSaveTo )
             aParams->Put( SfxBoolItem( SID_SAVETO, true ) );
@@ -3106,14 +3106,14 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
                 m_pData->m_pObjectShell->SetModifyPasswordEntered();
 
-                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
             }
             else
             {
                 m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
                 m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
-                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
             }
         }
         else
@@ -3126,7 +3126,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
 
 
-            SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
+            SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException(
@@ -3735,7 +3735,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
 
     // after i36090 is fixed the pool from object shell can be used
     // SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
-    SfxAllItemSet aSet( SFX_APP()->GetPool() );
+    SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
 
     // the BaseURL is part of the ItemSet
     SfxMedium* pMedium = new SfxMedium( xStorage, OUString() );
@@ -3784,7 +3784,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     if( pItem )
     {
         OUString aFilterName = pItem->GetValue();
-        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
         if ( pFilter && pFilter->UsesStorage() )
             nVersion = pFilter->GetVersion();
     }

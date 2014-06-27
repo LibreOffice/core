@@ -271,10 +271,10 @@ namespace basprov
 
         // TODO
         if ( !m_pAppBasicManager )
-            m_pAppBasicManager = SFX_APP()->GetBasicManager();
+            m_pAppBasicManager = SfxGetpApp()->GetBasicManager();
 
         if ( !m_xLibContainerApp.is() )
-            m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+            m_xLibContainerApp = Reference< script::XLibraryContainer >( SfxGetpApp()->GetBasicContainer(), UNO_QUERY );
     }
 
 

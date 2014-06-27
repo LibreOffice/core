@@ -97,7 +97,7 @@ void SfxProgress_Impl::Enable_Impl( bool bEnable )
     }
 
     if ( !pDoc )
-        SFX_APP()->GetAppDispatcher_Impl()->Lock( !bEnable );
+        SfxGetpApp()->GetAppDispatcher_Impl()->Lock( !bEnable );
 }
 
 
@@ -170,7 +170,7 @@ SfxProgress::SfxProgress
     if ( pObjSh )
         pObjSh->SetProgress_Impl(this);
     else if( !pImp->pActiveProgress )
-        SFX_APP()->SetProgress_Impl(this);
+        SfxGetpApp()->SetProgress_Impl(this);
     Resume();
 }
 
@@ -218,7 +218,7 @@ void SfxProgress::Stop()
     if ( pImp->xObjSh.Is() )
         pImp->xObjSh->SetProgress_Impl(0);
     else
-        SFX_APP()->SetProgress_Impl(0);
+        SfxGetpApp()->SetProgress_Impl(0);
     if ( pImp->bLocked )
         pImp->Enable_Impl(true);
 }
@@ -320,7 +320,7 @@ bool SfxProgress::SetState
         }
         else if ( pImp->pView )
         {
-            pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( pImp->pView );
+            pImp->pWorkWin = SfxGetpApp()->GetWorkWindow_Impl( pImp->pView );
             if ( pImp->pWorkWin )
                 pImp->xStatusInd = pImp->pWorkWin->GetStatusIndicator();
         }
@@ -454,7 +454,7 @@ void SfxProgress::Reschedule()
     SFX_STACK(SfxProgress::Reschedule);
 
     if( pImp->pActiveProgress ) return;
-    SfxApplication* pApp = SFX_APP();
+    SfxApplication* pApp = SfxGetpApp();
     if ( pImp->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
     {
         SfxAppData_Impl *pAppData = pApp->Get_Impl();
@@ -509,7 +509,7 @@ SfxProgress* SfxProgress::GetActiveProgress
     if ( pDocSh )
         pProgress = pDocSh->GetProgress();
     if ( !pProgress )
-        pProgress = SFX_APP()->GetProgress();
+        pProgress = SfxGetpApp()->GetProgress();
     return pProgress;
 }
 
@@ -517,14 +517,14 @@ SfxProgress* SfxProgress::GetActiveProgress
 
 void SfxProgress::EnterLock()
 {
-    SFX_APP()->Get_Impl()->nRescheduleLocks++;
+    SfxGetpApp()->Get_Impl()->nRescheduleLocks++;
 }
 
 
 
 void SfxProgress::LeaveLock()
 {
-    SfxAppData_Impl *pImp = SFX_APP()->Get_Impl();
+    SfxAppData_Impl *pImp = SfxGetpApp()->Get_Impl();
     DBG_ASSERT( 0 != pImp->nRescheduleLocks, "SFxProgress::LeaveLock but no locks" );
     pImp->nRescheduleLocks--;
 }

@@ -679,9 +679,9 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
 {
     if (pButton == m_pEditButton)
     {
-        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-        SFX_APP()->ExecuteSlot( aRequest );
+        SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxDispatcher* pDispatcher = GetDispatcher();
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();

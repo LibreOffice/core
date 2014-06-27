@@ -326,8 +326,8 @@ bool shouldLaunchQuickstart()
     if (!bQuickstart)
     {
         const SfxPoolItem* pItem=0;
-        SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
-        SFX_APP()->GetOptions(aQLSet);
+        SfxItemSet aQLSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+        SfxGetpApp()->GetOptions(aQLSet);
         SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, false, &pItem);
         if (SFX_ITEM_SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();

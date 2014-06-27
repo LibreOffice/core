@@ -299,7 +299,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
             //  "Import1" etc am Navigator bekanntmachen
             if (eMode==SC_DB_IMPORT)
-                SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+                SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
         }
         pData = pNoNameData;
     }
@@ -741,7 +741,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
     aModificator.SetDocumentModified();
 
     if (!aOldName.equals(rName))
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
     SfxBindings* pBindings = GetViewBindings();
     if (pBindings)
@@ -807,7 +807,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             PostPaintExtras();                                          // Tabellenreiter
             aModificator.SetDocumentModified();
 
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+            SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
             return nNewTab;
         }
@@ -978,7 +978,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
     PostPaintGridAll();
     PostPaintExtras();
     aModificator.SetDocumentModified();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
     return true;
 }

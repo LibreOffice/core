@@ -95,7 +95,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     SfxFilter* pExportFilter = 0;
     if (bExport)
     {
-        SFX_APP()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SFX_FILTER_IMPORT, 0);
+        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SFX_FILTER_IMPORT, 0);
         pExportFilter = pFilter;
     }
     else
