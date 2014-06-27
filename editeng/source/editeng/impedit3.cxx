@@ -423,7 +423,9 @@ void ImpEditEngine::FormatDoc()
     {
         sal_uInt32 nNewHeightNTP;
         sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
-        long nDiff = nNewHeight - nCurTextHeight;
+        // FIXME(matteocam)
+        long nDiff = 0;
+        //long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTHEIGHTCHANGED : EditStatusFlags::TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
@@ -441,7 +443,9 @@ void ImpEditEngine::FormatDoc()
         nCurTextHeight = nNewHeight;
         nCurTextHeightNTP = nNewHeightNTP;
 
-        if ( aStatus.AutoPageSize() )
+        // FIXME(matteocam)
+        //if ( aStatus.AutoPageSize() )
+        if (false)
             CheckAutoPageSize();
         else if ( nDiff )
         {
