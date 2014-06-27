@@ -405,8 +405,6 @@ void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, bool bSingl
 
 void RtfAttributeOutput::EndRun()
 {
-    if (m_bInURL)
-        EndURL();
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
     if (!m_bSingleEmptyRun && m_bInRun)
@@ -481,23 +479,30 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
     }
 
     m_aStyles.append("}");
-    m_bHadFieldResult = false;
-    m_bInURL = true;
+    m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
     return true;
 }
 
-bool RtfAttributeOutput::EndURL()
+bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
 {
-    if (m_bInURL)
-        m_bInURL = false;
-    else
-        return true;
-
-    // close the fldrslt group
-    if (m_bHadFieldResult)
+    // UGLY: usually EndRun is called earlier, but there is an extra
+    // call to OutAttrWithRange() when at the end of the paragraph,
+    // so in that special case the output needs to be appended to the
+    // new run's text instead of the previous run
+    if (isAtEndOfParagraph)
+    {
+        // close the fldrslt group
+        m_aRunText->append("}}");
+        // close the field group
         m_aRunText->append('}');
-    // close the field group
-    m_aRunText->append('}');
+    }
+    else
+    {
+        // close the fldrslt group
+        m_aRun->append("}}");
+        // close the field group
+        m_aRun->append('}');
+    }
     return true;
 }
 
@@ -2407,8 +2412,6 @@ void RtfAttributeOutput::TextINetFormat(const SwFmtINetFmt& rURL)
         const SwCharFmt* pFmt;
         const SwTxtINetFmt* pTxtAtr = rURL.GetTxtINetFmt();
 
-        m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-        m_bHadFieldResult = true;
         if (pTxtAtr && 0 != (pFmt = pTxtAtr->GetCharFmt()))
         {
             sal_uInt16 nStyle = m_rExport.GetId(*pFmt);
@@ -3248,12 +3251,10 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
       m_bBufferSectionHeaders(false),
       m_bLastTable(true),
       m_bWroteCellInfo(false),
-      m_bHadFieldResult(false),
       m_bTableRowEnded(false),
       m_aCells(),
       m_bSingleEmptyRun(false),
       m_bInRun(false),
-      m_bInURL(false),
       m_pFlyFrameSize(0),
       m_pPrevPageDesc(0)
 {
