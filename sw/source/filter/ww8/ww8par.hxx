@@ -301,7 +301,12 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual void SetAttr(
+        const SwPosition& rPos,
+        sal_uInt16 nAttrId = 0,
+        sal_Bool bTstEnde = sal_True,
+        long nHand = LONG_MAX,
+        sal_Bool consumedByField = sal_False );
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -1032,14 +1037,6 @@ private:
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
     std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
 
-    /*
-     Winword numbering gets imported as SwNumRules, there is a problem that
-     winword can have multiple outline numberings, only one gets chosen as
-     the writer outline numbering rule. The one that gets chosen is set here
-     as mpChosenOutlineNumRule
-    */
-    SwNumRule *mpChosenOutlineNumRule;
-
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
@@ -1500,8 +1497,11 @@ private:
 
 // Ver8-Listen
 
-    void RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
-        bool bSetAttr = true);
+    void RegisterNumFmtOnTxtNode(
+        sal_uInt16 nActLFO,
+        sal_uInt8 nActLevel,
+        const bool bSetAttr = true );
+
     void RegisterNumFmtOnStyle(sal_uInt16 nStyle);
     void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         sal_uInt8 nActLevel);
@@ -1537,7 +1537,7 @@ private:
     SwTwips MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         bool bTableJoin = true);
 
-    void SetOutLineStyles();
+    void SetOutlineStyles();
 
     bool SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper);
     bool SetUpperSpacing(SwPaM &pMyPam, int nSpace);
@@ -1700,7 +1700,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, String& rStr );
 
     eF_ResT Read_F_Tox( WW8FieldDesc* pF, String& rStr );
-    bool AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase);
     eF_ResT Read_F_Symbol( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);

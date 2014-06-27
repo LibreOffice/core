@@ -833,8 +833,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
-                    ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
+                    ( (SwTxtFmtColl*) pAktColl )->AssignToListLevelOfOutlineStyle( nSwNumLevel );
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
                     // werden: NO_NUM : Nummerierungs-Pause,
@@ -4036,7 +4035,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             rSI.n81Flags = pj->n81Flags;
             rSI.n81BiDiFlags = pj->n81BiDiFlags;
-            rSI.nOutlineLevel = pj->nOutlineLevel;
+            rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
             rSI.bParaAutoBefore = pj->bParaAutoBefore;
             rSI.bParaAutoAfter = pj->bParaAutoAfter;
 

@@ -129,6 +129,8 @@ class SwWW8StyInf
 {
     String      sWWStyleName;
     sal_uInt16      nWWStyleId;
+
+
 public:
     rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
     rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
@@ -141,7 +143,15 @@ public:
     sal_uInt16      nFollow;
     sal_uInt16      nLFOIndex;
     sal_uInt8        nListLevel;
-    sal_uInt8        nOutlineLevel;      // falls Gliederungs-Style
+
+    // WW8 outline level is zero-based:
+    // 0: outline level 1
+    // 1: outline level 2
+    // ...
+    // 8: outline level 9
+    // 9: body text
+    sal_uInt8        mnWW8OutlineLevel;
+
     sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
     sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
     SvxLRSpaceItem maWordLR;
@@ -173,7 +183,7 @@ public:
         nFollow( 0 ),
         nLFOIndex( USHRT_MAX ),
         nListLevel(WW8ListManager::nMaxLevel),
-        nOutlineLevel( MAXLEVEL ),
+        mnWW8OutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
         maWordLR( RES_LR_SPACE ),
@@ -199,25 +209,61 @@ public:
         sWWStyleName = rName;
         nWWStyleId = nId;
     }
-    sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
+
     const String& GetOrgWWName() const
     {
         return sWWStyleName;
     }
-    bool IsOutline() const
+
+    bool HasWW8OutlineLevel() const
     {
-        return (pFmt && (MAXLEVEL > nOutlineLevel));
+        return ( pFmt != NULL && (MAXLEVEL > mnWW8OutlineLevel) );
     }
+
     bool IsOutlineNumbered() const
     {
-        return pOutlineNumrule && IsOutline();
+        return pOutlineNumrule != NULL && HasWW8OutlineLevel();
     }
+
     const SwNumRule* GetOutlineNumrule() const
     {
         return pOutlineNumrule;
     }
+
     CharSet GetCharSet() const;
     CharSet GetCJKCharSet() const;
+
+    inline sal_uInt16 GetWWStyleId() const
+    {
+        return nWWStyleId;
+    }
+
+    inline bool IsWW8BuiltInHeadingStyle()
+    {
+        return GetWWStyleId() >= 1 && GetWWStyleId() <= 9;
+    }
+
+    inline bool IsWW8BuiltInDefaultStyle()
+    {
+        return GetWWStyleId() == 0;
+    }
+
+    static sal_uInt8 WW8OutlineLevelToOutlinelevel( const sal_uInt8 nWW8OutlineLevel )
+    {
+        if ( nWW8OutlineLevel < MAXLEVEL )
+        {
+            if ( nWW8OutlineLevel == 9 )
+            {
+                return 0; // no outline level --> body text
+            }
+            else
+            {
+                return nWW8OutlineLevel + 1; // outline level 1..9
+            }
+        }
+
+        return 0;
+    }
 };
 
 class WW8RStyle: public WW8Style

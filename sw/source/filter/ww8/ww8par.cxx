@@ -3792,7 +3792,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     mpDrawEditEngine = 0;
     pWWZOrder = 0;
     pFormImpl = 0;
-    mpChosenOutlineNumRule = 0;
     pNumFldType = 0;
     nFldNum = 0;
 
@@ -4449,7 +4448,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     pStyles->PostProcessStyles();
 
     if (pCollA)
-        SetOutLineStyles();
+        SetOutlineStyles();
 
     pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
@@ -5186,178 +5185,135 @@ public:
     }
 };
 
-void SwWW8ImplReader::SetOutLineStyles()
+
+void SwWW8ImplReader::SetOutlineStyles()
 {
-    /*
-    #i3674# - Load new document and insert document cases.
-    */
-    SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
-    // #i53044,i53213#
-    // <mpChosenOutlineNumRule> has to be set to point to local variable
-    // <aOutlineRule>, because its used below to be compared this <&aOutlineRule>.
-    // But at the end of the method <mpChosenOutlineNumRule> has to be set to
-    // <rDoc.GetOutlineNumRule()>, because <aOutlineRule> will be destroyed.
-    mpChosenOutlineNumRule = &aOutlineRule;
 
-    sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
-    // #i98791# - sorting algorithm adjusted
-    sw::util::SortByAssignedOutlineStyleListLevel(aOutLined);
-
-    typedef sw::ParaStyleIter myParaStyleIter;
-    /*
-    If we are inserted into a document then don't clobber existing existing
-    levels.
-    */
-    sal_uInt16 nFlagsStyleOutlLevel = 0;
-    if (!mbNewDoc)
+    // If we are inserted into a document then don't clobber existing outline levels.
+    sal_uInt16 nOutlineStyleListLevelWithAssignment = 0;
+    if ( !mbNewDoc )
     {
-        // #i70748# - backward iteration needed due to the outline level attribute
+        sw::ParaStyles aOutLined( sw::util::GetParaStyles( rDoc ) );
+        sw::util::SortByAssignedOutlineStyleListLevel( aOutLined );
         sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
-        for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+        for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter )
         {
-            if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();
+            if ( ( *aIter )->IsAssignedToListLevelOfOutlineStyle() )
+                nOutlineStyleListLevelWithAssignment |= 1 << ( *aIter )->GetAssignedOutlineStyleLevel();
             else
                 break;
         }
     }
-    else
+
+    // Check applied WW8 list styles at WW8 Built-In Heading Styles
+    // - Choose the list style which occurs most often as the one which provides
+    //   the list level properties for the Outline Style.
+    // - Populate temporary list of WW8 Built-In Heading Styles for further iteration
+    std::vector< SwWW8StyInf* > aWW8BuiltInHeadingStyles;
+    const SwNumRule* pChosenWW8ListStyle = NULL;
     {
-        /*
-        Only import *one* of the possible multiple outline numbering rules, so
-        pick the one that affects most styles. If we're not importing a new
-        document, we got to stick with what is already there.
-        */
-        // use index in text format collection
-        // array <pCollA> as key of the outline numbering map <aRuleMap>
-        // instead of the memory pointer of the outline numbering rule
-        // to assure that, if two outline numbering rule affect the same
-        // count of text formats, always the same outline numbering rule is chosen.
-        std::map<sal_uInt16, int>aRuleMap;
-        typedef std::map<sal_uInt16, int>::iterator myIter;
-        for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+        std::map< const SwNumRule*, int > aWW8ListStyleCounts;
+        for ( sal_uInt16 nI = 0; nI < nColls; ++nI )
         {
-            SwWW8StyInf& rSI = pCollA[ nI ];
-            if (
-                (MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule &&
-                rSI.pFmt
-               )
+            SwWW8StyInf& rSI = pCollA[nI];
+
+            if ( !rSI.IsWW8BuiltInHeadingStyle()
+                 || !rSI.HasWW8OutlineLevel() )
             {
-                myIter aIter = aRuleMap.find(nI);
-                if (aIter == aRuleMap.end())
+                continue;
+            }
+
+            aWW8BuiltInHeadingStyles.push_back( &rSI );
+
+            const SwNumRule* pWW8ListStyle = rSI.GetOutlineNumrule();
+            if ( pWW8ListStyle != NULL )
+            {
+                std::map< const SwNumRule*, int >::iterator aCountIter =
+                        aWW8ListStyleCounts.find( pWW8ListStyle );
+                if ( aCountIter == aWW8ListStyleCounts.end() )
                 {
-                    aRuleMap[nI] = 1;
+                    aWW8ListStyleCounts[pWW8ListStyle] = 1;
                 }
                 else
-                    ++(aIter->second);
+                {
+                    ++(aCountIter->second);
+                }
             }
         }
 
-        int nMax = 0;
-        myIter aEnd2 = aRuleMap.end();
-        for (myIter aIter = aRuleMap.begin(); aIter != aEnd2; ++aIter++)
+        int nCurrentMaxCount = 0;
+        std::map< const SwNumRule*, int >::iterator aCountIterEnd =
+            aWW8ListStyleCounts.end();
+        for ( std::map< const SwNumRule*, int >::iterator aIter = aWW8ListStyleCounts.begin();
+              aIter != aCountIterEnd;
+              ++aIter )
         {
-            if (aIter->second > nMax)
+            if ( aIter->second > nCurrentMaxCount )
             {
-                nMax = aIter->second;
-                mpChosenOutlineNumRule = pCollA[ aIter->first ].pOutlineNumrule;
-            }
-        }
-
-        ASSERT(mpChosenOutlineNumRule, "Impossible");
-        if (mpChosenOutlineNumRule)
-            aOutlineRule = *mpChosenOutlineNumRule;
-
-        if (mpChosenOutlineNumRule != &aOutlineRule)
-        {
-            // #i70748# - backward iteration needed due to the outline level attribute
-            sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
-            for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
-            {
-                if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
-                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();
-
-                else
-                    break;
+                nCurrentMaxCount = aIter->second;
+                pChosenWW8ListStyle = aIter->first;
             }
         }
     }
 
-    sal_uInt16 nOldFlags = nFlagsStyleOutlLevel;
-
-    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+    if ( pChosenWW8ListStyle == NULL )
     {
-        SwWW8StyInf& rSI = pCollA[nI];
+        // no WW8 list style for Outline Style found --> nothing to do
+        return;
+    }
 
-        if (rSI.IsOutlineNumbered())
+    // - set list level properties of Outline Style - ODF's list style applied by default to headings
+    // - assign corresponding Heading Paragraph Styles to the Outline Style
+    // - If a heading Paragraph Styles is not applying the WW8 list style which had been chosen as
+    //   the one which provides the list level properties for the Outline Style, its assignment to
+    //   the Outline Style is removed and a potential applied WW8 list style is assigned directly.
+    SwNumRule aOutlineRule( *rDoc.GetOutlineNumRule() );
+    bool bAppliedChangedOutlineStyle = false;
+    std::vector< SwWW8StyInf* >::iterator aStylesIterEnd =
+        aWW8BuiltInHeadingStyles.end();
+    for ( std::vector< SwWW8StyInf* >::iterator aStyleIter = aWW8BuiltInHeadingStyles.begin();
+          aStyleIter != aStylesIterEnd;
+          ++aStyleIter )
+    {
+        SwWW8StyInf* pStyleInf = (*aStyleIter);
+
+        const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle = 1 << pStyleInf->mnWW8OutlineLevel;
+        if ( nOutlineStyleListLevelOfWW8BuiltInHeadingStyle & nOutlineStyleListLevelWithAssignment )
         {
-            sal_uInt16 nAktFlags = 1 << rSI.nOutlineLevel;
-            if (
-                 (nAktFlags & nFlagsStyleOutlLevel) ||
-                 (rSI.pOutlineNumrule != mpChosenOutlineNumRule)
-               )
-            {
-                /*
-                If our spot is already taken by something we can't replace
-                then don't insert and remove our outline level.
-                */
-                rSI.pFmt->SetFmtAttr(
-                        SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
-                ((SwTxtFmtColl*)rSI.pFmt)->DeleteAssignmentToListLevelOfOutlineStyle();//#outline level,zhaojianwei
-            }
-            else
-            {
-                /*
-                If there is a style already set for this outline
-                numbering level and its not a style set by us already
-                then we can remove it outline numbering.
-                (its one of the default headings in a new document
-                so we can clobber it)
-                Of course if we are being inserted into a document that
-                already has some set we can't do this, thats covered by
-                the list of level in nFlagsStyleOutlLevel to ignore.
-                */
-                outlineeq aCmp(rSI.nOutlineLevel);
-                myParaStyleIter aResult = std::find_if(aOutLined.begin(),
-                    aOutLined.end(), aCmp);
+            continue;
+        }
 
-                myParaStyleIter aEnd = aOutLined.end();
-                while (aResult != aEnd  && aCmp(*aResult))
-                {
-                    //(*aResult)->SetOutlineLevel(NO_NUMBERING);//#outline level,zhaojianwei
-                    (*aResult)->DeleteAssignmentToListLevelOfOutlineStyle();
-                    ++aResult;
-                }
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( pStyleInf->mnWW8OutlineLevel == pStyleInf->nListLevel,
+                "WW8 import - <SwWW8ImplReader::SetOutlineStyles()> - it is not expected that WW8 Built-In Heading styles have different outline level and list level" );
+#endif
+        const SwNumFmt& rRule = pChosenWW8ListStyle->Get( pStyleInf->mnWW8OutlineLevel );
+        aOutlineRule.Set( pStyleInf->mnWW8OutlineLevel, rRule );
+        bAppliedChangedOutlineStyle = true;
+        // in case that there are more styles on this level ignore them
+        nOutlineStyleListLevelWithAssignment |= nOutlineStyleListLevelOfWW8BuiltInHeadingStyle;
 
-                /*
-                #i1886#
-                I believe that when a list is registered onto a winword
-                style which is an outline numbering style (i.e.
-                nOutlineLevel is set) that the style of numbering is for
-                the level is indexed by the *list* level that was
-                registered on that style, and not the outlinenumbering
-                level, which is probably a logical sequencing, and not a
-                physical mapping into the list style reged on that outline
-                style.
-                */
-                sal_uInt8 nFromLevel = rSI.nListLevel;
-                sal_uInt8 nToLevel = rSI.nOutlineLevel;
-                const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
-                aOutlineRule.Set(nToLevel, rRule);
-                // Set my outline level
-                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);//#outline level,zhaojianwei
-                ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);   //<-end,zhaojianwei
-                // If there are more styles on this level ignore them
-                nFlagsStyleOutlLevel |= nAktFlags;
+        SwTxtFmtColl* pTxtFmtColl = static_cast<SwTxtFmtColl*>(pStyleInf->pFmt);
+        if ( pStyleInf->GetOutlineNumrule() != pChosenWW8ListStyle )
+        {
+            // WW8 Built-In Heading Style does not apply the chosen one.
+            // --> delete assignment to OutlineStyle, but keep its current outline level
+            pTxtFmtColl->DeleteAssignmentToListLevelOfOutlineStyle( false );
+            // Apply existing WW8 list style a normal list style at the Paragraph Style
+            if ( pStyleInf->GetOutlineNumrule() != NULL )
+            {
+                pTxtFmtColl->SetFmtAttr( SwNumRuleItem( pStyleInf->GetOutlineNumrule()->GetName() ) );
             }
         }
+        else
+        {
+            pTxtFmtColl->AssignToListLevelOfOutlineStyle( pStyleInf->mnWW8OutlineLevel );
+        }
     }
-    if (nOldFlags != nFlagsStyleOutlLevel)
+
+    if ( bAppliedChangedOutlineStyle )
+    {
         rDoc.SetOutlineNumRule(aOutlineRule);
-    if ( mpChosenOutlineNumRule == &aOutlineRule )
-    {
-        mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
     }
 }
 

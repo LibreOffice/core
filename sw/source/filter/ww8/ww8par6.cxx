@@ -277,8 +277,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         sal_uInt32 nCharWidth=240;
         for (sal_uInt16 nI = 0; nI < pStyles->GetCount(); ++nI)
         {
-            if (pCollA[nI].bValid && pCollA[nI].pFmt &&
-                pCollA[nI].GetWWStyleId() == 0)
+            if (pCollA[nI].bValid
+                && pCollA[nI].pFmt != NULL
+                && pCollA[nI].IsWW8BuiltInDefaultStyle())
             {
                 nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
                     RES_CHRATR_CJK_FONTSIZE).GetHeight();
@@ -2863,19 +2864,33 @@ void SwWW8ImplReader::Read_PicLoc(sal_uInt16 , const sal_uInt8* pData, short nLe
     }
 }
 
+
 void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (pAktColl && (0 < nLen))
+    if ( nLen < 0 )
     {
-        if (SwWW8StyInf* pSI = GetStyle(nAktColl))
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_OUTLINELEVEL );
+        return;
+    }
+
+    if ( pAktColl != NULL )
+    {
+        SwWW8StyInf* pSI = GetStyle( nAktColl );
+        if ( pSI != NULL )
         {
-            pSI->nOutlineLevel = static_cast< sal_uInt8 >(
-                ( (1 <= pSI->GetWWStyleId()) && (9 >= pSI->GetWWStyleId()) )
-            ? pSI->GetWWStyleId()-1
-            : (pData ? *pData : 0) );
+            pSI->mnWW8OutlineLevel =
+                    static_cast< sal_uInt8 >( ( pData ? *pData : 0 ) );
+            NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, SwWW8StyInf::WW8OutlineLevelToOutlinelevel( pSI->mnWW8OutlineLevel ) ) );
         }
     }
+    else if ( pPaM != NULL )
+    {
+        const sal_uInt8 nOutlineLevel =
+                SwWW8StyInf::WW8OutlineLevelToOutlinelevel( static_cast< sal_uInt8 >( ( pData ? *pData : 0 ) ) );
+        NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, nOutlineLevel ) );
+    }
 }
+
 
 void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen )
 {

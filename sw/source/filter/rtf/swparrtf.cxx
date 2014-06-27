@@ -3922,11 +3922,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
-            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+            if ( nOutlineLevel < MAXLEVEL )
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();
             return pColl;
         }
 
