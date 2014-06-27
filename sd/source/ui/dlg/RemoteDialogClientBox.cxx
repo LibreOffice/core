@@ -36,7 +36,7 @@ namespace sd {
 
 //                          struct ClientBoxEntry
 
-ClientBoxEntry::ClientBoxEntry( ClientInfo* pClientInfo ) :
+ClientBoxEntry::ClientBoxEntry( ::boost::shared_ptr<ClientInfo> pClientInfo ) :
     m_bActive( false ),
     m_pClientInfo( pClientInfo )
 {
@@ -611,7 +611,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-long ClientBox::addEntry( ClientInfo* pClientInfo )
+long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 {
     long         nPos = 0;
 //     PackageState eState = m_pManager->getPackageState( xPackage );

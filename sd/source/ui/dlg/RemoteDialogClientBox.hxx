@@ -56,9 +56,9 @@ typedef ::boost::shared_ptr< ClientBoxEntry > TClientBoxEntry;
 struct ClientBoxEntry
 {
     bool            m_bActive       :1;
-    ClientInfo*     m_pClientInfo;
+    ::boost::shared_ptr<ClientInfo>     m_pClientInfo;
 
-    ClientBoxEntry( ClientInfo* pClientInfo );
+    ClientBoxEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
    ~ClientBoxEntry();
 
 };
@@ -155,9 +155,9 @@ public:
     void            RemoveUnlocked();
 
     void    selectEntry( const long nPos );
-    long            addEntry( ClientInfo* pClientInfo );
-    void            updateEntry( const ClientInfo* rPackageInfo );
-    void            removeEntry( const ClientInfo* rPackageInfo );
+    long            addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
+    void            updateEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
+    void            removeEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
 
     void            prepareChecking();
     void            checkEntries();

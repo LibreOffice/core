@@ -28,11 +28,11 @@ RemoteDialog::RemoteDialog( Window *pWindow )
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
 
-    vector<ClientInfo*> aClients( RemoteServer::getClients() );
+    vector<::boost::shared_ptr<ClientInfo>> aClients( RemoteServer::getClients() );
 
-    const vector<ClientInfo*>::const_iterator aEnd( aClients.end() );
+    const vector<::boost::shared_ptr<ClientInfo>>::const_iterator aEnd( aClients.end() );
 
-    for ( vector<ClientInfo*>::const_iterator aIt( aClients.begin() );
+    for ( vector<::boost::shared_ptr<ClientInfo>>::const_iterator aIt( aClients.begin() );
         aIt != aEnd; ++aIt )
     {
         m_pClientBox->addEntry( *aIt );
