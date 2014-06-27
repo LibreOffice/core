@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_e3512610",
+        "filename": "compilerplugins/clang/externandnotdefined.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 1,
+      "message": "why restrict this to extern \"C\"?  what worked for me to also catch extern \"C++\" functions (but I only tried this only for a small initial part of a full \"make\") is to replace that with\n\n  if (functionDecl-\u003eisDefined() || functionDecl-\u003eisPure()\n      || (compat::getLinkage(functionDecl-\u003egetLinkageAndVisibility()\n          !\u003d ExternalLinkage))",
+      "revId": "61ac099a198a3544d6dba970d7821df70ca21857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_c3562a06",
+        "filename": "compilerplugins/clang/externandnotdefined.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 1,
+      "message": "see above isDefined to be preferred over hasBody here, in case of deleted functions",
+      "revId": "61ac099a198a3544d6dba970d7821df70ca21857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_a35b1e2e",
+        "filename": "compilerplugins/clang/externandnotdefined.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 1,
+      "message": "functionDecl-\u003egetNameInfo().getLoc() can be simplified to functionDecl-\u003egetLocation()",
+      "revId": "61ac099a198a3544d6dba970d7821df70ca21857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_633e36ba",
+        "filename": "compilerplugins/clang/externandnotdefined.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 1,
+      "message": "instead of spellingLocation, you want functionDecl-\u003egetLocation() here, as otherwise isInMainFile would erroneously return true for some uses of DECL_DLLPRIVATE_LINK etc. macros in include files",
+      "revId": "61ac099a198a3544d6dba970d7821df70ca21857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_c36d0ace",
+        "filename": "compilerplugins/clang/externandnotdefined.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 1,
+      "message": "use functionDecl-\u003egetLocation() instead of functionDecl-\u003egetSourceRange().getBegin(), so the caret is nicely positioned under the start of the function name",
+      "revId": "61ac099a198a3544d6dba970d7821df70ca21857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

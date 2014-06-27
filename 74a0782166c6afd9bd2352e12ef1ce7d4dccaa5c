@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_034d3272",
+        "filename": "bean/native/unix/com_sun_star_beans_LocalOfficeWindow.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:06:26Z",
+      "side": 0,
+      "message": "in cases like this, where the function is defined in this file, and need not be declared in an include file, as it is not referenced directly from anywhere else (but only referenced via dynamic library symbol lookup), I would just remove that useless declaration and keep a lonely definition, not introduce a \"useless\" include file",
+      "revId": "74a0782166c6afd9bd2352e12ef1ce7d4dccaa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
