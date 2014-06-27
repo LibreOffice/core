@@ -45,6 +45,7 @@ public:
     void testShapeTextboxDelete();
     void testCp1000071();
     void testShapeTextboxVertadjust();
+    void testShapeTextboxAutosize();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST(testShapeTextboxVertadjust);
+    CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -370,6 +372,22 @@ void SwUiWriterTest::testShapeTextboxVertadjust()
     SwFrmFmt* pFmt = static_cast<SwDrawContact*>(pObject->GetUserCall())->GetFmt();
     // This was SDRTEXTVERTADJUST_TOP.
     CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFmt->GetTextVertAdjust().GetValue());
+}
+
+void SwUiWriterTest::testShapeTextboxAutosize()
+{
+    SwDoc* pDoc = createDoc("shape-textbox-autosize.odt");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pFirst = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("1st"), pFirst->GetName());
+
+    SdrObject* pSecond = pPage->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("2nd"), pSecond->GetName());
+
+    // Shape -> textbox synchronization was missing, the second shape had the
+    // same height as the first, even though the first contained 1 paragraph
+    // and the other 2 ones.
+    CPPUNIT_ASSERT(pFirst->GetSnapRect().getHeight() < pSecond->GetSnapRect().getHeight());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
