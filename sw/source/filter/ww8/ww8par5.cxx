@@ -2666,38 +2666,6 @@ static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
     }
 }
 
-//For all outline styles that are not in the outline numbering add them here as
-//custom extra styles
-bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
-{
-    bool bExtras = false;
-    //This is the case if the winword outline numbering is set while the
-    //writer one is not
-    for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
-    {
-        SwWW8StyInf& rSI = vColl[nI];
-        if (rSI.IsOutline())
-        {
-            const SwTxtFmtColl *pFmt = (const SwTxtFmtColl*)(rSI.pFmt);
-            sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
-            sal_uInt16 nMaxLevel = rBase.GetLevel();
-            if (
-                 nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&
-                 nStyleLevel < nMaxLevel
-               )
-            {
-                OUString sStyles(rBase.GetStyleNames(rSI.nOutlineLevel));
-                if ( !sStyles.isEmpty())
-                    sStyles += OUString(TOX_STYLE_DELIMITER);
-                sStyles += pFmt->GetName();
-                rBase.SetStyleNames(sStyles, rSI.nOutlineLevel);
-                bExtras = true;
-            }
-        }
-    }
-    return bExtras;
-}
-
 static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
 {
     //If the TOC contains Template entries at levels > the evaluation level
@@ -3180,9 +3148,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                         sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
                         if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)
                         {
-                            if (AddExtraOutlinesAsExtraStyles(*pBase))
-                                eCreateFrom |= (nsSwTOXElement::TOX_TEMPLATE | nsSwTOXElement::TOX_OUTLINELEVEL);
-
                             // #i19683# Insert a text token " " between the number and entry token.
                             // In an ideal world we could handle the tab stop between the number and
                             // the entry correctly, but I currently have no clue how to obtain
@@ -3193,7 +3158,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                 const SwWW8StyInf& rSI = vColl[nI];
                                 if (rSI.IsOutlineNumbered())
                                 {
-                                    sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
+                                    sal_uInt16 nStyleLevel = rSI.mnWW8OutlineLevel;
                                     const SwNumFmt& rFmt = rSI.GetOutlineNumrule()->Get( nStyleLevel );
                                     if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
                                     {

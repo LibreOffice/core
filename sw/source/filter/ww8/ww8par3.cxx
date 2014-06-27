@@ -1631,19 +1631,21 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
         SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
-        // make code robust
         if ( !pTxtNode )
         {
+            // make code robust
             return bRes;
         }
 
-        SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
+        const SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
 
         if( !IsInvalidOrToBeMergedTabCell() &&
             ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
+        {
             pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
+        }
 
-        if( !rStyleInfo.pOutlineNumrule )
+        if (rStyleInfo.GetOutlineNumrule() == NULL)
         {
             if (
                  (USHRT_MAX > rStyleInfo.nLFOIndex) &&
@@ -1653,15 +1655,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
                     rStyleInfo.nListLevel, false);
             }
-        }
-        else
-        {
-            // Use outline level set at the style info <rStyleInfo> instead of
-            // the outline level at the text format, because the WW8 document
-            // could contain more than one outline numbering rule and the one
-            // of the text format isn't the one, which a chosen as the Writer
-            // outline rule.
-            pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
         }
     }
     return bRes;
@@ -1756,8 +1749,8 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
         SwNumRule* pNmRule = 0;
-        sal_uInt16 nLFO = rStyleInf.nLFOIndex;
-        sal_uInt8  nLevel = rStyleInf.nListLevel;
+        const sal_uInt16 nLFO = rStyleInf.nLFOIndex;
+        const sal_uInt8  nLevel = rStyleInf.nListLevel;
         if (
              (USHRT_MAX > nLFO) &&
              (WW8ListManager::nMaxLevel > nLevel)
@@ -1767,13 +1760,19 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
             pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel,
                 aParaSprms);
 
-            if (pNmRule)
+            if (pNmRule != NULL)
             {
-                if( MAXLEVEL > rStyleInf.nOutlineLevel )
+                if (rStyleInf.IsWW8BuiltInHeadingStyle()
+                    && rStyleInf.HasWW8OutlineLevel())
+                {
                     rStyleInf.pOutlineNumrule = pNmRule;
-                rStyleInf.pFmt->SetFmtAttr(
-                        SwNumRuleItem( pNmRule->GetName() ) );
-                rStyleInf.bHasStyNumRule = true;
+                }
+                else
+                {
+                    rStyleInf.pFmt->SetFmtAttr(
+                        SwNumRuleItem(pNmRule->GetName()));
+                    rStyleInf.bHasStyNumRule = true;
+                }
             }
         }
 
@@ -1783,7 +1782,8 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 }
 
 void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
-    sal_uInt8 nActLevel, bool bSetAttr)
+                                              sal_uInt8 nActLevel,
+                                              const bool bSetAttr)
 {
     // beachte: die Methode haengt die NumRule an den Text Node, falls
     // bSetAttr (dann muessen natuerlich vorher die Listen gelesen sein)
@@ -1802,7 +1802,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
                 aParaSprms, pTxtNd) : 0;
 
-        if (pRule || !bSetAttr)
+        if (pRule != NULL || !bSetAttr)
         {
             //#i24136# old is the same as new, and its the outline numbering,
             //then we don't set the numrule again, and we just take the num node
@@ -1814,9 +1814,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
              is the one that was chosen to be the outline numbering then all
              is unchanged
             */
-            // correct condition according to the above given comment.
-            if ( pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule() &&
-                 pRule == mpChosenOutlineNumRule )
+            if (pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule())
             {
                 bUnchangedOutlineNumbering = true;
             }

@@ -236,7 +236,15 @@ public:
     sal_uInt16      nFollow;
     sal_uInt16      nLFOIndex;
     sal_uInt8        nListLevel;
-    sal_uInt8        nOutlineLevel;      // falls Gliederungs-Style
+
+    // WW8 outline level is zero-based:
+    // 0: outline level 1
+    // 1: outline level 2
+    // ...
+    // 8: outline level 9
+    // 9: body text
+    sal_uInt8 mnWW8OutlineLevel;
+
     sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
     sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
     SvxLRSpaceItem maWordLR;
@@ -268,7 +276,7 @@ public:
         nFollow( 0 ),
         nLFOIndex( USHRT_MAX ),
         nListLevel(WW8ListManager::nMaxLevel),
-        nOutlineLevel( MAXLEVEL ),
+        mnWW8OutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
         maWordLR( RES_LR_SPACE ),
@@ -294,25 +302,60 @@ public:
         sWWStyleName = rName;
         nWWStyleId = nId;
     }
-    sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
     const OUString& GetOrgWWName() const
     {
         return sWWStyleName;
     }
-    bool IsOutline() const
+
+    bool HasWW8OutlineLevel() const
     {
-        return (pFmt && (MAXLEVEL > nOutlineLevel));
+        return (pFmt != NULL && (MAXLEVEL > mnWW8OutlineLevel));
     }
+
     bool IsOutlineNumbered() const
     {
-        return pOutlineNumrule && IsOutline();
+        return pOutlineNumrule && HasWW8OutlineLevel();
     }
+
     const SwNumRule* GetOutlineNumrule() const
     {
         return pOutlineNumrule;
     }
     rtl_TextEncoding GetCharSet() const;
     rtl_TextEncoding GetCJKCharSet() const;
+
+    sal_uInt16 GetWWStyleId() const
+    {
+        return nWWStyleId;
+    }
+
+    bool IsWW8BuiltInHeadingStyle() const
+    {
+        return GetWWStyleId() >= 1 && GetWWStyleId() <= 9;
+    }
+
+    bool IsWW8BuiltInDefaultStyle() const
+    {
+        return GetWWStyleId() == 0;
+    }
+
+    static sal_uInt8
+    WW8OutlineLevelToOutlinelevel(const sal_uInt8 nWW8OutlineLevel)
+    {
+        if (nWW8OutlineLevel < MAXLEVEL)
+        {
+            if (nWW8OutlineLevel == 9)
+            {
+                return 0; // no outline level --> body text
+            }
+            else
+            {
+                return nWW8OutlineLevel + 1; // outline level 1..9
+            }
+        }
+
+        return 0;
+    }
 };
 
 //            Stack
@@ -1158,14 +1201,6 @@ private:
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
     std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
 
-    /*
-     Winword numbering gets imported as SwNumRules, there is a problem that
-     winword can have multiple outline numberings, only one gets chosen as
-     the writer outline numbering rule. The one that gets chosen is set here
-     as mpChosenOutlineNumRule
-    */
-    SwNumRule *mpChosenOutlineNumRule;
-
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
@@ -1616,7 +1651,8 @@ private:
 // Ver8-Listen
 
     void RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
-        bool bSetAttr = true);
+                                 const bool bSetAttr = true);
+
     void RegisterNumFmtOnStyle(sal_uInt16 nStyle);
     void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         sal_uInt8 nActLevel);
@@ -1657,7 +1693,7 @@ private:
     SwTwips MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         bool bTableJoin = true);
 
-    void SetOutLineStyles();
+    void SetOutlineStyles();
 
     bool SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper);
     bool SetUpperSpacing(SwPaM &pMyPam, int nSpace);
@@ -1826,7 +1862,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, OUString& rStr );
 
     eF_ResT Read_F_Tox( WW8FieldDesc* pF, OUString& rStr );
-    bool AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase);
     eF_ResT Read_F_Symbol( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_Embedd( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr);
