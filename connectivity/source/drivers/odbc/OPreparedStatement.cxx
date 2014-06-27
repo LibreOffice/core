@@ -317,7 +317,6 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     sal_Int32 nCharLen;
     sal_Int32 nByteLen;
     void *pData;
-    OString sOData;
     if (useWChar)
     {
         /*
@@ -337,23 +336,35 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          *
          * Our internal OUString storage is always UTF-16, so no conversion to do here.
          */
-        rtl_TextEncoding nSQLWCHAREncoding = RTL_TEXTENCODING_UCS2;
-        if( sizeof(SQLWCHAR) == 4 )
+        BOOST_STATIC_ASSERT(sizeof (SQLWCHAR) == 2 || sizeof (SQLWCHAR) == 4);
+        if (sizeof (SQLWCHAR) == 2)
         {
-            nSQLWCHAREncoding = RTL_TEXTENCODING_UCS4;
+            nCharLen = _sData.getLength();
+            nByteLen = 2 * nCharLen;
+            pData = allocBindBuf(parameterIndex, nByteLen);
+            memcpy(pData, _sData.getStr(), nByteLen);
         }
-
-        sOData = OUStringToOString(_sData, nSQLWCHAREncoding);
-        nByteLen = sOData.getLength();
-        nCharLen = nByteLen / sizeof(SQLWCHAR);
+        else
+        {
+            std::vector<sal_uInt32> u;
+            for (sal_Int32 i = 0; i != _sData.getLength();)
+            {
+                u.push_back(_sData.iterateCodePoints(&i));
+            }
+            nCharLen = u.size();
+            nByteLen = 4 * nCharLen;
+            pData = allocBindBuf(parameterIndex, nByteLen);
+            memcpy(pData, u.empty() ? 0 : &u[0], nByteLen);
+        }
     }
     else
     {
-        sOData = OUStringToOString(_sData, getOwnConnection()->getTextEncoding());
+        OString sOData(
+            OUStringToOString(_sData, getOwnConnection()->getTextEncoding()));
         nCharLen = nByteLen = sOData.getLength();
+        pData = allocBindBuf(parameterIndex, nByteLen);
+        memcpy(pData, sOData.getStr(), nByteLen);
     }
-    pData = allocBindBuf(parameterIndex, nByteLen);
-    memcpy(pData, sOData.getStr(), nByteLen);
 
     setParameter( parameterIndex, _nType, nCharLen, _nScale, pData, nByteLen, nByteLen );
 }
