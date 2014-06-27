@@ -405,7 +405,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLSMALLINT _fSqlType,
                                        bool &_bWasNull,
                                        const Reference< XInterface >& _xInterface,
-                                       rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+                                       const rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     OUStringBuffer aData;
     switch(_fSqlType)
@@ -414,15 +414,18 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     case SQL_WCHAR:
     case SQL_WLONGVARCHAR:
     {
-        sal_Unicode waCharArray[2048];
-        // we assume everyone (LibO & ODBC) uses UTF-16; see OPreparedStatement::setParameter
-        BOOST_STATIC_ASSERT(sizeof(sal_Unicode) == 2);
-        BOOST_STATIC_ASSERT(sizeof(SQLWCHAR)    == 2);
-        BOOST_STATIC_ASSERT(sizeof(waCharArray) % 2 == 0);
+        SQLWCHAR waCharArray[2048];
+        rtl_TextEncoding nSQLWCHAREncoding = RTL_TEXTENCODING_UCS2;
+        BOOST_STATIC_ASSERT(sizeof(SQLWCHAR) == 2 || sizeof(SQLWCHAR) == 4);
+        if(sizeof(SQLWCHAR) == 4)
+        {
+            // we assume LibO uses UTF-16 and & ODBC uses UCS4 (UTF-32); see OPreparedStatement::setParameter
+            nSQLWCHAREncoding = RTL_TEXTENCODING_UCS4;
+        }
         // Size == number of bytes, Len == number of UTF-16 code units
         const SQLLEN nMaxSize = sizeof(waCharArray);
-        const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(sal_Unicode);
-        BOOST_STATIC_ASSERT(nMaxLen * sizeof(sal_Unicode) == nMaxSize);
+        const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(SQLWCHAR);
+        BOOST_STATIC_ASSERT(nMaxLen * sizeof(SQLWCHAR) == nMaxSize);
 
         // read the unicode data
         SQLLEN pcbValue = SQL_NO_TOTAL;
@@ -456,11 +459,10 @@ OUString OTools::getStringValue(OConnection* _pConnection,
             }
             else
             {
-                nReadChars = pcbValue/sizeof(sal_Unicode);
+                nReadChars = pcbValue/sizeof(SQLWCHAR);
             }
 
-            aData.append(waCharArray, nReadChars);
-
+            aData.append(OUString((sal_Char*)waCharArray, nReadChars, nSQLWCHAREncoding));
         }
         break;
     }

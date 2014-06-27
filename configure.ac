@@ -8797,7 +8797,7 @@ dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
-if test "$with_system_odbc" = "yes"; then
+if test "$with_system_odbc" = "yes" -o "$_os" = Darwin ; then
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
