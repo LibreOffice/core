@@ -190,9 +190,6 @@ void Deck::DataChanged (const DataChangedEvent& rEvent)
     RequestLayout();
 }
 
-
-
-
 bool Deck::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == EVENT_COMMAND)
@@ -202,7 +199,7 @@ bool Deck::Notify (NotifyEvent& rEvent)
             switch (pCommandEvent->GetCommand())
             {
                 case COMMAND_WHEEL:
-                    return ProcessWheelEvent(pCommandEvent, rEvent);
+                    return ProcessWheelEvent(pCommandEvent);
 
                 default:
                     break;
@@ -212,23 +209,12 @@ bool Deck::Notify (NotifyEvent& rEvent)
     return Window::Notify(rEvent);
 }
 
-
-
-
-bool Deck::ProcessWheelEvent (
-    CommandEvent* pCommandEvent,
-    NotifyEvent& rEvent)
+bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
 {
     if ( ! mpVerticalScrollBar)
         return false;
     if ( ! mpVerticalScrollBar->IsVisible())
         return false;
-
-    // Ignore all wheel commands from outside the vertical scroll bar.
-    // Otherwise after a scroll we might land on a spin field and
-    // subsequent wheel events would change the value of that control.
-    if (rEvent.GetWindow() != mpVerticalScrollBar.get())
-        return true;
 
     // Get the wheel data and check that it describes a valid vertical
     // scroll.
@@ -246,22 +232,12 @@ bool Deck::ProcessWheelEvent (
     return true;
 }
 
-
-
-
 void Deck::SetPanels (const SharedPanelContainer& rPanels)
 {
     maPanels = rPanels;
 
     RequestLayout();
 }
-
-
-
-
-
-
-
 
 void Deck::RequestLayout (void)
 {
@@ -278,16 +254,10 @@ void Deck::RequestLayout (void)
         *mpVerticalScrollBar);
 }
 
-
-
-
 ::Window* Deck::GetPanelParentWindow (void)
 {
     return mpScrollContainer.get();
 }
-
-
-
 
 void Deck::ShowPanel (const Panel& rPanel)
 {
