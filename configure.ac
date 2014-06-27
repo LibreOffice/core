@@ -2813,10 +2813,7 @@ if test $_os = Darwin; then
             fi
             ;;
         10.8|10.9|10.10)
-            xcodepath="`xcode-select -print-path`"
-            if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
-            fi
+            MACOSX_SDK_PATH="`xcrun --sdk macosx${with_macosx_sdk} --show-sdk-path`"
             ;;
         esac
         if test -z "$MACOSX_SDK_PATH"; then
