@@ -27,7 +27,6 @@
 // #define LOAD_IMPLICIT
 
 
-
 /** @short  used to identify a some generic item properties against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
@@ -71,18 +70,18 @@
 /** @short  used to identify the list of sorted filters for a specific
             office module
  */
-#define  PROPNAME_SORTEDFILTERLIST     _FILTER_CONFIG_FROM_ASCII_("SortedFilterList")
+#define  PROPNAME_SORTEDFILTERLIST     "SortedFilterList"
 
 /** @short  implicit properties. which are used at the container interface only.
  */
-#define  PROPNAME_FINALIZED _FILTER_CONFIG_FROM_ASCII_("Finalized")
-#define  PROPNAME_MANDATORY _FILTER_CONFIG_FROM_ASCII_("Mandatory")
+#define  PROPNAME_FINALIZED "Finalized"
+#define  PROPNAME_MANDATORY "Mandatory"
 
 /** @short  used to identify a set of items against the configuration API. */
-#define  CFGSET_TYPES               _FILTER_CONFIG_FROM_ASCII_("Types"          )
-#define  CFGSET_FILTERS             _FILTER_CONFIG_FROM_ASCII_("Filters"        )
-#define  CFGSET_FRAMELOADERS        _FILTER_CONFIG_FROM_ASCII_("FrameLoaders"   )
-#define  CFGSET_CONTENTHANDLERS     _FILTER_CONFIG_FROM_ASCII_("ContentHandlers")
+#define  CFGSET_TYPES               "Types"
+#define  CFGSET_FILTERS             "Filters"
+#define  CFGSET_FRAMELOADERS        "FrameLoaders"
+#define  CFGSET_CONTENTHANDLERS     "ContentHandlers"
 
 /** @short  used to address some configuration keys directly.
 
@@ -91,40 +90,40 @@
 
     @TODO   define these direct keys ...
  */
-#define  CFGDIRECTKEY_OFFICELOCALE          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/L10N/ooLocale"                           )
-#define  CFGDIRECTKEY_DEFAULTFRAMELOADER    _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader")
-#define  CFGDIRECTKEY_OFFICELOCALE          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/L10N/ooLocale"                           )
-#define  CFGDIRECTKEY_PRODUCTNAME           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooName"                          )
+#define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
+#define  CFGDIRECTKEY_DEFAULTFRAMELOADER    "/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"
+#define  CFGDIRECTKEY_OFFICELOCALE          "/org.openoffice.Setup/L10N/ooLocale"
+#define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
 // comphelper/inc/comphelper/documentconstants.hxx . See that file for
 // documentation on their meaning.
 
 /** @short  names of filter flags, sorted in alphabetical order */
-#define  FLAGNAME_3RDPARTYFILTER    _FILTER_CONFIG_FROM_ASCII_("3RDPARTYFILTER"   )
-#define  FLAGNAME_ALIEN             _FILTER_CONFIG_FROM_ASCII_("ALIEN"            )
-#define  FLAGNAME_ASYNCHRON         _FILTER_CONFIG_FROM_ASCII_("ASYNCHRON"        )
-#define  FLAGNAME_BROWSERPREFERRED  _FILTER_CONFIG_FROM_ASCII_("BROWSERPREFERRED" )
-#define  FLAGNAME_CONSULTSERVICE    _FILTER_CONFIG_FROM_ASCII_("CONSULTSERVICE"   )
-#define  FLAGNAME_DEFAULT           _FILTER_CONFIG_FROM_ASCII_("DEFAULT"          )
-#define  FLAGNAME_ENCRYPTION        _FILTER_CONFIG_FROM_ASCII_("ENCRYPTION"       )
-#define  FLAGNAME_EXPORT            _FILTER_CONFIG_FROM_ASCII_("EXPORT"           )
-#define  FLAGNAME_IMPORT            _FILTER_CONFIG_FROM_ASCII_("IMPORT"           )
-#define  FLAGNAME_INTERNAL          _FILTER_CONFIG_FROM_ASCII_("INTERNAL"         )
-#define  FLAGNAME_NOTINCHOOSER      _FILTER_CONFIG_FROM_ASCII_("NOTINCHOOSER"     )
-#define  FLAGNAME_NOTINFILEDIALOG   _FILTER_CONFIG_FROM_ASCII_("NOTINFILEDIALOG"  )
-#define  FLAGNAME_NOTINSTALLED      _FILTER_CONFIG_FROM_ASCII_("NOTINSTALLED"     )
-#define  FLAGNAME_OWN               _FILTER_CONFIG_FROM_ASCII_("OWN"              )
-#define  FLAGNAME_PACKED            _FILTER_CONFIG_FROM_ASCII_("PACKED"           )
-#define  FLAGNAME_PASSWORDTOMODIFY  _FILTER_CONFIG_FROM_ASCII_("PASSWORDTOMODIFY" )
-#define  FLAGNAME_PREFERRED         _FILTER_CONFIG_FROM_ASCII_("PREFERRED"        )
-#define  FLAGNAME_STARTPRESENTATION _FILTER_CONFIG_FROM_ASCII_("STARTPRESENTATION")
-#define  FLAGNAME_READONLY          _FILTER_CONFIG_FROM_ASCII_("READONLY"         )
-#define  FLAGNAME_SUPPORTSSELECTION _FILTER_CONFIG_FROM_ASCII_("SUPPORTSSELECTION")
-#define  FLAGNAME_TEMPLATE          _FILTER_CONFIG_FROM_ASCII_("TEMPLATE"         )
-#define  FLAGNAME_TEMPLATEPATH      _FILTER_CONFIG_FROM_ASCII_("TEMPLATEPATH"     )
-#define  FLAGNAME_USESOPTIONS       _FILTER_CONFIG_FROM_ASCII_("USESOPTIONS"      )
-#define  FLAGNAME_COMBINED          _FILTER_CONFIG_FROM_ASCII_("COMBINED"         )
+#define  FLAGNAME_3RDPARTYFILTER    "3RDPARTYFILTER"
+#define  FLAGNAME_ALIEN             "ALIEN"
+#define  FLAGNAME_ASYNCHRON         "ASYNCHRON"
+#define  FLAGNAME_BROWSERPREFERRED  "BROWSERPREFERRED"
+#define  FLAGNAME_CONSULTSERVICE    "CONSULTSERVICE"
+#define  FLAGNAME_DEFAULT           "DEFAULT"
+#define  FLAGNAME_ENCRYPTION        "ENCRYPTION"
+#define  FLAGNAME_EXPORT            "EXPORT"
+#define  FLAGNAME_IMPORT            "IMPORT"
+#define  FLAGNAME_INTERNAL          "INTERNAL"
+#define  FLAGNAME_NOTINCHOOSER      "NOTINCHOOSER"
+#define  FLAGNAME_NOTINFILEDIALOG   "NOTINFILEDIALOG"
+#define  FLAGNAME_NOTINSTALLED      "NOTINSTALLED"
+#define  FLAGNAME_OWN               "OWN"
+#define  FLAGNAME_PACKED            "PACKED"
+#define  FLAGNAME_PASSWORDTOMODIFY  "PASSWORDTOMODIFY"
+#define  FLAGNAME_PREFERRED         "PREFERRED"
+#define  FLAGNAME_STARTPRESENTATION "STARTPRESENTATION"
+#define  FLAGNAME_READONLY          "READONLY"
+#define  FLAGNAME_SUPPORTSSELECTION "SUPPORTSSELECTION"
+#define  FLAGNAME_TEMPLATE          "TEMPLATE"
+#define  FLAGNAME_TEMPLATEPATH      "TEMPLATEPATH"
+#define  FLAGNAME_USESOPTIONS       "USESOPTIONS"
+#define  FLAGNAME_COMBINED          "COMBINED"
 
 /** @short  values of filter flags, sorted based on value */
 #define  FLAGVAL_IMPORT            0x00000001 // 1
@@ -155,31 +154,31 @@
 
 /** @short  some uno service names.
  */
-#define  SERVICE_CONFIGURATIONUPDATEACCESS  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationUpdateAccess" )
-#define  SERVICE_CONFIGURATIONACCESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationAccess"       )
+#define  SERVICE_CONFIGURATIONUPDATEACCESS  "com.sun.star.configuration.ConfigurationUpdateAccess"
+#define  SERVICE_CONFIGURATIONACCESS        "com.sun.star.configuration.ConfigurationAccess"
 
 /** @short  some configuration paths.
  */
-#define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
-#define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")
-#define  CFGPACKAGE_TD_OTHERS          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc"  )
-#define  CFGPACKAGE_TD_OLD             _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Office.TypeDetection")
+#define  CFGPACKAGE_TD_TYPES           "/org.openoffice.TypeDetection.Types"
+#define  CFGPACKAGE_TD_FILTERS         "/org.openoffice.TypeDetection.Filter"
+#define  CFGPACKAGE_TD_OTHERS          "/org.openoffice.TypeDetection.Misc"
+#define  CFGPACKAGE_TD_OLD             "/org.openoffice.Office.TypeDetection"
 
 /** @short  some default values.
  */
-#define  DEFAULT_OFFICELOCALE       _FILTER_CONFIG_FROM_ASCII_("en-US")
+#define  DEFAULT_OFFICELOCALE       "en-US"
 
 /** @short  used for the queries of the FilterFactory service.
  */
-#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    _FILTER_CONFIG_FROM_ASCII_("matchByDocumentService" )
-#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE _FILTER_CONFIG_FROM_ASCII_("getDefaultFilterForType")
-#define  QUERY_IDENTIFIER_GET_SORTED_FILTERLIST     _FILTER_CONFIG_FROM_ASCII_("getSortedFilterList()"  )
+#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    "matchByDocumentService"
+#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE "getDefaultFilterForType"
+#define  QUERY_IDENTIFIER_GET_SORTED_FILTERLIST     "getSortedFilterList()"
 
-#define  QUERY_PARAM_IFLAGS                         _FILTER_CONFIG_FROM_ASCII_("iflags")
-#define  QUERY_PARAM_EFLAGS                         _FILTER_CONFIG_FROM_ASCII_("eflags")
-#define  QUERY_PARAM_MODULE                         _FILTER_CONFIG_FROM_ASCII_("module")
-#define  QUERY_PARAM_DEFAULTFIRST                   _FILTER_CONFIG_FROM_ASCII_("default_first")
-#define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
+#define  QUERY_PARAM_IFLAGS                         "iflags"
+#define  QUERY_PARAM_EFLAGS                         "eflags"
+#define  QUERY_PARAM_MODULE                         "module"
+#define  QUERY_PARAM_DEFAULTFIRST                   "default_first"
+#define  QUERY_CONSTVALUE_ALL                       "all"
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
 
