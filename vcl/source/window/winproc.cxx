@@ -1431,7 +1431,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         pMouseWindow = pMouseWindow->GetParent();
     }
 
-    if (acceptableWheelScrollTarget(pMouseWindow) && !pMouseWindow->IsInModalMode())
+    if (acceptableWheelScrollTarget(pMouseWindow) && pMouseWindow->IsEnabled())
     {
         // transform coordinates to float window frame coordinates
         Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
