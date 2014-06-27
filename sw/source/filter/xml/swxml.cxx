@@ -367,7 +367,7 @@ sal_Int32 ReadThroughComponent(
 }
 
 // #i44177#
-static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
+static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 {
     // array containing the names of the default outline styles ('Heading 1',
     // 'Heading 2', ..., 'Heading 10')
@@ -445,7 +445,7 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     }
 }
 
-static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
+static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
 {
     if ( _rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
          _rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 ) )
