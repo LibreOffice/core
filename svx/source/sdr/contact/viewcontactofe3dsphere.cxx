@@ -23,7 +23,7 @@
 #include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 namespace sdr
@@ -57,7 +57,7 @@ namespace sdr
             aWorldTransform.translate(aSpherePosition.getX(), aSpherePosition.getY(), aSpherePosition.getZ());
 
             // get 3D Object Attributes
-            drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
+            boost::scoped_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // get segment count
             const sal_uInt32 nHorizontalSegments(GetE3dSphereObj().GetHorizontalSegments());
@@ -75,9 +75,6 @@ namespace sdr
                     aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
                     nHorizontalSegments, nVerticalSegments));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
-
-            // delete 3D Object Attributes
-            delete pSdr3DObjectAttribute;
 
             return xRetval;
         }

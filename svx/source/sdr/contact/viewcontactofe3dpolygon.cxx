@@ -25,7 +25,7 @@
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 namespace sdr
@@ -99,7 +99,7 @@ namespace sdr
             }
 
             // get 3D Object Attributes
-            drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
+            boost::scoped_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size
             basegfx::B2DVector aTextureSize(1.0, 1.0);
@@ -163,9 +163,6 @@ namespace sdr
                 new drawinglayer::primitive3d::SdrPolyPolygonPrimitive3D(
                     aPolyPolygon3D, aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
-
-            // delete 3D Object Attributes
-            delete pSdr3DObjectAttribute;
 
             return xRetval;
         }

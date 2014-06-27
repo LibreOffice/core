@@ -24,7 +24,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/range/b3drange.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 namespace sdr
@@ -71,7 +71,7 @@ namespace sdr
             aWorldTransform.translate(aCubeRange.getMinX(), aCubeRange.getMinY(), aCubeRange.getMinZ());
 
             // get 3D Object Attributes
-            drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
+            boost::scoped_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size to get a perfect mapping for
             // the front/back sides
@@ -82,9 +82,6 @@ namespace sdr
                 new drawinglayer::primitive3d::SdrCubePrimitive3D(
                     aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
-
-            // delete 3D Object Attributes
-            delete pSdr3DObjectAttribute;
 
             return xRetval;
         }
