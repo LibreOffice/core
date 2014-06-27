@@ -1361,6 +1361,11 @@ static bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     return false;
 }
 
+static bool acceptableWheelScrollTarget(const Window *pMouseWindow)
+{
+    return (pMouseWindow && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
+}
+
 static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
     ImplDelData aDogTag( pWindow );
@@ -1418,8 +1423,15 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         bIsFloat = true;
     }
 
-    if ( pMouseWindow &&
-         pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() && ! pMouseWindow->IsInModalMode() )
+    while (acceptableWheelScrollTarget(pMouseWindow))
+    {
+        if (pMouseWindow->IsEnabled())
+            break;
+        //try the parent if this one is disabled
+        pMouseWindow = pMouseWindow->GetParent();
+    }
+
+    if (acceptableWheelScrollTarget(pMouseWindow) && !pMouseWindow->IsInModalMode())
     {
         // transform coordinates to float window frame coordinates
         Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
