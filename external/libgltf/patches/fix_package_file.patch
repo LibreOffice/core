@@ -1,0 +1,13 @@
+diff -ur libgltf.org/libgltf.pc.in libgltf/libgltf.pc.in
+--- libgltf.org/libgltf.pc.in	2014-06-27 18:52:24.323562505 +0200
++++ libgltf/libgltf.pc.in	2014-06-27 18:52:48.423561484 +0200
+@@ -6,8 +6,7 @@
+ Name: libgltf-@GLTF_MAJOR_VERSION@.@GLTF_MINOR_VERSION@
+ Description: Library for rendering glTF models.
+ Version: @VERSION@
+-Requires: glew-1.10.0 glm glu
++Requires: glew
+ Libs: -L${libdir} -lgltf-@GLTF_MAJOR_VERSION@.@GLTF_MINOR_VERSION@
+ Cflags: -I${includedir}/libgltf-@GLTF_MAJOR_VERSION@.@GLTF_MINOR_VERSION@
+ 
+-Requires.private: boost
