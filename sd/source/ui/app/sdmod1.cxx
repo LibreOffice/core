@@ -99,7 +99,7 @@ void SdModule::Execute(SfxRequest& rReq)
     {
         case SID_NEWDOC:
         {
-            SFX_APP()->ExecuteSlot(rReq, SFX_APP()->GetInterface());
+            SfxGetpApp()->ExecuteSlot(rReq, SfxGetpApp()->GetInterface());
         }
         break;
 
@@ -230,7 +230,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
             if (!bIntercept)
             {
-                SFX_APP()->ExecuteSlot(rReq, SFX_APP()->GetInterface());
+                SfxGetpApp()->ExecuteSlot(rReq, SfxGetpApp()->GetInterface());
             }
             else
             {
@@ -358,7 +358,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     // state of SID_OPENDOC is determined by the base class
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
-        const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
+        const SfxPoolItem* pItem = SfxGetpApp()->GetSlotState(SID_OPENDOC, SfxGetpApp()->GetInterface());
         if (pItem)
             rItemSet.Put(*pItem);
     }
@@ -366,7 +366,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     // state of SID_OPENHYPERLINK is determined by the base class
     if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SFX_ITEM_UNKNOWN)
     {
-        const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENHYPERLINK, SFX_APP()->GetInterface());
+        const SfxPoolItem* pItem = SfxGetpApp()->GetSlotState(SID_OPENHYPERLINK, SfxGetpApp()->GetInterface());
         if (pItem)
             rItemSet.Put(*pItem);
     }
@@ -498,10 +498,10 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
 
     SfxObjectShellLock xDocShell;
 
-    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
 
-    sal_uLong lErr = SFX_APP()->LoadTemplate( xDocShell, rTemplatePath, true, pSet );
+    sal_uLong lErr = SfxGetpApp()->LoadTemplate( xDocShell, rTemplatePath, true, pSet );
 
     SfxObjectShell* pDocShell = xDocShell;
 
@@ -601,7 +601,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         }
                         else
                         {
-                            SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool());
+                            SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool());
                             aRequest.AppendItem (aFile);
                             aRequest.AppendItem (aReferer);
                             // Put the password into the request
@@ -613,7 +613,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 OUString("_default")));
                             try
                             {
-                                const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);
+                                const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot (aRequest);
                                 const SfxViewFrameItem* pFrameItem = PTR_CAST( SfxViewFrameItem, pRet );
                                 if ( pFrameItem )
                                     pFrame = &pFrameItem->GetFrame()->GetFrame();

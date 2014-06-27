@@ -1230,7 +1230,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_GENERAL_OPTIONS:
         {
             pRet = new SfxItemSet(
-                SFX_APP()->GetPool(),
+                SfxGetpApp()->GetPool(),
                 SID_ATTR_METRIC, SID_ATTR_SPELL,
                 SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                 SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
@@ -1238,8 +1238,8 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 SID_HTML_MODE, SID_HTML_MODE,
                 0 );
 
-            SfxItemSet aOptSet( SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
-            SFX_APP()->GetOptions(aOptSet);
+            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
             utl::MiscCfg    aMisc;
@@ -1270,7 +1270,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = new SfxItemSet(SFX_APP()->GetPool(),
+            pRet = new SfxItemSet(SfxGetpApp()->GetPool(),
                     SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
@@ -1328,7 +1328,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         }
         break;
         case SID_INET_DLG :
-                pRet = new SfxItemSet( SFX_APP()->GetPool(),
+                pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
                                 SID_INET_PROXY_TYPE, SID_INET_PROXY_PORT,
@@ -1338,20 +1338,20 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                                 SID_INET_DNS_AUTO, SID_INET_DNS_SERVER,
                                 SID_SECURE_URL, SID_SECURE_URL,
                                 0L );
-                SFX_APP()->GetOptions(*pRet);
+                SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
-            pRet = new SfxItemSet( SFX_APP()->GetPool(),
+            pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
             SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
             SID_SAVEREL_INET, SID_SAVEREL_FSYS,
             SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
             SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
             0 );
-            SFX_APP()->GetOptions(*pRet);
+            SfxGetpApp()->GetOptions(*pRet);
             break;
 
         case SID_SB_STARBASEOPTIONS:
-            pRet = new SfxItemSet( SFX_APP()->GetPool(),
+            pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
             SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER,
             0 );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
@@ -1361,7 +1361,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = new SfxItemSet( SFX_APP()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
+            pRet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }
@@ -1377,10 +1377,10 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem;
-            SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
-                SFX_APP()->SetOptions( aOptSet );
+                SfxGetpApp()->SetOptions( aOptSet );
             // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 
@@ -1427,7 +1427,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         break;
         case SID_INET_DLG :
         case SID_FILTER_DLG:
-            SFX_APP()->SetOptions( rSet );
+            SfxGetpApp()->SetOptions( rSet );
         break;
 
         case SID_SB_STARBASEOPTIONS:

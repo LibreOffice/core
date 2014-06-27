@@ -1690,7 +1690,7 @@ static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
 
             sal_uIntPtr nFormat = SotStorage::GetFormatID( xStorage );
 
-            const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
+            const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
 
             if ( pFilter )
             {

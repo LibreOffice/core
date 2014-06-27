@@ -80,7 +80,7 @@ static const sal_uInt16 pValueRanges[] =
 
 ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
-    : ScValidationDlgBase(pParent ? pParent : SFX_APP()->GetTopWindow(),
+    : ScValidationDlgBase(pParent ? pParent : SfxGetpApp()->GetTopWindow(),
         "ValidationDialog", "modules/scalc/ui/validationdialog.ui", pArgSet, pB)
     , m_pTabVwSh(pTabViewSh)
     , m_nValuePageId(0)

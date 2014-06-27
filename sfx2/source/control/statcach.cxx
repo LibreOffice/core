@@ -280,7 +280,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                     // If this dispatch object does not use the wanted dispatcher or the AppDispatcher, it's treated like any other UNO component
                     // (intercepting by internal dispatches)
                     SfxDispatcher *pDispatcher = pDisp->GetDispatcher_Impl();
-                    if ( pDispatcher == &rDispat || pDispatcher == SFX_APP()->GetAppDispatcher_Impl() )
+                    if ( pDispatcher == &rDispat || pDispatcher == SfxGetpApp()->GetAppDispatcher_Impl() )
                     {
                         // so we can use it directly
                         bSlotDirty = false;

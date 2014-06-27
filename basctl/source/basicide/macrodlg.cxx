@@ -125,7 +125,7 @@ MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries )
 MacroChooser::~MacroChooser()
 {
     if ( bForceStoreBasic )
-        SFX_APP()->SaveBasicAndDialogContainer();
+        SfxGetpApp()->SaveBasicAndDialogContainer();
 }
 
 void MacroChooser::StoreMacroDescription()
@@ -674,9 +674,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if ( pEntry )
                 aInfoItem.SetMethod( m_pMacroBox->GetEntryText( pEntry ) );
             StoreMacroDescription();
-            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
             SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-            SFX_APP()->ExecuteSlot( aRequest );
+            SfxGetpApp()->ExecuteSlot( aRequest );
 
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
@@ -710,9 +710,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     aInfoItem.SetMethod( pMethod->GetName() );
                     aInfoItem.SetModule( pMethod->GetModule()->GetName() );
                     aInfoItem.SetLib( pMethod->GetModule()->GetParent()->GetName() );
-                    SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                    SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
                     SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                    SFX_APP()->ExecuteSlot( aRequest );
+                    SfxGetpApp()->ExecuteSlot( aRequest );
 
                     if (SfxDispatcher* pDispatcher = GetDispatcher())
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
@@ -739,10 +739,10 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         DBG_ASSERT( pMethod, "Method?" );
         OUString aComment( GetInfo( pMethod ) );
         SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
-        SfxAllItemSet Args( SFX_APP()->GetPool() );
+        SfxAllItemSet Args( SfxGetpApp()->GetPool() );
         SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
         aRequest.AppendItem( aItem );
-        SFX_APP()->ExecuteSlot( aRequest );
+        SfxGetpApp()->ExecuteSlot( aRequest );
     }
     else if (pButton == m_pNewLibButton)
     {

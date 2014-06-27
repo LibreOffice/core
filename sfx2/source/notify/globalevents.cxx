@@ -236,7 +236,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     , pImp                    (0      )
 {
     m_refCount++;
-    SFX_APP();
+    SfxGetpApp();
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
     m_refCount--;

@@ -422,9 +422,9 @@ long HandleBasicError( StarBASIC* pBasic )
                 pShell = GetShell();
                 if ( !pShell )
                 {
-                    SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                    SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
                     SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                    SFX_APP()->ExecuteSlot( aRequest );
+                    SfxGetpApp()->ExecuteSlot( aRequest );
                     pShell = GetShell();
                 }
             }

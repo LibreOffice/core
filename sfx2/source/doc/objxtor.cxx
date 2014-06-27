@@ -188,7 +188,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( _rEvent.Source.get() );
         if ( aIt != s_aRegisteredVBAConstants.end() )
         {
-            if ( BasicManager* pAppMgr = SFX_APP()->GetBasicManager() )
+            if ( BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager() )
                 pAppMgr->SetGlobalUNOConstant( aIt->second.getStr(), Any( Reference< XInterface >() ) );
             s_aRegisteredVBAConstants.erase( aIt );
         }
@@ -267,7 +267,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bModifyPasswordEntered( false )
 {
     SfxObjectShell* pDoc = &_rDocShell;
-    SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
+    SfxObjectShellArr_Impl &rArr = SfxGetpApp()->GetObjectShells_Impl();
     rArr.push_back( pDoc );
     bInList = true;
 }
@@ -359,7 +359,7 @@ SfxObjectShell::~SfxObjectShell()
 
     DELETEX(AutoReloadTimer_Impl, pImp->pReloadTimer );
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
@@ -462,7 +462,7 @@ bool SfxObjectShell::Close()
         if ( pImp->bClosing )
         {
             // remove from Document list
-            SfxApplication *pSfxApp = SFX_APP();
+            SfxApplication *pSfxApp = SfxGetpApp();
             SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
             SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
             if ( it != rDocs.end() )

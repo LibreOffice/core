@@ -135,7 +135,7 @@ struct SearchDlg_Impl
 void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
 {
     SfxStringListItem* pSrchItem =
-        (SfxStringListItem*)SFX_APP()->GetItem( nId );
+        (SfxStringListItem*)SfxGetpApp()->GetItem( nId );
 
     if (pSrchItem)
     {
@@ -152,7 +152,7 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
 void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
-    SFX_APP()->PutItem( SfxStringListItem( nId, &rStrLst ) );
+    SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
 }
 
 // class SearchAttrItemList ----------------------------------------------
@@ -1305,7 +1305,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     }
     else if (pBtn == m_pJapOptionsBtn)
     {
-        SfxItemSet aSet( SFX_APP()->GetPool() );
+        SfxItemSet aSet( SfxGetpApp()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)

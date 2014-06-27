@@ -1275,7 +1275,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
 
     static bool s_bDeferredToNextSession = false;
     // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
-    // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
+    // interaction handler implementation), this was stored in SfxGetpApp()'s impl structure, in member
     // bODFVersionWarningLater. Of course, we do not have access to it here.
 
     // A proper solution which I would envision would be:

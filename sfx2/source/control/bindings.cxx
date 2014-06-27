@@ -649,7 +649,7 @@ void SfxBindings::InvalidateAll
     // everything is already set dirty or downing => nothing to do
     if ( !pDispatcher ||
          ( pImp->bAllDirty && ( !bWithMsg || pImp->bAllMsgDirty ) ) ||
-         SFX_APP()->IsDowning() )
+         SfxGetpApp()->IsDowning() )
     {
         return;
     }
@@ -693,7 +693,7 @@ void SfxBindings::Invalidate
         pImp->pSubBindings->Invalidate( pIds );
 
     // everything is already set dirty or downing => nothing to do
-    if ( !pDispatcher || pImp->bAllDirty || SFX_APP()->IsDowning() )
+    if ( !pDispatcher || pImp->bAllDirty || SfxGetpApp()->IsDowning() )
         return;
 
     // Search binary in always smaller areas
@@ -742,7 +742,7 @@ void SfxBindings::InvalidateShell
     if ( pImp->pSubBindings )
         pImp->pSubBindings->InvalidateShell( rSh, bDeep );
 
-    if ( !pDispatcher || pImp->bAllDirty || SFX_APP()->IsDowning() )
+    if ( !pDispatcher || pImp->bAllDirty || SfxGetpApp()->IsDowning() )
         return;
 
     // flush now already, it is done in GetShellLevel (rsh) anyway,
@@ -751,7 +751,7 @@ void SfxBindings::InvalidateShell
 
     if ( !pDispatcher ||
          ( pImp->bAllDirty && pImp->bAllMsgDirty ) ||
-         SFX_APP()->IsDowning() )
+         SfxGetpApp()->IsDowning() )
     {
         // if the next one is anyway, then all the servers are collected
         return;
@@ -799,7 +799,7 @@ void SfxBindings::Invalidate
     if ( pImp->pSubBindings )
         pImp->pSubBindings->Invalidate( nId );
 
-    if ( !pDispatcher || pImp->bAllDirty || SFX_APP()->IsDowning() )
+    if ( !pDispatcher || pImp->bAllDirty || SfxGetpApp()->IsDowning() )
         return;
 
     SfxStateCache* pCache = GetStateCache(nId);
@@ -830,7 +830,7 @@ void SfxBindings::Invalidate
     if ( pImp->pSubBindings )
         pImp->pSubBindings->Invalidate( nId, bWithItem, bWithMsg );
 
-    if ( SFX_APP()->IsDowning() )
+    if ( SfxGetpApp()->IsDowning() )
         return;
 
     SfxStateCache* pCache = GetStateCache(nId);
@@ -1535,7 +1535,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
         return sal_True;
     }
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
 
     if( pDispatcher )
         pDispatcher->Update_Impl();
@@ -1705,7 +1705,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
     pImp->nOwnRegLevel--;
 
     // check if this is the outer most level
-    if ( --nRegLevel == 0 && !SFX_APP()->IsDowning() )
+    if ( --nRegLevel == 0 && !SfxGetpApp()->IsDowning() )
     {
         if ( pImp->bContextChanged )
         {

@@ -1741,7 +1741,7 @@ void ScTabViewObj::SelectionChanged()
     // will cause the style dialog to be raised so we go
     // direct here
     ScFormatShell aShell( &GetViewShell()->GetViewData() );
-    SfxAllItemSet reqList( SFX_APP()->GetPool() );
+    SfxAllItemSet reqList( SfxGetpApp()->GetPool() );
     SfxRequest aReq( SID_STYLE_END_PREVIEW, 0, reqList );
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;

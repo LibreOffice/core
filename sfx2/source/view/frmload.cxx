@@ -262,7 +262,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
             m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_aContext),
             UNO_QUERY_THROW );
 
-        const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         const SfxFilterFlags nMust = SFX_FILTER_IMPORT;
         const SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED;
 
@@ -343,11 +343,11 @@ namespace
 bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
-    SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
+    SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
         aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
-    return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
+    return lcl_getDispatchResult( SfxGetpApp()->ExecuteSlot( aRequest ) );
 }
 
 
@@ -360,7 +360,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
     const Reference< XInteractionHandler >
                               xInteraction = io_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
 
-    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+    const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
     const SfxFilter* pFilter = NULL;
 
     // get filter by its name directly ...
@@ -443,7 +443,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
         {
             // detect the filter for the template. Might still be NULL (if the template is broken, or does not
             // exist, or some such), but this is handled by our caller the same way as if no template/URL was present.
-            const SfxFilter* pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SFX_APP()->GetFilterMatcher() );
+            const SfxFilter* pTemplateFilter = impl_detectFilterForURL( sTemplateURL, io_rDescriptor, SfxGetpApp()->GetFilterMatcher() );
             if ( pTemplateFilter )
             {
                 // load the template document, but, well, "as template"

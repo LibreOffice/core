@@ -2694,7 +2694,7 @@ namespace pcr
         try
         {
             // create the itemset for the dialog
-            SfxItemSet aCoreSet(SFX_APP()->GetPool(),
+            SfxItemSet aCoreSet(SfxGetpApp()->GetPool(),
                 SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
                 SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
                 0);     // ripped this somewhere ... don't understand it :(

@@ -626,7 +626,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
 )
 {
     SolarMutexGuard aGuard;
-    SfxApplication *pApp = SFX_APP();
+    SfxApplication *pApp = SfxGetpApp();
 
     SfxSlotPool *pSlotPool;
     if ( pMod )
@@ -665,7 +665,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
 
 void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, SfxStbCtrlFactory* pFact)
 {
-    SFX_APP()->RegisterStatusBarControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterStatusBarControl_Impl( pMod, pFact );
 }
 
 

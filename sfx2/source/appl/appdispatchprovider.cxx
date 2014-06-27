@@ -136,7 +136,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     bool                bMasterCommand( false );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = 0;
-    SfxDispatcher* pAppDisp = SFX_APP()->GetAppDispatcher_Impl();
+    SfxDispatcher* pAppDisp = SfxGetpApp()->GetAppDispatcher_Impl();
     if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
         nId = (sal_uInt16) aURL.Path.toInt32();
@@ -182,7 +182,7 @@ throw (uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
 
     std::list< sal_Int16 > aGroupList;
-    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
+    SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
 
     const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
@@ -215,7 +215,7 @@ throw (uno::RuntimeException, std::exception)
     std::list< frame::DispatchInformation > aCmdList;
 
     SolarMutexGuard aGuard;
-    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
+    SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
 
     if ( pAppSlotPool )
     {

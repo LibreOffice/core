@@ -623,7 +623,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SFX_HINT_TITLECHANGED:
                 aDocument.SetName( SfxShell::GetName() );
                 //  RegisterNewTargetNames gibts nicht mehr
-                SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
+                SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
                 break;
         }
     }
@@ -2725,7 +2725,7 @@ ScDocShell::~ScDocShell()
 
     delete pAutoStyleList;
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SfxApplication *pSfxApp = SfxGetpApp();
     if ( pSfxApp->GetDdeService() ) // Delete DDE for Document
         pSfxApp->RemoveDdeTopic( this );
 
@@ -2855,7 +2855,7 @@ void ScDocShell::SetDrawModified( bool bIsModified /* = true */ )
         if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
         {
             aDocument.UpdateChartListenerCollection();
-            SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
+            SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
         }
         SC_MOD()->AnythingChanged();
     }

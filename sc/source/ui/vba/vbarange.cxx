@@ -3574,7 +3574,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exc
     SfxViewFrame* pViewFrame = excel::getViewFrame( xModel );
     if ( pViewFrame )
     {
-        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+        SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
         // Hoping this will make sure this slot is called
         // synchronously
         SfxBoolItem sfxAsync( SID_ASYNCHRON, false );

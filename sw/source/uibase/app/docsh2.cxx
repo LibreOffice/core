@@ -346,7 +346,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             editeng::SortedAutoCompleteStrings aTmpLst( rACW.GetWordList() );
             pAFlags->m_pAutoCompleteList = &aTmpLst;
 
-            SfxApplication* pApp = SFX_APP();
+            SfxApplication* pApp = SfxGetpApp();
             SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
             SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, true );
             aAppReq.AppendItem(aSwOptions);
@@ -1295,7 +1295,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     if( rHtmlOptions.IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
-        if( pBasicMan && (pBasicMan != SFX_APP()->GetBasicManager()) )
+        if( pBasicMan && (pBasicMan != SfxGetpApp()->GetBasicManager()) )
         {
             sal_uInt16 nLibCount = pBasicMan->GetLibCount();
             while( nLibCount )

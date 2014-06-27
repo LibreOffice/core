@@ -240,7 +240,7 @@ SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
 {
     m_xStringLength = new StringLength;
     m_nAllowedMenuSize = ::std::min( m_nAllowedMenuSize, (sal_uInt32)PICKLIST_MAXSIZE );
-    StartListening( *SFX_APP() );
+    StartListening( *SfxGetpApp() );
 }
 
 SfxPickList::~SfxPickList()
@@ -335,7 +335,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 
     if ( pPick )
     {
-        SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, SFX_APP()->GetPool() );
+        SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, SfxGetpApp()->GetPool() );
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
         aReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );
@@ -352,7 +352,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 
         aReq.AppendItem(SfxStringItem( SID_FILTER_NAME, aFilter ));
         aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );
-        SFX_APP()->ExecuteSlot( aReq );
+        SfxGetpApp()->ExecuteSlot( aReq );
     }
 }
 

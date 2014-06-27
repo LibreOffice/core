@@ -134,7 +134,7 @@ void SfxInterface::Register( SfxModule* pMod )
     if ( pMod )
         pMod->GetSlotPool()->RegisterInterface(*this);
     else
-        SFX_APP()->GetAppSlotPool_Impl().RegisterInterface(*this);
+        SfxGetpApp()->GetAppSlotPool_Impl().RegisterInterface(*this);
 }
 
 void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
@@ -295,7 +295,7 @@ SfxInterface::~SfxInterface()
         if ( pMod )
             pMod->GetSlotPool()->ReleaseInterface(*this);
         else
-            SFX_APP()->GetAppSlotPool_Impl().ReleaseInterface(*this);
+            SfxGetpApp()->GetAppSlotPool_Impl().ReleaseInterface(*this);
     }
 }
 

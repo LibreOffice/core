@@ -2771,7 +2771,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
 
     try
     {

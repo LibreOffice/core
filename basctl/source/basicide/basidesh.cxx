@@ -370,7 +370,7 @@ void Shell::StoreAllWindowData( bool bPersistent )
 
     if ( bPersistent  )
     {
-        SFX_APP()->SaveBasicAndDialogContainer();
+        SfxGetpApp()->SaveBasicAndDialogContainer();
         SetAppBasicModified(false);
 
         if (SfxBindings* pBindings = GetBindingsPtr())

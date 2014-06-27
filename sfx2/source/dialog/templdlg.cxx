@@ -1715,7 +1715,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
     sal_uInt16 nMask, sal_uInt16 *pIdx, const sal_uInt16* pModifier)
 {
-    SfxDispatcher &rDispatcher = *SFX_APP()->GetDispatcher_Impl();
+    SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
     SfxStringItem aItem(nId, rStr);
     SfxUInt16Item aFamily(SID_STYLE_FAMILY, nFamily);
     SfxUInt16Item aMask( SID_STYLE_MASK, nMask );
@@ -1927,7 +1927,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
             break;
         }
         case SID_TEMPLATE_LOAD:
-            SFX_APP()->GetDispatcher_Impl()->Execute(nEntry);
+            SfxGetpApp()->GetDispatcher_Impl()->Execute(nEntry);
         break;
         default: OSL_FAIL("not implemented"); break;
     }
@@ -2117,7 +2117,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         if ( bUsedStyle )
         {
             #if defined UNX
-                QueryBox aBox( SFX_APP()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
+                QueryBox aBox( SfxGetpApp()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
             #else
                 QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , aMsg );
             #endif

@@ -660,7 +660,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rReq.Ignore();
                     break;
                 }
-                SfxApplication* pApp = SFX_APP();
+                SfxApplication* pApp = SfxGetpApp();
                 const SfxPoolItem* pItem;
                 SfxMedium* pMed = NULL;
                 if ( pReqArgs &&

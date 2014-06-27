@@ -354,7 +354,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
             if ( sLocation == "application" )
             {
-                xLibContainer = Reference< XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
+                xLibContainer = Reference< XLibraryContainer >( SfxGetpApp()->GetDialogContainer(), UNO_QUERY );
             }
             else if ( sLocation == "document" )
             {

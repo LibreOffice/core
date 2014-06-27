@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
             aItem.SetMacroTable( *pMacroTbl );
 
         // create empty itemset for macro-dlg
-        SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(),
+        SfxItemSet* pItemSet = new SfxItemSet(SfxGetpApp()->GetPool(),
                                               SID_ATTR_MACROITEM,
                                               SID_ATTR_MACROITEM );
         pItemSet->Put ( aItem, SID_ATTR_MACROITEM );

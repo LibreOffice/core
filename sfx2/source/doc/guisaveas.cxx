@@ -1048,7 +1048,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // generate SidSet from MediaDescriptor and provide it into FileDialog
     // than merge changed SidSet back
-    SfxAllItemSet aDialogParams( SFX_APP()->GetPool() );
+    SfxAllItemSet aDialogParams( SfxGetpApp()->GetPool() );
     SfxItemSet* pDialogParams = &aDialogParams;
     TransformParameters( nSlotID,
                          GetMediaDescr().getAsConstPropertyValueList(),

@@ -345,7 +345,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
     }
     else if (m_pSoundsLikeCJKSettings == pButton)
     {
-        SfxItemSet aSet( SFX_APP()->GetPool() );
+        SfxItemSet aSet( SfxGetpApp()->GetPool() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {

@@ -74,7 +74,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     // this Page needs ExchangeSupport
     SetExchangeSupport();
 
-    ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
+    ResMgr* pResMgr = SfxGetpApp()->GetModule_Impl()->GetResMgr();
     OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 

@@ -185,7 +185,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SetPool( pMessagePool );
     ScGlobal::InitTextHeight( pMessagePool );
 
-    StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
+    StartListening( *SfxGetpApp() );       // for SFX_HINT_DEINITIALIZING
 }
 
 ScModule::~ScModule()
@@ -972,7 +972,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     bool bSaveInputOptions = false;
     bool bCompileErrorCells = false;
 
-    //  SFX_APP()->SetOptions( rOptSet );
+    //  SfxGetpApp()->SetOptions( rOptSet );
 
     // No more linguistics
     if (rOptSet.HasItem(SID_ATTR_METRIC, &pItem))
@@ -1253,7 +1253,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SetPrintOptions( rNewOpt );
 
         // broadcast causes all previews to recalc page numbers
-        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );
     }
 
     if ( bSaveAppOptions )
@@ -1408,7 +1408,7 @@ bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
 
 void ScModule::InputEnterHandler( sal_uInt8 nBlockMode )
 {
-    if ( !SFX_APP()->IsDowning() ) // Not when quitting the program
+    if ( !SfxGetpApp()->IsDowning() ) // Not when quitting the program
     {
         ScInputHandler* pHdl = GetInputHdl();
         if (pHdl)
@@ -1555,7 +1555,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
             pViewFrm->SetChildWindow( nId, bVis );
         }
 
-        SfxApplication* pSfxApp = SFX_APP();
+        SfxApplication* pSfxApp = SfxGetpApp();
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
     }
 }
@@ -2003,7 +2003,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         ScUserListItem  aULItem( SCITEM_USERLIST );
         ScUserList*     pUL = ScGlobal::GetUserList();
 
-        //  SFX_APP()->GetOptions( aSet );
+        //  SfxGetpApp()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
                         sal::static_int_cast<sal_uInt16>(rAppOpt.GetAppMetric()) ) );

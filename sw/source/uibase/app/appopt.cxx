@@ -293,7 +293,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC, false, &pItem ) )
     {
-        SFX_APP()->SetOptions(rSet);
+        SfxGetpApp()->SetOptions(rSet);
         PutItem(*pItem);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
@@ -301,7 +301,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT,
                                                     false, &pItem ) )
     {
-        SFX_APP()->SetOptions(rSet);
+        SfxGetpApp()->SetOptions(rSet);
         const SfxBoolItem* pCharItem = (const SfxBoolItem*)pItem;
         ::SetApplyCharUnit(pCharItem->GetValue(), !bTextDialog);
     }

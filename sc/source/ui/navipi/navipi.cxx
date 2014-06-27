@@ -628,7 +628,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
 
     rBindings.LEAVEREGISTRATIONS();
 
-    StartListening( *(SFX_APP()) );
+    StartListening( *(SfxGetpApp()) );
     StartListening( rBindings );
 
     aLbDocuments.Hide();        // bei NAV_LMODE_NONE gibts die nicht
@@ -690,7 +690,7 @@ ScNavigatorDlg::~ScNavigatorDlg()
     delete [] ppBoundItems;
     delete pMarkArea;
 
-    EndListening( *(SFX_APP()) );
+    EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
 }
 

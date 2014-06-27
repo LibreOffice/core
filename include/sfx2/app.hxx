@@ -264,8 +264,6 @@ public:
     sfx2::sidebar::Theme & GetSidebarTheme();
 };
 
-#define SFX_APP() SfxGetpApp()
-
 inline SfxApplication* SfxGetpApp()
 {
     return SfxApplication::GetOrCreate();

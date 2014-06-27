@@ -64,7 +64,7 @@ SfxFrameDescriptor::~SfxFrameDescriptor()
 SfxItemSet* SfxFrameDescriptor::GetArgs()
 {
     if( !pImp->pArgs )
-        pImp->pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
+        pImp->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     return pImp->pArgs;
 }
 
@@ -118,7 +118,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
     if( pImp->pArgs )
     {
         // Currently in the clone of SfxAllItemSets there is still a bug ...
-        pFrame->pImp->pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
+        pFrame->pImp->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
         pFrame->pImp->pArgs->Put(*pImp->pArgs);
     }
 

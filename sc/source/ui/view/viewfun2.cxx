@@ -1892,7 +1892,7 @@ bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
         SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         return true;
     }
     else
@@ -1923,7 +1923,7 @@ bool ScViewFunc::AppendTable( const OUString& rName, bool bRecord )
         SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         return true;
     }
     else
@@ -1982,7 +1982,7 @@ bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
 
-        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -2106,7 +2106,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
 
-        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
         pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -2305,7 +2305,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                 PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
 
-    SfxApplication* pSfxApp = SFX_APP();
+    SfxApplication* pSfxApp = SfxGetpApp();
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 
@@ -2535,7 +2535,7 @@ void ScViewFunc::MoveTable(
         TheTabs.clear();
 
         pDestShell->SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     }
     else
     {
@@ -2692,7 +2692,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
         {
             rDoc.SetVisible( nPos, true );
             SetTabNo( nPos, true );
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+            SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
             if (!bFound)
                 bFound = true;
             if (bUndo)
@@ -2752,7 +2752,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
         }
 
         //  Update views
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
         pDocSh->SetDocumentModified();
     }

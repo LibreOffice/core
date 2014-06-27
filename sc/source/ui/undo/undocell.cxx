@@ -1010,7 +1010,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
 
     rDoc.PostprocessRangeNameUpdate();
 
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }
 
 void ScUndoRangeNames::Undo()

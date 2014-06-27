@@ -94,7 +94,7 @@ void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if ( !SFX_APP()->QueryExit_Impl() )
+    if ( !SfxGetpApp()->QueryExit_Impl() )
         throw TerminationVetoException();
 }
 
@@ -111,7 +111,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     // Application::Quit(), which is asynchronous (PostUserEvent) - disable!
     Timer::ImplDeInitTimer();
 
-    SfxApplication* pApp = SFX_APP();
+    SfxApplication* pApp = SfxGetpApp();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();

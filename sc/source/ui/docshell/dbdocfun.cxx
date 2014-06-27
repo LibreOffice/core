@@ -104,7 +104,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     }
 
     aModificator.SetDocumentModified();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
     return true;
 }
 
@@ -137,7 +137,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         }
 
         aModificator.SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
         bDone = true;
     }
 
@@ -184,7 +184,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
                 delete pUndoColl;
 
             aModificator.SetDocumentModified();
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+            SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
             bDone = true;
         }
     }

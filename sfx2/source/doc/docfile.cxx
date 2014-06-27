@@ -2822,7 +2822,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
 SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImp(new SfxMedium_Impl(this))
 {
-    SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pImp->m_pSet = pParams;
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
 
@@ -2839,7 +2839,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     if (aFilterProvider.isEmpty())
     {
         // This is a conventional filter type.
-        pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
     }
     else
     {
@@ -2892,7 +2892,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
     pImp(new SfxMedium_Impl(this))
 {
     OUString aType = SfxFilter::GetTypeFromStorage(rStor);
-    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
+    pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aType );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
@@ -2910,7 +2910,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl(this))
 {
-    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
+    pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
@@ -3015,7 +3015,7 @@ SfxItemSet* SfxMedium::GetItemSet() const
 {
     // this method *must* return an ItemSet, returning NULL can cause crashes
     if (!pImp->m_pSet)
-        pImp->m_pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+        pImp->m_pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     return pImp->m_pSet;
 }
 

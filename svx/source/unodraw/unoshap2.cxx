@@ -1526,7 +1526,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 const SfxFilter*    pSfxFilter = NULL;
                 SfxMedium           aSfxMedium( aURL, referer_, STREAM_READ | STREAM_SHARE_DENYNONE );
 
-                SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
                 if( !pSfxFilter )
                 {

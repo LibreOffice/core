@@ -630,7 +630,7 @@ namespace dlgprov
         }
         else
         {
-            ResMgr* pResMgr = SFX_APP()->GetSfxResManager();
+            ResMgr* pResMgr = SfxGetpApp()->GetSfxResManager();
             if( pResMgr )
             {
                 OUString aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );

@@ -224,7 +224,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString( "_blank" ) ) );
-            SFX_APP()->ExecuteSlot( aReq );
+            SfxGetpApp()->ExecuteSlot( aReq );
             const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
             if ( pItem )
                 rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );

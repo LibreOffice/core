@@ -92,7 +92,7 @@ rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* p
 
 void FuInsertFile::DoExecute( SfxRequest& rReq )
 {
-    SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
+    SfxFilterMatcher&       rMatcher = SfxGetpApp()->GetFilterMatcher();
     ::std::vector< OUString > aFilterVector;
     const SfxItemSet*       pArgs = rReq.GetArgs ();
 
@@ -251,7 +251,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE );
     const SfxFilter*    pFilter = NULL;
 
-    SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
     bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
     bool                bInserted = false;
@@ -718,7 +718,7 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 
 void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {
-    SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
+    SfxFilterMatcher&   rMatcher = SfxGetpApp()->GetFilterMatcher();
     const SfxFilter*    pSearchFilter = NULL;
 
     rFilterVector.clear();

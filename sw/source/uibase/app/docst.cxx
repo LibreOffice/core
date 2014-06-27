@@ -470,7 +470,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
                         nRet = MakeByExample(aParam, nFamily, nMask, pActShell );
-                        SfxTemplateDialog* pDlg = SFX_APP()->GetTemplateDialog();
+                        SfxTemplateDialog* pDlg = SfxGetpApp()->GetTemplateDialog();
 
                         if(pDlg && pDlg->IsVisible())
                             pDlg->Update();

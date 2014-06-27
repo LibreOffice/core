@@ -170,7 +170,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
                 // have SwOleClient::FormatChanged() to align the modified formula properly
                 // even if the vis area does not change (e.g. when formula text changes from
                 // "{a over b + c} over d" to "d over {a over b + c}"
-                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
+                SfxGetpApp()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
 
                 Repaint();
             }
@@ -664,7 +664,7 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 {
     pCursor = NULL;
 
-    SetPool(&SFX_APP()->GetPool());
+    SetPool(&SfxGetpApp()->GetPool());
 
     SmModule *pp = SM_MOD();
     aFormat = pp->GetConfig()->GetStandardFormat();
@@ -1280,7 +1280,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
 
 SfxItemPool& SmDocShell::GetPool() const
 {
-    return SFX_APP()->GetPool();
+    return SfxGetpApp()->GetPool();
 }
 
 void SmDocShell::SetVisArea(const Rectangle & rVisArea)

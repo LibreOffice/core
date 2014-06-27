@@ -556,7 +556,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                InfoBox aBox( SfxGetpApp()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
                 aBox.Execute();
                 rReq.Ignore();
             }
@@ -576,7 +576,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame, OUString() );
             if( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                    InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                    InfoBox aBox( SfxGetpApp()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
                     aBox.Execute();
                     rReq.Ignore();
             }
@@ -1206,7 +1206,7 @@ void SfxViewShell::SetWindow
         pWindow->GrabFocus();
     //TODO/CLEANUP
     //Do we still need this Method?!
-    //SFX_APP()->GrabFocus( pWindow );
+    //SfxGetpApp()->GrabFocus( pWindow );
 }
 
 
@@ -1238,7 +1238,7 @@ SfxViewShell::SfxViewShell
     StartListening(*pViewFrame->GetObjectShell());
 
     // Insert into list
-    SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
+    SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
     rViewArr.push_back(this);
 }
 
@@ -1249,7 +1249,7 @@ SfxViewShell::~SfxViewShell()
 
     // Remove from list
     const SfxViewShell *pThis = this;
-    SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
+    SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
     SfxViewShellArr_Impl::iterator it = std::find( rViewArr.begin(), rViewArr.end(), pThis );
     rViewArr.erase( it );
 
@@ -1484,8 +1484,8 @@ SfxViewShell* SfxViewShell::GetFirst
 )
 {
     // search for a SfxViewShell of the specified type
-    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
-    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
+    SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     for ( sal_uInt16 nPos = 0; nPos < rShells.size(); ++nPos )
     {
         SfxViewShell *pShell = rShells[nPos];
@@ -1521,8 +1521,8 @@ SfxViewShell* SfxViewShell::GetNext
     bool                bOnlyVisible
 )
 {
-    SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
-    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
+    SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     sal_uInt16 nPos;
     for ( nPos = 0; nPos < rShells.size(); ++nPos )
         if ( rShells[nPos] == &rPrev )
@@ -1567,7 +1567,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                 if ( GetController().is() )
                 {
                     // avoid access to dangling ViewShells
-                    SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
+                    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
                     for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
                     {
                         SfxViewFrame *frame = rFrames[n];

@@ -572,7 +572,7 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
         else
             pMedium->SetStorage_Impl( xStorage );
 
-        SfxAllItemSet aSet( SFX_APP()->GetPool() );
+        SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
         TransformParameters( SID_OPENDOC, rMediaDescr, aSet );
         pMedium->GetItemSet()->Put( aSet );
         pMedium->CanDisposeStorage_Impl( false );
@@ -1349,7 +1349,7 @@ bool SfxObjectShell::SaveTo_Impl
         // a draw document ), the ClassId of the destination storage is different from the ClassId of this
         // document. It can be retrieved from the default filter for the desired target format
         long nFormat = rMedium.GetFilter()->GetFormat();
-        SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
         {
@@ -3050,7 +3050,7 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     {
         // Password
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, false );
-        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
+        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SfxGetpApp()->GetPool(), pMedium ) )
         {
             uno::Sequence< beans::NamedValue > aEncryptionData;
             if ( GetEncryptionData_Impl(pMedium->GetItemSet(), aEncryptionData) )
@@ -3119,7 +3119,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
             pImp->m_bCreateTempStor = false;
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
+            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {
@@ -3271,7 +3271,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
 
     if ( bSendNotification )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
+        SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
     }
 
     return bResult;

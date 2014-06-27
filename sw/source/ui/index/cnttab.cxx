@@ -101,7 +101,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
     xFltMgr->appendFilter( rFileString, "*.sdi" );
     xFltMgr->setCurrentFilter( rFileString ) ;
 
-    OUString& rLastSaveDir = (OUString&)SFX_APP()->GetLastSaveDirectory();
+    OUString& rLastSaveDir = (OUString&)SfxGetpApp()->GetLastSaveDirectory();
     OUString sSaveDir = rLastSaveDir;
 
     if( !rURL.isEmpty() )
