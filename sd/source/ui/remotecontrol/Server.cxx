@@ -54,9 +54,10 @@ namespace sd {
 
         ClientInfoInternal( const OUString& rName,
                             const OUString& rAddress,
+                            const bool bIsAlreadyAuthorised,
                             BufferedStreamSocket *pSocket,
                             const OUString& rPin ):
-                ClientInfo( rName, rAddress ),
+                ClientInfo( rName, rAddress, bIsAlreadyAuthorised ),
                 mpStreamSocket( pSocket ),
                 mPin( rPin ) {}
     };
@@ -127,8 +128,8 @@ void RemoteServer::execute()
             ::boost::shared_ptr< ClientInfoInternal > pClient(
                 new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
-                    aAddress, pSocket, OStringToOUString( aPin,
-                    RTL_TEXTENCODING_UTF8 ) );
+                    aAddress, false, pSocket, OStringToOUString( aPin,
+                                                                 RTL_TEXTENCODING_UTF8 ) ) );
             mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines
@@ -247,6 +248,23 @@ std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
     MutexGuard aGuard( sDataMutex );
     aClients.assign( spServer->mAvailableClients.begin(),
                      spServer->mAvailableClients.end() );
+
+    // We also need to provide authorised clients (no matter whether or not
+    // they are actually available), so that they can be de-authorised if
+    // necessary. We specifically want these to be at the end of the list
+    // since the user is more likely to be trying to connect a new remote
+    // than removing an existing remote.
+    // We can also be sure that pre-authorised clients will not be on the
+    // available clients list, as they get automatially connected if seen.
+    // TODO: we should probably add some sort of extra labelling to mark
+    // authorised AND connected client.
+    Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
+    Sequence< OUString > aNames = xConfig->getElementNames();
+    for ( int i = 0; i < aNames.getLength(); i++ )
+    {
+        aClients.push_back( ::boost::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], "", true ) ) );
+    }
+
     return aClients;
 }
 
@@ -257,7 +275,12 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
         return false;
 
     ClientInfoInternal* apClient = dynamic_cast< ClientInfoInternal* >( pClient.get() );
-    ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
+    if ( !apClient )
+    // could happen if we try to "connect" an already authorised client
+    {
+        return false;
+    }
+
     if ( apClient->mPin.equals( aPin ) )
     {
         // Save in settings first
@@ -310,6 +333,30 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
     {
         return false;
     }
+}
+
+void RemoteServer::deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient )
+{
+    // TODO: we probably want to forcefully disconnect at this point too?
+    // But possibly via a separate function to allow just disconnecting from
+    // the UI.
+
+    SAL_INFO( "sdremote", "RemoteServer::deauthoriseClient called" );
+    if ( !spServer )
+        return;
+
+    if ( !pClient->mbIsAlreadyAuthorised )
+    // We can't remove unauthorised clients from the authorised list...
+    {
+        return;
+    }
+
+    boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
+    Reference< XNameContainer > const xConfig =
+        officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
+
+    xConfig->removeByName( pClient->mName );
+    aChanges->commit();
 }
 
 void SdDLL::RegisterRemotes()

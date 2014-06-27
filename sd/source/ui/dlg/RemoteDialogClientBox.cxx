@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vector>
+
 #include "svtools/controldims.hrc"
 
 #include "RemoteDialogClientBox.hxx"
@@ -29,6 +31,8 @@
 #include <vcl/settings.hxx>
 
 #include "glob.hrc"
+
+using namespace std;
 
 using namespace ::com::sun::star;
 
@@ -72,12 +76,15 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
     m_aPinBox( this, 0 ),
+    m_aDeauthoriseButton( this ),
     m_aScrollBar( this, WB_VERT )
 {
     m_aScrollBar.SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
     m_aScrollBar.EnableDrag();
 
     m_aPinBox.SetUseThousandSep(false);
+    m_aDeauthoriseButton.SetText( SD_RESSTR(STR_DEAUTHORISE_CLIENT) );
+    m_aDeauthoriseButton.SetClickHdl( LINK( this, ClientBox, DeauthoriseHdl ) );
 
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
@@ -102,6 +109,8 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
         SetBackground( rStyleSettings.GetFieldColor() );
 
     m_xRemoveListener = new ClientRemovedListener( this );
+
+    populateEntries();
 
     Show();
 }
@@ -332,18 +341,30 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                                MapMode( MAP_APPFONT ) );
         m_aPinBox.SetSizePixel( aSize );
+        m_aDeauthoriseButton.SetSizePixel( m_aDeauthoriseButton.GetOptimalSize() );
         const Rectangle aRect( GetEntryRect( m_nActive ) );
         Size  aBtnSize( m_aPinBox.GetSizePixel() );
         Point aBtnPos( aRect.Left(),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-        OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
-        DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
-                  sPinText, 0 );
 
-        aBtnPos = Point( aRect.Left() + GetTextWidth( sPinText ),
-                   aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
+        bool bAlreadyAuthorised = pEntry->m_pClientInfo->mbIsAlreadyAuthorised;
 
+        if ( !bAlreadyAuthorised )
+        {
+            OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
+            DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
+                      sPinText, 0 );
+
+            aBtnPos = Point( aRect.Left() + GetTextWidth( sPinText ),
+                             aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
+
+        }
         m_aPinBox.SetPosPixel( aBtnPos );
+        m_aPinBox.Show( !bAlreadyAuthorised );
+
+        aBtnPos.Move( 20, 0 );
+        m_aDeauthoriseButton.SetPosPixel( aBtnPos );
+        m_aDeauthoriseButton.Show( bAlreadyAuthorised );
 
 //         long nExtraHeight = 0;
 
@@ -475,6 +496,15 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
         aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
+
+    // If we have just removed the last entry (via deauthorise)
+    // then we need to make sure we hide the button (usually
+    // this would all be dealt with in in DrawRow, but that
+    // won't be called for 0 items).
+    if ( m_vEntries.size() == 0 )
+    {
+        m_aDeauthoriseButton.Show( false );
+    }
 
     typedef std::vector< TClientBoxEntry >::iterator ITER;
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
@@ -671,6 +701,44 @@ long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
     return nPos;
 }
 
+void ClientBox::clearEntries()
+{
+    selectEntry( -1 );
+    m_bHasActive = false;
+
+    const ::osl::MutexGuard aGuard( m_entriesMutex );
+
+    m_vEntries.clear();
+    if ( IsReallyVisible() )
+        Invalidate();
+    m_bNeedsRecalc = true;
+}
+
+void ClientBox::populateEntries()
+{
+    const ::osl::MutexGuard aGuard( m_entriesMutex );
+
+    clearEntries();
+
+#ifdef ENABLE_SDREMOTE
+    RemoteServer::ensureDiscoverable();
+
+    vector<::boost::shared_ptr<ClientInfo>> aClients( RemoteServer::getClients() );
+
+    const vector<::boost::shared_ptr<ClientInfo>>::const_iterator aEnd( aClients.end() );
+
+    for ( vector<::boost::shared_ptr<ClientInfo>>::const_iterator aIt( aClients.begin() );
+        aIt != aEnd; ++aIt )
+    {
+        addEntry( *aIt );
+    }
+#endif
+
+    if ( IsReallyVisible() )
+        Invalidate();
+    m_bNeedsRecalc = true;
+}
+
 void ClientBox::DoScroll( long nDelta )
 {
     m_nTopIndex += nDelta;
@@ -687,6 +755,20 @@ IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
 {
     DoScroll( pScrBar->GetDelta() );
 
+    return 1;
+}
+
+IMPL_LINK_NOARG( ClientBox, DeauthoriseHdl )
+{
+    long aSelected = GetActiveEntryIndex();
+    if ( aSelected < 0 )
+        return 1;
+    TClientBoxEntry aEntry = GetEntryData(aSelected);
+
+#ifdef ENABLE_SDREMOTE
+    RemoteServer::deauthoriseClient( aEntry->m_pClientInfo );
+#endif
+    populateEntries();
     return 1;
 }
 

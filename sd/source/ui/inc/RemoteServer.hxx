@@ -46,10 +46,15 @@ namespace sd
         OUString mName;
         OUString mAddress;
 
+        bool mbIsAlreadyAuthorised;
+
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
-        ClientInfo( const OUString& rName, const OUString& rAddress ) :
+        ClientInfo( const OUString& rName,
+                    const OUString& rAddress,
+                    const bool bIsAlreadyAuthorised ) :
             mName( rName ),
-            mAddress( rAddress ) {}
+            mAddress( rAddress ),
+            mbIsAlreadyAuthorised( bIsAlreadyAuthorised ) {}
 
         virtual ~ClientInfo() {};
     };
@@ -71,6 +76,7 @@ namespace sd
             SD_DLLPUBLIC static std::vector< ::boost::shared_ptr< ClientInfo > > getClients();
             SD_DLLPUBLIC static bool connectClient( ::boost::shared_ptr< ClientInfo > pClient,
                                                         const OUString& aPin );
+            SD_DLLPUBLIC static void deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();
