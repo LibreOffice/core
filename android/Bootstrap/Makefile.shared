@@ -58,7 +58,7 @@ properties:
 	echo "APP_PLATFORM := android-15" >> jni/Application.mk
 
 install: build-ant
-	unset JAVA_HOME && $(ANT) -quiet debug install
+	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) debug install
 	@echo
 	@echo 'Run it with "make run"'
 	@echo
@@ -67,7 +67,7 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 clean: android_version_setup properties
-	$(ANT) -quiet -keep-going clean
+	$(ANT) $(if $(VERBOSE)$(verbose),,-quiet) -keep-going clean
 	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
 	rm -f native-code.cxx
 
