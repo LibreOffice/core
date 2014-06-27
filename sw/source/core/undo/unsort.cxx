@@ -94,7 +94,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for( sal_uInt16 i=0; i < aSortList.size(); i++)
+        for( size_t i=0; i < aSortList.size(); i++)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
                     *aSortList[i].SORT_TXT_TBL.TBL.pSource );
@@ -124,10 +124,9 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         // create index for (sorted) positions
         // The IndexList must be created based on (asc.) sorted SourcePosition.
         SwUndoSortList aIdxList;
-        sal_uInt16 i;
 
-        for( i = 0; i < aSortList.size(); ++i)
-            for( sal_uInt16 ii=0; ii < aSortList.size(); ++ii )
+        for( size_t i = 0; i < aSortList.size(); ++i)
+            for( size_t ii=0; ii < aSortList.size(); ++ii )
                 if( aSortList[ii].SORT_TXT_TBL.TXT.nSource == nSttNode + i )
                 {
                     SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
@@ -136,7 +135,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
                     break;
                 }
 
-        for(i=0; i < aSortList.size(); ++i)
+        for(size_t i=0; i < aSortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
@@ -170,7 +169,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for(sal_uInt16 i=0; i < aSortList.size(); ++i)
+        for(size_t i=0; i < aSortList.size(); ++i)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
                     *aSortList[i].SORT_TXT_TBL.TBL.pSource );
@@ -203,16 +202,15 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         RemoveIdxFromRange(rPam, true);
 
         SwUndoSortList aIdxList;
-        sal_uInt16 i;
 
-        for( i = 0; i < aSortList.size(); ++i)
+        for( size_t i = 0; i < aSortList.size(); ++i)
         {   // current position is starting point
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i].SORT_TXT_TBL.TXT.nSource);
             aIdxList.insert( aIdxList.begin() + i, pIdx );
         }
 
-        for(i=0; i < aSortList.size(); ++i)
+        for( size_t i = 0; i < aSortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
