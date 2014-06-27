@@ -513,19 +513,37 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
 void InternalData::dump() const
 {
     // Header
-    svl::GridPrinter aPrinter(1, m_nColumnCount, true);
-    for (sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol)
+    if (!m_aColumnLabels.empty())
     {
-        if (m_aColumnLabels[nCol].empty())
-            continue;
+        svl::GridPrinter aPrinter(1, m_aColumnLabels.size(), true);
+        for (size_t nCol = 0; nCol < m_aColumnLabels.size(); ++nCol)
+        {
+            if (m_aColumnLabels[nCol].empty())
+                continue;
 
-        OUString aStr;
-        if (m_aColumnLabels[nCol][0] >>= aStr)
-            aPrinter.set(0, nCol, aStr);
+            OUString aStr;
+            if (m_aColumnLabels[nCol][0] >>= aStr)
+                aPrinter.set(0, nCol, aStr);
+        }
+        aPrinter.print("Header");
     }
-    aPrinter.print("Header");
 
-    aPrinter.resize(m_nRowCount, m_nColumnCount);
+    if (!m_aRowLabels.empty())
+    {
+        svl::GridPrinter aPrinter(m_aRowLabels.size(), m_aRowLabels[0].size());
+        for (size_t nRow = 0; nRow < m_aRowLabels.size(); ++nRow)
+        {
+            for (size_t nCol = 0; nCol < m_aRowLabels[nRow].size(); ++nCol)
+            {
+                OUString aStr;
+                if (m_aRowLabels[nRow].at(nCol) >>= aStr)
+                    aPrinter.set(nRow, nCol, aStr);
+            }
+        }
+        aPrinter.print("Row labels");
+    }
+
+    svl::GridPrinter aPrinter(m_nRowCount, m_nColumnCount);
 
     for (sal_Int32 nRow = 0; nRow < m_nRowCount; ++nRow)
     {
