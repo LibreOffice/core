@@ -471,11 +471,11 @@ DECLARE_RTFEXPORT_TEST(testHyperlink, "hyperlink.rtf")
 DECLARE_RTFEXPORT_TEST(test78758, "fdo78758.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc264438068"),
-        getProperty<OUString>(getRun(getParagraph(2), 1, "EE5E EeEEE5EE"), "HyperLinkURL"));
+                         getProperty<OUString>(getRun(getParagraph(2), 1, "EE5E EeEEE5EE"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc264438068"),
-        getProperty<OUString>(getRun(getParagraph(2), 2, "e"), "HyperLinkURL"));
+                         getProperty<OUString>(getRun(getParagraph(2), 2, "e"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc264438068"),
-        getProperty<OUString>(getRun(getParagraph(2), 3, "\t46"), "HyperLinkURL"));
+                         getProperty<OUString>(getRun(getParagraph(2), 3, "\t46"), "HyperLinkURL"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTextFrameBorders, "textframe-borders.rtf")
