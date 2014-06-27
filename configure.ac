@@ -2002,12 +2002,12 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2012/2010/2013>],
+    AS_HELP_STRING([--with-visual-studio=<2013/2012/2010>],
         [Specify which Visual Studio version to use in case several are
          are installed. If not specified, the order of preference is
-         2012, 2010, 2013 (including Express editions).])
+         2013, 2012, 2010 (including Express editions).])
     [
-                          Usage:     --with-visual-studio=<2012/2010/2013>
+                          Usage:     --with-visual-studio=<2013/2012/2010>
     ],
 ,)
 
@@ -3610,14 +3610,14 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2012, then 2010, then 2013
-        vsversions="11.0 10.0 12.0"
+        # By default we prefer 2013, 2012, then 2010
+        vsversions="12.0 11.0 10.0"
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2012/2010/2013
+    # Find Visual Studio 2013/2012/2010
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3641,7 +3641,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2012/2010/2013
+    # Find Visual C++ 2013/2012/2010
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
