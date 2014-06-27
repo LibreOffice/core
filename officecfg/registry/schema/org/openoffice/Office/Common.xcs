@@ -806,6 +806,24 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="PersonasEntry">
+      <info>
+        <desc>Stores the details of the installed personas.</desc>
+      </info>
+      <prop oor:name="PersonaPreview" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Name of the preview file for the Persona to show in the UI</desc>
+        </info>
+      </prop>
+      <prop oor:name="PersonaSettings" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Names of the header and footer images, and colors for text and
+            accent.  When set, the value has form
+            "header.jpg;footer.jpg;#RGBTXT;#RGBACC".</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
   </templates>
   <component>
     <group oor:name="InternalMSExport">
@@ -5738,6 +5756,11 @@
           <desc>List of names of the CMIS servers in the place edition dialog.</desc>
         </info>
       </prop>
+      <set oor:name="PersonasList" oor:node-type="PersonasEntry">
+        <info>
+          <desc>Contains the Personas installed through extensions</desc>
+        </info>
+      </set>
     </group>
     <group oor:name="Forms">
       <info>
