@@ -30,16 +30,6 @@ using namespace osl;
 
 namespace jfw_plugin
 {
-rtl::Reference<VendorBase> createInstance(createInstance_func pFunc,
-                                          vector<pair<OUString, OUString> > properties);
-
-
-
-
-
-
-
-
 
 MalformedVersionException::MalformedVersionException()
 {}
