@@ -41,6 +41,7 @@
 #include <ndole.hxx>
 #include <swtable.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdoashp.hxx>
 #include "layouter.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -59,6 +60,7 @@
 #include <vcl/svapp.hxx>
 #include "switerator.hxx"
 #include <IDocumentSettingAccess.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1275,6 +1277,21 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                 InvalidateObjRectWithSpaces();
             }
             mbValidSize = true;
+
+            std::map<SwFrmFmt*, SwFrmFmt*> aShapes = SwTextBoxHelper::findShapes(GetFmt()->GetDoc());
+            if (aShapes.find(GetFmt()) != aShapes.end())
+            {
+                // This fly is a textbox of a draw shape.
+                SdrObject* pShape = aShapes[GetFmt()]->FindSdrObject();
+                if (SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pShape))
+                {
+                    // The shape is a customshape: then inform it about the calculated fly size.
+                    Size aSize((Frm().*fnRect->fnGetWidth)(), (Frm().*fnRect->fnGetHeight)());
+                    pCustomShape->SuggestTextFrameSize(aSize);
+                    // Do the calculations normally done after touching editeng text of the shape.
+                    pCustomShape->NbcSetOutlinerParaObjectForText(0, 0);
+                }
+            }
         }
         else
         {
