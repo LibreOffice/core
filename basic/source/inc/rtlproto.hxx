@@ -226,7 +226,6 @@ extern RTLFUNC(Timer);
 extern RTLFUNC(Weekday);
 extern RTLFUNC(WeekdayName);
 extern RTLFUNC(Year);
-extern RTLFUNC(Date);
 extern RTLFUNC(InputBox);
 extern RTLFUNC(Me);
 extern RTLFUNC(MsgBox);

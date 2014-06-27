@@ -66,8 +66,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 
-extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
-
 // the dialog's carrier
 SwTemplateDlg::SwTemplateDlg(Window* pParent,
                              SfxStyleSheetBase& rBase,

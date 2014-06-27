@@ -110,10 +110,6 @@ css::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() 
 OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
 
-css::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-
 // Layout dump filter
 css::uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw();
 OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw();

@@ -49,6 +49,7 @@
 #include <tabcol.hxx>
 #include <cellatr.hxx>
 #include <pam.hxx>
+#include <pamtyp.hxx>
 #include <viscrs.hxx>
 #include <tblsel.hxx>
 #include <swtblfmt.hxx>

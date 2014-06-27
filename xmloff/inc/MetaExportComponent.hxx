@@ -54,21 +54,6 @@ protected:
     virtual void _ExportContent() SAL_OVERRIDE;
 };
 
-// global functions to support the component
-
-::com::sun::star::uno::Sequence< OUString > SAL_CALL
-    XMLMetaExportComponent_getSupportedServiceNames()
-    throw();
-
-OUString SAL_CALL XMLMetaExportComponent_getImplementationName()
-    throw();
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    XMLMetaExportComponent_createInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & )
-    throw( ::com::sun::star::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

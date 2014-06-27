@@ -1003,8 +1003,6 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 
 #ifdef DBG_UTIL
     {
-// to be found in tblrwcl.cxx
-extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
         // do some checking for correct table widths
         SwTwips nSize = GetFrmFmt()->GetFrmSize().GetWidth();
         for (size_t n = 0; n < aLines.size(); ++n)

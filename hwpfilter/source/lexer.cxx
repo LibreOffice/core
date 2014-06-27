@@ -988,14 +988,6 @@ int token_debug(const char *format, ...);
  * section 1.
  */
 
-#ifndef YY_SKIP_YYWRAP
-#ifdef __cplusplus
-extern "C" int yywrap YY_PROTO(( void ));
-#else
-extern int yywrap YY_PROTO(( void ));
-#endif
-#endif
-
 #ifndef YY_NO_UNPUT
 //static void yyunput YY_PROTO(( int c, char *buf_ptr ));
 #endif

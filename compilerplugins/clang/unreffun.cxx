@@ -45,6 +45,19 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     return false;
 }
 
+bool isFriendDecl(Decl const * decl) {
+    return decl->getFriendObjectKind() != Decl::FOK_None;
+}
+
+Decl const * getPreviousNonFriendDecl(Decl const * decl) {
+    for (;;) {
+        decl = decl->getPreviousDecl();
+        if (decl == nullptr || !isFriendDecl(decl)) {
+            return decl;
+        }
+    }
+}
+
 class UnrefFun: public RecursiveASTVisitor<UnrefFun>, public loplugin::Plugin {
 public:
     explicit UnrefFun(InstantiationData const & data): Plugin(data) {}
@@ -67,6 +80,26 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             || r->isDependentContext()))
     {
         return true;
+    }
+
+    if (!(decl->isThisDeclarationADefinition() || isFriendDecl(decl)
+          || decl->isFunctionTemplateSpecialization()))
+    {
+        Decl const * prev = getPreviousNonFriendDecl(decl);
+        if (prev != nullptr/* && prev != decl->getPrimaryTemplate()*/) {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant function%0 redeclaration", decl->getLocation())
+                << ((decl->getTemplatedKind()
+                     == FunctionDecl::TK_FunctionTemplate)
+                    ? " template" : "")
+                << decl->getSourceRange();
+            report(
+                DiagnosticsEngine::Note, "previous declaration is here",
+                prev->getLocation())
+                << prev->getSourceRange();
+            return true;
+        }
     }
 
     FunctionDecl const * canon = decl->getCanonicalDecl();

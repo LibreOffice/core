@@ -302,7 +302,6 @@ public:
 };
 
 bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
-bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 #endif // INCLUDED_SW_INC_PAM_HXX
 

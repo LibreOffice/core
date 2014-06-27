@@ -559,7 +559,6 @@ void GetRTFWriter( const OUString&, const OUString&, WriterRef& );
 void GetASCWriter( const OUString&, const OUString&, WriterRef& );
 void GetHTMLWriter( const OUString&, const OUString&, WriterRef& );
 void GetXMLWriter( const OUString&, const OUString&, WriterRef& );
-void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 
 #endif
 

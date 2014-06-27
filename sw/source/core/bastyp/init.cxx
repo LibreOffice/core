@@ -132,8 +132,6 @@
 
 using namespace ::com::sun::star;
 
-extern void _FrmFinit();
-
 // some ranges for sets in collections/ nodes
 
 // AttrSet range for the 2 break attributes

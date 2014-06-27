@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FLOWFRM_HXX
 
+#include "frmtool.hxx"
+
 class SwPageFrm;
 class SwRect;
 class SwBorderAttrs;
@@ -27,8 +29,6 @@ class SwDoc;
 class SwNodeIndex;
 // #i44049#
 class SwObjectFormatterTxtFrm;
-
-void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
 /** Base class that provides the general functionalities for frames that are
     allowed at page breaks (flow) and shall continue on the next page (can be
