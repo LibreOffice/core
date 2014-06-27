@@ -332,8 +332,7 @@ public:
 
     // #i62675#
     /// Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
-    void SetTxtFmtColl( SwTxtFmtColl*,
-                        bool bResetListAttrs = false );
+    void SetTxtFmtColl(SwTxtFmtColl*, const bool bResetListAttrs = false);
     SwTxtFmtColl *MakeTxtFmtColl(const OUString &rFmtCollName,
         SwTxtFmtColl *pDerivedFrom = 0);
     void FillByEx(SwTxtFmtColl*, bool bReset = false);

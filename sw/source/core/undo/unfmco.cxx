@@ -77,10 +77,8 @@ void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
     // does the format still exist?
     if( USHRT_MAX != nPos )
     {
-        rDoc.SetTxtFmtColl(rPaM,
-                                          (SwTxtFmtColl*)pFmtColl,
-                                          mbReset,
-                                          mbResetListAttrs );
+        rDoc.SetTxtFmtColl(rPaM, (SwTxtFmtColl*)pFmtColl, mbReset,
+                           mbResetListAttrs);
     }
 }
 

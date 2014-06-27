@@ -186,12 +186,11 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
     // #i70223#
     case RES_PARATR_NUMRULE:
-    {
-        if ( bAssignedToListLevelOfOutlineStyle )
+        if (bAssignedToListLevelOfOutlineStyle)
         {
             pNewNumRuleItem = (SwNumRuleItem*)pNew;
         }
-    }
+        break;
     default:
         break;
     }
@@ -607,6 +606,7 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
     }
 }
 
+// FEATURE::CONDCOLL
 void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
     OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
@@ -653,10 +653,14 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     }
 }
 
-void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()
+void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle(
+    const bool bResetOutlineLevel)
 {
     mbAssignedToOutlineStyle = false;
-    ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
+    if (bResetOutlineLevel)
+    {
+        ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

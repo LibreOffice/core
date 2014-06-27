@@ -1463,7 +1463,9 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                 if( pOutlNd )
                 {
                     if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
+                    {
                         nSetLevel = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
+                    }
                 }
             }
 
@@ -1518,7 +1520,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                             if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                             {
                                 const int nTmp = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
-                                pNew->SetLevel( static_cast<sal_uInt16>(nTmp) );
+                                pNew->SetLevel(static_cast<sal_uInt16>(nTmp));
                             }
                         }
                     }

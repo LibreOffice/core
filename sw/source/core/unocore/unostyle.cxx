@@ -1902,6 +1902,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             bDone = true;
             break;
         }
+
         case RES_PARATR_OUTLINELEVEL:
         {
             sal_Int16 nLevel = 0;
@@ -1912,6 +1913,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             bDone = true;
             break;
         }
+
         case FN_UNO_FOLLOW_STYLE:
         {
             OUString sTmp;

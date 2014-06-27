@@ -67,23 +67,22 @@ protected:
     SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
                     sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
-                        pDerFrom, nFmtWh ),
-          mbStayAssignedToListLevelOfOutlineStyle( false ),
-
-          mbAssignedToOutlineStyle(false)
-    { pNextTxtFmtColl = this; }
+        : SwFmtColl(rPool, pFmtCollName, aTxtFmtCollSetRange, pDerFrom, nFmtWh)
+        , mbStayAssignedToListLevelOfOutlineStyle(false)
+        , mbAssignedToOutlineStyle(false)
+    {
+        pNextTxtFmtColl = this;
+    }
 
     SwTxtFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
                     sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
-                        pDerFrom, nFmtWh ),
-
-          mbStayAssignedToListLevelOfOutlineStyle( false ),
-
-          mbAssignedToOutlineStyle(false)
-    { pNextTxtFmtColl = this; }
+        : SwFmtColl(rPool, rFmtCollName, aTxtFmtCollSetRange, pDerFrom, nFmtWh)
+        , mbStayAssignedToListLevelOfOutlineStyle(false)
+        , mbAssignedToOutlineStyle(false)
+    {
+        pNextTxtFmtColl = this;
+    }
 
     /// To get UL- / LR- / FontHeight-changes.
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
@@ -99,13 +98,22 @@ public:
 
     void SetAttrOutlineLevel( int );
     int  GetAttrOutlineLevel() const;
+
+    // Return the list level of the Outline Style - the List Style for the
+    // outline numbering -
+    // to which the Paragraph Style is assigned.
     int  GetAssignedOutlineStyleLevel() const;
+
     inline bool IsAssignedToListLevelOfOutlineStyle() const
     {
         return mbAssignedToOutlineStyle;
     }
+
+    // If a Paragraph Style is assigned to list level N of the Outline Style,
+    // then its outline level - AttrOutlineLevel - is set to N+1
     void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
-    void DeleteAssignmentToListLevelOfOutlineStyle();
+    void DeleteAssignmentToListLevelOfOutlineStyle(const bool bResetOutlineLevel
+                                                   = true);
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */
