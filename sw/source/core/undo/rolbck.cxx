@@ -1127,8 +1127,7 @@ bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
         return false;
 
     SwHistoryHint * pHHt;
-    sal_uInt16 i;
-    for ( i = Count(); i > nStart ; )
+    for ( sal_uInt16 i = Count(); i > nStart ; )
     {
         pHHt = m_SwpHstry[ --i ];
         pHHt->SetInDoc( pDoc, false );

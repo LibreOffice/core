@@ -924,7 +924,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     if ( COMPLETE_STRING != nCntnt )
                     {
                         const std::vector<sal_uInt16>& rArr = pHistoryHint->GetArr();
-                        for ( sal_uInt16 i = rArr.size(); i; )
+                        for ( size_t i = rArr.size(); i; )
                         {
                             if ( RES_TXTATR_FTN == rArr[ --i ] )
                             {
