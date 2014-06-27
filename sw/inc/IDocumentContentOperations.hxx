@@ -74,7 +74,7 @@ public:
         SwDoc::IsColumnSelection!
 
         Normally this functions should work only with content nodes. But there
-        is a special case used by SwDoc::Paste, which starts the SwPaM at the
+        is a special case used by SwDoc::Append, which starts the SwPaM at the
         content start node. This position doesn't contain any content:
 
         @code

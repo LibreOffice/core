@@ -461,7 +461,6 @@ private:
     OUString msDocAccTitle;
 
     void InitTOXTypes();
-    void Paste( const SwDoc& );
 
 public:
     enum DocumentType {
@@ -1647,7 +1646,10 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
+
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+    void Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
+                 SwPageDesc* pTargetPageDesc, bool bDeletePrevious = false );
 
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
