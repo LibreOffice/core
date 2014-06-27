@@ -149,6 +149,7 @@ public:
                                 SfxApplication();
                                 virtual ~SfxApplication();
     static SfxApplication*      GetOrCreate();
+    static SfxApplication*      Get() { return pApp;}
 
     // Resource Manager
     ResMgr*                     GetSfxResManager();
@@ -202,7 +203,6 @@ public:
     bool                        IsDowning() const;
     void                        ResetLastDir();
 
-    SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
