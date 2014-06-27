@@ -1,0 +1,24 @@
+From 7c9cc06fecd69e88428ee5b0cf5a3a3cf40db44b Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Fri, 27 Jun 2014 11:30:50 +0200
+Subject: [PATCH 2/3] add missing typedef on windows
+
+---
+ src/lib/libpagemaker_utils.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/libpagemaker_utils.h b/src/lib/libpagemaker_utils.h
+index ab070b5..73d2a59 100644
+--- a/src/lib/libpagemaker_utils.h
++++ b/src/lib/libpagemaker_utils.h
+@@ -27,6 +27,7 @@
+ #ifdef _MSC_VER
+ 
+ typedef unsigned char uint8_t;
++typedef signed char int8_t;
+ typedef unsigned short uint16_t;
+ typedef short int16_t;
+ typedef unsigned uint32_t;
+-- 
+1.9.3
+
