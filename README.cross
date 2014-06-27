@@ -377,6 +377,17 @@ an "adb logcat" running in another window.
 To debug, do manually what "make run" would do and when the app has
 started, run ndk-gdb.
 
+NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
+'make verbose=t android') fails for you with:
+
+       [dx] UNEXPECTED TOP-LEVEL EXCEPTION:
+       [dx] java.io.FileNotFoundException: /local/libreoffice/android-sdk-linux/tools/support/annotations.jar (Adresář nebo soubor neexistuje)
+
+you need to copy the annotations.jar from an older sdk; like
+
+wget 'http://dl-ssl.google.com/android/repository/tools_r22.6.2-linux.zip'
+unzip tools_r22.6.2-linux.zip
+cp tools/support/annotations.jar <android-sdk-linux>/tools/support/
 
 Raspbian
 ********
