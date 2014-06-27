@@ -308,8 +308,8 @@ SwUndoComments_t UndoManager::GetUndoComments() const
             "GetUndoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    sal_uInt16 const nUndoCount(SdrUndoManager::GetUndoActionCount(TopLevel));
-    for (sal_uInt16 n = 0; n < nUndoCount; ++n)
+    const size_t nUndoCount(SdrUndoManager::GetUndoActionCount(TopLevel));
+    for (size_t n = 0; n < nUndoCount; ++n)
     {
         OUString const comment(
                 SdrUndoManager::GetUndoActionComment(n, TopLevel));
@@ -352,8 +352,8 @@ SwUndoComments_t UndoManager::GetRedoComments() const
             "GetRedoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    sal_uInt16 const nRedoCount(SdrUndoManager::GetRedoActionCount(TopLevel));
-    for (sal_uInt16 n = 0; n < nRedoCount; ++n)
+    const size_t nRedoCount(SdrUndoManager::GetRedoActionCount(TopLevel));
+    for (size_t n = 0; n < nRedoCount; ++n)
     {
         OUString const comment(
                 SdrUndoManager::GetRedoActionComment(n, TopLevel));

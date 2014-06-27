@@ -54,7 +54,7 @@ static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
     {
         SwFlyFrmFmt* pFmt;
         const SwFmtAnchor* pAnchor;
-        for( sal_uInt16 n = 0; n < rSpzArr.size(); ++n )
+        for( size_t n = 0; n < rSpzArr.size(); ++n )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
@@ -720,7 +720,7 @@ static void lcl_ReAnchorAtCntntFlyFrames( const SwFrmFmts& rSpzArr, SwPosition &
         SwFlyFrmFmt* pFmt;
         const SwFmtAnchor* pAnchor;
         const SwPosition* pAPos;
-        for( sal_uInt16 n = 0; n < rSpzArr.size(); ++n )
+        for( size_t n = 0; n < rSpzArr.size(); ++n )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
