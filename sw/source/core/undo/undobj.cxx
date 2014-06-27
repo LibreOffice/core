@@ -64,7 +64,7 @@ public:
 #endif
 };
 
-// This class saves the Pam as sal_uInt16s and can recompose those into a PaM
+// This class saves the Pam as integers and can recompose those into a PaM
 SwUndRng::SwUndRng()
     : nSttNode( 0 ), nEndNode( 0 ), nSttCntnt( 0 ), nEndCntnt( 0 )
 {
@@ -343,7 +343,6 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     const SwPosition* pStt = rPaM.Start(), *pEnd = rPaM.End();
 
-    // keep as sal_uInt16; the indices shift!
     sal_uLong nTmpMvNode = aPos.nNode.GetIndex();
 
     if( pCpyNd || pEndNdIdx )
@@ -696,7 +695,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         if( pMarkAccess->getAllMarksCount() )
         {
 
-            for( sal_uInt16 n = 0; n < pMarkAccess->getAllMarksCount(); ++n )
+            for( sal_Int32 n = 0; n < pMarkAccess->getAllMarksCount(); ++n )
             {
                 // #i81002#
                 bool bSavePos = false;
