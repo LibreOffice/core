@@ -203,7 +203,7 @@ public:
     virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) = 0;
 
     /// Output URL end.
-    virtual bool EndURL() = 0;
+    virtual bool EndURL(bool isAtEndOfParagraph) = 0;
 
     virtual void FieldVanish( const OUString& rTxt, ww::eField eType ) = 0;
 
