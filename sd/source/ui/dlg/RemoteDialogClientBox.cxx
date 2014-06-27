@@ -465,14 +465,14 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    // If we have just removed the last entry (via deauthorise)
-    // then we need to make sure we hide the button (usually
-    // this would all be dealt with in in DrawRow, but that
-    // won't be called for 0 items).
-    if ( m_vEntries.size() == 0 )
-    {
-        m_aDeauthoriseButton.Show( false );
-    }
+    // It's easiest to disbale these and only reenable as appropriate in DrawRow
+    // -- both are shown in only certain situations, and e.g. if we've removed
+    // the last entry then the visibility of the deauthorise button won't be
+    // changed in the loop below, or when we select 0 entries then we
+    // won't run through the appropriate conditions which would otherwise
+    // set the visibility of the pin-box.
+    m_aDeauthoriseButton.Show( false );
+    m_aPinBox.Show( false );
 
     typedef std::vector< TClientBoxEntry >::iterator ITER;
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
