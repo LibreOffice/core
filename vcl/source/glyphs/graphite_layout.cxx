@@ -95,16 +95,6 @@ namespace
         return !(b > i) && i < e;
     }
 
-    template<typename T>
-    inline bool is_subrange(const T sb, const T se, const T b, const T e) {
-        return !(b > sb || se > e);
-    }
-
-    template<typename T>
-    inline bool is_subrange(const std::pair<T, T> &s, const T b, const T e) {
-        return is_subrange(s.first, s.second, b, e);
-    }
-
     int findSameDirLimit(const sal_Unicode* buffer, int charCount, bool rtl)
     {
         UErrorCode status = U_ZERO_ERROR;
