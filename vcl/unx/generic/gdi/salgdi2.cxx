@@ -450,7 +450,7 @@ namespace
         //fdo#33455 and fdo#80160 handle 1 bit depth pngs with palette entries
         //to set fore/back colors
         SalBitmap& rBitmap = const_cast<SalBitmap&>(rSalBitmap);
-        if (const BitmapBuffer* pBitmapBuffer = rBitmap.AcquireBuffer(true))
+        if (BitmapBuffer* pBitmapBuffer = rBitmap.AcquireBuffer(true))
         {
             const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
             if (rPalette.GetEntryCount() == 2)
