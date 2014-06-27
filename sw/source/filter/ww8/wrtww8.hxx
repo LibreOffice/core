@@ -655,6 +655,9 @@ public:
     /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
     virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
 
+    /// If saving page break is preferred as a paragraph attribute (yes) or as a special character (no).
+    virtual bool PreferPageBreakBefore() const = 0;
+
     /// Guess the script (asian/western).
     ///
     /// Sadly word does not have two different sizes for asian font size and
@@ -973,6 +976,8 @@ public:
 
     /// False for WW6, true for WW8.
     virtual bool SupportsUnicode() const SAL_OVERRIDE { return bWrtWW8; }
+
+    virtual bool PreferPageBreakBefore() const SAL_OVERRIDE { return true; }
 
     virtual bool SupportsOneColumnBreak() const SAL_OVERRIDE { return false; }
 

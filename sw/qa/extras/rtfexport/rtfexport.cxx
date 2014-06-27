@@ -653,6 +653,12 @@ DECLARE_RTFEXPORT_TEST(testFdo79599, "fdo79599.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x800080), getProperty<sal_uInt32>(xRun, "CharBackColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
+{
+    // Problem was that after export, the page break was missing, so this was 1.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
