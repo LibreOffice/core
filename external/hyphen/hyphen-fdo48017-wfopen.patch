@@ -1,6 +1,6 @@
 diff -u hyphen/hyphen.c build/hyphen/hyphen.c
 --- hyphen/hyphen.c	2014-05-22 00:28:13.164587974 +0200
-+++ build/hyphen/hyphen.c	2014-05-22 11:08:55.000000000 +0200
++++ build/hyphen/hyphen.c	2015-05-22 11:08:55.000000000 +0200
 @@ -44,6 +44,11 @@
  #include <unistd.h> /* for exit */
  #endif
@@ -13,7 +13,7 @@ diff -u hyphen/hyphen.c build/hyphen/hyphen.c
  #define noVERBOSE
  
  /* calculate hyphenmin values with long ligature length (2 or 3 characters
-@@ -371,6 +376,22 @@
+@@ -371,12 +376,28 @@
  	    }
  }
  
@@ -36,10 +36,8 @@ diff -u hyphen/hyphen.c build/hyphen/hyphen.c
  HyphenDict *
  hnj_hyphen_load (const char *fn)
  {
-@@ -383,7 +404,7 @@
-   HashEntry *e;
-   int state_num = 0;
- 
+   HyphenDict *result;
+   FILE *f;
 -  f = fopen (fn, "r");
 +  f = hnj_fopen (fn, "r");
    if (f == NULL)
