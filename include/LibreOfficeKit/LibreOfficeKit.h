@@ -72,10 +72,6 @@ struct _LibreOfficeKitDocumentClass
                      const char *pUrl,
                      const char *pFormat,
                      const char *pFilterOptions);
-  int (*saveAsWithOptions) (LibreOfficeKitDocument* pThis,
-                            const char *pUrl,
-                            const char *pFormat,
-                            const char *pFilterOptions);
 #ifdef LOK_USE_UNSTABLE_API
   LibreOfficeKitDocumentType (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
