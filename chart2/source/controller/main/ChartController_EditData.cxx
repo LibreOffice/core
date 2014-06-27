@@ -57,8 +57,8 @@ void ChartController::executeDispatch_EditData()
                 SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
                 m_xUndoManager );
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
-            // the dialog has no OK/Cancel
-            aDataEditorDialog.Execute();
+            if (aDataEditorDialog.Execute() == RET_OK)
+                aDataEditorDialog.ApplyChangesToModel();
             aUndoGuard.commit();
         }
     }
