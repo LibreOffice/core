@@ -170,7 +170,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 SwRedlineData aRData( nsRedlineType_t::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
                 const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
                 SwIndex* pIdx;
-                for( sal_uInt16 i = 0; i < rTbl.size(); ++i )
+                for( size_t i = 0; i < rTbl.size(); ++i )
                 {
                     SwRangeRedline* pRedl = rTbl[ i ];
                     if( pIReg == (pIdx = &pRedl->End()->nContent)->GetIdxReg() &&
