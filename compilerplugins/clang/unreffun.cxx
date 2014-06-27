@@ -60,12 +60,12 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
         return true;
     }
 
-    //TODO, filtering out anything template for now:
-    if (decl->isDependentContext()) {
-        return true;
-    }
+    //TODO, filtering out any functions relating to (class) templates for now:
     CXXRecordDecl const * r = dyn_cast<CXXRecordDecl>(decl->getDeclContext());;
-    if (r != nullptr && r->getTemplateSpecializationKind() != TSK_Undeclared) {
+    if (r != nullptr
+        && (r->getTemplateSpecializationKind() != TSK_Undeclared
+            || r->isDependentContext()))
+    {
         return true;
     }
 
@@ -81,6 +81,9 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             compiler.getSourceManager().getSpellingLoc(
                 canon->getNameInfo().getLoc()))
         || canon->isMain()
+        || (decl->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate
+            && (decl->getDescribedFunctionTemplate()->spec_begin()
+                != decl->getDescribedFunctionTemplate()->spec_end()))
         || (compiler.getDiagnostics().getDiagnosticLevel(
                 diag::warn_unused_function, decl->getLocation())
             < DiagnosticsEngine::Warning))
@@ -102,13 +105,15 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
         (canon->isDefined()
 #if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
          ? (canon->isExternallyVisible()
-            ? "Unreferenced externally visible function definition"
-            : "Unreferenced externally invisible function definition")
+            ? "Unreferenced externally visible function%0 definition"
+            : "Unreferenced externally invisible function%0 definition")
 #else
-         ? "Unreferenced function definition"
+         ? "Unreferenced function%0 definition"
 #endif
-         : "Unreferenced function declaration"),
+         : "Unreferenced function%0 declaration"),
         decl->getLocation())
+        << (decl->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate
+            ? " template" : "")
         << decl->getSourceRange();
     if (canon->isDefined() && !compat::isFirstDecl(*decl)) {
         report(

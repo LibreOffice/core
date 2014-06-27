@@ -74,22 +74,6 @@ void decBlock(std::pair<_Iter, size_t>& rPos)
     rPos.second = rPos.first->size - 1;
 }
 
-template<typename _Iter>
-void incPos(std::pair<_Iter, size_t>& rPos)
-{
-    if (rPos.second + 1 < rPos.first->size)
-        // Increment within the block.
-        ++rPos.second;
-    else
-        incBlock(rPos);
-}
-
-template<typename _Iter>
-size_t toLogicalPos(const std::pair<_Iter, size_t>& rPos)
-{
-    return rPos.first->position + rPos.second;
-}
-
 }
 
 void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
