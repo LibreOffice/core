@@ -1202,8 +1202,7 @@ bool DataBrowser::SaveModified()
 
 bool DataBrowser::EndEditing()
 {
-    if( IsModified())
-        SaveModified();
+    SaveModified();
 
     // apply changes made to series headers
     ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
