@@ -2897,17 +2897,12 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 }
             }
             if(nDocNo == 1 || bPageStylesWithHeaderFooter)
-            {
                 pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), true );
-            }
             if(nDocNo > 1)
-            {
                 pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
-            }
             else
-            {
                 pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
-            }
+
             sal_uInt16 nPageCountBefore = pTargetShell->GetPageCnt();
             OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
             bool para_added = false;
@@ -2915,9 +2910,9 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             //#i51359# add a second paragraph in case there's only one
             {
                 SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
-              SwPosition aTestPos( aIdx );
-              SwCursor aTestCrsr(aTestPos,0,false);
-                if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
+                SwPosition aTestPos( aIdx );
+                SwCursor aTestCrsr( aTestPos, 0, false );
+                if ( !aTestCrsr.MovePara(fnParaNext, fnParaStart) )
                 {
                     //append a paragraph
                     pWorkDoc->getIDocumentContentOperations().AppendTxtNode( aTestPos );
@@ -2950,7 +2945,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
 #endif
 
-            //add the document info to the config item
+            // add the document info to the config item
             SwDocMergeInfo aMergeInfo;
             aMergeInfo.nStartPageInTarget = nPageCountBefore;
             //#i72820# calculate layout to be able to find the correct page index
@@ -2964,17 +2959,17 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             for( sal_uInt16 i = 0; i < 25; i++)
                 Application::Reschedule();
 
-            //restore the ole DBManager
+            // restore the old DBManager
             pWorkDoc->SetDBManager( pWorkDBManager );
-            //now the temporary document should be closed
-            SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
-            xDocSh->DoClose();
+            // close the temporary document
+            xWorkDocSh->DoClose();
+
             nEndRow = pImpl->pMergeData->xResultSet->getRow();
             ++nDocNo;
         } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
-        //deselect all, go out of the frame and go to the beginning of the document
+        // deselect all, go out of the frame and go to the beginning of the document
         Point aPt(LONG_MIN, LONG_MIN);
         pTargetShell->SelectObj(aPt, SW_LEAVE_FRAME);
         if (pTargetShell->IsSelFrmMode())
