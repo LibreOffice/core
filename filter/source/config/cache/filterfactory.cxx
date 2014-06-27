@@ -191,7 +191,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // reject old deprecated queries ...
     if (sQuery.matchAsciiL("_filterquery_",13,0))
         throw css::uno::RuntimeException(
-                    _FILTER_CONFIG_FROM_ASCII_("Use of deprecated and now unsupported query!"),
+                    "Use of deprecated and now unsupported query!",
                     static_cast< css::container::XContainerQuery* >(this));
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."

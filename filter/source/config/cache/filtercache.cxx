@@ -901,15 +901,15 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         css::beans::NamedValue aParam;
 
         // set root path
-        aParam.Name    = _FILTER_CONFIG_FROM_ASCII_("nodepath");
+        aParam.Name = "nodepath";
         aParam.Value <<= sRoot;
         lParams.push_back(css::uno::makeAny(aParam));
 
         // enable "all locales mode" ... if required
         if (bLocalesMode)
         {
-            aParam.Name    = _FILTER_CONFIG_FROM_ASCII_("locale");
-            aParam.Value <<= _FILTER_CONFIG_FROM_ASCII_("*"     );
+            aParam.Name = "locale";
+            aParam.Value <<= OUString("*");
             lParams.push_back(css::uno::makeAny(aParam));
         }
 
@@ -924,7 +924,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         // Let message empty. The normal exception text show enough information to the user.
         if (! xCfg.is())
             throw css::uno::Exception(
-                    _FILTER_CONFIG_FROM_ASCII_("Got NULL reference on opening configuration file ... but no exception."),
+                    "Got NULL reference on opening configuration file ... but no exception.",
                     css::uno::Reference< css::uno::XInterface >());
     }
     catch(const css::uno::Exception& ex)
@@ -1605,7 +1605,6 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     }
     #endif
 
-    // The internal name of an item must(!) be part of the property
     // set too. Of course its already used as key into the e.g. outside
     // used hash map ... but some of our API methods provide
     // this property set as result only. But the user of this CacheItem
@@ -1614,7 +1613,6 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     aItem[PROPNAME_NAME] = css::uno::makeAny(sItem);
     switch(eType)
     {
-
         case E_TYPE :
         {
             // read standard properties of a type
@@ -1917,125 +1915,125 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
     sal_Int32 nField = 0;
 
     const OUString* pNames = lNames.getConstArray();
-          sal_Int32        c      = lNames.getLength();
+    sal_Int32       c      = lNames.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
-        if (pNames[i].equals(FLAGNAME_3RDPARTYFILTER))
+        if (pNames[i] == FLAGNAME_3RDPARTYFILTER)
         {
             nField |= FLAGVAL_3RDPARTYFILTER;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_ALIEN))
+        if (pNames[i] == FLAGNAME_ALIEN)
         {
             nField |= FLAGVAL_ALIEN;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_ASYNCHRON))
+        if (pNames[i] == FLAGNAME_ASYNCHRON)
         {
             nField |= FLAGVAL_ASYNCHRON;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_BROWSERPREFERRED))
+        if (pNames[i] == FLAGNAME_BROWSERPREFERRED)
         {
             nField |= FLAGVAL_BROWSERPREFERRED;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_CONSULTSERVICE))
+        if (pNames[i] == FLAGNAME_CONSULTSERVICE)
         {
             nField |= FLAGVAL_CONSULTSERVICE;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_DEFAULT))
+        if (pNames[i] == FLAGNAME_DEFAULT)
         {
             nField |= FLAGVAL_DEFAULT;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_ENCRYPTION))
+        if (pNames[i] == FLAGNAME_ENCRYPTION)
         {
             nField |= FLAGVAL_ENCRYPTION;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_EXPORT))
+        if (pNames[i] == FLAGNAME_EXPORT)
         {
             nField |= FLAGVAL_EXPORT;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_IMPORT))
+        if (pNames[i] == FLAGNAME_IMPORT)
         {
             nField |= FLAGVAL_IMPORT;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_INTERNAL))
+        if (pNames[i] == FLAGNAME_INTERNAL)
         {
             nField |= FLAGVAL_INTERNAL;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_NOTINCHOOSER))
+        if (pNames[i] == FLAGNAME_NOTINCHOOSER)
         {
             nField |= FLAGVAL_NOTINCHOOSER;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_NOTINFILEDIALOG))
+        if (pNames[i] == FLAGNAME_NOTINFILEDIALOG)
         {
             nField |= FLAGVAL_NOTINFILEDIALOG;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_NOTINSTALLED))
+        if (pNames[i] == FLAGNAME_NOTINSTALLED)
         {
             nField |= FLAGVAL_NOTINSTALLED;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_OWN))
+        if (pNames[i] == FLAGNAME_OWN)
         {
             nField |= FLAGVAL_OWN;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_PACKED))
+        if (pNames[i] == FLAGNAME_PACKED)
         {
             nField |= FLAGVAL_PACKED;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_PASSWORDTOMODIFY))
+        if (pNames[i] == FLAGNAME_PASSWORDTOMODIFY)
         {
             nField |= FLAGVAL_PASSWORDTOMODIFY;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_PREFERRED))
+        if (pNames[i] == FLAGNAME_PREFERRED)
         {
             nField |= FLAGVAL_PREFERRED;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_STARTPRESENTATION))
+        if (pNames[i] == FLAGNAME_STARTPRESENTATION)
         {
             nField |= FLAGVAL_STARTPRESENTATION;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_READONLY))
+        if (pNames[i] == FLAGNAME_READONLY)
         {
             nField |= FLAGVAL_READONLY;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_SUPPORTSSELECTION))
+        if (pNames[i] == FLAGNAME_SUPPORTSSELECTION)
         {
             nField |= FLAGVAL_SUPPORTSSELECTION;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_TEMPLATE))
+        if (pNames[i] == FLAGNAME_TEMPLATE)
         {
             nField |= FLAGVAL_TEMPLATE;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_TEMPLATEPATH))
+        if (pNames[i] == FLAGNAME_TEMPLATEPATH)
         {
             nField |= FLAGVAL_TEMPLATEPATH;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_USESOPTIONS))
+        if (pNames[i] == FLAGNAME_USESOPTIONS)
         {
             nField |= FLAGVAL_USESOPTIONS;
             continue;
         }
-        if (pNames[i].equals(FLAGNAME_COMBINED))
+        if (pNames[i] == FLAGNAME_COMBINED)
         {
             nField |= FLAGVAL_COMBINED;
             continue;

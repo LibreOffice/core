@@ -20,20 +20,11 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 
-
-
 #include <rtl/ustring.hxx>
-
-#ifdef _FILTER_CONFIG_FROM_ASCII_
-    #error "who already defined such macro :-("
-#endif
 
 #ifdef _FILTER_CONFIG_TO_ASCII_
     #error "who already defined such macro :-("
 #endif
-
-#define _FILTER_CONFIG_FROM_ASCII_(ASCII_STRING)            \
-            OUString(ASCII_STRING)
 
 #define _FILTER_CONFIG_TO_ASCII_(UNICODE_STRING)            \
             OUStringToOString(UNICODE_STRING, RTL_TEXTENCODING_UTF8).getStr()
