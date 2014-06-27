@@ -8064,8 +8064,13 @@ if test $enable_python = system; then
             python_version=2.7;;
         esac
         PYTHON=python$python_version
-        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
-        PYTHON_LIBS="-framework Python"
+        if test -d "$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"; then
+            PYTHON_CFLAGS="-I$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"
+            PYTHON_LIBS="-framework Python"
+        else
+            PYTHON_CFLAGS="`$PYTHON-config --includes`"
+            PYTHON_LIBS="`$PYTHON-config --libs`"
+        fi
     fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
         # Fallback: Accept these in the environment, or as set above
