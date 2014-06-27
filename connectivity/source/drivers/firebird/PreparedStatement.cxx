@@ -76,7 +76,7 @@ void OPreparedStatement::ensurePrepared()
 
     if (!m_pInSqlda)
     {
-        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
+        m_pInSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(10));
         m_pInSqlda->version = SQLDA_VERSION1;
         m_pInSqlda->sqln = 10;
     }
@@ -99,7 +99,7 @@ void OPreparedStatement::ensurePrepared()
     {
         short nItems = m_pInSqlda->sqld;
         free(m_pInSqlda);
-        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(nItems));
+        m_pInSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(nItems));
         m_pInSqlda->version = SQLDA_VERSION1;
         m_pInSqlda->sqln = nItems;
         isc_dsql_describe_bind(m_statusVector,
