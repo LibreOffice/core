@@ -2312,9 +2312,17 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
         }
     }
 }
+
+void SdrObjCustomShape::SuggestTextFrameSize(Size aSuggestedTextFrameSize)
+{
+    m_aSuggestedTextFrameSize = aSuggestedTextFrameSize;
+}
+
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
-     if ( pModel && HasText() && !rR.IsEmpty() )
+    // Either we have text or the application has native text and suggested its size to us.
+    bool bHasText = HasText() || (m_aSuggestedTextFrameSize.Width() != 0 && m_aSuggestedTextFrameSize.Height() != 0);
+    if ( pModel && bHasText && !rR.IsEmpty() )
     {
         bool bWdtGrow=bWdt && IsAutoGrowWidth();
         bool bHgtGrow=bHgt && IsAutoGrowHeight();
@@ -2353,41 +2361,49 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
             if ( aSiz.Height() < 2 )
                 aSiz.Height() = 2; // minimum size=2
 
-            if(pEdtOutl)
+            if (HasText())
             {
-                pEdtOutl->SetMaxAutoPaperSize( aSiz );
-                if (bWdtGrow)
+                if(pEdtOutl)
                 {
-                    Size aSiz2(pEdtOutl->CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // a little more tolerance
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
-                } else
+                    pEdtOutl->SetMaxAutoPaperSize( aSiz );
+                    if (bWdtGrow)
+                    {
+                        Size aSiz2(pEdtOutl->CalcTextSize());
+                        nWdt=aSiz2.Width()+1; // a little more tolerance
+                        if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
+                    } else
+                    {
+                        nHgt=pEdtOutl->GetTextHeight()+1; // a little more tolerance
+                    }
+                }
+                else
                 {
-                    nHgt=pEdtOutl->GetTextHeight()+1; // a little more tolerance
+                    Outliner& rOutliner=ImpGetDrawOutliner();
+                    rOutliner.SetPaperSize(aSiz);
+                    rOutliner.SetUpdateMode(true);
+                    // TODO: add the optimization with bPortionInfoChecked again.
+                    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+                    if( pOutlinerParaObject != NULL )
+                    {
+                        rOutliner.SetText(*pOutlinerParaObject);
+                        rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                    }
+                    if ( bWdtGrow )
+                    {
+                        Size aSiz2(rOutliner.CalcTextSize());
+                        nWdt=aSiz2.Width()+1; // a little more tolerance
+                        if ( bHgtGrow )
+                            nHgt=aSiz2.Height()+1; // a little more tolerance
+                    }
+                    else
+                        nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
+                    rOutliner.Clear();
                 }
             }
             else
             {
-                Outliner& rOutliner=ImpGetDrawOutliner();
-                rOutliner.SetPaperSize(aSiz);
-                rOutliner.SetUpdateMode(true);
-                // TODO: add the optimization with bPortionInfoChecked again.
-                OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-                if( pOutlinerParaObject != NULL )
-                {
-                    rOutliner.SetText(*pOutlinerParaObject);
-                    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
-                }
-                if ( bWdtGrow )
-                {
-                    Size aSiz2(rOutliner.CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // a little more tolerance
-                    if ( bHgtGrow )
-                        nHgt=aSiz2.Height()+1; // a little more tolerance
-                }
-                else
-                    nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
-                rOutliner.Clear();
+                nHgt = m_aSuggestedTextFrameSize.Height();
+                nWdt = m_aSuggestedTextFrameSize.Width();
             }
             if ( nWdt < nMinWdt )
                 nWdt = nMinWdt;
