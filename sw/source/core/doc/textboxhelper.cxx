@@ -95,6 +95,7 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
         syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_RELATION));
         syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_POSITION));
         syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION));
+        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
     }
 }
 
