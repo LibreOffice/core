@@ -75,6 +75,23 @@ static bool CallPrePro( const OString& rInput,
             bVerbose = true;
             continue;
         }
+        if (strcmp(static_cast<char *>(pCmdLine->GetEntry(i)), "-isystem") == 0)
+        {
+            // ignore "-isystem" and following arg
+            if (i < int(pCmdLine->GetCount()) - 1)
+            {
+                ++i;
+            }
+            continue;
+        }
+        if (strncmp(
+                static_cast<char *>(pCmdLine->GetEntry(i)), "-isystem",
+                strlen("-isystem"))
+            == 0)
+        {
+            // ignore args starting with "-isystem"
+            continue;
+        }
         if ( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 ) ||
              !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 ) ||
              !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 ))
