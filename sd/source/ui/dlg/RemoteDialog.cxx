@@ -25,20 +25,6 @@ RemoteDialog::RemoteDialog( Window *pWindow )
     get(m_pButtonClose, "close");
     get(m_pClientBox, "tree");
 
-#ifdef ENABLE_SDREMOTE
-    RemoteServer::ensureDiscoverable();
-
-    vector<::boost::shared_ptr<ClientInfo>> aClients( RemoteServer::getClients() );
-
-    const vector<::boost::shared_ptr<ClientInfo>>::const_iterator aEnd( aClients.end() );
-
-    for ( vector<::boost::shared_ptr<ClientInfo>>::const_iterator aIt( aClients.begin() );
-        aIt != aEnd; ++aIt )
-    {
-        m_pClientBox->addEntry( *aIt );
-    }
-#endif
-
     m_pButtonConnect->SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
     m_pButtonClose->SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );

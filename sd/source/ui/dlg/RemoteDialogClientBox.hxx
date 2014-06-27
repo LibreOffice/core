@@ -23,6 +23,7 @@
 #include "rtl/ustring.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/button.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/field.hxx"
 
@@ -98,8 +99,10 @@ class ClientBox:
     long            m_nExtraHeight;
     Size            m_aOutputSize;
     Link            m_aClickHdl;
+    Link            m_aDeauthoriseHdl;
 
     NumericBox      m_aPinBox;
+    PushButton      m_aDeauthoriseButton;
 
     ScrollBar       m_aScrollBar;
 
@@ -125,7 +128,7 @@ class ClientBox:
     void            DeleteRemoved();
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
-
+    DECL_DLLPRIVATE_LINK( DeauthoriseHdl, void * );
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
     void checkIndex(sal_Int32 pos) const;
@@ -158,11 +161,13 @@ public:
     long            addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
     void            updateEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
     void            removeEntry( const ::boost::shared_ptr<ClientInfo> pPackageInfo );
+    void            clearEntries();
 
     void            prepareChecking();
     void            checkEntries();
 
     OUString getPin();
+    void            populateEntries();
 };
 
 }

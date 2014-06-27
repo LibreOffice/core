@@ -453,4 +453,9 @@ String STR_ENTER_PIN
     Text [ en-US ] = "Enter PIN:";
 };
 
+String STR_DEAUTHORISE_CLIENT
+{
+    Text [ en-US ] = "Remove client authorisation";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
