@@ -3538,7 +3538,7 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
         return false;
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    rPos = rDoc.GetNotePosition(nIndex);
+    rPos = rDoc.GetNotePosition(nIndex, nTab);
     return rPos.IsValid();
 }
 
