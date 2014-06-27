@@ -39,9 +39,6 @@ ifeq ($(SYSTEM_GLM),)
 libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,glm)"
 endif
 
-libgltf_empty :=
-libgltf_space := $(libgltf_empty) $(libgltf_empty)
-
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
 		msbuild.exe libgltf.vcxproj \
@@ -50,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 				/p:VisualStudioVersion=11.0) \
 			$(if $(filter 100,$(VCVER)),/p:PlatformToolset=v100 \
 				/p:VisualStudioVersion=10.0) \
-			'/p:AdditionalIncludeDirectories=$(subst $(libgltf_space),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
+			'/p:AdditionalIncludeDirectories=$(subst $(WHITESPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
 			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_GLEW),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,glew))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
 
