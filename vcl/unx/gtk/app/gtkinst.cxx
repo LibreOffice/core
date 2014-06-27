@@ -19,7 +19,6 @@
 
 #include <stack>
 #include <string.h>
-#include <osl/module.h>
 #include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -58,7 +57,7 @@ extern "C"
         pYieldMutex->ThreadsLeave();
     }
 
-    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule )
+    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance()
     {
         SAL_INFO(
             "vcl.gtk",

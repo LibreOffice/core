@@ -34,7 +34,7 @@
 
 /// entry point for the KDE4 VCL plugin
 extern "C" {
-    VCLPLUG_KDE4_PUBLIC SalInstance* create_SalInstance( oslModule )
+    VCLPLUG_KDE4_PUBLIC SalInstance* create_SalInstance()
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */
