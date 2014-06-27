@@ -31,7 +31,7 @@ protected:
 public:
     virtual ~RefHint() = 0;
 
-    Type getType() const { return meType; }
+    Type getType() const;
 };
 
 class RefMovedHint : public RefHint
@@ -47,12 +47,12 @@ public:
     /**
      * Get the source range from which the references have moved.
      */
-    const ScRange& getRange() const { return maRange;}
+    const ScRange& getRange() const;
 
     /**
      * Get the movement vector.
      */
-    const ScAddress& getDelta() const { return maMoveDelta;}
+    const ScAddress& getDelta() const;
 };
 
 class RefColReorderHint : public RefHint
@@ -66,11 +66,11 @@ public:
     RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
     virtual ~RefColReorderHint();
 
-    const sc::ColReorderMapType& getColMap() const { return mrColMap;}
+    const sc::ColReorderMapType& getColMap() const;
 
-    SCTAB getTab() const { return mnTab;}
-    SCROW getStartRow() const { return mnRow1;}
-    SCROW getEndRow() const { return mnRow2;}
+    SCTAB getTab() const;
+    SCROW getStartRow() const;
+    SCROW getEndRow() const;
 };
 
 }
