@@ -424,8 +424,8 @@ void ImpEditEngine::FormatDoc()
         sal_uInt32 nNewHeightNTP;
         sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
         // FIXME(matteocam)
-        long nDiff = 0;
-        //long nDiff = nNewHeight - nCurTextHeight;
+        //long nDiff = 0;
+        long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTHEIGHTCHANGED : EditStatusFlags::TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
