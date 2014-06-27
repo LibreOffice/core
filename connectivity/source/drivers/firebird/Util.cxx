@@ -271,7 +271,11 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
         case SQL_INT64:
         case SQL_TYPE_TIME:
         case SQL_TYPE_DATE:
-            free(pVar->sqldata);
+            if(pVar->sqldata)
+            {
+                free(pVar->sqldata);
+                pVar->sqldata = NULL;
+            }
             break;
         case SQL_ARRAY:
             assert(false); // TODO: implement
@@ -284,13 +288,17 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             break;
         default:
             SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
-            assert(false);
+//            assert(false);
             break;
         }
 
         if (pVar->sqltype & 1)
         {
-            free(pVar->sqlind);
+            if(pVar->sqlind)
+            {
+                free(pVar->sqlind);
+                pVar->sqlind = NULL;
+            }
         }
     }
 }

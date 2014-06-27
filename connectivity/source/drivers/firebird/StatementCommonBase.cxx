@@ -133,7 +133,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     if (!pOutSqlda)
     {
-        pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
+        pOutSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(10));
         pOutSqlda->version = SQLDA_VERSION1;
         pOutSqlda->sqln = 10;
     }
@@ -146,68 +146,79 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     if (aErr)
     {
-        free(pOutSqlda);
-        pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_allocate_statement",
                              *this);
     }
-
-    aErr = isc_dsql_prepare(m_statusVector,
-                            &m_pConnection->getTransaction(),
-                            &m_aStatementHandle,
-                            0,
-                            OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                            FIREBIRD_SQL_DIALECT,
-                            pInSqlda);
-
-    if (aErr)
+    else
     {
-        // TODO: free statement handle?
-        free(pOutSqlda);
-        pOutSqlda = 0;
-        evaluateStatusVector(m_statusVector,
-                             "isc_dsql_prepare",
-                             *this);
+        aErr = isc_dsql_prepare(m_statusVector,
+                                &m_pConnection->getTransaction(),
+                                &m_aStatementHandle,
+                                0,
+                                OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
+                                FIREBIRD_SQL_DIALECT,
+                                pInSqlda);
+
+        if (aErr)
+        {
+            evaluateStatusVector(m_statusVector,
+                                 "isc_dsql_prepare",
+                                 *this);
+        }
+        else
+        {
+            aErr = isc_dsql_describe(m_statusVector,
+                                     &m_aStatementHandle,
+                                     1,
+                                     pOutSqlda);
+
+            if (aErr)
+            {
+                // TODO: free statement handle, etc.?
+                evaluateStatusVector(m_statusVector,
+                                     "isc_dsql_describe",
+                                     *this);
+            }
+            else
+            {
+                // Ensure we have enough space in pOutSqlda
+                if (pOutSqlda->sqld > pOutSqlda->sqln)
+                {
+                    int n = pOutSqlda->sqld;
+                    free(pOutSqlda);
+                    pOutSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(n));
+                    pOutSqlda->version = SQLDA_VERSION1;
+                    pOutSqlda->sqln = n;
+                    aErr = isc_dsql_describe(m_statusVector,
+                                             &m_aStatementHandle,
+                                             1,
+                                             pOutSqlda);
+                }
+
+                // Process each XSQLVAR parameter structure in the output XSQLDA
+                if (aErr)
+                {
+                    evaluateStatusVector(m_statusVector,
+                                         "isc_dsql_describe",
+                                         *this);
+                }
+                else
+                {
+                    mallocSQLVAR(pOutSqlda);
+                }
+            }
+        }
+        if(aErr)
+        {
+            freeStatementHandle();
+        }
     }
-
-    aErr = isc_dsql_describe(m_statusVector,
-                             &m_aStatementHandle,
-                             1,
-                             pOutSqlda);
-
-
-    if (aErr)
+    if(aErr)
     {
-        // TODO: free statement handle, etc.?
         free(pOutSqlda);
-        pOutSqlda = 0;
-        evaluateStatusVector(m_statusVector,
-                             "isc_dsql_describe",
-                             *this);
+        pOutSqlda = NULL;
     }
-
-    // Ensure we have enough space in pOutSqlda
-    if (pOutSqlda->sqld > pOutSqlda->sqln)
-    {
-        int n = pOutSqlda->sqld;
-        free(pOutSqlda);
-        pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(n));
-        pOutSqlda->version = SQLDA_VERSION1;
-        pOutSqlda->sqln = n;
-        aErr = isc_dsql_describe(m_statusVector,
-                                 &m_aStatementHandle,
-                                 1,
-                                 pOutSqlda);
-    }
-
-    // Process each XSQLVAR parameter structure in the output XSQLDA
-    if (aErr)
-        evaluateStatusVector(m_statusVector,
-                             "isc_dsql_describe",
-                             *this);
-
-    mallocSQLVAR(pOutSqlda);
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------
