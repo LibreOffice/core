@@ -361,7 +361,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
     OUString  GetDoString( DoType eDoType ) const;
     OUString  GetRepeatString() const;
-    sal_uInt16  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
+    void    GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     // search and replace
     sal_uLong SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
