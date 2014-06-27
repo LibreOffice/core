@@ -15,6 +15,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/ace.lm \
 	langclass/LM/ada.lm \
 	langclass/LM/af.lm \
+	langclass/LM/ak.lm \
 	langclass/LM/alt.lm \
 	langclass/LM/am.lm \
 	langclass/LM/ar.lm \
@@ -36,6 +37,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/br.lm \
 	langclass/LM/bs.lm \
 	langclass/LM/ca.lm \
+	langclass/LM/ckb.lm \
 	langclass/LM/cs.lm \
 	langclass/LM/cy.lm \
 	langclass/LM/da.lm \
@@ -43,6 +45,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/dv.lm \
 	langclass/LM/ee.lm \
 	langclass/LM/el.lm \
+	langclass/LM/emk-Latn.lm \
 	langclass/LM/en.lm \
 	langclass/LM/eo.lm \
 	langclass/LM/es.lm \
@@ -82,6 +85,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/kl.lm \
 	langclass/LM/km.lm \
 	langclass/LM/kn.lm \
+	langclass/LM/kng.lm \
 	langclass/LM/ko.lm \
 	langclass/LM/ktu.lm \
 	langclass/LM/ky.lm \
@@ -103,6 +107,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/mt.lm \
 	langclass/LM/my.lm \
 	langclass/LM/nb.lm \
+	langclass/LM/nds.lm \
 	langclass/LM/ne.lm \
 	langclass/LM/nl.lm \
 	langclass/LM/nn.lm \
@@ -115,6 +120,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/pl.lm \
 	langclass/LM/plt.lm \
 	langclass/LM/pt.lm \
+	langclass/LM/quz.lm \
 	langclass/LM/qxa.lm \
 	langclass/LM/rm.lm \
 	langclass/LM/ro.lm \
@@ -152,11 +158,14 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/ts.lm \
 	langclass/LM/tt.lm \
 	langclass/LM/ty.lm \
+	langclass/LM/tzm-Latn.lm \
 	langclass/LM/ug.lm \
 	langclass/LM/uk.lm \
 	langclass/LM/ur.lm \
+	langclass/LM/uz-Cyrl.lm \
 	langclass/LM/uz.lm \
 	langclass/LM/ve.lm \
+	langclass/LM/vep.lm \
 	langclass/LM/vi.lm \
 	langclass/LM/wa.lm \
 	langclass/LM/xh.lm \
