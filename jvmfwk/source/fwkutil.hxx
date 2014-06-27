@@ -122,8 +122,6 @@ FileStatus checkFileURL(const OUString & path);
 
 bool isAccessibilitySupportDesired();
 
-OUString buildClassPathFromDirectory(const OUString & relPath);
-
 OUString retrieveClassPath( OUString const & macro );
 }
 #endif

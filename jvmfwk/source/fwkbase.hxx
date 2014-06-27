@@ -120,8 +120,6 @@ OString getSharedSettingsPath();
  */
 OString getVendorSettingsPath();
 
-OUString buildClassPathFromDirectory(const OUString & relPath);
-
 /** Called from writeJavaInfoData. It sets the process identifier. When
 java is to be started, then the current id is compared to the one set by
 this function. If they are identical then the Java was selected in the
