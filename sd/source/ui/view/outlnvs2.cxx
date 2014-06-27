@@ -285,6 +285,17 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
+        case SID_REMOTE_DLG:
+        {
+#ifdef ENABLE_SDREMOTE
+             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
+             if (pDlg)
+                 pDlg->Execute();
+#endif
+        }
+        break;
+
         case SID_CUSTOMSHOW_DLG:
         {
             SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
