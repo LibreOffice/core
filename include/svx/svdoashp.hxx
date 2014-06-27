@@ -136,6 +136,7 @@ protected:
     virtual void AdaptTextMinSize() SAL_OVERRIDE;
 
     OUString      aName;
+    Size          m_aSuggestedTextFrameSize;
 
 public:
 
@@ -212,6 +213,12 @@ public:
     virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE; // #i37448#
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
+    /**
+     * Allows suggesting the text frame size: in case the application has its
+     * own text associated to the shape, instead of using the shape's editeng
+     * text.
+     */
+    void SuggestTextFrameSize(Size aSuggestedTextFrameSize);
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const SAL_OVERRIDE;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) SAL_OVERRIDE;
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) SAL_OVERRIDE;
