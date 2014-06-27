@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_xshape, \
 
 $(eval $(call gb_CppunitTest_set_include,chart2_xshape,\
 	-I$(SRCDIR)/chart2/qa/extras \
+    -I$(SRCDIR)/chart2/inc \
     $$(INCLUDE) \
 ))
 
