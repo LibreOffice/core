@@ -43,9 +43,6 @@
 
 using namespace vcl;
 #include "unx/i18n_cb.hxx"
-#if defined(SOLARIS) ||  defined(LINUX)
-extern "C" char * XSetIMValues(XIM im, ...);
-#endif
 
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work
