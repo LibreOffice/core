@@ -690,7 +690,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
-     SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
+    SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
     SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode()->GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
@@ -1078,19 +1078,12 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
                 for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
                 {
-                    bool bInsWithFmt = true;
                     const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
-                    if( bInsWithFmt  )
-                    {
-                        SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                        if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
-                        {
-                            aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
-                        }
-                        else
-                            continue;
-                        GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
-                    }
+                    SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                    if ( FLY_AT_PAGE != aAnchor.GetAnchorId() )
+                        continue;
+                    aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
+                    GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
                 }
             }
         }
