@@ -124,7 +124,8 @@ void RemoteServer::execute()
             OUString aAddress = aClientAddr.getHostname();
 
             MutexGuard aGuard( sDataMutex );
-            ClientInfoInternal* pClient = new ClientInfoInternal(
+            ::boost::shared_ptr< ClientInfoInternal > pClient(
+                new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, pSocket, OStringToOUString( aPin,
                     RTL_TEXTENCODING_UTF8 ) );
@@ -233,10 +234,10 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
     }
 }
 
-std::vector<ClientInfo*> RemoteServer::getClients()
+std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
 {
     SAL_INFO( "sdremote", "RemoteServer::getClients() called" );
-    std::vector<ClientInfo*> aClients;
+    std::vector< ::boost::shared_ptr< ClientInfo > > aClients;
     if ( !spServer )
     {
         SAL_INFO( "sdremote", "No remote server instance => no clients" );
@@ -249,12 +250,13 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     return aClients;
 }
 
-bool RemoteServer::connectClient( ClientInfo* pClient, const OUString& aPin )
+bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, const OUString& aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )
         return false;
 
+    ClientInfoInternal* apClient = dynamic_cast< ClientInfoInternal* >( pClient.get() );
     ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
     if ( apClient->mPin.equals( aPin ) )
     {
@@ -292,7 +294,7 @@ bool RemoteServer::connectClient( ClientInfo* pClient, const OUString& aPin )
 
         sCommunicators.push_back( pCommunicator );
 
-        for ( vector<ClientInfoInternal*>::iterator aIt = spServer->mAvailableClients.begin();
+        for ( vector<::boost::shared_ptr<ClientInfoInternal>>::iterator aIt = spServer->mAvailableClients.begin();
             aIt != spServer->mAvailableClients.end(); ++aIt )
         {
             if ( pClient == *aIt )
