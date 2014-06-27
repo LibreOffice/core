@@ -20,7 +20,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
+#define NUMBER_OF_TESTS 4
 
 class ScAnnontationsObj : public CalcUnoApiTest, apitest::XSheetAnnotations
 {
@@ -37,6 +37,7 @@ public:
     CPPUNIT_TEST(testInsertNew);
     CPPUNIT_TEST(testRemoveByIndex);
     CPPUNIT_TEST(testCount);
+    CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST_SUITE_END();
 private:
 

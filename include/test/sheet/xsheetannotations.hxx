@@ -21,6 +21,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     // XSheetAnnotations
+    void testGetByIndex();
     void testInsertNew();
     void testRemoveByIndex();
     void testCount();
