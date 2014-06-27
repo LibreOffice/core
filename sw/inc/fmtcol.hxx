@@ -69,29 +69,31 @@ protected:
 
     SwTxtFmtColl *pNextTxtFmtColl;
 
-    SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
-                    SwTxtFmtColl* pDerFrom = 0,
-                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
-                        pDerFrom, nFmtWh ),
-          // --> OD 2007-01-24 #i73790#
-          mbStayAssignedToListLevelOfOutlineStyle( false ),
-          // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
-    { pNextTxtFmtColl = this; }
+    SwTxtFmtColl(
+        SwAttrPool& rPool,
+        const sal_Char* pFmtCollName,
+        SwTxtFmtColl* pDerFrom = 0,
+        sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
+        : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange
+        , pDerFrom, nFmtWh )
+        , mbStayAssignedToListLevelOfOutlineStyle( false )
+        , mbAssignedToOutlineStyle( false )
+    {
+        pNextTxtFmtColl = this;
+    }
 
-    SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
-                    SwTxtFmtColl* pDerFrom = 0,
-                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
-                        pDerFrom, nFmtWh ),
-          // --> OD 2007-01-24 #i73790#
-          mbStayAssignedToListLevelOfOutlineStyle( false ),
-          // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
-    { pNextTxtFmtColl = this; }
+    SwTxtFmtColl(
+        SwAttrPool& rPool,
+        const String &rFmtCollName,
+        SwTxtFmtColl* pDerFrom = 0,
+        sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
+        : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange
+        , pDerFrom, nFmtWh )
+        , mbStayAssignedToListLevelOfOutlineStyle( false )
+        , mbAssignedToOutlineStyle( false )
+    {
+        pNextTxtFmtColl = this;
+    }
 
     // zum "abfischen" von UL-/LR-/FontHeight Aenderungen
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
@@ -105,29 +107,30 @@ public:
 
     sal_Bool IsAtDocNodeSet() const;
 
-    // --> OD 2006-11-22 #i71574#
-   //<-#outline level,zhaojianwei
     void SetAttrOutlineLevel( int );
-    int  GetAttrOutlineLevel() const;
-    int  GetAssignedOutlineStyleLevel() const;
+    int GetAttrOutlineLevel() const;
+
+    // Return the list level of the Outline Style - the List Style for the outline numbering -
+    // to which the Paragraph Style is assigned.
+    int GetAssignedOutlineStyleLevel() const;
+
     inline bool IsAssignedToListLevelOfOutlineStyle() const
     {
         return mbAssignedToOutlineStyle;
     }
-    void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
-    void DeleteAssignmentToListLevelOfOutlineStyle();
-    //<-end
-    // <--
 
-    // --> OD 2008-03-04 #refactorlists#
+    // If a Paragraph Style is assigned to list level N of the Outline Style,
+    // then its outline level - AttrOutlineLevel - is set to N+1
+    void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
+
+    void DeleteAssignmentToListLevelOfOutlineStyle( const bool bResetOutlineLevel = true );
+
     // override to recognize changes on the <SwNumRuleItem> and register/unregister
     // the paragragh style at the corresponding <SwNumRule> instance
     virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
     virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    // <--
 
-    // --> OD 2007-01-24 #i73790#
     // override <ResetAllFmtAttr()> to stay assigned to list level of outline style
     virtual sal_uInt16 ResetAllFmtAttr();
 

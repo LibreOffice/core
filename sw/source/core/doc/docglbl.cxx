@@ -125,8 +125,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
     {
         // wenn keine OutlineNumerierung ist, dann benutze eigenes Array
         // und sammel die Nodes zusammen.
-        //if( NO_NUMBERING == pSplitColl->GetOutlineLevel() )//#outline level,zhaojianwei
-        if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
+        if( pSplitColl->GetAttrOutlineLevel() == 0 )
         {
             pOutlNds = new SwOutlineNodes( 8, 8 );
             SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );

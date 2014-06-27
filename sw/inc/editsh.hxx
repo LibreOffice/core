@@ -303,11 +303,11 @@ public:
     sal_uInt16 GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( sal_uInt16 nTxtFmtColl) const;
     SwTxtFmtColl* GetCurTxtFmtColl() const;
-    // --> OD 2007-11-06 #i62675#
+
     // Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
     void SetTxtFmtColl( SwTxtFmtColl*,
-                        bool bResetListAttrs = false );
-    // <--
+                        const bool bResetListAttrs = false );
+
     SwTxtFmtColl *MakeTxtFmtColl(const String &rFmtCollName,
         SwTxtFmtColl *pDerivedFrom = 0);
     void FillByEx(SwTxtFmtColl*, sal_Bool bReset = sal_False);

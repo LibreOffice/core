@@ -94,14 +94,13 @@ void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
     sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
     // does the format still exist?
-    if( USHRT_MAX != nPos )
+    if ( USHRT_MAX != nPos )
     {
-        // --> OD 2008-04-15 #refactorlists#
-        rDoc.SetTxtFmtColl(rPaM,
-                                          (SwTxtFmtColl*)pFmtColl,
-                                          mbReset,
-                                          mbResetListAttrs );
-        // <--
+        rDoc.SetTxtFmtColl(
+            rPaM,
+            (SwTxtFmtColl*) pFmtColl,
+            mbReset,
+            mbResetListAttrs );
     }
 }
 

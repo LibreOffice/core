@@ -548,12 +548,10 @@ sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {
@@ -656,12 +654,10 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         if( 0 != ( bRet = (0 != aSet.Put( aTempSet ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {

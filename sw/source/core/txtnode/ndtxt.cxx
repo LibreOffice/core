@@ -4680,6 +4680,7 @@ namespace {
         // --> OD 2008-11-19 #i70748#
         if ( mbOutlineLevelSet )
         {
+            mrTxtNode.GetNodes().UpdateOutlineNode( mrTxtNode );
             if ( mrTxtNode.GetAttrOutlineLevel() == 0 )
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();

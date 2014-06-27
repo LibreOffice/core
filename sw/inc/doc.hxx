@@ -1310,7 +1310,7 @@ public:
                                                sal_Bool bBroadcast = sal_False);
     void DelTxtFmtColl(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
     void DelTxtFmtColl( SwTxtFmtColl* pColl, sal_Bool bBroadcast = sal_False );
-    // --> OD 2007-11-06 #i62675#
+
     // Add 4th optional parameter <bResetListAttrs>.
     // 'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
     // attributes of the affected text nodes are cleared, except the break
@@ -1318,10 +1318,12 @@ public:
     // The new parameter <bResetListAttrs> indicates, if the list attributes
     // (list style, restart at and restart with) are cleared as well in case
     // that <bReset = true> and the paragraph style has a list style attribute set.
-    sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
-                            bool bReset = true,
-                            bool bResetListAttrs = false );
-    // <--
+    sal_Bool SetTxtFmtColl(
+        const SwPaM &rRg,
+        SwTxtFmtColl *pFmt,
+        const bool bReset = true,
+        const bool bResetListAttrs = false );
+
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
 

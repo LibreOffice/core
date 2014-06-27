@@ -2167,29 +2167,24 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sStyleName;
-                    SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                    SwStyleNameMapper::FillUIName( uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
                     const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
                     const sal_uInt16 nCount = pColls->Count();
-                    for(sal_uInt16 k = 0; k < nCount; ++k)
+                    for ( sal_uInt16 k = 0; k < nCount; ++k )
                     {
-                        SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
-                        if(rTxtColl.IsDefault())
+                        SwTxtFmtColl &rTxtColl = *( ( *pColls )[k] );
+                        if ( rTxtColl.IsDefault() )
                             continue;
-                        //if(rTxtColl.GetOutlineLevel() == nIndex &&            //#outline level,removed by zhaojianwei
-                        //  rTxtColl.GetName() != sStyleName)
-                        //  rTxtColl..SetOutlineLevel(NO_NUMBERING);
-                        //else if(rTxtColl.GetName() == sStyleName)
-                        //  rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
-                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&  //add by zhaojianwei
-                             rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
-                             rTxtColl.GetName() != sStyleName )
+                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle()
+                             && rTxtColl.GetAssignedOutlineStyleLevel() == nIndex
+                             && rTxtColl.GetName() != sStyleName )
                         {
                             rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
                         }
                         else if ( rTxtColl.GetName() == sStyleName )
                         {
                             rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
-                        }                                                       //<-end,,zhaojianwei,
+                        }
                     }
                 }
                 break;

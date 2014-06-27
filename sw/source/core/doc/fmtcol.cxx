@@ -65,17 +65,14 @@ namespace TxtFmtCollFunc
             return;
         }
 
-        // --> OD 2007-01-24 #i73790#
-    //    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
-        if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
-             pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
-        // <--
+        if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle()
+             && pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( !pNewNumRuleItem )
+            if ( pNewNumRuleItem == NULL )
             {
                 pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNewNumRuleItem );
             }
-            if ( pNewNumRuleItem )
+            if ( pNewNumRuleItem != NULL )
             {
                 String sNumRuleName = pNewNumRuleItem->GetValue();
                 if ( sNumRuleName.Len() == 0 ||
@@ -87,7 +84,7 @@ namespace TxtFmtCollFunc
             }
         }
     }
-    // <--
+
 
     SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl )
     {
@@ -212,7 +209,6 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_CHRATR_CTL_FONTSIZE:
         aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
         break;
-    // --> OD 2006-10-17 #i70223#
     case RES_PARATR_NUMRULE:
     {
         if ( bAssignedToListLevelOfOutlineStyle )
@@ -220,17 +216,16 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             pNewNumRuleItem = (SwNumRuleItem*)pNew;
         }
     }
+    break;
     default:
         break;
     }
 
-    // --> OD 2006-10-17 #i70223#
-    if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
+    if ( bAssignedToListLevelOfOutlineStyle
+         && pNewNumRuleItem != NULL )
     {
-        TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
-                                                        this, pNewNumRuleItem );
+        TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this, pNewNumRuleItem );
     }
-    // <--
 
     int bWeiter = sal_True;
 
@@ -416,28 +411,24 @@ sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 }
 // <--
 
-// --> OD 2007-01-24 #i73790#
+
 sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
 {
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
-    // --> OD 2008-12-16 #i70748#
     // Outline level is no longer a member, it is a attribute now.
     // Thus, it needs to be restored, if the paragraph style is assigned
     // to the outline style
     const int nAssignedOutlineStyleLevel = IsAssignedToListLevelOfOutlineStyle()
                                      ? GetAssignedOutlineStyleLevel()
                                      : -1;
-    // <--
 
     sal_uInt16 nRet = SwFmtColl::ResetAllFmtAttr();
 
-    // --> OD 2008-12-16 #i70748#
     if ( nAssignedOutlineStyleLevel != -1 )
     {
         AssignToListLevelOfOutlineStyle( nAssignedOutlineStyleLevel );
     }
-    // <--
 
     mbStayAssignedToListLevelOfOutlineStyle = bOldState;
 
@@ -654,7 +645,9 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
         aCondColls.Insert( pNew, n );
     }
 }
-//#outline level, zhaojianwei
+//FEATURE::CONDCOLL
+
+
 void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
     ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
@@ -662,24 +655,26 @@ void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
                             static_cast<sal_uInt16>(nLevel) ) );
 }
 
+
 int SwTxtFmtColl::GetAttrOutlineLevel() const
 {
-    return ((const SfxUInt16Item &)GetFmtAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+    return ( (const SfxUInt16Item &) GetFmtAttr( RES_PARATR_OUTLINELEVEL ) ).GetValue();
 }
+
 
 int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const
 {
     ASSERT( IsAssignedToListLevelOfOutlineStyle(),
-        "<SwTxtFmtColl::GetAssignedOutlineStyleLevel()> - misuse of method");
+            "<SwTxtFmtColl::GetAssignedOutlineStyleLevel()> - misuse of method" );
     return GetAttrOutlineLevel() - 1;
 }
+
 
 void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
 {
     mbAssignedToOutlineStyle = true;
-    SetAttrOutlineLevel(nAssignedListLevel+1);
+    SetAttrOutlineLevel( nAssignedListLevel + 1 );
 
-    // --> OD 2009-03-18 #i100277#
     SwIterator<SwTxtFmtColl,SwFmtColl> aIter( *this );
     SwTxtFmtColl* pDerivedTxtFmtColl = aIter.First();
     while ( pDerivedTxtFmtColl != 0 )
@@ -699,14 +694,16 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
 
         pDerivedTxtFmtColl = aIter.Next();
     }
-    // <--
 }
 
-void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()
+
+void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle(
+    const bool bResetOutlineLevel )
 {
     mbAssignedToOutlineStyle = false;
-    ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
+    if ( bResetOutlineLevel )
+    {
+        ResetFmtAttr( RES_PARATR_OUTLINELEVEL );
+    }
 }
-//<-end,zhaojianwei
 
-//FEATURE::CONDCOLL

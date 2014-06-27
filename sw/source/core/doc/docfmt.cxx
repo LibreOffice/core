@@ -116,13 +116,9 @@ struct ParaRstFmt
     const SfxItemSet* pDelSet;
     sal_uInt16 nWhich;
     bool bReset;
-    // --> OD 2007-11-06 #i62575#
     bool bResetListAttrs;
-    // <--
     bool bResetAll;
     bool bInclRefToxMark;
-
-    bool bKeepOutlineLevelAttr; //#outline level,add by zhaojianwei
 
     ParaRstFmt( const SwPosition* pStt, const SwPosition* pEnd,
                 SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = 0 )
@@ -132,14 +128,12 @@ struct ParaRstFmt
           pEndNd(pEnd),
           pDelSet(pSet),
           nWhich(nWhch),
-          // --> OD 2007-11-06 #i62675#
           bReset( false ),
           bResetListAttrs( false ),
-          // <--
           bResetAll( true ),
-          bInclRefToxMark( false ),
-          bKeepOutlineLevelAttr( false )    //#outline level,add by zhaojianwei
-    {}
+          bInclRefToxMark( false )
+    {
+    }
 
     ParaRstFmt( SwHistory* pHst )
         : pFmtColl(0),
@@ -148,14 +142,12 @@ struct ParaRstFmt
           pEndNd(0),
           pDelSet(0),
           nWhich(0),
-          // --> OD 2007-11-06 #i62675#
           bReset( false ),
           bResetListAttrs( false ),
-          // <--
           bResetAll( true ),
-          bInclRefToxMark( false ),
-            bKeepOutlineLevelAttr( false )  //#outline level,add by zhaojianwei
-    {}
+          bInclRefToxMark( false )
+    {
+    }
 };
 
 /* in pArgs steht die ChrFmtTablle vom Dokument
@@ -197,8 +189,8 @@ sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 
 sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
-    ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
-    SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
+    const ParaRstFmt* pPara = (ParaRstFmt*) pArgs;
+    SwCntntNode* pNode = (SwCntntNode*) rpNd->GetCntntNode();
     if( pNode && pNode->HasSwAttrSet() )
     {
         const sal_Bool bLocked = pNode->IsModifyLocked();
@@ -206,31 +198,24 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         SwDoc* pDoc = pNode->GetDoc();
 
-        // --> OD 2008-04-14 #refactorlists#
-        // remove unused attribute RES_LR_SPACE
-        // add list attributes
-        SfxItemSet aSet( pDoc->GetAttrPool(),
-                         RES_PAGEDESC, RES_BREAK,
-                         RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                         RES_PARATR_OUTLINELEVEL,RES_PARATR_OUTLINELEVEL,//#outline level,removed by zhaojianwei
-                         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                         0 );
-        const SfxItemSet* pSet = pNode->GetpSwAttrSet();
+        SfxItemSet aSavedAttrsSet(
+            pDoc->GetAttrPool(),
+            RES_PAGEDESC, RES_BREAK,
+            RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
+            RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+            0 );
+        const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
-        // --> OD 2008-04-15 #refactorlists#
-//        std::vector<sal_uInt16> aClearWhichIds;
         SvUShorts aClearWhichIds;
-        // <--
-        // --> OD 2008-04-15 #refactorlists#
         // restoring all paragraph list attributes
         {
             SfxItemSet aListAttrSet( pDoc->GetAttrPool(),
                                      RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
                                      0 );
-            aListAttrSet.Set( *pSet );
+            aListAttrSet.Set( *pAttrSetOfNode );
             if ( aListAttrSet.Count() )
             {
-                aSet.Put( aListAttrSet );
+                aSavedAttrsSet.Put( aListAttrSet );
                 SfxItemIter aIter( aListAttrSet );
                 const SfxPoolItem* pItem = aIter.GetCurItem();
                 while( pItem )
@@ -240,94 +225,72 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 }
             }
         }
-        // <--
 
         const SfxPoolItem* pItem;
-  //      sal_uInt16 __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,  //#outline level,removed by zhaojianwei
-  //                                              RES_PARATR_NUMRULE };
-        //for( sal_uInt16 n = 0; n < 3; ++n )
-        sal_uInt16 __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,    //->add by zhaojianwei
-                                                RES_PARATR_NUMRULE,
-                                                RES_PARATR_OUTLINELEVEL };
-        for( sal_uInt16 n = 0; n < 4; ++n )                                     //<-end,zhaojianwei
+        sal_uInt16 __READONLY_DATA aSavIds[3] =
+                { RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE };
+        for ( sal_uInt16 n = 0; n < 3; ++n )
         {
-            if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], sal_False, &pItem ))
+            if ( SFX_ITEM_SET == pAttrSetOfNode->GetItemState( aSavIds[n], sal_False, &pItem ) )
             {
                 bool bSave = false;
-                switch( aSavIds[ n ] )
+                switch (aSavIds[n])
                 {
-                    case RES_PAGEDESC:
-                        bSave = 0 != ((SwFmtPageDesc*)pItem)->GetPageDesc();
+                case RES_PAGEDESC:
+                    bSave = 0 != ( (SwFmtPageDesc*) pItem )->GetPageDesc();
                     break;
-                    case RES_BREAK:
-                        bSave = SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak();
+                case RES_BREAK:
+                    bSave = SVX_BREAK_NONE != ( (SvxFmtBreakItem*) pItem )->GetBreak();
                     break;
-                    case RES_PARATR_NUMRULE:
-                    {
-                        bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
-                    }
+                case RES_PARATR_NUMRULE:
+                    bSave = 0 != ( (SwNumRuleItem*) pItem )->GetValue().Len();
                     break;
-                    case RES_PARATR_OUTLINELEVEL:               //#outline level,add by zhaojianwei
-                    {
-                        bSave = pPara && pPara->bKeepOutlineLevelAttr;
-                    }
-                    break;                                      //<-end,zhaojianwei
                 }
-                if( bSave )
+                if ( bSave )
                 {
-                    aSet.Put( *pItem );
-                    // --> OD 2008-04-15 #refactorlists#
-//                    aClearWhichIds.push_back( aSavIds[n] );
+                    aSavedAttrsSet.Put( *pItem );
                     aClearWhichIds.Insert( aSavIds[n], aClearWhichIds.Count() );
                 }
             }
         }
 
-        // --> OD 2008-04-14 #refactorlists#
         // do not clear items directly from item set and only clear to be kept
         // attributes, if no deletion item set is found.
-//        pNode->ClearItemsFromAttrSet( aClearWhichIds );
         const bool bKeepAttributes =
                     !pPara || !pPara->pDelSet || pPara->pDelSet->Count() == 0;
         if ( bKeepAttributes )
         {
             pNode->ResetAttr( aClearWhichIds );
         }
-        // <--
 
         if( !bLocked )
             pNode->UnlockModify();
 
-        if( pPara )
+        if ( pPara )
         {
             SwRegHistory aRegH( pNode, *pNode, pPara->pHistory );
 
-            if( pPara->pDelSet && pPara->pDelSet->Count() )
+            if ( pPara->pDelSet && pPara->pDelSet->Count() )
             {
-                // --> OD 2008-04-15 #refactorlists#
                 ASSERT( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
-                // <--
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
-                while( sal_True )
+                while ( sal_True )
                 {
-                    // --> OD 2008-04-14 #refactorlists#
-                    //
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_PARATR_NUMRULE ) ||
-                         ( aSet.GetItemState( pItem->Which(), sal_False ) != SFX_ITEM_SET ) )
+                         ( aSavedAttrsSet.GetItemState( pItem->Which(), sal_False ) != SFX_ITEM_SET ) )
                     {
                         pNode->ResetAttr( pItem->Which() );
                     }
-                    // <--
-                    if( aIter.IsAtEnd() )
+                    if ( aIter.IsAtEnd() )
                         break;
                     pItem = aIter.NextItem();
                 }
             }
-            else if( pPara->bResetAll )
+            else if ( pPara->bResetAll )
                 pNode->ResetAllAttr();
             else
                 pNode->ResetAttr( RES_PARATR_BEGIN, POOLATTR_END - 1 );
@@ -335,21 +298,20 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         else
             pNode->ResetAllAttr();
 
-        // --> OD 2008-04-15 #refactorlists#
         // only restore saved attributes, if needed
-        if ( bKeepAttributes && aSet.Count() )
-        // <--
+        if ( bKeepAttributes && aSavedAttrsSet.Count() )
         {
             pNode->LockModify();
 
-            pNode->SetAttr( aSet );
+            pNode->SetAttr( aSavedAttrsSet );
 
-            if( !bLocked )
+            if ( !bLocked )
                 pNode->UnlockModify();
         }
     }
     return sal_True;
 }
+
 
 void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
 {
@@ -1746,23 +1708,17 @@ void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, sal_Bool bBroadcast )
 
 sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 {
-    // ParaSetFmtColl * pPara = (ParaSetFmtColl*)pArgs;
-    SwCntntNode* pCNd = (SwCntntNode*)rpNode->GetTxtNode();
-    if( pCNd )
+    SwCntntNode* pCNd = (SwCntntNode*) rpNode->GetTxtNode();
+    if ( pCNd )
     {
-        ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
+        ParaRstFmt* pPara = (ParaRstFmt*) pArgs;
 
-        SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
+        SwTxtFmtColl* pFmt = static_cast< SwTxtFmtColl* >( pPara->pFmtColl );
         if ( pPara->bReset )
         {
 
-            if( pFmt->GetAttrOutlineLevel() == 0 && pPara )
-                pPara->bKeepOutlineLevelAttr = true;
-
             lcl_RstAttr( pCNd, pPara );
 
-            // --> OD 2007-11-06 #i62675#
-            // --> OD 2008-04-15 #refactorlists#
             // check, if paragraph style has changed
             if ( pPara->bResetListAttrs &&
                  pFmt != pCNd->GetFmtColl() &&
@@ -1790,7 +1746,6 @@ sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
                 if ( bChangeOfListStyleAtParagraph )
                 {
-                    // --> OD 2008-04-08 #refactorlists#
                     std::auto_ptr< SwRegHistory > pRegH;
                     if ( pPara->pHistory )
                     {
@@ -1806,9 +1761,7 @@ sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
                     pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
                     pCNd->ResetAttr( RES_PARATR_LIST_ID );
                 }
-                // <--
             }
-            // <--
         }
 
         // erst in die History aufnehmen, damit ggfs. alte Daten
@@ -1824,10 +1777,12 @@ sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     return sal_True;
 }
 
-sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
-                           SwTxtFmtColl *pFmt,
-                           bool bReset,
-                           bool bResetListAttrs )
+
+sal_Bool SwDoc::SetTxtFmtColl(
+    const SwPaM &rRg,
+    SwTxtFmtColl *pFmt,
+    const bool bReset,
+    const bool bResetListAttrs )
 {
     SwDataChanged aTmp( rRg, 0 );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -1836,11 +1791,9 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // --> OD 2008-04-15 #refactorlists#
         SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt,
                                                   bReset,
                                                   bResetListAttrs );
-        // <--
         pHst = pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
@@ -1848,17 +1801,18 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     ParaRstFmt aPara( pStt, pEnd, pHst );
     aPara.pFmtColl = pFmt;
     aPara.bReset = bReset;
-    // --> OD 2007-11-06 #i62675#
     aPara.bResetListAttrs = bResetListAttrs;
-    // <--
 
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_SetTxtFmtColl, &aPara );
-    if( !aPara.nWhich )
+    if ( !aPara.nWhich )
         bRet = sal_False;           // keinen gueltigen Node gefunden
 
-    if( bRet )
+    if ( bRet )
+    {
         SetModified();
+    }
+
     return bRet;
 }
 
@@ -1954,11 +1908,9 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     pNewColl->CopyAttrs( rColl, sal_True );
 
     // setze noch den Outline-Level
-    //if( NO_NUMBERING != rColl.GetOutlineLevel() ) //#outline level,zhaojianwei
-    //  pNewColl->SetOutlineLevel( rColl.GetOutlineLevel() );
-    if(rColl.IsAssignedToListLevelOfOutlineStyle())
-        pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
-    //<-end
+    if ( rColl.IsAssignedToListLevelOfOutlineStyle() )
+        pNewColl->AssignToListLevelOfOutlineStyle( rColl.GetAssignedOutlineStyleLevel() );
+
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
@@ -2111,11 +2063,8 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                     rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
 
             // setze noch den Outline-Level
-            //if( NO_NUMBERING != pSrcColl->GetOutlineLevel() ) //#outline level,zhaojianwei
-            //  pDstColl->SetOutlineLevel( pSrcColl->GetOutlineLevel() );
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
-                pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
-            //<-end
+                pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
 
 //FEATURE::CONDCOLL
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
