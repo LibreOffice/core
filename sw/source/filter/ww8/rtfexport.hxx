@@ -80,6 +80,11 @@ public:
         return false;
     }
 
+    virtual bool PreferPageBreakBefore() const SAL_OVERRIDE
+    {
+        return true;
+    }
+
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) SAL_OVERRIDE;
 
