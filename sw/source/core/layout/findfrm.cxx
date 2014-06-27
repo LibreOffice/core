@@ -1365,13 +1365,13 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
         pCorrCell = (SwCellFrm*)pCorrCell->GetNext();
     }
 
-    OSL_ENSURE( pCell && pCorrCell, "lcl_FindCorrespondingCellFrm does not work" );
+    assert(pCell && pCorrCell && "lcl_FindCorrespondingCellFrm does not work");
 
     if ( pCell != &rOrigCell )
     {
         // rOrigCell must be a lower of pCell. We need to recurse into the rows:
-        OSL_ENSURE( pCell->Lower() && pCell->Lower()->IsRowFrm(),
-                "lcl_FindCorrespondingCellFrm does not work" );
+        assert(pCell->Lower() && pCell->Lower()->IsRowFrm() &&
+               "lcl_FindCorrespondingCellFrm does not work");
 
         SwRowFrm* pRow = (SwRowFrm*)pCell->Lower();
         while ( !pRow->IsAnLower( &rOrigCell ) )

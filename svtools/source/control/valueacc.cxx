@@ -776,34 +776,22 @@ void ValueSetAcc::ThrowIfDisposed (void)
     }
 }
 
-
-
-bool ValueSetAcc::HasNoneField (void) const
+bool ValueSetAcc::HasNoneField() const
 {
-    DBG_ASSERT (mpParent!=NULL, "ValueSetAcc::HasNoneField called with mpParent==NULL");
+    assert(mpParent && "ValueSetAcc::HasNoneField called with mpParent==NULL");
     return ((mpParent->GetStyle() & WB_NONEFIELD) != 0);
 }
 
-
-
-
-
 // - ValueItemAcc -
-
-
 ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled ) :
     mpParent( pParent ),
     mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
 {
 }
 
-
-
 ValueItemAcc::~ValueItemAcc()
 {
 }
-
-
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {

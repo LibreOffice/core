@@ -701,7 +701,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                             "missing XUnoTunnel for Cursor" );
                     OTextCursorHelper *pDstTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                             sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
-                    OSL_ENSURE( pDstTxtCrsr, "SwXTextCursor missing" );
+                    assert(pDstTxtCrsr && "SwXTextCursor missing");
                     SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
                                    *pSrcPaM->GetMark() );
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
