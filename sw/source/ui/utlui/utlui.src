@@ -185,7 +185,7 @@ String STR_CONTENT_TYPE_FRAME
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
-    Text [ en-US ] = "Image" ;
+    Text [ en-US ] = "Images" ;
 };
 String STR_CONTENT_TYPE_OLE
 {
