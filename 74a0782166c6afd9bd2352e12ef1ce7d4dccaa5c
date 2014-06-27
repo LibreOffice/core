@@ -16,6 +16,24 @@
       "revId": "74a0782166c6afd9bd2352e12ef1ce7d4dccaa5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_43621ada",
+        "filename": "bean/native/unix/com_sun_star_beans_LocalOfficeWindow.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-27T16:22:19Z",
+      "side": 0,
+      "message": "erm, nonsense; I got confused by those long function names :)",
+      "parentUuid": "5aa745d1_034d3272",
+      "revId": "74a0782166c6afd9bd2352e12ef1ce7d4dccaa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
