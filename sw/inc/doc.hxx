@@ -1086,9 +1086,9 @@ public:
      The new parameter <bResetListAttrs> indicates, if the list attributes
      (list style, restart at and restart with) are cleared as well in case
      that <bReset = true> and the paragraph style has a list style attribute set. */
-    bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
-                            bool bReset = true,
-                            bool bResetListAttrs = false );
+    bool SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt,
+                       const bool bReset = true,
+                       const bool bResetListAttrs = false);
     SwTxtFmtColl* FindTxtFmtCollByName( const OUString& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SwFmtsBase&)*mpTxtFmtCollTbl, rName ); }
 

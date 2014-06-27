@@ -4538,9 +4538,10 @@ namespace {
         }
 
         // #i70748#
-        if ( mbOutlineLevelSet )
+        if (mbOutlineLevelSet)
         {
-            if ( mrTxtNode.GetAttrOutlineLevel() == 0 )
+            mrTxtNode.GetNodes().UpdateOutlineNode(mrTxtNode);
+            if (mrTxtNode.GetAttrOutlineLevel() == 0)
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
             }
