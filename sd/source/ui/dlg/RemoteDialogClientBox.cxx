@@ -251,6 +251,9 @@ void ClientBox::selectEntry( const long nPos )
         Invalidate();
     }
 
+    // We empty the pin box now too, just in case the user previously
+    // entered a pin, but then changed their selected device.
+    m_aPinBox.SetText( "" );
     guard.clear();
 }
 
@@ -333,7 +336,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
             aBtnPos = Point( aRect.Left() + GetTextWidth( sPinText ),
                              aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-
         }
         m_aPinBox.SetPosPixel( aBtnPos );
         m_aPinBox.Show( !bAlreadyAuthorised );
