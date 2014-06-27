@@ -884,6 +884,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             // in case of creating a single resulting file this has to be created here
             SwWrtShell* pTargetShell = 0;
+            SwDoc* pTargetDoc = 0;
+            SwNodes* pTargetNodes = 0;
 
             // the shell will be explicitly closed at the end of the method, but it is
             // still more safe to use SfxObjectShellLock here
@@ -907,6 +909,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 //initiate SelectShell() to create sub shells
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
                 pTargetShell = pTargetView->GetWrtShellPtr();
+                pTargetDoc = pTargetShell->GetDoc();
+                pTargetNodes = &pTargetDoc->GetNodes();
                 //copy the styles from the source to the target document
                 pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, true );
                 //determine the page style and number used at the start of the source document
@@ -1068,8 +1072,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 {
                                     //create a new pagestyle
                                     //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
-
-                                    SwDoc* pTargetDoc = pTargetShell->GetDoc();
                                     SwPageDesc* pSourcePageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
                                     OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                                     pTargetDoc->MakePageDesc( sNewPageDescName );
@@ -1087,7 +1089,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 else
                                     pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
                                 OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+
                                 //#i51359# add a second paragraph in case there's only one
+                                bool para_added = false;
                                 {
                                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
                                     SwPosition aTestPos( aIdx );
@@ -1096,9 +1100,18 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     {
                                         //append a paragraph
                                         pWorkDoc->getIDocumentContentOperations().AppendTxtNode( aTestPos );
+                                        para_added = true;
                                     }
                                 }
                                 pTargetShell->Paste( rWorkShell.GetDoc(), true );
+    
+                                if ( para_added ) {
+                                    // Move cursor to the start or Delete will assert because
+                                    // of the cursors SwIndex ref on the deleting node.
+                                    pTargetShell->SttEndDoc( true );
+                                    SwNodeIndex aTargetIdx( pTargetNodes->GetEndOfContent(), -1 );
+                                    pTargetNodes->Delete( aTargetIdx, 1 );
+                                }
 
                                 //convert fields in page styles (header/footer - has to be done after the first document has been pasted
                                 if(1 == nDocNo)
@@ -2770,6 +2783,9 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         //initiate SelectShell() to create sub shells
         pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
         SwWrtShell* pTargetShell = pTargetView->GetWrtShellPtr();
+        SwDoc* pTargetDoc = pTargetShell->GetDoc();
+        SwNodes* pTargetNodes = &pTargetDoc->GetNodes();
+
         // #i63806#
         const SwPageDesc* pSourcePageDesc = rSourceShell.FindPageDescByName( sStartingPageDesc );
         const SwFrmFmt& rMaster = pSourcePageDesc->GetMaster();
@@ -2868,7 +2884,6 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //create a new pagestyle
                 //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
 
-                SwDoc* pTargetDoc = pTargetShell->GetDoc();
                 OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                 pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
                 SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
@@ -2895,6 +2910,8 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
             sal_uInt16 nPageCountBefore = pTargetShell->GetPageCnt();
             OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+            bool para_added = false;
+
             //#i51359# add a second paragraph in case there's only one
             {
                 SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -2904,6 +2921,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 {
                     //append a paragraph
                     pWorkDoc->getIDocumentContentOperations().AppendTxtNode( aTestPos );
+                    para_added = true;
                 }
             }
 
@@ -2912,6 +2930,15 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
             pTargetShell->Paste( rWorkShell.GetDoc(), true );
+
+            if ( para_added ) {
+                // Move cursor to the start or Delete will assert because
+                // of the cursors SwIndex ref on the deleting node.
+                pTargetShell->SttEndDoc( true );
+                SwNodeIndex aTargetIdx( pTargetNodes->GetEndOfContent(), -1 );
+                pTargetNodes->Delete( aTargetIdx, 1 );
+            }
+
             //convert fields in page styles (header/footer - has to be done after the first document has been pasted
             if(1 == nDocNo)
             {
