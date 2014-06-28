@@ -55,21 +55,21 @@ writerfilter_ALL = \
 	$(writerfilter_GEN_ooxml_QNameToStr_cxx) \
 	$(writerfilter_GEN_ooxml_ResourceIds_hxx) \
 	$(writerfilter_GEN_ooxml_Model_processed) \
-	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.hxx,$(writerfilter_OOXMLNAMESPACES)) \
-	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.cxx,$(writerfilter_OOXMLNAMESPACES)) \
+	$(patsubst %,$(writerfilter_WORK)/ooxml/OOXMLFactory_%.hxx,$(writerfilter_OOXMLNAMESPACES)) \
+	$(patsubst %,$(writerfilter_WORK)/ooxml/OOXMLFactory_%.cxx,$(writerfilter_OOXMLNAMESPACES)) \
 
 writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/generated)/misc/namespaces.txt
-writerfilter_GEN_ooxml_FactoryValues_hxx=$(writerfilter_WORK)/OOXMLFactory_values.hxx
-writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/OOXMLFactory_generated.cxx
-writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/OOXMLFactory_generated.hxx
+writerfilter_GEN_ooxml_FactoryValues_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_values.hxx
+writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.cxx
+writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/ooxml/OOXMLFactory_generated.hxx
 writerfilter_GEN_ooxml_FastTokens_hxx=$(writerfilter_WORK)/ooxml/OOXMLFastTokens.hxx
-writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/gperffasttoken.hxx
-writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/model_preprocessed.xml
+writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/ooxml/gperffasttoken.hxx
+writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/ooxml/model_preprocessed.xml
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
-writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/namespacesmap.xsl
+writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/ooxml/namespacesmap.xsl
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
-writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/token.xml
+writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/ooxml/token.xml
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
 writerfilter_SRC_ooxml_FactoryValues_xsl=$(writerfilter_SRC)/ooxml/factory_values.xsl
 writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
@@ -122,11 +122,11 @@ $(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(wr
 	sed -f $(writerfilter_SRC)/ooxml/tokens-to-xml.sed \
 		< $(SRCDIR)/oox/source/token/tokens.txt > $@
 
-$(writerfilter_WORK)/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) --stringparam file $@ $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_WORK)/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) --stringparam file $@ $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
