@@ -1,0 +1,130 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <time.h>
+
+#include <jni.h>
+
+#include <android/log.h>
+
+#include <osl/detail/android-bootstrap.h>
+
+//#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "LibreOfficeKit", __VA_ARGS__))
+
+/* These are valid / used in all apps. */
+extern const char *data_dir;
+extern const char *cache_dir;
+extern void *apk_file;
+extern int apk_file_size;
+
+extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
+extern jboolean Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
+extern void Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env, jobject clazz);
+
+/// Call the same method from Bootstrap.
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_LibreOfficeKit_putenv(JNIEnv* env,
+                                              jobject clazz,
+                                              jstring string)
+{
+    Java_org_libreoffice_android_Bootstrap_putenv(env, clazz, string);
+}
+
+/// Call the same method from Bootstrap.
+__attribute__ ((visibility("default")))
+jboolean
+Java_org_libreoffice_android_LibreOfficeKit_redirect_1stdio(JNIEnv* env,
+                                                            jobject clazz,
+                                                            jboolean state)
+{
+    return Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
+}
+
+/// Call the same method from Bootstrap.
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_LibreOfficeKit_extract_1files(JNIEnv* env,
+                                                           jobject clazz)
+{
+    Java_org_libreoffice_android_Bootstrap_extract_1files(env, clazz);
+}
+
+/// Initialize the LibreOfficeKit.
+__attribute__ ((visibility("default")))
+jboolean
+Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2
+    (JNIEnv* env,
+     jobject clazz,
+     jstring dataDir,
+     jstring cacheDir,
+     jstring apkFile)
+{
+    struct stat st;
+    int fd;
+    const char *dataDirPath;
+    const char *cacheDirPath;
+    const char *apkFilePath;
+
+    (void) clazz;
+
+    dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
+    data_dir = strdup(dataDirPath);
+    (*env)->ReleaseStringUTFChars(env, dataDir, dataDirPath);
+
+    cacheDirPath = (*env)->GetStringUTFChars(env, cacheDir, NULL);
+    cache_dir = strdup(cacheDirPath);
+    (*env)->ReleaseStringUTFChars(env, cacheDir, cacheDirPath);
+
+    apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
+
+    fd = open(apkFilePath, O_RDONLY);
+    if (fd == -1) {
+        LOGE("Could not open %s", apkFilePath);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    if (fstat(fd, &st) == -1) {
+        LOGE("Could not fstat %s", apkFilePath);
+        close(fd);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    apk_file = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    close(fd);
+
+    if (apk_file == MAP_FAILED) {
+        LOGE("Could not mmap %s", apkFilePath);
+        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        return JNI_FALSE;
+    }
+    apk_file_size = st.st_size;
+
+    (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+
+    if (!setup_cdir())
+        return JNI_FALSE;
+
+    if (!setup_assets_tree())
+        return JNI_FALSE;
+
+    return JNI_TRUE;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

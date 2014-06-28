@@ -19,6 +19,7 @@ $(eval $(call gb_Library_add_libs,lo-bootstrap,\
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
+	sal/android/libreofficekit-jni \
 	sal/android/lo-bootstrap \
 ))
 
