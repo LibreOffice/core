@@ -310,11 +310,11 @@ void SwGlossaryList::Update()
                 delete pDT;
             }
 
-            const size_t nArrCount = aGroupArr.size();
-            for( size_t i = nArrCount; i; --i)
+            for( size_t i = aGroupArr.size(); i>0; )
             {
+                --i;
                 // maybe remove deleted groups
-                AutoTextGroup* pGroup = aGroupArr[i - 1];
+                AutoTextGroup* pGroup = aGroupArr[i];
                 const size_t nGroupPath = static_cast<size_t>(
                     pGroup->sName.getToken( 1, GLOS_DELIM).toInt32());
                 // Only the groups will be checked which are registered
@@ -328,7 +328,7 @@ void SwGlossaryList::Update()
 
                     if(!bFound)
                     {
-                        aGroupArr.erase(aGroupArr.begin() + i - 1);
+                        aGroupArr.erase(aGroupArr.begin() + i);
                         delete pGroup;
                     }
                 }
