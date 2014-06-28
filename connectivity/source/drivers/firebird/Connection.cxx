@@ -77,7 +77,7 @@ const OUString Connection::our_sDBLocation( "firebird.fdb" );
 Connection::Connection(FirebirdDriver*    _pDriver)
     : Connection_BASE(m_aMutex)
     , OSubComponent<Connection, Connection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-    , m_pDriver(_pDriver)
+    , m_xDriver(_pDriver)
     , m_sConnectionURL()
     , m_sFirebirdURL()
     , m_bIsEmbedded(false)
@@ -93,16 +93,12 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_xMetaData(0)
     , m_aStatements()
 {
-    m_pDriver->acquire();
 }
 
 Connection::~Connection()
 {
     if(!isClosed())
         close();
-
-    m_pDriver->release();
-    m_pDriver = 0;
 }
 
 void SAL_CALL Connection::release() throw()
@@ -348,7 +344,7 @@ OUString Connection::transformPreparedStatement(const OUString& _sSQL)
     OUString sSqlStatement (_sSQL);
     try
     {
-        OSQLParser aParser( m_pDriver->getContext() );
+        OSQLParser aParser( m_xDriver->getContext() );
         OUString sErrorMessage;
         OUString sNewSql;
         OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
@@ -758,6 +754,7 @@ void Connection::disposing()
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
+    m_xDriver.clear();
 }
 
 void Connection::disposeStatements()
