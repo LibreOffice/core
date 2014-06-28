@@ -36,15 +36,6 @@ class SwTxtFmtColl;
 class SwFrmFmt;
 class SwNumRule;
 
-// Local helper class.
-class SwPoolFmtList : public std::vector<OUString>
-{
-public:
-    SwPoolFmtList() {}
-    void Append( char cChar, const OUString& rStr );
-    void Erase();
-};
-
 // Temporary StyleSheet.
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 {
@@ -146,10 +137,25 @@ public:
 // Iterator for Pool.
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 {
+    // Local helper class.
+    class SwPoolFmtList
+    {
+        std::vector<OUString> maImpl;
+    public:
+        SwPoolFmtList() {}
+        void Append( char cChar, const OUString& rStr );
+        void Erase() { maImpl.clear(); }
+        size_t size() { return maImpl.size(); }
+        bool empty() { return maImpl.empty(); }
+        sal_uInt32 FindName(SfxStyleFamily eFam, const OUString &rName);
+        void RemoveName(SfxStyleFamily eFam, const OUString &rName);
+        const OUString &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
+    };
+
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwPoolFmtList       aLst;
-    sal_uInt16              nLastPos;
+    sal_uInt32          nLastPos;
     bool                bFirstCalled;
 
     void                AppendStyleList(const ::std::vector<OUString>& rLst,

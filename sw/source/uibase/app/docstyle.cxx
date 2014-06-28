@@ -288,10 +288,10 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     return pRule;
 }
 
-static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
-    const OUString& rName)
+sal_uInt32 SwStyleSheetIterator::SwPoolFmtList::FindName(SfxStyleFamily eFam,
+                                                         const OUString &rName)
 {
-    if(!rLst.empty())
+    if(!maImpl.empty())
     {
         sal_Unicode cStyle(0);
         switch( eFam )
@@ -316,27 +316,32 @@ static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
             break;
         }
         const OUString sSrch = OUString(cStyle) + rName;
-        for(size_t i = 0; i < rLst.size(); ++i)
-            if(rLst[i] == sSrch)
+        for(size_t i = 0; i < maImpl.size(); ++i)
+            if(maImpl[i] == sSrch)
                 return i;
     }
-    return USHRT_MAX;
+    return SAL_MAX_UINT32;
+}
+
+void SwStyleSheetIterator::SwPoolFmtList::RemoveName(SfxStyleFamily eFam,
+                                                     const OUString &rName)
+{
+    sal_uInt32 nTmpPos = FindName( eFam, rName );
+    if( nTmpPos < maImpl.size() )
+        maImpl.erase(maImpl.begin() + nTmpPos);
 }
 
 // Add Strings to the list of templates
-void SwPoolFmtList::Append( char cChar, const OUString& rStr )
+void SwStyleSheetIterator::SwPoolFmtList::Append( char cChar, const OUString& rStr )
 {
     const OUString aStr = OUString(cChar) + rStr;
-    for(std::vector<OUString>::const_iterator i = begin(); i != end(); ++i)
+    for(std::vector<OUString>::const_iterator i = maImpl.begin();
+        i != maImpl.end(); ++i)
+    {
         if(*i == aStr)
             return;
-    push_back(aStr);
-}
-
-// Erase the list completely
-void SwPoolFmtList::Erase()
-{
-    clear();
+    }
+    maImpl.push_back(aStr);
 }
 
 // UI-sided implementation of StyleSheets
@@ -2481,7 +2486,7 @@ sal_uInt16  SwStyleSheetIterator::Count()
     return aLst.size();
 }
 
-SfxStyleSheetBase*  SwStyleSheetIterator::operator[]( sal_uInt16 nIdx )
+SfxStyleSheetBase* SwStyleSheetIterator::operator[]( sal_uInt16 nIdx )
 {
     // found
     if( !bFirstCalled )
@@ -2840,17 +2845,17 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
     if(!aLst.empty())
     {
-        nLastPos = USHRT_MAX;
+        nLastPos = SAL_MAX_UINT32;
         return Next();
     }
     return 0;
 }
 
-SfxStyleSheetBase*  SwStyleSheetIterator::Next()
+SfxStyleSheetBase* SwStyleSheetIterator::Next()
 {
     assert(bFirstCalled);
     ++nLastPos;
-    if(!aLst.empty() && nLastPos < aLst.size())
+    if(nLastPos < aLst.size())
     {
         mxIterSheet->PresetNameAndFamily(aLst[nLastPos]);
         mxIterSheet->SetPhysical( false );
@@ -2865,14 +2870,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Next()
     return 0;
 }
 
-SfxStyleSheetBase*  SwStyleSheetIterator::Find(const OUString& rName)
+SfxStyleSheetBase* SwStyleSheetIterator::Find(const OUString& rName)
 {
     // searching
     if( !bFirstCalled )
         First();
 
-    nLastPos = lcl_FindName( aLst, nSearchFamily, rName );
-    if( USHRT_MAX != nLastPos )
+    nLastPos = aLst.FindName( nSearchFamily, rName );
+    if( SAL_MAX_UINT32 != nLastPos )
     {
         // found
         mxStyleSheet->PresetNameAndFamily(aLst[nLastPos]);
@@ -2948,7 +2953,7 @@ void SwDocStyleSheetPool::InvalidateIterator()
     dynamic_cast<SwStyleSheetIterator&>(GetIterator_Impl()).InvalidateIterator();
 }
 
-void  SwStyleSheetIterator::InvalidateIterator()
+void SwStyleSheetIterator::InvalidateIterator()
 {
     // potentially we could send an SfxHint to Notify but currently it's
     // iterating over the vector anyway so would still be slow - why does
@@ -2958,7 +2963,7 @@ void  SwStyleSheetIterator::InvalidateIterator()
     aLst.Erase();
 }
 
-void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // search and remove from View-List!!
     if( rHint.ISA( SfxStyleSheetHint ) &&
@@ -2967,12 +2972,7 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
         SfxStyleSheetBase* pStyle = ((SfxStyleSheetHint&)rHint).GetStyleSheet();
 
         if (pStyle)
-        {
-            sal_uInt16 nTmpPos = lcl_FindName( aLst, pStyle->GetFamily(),
-                                           pStyle->GetName() );
-            if( nTmpPos < aLst.size() )
-                aLst.erase(aLst.begin() + nTmpPos);
-        }
+            aLst.RemoveName(pStyle->GetFamily(), pStyle->GetName());
     }
 }
 
