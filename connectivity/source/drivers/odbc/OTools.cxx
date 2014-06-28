@@ -416,14 +416,8 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     {
         SQLWCHAR waCharArray[2048];
         BOOST_STATIC_ASSERT(sizeof(waCharArray) % sizeof(SQLWCHAR) == 0);
-        rtl_TextEncoding nSQLWCHAREncoding = RTL_TEXTENCODING_UCS2;
         BOOST_STATIC_ASSERT(sizeof(SQLWCHAR) == 2 || sizeof(SQLWCHAR) == 4);
-        if(sizeof(SQLWCHAR) == 4)
-        {
-            // we assume LibO uses UTF-16 and & ODBC uses UCS4 (UTF-32); see OPreparedStatement::setParameter
-            nSQLWCHAREncoding = RTL_TEXTENCODING_UCS4;
-        }
-        // Size == number of bytes, Len == number of UTF-16 code units
+        // Size == number of bytes, Len == number of UTF-16 or UCS4 code units
         const SQLLEN nMaxSize = sizeof(waCharArray);
         const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(SQLWCHAR);
         BOOST_STATIC_ASSERT(nMaxLen * sizeof(SQLWCHAR) == nMaxSize);
@@ -463,7 +457,17 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                 nReadChars = pcbValue/sizeof(SQLWCHAR);
             }
 
-            aData.append(OUString((sal_Char*)waCharArray, nReadChars, nSQLWCHAREncoding));
+            if (sizeof (SQLWCHAR) == 2)
+            {
+                aData.append(waCharArry, nReadChars);
+            }
+            else
+            {
+                for (sal_Int32 i = 0; i < nReadChars; ++i)
+                {
+                    aData.appendUtf32(waCharArray[i]);
+                }
+            }
         }
         break;
     }
