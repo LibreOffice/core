@@ -53,6 +53,7 @@
 #include <svx/sidebar/ColorControl.hxx>
 #include "LineWidthControl.hxx"
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace css;
 using namespace cssu;
@@ -736,13 +737,12 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
     {
-        XLineStartItem* pItem = NULL;
+        boost::scoped_ptr<XLineStartItem> pItem;
         if( nPos == 0 )
-            pItem = new XLineStartItem();
+            pItem.reset(new XLineStartItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem = new XLineStartItem( mpLBStart->GetSelectEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem,  0L);
-        delete pItem;
+            pItem.reset(new XLineStartItem( mpLBStart->GetSelectEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -755,13 +755,12 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
     sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
     {
-        XLineEndItem* pItem = NULL;
+        boost::scoped_ptr<XLineEndItem> pItem;
         if( nPos == 0 )
-            pItem = new XLineEndItem();
+            pItem.reset(new XLineEndItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem = new XLineEndItem( mpLBEnd->GetSelectEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem,  0L);
-        delete pItem;
+            pItem.reset(new XLineEndItem( mpLBEnd->GetSelectEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -775,34 +774,33 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBEdgeStyle->IsValueChangedFromSaved())
     {
-        XLineJointItem* pItem = 0;
+        boost::scoped_ptr<XLineJointItem> pItem;
 
         switch(nPos)
         {
             case 0: // rounded
             {
-                pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND);
+                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // none
             {
-                pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_NONE);
+                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // mitered
             {
-                pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_MITER);
+                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // beveled
             {
-                pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL);
+                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
                 break;
             }
         }
 
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_JOINT, SFX_CALLMODE_RECORD, pItem,  0L);
-        delete pItem;
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_JOINT, SFX_CALLMODE_RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -816,29 +814,28 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBCapStyle->IsValueChangedFromSaved())
     {
-        XLineCapItem* pItem = 0;
+        boost::scoped_ptr<XLineCapItem> pItem;
 
         switch(nPos)
         {
             case 0: // flat
             {
-                pItem = new XLineCapItem(com::sun::star::drawing::LineCap_BUTT);
+                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // round
             {
-                pItem = new XLineCapItem(com::sun::star::drawing::LineCap_ROUND);
+                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // square
             {
-                pItem = new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE);
+                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
                 break;
             }
         }
 
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_CAP, SFX_CALLMODE_RECORD, pItem,  0L);
-        delete pItem;
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_CAP, SFX_CALLMODE_RECORD, pItem.get(),  0L);
     }
     return 0;
 }

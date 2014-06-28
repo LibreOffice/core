@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -170,7 +171,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
     if( pIStm ) {
         sal_uInt32                  nVersion = 0;
         sal_Int32                   nNumIndex = 0;
@@ -198,7 +199,6 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                 pIStm->ReadInt32( nNumIndex );
             }
         }
-        delete pIStm;
     }
     eCoreUnit = eOldCoreUnit;
     bIsLoading = false;
@@ -210,7 +210,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
     if( pOStm ) {
         sal_uInt32                      nVersion;
         sal_Int32                       nNumIndex;
@@ -228,7 +228,6 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
         }
         nNumIndex = -1;
         pOStm->WriteInt32( nNumIndex );  //write end flag
-        delete pOStm;
     }
     eCoreUnit = eOldCoreUnit;
 }

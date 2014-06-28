@@ -42,7 +42,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 using ::std::vector;
 
@@ -772,7 +772,7 @@ void SdrEditView::DistributeMarkedObjects()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr);
+            boost::scoped_ptr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(NULL, aNewAttr));
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
             sal_uInt16 nResult = pDlg->Execute();
@@ -985,8 +985,6 @@ void SdrEditView::DistributeMarkedObjects()
                 if( bUndo )
                     EndUndo();
             }
-
-            delete(pDlg);
         }
     }
 }
