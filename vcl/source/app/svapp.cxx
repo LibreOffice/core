@@ -1599,7 +1599,13 @@ bool Application::GetShowImeStatusWindowDefault()
 
 const OUString& Application::GetDesktopEnvironment()
 {
-    return SalGetDesktopEnvironment();
+    if (IsHeadlessModeEnabled())
+    {
+        static OUString aNone("none");
+        return aNone;
+    }
+    else
+        return SalGetDesktopEnvironment();
 }
 
 void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
