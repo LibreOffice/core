@@ -259,7 +259,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         const SvxPageItem& rPageItem = (const SvxPageItem&)rSet.Get(SID_ATTR_PAGE);
 
-        sal_uInt16 nUse = (sal_uInt16)rPageItem.GetPageUsage();
+        const sal_uInt16 nUse = rPageItem.GetPageUsage();
         if(nUse)
             rPageDesc.SetUseOn( lcl_convertUseFromSvx((UseOnPage) nUse) );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
@@ -380,7 +380,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
             if( !pColl )
             {
-                sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+                    rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if( USHRT_MAX != nId )
                     pColl = rDoc.GetTxtCollFromPool( nId );
                 else
@@ -781,7 +782,7 @@ void SetApplyCharUnit(bool bApplyChar, bool bWeb)
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId )
 {
     bool bRet = false;
-    sal_uInt16 nItemCount = rMenu.GetItemCount();
+    const sal_uInt16 nItemCount = rMenu.GetItemCount();
     OUString sCommand;
     for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem)
     {
