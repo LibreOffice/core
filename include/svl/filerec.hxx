@@ -28,7 +28,7 @@
 #define SFX_REC_PRETAG_EXT              sal_uInt8(0x00) // Pre-Tag for Extended-Records
 #define SFX_REC_PRETAG_EOR              sal_uInt8(0xFF) // Pre-Tag for End-Of-Records
 
-#define SFX_REC_TYPE_NONE               sal_uInt8(0x00) // unknown Record-Typ
+#define SFX_REC_TYPE_NONE               sal_uInt8(0x00) // unknown Record type
 #define SFX_REC_TYPE_FIRST              sal_uInt8(0x01)
 #define SFX_REC_TYPE_SINGLE             sal_uInt8(0x01) // Single-Content-Record
 #define SFX_REC_TYPE_FIXSIZE            sal_uInt8(0x02) // Fix-Size-Multi-Content-Record
@@ -53,114 +53,7 @@
 #endif
 #endif
 
-/*  [Fileformat]
-
-    Jeder Record beginnt mit einem Byte, dem sogenannten 'Pre-Tag'.
-
-    Ist dieses 'Pre-Tag' == 0x00, dann handelt es sich um einen Extended-
-    Record, dessen Typ durch ein weiteres Byte an Position 5 n?her
-    beschrieben wird:
-
-    0x01:       SfxSingleRecord
-    0x02:       SfxMultiFixRecord
-    0x03+0x04:  SfxMultiVarRecord
-    0x07+0x08:  SfxMultiMixRecord
-    (Alle weiteren Record-Typ-Kennungen sind reserviert.)
-
-    I.d.R. werden File-Formate schon aus Performance-Gr"unden so aufgebaut,
-    da\s beim Lesen jeweils vorher schon feststeht, welcher Record-Typ
-    vorliegt. Diese Kennung dient daher hautps"achlich der "Uberpr"ufung
-    und File-Viewern, die das genaue File-Format (unterhalb der Records)
-    nicht kennen.
-
-    Der 'SfxMiniRecordReader' verf"ugt dazu auch "uber eine statische
-    Methode 'ScanRecordType()', mit der festgestellt werden kann, welcher
-    Record-Typ in dem "ubergebenen Stream zu finden ist.
-
-    Ein 'Pre-Tag' mit dem Wert 0xFF ist als Terminator reserviert.
-    Terminatoren werden verwendet, um das Suchen nach einem speziellen
-    Record zu terminieren, d.h. ist er bis dorthin nicht gefunden, wird
-    auch nicht weitergesucht.
-
-    Bei allen anderen Werten des 'Pre-Tags' (also von 0x01 bis 0xFE)
-    handelt es sich um einen zum SW3 kompatbilen Record, der hier
-    'SfxMiniRecord' genannt wird, er kann daher mit einem <SfxMiniRecordReader>
-    gelesen werden.
-
-    Beginnt ein Record mit 0x44 k"onnte es sich um einen Drawing-Engine-
-    Record handeln. Dies ist dann der Fall, wenn die folgenden drei Bytes
-    die Zeichenkette 'RMD' bzw. 'RVW' ergeben (zusammen mit 'D'==0x44
-    ergibt dies die K"urzel f"ur 'DRaw-MoDel' bzw. 'DRaw-VieW'). Records
-    dieser Art k"onnen von den hier dargestellten Klassen weder gelesen,
-    noch in irgendeiner Weise interpretiert werden. Einzig die Methode
-    'ScanRecordType()' kann sie erkennen - weitere Behandlung obliegt
-    jedoch der Anwendungsprogrammierung.
-
-    Diese drei Bytes an den Positionen 2 bis 4 enthalten normalerweise
-    die Gr"o\se des Records ohne Pre-Tag und Gr"o\sen-Bytes selbst,
-    also die Restgr"o\se nach diesem 4-Byte-Header.
-
-        Struktur des Mini-Records:
-
-                            1 sal_uInt8         Pre-Tag
-                            3 sal_uInt8         OffsetToEndOfRec
-        OffsetToEndOfRec*   1 sal_uInt8         Content
-
-    Bei den Extended-Reords folgt auf diesen 4-Byte-Header ein erweiterter
-    Header, der zun"achst den o.g. Record-Typ, dann eine Versions-Kennung
-    sowie ein Tag enth"alt, welches den Inhalt kennzeichnet.
-
-        Struktur des Extended-Records:
-
-                            1 sal_uInt8         Pre-Tag (==0x00)
-                            3 sal_uInt8         OffsetToEndOfRec
-        OffsetToEndOfRec*   1 sal_uInt8         Content
-                            1 sal_uInt8         Record-Type
-                            1 sal_uInt8         Version
-                            2 sal_uInt8         Tag
-        ContentSize*        1 sal_uInt8         Content
-
-        (ContentSize = OffsetToEndOfRec - 8)
-
-    [Anmerkung]
-
-    Der Aufbau der Records wird wie folgt begr"undet:
-
-    Der SW-Record-Typ war zuerst vorhanden, mu\ste also 1:1 "ubernommen
-    werden. Zum Gl"uck wurden einige Record-Tags nicht verwendet, (Z.B.
-    0x00 und 0xFF).
-    =>  1. Byte 0x00 kann als Kennung f"ur erweiterten Record verwendet werden
-    =>  1. Byte 0xFF kann f"ur besondere Zwecke verwendet werden
-
-    Egal welcher Record-Typ vorliegt, sollte eine Erkennung des Typs, ein
-    Auslesen des Headers und ein "uberpspringen des Records m"oglich sein,
-    ohne zu"uck-seeken zu m"ussen und ohne "uberfl"ussige Daten lesen zu
-    m"ussen.
-    =>  die Bytes 2-4 werden bei allen Records als Offset zum Ende des
-        Records interpretiert, so da\s die Gesamt-Recors-Size sich wie
-        folgt berechnet: sizeof(sal_uInt32) + OffsetToEndOfRec
-
-    Die Records sollten einfach zu parsen un einheitlich aufgebaut sein.
-    =>  Sie bauen aufeinander auf, so ist z.B. der SfxMiniRecord in jedem
-        anderen enthalten.
-
-    Die Records sollten auch von denen der Drawing Enginge unterscheidbar
-    sein. Diese beginnen mit 'DRMD' und 'DRVW'.
-    =>  Mini-Records mit dem Pre-Tag 'D' d"urfen maximal 4MB gro\s sein,
-        um nicht in diesen Kennungs-Bereich zu reichen.
-
-    [Erweiterungen]
-
-    Es ist geplant das File-Format so zu erweitern, da\s das High-Nibble
-    des Record-Typs der erweiterten Records besondere Aufgaben "ubernehmen
-    soll. Zum Beispiel ist geplant, Record-Contents als 'nur aus Records
-    bestehend' zu kennzeichnen. Ein File-Viewer k"onnte sich dann automatisch
-    durch solche Strukturen 'hangeln', ohne Gefahr zu laufen, auf Daten
-    zu sto\sen, die sich zwar als Records interpretieren lassen, aber
-    tats"achlis als 'flache' Daten geschrieben wurden. Die m"ogliche
-    Erweiterung wird schon jetzt insofern vorbereitet, als da\s das
-    High-Nibble des Typs bei Vergleichen nicht ber"ucksichtigt wird.
-*/
+// General file format: documented at class SfxMiniRecordReader below
 
 /** Writes simple records in a stream
  *
@@ -171,17 +64,21 @@
  * One can either provide the size or the latter will be automatically calculated based on the
  * difference of Tell() before and after streaming the content.
  *
- * [File Format]
- * 1*              sal_uInt8    Content-Tag (!= 0)
- * 1*              3-sal_uInt8  OffsetToEndOfRec in Bytes
- * SizeOfContent*  sal_uInt8    Content
+ * @par File format
  *
- * @example
+ *     1*              sal_uInt8    Content-Tag (!= 0)
+ *     1*              3-sal_uInt8  OffsetToEndOfRec in Bytes
+ *     SizeOfContent*  sal_uInt8    Content
+ *
+ * @par Example
+ * @code
  * {
  *     SfxMiniRecordWriter aRecord( pStream, MY_TAG_X );
  *     *aRecord << aMember1;
  *     *aRecord << aMember2;
  * }
+ * @endcode
+ *
  * @note To ensure up- and downwards compatibility, new versions need to include
  * the data of the older ones and are only allowed to add data afterwards.
  * @see SfxMiniRecordReader
@@ -215,7 +112,8 @@ private:
  * SfxMiniRecordWriter. It is also possible to skip a record, even without knowing its internal
  * format.
  *
- * @example
+ * @par Example
+ * @code
  * {
  *      SfxMiniRecordReader aRecord( pStream );
  *      switch ( aRecord.GetTag() )
@@ -228,17 +126,121 @@ private:
  *          ...
  *      }
  * }
+ * @endcode
+ *
+ * @par General file format
+ *
+ *  Each record begins with one byte, the so called 'Pre-Tag'.
+ *
+ *  If this 'Pre-Tag' == 0x00, then the record is a extended record,
+ *  whose type is further determined by another byte at position 5:
+ *
+ *      0x01:       SfxSingleRecord
+ *      0x02:       SfxMultiFixRecord
+ *      0x03+0x04:  SfxMultiVarRecord
+ *      0x07+0x08:  SfxMultiMixRecord
+ *      (All other possible record types are reserved.)
+ *
+ *  Normally, if only for performance reasons, the file formats are
+ *  constructed in such a way, that when loading the record type
+ *  is predetermined. So the record type serves mainly for checks
+ *  and for file viewers that do not know the exact file format.
+ *
+ *  For that purpse 'SfxMiniRecordReader' provides a static method
+ *  'ScanRecordType()', with which it is possible to find out what
+ *  Record type can be found in the stream that was passed.
+ *
+ *  A 'Pre-Tag' with value 0xFF is reserved for a terminator.
+ *  Terminators are used to stop looking for a particular record,
+ *  i.e. if it was not found until then the search will not be continued.
+ *
+ *  For all other values of the 'Pre-Tag' (so 0x01 to 0xFE) the record
+ *  is one that is compatible with SW3, called 'SfxMiniRecord' here,
+ *  and therefore it can be read with an <SfxMiniRecordReader>.
+ *
+ *  If the record starts with 0x44 it could be a Drawing-Engine-Record.
+ *  This is the case if the following 3 bytes spell 'RMD' or 'RVW'
+ *  (which together with  'D'==0x44 form an abbreviation for 'DRaw-MoDel'
+ *  or 'DRaw-VieW'). Records of this type cannot be readby the classes
+ *  represented here, nor interpreted in any way. Only the
+ *  'ScanRecordType()' method can recognise it - but further processing
+ *  is impossible.
+ *
+ *  The 3 bytes in postion 2 to 4 normally contain the size of the
+ *  record without the pre-tag and the size field itself,
+ *  so the remaining size after the 4 byte header.
+ *
+ *  Structure of the Mini-Records:
+ *
+ *                           1 sal_uInt8         Pre-Tag
+ *                           3 sal_uInt8         OffsetToEndOfRec
+ *       OffsetToEndOfRec*   1 sal_uInt8         Content
+ *
+ *  For Extended-Reords the 4 byte header is followed by an extended header,
+ *  which contains first the record type, than a version number
+ *  and a tag, which indicates the kind of content.
+ *
+ *  Structure of the extended record:
+ *
+ *                            1 sal_uInt8         Pre-Tag (==0x00)
+ *                            3 sal_uInt8         OffsetToEndOfRec
+ *        OffsetToEndOfRec*   1 sal_uInt8         Content
+ *                            1 sal_uInt8         Record-Type
+ *                            1 sal_uInt8         Version
+ *                            2 sal_uInt8         Tag
+ *        ContentSize*        1 sal_uInt8         Content
+ *
+ *       (ContentSize = OffsetToEndOfRec - 8)
+ *
+ *  @note
+ *  The reason for the structure of the record is as follows:
+ *
+ *  The SW record type came first, and so had to be kept 1:1.
+ *  Fortunately some record tags had not been used (like 0x00 and 0xFF).
+ *  <BR>
+ *  =>  1st byte 0x00 can be used to identify extended records
+ *  <BR>
+ *  =>  1st byte 0xFF can be used for special purposes.
+ *
+ *  Whatever record type is present, it should be possible to recognise
+ *  the type, read the header and skip the record without having to
+ *  seek back or read superfluous data.
+ *  <BR>
+ *  =>  Bytes 2-4 are interpreted as the offset to the end of the record
+ *  whatever the record, so that the total record size is equal
+ *  to sizeof(sal_uInt32) + OffsetToEndOfRec
+ *
+ *  The records should be easy to parse and constructed uniformly
+ *  <BR>
+ *  =>  They build on each, for instance the SfxMiniRecord is contained
+ *  in all others
+ *
+ *  It should be possible to distinguish the record from Drawing Enginge
+ *  ones. These start with 'DRMD' und 'DRVW'.
+ *  <BR>
+ *  =>  Mini-Records with Pre-Tag 'D' can only be up to 4MB in size,
+ *  to avoid confusion.
+ *
+ *  @par Extensions
+ *  Plans are to extend the file format in such a way that the high nibble
+ *  of the record type has special duties. For instance it is planned
+ *  to mark Record-Contents als 'consisting only of Records'. That way
+ *  a file viewer could automatically parse these structures without
+ *  risking encountering data that looks like records, but actually is
+ *  flat data. Those further extensions are prepared to the extent
+ *  that in type comparisons the high nibble is not taken into account.
+ *
  * @see SfxMiniRecordWriter
  */
 class SVL_DLLPUBLIC SfxMiniRecordReader
 {
 protected:
     SvStream*           _pStream;   //  <SvStream> to read from
-    sal_uInt32          _nEofRec;   //  Position direkt hinter dem Record
-    bool                _bSkipped;  //  TRUE: der Record wurde explizit geskippt
-    sal_uInt8           _nPreTag;   //  aus dem Header gelesenes Pre-Tag
+    sal_uInt32          _nEofRec;   //  Position direcly after the record
+    bool                _bSkipped;  //  TRUE: the record was skipped explicitly
+    sal_uInt8           _nPreTag;   //  Pre-Tag read from the heather
 
-                        // Drei-Phasen-Ctor f"ur Subklassen
+                        // three phase constructor for sub-classes
     SfxMiniRecordReader()
         : _pStream(NULL)
         , _nEofRec(0)
@@ -254,7 +256,7 @@ protected:
                         }
     inline bool         SetHeader_Impl( sal_uInt32 nHeader );
 
-                        // als ung"ultig markieren und zur"uck-seeken
+                        // mark as invalid and seek back
     void                SetInvalid_Impl( sal_uInt32 nRecordStartPos )
                         {
                             _nPreTag = SFX_REC_PRETAG_EOR;
@@ -278,31 +280,31 @@ private:
     SfxMiniRecordReader& operator=(const SfxMiniRecordReader&);
 };
 
-/*  [Beschreibung]
-
-    Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, dessen einziger Inhalt sich durch ein sal_uInt16-Tag und eine
-    sal_uInt8-Versions-Nummer identifiziert, sowie seine eigene L"ange speichert
-    und somit auch von "alteren Versionen bzw. Readern, die diesen
-    Record-Type (Tag) nicht kennen, "ubersprungen werden kann.
-
-    Alternativ kann die Gr"o\se fest angegeben werden oder sie wird
-    automatisch aus der Differenz der Tell()-Angaben vor und nach dem
-    Streamen des Inhalts ermittelt.
-
-    Um Auf- und Abw"artskompatiblit"at gew"ahrleisten zu k"onnen, m"ussen
-    neue Versionen die Daten der "alteren immer komplett enthalten,
-    es d"urfen allenfalls neue Daten hintenan geh"angt werden!
-
-    [Fileformat]
-
-    1*              sal_uInt8       Pre-Tag (!= 0)
-    1*              3-sal_uInt8     OffsetToEndOfRec in Bytes
-    1*              sal_uInt8       Record-Type (==SFX_REC_TYPE_SINGLE)
-    1*              sal_uInt8       Content-Version
-    1*              sal_uInt16      Content-Tag
-    SizeOfContent*  sal_uInt8       Content
-*/
+/**
+ *
+ *  With instances of this class a record ban be written to a stream,
+ *  whose only contents is identified by a sal_uInt16 tag and a
+ *  sal_uInt8 version number. Also the length of the record is stored
+ *  so that older versions or readers that do not known the
+ *  record type (tag) can skip it.
+ *
+ *  The size can be given directly or calculated automatically from
+ *  the difference between the tell() return values before and
+ *  after streaming the conntents.
+ *
+ *  To allow for forward and backward compatibility, newer versions
+ *  of the data must always inclode the older versions completely,
+ *  it is only allowed to append new data!
+ *
+ *  @par File Format
+ *
+ *      1*              sal_uInt8       Pre-Tag (!= 0)
+ *      1*              3-sal_uInt8     OffsetToEndOfRec in bytes
+ *      1*              sal_uInt8       Record-Type (==SFX_REC_TYPE_SINGLE)
+ *      1*              sal_uInt8       Content-Version
+ *      1*              sal_uInt16      Content-Tag
+ *      SizeOfContent*  sal_uInt8       Content
+ */
 class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 {
 protected:
@@ -316,23 +318,21 @@ public:
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
-/*  [Beschreibung]
-
-    Mit Instanzen dieser Klasse kann ein einfacher Record aus einem Stream
-    gelesen werden, der mit der Klasse <SfxSingleRecordWriter> geschrieben
-    wurde.
-
-    Es ist auch m"oglich, den Record zu "uberspringen, ohne sein internes
-    Format zu kennen.
+/**
+ *
+ *  With instances of this class simple records can be read from a stream,
+ *  that were written with class <SfxSingleRecordWriter>.
+ *
+ *  It is also possible to skip the record without knowing the internal format.
 */
 class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 {
 protected:
-    sal_uInt16              _nRecordTag;    // Art des Gesamt-Inhalts
-    sal_uInt8               _nRecordVer;    // Version des Gesamt-Inhalts
-    sal_uInt8               _nRecordType;   // Record Type aus dem Header
+    sal_uInt16              _nRecordTag;    // type of the complete contents
+    sal_uInt8               _nRecordVer;    // version of the complete contents
+    sal_uInt8               _nRecordType;   // Record Type from the header
 
-    // Drei-Phasen-Ctor f"ur Subklassen
+    // Three phase constructor for derived classes
     SfxSingleRecordReader()
         : _nRecordTag(0)
         , _nRecordVer(0)
@@ -355,50 +355,50 @@ public:
     inline bool         HasVersion( sal_uInt16 nVersion ) const;
 };
 
-/*  [Beschreibung]
-
-    Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, der seine eigene L"ange speichert und somit auch von "alteren
-    Versionen bzw. Readern, die diesen Record-Type (Tag) nicht kennen,
-    "ubersprungen werden kann.
-
-    Er enth"alt mehrere Inhalte von demselben Typ (Tag) und derselben
-    Version, die einmalig (stellvertretend f"ur alle) im Header des Records
-    identifiziert werden. Alle Inhalte haben eine vorher bekannte und
-    identische L"ange.
-
-    Um Auf- und Abw"artskompatiblit"at gew"ahrleisten zu k"onnen, m"ussen
-    neue Versionen die Daten der "alteren immer komplett enthalten,
-    es d"urfen allenfalls neue Daten hinten angeh"angt werden! Hier sind
-    damit selbstverst"andlich nur die Daten der einzelnen Inhalte gemeint,
-    die Anzahl der Inhalte ist selbstverst"andlich variabel und sollte
-    von lesenden Applikationen auch so behandelt werden.
-
-    [Fileformat]
-
-    1*                  sal_uInt8       Pre-Tag (==0)
-    1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
-    1*                  sal_uInt8       Record-Type (==SFX_REC_TYPE_FIXSIZE)
-    1*                  sal_uInt8       Content-Version
-    1*                  sal_uInt16      Content-Tag
-    1*                  sal_uInt16      NumberOfContents
-    1*                  sal_uInt32      SizeOfEachContent
-    NumberOfContents*   (
-    SizeOfEachContent   sal_uInt8       Content
-                        )
-
-    [Beispiel]
-
-    {
-        SfxMultiFixRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
-        for ( sal_uInt16 n = 0; n < Count(); ++n )
-        {
-            aRecord.NewContent();
-            *aRecord << aMember1[n];
-            *aRecord << aMember2[n];
-        }
-    }
-*/
+/**
+ *
+ *  Instances of this class can be used to write a record to a stream,
+ *  which stores its own length so that it can be skipped by
+ *  older versions and readers that do not known the record type (tag).
+ *
+ *  It contains multipl contents of the same type (tag) and the same
+ *  version, which have been identified once and for all in the
+ *  header of the reacord. All contents have a length which is
+ *  known in advance and identical.
+ *
+ *  To be able to guarantee forward and backwards compatibility,
+ *  newer versions of the that must always completely contain
+ *  the old version, so it is only allowed to append data!
+ *  Obviously, only the data of the individual contents are meant,
+ *  the number of contents is naturally variable, and should be
+ *  treated as such by the reading application.
+ *
+ *  @par File format
+ *
+ *        1*                  sal_uInt8       Pre-Tag (==0)
+ *        1*                  3-sal_uInt8     OffsetToEndOfRec in bytes
+ *        1*                  sal_uInt8       Record-Type (==SFX_REC_TYPE_FIXSIZE)
+ *        1*                  sal_uInt8       Content-Version
+ *        1*                  sal_uInt16      Content-Tag
+ *        1*                  sal_uInt16      NumberOfContents
+ *        1*                  sal_uInt32      SizeOfEachContent
+ *        NumberOfContents*   (
+ *        SizeOfEachContent   sal_uInt8       Content
+ *                            )
+ *
+ * @par Example
+ * @code
+ *    {
+ *        SfxMultiFixRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
+ *        for ( sal_uInt16 n = 0; n < Count(); ++n )
+ *        {
+ *            aRecord.NewContent();
+ *            *aRecord << aMember1[n];
+ *            *aRecord << aMember2[n];
+ *        }
+ *    }
+ * @endcode
+ */
 class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 {
 protected:
@@ -433,20 +433,23 @@ public:
  * automatically and stored so that single content items can be skipped without
  * having to read them.
  *
- * [Fileformat]
- * 1*                  sal_uInt8       Pre-Tag (==0)
- * 1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
- * 1*                  sal_uInt8       Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
- * 1*                  sal_uInt8       Content-Version
- * 1*                  sal_uInt16      Content-Tag
- * 1*                  sal_uInt16      NumberOfContents
- * 1*                  sal_uInt32      OffsetToOfsTable
- * NumberOfContents*   (
- * ContentSize*        sal_uInt8       Content
- *                     )
- * NumberOfContents*   sal_uInt32      ContentOfs (je per <<8 verschoben)
- * @example
- * {
+ * @par File Format
+ *
+ *      1*                  sal_uInt8       Pre-Tag (==0)
+ *      1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
+ *      1*                  sal_uInt8       Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
+ *      1*                  sal_uInt8       Content-Version
+ *      1*                  sal_uInt16      Content-Tag
+ *      1*                  sal_uInt16      NumberOfContents
+ *      1*                  sal_uInt32      OffsetToOfsTable
+ *      NumberOfContents*   (
+ *      ContentSize*        sal_uInt8       Content
+ *                          )
+ *      NumberOfContents*   sal_uInt32      ContentOfs (shifted each <<8)
+ *
+ * @par Example
+ * @code
+ *  {
  *      SfxMultiVarRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
  *      for ( sal_uInt16 n = 0; n < Count(); ++n )
  *      {
@@ -455,6 +458,8 @@ public:
  *          *aRecord << aMember2[n];
  *      }
  *  }
+ * @endcode
+ *
  * @note To ensure up- and downwards compatibility, new versions need to include
  * the data of the older ones and are only allowed to add data afterwards.
  */
@@ -491,19 +496,21 @@ public:
  * stored in the header of the record. All content items have a known identical
  * size.
  *
- * [Fileformat]
- * 1*                  sal_uInt8       Pre-Tag (==0)
- * 1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
- * 1*                  sal_uInt8       record type (==SFX_REC_TYPE_MIXTAGS)
- * 1*                  sal_uInt8       content version
- * 1*                  sal_uInt16      record tag
- * 1*                  sal_uInt16      NumberOfContents
- * 1*                  sal_uInt32      OffsetToOfsTable
- * NumberOfContents*   (
- * 1*                  sal_uInt16      content tag
- * ContentSize*        sal_uInt8       content
- *                     )
- * NumberOfContents*   sal_uInt32      ( ContentOfs << 8 + Version )
+ * @par File Format
+ *
+ *     1*                  sal_uInt8       Pre-Tag (==0)
+ *     1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
+ *     1*                  sal_uInt8       record type (==SFX_REC_TYPE_MIXTAGS)
+ *     1*                  sal_uInt8       content version
+ *     1*                  sal_uInt16      record tag
+ *     1*                  sal_uInt16      NumberOfContents
+ *     1*                  sal_uInt32      OffsetToOfsTable
+ *     NumberOfContents*   (
+ *     1*                  sal_uInt16      content tag
+ *     ContentSize*        sal_uInt8       content
+ *                         )
+ *     NumberOfContents*   sal_uInt32      ( ContentOfs << 8 + Version )
+ *
  * @note To ensure up- and downwards compatibility, new versions need to include
  * the data of the older ones and are only allowed to add data afterwards.
  */
@@ -531,7 +538,8 @@ public:
  * It is possible to skip single content or the whole record without knowing
  * its internal format.
  *
- * @example
+ * @par Example
+ * @code
  * {
  *      SfxMultiRecordReader aRecord( pStream );
  *      for ( sal_uInt16 nRecNo = 0; aRecord.GetContent(); ++nRecNo )
@@ -550,6 +558,7 @@ public:
  *          }
  *      }
  *  }
+ * @endcode
  */
 class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 {
