@@ -24,7 +24,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/region.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 // class to remember broadcast start positions
 
@@ -113,10 +113,9 @@ namespace sdr
                 {
                     if(pItem->HasMetrics())
                     {
-                        SfxPoolItem* pNewItem = pItem->Clone();
+                        boost::scoped_ptr<SfxPoolItem> pNewItem(pItem->Clone());
                         pNewItem->ScaleMetrics(nMul, nDiv);
                         rSet.Put(*pNewItem);
-                        delete pNewItem;
                     }
                 }
                 nWhich = aIter.NextWhich();

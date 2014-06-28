@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/svditer.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 namespace sdr
@@ -121,7 +121,7 @@ namespace sdr
             {
                 // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
                 // #i50808# Leak fix, Clone produces a new instance and we get ownership here
-                SfxItemSet* pNewSet = rSet.Clone(true);
+                boost::scoped_ptr<SfxItemSet> pNewSet(rSet.Clone(true));
                 DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
 
                 for(sal_uInt16 b(SDRATTR_3DSCENE_FIRST); b <= SDRATTR_3DSCENE_LAST; b++)
@@ -142,8 +142,6 @@ namespace sdr
                         }
                     }
                 }
-
-                delete pNewSet;
             }
 
             // call parent. This will set items on local object, too.

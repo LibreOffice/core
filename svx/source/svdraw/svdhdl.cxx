@@ -64,6 +64,8 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 
 // #i15222#
@@ -990,7 +992,7 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
     aRetval.Erase(aCol);
 
     // get write access
-    BitmapWriteAccess* pWrite = aRetval.AcquireWriteAccess();
+    boost::scoped_ptr<BitmapWriteAccess> pWrite(aRetval.AcquireWriteAccess());
     DBG_ASSERT(pWrite, "Got NO write access to a new Bitmap!");
 
     if(pWrite)
@@ -1023,9 +1025,6 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
         pWrite->SetLineColor(aDarkColor);
         pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
         pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
-
-        // get rid of write access
-        delete pWrite;
     }
 
     return aRetval;
@@ -1860,7 +1859,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         }
 
         // allocate pointer array for sorted handle list
-        ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.size()];
+        boost::scoped_array<ImplHdlAndIndex> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
 
         // build sorted handle list
         sal_uInt32 a;
@@ -1870,7 +1869,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
             pHdlAndIndex[a].mnIndex = a;
         }
 
-        qsort(pHdlAndIndex, aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
+        qsort(pHdlAndIndex.get(), aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
         // look for old num in sorted array
         sal_uIntPtr nOldHdl(nOldHdlNum);
@@ -1964,9 +1963,6 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
                 pNew->Touch();
             }
         }
-
-        // free memory again
-        delete [] pHdlAndIndex;
     }
 }
 
