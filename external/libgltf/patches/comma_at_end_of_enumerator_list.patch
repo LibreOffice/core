@@ -1,0 +1,51 @@
+diff -ur libgltf.org/src/Common.h libgltf/src/Common.h
+--- libgltf.org/src/Common.h	2014-06-28 12:17:56.880068394 +0200
++++ libgltf/src/Common.h	2014-06-28 12:22:32.940078647 +0200
+@@ -86,7 +86,7 @@
+     DataType_FLOAT_MAT3                     = 0x8B5B,
+     DataType_FLOAT_MAT4                     = 0x8B5C,
+     DataType_SAMPLER_2D                     = 0x8B5E,
+-    DataType_SAMPLER_CUBE                   = 0x8B60,
++    DataType_SAMPLER_CUBE                   = 0x8B60
+ } DataType_E;
+ 
+ class Attribute
+@@ -119,7 +119,7 @@
+     LightSource_DIRECTIONAL   = 0x1,
+     LightSource_POINT         = 0x2,
+     LightSource_SPOT          = 0x3,
+-    LightSource_AMBIET        = 0x4,
++    LightSource_AMBIET        = 0x4
+ } LightSourceType_E;
+ 
+ class Light
+@@ -252,7 +252,7 @@
+     TextureType_DISPLACEMENT = 0x9,
+     TextureType_LIGHTMAP = 0xA,
+     TextureType_REFLECTION = 0xB,
+-    TextureType_UNKNOWN = 0xC,
++    TextureType_UNKNOWN = 0xC
+ } TextureType_E;
+ 
+ class MaterialProperty
+@@ -449,7 +449,7 @@
+     NodeType_Node        = 0x1,
+     NodeType_Mesh        = 0x2,
+     NodeType_Camera      = 0x4,
+-    NodeType_Light       = 0x8,
++    NodeType_Light       = 0x8
+ } NodeType_E;
+ 
+ class Node
+diff -ur libgltf.org/src/Texture.h libgltf/src/Texture.h
+--- libgltf.org/src/Texture.h	2014-06-28 12:17:56.880068394 +0200
++++ libgltf/src/Texture.h	2014-06-28 12:18:19.740069243 +0200
+@@ -24,7 +24,7 @@
+     TEXTURE_FILTER_MIN_BILINEAR,
+     TEXTURE_FILTER_MIN_NEAREST_MIPMAP,
+     TEXTURE_FILTER_MIN_BILINEAR_MIPMAP,
+-    TEXTURE_FILTER_MIN_TRILINEAR,
++    TEXTURE_FILTER_MIN_TRILINEAR
+ };
+ 
+ class Texture
