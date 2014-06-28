@@ -95,7 +95,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
         if (bWithChildren)
             rSh.MakeOutlineSel(nSource, nSource, true);
         // While moving, the selected children does not counting.
-        sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
+        const sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
         if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
         {
@@ -450,7 +450,7 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus
 
 void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+    const sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
     if( FN_UP == nItemId || FN_DOWN == nItemId )
     {
         SetItemText(nItemId, SwScrollNaviPopup::GetQuickHelpText((FN_DOWN == nItemId)));
@@ -713,9 +713,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     // determine the suitable size differently.
     Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
     Rectangle aSecondRect = aContentToolBox.GetItemRect(FN_SELECT_HEADER);
-    sal_uInt16 nWidth = sal_uInt16(aFirstRect.Left() - aSecondRect.Left());
-
-    Size aItemWinSize( nWidth , aFirstRect.Bottom() - aFirstRect.Top() );
+    Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
+                       aFirstRect.Bottom() - aFirstRect.Top() );
     pEdit->SetSizePixel(aItemWinSize);
     aContentToolBox.InsertSeparator(4);
     aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 4);
@@ -1057,9 +1056,9 @@ void SwNavigationPI::UpdateListBox()
     SwView *pActView = GetCreateView();
     bool bDisable = pActView == 0;
     SwView *pView = SwModule::GetFirstView();
-    sal_uInt16 nCount = 0;
-    sal_uInt16 nAct = 0;
-    sal_uInt16 nConstPos = 0;
+    sal_Int32 nCount = 0;
+    sal_Int32 nAct = 0;
+    sal_Int32 nConstPos = 0;
     const SwView* pConstView = aContentTree.IsConstantView() &&
                                 aContentTree.GetActiveWrtShell() ?
                                     &aContentTree.GetActiveWrtShell()->GetView():
@@ -1105,8 +1104,7 @@ void SwNavigationPI::UpdateListBox()
     if(aContentTree.IsActiveView())
     {
         //Either the name of the current Document or "Active Document".
-        sal_uInt16 nTmp = pActView ? nAct : --nCount;
-        aDocListBox.SelectEntryPos( nTmp );
+        aDocListBox.SelectEntryPos( pActView ? nAct : --nCount );
     }
     else if(aContentTree.IsHiddenView())
     {
@@ -1332,7 +1330,7 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
 
-    sal_uInt16 nRootType = static_cast< sal_uInt16 >( pNaviConfig->GetRootType() );
+    const sal_uInt16 nRootType = static_cast< sal_uInt16 >( pNaviConfig->GetRootType() );
     if( nRootType < CONTENT_TYPE_MAX )
     {
         pNavi->aContentTree.SetRootType(nRootType);
@@ -1363,14 +1361,12 @@ void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwNavigationPI::InitImageList()
 {
-    sal_uInt16 k;
-
     ImageList& rImgLst = aContentImageList;
-    for( k = 0; k < aContentToolBox.GetItemCount(); k++)
+    for( sal_uInt16 k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
                     rImgLst.GetImage(aContentToolBox.GetItemId(k)));
 
-    for( k = 0; k < aGlobalToolBox.GetItemCount(); k++)
+    for( sal_uInt16 k = 0; k < aGlobalToolBox.GetItemCount(); k++)
             aGlobalToolBox.SetItemImage(aGlobalToolBox.GetItemId(k),
                     rImgLst.GetImage(aGlobalToolBox.GetItemId(k)));
 
