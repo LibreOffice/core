@@ -311,6 +311,10 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     if (!setup_assets_tree())
         return JNI_FALSE;
 
+    // Extract files from the .apk that can't be used mmapped directly from it
+    extract_files(UNPACK_TREE, UNPACK_TREE, 0);
+    extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
+
     return JNI_TRUE;
 }
 
@@ -805,20 +809,6 @@ extract_files(const char *root,
         }
     }
     lo_apk_closedir(tree);
-}
-
-// static native void extract_files();
-
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env,
-                                                      jobject clazz)
-{
-    (void) env;
-    (void) clazz;
-
-    extract_files(UNPACK_TREE, UNPACK_TREE, 0);
-    extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
 }
 
 /* Android's JNI works only to libraries loaded through Java's
