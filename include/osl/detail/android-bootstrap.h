@@ -38,6 +38,13 @@ JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);
 
+#define UNPACK_TREE "/assets/unpack"
+#define UNPACK_TREE_GZ "/assets/gz.unpack"
+
+int setup_cdir(void);
+int setup_assets_tree(void);
+void extract_files(const char *root, const char *prefix, int gzipped);
+
 #ifdef __cplusplus
 }
 #endif

@@ -28,7 +28,7 @@
 
 #include "uthash.h"
 
-#include "osl/detail/android-bootstrap.h"
+#include <osl/detail/android-bootstrap.h>
 
 #undef LOGI
 
@@ -142,7 +142,7 @@ cdir_entry_size(struct cdir_entry *entry)
         letoh16(entry->file_comment_size);
 }
 
-static int
+int
 setup_cdir(void)
 {
     struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
@@ -221,7 +221,7 @@ handle_one_asset(struct cdir_entry *entry)
     }
 }
 
-static int
+int
 setup_assets_tree(void)
 {
     int count = cdir_entries;
@@ -629,9 +629,6 @@ lo_apk_lstat(const char *path,
     return -1;
 }
 
-#define UNPACK_TREE "/assets/unpack"
-#define UNPACK_TREE_GZ "/assets/gz.unpack"
-
 static int
 mkdir_p(const char *dirname)
 {
@@ -718,7 +715,7 @@ extract_gzipped(const char *filename,
     return total;
 }
 
-static void
+void
 extract_files(const char *root,
               const char *prefix,
               int gzipped)
