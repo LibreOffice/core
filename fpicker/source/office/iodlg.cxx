@@ -368,7 +368,7 @@ SvtFileDialog::SvtFileDialog
     WinBits nBits,
     WinBits nExtraBits
 ) :
-    ModalDialog( _pParent, SvtResId( DLG_FPICKER_EXPLORERFILE ) )
+    ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
     ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
@@ -393,7 +393,7 @@ SvtFileDialog::SvtFileDialog
 
 
 SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
-    :ModalDialog( _pParent, SvtResId( DLG_FPICKER_EXPLORERFILE ) )
+    :ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
     ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
@@ -451,26 +451,45 @@ SvtFileDialog::~SvtFileDialog()
     delete _pImp;
     delete _pFileView;
     delete _pSplitter;
-
-    delete _pCbReadOnly;
-    delete _pCbLinkBox;
-    delete _pCbPreviewBox;
-    delete _pCbSelection;
-    delete _pPbPlay;
-    delete _pPrevWin;
     delete _pPrevBmp;
-
     delete _pUserControls;
 }
-
-
 
 void SvtFileDialog::Init_Impl
 (
     WinBits nStyle
 )
 {
+    get(_pCbReadOnly, "readonly");
+    get(_pCbLinkBox, "link");
+    get(_pCbPreviewBox, "cb_preview");
+    get(_pCbSelection, "selection");
+    get(_pPrevWin, "preview");
+    get(_pPbPlay, "play");
+    get(_pImp->_pCbOptions, "options");
+    get(_pImp->_pFtFileName, "file_name_label");
+    get(_pImp->_pEdFileName, "file_name");
+    get(_pImp->_pFtFileType, "file_type_label");
+    get(_pImp->_pLbFilter, "file_type");
+    get(_pImp->_pEdCurrentPath, "current_path");
+    get(_pImp->_pBtnFileOpen, "open");
+    get(_pImp->_pBtnCancel, "cancel");
+    get(_pImp->_pBtnHelp, "help");
+    get(_pImp->_pBtnConnectToServer, "connect_to_server");
+    get(_pImp->_pBtnNewFolder, "new_folder");
+    get(_pImp->_pCbPassword, "password");
+    get(_pImp->_pCbAutoExtension, "extension");
+    get(_pImp->_pFtFileVersion, "shared_label");
+    get(_pImp->_pLbFileVersion, "shared");
+    get(_pImp->_pFtTemplates, "shared_label");
+    get(_pImp->_pLbTemplates, "shared");
+    get(_pImp->_pFtImageTemplates, "shared_label");
+    get(_pImp->_pLbImageTemplates, "shared");
+
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
+    Window *pUpContainer = get<Window>("up");
+    _pImp->_pBtnUp = new SvtUpButton_Impl(pUpContainer, this, 0);
+    _pImp->_pBtnUp->Show();
 
     _pImp->_nStyle = nStyle;
     _pImp->_a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
@@ -491,190 +510,62 @@ void SvtFileDialog::Init_Impl
     }
 
     // Create control element, the order defines the tab control.
-    _pImp->_pFtFileName = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILENAME ) );
-
-    SvtURLBox* pURLBox = new SvtURLBox( this, SvtResId( ED_EXPLORERFILE_FILENAME ) );
-    _pImp->_pEdFileName = pURLBox;
-    _pImp->_pEdFileName->Show();
-    pURLBox->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
-    pURLBox->SetOpenHdl( STATIC_LINK( this, SvtFileDialog, OpenHdl_Impl ) );
+    _pImp->_pEdFileName->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
+    _pImp->_pEdFileName->SetOpenHdl( STATIC_LINK( this, SvtFileDialog, OpenHdl_Impl ) );
 
     // in folder picker mode, only auto-complete directories (no files)
     bool bIsFolderPicker = ( _pImp->_eDlgType == FILEDLG_TYPE_PATHDLG );
-    pURLBox->SetOnlyDirectories( bIsFolderPicker );
+    _pImp->_pEdFileName->SetOnlyDirectories( bIsFolderPicker );
 
     // in save mode, don't use the autocompletion as selection in the edit part
     bool bSaveMode = ( FILEDLG_MODE_SAVE == _pImp->_eMode );
-    pURLBox->SetNoURLSelection( bSaveMode );
-
+    _pImp->_pEdFileName->SetNoURLSelection( bSaveMode );
     _pImp->_pEdFileName->SetHelpId( HID_FILEDLG_AUTOCOMPLETEBOX );
 
-    _pImp->_pFtFileType = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILETYPE ) );
-    _pImp->CreateFilterListControl( this, SvtResId( LB_EXPLORERFILE_FILETYPE ) );
-
-    // move the filter listbox to the space occupied by the version listbox
-    // if that box isn't needed
-    if ( !( _nExtraBits & SFX_EXTRA_SHOWVERSIONS ) &&
-         !( _nExtraBits & SFX_EXTRA_TEMPLATES ) &&
-         !( _nExtraBits & SFX_EXTRA_IMAGE_TEMPLATE ) )
-    {
-        {
-            FixedText aSharedListBoxLabel( this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
-            _pImp->_pFtFileType->SetPosPixel( aSharedListBoxLabel.GetPosPixel() );
-        }
-
-        {
-            ListBox aSharedListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
-            _pImp->GetFilterListControl()->SetPosPixel( aSharedListBox.GetPosPixel() );
-        }
-    }
-
-    _pImp->_pEdCurrentPath = new SvtURLBox( this, SvtResId(ED_EXPLORERFILE_CURRENTPATH) );
-    _pImp->_pEdCurrentPath->Show();
-
-    _pImp->_pBtnFileOpen = new PushButton( this, SvtResId( BTN_EXPLORERFILE_OPEN ) );
-    _pImp->_pBtnCancel = new CancelButton( this, SvtResId( BTN_EXPLORERFILE_CANCEL ) );
-    _pImp->_pBtnHelp = new HelpButton( this, SvtResId( BTN_EXPLORERFILE_HELP ) );
-
-    _pImp->_pBtnConnectToServer = new PushButton ( this, SvtResId ( BTN_EXPLORERFILE_CONNECT_TO_SERVER ) );
     _pImp->_pBtnConnectToServer->SetAccessibleName( _pImp->_pBtnConnectToServer->GetQuickHelpText() );
-
-    _pImp->_pBtnUp = new SvtUpButton_Impl( this, SvtResId( BTN_EXPLORERFILE_UP ) );
-    _pImp->_pBtnNewFolder = new ImageButton( this, SvtResId( BTN_EXPLORERFILE_NEWFOLDER ) );
     _pImp->_pBtnNewFolder->SetStyle( _pImp->_pBtnNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
-
     _pImp->_pBtnUp->SetAccessibleName( _pImp->_pBtnUp->GetQuickHelpText() );
     _pImp->_pBtnNewFolder->SetAccessibleName( _pImp->_pBtnNewFolder->GetQuickHelpText() );
 
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
-    _pFileView = new SvtFileView( this, SvtResId( CTL_EXPLORERFILE_FILELIST ),
+    Window *pContainer = get<Window>("container");
+    pContainer->SetSizePixel(Size(400, 150));
+    _pFileView = new SvtFileView( pContainer, WB_BORDER,
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
+    _pFileView->Show();
     _pFileView->EnableAutoResize();
-
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
-    _pSplitter = new Splitter( this, SvtResId( EXPLORERFILE_SPLITTER ) );
+    _pSplitter = new Splitter( pContainer, WB_HSCROLL );
     _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
 
-    // determine the size of the buttons
-    Size aSize = _pImp->_pBtnNewFolder->GetSizePixel();
     Image aNewFolderImg( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
     _pImp->_pBtnNewFolder->SetModeImage( aNewFolderImg );
 
-    // set position of the buttons
-    Size aDlgSize = GetOutputSizePixel();
-    long n6AppFontInPixel =
-            LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
-    long n3AppFontInPixel =
-            LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-    long nHalf3AppFontInPixel = n3AppFontInPixel/2;
-
-    // nDelta is the space between the right border and the left border of the
-    // component currently positioned
-    long nDelta = n6AppFontInPixel;
-
-    // New folder
-    Point aPos(
-        aDlgSize.Width() - nDelta,
-        _pImp->_pBtnNewFolder->GetPosPixel().Y()
-    );
-    nDelta += aSize.Width() + nHalf3AppFontInPixel;
-    aPos.X() = aDlgSize.Width() - nDelta;
-    _pImp->_pBtnNewFolder->SetPosPixel(aPos);
-
-    // Previous level (up)
-    nDelta += aSize.Width() + nHalf3AppFontInPixel;
-    aPos.X() = aDlgSize.Width() - nDelta;
-    _pImp->_pBtnUp->SetPosPixel(aPos);
-
-    // Connect to server ("...")
-    nDelta += _pImp->_pBtnConnectToServer->GetSizePixel().Width() + nHalf3AppFontInPixel;
-    aPos.X() = aDlgSize.Width() - nDelta;
-    _pImp->_pBtnConnectToServer->SetPosPixel(aPos);
-
-    // Set the size of the URL bar
-    nDelta += nHalf3AppFontInPixel; // right margin of the URL bar
-    aSize.Width() = aDlgSize.Width()
-        - _pImp->_pEdCurrentPath->GetPosPixel().X()
-        - nDelta;
-    _pImp->_pEdCurrentPath->SetOutputSizePixel(aSize);
-
-    aPos.X() = _pImp->_pEdCurrentPath->GetPosPixel().X();
-    _pImp->_pEdCurrentPath->SetPosPixel(aPos);
-
     if ( nStyle & SFXWB_READONLY )
     {
-        _pCbReadOnly = new CheckBox( this, SvtResId( CB_EXPLORERFILE_READONLY ) );
         _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
         _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
-        AddControl( _pCbReadOnly );
-        ReleaseOwnership( _pCbReadOnly );
         _pCbReadOnly->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pCbReadOnly->Show();
     }
 
     if ( nStyle & SFXWB_PASSWORD )
     {
-        _pImp->_pCbPassword = new CheckBox( this, SvtResId( CB_EXPLORERFILE_PASSWORD ) );
         _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
-        AddControl( _pImp->_pCbPassword );
-        ReleaseOwnership( _pImp->_pCbPassword );
         _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pImp->_pCbPassword->Show();
     }
 
     // set the ini file for extracting the size
     _pImp->_aIniKey = IODLG_CONFIGNAME;
 
     AddControls_Impl( );
-
-    // Determine the amount of pixel the other elements have to be adjusted in their position.
-    aPos.Y() += aSize.Height();
-    aPos.Y() += LogicToPixel( Size( 0, 6 ), MAP_APPFONT ).Height();
-    long nYOffset = aPos.Y();
-    aPos = _pFileView->GetPosPixel();
-
-    aPos.Y() = nYOffset;
-    nYOffset -= aPos.Y();
-
-    // Adjust the position of the other elements.
-    _pFileView->SetPosPixel( aPos );
-
-    aPos.X() = _pSplitter->GetPosPixel().X();
-    _pSplitter->SetPosPixel( aPos );
-
-    aPos.X() = _pImp->_pPlaces->GetPosPixel().X();
-    _pImp->_pPlaces->SetPosPixel( aPos );
-
-
-    lcl_MoveControl( _pImp->_pFtFileName, 0, nYOffset );
-    lcl_MoveControl( _pImp->_pEdFileName, 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pFtFileVersion, 0, nYOffset );
-    lcl_MoveControl( _pImp->_pLbFileVersion, 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pFtTemplates, 0, nYOffset );
-    lcl_MoveControl( _pImp->_pLbTemplates, 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pFtImageTemplates, 0, nYOffset );
-    lcl_MoveControl( _pImp->_pLbImageTemplates, 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pFtFileType, 0, nYOffset );
-    lcl_MoveControl( _pImp->GetFilterListControl(), 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pBtnFileOpen, 0, nYOffset );
-    lcl_MoveControl( _pImp->_pBtnCancel, 0, nYOffset );
-
-    lcl_MoveControl( _pImp->_pBtnHelp, 0, nYOffset + 3 );
-        // a little more spacing between Cancel- and HelpButton
-
-    // adjust size of the dialog
-    aSize = GetSizePixel();
-    aSize.Height() += nYOffset;
-    SetSizePixel( aSize );
 
     // adjust the labels to the mode
     sal_uInt16 nResId = STR_EXPLORERFILE_OPEN;
@@ -719,7 +610,6 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetDoubleClickHdl( LINK( this, SvtFileDialog, DblClickHdl_Impl ) );
     _pFileView->SetOpenDoneHdl( LINK( this, SvtFileDialog, OpenDoneHdl_Impl ) );
 
-    FreeResource();
 
     // set timer for the filterbox travel
     _pImp->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
@@ -755,14 +645,13 @@ void SvtFileDialog::Init_Impl
         if ( _pCbSelection ) _pCbSelection->SetHelpId( HID_FILESAVE_SELECTION );
     }
 
-    // correct the z-order of the controls
-    implArrangeControls();
-
     /// read our settings from the configuration
     m_aConfiguration = OConfigurationTreeRoot::createWithComponentContext(
         ::comphelper::getProcessComponentContext(),
         OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
+
+    Resize();
 }
 
 
@@ -1762,45 +1651,6 @@ public:
     ~SvtDefModalDialogParent_Impl() { Application::SetDefDialogParent( _pOld ); }
 };
 
-
-
-
-void SvtFileDialog::updateListboxLabelSizes()
-{
-    sal_Int16 nLineControlId[5] = {
-        LISTBOX_VERSION, LISTBOX_TEMPLATE, LISTBOX_IMAGE_TEMPLATE, LISTBOX_FILTER, EDIT_FILEURL
-    };
-
-    // determine the maximum width needed for the listbox labels
-    long nMaxWidth = 0;
-    for ( sal_Int32 i=0; i<5; ++i )
-    {
-        FixedText* pLabel = static_cast< FixedText* >( getControl( nLineControlId[i], sal_True ) );
-        if ( !pLabel )
-            continue;
-        nMaxWidth = ::std::max( pLabel->GetTextWidth( pLabel->GetText() ), nMaxWidth );
-    }
-
-    // ensure that all labels are wide enough
-    for ( sal_Int32 i=0; i<5; ++i )
-    {
-        FixedText* pLabel = static_cast< FixedText* >( getControl( nLineControlId[i], sal_True ) );
-        ListBox* pListbox = static_cast< ListBox* >( getControl( nLineControlId[i], sal_False ) );
-        if ( !pLabel || !pListbox )
-            continue;
-        Size aCurrentSize( pLabel->GetSizePixel() );
-        if ( aCurrentSize.Width() >= nMaxWidth )
-            continue;
-
-        long nChange = nMaxWidth - aCurrentSize.Width();
-        pLabel->SetSizePixel( Size( nMaxWidth, aCurrentSize.Height() ) );
-
-        aCurrentSize = pListbox->GetSizePixel();
-        pListbox->SetSizePixel( Size( aCurrentSize.Width() - nChange, aCurrentSize.Height() ) );
-        lcl_MoveControl( pListbox, nChange, 0 );
-    }
-}
-
 namespace
 {
 
@@ -2385,14 +2235,6 @@ void SvtFileDialog::InitSize()
     Size aDlgSize = GetResizeOutputSizePixel();
     SetMinOutputSizePixel( aDlgSize );
 
-    if ( !_pImp->_nFixDeltaHeight )
-    {
-        // calculate and save fixsize
-        long nBoxH = _pFileView->GetSizePixel().Height();
-        long nH = GetSizePixel().Height();
-        _pImp->_nFixDeltaHeight = nH - nBoxH;
-    }
-
     // initialize from config
     SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
 
@@ -2433,54 +2275,6 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
 
     return aList;
 }
-
-
-
-void SvtFileDialog::implArrangeControls()
-{
-    // this is the list of controls in the order they should be tabbed
-    // from topleft to bottomright
-    // pb: #136070# new order so all LabeledBy relations are correct now
-    Control* pControls[] =
-    {
-        _pImp->_pEdCurrentPath, _pImp->_pBtnConnectToServer,
-        _pImp->_pBtnUp, _pImp->_pBtnNewFolder,                              // image buttons
-        _pImp->_pPlaces,                                                    // list of places
-        _pFileView,                                                         // the file view
-        _pImp->_pFtFileName, _pImp->_pEdFileName,
-        _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
-        _pImp->_pFtTemplates, _pImp->_pLbTemplates,
-        _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
-        _pImp->_pFtFileType, _pImp->GetFilterListControl(),                 // edit fields/list boxes
-        _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions,  // checkboxes
-        _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox, _pCbSelection, _pPbPlay, // check boxes (continued)
-        _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp          // buttons
-
-        // (including the FixedTexts is important - not for tabbing order (they're irrelevant there),
-        // but for working keyboard shortcuts)
-    };
-
-    // loop through all these controls and adjust the z-order
-    Window* pPreviousWin = NULL;
-    Control** pCurrent = pControls;
-    for ( sal_Int32 i = 0; i < sal_Int32(sizeof( pControls ) / sizeof( pControls[ 0 ] )); ++i, ++pCurrent )
-    {
-        if ( !*pCurrent )
-            // this control is not available in the current operation mode -> skip
-            continue;
-
-        if ( pPreviousWin )
-            (*pCurrent)->SetZOrder( pPreviousWin, WINDOW_ZORDER_BEHIND );
-        else
-            (*pCurrent)->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
-
-        pPreviousWin = *pCurrent;
-    }
-
-    // FileName edit not the first control but it should have the focus initially
-    _pImp->_pEdFileName->GrabFocus();
-}
-
 
 
 bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter )
@@ -2580,26 +2374,31 @@ void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 
 void SvtFileDialog::Resize()
 {
+    Dialog::Resize();
+
     if ( IsRollUp() )
         return;
+
+    Window *pContainer = get<Window>("container");
+    long nContainerHeight = pContainer->GetSizePixel().Height();
 
     Size aDlgSize = GetResizeOutputSizePixel();
     Size aOldSize = _pImp->_aDlgSize;
     _pImp->_aDlgSize = aDlgSize;
     long nWinDeltaW = 0;
 
-    if ( _pPrevWin &&
-         _pPrevWin->GetPosPixel().X() > _pFileView->GetPosPixel().X() )
+    if(_pPrevBmp)
     {
-        nWinDeltaW = _pPrevWin->GetOutputSizePixel().Width() + _pImp->_a6Size.Width();
+        nWinDeltaW = _pPrevWin->GetOutputSizePixel().Width();
+        _pPrevBmp->SetSizePixel(_pPrevWin->GetOutputSizePixel());
     }
 
     Size aNewSize = _pFileView->GetSizePixel();
     Point aBoxPos( _pFileView->GetPosPixel() );
     long nDeltaY = aNewSize.Height();
     long nDeltaX = aNewSize.Width();
-    aNewSize.Height() = aDlgSize.Height() - _pImp->_nFixDeltaHeight;
-    aNewSize.Width() = aDlgSize.Width() - aBoxPos.X() - _pImp->_a6Size.Width() - nWinDeltaW;
+    aNewSize.Height() = nContainerHeight;
+    aNewSize.Width() = aDlgSize.Width() - aBoxPos.X() - 2*_pImp->_a6Size.Width() - nWinDeltaW;
     if ( aOldSize.Height() )
         nDeltaY = _pImp->_aDlgSize.Height() - aOldSize.Height();
     else
@@ -2615,7 +2414,7 @@ void SvtFileDialog::Resize()
 
     // Resize the Splitter to fit the height
     Size splitterNewSize = _pSplitter->GetSizePixel( );
-    splitterNewSize.Height() += nDeltaY;
+    splitterNewSize.Height() = nContainerHeight;
     _pSplitter->SetSizePixel( splitterNewSize );
     sal_Int32 nMinX = _pImp->_pPlaces->GetPosPixel( ).X( );
     sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
@@ -2623,96 +2422,12 @@ void SvtFileDialog::Resize()
 
     // Resize the places list box to fit the height of the FileView
     Size placesNewSize(_pImp->_pPlaces->GetSizePixel());
-    placesNewSize.Height() += nDeltaY;
+    placesNewSize.Height() = nContainerHeight;
     _pImp->_pPlaces->SetSizePixel( placesNewSize );
 
     if ( !nDeltaY && !nDeltaX )
         // This resize was only called to show or hide the indicator.
         return;
-
-
-    // move controls
-
-    // controls to move vertically
-    {
-        Control* aMoveControlsVert[] =
-        {
-            _pImp->_pFtFileName, _pImp->_pEdFileName, _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
-            _pImp->_pFtTemplates, _pImp->_pLbTemplates, _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
-            _pImp->_pFtFileType, _pImp->GetFilterListControl(), _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox,
-            _pPbPlay, _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions, _pCbSelection
-        };
-        Control** ppMoveControls = aMoveControlsVert;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsVert ) / sizeof( aMoveControlsVert[0] );
-        for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, 0, nDeltaY );
-    }
-
-    // controls to move vertically and horizontally
-    {
-        Control* aMoveControlsBoth[] =
-        {
-            _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp
-        };
-        Control** ppMoveControls = aMoveControlsBoth;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsBoth ) / sizeof( aMoveControlsBoth[0] );
-        for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, nDeltaX, nDeltaY );
-    }
-
-    // controls to move horizontally
-    {
-        Control* aMoveControlsHor[] =
-        {
-            _pImp->_pBtnConnectToServer,
-            _pImp->_pBtnUp, _pImp->_pBtnNewFolder
-        };
-        Control** ppMoveControls = aMoveControlsHor;
-        Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsHor ) / sizeof( aMoveControlsHor[0] );
-        for ( ; ppMoveControls != ppMoveControlsEnd; ++ppMoveControls )
-            lcl_MoveControl( *ppMoveControls, nDeltaX, 0 );
-    }
-
-
-    // resize controls
-    {
-        Control* aSizeControls[] =
-        {
-            _pImp->_pEdFileName, _pImp->_pLbFileVersion, _pImp->_pLbTemplates, _pImp->_pLbImageTemplates,
-            _pImp->GetFilterListControl(), _pImp->_pEdCurrentPath,
-        };
-        sal_Int32 nSizeControls = sizeof( aSizeControls ) / sizeof( aSizeControls[0] );
-        Control** ppSizeControls = aSizeControls;
-        for ( sal_Int32 j=0; j<nSizeControls; ++j, ++ppSizeControls )
-        {
-            if ( *ppSizeControls )
-            {
-                aNewSize = (*ppSizeControls)->GetSizePixel();
-                aNewSize.Width() += nDeltaX;
-                (*ppSizeControls)->SetSizePixel( aNewSize );
-            }
-        }
-    }
-
-    // align additional controls
-    if ( _pPrevWin &&
-         _pPrevWin->GetPosPixel().X() > _pFileView->GetPosPixel().X() )
-    {
-        // special alignment for controls of the type window
-        // also adjust the size
-        Point aNewPos = _pPrevWin->GetPosPixel();
-        aNewPos.X() += nDeltaX;
-        _pPrevWin->SetPosPixel( aNewPos );
-        _pPrevBmp->SetPosPixel( aNewPos );
-        aNewSize = _pPrevWin->GetOutputSizePixel();
-        aNewSize.Width() += nWinDeltaW;
-        aNewSize.Height() += nDeltaY;
-        if ( !aOldSize.Height() )
-            aNewSize.Height() -= ( _pImp->_a6Size.Height() / 2 );
-        _pPrevWin->SetOutputSizePixel( aNewSize );
-        _pPrevBmp->SetOutputSizePixel( aNewSize );
-        _pPrevBmp->Invalidate();
-    }
 
     if ( _pFileNotifier )
         _pFileNotifier->notify( DIALOG_SIZE_CHANGED, 0 );
@@ -2860,12 +2575,10 @@ void SvtFileDialog::AddControls_Impl( )
     // create the "insert as link" checkbox, if needed
     if ( _nExtraBits & SFX_EXTRA_INSERTASLINK )
     {
-        _pCbLinkBox = new CheckBox( this );
         _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
-        AddControl( _pCbLinkBox  );
-        ReleaseOwnership( _pCbLinkBox );
         _pCbLinkBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pCbLinkBox->Show();
     }
 
     // create the "show preview" checkbox ( and the preview window, too ), if needed
@@ -2877,92 +2590,91 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->DisableFilterBoxAutoWidth();
 
         // "preview"
-        _pCbPreviewBox = new CheckBox( this );
         _pCbPreviewBox->SetText( SvtResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
         _pCbPreviewBox->SetHelpId( HID_FILEDLG_PREVIEW_CB );
-        AddControl( _pCbPreviewBox );
-        ReleaseOwnership( _pCbPreviewBox );
         _pCbPreviewBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pCbPreviewBox->Show();
 
         // generate preview window just here
-        _pPrevWin = new Window( this, WinBits( WB_BORDER ) );
-        AddControl( _pPrevWin );
-        ReleaseOwnership( _pPrevWin );
-        _pPrevWin->Hide();
+        _pPrevWin->SetOutputSizePixel(Size(200, 300));
+        _pPrevWin->Show();
 
-        _pPrevBmp = new FixedBitmap( this, WinBits( WB_BORDER ) );
+        _pPrevBmp = new FixedBitmap( _pPrevWin, WinBits( WB_BORDER ) );
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+        _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();
         _pPrevBmp->SetAccessibleName(SVT_RESSTR(STR_PREVIEW));
     }
 
     if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )
     {
-        _pImp->_pCbAutoExtension = new CheckBox( this, SvtResId( CB_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->Check( true );
-        AddControl( _pImp->_pCbAutoExtension );
-        ReleaseOwnership( _pImp->_pCbAutoExtension );
         _pImp->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
+        _pImp->_pCbAutoExtension->Show();
     }
 
     if ( _nExtraBits & SFX_EXTRA_FILTEROPTIONS )
     {
-        _pImp->_pCbOptions = new CheckBox( this, SvtResId( CB_OPTIONS ) );
         _pImp->_pCbOptions->SetText( SvtResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
-        AddControl( _pImp->_pCbOptions );
-        ReleaseOwnership( _pImp->_pCbOptions );
         _pImp->_pCbOptions->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pImp->_pCbOptions->Show();
     }
 
     if ( _nExtraBits & SFX_EXTRA_SELECTION )
     {
-        _pCbSelection = new CheckBox( this, SvtResId( CB_OPTIONS ) );
         _pCbSelection->SetText( SvtResId( STR_SVT_FILEPICKER_SELECTION ) );
-        AddControl( _pCbSelection );
-        ReleaseOwnership( _pCbSelection );
         _pCbSelection->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        _pCbSelection->Show();
     }
 
     if ( _nExtraBits & SFX_EXTRA_PLAYBUTTON )
     {
-        _pPbPlay = new PushButton( this );
         _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
         _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
-        AddControl( _pPbPlay );
-        ReleaseOwnership( _pPbPlay );
         _pPbPlay->SetClickHdl( LINK( this, SvtFileDialog, PlayButtonHdl_Impl ) );
+        _pPbPlay->Show();
     }
 
     if ( _nExtraBits & SFX_EXTRA_SHOWVERSIONS )
     {
-        _pImp->_pFtFileVersion = new FixedText( this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
+        _pImp->_pFtFileVersion->Show();
 
-        _pImp->_pLbFileVersion = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pLbFileVersion->SetHelpId( HID_FILEOPEN_VERSION );
+        _pImp->_pLbFileVersion->Show();
     }
     else if ( _nExtraBits & SFX_EXTRA_TEMPLATES )
     {
-        _pImp->_pFtTemplates = new FixedText( this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pFtTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_TEMPLATES ) );
+        _pImp->_pFtTemplates->Show();
 
-        _pImp->_pLbTemplates = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pLbTemplates->SetHelpId( HID_FILEOPEN_VERSION );
+        _pImp->_pLbTemplates->Show();
             // This is strange. During the re-factoring during 96930, I discovered that this help id
             // is set in the "Templates mode". This was hidden in the previous implementation.
             // Shouldn't this be a more meaningfull help id.
     }
     else if ( _nExtraBits & SFX_EXTRA_IMAGE_TEMPLATE )
     {
-        _pImp->_pFtImageTemplates = new FixedText( this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pFtImageTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
+        _pImp->_pFtImageTemplates->Show();
 
-        _pImp->_pLbImageTemplates = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pLbImageTemplates->SetHelpId( HID_FILEOPEN_IMAGE_TEMPLATE );
+        _pImp->_pLbImageTemplates->Show();
     }
 
-    _pImp->_pPlaces = new PlacesListBox( this, SVT_RESSTR(STR_PLACES_TITLE), SvtResId(LB_EXPLORERFILE_PLACES_LISTBOX) );
+    Window *pContainer;
+    get(pContainer, "container");
+    _pImp->_pPlaces = new PlacesListBox( pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER );
+    _pImp->_pPlaces->SetSizePixel(Size(100, 150));
+    _pImp->_pPlaces->Show();
+
+    sal_Int32 nPosX = _pImp->_pPlaces->GetSizePixel().Width();
+    _pSplitter->SetPosPixel(Point(nPosX, 0));
+    nPosX += _pSplitter->GetSizePixel().Width();
+    _pFileView->SetPosPixel(Point(nPosX, 0));
+
     _pImp->_pPlaces->SetAddHdl( LINK ( this, SvtFileDialog, AddPlacePressed_Hdl ) );
     _pImp->_pPlaces->SetDelHdl( LINK ( this, SvtFileDialog, RemovePlacePressed_Hdl ) );
 
@@ -3074,154 +2786,6 @@ bool SvtFileDialog::getShowState()
         return false;
 }
 
-
-void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
-
-/*
-  [Description]
-  This method ensures that the specified element is no longer in possession
-  of the instance.
-*/
-
-{
-    ControlChain_Impl* pElement = _pUserControls;
-    while ( pElement )
-    {
-        if ( pElement->_pControl == pUserControl )
-        {
-            pElement->_bHasOwnership = false;
-            break;
-        }
-        pElement = pElement->_pNext;
-    }
-}
-
-
-
-bool SvtFileDialog::AddControl( Window* pControl, sal_Bool bNewLine )
-{
-    // control already exists
-    ControlChain_Impl* pElement = _pUserControls;
-    while ( pElement )
-    {
-        if ( pElement->_pControl == pControl )
-            return false;
-        pElement = pElement->_pNext;
-    }
-
-    // Check if controls have already been added.
-    Size aNewControlSize( pControl->GetOutputSizePixel() );
-    Size aDlgSize( GetOutputSizePixel() );
-    WindowType nType = pControl->GetType();
-    if ( !aNewControlSize.Height() )
-    {
-        // Detect a size.
-        Size aSize( 0, 10 );
-        if ( nType == WINDOW_PUSHBUTTON )
-        {
-            Size aDefSiz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-            long nTextWidth = pControl->GetTextWidth( pControl->GetText() );
-            aSize.Width() = nTextWidth + WIDTH_ADDITION;
-
-            // PushButton:  Minimum width 50 logical units,
-            //              height always 14 logical units.
-            if ( aDefSiz.Width() > aSize.Width() )
-                aSize.Width() = aDefSiz.Width();
-            aSize.Height() = aDefSiz.Height();
-            aNewControlSize = aSize;
-        }
-        else
-            aNewControlSize = LogicToPixel( aSize, MAP_APPFONT );
-        if ( nType != WINDOW_PUSHBUTTON )
-            aNewControlSize.Width() = pControl->GetTextWidth( pControl->GetText() ) + WIDTH_ADDITION;
-        if ( nType == WINDOW_CHECKBOX )
-            aNewControlSize.Width() += WIDTH_ADDITION;
-        if ( nType == WINDOW_WINDOW )
-        {
-            aNewControlSize.Height() = GetOutputSizePixel().Height() - 18;
-            aNewControlSize.Width() = 200;
-            aDlgSize.Width() += 210;
-            SetOutputSizePixel( aDlgSize );
-        }
-        pControl->SetOutputSizePixel( aNewControlSize );
-    }
-    Point aNewControlPos;
-    Size* pNewDlgSize = NULL;
-    bool bNewRow = bNewLine;
-
-    if ( nType == WINDOW_WINDOW )
-    {
-        aNewControlPos.X() = aDlgSize.Width() - 210;
-        aNewControlPos.Y() = 8;
-    }
-    else if ( _pUserControls )
-    {
-        Point aNewControlRange( _pUserControls->_pControl->GetPosPixel() );
-        long nPrevControlHeight = _pUserControls->_pControl->GetSizePixel().Height();
-        aNewControlRange +=
-            Point( _pUserControls->_pControl->GetOutputSizePixel().Width(), 0 );
-        aNewControlPos = aNewControlRange;
-        if ( nPrevControlHeight > aNewControlSize.Height() )
-        {
-            long nY = nPrevControlHeight;
-            nY -= aNewControlSize.Height();
-            nY /= 2;
-            aNewControlPos.Y() += nY;
-        }
-        aNewControlPos += LogicToPixel( Point( 3, 0 ), MAP_APPFONT );
-        aNewControlRange += LogicToPixel( Point( 9, 0 ), MAP_APPFONT );
-        aNewControlRange += Point( aNewControlSize.Width(), 0 );
-
-        // Check if a new row has to be created.
-        if ( aNewControlRange.X() > aDlgSize.Width() )
-            bNewRow = true;
-    }
-    else
-    {
-        // Create a new row if there was no usercontrol before.
-        bNewRow = true;
-    }
-
-    // Check if a new row has to be created.
-    Size aBorderSize = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nLeftBorder = aBorderSize.Width();
-    long nLowerBorder = aBorderSize.Height();
-    if ( bNewRow )
-    {
-        // Set control at the beginning of a new line.
-        long nSmallBorderHeight = nLowerBorder / 2;
-        aNewControlPos = Point( nLeftBorder, 0 );
-        aNewControlPos += Point( 0, aDlgSize.Height() );
-        aNewControlPos.Y() -= nSmallBorderHeight;
-        // Set new size.
-        pNewDlgSize = new Size( aDlgSize );
-        pNewDlgSize->Height() -= nSmallBorderHeight;
-        pNewDlgSize->Height() += aNewControlSize.Height();
-        pNewDlgSize->Height() += nLowerBorder;
-    }
-    else
-    {
-        // Check if the window has to be resized.
-        Size aNewControlRange( 0, aNewControlPos.Y() );
-        aNewControlRange.Height() += aNewControlSize.Height();
-        aNewControlRange.Height() += nLowerBorder;
-        if ( aNewControlRange.Height() > aDlgSize.Height() )
-            pNewDlgSize = new Size( aDlgSize.Width(), aNewControlRange.Height() );
-    }
-
-    // Update view.
-    if ( pNewDlgSize )
-    {
-        SetOutputSizePixel( *pNewDlgSize );
-        delete pNewDlgSize;
-    }
-    pControl->SetPosPixel( aNewControlPos );
-    pControl->Show();
-    _pUserControls = new ControlChain_Impl( pControl, _pUserControls );
-
-    return true;
-}
-
 bool SvtFileDialog::ContentHasParentFolder( const OUString& rURL )
 {
     m_aContent.bindTo( rURL );
@@ -3330,7 +2894,7 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
     fileViewSize.Width() -= ( nNewX - nOldX );
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
-    _pSplitter->SetPosPixel( Point( nSplitPos, _pSplitter->GetPosPixel().Y() ) );
+    _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );
     return 0;
 }
 

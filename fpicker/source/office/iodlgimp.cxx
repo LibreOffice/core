@@ -91,13 +91,13 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 
 
 
-SvtFileDialogURLSelector::SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId )
-    :MenuButton ( _pParent, _rResId )
-    ,m_pParent  ( _pParent )
+SvtFileDialogURLSelector::SvtFileDialogURLSelector( Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId )
+    :MenuButton ( _pParent, nBits )
+    ,m_pDlg     ( _pDlg )
     ,m_pMenu    ( new PopupMenu )
 {
     SetStyle( GetStyle() | WB_NOPOINTERFOCUS | WB_RECTSTYLE | WB_SMALLSTYLE );
-    SetModeImage( m_pParent->GetButtonImage( _nButtonId ) );
+    SetModeImage( _pDlg->GetButtonImage( _nButtonId ) );
     SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     SetDropDown( PUSHBUTTON_DROPDOWN_TOOLBOX );
 }
@@ -123,8 +123,8 @@ void SvtFileDialogURLSelector::Activate()
 
 
 
-SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
-    :SvtFileDialogURLSelector( pParent, rResId, IMG_FILEDLG_BTN_UP )
+SvtUpButton_Impl::SvtUpButton_Impl( Window *pParent, SvtFileDialog* pDlg, WinBits nBits )
+    :SvtFileDialogURLSelector( pParent, pDlg, nBits, IMG_FILEDLG_BTN_UP )
 {
 }
 
@@ -234,7 +234,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     m_bNeedDelayedFilterExecute ( false ),
     _pDefaultFilter     ( NULL ),
     _bMultiSelection    ( false ),
-    _nFixDeltaHeight    ( 0 ),
     _bFolderHasOpened   ( false )
 {
 }
@@ -243,29 +242,10 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
-    delete _pEdCurrentPath;
-    delete _pCbPassword;
-    delete _pCbAutoExtension;
-    delete _pCbOptions;
-    delete _pBtnNewFolder;
     delete _pBtnUp;
-    delete _pBtnHelp;
-    delete _pBtnCancel;
-    delete _pBtnFileOpen;
-    delete _pLbFilter;
-    delete _pFtFileType;
-    delete _pLbFileVersion;
-    delete _pFtFileVersion;
-    delete _pFtTemplates;
-    delete _pLbTemplates;
-    delete _pFtImageTemplates;
-    delete _pLbImageTemplates;
-    delete _pEdFileName;
-    delete _pFtFileName;
     delete _pUserFilter;
     delete _pFilter;
     delete _pPlaces;
-    delete _pBtnConnectToServer;
 }
 
 
@@ -341,18 +321,6 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     // add all following entries
     while ( (sal_Int16)nPos >= 0 )
         InsertFilterListEntry( &(*_pFilter)[ nPos-- ] );
-}
-
-
-
-void SvtExpFileDlg_Impl::CreateFilterListControl( Window* _pParent, const ResId& _rId )
-{
-    DBG_ASSERT( !_pLbFilter, "SvtExpFileDlg_Impl::CreateFilterListControl: already created the control!" );
-    if ( !_pLbFilter )
-    {
-        _pLbFilter = new ListBox( _pParent, _rId );
-        _pLbFilter->SetDropDownLineCount( 10 );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

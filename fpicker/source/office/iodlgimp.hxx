@@ -79,18 +79,18 @@ enum SvtFileDlgType
 class SvtFileDialogURLSelector : public MenuButton
 {
 private:
-    SvtFileDialog*      m_pParent;
+    SvtFileDialog*      m_pDlg;
     PopupMenu*          m_pMenu;
 
 protected:
-    inline        SvtFileDialog*  GetDialogParent()       { return m_pParent; }
+    inline        SvtFileDialog*  GetDialogParent()       { return m_pDlg; }
 
 protected:
 
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
 protected:
-    SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId );
+    SvtFileDialogURLSelector( Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
     virtual ~SvtFileDialogURLSelector();
 
     virtual void        Activate() SAL_OVERRIDE;
@@ -102,7 +102,7 @@ private:
     std::vector<OUString> _aURLs;
 
 public:
-    SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId );
+    SvtUpButton_Impl( Window* pParent, SvtFileDialog* pDlg, WinBits nBits );
     virtual ~SvtUpButton_Impl();
 
 protected:
@@ -123,8 +123,6 @@ private:
     DECL_STATIC_LINK( SvtExpFileDlg_Impl, UnClickHdl, Button* );
 
 private:
-    ListBox*                        _pLbFilter;
-
     const SvtFileDialogFilter_Impl* _pCurFilter;
     OUString                        m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 
@@ -147,11 +145,12 @@ public:
     ListBox*                        _pLbImageTemplates;
 
     FixedText*                      _pFtFileType;
+    ListBox*                        _pLbFilter;
     PushButton*                     _pBtnFileOpen;
     PushButton*                     _pBtnCancel;
     HelpButton*                     _pBtnHelp;
     SvtUpButton_Impl*               _pBtnUp;
-    ImageButton*                    _pBtnNewFolder;
+    PushButton*                     _pBtnNewFolder;
     CheckBox*                       _pCbPassword;
     SvtURLBox*                      _pEdCurrentPath;
     CheckBox*                       _pCbAutoExtension;
@@ -182,7 +181,6 @@ public:
     bool                        _bMultiSelection;
 
     // remember fixsizes for resize
-    long                            _nFixDeltaHeight;
     Size                            _a6Size;
     Size                            _aDlgSize;
     OUString                        _aIniKey;
@@ -203,7 +201,6 @@ public:
     // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself
             Control*        GetFilterListControl()          { return _pLbFilter; }
             const Control*  GetFilterListControl() const    { return _pLbFilter; }
-            void            CreateFilterListControl( Window* _pParent, const ResId& _rId );
     inline  void            SetFilterListSelectHdl( const Link& _rHandler );
 
     // inits the listbox for the filters from the filter list (_pFilter)

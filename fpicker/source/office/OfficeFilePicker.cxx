@@ -193,7 +193,6 @@ void SvtFilePicker::prepareExecute()
                 aAccess.enableControl( rEntry.m_nElementID, rEntry.m_bEnabled );
         }
 
-        getDialog()->updateListboxLabelSizes();
     }
 
     if ( m_pFilterList && !m_pFilterList->empty() )

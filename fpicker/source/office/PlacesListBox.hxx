@@ -48,7 +48,7 @@ class PlacesListBox : public Control
         bool                 mbSelectionChanged;
 
     public:
-        PlacesListBox( SvtFileDialog* pFileDlg, const OUString& rTitle, const ResId& rResId );
+        PlacesListBox( Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits );
         virtual ~PlacesListBox( );
 
         void AppendPlace( PlacePtr pPlace );

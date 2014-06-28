@@ -80,7 +80,7 @@ protected:
     virtual void GetFocus() SAL_OVERRIDE;
 
 public:
-    SvtFileView( Window* pParent, const ResId& rResId, bool bOnlyFolder, bool bMultiSelection );
+    SvtFileView( Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
     SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
     virtual ~SvtFileView();
 

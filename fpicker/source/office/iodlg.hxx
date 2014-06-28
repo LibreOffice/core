@@ -161,7 +161,6 @@ private:
     // removes a filter with wildcards from the path and returns it
     bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
 
-    void    implArrangeControls();
     void    implUpdateImages( );
 
 protected:
@@ -175,8 +174,6 @@ protected:
 
     OUString                    _aPath;
     OUString                    _aDefExt;
-
-    void                        ReleaseOwnership( Window* pUserControl );
 
     /** enables or disables the complete UI of the file picker, with only offering a
         cancel button
@@ -260,9 +257,6 @@ public:
 
     void                        displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
-    // originally from VclFileDialog
-    virtual bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
-
     // inline
     inline void                 SetPath( const OUString& rNewURL );
     inline void                 SetHasFilename( bool bHasFilename );
@@ -283,13 +277,6 @@ public:
     bool                    ContentHasParentFolder( const OUString& rURL );
     bool                    ContentCanMakeFolder( const OUString& rURL );
     bool                    ContentGetTitle( const OUString& rURL, OUString& rTitle );
-
-    /** updates the sizes of the listboxes in the bottom area of the dialog, and of their labels,
-        according to the space occupied by the current label texts
-
-        @since #i42824#
-    */
-    void                        updateListboxLabelSizes();
 
 private:
     SvtFileDialogFilter_Impl*   implAddFilter( const OUString& _rFilter, const OUString& _rType );
