@@ -32,7 +32,6 @@
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"
 #include "externallinkbuffer.hxx"
-#include "tablebuffer.hxx"
 #include "worksheethelper.hxx"
 
 namespace oox {
@@ -1249,7 +1248,6 @@ private:
 
     bool                importAttrToken( SequenceInputStream& rStrm );
     bool                importSpaceToken( SequenceInputStream& rStrm );
-    bool                importTableToken( SequenceInputStream& rStrm );
     bool                importArrayToken( SequenceInputStream& rStrm );
     bool                importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
@@ -1350,7 +1348,6 @@ ApiTokenSequence OoxFormulaParserImpl::importBiff12Formula( const CellAddress& r
                 case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                                    break;
                 case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                                break;
                 case BIFF_TOKID_STR:        bOk = pushValueOperand( BiffHelper::readString( rStrm, false ) );   break;
-                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                                    break;
                 case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                                     break;
                 case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );                    break;
                 case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );                     break;
@@ -1465,131 +1462,6 @@ bool OoxFormulaParserImpl::importSpaceToken( SequenceInputStream& rStrm )
         break;
     }
     return true;
-}
-
-bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
-{
-    sal_uInt16 nFlags, nTableId, nCol1, nCol2;
-    rStrm.skip( 3 );
-    rStrm >> nFlags >> nTableId;
-    rStrm.skip( 2 );
-    rStrm >> nCol1 >> nCol2;
-    TableRef xTable = getTables().getTable( nTableId );
-    sal_Int32 nTokenIndex = xTable.get() ? xTable->getTokenIndex() : -1;
-    if( nTokenIndex >= 0 )
-    {
-        sal_Int32 nWidth = xTable->getWidth();
-        sal_Int32 nHeight = xTable->getHeight();
-        sal_Int32 nStartCol = 0;
-        sal_Int32 nEndCol = nWidth - 1;
-        sal_Int32 nStartRow = 0;
-        sal_Int32 nEndRow = nHeight - 1;
-        bool bFixedStartRow = true;
-        bool bFixedHeight = false;
-
-        bool bSingleCol = getFlag( nFlags, BIFF12_TOK_TABLE_COLUMN );
-        bool bColRange = getFlag( nFlags, BIFF12_TOK_TABLE_COLRANGE );
-        bool bValidRef = !bSingleCol || !bColRange;
-        OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - illegal combination of single column and column range" );
-        if( bValidRef )
-        {
-            if( bSingleCol )
-                nStartCol = nEndCol = nCol1;
-            else if( bColRange )
-                { nStartCol = nCol1; nEndCol = nCol2; }
-            bValidRef = (nStartCol <= nEndCol) && (nEndCol < nWidth);
-            OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - invalid column range" );
-        }
-
-        if( bValidRef )
-        {
-            bool bAllRows    = getFlag( nFlags, BIFF12_TOK_TABLE_ALL );
-            bool bHeaderRows = getFlag( nFlags, BIFF12_TOK_TABLE_HEADERS );
-            bool bDataRows   = getFlag( nFlags, BIFF12_TOK_TABLE_DATA );
-            bool bTotalsRows = getFlag( nFlags, BIFF12_TOK_TABLE_TOTALS );
-            bool bThisRow    = getFlag( nFlags, BIFF12_TOK_TABLE_THISROW );
-
-            sal_Int32 nStartDataRow = xTable->getHeaderRows();
-            sal_Int32 nEndDataRow = nEndRow - xTable->getTotalsRows();
-            bValidRef = (nStartRow <= nStartDataRow) && (nStartDataRow <= nEndDataRow) && (nEndDataRow <= nEndRow);
-            OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - invalid data row range" );
-            if( bValidRef )
-            {
-                if( bAllRows )
-                {
-                    bValidRef = !bHeaderRows && !bDataRows && !bTotalsRows && !bThisRow;
-                    OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - unexpected flags in [#All] table token" );
-                }
-                else if( bHeaderRows )
-                {
-                    bValidRef = !bTotalsRows && !bThisRow;
-                    OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - unexpected flags in [#Headers] table token" );
-                    nEndRow = bDataRows ? nEndDataRow : (nStartDataRow - 1);
-                    bFixedHeight = !bDataRows;
-                }
-                else if( bDataRows )
-                {
-                    bValidRef = !bThisRow;
-                    OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - unexpected flags in [#Data] table token" );
-                    nStartRow = nStartDataRow;
-                    if( !bTotalsRows ) nEndRow = nEndDataRow;
-                }
-                else if( bTotalsRows )
-                {
-                    bValidRef = !bThisRow;
-                    OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - unexpected flags in [#Totals] table token" );
-                    nStartRow = nEndDataRow + 1;
-                    bFixedStartRow = false;
-                    bFixedHeight = !bDataRows;
-                }
-                else if( bThisRow )
-                {
-                    nStartRow = nEndRow = maBaseAddr.Row - xTable->getRange().StartRow;
-                    bFixedHeight = true;
-                }
-                else
-                {
-                    // nothing is the same as [#Data]
-                    nStartRow = nStartDataRow;
-                    nEndRow = nEndDataRow;
-                }
-            }
-            if( bValidRef )
-                bValidRef = (0 <= nStartRow) && (nStartRow <= nEndRow) && (nEndRow < nHeight);
-        }
-        if( bValidRef )
-        {
-            // push single database area token, if table token refers to entire table
-            if( (nStartCol == 0) && (nEndCol + 1 == nWidth) && (nStartRow == 0) && (nEndRow + 1 == nHeight) )
-                return pushValueOperand( nTokenIndex, OPCODE_DBAREA );
-            // create an OFFSET function call to refer to a subrange of the table
-            const FunctionInfo* pRowsInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_ROWS );
-            const FunctionInfo* pColumnsInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_COLUMNS );
-            return
-                pRowsInfo && pColumnsInfo &&
-                pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
-                (bFixedStartRow ?
-                    pushValueOperandToken< double >( nStartRow ) :
-                    (pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
-                     pushFunctionOperatorToken( *pRowsInfo, 1 ) &&
-                     pushValueOperandToken< double >( nHeight - nStartRow ) &&
-                     pushBinaryOperatorToken( OPCODE_SUB ))) &&
-                pushValueOperandToken< double >( nStartCol ) &&
-                (bFixedHeight ?
-                    pushValueOperandToken< double >( nEndRow - nStartRow + 1 ) :
-                    (pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
-                     pushFunctionOperatorToken( *pRowsInfo, 1 ) &&
-                     (((nStartRow == 0) && (nEndRow + 1 == nHeight)) ||
-                      (pushValueOperandToken< double >( nHeight - (nEndRow - nStartRow + 1) ) &&
-                       pushBinaryOperatorToken( OPCODE_SUB ))))) &&
-                (((nStartCol == 0) && (nEndCol + 1 == nWidth)) ?
-                    (pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
-                     pushFunctionOperatorToken( *pColumnsInfo, 1 )) :
-                    pushValueOperandToken< double >( nEndCol - nStartCol + 1 )) &&
-                pushBiff12Function( BIFF_FUNC_OFFSET, 5 );
-        }
-    }
-    return pushBiffErrorOperand( BIFF_ERR_REF );
 }
 
 bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )

@@ -177,10 +177,12 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/condformatcontext \
 	sc/source/filter/oox/connectionsbuffer \
 	sc/source/filter/oox/connectionsfragment \
+	sc/source/filter/oox/datatablefragment \
 	sc/source/filter/oox/defnamesbuffer \
 	sc/source/filter/oox/drawingbase \
 	sc/source/filter/oox/drawingfragment \
 	sc/source/filter/oox/drawingmanager \
+	sc/source/filter/oox/datatablebuffer \
 	sc/source/filter/oox/excelchartconverter \
 	sc/source/filter/oox/excelhandlers \
 	sc/source/filter/oox/excelvbaproject \
@@ -209,8 +211,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/sheetdatacontext \
 	sc/source/filter/oox/stylesbuffer \
 	sc/source/filter/oox/stylesfragment \
-	sc/source/filter/oox/tablebuffer \
-	sc/source/filter/oox/tablefragment \
 	sc/source/filter/oox/themebuffer \
 	sc/source/filter/oox/threadpool \
 	sc/source/filter/oox/unitconverter \

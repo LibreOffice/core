@@ -37,7 +37,6 @@
 #include "sharedstringsbuffer.hxx"
 #include "sharedstringsfragment.hxx"
 #include "stylesfragment.hxx"
-#include "tablebuffer.hxx"
 #include "themebuffer.hxx"
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
@@ -459,7 +458,6 @@ void WorkbookFragment::finalizeImport()
 
     // create all defined names and database ranges
     getDefinedNames().finalizeImport();
-    getTables().finalizeImport();
     // open the VBA project storage
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
     if( !aVbaFragmentPath.isEmpty() )

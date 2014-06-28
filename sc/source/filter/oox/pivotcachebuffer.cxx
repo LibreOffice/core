@@ -37,7 +37,6 @@
 #include "excelhandlers.hxx"
 #include "pivotcachefragment.hxx"
 #include "sheetdatabuffer.hxx"
-#include "tablebuffer.hxx"
 #include "unitconverter.hxx"
 #include "worksheetbuffer.hxx"
 
@@ -1300,6 +1299,7 @@ void PivotCache::finalizeInternalSheetSource()
         {
             mbValidSource = pDefName->getAbsoluteRange( maSheetSrcModel.maRange );
         }
+        /*
         // table
         else if( const Table* pTable = getTables().getTable( maSheetSrcModel.maDefName ).get() )
         {
@@ -1309,6 +1309,7 @@ void PivotCache::finalizeInternalSheetSource()
             if( mbValidSource )
                 maSheetSrcModel.maRange.EndRow -= pTable->getTotalsRows();
         }
+        */
     }
     // else try the cell range (if the sheet exists)
     else if( nSheet >= 0 )

@@ -25,6 +25,8 @@
 #include <oox/ole/olehelper.hxx>
 #include "addressconverter.hxx"
 #include "formulabase.hxx"
+#include "tabledata.hxx"
+#include "datatablebuffer.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
@@ -56,6 +58,7 @@ class SheetDataBuffer;
 class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
+class TableDataBuffer;
 
 typedef ::std::map< OUString, void* >  ExtLst;
 
@@ -232,6 +235,8 @@ public:
     SheetViewSettings&  getSheetViewSettings() const;
     /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
     VmlDrawing&         getVmlDrawing() const;
+
+    TableDataBuffer&    getTableDataBuffer();
 
     ExtLst&             getExtLst() const;
 

@@ -111,6 +111,8 @@ private:
 
     /** Imports the binary data of an embedded OLE object from the fragment with the passed ID. */
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId );
+
+    void importDataTable(const AttributeList& rAttribs);
 };
 
 } // namespace xls

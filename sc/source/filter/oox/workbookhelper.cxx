@@ -55,7 +55,6 @@
 #include "scenariobuffer.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "stylesbuffer.hxx"
-#include "tablebuffer.hxx"
 #include "themebuffer.hxx"
 #include "unitconverter.hxx"
 #include "viewsettings.hxx"
@@ -559,7 +558,6 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxSharedStrings.reset( new SharedStringsBuffer( *this ) );
     mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
-    mxTables.reset( new TableBuffer( *this ) );
     mxScenarios.reset( new ScenarioBuffer( *this ) );
     mxConnections.reset( new ConnectionsBuffer( *this ) );
     mxPivotCaches.reset( new PivotCacheBuffer( *this ) );

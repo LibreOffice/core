@@ -110,6 +110,20 @@ private:
     DxfRef              mxDxf;
 };
 
+class TableStylesContext : public WorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit TableStylesContext( ParentType& rParent, const StylesBuffer& rStylesBuffer ) :
+        WorkbookContextBase( rParent ) {}
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+
+
+private:
+};
+
 class StylesFragment : public WorkbookFragmentBase
 {
 public:

@@ -179,6 +179,7 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
                 case XLS_TOKEN( borders ):
                 case XLS_TOKEN( fills ):
                 case XLS_TOKEN( cellXfs ):
+                case XLS_TOKEN( tableStyles ):
                 case XLS_TOKEN( cellStyleXfs ):
                 case XLS_TOKEN( dxfs ):
                 case XLS_TOKEN( cellStyles ):   return this;
@@ -212,6 +213,12 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
         case XLS_TOKEN( cellStyles ):
             if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );
         break;
+        /*
+        case XLS_TOKEN( tableStyles ):
+            if(nElement == XLS_TOKEN(tableStyle))
+                return new TableStylesContext(*this, getStyles());
+        break;
+        */
     }
     return 0;
 }

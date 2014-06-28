@@ -38,11 +38,11 @@
 #include "scenariocontext.hxx"
 #include "sheetdatabuffer.hxx"
 #include "sheetdatacontext.hxx"
-#include "tablefragment.hxx"
 #include "extlstcontext.hxx"
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
 #include "worksheetsettings.hxx"
+#include "datatablefragment.hxx"
 
 namespace oox {
 namespace xls {
@@ -192,11 +192,6 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )
 {
-    // import data tables related to this worksheet
-    RelationsRef xTableRels = getRelations().getRelationsFromTypeFromOfficeDoc( "table" );
-    for( Relations::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
-        importOoxFragment( new TableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
-
     // import comments related to this worksheet
     OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "comments" );
     if( !aCommentsFragmentPath.isEmpty() )
@@ -237,6 +232,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( rowBreaks ):
                 case XLS_TOKEN( colBreaks ):
                 case XLS_TOKEN( oleObjects ):
+                case XLS_TOKEN(tableParts):
                 case XLS_TOKEN( controls ):         return this;
 
                 case XLS_TOKEN( sheetPr ):          getWorksheetSettings().importSheetPr( rAttribs );               return this;
@@ -332,6 +328,10 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                     aMceState.back() = MCE_STARTED;
                 }
             }
+        break;
+        case XLS_TOKEN(tableParts):
+            if(nElement == XLS_TOKEN(tablePart))
+                importDataTable(rAttribs);
         break;
     }
     return 0;
@@ -479,6 +479,11 @@ void WorksheetFragment::initializeImport()
     RelationsRef xPivotRels = getRelations().getRelationsFromTypeFromOfficeDoc( "pivotTable" );
     for( Relations::const_iterator aIt = xPivotRels->begin(), aEnd = xPivotRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new PivotTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
+
+    // import data table fragments related to this worksheet
+    RelationsRef xTableRels = getRelations().getRelationsFromTypeFromOfficeDoc("table");
+    for( Relations::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
+        importOoxFragment( new DataTableFragment( *this, getFragmentPathFromRelation( aIt->second ), aIt->first ) );
 }
 
 void WorksheetFragment::finalizeImport()
@@ -507,6 +512,12 @@ void WorksheetFragment::importDimension( const AttributeList& rAttribs )
     {
         extendUsedArea( aRange );
     }
+}
+
+void WorksheetFragment::importDataTable(const AttributeList& rAttribs)
+{
+    OUString aId = rAttribs.getXString(R_TOKEN(id), OUString());
+    SAL_INFO("sc.oox", aId);
 }
 
 void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )

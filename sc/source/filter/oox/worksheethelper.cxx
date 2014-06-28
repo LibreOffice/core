@@ -68,7 +68,6 @@
 #include "scitems.hxx"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
-#include "tablebuffer.hxx"
 #include "documentimport.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
@@ -269,6 +268,8 @@ public:
     /** returns the ExtLst entries that need to be filled */
     inline ExtLst&      getExtLst() { return maExtLst; }
 
+    TableDataBuffer& getTableDataBuffer() { return maTableData; }
+
     /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
     inline BiffSheetDrawing& getBiffDrawing() const { return *mxBiffDrawing; }
 
@@ -392,6 +393,7 @@ private:
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
     ExtLst              maExtLst;           /// List of extended elements
+    TableDataBuffer     maTableData;        /// List of data tables
     BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
@@ -933,10 +935,6 @@ void WorksheetGlobals::finalizeWorksheetImport()
 {
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     maSheetData.finalizeImport();
-    // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
-    // has been called already
-    getTables().applyAutoFilters();
-
     getCondFormats().finalizeImport();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );
     finalizeHyperlinkRanges();
@@ -1468,6 +1466,11 @@ VmlDrawing& WorksheetHelper::getVmlDrawing() const
 ExtLst& WorksheetHelper::getExtLst() const
 {
     return mrSheetGlob.getExtLst();
+}
+
+TableDataBuffer& WorksheetHelper::getTableDataBuffer()
+{
+    return mrSheetGlob.getTableDataBuffer();
 }
 
 void WorksheetHelper::setPageBreak( const PageBreakModel& rModel, bool bRowBreak )

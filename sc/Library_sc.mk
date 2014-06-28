@@ -185,6 +185,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/table5 \
     sc/source/core/data/table6 \
     sc/source/core/data/table7 \
+    sc/source/core/data/tabledata \
     sc/source/core/data/tabprotection \
     sc/source/core/data/types \
     sc/source/core/data/userdat \
