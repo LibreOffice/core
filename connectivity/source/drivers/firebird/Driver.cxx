@@ -110,6 +110,8 @@ void FirebirdDriver::disposing()
     osl_clearEnvironment(our_sFirebirdMsgVar.pData);
 #endif
 
+    OSL_VERIFY(fb_shutdown(0, 1));
+
     ODriver_BASE::disposing();
 }
 
