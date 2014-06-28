@@ -110,9 +110,9 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
 
     std::vector<TripleString> aTripleStrings;
 
-    sal_uInt16 nCount = aGroupArr.size();
+    size_t nCount = aGroupArr.size();
     sal_uInt16 nFound = 0;
-    for(sal_uInt16 i = 0; i < nCount; i++ )
+    for(size_t i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr[i];
         if(!rGroupName.isEmpty() && rGroupName != pGroup->sName)
@@ -250,12 +250,13 @@ void SwGlossaryList::Update()
     const OUString sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
-        sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
+        const sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
         for(sal_uInt16 i = 0; i < nGroupCount; i++)
         {
             OUString sGrpName = pGlossaries->GetGroupName(i);
-            sal_uInt16 nPath = (sal_uInt16)sGrpName.getToken(1, GLOS_DELIM).toInt32();
-            if( static_cast<size_t>(nPath) < rPathArr.size() )
+            const size_t nPath = static_cast<size_t>(
+                sGrpName.getToken(1, GLOS_DELIM).toInt32());
+            if( nPath < rPathArr.size() )
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
                 pGroup->sName = sGrpName;
@@ -285,7 +286,7 @@ void SwGlossaryList::Update()
             for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {
                 const OUString aTitle = aFiles[ nFiles ];
-                ::DateTime* pDT = (::DateTime*) aDateTimeArr[ static_cast<sal_uInt16>(nFiles) ];
+                ::DateTime* pDT = (::DateTime*) aDateTimeArr[ nFiles ];
 
                 OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() ));
 
@@ -311,16 +312,16 @@ void SwGlossaryList::Update()
                 delete pDT;
             }
 
-            sal_uInt16 nArrCount = aGroupArr.size();
-            for( sal_uInt16 i = nArrCount; i; --i)
+            const size_t nArrCount = aGroupArr.size();
+            for( size_t i = nArrCount; i; --i)
             {
                 // maybe remove deleted groups
                 AutoTextGroup* pGroup = aGroupArr[i - 1];
-                sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.getToken( 1,
-                                                        GLOS_DELIM).toInt32();
+                const size_t nGroupPath = static_cast<size_t>(
+                    pGroup->sName.getToken( 1, GLOS_DELIM).toInt32());
                 // Only the groups will be checked which are registered
                 // for the current subpath.
-                if( nGroupPath == static_cast<sal_uInt16>(nPath) )
+                if( nGroupPath == nPath )
                 {
                     bool bFound = false;
                     OUString sCompareGroup = pGroup->sName.getToken(0, GLOS_DELIM);
@@ -347,7 +348,7 @@ void SwGlossaryList::Timeout()
 
 AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
 {
-    for(sal_uInt16 i = 0; i < aGroupArr.size(); i++)
+    for(size_t i = 0; i < aGroupArr.size(); ++i)
     {
         AutoTextGroup* pRet = aGroupArr[i];
         if(pRet->sName == rGroupName)
@@ -382,11 +383,11 @@ bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *
     if(!bFilled)
         Update();
     sal_uInt16 nFound = 0;
-    sal_uInt16 nCount = aGroupArr.size();
+    const size_t nCount = aGroupArr.size();
     sal_Int32 nBeginLen = rBegin.getLength();
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
-    for(sal_uInt16 i = 0; i < nCount; i++ )
+    for(size_t i = 0; i < nCount; ++i)
     {
         AutoTextGroup* pGroup = aGroupArr[i];
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
@@ -407,8 +408,8 @@ bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *
 
 void    SwGlossaryList::ClearGroups()
 {
-    sal_uInt16 nCount = aGroupArr.size();
-    for( sal_uInt16 i = 0; i < nCount; ++i )
+    const size_t nCount = aGroupArr.size();
+    for( size_t i = 0; i < nCount; ++i )
         delete aGroupArr[ i ];
 
     aGroupArr.clear();
