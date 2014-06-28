@@ -1440,7 +1440,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
     {
         try
         {
-            // the substorage still can not be locked by the embedded object conteiner
+            // the substorage still can not be locked by the embedded object container
             OUString aObjReplElement( "ObjectReplacements" );
             if ( _xStorage->hasByName( aObjReplElement ) && _xStorage->isStorageElement( aObjReplElement ) )
                 _xStorage->removeElement( aObjReplElement );
