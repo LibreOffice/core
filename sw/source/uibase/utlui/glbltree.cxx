@@ -225,7 +225,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             // Get data
             FileList aFileList;
             aData.GetFileList( FORMAT_FILE_LIST, aFileList );
-            for ( sal_uInt16 n = (sal_uInt16)aFileList.Count(); n--; )
+            for ( size_t n = aFileList.Count(); n--; )
             {
                 sFileName = aFileList.GetFile(n);
                 InsertRegion(pCnt, &sFileName);
@@ -327,7 +327,7 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
     if(pActiveShell &&
         !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
-        sal_uInt16 nEnableFlags = GetEnableFlags();
+        const sal_uInt16 nEnableFlags = GetEnableFlags();
         pPop = new PopupMenu;
         PopupMenu* pSubPop1 = new PopupMenu;
         PopupMenu* pSubPop2 = new PopupMenu;
@@ -382,7 +382,7 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
 
 void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
 {
-    sal_uInt16 nEnableFlags = GetEnableFlags();
+    const sal_uInt16 nEnableFlags = GetEnableFlags();
     if(FN_GLOBAL_OPEN == nTbxId)
     {
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
@@ -1215,7 +1215,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
         const OUString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
+    const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
