@@ -354,7 +354,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 
                     OSL_ENSURE( xContainer.is(),
                                 "PropertySetRegistry::openPropertySet - "
-                                "No conteiner!" );
+                                "No container!" );
 
                     if ( xFac.is() && xBatch.is() && xContainer.is() )
                     {
