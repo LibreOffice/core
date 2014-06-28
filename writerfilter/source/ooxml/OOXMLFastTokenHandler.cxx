@@ -28,7 +28,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
-#include "gperffasttoken.hxx"
+#include "ooxml/gperffasttoken.hxx"
 #if defined __clang__
 #if __has_warning("-Wdeprecated-register")
 #pragma GCC diagnostic pop
