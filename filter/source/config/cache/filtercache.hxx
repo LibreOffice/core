@@ -235,6 +235,11 @@ class FilterCache : public BaseLock
         OUStringList m_lChangedFrameLoaders;
         OUStringList m_lChangedContentHandlers;
 
+        /// standard property names for filter config keyed by EReadOption
+        css::uno::Sequence< OUString > m_aStandardProps[4];
+
+        /// type property names for filter config keyed by EReadOption
+        css::uno::Sequence< OUString > m_aTypeProps[4];
 
         /// readonly acccess to the module configuration of OOo
         css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;

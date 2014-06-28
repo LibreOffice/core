@@ -33,6 +33,8 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -58,8 +60,51 @@ FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
-}
+    int i = 0;
+    OUString sStandardProps[9];
 
+    sStandardProps[i++] = PROPNAME_USERDATA;
+    sStandardProps[i++] = PROPNAME_TEMPLATENAME;
+    // E_READ_UPDATE only above
+    sStandardProps[i++] = PROPNAME_TYPE;
+    sStandardProps[i++] = PROPNAME_FILEFORMATVERSION;
+    sStandardProps[i++] = PROPNAME_UICOMPONENT;
+    sStandardProps[i++] = PROPNAME_FILTERSERVICE;
+    sStandardProps[i++] = PROPNAME_DOCUMENTSERVICE;
+    sStandardProps[i++] = PROPNAME_EXPORTEXTENSION;
+    sStandardProps[i++] = PROPNAME_FLAGS; // must be last.
+    assert(i == SAL_N_ELEMENTS(sStandardProps));
+
+    // E_READ_NOTHING -> creative nothingness.
+    m_aStandardProps[E_READ_STANDARD] =
+        css::uno::Sequence< OUString >(sStandardProps + 2, 7);
+    m_aStandardProps[E_READ_UPDATE] =
+        css::uno::Sequence< OUString >(sStandardProps, 2);
+    m_aStandardProps[E_READ_ALL] =
+        css::uno::Sequence< OUString >(sStandardProps,
+                                       SAL_N_ELEMENTS(sStandardProps));
+
+    i = 0;
+    OUString sTypeProps[7];
+    sTypeProps[i++] = PROPNAME_MEDIATYPE;
+    // E_READ_UPDATE only above
+    sTypeProps[i++] = PROPNAME_PREFERREDFILTER;
+    sTypeProps[i++] = PROPNAME_DETECTSERVICE;
+    sTypeProps[i++] = PROPNAME_URLPATTERN;
+    sTypeProps[i++] = PROPNAME_EXTENSIONS;
+    sTypeProps[i++] = PROPNAME_PREFERRED;
+    sTypeProps[i++] = PROPNAME_CLIPBOARDFORMAT;
+    assert(i == SAL_N_ELEMENTS(sTypeProps));
+
+    // E_READ_NOTHING -> more creative nothingness.
+    m_aTypeProps[E_READ_STANDARD] =
+        css::uno::Sequence< OUString >(sTypeProps + 1, 6);
+    m_aTypeProps[E_READ_UPDATE] =
+        css::uno::Sequence< OUString >(sTypeProps, 1);
+    m_aTypeProps[E_READ_ALL] =
+        css::uno::Sequence< OUString >(sTypeProps,
+                                       SAL_N_ELEMENTS(sTypeProps));
+}
 
 
 FilterCache::~FilterCache()
@@ -1615,79 +1660,71 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     {
         case E_TYPE :
         {
-            // read standard properties of a type
-            if (
-                (eOption == E_READ_STANDARD) ||
-                (eOption == E_READ_ALL     )
-               )
+            assert(eOption >= 0 && eOption <= E_READ_ALL);
+            css::uno::Sequence< OUString > &rNames = m_aTypeProps[eOption];
+
+            // read standard properties of a filter
+            if (rNames.getLength() > 0)
             {
-                aItem[PROPNAME_PREFERREDFILTER] = xItem->getByName(PROPNAME_PREFERREDFILTER);
-                aItem[PROPNAME_DETECTSERVICE  ] = xItem->getByName(PROPNAME_DETECTSERVICE  );
-                aItem[PROPNAME_URLPATTERN     ] = xItem->getByName(PROPNAME_URLPATTERN     );
-                aItem[PROPNAME_EXTENSIONS     ] = xItem->getByName(PROPNAME_EXTENSIONS     );
-                aItem[PROPNAME_PREFERRED      ] = xItem->getByName(PROPNAME_PREFERRED      );
-                aItem[PROPNAME_CLIPBOARDFORMAT] = xItem->getByName(PROPNAME_CLIPBOARDFORMAT);
+                css::uno::Reference< css::beans::XMultiPropertySet >
+                    xPropSet( xItem, css::uno::UNO_QUERY_THROW);
+                css::uno::Sequence< css::uno::Any > aValues;
+                aValues = xPropSet->getPropertyValues(rNames);
+
+                for (sal_Int32 i = 0; i < aValues.getLength(); i++)
+                    aItem[rNames[i]] = aValues[i];
             }
+
             // read optional properties of a type
             // no else here! Is an additional switch ...
-            if (
-                (eOption == E_READ_UPDATE) ||
-                (eOption == E_READ_ALL   )
-               )
-            {
-                aItem[PROPNAME_MEDIATYPE      ] = xItem->getByName(PROPNAME_MEDIATYPE      );
+            if (eOption == E_READ_UPDATE || eOption == E_READ_ALL)
                 impl_readPatchUINames(xItem, aItem);
-            }
         }
         break;
 
 
         case E_FILTER :
         {
-            // read standard properties of a filter
-            if (
-                (eOption == E_READ_STANDARD) ||
-                (eOption == E_READ_ALL     )
-               )
-            {
-                aItem[PROPNAME_TYPE             ] = xItem->getByName(PROPNAME_TYPE             );
-                aItem[PROPNAME_FILEFORMATVERSION] = xItem->getByName(PROPNAME_FILEFORMATVERSION);
-                aItem[PROPNAME_UICOMPONENT      ] = xItem->getByName(PROPNAME_UICOMPONENT      );
-                aItem[PROPNAME_FILTERSERVICE    ] = xItem->getByName(PROPNAME_FILTERSERVICE    );
-                aItem[PROPNAME_DOCUMENTSERVICE  ] = xItem->getByName(PROPNAME_DOCUMENTSERVICE  );
-                aItem[PROPNAME_EXPORTEXTENSION  ] = xItem->getByName(PROPNAME_EXPORTEXTENSION  );
+            assert(eOption >= 0 && eOption <= E_READ_ALL);
+            css::uno::Sequence< OUString > &rNames = m_aStandardProps[eOption];
 
-                // special handling for flags! Convert it from a list of names to its
-                // int representation ...
-                css::uno::Sequence< OUString > lFlagNames;
-                if (xItem->getByName(PROPNAME_FLAGS) >>= lFlagNames)
-                    aItem[PROPNAME_FLAGS] <<= FilterCache::impl_convertFlagNames2FlagField(lFlagNames);
-            }
-            // read optional properties of a filter
-            // no else here! Is an additional switch ...
-            if (
-                (eOption == E_READ_UPDATE) ||
-                (eOption == E_READ_ALL   )
-               )
+            // read standard properties of a filter
+            if (rNames.getLength() > 0)
             {
-                aItem[PROPNAME_USERDATA    ] = xItem->getByName(PROPNAME_USERDATA    );
-                aItem[PROPNAME_TEMPLATENAME] = xItem->getByName(PROPNAME_TEMPLATENAME);
+                css::uno::Reference< css::beans::XMultiPropertySet >
+                    xPropSet( xItem, css::uno::UNO_QUERY_THROW);
+                css::uno::Sequence< css::uno::Any > aValues;
+                aValues = xPropSet->getPropertyValues(rNames);
+
+                for (sal_Int32 i = 0; i < rNames.getLength(); i++)
+                {
+                    OUString &rPropName = rNames[i];
+                    if (i != rNames.getLength() - 1 || rPropName != PROPNAME_FLAGS)
+                        aItem[rPropName] = aValues[i];
+                    else
+                    {
+                        assert(rPropName == PROPNAME_FLAGS);
+                        // special handling for flags! Convert it from a list of names to its
+                        // int representation ...
+                        css::uno::Sequence< OUString > lFlagNames;
+                        if (aValues[i] >>= lFlagNames)
+                            aItem[rPropName] <<= FilterCache::impl_convertFlagNames2FlagField(lFlagNames);
+                    }
+                }
+            }
 //TODO remove it if moving of filter uinames to type uinames
 //       will be finished really
 #ifdef AS_ENABLE_FILTER_UINAMES
+            if (eOption == E_READ_UPDATE || eOption == E_READ_ALL)
                 impl_readPatchUINames(xItem, aItem);
 #endif // AS_ENABLE_FILTER_UINAMES
-            }
         }
         break;
-
 
         case E_FRAMELOADER :
         case E_CONTENTHANDLER :
-        {
             aItem[PROPNAME_TYPES] = xItem->getByName(PROPNAME_TYPES);
-        }
-        break;
+            break;
         default: break;
     }
 
@@ -2275,7 +2312,6 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
         const OUString& sItem = pIt->first;
         ::comphelper::SequenceAsHashMap lProps(pIt->second);
         OUStringList                    lTypes(lProps[PROPNAME_TYPES]);
-
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }
