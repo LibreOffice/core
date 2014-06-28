@@ -734,12 +734,12 @@ css::uno::Any Access::getPropertyValue(OUString const & PropertyName)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    rtl::Reference< ChildAccess > child(getChild(PropertyName));
-    if (!child.is()) {
+
+    css::uno::Any value;
+    if (!getByNameFast(PropertyName, value))
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
-    }
-    return child->asValue();
+    return value;
 }
 
 void Access::addPropertyChangeListener(
