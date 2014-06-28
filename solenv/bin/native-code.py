@@ -228,7 +228,10 @@ if options.java:
     volatile void *p = (void *) Java_org_libreoffice_android_AppSupport_runMain;
 
     extern void Java_org_libreoffice_android_AppSupport_renderVCL();
-    p = (void *) Java_org_libreoffice_android_AppSupport_renderVCL;""")
+    p = (void *) Java_org_libreoffice_android_AppSupport_renderVCL;
+
+    extern void Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2();
+    p = (void *) Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2;""")
 
 print ("""
     return map;

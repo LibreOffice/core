@@ -42,11 +42,11 @@ struct engine {
 };
 
 /* These are valid / used in all apps. */
-static const char *data_dir;
-static const char *cache_dir;
-static void *apk_file;
-static int apk_file_size;
-static JavaVM *the_java_vm;
+const char *data_dir;
+const char *cache_dir;
+void *apk_file;
+int apk_file_size;
+JavaVM *the_java_vm;
 
 /* Zip data structures */
 
@@ -1019,7 +1019,7 @@ redirect_to_null(void)
 }
 
 __attribute__ ((visibility("default")))
-jboolean
+void
 Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
                                                        jobject clazz,
                                                        jboolean state)
@@ -1031,22 +1031,22 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
     (void) env;
     (void) clazz;
 
-   if (state == current)
-        return current;
+    if (state == current)
+        return;
 
     if (state == JNI_FALSE) {
         if (!redirect_to_null())
-            return current;
+            return;
     } else {
         if (pipe(stdout_pipe) == -1) {
             LOGE("redirect_stdio: Could not create pipes: %s", strerror(errno));
-            return current;
+            return;
         }
         if (pipe(stderr_pipe) == -1) {
             LOGE("redirect_stdio: Could not create pipes: %s", strerror(errno));
             close(stdout_pipe[0]);
             close(stdout_pipe[1]);
-            return current;
+            return;
         }
         LOGI("redirect_stdio: stdout pipe: [%d,%d], stderr pipe: [%d,%d]",
              stdout_pipe[0], stdout_pipe[1], stderr_pipe[0], stderr_pipe[1]);
@@ -1057,7 +1057,7 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
             close(stdout_pipe[1]);
             close(stderr_pipe[0]);
             close(stderr_pipe[1]);
-            return current;
+            return;
         }
 
         if (dup2(stderr_pipe[1], 2) == -1) {
@@ -1070,7 +1070,7 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
             close(stdout_pipe[1]);
             close(stderr_pipe[0]);
             close(stderr_pipe[1]);
-            return current;
+            return;
         }
         close(stdout_pipe[1]);
         close(stderr_pipe[1]);
@@ -1082,11 +1082,11 @@ Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env,
             redirect_to_null();
             close(stdout_pipe[0]);
             close(stderr_pipe[0]);
-            return current;
+            return;
         }
     }
     current = state;
-    return current;
+    return;
 }
 
 __attribute__ ((visibility("default")))

@@ -24,7 +24,9 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-//#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
+#include <LibreOfficeKit/LibreOfficeKit.h>
+
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "LibreOfficeKit", __VA_ARGS__))
 
 /* These are valid / used in all apps. */
@@ -34,8 +36,12 @@ extern void *apk_file;
 extern int apk_file_size;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
-extern jboolean Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
+extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
 extern void Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env, jobject clazz);
+
+extern LibreOfficeKit *libreofficekit_hook(const char* install_path);
+
+static LibreOfficeKit* pOffice;
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
@@ -49,12 +55,12 @@ Java_org_libreoffice_android_LibreOfficeKit_putenv(JNIEnv* env,
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
-jboolean
+void
 Java_org_libreoffice_android_LibreOfficeKit_redirect_1stdio(JNIEnv* env,
                                                             jobject clazz,
                                                             jboolean state)
 {
-    return Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
+    Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
 }
 
 /// Call the same method from Bootstrap.
@@ -119,10 +125,25 @@ Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_
     (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
 
     if (!setup_cdir())
+    {
+        LOGE("setup_cdir failed");
         return JNI_FALSE;
+    }
 
     if (!setup_assets_tree())
+    {
+        LOGE("setup_assets_tree failed");
         return JNI_FALSE;
+    }
+
+    pOffice = libreofficekit_hook(data_dir);
+    if (!pOffice)
+    {
+        LOGE("libreofficekit_hook returned null");
+        return JNI_FALSE;
+    }
+
+    LOGI("LibreOfficeKit successfully initialized");
 
     return JNI_TRUE;
 }
