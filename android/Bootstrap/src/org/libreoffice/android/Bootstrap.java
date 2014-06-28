@@ -60,7 +60,7 @@ public final class Bootstrap
 
     // A method that starts a thread to redirect stdout and stderr writes to
     // the Android logging mechanism, or stops the redirection.
-    public static native boolean redirect_stdio(boolean state);
+    public static native void redirect_stdio(boolean state);
 
     // The DIB returned by css.awt.XBitmap.getDIB is in BGR_888 form, at least
     // for Writer documents. We need it in Android's Bitmap.Config.ARGB_888

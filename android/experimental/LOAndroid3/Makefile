@@ -13,7 +13,7 @@ BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
-	$< -g core -g writer > $@
+	$< -j -g core -g writer > $@
 
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic

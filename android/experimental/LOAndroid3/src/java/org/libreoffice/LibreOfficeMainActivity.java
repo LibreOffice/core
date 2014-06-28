@@ -16,7 +16,7 @@ import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.LayerView;
 
-import org.libreoffice.android.Bootstrap;
+import org.libreoffice.android.LibreOfficeKit;
 
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -74,18 +74,19 @@ public class LibreOfficeMainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-            Bootstrap.setup(this);
-            Bootstrap.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
+            LibreOfficeKit.init(this);
+            LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
 
             setContentView(R.layout.activity_main);
 
             Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
+            /*
             String input = "/assets/test1.odt";
 
             String[] argv = { "lo-document-loader", input };
 
-            Bootstrap.setCommandArgs(argv);
+            LibreOfficeKit.setCommandArgs(argv);
 
             Bootstrap.initVCL();
 
@@ -102,7 +103,7 @@ public class LibreOfficeMainActivity extends Activity {
 
             componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
             Log.i(LOGTAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
-
+            */
         } catch (Exception e) {
             e.printStackTrace(System.err);
             //finish();
@@ -143,3 +144,5 @@ public class LibreOfficeMainActivity extends Activity {
         return mLayerController;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
