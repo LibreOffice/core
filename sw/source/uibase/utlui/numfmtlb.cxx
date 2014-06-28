@@ -206,7 +206,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         }
 
         const SvNumberformat* pFmt;
-        sal_uInt16 nPos, i = 0;
+        sal_Int32 i = 0;
         sal_uLong  nFormat;
         Color* pCol;
         double fVal = GetDefValue( nFormatType );
@@ -241,7 +241,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                 nFormat != nSysShortDateFmt &&
                 nFormat != nSysLongDateFmt)
             {
-                nPos = InsertEntry( sValue );
+                const sal_Int32 nPos = InsertEntry( sValue );
                 SetEntryData( nPos, (void*)nFormat );
 
                 if( nFormat == pFormatter->GetStandardFormat(
@@ -253,7 +253,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
 
         if (!pOwnFormatter)
         {
-            nPos = InsertEntry(SW_RESSTR( STR_DEFINE_NUMBERFORMAT ));
+            const sal_Int32 nPos = InsertEntry(SW_RESSTR( STR_DEFINE_NUMBERFORMAT ));
             SetEntryData( nPos, NULL );
         }
 
@@ -290,7 +290,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     sal_uLong nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
 
-    for (sal_uInt16 i = 0; i < GetEntryCount(); i++)
+    for (sal_Int32 i = 0; i < GetEntryCount(); i++)
     {
         if (nFormat == (sal_uLong)GetEntryData(i))
         {
@@ -315,7 +315,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
     }
 
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     while ((sal_uLong)GetEntryData(nPos) == ULONG_MAX)
         nPos++;
 
@@ -361,7 +361,7 @@ sal_uLong NumFormatListBox::GetFormat() const
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    const sal_Int32 nPos = pBox->GetSelectEntryPos();
     OUString sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
@@ -410,7 +410,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             {
                 const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)pItem)->GetDelArray();
 
-                for ( sal_uInt16 i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
+                for ( sal_uInt32 i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
                     pFormatter->DeleteEntry( pDelArr[i] );
             }
 
