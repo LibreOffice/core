@@ -246,7 +246,7 @@ namespace dbaui
             m_aJavaDriverLabel.Show(bEnableJDBC);
             m_aJavaDriver.Show(bEnableJDBC);
             m_aTestJavaDriver.Show(bEnableJDBC);
-            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().isEmpty() );
+            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().trim().isEmpty() );
             m_aFL3.Show(bEnableJDBC);
 
             checkTestConnection();
@@ -307,10 +307,11 @@ namespace dbaui
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aJavaDriver.GetText().isEmpty() )
+            if ( !m_aJavaDriver.GetText().trim().isEmpty() )
             {
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aJavaDriver.GetText());
+                m_aJavaDriver.SetText(m_aJavaDriver.GetText().trim()); // fdo#68341
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aJavaDriver.GetText().trim());
             }
         }
         catch(Exception&)
@@ -329,14 +330,14 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
-            bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().isEmpty());
+            bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().trim().isEmpty());
         m_aTestConnection.Enable(bEnableTestConnection);
         return true;
     }
     IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aJavaDriver )
-            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().isEmpty() );
+            m_aTestJavaDriver.Enable( !m_aJavaDriver.GetText().trim().isEmpty() );
 
         checkTestConnection();
         // tell the listener we were modified

@@ -479,7 +479,7 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( m_aETDriverClass.GetText().isEmpty() )
+        if ( m_aETDriverClass.GetText().trim().isEmpty() )
         {
             m_aETDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aETDriverClass.SetModifyFlag();
@@ -498,10 +498,11 @@ using namespace ::com::sun::star;
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aETDriverClass.GetText().isEmpty() )
+            if ( !m_aETDriverClass.GetText().trim().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                m_aETDriverClass.SetText(m_aETDriverClass.GetText().trim()); // fdo#68341
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
             }
         }
@@ -519,8 +520,8 @@ using namespace ::com::sun::star;
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aETDriverClass )
-            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().isEmpty() );
-        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
+            m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().trim().isEmpty() );
+        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().trim().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -611,6 +612,7 @@ using namespace ::com::sun::star;
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                m_aETDriverClass.SetText(m_aETDriverClass.GetText().trim()); // fdo#68341
                 bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
             }
         }
