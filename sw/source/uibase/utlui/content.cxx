@@ -216,11 +216,12 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case CONTENT_TYPE_OUTLINE   :
         {
             sTypeToken = "outline";
-            sal_uInt16 nOutlineCount = nMemberCount =
-                static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
+            const size_t nOutlineCount =
+                pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            nMemberCount = static_cast<sal_uInt16>(nOutlineCount);
             if(nOutlineLevel < MAXLEVEL)
             {
-                for(sal_uInt16 j = 0; j < nOutlineCount; j++)
+                for(size_t j = 0; j < nOutlineCount; ++j)
                 {
                     if(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel )
                         nMemberCount --;
@@ -270,7 +271,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case CONTENT_TYPE_REGION :
         {
             SwContentArr*   pOldMember = 0;
-            sal_uInt16 nOldRegionCount = 0;
+            size_t nOldRegionCount = 0;
             bool bInvalidate = false;
             if(!pMember)
                 pMember = new SwContentArr;
@@ -310,7 +311,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
 
-                    sal_uInt16 nPos = pMember->size() - 1;
+                    const size_t nPos = pMember->size() - 1;
                     if(nOldRegionCount > nPos &&
                         ((*pOldMember)[nPos])->IsInvisible()
                                 != pCnt->IsInvisible())
@@ -823,19 +824,17 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bIsImageListInitialized(false),
         bIsKeySpace(false)
 {
-    sal_uInt16 i;
-
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
-    for( i = 0; i < CONTENT_TYPE_MAX; i++)
+    for( sal_uInt16 i = 0; i < CONTENT_TYPE_MAX; i++)
     {
         aActiveContentArr[i]    = 0;
         aHiddenContentArr[i]    = 0;
     }
-    for( i = 0; i < CONTEXT_COUNT; i++  )
+    for( sal_uInt16 i = 0; i < CONTEXT_COUNT; i++  )
     {
         aContextStrings[i] = SW_RESSTR(i+ST_CONTEXT_FIRST);
     }
@@ -955,10 +954,9 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     if( pCnt == NULL || pCnt->GetParent() == NULL)
         return OUString();
 
-    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
     SdrObject* pTemp;
 
-    switch(nJumpType)
+    switch(pCnt->GetParent()->GetType())
     {
         case CONTENT_TYPE_DRAWOBJECT:
             {
@@ -1127,13 +1125,12 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     PopupMenu* pSubPop3 = new PopupMenu;
     PopupMenu* pSubPop4 = new PopupMenu; // Edit
 
-    sal_uInt16 i;
-    for(i = 1; i <= MAXLEVEL; i++ )
+    for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
     {
         pSubPop1->InsertItem( i + 100, OUString::number(i));
     }
     pSubPop1->CheckItem(100 + nOutlineLevel);
-    for(i=0; i < 3; i++ )
+    for(sal_uInt16 i=0; i < 3; ++i)
     {
         pSubPop2->InsertItem( i + 201, aContextStrings[
                 ST_HYPERLINK - ST_CONTEXT_FIRST + i]);
@@ -1316,7 +1313,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
             OSL_ENSURE(pParent->GetUserData(), "no UserData?");
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
 
-            sal_uInt16 nCount = pCntType->GetMemberCount();
+            const sal_uInt16 nCount = pCntType->GetMemberCount();
              // Add for outline plus/minus
              if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
              {
@@ -1326,7 +1323,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                      const SwContent* pCnt = pCntType->GetMember(i);
                      if(pCnt)
                      {
-                         sal_uInt16 nLevel = ((SwOutlineContent*)pCnt)->GetOutlineLevel();
+                         const sal_uInt16 nLevel = ((SwOutlineContent*)pCnt)->GetOutlineLevel();
                          OUString sEntry = pCnt->GetName();
                          if(sEntry.isEmpty())
                              sEntry = sSpace;
@@ -1401,8 +1398,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
 SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 {
     SdrObject *pRetObj = NULL;
-    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
-    switch(nJumpType)
+    switch(pCnt->GetParent()->GetType())
     {
         case CONTENT_TYPE_DRAWOBJECT:
         {
@@ -1441,7 +1437,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         if(lcl_IsContentType(pParent))
         {
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
-            sal_uInt16 nOr = 1 << pCntType->GetType(); //linear -> Bitposition
+            const sal_Int32 nOr = 1 << pCntType->GetType(); //linear -> Bitposition
             if(bIsActive || bIsConstant)
             {
                 nActiveBlock |= nOr;
@@ -1501,8 +1497,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
             if(bIsRoot)
                 return bRet = false;
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
-            sal_uInt16 nAnd = 1 << pCntType->GetType();
-            nAnd = ~nAnd;
+            const sal_Int32 nAnd = ~(1 << pCntType->GetType());
             if(bIsActive || bIsConstant)
             {
                 nActiveBlock &= nAnd;
@@ -1578,7 +1573,7 @@ void SwContentTree::Display( bool bActive )
     // -> the user data here are no longer valid!
     SvTreeListEntry* pOldSelEntry = FirstSelected();
     OUString sEntryName;  // Name of the entry
-    sal_uInt16 nEntryRelPos = 0; // relative position to their parent
+    sal_uLong nEntryRelPos = 0; // relative position to their parent
     sal_uInt32 nOldEntryCount = GetEntryCount();
     sal_Int32 nOldScrollPos = 0;
     if(pOldSelEntry)
@@ -1595,7 +1590,7 @@ void SwContentTree::Display( bool bActive )
         }
         if(GetParent(pOldSelEntry))
         {
-            nEntryRelPos = (sal_uInt16)(GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParantEntry));
+            nEntryRelPos = GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParantEntry);
         }
     }
     Clear();
@@ -1649,7 +1644,7 @@ void SwContentTree::Display( bool bActive )
                         // Now maybe select a additional child
                         SvTreeListEntry* pChild = pEntry;
                         SvTreeListEntry* pTemp = 0;
-                        sal_uInt16 nPos = 1;
+                        sal_uLong nPos = 1;
                         while(0 != (pChild = Next(pChild)))
                         {
                             // The old text will be slightly favored
@@ -1727,7 +1722,7 @@ void SwContentTree::Display( bool bActive )
                 // Now maybe select a additional child
                 SvTreeListEntry* pChild = pParent;
                 SvTreeListEntry* pTemp = 0;
-                sal_uInt16 nPos = 1;
+                sal_uLong nPos = 1;
                 while(0 != (pChild = Next(pChild)))
                 {
                     // The old text will be slightly favored
@@ -1782,7 +1777,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     OUString sEntry;
     SwContent* pCnt = ((SwContent*)pEntry->GetUserData());
 
-    sal_uInt16 nActType = pCnt->GetParent()->GetType();
+    const sal_uInt16 nActType = pCnt->GetParent()->GetType();
     OUString sUrl;
     bool bOutline = false;
     OUString sOutlineText;
@@ -1790,7 +1785,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     {
         case CONTENT_TYPE_OUTLINE:
         {
-            sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
+            const sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
             OSL_ENSURE(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
                        "outlinecnt changed");
 
@@ -1808,10 +1803,8 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                          nLevel <= pTxtNd->GetActualListLevel();
                          nLevel++ )
                     {
-                        sal_uInt16 nVal = (sal_uInt16)aNumVector[nLevel];
-                        nVal ++;
-                        nVal = nVal - pOutlRule->Get(nLevel).GetStart();
-                        sEntry += OUString::number( nVal );
+                        const SwNumberTree::tSwNumTreeNumber nVal = aNumVector[nLevel] + 1;
+                        sEntry += OUString::number( nVal - pOutlRule->Get(nLevel).GetStart() );
                         sEntry += ".";
                     }
                 }
@@ -1983,23 +1976,22 @@ bool SwContentTree::HasContentChanged()
             bRepaint = true;
         else
         {
-            sal_uInt16 nType = ((SwContentType*)pEntry->GetUserData())->GetType();
+            const sal_uInt16 nType = ((SwContentType*)pEntry->GetUserData())->GetType();
             bOutline = nRootType == CONTENT_TYPE_OUTLINE;
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
                 bRepaint = true;
             else
             {
-                sal_uInt16 nSelLevel = USHRT_MAX;
-
                 SvTreeListEntry* pFirstSel;
                 if(bOutline &&
                         0 != ( pFirstSel = FirstSelected()) &&
                             lcl_IsContent(pFirstSel))
                 {
-                    nSelLevel = ((SwOutlineContent*)pFirstSel->GetUserData())->GetOutlineLevel();
+                    const sal_uInt16 nSelLevel =
+                        ((SwOutlineContent*)pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
-                    sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
+                    const sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
                     if (nOutlinePos != USHRT_MAX &&
                         pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
                         bRepaint = true;
@@ -2014,7 +2006,7 @@ bool SwContentTree::HasContentChanged()
                             bRepaint = true;
                     else
                     {
-                        sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                        const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
                         for(sal_uInt16 j = 0; j < nChildCount; j++)
                         {
                             pEntry = Next(pEntry);
@@ -2057,8 +2049,8 @@ bool SwContentTree::HasContentChanged()
         {
             bool bNext = true; // at least a next must be
             SwContentType* pTreeType = (SwContentType*)pEntry->GetUserData();
-            sal_uInt16 nType = pTreeType->GetType();
-            sal_uInt16 nTreeCount = pTreeType->GetMemberCount();
+            const sal_uInt16 nTreeCount = pTreeType->GetMemberCount();
+            const sal_uInt16 nType = pTreeType->GetType();
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
                 bRepaint = true;
@@ -2073,7 +2065,7 @@ bool SwContentTree::HasContentChanged()
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
-                    sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                    const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
                     if((nType == CONTENT_TYPE_OUTLINE) && bLevelOrVisibiblityChanged)
                         bRepaint = true;
                     if(bLevelOrVisibiblityChanged)
@@ -2108,7 +2100,7 @@ bool SwContentTree::HasContentChanged()
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
                     bool bRemoveChildren = false;
-                    sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
+                    const sal_uInt16 nChildCount = (sal_uInt16)GetChildCount(pEntry);
                     if( nChildCount != pArrType->GetMemberCount() )
                     {
                         bRemoveChildren = true;
@@ -2321,7 +2313,6 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                             pEntry = Next(pEntry);
                             nActEndPos++;
                         }
-                        sal_uInt16 nDest;
                         if(nDir == 1)
                         {
                             // If the last entry is to be moved it is over!
@@ -2330,8 +2321,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                             {
                                 // pEntry now points to the following entry of the last
                                 // selected entry.
-                                nDest = nActEndPos;
-                                nDest++;
+                                sal_uInt16 nDest = nActEndPos + 1;
                                 // here needs to found the next record after next.
                                 // The selection must be inserted in front of.
                                 while(pEntry )
@@ -2355,7 +2345,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                         }
                         else
                         {
-                            nDest = nActPos;
+                            sal_uInt16 nDest = nActPos;
                             pEntry = pFirstEntry;
                             while(pEntry && nDest )
                             {
@@ -2668,8 +2658,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
                 SwContent* pCnt = (SwContent*)pEntry->GetUserData();
 
-                sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
-                switch(nJumpType)
+                switch(pCnt->GetParent()->GetType())
                 {
                     case CONTENT_TYPE_DRAWOBJECT:
                     {
@@ -2829,7 +2818,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                sal_uInt16 nMemberCount = ((SwContentType*)pUserData)->GetMemberCount();
+                const sal_uInt16 nMemberCount = ((SwContentType*)pUserData)->GetMemberCount();
                 sEntry = OUString::number(nMemberCount);
                 sEntry += " ";
                 sEntry += nMemberCount == 1
@@ -3060,7 +3049,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 {
     SwContent* pCnt = (SwContent*)pEntry->GetUserData();
     GotoContent(pCnt);
-    sal_uInt16 nType = pCnt->GetParent()->GetType();
+    const sal_uInt16 nType = pCnt->GetParent()->GetType();
     sal_uInt16 nSlot = 0;
 
     uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
@@ -3282,8 +3271,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     pActiveShell->EnterStdMode();
 
     bool bSel = false;
-    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
-    switch(nJumpType)
+    switch(pCnt->GetParent()->GetType())
     {
         case CONTENT_TYPE_OUTLINE   :
         {
@@ -3445,7 +3433,7 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
         const OUString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
+    const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, pCol->GetText() );

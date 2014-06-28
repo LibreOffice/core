@@ -69,7 +69,7 @@ class SwContentTree : public SvTreeListBox
     std::map< void*, bool > mOutLineNodeMap;
 
     sal_Int32           nActiveBlock;
-    sal_uInt16              nHiddenBlock;
+    sal_Int32           nHiddenBlock;
     sal_uInt16              nRootType;
     sal_uInt16              nLastSelType;
     sal_uInt8               nOutlineLevel;
