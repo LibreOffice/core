@@ -2707,38 +2707,85 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
     if test -z "$with_macosx_sdk"; then
-        if test -d /Developer/SDKs/MacOSX10.6.sdk; then
-            with_macosx_sdk=10.6
-        elif test -d /Developer-old/SDKs/MacOSX10.6.sdk; then
-            with_macosx_sdk=10.6
-        elif test -d /Xcode3/SDKs/MacOSX10.6.sdk; then
-            with_macosx_sdk=10.6
-        elif test -d /Developer/SDKs/MacOSX10.7.sdk; then
-            with_macosx_sdk=10.7
-        elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk"; then
-            with_macosx_sdk=10.6
-        elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"; then
-            with_macosx_sdk=10.7
-        elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"; then
-            with_macosx_sdk=10.8
-        elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"; then
-            with_macosx_sdk=10.9
-        elif test -x /usr/bin/xcode-select; then
-            xcodepath="`xcode-select -print-path`"
-            if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk"; then
+        for MACOSX_SDK_PATH in "/Developer/SDKs/MacOSX10.6.sdk /Developer-old/SDKs/MacOSX10.6.sdk /Xcode3/SDKs/MacOSX10.6.sdk"; do
+            if test -d "$MACOSX_SDK_PATH"; then
                 with_macosx_sdk=10.6
-            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"; then
+                break
+            fi
+        done
+        if test -z "$with_macosx_sdk"; then
+            MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.7.sdk"
+            if test -d "$MACOSX_SDK_PATH"; then
                 with_macosx_sdk=10.7
-            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"; then
-                with_macosx_sdk=10.8
-            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"; then
-                with_macosx_sdk=10.9
+            else
+                for with_macosx_sdk in 10.6 10.7 10.8 10.9 10.10; do
+                    MACOSX_SDK_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOS${with_macosx_sdk}.sdk"
+                    if test -d "$MACOSX_SDK_PATH"; then
+                        break
+                    fi
+                done
+                if test ! -d "$MACOSX_SDK_PATH"; then
+                    if test -x /usr/bin/xcrun; then
+                        for with_macosx_sdk in 10.6 10.7 10.8 10.9 10.10; do
+                            MACOSX_SDK_PATH=`xcrun --sdk macosx$with_macosx_sdk --show-sdk-path 2>/dev/null`
+                            if test -d "$MACOSX_SDK_PATH"; then
+                                break
+                            fi
+                        done
+                        if test ! -d "$MACOSX_SDK_PATH"; then
+                            AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
+                        fi
+                    else
+                        AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
+                    fi
+                fi
             fi
         fi
-        if test -z "$with_macosx_sdk"; then
-            AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
+    else
+        # Next find it (again, if we deduced its version above by finding
+        # it... but we need to look for it once more in case
+        # --with-macosx-sdk was given so that the above search did not
+        # happen).
+        case $with_macosx_sdk in
+        10.5|10.6)
+            if test -d /Developer-old/SDKs/MacOSX${with_macosx_sdk}.sdk; then
+                MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX${with_macosx_sdk}.sdk
+            elif test -d /Xcode3/SDKs/MacOSX${with_macosx_sdk}.sdk; then
+                MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX${with_macosx_sdk}.sdk
+            fi
+            ;;
+        esac
+        if test -z "$MACOSX_SDK_PATH"; then
+            case $with_macosx_sdk in
+            10.5|10.6|10.7)
+                if test -d /Developer/SDKs/MacOSX${with_macosx_sdk}.sdk; then
+                    MACOSX_SDK_PATH=/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk
+                fi
+                ;;
+            esac
+            if test -z "$MACOSX_SDK_PATH"; then
+                case $with_macosx_sdk in
+                10.6|10.7|10.8|10.9|10.10)
+                    if test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk"; then
+                        MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk
+                    elif test -x /usr/bin/xcrun; then
+                        MACOSX_SDK_PATH="`xcrun --sdk macosx${with_macosx_sdk} --show-sdk-path 2> /dev/null`"
+                        if test ! -d "$MACOSX_SDK_PATH"; then
+                            AC_MSG_ERROR([Could not figure out the location of Mac OS X $with_macosx_sdk SDK])
+                        fi
+                    else
+                        AC_MSG_ERROR([Could not figure out the location of Mac OS X $with_macosx_sdk SDK])
+                    fi
+                    ;;
+                *)
+                    AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.5--10])
+                    ;;
+                esac
+            fi
         fi
     fi
+
+    AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     case $with_macosx_sdk in
     10.5)
@@ -2763,67 +2810,6 @@ if test $_os = Darwin; then
         AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.5--10])
         ;;
     esac
-
-    # Next find it (again, if we deduced its version above by finding
-    # it... but we need to look for it once more in case
-    # --with-macosx-sdk was given so that the above search did not
-    # happen).
-    if test -z "$MACOSX_SDK_PATH"; then
-        case $with_macosx_sdk in
-        10.5)
-            if test -x /usr/bin/xcode-select; then
-                xcodepath="`xcode-select -print-path`"
-                if test -d "$xcodepath/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                    MACOSX_SDK_PATH="$xcodepath/SDKs/MacOSX$with_macosx_sdk.sdk"
-                fi
-            elif test -d /Developer/SDKs/MacOSX10.5.sdk; then
-                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.5.sdk
-            elif test -d /Developer-old/SDKs/MacOSX10.5.sdk; then
-                MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX10.5.sdk
-            elif test -d /Xcode3/SDKs/MacOSX10.5.sdk; then
-                MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.5.sdk
-            fi
-            ;;
-        10.6)
-            if test -d /Developer/SDKs/MacOSX10.6.sdk; then
-                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.6.sdk
-            elif test -d /Developer-old/SDKs/MacOSX10.6.sdk; then
-                MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX10.6.sdk
-            elif test -d /Xcode3/SDKs/MacOSX10.6.sdk; then
-                MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.6.sdk
-            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
-            elif test -x /usr/bin/xcode-select; then
-                xcodepath="`xcode-select -print-path`"
-                if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                    MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
-                fi
-            fi
-            ;;
-        10.7)
-            if test -d /Developer/SDKs/MacOSX$with_macosx_sdk.sdk; then
-                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
-            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
-            elif test -x /usr/bin/xcode-select; then
-                xcodepath="`xcode-select -print-path`"
-                if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                    MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
-                fi
-            fi
-            ;;
-        10.8|10.9|10.10)
-            xcodepath="`xcode-select -print-path`"
-            if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
-            fi
-            ;;
-        esac
-        if test -z "$MACOSX_SDK_PATH"; then
-            AC_MSG_ERROR([Could not figure out the location of Mac OS X $with_macosx_sdk SDK])
-        fi
-    fi
-    AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     if test "$with_macosx_version_min_required" = ""; then
         case $with_macosx_sdk in
