@@ -28,7 +28,7 @@ class SwView;
 class SW_DLLPUBLIC NumFormatListBox : public ListBox
 {
     short               nCurrFormatType;
-    sal_uInt16              nStdEntry;
+    sal_Int32           nStdEntry;
     bool                bOneArea;
     sal_uLong               nDefFormat;
     SwView*             pVw;
