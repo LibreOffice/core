@@ -346,16 +346,15 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
         }
         else
         {
-            std::vector<sal_uInt32> u;
+            pData = allocBindBuf(parameterIndex, _sData.getLength() * 4);
+            sal_uInt32* pCursor = (sal_uInt32*)pData;
+            nCharLen = 0;
             for (sal_Int32 i = 0; i != _sData.getLength();)
             {
-                u.push_back(_sData.iterateCodePoints(&i));
+                *pCursor++ = _sData.iterateCodePoints(&i);
+                nCharLen += 1;
             }
-            nCharLen = u.size();
             nByteLen = 4 * nCharLen;
-            pData = allocBindBuf(parameterIndex, nByteLen);
-            if (!u.empty())
-                memcpy(pData, &u[0], nByteLen);
         }
     }
     else
