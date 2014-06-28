@@ -37,7 +37,6 @@ extern int apk_file_size;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
-extern void Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env, jobject clazz);
 
 extern LibreOfficeKit *libreofficekit_hook(const char* install_path);
 
@@ -61,15 +60,6 @@ Java_org_libreoffice_android_LibreOfficeKit_redirect_1stdio(JNIEnv* env,
                                                             jboolean state)
 {
     Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
-}
-
-/// Call the same method from Bootstrap.
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_LibreOfficeKit_extract_1files(JNIEnv* env,
-                                                           jobject clazz)
-{
-    Java_org_libreoffice_android_Bootstrap_extract_1files(env, clazz);
 }
 
 /// Initialize the LibreOfficeKit.
@@ -136,6 +126,11 @@ Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_
         return JNI_FALSE;
     }
 
+    // Extract files from the .apk that can't be used mmapped directly from it
+    extract_files(UNPACK_TREE, UNPACK_TREE, 0);
+    extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
+
+    // Initialize LibreOfficeKit
     pOffice = libreofficekit_hook(data_dir);
     if (!pOffice)
     {

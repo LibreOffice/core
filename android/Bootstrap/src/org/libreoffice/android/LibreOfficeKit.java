@@ -26,7 +26,7 @@ public final class LibreOfficeKit
     {
     }
 
-    private static String TAG = "lo-bootstrap";
+    private static String TAG = "LibreOfficeKit";
 
     // Native methods in this class are all implemented in
     // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
@@ -36,9 +36,6 @@ public final class LibreOfficeKit
     private static native boolean init(String dataDir,
                                        String cacheDir,
                                        String apkFile);
-
-    // Extracts files in the .apk that need to be extraced into the app's tree
-    static native void extract_files();
 
 /*
     // Wrapper for getpid()
@@ -92,7 +89,7 @@ public final class LibreOfficeKit
 
         ApplicationInfo ai = activity.getApplicationInfo();
         dataDir = ai.dataDir;
-        Log.i(TAG, String.format("dataDir=%s\n", dataDir));
+        Log.i(TAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
 
         redirect_stdio(true);
 
@@ -100,9 +97,6 @@ public final class LibreOfficeKit
                   activity.getApplication().getCacheDir().getAbsolutePath(),
                   activity.getApplication().getPackageResourcePath()))
             return;
-
-        // Extract files from the .apk that can't be used mmapped directly from it
-        extract_files();
 
         // If we notice that a fonts.conf file was extracted, automatically
         // set the FONTCONFIG_FILE env var.

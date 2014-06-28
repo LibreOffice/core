@@ -37,9 +37,6 @@ public final class Bootstrap
                                         String cacheDir,
                                         String apkFile);
 
-    // Extracts files in the .apk that need to be extraced into the app's tree
-    static native void extract_files();
-
     // Wrapper for getpid()
     public static native int getpid();
 
@@ -100,9 +97,6 @@ public final class Bootstrap
                    activity.getApplication().getCacheDir().getAbsolutePath(),
                    activity.getApplication().getPackageResourcePath()))
             return;
-
-        // Extract files from the .apk that can't be used mmapped directly from it
-        extract_files();
 
         // If we notice that a fonts.conf file was extracted, automatically
         // set the FONTCONFIG_FILE env var.
