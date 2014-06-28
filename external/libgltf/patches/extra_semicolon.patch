@@ -1,0 +1,18 @@
+diff -ur libgltf.org/src/Common.cpp libgltf/src/Common.cpp
+--- libgltf.org/src/Common.cpp	2014-06-28 12:30:58.792097436 +0200
++++ libgltf/src/Common.cpp	2014-06-28 12:31:13.884097997 +0200
+@@ -550,12 +550,12 @@
+ /* -- Primitives -- */
+ Primitives::Primitives()
+ {
+-};
++}
+ 
+ Primitives::~Primitives()
+ {
+     mAttributeMap.clear();
+-};
++}
+ 
+ void Primitives::setMaterialIndex(std::string materialIndex)
+ {
