@@ -557,14 +557,9 @@ void MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs)
 
 // Distance between two tabs
 
-sal_uInt16 GetTabDist(const SvxTabStopItem& rTabs)
+SwTwips GetTabDist(const SvxTabStopItem& rTabs)
 {
-    sal_uInt16 nDefDist;
-    if( rTabs.Count() )
-        nDefDist = (sal_uInt16)( rTabs[0].GetTabPos() );
-    else
-        nDefDist = 1134;     // 2cm
-    return nDefDist;
+    return rTabs.Count() ? rTabs[0].GetTabPos() : 1134; // 1134 = 2 cm
 }
 
 // Inquire if in the set is a Sfx-PageDesc combination present and return it.

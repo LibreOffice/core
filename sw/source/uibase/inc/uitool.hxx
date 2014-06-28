@@ -74,7 +74,7 @@ SW_DLLPUBLIC void   MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
 //void  EraseDefTabs(SvxTabStopItem& rTabs);
 
 // determine space between 1st and 2nd element
-SW_DLLPUBLIC sal_uInt16     GetTabDist(const SvxTabStopItem& rTabs);
+SW_DLLPUBLIC SwTwips GetTabDist(const SvxTabStopItem& rTabs);
 
 // determine whether a Sfx-PageDesc combination exists in the set
 // and set this in the set and delete the transport items

@@ -915,7 +915,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                             GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
-            sal_uInt16 nDefDist = ::GetTabDist( rDefTabs );
+            const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
             aCoreSet.Put( aDefDistItem );
 
