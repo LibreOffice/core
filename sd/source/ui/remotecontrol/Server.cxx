@@ -239,16 +239,16 @@ std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
 {
     SAL_INFO( "sdremote", "RemoteServer::getClients() called" );
     std::vector< ::boost::shared_ptr< ClientInfo > > aClients;
-    if ( !spServer )
+    if ( spServer )
     {
-        SAL_INFO( "sdremote", "No remote server instance => no clients" );
-        return aClients;
+        MutexGuard aGuard( sDataMutex );
+        aClients.assign( spServer->mAvailableClients.begin(),
+                         spServer->mAvailableClients.end() );
     }
-
-    MutexGuard aGuard( sDataMutex );
-    aClients.assign( spServer->mAvailableClients.begin(),
-                     spServer->mAvailableClients.end() );
-
+    else
+    {
+        SAL_INFO( "sdremote", "No remote server instance => no remote clients" );
+    }
     // We also need to provide authorised clients (no matter whether or not
     // they are actually available), so that they can be de-authorised if
     // necessary. We specifically want these to be at the end of the list
@@ -342,8 +342,6 @@ void RemoteServer::deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient 
     // the UI.
 
     SAL_INFO( "sdremote", "RemoteServer::deauthoriseClient called" );
-    if ( !spServer )
-        return;
 
     if ( !pClient->mbIsAlreadyAuthorised )
     // We can't remove unauthorised clients from the authorised list...
