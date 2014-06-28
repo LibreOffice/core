@@ -148,8 +148,7 @@ private:
     typedef std::set< RootAccess * > WeakRootSet;
 
     typedef
-        std::map<
-            OUString,
+        config_map<
             com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySet > >
         ExternalServices;

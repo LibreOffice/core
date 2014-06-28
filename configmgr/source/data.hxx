@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <climits>
-#include <map>
+#include "config_map.hxx"
 #include <vector>
 
 #include <boost/noncopyable.hpp>
@@ -86,7 +86,7 @@ struct Data: private boost::noncopyable {
         OUString const & url);
 
 private:
-    typedef std::map< OUString, rtl::Reference< ExtensionXcu > >
+    typedef config_map< rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;
 
     rtl::Reference< Node > root_;

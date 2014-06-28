@@ -21,13 +21,13 @@
 #define INCLUDED_CONFIGMGR_SOURCE_NODEMAP_HXX
 
 #include <sal/config.h>
-#include <map>
+#include "config_map.hxx"
 #include <rtl/ref.hxx>
 #include <node.hxx>
 
 namespace configmgr {
 
-typedef std::map< OUString, rtl::Reference< Node > > NodeMapImpl;
+typedef config_map< rtl::Reference< Node > > NodeMapImpl;
 class NodeMap
 {
     NodeMapImpl maImpl;

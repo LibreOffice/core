@@ -25,6 +25,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include "config_map.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -486,7 +487,7 @@ private:
             bool theDirectlyModified);
     };
 
-    typedef std::map< OUString, ModifiedChild > ModifiedChildren;
+    typedef config_map< ModifiedChild > ModifiedChildren;
 
     rtl::Reference< ChildAccess > getModifiedChild(
         ModifiedChildren::iterator const & childIterator);
@@ -515,7 +516,7 @@ private:
 
     rtl::Reference< Access > getNotificationRoot();
 
-    typedef std::map< OUString, ChildAccess * > WeakChildMap;
+    typedef config_map< ChildAccess * > WeakChildMap;
 
     typedef
         std::multiset<
@@ -535,7 +536,7 @@ private:
                 com::sun::star::beans::XPropertyChangeListener > >
         PropertyChangeListenersElement;
 
-    typedef std::map< OUString, PropertyChangeListenersElement >
+    typedef config_map< PropertyChangeListenersElement >
         PropertyChangeListeners;
 
     typedef
@@ -544,7 +545,7 @@ private:
                 com::sun::star::beans::XVetoableChangeListener > >
         VetoableChangeListenersElement;
 
-    typedef std::map< OUString, VetoableChangeListenersElement >
+    typedef config_map< VetoableChangeListenersElement >
         VetoableChangeListeners;
 
     typedef
