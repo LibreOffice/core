@@ -679,6 +679,9 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
 void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
     throw (RuntimeException, std::exception)
 {
+    MutexGuard aGuard( m_aMutex );
+
+    m_xEmbeddedStorage.clear();
 }
 
 void Connection::buildTypeInfo() throw( SQLException)
