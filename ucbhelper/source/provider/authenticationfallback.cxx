@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
 #include <ucbhelper/authenticationfallback.hxx>
 
 using namespace com::sun::star;
@@ -27,8 +28,12 @@ AuthenticationFallbackRequest::AuthenticationFallbackRequest(
                                       const OUString & rURL )
 {
 
-    m_Instructions = rInstructions;
-    m_Url = rURL;
+    ucb::AuthenticationFallbackRequest aRequest;
+    aRequest.instructions = rInstructions;
+    aRequest.url = rURL;
+
+    setRequest( uno::makeAny( aRequest ) );
+
     uno::Sequence<
         uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
     aContinuations[ 0 ] = new InteractionAbort( this );
