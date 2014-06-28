@@ -354,7 +354,8 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
             nCharLen = u.size();
             nByteLen = 4 * nCharLen;
             pData = allocBindBuf(parameterIndex, nByteLen);
-            memcpy(pData, u.empty() ? 0 : &u[0], nByteLen);
+            if (!u.empty())
+                memcpy(pData, &u[0], nByteLen);
         }
     }
     else
