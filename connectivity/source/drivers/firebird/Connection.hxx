@@ -83,7 +83,7 @@ namespace connectivity
                                                                     //  for each row returned by
                                                                     //  DatabaseMetaData.getTypeInfo.
             /** The parent driver that created this connection. */
-            FirebirdDriver*     m_pDriver;
+            ::rtl::Reference<FirebirdDriver>     m_xDriver;
 
             /** The URL passed to us when opening, i.e. of the form sdbc:* */
             ::rtl::OUString     m_sConnectionURL;
@@ -178,8 +178,6 @@ namespace connectivity
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)
             throw(::com::sun::star::sdbc::SQLException,
                   ::com::sun::star::uno::RuntimeException);
-
-            FirebirdDriver* getDriver()         const {return m_pDriver;}
 
             ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
             bool        isEmbedded()        const   {return m_bIsEmbedded;}
