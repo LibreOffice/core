@@ -640,8 +640,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
 
             // Populate with default tabs.
-            sal_uInt16 nDef = ::GetTabDist( rDefTabs );
-            ::MakeDefTabs( nDef, aTabStops );
+            ::MakeDefTabs( ::GetTabDist( rDefTabs ), aTabStops );
 
             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
             if( pColl && pColl->IsAutoUpdateFmt() )
@@ -720,8 +719,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
                     const SvxTabStopItem& rDefTabs =
                         (const SvxTabStopItem&)rSh.GetDefault(RES_PARATR_TABSTOP);
-                    sal_uInt16 nDef = ::GetTabDist(rDefTabs);
-                    ::MakeDefTabs( nDef, aTabStops );
+                    ::MakeDefTabs( ::GetTabDist(rDefTabs), aTabStops );
 
                     if( pColl && pColl->IsAutoUpdateFmt())
                     {
@@ -1209,7 +1207,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                             rSh.GetDefault(RES_PARATR_TABSTOP);
 
                 OSL_ENSURE(m_pHRuler, "why is there no ruler?");
-                long nDefTabDist = ::GetTabDist(rDefTabs);
+                const long nDefTabDist = ::GetTabDist(rDefTabs);
                 m_pHRuler->SetDefTabDist( nDefTabDist );
                 m_pVRuler->SetDefTabDist( nDefTabDist );
                 ::lcl_EraseDefTabs(aTabStops);

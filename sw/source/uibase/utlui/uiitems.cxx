@@ -76,7 +76,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nHght = (sal_uInt16) GetPageFtnInfo().GetHeight();
+            const SwTwips nHght = GetPageFtnInfo().GetHeight();
             if ( nHght )
             {
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
