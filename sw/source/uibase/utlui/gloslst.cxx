@@ -111,7 +111,6 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     std::vector<TripleString> aTripleStrings;
 
     size_t nCount = aGroupArr.size();
-    sal_uInt16 nFound = 0;
     for(size_t i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr[i];
@@ -129,7 +128,6 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
             pTriple.sBlock = sLong;
             pTriple.sShort = pGroup->sShortNames.getToken(j, STRING_DELIM);
             aTripleStrings.push_back(pTriple);
-            ++nFound;
         }
     }
 
