@@ -269,14 +269,14 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 {
 }
 
-OOXMLBooleanValue::OOXMLBooleanValue(const OUString & rValue)
+OOXMLBooleanValue::OOXMLBooleanValue(const char *pValue)
 : mbValue(false)
 {
-    mbValue = (rValue == "true"
-        || rValue == "True"
-        || rValue == "1"
-        || rValue == "on"
-        || rValue == "On");
+    mbValue = !strcmp(pValue, "true")
+           || !strcmp(pValue, "True")
+           || !strcmp(pValue, "1")
+           || !strcmp(pValue, "on")
+           || !strcmp(pValue, "On");
 }
 
 OOXMLBooleanValue::~OOXMLBooleanValue()
@@ -574,12 +574,6 @@ OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 {
 }
 
-OOXMLIntegerValue::OOXMLIntegerValue(const OUString & rValue)
-: mnValue(0)
-{
-    mnValue = rValue.toInt32();
-}
-
 OOXMLIntegerValue::~OOXMLIntegerValue()
 {
 }
@@ -620,9 +614,9 @@ OOXMLHexValue::OOXMLHexValue(sal_uInt32 nValue)
 {
 }
 
-OOXMLHexValue::OOXMLHexValue(const OUString & rValue)
+OOXMLHexValue::OOXMLHexValue(const char * pValue)
 {
-    mnValue = rValue.toUInt32(16);
+    mnValue = rtl_str_toUInt32(pValue, 16);
 }
 
 OOXMLHexValue::~OOXMLHexValue()
@@ -651,12 +645,17 @@ string OOXMLHexValue::toString() const
 
 // OOXMLUniversalMeasureValue
 
-OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const OUString& rValue)
+OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue)
 {
-    if (rValue.endsWith("pt"))
-        mnValue = rValue.copy(0, rValue.getLength() - 2).toInt32() * 20;
-    else
-        mnValue = rValue.toInt32();
+    mnValue = rtl_str_toUInt32(pValue, 10); // will ignore the trailing 'pt'
+
+    int nLen = strlen(pValue);
+    if (nLen > 2 &&
+        pValue[nLen-2] == 'p' &&
+        pValue[nLen-1] == 't')
+    {
+        mnValue = mnValue * 20;
+    }
 }
 
 OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()

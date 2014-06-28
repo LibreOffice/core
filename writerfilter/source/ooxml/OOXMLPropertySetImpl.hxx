@@ -108,7 +108,7 @@ protected:
     bool mbValue;
 public:
     explicit OOXMLBooleanValue(bool bValue);
-    explicit OOXMLBooleanValue(const OUString & rValue);
+    explicit OOXMLBooleanValue(const char *pValue);
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const SAL_OVERRIDE;
@@ -207,7 +207,6 @@ protected:
     sal_Int32 mnValue;
 public:
     explicit OOXMLIntegerValue(sal_Int32 nValue);
-    explicit OOXMLIntegerValue(const OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const SAL_OVERRIDE;
@@ -224,7 +223,7 @@ protected:
     sal_uInt32 mnValue;
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
-    explicit OOXMLHexValue(const OUString & rValue);
+    explicit OOXMLHexValue(const char * pValue);
     virtual ~OOXMLHexValue();
 
     virtual int getInt() const SAL_OVERRIDE;
@@ -240,7 +239,7 @@ class OOXMLUniversalMeasureValue : public OOXMLValue
 protected:
     sal_uInt32 mnValue;
 public:
-    explicit OOXMLUniversalMeasureValue(const OUString& rValue);
+    explicit OOXMLUniversalMeasureValue(const char * pValue);
     virtual ~OOXMLUniversalMeasureValue();
 
     virtual int getInt() const SAL_OVERRIDE;

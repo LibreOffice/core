@@ -1311,7 +1311,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(0));
+        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(sal_uInt32(0)));
         setValue(pValue);
     }
 }

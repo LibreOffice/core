@@ -21,6 +21,7 @@
 
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
+#include <sax/fastattribs.hxx>
 #include "OOXMLFactory.hxx"
 #include "OOXMLFastHelper.hxx"
 
@@ -131,59 +132,61 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         AttributeToResourceMap::const_iterator aIt;
         AttributeToResourceMap::const_iterator aEndIt = pMap->end();
 
+        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != NULL );
+        sax_fastparser::FastAttributeList *pAttribs;
+        pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+
         for (aIt = pMap->begin(); aIt != aEndIt; ++aIt)
         {
-            Id nId = (*pTokenToIdMap)[aIt->first];
-            if (Attribs->hasAttribute(aIt->first))
+            sal_Int32 nToken = aIt->first;
+            if (pAttribs->hasAttribute(nToken))
             {
+                Id nId = (*pTokenToIdMap)[nToken];
+
                 switch (aIt->second.m_nResource)
                 {
                 case RT_Boolean:
                     {
-                        OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
-
-                        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(aValue));
-                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                        const char *pValue = "";
+                        pAttribs->getAsChar(nToken, pValue);
+                        OOXMLValue::Pointer_t xValue(new OOXMLBooleanValue(pValue));
+                        pHandler->newProperty(nId, xValue);
+                        pFactory->attributeAction(pHandler, nToken, xValue);
                     }
                     break;
                 case RT_String:
                     {
-                        OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLStringValue>::newProperty
-                            (pHandler, nId, aValue);
-
-                        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(aValue));
-                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                        OUString aValue(pAttribs->getValue(nToken));
+                        OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
+                        pHandler->newProperty(nId, xValue);
+                        pFactory->attributeAction(pHandler, nToken, xValue);
                     }
                     break;
                 case RT_Integer:
                     {
-                        OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLIntegerValue>::newProperty
-                            (pHandler, nId, aValue);
-
-                        OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(aValue));
-                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                        sal_Int32 nValue;
+                        pAttribs->getAsInteger(nToken,nValue);
+                        OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                        pHandler->newProperty(nId, xValue);
+                        pFactory->attributeAction(pHandler, nToken, xValue);
                     }
                     break;
                 case RT_Hex:
                     {
-                        OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLHexValue>::newProperty
-                            (pHandler, nId, aValue);
-
-                        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(aValue));
-                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                        const char *pValue = "";
+                        pAttribs->getAsChar(nToken, pValue);
+                        OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
+                        pHandler->newProperty(nId, xValue);
+                        pFactory->attributeAction(pHandler, nToken, xValue);
                     }
                     break;
                 case RT_UniversalMeasure:
                     {
-                        OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLUniversalMeasureValue>::newProperty(pHandler, nId, aValue);
-
-                        OOXMLValue::Pointer_t pValue(new OOXMLUniversalMeasureValue(aValue));
-                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                        const char *pValue = "";
+                        pAttribs->getAsChar(nToken, pValue);
+                        OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
+                        pHandler->newProperty(nId, xValue);
+                        pFactory->attributeAction(pHandler, nToken, xValue);
                     }
                     break;
                 case RT_List:
@@ -193,14 +196,11 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
                         if (pListValueMap.get() != NULL)
                         {
-                            OUString aValue(Attribs->getValue(aIt->first));
+                            OUString aValue(Attribs->getValue(nToken));
                             sal_uInt32 nValue = (*pListValueMap)[aValue];
-
-                            OOXMLFastHelper<OOXMLIntegerValue>::newProperty
-                                (pHandler, nId, nValue);
-
-                            OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(nValue));
-                            pFactory->attributeAction(pHandler, aIt->first, pValue);
+                            OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                            pHandler->newProperty(nId, xValue);
+                            pFactory->attributeAction(pHandler, nToken, xValue);
                         }
                     }
                     break;
