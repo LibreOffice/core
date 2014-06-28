@@ -554,7 +554,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correcxt value when saveValue was called by base class
-        if ( m_bUseClass && m_aEDDriverClass.GetText().isEmpty() )
+        if ( m_bUseClass && m_aEDDriverClass.GetText().trim().isEmpty() )
         {
             m_aEDDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aEDDriverClass.SetModifyFlag();
@@ -569,10 +569,11 @@ namespace dbaui
 #if HAVE_FEATURE_JAVA
         try
         {
-            if ( !m_aEDDriverClass.GetText().isEmpty() )
+            if ( !m_aEDDriverClass.GetText().trim().isEmpty() )
             {
 // TODO change jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
+                m_aEDDriverClass.SetText(m_aEDDriverClass.GetText().trim()); // fdo#68341
                 bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aEDDriverClass.GetText());
             }
         }
@@ -589,7 +590,7 @@ namespace dbaui
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
     {
         if ( m_bUseClass && _pEdit == &m_aEDDriverClass )
-            m_aTestJavaDriver.Enable( !m_aEDDriverClass.GetText().isEmpty() );
+            m_aTestJavaDriver.Enable( !m_aEDDriverClass.GetText().trim().isEmpty() );
 
         // tell the listener we were modified
         callModifiedHdl();
