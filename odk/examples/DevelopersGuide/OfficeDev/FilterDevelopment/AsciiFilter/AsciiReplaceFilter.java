@@ -601,7 +601,7 @@ public class AsciiReplaceFilter
         private String implts_replace( StringBuffer rBuffer, FilterOptions aOptions )
         {
             // replace complete strings first
-            // Because its easiear on a buffer then on a string
+            // Because its easier on a buffer then on a string
             if ( ! aOptions.m_sOld.equals(aOptions.m_sNew) )
             {
                 int nStart  = rBuffer.indexOf(aOptions.m_sOld);

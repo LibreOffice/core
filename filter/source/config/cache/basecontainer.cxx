@@ -465,7 +465,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 
     /* Note: Its not allowed to return NULL. Because an empty enumeration
              transport the same information but make no trouble outside.
-             Further its easiear to work directly with the return value
+             Further its easier to work directly with the return value
              instaed of checking of NULL returns! */
 
     css::uno::Sequence< OUString > lSubSet;

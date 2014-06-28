@@ -106,7 +106,7 @@ void Desktop::constructorInit()
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
     // Hold interception helper by reference only - not by pointer!
-    // So it's easiear to destroy it.
+    // So it's easier to destroy it.
     InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
     m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
