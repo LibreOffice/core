@@ -746,12 +746,12 @@ UUIInteractionHelper::handlePasswordRequest(
 }
 
 bool
-UUIInteractionHelper::handleAuthFallbackRequest(
-    uno::Reference< task::XInteractionRequest > const & rRequest)
+UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
+        OUString & url )
 {
-    Window * pParent = getParentProperty();
-    AuthFallbackDlg *dlg = new AuthFallbackDlg(pParent, "instructions", "url");
-    dlg->Execute( );
+    Window * pParent = getParentProperty( );
+    AuthFallbackDlg *dlg = new AuthFallbackDlg( pParent, instructions, url );
+    int retCode = dlg->Execute( );
     return true;
 }
 

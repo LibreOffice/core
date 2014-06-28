@@ -302,9 +302,7 @@ private:
             ) const;
 
     bool
-    handleAuthFallbackRequest(
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionRequest > const & rRequest);
+    handleAuthFallbackRequest( OUString & instructions, OUString & url);
 };
 
 class ErrorResource: private Resource
