@@ -251,7 +251,7 @@ SfxItemPresentation SwRegisterItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
+            const sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -306,7 +306,7 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
+            const sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -694,7 +694,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
                 rText = OUString(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
                 if ( COLADJ_NONE != GetLineAdj() )
                 {
-                    sal_uInt16 nWdth = sal_uInt16(GetLineWidth());
+                    const long nWdth = static_cast<long>(GetLineWidth());
                     rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
                             ::GetMetricText( nWdth, eCoreUnit,
                                               SFX_MAPUNIT_POINT, pIntl );
@@ -1153,7 +1153,7 @@ SfxItemPresentation SwInvertGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
+            const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
             rText = SW_RESSTR( nId );
         }
         break;
@@ -1233,7 +1233,7 @@ SfxItemPresentation SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation eP
         break;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             {
-                sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
+                const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
                 rText = SW_RESSTR( nId );
             }
         break;
