@@ -344,6 +344,42 @@ sal_Bool Access::hasElements() throw (css::uno::RuntimeException, std::exception
     return !getAllChildren().empty(); //TODO: optimize
 }
 
+bool Access::getByNameFast(const OUString & name, css::uno::Any & value)
+{
+    bool bGotValue = false;
+    rtl::Reference< ChildAccess > child;
+
+    if (getNode()->kind() != Node::KIND_LOCALIZED_PROPERTY)
+    { // try to get it directly
+        ModifiedChildren::iterator i(modifiedChildren_.find(name));
+        if (i != modifiedChildren_.end())
+        {
+            child = getModifiedChild(i);
+            if (child.is())
+            {
+                value = child->asValue();
+                bGotValue = true;
+            }
+        }
+        else
+        {
+            rtl::Reference< Node > node(getNode()->getMember(name));
+            if (!node.is())
+                return false;
+            bGotValue = ChildAccess::asSimpleValue(node, value, components_);
+        }
+    }
+
+    if (!bGotValue)
+    {
+        child = getChild(name);
+        if (!child.is())
+            return false;
+        value = child->asValue();
+    }
+    return true;
+}
+
 css::uno::Any Access::getByName(OUString const & aName)
     throw (
         css::container::NoSuchElementException,
@@ -352,12 +388,11 @@ css::uno::Any Access::getByName(OUString const & aName)
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    rtl::Reference< ChildAccess > child(getChild(aName));
-    if (!child.is()) {
+    css::uno::Any value;
+    if (!getByNameFast(aName, value))
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
-    }
-    return child->asValue();
+    return value;
 }
 
 css::uno::Sequence< OUString > Access::getElementNames()
@@ -852,15 +887,15 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
     css::uno::Sequence< css::uno::Any > vals(aPropertyNames.getLength());
-    for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i) {
-        rtl::Reference< ChildAccess > child(getChild(aPropertyNames[i]));
-        if (!child.is()) {
+
+    for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i)
+    {
+        if (!getByNameFast(aPropertyNames[i], vals[i]))
             throw css::uno::RuntimeException(
                 "configmgr getPropertyValues inappropriate property name",
                 static_cast< cppu::OWeakObject * >(this));
-        }
-        vals[i] = child->asValue();
     }
+
     return vals;
 }
 
@@ -1988,6 +2023,15 @@ rtl::Reference< ChildAccess > Access::getModifiedChild(
         ? childIterator->second.child : rtl::Reference< ChildAccess >();
 }
 
+rtl::Reference< ChildAccess > Access::createUnmodifiedChild(
+                const OUString &name, const rtl::Reference< Node > &node)
+{
+    rtl::Reference< ChildAccess > child(
+        new ChildAccess(components_, getRootAccess(), this, name, node));
+    cachedChildren_[name] = child.get();
+    return child;
+}
+
 rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
     OUString const & name)
 {
@@ -2008,10 +2052,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
             return child;
         }
     }
-    rtl::Reference< ChildAccess > child(
-        new ChildAccess(components_, getRootAccess(), this, name, node));
-    cachedChildren_[name] = child.get();
-    return child;
+    return createUnmodifiedChild(name,node);
 }
 
 rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {

@@ -113,7 +113,10 @@ public:
         com::sun::star::uno::Any const & value,
         Modifications * localModifications);
 
-    com::sun::star::uno::Any asValue();
+    css::uno::Any asValue();
+    static bool asSimpleValue(const rtl::Reference< Node > &rNode,
+                              css::uno::Any &value,
+                              Components &components);
 
     void commitChanges(bool valid, Modifications * globalModifications);
 
