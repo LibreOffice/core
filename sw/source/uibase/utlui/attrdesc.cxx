@@ -691,7 +691,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
             sal_uInt16 nCnt = GetNumCols();
             if ( nCnt > 1 )
             {
-                rText = OUString(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
+                rText = OUString::number(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
                 if ( COLADJ_NONE != GetLineAdj() )
                 {
                     const long nWdth = static_cast<long>(GetLineWidth());
