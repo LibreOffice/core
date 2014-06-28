@@ -497,10 +497,14 @@ private:
     rtl::Reference< ChildAccess > getSubChild(OUString const & path);
 
     bool setChildProperty(
-        OUString const & name, com::sun::star::uno::Any const & value,
+        OUString const & name, css::uno::Any const & value,
         Modifications * localModifications);
 
-    com::sun::star::beans::Property asProperty();
+    css::beans::Property asProperty();
+
+    bool getByNameFast(const OUString & name, css::uno::Any & value);
+    rtl::Reference< ChildAccess > createUnmodifiedChild(const OUString &name,
+                                                        const rtl::Reference< Node > &node);
 
     void checkFinalized();
 

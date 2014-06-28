@@ -252,33 +252,48 @@ void ChildAccess::setProperty(
     localModifications->add(getRelativePath());
 }
 
-css::uno::Any ChildAccess::asValue() {
+
+css::uno::Any ChildAccess::asValue()
+{
     if (changedValue_.get() != 0) {
         return *changedValue_;
     }
-    switch (node_->kind()) {
-    case Node::KIND_PROPERTY:
-        return static_cast< PropertyNode * >(node_.get())->getValue(
-            getComponents());
-    case Node::KIND_LOCALIZED_PROPERTY:
+    css::uno::Any value;
+    if (!asSimpleValue(node_, value, getComponents()))
+    {
+        if (node_->kind() == Node::KIND_LOCALIZED_PROPERTY)
         {
             OUString locale(getRootAccess()->getLocale());
             if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild("*" + locale));
                 // As a last resort, return a nil value even though it may be
                 // illegal for the given property:
-                return child.is() ? child->asValue() : css::uno::Any();
+                if (child.is())
+                    return child->asValue();
             }
         }
-        break;
-    case Node::KIND_LOCALIZED_VALUE:
-        return static_cast< LocalizedValueNode * >(node_.get())->getValue();
-    default:
-        break;
+        value = css::uno::makeAny(
+                        css::uno::Reference< css::uno::XInterface >(
+                                static_cast< cppu::OWeakObject * >(this)));
     }
-    return css::uno::makeAny(
-        css::uno::Reference< css::uno::XInterface >(
-            static_cast< cppu::OWeakObject * >(this)));
+    return value;
+}
+
+/// Can we quickly extract a simple value into value ? if so returns true
+bool ChildAccess::asSimpleValue(const rtl::Reference< Node > &rNode,
+                                css::uno::Any &value,
+                                Components &components)
+{
+    switch (rNode->kind()) {
+    case Node::KIND_PROPERTY:
+        value = static_cast< PropertyNode * >(rNode.get())->getValue(components);
+        return true;
+    case Node::KIND_LOCALIZED_VALUE:
+        value = static_cast< LocalizedValueNode * >(rNode.get())->getValue();
+        return true;
+    default:
+        return false;
+    }
 }
 
 void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
