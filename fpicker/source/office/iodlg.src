@@ -47,200 +47,48 @@ ImageList RID_FILEPICKER_IMAGES
     FILEPICKER_IL_IDLIST
 };
 
- // dialogs *******************************************************************
-
-ModalDialog DLG_FPICKER_EXPLORERFILE
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Sizeable = TRUE;
-    HelpId = HID_EXPLORERDLG_FILE ;
-    Size = MAP_APPFONT ( 280 , 174 ) ;
-    ComboBox ED_EXPLORERFILE_CURRENTPATH
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
-        Border = TRUE ;
-    };
-    ImageButton BTN_EXPLORERFILE_NEWFOLDER
-    {
-        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER";
-        TabStop = FALSE ;
-        Pos = MAP_APPFONT ( 59 , 6 ) ;
-        Size = MAP_APPFONT( 12, 12 ) ;
-        QuickHelpText [ en-US ] = "Create New Folder" ;
-    };
-    MenuButton BTN_EXPLORERFILE_UP
-    {
-        HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP";
-        TabStop = FALSE ;
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT( 12, 12 ) ;
-        QuickHelpText [ en-US ] = "Up One Level" ;
-    };
-    Splitter EXPLORERFILE_SPLITTER
-    {
-        Pos = MAP_APPFONT( 56, 26 );
-        Size = MAP_APPFONT( 3, 85 );
-        HScroll = TRUE;
-    };
-    Control LB_EXPLORERFILE_PLACES_LISTBOX
-    {
-        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_PLACES_LISTBOX";
-        Pos = MAP_APPFONT ( 6 , 26 ) ;
-        Size = MAP_APPFONT ( 50 , 85 ) ;
-        Border = TRUE ;
-    };
-    PushButton BTN_EXPLORERFILE_CONNECT_TO_SERVER
-    {
-        HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
-        Pos = MAP_APPFONT ( 94 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ en-US ] = "Servers..." ;
-        QuickHelpText [ en-US ] = "Connect To Server" ;
-    };
-    Control CTL_EXPLORERFILE_FILELIST
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 26 ) ;
-        Size = MAP_APPFONT ( 215 , 85 ) ;
-        Border = TRUE ;
-    };
-    FixedText FT_EXPLORERFILE_FILENAME
-    {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ en-US ] = "File ~name:" ;
-    };
-    ComboBox ED_EXPLORERFILE_FILENAME
-    {
-        HelpID = "fpicker:Edit:DLG_SVT_EXPLORERFILE:ED_EXPLORERFILE_FILENAME";
-        Pos = MAP_APPFONT ( 59 , 117 ) ;
-        Size = MAP_APPFONT ( 159 , 12 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        AutoSize = TRUE ;
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_EXPLORERFILE_SHARED_LISTBOX
-    {
-        Pos = MAP_APPFONT ( 6 , 133 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        // Note: this control does not have a text. The text is filled at runtime from the STR_SVT_FILEPICKER_VERSION,
-        // STR_SVT_FILEPICKER_TEMPLATES, or STR_SVT_FILEPICKER_IMAGE_TEMPLATE resource
-    };
-    ListBox LB_EXPLORERFILE_SHARED_LISTBOX
-    {
-        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_SHARED_LISTBOX";
-        Pos = MAP_APPFONT ( 59 , 132 ) ;
-        Size = MAP_APPFONT ( 159 , 40 ) ;
-        DropDown = TRUE ;
-        AutoSize = TRUE ;
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_EXPLORERFILE_FILETYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 148 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ en-US ] = "File ~type:" ;
-    };
-    ListBox LB_EXPLORERFILE_FILETYPE
-    {
-        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE";
-        Pos = MAP_APPFONT ( 59 , 147 ) ;
-        Size = MAP_APPFONT ( 159 , 80 ) ;
-        DropDown = TRUE ;
-        AutoSize = TRUE ;
-        AutoHScroll = TRUE ;
-        Sort = FALSE ;
-    };
-    CheckBox CB_EXPLORERFILE_READONLY
-    {
-        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_READONLY";
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ en-US ] = "~Read-only" ;
-    };
-    CheckBox CB_EXPLORERFILE_PASSWORD
-    {
-        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_PASSWORD";
-        Size = MAP_APPFONT ( 100, 10 ) ;
-        Text [ en-US ] = "Save with password" ;
-    };
-    CheckBox CB_AUTO_EXTENSION
-    {
-        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_AUTO_EXTENSION";
-        Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text [ en-US ] = "~Automatic file name extension" ;
-    };
-    CheckBox CB_OPTIONS
-    {
-        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_OPTIONS";
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ en-US ] = "Edit ~filter settings";
-    };
-    PushButton BTN_EXPLORERFILE_OPEN
-    {
-        HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN";
-        Pos = MAP_APPFONT ( 224 , 117 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-        Text [ en-US ] = "~Open" ;
-    };
-    CancelButton BTN_EXPLORERFILE_CANCEL
-    {
-        Pos = MAP_APPFONT ( 224 , 134 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_EXPLORERFILE_HELP
-    {
-        Pos = MAP_APPFONT ( 224 , 151 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String STR_EXPLORERFILE_OPEN
-    {
-        Text [ en-US ] = "Open" ;
-    };
-    String STR_EXPLORERFILE_SAVE
-    {
-        Text [ en-US ] = "Save as" ;
-    };
-    String STR_EXPLORERFILE_BUTTONSAVE
-    {
-        Text [ en-US ] = "~Save" ;
-    };
-    String STR_PATHNAME
-    {
-        Text [ en-US ] = "~Path:" ;
-    };
-    String STR_PATHSELECT
-    {
-        Text [ en-US ] = "Select path" ;
-    };
-    String STR_BUTTONSELECT
-    {
-        Text [ en-US ] = "~Select";
-    };
-    String STR_ACTUALVERSION
-    {
-        Text [ en-US ] = "Current version";
-    };
-    String STR_PREVIEW
-    {
-        Text [ en-US ] = "File Preview";
-    };
-    String STR_DEFAULT_DIRECTORY
-    {
-        Text [ en-US ] = "My Documents" ;
-    };
-    String STR_PLACES_TITLE
-    {
-        Text [ en-US ] = "Places" ;
-    };
-};
-
 // strings *******************************************************************
+
+String STR_EXPLORERFILE_OPEN
+{
+    Text [ en-US ] = "Open" ;
+};
+String STR_EXPLORERFILE_SAVE
+{
+    Text [ en-US ] = "Save as" ;
+};
+String STR_EXPLORERFILE_BUTTONSAVE
+{
+    Text [ en-US ] = "~Save" ;
+};
+String STR_PATHNAME
+{
+    Text [ en-US ] = "~Path:" ;
+};
+String STR_PATHSELECT
+{
+    Text [ en-US ] = "Select path" ;
+};
+String STR_BUTTONSELECT
+{
+    Text [ en-US ] = "~Select";
+};
+String STR_ACTUALVERSION
+{
+    Text [ en-US ] = "Current version";
+};
+String STR_PREVIEW
+{
+    Text [ en-US ] = "File Preview";
+};
+String STR_DEFAULT_DIRECTORY
+{
+    Text [ en-US ] = "My Documents" ;
+};
+String STR_PLACES_TITLE
+{
+    Text [ en-US ] = "Places" ;
+};
 
 String RID_FILEOPEN_NOTEXISTENTFILE
 {

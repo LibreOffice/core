@@ -21,15 +21,9 @@
 #define _SVTOOLS_IODLGIMPL_HRC
 
 #include "svtools/helpid.hrc"
+#include <vcl/fpicker.hrc>
 
 // ModalDialog DLG_SVT_EXPLORERFILE
-
-#define ED_EXPLORERFILE_CURRENTPATH         10
-#define BTN_EXPLORERFILE_NEWFOLDER          11
-#define BTN_EXPLORERFILE_UP                 12
-#define BTN_EXPLORERFILE_OPEN               14
-#define BTN_EXPLORERFILE_CANCEL             15
-#define BTN_EXPLORERFILE_HELP               16
 
 #define IMG_FILEDLG_BTN_UP                  10
 #define IMG_FILEDLG_BTN_STD                 11
@@ -37,34 +31,16 @@
 #define IMG_FILEDLG_PLACE_LOCAL             15
 #define IMG_FILEDLG_PLACE_REMOTE            16
 
-#define CTL_EXPLORERFILE_FILELIST           20
-
-#define FT_EXPLORERFILE_FILENAME            30
-#define ED_EXPLORERFILE_FILENAME            31
-#define FT_EXPLORERFILE_SHARED_LISTBOX      32
-#define LB_EXPLORERFILE_SHARED_LISTBOX      33
-#define FT_EXPLORERFILE_FILETYPE            34
-#define LB_EXPLORERFILE_FILETYPE            35
-
-#define CB_EXPLORERFILE_READONLY            40
-#define CB_EXPLORERFILE_PASSWORD            41
-#define CB_AUTO_EXTENSION                   42
-#define CB_OPTIONS                          43
-
-#define LB_EXPLORERFILE_PLACES_LISTBOX      50
-#define BTN_EXPLORERFILE_CONNECT_TO_SERVER  51
-#define EXPLORERFILE_SPLITTER               52
-
-#define STR_EXPLORERFILE_OPEN               1
-#define STR_EXPLORERFILE_SAVE               2
-#define STR_EXPLORERFILE_BUTTONSAVE         3
-#define STR_PATHNAME                        4
-#define STR_PATHSELECT                      5
-#define STR_BUTTONSELECT                    6
-#define STR_ACTUALVERSION                   7
-#define STR_PREVIEW             			8
-#define STR_DEFAULT_DIRECTORY     			9
-#define STR_PLACES_TITLE         			10
+#define STR_EXPLORERFILE_OPEN               (RID_FPICKER_START+31)
+#define STR_EXPLORERFILE_SAVE               (RID_FPICKER_START+32)
+#define STR_EXPLORERFILE_BUTTONSAVE         (RID_FPICKER_START+33)
+#define STR_PATHNAME                        (RID_FPICKER_START+34)
+#define STR_PATHSELECT                      (RID_FPICKER_START+35)
+#define STR_BUTTONSELECT                    (RID_FPICKER_START+36)
+#define STR_ACTUALVERSION                   (RID_FPICKER_START+37)
+#define STR_PREVIEW                         (RID_FPICKER_START+38)
+#define STR_DEFAULT_DIRECTORY               (RID_FPICKER_START+39)
+#define STR_PLACES_TITLE                    (RID_FPICKER_START+40)
 
 #endif
 

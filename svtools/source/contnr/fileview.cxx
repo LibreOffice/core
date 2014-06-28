@@ -1100,11 +1100,10 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
 // class SvtFileView -----------------------------------------------------
 
-
-SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
+SvtFileView::SvtFileView( Window* pParent, WinBits nBits,
                           bool bOnlyFolder, bool bMultiSelection ) :
 
-    Control( pParent, rResId )
+    Control( pParent, nBits )
 {
     sal_Int8 nFlags = 0;
     if ( bOnlyFolder )
