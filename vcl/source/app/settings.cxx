@@ -213,6 +213,7 @@ struct ImplMiscData
     TriState                        mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
     TriState                        mnDisablePrinting;
+    bool                            mbPseudoHeadless;
 };
 
 struct ImplHelpData
@@ -2341,6 +2342,8 @@ ImplMiscData::ImplMiscData()
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != NULL);
+    pEnv = getenv("VCL_HIDE_WINDOWS"); // do not display any windows
+    mbPseudoHeadless = (pEnv != NULL);
 }
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
@@ -2348,6 +2351,7 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
     mnEnableATT                 = rData.mnEnableATT;
     mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
+    mbPseudoHeadless = rData.mbPseudoHeadless;
 }
 
 MiscSettings::MiscSettings()
@@ -2533,6 +2537,11 @@ void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 bool MiscSettings::GetEnableLocalizedDecimalSep() const
 {
     return mpData->mbEnableLocalizedDecimalSep;
+}
+
+bool MiscSettings::GetPseudoHeadless() const
+{
+    return mpData->mbPseudoHeadless;
 }
 
 ImplHelpData::ImplHelpData()

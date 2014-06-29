@@ -17,6 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+# to avoid flashing windows during tests
+export VCL_HIDE_WINDOWS=1
+
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk

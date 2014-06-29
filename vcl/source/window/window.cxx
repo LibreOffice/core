@@ -5259,8 +5259,11 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
-            mpWindowImpl->mpFrame->Show( true, bNoActivate );
+            if (!Application::GetSettings().GetMiscSettings().GetPseudoHeadless())
+            {
+                bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
+                mpWindowImpl->mpFrame->Show( true, bNoActivate );
+            }
             if( aDogTag.IsDead() )
                 return;
 
