@@ -195,7 +195,8 @@ static SwTxtFmtColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
     SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
     if( !pColl )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+            rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId )
             pColl = pDoc->GetTxtCollFromPool( nId );
     }
@@ -1038,7 +1039,7 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
     return nRet;
 }
 
-static OUString lcl_CreateOutlineString( sal_uInt16 nIndex,
+static OUString lcl_CreateOutlineString( size_t nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
     OUString sEntry;
@@ -1634,7 +1635,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     {
         throw RuntimeException();
     }
-    sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
+    const sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
     if (nType != SW_SERVICE_INVALID)
     {
         return SwXServiceProvider::MakeInstance(nType, pDocShell->GetDoc());
@@ -2033,11 +2034,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
         {
-            sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
+            const sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
             bool bSet = false;
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
-                sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE;
+                const sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT |
+                                         nsRedlineMode_t::REDLINE_SHOW_DELETE;
                 bSet = (eMode & nMask) == nMask;
             }
             else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
@@ -2719,7 +2721,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         // determine the correct page number from the renderer index
         // #i114875
         // consider brochure print
-        const sal_uInt16 nPage = bPrintProspect
+        const sal_Int32 nPage = bPrintProspect
                              ? nRenderer + 1
                              : m_pRenderData->GetPagesToPrint()[ nRenderer ];
 
@@ -3199,7 +3201,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     //USER STYLES
 
     const SwCharFmts *pFmts = pDoc->GetCharFmts();
-    for(sal_uInt16 i = 0; i < pFmts->size(); ++i)
+    for(size_t i = 0; i < pFmts->size(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pFmts)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;
@@ -3224,7 +3226,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     }
 
     const SwTxtFmtColls *pColls = pDoc->GetTxtFmtColls();
-    for (sal_uInt16 i = 0; i < pColls->size(); ++i)
+    for (size_t i = 0; i < pColls->size(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;
@@ -3254,7 +3256,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
       IStyleAccess::AUTO_STYLE_CHAR,
       IStyleAccess::AUTO_STYLE_PARA
     };
-    for (sal_uInt16 i = 0; i < 2; ++i)
+    for (int i = 0; i < 2; ++i)
     {
         std::vector< SfxItemSet_Pointer_t > rStyles;
         pDoc->GetIStyleAccess().getAllStyles(rStyles, aFam[i]);
@@ -3553,14 +3555,13 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                 if(!pxDoc->GetDocShell())
                     throw RuntimeException();
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
-                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
+                const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
-                for (sal_uInt16 i = 0; i < nOutlineCount && !bFound; ++i)
+                for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
                 {
                     const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
                     const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-                    if(sParam ==
-                        lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
+                    if(sParam == lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
                     {
                         Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
                         aRet.setValue(&xOutline, cppu::UnoType<XPropertySet>::get());
@@ -3596,12 +3597,12 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
 
         SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
         const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nOutlineCount = rOutlineNodes.size();
+        const size_t nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
         OUString sSuffix("|outline");
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
-        for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
+        for (size_t i = 0; i < nOutlineCount; ++i)
         {
             OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
             sEntry += sSuffix;
@@ -3639,9 +3640,9 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
                 if(!pxDoc->GetDocShell())
                     throw RuntimeException();
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
-                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
+                const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
-                for (sal_uInt16 i = 0; i < nOutlineCount && !bRet; ++i)
+                for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
                 {
                     const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
                     const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();

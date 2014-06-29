@@ -407,7 +407,7 @@ uno::Any SwXTextView::getSelection()
                         comphelper::getProcessComponentContext());
 
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
-                for(sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); i++)
+                for(sal_uLong i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
@@ -549,7 +549,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     SwRubyList aList;
 
-    sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
+    const sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
     OUString aString;
@@ -620,7 +620,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 {
                     OUString sName;
                     SwStyleNameMapper::FillUIName(sTmp, sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                    sal_uInt16 nPoolId = sName.isEmpty() ? 0
+                    const sal_uInt16 nPoolId = sName.isEmpty() ? 0
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,
                                 nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
 
