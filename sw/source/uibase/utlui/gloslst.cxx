@@ -248,8 +248,8 @@ void SwGlossaryList::Update()
     const OUString sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
-        const sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
-        for(sal_uInt16 i = 0; i < nGroupCount; i++)
+        const size_t nGroupCount = pGlossaries->GetGroupCnt();
+        for(size_t i = 0; i < nGroupCount; ++i)
         {
             OUString sGrpName = pGlossaries->GetGroupName(i);
             const size_t nPath = static_cast<size_t>(

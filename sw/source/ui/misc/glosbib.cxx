@@ -92,8 +92,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     m_pPathLB->SelectEntryPos(0);
     m_pPathLB->Enable(true);
 
-    const sal_uInt16 nCount = pHdl->GetGroupCnt();
-    for( sal_uInt16 i = 0; i < nCount; ++i)
+    const size_t nCount = pHdl->GetGroupCnt();
+    for( size_t i = 0; i < nCount; ++i)
     {
         OUString sTitle;
         OUString sGroup = pHdl->GetGroupName(i, &sTitle);

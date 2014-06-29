@@ -89,7 +89,9 @@ SwXAutoTextContainer::~SwXAutoTextContainer()
 
 sal_Int32 SwXAutoTextContainer::getCount(void) throw( uno::RuntimeException, std::exception )
 {
-    return pGlossaries->GetGroupCnt();
+    OSL_ENSURE(pGlossaries->GetGroupCnt() < static_cast<size_t>(SAL_MAX_INT32),
+               "SwXAutoTextContainer::getCount: too many items");
+    return static_cast<sal_Int32>(pGlossaries->GetGroupCnt());
 }
 
 uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
@@ -97,9 +99,9 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    sal_uInt16 nCount = pGlossaries->GetGroupCnt();
-    if ( 0 <= nIndex && nIndex < nCount )
-        aRet = getByName(pGlossaries->GetGroupName( static_cast< sal_uInt16 >(nIndex) ));
+    const size_t nCount = pGlossaries->GetGroupCnt();
+    if ( 0 <= nIndex && static_cast<size_t>(nIndex) < nCount )
+        aRet = getByName(pGlossaries->GetGroupName( static_cast<size_t>(nIndex) ));
     else
         throw lang::IndexOutOfBoundsException();
     return aRet;
@@ -136,12 +138,14 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = pGlossaries->GetGroupCnt();
+    const size_t nCount = pGlossaries->GetGroupCnt();
+    OSL_ENSURE(nCount < static_cast<size_t>(SAL_MAX_INT32),
+               "SwXAutoTextContainer::getElementNames: too many groups");
 
-    uno::Sequence< OUString > aGroupNames(nCount);
+    uno::Sequence< OUString > aGroupNames(static_cast<sal_Int32>(nCount));
     OUString *pArr = aGroupNames.getArray();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; ++i )
     {
         // The names will be passed without a path extension.
         OUString sGroupName(pGlossaries->GetGroupName(i));

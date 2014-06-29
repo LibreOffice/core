@@ -149,12 +149,12 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
     }
 }
 
-sal_uInt16 SwGlossaryHdl::GetGroupCnt() const
+size_t SwGlossaryHdl::GetGroupCnt() const
 {
     return rStatGlossaries.GetGroupCnt();
 }
 
-OUString SwGlossaryHdl::GetGroupName( sal_uInt16 nId, OUString* pTitle )
+OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
 {
     OUString sRet = rStatGlossaries.GetGroupName(nId);
     if(pTitle)

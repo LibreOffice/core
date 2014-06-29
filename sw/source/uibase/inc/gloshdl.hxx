@@ -49,8 +49,8 @@ public:
     bool    ConvertToNew(SwTextBlocks& rOld);
     void    GlossaryDlg();
 
-    sal_uInt16  GetGroupCnt() const;
-    OUString    GetGroupName( sal_uInt16, OUString* pTitle = 0 );
+    size_t      GetGroupCnt() const;
+    OUString    GetGroupName( size_t, OUString* pTitle = 0 );
     bool        NewGroup(OUString & rGroupName, const OUString& rTitle);
     bool        DelGroup(const OUString &);
     bool        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);

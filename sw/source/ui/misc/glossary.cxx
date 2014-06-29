@@ -660,14 +660,14 @@ void SwGlossaryDlg::Init()
     m_pCategoryBox->SetUpdateMode( false );
     m_pCategoryBox->Clear();
     // display text block regions
-    const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
+    const size_t nCnt = pGlossaryHdl->GetGroupCnt();
     SvTreeListEntry* pSelEntry = 0;
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
     const sal_Int32 nSelPath = ::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32();
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
     const OUString sMyAutoTextEnglish("My AutoText");
     const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
-    for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
+    for(size_t nId = 0; nId < nCnt; ++nId )
     {
         OUString sTitle;
         OUString sGroupName(pGlossaryHdl->GetGroupName(nId, &sTitle));

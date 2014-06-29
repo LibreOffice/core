@@ -103,8 +103,8 @@ public:
                                 bool _bCreate = false
                             );
 
-    sal_uInt16                  GetGroupCnt();
-    OUString        GetGroupName(sal_uInt16 );
+    size_t          GetGroupCnt();
+    OUString        GetGroupName(size_t);
     OUString        GetGroupTitle( const OUString& rGroupName );
 
     bool            FindGroupName(OUString& rGroup);

@@ -97,9 +97,9 @@ OUString SwGlossaries::GetDefName()
 }
 
 // supplies the number of text block groups
-sal_uInt16 SwGlossaries::GetGroupCnt()
+size_t SwGlossaries::GetGroupCnt()
 {
-    return static_cast<sal_uInt16>(GetNameList().size());
+    return GetNameList().size();
 }
 
 // supplies the group's name
@@ -107,9 +107,8 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
 {
     // if the group name doesn't contain a path, a suitable group entry
     // can the searched for here;
-    sal_uInt16 nCount = GetGroupCnt();
-    sal_uInt16 i;
-    for(i= 0; i < nCount; i++)
+    const size_t nCount = GetGroupCnt();
+    for(size_t i = 0; i < nCount; ++i)
     {
         const OUString sTemp(GetGroupName(i));
         if (rGroup==sTemp.getToken(0, GLOS_DELIM))
@@ -121,7 +120,7 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
     // you can search two times because for more directories the case sensitive
     // name could occur multiple times
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for(i = 0; i < nCount; i++)
+    for(size_t i = 0; i < nCount; ++i)
     {
         const OUString sTemp( GetGroupName( i ));
         sal_uInt16 nPath = (sal_uInt16)sTemp.getToken(1, GLOS_DELIM).toInt32();
@@ -136,9 +135,9 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
     return false;
 }
 
-OUString SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
+OUString SwGlossaries::GetGroupName(size_t nGroupId)
 {
-    OSL_ENSURE(static_cast<size_t>(nGroupId) < m_GlosArr.size(),
+    OSL_ENSURE(nGroupId < m_GlosArr.size(),
             "SwGlossaries::GetGroupName: index out of bounds");
     return m_GlosArr[nGroupId];
 }
@@ -499,12 +498,12 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
 
 OUString SwGlossaries::GetCompleteGroupName( const OUString& rGroupName )
 {
-    const sal_uInt16 nCount = GetGroupCnt();
+    const size_t nCount = GetGroupCnt();
     // when the group name was created internally the path is here as well
     sal_Int32 nIndex = 0;
     const OUString sGroupName(rGroupName.getToken(0, GLOS_DELIM, nIndex));
     const bool bPathLen = !rGroupName.getToken(0, GLOS_DELIM, nIndex).isEmpty();
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
         const OUString sGrpName = GetGroupName(i);
         if (bPathLen)
