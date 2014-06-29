@@ -33,7 +33,7 @@ my $usage =
 "the last product upate. This information is obtained from the file which is passed as ".
 "argument changedTypes. The names in the version file must have a particular form. ".
 "They must end on one of folling terms: NEW_VERSION, OLD_VERSION, POLICY_VERSION\n".
-"If no new published types habe been added then no output, argument  newVersions, is written".
+"If no new published types have been added then no output, argument  newVersions, is written".
 "Usage is: \n increment_version.pl oldVersions  incVersions newVersions changedTypes\n\n".
 "oldVersion: Contains name value pairs, which are used for forming the config files of ".
 "the policy assemblies, for building the assemblies. \n\n".
