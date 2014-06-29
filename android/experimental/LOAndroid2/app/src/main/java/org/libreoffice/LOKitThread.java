@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LOKitThread extends Thread {
     private static final String LOGTAG = "GeckoThread";
+    private static final int TILE_SIZE = 256;
+
 
     public ConcurrentLinkedQueue<LOEvent> gEvents = new ConcurrentLinkedQueue<LOEvent>();
     private ViewportMetrics mViewportMetrics;
@@ -28,59 +30,75 @@ public class LOKitThread extends Thread {
     private boolean draw() throws InterruptedException {
         final LibreOfficeMainActivity application = LibreOfficeMainActivity.mAppContext;
 
-        Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable("docu");
-        //bitmap = convert(bitmap, Bitmap.Config.ARGB_8888);
+        Bitmap originalBitmap = application.getLayerClient().getLayerController().getDrawable("dummy_page");
 
-        StringWriter stringWriter = new StringWriter();
+        String metadata;
+        if (mViewportMetrics == null) {
+            metadata = createJson(0, 0, originalBitmap.getWidth(), originalBitmap.getHeight(), originalBitmap.getWidth(), originalBitmap.getHeight(), 0, 0, 1.0);
+        } else {
+            metadata = createJson(mViewportMetrics);
+        }
 
+        Rect bufferRect = application.getLayerClient().beginDrawing(originalBitmap.getWidth(), originalBitmap.getHeight(), 256, 256, metadata, false);
+        if (bufferRect == null)
+            return false;
+
+        ByteBuffer buffer = application.getLayerClient().lockBuffer();
+        for (Integer i = 1; i <= 9; i++) {
+            String imageName = "d" + i;
+            Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable(imageName);
+            bitmap.copyPixelsToBuffer(buffer.asIntBuffer());
+            buffer.position(buffer.position() + bitmap.getByteCount());
+        }
+        buffer.position(0);
+
+        application.getLayerClient().unlockBuffer();
+        application.getLayerClient().endDrawing(0, 0, originalBitmap.getWidth(), originalBitmap.getHeight());
+
+        application.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                application.getLayerClient().handleMessage("Viewport:UpdateLater", null);
+            }
+        });
+
+        return true;
+    }
+
+    private String createJson(ViewportMetrics viewportMetrics) {
+        return createJson(
+                (int) viewportMetrics.getOrigin().x,
+                (int) viewportMetrics.getOrigin().y,
+                (int) viewportMetrics.getSize().width,
+                (int) viewportMetrics.getSize().height,
+                (int) viewportMetrics.getPageSize().width,
+                (int) viewportMetrics.getPageSize().height,
+                (int) viewportMetrics.getViewportOffset().x,
+                (int) viewportMetrics.getViewportOffset().y,
+                viewportMetrics.getZoomFactor());
+    }
+
+    private String createJson(int x, int y, int width, int height, int pageWidth, int pageHeight, int offsetX, int offsetY, double zoom) {
         try {
+            StringWriter stringWriter = new StringWriter();
             JsonWriter writer = new JsonWriter(stringWriter);
             writer.beginObject();
-            if (mViewportMetrics == null) {
-                writer.name("x").value(0);
-                writer.name("y").value(0);
-                writer.name("width").value(bitmap.getWidth());
-                writer.name("height").value(bitmap.getHeight());
-                writer.name("pageWidth").value(bitmap.getWidth());
-                writer.name("pageHeight").value(bitmap.getHeight());
-                writer.name("offsetX").value(0);
-                writer.name("offsetY").value(0);
-                writer.name("zoom").value(0.5);
-            } else {
-                writer.name("x").value(mViewportMetrics.getOrigin().x);
-                writer.name("y").value(mViewportMetrics.getOrigin().y);
-                writer.name("width").value(mViewportMetrics.getSize().width);
-                writer.name("height").value(mViewportMetrics.getSize().height);
-                writer.name("pageWidth").value(mViewportMetrics.getPageSize().width);
-                writer.name("pageHeight").value(mViewportMetrics.getPageSize().height);
-                writer.name("offsetX").value(mViewportMetrics.getViewportOffset().x);
-                writer.name("offsetY").value(mViewportMetrics.getViewportOffset().y);
-                writer.name("zoom").value(mViewportMetrics.getZoomFactor());
-            }
+            writer.name("x").value(x);
+            writer.name("y").value(y);
+            writer.name("width").value(width);
+            writer.name("height").value(height);
+            writer.name("pageWidth").value(pageWidth);
+            writer.name("pageHeight").value(pageHeight);
+            writer.name("offsetX").value(offsetX);
+            writer.name("offsetY").value(offsetY);
+            writer.name("zoom").value(zoom);
             writer.name("backgroundColor").value("rgb(255,255,255)");
             writer.endObject();
             writer.close();
+            return stringWriter.toString();
         } catch (IOException ex) {
         }
-
-        Rect bufferRect = application.getLayerClient().beginDrawing(bitmap.getWidth(), bitmap.getHeight(), 256, 256, stringWriter.toString(), false);
-
-        if (bufferRect == null) {
-            return false;
-        }
-            ByteBuffer buffer = application.getLayerClient().lockBuffer();
-            bitmap.copyPixelsToBuffer(buffer.asIntBuffer());
-            application.getLayerClient().unlockBuffer();
-
-            application.getLayerClient().endDrawing(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-            application.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    application.getLayerClient().handleMessage("Viewport:UpdateLater", null);
-                }
-            });
-        return true;
+        return null;
     }
 
     private short convertTo16Bit(int color) {
