@@ -43,7 +43,7 @@ namespace dbaui
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
         <BR>
-        The controls to be used habe to be defined within the resource, as usual, but
+        The controls to be used have to be defined within the resource, as usual, but
         this class does all the handling necessary.
     */
     class OCommonBehaviourTabPage : public OGenericAdministrationPage

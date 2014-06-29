@@ -2221,7 +2221,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                 }
             }
             // OK, now the map data is being pushed. Unfortunatly OS2 and BMP
-            // do habe a different RGB ordering when using 24-bit
+            // do have a different RGB ordering when using 24-bit
             boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nDataLen]);
             pOS2MET->Read(pBuf.get(),nDataLen);
             if (p->nBitsPerPixel==24) {
