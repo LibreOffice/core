@@ -869,8 +869,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
 
     nResult = 0;
-    sal_uInt16 nSearchProc = 0;
-    while(nSearchProc < 2)
+    for (int nSearchProc = 0; nSearchProc < 2; ++nSearchProc)
     {
         //try attribute search first
         if(pSearch->HasSearchAttributes())
@@ -909,7 +908,6 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                     (FindRanges)eRanges,
                     /*bool bReplace =*/false );
         }
-        nSearchProc++;
         if(nResult || (eRanges&(FND_IN_SELALL|FND_IN_OTHER)))
             break;
         //second step - find in other
