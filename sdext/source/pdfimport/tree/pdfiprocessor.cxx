@@ -638,7 +638,6 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     aProps[ "xmlns:xsd"]          = "http://www.w3.org/2001/XMLSchema";
     aProps[ "xmlns:xsi"]          = "http://www.w3.org/2001/XMLSchema-instance";
     aProps[ "office:version" ]    = "1.0";
-    aProps[ "office:version" ]    = "1.0";
 
     aContext.rEmitter.beginTag( "office:document", aProps );
 

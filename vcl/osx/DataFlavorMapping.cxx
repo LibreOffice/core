@@ -508,7 +508,6 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
 {
     const NSString* sysFlavor = NULL;
     rbInternal = false;
-    rbInternal = false;
 
     for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
     {
