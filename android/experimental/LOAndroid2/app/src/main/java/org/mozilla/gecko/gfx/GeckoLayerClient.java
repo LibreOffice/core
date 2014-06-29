@@ -48,6 +48,7 @@ import org.mozilla.gecko.util.FloatUtils;
 import org.mozilla.gecko.GeckoEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -57,61 +58,79 @@ import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class GeckoLayerClient extends LayerClient implements GeckoEventListener {
-    private static final String LOGTAG = "GeckoLayerClient";
-
     public static final int LAYER_CLIENT_TYPE_NONE = 0;
     public static final int LAYER_CLIENT_TYPE_SOFTWARE = 1;
     public static final int LAYER_CLIENT_TYPE_GL = 2;
-
+    private static final String LOGTAG = "GeckoLayerClient";
+    private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
+    private static Pattern sColorPattern;
     protected IntSize mScreenSize;
     protected IntSize mBufferSize;
-
     protected Layer mTileLayer;
-
     /* The viewport that Gecko is currently displaying. */
     protected ViewportMetrics mGeckoViewport;
-
     /* The viewport that Gecko will display when drawing is finished */
     protected ViewportMetrics mNewGeckoViewport;
-
-    private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
-
     // mUpdateViewportOnEndDraw is used to indicate that we received a
     // viewport update notification while drawing. therefore, when the
     // draw finishes, we need to update the entire viewport rather than
     // just the page size. this boolean should always be accessed from
     // inside a transaction, so no synchronization is needed.
     private boolean mUpdateViewportOnEndDraw;
-
     private String mLastCheckerboardColor;
-
-    private static Pattern sColorPattern;
-
     /* Used by robocop for testing purposes */
     private DrawListener mDrawListener;
-
-    protected abstract boolean handleDirectTextureChange(boolean hasDirectTexture);
-    protected abstract boolean shouldDrawProceed(int tileWidth, int tileHeight);
-    protected abstract void updateLayerAfterDraw(Rect updatedRect);
-    protected abstract IntSize getBufferSize();
-    protected abstract IntSize getTileSize();
-    protected abstract void tileLayerUpdated();
-    public abstract Bitmap getBitmap();
-    public abstract int getType();
 
     public GeckoLayerClient(Context context) {
         mScreenSize = new IntSize(0, 0);
         mBufferSize = new IntSize(0, 0);
     }
 
-    /** Attaches the root layer to the layer controller so that Gecko appears. */
+    // Parses a color from an RGB triple of the form "rgb([0-9]+, [0-9]+, [0-9]+)". If the color
+    // cannot be parsed, returns white.
+    private static int parseColorFromGecko(String string) {
+        if (sColorPattern == null) {
+            sColorPattern = Pattern.compile("rgb\\((\\d+),\\s*(\\d+),\\s*(\\d+)\\)");
+        }
+
+        Matcher matcher = sColorPattern.matcher(string);
+        if (!matcher.matches()) {
+            return Color.WHITE;
+        }
+
+        int r = Integer.parseInt(matcher.group(1));
+        int g = Integer.parseInt(matcher.group(2));
+        int b = Integer.parseInt(matcher.group(3));
+        return Color.rgb(r, g, b);
+    }
+
+    protected abstract boolean handleDirectTextureChange(boolean hasDirectTexture);
+
+    protected abstract boolean shouldDrawProceed(int tileWidth, int tileHeight);
+
+    protected abstract void updateLayerAfterDraw(Rect updatedRect);
+
+    protected abstract IntSize getBufferSize();
+
+    protected abstract IntSize getTileSize();
+
+    protected abstract void tileLayerUpdated();
+
+    public abstract Bitmap getBitmap();
+
+    public abstract int getType();
+
+    /**
+     * Attaches the root layer to the layer controller so that Gecko appears.
+     */
     @Override
     public void setLayerController(LayerController layerController) {
         super.setLayerController(layerController);
@@ -127,10 +146,9 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         sendResizeEventIfNecessary();
     }
 
-    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight,
-                             String metadata, boolean hasDirectTexture) {
-        Log.e(LOGTAG, "### beginDrawing " + width + " " + height + " " + tileWidth + " " +
-                tileHeight + " " + hasDirectTexture);
+    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata, boolean hasDirectTexture) {
+
+        Log.e(LOGTAG, "### beginDrawing " + width + " " + height + " " + tileWidth + " " + tileHeight + " " + hasDirectTexture);
 
         // If we've changed surface types, cancel this draw
         if (handleDirectTextureChange(hasDirectTexture)) {
@@ -187,6 +205,7 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
 
 
             // Take the intersection of the two as the area we're interested in rendering.
+
             if (!bufferRect.intersect(currentRect)) {
                 // If there's no intersection, we have no need to render anything,
                 // but make sure to update the viewport size.
@@ -264,15 +283,14 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         Log.e(LOGTAG, "### sendResizeEventIfNecessary " + force);
 
         DisplayMetrics metrics = new DisplayMetrics();
-        /*GeckoApp*/LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         // Return immediately if the screen size hasn't changed or the viewport
         // size is zero (which indicates that the rendering surface hasn't been
         // allocated yet).
-        boolean screenSizeChanged = (metrics.widthPixels != mScreenSize.width ||
-                metrics.heightPixels != mScreenSize.height);
-        boolean viewportSizeValid = (getLayerController() != null &&
-                getLayerController().getViewportSize().isPositive());
+        boolean screenSizeChanged = (metrics.widthPixels != mScreenSize.width || metrics.heightPixels != mScreenSize.height);
+        boolean viewportSizeValid = (getLayerController() != null && getLayerController().getViewportSize().isPositive());
+
         if (!(force || (screenSizeChanged && viewportSizeValid))) {
             return;
         }
@@ -281,31 +299,11 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         IntSize bufferSize = getBufferSize(), tileSize = getTileSize();
 
         Log.e(LOGTAG, "### Screen-size changed to " + mScreenSize);
-        //GeckoEvent event = GeckoEvent.createSizeChangedEvent(bufferSize.width, bufferSize.height,
-        //        metrics.widthPixels, metrics.heightPixels,
-        //        tileSize.width, tileSize.height);
-        //GeckoAppShell.sendEventToGecko(event);
+
         LOEvent event = LOEvent.sizeChanged(bufferSize.width, bufferSize.height,
-                                            metrics.widthPixels, metrics.heightPixels,
-                                            tileSize.width, tileSize.height);
-    }
-
-    // Parses a color from an RGB triple of the form "rgb([0-9]+, [0-9]+, [0-9]+)". If the color
-    // cannot be parsed, returns white.
-    private static int parseColorFromGecko(String string) {
-        if (sColorPattern == null) {
-            sColorPattern = Pattern.compile("rgb\\((\\d+),\\s*(\\d+),\\s*(\\d+)\\)");
-        }
-
-        Matcher matcher = sColorPattern.matcher(string);
-        if (!matcher.matches()) {
-            return Color.WHITE;
-        }
-
-        int r = Integer.parseInt(matcher.group(1));
-        int g = Integer.parseInt(matcher.group(2));
-        int b = Integer.parseInt(matcher.group(3));
-        return Color.rgb(r, g, b);
+                metrics.widthPixels, metrics.heightPixels,
+                tileSize.width, tileSize.height);
+        LOKitShell.sendEvent(event);
     }
 
     @Override
@@ -328,7 +326,8 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
                             mPendingViewportAdjust = false;
                             adjustViewport();
                         }
-                    }, MIN_VIEWPORT_CHANGE_DELAY - timeDelta);
+                    }, MIN_VIEWPORT_CHANGE_DELAY - timeDelta
+            );
             mPendingViewportAdjust = true;
             return;
         }
@@ -342,18 +341,15 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     }
 
     private void adjustViewport() {
-        ViewportMetrics viewportMetrics =
-                new ViewportMetrics(getLayerController().getViewportMetrics());
+        ViewportMetrics viewportMetrics = new ViewportMetrics(getLayerController().getViewportMetrics());
 
         PointF viewportOffset = viewportMetrics.getOptimumViewportOffset(mBufferSize);
         viewportMetrics.setViewportOffset(viewportOffset);
         viewportMetrics.setViewport(viewportMetrics.getClampedViewport());
 
-        //GeckoAppShell.sendEventToGecko(GeckoEvent.createViewportEvent(viewportMetrics));
         LOKitShell.sendEvent(LOEvent.viewport(viewportMetrics));
         if (mViewportSizeChanged) {
             mViewportSizeChanged = false;
-            //GeckoAppShell.viewSizeChanged();
             LOKitShell.viewSizeChanged();
         }
 
@@ -367,7 +363,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
 
             // Redraw everything.
             Rect rect = new Rect(0, 0, mBufferSize.width, mBufferSize.height);
-            //GeckoAppShell.sendEventToGecko(GeckoEvent.createDrawEvent(rect));
             LOKitShell.sendEvent(LOEvent.draw(rect));
         } else if ("Viewport:UpdateLater".equals(event)) {
             Log.e(LOGTAG, "### Java side Viewport:UpdateLater()!");
@@ -377,7 +372,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
 
     @Override
     public void geometryChanged() {
-        /* Let Gecko know if the screensize has changed */
         sendResizeEventIfNecessary();
         render();
     }
@@ -391,7 +385,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     }
 
     public ViewportMetrics getGeckoViewportMetrics() {
-        // Return a copy, as we modify this inside the Gecko thread
         if (mGeckoViewport != null)
             return new ViewportMetrics(mGeckoViewport);
         return null;
@@ -401,14 +394,17 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         sendResizeEventIfNecessary(false);
     }
 
-    /** Used by robocop for testing purposes. Not for production use! This is called via reflection by robocop. */
+    /**
+     * Used by robocop for testing purposes. Not for production use! This is called via reflection by robocop.
+     */
     public void setDrawListener(DrawListener listener) {
         mDrawListener = listener;
     }
 
-    /** Used by robocop for testing purposes. Not for production use! This is used via reflection by robocop. */
+    /**
+     * Used by robocop for testing purposes. Not for production use! This is used via reflection by robocop.
+     */
     public interface DrawListener {
         public void drawFinished(int x, int y, int width, int height);
     }
 }
-

@@ -164,10 +164,9 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     }
 
     @Override
-    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight,
-                             String metadata, boolean hasDirectTexture) {
-        Rect bufferRect = super.beginDrawing(width, height, tileWidth, tileHeight,
-                metadata, hasDirectTexture);
+    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata, boolean hasDirectTexture) {
+        Rect bufferRect = super.beginDrawing(width, height, tileWidth, tileHeight, metadata, hasDirectTexture);
+
         if (bufferRect == null) {
             return bufferRect;
         }
