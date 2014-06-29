@@ -50,7 +50,7 @@ SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
 
 void SvLinkSourceTimer::Timeout()
 {
-    // Secure against beeing destroyed in Handler
+    // Secure against being destroyed in Handler
     SvLinkSourceRef aAdv( pOwner );
     pOwner->SendDataChanged();
 }

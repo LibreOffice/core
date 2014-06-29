@@ -68,7 +68,7 @@ class ZoomList;
 
     <p>Despite its name this class is not a descendant of SfxViewShell
     but of SfxShell.  Its name expresses the fact that it acts like a
-    view shell.  Beeing a stacked shell rather then being an actual view shell
+    view shell.  Being a stacked shell rather then being an actual view shell
     there can be several instances of this class that
     <ul>
     <li>all are based on the same view shell and thus show the same

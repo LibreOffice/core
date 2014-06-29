@@ -143,7 +143,7 @@ public:
     void            RemoveServer( SvLinkSource* rObj );
 
     // A transfer is aborted, so cancel all download media
-    // (for the time beeing this is only of interest for the FileLinks!)
+    // (for the time being this is only of interest for the FileLinks!)
     void CancelTransfers();
 
     // To send status information from the FileObject to the Baselink,

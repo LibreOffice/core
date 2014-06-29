@@ -100,7 +100,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             m_xFilterList.addPropertyChangeListener( "SelectedItems", this );
             m_xManualFilter.addPropertyChangeListener( "Date", this );
 
-            // want to know about the date field beeing reset
+            // want to know about the date field being reset
             XReset xReset = UNO.queryReset( m_xManualFilter );
             xReset.addResetListener( this );
 

@@ -484,7 +484,7 @@ private:
     /// stops sharing the connection with the parent
     void        stopSharingConnection( );
 
-    /// called when the connection which we share with our parent is beeing disposed
+    /// called when the connection which we share with our parent is being disposed
     void        disposingSharedConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn );
 
     /// checks if we currently share our connection with our parent

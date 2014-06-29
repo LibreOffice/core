@@ -2584,7 +2584,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
         // Either dummy window or window in the auto-show-mode are processed
         // (not pinned, FadeIn).
         // Only the abandoned window may be invisible, because perhaps its
-        // size is just beeing calculated before it is displayed.
+        // size is just being calculated before it is displayed.
         SfxSplitWindow* pSplitWin = pSplit[n];
         bool bDummyWindow = !pSplitWin->IsFadeIn();
         Window *pDummy = pSplitWin->GetSplitWindow();

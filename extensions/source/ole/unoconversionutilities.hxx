@@ -321,7 +321,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             // the sequence expects. Thus variantToAny produces the correct type
             // E.g. An Array object contains VT_I4 and the sequence expects shorts
             // than the vartype must be changed. The reason is, you can't specify the
-            // type in JavaScript and the script engine determines the type beeing used.
+            // type in JavaScript and the script engine determines the type being used.
             switch( ptype.getTypeClass())
             {
             case TypeClass_CHAR: // could be: new Array( 12, 'w', "w")

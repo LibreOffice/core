@@ -2354,7 +2354,7 @@ void SfxViewFrame::StateView_Impl
     This internal methode returns in 'rSet' the Status for the  <SfxShell>
     Subclass SfxViewFrame in the <SVIDL> described <Slots>.
 
-    Thus exactly those Slots-IDs that are recognized as beeing invalid by Sfx
+    Thus exactly those Slots-IDs that are recognized as being invalid by Sfx
     are included as Which-ranges in 'rSet'. If there exists a mapping for
     single slot-IDs of the <SfxItemPool> set in the shell, then the respective
     Which-IDs are used so that items can be replaced directly with a working

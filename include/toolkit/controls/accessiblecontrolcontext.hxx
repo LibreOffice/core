@@ -45,7 +45,7 @@ namespace toolkit
         <p><b>life time control<b/><br/>
         This control should be held weak by the creator (an UNO control), it itself holds a hard reference to the
         control model, and a weak reference to the control. The reference to the model is freed when the model
-        is beeing disposed.</p>
+        is being disposed.</p>
     */
     class OAccessibleControlContext
             :public ::comphelper::OAccessibleImplementationAccess
