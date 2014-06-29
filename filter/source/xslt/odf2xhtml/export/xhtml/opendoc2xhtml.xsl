@@ -97,7 +97,7 @@
 	<xsl:param name="sourceBaseURL" select="'./'" />
 
 	<!-- OPTIONAL: (MANDATORY: for session management by URL rewriting)
-		 Useful for WebApplications: if a HTTP session is not cookie based, URL rewriting is beeing used (the session is appended to the URL).
+		 Useful for WebApplications: if a HTTP session is not cookie based, URL rewriting is being used (the session is appended to the URL).
 		 This URL session is used for example when links to graphics are created by XSLT. Otherwise the user havt to log again in for every graphic he liks to see. -->
 	<xsl:param name="optionalURLSuffix" />
 

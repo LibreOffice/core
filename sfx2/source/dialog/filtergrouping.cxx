@@ -106,7 +106,7 @@ namespace sfx2
     the filter itself) nor indirectly (as part of another local group).</p>
 
     <p>The only exception are filters which are part of a global class <em>and</em> a local class. This is allowed.
-    Beeing cotained in two local classes isn't.</p>
+    Being cotained in two local classes isn't.</p>
 
     <p>So that's all what you need to know: Understand the concept of "filter classes" (a filter class combines
     different filters and acts as if it's a filter itself) and the concept of groups (a group just describes a
@@ -433,7 +433,7 @@ namespace sfx2
                         ||  ( s_cWildcardSeparator == pBuffer[ nExistentWCEnd ] )
                         )
                     {   // it's really the complete wildcard we found
-                        // (not something like _rWC beeing "*.t" and _rToBeExtended containing "*.txt")
+                        // (not something like _rWC being "*.t" and _rToBeExtended containing "*.txt")
                         // -> outta here
                         return;
                     }

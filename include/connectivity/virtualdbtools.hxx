@@ -277,7 +277,7 @@ namespace connectivity
 
         //= ISQLParseNode
 
-        /** a simple version of the OSQLParseNode, with all methods beeing virtual
+        /** a simple version of the OSQLParseNode, with all methods being virtual
         */
         class OOO_DLLPUBLIC_DBTOOLS ISQLParseNode : public ::rtl::IReference
         {
@@ -304,7 +304,7 @@ namespace connectivity
 
         //= ISQLParser
 
-        /** a simple version of the OSQLParser, with all methods beeing virtual
+        /** a simple version of the OSQLParser, with all methods being virtual
         */
         class OOO_DLLPUBLIC_DBTOOLS ISQLParser : public ::rtl::IReference
         {

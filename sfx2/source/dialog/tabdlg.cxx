@@ -282,7 +282,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
 /*  [Description]
 
     static Method: hereby are the implementations of the TabPage code
-    beeing simplified.
+    being simplified.
 */
 
 {

@@ -389,7 +389,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
             static_cast<sal_uLong>(pParaList->GetParagraphCount()) )
         nCount = pParaList->GetParagraphCount() - nStartPara;
 
-    // When a new OutlinerParaObject is created because a paragraph is just beeing deleted,
+    // When a new OutlinerParaObject is created because a paragraph is just being deleted,
     // it can happen that the ParaList is not updated yet...
     if ( ( nStartPara + nCount ) > pEditEngine->GetParagraphCount() )
         nCount = pEditEngine->GetParagraphCount() - nStartPara;

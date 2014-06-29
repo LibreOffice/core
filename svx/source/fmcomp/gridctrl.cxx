@@ -3591,7 +3591,7 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& /*_rEvt*/)
 {
     if (_nId == 0)
-    {   // the seek cursor is beeing disposed
+    {   // the seek cursor is being disposed
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
         setDataSource(NULL,0); // our clone was disposed so we set our datasource to null to avoid later acces to it
         if (m_nAsynAdjustEvent)

@@ -80,7 +80,7 @@ public:
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource
 
-        <p>The resource must contain a local image lists, with the id beeing the integer equivalent for the
+        <p>The resource must contain a local image lists, with the id being the integer equivalent for the
         requested bitmap mode, incremented by 1.</p>
 
         <p>Usually, you will use the same resource which originally constructed the object.</p>

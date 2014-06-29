@@ -104,7 +104,7 @@ namespace xmloff
 
         MapPropertySet2Map::iterator
                             m_aCurrentPageIds;
-            // the iterator for the control id map for the page beeing handled
+            // the iterator for the control id map for the page being handled
         MapPropertySet2Map::iterator
                             m_aCurrentPageReferring;
             // the same for the map of referring controls

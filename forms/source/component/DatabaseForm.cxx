@@ -2768,7 +2768,7 @@ void ODatabaseForm::stopSharingConnection( )
             xSharedConnComp->removeEventListener( static_cast< XLoadListener* >( this ) );
 
         // no need to dispose the conn: we're not the owner, this is our parent
-        // (in addition, this method may be called if the connection is beeing disposed while we use it)
+        // (in addition, this method may be called if the connection is being disposed while we use it)
 
         // reset the property
         xSharedConn.clear();

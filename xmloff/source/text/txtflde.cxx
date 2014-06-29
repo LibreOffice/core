@@ -1198,7 +1198,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // sequence field: name, formula, seq-format
         OUString sName = GetStringProperty(sPropertyVariableName, rPropSet);
-        // TODO: use reference name only if actually beeing referenced.
+        // TODO: use reference name only if actually being referenced.
         ProcessString(XML_REF_NAME,
                       MakeSequenceRefName(
                           GetInt16Property(sPropertySequenceValue, rPropSet),

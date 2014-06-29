@@ -891,7 +891,7 @@ namespace svt
         EditBrowseBox * pTHIS = const_cast<EditBrowseBox *> (this);
 
         // save the cell content if
-        // a) a selection is beeing made
+        // a) a selection is being made
         // b) the row is changing
         if (IsModified() && (nInfo & (ROWCHANGE | COLSELECT | ROWSELECT)) &&
             !pTHIS->SaveRow())

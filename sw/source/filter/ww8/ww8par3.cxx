@@ -1993,7 +1993,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
             if (pAktColl)
             {
-                // here a "named" style is beeing configured
+                // here a "named" style is being configured
 
                 // disable the numbering/list in the style currently configured
                 pAktColl->SetFmtAttr(*GetDfltAttr(RES_PARATR_NUMRULE));

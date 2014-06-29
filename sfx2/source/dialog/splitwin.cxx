@@ -327,7 +327,7 @@ SfxSplitWindow::~SfxSplitWindow()
     if ( pEmptyWin )
     {
         // Set pOwner to NULL, otherwise try to delete pEmptyWin once more. The
-        // window that is just beeing docked is always deleted from the outside.
+        // window that is just being docked is always deleted from the outside.
         pEmptyWin->pOwner = NULL;
         delete pEmptyWin;
     }
@@ -822,7 +822,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
 /*  [Description]
 
     Removes a DockingWindow. If it was the last one, then the SplitWindow is
-    beeing hidden.
+    being hidden.
 */
 {
     sal_uInt16 nSet = GetSet( pDockWin->GetType() );

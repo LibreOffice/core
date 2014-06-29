@@ -66,7 +66,7 @@ sal_Int32 SvxOutlinerForwarder::GetTextLen( sal_Int32 nParagraph ) const
 OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
     //! GetText (ESelection) should probably also be in the Outliner
-    // in the time beeing use as the hack for the EditEngine:
+    // in the time being use as the hack for the EditEngine:
     EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }

@@ -85,7 +85,7 @@ namespace xmloff
 
         /** lookup a control given by id.
 
-            <p>The control must be part of the page which is currently beeing imported.</p>
+            <p>The control must be part of the page which is currently being imported.</p>
 
             <p>(And, of course, the control must have been imported already at the moment you call this.)</p>
 

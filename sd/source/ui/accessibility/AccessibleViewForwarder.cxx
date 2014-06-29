@@ -24,7 +24,7 @@
 
 namespace accessibility {
 
-/** For the time beeing, the implementation of this class will not use the
+/** For the time being, the implementation of this class will not use the
     member mrDevice.  Instead the device is retrieved from the view
     every time it is used.  This is necessary because the device has to stay
     up-to-date with the current view and the class has to stay compatible.

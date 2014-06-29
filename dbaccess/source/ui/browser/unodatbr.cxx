@@ -3376,7 +3376,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
     if (isContainer(pRHS))
     {
         // don't use getEntryType (directly or indirecly) for the LHS:
-        // LHS is currently beeing inserted, so it is not "completely valid" at the moment
+        // LHS is currently being inserted, so it is not "completely valid" at the moment
 
         const EntryType eRight = getEntryType(pRHS);
         if (etTableContainer == eRight)
@@ -3766,7 +3766,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
         return;
 
     if ( isSelected( pDataSourceEntry ) )
-    {   // a table or query belonging to the deleted data source is currently beeing displayed.
+    {   // a table or query belonging to the deleted data source is currently being displayed.
         OSL_ENSURE( m_pTreeView->getListBox().GetRootLevelParent( m_pCurrentlyDisplayed ) == pDataSourceEntry,
             "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: inconsistence (1)!" );
         unloadAndCleanup( true );

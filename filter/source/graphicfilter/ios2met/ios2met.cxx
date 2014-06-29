@@ -2220,7 +2220,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     for (i=0; i<nColTabSize; i++) (p->pBMP)->WriteUInt32( GetPalette0RGB(i) );
                 }
             }
-            // OK, now the map data is beeing pushed. Unfortunatly OS2 and BMP
+            // OK, now the map data is being pushed. Unfortunatly OS2 and BMP
             // do habe a different RGB ordering when using 24-bit
             boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nDataLen]);
             pOS2MET->Read(pBuf.get(),nDataLen);

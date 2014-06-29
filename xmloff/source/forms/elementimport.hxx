@@ -95,7 +95,7 @@ namespace xmloff
             @param _rImport
                 the importer
             @param _rEventManager
-                the event attacher manager for the control beeing imported
+                the event attacher manager for the control being imported
             @param _nPrefix
                 the namespace prefix
             @param _rName
@@ -307,7 +307,7 @@ namespace xmloff
     class OReferredControlImport : public OControlImport
     {
     protected:
-        OUString m_sReferringControls;   // the list of ids of controls referring to the one beeing imported
+        OUString m_sReferringControls;   // the list of ids of controls referring to the one being imported
 
     public:
         OReferredControlImport(

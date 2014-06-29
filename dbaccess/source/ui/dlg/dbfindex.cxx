@@ -343,7 +343,7 @@ void ODbaseIndexDialog::Init()
                     // and remove it from the free index list
                     aUsedIndexes.push_back(aEntry);
                         // do this later below. We may not have encountered the index file, yet, thus we may not
-                        // know the index as beeing free, yet
+                        // know the index as being free, yet
                 }
             }
         }
