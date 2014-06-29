@@ -350,21 +350,17 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             aLineWidth <<= i->second.toInt32()/360;
         else if (i->first == "pVerticies")
         {
-            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+            comphelper::SequenceAsVector<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
             sal_Int32 nSize = 0; // Size of a token (its value is hardwired in the exporter)
             sal_Int32 nCount = 0; // Number of tokens
             sal_Int32 nCharIndex = 0; // Character index
-            sal_Int32 nIndex = 0; // Array index
             do
             {
                 OUString aToken = i->second.getToken(0, ';', nCharIndex);
                 if (!nSize)
                     nSize = aToken.toInt32();
                 else if (!nCount)
-                {
                     nCount = aToken.toInt32();
-                    aCoordinates.realloc(nCount);
-                }
                 else if (aToken.getLength())
                 {
                     // The coordinates are in an (x,y) form.
@@ -381,14 +377,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                             oY.reset(aPoint.toInt32());
                     }
                     while (nI >= 0);
-                    aCoordinates[nIndex].First.Value <<= *oX;
-                    aCoordinates[nIndex].Second.Value <<= *oY;
-                    nIndex++;
+                    drawing::EnhancedCustomShapeParameterPair aPair;
+                    aPair.First.Value <<= *oX;
+                    aPair.Second.Value <<= *oY;
+                    aCoordinates.push_back(aPair);
                 }
             }
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Coordinates";
-            aPropertyValue.Value <<= aCoordinates;
+            aPropertyValue.Value <<= aCoordinates.getAsConstList();
             aPath.push_back(aPropertyValue);
         }
         else if (i->first == "pSegmentInfo")
