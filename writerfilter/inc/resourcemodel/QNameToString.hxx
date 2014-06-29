@@ -52,29 +52,6 @@ public:
     std::string operator()(Id qName);
 };
 
-class SprmIdToString
-{
-    typedef boost::shared_ptr<SprmIdToString> Pointer_t;
-
-    static Pointer_t pInstance;
-
-    std::map<sal_uInt32, std::string> mMap;
-
-protected:
-    /**
-       Generated automatically.
-    */
-    SprmIdToString();
-
-public:
-    static Pointer_t Instance();
-#ifdef DEBUG_DOMAINMAPPER
-    std::string operator()(sal_uInt32 nId);
-#endif
-};
-
-
-
 }
 
 #endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
