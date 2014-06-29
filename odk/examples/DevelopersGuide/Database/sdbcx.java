@@ -387,7 +387,7 @@ public class sdbcx
             xKeyCol.setPropertyValue("Name","SNR");
             // append the key column
             xKeyColAppend.appendByDescriptor(xKeyCol);
-            // apend the key
+            // append the key
             xKeyAppend.appendByDescriptor(xKey);
             // the last step is to append the new table to the tables collection
              XAppend xTableAppend = UnoRuntime.queryInterface(XAppend.class,xTabFac);
