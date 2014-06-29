@@ -6850,6 +6850,12 @@ if test "$ENABLE_JAVA" != ""; then
         fi
     fi
 
+    # MacOS X: /usr/libexec/java_home helps to set the current JDK_HOME. Actually JDK_HOME should NOT be set where java (/usr/bin/java) is located.
+    # /usr/bin/java -> /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java, but /usr does not contain the JDK libraries
+    if test -z "$with_jdk_home" -a "$_os" = "Darwin" -a -x /usr/libexec/java_home; then
+        with_jdk_home=`/usr/libexec/java_home`
+    fi
+
     JAVA_HOME=; export JAVA_HOME
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVAINTERPRETER, $with_java)
