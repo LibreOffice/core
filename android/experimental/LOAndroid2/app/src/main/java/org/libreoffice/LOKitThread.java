@@ -39,7 +39,7 @@ public class LOKitThread extends Thread {
             metadata = createJson(mViewportMetrics);
         }
 
-        Rect bufferRect = application.getLayerClient().beginDrawing(originalBitmap.getWidth(), originalBitmap.getHeight(), 256, 256, metadata, false);
+        Rect bufferRect = application.getLayerClient().beginDrawing(originalBitmap.getWidth(), originalBitmap.getHeight(), 256, 256, metadata);
         if (bufferRect == null)
             return false;
 

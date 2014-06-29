@@ -38,17 +38,6 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.libreoffice.LOEvent;
-import org.libreoffice.LOKitShell;
-import org.libreoffice.LibreOfficeMainActivity;
-import org.mozilla.gecko.util.FloatUtils;
-//import org.mozilla.gecko.GeckoApp;
-//import org.mozilla.gecko.GeckoAppShell;
-//import org.mozilla.gecko.GeckoEvent;
-import org.mozilla.gecko.GeckoEventListener;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -59,13 +48,26 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.libreoffice.LOEvent;
+import org.libreoffice.LOKitShell;
+import org.libreoffice.LibreOfficeMainActivity;
+import org.mozilla.gecko.GeckoEventListener;
+import org.mozilla.gecko.util.FloatUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+//import org.mozilla.gecko.GeckoApp;
+//import org.mozilla.gecko.GeckoAppShell;
+//import org.mozilla.gecko.GeckoEvent;
 
 public abstract class GeckoLayerClient extends LayerClient implements GeckoEventListener {
     public static final int LAYER_CLIENT_TYPE_NONE = 0;
     public static final int LAYER_CLIENT_TYPE_SOFTWARE = 1;
     public static final int LAYER_CLIENT_TYPE_GL = 2;
+
     private static final String LOGTAG = "GeckoLayerClient";
     private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
     private static Pattern sColorPattern;
@@ -79,6 +81,7 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
+
     // mUpdateViewportOnEndDraw is used to indicate that we received a
     // viewport update notification while drawing. therefore, when the
     // draw finishes, we need to update the entire viewport rather than
@@ -112,7 +115,7 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         return Color.rgb(r, g, b);
     }
 
-    protected abstract boolean handleDirectTextureChange(boolean hasDirectTexture);
+    protected abstract boolean setupLayer();
 
     protected abstract boolean shouldDrawProceed(int tileWidth, int tileHeight);
 
@@ -140,19 +143,15 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
             layerController.setViewportMetrics(mGeckoViewport);
         }
 
-        //GeckoAppShell.registerGeckoEventListener("Viewport:UpdateAndDraw", this);
-        //GeckoAppShell.registerGeckoEventListener("Viewport:UpdateLater", this);
-
         sendResizeEventIfNecessary();
     }
 
-    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata, boolean hasDirectTexture) {
+    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata) {
 
-        Log.e(LOGTAG, "### beginDrawing " + width + " " + height + " " + tileWidth + " " + tileHeight + " " + hasDirectTexture);
+        Log.e(LOGTAG, "### beginDrawing " + width + " " + height + " " + tileWidth + " " + tileHeight);
 
-        // If we've changed surface types, cancel this draw
-        if (handleDirectTextureChange(hasDirectTexture)) {
-            Log.e(LOGTAG, "### Cancelling draw due to direct texture change");
+        if (setupLayer()) {
+            Log.e(LOGTAG, "### Cancelling due to layer setup");
             return null;
         }
 
@@ -179,7 +178,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
             Log.e(LOGTAG, "Aborting draw, bad viewport description: " + metadata);
             return null;
         }
-
 
         // Make sure we don't spend time painting areas we aren't interested in.
         // Only do this if the Gecko viewport isn't going to override our viewport.
@@ -263,15 +261,14 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
         mTileLayer.setResolution(mGeckoViewport.getZoomFactor());
 
         this.tileLayerUpdated();
-        Log.e(LOGTAG, "### updateViewport onlyUpdatePageSize=" + onlyUpdatePageSize +
-                " getTileViewport " + mGeckoViewport);
+        Log.e(LOGTAG, "### updateViewport onlyUpdatePageSize=" + onlyUpdatePageSize + " getTileViewport " + mGeckoViewport);
 
         if (onlyUpdatePageSize) {
             // Don't adjust page size when zooming unless zoom levels are
             // approximately equal.
-            if (FloatUtils.fuzzyEquals(controller.getZoomFactor(),
-                    mGeckoViewport.getZoomFactor()))
+            if (FloatUtils.fuzzyEquals(controller.getZoomFactor(), mGeckoViewport.getZoomFactor())) {
                 controller.setPageSize(mGeckoViewport.getPageSize());
+            }
         } else {
             controller.setViewportMetrics(mGeckoViewport);
             controller.abortPanZoomAnimation();
