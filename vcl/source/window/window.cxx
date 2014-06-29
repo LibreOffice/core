@@ -713,6 +713,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbFill                              = true;
     mbSecondary                         = false;
     mbNonHomogeneous                    = false;
+    mbPseudoHeadless                    = Application::GetSettings().GetMiscSettings().GetPseudoHeadless();
 }
 
 WindowImpl::~WindowImpl()
@@ -2414,8 +2415,11 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
-            mpWindowImpl->mpFrame->Show( true, bNoActivate );
+            if(!mpWindowImpl->mbPseudoHeadless)
+            {
+                bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
+                mpWindowImpl->mpFrame->Show( true, bNoActivate );
+            }
             if( aDogTag.IsDead() )
                 return;
 

@@ -363,7 +363,8 @@ public:
                         mbExpand:1,
                         mbFill:1,
                         mbSecondary:1,
-                        mbNonHomogeneous:1;
+                        mbNonHomogeneous:1,
+                        mbPseudoHeadless:1; // used to block the display of windows during tests on Mac and Windows
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
