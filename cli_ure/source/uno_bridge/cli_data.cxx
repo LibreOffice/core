@@ -515,7 +515,7 @@ System::String^ mapUnoTypeName(rtl_uString const * typeName)
         System::String ^ sName = mapUnoPolymorphicName(sUnoName);
         buf->Append(sName);
     }
-    // apend []
+    // append []
     for (;dims--;)
         buf->Append(const_cast<System::String^>(Constants::sBrackets));
 

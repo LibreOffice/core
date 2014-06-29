@@ -194,7 +194,7 @@ System::String^ mapUnoTypeName(System::String ^ typeName)
         buf->Append(const_cast<System::String^>(Constants::sUnoidl));
         buf->Append(mapUnoPolymorphicName(sUnoName));
     }
-    // apend []
+    // append []
     for (;dims--;)
         buf->Append(const_cast<System::String^>(Constants::sBrackets));
 
