@@ -1322,7 +1322,6 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         {
             pChildList->erase( pChildList->begin() + n );
             --n;
-            continue;
         }
     }
     if( pChildList->empty() )
