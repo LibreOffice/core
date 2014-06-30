@@ -660,6 +660,9 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const sal_Char*pPrefix, int nPr
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
     Entity& rEntity = getEntity();
+    if (rEntity.maNamespaceCount.empty())
+        return nNamespaceToken;
+
     sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
     while( nNamespace-- )
     {
