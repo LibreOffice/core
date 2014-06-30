@@ -2597,8 +2597,12 @@ BmpWindow::BmpWindow(Window* pPar, WinBits nStyle)
     , bGraphic(false)
     , bLeftAlign(false)
 {
-    // #i119307# use background, the graphic might have transparency
-    SetBackground(Wallpaper(Color(COL_WHITE)));
+    SetBackground();
+    SetPaintTransparent(sal_True);
+    // #i119307# the graphic might have transparency, set up white as the color
+    // to use when drawing a rectangle under the image
+    SetLineColor(COL_WHITE);
+    SetFillColor(COL_WHITE);
 }
 
 Size BmpWindow::GetOptimalSize() const
@@ -2656,7 +2660,7 @@ void BmpWindow::Paint( const Rectangle& )
     }
 
     // #i119307# clear window background, the graphic might have transparency
-    Erase();
+    DrawRect(Rectangle(aPntPos, aPntSz));
 
     if ( bGraphic )
         aGraphic.Draw( this, aPntPos, aPntSz );
