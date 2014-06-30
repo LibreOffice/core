@@ -89,9 +89,23 @@ namespace cmis
                 rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
                     = new ucbhelper::AuthenticationFallbackRequest (
                             instructions, url_oustr );
+
                 xIH->handle( xRequest.get() );
+
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                     = xRequest->getSelection();
+
+                if ( xSelection.is() )
+                {
+                    // Handler handled the request.
+                    const rtl::Reference< ucbhelper::InteractionAuthFallback >&
+                        xAuthFallback = xRequest->getAuthFallbackInter( );
+                    if ( xAuthFallback.is() )
+                    {
+                        OUString code = xAuthFallback->getCode( );
+                        return strdup( OUSTR_TO_STDSTR( code ).c_str( ) );
+                    }
+                }
             }
         }
 
