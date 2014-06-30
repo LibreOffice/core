@@ -375,8 +375,8 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     for( ; nIndex < nLength; nIndex++ )
     {
         Reference< XPropertySet > xPropertySet( officecfg::Office::Common::Misc::PersonasList::get()->getByName( installedPersonas[nIndex] ), UNO_QUERY_THROW );
+        OUString aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aAccentColor, aPersonaSettings;
         Any aValue = xPropertySet->getPropertyValue( "PersonaPreview" );
-        OUString aPreviewFile;
         aValue >>= aPreviewFile;
         INetURLObject aURLObj( aPreviewFile );
         aFilter.ImportGraphic( aGraphic, aURLObj );
@@ -384,11 +384,24 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         m_vExtensionPersonas[nCount]->Show();
         m_vExtensionPersonas[nCount++]->SetModeImage( Image( aBmp ) );
 
-        aValue = xPropertySet->getPropertyValue( "PersonaSettings" );
-        OUString sPersonaSettings;
-        aValue >>= sPersonaSettings;
-        rtl::Bootstrap::expandMacros( sPersonaSettings );
-        m_vExtensionPersonaSettings.push_back( sPersonaSettings );
+        aValue = xPropertySet->getPropertyValue( "PersonaName" );
+        aValue >>= aPersonaName;
+
+        aValue = xPropertySet->getPropertyValue( "PersonaHeader" );
+        aValue >>= aHeaderFile;
+
+        aValue = xPropertySet->getPropertyValue( "PersonaFooter" );
+        aValue >>= aFooterFile;
+
+        aValue = xPropertySet->getPropertyValue( "PersonaTextColor" );
+        aValue >>= aTextColor;
+
+        aValue = xPropertySet->getPropertyValue( "PersonaAccentColor" );
+        aValue >>= aAccentColor;
+
+        aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        rtl::Bootstrap::expandMacros( aPersonaSettings );
+        m_vExtensionPersonaSettings.push_back( aPersonaSettings );
     }
 }
 
