@@ -20,6 +20,7 @@ certain functionality.
 
 @section SAL
 
+@li @c sal.bootstrap - SAL bootstrap
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file
 @li @c sal.osl - SAL OSL library
