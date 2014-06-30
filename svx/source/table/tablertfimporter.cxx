@@ -19,6 +19,7 @@
 
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/table/XTable.hpp>
@@ -272,14 +273,13 @@ void SdrTableRTFParser::FillTable()
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SFX_ITEM_SET)
                         xCell->SetMergedItem( *pPoolItem );
 
-                    OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount );
+                    boost::scoped_ptr<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
                         rOutliner.SetUpdateMode(true);
                         rOutliner.SetText( *pTextObject );
                         mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
-                        delete pTextObject;
                     }
                 }
             }

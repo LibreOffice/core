@@ -86,6 +86,7 @@
 #include <svl/itemset.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1538,7 +1539,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
     // at first, save the pointers of the affected pages in an array
     sal_uInt16 nPageNum=nFirstPageNum;
     sal_uInt16 nCopyAnz=((!bReverse)?(nLastPageNum-nFirstPageNum):(nFirstPageNum-nLastPageNum))+1;
-    SdrPage** pPagePtrs=new SdrPage*[nCopyAnz];
+    boost::scoped_array<SdrPage*> pPagePtrs(new SdrPage*[nCopyAnz]);
     sal_uInt16 nCopyNum;
     for(nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
     {
@@ -1584,7 +1585,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
             nPageNum2++;
     }
 
-    delete[] pPagePtrs;
+    pPagePtrs.reset();
     if(bUndo)
         EndUndo();
 }
@@ -1616,18 +1617,18 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
     bool bReverse=nLastPageNum<nFirstPageNum;
 
-    sal_uInt16*   pMasterMap=NULL;
-    bool* pMasterNeed=NULL;
+    boost::scoped_array<sal_uInt16> pMasterMap;
+    boost::scoped_array<bool> pMasterNeed;
     sal_uInt16    nMasterNeed=0;
     if (bMergeMasterPages && nSrcMasterPageAnz!=0) {
         // determine which MasterPages from rSrcModel we need
-        pMasterMap=new sal_uInt16[nSrcMasterPageAnz];
-        pMasterNeed=new bool[nSrcMasterPageAnz];
-        memset(pMasterMap,0xFF,nSrcMasterPageAnz*sizeof(sal_uInt16));
+        pMasterMap.reset(new sal_uInt16[nSrcMasterPageAnz]);
+        pMasterNeed.reset(new bool[nSrcMasterPageAnz]);
+        memset(pMasterMap.get(),0xFF,nSrcMasterPageAnz*sizeof(sal_uInt16));
         if (bAllMasterPages) {
-            memset(pMasterNeed, true, nSrcMasterPageAnz * sizeof(bool));
+            memset(pMasterNeed.get(), true, nSrcMasterPageAnz * sizeof(bool));
         } else {
-            memset(pMasterNeed, false, nSrcMasterPageAnz * sizeof(bool));
+            memset(pMasterNeed.get(), false, nSrcMasterPageAnz * sizeof(bool));
             sal_uInt16 nAnf= bReverse ? nLastPageNum : nFirstPageNum;
             sal_uInt16 nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (sal_uInt16 i=nAnf; i<=nEnd; i++) {
@@ -1656,7 +1657,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     }
 
     // get the MasterPages
-    if (pMasterMap!=NULL && pMasterNeed!=NULL && nMasterNeed!=0) {
+    if (pMasterMap && pMasterNeed && nMasterNeed!=0) {
         for (sal_uInt16 i=nSrcMasterPageAnz; i>0;) {
             i--;
             if (pMasterNeed[i]) {
@@ -1743,8 +1744,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         }
     }
 
-    delete [] pMasterMap;
-    delete [] pMasterNeed;
+    pMasterMap.reset();
+    pMasterNeed.reset();
 
     bMPgNumsDirty=true;
     bPagNumsDirty=true;

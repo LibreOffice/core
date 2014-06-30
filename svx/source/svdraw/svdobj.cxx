@@ -129,6 +129,7 @@
 #include <svx/xpoly.hxx>
 #include <rtl/strbuf.hxx>
 #include <svdoopengl.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -3315,16 +3316,15 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
 
     if(pObj == NULL)
     {
-        SdrObjFactory* pFact=new SdrObjFactory(nInvent,nIdent,pPage,pModel);
+        boost::scoped_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInvent,nIdent,pPage,pModel));
         SdrLinkList& rLL=ImpGetUserMakeObjHdl();
         unsigned nAnz=rLL.GetLinkCount();
         unsigned i=0;
         while (i<nAnz && pObj==NULL) {
-            rLL.GetLink(i).Call((void*)pFact);
+            rLL.GetLink(i).Call((void*)pFact.get());
             pObj=pFact->pNewObj;
             i++;
         }
-        delete pFact;
     }
 
     if(pObj == NULL)

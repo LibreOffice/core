@@ -397,7 +397,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
     if( !mxTable.is() || !mxTableObj.is() || !mxTableObj->GetModel() )
         return;
 
-    SfxItemSet* pSet = 0;
+    boost::scoped_ptr<SfxItemSet> pSet;
 
     bool bVertDone = false;
 
@@ -420,7 +420,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     {
                         if( !pSet )
                         {
-                            pSet = new SfxItemSet( mxTableObj->GetModel()->GetItemPool() );
+                            pSet.reset(new SfxItemSet( mxTableObj->GetModel()->GetItemPool() ));
                             MergeAttrFromSelectedCells(*pSet, false);
                         }
 
@@ -487,7 +487,6 @@ void SvxTableController::GetState( SfxItemSet& rSet )
         }
         nWhich = aIter.NextWhich();
     }
-    delete pSet;
 }
 
 
