@@ -100,6 +100,12 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 ))
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+	desktop/source/lib/lokandroid \
+))
+endif
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sofficeapp,tubes))
 endif
