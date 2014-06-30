@@ -158,13 +158,6 @@ public:
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( Window* pWin );
 
 private:
-    // Default construction is forbidden and not implemented.
-    SystemWindow();
-
-    // Copy assignment is forbidden and not implemented.
-    SystemWindow (const SystemWindow &);
-    SystemWindow & operator= (const SystemWindow &);
-
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin );
 
 protected:

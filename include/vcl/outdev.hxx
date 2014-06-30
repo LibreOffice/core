@@ -42,6 +42,7 @@
 
 #include <unotools/fontdefs.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
@@ -244,7 +245,7 @@ extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
 
-class VCL_DLLPUBLIC OutputDevice
+class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
 {
     friend class Application;
     friend class Bitmap;
@@ -350,14 +351,8 @@ private:
 protected:
                                 OutputDevice();
 
-private:
-    SAL_DLLPRIVATE              OutputDevice( const OutputDevice& rOutDev );
-
 public:
     virtual                     ~OutputDevice();
-
-private:
-    SAL_DLLPRIVATE OutputDevice& operator =( const OutputDevice& rOutDev );
 
 public:
 

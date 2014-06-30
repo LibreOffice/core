@@ -619,14 +619,6 @@ private:
 public:
     virtual Region                      GetActiveClipRegion() const SAL_OVERRIDE;
 
-private:
-    // Default construction is forbidden and not implemented.
-    SAL_DLLPRIVATE                      Window();
-
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE                      Window (const Window &);
-    SAL_DLLPRIVATE                      Window & operator= (const Window &);
-
 protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
