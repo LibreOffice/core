@@ -24,7 +24,7 @@
 
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/prhdlfac.hxx>
 
@@ -38,7 +38,7 @@ class SvXMLStyleContext;
 typedef std::map< OUString, OUString > XMLTableTemplate;
 typedef std::map < OUString, boost::shared_ptr< XMLTableTemplate > > XMLTableTemplateMap;
 
-class XMLTableImport : public UniRefBase
+class XMLTableImport : public salhelper::SimpleReferenceObject
 {
     friend class XMLTableImportContext;
 

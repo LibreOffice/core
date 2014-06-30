@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlictxt.hxx>
 
 #include <xmloff/table/XMLTableImport.hxx>
@@ -269,7 +269,7 @@ class ShapeSortContext;
 struct XMLShapeImportHelperImpl;
 struct XMLShapeImportPageContextImpl;
 
-class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceObject
 {
     XMLShapeImportHelperImpl*   mpImpl;
 

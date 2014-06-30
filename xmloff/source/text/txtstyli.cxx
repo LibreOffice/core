@@ -170,7 +170,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_TABLE_ROW;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
                 pContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
@@ -397,7 +397,7 @@ void XMLTextStyleContext::FillPropertySet(
     // catch the combined characters attribute
 
     // imitate XMLPropStyleContext::FillPropertySet(...)
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(GetFamily());
     DBG_ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
     if( xImpPrMap.is() )
@@ -523,7 +523,7 @@ void XMLTextStyleContext::FillPropertySet(
                         aAny <<= sFontName;
 
                         // get property set mapper
-                        UniReference<XMLPropertySetMapper> rPropMapper =
+                        rtl::Reference<XMLPropertySetMapper> rPropMapper =
                             xImpPrMap->getPropertySetMapper();
 
                         // set property

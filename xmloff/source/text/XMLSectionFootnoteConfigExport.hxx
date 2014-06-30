@@ -28,7 +28,9 @@
 class SvXMLExport;
 class XMLPropertySetMapper;
 struct XMLPropertyState;
-template<class X> class UniReference;
+namespace rtl {
+    template<class X> class Reference;
+}
 
 /**
  * Export the footnote-/endnote-configuration element in section styles.
@@ -45,7 +47,7 @@ public:
         bool bEndnote,
         const ::std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
-        const UniReference<XMLPropertySetMapper> & rMapper);    /// used only for debugging
+        const rtl::Reference<XMLPropertySetMapper> & rMapper);    /// used only for debugging
 };
 
 #endif

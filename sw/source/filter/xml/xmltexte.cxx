@@ -232,7 +232,7 @@ static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
 static void lcl_addAspect(
         const svt::EmbeddedObjectRef& rObj,
         const XMLPropertyState **pStates,
-        const UniReference < XMLPropertySetMapper >& rMapper )
+        const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     {
         sal_Int64 nAspect = rObj.GetViewAspect();
@@ -248,7 +248,7 @@ static void lcl_addAspect(
 static void lcl_addOutplaceProperties(
         const svt::EmbeddedObjectRef& rObj,
         const XMLPropertyState **pStates,
-        const UniReference < XMLPropertySetMapper >& rMapper )
+        const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     {
         MapMode aMode( MAP_100TH_MM ); // the API expects this map mode for the embedded objects
@@ -279,7 +279,7 @@ static void lcl_addOutplaceProperties(
 static void lcl_addFrameProperties(
         const uno::Reference < embed::XEmbeddedObject >& xObj,
         const XMLPropertyState **pStates,
-        const UniReference < XMLPropertySetMapper >& rMapper )
+        const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     if ( !::svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         return;

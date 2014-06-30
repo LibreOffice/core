@@ -21,10 +21,8 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
 
-
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/uniref.hxx>
-
+#include <rtl/ref.hxx>
 #include <vector>
 
 
@@ -43,7 +41,7 @@ namespace com { namespace sun { namespace star {
 class XMLSectionFootnoteConfigImport : public SvXMLImportContext
 {
     ::std::vector<XMLPropertyState> & rProperties;
-    UniReference<XMLPropertySetMapper> rMapper;
+    rtl::Reference<XMLPropertySetMapper> rMapper;
 
 public:
 
@@ -54,7 +52,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
-        const UniReference<XMLPropertySetMapper> & rMapperRef);
+        const rtl::Reference<XMLPropertySetMapper> & rMapperRef);
 
     virtual ~XMLSectionFootnoteConfigImport();
 

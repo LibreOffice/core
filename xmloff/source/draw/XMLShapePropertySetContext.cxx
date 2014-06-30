@@ -36,7 +36,7 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap ) :
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
                              rProps, rMap ),
     mnBulletIndex(-1)

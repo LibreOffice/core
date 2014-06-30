@@ -37,7 +37,7 @@ public:
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap );
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~XMLShapePropertySetContext();
 

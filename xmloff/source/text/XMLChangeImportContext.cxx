@@ -68,7 +68,7 @@ void XMLChangeImportContext::StartElement(
             // Id found! Now call RedlineImportHelper
 
             // prepare parameters
-            UniReference<XMLTextImportHelper> rHelper =
+            rtl::Reference<XMLTextImportHelper> rHelper =
                 GetImport().GetTextImport();
             OUString sID = xAttrList->getValueByIndex(nAttr);
 

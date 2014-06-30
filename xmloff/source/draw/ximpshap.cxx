@@ -216,7 +216,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
             uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
             if( xText.is() )
             {
-                UniReference < XMLTextImportHelper > xTxtImport =
+                rtl::Reference < XMLTextImportHelper > xTxtImport =
                     GetImport().GetTextImport();
                 mxOldCursor = xTxtImport->GetCursor();
                 mxCursor = xText->createTextCursor();
@@ -438,7 +438,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
                 xNamed->setName( maShapeName );
         }
 
-        UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
+        rtl::Reference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
         xImp->addShape( xShape, mxAttrList, mxShapes );
 
         if( mbClearDefaultAttributes )
@@ -973,7 +973,7 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
 
         uno::Sequence< sal_Int32 > aSourceIdSequence( xSourceGluePoints->getIdentifiers() );
         const sal_Int32 nSourceCount(aSourceIdSequence.getLength());
-        UniReference< XMLShapeImportHelper > xSourceShapeImportHelper(const_cast< SdXMLShapeContext* >(pCandidate)->GetImport().GetShapeImport());
+        rtl::Reference< XMLShapeImportHelper > xSourceShapeImportHelper(const_cast< SdXMLShapeContext* >(pCandidate)->GetImport().GetShapeImport());
 
         if(nSourceCount)
         {

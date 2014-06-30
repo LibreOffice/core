@@ -32,7 +32,7 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     sal_uInt32 nFam,
     vector< XMLPropertyState > &rProps,
-    const UniReference < SvXMLImportPropertyMapper >  &rMap,
+    const rtl::Reference < SvXMLImportPropertyMapper >  &rMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
 :   SvXMLImportContext( rImp, nPrfx, rLName )
 ,   mnStartIdx( nSIdx )
@@ -56,7 +56,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    UniReference< XMLPropertySetMapper > aSetMapper(
+    rtl::Reference< XMLPropertySetMapper > aSetMapper(
             mxMapper->getPropertySetMapper() );
     sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( nPrefix, rLocalName,
                                                        mnFamily, mnStartIdx );

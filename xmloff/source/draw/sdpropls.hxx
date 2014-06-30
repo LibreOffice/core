@@ -223,7 +223,7 @@ public:
 class XMLShapePropertySetMapper : public XMLPropertySetMapper
 {
 public:
-    XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef, bool bForExport);
+    XMLShapePropertySetMapper(const rtl::Reference< XMLPropertyHandlerFactory >& rFactoryRef, bool bForExport);
     virtual ~XMLShapePropertySetMapper();
 };
 
@@ -244,7 +244,7 @@ protected:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
 public:
-    XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
+    XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLShapeExportPropertyMapper();
 
     virtual void        handleElementItem(
@@ -282,7 +282,7 @@ protected:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
 public:
-    XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
+    XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLPageExportPropertyMapper();
 
     virtual void        handleElementItem(

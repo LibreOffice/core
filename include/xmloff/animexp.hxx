@@ -21,13 +21,13 @@
 #define INCLUDED_XMLOFF_ANIMEXP_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class AnimExpImpl;
 class SvXMLExport;
 class XMLShapeExport;
 
-class XMLAnimationsExporter : public UniRefBase
+class XMLAnimationsExporter : public salhelper::SimpleReferenceObject
 {
     AnimExpImpl*    mpImpl;
 

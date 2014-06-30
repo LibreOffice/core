@@ -840,11 +840,11 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     OUString                       sStandardFormat;
     OUString                       sType;
 
-    UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
-    UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
+    rtl::Reference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pStylesElemTokenMap;
@@ -1020,10 +1020,10 @@ public:
 
     sal_Int16 GetCellType(const OUString& rStrValue) const;
 
-    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
-    UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
-    UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
-    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();

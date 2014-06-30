@@ -20,10 +20,11 @@
 #ifndef INCLUDED_XMLOFF_XMLEXPPR_HXX
 #define INCLUDED_XMLOFF_XMLEXPPR_HXX
 
+#include <rtl/ref.hxx>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 class SvXMLUnitConverter;
@@ -39,7 +40,7 @@ class SvXMLExport;
                                                 // even if its empty
 #define XML_EXPORT_FLAG_IGN_WS      0x0008
 
-class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public UniRefBase
+class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public salhelper::SimpleReferenceObject
 {
     struct Impl;
     Impl* mpImpl;
@@ -91,14 +92,14 @@ protected:
 public:
 
     SvXMLExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~SvXMLExportPropertyMapper();
 
     // Add a ExportPropertyMapper at the end of the import mapper chain.
     // The added mapper MUST not be used outside the Mapper chain any longer,
     // because its PropertyMapper will be replaced.
     void ChainExportMapper(
-        const UniReference< SvXMLExportPropertyMapper>& rMapper );
+        const rtl::Reference< SvXMLExportPropertyMapper>& rMapper );
 
     /** Filter all properties we don't want to export:
         Take all properties of the XPropertySet which are also found in the
@@ -174,7 +175,7 @@ public:
             const ::std::vector< XMLPropertyState > *pProperties = 0,
             sal_uInt32 nIdx = 0 ) const;
 
-    const UniReference<XMLPropertySetMapper>& getPropertySetMapper() const;
+    const rtl::Reference<XMLPropertySetMapper>& getPropertySetMapper() const;
 
     void SetStyleName( const OUString& rStyleName );
     const OUString& GetStyleName() const;

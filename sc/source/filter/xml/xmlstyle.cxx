@@ -180,7 +180,7 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
 };
 
 ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper )
+            const rtl::Reference< XMLPropertySetMapper >& rMapper )
             : SvXMLExportPropertyMapper(rMapper)
 {
 }
@@ -548,7 +548,7 @@ void ScXMLCellExportPropertyMapper::handleElementItem(
 }
 
 ScXMLRowExportPropertyMapper::ScXMLRowExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper )
+            const rtl::Reference< XMLPropertySetMapper >& rMapper )
             : SvXMLExportPropertyMapper(rMapper)
 {
 }
@@ -566,7 +566,7 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
 }
 
 ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper )
+            const rtl::Reference< XMLPropertySetMapper >& rMapper )
             : SvXMLExportPropertyMapper(rMapper)
 {
 }
@@ -588,7 +588,7 @@ void ScXMLColumnExportPropertyMapper::handleSpecialItem(
 }
 
 ScXMLTableExportPropertyMapper::ScXMLTableExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper )
+            const rtl::Reference< XMLPropertySetMapper >& rMapper )
             : SvXMLExportPropertyMapper(rMapper)
 {
 }
@@ -625,7 +625,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
         while (i != endi)
         {
-            UniReference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetCellStylesPropertySetMapper());
+            rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetCellStylesPropertySetMapper());
             sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
             switch (nContextID)
             {
@@ -655,7 +655,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
         while(i != endi)
         {
-            UniReference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetTableStylesPropertySetMapper());
+            rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetTableStylesPropertySetMapper());
             sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
             switch (nContextID)
             {

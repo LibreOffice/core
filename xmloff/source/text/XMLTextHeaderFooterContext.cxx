@@ -162,7 +162,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                 xText->setString( aText );
             }
 
-            UniReference < XMLTextImportHelper > xTxtImport =
+            rtl::Reference < XMLTextImportHelper > xTxtImport =
                 GetImport().GetTextImport();
 
             xOldTextCursor = xTxtImport->GetCursor();

@@ -22,7 +22,6 @@
 #include <xmloff/SchXMLExportHelper.hxx>
 #include "SchXMLAutoStylePoolP.hxx"
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/uniref.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/prhdlfac.hxx>
 
@@ -58,7 +57,7 @@ public:
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
+    rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX

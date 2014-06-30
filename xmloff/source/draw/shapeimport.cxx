@@ -148,14 +148,14 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpSdPropHdlFactory->acquire();
 
     // construct PropertySetMapper
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
+    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
     mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     // set lock to avoid deletion
     mpPropertySetMapper->acquire();
 
     if( pExtMapper )
     {
-        UniReference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
+        rtl::Reference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
         mpPropertySetMapper->ChainImportMapper( xExtMapper );
     }
 
@@ -1015,8 +1015,8 @@ void XMLShapeImportHelper::restoreConnections()
 
 SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, false );
+    rtl::Reference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
+    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, false );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
     // chain text attributes

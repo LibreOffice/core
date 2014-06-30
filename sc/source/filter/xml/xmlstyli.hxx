@@ -42,7 +42,7 @@ protected:
 public:
 
     ScXMLCellImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImport);
     virtual ~ScXMLCellImportPropertyMapper();
 
@@ -58,7 +58,7 @@ protected:
 public:
 
     ScXMLRowImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImport);
     virtual ~ScXMLRowImportPropertyMapper();
 
@@ -141,10 +141,10 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nMasterPageNameIndex;
     bool bAutoStyles;
 
-    UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > xRowImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > xTableImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xCellImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xRowImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xTableImpPropMapper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -174,7 +174,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+    virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer >

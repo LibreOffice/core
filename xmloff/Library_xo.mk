@@ -257,7 +257,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/styleexp \
     xmloff/source/style/tabsthdl \
     xmloff/source/style/undlihdl \
-    xmloff/source/style/uniref \
     xmloff/source/style/weighhdl \
     xmloff/source/style/xmlaustp \
     xmloff/source/style/xmlbahdl \

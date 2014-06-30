@@ -37,7 +37,7 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  OUString& rDCTextStyleName ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                              rProps, rMap ),

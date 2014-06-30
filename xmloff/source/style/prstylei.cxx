@@ -113,7 +113,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     }
     if( nFamily )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
@@ -134,7 +134,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
 void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
@@ -179,7 +179,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 ((SvXMLStylesContext *)&mxStyles)->GetAutoStyles( GetFamily() );
         if( !xAutoFamily.is() )
             return;
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper( GetFamily() );
         DBG_ASSERT( xImpPrMap.is(), "There is no import prop mapper" );
         if( xImpPrMap.is() )
@@ -270,8 +270,8 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         {
             Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
 
-            UniReference < XMLPropertySetMapper > xPrMap;
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < XMLPropertySetMapper > xPrMap;
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                                     GetFamily() );
             DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );

@@ -76,11 +76,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
          (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
     {
         bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
-            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
             sal_Int32 nFlag;
             if (bHeader)
                 nFlag = CTF_PM_HEADERFLAG;
@@ -117,11 +117,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken(rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
-            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
             sal_Int32 nEndIndex (-1);
             bool bEnd(false);
             sal_Int32 nIndex = 0;

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLCHARTPROPERTYSETMAPPER_HXX
 #define INCLUDED_XMLOFF_INC_XMLCHARTPROPERTYSETMAPPER_HXX
 
-#include <xmloff/uniref.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlimppr.hxx>
@@ -78,7 +77,7 @@ private:
         sal_uInt32 nIdx = 0  ) const SAL_OVERRIDE;
 
 public:
-    XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+    XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper();
 
@@ -94,7 +93,7 @@ private:
     SvXMLImport& mrImport;
 
 public:
-    XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+    XMLChartImportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   const SvXMLImport& rImport );
     virtual ~XMLChartImportPropertyMapper();
 

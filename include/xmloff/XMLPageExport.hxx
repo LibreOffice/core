@@ -26,7 +26,8 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <xmloff/attrlist.hxx>
-#include <xmloff/uniref.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -50,7 +51,7 @@ struct XMLPageExportNameEntry
 
 
 
-class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& rExport;
 
@@ -63,9 +64,9 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
     ::std::vector< XMLPageExportNameEntry > aNameVector;
     SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
-    UniReference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
-    UniReference < XMLPropertySetMapper > xPageMasterPropSetMapper;
-    UniReference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
+    rtl::Reference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper > xPageMasterPropSetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
 
 protected:
 

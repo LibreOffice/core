@@ -91,11 +91,11 @@ namespace rptxml
         sal_Int32 m_nNumberFormatIndex;
         bool bAutoStyles : 1;
 
-        //mutable UniReference < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
-        mutable UniReference < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
-        mutable UniReference < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
-        mutable UniReference < SvXMLImportPropertyMapper > m_xRowImpPropMapper;
-        mutable UniReference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
+        //mutable rtl::Reference < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
+        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
+        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
+        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xRowImpPropMapper;
+        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
 
         mutable ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > m_xCellStyles;
@@ -137,7 +137,7 @@ namespace rptxml
 
         virtual void EndElement() SAL_OVERRIDE;
 
-        virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+        virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                             sal_uInt16 nFamily ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XNameContainer >

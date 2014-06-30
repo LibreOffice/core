@@ -1370,7 +1370,7 @@ namespace xmloff
                 Reference< XText > xTextElement( m_xElement, UNO_QUERY );
                 if ( xTextElement.is() )
                 {
-                    UniReference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
+                    rtl::Reference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
 
                     if ( !m_xCursor.is() )
                     {
@@ -1510,7 +1510,7 @@ namespace xmloff
         OControlImport::EndElement();
 
         // some cleanups
-        UniReference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
+        rtl::Reference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
         if ( m_xCursor.is() )
         {
             // delete the newline which has been imported errornously

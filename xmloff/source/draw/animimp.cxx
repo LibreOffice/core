@@ -554,7 +554,7 @@ void XMLAnimationsEffectContext::EndElement()
 
     try
     {
-        UniReference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
+        rtl::Reference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
         Any aAny;
 
         if( !maShapeId.isEmpty() )
