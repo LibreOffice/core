@@ -832,7 +832,7 @@ UUIInteractionHelper::handleRequest_impl(
             if ( aAnyRequest >>= anAuthFallbackRequest )
             {
                 handleAuthFallbackRequest( anAuthFallbackRequest.instructions,
-                        anAuthFallbackRequest.url );
+                        anAuthFallbackRequest.url, rRequest->getContinuations() );
                 return true;
             }
 

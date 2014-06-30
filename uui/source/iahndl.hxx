@@ -302,7 +302,10 @@ private:
             ) const;
 
     bool
-    handleAuthFallbackRequest( OUString & instructions, OUString & url);
+    handleAuthFallbackRequest(
+            OUString & instructions,
+            OUString & url,
+            Continuations  const & rContinuations );
 };
 
 class ErrorResource: private Resource
