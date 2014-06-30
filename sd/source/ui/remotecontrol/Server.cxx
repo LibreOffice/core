@@ -317,7 +317,7 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
 
         sCommunicators.push_back( pCommunicator );
 
-        for ( vector<::boost::shared_ptr<ClientInfoInternal>>::iterator aIt = spServer->mAvailableClients.begin();
+        for ( vector< ::boost::shared_ptr< ClientInfoInternal > >::iterator aIt = spServer->mAvailableClients.begin();
             aIt != spServer->mAvailableClients.end(); ++aIt )
         {
             if ( pClient == *aIt )
