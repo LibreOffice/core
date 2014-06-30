@@ -48,7 +48,6 @@
 
 class SvTabListBox;
 class SvtFileView;
-struct ControlChain_Impl;
 class SvtFileDialogFilter_Impl;
 
 
@@ -85,9 +84,6 @@ class CustomContainer;
 class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
 {
 private:
-    // originally from VclFileDialog
-    ControlChain_Impl*          _pUserControls;
-
     CheckBox*                   _pCbReadOnly;
     CheckBox*                   _pCbLinkBox;
     CheckBox*                   _pCbPreviewBox;

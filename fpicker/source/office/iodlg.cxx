@@ -187,27 +187,6 @@ namespace
         rFile += rExtension;
     }
 
-
-    // move the control with the given offset
-    void lcl_MoveControl( Control* _pControl, sal_Int32 _nDeltaX, sal_Int32 _nDeltaY, sal_Int32* _pMaxY = NULL )
-    {
-        if ( _pControl )
-        {
-            Point aNewPos = _pControl->GetPosPixel();
-
-            // adjust the vertical position
-            aNewPos.Y() += _nDeltaY;
-            if ( _pMaxY && ( aNewPos.Y() > *_pMaxY ) )
-                *_pMaxY = aNewPos.Y();
-
-            // adjust the horizontal position
-            aNewPos.X() += _nDeltaX;
-
-            _pControl->SetPosPixel( aNewPos );
-        }
-    }
-
-
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
     {
         // if auto extension is enabled ....
@@ -319,45 +298,6 @@ namespace
     }
 }
 
-
-// ControlChain_Impl
-
-
-struct ControlChain_Impl
-{
-    Window*            _pControl;
-    ControlChain_Impl* _pNext;
-    bool               _bHasOwnership;
-
-    ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext );
-    ~ControlChain_Impl();
-};
-
-
-
-ControlChain_Impl::ControlChain_Impl
-(
-    Window* pControl,
-    ControlChain_Impl* pNext
-)
-    : _pControl( pControl ),
-      _pNext( pNext ),
-      _bHasOwnership( true )
-{
-}
-
-
-
-ControlChain_Impl::~ControlChain_Impl()
-{
-    if ( _bHasOwnership )
-    {
-        delete _pControl;
-    }
-    delete _pNext;
-}
-
-
 // SvtFileDialog
 
 SvtFileDialog::SvtFileDialog
@@ -368,7 +308,6 @@ SvtFileDialog::SvtFileDialog
 ) :
     ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
-    ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
     ,_pCbPreviewBox( NULL )
@@ -392,7 +331,6 @@ SvtFileDialog::SvtFileDialog
 
 SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     :ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
-    ,_pUserControls( NULL )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
     ,_pCbPreviewBox( NULL )
@@ -501,7 +439,6 @@ SvtFileDialog::~SvtFileDialog()
     delete _pSplitter;
     delete _pContainer;
     delete _pPrevBmp;
-    delete _pUserControls;
 }
 
 void SvtFileDialog::Init_Impl
