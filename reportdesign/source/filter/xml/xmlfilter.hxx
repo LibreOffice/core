@@ -92,11 +92,11 @@ private:
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pCellElemTokenMap;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    UniReference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
-    UniReference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xColumnStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xRowStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xTableStylesPropertySetMapper;
+    rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >           m_xColumnStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >           m_xRowStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >           m_xTableStylesPropertySetMapper;
 
     Reference<XReportDefinition>                    m_xReportDefinition;
     ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
@@ -158,10 +158,10 @@ public:
     const SvXMLTokenMap& GetColumnTokenMap() const;
     const SvXMLTokenMap& GetCellElemTokenMap() const;
 
-    inline UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper()      const   { return m_xCellStylesPropertySetMapper;    }
-    inline UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper()    const   { return m_xColumnStylesPropertySetMapper;  }
-    inline UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper()       const   { return m_xRowStylesPropertySetMapper;     }
-    inline UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper()     const   { return m_xTableStylesPropertySetMapper;   }
+    inline rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper()      const   { return m_xCellStylesPropertySetMapper;    }
+    inline rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper()    const   { return m_xColumnStylesPropertySetMapper;  }
+    inline rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper()       const   { return m_xRowStylesPropertySetMapper;     }
+    inline rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper()     const   { return m_xTableStylesPropertySetMapper;   }
     static OUString convertFormula(const OUString& _sFormula);
     /** inserts a new function
     *

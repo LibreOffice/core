@@ -636,7 +636,7 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
 
 XMLImpRubyContext_Impl::~XMLImpRubyContext_Impl()
 {
-    const UniReference < XMLTextImportHelper > xTextImport(
+    const rtl::Reference < XMLTextImportHelper > xTextImport(
         GetImport().GetTextImport());
     const Reference < XTextCursor > xAttrCursor(
         xTextImport->GetText()->createTextCursorByRange( m_xStart ));
@@ -1944,7 +1944,7 @@ XMLParaContext::XMLParaContext(
 
 XMLParaContext::~XMLParaContext()
 {
-    UniReference < XMLTextImportHelper > xTxtImport(
+    rtl::Reference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
     Reference < XTextRange > xCrsrRange( xTxtImport->GetCursorAsRange() );
     if( !xCrsrRange.is() )

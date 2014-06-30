@@ -125,18 +125,18 @@ private:
     OUString                                 m_sCellStyle;
     OUString                                 m_sColumnStyle;
     Any                                             m_aPreviewMode;
-    UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
-    UniReference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper>       m_xRowStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
-    UniReference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xRowStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
+    rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
-    mutable UniReference < XMLPropertySetMapper >   m_xControlStylePropertyMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xControlStylePropertyMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XReportDefinition>                    m_xReportDefinition;
     bool                                        m_bAllreadyFilled;
 
@@ -196,7 +196,7 @@ public:
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-    UniReference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
+    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
 };
 
 /** Exports only settings

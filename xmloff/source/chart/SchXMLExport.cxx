@@ -154,7 +154,7 @@ public:
                           com::sun::star::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
-    UniReference<XMLPropertySetMapper> GetPropertySetMapper() const;
+    rtl::Reference<XMLPropertySetMapper> GetPropertySetMapper() const;
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
@@ -252,8 +252,8 @@ public:
 public:
     SvXMLExport& mrExport;
     SvXMLAutoStylePoolP& mrAutoStylePool;
-    UniReference< XMLPropertySetMapper > mxPropertySetMapper;
-    UniReference< XMLChartExportPropertyMapper > mxExpPropMapper;
+    rtl::Reference< XMLPropertySetMapper > mxPropertySetMapper;
+    rtl::Reference< XMLChartExportPropertyMapper > mxExpPropMapper;
 
     OUString msTableName;
     OUStringBuffer msStringBuffer;
@@ -1023,7 +1023,7 @@ void SchXMLExportHelper::SetDestinationShellID( const OUString& rShellID )
     m_pImpl->maDestShellID = rShellID;
 }
 
-UniReference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
+rtl::Reference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
 {
     return mxPropertySetMapper;
 }
@@ -1481,7 +1481,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 // initialisation happened with the complete draw page and not
                 // the XShapes object used here. Thus the shapes have to be
                 // exported one by one
-                UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
+                rtl::Reference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
                 Reference< drawing::XShape > xShape;
                 const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
@@ -1530,7 +1530,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 // the initialisation happened with the complete draw page and
                 // not the XShapes object used here. Thus the shapes have to be
                 // exported one by one
-                UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
+                rtl::Reference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
                 Reference< drawing::XShape > xShape;
                 const sal_Int32 nShapeCount( mxAdditionalShapes->getCount());
                 for( sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++ )
@@ -1885,7 +1885,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     }
     if( bExportContent )
     {
-        UniReference< XMLShapeExport > rShapeExport;
+        rtl::Reference< XMLShapeExport > rShapeExport;
 
         // write style name
         AddAutoStyleAttribute( aPropertyStates );
@@ -2280,7 +2280,7 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis > xChart2Axis, SvXMLExpo
 }
 
 void disableLinkedNumberFormat(
-    std::vector<XMLPropertyState>& rPropStates, const UniReference<XMLPropertySetMapper>& rMapper )
+    std::vector<XMLPropertyState>& rPropStates, const rtl::Reference<XMLPropertySetMapper>& rMapper )
 {
     for (size_t i = 0; i < rPropStates.size(); ++i)
     {
@@ -3711,7 +3711,7 @@ void SchXMLExport::_ExportContent()
     }
 }
 
-UniReference< XMLPropertySetMapper > SchXMLExport::GetPropertySetMapper() const
+rtl::Reference< XMLPropertySetMapper > SchXMLExport::GetPropertySetMapper() const
 {
     return maExportHelper.m_pImpl->GetPropertySetMapper();
 }

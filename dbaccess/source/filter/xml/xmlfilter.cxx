@@ -842,7 +842,7 @@ SvXMLImportContext* ODBFilter::CreateScriptContext( const OUString& _rLocalName 
     return new XMLScriptContext( *this, XML_NAMESPACE_OFFICE, _rLocalName, GetModel() );
 }
 
-UniReference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper() const
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
@@ -851,7 +851,7 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper
     return m_xTableStylesPropertySetMapper;
 }
 
-UniReference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMapper() const
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {
@@ -860,7 +860,7 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMappe
     return m_xColumnStylesPropertySetMapper;
 }
 
-UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper() const
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {

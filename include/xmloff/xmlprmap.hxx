@@ -64,7 +64,7 @@ struct XMLPropertySetMapperEntry_Impl
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertyMapEntry& rMapEntry,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory );
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertySetMapperEntry_Impl& rEntry );
@@ -75,7 +75,7 @@ struct XMLPropertySetMapperEntry_Impl
 class XMLOFF_DLLPUBLIC XMLPropertySetMapper : public UniRefBase
 {
     ::std::vector< XMLPropertySetMapperEntry_Impl > aMapEntries;
-    ::std::vector< UniReference < XMLPropertyHandlerFactory > > aHdlFactories;
+    ::std::vector< rtl::Reference < XMLPropertyHandlerFactory > > aHdlFactories;
     bool mbOnlyExportMappings;
 
 public:
@@ -87,11 +87,11 @@ public:
       */
     XMLPropertySetMapper(
             const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory,
+            const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
             bool bForExport );
     virtual ~XMLPropertySetMapper();
 
-    void AddMapperEntry( const UniReference < XMLPropertySetMapper >& rMapper );
+    void AddMapperEntry( const rtl::Reference < XMLPropertySetMapper >& rMapper );
 
     /** Return number of entries in input-array */
     sal_Int32   GetEntryCount() const { return aMapEntries.size(); }

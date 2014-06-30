@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 XMLAutoStyleFamily::XMLAutoStyleFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
-        const UniReference < SvXMLExportPropertyMapper > &rMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
         bool bAsFamily ) :
     mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
@@ -389,7 +389,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
-        const UniReference < SvXMLExportPropertyMapper > & rMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper > & rMapper,
            const OUString& rStrPrefix,
         bool bAsFamily )
 {
@@ -425,7 +425,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
         sal_Int32 nFamily,
-        const UniReference < SvXMLExportPropertyMapper > & rMapper )
+        const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
 {
 
     XMLAutoStyleFamily aTemporary( nFamily );
@@ -724,7 +724,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             {
                 nStart = 0;
                 sal_Int32 nIndex = 0;
-                UniReference< XMLPropertySetMapper > aPropMapper =
+                rtl::Reference< XMLPropertySetMapper > aPropMapper =
                     rFamily.mxMapper->getPropertySetMapper();
                 sal_Int16 nContextID;
                 while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)

@@ -132,13 +132,13 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     SvXMLNumFmtExport           *mpNumExport;
     ProgressBarHelper           *mpProgressBarHelper;
 
-    UniReference< XMLTextParagraphExport > mxTextParagraphExport;
-    UniReference< XMLShapeExport > mxShapeExport;
-    UniReference< SvXMLAutoStylePoolP > mxAutoStylePool;
-    UniReference< SchXMLExportHelper > mxChartExport;
-    UniReference< XMLPageExport > mxPageExport;
-    UniReference< XMLFontAutoStylePool > mxFontAutoStylePool;
-    UniReference< xmloff::OFormLayerXMLExport > mxFormExport;
+    rtl::Reference< XMLTextParagraphExport > mxTextParagraphExport;
+    rtl::Reference< XMLShapeExport > mxShapeExport;
+    rtl::Reference< SvXMLAutoStylePoolP > mxAutoStylePool;
+    rtl::Reference< SchXMLExportHelper > mxChartExport;
+    rtl::Reference< XMLPageExport > mxPageExport;
+    rtl::Reference< XMLFontAutoStylePool > mxFontAutoStylePool;
+    rtl::Reference< xmloff::OFormLayerXMLExport > mxFormExport;
     XMLEventExport* mpEventExport;
     XMLImageMapExport* mpImageMapExport;
     XMLErrors*  mpXMLErrors;
@@ -441,27 +441,27 @@ public:
     }
 
     // get export helper for text
-    inline UniReference< XMLTextParagraphExport > GetTextParagraphExport();
+    inline rtl::Reference< XMLTextParagraphExport > GetTextParagraphExport();
 
     // get export helper for shapes
-    inline UniReference< XMLShapeExport > GetShapeExport();
+    inline rtl::Reference< XMLShapeExport > GetShapeExport();
 
     // get auto style pool
-    inline UniReference< SvXMLAutoStylePoolP > GetAutoStylePool();
+    inline rtl::Reference< SvXMLAutoStylePoolP > GetAutoStylePool();
 
     // get Page Export
-    inline UniReference< XMLPageExport > GetPageExport();
+    inline rtl::Reference< XMLPageExport > GetPageExport();
 
     // get chart export helper
-    inline UniReference< SchXMLExportHelper > GetChartExport();
+    inline rtl::Reference< SchXMLExportHelper > GetChartExport();
 
     // get font auto style pool
-    inline UniReference< XMLFontAutoStylePool > GetFontAutoStylePool();
+    inline rtl::Reference< XMLFontAutoStylePool > GetFontAutoStylePool();
 
     ProgressBarHelper*  GetProgressBarHelper();
 
     // get Formlayer Export
-    inline UniReference< xmloff::OFormLayerXMLExport > GetFormExport();
+    inline rtl::Reference< xmloff::OFormLayerXMLExport > GetFormExport();
     inline bool HasFormExport();
 
     // get XPropertySet with export information
@@ -581,7 +581,7 @@ public:
     bool SetNullDateOnUnitConverter();
 };
 
-inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
+inline rtl::Reference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
 {
     if( !mxTextParagraphExport.is() )
         mxTextParagraphExport = CreateTextParagraphExport();
@@ -589,7 +589,7 @@ inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExpor
     return mxTextParagraphExport;
 }
 
-inline UniReference< XMLShapeExport > SvXMLExport::GetShapeExport()
+inline rtl::Reference< XMLShapeExport > SvXMLExport::GetShapeExport()
 {
     if( !mxShapeExport.is() )
         mxShapeExport = CreateShapeExport();
@@ -597,7 +597,7 @@ inline UniReference< XMLShapeExport > SvXMLExport::GetShapeExport()
     return mxShapeExport;
 }
 
-inline UniReference< SvXMLAutoStylePoolP > SvXMLExport::GetAutoStylePool()
+inline rtl::Reference< SvXMLAutoStylePoolP > SvXMLExport::GetAutoStylePool()
 {
     if( !mxAutoStylePool.is() )
         mxAutoStylePool = CreateAutoStylePool();
@@ -605,7 +605,7 @@ inline UniReference< SvXMLAutoStylePoolP > SvXMLExport::GetAutoStylePool()
     return mxAutoStylePool;
 }
 
-inline UniReference< SchXMLExportHelper > SvXMLExport::GetChartExport()
+inline rtl::Reference< SchXMLExportHelper > SvXMLExport::GetChartExport()
 {
     if( !mxChartExport.is() )
         mxChartExport = CreateChartExport();
@@ -613,7 +613,7 @@ inline UniReference< SchXMLExportHelper > SvXMLExport::GetChartExport()
     return mxChartExport;
 }
 
-inline UniReference< XMLPageExport > SvXMLExport::GetPageExport()
+inline rtl::Reference< XMLPageExport > SvXMLExport::GetPageExport()
 {
     if( !mxPageExport.is() )
         mxPageExport = CreatePageExport();
@@ -621,7 +621,7 @@ inline UniReference< XMLPageExport > SvXMLExport::GetPageExport()
     return mxPageExport;
 }
 
-inline UniReference< XMLFontAutoStylePool > SvXMLExport::GetFontAutoStylePool()
+inline rtl::Reference< XMLFontAutoStylePool > SvXMLExport::GetFontAutoStylePool()
 {
     if( !mxFontAutoStylePool.is() )
         mxFontAutoStylePool = CreateFontAutoStylePool();
@@ -629,7 +629,7 @@ inline UniReference< XMLFontAutoStylePool > SvXMLExport::GetFontAutoStylePool()
     return mxFontAutoStylePool;
 }
 
-inline UniReference< xmloff::OFormLayerXMLExport > SvXMLExport::GetFormExport()
+inline rtl::Reference< xmloff::OFormLayerXMLExport > SvXMLExport::GetFormExport()
 {
     if( !mxFormExport.is() )
         mxFormExport = CreateFormExport();

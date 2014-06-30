@@ -603,10 +603,10 @@ sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue ) const
     return nFamily;
 }
 
-UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportPropertyMapper(
+rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper;
 
     switch( nFamily )
     {
@@ -652,7 +652,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
     case XML_STYLE_FAMILY_SD_POOL_ID:
         if(!mxShapeImpPropMapper.is())
         {
-            UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
+            rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
             ((SvXMLStylesContext*)this)->mxShapeImpPropMapper =
                 aImpHelper->GetPropertySetMapper();
         }

@@ -131,7 +131,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
 }
 
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImp ) :
     SvXMLImportPropertyMapper( rMapper, rImp ),
     nSizeTypeIndex( -2 ),
@@ -257,7 +257,7 @@ namespace {
 
 //On import clear 100% all-margins relative sizes.
 static bool
-isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPropertySetMapper>& rPrMap)
+isNotDefaultRelSize(const XMLPropertyState* pRelState, const rtl::Reference<XMLPropertySetMapper>& rPrMap)
 {
     if (rPrMap->GetEntryContextId(pRelState->mnIndex) == CTF_PARAMARGINALL_REL)
     {
@@ -281,7 +281,7 @@ static void lcl_SeparateBorder(
     XMLPropertyState* pNewBorders[4], XMLPropertyState* pAllBorderWidth,
     XMLPropertyState* pBorderWidths[4]
 #ifdef DBG_UTIL
-    , const UniReference< XMLPropertySetMapper >& rMapper
+    , const rtl::Reference< XMLPropertySetMapper >& rMapper
 #endif
 )
 {

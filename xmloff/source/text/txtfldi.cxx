@@ -3664,7 +3664,7 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
                 aAny >>= xText;
                 if( xText.is() )
                 {
-                    UniReference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                    rtl::Reference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
                     if( !mxCursor.is() )
                     {
                         mxOldCursor = xTxtImport->GetCursor();

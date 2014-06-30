@@ -21,15 +21,14 @@
 #define INCLUDED_XMLOFF_SOURCE_STYLE_XMLFOOTNOTESEPARATOREXPORT_HXX
 
 #include <sal/types.h>
+#include <vector>
 
 class SvXMLExport;
 class XMLPropertySetMapper;
 struct XMLPropertyState;
-template<class X> class UniReference;
-
-
-#include <vector>
-
+namespace rtl {
+    template<class X> class Reference;
+}
 
 /**
  * export footnote separator element in page styles
@@ -48,7 +47,7 @@ public:
         const ::std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
         /// used only for debugging
-        const UniReference<XMLPropertySetMapper> & rMapper);
+        const rtl::Reference<XMLPropertySetMapper> & rMapper);
 };
 
 #endif

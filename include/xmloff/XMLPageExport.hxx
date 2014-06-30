@@ -63,9 +63,9 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
     ::std::vector< XMLPageExportNameEntry > aNameVector;
     SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
-    UniReference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
-    UniReference < XMLPropertySetMapper > xPageMasterPropSetMapper;
-    UniReference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
+    rtl::Reference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper > xPageMasterPropSetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
 
 protected:
 

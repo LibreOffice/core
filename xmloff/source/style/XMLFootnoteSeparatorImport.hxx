@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
 class XMLFootnoteSeparatorImport : public SvXMLImportContext
 {
     ::std::vector<XMLPropertyState> & rProperties;
-    UniReference<XMLPropertySetMapper> rMapper;
+    rtl::Reference<XMLPropertySetMapper> rMapper;
     sal_Int32 nPropIndex;
 
 public:
@@ -55,7 +55,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
-        const UniReference<XMLPropertySetMapper> & rMapperRef,
+        const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
         sal_Int32 nIndex);
 
     virtual ~XMLFootnoteSeparatorImport();

@@ -66,7 +66,7 @@ protected:
 public:
 
     XMLTextExportPropertySetMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLExport& rExt );
     virtual ~XMLTextExportPropertySetMapper();
 

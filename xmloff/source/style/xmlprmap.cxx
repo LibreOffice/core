@@ -35,7 +35,7 @@ using ::xmloff::token::GetXMLToken;
 
 XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,
-    const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
+    const rtl::Reference< XMLPropertyHandlerFactory >& rFactory ) :
     sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
     sAPIPropertyName( OUString(rMapEntry.msApiName, rMapEntry.nApiNameLength,
                                RTL_TEXTENCODING_ASCII_US ) ),
@@ -65,7 +65,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
 // Ctor
 XMLPropertySetMapper::XMLPropertySetMapper(
         const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory,
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
         bool bForExport )
     :
         mbOnlyExportMappings( bForExport)
@@ -104,9 +104,9 @@ XMLPropertySetMapper::~XMLPropertySetMapper()
 }
 
 void XMLPropertySetMapper::AddMapperEntry(
-    const UniReference < XMLPropertySetMapper >& rMapper )
+    const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
-    for( vector < UniReference < XMLPropertyHandlerFactory > >::iterator
+    for( vector < rtl::Reference < XMLPropertyHandlerFactory > >::iterator
             aFIter = rMapper->aHdlFactories.begin();
          aFIter != rMapper->aHdlFactories.end();
          ++aFIter )

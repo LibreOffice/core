@@ -81,7 +81,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& )
 bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
         const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         const Reference< XNameAccess >& xStyles,
         const OUString* pPrefix )
 {
@@ -336,7 +336,7 @@ bool XMLStyleExport::exportStyle(
 bool XMLStyleExport::exportDefaultStyle(
         const Reference< XPropertySet >& xPropSet,
           const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper )
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper )
 {
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
@@ -365,7 +365,7 @@ bool XMLStyleExport::exportDefaultStyle(
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
     const OUString& rXMLFamily,
-    const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+    const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
     bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
@@ -375,7 +375,7 @@ void XMLStyleExport::exportStyleFamily(
 
 void XMLStyleExport::exportStyleFamily(
     const OUString& rFamily, const OUString& rXMLFamily,
-    const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+    const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
     bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );

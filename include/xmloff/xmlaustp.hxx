@@ -79,10 +79,10 @@ public:
     // TODO: Remove this ugly method as soon as possible
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, const OUString& aStrPrefix, bool bAsFamily = true );
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
-                    const UniReference< SvXMLExportPropertyMapper >& rMapper,
+                    const rtl::Reference< SvXMLExportPropertyMapper >& rMapper,
                     const OUString& rStrPrefix, bool bAsFamily = true );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
-                    const UniReference< SvXMLExportPropertyMapper >& rMapper );
+                    const rtl::Reference< SvXMLExportPropertyMapper >& rMapper );
 
     /// Register a name that must not be used as a generated name.
     void RegisterName( sal_Int32 nFamily, const OUString& rName );

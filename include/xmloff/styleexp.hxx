@@ -73,7 +73,7 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xStyles,
         const OUString* pPrefix = 0L );
 
@@ -93,13 +93,13 @@ public:
 
 //  void exportStyleFamily(
 //      const OUString& rFamily, const OUString& rXMLFamily,
-//      const UniReference < XMLPropertySetMapper >& rPropMapper,
+//      const rtl::Reference < XMLPropertySetMapper >& rPropMapper,
 //      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0L);
 
 //  void exportStyleFamily(
 //      const sal_Char *pFamily, const OUString& rXMLFamily,
-//      const UniReference < XMLPropertySetMapper >& rPropMapper,
+//      const rtl::Reference < XMLPropertySetMapper >& rPropMapper,
 //      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0L);
 
@@ -107,17 +107,17 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & xPropSet,
         const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper );
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper );
 
     void exportStyleFamily(
         const OUString& rFamily, const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         bool bUsed, sal_uInt16 nFamily = 0,
         const OUString* pPrefix = 0L);
 
     void exportStyleFamily(
         const sal_Char *pFamily, const OUString& rXMLFamily,
-        const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         bool bUsed, sal_uInt16 nFamily = 0,
         const OUString* pPrefix = 0L);
 };

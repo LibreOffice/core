@@ -74,7 +74,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImportP) :
     SvXMLImportPropertyMapper( rMapper, rImportP )
 {
@@ -217,7 +217,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
 }
 
 ScXMLRowImportPropertyMapper::ScXMLRowImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImportP) :
     SvXMLImportPropertyMapper( rMapper, rImportP )
 {
@@ -286,7 +286,7 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              const uno::Reference< xml::sax::XAttributeList >& xAttrList,
              sal_uInt32 nFamily,
              ::std::vector< XMLPropertyState > &rProps,
-             const UniReference < SvXMLImportPropertyMapper > &rMap);
+             const rtl::Reference < SvXMLImportPropertyMapper > &rMap);
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -301,7 +301,7 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
              const uno::Reference< xml::sax::XAttributeList >& xAttrList,
              sal_uInt32 nFamily,
              ::std::vector< XMLPropertyState > &rProps,
-             const UniReference < SvXMLImportPropertyMapper > &rMap)
+             const rtl::Reference < SvXMLImportPropertyMapper > &rMap)
           : SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                rProps, rMap )
 {
@@ -478,7 +478,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
     else if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_TABLE_CELL_PROPERTIES ) )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(
                 GetFamily() );
         if( xImpPrMap.is() )
@@ -596,8 +596,8 @@ void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
 XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
 {
     XMLPropertyState* pRet = NULL;
-    UniReference < XMLPropertySetMapper > xPrMap;
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < XMLPropertySetMapper > xPrMap;
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         pStyles->GetImportPropertyMapper( GetFamily() );
     OSL_ENSURE( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
@@ -730,11 +730,11 @@ void XMLTableStylesContext::EndElement()
         ((ScXMLImport&)GetImport()).InsertStyles();
 }
 
-UniReference < SvXMLImportPropertyMapper >
+rtl::Reference < SvXMLImportPropertyMapper >
     XMLTableStylesContext::GetImportPropertyMapper(
                     sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
 
     if (!xMapper.is())
     {

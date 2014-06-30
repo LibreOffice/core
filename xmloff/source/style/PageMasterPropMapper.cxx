@@ -33,7 +33,7 @@ XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper( bool bForExport ):
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
         const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory,
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
         bool bForExport ) :
     XMLPropertySetMapper( pEntries, rFactory, bForExport )
 {

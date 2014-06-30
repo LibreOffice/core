@@ -58,7 +58,7 @@ public:
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
+    rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX

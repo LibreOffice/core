@@ -54,7 +54,7 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
-    const UniReference<XMLPropertySetMapper> & rMapperRef) :
+    const rtl::Reference<XMLPropertySetMapper> & rMapperRef) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),
         rMapper(rMapperRef)

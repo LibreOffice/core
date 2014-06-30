@@ -48,7 +48,7 @@ struct XMLAutoStyleFamily : boost::noncopyable
 
     sal_uInt32                   mnFamily;
     OUString                     maStrFamilyName;
-    UniReference < SvXMLExportPropertyMapper >  mxMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >  mxMapper;
 
     ParentSetType maParentSet;
     NameSetType maNameSet;
@@ -58,7 +58,7 @@ struct XMLAutoStyleFamily : boost::noncopyable
     bool                         mbAsFamily;
 
     XMLAutoStyleFamily( sal_Int32 nFamily, const OUString& rStrName,
-            const UniReference<SvXMLExportPropertyMapper>& rMapper,
+            const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
             const OUString& rStrPrefix, bool bAsFamily = true );
 
     XMLAutoStyleFamily( sal_Int32 nFamily );
@@ -145,10 +145,10 @@ public:
     SvXMLExport& GetExport() const { return rExport; }
 
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
-        const UniReference < SvXMLExportPropertyMapper > & rMapper,
+        const rtl::Reference < SvXMLExportPropertyMapper > & rMapper,
         const OUString& rStrPrefix, bool bAsFamily = true );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
-        const UniReference < SvXMLExportPropertyMapper > & rMapper );
+        const rtl::Reference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const OUString& rName );
     void GetRegisteredNames(
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,

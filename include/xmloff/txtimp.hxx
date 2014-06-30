@@ -543,13 +543,13 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet >& rFrmPropSet );
 
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetParaImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetTextImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetSectionImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetRubyImportPropertySetMapper() const;
 
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);

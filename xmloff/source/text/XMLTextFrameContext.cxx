@@ -477,7 +477,7 @@ TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
 
 void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
 {
-    UniReference < XMLTextImportHelper > xTextImportHelper =
+    rtl::Reference < XMLTextImportHelper > xTextImportHelper =
         GetImport().GetTextImport();
 
     switch ( nType)
@@ -717,7 +717,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         // URL
         OSL_ENSURE( !sHRef.isEmpty() || xBase64Stream.is(),
                     "neither URL nor base64 image data given" );
-        UniReference < XMLTextImportHelper > xTxtImport =
+        rtl::Reference < XMLTextImportHelper > xTxtImport =
             GetImport().GetTextImport();
         if( !sHRef.isEmpty() )
         {
@@ -895,7 +895,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     bCreateFailed = false;
     bOwnBase64Stream = false;
 
-    UniReference < XMLTextImportHelper > xTxtImport =
+    rtl::Reference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     const SvXMLTokenMap& rTokenMap =
         xTxtImport->GetTextFrameAttrTokenMap();
@@ -1273,7 +1273,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     if( !xPropSet.is() )
         return;
 
-    UniReference< XMLTextImportHelper > xTxtImp = GetImport().GetTextImport();
+    rtl::Reference< XMLTextImportHelper > xTxtImp = GetImport().GetTextImport();
     Reference < XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
     if( !xPropSetInfo.is() ||
@@ -1398,7 +1398,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             OUString aStyleName = xAttrList->getValueByIndex( i );
             if( !aStyleName.isEmpty() )
             {
-                UniReference < XMLTextImportHelper > xTxtImport =
+                rtl::Reference < XMLTextImportHelper > xTxtImport =
                                                     GetImport().GetTextImport();
                 XMLPropStyleContext* pStyle( 0L );
                 pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );

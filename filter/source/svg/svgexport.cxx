@@ -1184,7 +1184,7 @@ bool SVGFilter::implExportAnimations()
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Animations" );
                         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-                        UniReference< xmloff::AnimationsExporter > xAnimationsExporter;
+                        rtl::Reference< xmloff::AnimationsExporter > xAnimationsExporter;
                         xAnimationsExporter = new xmloff::AnimationsExporter( *mpSVGExport, xProps );
                         xAnimationsExporter->prepare( xRootNode );
                         xAnimationsExporter->exportAnimations( xRootNode );

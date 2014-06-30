@@ -112,7 +112,7 @@ protected:
                         ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
 public:
     ScXMLCellExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLCellExportPropertyMapper();
     virtual void handleElementItem(
             SvXMLExport& rExport,
@@ -142,7 +142,7 @@ protected:
                         ::com::sun::star::beans::XPropertySet > rPropSet ) const SAL_OVERRIDE;
 public:
     ScXMLRowExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLRowExportPropertyMapper();
 };
 
@@ -150,7 +150,7 @@ class ScXMLColumnExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 public:
     ScXMLColumnExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLColumnExportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -168,7 +168,7 @@ class ScXMLTableExportPropertyMapper : public SvXMLExportPropertyMapper
 protected:
 public:
     ScXMLTableExportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLTableExportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */

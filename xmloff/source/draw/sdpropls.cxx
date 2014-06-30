@@ -1168,7 +1168,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     return pHdl;
 }
 
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef,
+XMLShapePropertySetMapper::XMLShapePropertySetMapper(const rtl::Reference< XMLPropertyHandlerFactory >& rFactoryRef,
         bool bForExport)
 : XMLPropertySetMapper( aXMLSDProperties, rFactoryRef, bForExport )
 {
@@ -1178,7 +1178,7 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 {
 }
 
-XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
+XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
 : SvXMLExportPropertyMapper( rMapper )
 , maNumRuleExp( rExport )
 , mbIsInAutoStyles( true )
@@ -1563,7 +1563,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
     }
 }
 
-XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
+XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
         SvXMLExportPropertyMapper( rMapper ),
         mrExport( rExport ),
         msCDATA( GetXMLToken(XML_CDATA))

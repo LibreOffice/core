@@ -60,11 +60,11 @@ void Test::tearDown()
 
 void Test::testAutoStylePool()
 {
-    UniReference< SvXMLAutoStylePoolP > xPool(
+    rtl::Reference< SvXMLAutoStylePoolP > xPool(
         new SvXMLAutoStylePoolP( *pExport ) );
-    UniReference< XMLPropertySetMapper > xSetMapper(
+    rtl::Reference< XMLPropertySetMapper > xSetMapper(
         new XMLChartPropertySetMapper( true) );
-    UniReference< XMLChartExportPropertyMapper > xExportPropMapper(
+    rtl::Reference< XMLChartExportPropertyMapper > xExportPropMapper(
         new XMLChartExportPropertyMapper( xSetMapper, *pExport ) );
 
     xPool->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH,

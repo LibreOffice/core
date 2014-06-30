@@ -146,7 +146,7 @@ void XMLChangedRegionImportContext::EndElement()
     {
         // delete last paragraph
         // (one extra paragraph was inserted in the beginning)
-        UniReference<XMLTextImportHelper> rHelper =
+        rtl::Reference<XMLTextImportHelper> rHelper =
             GetImport().GetTextImport();
         rHelper->DeleteParagraph();
 
@@ -175,7 +175,7 @@ void XMLChangedRegionImportContext::UseRedlineText()
     if (! xOldCursor.is())
     {
         // get TextImportHelper and old Cursor
-        UniReference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
+        rtl::Reference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
         Reference<XTextCursor> xCursor( rHelper->GetCursor() );
 
         // create Redline and new Cursor

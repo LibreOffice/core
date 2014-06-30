@@ -232,7 +232,7 @@ void XMLPageExport::exportDefaultStyle()
                 xPageMasterExportPropMapper->FilterDefaults( xPropSet );
 
             bool bExport = false;
-            UniReference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
+            rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
             for( ::std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin(); aIter != xPropStates.end(); ++aIter )
             {
                 XMLPropertyState *pProp = &(*aIter);

@@ -918,7 +918,7 @@ class SvTextShapeImportHelper : public XMLTextShapeImportHelper
     // stored in the superclass, from whom we originally got the
     // reference, is already destroyed when we want to use it in the
     // destructor
-    UniReference< ::xmloff::OFormLayerXMLImport > rFormImport;
+    rtl::Reference< ::xmloff::OFormLayerXMLImport > rFormImport;
 
     // hold reference to the one page (if it exists) for calling startPage()
     // and endPage. If !xPage.is(), then this document doesn't have a

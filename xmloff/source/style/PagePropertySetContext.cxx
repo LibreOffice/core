@@ -34,7 +34,7 @@ PagePropertySetContext::PagePropertySetContext(
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aTempType ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,

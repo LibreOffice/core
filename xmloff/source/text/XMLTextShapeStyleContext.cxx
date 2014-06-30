@@ -46,7 +46,7 @@ public:
         const Reference< XAttributeList >& xAttrList,
                  sal_uInt32 nFamily,
         ::std::vector< XMLPropertyState > &rProps,
-        const UniReference < SvXMLImportPropertyMapper > &rMap );
+        const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~XMLTextShapePropertySetContext_Impl();
 
@@ -64,7 +64,7 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
                  const Reference< XAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap ) :
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     XMLShapePropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                                 rProps, rMap )
 {
@@ -172,7 +172,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
             {

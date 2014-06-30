@@ -189,7 +189,7 @@ public:
     void FillPropertyStateArray(
             vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
-            const UniReference< XMLPropertySetMapper >& maPropMapper,
+            const rtl::Reference< XMLPropertySetMapper >& maPropMapper,
             const bool bDefault = false);
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
@@ -277,7 +277,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         vector< XMLPropertyState >& rPropStates,
         const Reference< XPropertySet >& rPropSet,
-        const UniReference< XMLPropertySetMapper >& rPropMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rPropMapper,
         const bool bDefault )
 {
     XMLPropertyStates_Impl aPropStates;
@@ -511,8 +511,8 @@ struct SvXMLExportPropertyMapper::Impl
     typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, FilterPropertiesInfo_Impl*> CacheType;
     CacheType maCache;
 
-    UniReference<SvXMLExportPropertyMapper> mxNextMapper;
-    UniReference<XMLPropertySetMapper> mxPropMapper;
+    rtl::Reference<SvXMLExportPropertyMapper> mxNextMapper;
+    rtl::Reference<XMLPropertySetMapper> mxPropMapper;
 
     OUString maStyleName;
 
@@ -527,7 +527,7 @@ struct SvXMLExportPropertyMapper::Impl
 // ctor/dtor , class SvXMLExportPropertyMapper
 
 SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
+        const rtl::Reference< XMLPropertySetMapper >& rMapper ) :
     mpImpl(new Impl)
 {
     mpImpl->mxPropMapper = rMapper;
@@ -539,7 +539,7 @@ SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 }
 
 void SvXMLExportPropertyMapper::ChainExportMapper(
-        const UniReference< SvXMLExportPropertyMapper>& rMapper )
+        const rtl::Reference< SvXMLExportPropertyMapper>& rMapper )
 {
     // add map entries from rMapper to current map
     mpImpl->mxPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
@@ -547,7 +547,7 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
     rMapper->mpImpl->mxPropMapper = mpImpl->mxPropMapper;
 
     // set rMapper as last mapper in current chain
-    UniReference< SvXMLExportPropertyMapper > xNext = mpImpl->mxNextMapper;
+    rtl::Reference< SvXMLExportPropertyMapper > xNext = mpImpl->mxNextMapper;
     if( xNext.is())
     {
         while (xNext->mpImpl->mxNextMapper.is())
@@ -1027,7 +1027,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
         rExport.IgnorableWhitespace();
 }
 
-const UniReference<XMLPropertySetMapper>& SvXMLExportPropertyMapper::getPropertySetMapper() const
+const rtl::Reference<XMLPropertySetMapper>& SvXMLExportPropertyMapper::getPropertySetMapper() const
 {
     return mpImpl->mxPropMapper;
 }

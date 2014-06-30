@@ -178,11 +178,11 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference <
                     ::com::sun::star::style::XAutoStyleFamily > mxTextAutoStyles;
 
-    UniReference < SvXMLImportPropertyMapper > mxParaImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > mxTextImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > mxShapeImpPropMapper;
-    mutable UniReference < SvXMLImportPropertyMapper > mxChartImpPropMapper;
-    mutable UniReference < SvXMLImportPropertyMapper > mxPageImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > mxParaImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > mxTextImpPropMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > mxShapeImpPropMapper;
+    mutable rtl::Reference < SvXMLImportPropertyMapper > mxChartImpPropMapper;
+    mutable rtl::Reference < SvXMLImportPropertyMapper > mxPageImpPropMapper;
 
     SAL_DLLPRIVATE const SvXMLTokenMap& GetStyleStylesElemTokenMap();
 
@@ -241,7 +241,7 @@ public:
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
     virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
-    virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+    virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
 
     virtual ::com::sun::star::uno::Reference <

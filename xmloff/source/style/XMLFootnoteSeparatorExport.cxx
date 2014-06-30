@@ -56,7 +56,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     nIdx
     #endif
     ,
-    const UniReference<XMLPropertySetMapper> & rMapper)
+    const rtl::Reference<XMLPropertySetMapper> & rMapper)
 {
     DBG_ASSERT(NULL != pProperties, "Need property states");
 

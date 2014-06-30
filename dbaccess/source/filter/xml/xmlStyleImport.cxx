@@ -170,11 +170,11 @@ void OTableStylesContext::EndElement()
         GetImport().GetStyles()->CopyStylesToDoc(true);
 }
 
-UniReference < SvXMLImportPropertyMapper >
+rtl::Reference < SvXMLImportPropertyMapper >
     OTableStylesContext::GetImportPropertyMapper(
                     sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
 
     if (!xMapper.is())
     {

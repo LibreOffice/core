@@ -70,12 +70,12 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
 //  SvXMLExport& rExport;
     SvXMLAutoStylePoolP& rAutoStylePool;
-    UniReference < SvXMLExportPropertyMapper > xParaPropMapper;
-    UniReference < SvXMLExportPropertyMapper > xTextPropMapper;
-    UniReference < SvXMLExportPropertyMapper > xFramePropMapper;
-    UniReference < SvXMLExportPropertyMapper > xAutoFramePropMapper;
-    UniReference < SvXMLExportPropertyMapper > xSectionPropMapper;
-    UniReference < SvXMLExportPropertyMapper > xRubyPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xParaPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xTextPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xFramePropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xAutoFramePropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xSectionPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xRubyPropMapper;
 
     const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
@@ -211,29 +211,29 @@ protected:
     const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
 
 public:
-    UniReference < SvXMLExportPropertyMapper > GetParaPropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetParaPropMapper() const
     {
         return xParaPropMapper;
     }
 
-    UniReference < SvXMLExportPropertyMapper > GetTextPropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetTextPropMapper() const
     {
         return xTextPropMapper;
     }
 
-    UniReference < SvXMLExportPropertyMapper > GetFramePropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetFramePropMapper() const
     {
         return xFramePropMapper;
     }
-    UniReference < SvXMLExportPropertyMapper > GetAutoFramePropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetAutoFramePropMapper() const
     {
         return xAutoFramePropMapper;
     }
-    UniReference < SvXMLExportPropertyMapper > GetSectionPropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetSectionPropMapper() const
     {
         return xSectionPropMapper;
     }
-    UniReference < SvXMLExportPropertyMapper > GetRubyPropMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetRubyPropMapper() const
     {
         return xRubyPropMapper;
     }
@@ -647,7 +647,7 @@ public:
     bool IsBlockMode() const { return bBlock; }
 
 
-    UniReference < SvXMLExportPropertyMapper > GetParagraphPropertyMapper() const
+    rtl::Reference < SvXMLExportPropertyMapper > GetParagraphPropertyMapper() const
     {
         return xParaPropMapper;
     }
@@ -667,7 +667,7 @@ public:
     void PreventExportOfControlsInMuteSections(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexAccess> & rShapes,
-        UniReference<xmloff::OFormLayerXMLExport> xFormExport );
+        rtl::Reference<xmloff::OFormLayerXMLExport> xFormExport );
 
     SinglePropertySetInfoCache& GetCharStyleNamesPropInfoCache() { return aCharStyleNamesPropInfoCache; }
 

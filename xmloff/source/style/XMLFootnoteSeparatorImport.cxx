@@ -60,7 +60,7 @@ XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     vector<XMLPropertyState> & rProps,
-    const UniReference<XMLPropertySetMapper> & rMapperRef,
+    const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),

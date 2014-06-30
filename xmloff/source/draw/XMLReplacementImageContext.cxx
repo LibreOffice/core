@@ -42,7 +42,7 @@ XMLReplacementImageContext::XMLReplacementImageContext(
     m_xPropSet( rPropSet ),
     m_sGraphicURL("GraphicURL")
 {
-    UniReference < XMLTextImportHelper > xTxtImport =
+    rtl::Reference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     const SvXMLTokenMap& rTokenMap =
         xTxtImport->GetTextFrameAttrTokenMap();
@@ -74,7 +74,7 @@ void XMLReplacementImageContext::EndElement()
 {
     OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
                 "neither URL nor base64 image data given" );
-    UniReference < XMLTextImportHelper > xTxtImport =
+    rtl::Reference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     OUString sHRef;
     if( !m_sHRef.isEmpty() )

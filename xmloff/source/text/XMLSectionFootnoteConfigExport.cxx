@@ -52,7 +52,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
     nIdx
     #endif
     ,
-    const UniReference<XMLPropertySetMapper> & rMapper)
+    const rtl::Reference<XMLPropertySetMapper> & rMapper)
 {
     // store and initialize the values
     bool bNumOwn = false;

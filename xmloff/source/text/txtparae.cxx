@@ -448,7 +448,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates, bool bDontSeek )
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -539,7 +539,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         case XML_STYLE_FAMILY_TEXT_TEXT:
             {
                 // Get parent and remove hyperlinks (they aren't of interest)
-                UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+                rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
                 for( ::std::vector< XMLPropertyState >::iterator i(xPropStates.begin());
                       nIgnoreProps < 2 && i != xPropStates.end(); )
                 {
@@ -594,7 +594,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates)
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -689,7 +689,7 @@ OUString XMLTextParagraphExport::Find(
         const XMLPropertyState** ppAddStates) const
 {
     OUString sName( rParent );
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
+    rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -730,14 +730,14 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         bool& rbHasAutoStyle,
         const XMLPropertyState** ppAddStates ) const
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
+    rtl::Reference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
     vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
     rbHyperlink = rbHasCharStyle = rbHasAutoStyle = false;
     sal_uInt16 nIgnoreProps = 0;
-    UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
+    rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
     ::std::vector< XMLPropertyState >::iterator aFirstDel = xPropStates.end();
     ::std::vector< XMLPropertyState >::iterator aSecondDel = xPropStates.end();
 
@@ -1272,7 +1272,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
-    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
+    rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
     xParaPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
 
@@ -1355,7 +1355,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
         SvXMLExport& rExport )
 {
-    UniReference < XMLPropertySetMapper > xPropMapper =
+    rtl::Reference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE, true );
     return new XMLTextExportPropertySetMapper( xPropMapper, rExport );
 }
@@ -3767,7 +3767,7 @@ void XMLTextParagraphExport::exportMeta(
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
     const Reference<XIndexAccess> & rShapes,
-    UniReference<xmloff::OFormLayerXMLExport> xFormExport   )
+    rtl::Reference<xmloff::OFormLayerXMLExport> xFormExport   )
 {
     // check parameters ad pre-conditions
     if( ( ! rShapes.is() ) || ( ! xFormExport.is() ) )

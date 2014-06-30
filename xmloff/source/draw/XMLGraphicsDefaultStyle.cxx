@@ -68,7 +68,7 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
                 pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily, GetProperties(), xImpPrMap );
         }
@@ -142,7 +142,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         // special handling since AOO still does _not_ write it into the file
         || bIsAOO4)
     {
-        UniReference<XMLPropertySetMapper> const pImpPrMap(
+        rtl::Reference<XMLPropertySetMapper> const pImpPrMap(
             GetStyles()->GetImportPropertyMapper(GetFamily())
                 ->getPropertySetMapper());
         sal_Int32 const nStrokeIndex(

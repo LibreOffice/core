@@ -56,7 +56,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
             if( iter->mnIndex == -1 )
                 continue;
 
-            UniReference< XMLPropertySetMapper > aPropMapper =
+            rtl::Reference< XMLPropertySetMapper > aPropMapper =
                 mrSchXMLExport.GetPropertySetMapper();
             sal_Int16 nContextID = aPropMapper->GetEntryContextId( iter->mnIndex );
             if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )

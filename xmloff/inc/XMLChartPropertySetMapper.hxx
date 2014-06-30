@@ -78,7 +78,7 @@ private:
         sal_uInt32 nIdx = 0  ) const SAL_OVERRIDE;
 
 public:
-    XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+    XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper();
 
@@ -94,7 +94,7 @@ private:
     SvXMLImport& mrImport;
 
 public:
-    XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+    XMLChartImportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   const SvXMLImport& rImport );
     virtual ~XMLChartImportPropertyMapper();
 

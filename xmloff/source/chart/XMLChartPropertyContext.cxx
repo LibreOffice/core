@@ -34,7 +34,7 @@ XMLChartPropertyContext::XMLChartPropertyContext(
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     sal_uInt32 nFamily,
     ::std::vector< XMLPropertyState >& rProps,
-    const UniReference< SvXMLImportPropertyMapper >& rMapper ) :
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMapper ) :
         SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily, rProps, rMapper )
 {
 }

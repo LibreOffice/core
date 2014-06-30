@@ -83,15 +83,15 @@ class ScXMLExport : public SvXMLExport
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     boost::scoped_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
     boost::scoped_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
-    UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
-    UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper >  xCellStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
-    UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
+    rtl::Reference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
+    rtl::Reference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
+    rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >  xCellStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
+    rtl::Reference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     typedef ::boost::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
@@ -248,8 +248,8 @@ public:
     bool IsMatrix (const ScAddress& aCell,
         com::sun::star::table::CellRangeAddress& aCellAddress, bool& bIsFirst) const;
 
-    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
-    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
+    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
 
     void SetSourceStream( const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xNewStream );
 

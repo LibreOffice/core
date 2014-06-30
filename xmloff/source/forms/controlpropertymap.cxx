@@ -113,7 +113,7 @@ namespace xmloff
     }
 
     //= OFormComponentStyleExportMapper
-    OFormComponentStyleExportMapper::OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
+    OFormComponentStyleExportMapper::OFormComponentStyleExportMapper( const rtl::Reference< XMLPropertySetMapper >& _rMapper )
         :SvXMLExportPropertyMapper( _rMapper )
     {
     }

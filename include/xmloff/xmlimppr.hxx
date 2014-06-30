@@ -52,7 +52,7 @@ struct _ContextID_Index_Pair
 
 class XMLOFF_DLLPUBLIC SvXMLImportPropertyMapper : public UniRefBase
 {
-    UniReference< SvXMLImportPropertyMapper> mxNextMapper;
+    rtl::Reference< SvXMLImportPropertyMapper> mxNextMapper;
 
     SvXMLImport& rImport;   // access to error handling
 
@@ -62,13 +62,13 @@ class XMLOFF_DLLPUBLIC SvXMLImportPropertyMapper : public UniRefBase
 
 protected:
 
-    UniReference< XMLPropertySetMapper > maPropMapper;
+    rtl::Reference< XMLPropertySetMapper > maPropMapper;
     SvXMLImport& GetImport() const { return rImport;}
 
 public:
 
     SvXMLImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImport);
     virtual ~SvXMLImportPropertyMapper();
 
@@ -76,7 +76,7 @@ public:
     // The added mapper MUST not be used outside the Mapper chain any longer,
     // because its PropertyMapper will be replaced.
     void ChainImportMapper(
-        const UniReference< SvXMLImportPropertyMapper>& rMapper );
+        const rtl::Reference< SvXMLImportPropertyMapper>& rMapper );
 
     /** fills the given itemset with the attributes in the given list
       * the map is only searched within the range
@@ -121,7 +121,7 @@ public:
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues )
             const;
 
-    inline const UniReference< XMLPropertySetMapper >&
+    inline const rtl::Reference< XMLPropertySetMapper >&
         getPropertySetMapper() const;
 
 
@@ -134,7 +134,7 @@ public:
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
-        const UniReference<XMLPropertySetMapper> & rPropMapper,
+        const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
         // parameter for use by txtstyli.cxx; allows efficient
@@ -149,7 +149,7 @@ public:
             ::com::sun::star::beans::XMultiPropertySet> & rMultiPropSet,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
-        const UniReference<XMLPropertySetMapper> & rPropMapper,
+        const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
 
         // parameters for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
@@ -161,7 +161,7 @@ public:
         const ::std::vector<XMLPropertyState> & rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XTolerantMultiPropertySet> & rTolPropSet,
-        const UniReference<XMLPropertySetMapper> & rPropMapper,
+        const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
         // parameters for use by txtstyli.cxx; allows efficient
@@ -173,14 +173,14 @@ public:
         const ::std::vector<XMLPropertyState> & rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
-        const UniReference<XMLPropertySetMapper> & rPropMapper,
+        const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         _ContextID_Index_Pair* pSpecialContextIds,
         ::com::sun::star::uno::Sequence< OUString >& rNames,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues);
 };
 
 
-inline const UniReference< XMLPropertySetMapper >&
+inline const rtl::Reference< XMLPropertySetMapper >&
     SvXMLImportPropertyMapper::getPropertySetMapper() const
 {
     return maPropMapper;

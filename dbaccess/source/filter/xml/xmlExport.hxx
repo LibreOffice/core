@@ -100,15 +100,15 @@ class ODBExport : public SvXMLExport
     TPropertyStyleMap                               m_aRowAutoStyleNames;
     TTableColumnMap                                 m_aTableDummyColumns;
     OUString                                 m_sCharSet;
-    UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xCellExportHelper;
-    UniReference < SvXMLExportPropertyMapper>       m_xRowExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xCellExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xRowExportHelper;
 
-    mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
 
     Reference<XPropertySet>                         m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
@@ -153,7 +153,7 @@ class ODBExport : public SvXMLExport
 
     OUString         implConvertAny(const Any& _rValue);
 
-    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
 
 private:
                             ODBExport();
@@ -184,8 +184,8 @@ public:
     static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
-    UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
-    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

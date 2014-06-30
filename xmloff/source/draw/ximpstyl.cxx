@@ -61,7 +61,7 @@ public:
                  const ::com::sun::star::uno::Reference<
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap );
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~SdXMLDrawingPagePropertySetContext();
 
@@ -80,7 +80,7 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  const OUString& rLName,
                  const uno::Reference< xml::sax::XAttributeList > & xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const UniReference < SvXMLImportPropertyMapper > &rMap ) :
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
                              XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
 {
@@ -182,7 +182,7 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES ) )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
             pContext = new SdXMLDrawingPagePropertySetContext( GetImport(), nPrefix,
@@ -204,7 +204,7 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
     ::std::vector< XMLPropertyState > &rProperties = GetProperties();
 
-    const UniReference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
+    const rtl::Reference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     for(; property != rProperties.end(); ++property)
@@ -264,7 +264,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
         XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
     };
 
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
@@ -282,7 +282,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
             sStyleName = GetImport().GetStyleDisplayName( aFamilies[i],
                                                           sStyleName );
             // get property set mapper
-            UniReference<XMLPropertySetMapper> rPropMapper =
+            rtl::Reference<XMLPropertySetMapper> rPropMapper =
                                         xImpPrMap->getPropertySetMapper();
 
             // set property
@@ -1098,10 +1098,10 @@ sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
     return SvXMLStylesContext::GetFamily(rFamily);
 }
 
-UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
+rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
     sal_uInt16 nFamily) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper;
 
     switch( nFamily )
     {
@@ -1109,7 +1109,7 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
     {
         if(!xPresImpPropMapper.is())
         {
-            UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
+            rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
             ((SdXMLStylesContext*)this)->xPresImpPropMapper =
                 aImpHelper->GetPresPagePropsMapper();
         }
@@ -1268,7 +1268,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 //enabled before having autoheight turned off again and getting stuck on that
 //autosized height
 static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pPropStyle,
-    const uno::Reference< beans::XPropertySet > &rPropSet, const UniReference < XMLPropertySetMapper >& rPrMap)
+    const uno::Reference< beans::XPropertySet > &rPropSet, const rtl::Reference < XMLPropertySetMapper >& rPrMap)
 {
     bool bCanSkipReset = false;
     if (pPropStyle && rName == "TextAutoGrowHeight")
@@ -1353,8 +1353,8 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
                     if( xPropState.is() )
                     {
-                        UniReference < XMLPropertySetMapper > xPrMap;
-                        UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
+                        rtl::Reference < XMLPropertySetMapper > xPrMap;
+                        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
                         DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
                         if( xImpPrMap.is() )
                             xPrMap = xImpPrMap->getPropertySetMapper();

@@ -78,9 +78,9 @@ private:
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
-    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XPropertySet>                         m_xDataSource;
     sal_Int32                                       m_nPreviewMode;
     bool                                            m_bNewFormat;
@@ -142,9 +142,9 @@ public:
     const SvXMLTokenMap& GetQueryElemTokenMap() const;
     const SvXMLTokenMap& GetColumnElemTokenMap() const;
 
-    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
-    UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
-    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     /** add a Info to the sequence which will be appened to the data source
         @param  _rInfo The property to append.

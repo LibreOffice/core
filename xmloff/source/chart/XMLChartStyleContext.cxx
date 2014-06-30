@@ -128,7 +128,7 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_CHART;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
                 pContext = new XMLChartPropertyContext(

@@ -452,7 +452,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 // methods without content:
 void SvxXMLTextExportComponent::_ExportAutoStyles()
 {
-    UniReference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
+    rtl::Reference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
 
     xTextExport->collectTextAutoStyles( mxText );
     xTextExport->exportTextAutoStyles();
@@ -460,7 +460,7 @@ void SvxXMLTextExportComponent::_ExportAutoStyles()
 
 void SvxXMLTextExportComponent::_ExportContent()
 {
-    UniReference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
+    rtl::Reference< XMLTextParagraphExport > xTextExport( GetTextParagraphExport() );
 
     xTextExport->exportText( mxText );
 }

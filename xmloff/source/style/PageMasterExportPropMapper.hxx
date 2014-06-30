@@ -40,7 +40,7 @@ protected:
 
 public:
                         XMLPageMasterExportPropMapper(
-                             const UniReference< XMLPropertySetMapper >& rMapper,
+                             const rtl::Reference< XMLPropertySetMapper >& rMapper,
                             SvXMLExport& rExport
                             );
     virtual             ~XMLPageMasterExportPropMapper();

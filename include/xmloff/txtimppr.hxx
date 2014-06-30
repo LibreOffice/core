@@ -56,7 +56,7 @@ protected:
             const SvXMLNamespaceMap& rNamespaceMap ) const SAL_OVERRIDE;
 public:
     XMLTextImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImport );
     virtual ~XMLTextImportPropertyMapper();
 

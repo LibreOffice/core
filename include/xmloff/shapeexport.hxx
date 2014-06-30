@@ -159,9 +159,9 @@ class XMLOFF_DLLPUBLIC XMLShapeExport : public UniRefBase
 private:
 
     SvXMLExport&                                mrExport;
-    UniReference< XMLPropertyHandlerFactory >   mxSdPropHdlFactory;
-    UniReference< SvXMLExportPropertyMapper >   mxPropertySetMapper;
-    UniReference< XMLAnimationsExporter >       mxAnimationsExporter;
+    rtl::Reference< XMLPropertyHandlerFactory >   mxSdPropHdlFactory;
+    rtl::Reference< SvXMLExportPropertyMapper >   mxPropertySetMapper;
+    rtl::Reference< XMLAnimationsExporter >       mxAnimationsExporter;
     ShapesInfos                                 maShapesInfos;
     ShapesInfos::iterator                       maCurrentShapesIter;
     bool                                        mbExportLayer;
@@ -179,7 +179,7 @@ protected:
     const SvXMLExport& GetExport() const  { return mrExport; }
 private:
 
-    SAL_DLLPRIVATE UniReference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
+    SAL_DLLPRIVATE rtl::Reference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
 
     const OUString                         msZIndex;
     const OUString                         msPrintable;
@@ -287,10 +287,10 @@ public:
         If this is a non NULL reference, the animation information from all shapes given to exportShape()
         from now on are collected.
     */
-    void setAnimationsExporter( UniReference< XMLAnimationsExporter > xAnimExport ) { mxAnimationsExporter = xAnimExport; }
+    void setAnimationsExporter( rtl::Reference< XMLAnimationsExporter > xAnimExport ) { mxAnimationsExporter = xAnimExport; }
 
     /** returns the last set XMLAnimationExport */
-    UniReference< XMLAnimationsExporter > getAnimationsExporter() const { return mxAnimationsExporter; }
+    rtl::Reference< XMLAnimationsExporter > getAnimationsExporter() const { return mxAnimationsExporter; }
 
     /// returns the export property mapper for external chaining
     static SvXMLExportPropertyMapper* CreateShapePropMapper( SvXMLExport& rExport );
