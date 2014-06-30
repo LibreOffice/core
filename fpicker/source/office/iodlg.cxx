@@ -543,6 +543,7 @@ void SvtFileDialog::Init_Impl
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
     Window *pUpContainer = get<Window>("up");
     _pImp->_pBtnUp = new SvtUpButton_Impl(pUpContainer, this, 0);
+    _pImp->_pBtnUp->SetHelpId( HID_FILEOPEN_LEVELUP );
     _pImp->_pBtnUp->set_vexpand(true);
     _pImp->_pBtnUp->Show();
 
@@ -574,7 +575,6 @@ void SvtFileDialog::Init_Impl
     // in save mode, don't use the autocompletion as selection in the edit part
     bool bSaveMode = ( FILEDLG_MODE_SAVE == _pImp->_eMode );
     _pImp->_pEdFileName->SetNoURLSelection( bSaveMode );
-    _pImp->_pEdFileName->SetHelpId( HID_FILEDLG_AUTOCOMPLETEBOX );
 
     _pImp->_pBtnConnectToServer->SetAccessibleName( _pImp->_pBtnConnectToServer->GetQuickHelpText() );
     _pImp->_pBtnNewFolder->SetStyle( _pImp->_pBtnNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
@@ -2671,6 +2671,7 @@ void SvtFileDialog::AddControls_Impl( )
     }
 
     _pImp->_pPlaces = new PlacesListBox(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
+    _pImp->_pPlaces->SetHelpId("SVT_HID_FILESAVE_PLACES_LISTBOX");
     Size aSize(LogicToPixel(Size(50, 85), MAP_APPFONT));
     _pImp->_pPlaces->set_height_request(aSize.Height());
     _pImp->_pPlaces->set_width_request(aSize.Width());

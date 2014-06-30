@@ -23,7 +23,6 @@
 #define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
 #define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
-#define HID_FILEDLG_AUTOCOMPLETEBOX                           "SVT_HID_FILEDLG_AUTOCOMPLETEBOX"
 
 // Help ids of template dialog
 #define HID_TEMPLATEDLG_DIALOG                                 "SVT_HID_TEMPLATEDLG_DIALOG"
@@ -36,8 +35,6 @@
 #define HID_TEMPLATEDLG_TB_PREVIEW                             "SVT_HID_TEMPLATEDLG_TB_PREVIEW"
 
 // Help ids for the filepicker dialogs
-#define HID_EXPLORERDLG_FILE                                   "SVT_HID_EXPLORERDLG_FILE"
-
 // help ids for fileview contextmenu
 #define HID_FILEVIEW_MENU_DELETE                               "SVT_HID_FILEVIEW_MENU_DELETE"
 #define HID_FILEVIEW_MENU_RENAME                               "SVT_HID_FILEVIEW_MENU_RENAME"
@@ -57,6 +54,7 @@
 #define HID_FILESAVE_DIALOG                                    "SVT_HID_FILESAVE_DIALOG"
 #define HID_FILESAVE_DOPLAY                                    "SVT_HID_FILESAVE_DOPLAY"
 
+#define HID_FILEOPEN_LEVELUP                                   "SVT_HID_FILEOPEN_LEVELUP"
 #define HID_FILEOPEN_READONLY                                  "SVT_HID_FILEOPEN_READONLY"
 #define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
