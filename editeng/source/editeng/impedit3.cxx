@@ -423,9 +423,8 @@ void ImpEditEngine::FormatDoc()
     {
         sal_uInt32 nNewHeightNTP;
         sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
-        // FIXME(matteocam)
-        long nDiff = 0;
-        //long nDiff = nNewHeight - nCurTextHeight;
+
+        long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTHEIGHTCHANGED : EditStatusFlags::TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
@@ -505,11 +504,6 @@ bool ImpEditEngine::ImpCheckRefMapMode()
 
 void ImpEditEngine::CheckAutoPageSize()
 {
-    // FIXME(matteocam)
-    SetValidPaperSize( aPaperSize );    // consider Min, Max
-    return;
-    // END FIXME
-
     Size aPrevPaperSize( GetPaperSize() );
 
     if ( GetStatus().AutoPageWidth() )
