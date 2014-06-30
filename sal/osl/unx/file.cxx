@@ -827,6 +827,8 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
     oslFileError eRet;
 
 #ifdef ANDROID
+    SAL_INFO("sal.file", "osl_openFile: " << cpFilePath);
+
     /* Opening a file from /assets read-only means
      * we should mmap it from the .apk file
      */
