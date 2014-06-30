@@ -3088,12 +3088,15 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 rInvFlags |= 0x40;
                 SwPageFrm *pPage = FindPageFrm();
-                if ( !GetPrev() )
-                    CheckPageDescs( pPage );
-                if ( pPage && GetFmt()->GetPageDesc().GetNumOffset() )
-                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
-                SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
-                GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
+                if (pPage)
+                {
+                    if ( !GetPrev() )
+                        CheckPageDescs( pPage );
+                    if (GetFmt()->GetPageDesc().GetNumOffset())
+                        ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
+                    SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
+                    GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
+                }
             }
             break;
 
