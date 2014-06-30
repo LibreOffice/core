@@ -156,7 +156,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 // Update of TOXMarks
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
-    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
+    assert(pCurTOXMark && "no current TOXMark");
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
     {

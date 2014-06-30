@@ -2968,8 +2968,8 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
                                      const SwPageFrm* _pSelectedPageFrm,
                                      const Size&      _rPreviewWinSize )
 {
-    OSL_ENSURE( GetShell()->IsPreview(), "no preview?" );
-    OSL_ENSURE( mpPreview != NULL, "no preview data?" );
+    assert(GetShell()->IsPreview() && "no preview?");
+    assert(mpPreview != NULL && "no preview data?");
 
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 

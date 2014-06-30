@@ -1092,7 +1092,8 @@ sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara
             break;                  // correct Y-Position not needed
         }
     }
-    DBG_ASSERT( pLine, "ImpFindIndex: pLine ?" );
+
+    assert(pLine && "ImpFindIndex: pLine ?");
 
     nCurIndex = GetCharPos( nPortion, nLine, rPosInPara.X(), bSmart );
 

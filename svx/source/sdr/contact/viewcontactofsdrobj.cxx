@@ -80,10 +80,10 @@ namespace sdr
 
         ViewContact& ViewContactOfSdrObj::GetViewContact(sal_uInt32 nIndex) const
         {
-            DBG_ASSERT(GetSdrObject().GetSubList(),
+            assert(GetSdrObject().GetSubList() &&
                 "ViewContactOfSdrObj::GetViewContact: Access to non-existent Sub-List (!)");
             SdrObject* pObj = GetSdrObject().GetSubList()->GetObj(nIndex);
-            DBG_ASSERT(pObj, "ViewContactOfSdrObj::GetViewContact: Corrupt SdrObjList (!)");
+            assert(pObj && "ViewContactOfSdrObj::GetViewContact: Corrupt SdrObjList (!)");
             return pObj->GetViewContact();
         }
 

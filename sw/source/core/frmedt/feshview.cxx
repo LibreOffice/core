@@ -1762,7 +1762,7 @@ bool SwFEShell::ImpEndCreate()
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
-                OSL_ENSURE( pTmp, "Where's my Master?" );
+                assert(pTmp && "Where's my Master?");
                 nYOffset += pTmp->IsVertical() ?
                             pTmp->Prt().Width() : pTmp->Prt().Height();
             } while ( pTmp->IsFollow() );

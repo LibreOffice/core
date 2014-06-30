@@ -698,7 +698,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 {
     sal_uInt16  nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unknown number format!" );
+    assert(pCurFmtTable && "Unknown number format!");
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
@@ -707,9 +707,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 
     short           nMyCat      = SELPOS_NONE;
 
-    long nIndex;
-
-    for(nIndex=NF_DATETIME_START;nIndex<=NF_DATETIME_END;nIndex++)
+    for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 

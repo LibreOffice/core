@@ -1266,10 +1266,9 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& /*rPropInfo*/,
                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     // normal | small-caps
-
     switch( pExpr->GetType() )
     {
     case CSS1_IDENT:
@@ -2131,7 +2130,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& rPropInfo,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    OSL_ENSURE( pExpr, "no expression" );
+    assert(pExpr && "no expression");
 
     sal_uInt16 nUpper = 0;
     bool bSet = false;

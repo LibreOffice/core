@@ -3861,7 +3861,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
-    DBG_ASSERT( pEntry, "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry" );
+    assert(pEntry && "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry");
 
     if ( pEntry->HasChildrenOnDemand() || pEntry->HasChildren() )
     {

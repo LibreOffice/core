@@ -682,7 +682,8 @@ void _SaveRedlEndPosForRestore::_Restore()
 /// The passed Node is located somewhere in the designated Section.
 void SwDoc::DeleteSection( SwNode *pNode )
 {
-    OSL_ENSURE( pNode, "Didn't pass a Node." );
+    assert(pNode && "Didn't pass a Node.");
+
     SwStartNode* pSttNd = pNode->IsStartNode() ? (SwStartNode*)pNode
                                                : pNode->StartOfSectionNode();
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );

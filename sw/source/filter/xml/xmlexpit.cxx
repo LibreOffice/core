@@ -132,7 +132,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             {
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-                assert(pSplit); //Wrong Which-ID
+                assert(pSplit && "Wrong Which-ID");
                 const unsigned int eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
                 SvXMLUnitConverter::convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
@@ -493,7 +493,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_SHADOW:
         {
             const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
-            assert(pShadow); //Wrong Which-ID
+            assert(pShadow && "Wrong Which-ID");
             if (pShadow)
             {
                 sal_Int32 nX = 1, nY = 1;
@@ -534,7 +534,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
-            assert(pBox); //Wrong WHich-ID
+            assert(pBox && "Wrong Which-ID");
             if (pBox)
             {
                 /**
@@ -872,7 +872,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            assert(pFmtKeep); //Wrong Which-ID
+            assert(pFmtKeep && "Wrong Which-ID");
             if (pFmtKeep)
             {
                 aOut.append( pFmtKeep->GetValue()
@@ -1024,7 +1024,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_ROW_SPLIT:
         {
             const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            assert(pSplit); //Wrong Which-ID
+            assert(pSplit && "Wrong Which-ID");
             if (pSplit)
             {
                 ::sax::Converter::convertBool( aOut, pSplit->GetValue() );
@@ -1036,7 +1036,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_HORI_ORIENT:
         {
             SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
-            assert(pHoriOrient); //Wrong Which-ID
+            assert(pHoriOrient && "Wrong Which-ID");
             if (pHoriOrient)
             {
                 SvXMLUnitConverter::convertEnum( aOut, pHoriOrient->GetHoriOrient(),
@@ -1049,7 +1049,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_VERT_ORIENT:
         {
             SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
-            OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
+            assert(pVertOrient && "Wrong Which-ID");
 
             SvXMLUnitConverter::convertEnum( aOut, pVertOrient->GetVertOrient(),
                                         aXMLTableVAlignMap );
@@ -1114,7 +1114,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_COLLAPSING_BORDERS:
         {
             const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
-            assert(pBorders); //Wrong RES-ID
+            assert(pBorders && "Wrong RES-ID");
             if (pBorders)
             {
                 aOut.append( pBorders->GetValue()

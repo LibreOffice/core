@@ -22,9 +22,9 @@ SwWordCountWrapper::SwWordCountWrapper(   Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+    assert(pFact && "SwAbstractDialogFactory fail!");
     pAbstDlg = pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo);
-    OSL_ENSURE(pAbstDlg, "Dialog construction failed!");
+    assert(pAbstDlg && "Dialog construction failed!");
     pWindow = pAbstDlg->GetWindow();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

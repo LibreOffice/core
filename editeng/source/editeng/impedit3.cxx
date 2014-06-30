@@ -4112,7 +4112,7 @@ EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
         ContentNode* pNode = GetEditDoc().GetObject( nPara-1 );
         if ( !pNode )
             pNode = GetEditDoc().GetObject( GetEditDoc().Count() - 1 );
-        DBG_ASSERT( pNode, "Not a single paragraph in InsertParagraph ?" );
+        assert(pNode && "Not a single paragraph in InsertParagraph ?");
         aPaM = EditPaM( pNode, pNode->Len() );
     }
     else

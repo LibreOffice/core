@@ -590,7 +590,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     const long nScanlineLeftOffset( pos.X*m_nBitsPerInputPixel/8 );
     if( !m_aBmpEx.IsTransparent() )
     {
-        OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
+        assert(m_pBmpAcc && "Invalid bmp read access");
 
         // can return bitmap data as-is
         Scanline pScan = m_pBmpAcc->GetScanline(pos.Y);
@@ -598,12 +598,12 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     }
     else
     {
-        OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
-        OSL_ENSURE(m_pAlphaAcc,"Invalid alpha read access");
+        assert(m_pBmpAcc && "Invalid bmp read access");
+        assert(m_pAlphaAcc && "Invalid alpha read access");
 
         // interleave alpha with bitmap data - note, bitcount is
         // always integer multiple of 8
-        OSL_ENSURE((m_nBitsPerOutputPixel & 0x07) == 0,
+        assert((m_nBitsPerOutputPixel & 0x07) == 0 &&
                    "Transparent bitmap bitcount not integer multiple of 8" );
 
         if( m_nBitsPerInputPixel < 8 )

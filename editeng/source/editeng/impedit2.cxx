@@ -711,7 +711,7 @@ void ImpEditEngine::TextModified()
 
 void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
 {
-    OSL_ENSURE( pNode, "ParaAttribsChanged: Which one?" );
+    assert(pNode && "ParaAttribsChanged: Which one?");
 
     aEditDoc.SetModified( true );
     bFormatted = false;

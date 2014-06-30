@@ -280,7 +280,7 @@ void SwLayouter::EndLoopControl()
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
 {
-    OSL_ENSURE( pDoc, "No doc, no fun" );
+    assert(pDoc && "No doc, no fun");
     if( !pDoc->GetLayouter() )
         pDoc->SetLayouter( new SwLayouter() );
     pDoc->GetLayouter()->_CollectEndnotes( pSect );

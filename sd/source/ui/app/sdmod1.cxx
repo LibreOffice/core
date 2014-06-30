@@ -664,7 +664,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             ::sd::ViewShellBase* pBase =
                                   ::sd::ViewShellBase::GetViewShellBase (
                                       pViewFrame);
-                            OSL_ASSERT (pBase!=NULL);
+                            assert(pBase!=NULL);
                             ::boost::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
                             SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 

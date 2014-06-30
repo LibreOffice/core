@@ -449,7 +449,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         pOutliner->SetPaperSize(pPage->GetSize());
 
         SvStream* pStream = pMedium->GetInStream();
-        DBG_ASSERT( pStream, "No InStream!" );
+        assert(pStream && "No InStream!");
         pStream->Seek( 0 );
 
         sal_uLong nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
@@ -469,7 +469,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             }
 
-            DBG_ASSERT(pPage, "page not found");
+            assert(pPage && "page not found");
 
             // if editing is going on right now, let it flow into this text object
             OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();

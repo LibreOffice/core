@@ -1450,7 +1450,7 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
             for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
             {
                 SdrPageWindow* pPageWindow = pPageView->GetPageWindow(b);
-                DBG_ASSERT(pPageWindow, "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
+                assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
 
                 // force deletion of ObjectContact, so at re-display all VOCs
                 // will be re-created with updated flag setting
