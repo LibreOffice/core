@@ -80,9 +80,11 @@ protected:
     virtual void GetFocus() SAL_OVERRIDE;
 
 public:
-    SvtFileView( Window* pParent, const ResId& rResId, bool bOnlyFolder, bool bMultiSelection );
-    SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
+    SvtFileView( Window* pParent, const WinBits& nStyle, bool bOnlyFolder, bool bMultiSelection );
+    SvtFileView( Window* pParent, const WinBits& nStyle, sal_uInt8 nFlags );
     virtual ~SvtFileView();
+
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     const OUString&         GetViewURL() const;
     OUString                GetURL( SvTreeListEntry* pEntry ) const;

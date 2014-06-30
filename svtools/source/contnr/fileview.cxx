@@ -1101,10 +1101,10 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 // class SvtFileView -----------------------------------------------------
 
 
-SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
+SvtFileView::SvtFileView( Window* pParent, const WinBits& nStyle,
                           bool bOnlyFolder, bool bMultiSelection ) :
 
-    Control( pParent, rResId )
+    Control( pParent, nStyle )
 {
     sal_Int8 nFlags = 0;
     if ( bOnlyFolder )
@@ -1126,9 +1126,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags ) :
+SvtFileView::SvtFileView( Window* pParent, const WinBits& nStyle, sal_uInt8 nFlags ) :
 
-    Control( pParent, rResId )
+    Control( pParent, nStyle )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
@@ -1152,6 +1152,28 @@ SvtFileView::~SvtFileView()
     SvtFileView_Impl* pTemp = mpImp;
     mpImp = NULL;
     delete pTemp;
+}
+
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtFileView(Window *pParent,
+VclBuilder::stringmap &rMap)
+{
+    WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+
+    return new SvtFileView(pParent, nBits, true, true);
+}
+
+
+
+Size SvtFileView::GetOptimalSize() const
+{
+    return LogicToPixel(Size(208, 50), MAP_APPFONT);
 }
 
 

@@ -18,7 +18,6 @@
  */
 
 #include "CollectionView.hxx"
-#include "CollectionView.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "moduledbu.hxx"
@@ -60,42 +59,36 @@ OCollectionView::OCollectionView( Window * pParent
                                  ,const Reference< XContent>& _xContent
                                  ,const OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
-    : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
-    , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
-    , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
-    , m_aUp(            this, ModuleRes( BTN_EXPLORERFILE_UP ) )
-    , m_aView(          this, ModuleRes( CTRL_VIEW ), FILEVIEW_SHOW_ONLYTITLE )
-    , m_aFTName(        this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
-    , m_aName(          this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
-    , m_aFL(            this, ModuleRes( FL_1 ) )
-    , m_aPB_OK(         this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
-    , m_aPB_CANCEL(     this, ModuleRes( PB_CANCEL ) )
-    , m_aPB_HELP(       this, ModuleRes( PB_HELP ) )
-    , m_sPath(          ModuleRes( STR_PATHNAME ) )
+    : ModalDialog( pParent, "CollectionView", "dbaccess/ui/collectionviewdialog.ui")
     , m_xContent(_xContent)
     , m_xContext(_rxContext)
     , m_bCreateForm(true)
 {
-    FreeResource();
+    get(m_pFTCurrentPath, "currentPathLabel");
+    get(m_pNewFolder, "newFolderButton");
+    get(m_pUp, "upButton");
+    get(m_pView, "viewTreeview");
+    get(m_pName, "fileNameEntry");
+    get(m_pPB_OK, "ok");
 
     OSL_ENSURE(m_xContent.is(),"No valid content!");
-    m_aView.Initialize(m_xContent,OUString());
-    m_aFTCurrentPath.SetStyle( m_aFTCurrentPath.GetStyle() | WB_PATHELLIPSIS );
+    m_pView->Initialize(m_xContent,OUString());
+    m_pFTCurrentPath->SetStyle( m_pFTCurrentPath->GetStyle() | WB_PATHELLIPSIS );
     initCurrentPath();
 
-    m_aName.SetText(_sDefaultName);
-    m_aName.GrabFocus();
+    m_pName->SetText(_sDefaultName);
+    m_pName->GrabFocus();
 
-    m_aNewFolder.SetStyle( m_aNewFolder.GetStyle() | WB_NOPOINTERFOCUS );
-    m_aUp.SetModeImage(Image(ModuleRes(IMG_NAVIGATION_BTN_UP_SC)));
-    m_aNewFolder.SetModeImage(Image(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC)));
+    m_pNewFolder->SetStyle( m_pNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
+    m_pUp->SetModeImage(Image(ModuleRes(IMG_NAVIGATION_BTN_UP_SC)));
+    m_pNewFolder->SetModeImage(Image(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC)));
 
-    m_aView.SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
-    m_aView.EnableAutoResize();
-    m_aView.EnableDelete(true);
-    m_aUp.SetClickHdl( LINK( this, OCollectionView, Up_Click ) );
-    m_aNewFolder.SetClickHdl( LINK( this, OCollectionView, NewFolder_Click ) );
-    m_aPB_OK.SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
+    m_pView->SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
+    m_pView->EnableAutoResize();
+    m_pView->EnableDelete(true);
+    m_pUp->SetClickHdl( LINK( this, OCollectionView, Up_Click ) );
+    m_pNewFolder->SetClickHdl( LINK( this, OCollectionView, NewFolder_Click ) );
+    m_pPB_OK->SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
 }
 
 OCollectionView::~OCollectionView( )
@@ -109,12 +102,12 @@ Reference< XContent> OCollectionView::getSelectedFolder() const
 
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
-    OUString sName = m_aName.GetText();
+    OUString sName = m_pName->GetText();
     if ( sName.isEmpty() )
         return 0;
     try
     {
-        OUString sSubFolder = m_aView.GetCurrentURL();
+        OUString sSubFolder = m_pView->GetCurrentURL();
         sal_Int32 nIndex = sName.lastIndexOf('/') + 1;
         if ( nIndex )
         {
@@ -131,7 +124,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                         xChild.set(m_xContent,UNO_QUERY);
                     }
                 }
-                m_aView.Initialize(m_xContent,OUString());
+                m_pView->Initialize(m_xContent,OUString());
                 initCurrentPath();
             }
             sSubFolder = sName.copy(0,nIndex-1);
@@ -184,7 +177,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                 if ( aBox.Execute() != RET_YES )
                     return 0;
             }
-            m_aName.SetText(sName);
+            m_pName->SetText(sName);
             EndDialog( sal_True );
         }
     }
@@ -201,7 +194,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
         if ( dbaui::insertHierachyElement(this,m_xContext,xNameContainer,OUString(),m_bCreateForm) )
-            m_aView.Initialize(m_xContent,OUString());
+            m_pView->Initialize(m_xContent,OUString());
     }
     catch( const SQLException& )
     {
@@ -225,11 +218,11 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click)
             if ( xNameAccess.is() )
             {
                 m_xContent.set(xNameAccess,UNO_QUERY);
-                m_aView.Initialize(m_xContent,OUString());
+                m_pView->Initialize(m_xContent,OUString());
                 initCurrentPath();
             }
             else
-                m_aUp.Disable();
+                m_pUp->Disable();
         }
     }
     catch( const Exception& )
@@ -246,7 +239,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
         Reference<XNameAccess> xNameAccess(m_xContent,UNO_QUERY);
         if ( xNameAccess.is() )
         {
-            OUString sSubFolder = m_aView.GetCurrentURL();
+            OUString sSubFolder = m_pView->GetCurrentURL();
             sal_Int32 nIndex = sSubFolder.lastIndexOf('/') + 1;
             sSubFolder = sSubFolder.getToken(0,'/',nIndex);
             if ( !sSubFolder.isEmpty() )
@@ -257,7 +250,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
                 if ( xContent.is() )
                 {
                     m_xContent = xContent;
-                    m_aView.Initialize(m_xContent,OUString());
+                    m_pView->Initialize(m_xContent,OUString());
                     initCurrentPath();
                 }
             }
@@ -285,9 +278,9 @@ void OCollectionView::initCurrentPath()
             if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
                 sPath = sCID.copy(s_sFormsCID.getLength());
             else if ( !m_bCreateForm && sCID.getLength() != s_sReportsCID.getLength() )
-                sPath = sCID.copy(s_sReportsCID.getLength());
+                sPath = sCID.copy(s_sReportsCID.getLength() - 2);
 
-            m_aFTCurrentPath.SetText(sPath);
+            m_pFTCurrentPath->SetText(sPath);
             Reference<XChild> xChild(m_xContent,UNO_QUERY);
             bEnable = xChild.is() && Reference<XNameAccess>(xChild->getParent(),UNO_QUERY).is();
         }
@@ -296,12 +289,12 @@ void OCollectionView::initCurrentPath()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    m_aUp.Enable(bEnable);
+    m_pUp->Enable(bEnable);
 }
 
 OUString OCollectionView::getName() const
 {
-    return m_aName.GetText();
+    return m_pName->GetText();
 }
 
 }   // namespace dbaui
