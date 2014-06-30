@@ -80,6 +80,8 @@ class SvtFileDialogFilter_Impl;
 
 
 class SvtExpFileDlg_Impl;
+class CustomContainer;
+
 class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
 {
 private:
@@ -93,6 +95,7 @@ private:
     PushButton*                 _pPbPlay;
     Window*                     _pPrevWin;
     FixedBitmap*                _pPrevBmp;
+    CustomContainer*            _pContainer;
     SvtFileView*                _pFileView;
     Splitter*                   _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;

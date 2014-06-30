@@ -121,11 +121,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="container">
+                  <object class="GtkBox" id="container">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>

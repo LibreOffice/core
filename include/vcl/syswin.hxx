@@ -203,7 +203,6 @@ public:
     const Size&     GetMinOutputSizePixel() const { return maMinOutSize; }
     void            SetMaxOutputSizePixel( const Size& rSize );
     const Size&     GetMaxOutputSizePixel() const;
-    Size            GetResizeOutputSizePixel() const;
 
     void            SetWindowState(const OString& rStr);
     OString    GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;

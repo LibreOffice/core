@@ -181,9 +181,7 @@ public:
     // MultiSelection?
     bool                        _bMultiSelection;
 
-    // remember fixsizes for resize
-    Size                            _a6Size;
-    Size                            _aDlgSize;
+    // remember sizes
     OUString                        _aIniKey;
 
     bool                        _bFolderHasOpened;

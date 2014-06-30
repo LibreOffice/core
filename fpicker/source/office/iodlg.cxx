@@ -412,7 +412,57 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     Init_Impl( nBits );
 }
 
+class CustomContainer : public Window
+{
+    SvtExpFileDlg_Impl* _pImp;
+    SvtFileView* _pFileView;
+    Splitter* _pSplitter;
 
+public:
+    CustomContainer(Window *pParent)
+        : Window(pParent)
+        , _pImp(NULL)
+        , _pFileView(NULL)
+        , _pSplitter(NULL)
+    {
+    }
+
+    void init(SvtExpFileDlg_Impl* pImp,
+              SvtFileView* pFileView,
+              Splitter* pSplitter)
+    {
+        _pImp = pImp;
+        _pFileView = pFileView;
+        _pSplitter = pSplitter;
+    }
+
+    virtual void Resize() SAL_OVERRIDE
+    {
+        Window::Resize();
+
+        if (!_pImp || !_pImp->_pPlaces)
+            return;
+
+        Size aSize = GetSizePixel();
+
+        Point aBoxPos(_pFileView->GetPosPixel());
+        Size aNewSize(aSize.Width() - aBoxPos.X(), aSize.Height());
+        _pFileView->SetSizePixel( aNewSize );
+
+        // Resize the Splitter to fit the height
+        Size splitterNewSize = _pSplitter->GetSizePixel( );
+        splitterNewSize.Height() = aSize.Height();
+        _pSplitter->SetSizePixel( splitterNewSize );
+        sal_Int32 nMinX = _pImp->_pPlaces->GetPosPixel( ).X( );
+        sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
+        _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
+
+        // Resize the places list box to fit the height of the FileView
+        Size placesNewSize(_pImp->_pPlaces->GetSizePixel());
+        placesNewSize.Height() = aSize.Height();
+        _pImp->_pPlaces->SetSizePixel( placesNewSize );
+    }
+};
 
 SvtFileDialog::~SvtFileDialog()
 {
@@ -451,6 +501,7 @@ SvtFileDialog::~SvtFileDialog()
     delete _pImp;
     delete _pFileView;
     delete _pSplitter;
+    delete _pContainer;
     delete _pPrevBmp;
     delete _pUserControls;
 }
@@ -496,7 +547,6 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnUp->Show();
 
     _pImp->_nStyle = nStyle;
-    _pImp->_a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     _pImp->_eMode = ( nStyle & WB_SAVEAS ) ? FILEDLG_MODE_SAVE : FILEDLG_MODE_OPEN;
     _pImp->_eDlgType = FILEDLG_TYPE_FILEDLG;
 
@@ -534,12 +584,14 @@ void SvtFileDialog::Init_Impl
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
-    Window *pContainer = get<Window>("container");
+    _pContainer = new CustomContainer(get<Window>("container"));
     Size aSize(LogicToPixel(Size(270, 85), MAP_APPFONT));
-    pContainer->set_height_request(aSize.Height());
-    pContainer->set_width_request(aSize.Width());
-    pContainer->SetSizePixel(aSize);
-    _pFileView = new SvtFileView( pContainer, WB_BORDER,
+    _pContainer->set_height_request(aSize.Height());
+    _pContainer->set_width_request(aSize.Width());
+    _pContainer->set_hexpand(true);
+    _pContainer->set_vexpand(true);
+
+    _pFileView = new SvtFileView( _pContainer, WB_BORDER,
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
     _pFileView->Show();
@@ -547,7 +599,7 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
-    _pSplitter = new Splitter( pContainer, WB_HSCROLL );
+    _pSplitter = new Splitter( _pContainer, WB_HSCROLL );
     _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
 
@@ -658,10 +710,11 @@ void SvtFileDialog::Init_Impl
         OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
 
+    _pContainer->init(_pImp, _pFileView, _pSplitter);
+    _pContainer->Show();
+
     Resize();
 }
-
-
 
 IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
 {
@@ -2239,9 +2292,6 @@ void SvtFileDialog::InitSize()
     if ( _pImp->_aIniKey.isEmpty() )
         return;
 
-    Size aDlgSize = GetResizeOutputSizePixel();
-    SetMinOutputSizePixel( aDlgSize );
-
     // initialize from config
     SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
 
@@ -2378,61 +2428,12 @@ void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
     ModalDialog::DataChanged( _rDCEvt );
 }
 
+
 void SvtFileDialog::Resize()
 {
     Dialog::Resize();
 
     if ( IsRollUp() )
-        return;
-
-    Window *pContainer = get<Window>("container");
-    long nContainerHeight = pContainer->GetSizePixel().Height();
-
-    Size aDlgSize = GetResizeOutputSizePixel();
-    Size aOldSize = _pImp->_aDlgSize;
-    _pImp->_aDlgSize = aDlgSize;
-    long nWinDeltaW = 0;
-
-    if(_pPrevBmp)
-    {
-        nWinDeltaW = _pPrevWin->GetOutputSizePixel().Width();
-        _pPrevBmp->SetSizePixel(_pPrevWin->GetOutputSizePixel());
-    }
-
-    Size aNewSize = _pFileView->GetSizePixel();
-    Point aBoxPos( _pFileView->GetPosPixel() );
-    long nDeltaY = aNewSize.Height();
-    long nDeltaX = aNewSize.Width();
-    aNewSize.Height() = nContainerHeight;
-    aNewSize.Width() = aDlgSize.Width() - aBoxPos.X() - 2*_pImp->_a6Size.Width() - nWinDeltaW;
-    if ( aOldSize.Height() )
-        nDeltaY = _pImp->_aDlgSize.Height() - aOldSize.Height();
-    else
-        nDeltaY = aNewSize.Height() - nDeltaY;
-    nDeltaX = aNewSize.Width() - nDeltaX;
-
-    if ( nWinDeltaW )
-        nWinDeltaW = nDeltaX * 2 / 3;
-    aNewSize.Width() -= nWinDeltaW;
-    nDeltaX -= nWinDeltaW;
-
-    _pFileView->SetSizePixel( aNewSize );
-
-    // Resize the Splitter to fit the height
-    Size splitterNewSize = _pSplitter->GetSizePixel( );
-    splitterNewSize.Height() = nContainerHeight;
-    _pSplitter->SetSizePixel( splitterNewSize );
-    sal_Int32 nMinX = _pImp->_pPlaces->GetPosPixel( ).X( );
-    sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
-    _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aDlgSize.Width() ) ) );
-
-    // Resize the places list box to fit the height of the FileView
-    Size placesNewSize(_pImp->_pPlaces->GetSizePixel());
-    placesNewSize.Height() = nContainerHeight;
-    _pImp->_pPlaces->SetSizePixel( placesNewSize );
-
-    if ( !nDeltaY && !nDeltaX )
-        // This resize was only called to show or hide the indicator.
         return;
 
     if ( _pFileNotifier )
@@ -2669,9 +2670,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbImageTemplates->Show();
     }
 
-    Window *pContainer;
-        get(pContainer, "container");
-        _pImp->_pPlaces = new PlacesListBox( pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER );
+    _pImp->_pPlaces = new PlacesListBox(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
     Size aSize(LogicToPixel(Size(50, 85), MAP_APPFONT));
     _pImp->_pPlaces->set_height_request(aSize.Height());
     _pImp->_pPlaces->set_width_request(aSize.Width());

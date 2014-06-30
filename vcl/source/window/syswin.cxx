@@ -386,16 +386,6 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
     return mpImplData->maMaxOutSize;
 }
 
-Size SystemWindow::GetResizeOutputSizePixel() const
-{
-    Size aSize = GetOutputSizePixel();
-    if ( aSize.Width() < maMinOutSize.Width() )
-        aSize.Width() = maMinOutSize.Width();
-    if ( aSize.Height() < maMinOutSize.Height() )
-        aSize.Height() = maMinOutSize.Height();
-    return aSize;
-}
-
 static void ImplWindowStateFromStr(WindowStateData& rData,
     const OString& rStr)
 {
