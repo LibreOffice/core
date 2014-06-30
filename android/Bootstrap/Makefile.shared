@@ -137,19 +137,15 @@ copy-stuff:
 	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/share/registry assets/share
 	cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config
-#
-# Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
-# doesn't use soffice_main() (at least I think it shouldn't), the
-# rtl::Bootstrap::setIniFilename() call there that hardcodes
-# /assets/program/lofficerc isn't executed. Instead the hardcoding of
-# /assets/rc in BootstrapMap::getBaseIni() gets used.
-	echo '[Bootstrap]' > assets/rc
-	echo 'Logo=1' >> assets/rc
-	echo 'NativeProgress=1' >> assets/rc
-	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/rc
-#	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/rc
-	echo 'HOME=$$APP_DATA_DIR/cache' >> assets/rc
-	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> assets/rc
+
+	mkdir -p assets/unpack/program
+	echo '[Bootstrap]' > assets/unpack/program/sofficerc
+	echo 'Logo=1' >> assets/unpack/program/sofficerc
+	echo 'NativeProgress=1' >> assets/unpack/program/sofficerc
+	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/unpack/program/sofficerc
+#	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/unpack/program/sofficerc
+	echo 'HOME=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
+	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> assets/unpack/program/sofficerc
 #
 # Set up fundamentalrc
 	echo '[Bootstrap]' > assets/program/fundamentalrc
