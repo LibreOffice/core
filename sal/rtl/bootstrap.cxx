@@ -895,6 +895,7 @@ rtl::OUString expandMacros(
     Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
     ExpandRequestLink const * requestStack)
 {
+    SAL_INFO("sal.bootstrap", "expandMacros called with: " << text);
     rtl::OUStringBuffer buf;
     for (sal_Int32 i = 0; i < text.getLength();) {
         bool escaped;
@@ -1020,7 +1021,9 @@ rtl::OUString expandMacros(
             }
         }
     }
-    return buf.makeStringAndClear();
+    OUString result(buf.makeStringAndClear());
+    SAL_INFO("sal.bootstrap", "expandMacros result: " << result);
+    return result;
 }
 
 }
