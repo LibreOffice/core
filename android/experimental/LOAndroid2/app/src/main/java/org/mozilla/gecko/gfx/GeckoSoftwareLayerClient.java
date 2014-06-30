@@ -68,28 +68,18 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
 
     private int mFormat;
     private IntSize mViewportSize;
-    private ByteBuffer mBuffer;
-
-    private CairoImage mCairoImage;
-
+    private IntSize mBufferSize;
     private static final IntSize TILE_SIZE = new IntSize(256, 256);
 
     public GeckoSoftwareLayerClient(Context context) {
         super(context);
-
+        mBufferSize = new IntSize(0,0);
         mFormat = CairoImage.FORMAT_ARGB32;
 
-        mCairoImage = new CairoImage() {
-            @Override
-            public ByteBuffer getBuffer() { return mBuffer; }
-            @Override
-            public IntSize getSize() { return mBufferSize; }
-            @Override
-            public int getFormat() { return mFormat; }
-        };
+
     }
 
-    protected void finalize() throws Throwable {
+    /*protected void finalize() throws Throwable {
         try {
             if (mBuffer != null)
                 LOKitShell.freeDirectBuffer(mBuffer);
@@ -97,7 +87,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         } finally {
             super.finalize();
         }
-    }
+    }*/
 
     public void setLayerController(LayerController layerController) {
         super.setLayerController(layerController);
@@ -116,7 +106,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
             return false;
 
         Log.i(LOGTAG, "Creating MultiTileLayer");
-        mTileLayer = new MultiTileLayer(mCairoImage, TILE_SIZE);
+        mTileLayer = new MultiTileLayer(TILE_SIZE);
 
         getLayerController().setRoot(mTileLayer);
 
@@ -149,21 +139,6 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         // If the window size has changed, reallocate the buffer to match.
         if (mBufferSize.width != width || mBufferSize.height != height) {
             mBufferSize = new IntSize(width, height);
-
-            // Reallocate the buffer if necessary
-            if (mTileLayer instanceof MultiTileLayer) {
-                int bpp = CairoUtils.bitsPerPixelForCairoFormat(mFormat) / 8;
-                int size = mBufferSize.getArea() * bpp;
-                if (mBuffer == null || mBuffer.capacity() != size) {
-                    // Free the old buffer
-                    if (mBuffer != null) {
-                        LOKitShell.freeDirectBuffer(mBuffer);
-                        mBuffer = null;
-                    }
-
-                    mBuffer = LOKitShell.allocateDirectBuffer(size);
-                }
-            }
         }
 
         return bufferRect;
@@ -176,7 +151,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         }
     }
 
-    private void copyPixelsFromMultiTileLayer(Bitmap target) {
+    /*private void copyPixelsFromMultiTileLayer(Bitmap target) {
         Canvas c = new Canvas(target);
         ByteBuffer tileBuffer = mBuffer.slice();
         int bpp = CairoUtils.bitsPerPixelForCairoFormat(mFormat) / 8;
@@ -201,7 +176,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
                 tileBuffer = tileBuffer.slice();
             }
         }
-    }
+    }*/
 
     @Override
     protected void tileLayerUpdated() {
@@ -215,7 +190,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
 
         // Begin a tile transaction, otherwise the buffer can be destroyed while
         // we're reading from it.
-        beginTransaction(mTileLayer);
+        /*beginTransaction(mTileLayer);
         try {
             if (mBuffer == null || mBufferSize.width <= 0 || mBufferSize.height <= 0)
                 return null;
@@ -223,8 +198,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
                 Bitmap b = null;
 
                 if (mTileLayer instanceof MultiTileLayer) {
-                    b = Bitmap.createBitmap(mBufferSize.width, mBufferSize.height,
-                            CairoUtils.cairoFormatTobitmapConfig(mFormat));
+                    b = Bitmap.createBitmap(mBufferSize.width, mBufferSize.height,CairoUtils.cairoFormatTobitmapConfig(mFormat));
                     copyPixelsFromMultiTileLayer(b);
                 } else {
                     Log.w(LOGTAG, "getBitmap() called on a layer (" + mTileLayer + ") we don't know how to get a bitmap from");
@@ -237,20 +211,9 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
             }
         } finally {
             endTransaction(mTileLayer);
-        }
-    }
+        }*/
 
-    /** Returns the back buffer. This function is for Gecko to use. */
-    public ByteBuffer lockBuffer() {
-        return mBuffer;
-    }
-
-    /**
-     * Gecko calls this function to signal that it is done with the back buffer. After this call,
-     * it is forbidden for Gecko to touch the buffer.
-     */
-    public void unlockBuffer() {
-        /* no-op */
+        return null;
     }
 
     @Override
@@ -268,6 +231,12 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     @Override
     protected IntSize getTileSize() {
         return TILE_SIZE;
+    }
+
+    public void addTile(Bitmap bitmap, int x, int y) {
+        if (mTileLayer instanceof MultiTileLayer) {
+            ((MultiTileLayer)mTileLayer).addTile(bitmap, x, y);
+        }
     }
 }
 

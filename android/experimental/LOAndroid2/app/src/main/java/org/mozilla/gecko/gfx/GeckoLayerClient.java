@@ -72,7 +72,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
     private static Pattern sColorPattern;
     protected IntSize mScreenSize;
-    protected IntSize mBufferSize;
     protected Layer mTileLayer;
     /* The viewport that Gecko is currently displaying. */
     protected ViewportMetrics mGeckoViewport;
@@ -94,7 +93,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
 
     public GeckoLayerClient(Context context) {
         mScreenSize = new IntSize(0, 0);
-        mBufferSize = new IntSize(0, 0);
     }
 
     // Parses a color from an RGB triple of the form "rgb([0-9]+, [0-9]+, [0-9]+)". If the color
@@ -340,7 +338,7 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     private void adjustViewport() {
         ViewportMetrics viewportMetrics = new ViewportMetrics(getLayerController().getViewportMetrics());
 
-        PointF viewportOffset = viewportMetrics.getOptimumViewportOffset(mBufferSize);
+        PointF viewportOffset = viewportMetrics.getOptimumViewportOffset(getBufferSize());
         viewportMetrics.setViewportOffset(viewportOffset);
         viewportMetrics.setViewport(viewportMetrics.getClampedViewport());
 
@@ -359,7 +357,8 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
             mUpdateViewportOnEndDraw = true;
 
             // Redraw everything.
-            Rect rect = new Rect(0, 0, mBufferSize.width, mBufferSize.height);
+            IntSize bufferSize = getBufferSize();
+            Rect rect = new Rect(0, 0, bufferSize.width, bufferSize.height);
             LOKitShell.sendEvent(LOEvent.draw(rect));
         } else if ("Viewport:UpdateLater".equals(event)) {
             Log.e(LOGTAG, "### Java side Viewport:UpdateLater()!");
@@ -371,14 +370,6 @@ public abstract class GeckoLayerClient extends LayerClient implements GeckoEvent
     public void geometryChanged() {
         sendResizeEventIfNecessary();
         render();
-    }
-
-    public int getWidth() {
-        return mBufferSize.width;
-    }
-
-    public int getHeight() {
-        return mBufferSize.height;
     }
 
     public ViewportMetrics getGeckoViewportMetrics() {

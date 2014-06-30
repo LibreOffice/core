@@ -40,19 +40,23 @@ public class LOKitThread extends Thread {
         }
 
         Rect bufferRect = application.getLayerClient().beginDrawing(originalBitmap.getWidth(), originalBitmap.getHeight(), 256, 256, metadata);
-        if (bufferRect == null)
+        if (bufferRect == null) {
             return false;
+        }
+        int x = 0;
+        int y = 0;
 
-        ByteBuffer buffer = application.getLayerClient().lockBuffer();
         for (Integer i = 1; i <= 9; i++) {
             String imageName = "d" + i;
             Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable(imageName);
-            bitmap.copyPixelsToBuffer(buffer.asIntBuffer());
-            buffer.position(buffer.position() + bitmap.getByteCount());
+            application.getLayerClient().addTile(bitmap, x, y);
+            x += TILE_SIZE;
+            if (x > originalBitmap.getWidth()) {
+                x = 0;
+                y += TILE_SIZE;
+            }
         }
-        buffer.position(0);
 
-        application.getLayerClient().unlockBuffer();
         application.getLayerClient().endDrawing(0, 0, originalBitmap.getWidth(), originalBitmap.getHeight());
 
         application.runOnUiThread(new Runnable() {
