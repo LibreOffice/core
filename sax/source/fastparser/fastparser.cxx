@@ -492,6 +492,12 @@ void Entity::characters( const OUString& sChars )
 
 void Entity::endElement()
 {
+    if (maContextStack.empty())
+    {
+        // Malformed XML stream !?
+        return;
+    }
+
     const SaxContext& aContext = maContextStack.top();
     const Reference< XFastContextHandler >& xContext( aContext.mxContext );
     if( xContext.is() ) try
