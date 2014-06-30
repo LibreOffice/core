@@ -77,12 +77,6 @@ public:
 
 };
 
-/*
- *  FIXME(matteocam):
- * both classes Svx{Background,}Color should be derived from a
- * common ancestor or be totally separate (not recommended probably).
-*/
-
 // class SvxBackgroundColorItem
 
 // XXX: to be moved in a separate header.

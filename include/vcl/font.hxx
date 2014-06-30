@@ -60,11 +60,6 @@ public:
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
-    // FIXME(matteocam) // XXX: is this the right spot for changes?
-    void                SetBackgroundColor(const Color &);
-    const Color&        GetBackgroundColor() const;
-
-
     void                SetName( const OUString& rFamilyName );
     const OUString&     GetName() const;
     void                SetStyleName( const OUString& rStyleName );

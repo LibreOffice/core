@@ -742,12 +742,6 @@ void OutputDevice::SetTextFillColor()
         mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
 
     if ( maFont.GetColor() != Color( COL_TRANSPARENT ) ) {
-        // FIXME(matteocam)
-        Color aColor = maFont.GetColor();
-        if (aColor.GetRed() == 0x66) {
-            fprintf(stderr, "OutputDevice::SetTextFillColor() changing blue to transparent\n ");
-        }
-        // end modified code
         maFont.SetFillColor( Color( COL_TRANSPARENT ) );
     }
     if ( !maFont.IsTransparent() )
@@ -762,14 +756,6 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 
     Color aColor( rColor );
     bool bTransFill = ImplIsColorTransparent( aColor );
-
-    // FIXME(matteocam)
-    if ( rColor.GetRed() == 0x66 ) { // component of the blue I use
-        fprintf(stderr, "OutputDevice::SetTextFillColor(Color &): called  with (%d, %d, %d)\n",
-                rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
-    }
-
-    // end modified code
 
     if ( !bTransFill )
     {
@@ -966,12 +952,6 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const sal_Int32* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen )
 {
-    if ( maFont.IsTransparent() )
-        fprintf(stderr, "[Actually transparent font] Real color = %x\n", maFont.GetFillColor().GetColor() );
-    fprintf(stderr, "TextFillColor printing %c is %x\n",
-        (char) rStr.toChar(),
-        GetTextFillColor().GetColor());
-
     if(nLen == 0x0FFFF)
     {
         SAL_INFO("sal.rtl.xub",

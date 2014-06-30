@@ -3421,12 +3421,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                              ' ' == aText[nTextStart + nTextLen - 1] )
                                             --nTextLen;
 
-                                        // FIXME(matteocam)
-                                        if (aTmpFont.GetItalic() != ITALIC_NONE) {
-                                            Color aColor = COL_BROWN;
-                                            aTmpFont.SetFillColor(aColor);
-                                        }
-
                                         // output directly
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
 
