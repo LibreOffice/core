@@ -25,11 +25,6 @@
 // Magenta and Grey as mask colors
 #define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
-Control CTRL_FILEVIEW
-{
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-};
-
 String STR_SVT_NEWDOC
 {
     Text [ en-US ] = "New Document";

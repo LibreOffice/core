@@ -81,8 +81,10 @@ protected:
 
 public:
     SvtFileView( Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
-    SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
+    SvtFileView( Window* pParent, WinBits nBits, sal_uInt8 nFlags );
     virtual ~SvtFileView();
+
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     const OUString&         GetViewURL() const;
     OUString                GetURL( SvTreeListEntry* pEntry ) const;

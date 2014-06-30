@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/applycolpage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
+    dbaccess/uiconfig/ui/collectionviewdialog \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/copytablepage \
     dbaccess/uiconfig/ui/dbaseindexdialog \

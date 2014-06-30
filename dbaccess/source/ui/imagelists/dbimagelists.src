@@ -147,4 +147,18 @@ Image REPORTFOLDER_TREE_ICON
     MASKCOLOR;
 };
 
+// new folder and parent folder
+
+Image IMG_NAVIGATION_BTN_UP_SC
+{
+    ImageBitmap = Bitmap { File = "fp010"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image IMG_NAVIGATION_CREATEFOLDER_SC
+{
+    ImageBitmap = Bitmap { File = "fp015"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

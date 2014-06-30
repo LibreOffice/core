@@ -52,7 +52,7 @@
 
 // doc template dialog
 #define DLG_DOCTEMPLATE                 (RID_SVTOOLS_START+50)
-#define CTRL_FILEVIEW                   (RID_SVTOOLS_START+51)
+// FREE
 #define STR_SVT_NEWDOC                  (RID_SVTOOLS_START+52)
 #define STR_SVT_MYDOCS                  (RID_SVTOOLS_START+53)
 #define STR_SVT_TEMPLATES               (RID_SVTOOLS_START+54)
