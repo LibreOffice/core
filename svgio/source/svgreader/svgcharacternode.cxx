@@ -463,6 +463,7 @@ namespace svgio
                         aFontAttribute,
                         aLocale,
                         aFill,
+                        COL_TRANSPARENT,
 
                         // extra props for decorated
                         aDecoColor,
