@@ -55,7 +55,7 @@ class SvxPopupWindowListBox;
 
 
 
-class SvxPopupWindowListBox: public SfxPopupWindow, private boost::noncopyable
+class SvxPopupWindowListBox: public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
