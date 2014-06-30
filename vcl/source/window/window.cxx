@@ -65,6 +65,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <cassert>
 #include <set>
 #include <typeinfo>
 
@@ -327,13 +328,16 @@ Window::~Window()
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
-        Window* pMyParent = this;
+        Window* pMyParent = GetParent();
         SystemWindow* pMySysWin = NULL;
 
         while ( pMyParent )
         {
             if ( pMyParent->IsSystemWindow() )
-                pMySysWin = (SystemWindow*)pMyParent;
+            {
+                pMySysWin = dynamic_cast<SystemWindow *>(pMyParent);
+                assert(pMyParent != 0);
+            }
             pMyParent = pMyParent->GetParent();
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
@@ -349,13 +353,16 @@ Window::~Window()
 
     if( mpWindowImpl->mbIsInTaskPaneList )
     {
-        Window* pMyParent = this;
+        Window* pMyParent = GetParent();
         SystemWindow* pMySysWin = NULL;
 
         while ( pMyParent )
         {
             if ( pMyParent->IsSystemWindow() )
-                pMySysWin = (SystemWindow*)pMyParent;
+            {
+                pMySysWin = dynamic_cast<SystemWindow *>(pMyParent);
+                assert(pMyParent != 0);
+            }
             pMyParent = pMyParent->GetParent();
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
