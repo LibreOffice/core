@@ -18,13 +18,16 @@ $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
 $(eval $(call gb_CppunitTest_use_external,extensions_test_update,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
-	updchk \
 	cppu \
 	cppuhelper \
 	sal \
 	test \
 	unotest \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_CppunitTest_use_library_objects,extensions_test_update, \
+	updchk \
 ))
 
 ifeq ($(OS),WNT)

@@ -58,7 +58,7 @@ class UpdateCheck :
     public salhelper::ReferenceObject,
     public rtl::StaticWithInit< rtl::Reference< UpdateCheck >, UpdateCheckInitData >
 {
-    SAL_DLLPUBLIC_EXPORT UpdateCheck();
+    UpdateCheck();
 
     virtual ~UpdateCheck();
 
@@ -106,7 +106,7 @@ public:
     void cancelDownload();
 
     // Returns the XInteractionHandler of the UpdateHandler instance if present (and visible)
-    SAL_DLLPUBLIC_EXPORT com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
     virtual void autoCheckStatusChanged(bool enabled) SAL_OVERRIDE;
