@@ -74,8 +74,10 @@ public class LibreOfficeMainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         try {
-            LibreOfficeKit.init(this);
+            // enable debugging messages as the first thing
             LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
+
+            LibreOfficeKit.init(this);
 
             setContentView(R.layout.activity_main);
 
