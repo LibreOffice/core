@@ -1,12 +1,12 @@
 [submodule "dictionaries"]
 	path = dictionaries
-	url = http://:@kgit.tvc.muenchen.de/office/libreoffice-dictionaries.git
+	url = ../libreoffice-dictionaries.git
 	branch = libreoffice-lhm-416 
 [submodule "helpcontent2"]
 	path = helpcontent2
-	url = http://:@kgit.tvc.muenchen.de/office/libreoffice-help.git
+	url = ../libreoffice-help.git
 	branch = libreoffice-lhm-416
 [submodule "translations"]
 	path = translations
-	url = http://:@kgit.tvc.muenchen.de/office/libreoffice-translations.git
+	url = ../libreoffice-translations.git
 	branch = libreoffice-lhm-416 
