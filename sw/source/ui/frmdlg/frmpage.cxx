@@ -2607,7 +2607,7 @@ BmpWindow::BmpWindow(Window* pPar, WinBits nStyle)
     , bLeftAlign(false)
 {
     SetBackground();
-    SetPaintTransparent(sal_True);
+    SetPaintTransparent(true);
     // #i119307# the graphic might have transparency, set up white as the color
     // to use when drawing a rectangle under the image
     SetLineColor(COL_WHITE);
