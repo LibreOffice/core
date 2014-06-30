@@ -4609,7 +4609,8 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
         if ( RES_TXTATR_AUTOFMT == pEntry->nWID || RES_AUTO_STYLE == pEntry->nWID )
         {
-            pValues[i] <<= StylePool::nameOf( mpSet );
+            OUString sName(StylePool::nameOf( mpSet ));
+            aTarget <<= sName;
             bDone = true;
         }
         else if(bTakeCareOfDrawingLayerFillStyle)
