@@ -103,6 +103,7 @@ class ClientBox:
 
     NumericBox      m_aPinBox;
     PushButton      m_aDeauthoriseButton;
+    Rectangle       m_sPinTextRect;
 
     ScrollBar       m_aScrollBar;
 

@@ -84,7 +84,6 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     m_aDeauthoriseButton.SetText( SD_RESSTR(STR_DEAUTHORISE_CLIENT) );
     m_aDeauthoriseButton.SetClickHdl( LINK( this, ClientBox, DeauthoriseHdl ) );
 
-    SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
     long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
     long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
@@ -245,15 +244,30 @@ void ClientBox::selectEntry( const long nPos )
         }
     }
 
+    // We empty the pin box now too, just in case the user previously
+    // entered a pin, but then changed their selected device.
+    m_aPinBox.SetText( "" );
+    if ( m_bHasActive )
+    {
+        bool bAlreadyAuthorised =
+            m_vEntries[ m_nActive ]->m_pClientInfo->mbIsAlreadyAuthorised;
+
+        if ( bAlreadyAuthorised )
+        {
+            m_aDeauthoriseButton.GetFocus();
+        }
+        else
+        {
+            m_aPinBox.GetFocus();
+        }
+    }
+
     if ( IsReallyVisible() )
     {
         m_bNeedsRecalc = true;
         Invalidate();
     }
 
-    // We empty the pin box now too, just in case the user previously
-    // entered a pin, but then changed their selected device.
-    m_aPinBox.SetText( "" );
     guard.clear();
 }
 
@@ -317,43 +331,9 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     aPos.Y() += aTextHeight;
     if ( pEntry->m_bActive )
     {
-        Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                               MapMode( MAP_APPFONT ) );
-        m_aPinBox.SetSizePixel( aSize );
-        m_aDeauthoriseButton.SetSizePixel( m_aDeauthoriseButton.GetOptimalSize() );
-        const Rectangle aRect( GetEntryRect( m_nActive ) );
-        Size  aBtnSize( m_aPinBox.GetSizePixel() );
-        Point aBtnPos( aRect.Left(),
-                   aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-
-        bool bAlreadyAuthorised = pEntry->m_pClientInfo->mbIsAlreadyAuthorised;
-
-        if ( !bAlreadyAuthorised )
-        {
-            OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
-            DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
-                      sPinText, 0 );
-
-            aBtnPos = Point( aRect.Left() + GetTextWidth( sPinText ),
-                             aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-        }
-        m_aPinBox.SetPosPixel( aBtnPos );
-        m_aPinBox.Show( !bAlreadyAuthorised );
-
-        aBtnPos.Move( 20, 0 );
-        m_aDeauthoriseButton.SetPosPixel( aBtnPos );
-        m_aDeauthoriseButton.Show( bAlreadyAuthorised );
-        if ( bAlreadyAuthorised )
-        {
-            m_aDeauthoriseButton.GetFocus();
-        }
-        else
-        {
-            m_aPinBox.GetFocus();
-        }
-    }
-    else
-    {
+      OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
+      DrawText( m_sPinTextRect,
+                sPinText, 0 );
     }
 
     SetLineColor( Color( COL_LIGHTGRAY ) );
@@ -367,9 +347,47 @@ void ClientBox::RecalcAll()
 
     SetupScrollBar();
 
-    if ( m_bHasActive )
+    Size aPBSize = LogicToPixel(
+                      Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
+                      MapMode( MAP_APPFONT ) );
+    m_aPinBox.SetSizePixel( aPBSize );
+    m_aDeauthoriseButton.SetSizePixel( m_aDeauthoriseButton.GetOptimalSize() );
+
+    if ( !m_bHasActive )
+    {
+        m_aPinBox.Show( false );
+        m_aDeauthoriseButton.Show( false );
+    }
+    else
     {
         Rectangle aEntryRect = GetEntryRect( m_nActive );
+
+        Size  aPinBoxSize( m_aPinBox.GetSizePixel() );
+        Point aPos( aEntryRect.Left(),
+                    aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );
+
+        bool bAlreadyAuthorised = m_vEntries[ m_nActive ]->m_pClientInfo->mbIsAlreadyAuthorised;
+
+        if ( !bAlreadyAuthorised )
+        {
+            m_sPinTextRect = Rectangle( aPos.X(), aPos.Y(),
+                                        aEntryRect.Right(),
+                                        aEntryRect.Bottom() - TOP_OFFSET);
+
+            OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
+
+            aPos = Point( aEntryRect.Left() + GetTextWidth( sPinText ),
+                          aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );
+            m_aPinBox.SetPosPixel( aPos );
+        }
+        else
+        {
+            aPos += Point( 20, 0 );
+            m_aDeauthoriseButton.SetPosPixel( aPos );
+        }
+
+        m_aPinBox.Show( !bAlreadyAuthorised );
+        m_aDeauthoriseButton.Show( bAlreadyAuthorised );
 
         if ( m_bAdjustActive )
         {
@@ -474,15 +492,6 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
         aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
-
-    // It's easiest to disbale these and only reenable as appropriate in DrawRow
-    // -- both are shown in only certain situations, and e.g. if we've removed
-    // the last entry then the visibility of the deauthorise button won't be
-    // changed in the loop below, or when we select 0 entries then we
-    // won't run through the appropriate conditions which would otherwise
-    // set the visibility of the pin-box.
-    m_aDeauthoriseButton.Show( false );
-    m_aPinBox.Show( false );
 
     typedef std::vector< TClientBoxEntry >::iterator ITER;
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
