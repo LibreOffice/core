@@ -17,6 +17,7 @@
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <com/sun/star/util/Color.hpp>
 
@@ -41,6 +42,7 @@ public:
     void testDelayedCellImport(); // chart range referencing content on later sheets
     void testFlatODSStackedColumnChart();
     void testFdo78080();
+    void testFdo54361();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -67,6 +69,7 @@ public:
     CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
     CPPUNIT_TEST(testFdo78080);
+    CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -381,6 +384,24 @@ void Chart2ImportTest::testFdo78080()
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(!xTitle.is());
+}
+
+void Chart2ImportTest::testFdo54361()
+{
+    load("/chart2/qa/extras/data/xlsx/", "fdo54361.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    uno::Reference< chart::XChartDocument > xChart2Doc (xChartDoc, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChart2Doc.is());
+
+    Reference< beans::XPropertySet > xPropSet( xChart2Doc->getArea(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("failed to get Area", xPropSet.is());
+
+    com::sun::star::drawing::FillStyle aStyle;
+    xPropSet -> getPropertyValue("FillStyle") >>= aStyle;
+
+    CPPUNIT_ASSERT_MESSAGE("Background needs to be with solid fill style", aStyle == 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
