@@ -34,6 +34,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_system_win32_libs,extensions_test_update,\
 	shell32 \
 	ole32 \
+	wininet \
 ))
 endif
 
