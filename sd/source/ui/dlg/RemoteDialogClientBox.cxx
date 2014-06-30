@@ -634,20 +634,16 @@ long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 
     TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
 
-    bool bNewEntryInserted = false;
-
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
         m_vEntries.push_back( pEntry );
-        bNewEntryInserted = true;
     }
     else
     {
 //         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
 //         {
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
-            bNewEntryInserted = true;
 //         }
 //         else if ( !m_bInCheckMode )
 //         {
