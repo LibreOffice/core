@@ -3819,9 +3819,11 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
 
                 case FN_UNO_HEADER:
                 case FN_UNO_HEADER_LEFT:
+                case FN_UNO_HEADER_FIRST:
                 case FN_UNO_HEADER_RIGHT:
                 case FN_UNO_FOOTER:
                 case FN_UNO_FOOTER_LEFT:
+                case FN_UNO_FOOTER_FIRST:
                 case FN_UNO_FOOTER_RIGHT:
                 {
                     //UUUU cleanups for readability (undos removed, rearranged)
@@ -3831,9 +3833,11 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     {
                         case FN_UNO_HEADER:       bHeader = true;  nRes = RES_HEADER; break;
                         case FN_UNO_HEADER_LEFT:  bHeader = true;  nRes = RES_HEADER; bLeft = true;  break;
+                        case FN_UNO_HEADER_FIRST: bHeader = true;  nRes = RES_HEADER; bFirst = true; break;
                         case FN_UNO_HEADER_RIGHT: bHeader = true;  nRes = RES_HEADER; break;
                         case FN_UNO_FOOTER:       bHeader = false; nRes = RES_FOOTER; break;
                         case FN_UNO_FOOTER_LEFT:  bHeader = false; nRes = RES_FOOTER; bLeft = true;  break;
+                        case FN_UNO_FOOTER_FIRST: bHeader = false; nRes = RES_FOOTER; bFirst = true; break;
                         case FN_UNO_FOOTER_RIGHT: bHeader = false; nRes = RES_FOOTER; break;
                         default: break;
                     }
