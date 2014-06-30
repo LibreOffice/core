@@ -196,16 +196,14 @@ namespace slideshow
 
             if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
             {
-                OUString sURL;
-                OUString sMimeType;
+                uno::Reference< graphic::XGraphic > xGraphic;
                 uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
                 if (xPropSet.is())
                 {
-                    xPropSet->getPropertyValue("PrivateTempFileURL") >>= sURL;
-                    xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
+                    xPropSet->getPropertyValue("FallbackGraphic") >>= xGraphic;
                 }
 
-                const Graphic aGraphic(avmedia::MediaWindow::grabFrame(sURL,"",sMimeType));
+                Graphic aGraphic(xGraphic);
                 const BitmapEx aBmp = aGraphic.GetBitmapEx();
 
                 uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(
