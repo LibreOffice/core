@@ -5724,18 +5724,6 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
     return nErrRet;
 }
 
-class outlineeq : public std::unary_function<const SwTxtFmtColl*, bool>
-{
-private:
-    sal_uInt8 mnNum;
-public:
-    outlineeq(sal_uInt8 nNum) : mnNum(nNum) {}
-    bool operator()(const SwTxtFmtColl *pTest) const
-    {
-        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;
-    }
-};
-
 void SwWW8ImplReader::SetOutlineStyles()
 {
     // If we are inserted into a document then don't clobber existing outline
