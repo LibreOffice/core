@@ -810,35 +810,35 @@
       <info>
         <desc>Stores the details of the installed personas.</desc>
       </info>
-      <prop oor:name="PersonaName" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="Name" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>The Persona's name</desc>
         </info>
       </prop>
-      <prop oor:name="PersonaPreview" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="Preview" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of the preview file for the Persona to show in the UI</desc>
         </info>
       </prop>
-      <prop oor:name="PersonaHeader" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="Header" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of the header file for the Persona</desc>
         </info>
         <value/>
       </prop>
-      <prop oor:name="PersonaFooter" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="Footer" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of the footer file for the Persona</desc>
         </info>
         <value/>
       </prop>
-      <prop oor:name="PersonaTextColor" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="TextColor" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Value of the text color for the Persona</desc>
         </info>
         <value/>
       </prop>
-      <prop oor:name="PersonaAccentColor" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="AccentColor" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Value of the accent color for the Persona</desc>
         </info>
