@@ -191,10 +191,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
     if(!pXFillStyleItem || XFILL_NONE == pXFillStyleItem->GetValue())
     {
-        // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have XFILL_NONE)
-        Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
-        aFillColor.SetTransparency(0xff);
-
+        Color aFillColor(COL_AUTO);
         return SvxBrushItem(aFillColor, nBackgroundID);
     }
 
