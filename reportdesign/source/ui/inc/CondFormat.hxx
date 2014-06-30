@@ -68,7 +68,6 @@ namespace rptui
     \************************************************************************/
     class ConditionalFormattingDialog  :public ModalDialog
                                         ,public IConditionalFormatAction
-                                        ,private ::boost::noncopyable
     {
         typedef ::boost::shared_ptr< Condition >    ConditionPtr;
         typedef ::std::vector< ConditionPtr >       Conditions;

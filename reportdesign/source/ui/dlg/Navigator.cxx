@@ -111,7 +111,6 @@ class NavigatorTree :   public ::cppu::BaseMutex
                     ,   public reportdesign::ITraverseReport
                     ,   public comphelper::OSelectionChangeListener
                     ,   public ::comphelper::OPropertyChangeListener
-                    ,   private boost::noncopyable
 {
     class UserData;
     friend class UserData;

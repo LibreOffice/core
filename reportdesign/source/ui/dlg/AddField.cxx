@@ -60,7 +60,7 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-class OAddFieldWindowListBox: public SvTreeListBox, private boost::noncopyable
+class OAddFieldWindowListBox: public SvTreeListBox
 {
     OAddFieldWindow*                    m_pTabWin;
 

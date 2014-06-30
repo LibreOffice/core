@@ -82,7 +82,6 @@ typedef ::svt::EditBrowseBox OFieldExpressionControl_Base;
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > TContainerListenerBase;
 class OFieldExpressionControl : public TContainerListenerBase
                                ,public OFieldExpressionControl_Base
-                               ,private boost::noncopyable
 {
     ::osl::Mutex                    m_aMutex;
     ::std::vector<sal_Int32>        m_aGroupPositions;
