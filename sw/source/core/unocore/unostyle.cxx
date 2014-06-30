@@ -2862,7 +2862,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                     const bool bHeader(SFX_STYLE_FAMILY_PAGE == eFamily && sPropName.startsWith("Header"));
                     const bool bFooter(SFX_STYLE_FAMILY_PAGE == eFamily && sPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter)
+                    if(bHeader || bFooter || sPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         const SvxSetItem* pSetItem;
 
@@ -3415,7 +3415,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter)
+                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         // it is a Header/Footer entry, access the SvxSetItem containing it's information
                         const SvxSetItem* pSetItem = 0;
@@ -3523,7 +3523,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter)
+                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         const SvxSetItem* pSetItem = 0;
 
@@ -3720,7 +3720,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter)
+                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         // slot is a Header/Footer slot
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
@@ -3794,7 +3794,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter)
+                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
