@@ -160,7 +160,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( nPara );
-        DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
+        assert(pNode && "AddRTFDefaultValues - No paragraph?!");
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
             pNode->GetContentAttribs().GetItems().Put( aFontItem );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTHEIGHT ) )
@@ -280,7 +280,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     if ( nCurPara )
         nCurPara--;
     ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject( nCurPara );
-    DBG_ASSERT( pPrevNode, "pPrevNode = 0!" );
+    assert(pPrevNode && "pPrevNode = 0!");
     rpNodePos = new EditNodeIdx(mpEditEngine, pPrevNode);
     rCntPos = pPrevNode->Len();
 }

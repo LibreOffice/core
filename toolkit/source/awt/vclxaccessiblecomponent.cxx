@@ -186,7 +186,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
     uno::Any aOldValue, aNewValue;
 
     Window* pAccWindow = rVclWindowEvent.GetWindow();
-    DBG_ASSERT( pAccWindow, "VCLXAccessibleComponent::ProcessWindowEvent - Window?" );
+    assert(pAccWindow && "VCLXAccessibleComponent::ProcessWindowEvent - Window?");
 
     switch ( rVclWindowEvent.GetId() )
     {

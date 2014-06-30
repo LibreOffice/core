@@ -1686,7 +1686,7 @@ void SwTableBox::RemoveFromTable()
     {
         // remove from table
         const SwTableNode* pTblNd = pSttNd->FindTableNode();
-        OSL_ENSURE( pTblNd, "In which table is that box?" );
+        assert(pTblNd && "In which table is that box?");
         SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this

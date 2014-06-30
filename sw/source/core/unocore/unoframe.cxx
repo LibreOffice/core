@@ -2984,7 +2984,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
                     pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
-                    OSL_ENSURE( pFmt2, "Doc->Insert(notxt) failed." );
+                    assert(pFmt2 && "Doc->Insert(notxt) failed.");
 
                     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                     pFmt2->Add(this);

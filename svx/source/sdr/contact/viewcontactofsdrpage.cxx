@@ -482,13 +482,11 @@ namespace sdr
         ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
         {
             SdrObject* pObj = getPage().GetObj(nIndex);
-            DBG_ASSERT(pObj, "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
+            assert(pObj && "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
             return pObj->GetViewContact();
         }
     } // end of namespace contact
 } // end of namespace sdr
-
-
 
 namespace sdr
 {

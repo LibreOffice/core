@@ -629,7 +629,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
             else
                 m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
 
-            OSL_ENSURE(pItem->m_pItem,"No accessible created!");
+            assert(pItem->m_pItem && "No accessible created!");
             Any aOldAny, aNewAny;
             aNewAny <<= AccessibleStateType::FOCUSED;
             // Don't fire the focus event.

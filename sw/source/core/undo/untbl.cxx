@@ -2312,7 +2312,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwNode * pNd = & pPam->GetPoint()->nNode.GetNode();
     SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
-    OSL_ENSURE( pSttNd, "without StartNode no TableBox" );
+    assert(pSttNd && "without StartNode no TableBox");
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTblBox(
                                     pSttNd->GetIndex() );
     OSL_ENSURE( pBox, "found no TableBox" );

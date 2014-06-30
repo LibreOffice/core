@@ -57,30 +57,24 @@ ChildrenManager::~ChildrenManager (void)
     OSL_TRACE ("~ChildrenManager");
 }
 
-
-
-
 long ChildrenManager::GetChildCount (void) const throw ()
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     return mpImpl->GetChildCount();
 }
-
-
-
 
 ::com::sun::star::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException,
            ::com::sun::star::lang::IndexOutOfBoundsException)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     return mpImpl->GetChild (nIndex);
 }
 
 Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     return mpImpl->GetChild (xShape);
 }
 
@@ -89,92 +83,66 @@ Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShap
     throw (::com::sun::star::uno::RuntimeException,
            ::com::sun::star::lang::IndexOutOfBoundsException)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     return mpImpl->GetChildShape(nIndex);
 }
 
 void ChildrenManager::Update (bool bCreateNewObjectsOnDemand)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->Update (bCreateNewObjectsOnDemand);
 }
-
-
-
 
 void ChildrenManager::SetShapeList (const ::com::sun::star::uno::Reference<
     ::com::sun::star::drawing::XShapes>& xShapeList)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->SetShapeList (xShapeList);
 }
 
-
-
-
 void ChildrenManager::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->AddAccessibleShape (shape);
 }
 
-
-
-
 void ChildrenManager::ClearAccessibleShapeList (void)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->ClearAccessibleShapeList ();
 }
 
-
-
-
 void ChildrenManager::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->SetInfo (rShapeTreeInfo);
 }
 
-
-
-
 void ChildrenManager::UpdateSelection (void)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->UpdateSelection ();
 }
 
-
-
-
 bool ChildrenManager::HasFocus (void)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     return mpImpl->HasFocus ();
 }
 
-
-
-
 void ChildrenManager::RemoveFocus (void)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->RemoveFocus ();
 }
-
-
-
 
 //=====  IAccessibleViewForwarderListener  ====================================
 void ChildrenManager::ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder)
 {
-    OSL_ASSERT (mpImpl != NULL);
+    assert(mpImpl != NULL);
     mpImpl->ViewForwarderChanged (aChangeType, pViewForwarder);
 }
-
-
 
 } // end of namespace accessibility
 

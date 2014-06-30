@@ -131,7 +131,7 @@ void SwView::InvalidateRulerPos()
 
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    OSL_ENSURE(m_pHRuler, "Why is the ruler not there?");
+    assert(m_pHRuler && "Why is the ruler not there?");
     m_pHRuler->ForceUpdate();
     m_pVRuler->ForceUpdate();
 }
