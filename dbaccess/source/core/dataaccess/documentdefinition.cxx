@@ -928,7 +928,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         if ( m_bForm )
             xModule->setIdentifier( "com.sun.star.sdb.FormDesign" );
         else if ( !xReportDefinition.is() )
-            xModule->setIdentifier( "com.sun.star.sdb.TextReportDesign" );
+            xModule->setIdentifier( "com.sun.star.text.TextDocument" );
 
         updateDocumentTitle();
     }
