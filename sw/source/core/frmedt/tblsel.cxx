@@ -2110,7 +2110,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
         if( nEndPos < nPos )
             nEndPos = nPos;
     }
-    if ( nStPos > 1 )
+    if (USHRT_MAX != nStPos && nStPos > 1)
         pLineBefore = rTable.GetTabLines()[nStPos - 2];
     if ( nEndPos < rTable.GetTabLines().size() )
         pLineBehind = rTable.GetTabLines()[nEndPos];
@@ -2173,7 +2173,8 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
         nEndPos = rTable.GetTabLines().GetPos(
                         (const SwTableLine*&)pLineBehind );
         OSL_ENSURE( nEndPos != USHRT_MAX, "The fox stole the line!" );
-        --nEndPos;
+        if (nEndPos != 0)
+            --nEndPos;
     }
 
     for ( sal_uInt16 i = nStPos; i <= nEndPos; ++i)
