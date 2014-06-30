@@ -687,11 +687,11 @@ void ClientBox::populateEntries()
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
 
-    vector<::boost::shared_ptr<ClientInfo>> aClients( RemoteServer::getClients() );
+    vector< ::boost::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
 
-    const vector<::boost::shared_ptr<ClientInfo>>::const_iterator aEnd( aClients.end() );
+    const vector< ::boost::shared_ptr<ClientInfo > >::const_iterator aEnd( aClients.end() );
 
-    for ( vector<::boost::shared_ptr<ClientInfo>>::const_iterator aIt( aClients.begin() );
+    for ( vector< ::boost::shared_ptr< ClientInfo > >::const_iterator aIt( aClients.begin() );
         aIt != aEnd; ++aIt )
     {
         addEntry( *aIt );
