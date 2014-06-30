@@ -336,7 +336,6 @@ Window::~Window()
             if ( pMyParent->IsSystemWindow() )
             {
                 pMySysWin = dynamic_cast<SystemWindow *>(pMyParent);
-                assert(pMyParent != 0);
             }
             pMyParent = pMyParent->GetParent();
         }
@@ -361,7 +360,6 @@ Window::~Window()
             if ( pMyParent->IsSystemWindow() )
             {
                 pMySysWin = dynamic_cast<SystemWindow *>(pMyParent);
-                assert(pMyParent != 0);
             }
             pMyParent = pMyParent->GetParent();
         }
