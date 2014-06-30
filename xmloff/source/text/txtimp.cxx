@@ -502,11 +502,11 @@ struct XMLTextImportHelper::Impl
     SvXMLImportContextRef m_xAutoStyles;
     SvXMLImportContextRef m_xFontDecls;
 
-    UniReference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
-    UniReference< SvXMLImportPropertyMapper > m_xTextImpPrMap;
-    UniReference< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
-    UniReference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
-    UniReference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xTextImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
 
     boost::scoped_ptr<SvI18NMap> m_pRenameMap;
 
@@ -693,25 +693,25 @@ XMLTextImportHelper::GetChapterNumbering() const
     return m_pImpl->m_xChapterNumbering;
 }
 
-UniReference< SvXMLImportPropertyMapper > const&
+rtl::Reference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetParaImportPropertySetMapper() const
 {
     return m_pImpl->m_xParaImpPrMap;
 }
 
-UniReference< SvXMLImportPropertyMapper > const&
+rtl::Reference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetTextImportPropertySetMapper() const
 {
     return m_pImpl->m_xTextImpPrMap;
 }
 
-UniReference< SvXMLImportPropertyMapper > const&
+rtl::Reference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetSectionImportPropertySetMapper() const
 {
     return m_pImpl->m_xSectionImpPrMap;
 }
 
-UniReference< SvXMLImportPropertyMapper > const&
+rtl::Reference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetRubyImportPropertySetMapper() const
 {
     return m_pImpl->m_xRubyImpPrMap;
@@ -1230,12 +1230,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                     sal_Int32 nCount = pStyle->_GetProperties().size();
                     if( nCount )
                     {
-                        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)
                                 ->GetImportPropertyMapper(nFamily);
                         if( xImpPrMap.is() )
                         {
-                            UniReference<XMLPropertySetMapper> rPropMapper =
+                            rtl::Reference<XMLPropertySetMapper> rPropMapper =
                                 xImpPrMap->getPropertySetMapper();
                             for( sal_Int32 i=0; i < nCount; i++ )
                             {

@@ -130,7 +130,7 @@ void XMLSectionImportContext::StartElement(
         bValid = true;
     }
 
-    UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
+    rtl::Reference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
 
     // valid?
     if (bValid)
@@ -333,7 +333,7 @@ void XMLSectionImportContext::EndElement()
 {
     // get rid of last paragraph
     // (unless it's the only paragraph in the section)
-    UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
+    rtl::Reference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
     rHelper->GetCursor()->goRight(1, sal_False);
     if (bHasContent)
     {

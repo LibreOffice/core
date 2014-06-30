@@ -106,7 +106,7 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
                 pContext = new XMLShapePropertySetContext( GetImport(), nPrefix,
@@ -132,7 +132,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
         // for compatibility to beta files, search for CTF_SD_NUMBERINGRULES_NAME to
         // import numbering rules from the style:properties element
-        const UniReference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
         ::std::vector< XMLPropertyState > &rProperties = GetProperties();
         ::std::vector< XMLPropertyState >::iterator end( rProperties.end() );
@@ -190,9 +190,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     // ones are used when a FillStyle is defined
     if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
     {
-        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
-
-        if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
+        if(doNewDrawingLayerFillStyleDefinitionsExist(OUString("FillStyle")))
         {
             deactivateOldFillStyleDefinitions(getStandardSet());
         }
@@ -226,7 +224,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
     };
 
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
@@ -234,7 +232,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
     Reference< XPropertySetInfo > xInfo;
     // get property set mapper
-    UniReference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
+    rtl::Reference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
 
     for( sal_uInt16 i=0; aContextIDs[i].nContextID != -1; i++ )
     {

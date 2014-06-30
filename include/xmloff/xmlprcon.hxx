@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/uniref.hxx>
 
 
 class SvXMLImportPropertyMapper;
@@ -35,7 +34,7 @@ protected:
     sal_Int32 mnEndIdx;
     sal_uInt32 mnFamily;
     ::std::vector< XMLPropertyState > &mrProperties;
-    UniReference < SvXMLImportPropertyMapper >   mxMapper;
+    rtl::Reference < SvXMLImportPropertyMapper >   mxMapper;
 
 public:
 
@@ -45,7 +44,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
             sal_uInt32 nFamily,
             ::std::vector< XMLPropertyState > &rProps,
-            const UniReference < SvXMLImportPropertyMapper > &rMap,
+            const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
     virtual ~SvXMLPropertySetContext();

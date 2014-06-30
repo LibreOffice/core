@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	tl \
 	i18nlangtag \
 	sax \
+	salhelper \
 	comphelper \
 	basegfx \
 	cppuhelper \

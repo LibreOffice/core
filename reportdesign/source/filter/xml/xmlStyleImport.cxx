@@ -52,7 +52,7 @@ using namespace xmloff::token;
 class OSpecialHanldeXMLImportPropertyMapper : public SvXMLImportPropertyMapper
 {
 public:
-    OSpecialHanldeXMLImportPropertyMapper(const UniReference< XMLPropertySetMapper >& rMapper,SvXMLImport& _rImport) : SvXMLImportPropertyMapper(rMapper ,_rImport)
+    OSpecialHanldeXMLImportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper,SvXMLImport& _rImport) : SvXMLImportPropertyMapper(rMapper ,_rImport)
     {
     }
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -186,11 +186,11 @@ void OReportStylesContext::EndElement()
 }
 
 
-UniReference < SvXMLImportPropertyMapper >
+rtl::Reference < SvXMLImportPropertyMapper >
     OReportStylesContext::GetImportPropertyMapper(
                     sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
 
     if (!xMapper.is())
     {
@@ -229,7 +229,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !m_xTableImpPropMapper.is() )
                 {
-                    UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
+                    rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
                     m_xTableImpPropMapper = new SvXMLImportPropertyMapper( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac, false), m_rImport );
                 }
                 xMapper = m_xTableImpPropMapper;

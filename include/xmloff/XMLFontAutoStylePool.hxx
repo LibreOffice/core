@@ -24,14 +24,14 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <set>
 
 class XMLFontAutoStylePool_Impl;
 typedef std::set<OUString> XMLFontAutoStylePoolNames_Impl;
 class SvXMLExport;
 
-class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& rExport;
 

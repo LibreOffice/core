@@ -56,7 +56,7 @@ using ::com::sun::star::beans::PropertyVetoException;
 
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImp ):
     rImport(rImp),
     maPropMapper  ( rMapper )
@@ -69,7 +69,7 @@ SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 }
 
 void SvXMLImportPropertyMapper::ChainImportMapper(
-        const UniReference< SvXMLImportPropertyMapper>& rMapper )
+        const rtl::Reference< SvXMLImportPropertyMapper>& rMapper )
 {
     // add map entries from rMapper to current map
     maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
@@ -77,7 +77,7 @@ void SvXMLImportPropertyMapper::ChainImportMapper(
     rMapper->maPropMapper = maPropMapper;
 
     // set rMapper as last mapper in current chain
-    UniReference< SvXMLImportPropertyMapper > xNext = mxNextMapper;
+    rtl::Reference< SvXMLImportPropertyMapper > xNext = mxNextMapper;
     if( xNext.is())
     {
         while( xNext->mxNextMapper.is())
@@ -449,7 +449,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
-    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
     _ContextID_Index_Pair* pSpecialContextIds )
 {
@@ -567,7 +567,7 @@ struct PropertyPairLessFunctor :
 void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySetInfo> & rPropSetInfo,
-    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     _ContextID_Index_Pair* pSpecialContextIds,
     Sequence<OUString>& rNames,
     Sequence<Any>& rValues)
@@ -650,7 +650,7 @@ bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
-    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     _ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
@@ -681,7 +681,7 @@ bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
 bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XTolerantMultiPropertySet> & rTolMultiPropSet,
-    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
     _ContextID_Index_Pair* pSpecialContextIds )
 {

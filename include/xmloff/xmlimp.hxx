@@ -106,10 +106,10 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxImportInfo;
 
-    UniReference< XMLTextImportHelper >             mxTextImport;
-    UniReference< XMLShapeImportHelper >            mxShapeImport;
-    UniReference< SchXMLImportHelper >              mxChartImport;
-    UniReference< ::xmloff::OFormLayerXMLImport >   mxFormImport;
+    rtl::Reference< XMLTextImportHelper >             mxTextImport;
+    rtl::Reference< XMLShapeImportHelper >            mxShapeImport;
+    rtl::Reference< SchXMLImportHelper >              mxChartImport;
+    rtl::Reference< ::xmloff::OFormLayerXMLImport >   mxFormImport;
 
     SvXMLImportContextRef mxFontDecls;
     SvXMLImportContextRef mxStyles;
@@ -256,18 +256,18 @@ public:
     virtual void SetStatistics(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > & i_rStats);
 
     // get import helper for text
-    inline UniReference< XMLTextImportHelper > GetTextImport();
+    inline rtl::Reference< XMLTextImportHelper > GetTextImport();
     bool HasTextImport() const { return mxTextImport.is(); }
     inline SvXMLNumFmtHelper* GetDataStylesImport();
 
     // get import helper for shapes
-    inline UniReference< XMLShapeImportHelper > GetShapeImport();
+    inline rtl::Reference< XMLShapeImportHelper > GetShapeImport();
 
     // get import helper for charts
-    inline UniReference< SchXMLImportHelper > GetChartImport();
+    inline rtl::Reference< SchXMLImportHelper > GetChartImport();
 
     // get import helper for form layer
-    inline UniReference< ::xmloff::OFormLayerXMLImport > GetFormImport();
+    inline rtl::Reference< ::xmloff::OFormLayerXMLImport > GetFormImport();
 
     // get XPropertySet with import information
     inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getImportInfo() const { return mxImportInfo; }
@@ -482,7 +482,7 @@ public:
     bool needFixPositionAfterZ() const;
 };
 
-inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()
+inline rtl::Reference< XMLTextImportHelper > SvXMLImport::GetTextImport()
 {
     if( !mxTextImport.is() )
         mxTextImport = CreateTextImport();
@@ -490,7 +490,7 @@ inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()
     return mxTextImport;
 }
 
-inline UniReference< XMLShapeImportHelper > SvXMLImport::GetShapeImport()
+inline rtl::Reference< XMLShapeImportHelper > SvXMLImport::GetShapeImport()
 {
     if( !mxShapeImport.is() )
         mxShapeImport = CreateShapeImport();
@@ -498,7 +498,7 @@ inline UniReference< XMLShapeImportHelper > SvXMLImport::GetShapeImport()
     return mxShapeImport;
 }
 
-inline UniReference< SchXMLImportHelper > SvXMLImport::GetChartImport()
+inline rtl::Reference< SchXMLImportHelper > SvXMLImport::GetChartImport()
 {
     if( !mxChartImport.is() )
         mxChartImport = CreateChartImport();
@@ -506,7 +506,7 @@ inline UniReference< SchXMLImportHelper > SvXMLImport::GetChartImport()
     return mxChartImport;
 }
 
-inline UniReference< ::xmloff::OFormLayerXMLImport > SvXMLImport::GetFormImport()
+inline rtl::Reference< ::xmloff::OFormLayerXMLImport > SvXMLImport::GetFormImport()
 {
     if( !mxFormImport.is() )
         mxFormImport = CreateFormImport();

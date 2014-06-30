@@ -200,7 +200,7 @@ void XMLIndexTOCContext::StartElement(
 #else
                 OUString sMarker("Y");
 #endif
-                UniReference<XMLTextImportHelper> rImport =
+                rtl::Reference<XMLTextImportHelper> rImport =
                     GetImport().GetTextImport();
 
                 // a) insert index
@@ -263,7 +263,7 @@ void XMLIndexTOCContext::EndElement()
     {
         // preliminaries
         OUString sEmpty;
-        UniReference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
+        rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
 
         // get rid of last paragraph (unless it's the only paragraph)
         rHelper->GetCursor()->goRight(1, sal_False);

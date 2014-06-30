@@ -184,10 +184,10 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper.get(), rImport );
     mxCellImportPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImport));
 
-    UniReference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), false ) );
+    rtl::Reference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), false ) );
     mxRowImportPropertySetMapper = new SvXMLImportPropertyMapper( xRowMapper, rImport );
 
-    UniReference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), false ) );
+    rtl::Reference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), false ) );
     mxColumnImportPropertySetMapper = new SvXMLImportPropertyMapper( xColMapper, rImport );
 }
 
@@ -624,7 +624,7 @@ SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefi
         Reference< XText > xText( mxCell, UNO_QUERY );
         if( xText.is() )
         {
-            UniReference < XMLTextImportHelper > xTxtImport( GetImport().GetTextImport() );
+            rtl::Reference < XMLTextImportHelper > xTxtImport( GetImport().GetTextImport() );
             mxOldCursor = xTxtImport->GetCursor();
             mxCursor = xText->createTextCursor();
             if( mxCursor.is() )

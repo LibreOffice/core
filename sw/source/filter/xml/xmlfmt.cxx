@@ -719,7 +719,7 @@ protected:
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     // HACK
-    virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+    virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
         sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
     virtual uno::Reference < container::XNameContainer >
@@ -860,10 +860,10 @@ bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
     return bIns;
 }
 
-UniReference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportPropertyMapper(
+rtl::Reference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportPropertyMapper(
         sal_uInt16 nFamily ) const
 {
-    UniReference < SvXMLImportPropertyMapper > xMapper;
+    rtl::Reference < SvXMLImportPropertyMapper > xMapper;
     if( nFamily == XML_STYLE_FAMILY_TABLE_TABLE )
         xMapper = XMLTextImportHelper::CreateTableDefaultExtPropMapper(
             const_cast<SwXMLStylesContext_Impl*>( this )->GetImport() );

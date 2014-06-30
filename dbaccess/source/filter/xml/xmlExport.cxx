@@ -173,7 +173,7 @@ namespace dbaxml
     class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:
-        OSpecialHanldeXMLExportPropertyMapper(const UniReference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
+        OSpecialHanldeXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
         {
         }
         /** this method is called for every item that has the
@@ -1152,7 +1152,7 @@ void ODBExport::exportTables(bool _bExportContext)
 void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 {
     typedef ::std::pair<TPropertyStyleMap*,sal_uInt16> TEnumMapperPair;
-    typedef ::std::pair< UniReference < SvXMLExportPropertyMapper> , TEnumMapperPair> TExportPropMapperPair;
+    typedef ::std::pair< rtl::Reference < SvXMLExportPropertyMapper> , TEnumMapperPair> TExportPropMapperPair;
     Reference<XColumnsSupplier> xSup(_xProp,UNO_QUERY);
     if ( xSup.is() )
     {
@@ -1215,7 +1215,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             {
                 ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
                 ::std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
-                const UniReference < XMLPropertySetMapper >& pStyle = pExportHelper[i].first->getPropertySetMapper();
+                const rtl::Reference < XMLPropertySetMapper >& pStyle = pExportHelper[i].first->getPropertySetMapper();
                 while ( aItr != aEnd )
                 {
                     if ( aItr->mnIndex != -1 )
@@ -1396,7 +1396,7 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
     return aBuffer.makeStringAndClear();
 }
 
-UniReference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper() const
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
@@ -1405,7 +1405,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper
     return m_xTableStylesPropertySetMapper;
 }
 
-UniReference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper() const
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {
@@ -1414,7 +1414,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper(
     return m_xCellStylesPropertySetMapper;
 }
 
-UniReference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMapper() const
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {

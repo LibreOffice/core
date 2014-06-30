@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class SvXMLExportPropertyMapper;
 class SvXMLNamespaceMap;
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace uno
     { template<typename A> class Sequence; }
 } } }
 
-class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
+class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public salhelper::SimpleReferenceObject
 {
     friend class Test;
     friend class SvXMLAutoStylePoolP_Impl;
@@ -79,10 +79,10 @@ public:
     // TODO: Remove this ugly method as soon as possible
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, const OUString& aStrPrefix, bool bAsFamily = true );
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
-                    const UniReference< SvXMLExportPropertyMapper >& rMapper,
+                    const rtl::Reference< SvXMLExportPropertyMapper >& rMapper,
                     const OUString& rStrPrefix, bool bAsFamily = true );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
-                    const UniReference< SvXMLExportPropertyMapper >& rMapper );
+                    const rtl::Reference< SvXMLExportPropertyMapper >& rMapper );
 
     /// Register a name that must not be used as a generated name.
     void RegisterName( sal_Int32 nFamily, const OUString& rName );

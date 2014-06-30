@@ -79,7 +79,7 @@ void XMLTextShapeImportHelper::addShape(
     sal_Int16   nPage = 0;
     sal_Int32   nY = 0;
 
-    UniReference < XMLTextImportHelper > xTxtImport =
+    rtl::Reference < XMLTextImportHelper > xTxtImport =
         rImport.GetTextImport();
     const SvXMLTokenMap& rTokenMap =
         xTxtImport->GetTextFrameAttrTokenMap();

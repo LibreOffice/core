@@ -174,7 +174,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_TABLE_ROW;
         if( nFamily )
         {
-            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
                 pContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
@@ -402,7 +402,7 @@ void XMLTextStyleContext::FillPropertySet(
 
     // imitate XMLPropStyleContext::FillPropertySet(...)
     SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(GetStyles());
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     DBG_ASSERT(xImpPrMap.is(),"Where is the import prop mapper?");
 
     if(xImpPrMap.is())
@@ -444,7 +444,7 @@ void XMLTextStyleContext::FillPropertySet(
 
         // get property set info
         Reference< XPropertySetInfo > xInfo;
-        UniReference< XMLPropertySetMapper > rPropMapper;
+        rtl::Reference< XMLPropertySetMapper > rPropMapper;
         bool bAutomatic = false;
 
         if(pSvXMLStylesContext->IsAutomaticStyle() &&
@@ -545,7 +545,7 @@ void XMLTextStyleContext::FillPropertySet(
                     case CTF_FILLHATCHNAME:
                     case CTF_FILLBITMAPNAME:
                     {
-                        // DrawingLayer FillStyle name´needs to be mapped to DisplayName
+                        // DrawingLayer FillStyle name needs to be mapped to DisplayName
                         rtl::OUString sStyleName;
                         rState.maValue >>= sStyleName;
 

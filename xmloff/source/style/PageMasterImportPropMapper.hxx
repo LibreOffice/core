@@ -33,7 +33,7 @@ protected:
 public:
 
     PageMasterImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
+            const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImp);
     virtual ~PageMasterImportPropertyMapper();
 

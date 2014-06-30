@@ -30,7 +30,8 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/uniref.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class XMLTextListsHelper;
 class SvXMLImportContext;
@@ -365,7 +366,7 @@ enum XMLTextType
 #define XML_TEXT_RENAME_TYPE_FRAME 10
 #define XML_TEXT_RENAME_TYPE_TABLE 20
 
-class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
+class XMLOFF_DLLPUBLIC XMLTextImportHelper : public salhelper::SimpleReferenceObject,
     private boost::noncopyable
 {
 private:
@@ -543,13 +544,13 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet >& rFrmPropSet );
 
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetParaImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetTextImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetSectionImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
+    rtl::Reference< SvXMLImportPropertyMapper > const&
         GetRubyImportPropertySetMapper() const;
 
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);

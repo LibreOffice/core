@@ -26,7 +26,7 @@
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class SvXMLExport;
 
@@ -34,7 +34,7 @@ namespace xmloff
 {
 class AnimationsExporterImpl;
 
-class XMLOFF_DLLPUBLIC AnimationsExporter : public UniRefBase
+class XMLOFF_DLLPUBLIC AnimationsExporter : public salhelper::SimpleReferenceObject
 {
     AnimationsExporterImpl*	mpImpl;
 

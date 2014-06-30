@@ -171,7 +171,7 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 {
 }
 
-XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
         SvXMLExportPropertyMapper( rMapper ),
         msTrue( GetXMLToken( XML_TRUE )),
@@ -499,7 +499,7 @@ void XMLChartExportPropertyMapper::setChartDoc( uno::Reference< chart2::XChartDo
     mxChartDoc = xChartDoc;
 }
 
-XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                                             const SvXMLImport& _rImport ) :
         SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( _rImport )),
         mrImport( const_cast< SvXMLImport & > ( _rImport ))

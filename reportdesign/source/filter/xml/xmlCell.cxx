@@ -164,7 +164,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             {
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
-                UniReference< XMLShapeImportHelper > xShapeImportHelper = rImport.GetShapeImport();
+                rtl::Reference< XMLShapeImportHelper > xShapeImportHelper = rImport.GetShapeImport();
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
                 pContext = xShapeImportHelper->CreateGroupChildContext(rImport,_nPrefix,_rLocalName,xAttrList,xShapes);
                 m_bContainsShape = true;

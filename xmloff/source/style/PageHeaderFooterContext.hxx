@@ -27,7 +27,7 @@ class PageHeaderFooterContext : public SvXMLImportContext
     sal_Int32                               nStartIndex;
     sal_Int32                               nEndIndex;
     bool                                bHeader;
-    const UniReference < SvXMLImportPropertyMapper > rMap;
+    const rtl::Reference < SvXMLImportPropertyMapper > rMap;
 
 public:
 
@@ -36,7 +36,7 @@ public:
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ::std::vector< XMLPropertyState > & rProperties,
-                        const UniReference < SvXMLImportPropertyMapper > &rMap,
+                        const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                         sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                         const bool bHeader);
 

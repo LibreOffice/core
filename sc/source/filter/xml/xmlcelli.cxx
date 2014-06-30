@@ -381,7 +381,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
         return;
 
     // Get the style information from xmloff.
-    UniReference<XMLPropertySetMapper> xMapper = GetImport().GetTextImport()->GetTextImportPropertySetMapper()->getPropertySetMapper();
+    rtl::Reference<XMLPropertySetMapper> xMapper = GetImport().GetTextImport()->GetTextImportPropertySetMapper()->getPropertySetMapper();
     if (!xMapper.is())
         // We can't do anything without the mapper.
         return;

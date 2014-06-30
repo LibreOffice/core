@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlexp.hxx>
 #include "xmlitmap.hxx"
-#include <xmloff/uniref.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vector>
 
@@ -55,7 +54,7 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableItemMap;
     SvXMLItemMapEntriesRef      xTableRowItemMap;
     SvXMLItemMapEntriesRef      xTableCellItemMap;
-    UniReference < XMLPropertySetMapper > xParaPropMapper;
+    rtl::Reference < XMLPropertySetMapper > xParaPropMapper;
 
     bool                    bBlock : 1;         // export text block?
     bool                    bShowProgress : 1;
@@ -130,7 +129,7 @@ public:
     void ExportTable( const SwTableNode& rTblNd );
 
     SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
-    const UniReference < XMLPropertySetMapper >& GetParaPropMapper()
+    const rtl::Reference < XMLPropertySetMapper >& GetParaPropMapper()
     {
         return xParaPropMapper;
     }

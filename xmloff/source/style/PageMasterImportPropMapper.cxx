@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 PageMasterImportPropertyMapper::PageMasterImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImp ) :
     SvXMLImportPropertyMapper( rMapper, rImp ),
     rImport( rImp )

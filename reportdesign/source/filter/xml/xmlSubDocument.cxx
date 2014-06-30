@@ -79,7 +79,7 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
             {
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
-                UniReference< XMLShapeImportHelper > xShapeImportHelper = GetImport().GetShapeImport();
+                rtl::Reference< XMLShapeImportHelper > xShapeImportHelper = GetImport().GetShapeImport();
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
                 pContext = xShapeImportHelper->CreateGroupChildContext(GetImport(),_nPrefix,_rLocalName,xAttrList,xShapes);
                 m_bContainsShape = true;

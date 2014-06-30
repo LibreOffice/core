@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLPRMAP_HXX
 #define INCLUDED_XMLOFF_XMLPRMAP_HXX
 
+#include <rtl/ref.hxx>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -27,7 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vector>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -64,7 +65,7 @@ struct XMLPropertySetMapperEntry_Impl
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertyMapEntry& rMapEntry,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory );
+        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertySetMapperEntry_Impl& rEntry );
@@ -72,10 +73,10 @@ struct XMLPropertySetMapperEntry_Impl
     sal_uInt32 GetPropType() const { return nType & XML_TYPE_PROP_MASK; }
 };
 
-class XMLOFF_DLLPUBLIC XMLPropertySetMapper : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLPropertySetMapper : public salhelper::SimpleReferenceObject
 {
     ::std::vector< XMLPropertySetMapperEntry_Impl > aMapEntries;
-    ::std::vector< UniReference < XMLPropertyHandlerFactory > > aHdlFactories;
+    ::std::vector< rtl::Reference < XMLPropertyHandlerFactory > > aHdlFactories;
     bool mbOnlyExportMappings;
 
 public:
@@ -87,11 +88,11 @@ public:
       */
     XMLPropertySetMapper(
             const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory,
+            const rtl::Reference< XMLPropertyHandlerFactory >& rFactory,
             bool bForExport );
     virtual ~XMLPropertySetMapper();
 
-    void AddMapperEntry( const UniReference < XMLPropertySetMapper >& rMapper );
+    void AddMapperEntry( const rtl::Reference < XMLPropertySetMapper >& rMapper );
 
     /** Return number of entries in input-array */
     sal_Int32   GetEntryCount() const { return aMapEntries.size(); }

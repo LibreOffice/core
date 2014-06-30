@@ -25,7 +25,7 @@
 #include <sal/types.h>
 
 #include <map>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlprhdl.hxx>
 
 /**
@@ -37,7 +37,7 @@
  you have to override the virtual method GetPropertyHandler
  ( see below ).
 */
-class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public salhelper::SimpleReferenceObject
 {
 public:
     virtual ~XMLPropertyHandlerFactory();

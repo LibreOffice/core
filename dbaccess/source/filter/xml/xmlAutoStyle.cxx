@@ -39,7 +39,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if ( nFamily == XML_STYLE_FAMILY_TABLE_COLUMN )
     {
-        UniReference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
+        rtl::Reference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
         for ( ; i != aEnd ; ++i )

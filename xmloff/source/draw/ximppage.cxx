@@ -147,7 +147,7 @@ SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPref
                 uno::Reference< text::XText > xText( mxAnnotation->getTextRange() );
                 if( xText.is() )
                 {
-                    UniReference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                    rtl::Reference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
                     mxCursor = xText->createTextCursor();
                     if( mxCursor.is() )
                         xTxtImport->SetCursor( mxCursor );

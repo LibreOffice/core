@@ -214,7 +214,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
 }
 
 XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLExport& rExport ) :
     SvXMLExportPropertyMapper( rMapper ),
     aBackgroundImageExport( rExport ),
@@ -343,7 +343,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState* pFooterRepeatOffsetX = NULL;
     XMLPropertyState* pFooterRepeatOffsetY = NULL;
 
-    UniReference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
+    rtl::Reference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
     {

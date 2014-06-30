@@ -190,7 +190,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     }
     if( nFamily )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
@@ -211,7 +211,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
 void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
@@ -250,7 +250,7 @@ typedef ::std::set < OUString > PropertyNameSet;
 void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
     SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(&mxStyles);
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     OSL_ENSURE(xImpPrMap.is(), "There is no import prop mapper");
 
     //UUUU need to filter out old fill definitions when the new ones are used. The new
@@ -375,7 +375,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         {
             Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
 
-            UniReference < XMLPropertySetMapper > xPrMap;
+            rtl::Reference < XMLPropertySetMapper > xPrMap;
             if( xImpPrMap.is() )
                 xPrMap = xImpPrMap->getPropertySetMapper();
             if( xPrMap.is() )
@@ -515,7 +515,7 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 {
     if(maProperties.size() && rFillStyleTag.getLength())
     {
-        const UniReference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
         if(rMapper.is())
         {
@@ -563,7 +563,7 @@ bool XMLPropStyleContext::deactivateOldFillStyleDefinitions(
 
     if(!rHashSetOfTags.empty() && maProperties.size())
     {
-        const UniReference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
         if(rMapper.is())
         {
@@ -594,7 +594,7 @@ bool XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
 
     if(maProperties.size())
     {
-        const UniReference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
         if(rMapper.is())
         {

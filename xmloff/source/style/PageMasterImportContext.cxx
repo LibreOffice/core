@@ -85,11 +85,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
          (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
     {
         bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
-            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
             sal_Int32 nFlag;
             if (bHeader)
                 nFlag = CTF_PM_HEADERFLAG;
@@ -126,11 +126,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken(rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
         {
-            const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
             sal_Int32 nEndIndex (-1);
             bool bEnd(false);
             sal_Int32 nIndex = 0;
@@ -193,7 +193,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
     //UUUU do not use XMLPropStyleContext::FillPropertySet, we need to handle this ourselves since
     // we have properties which use the MID_FLAG_NO_PROPERTY_IMPORT flag since they need some special
     // handling
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper(GetFamily());
+    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper(GetFamily());
 
     if(xImpPrMap.is())
     {
@@ -233,7 +233,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
         xImpPrMap->FillPropertySet(GetProperties(), rPropSet, aContextIDs);
 
         // get property set mapper
-        const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
         Reference< XPropertySetInfo > xInfo;
 
         //UUUU handle special attributes which have MID_FLAG_NO_PROPERTY_IMPORT set

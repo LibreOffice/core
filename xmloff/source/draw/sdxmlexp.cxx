@@ -436,10 +436,10 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         mpSdPropHdlFactory->acquire();
 
         // build one ref
-        const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
+        const rtl::Reference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
         // construct PropertySetMapper
-        UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef, true);
+        rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef, true);
 
         // get or create text paragraph export
         GetTextParagraphExport();
@@ -1659,7 +1659,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage
             xPropSet = xPropSet1;
         }
 
-        const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
+        const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
 
         std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
 
@@ -1724,7 +1724,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                 if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
                 {
                     XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
-                    const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
+                    const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
                     OUString aPrefix( xNamed->getName() );
 
@@ -1857,7 +1857,7 @@ void SdXMLExport::_ExportContent()
             if( !sNavigationOrder.isEmpty() )
                 AddAttribute ( XML_NAMESPACE_DRAW, XML_NAV_ORDER, sNavigationOrder );
 
-            UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
+            rtl::Reference< xmloff::AnimationsExporter >  xAnimationsExporter;
             uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
             // prepare animation export
@@ -1878,7 +1878,7 @@ void SdXMLExport::_ExportContent()
                 else
                 {
                     // export old animations for ooo format
-                    UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+                    rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
                     GetShapeExport()->setAnimationsExporter( xAnimExport );
                 }
             }
@@ -1911,7 +1911,7 @@ void SdXMLExport::_ExportContent()
                 else
                 {
                     // animations
-                    UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
+                    rtl::Reference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
                     if( xAnimExport.is() )
                         xAnimExport->exportAnimations( *this );
 
@@ -2291,7 +2291,7 @@ void SdXMLExport::_ExportAutoStyles()
         // prepare animations exporter if impress
         if(IsImpress() && ((getExportFlags() & EXPORT_OASIS) == 0) )
         {
-            UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+            rtl::Reference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
             GetShapeExport()->setAnimationsExporter( xAnimExport );
         }
 
@@ -2355,7 +2355,7 @@ void SdXMLExport::_ExportAutoStyles()
         }
         if(IsImpress())
         {
-            UniReference< XMLAnimationsExporter > xAnimExport;
+            rtl::Reference< XMLAnimationsExporter > xAnimExport;
             GetShapeExport()->setAnimationsExporter( xAnimExport );
         }
     }

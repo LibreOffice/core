@@ -173,7 +173,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
 }
 
 XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper,
+        const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLExport& rExp ) :
     SvXMLExportPropertyMapper( rMapper ),
     rExport( rExp ),

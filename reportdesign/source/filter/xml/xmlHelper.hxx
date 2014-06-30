@@ -56,7 +56,7 @@ namespace rptxml
     class OXMLHelper
     {
     public:
-        static UniReference < XMLPropertySetMapper > GetCellStylePropertyMap(bool _bOldFormat, bool bForExport);
+        static rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMap(bool _bOldFormat, bool bForExport);
 
         static const SvXMLEnumMapEntry* GetReportPrintOptions();
         static const SvXMLEnumMapEntry* GetForceNewPageOptions();

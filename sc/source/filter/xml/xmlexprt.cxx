@@ -1078,7 +1078,7 @@ namespace {
 
 void handleFont(
     std::vector<XMLPropertyState>& rPropStates,
-    const SfxPoolItem* p, const UniReference<XMLPropertySetMapper>& xMapper, const OUString& rXMLName )
+    const SfxPoolItem* p, const rtl::Reference<XMLPropertySetMapper>& xMapper, const OUString& rXMLName )
 {
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
 
@@ -1099,7 +1099,7 @@ void handleFont(
 
 const SvxFieldData* toXMLPropertyStates(
     std::vector<XMLPropertyState>& rPropStates, const std::vector<const SfxPoolItem*>& rSecAttrs,
-    const UniReference<XMLPropertySetMapper>& xMapper, const ScXMLEditAttributeMap& rAttrMap )
+    const rtl::Reference<XMLPropertySetMapper>& xMapper, const ScXMLEditAttributeMap& rAttrMap )
 {
     const SvxFieldData* pField = NULL;
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
@@ -1351,8 +1351,8 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
     if (!ValidTab(nTable))
         return;
 
-    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
-    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
+    rtl::Reference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
+    rtl::Reference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
     const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
 
     sc::EditTextIterator aIter(*pDoc, nTable);
@@ -2420,7 +2420,7 @@ void ScXMLExport::_ExportAutoStyles()
 
             // stored styles for notes
 
-            UniReference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
+            rtl::Reference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
             GetShapeExport(); // make sure the graphics styles family is added
 
             const std::vector<ScNoteStyleEntry>& rNoteEntries = pSheetData->GetNoteStyles();
@@ -2469,7 +2469,7 @@ void ScXMLExport::_ExportAutoStyles()
 
             // note paragraph styles
 
-            UniReference<SvXMLExportPropertyMapper> xParaPropMapper = GetTextParagraphExport()->GetParagraphPropertyMapper();
+            rtl::Reference<SvXMLExportPropertyMapper> xParaPropMapper = GetTextParagraphExport()->GetParagraphPropertyMapper();
 
             const std::vector<ScTextStyleEntry>& rNoteParaEntries = pSheetData->GetNoteParaStyles();
             std::vector<ScTextStyleEntry>::const_iterator aNoteParaIter = rNoteParaEntries.begin();
@@ -2504,7 +2504,7 @@ void ScXMLExport::_ExportAutoStyles()
 
             // note text styles
 
-            UniReference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
+            rtl::Reference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
 
             const std::vector<ScTextStyleEntry>& rNoteTextEntries = pSheetData->GetNoteTextStyles();
             std::vector<ScTextStyleEntry>::const_iterator aNoteTextIter = rNoteTextEntries.begin();
@@ -3145,7 +3145,7 @@ void writeContent(
 
 void flushParagraph(
     ScXMLExport& rExport, const OUString& rParaText,
-    UniReference<XMLPropertySetMapper> xMapper, UniReference<SvXMLAutoStylePoolP> xStylePool,
+    rtl::Reference<XMLPropertySetMapper> xMapper, rtl::Reference<SvXMLAutoStylePoolP> xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
     std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator itEnd )
 {
@@ -3346,8 +3346,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 
 void ScXMLExport::WriteEditCell(const EditTextObject* pText)
 {
-    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
-    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
+    rtl::Reference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
+    rtl::Reference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
     const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
 
     // Get raw paragraph texts first.

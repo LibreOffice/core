@@ -38,7 +38,7 @@
 #include <rtl/ref.hxx>
 
 #include <xmloff/dllapi.h>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 
@@ -61,7 +61,7 @@ struct XMLTableInfo
 
 typedef ::std::map< const ::com::sun::star::uno::Reference< com::sun::star::table::XColumnRowRange >, boost::shared_ptr< XMLTableInfo > > TableInfoMap;
 
-class XMLOFF_DLLPUBLIC XMLTableExport : public UniRefBase
+class XMLOFF_DLLPUBLIC XMLTableExport : public salhelper::SimpleReferenceObject
 {
 public:
     XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper >& xCellExportPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );

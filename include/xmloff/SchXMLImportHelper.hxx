@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/families.hxx>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -61,7 +61,7 @@ class SvXMLImport;
     converts table addresses in XML format to the appropriate application
     format.
  */
-class SchXMLImportHelper : public UniRefBase
+class SchXMLImportHelper : public salhelper::SimpleReferenceObject
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > mxChartDoc;

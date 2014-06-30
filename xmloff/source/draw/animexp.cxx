@@ -225,7 +225,7 @@ class AnimExpImpl
 {
 public:
     list<XMLEffectHint> maEffects;
-    UniReference< XMLShapeExport > mxShapeExp;
+    rtl::Reference< XMLShapeExport > mxShapeExp;
 
     OUString msDimColor;
     OUString msDimHide;

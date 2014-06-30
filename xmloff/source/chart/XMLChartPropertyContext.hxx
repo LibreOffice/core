@@ -32,7 +32,7 @@ public:
                                  ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                              sal_uInt32 nFamily,
                              ::std::vector< XMLPropertyState >& rProps,
-                             const UniReference< SvXMLImportPropertyMapper >& rMapper );
+                             const rtl::Reference< SvXMLImportPropertyMapper >& rMapper );
     virtual ~XMLChartPropertyContext();
 
     using SvXMLPropertySetContext::CreateChildContext;

@@ -22,7 +22,7 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <xmloff/uniref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -41,7 +41,7 @@ class SchXMLExportHelper_Impl;
     the latter case you have to provide a table address mapper if the
     cell addressing set at the document is not in XML format.
  */
-class XMLOFF_DLLPUBLIC SchXMLExportHelper : public UniRefBase
+class XMLOFF_DLLPUBLIC SchXMLExportHelper : public salhelper::SimpleReferenceObject
 {
 public:
     SchXMLExportHelper( SvXMLExport& rExport,

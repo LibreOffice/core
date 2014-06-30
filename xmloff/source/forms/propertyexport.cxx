@@ -423,7 +423,7 @@ namespace xmloff
     void OPropertyExport::flagStyleProperties()
     {
         // flag all the properties which are part of the style as "handled"
-        UniReference< XMLPropertySetMapper > xStylePropertiesSupplier = m_rContext.getStylePropertyMapper()->getPropertySetMapper();
+        rtl::Reference< XMLPropertySetMapper > xStylePropertiesSupplier = m_rContext.getStylePropertyMapper()->getPropertySetMapper();
         for (sal_Int32 i=0; i<xStylePropertiesSupplier->GetEntryCount(); ++i)
             exportedProperty(xStylePropertiesSupplier->GetEntryAPIName(i));
 
