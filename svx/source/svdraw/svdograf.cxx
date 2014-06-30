@@ -61,6 +61,7 @@
 #include <osl/thread.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1334,11 +1335,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     Graphic aGraphic;
 
-                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL;
+                    boost::scoped_ptr<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > pFilterData;
 
                     if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
                     {
-                        pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
+                        pFilterData.reset(new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 ));
 
                         const com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
                         const bool bAllowPartialStreamRead = true;
@@ -1357,7 +1358,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(
                         aGraphic, aUserData, *pStream,
-                        GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData))
+                        GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData.get()))
                     {
                         const OUString aNewUserData( pGraphic->GetUserData() );
 
@@ -1367,7 +1368,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         // Graphic successfully swapped in.
                         pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                     }
-                    delete pFilterData;
+                    pFilterData.reset();
 
                     pStream->ResetError();
                 }
