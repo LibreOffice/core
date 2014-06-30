@@ -146,11 +146,9 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             if(pLocalPool)
             {
                 OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
-                fprintf(stderr, "ANS is %p\n", pLocalPool->GetSecondaryPool());
 #if 0
                 pLocalPool->SetSecondaryPool(&pDrawLayer->GetItemPool());
 #endif
-                fprintf(stderr, "was set to %p\n", pLocalPool->GetSecondaryPool());
             }
         }
 #endif
