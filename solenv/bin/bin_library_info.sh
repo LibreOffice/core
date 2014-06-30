@@ -35,7 +35,7 @@ get_config_sha()
 {
     pushd ${SRCDIR?} > /dev/null
     cat ${BUILDDIR?}/config_host.mk | git hash-object --stdin
-    popd ${SRCDIR?} > /dev/null
+    popd > /dev/null
 }
 
 get_library_gbuild_sha()
@@ -48,7 +48,7 @@ get_library_gbuild_sha()
     else
         git ls-tree -d HEAD | "{module?}" | cut -f 1 | cut -d " " -f 3
     fi
-    popd ${SRCDIR?} > /dev/null
+    popd > /dev/null
 }
 
 
