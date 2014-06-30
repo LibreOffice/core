@@ -209,10 +209,14 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
             break;
         }
     default:
+        delete pUndo;
         throw UnknownPropertyException();
     }
     if( !bOk )
+    {
+        delete pUndo;
         throw IllegalArgumentException();
+    }
 
     if( bChange )
     {

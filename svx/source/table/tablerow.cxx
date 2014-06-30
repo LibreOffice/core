@@ -283,10 +283,14 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
             break;
         }
     default:
+        delete pUndo;
         throw UnknownPropertyException();
     }
     if( !bOk )
+    {
+        delete pUndo;
         throw IllegalArgumentException();
+    }
 
     if( bChange )
     {
