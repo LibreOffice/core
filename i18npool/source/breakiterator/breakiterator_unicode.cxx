@@ -398,7 +398,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
             uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
             aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
                         wBoundary.endPos - wBoundary.startPos), rLocale,
-                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos - nStartPosWordEnd), hOptions.aHyphenationOptions);
+                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos - ((hOptions.hyphenIndex == wBoundary.endPos)? nStartPosWordEnd : 0)), hOptions.aHyphenationOptions);
             if (aHyphenatedWord.is()) {
                 lbr.rHyphenatedWord = aHyphenatedWord;
                 if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
