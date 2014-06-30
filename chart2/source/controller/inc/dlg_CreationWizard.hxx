@@ -39,7 +39,7 @@ class DataSourceTabPage;
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable, private boost::noncopyable
+class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 {
 public:
     CreationWizard( Window* pParent,
