@@ -34,17 +34,12 @@ namespace dbaui
     */
     class OCollectionView : public ModalDialog
     {
-        FixedText       m_aFTCurrentPath;
-        ImageButton     m_aNewFolder;
-        ImageButton     m_aUp;
-        SvtFileView     m_aView;
-        FixedText       m_aFTName;
-        Edit            m_aName;
-        FixedLine       m_aFL;
-        PushButton      m_aPB_OK;
-        CancelButton    m_aPB_CANCEL;
-        HelpButton      m_aPB_HELP;
-        OUString        m_sPath;
+        FixedText*      m_pFTCurrentPath;
+        PushButton*    m_pNewFolder;
+        PushButton*    m_pUp;
+        SvtFileView*    m_pView;
+        Edit*           m_pName;
+        PushButton*     m_pPB_OK;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         Size            m_aDlgSize;

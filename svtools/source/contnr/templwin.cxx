@@ -411,7 +411,7 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     rParent             ( *pParent ),
-    aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_NONE | FILEVIEW_SHOW_ONLYTITLE ),
+    aFileView           ( this, WB_TABSTOP | WB_3DLOOK, FILEVIEW_SHOW_NONE | FILEVIEW_SHOW_ONLYTITLE ),
     bIsTemplateFolder   ( false )
 
 {

@@ -39,4 +39,14 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text [ en-US ] = "The directory $name$ could not be created.";
 };
 
+String STR_ALREADYEXISTOVERWRITE
+{
+    Text [ en-US ] = "The file already exists. Overwrite?" ;
+};
+
+String STR_NEW_FOLDER
+{
+    Text [ en-US ] = "Folder" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

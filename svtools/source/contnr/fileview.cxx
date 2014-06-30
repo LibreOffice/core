@@ -1094,12 +1094,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     return bRet;
 }
 
-
-
-
-
 // class SvtFileView -----------------------------------------------------
-
 SvtFileView::SvtFileView( Window* pParent, WinBits nBits,
                           bool bOnlyFolder, bool bMultiSelection ) :
 
@@ -1125,9 +1120,9 @@ SvtFileView::SvtFileView( Window* pParent, WinBits nBits,
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags ) :
+SvtFileView::SvtFileView( Window* pParent, WinBits nStyle, sal_uInt8 nFlags ) :
 
-    Control( pParent, rResId )
+    Control( pParent, nStyle )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
@@ -1143,14 +1138,32 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-
-
 SvtFileView::~SvtFileView()
 {
     // use temp pointer to prevent access of deleted member (GetFocus())
     SvtFileView_Impl* pTemp = mpImp;
     mpImp = NULL;
     delete pTemp;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtFileView(Window *pParent,
+VclBuilder::stringmap &rMap)
+{
+    WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+
+    return new SvtFileView(pParent, nBits, true, true);
+}
+
+
+
+Size SvtFileView::GetOptimalSize() const
+{
+    return LogicToPixel(Size(208, 50), MAP_APPFONT);
 }
 
 
