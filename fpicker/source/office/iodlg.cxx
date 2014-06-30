@@ -117,8 +117,6 @@ using namespace InternalFilePickerElementIds;
 // the browsebox gets filtered ( in ms).
 #define TRAVELFILTER_TIMEOUT    750
 
-#define WIDTH_ADDITION  15
-
 // functions -------------------------------------------------------------
 
 namespace
