@@ -48,6 +48,7 @@
 #include <edtwin.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentOutlineNodes.hxx>
 #include <unotools.hxx>
 #include <crsskip.hxx>
 #include <cmdid.h>

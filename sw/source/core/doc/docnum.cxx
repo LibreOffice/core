@@ -2305,45 +2305,4 @@ bool SwDoc::IsFirstOfNumRuleAtPos( const SwPosition & rPos )
     return bResult;
 }
 
-// implementation for interface <IDocumentOutlineNodes>
-sal_Int32 SwDoc::getOutlineNodesCount() const
-{
-    return GetNodes().GetOutLineNds().size();
-}
-
-int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
-{
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
-                                GetTxtNode()->GetAttrOutlineLevel()-1;
-}
-
-OUString SwDoc::getOutlineText( const sal_Int32 nIdx,
-                              const bool bWithNumber,
-                              const bool bWithSpacesForLevel,
-                              const bool bWithFtn ) const
-{
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
-                GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
-                                            bWithNumber, bWithSpacesForLevel, bWithFtn );
-}
-
-SwTxtNode* SwDoc::getOutlineNode( const sal_Int32 nIdx ) const
-{
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->GetTxtNode();
-}
-
-void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const
-{
-    orOutlineNodeList.clear();
-    orOutlineNodeList.reserve( getOutlineNodesCount() );
-
-    const sal_uInt16 nOutlCount( static_cast<sal_uInt16>(getOutlineNodesCount()) );
-    for ( sal_uInt16 i = 0; i < nOutlCount; ++i )
-    {
-        orOutlineNodeList.push_back(
-            GetNodes().GetOutLineNds()[i]->GetTxtNode() );
-    }
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

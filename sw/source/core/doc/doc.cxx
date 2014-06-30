@@ -26,6 +26,7 @@
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentListItemsManager.hxx>
 #include <DocumentListsManager.hxx>
+#include <DocumentOutlineNodesManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -326,6 +327,17 @@ IDocumentListsAccess const & SwDoc::getIDocumentListsAccess() const
 IDocumentListsAccess & SwDoc::getIDocumentListsAccess()
 {
     return *m_pDocumentListsManager;
+}
+
+//IDocumentOutlinesNodes
+IDocumentOutlineNodes const & SwDoc::getIDocumentOutlineNodes() const
+{
+    return *m_pDocumentOutlineNodesManager;
+}
+
+IDocumentOutlineNodes & SwDoc::getIDocumentOutlineNodes()
+{
+    return *m_pDocumentOutlineNodesManager;
 }
 
 /* Implementations the next Interface here */

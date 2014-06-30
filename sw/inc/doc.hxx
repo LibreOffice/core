@@ -30,7 +30,6 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentOutlineNodes.hxx>
 #include <IDocumentExternalData.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -193,6 +192,7 @@ class IDocumentTimerAccess;
 class IDocumentLinksAdministration;
 class IDocumentListItems;
 class IDocumentListsAccess;
+class IDocumentOutlineNodes;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -210,6 +210,7 @@ namespace sw {
     class DocumentLinksAdministrationManager;
     class DocumentListItemsManager;
     class DocumentListsManager;
+    class DocumentOutlineNodesManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -255,7 +256,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentStatistics,
     public IDocumentState,
     public IDocumentLayoutAccess,
-    public IDocumentOutlineNodes,
     public IDocumentExternalData
 {
 
@@ -291,6 +291,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
     const ::boost::scoped_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
     const ::boost::scoped_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
+    const ::boost::scoped_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -763,14 +764,8 @@ public:
     IDocumentListItems & getIDocumentListItems();
 
     // IDocumentOutlineNodes
-    virtual sal_Int32 getOutlineNodesCount() const SAL_OVERRIDE;
-    virtual int getOutlineLevel( const sal_Int32 nIdx ) const SAL_OVERRIDE;
-    virtual OUString getOutlineText( const sal_Int32 nIdx,
-                                   const bool bWithNumber,
-                                   const bool bWithSpacesForLevel,
-                                   const bool bWithFtn ) const SAL_OVERRIDE;
-    virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
-    virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
+    IDocumentOutlineNodes const & getIDocumentOutlineNodes() const;
+    IDocumentOutlineNodes & getIDocumentOutlineNodes();
 
     // IDocumentListsAccess
     IDocumentListsAccess const & getIDocumentListsAccess() const;

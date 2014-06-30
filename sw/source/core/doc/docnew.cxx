@@ -95,6 +95,7 @@
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentListItemsManager.hxx>
 #include <DocumentListsManager.hxx>
+#include <DocumentOutlineNodesManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -205,6 +206,7 @@ SwDoc::SwDoc()
     m_pDocumentLinksAdministrationManager( new ::sw::DocumentLinksAdministrationManager( *this ) ),
     m_pDocumentListItemsManager( new ::sw::DocumentListItemsManager() ),
     m_pDocumentListsManager( new ::sw::DocumentListsManager( *this ) ),
+    m_pDocumentOutlineNodesManager( new ::sw::DocumentOutlineNodesManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),

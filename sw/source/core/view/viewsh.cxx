@@ -34,6 +34,7 @@
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentOutlineNodes.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -2545,7 +2546,7 @@ const IDocumentListItems* SwViewShell::getIDocumentListItemsAccess() const
 
 const IDocumentOutlineNodes* SwViewShell::getIDocumentOutlineNodesAccess() const
 {
-    return mpDoc;
+    return &mpDoc->getIDocumentOutlineNodes();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
