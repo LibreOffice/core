@@ -21,6 +21,7 @@ class TableDataBuffer
 {
 public:
     ScTableData& createDataTable(const OUString& rId);
+    ScTableData& getTable(const OUString& rId);
 private:
     std::map<OUString, ScTableData> maTableData;
 };

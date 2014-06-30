@@ -29,6 +29,7 @@
 #include "globstr.hrc"
 #include "subtotalparam.hxx"
 #include "sortparam.hxx"
+#include "tabledata.hxx"
 
 #include <memory>
 
@@ -42,6 +43,33 @@ using ::std::pair;
 bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) const
 {
     return ScGlobal::GetpTransliteration()->compareString(left.GetUpperName(), right.GetUpperName()) < 0;
+}
+
+ScDBData::ScDBData(const OUString& rName, const ScRange& rRange):
+    mpSortParam(new ScSortParam),
+    mpQueryParam(new ScQueryParam),
+    mpSubTotal(new ScSubTotalParam),
+    mpImportParam(new ScImportParam),
+    mpTableData(new ScTableData),
+    aName       (rName),
+    aUpper      (rName),
+    nTable      (rRange.aStart.Tab()),
+    nStartCol   (rRange.aStart.Col()),
+    nStartRow   (rRange.aStart.Row()),
+    nEndCol     (rRange.aEnd.Col()),
+    nEndRow     (rRange.aEnd.Row()),
+    bByRow      (false), // TODO: moggi: fix it
+    bHasHeader  (false), // TODO: moggi: fix it
+    bDoSize     (false),
+    bKeepFmt    (false),
+    bStripData  (false),
+    bIsAdvanced (false),
+    bDBSelection(false),
+    nIndex      (0),
+    bAutoFilter (false),
+    bModified   (false)
+{
+    aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
 
 ScDBData::ScDBData( const OUString& rName,
@@ -401,6 +429,16 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 {
     // the range is ignored.
     mpImportParam.reset(new ScImportParam(rImportParam));
+}
+
+void ScDBData::SetTableData(const ScTableData& rTableData)
+{
+    *mpTableData = rTableData;
+}
+
+void ScDBData::GetTableData(ScTableData& rTableData)
+{
+    rTableData = *mpTableData;
 }
 
 bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const

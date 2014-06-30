@@ -44,6 +44,9 @@
 #include "worksheetsettings.hxx"
 #include "datatablefragment.hxx"
 
+#include "dbdata.hxx"
+#include "document.hxx"
+
 namespace oox {
 namespace xls {
 
@@ -518,6 +521,12 @@ void WorksheetFragment::importDataTable(const AttributeList& rAttribs)
 {
     OUString aId = rAttribs.getXString(R_TOKEN(id), OUString());
     SAL_INFO("sc.oox", aId);
+    ScTableData& rTableData = getTableDataBuffer().getTable(aId);
+    ScDBData* pDBData = new ScDBData(rTableData.maName, rTableData.maRange);
+    pDBData->SetTableData(rTableData);
+    bool bOk = getScDocument().GetDBCollection()->getNamedDBs().insert(pDBData);
+    if(!bOk)
+        delete pDBData;
 }
 
 void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )

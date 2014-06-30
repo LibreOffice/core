@@ -34,6 +34,7 @@ struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
 struct ScImportParam;
+struct ScTableData;
 
 class ScDBData : public ScRefreshTimer
 {
@@ -42,6 +43,7 @@ private:
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
     boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
     boost::scoped_ptr<ScImportParam> mpImportParam;
+    boost::scoped_ptr<ScTableData> mpTableData;
 
     /// DBParam
     const OUString aName;
@@ -79,6 +81,7 @@ public:
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
              bool bByR = true, bool bHasH = true);
+    SC_DLLPUBLIC ScDBData(const OUString& rName, const ScRange& rRange);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     virtual ~ScDBData();
@@ -116,6 +119,8 @@ public:
     SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
     SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
     SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
+    SC_DLLPUBLIC void       SetTableData(const ScTableData& rData);
+    SC_DLLPUBLIC void       GetTableData(ScTableData& rData);
 
     void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);

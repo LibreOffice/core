@@ -19,6 +19,17 @@ ScTableData& TableDataBuffer::createDataTable(const OUString& rId)
     return aData.first->second;
 }
 
+ScTableData& TableDataBuffer::getTable(const OUString& rId)
+{
+    std::map<OUString, ScTableData>::iterator itr =
+        maTableData.find(rId);
+
+    if(itr != maTableData.end())
+        return itr->second;
+
+    throw std::exception();
+}
+
 }
 }
 
