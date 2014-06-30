@@ -390,21 +390,17 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (i->first == "pSegmentInfo")
         {
-            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+            comphelper::SequenceAsVector<drawing::EnhancedCustomShapeSegment> aSegments;
             sal_Int32 nSize = 0;
             sal_Int32 nCount = 0;
             sal_Int32 nCharIndex = 0;
-            sal_Int32 nIndex = 0;
             do
             {
                 sal_Int32 nSeg = i->second.getToken(0, ';', nCharIndex).toInt32();
                 if (!nSize)
                     nSize = nSeg;
                 else if (!nCount)
-                {
                     nCount = nSeg;
-                    aSegments.realloc(nCount);
-                }
                 else
                 {
                     sal_Int32 nPoints = 1;
@@ -414,23 +410,28 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                         nSeg &= 0xFF00;
                     }
 
+                    drawing::EnhancedCustomShapeSegment aSegment;
                     switch (nSeg)
                     {
                     case 0x0001: // lineto
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                        aSegments[nIndex].Count = sal_Int32(1);
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                        aSegment.Count = sal_Int32(1);
+                        aSegments.push_back(aSegment);
                         break;
                     case 0x4000: // moveto
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                        aSegments[nIndex].Count = sal_Int32(1);
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                        aSegment.Count = sal_Int32(1);
+                        aSegments.push_back(aSegment);
                         break;
                     case 0x2000: // curveto
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                        aSegments[nIndex].Count = sal_Int32(nPoints);
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                        aSegment.Count = sal_Int32(nPoints);
+                        aSegments.push_back(aSegment);
                         break;
                     case 0xb300: // arcto
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
-                        aSegments[nIndex].Count = sal_Int32(0);
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                        aSegment.Count = sal_Int32(0);
+                        aSegments.push_back(aSegment);
                         break;
                     case 0xac00:
                     case 0xaa00: // nofill
@@ -438,20 +439,21 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     case 0x6001: // close
                         break;
                     case 0x8000: // end
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-                        aSegments[nIndex].Count = sal_Int32(0);
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                        aSegment.Count = sal_Int32(0);
+                        aSegments.push_back(aSegment);
                         break;
                     default: // given number of lineto elements
-                        aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                        aSegments[nIndex].Count = nSeg;
+                        aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                        aSegment.Count = nSeg;
+                        aSegments.push_back(aSegment);
                         break;
                     }
-                    nIndex++;
                 }
             }
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Segments";
-            aPropertyValue.Value <<= aSegments;
+            aPropertyValue.Value <<= aSegments.getAsConstList();
             aPath.push_back(aPropertyValue);
         }
         else if (i->first == "geoLeft")
