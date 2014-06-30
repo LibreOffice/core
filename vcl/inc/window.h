@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_INC_WINDOW_H
 #define INCLUDED_VCL_INC_WINDOW_H
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <list>
@@ -192,7 +195,7 @@ struct ImplAccessibleInfos
 
 enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputDisabled =2 };
 
-class WindowImpl
+class WindowImpl: private boost::noncopyable
 {
 public:
     WindowImpl( WindowType );
