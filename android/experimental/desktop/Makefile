@@ -23,6 +23,7 @@ BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 copy-stuff-desktop:
 # tango artwork / icons
+	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/$(LIBO_SHARE_FOLDER)/config/images_tango.zip assets/share/config
 # shell / splash images
 	mkdir -p assets/program
