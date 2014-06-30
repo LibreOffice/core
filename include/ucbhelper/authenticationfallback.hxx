@@ -23,6 +23,8 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
+
 
 namespace ucbhelper {
 
@@ -35,10 +37,9 @@ namespace ucbhelper {
   */
 class UCBHELPER_DLLPUBLIC AuthenticationFallbackRequest : public ucbhelper::InteractionRequest
 {
+private:
+    rtl::Reference< ucbhelper::InteractionAuthFallback > m_xAuthFallback; 
 
-    OUString m_Instructions;
-    OUString m_Url;
-    OUString m_Code;
 public:
     /**
       * Constructor.
@@ -48,8 +49,10 @@ public:
       */
     AuthenticationFallbackRequest( const OUString & rInstructions,
                                  const OUString & rURL );
-    void setCode( const OUString & code ) { m_Code = code; }
-    OUString getCode( ) { return m_Code; }
+
+    const rtl::Reference< ucbhelper::InteractionAuthFallback >&
+        getAuthFallbackInter( ) const { return m_xAuthFallback; } 
+
 };
 
 } // namespace ucbhelper
