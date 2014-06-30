@@ -31,6 +31,7 @@ typedef long (*PSTUB)( void*, void* );
     static long LinkStub##Method( void* pThis, void* )
 
 #define DECL_STATIC_LINK( Class, Method, ArgType ) \
+    static long LinkStub##Method( void* pThis, void* ); \
     static long Method( Class*, ArgType )
 
 #define DECL_DLLPRIVATE_LINK(Method, ArgType) \
@@ -38,6 +39,7 @@ typedef long (*PSTUB)( void*, void* );
     SAL_DLLPRIVATE static long LinkStub##Method(void * pThis, void *)
 
 #define DECL_DLLPRIVATE_STATIC_LINK(Class, Method, ArgType) \
+    SAL_DLLPRIVATE static long LinkStub##Method( void* pThis, void* ); \
     SAL_DLLPRIVATE static long Method(Class *, ArgType)
 
 #define IMPL_STUB(Class, Method, ArgType) \
@@ -47,16 +49,30 @@ typedef long (*PSTUB)( void*, void* );
     }
 
 #define IMPL_STATIC_LINK( Class, Method, ArgType, ArgName ) \
+    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    { \
+        return Method( (Class*)pThis, (ArgType)pCaller ); \
+    } \
     long Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
+    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    { \
+        return Method( (Class*)pThis, (ArgType)pCaller ); \
+    } \
     long Class::Method( SAL_UNUSED_PARAMETER Class*, ArgType ArgName )
+
+#define IMPL_STATIC_LINK_NOINSTANCE_NOARG( Class, Method ) \
+    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    { \
+        return Method( (Class*)pThis, pCaller ); \
+    } \
+    long Class::Method( SAL_UNUSED_PARAMETER Class*, SAL_UNUSED_PARAMETER void* )
 
 #define LINK( Inst, Class, Member ) \
     Link( (Class*)Inst, (PSTUB)&Class::LinkStub##Member )
 
-#define STATIC_LINK( Inst, Class, Member ) \
-    Link( (Class*)Inst, (PSTUB)&Class::Member )
+#define STATIC_LINK( Inst, Class, Member ) LINK(Inst, Class, Member)
 
 #define IMPL_LINK( Class, Method, ArgType, ArgName ) \
     IMPL_STUB( Class, Method, ArgType ) \

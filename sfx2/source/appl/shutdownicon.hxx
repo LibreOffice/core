@@ -33,6 +33,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <sfx2/dllapi.h>
+#include <tools/link.hxx>
 
 class ResMgr;
 namespace sfx2
@@ -125,7 +126,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         void                    StartFileDialog();
         sfx2::FileDialogHelper* GetFileDialog() const { return m_pFileDlg; }
-        static long DialogClosedHdl_Impl( ShutdownIcon*, sfx2::FileDialogHelper* );
+        DECL_STATIC_LINK(
+            ShutdownIcon, DialogClosedHdl_Impl, sfx2::FileDialogHelper*);
 
         static bool IsQuickstarterInstalled();
 
