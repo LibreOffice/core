@@ -8,6 +8,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# to avoid flashing windows during tests
+export VCL_HIDE_WINDOWS=1
+
 gb_LICENSE := license.txt
 gb_README = readme_$(1).txt
 
