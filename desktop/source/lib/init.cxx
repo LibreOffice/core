@@ -535,7 +535,7 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 
 static void initialize_uno(const OUString &aAppURL)
 {
-    rtl::Bootstrap::setIniFilename( aAppURL + "/sofficerc" );
+    rtl::Bootstrap::setIniFilename(aAppURL + "/" + LIBO_ETC_FOLDER + "/" + SAL_CONFIGFILE("soffice"));
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     fprintf(stderr, "Uno initialized %d\n", xContext.is());
