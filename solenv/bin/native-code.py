@@ -230,8 +230,13 @@ if options.java:
     extern void Java_org_libreoffice_android_AppSupport_renderVCL();
     p = (void *) Java_org_libreoffice_android_AppSupport_renderVCL;
 
-    extern void Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2();
-    p = (void *) Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2;""")
+    extern void Java_org_libreoffice_kit_LibreOfficeKit_initializeNative();
+    p = (void *) Java_org_libreoffice_kit_LibreOfficeKit_initializeNative;
+
+    extern void Java_org_libreoffice_kit_Office_initialize();
+    p = (void *) Java_org_libreoffice_kit_Office_initialize;
+
+    """)
 
 print ("""
     return map;

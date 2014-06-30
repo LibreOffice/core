@@ -11,12 +11,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.os.Environment;
+import java.io.File;
 
 import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.LayerView;
 
-import org.libreoffice.android.LibreOfficeKit;
+import org.libreoffice.kit.LibreOfficeKit;
+import org.libreoffice.kit.Office;
+import org.libreoffice.kit.Document;
 
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -76,47 +80,29 @@ public class LibreOfficeMainActivity extends Activity {
         try {
             // enable debugging messages as the first thing
             LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
-
             LibreOfficeKit.init(this);
 
-            setContentView(R.layout.activity_main);
+            Log.w(LOGTAG, "LOK Handle:" + handle);
+            Office office = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
 
-            Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
+            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            String input = file.getPath() + "/test.odt";
+            Document document = office.documentLoad(input);
+            if (document == null) {
+                Log.w(LOGTAG, "LOK Document error:" + office.getErrorNative());
+            }
 
-            /*
-            String input = "/assets/test1.odt";
-
-            String[] argv = { "lo-document-loader", input };
-
-            LibreOfficeKit.setCommandArgs(argv);
-
-            Bootstrap.initVCL();
-
-            context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
-
-            Log.i(LOGTAG, "context is" + (context!=null ? " not" : "") + " null");
-
-            mcf = context.getServiceManager();
-
-            Log.i(LOGTAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
-
-            Object desktop = mcf.createInstanceWithContext("com.sun.star.frame.Desktop", context);
-            Log.i(LOGTAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
-
-            componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
-            Log.i(LOGTAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
-            */
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            //finish();
+            finish();
         }
 
         setContentView(R.layout.activity_main);
+        Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
         // setup gecko layout
         mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
         mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
-
 
         if (mLayerController == null) {
             mLayerController = new LayerController(this);

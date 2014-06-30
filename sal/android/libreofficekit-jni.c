@@ -30,47 +30,40 @@
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "LibreOfficeKit", __VA_ARGS__))
 
 /* These are valid / used in all apps. */
-extern const char *data_dir;
-extern const char *cache_dir;
-extern void *apk_file;
+extern const char* data_dir;
+extern const char* cache_dir;
+extern void* apk_file;
 extern int apk_file_size;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
 
-extern LibreOfficeKit *libreofficekit_hook(const char* install_path);
+extern LibreOfficeKit* libreofficekit_hook(const char* install_path);
 
-static LibreOfficeKit* pOffice;
+static LibreOfficeKit* gpOffice;
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
 void
-Java_org_libreoffice_android_LibreOfficeKit_putenv(JNIEnv* env,
-                                              jobject clazz,
-                                              jstring string)
+Java_org_libreoffice_kit_LibreOfficeKit_putenv
+    (JNIEnv* env, jobject clazz, jstring string)
 {
     Java_org_libreoffice_android_Bootstrap_putenv(env, clazz, string);
 }
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_LibreOfficeKit_redirect_1stdio(JNIEnv* env,
-                                                            jobject clazz,
-                                                            jboolean state)
+void Java_org_libreoffice_kit_LibreOfficeKit_redirectStdio
+    (JNIEnv* env, jobject clazz, jboolean state)
 {
     Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
 }
 
 /// Initialize the LibreOfficeKit.
 __attribute__ ((visibility("default")))
-jboolean
-Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2
-    (JNIEnv* env,
-     jobject clazz,
-     jstring dataDir,
-     jstring cacheDir,
-     jstring apkFile)
+jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
+    (JNIEnv* env, jobject clazz,
+     jstring dataDir, jstring cacheDir, jstring apkFile)
 {
     struct stat st;
     int fd;
@@ -131,8 +124,8 @@ Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_
     extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
 
     // Initialize LibreOfficeKit
-    pOffice = libreofficekit_hook(data_dir);
-    if (!pOffice)
+    gpOffice = libreofficekit_hook(data_dir);
+    if (!gpOffice)
     {
         LOGE("libreofficekit_hook returned null");
         return JNI_FALSE;
@@ -141,6 +134,16 @@ Java_org_libreoffice_android_LibreOfficeKit_init__Ljava_lang_String_2Ljava_lang_
     LOGI("LibreOfficeKit successfully initialized");
 
     return JNI_TRUE;
+}
+
+__attribute__ ((visibility("default")))
+jlong Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
+    (JNIEnv* env, jobject clazz)
+{
+    (void) env;
+    (void) clazz;
+
+    return (jlong) (intptr_t) gpOffice;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

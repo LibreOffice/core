@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package org.libreoffice.android;
+package org.libreoffice.kit;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -21,6 +21,8 @@ import java.util.Arrays;
 // final because subclassing would be meaningless.
 public final class LibreOfficeKit
 {
+    private long handle;
+
     // private constructor because instantiating would be meaningless
     private LibreOfficeKit()
     {
@@ -33,88 +35,59 @@ public final class LibreOfficeKit
     // System.loadLibrary() and Android's JNI works only to such libraries, it
     // seems.
 
-    private static native boolean init(String dataDir,
-                                       String cacheDir,
-                                       String apkFile);
+    private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile);
 
-/*
-    // Wrapper for getpid()
-    public static native int getpid();
+    public static native long getLibreOfficeKitHandle();
 
-    // Wrapper for system()
-    public static native void system(String cmdline);
-*/
     // Wrapper for putenv()
     public static native void putenv(String string);
-/*
-    // A wrapper for InitVCL() in libvcl (svmain.cxx), called indirectly
-    // through the lo-bootstrap library
-    public static native void initVCL();
 
-    // A wrapper for osl_setCommandArgs(). Before calling
-    // osl_setCommandArgs(), argv[0] is prefixed with the parent directory of
-    // where the lo-bootstrap library is.
-    public static native void setCommandArgs(String[] argv);
-*/
     // A method that starts a thread to redirect stdout and stderr writes to
     // the Android logging mechanism, or stops the redirection.
-    public static native void redirect_stdio(boolean state);
-/*
-    // The DIB returned by css.awt.XBitmap.getDIB is in BGR_888 form, at least
-    // for Writer documents. We need it in Android's Bitmap.Config.ARGB_888
-    // format, which actually is RGBA_888, whee... At least in Android 4.0.3,
-    // at least on my device. No idea if it is always like that or not, the
-    // documentation sucks.
-    public static native void twiddle_BGR_to_RGBA(byte[] source, int offset, int width, int height, ByteBuffer destination);
+    public static native void redirectStdio(boolean state);
 
-    public static native void force_full_alpha_array(byte[] array, int offset, int length);
-
-    public static native void force_full_alpha_bb(ByteBuffer buffer, int offset, int length);
-
-    public static native long new_byte_buffer_wrapper(ByteBuffer bbuffer);
-
-    public static native void delete_byte_buffer_wrapper(long bbw);
-*/
-
-    static boolean init_done = false;
+    static boolean initializeDone = false;
 
     // This init() method should be called from the upper Java level of
     // LO-based apps.
     public static synchronized void init(Activity activity)
     {
-        if (init_done)
+        if (initializeDone)
             return;
 
         String dataDir = null;
 
-        ApplicationInfo ai = activity.getApplicationInfo();
-        dataDir = ai.dataDir;
+        ApplicationInfo applicationInfo = activity.getApplicationInfo();
+        dataDir = applicationInfo.dataDir;
         Log.i(TAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
 
-        redirect_stdio(true);
+        redirectStdio(true);
 
-        if (!init(dataDir,
-                  activity.getApplication().getCacheDir().getAbsolutePath(),
-                  activity.getApplication().getPackageResourcePath()))
+        String cacheDir = activity.getApplication().getCacheDir().getAbsolutePath();
+        String apkFile = activity.getApplication().getPackageResourcePath();
+
+        if (!initializeNative(dataDir, cacheDir, apkFile)) {
             return;
+        }
 
         // If we notice that a fonts.conf file was extracted, automatically
         // set the FONTCONFIG_FILE env var.
-        InputStream i;
+        InputStream inputStream = null;
         try {
-            i = activity.getAssets().open("unpack/etc/fonts/fonts.conf");
+            inputStream = activity.getAssets().open("unpack/etc/fonts/fonts.conf");
+        } catch (java.io.IOException exception) {
         }
-        catch (java.io.IOException e) {
-            i = null;
-        }
+
         putenv("OOO_DISABLE_RECOVERY=1");
-        if (i != null)
+
+        if (inputStream != null) {
             putenv("FONTCONFIG_FILE=" + dataDir + "/etc/fonts/fonts.conf");
+        }
 
         // TMPDIR is used by osl_getTempDirURL()
         putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
 
-        init_done = true;
+        initializeDone = true;
     }
 
     // Now with static loading we always have all native code in one native
