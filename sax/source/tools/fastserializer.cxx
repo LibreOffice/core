@@ -291,7 +291,7 @@ namespace sax_fastparser {
         if ( maMarkStack.empty() )
             return;
 
-        if ( maMarkStack.size() == 1 )
+        if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
             mxOutputStream->writeBytes( maMarkStack.top()->getData() );
             maMarkStack.pop();
@@ -306,6 +306,8 @@ namespace sax_fastparser {
             case MERGE_MARKS_APPEND:   maMarkStack.top()->append( aMerge );   break;
             case MERGE_MARKS_PREPEND:  maMarkStack.top()->prepend( aMerge );  break;
             case MERGE_MARKS_POSTPONE: maMarkStack.top()->postpone( aMerge ); break;
+            case MERGE_MARKS_IGNORE  :  break;
+
         }
     }
 

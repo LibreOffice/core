@@ -770,6 +770,8 @@ private:
     /// The current table helper
     SwWriteTable *m_pTableWrt;
 
+    sw::Frame* m_pCurrentFrame;
+
     bool m_bParagraphOpened;
     bool m_bParagraphFrameOpen;
     bool m_bIsFirstParagraph;

@@ -329,11 +329,9 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const
             relativeFromV = "page";
             break;
         case text::RelOrientation::FRAME:
-            relativeFromV = "paragraph";
-            break;
         case text::RelOrientation::TEXT_LINE:
         default:
-            relativeFromV = "line";
+            relativeFromV = "text";
             break;
     }
 
@@ -346,19 +344,31 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const
             relativeFromH = "page";
             break;
         case text::RelOrientation::CHAR:
-            relativeFromH = "character";
-            break;
         case text::RelOrientation::PAGE_RIGHT:
-            relativeFromH = "page";
-            break;
         case text::RelOrientation::FRAME:
         default:
-            relativeFromH = "column";
+            relativeFromH = "text";
             break;
+    }
+
+    switch (pFrmFmt->GetSurround().GetValue())
+    {
+    case SURROUND_NONE:
+        attrList->add( FSNS( XML_w, XML_wrap), "none");
+        break;
+    case SURROUND_THROUGHT:
+        attrList->add( FSNS( XML_w, XML_wrap), "through");
+        break;
+    case SURROUND_PARALLEL:
+        attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
+        break;
+    case SURROUND_IDEAL:
+    default:
+        attrList->add( FSNS( XML_w, XML_wrap), "auto");
+        break;
     }
     attrList->add( FSNS( XML_w, XML_vAnchor), relativeFromV);
     attrList->add( FSNS( XML_w, XML_hAnchor), relativeFromH);
-    attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
     attrList->add( FSNS( XML_w, XML_hRule), "exact");
 
     sax_fastparser::XFastAttributeListRef xAttrList(attrList);
@@ -399,7 +409,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks();
-
+    std::vector<  boost::shared_ptr <sw::Frame> > aFramePrTextbox;
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
     ++m_nTextFrameLevel;
@@ -411,12 +421,11 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         {
             m_bParagraphFrameOpen = true;
             sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
-            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-
             const SwFrmFmt& rFrmFmt = aFrame.GetFrmFmt();
 
             if (!TextBoxIsFramePr(rFrmFmt) || m_bWritingHeaderFooter)
             {
+                m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
                 m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
                 m_pSerializer->startElementNS(XML_mc, XML_Choice,
                         XML_Requires, "wps",
@@ -465,17 +474,15 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
                 m_pSerializer->endElementNS(XML_mc, XML_Fallback);
                 m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+                m_pSerializer->endElementNS( XML_w, XML_r );
+                m_bParagraphFrameOpen = false;
             }
             else
             {
-                ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
-                //Reset the table infos after saving.
-                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-                m_rExport.SdrExporter().writeOnlyTextOfFrame(&aFrame);
-                m_rExport.mpTableInfo = pOldTableInfo;
+                ::boost::shared_ptr<sw::Frame>  pFramePr;
+                pFramePr.reset(new sw::Frame(aFrame));
+                aFramePrTextbox.push_back(pFramePr);
             }
-            m_pSerializer->endElementNS( XML_w, XML_r );
-            m_bParagraphFrameOpen = false;
         }
         if (!m_postponedCustomShape->empty())
         {
@@ -515,8 +522,25 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     //sdtcontent is written so Set m_bParagraphHasDrawing to false
     m_rExport.SdrExporter().setParagraphHasDrawing( false );
     m_bRunTextIsOn = false;
-    m_pSerializer->mergeTopMarks();
+    if(aFramePrTextbox.empty())
+        m_pSerializer->mergeTopMarks();
+    else
+        m_pSerializer->mergeTopMarks(sax_fastparser::MERGE_MARKS_IGNORE );
 
+    // Write framePr
+    if(!aFramePrTextbox.empty())
+    {
+            ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+            for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
+            {
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                m_pCurrentFrame = it->get();
+                m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
+                m_pCurrentFrame = NULL;
+            }
+            m_rExport.mpTableInfo = pOldTableInfo;
+            aFramePrTextbox.clear();
+    }
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
 
@@ -818,20 +842,16 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
-    if (!m_bWritingHeaderFooter)
+    if (!m_bWritingHeaderFooter && m_pCurrentFrame)
     {
-        //Check whether we have Frame for paragraph
-        for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
+        const SwFrmFmt& rFrmFmt = m_pCurrentFrame->GetFrmFmt();
+        if (TextBoxIsFramePr(rFrmFmt))
         {
-            sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
-            const SwFrmFmt& rFrmFmt = aFrame.GetFrmFmt();
-            if (TextBoxIsFramePr(rFrmFmt))
-            {
-                const Size aSize = aFrame.GetSize();
-                PopulateFrameProperties(&rFrmFmt, aSize);
-            }
+            const Size aSize = m_pCurrentFrame->GetSize();
+            PopulateFrameProperties(&rFrmFmt, aSize);
         }
     }
+
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
     if ( m_nColBreakStatus == COLBRK_WRITE )
@@ -7756,6 +7776,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
       m_pTableWrt( NULL ),
+      m_pCurrentFrame( NULL ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
       m_bIsFirstParagraph( true ),
