@@ -5339,7 +5339,9 @@ ScVbaRange::Previous() throw (script::BasicErrorException, uno::RuntimeException
 }
 
 uno::Reference< excel::XRange > SAL_CALL
-ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue) throw ( script::BasicErrorException, std::exception )
+ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
+    throw (script::BasicErrorException, uno::RuntimeException,
+           std::exception)
 {
     bool bIsSingleCell = isSingleCellRange();
     bool bIsMultiArea = ( m_Areas->getCount() > 1 );
