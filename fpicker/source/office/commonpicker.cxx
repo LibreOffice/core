@@ -99,12 +99,12 @@ namespace svt
 
     void OCommonPicker::prepareDialog()
     {
-        if ( !getDialog() )
-            createPicker();
-
-        // set the title
-        if ( !m_aTitle.isEmpty() )
-            getDialog()->SetText( m_aTitle );
+        if(createPicker())
+        {
+            // set the title
+            if ( !m_aTitle.isEmpty() )
+                m_pDlg->SetText( m_aTitle );
+        }
     }
 
 
@@ -199,8 +199,6 @@ namespace svt
 
     bool OCommonPicker::createPicker()
     {
-        SolarMutexGuard aGuard;
-
         if ( !m_pDlg )
         {
             m_pDlg = implCreateDialog( VCLUnoHelper::GetWindow( m_xDialogParent ) );
