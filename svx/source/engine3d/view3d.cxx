@@ -938,8 +938,8 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
             }
         }
 
-        // Walk throguh the selection and convert it into 3D, complete with
-        // Convertion to SdrPathObject, also fonts
+        // Walk through the selection and convert it into 3D, complete with
+        // Conversion to SdrPathObject, also fonts
         for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
         {
             SdrMark* pMark = GetSdrMarkByIndex(a);
@@ -1192,7 +1192,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 {
     if(Is3DRotationCreationActive() && GetMarkedObjectCount())
     {
-        // Determine all selected polygons and return rhe mirrored helper overlay
+        // Determine all selected polygons and return the mirrored helper overlay
         mpMirrorOverlay->SetMirrorAxis(aRef1, aRef2);
     }
     else
