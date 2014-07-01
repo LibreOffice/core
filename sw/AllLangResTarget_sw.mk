@@ -89,11 +89,9 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/chrdlg/chrdlg.src \
     sw/source/ui/config/optdlg.src \
     sw/source/ui/config/optload.src \
-    sw/source/ui/dbui/dbtablepreviewdialog.src \
     sw/source/ui/dbui/dbui.src \
     sw/source/ui/dbui/mailmergewizard.src \
     sw/source/ui/dbui/mmaddressblockpage.src \
-    sw/source/ui/dbui/mmgreetingspage.src \
     sw/source/ui/dbui/selectdbtabledialog.src \
     sw/source/ui/dialog/dialog.src \
     sw/source/ui/dochdl/dochdl.src \
