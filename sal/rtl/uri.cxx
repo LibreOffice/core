@@ -41,21 +41,6 @@ std::size_t const nCharClassSize = 128;
 
 sal_Unicode const cEscapePrefix = 0x25; // '%'
 
-inline bool isHighSurrogate(sal_uInt32 nUtf16)
-{
-    return SAL_RTL_IS_HIGH_SURROGATE(nUtf16);
-}
-
-inline bool isLowSurrogate(sal_uInt32 nUtf16)
-{
-    return SAL_RTL_IS_LOW_SURROGATE(nUtf16);
-}
-
-inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
-{
-    return SAL_RTL_COMBINE_SURROGATES(high, low);
-}
-
 inline int getHexWeight(sal_uInt32 nUtf32)
 {
     return nUtf32 >= 0x30 && nUtf32 <= 0x39 ? // '0'--'9'

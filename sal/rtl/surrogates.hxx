@@ -20,24 +20,29 @@
 #ifndef INCLUDED_SAL_RTL_SURROGATES_HXX
 #define INCLUDED_SAL_RTL_SURROGATES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
+
+#include <sal/types.h>
 
 #define SAL_RTL_FIRST_HIGH_SURROGATE 0xD800
 #define SAL_RTL_LAST_HIGH_SURROGATE 0xDBFF
 #define SAL_RTL_FIRST_LOW_SURROGATE 0xDC00
 #define SAL_RTL_LAST_LOW_SURROGATE 0xDFFF
 
-#define SAL_RTL_IS_HIGH_SURROGATE(utf16) \
-    ((utf16) >= SAL_RTL_FIRST_HIGH_SURROGATE && \
-     (utf16) <= SAL_RTL_LAST_HIGH_SURROGATE)
+inline bool isHighSurrogate(sal_uInt32 utf16) {
+    return utf16 >= SAL_RTL_FIRST_HIGH_SURROGATE
+        && utf16 <= SAL_RTL_LAST_HIGH_SURROGATE;
+}
 
-#define SAL_RTL_IS_LOW_SURROGATE(utf16) \
-    ((utf16) >= SAL_RTL_FIRST_LOW_SURROGATE && \
-     (utf16) <= SAL_RTL_LAST_LOW_SURROGATE)
+inline bool isLowSurrogate(sal_uInt32 utf16) {
+    return utf16 >= SAL_RTL_FIRST_LOW_SURROGATE
+        && utf16 <= SAL_RTL_LAST_LOW_SURROGATE;
+}
 
-#define SAL_RTL_COMBINE_SURROGATES(high, low) \
-    ((((high) - SAL_RTL_FIRST_HIGH_SURROGATE) << 10) + \
-     ((low) - SAL_RTL_FIRST_LOW_SURROGATE) + 0x10000)
+inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
+    return ((high - SAL_RTL_FIRST_HIGH_SURROGATE) << 10)
+        + (low - SAL_RTL_FIRST_LOW_SURROGATE) + 0x10000;
+}
 
 #endif
 

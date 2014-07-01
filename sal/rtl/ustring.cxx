@@ -1010,8 +1010,8 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     while (incrementCodePoints < 0) {
         assert(n > 0);
         cu = string->buffer[--n];
-        if (SAL_RTL_IS_LOW_SURROGATE(cu) && n != 0 &&
-            SAL_RTL_IS_HIGH_SURROGATE(string->buffer[n - 1]))
+        if (isLowSurrogate(cu) && n != 0 &&
+            isHighSurrogate(string->buffer[n - 1]))
         {
             --n;
         }
@@ -1019,18 +1019,18 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     }
     assert(n >= 0 && n < string->length);
     cu = string->buffer[n];
-    if (SAL_RTL_IS_HIGH_SURROGATE(cu) && string->length - n >= 2 &&
-        SAL_RTL_IS_LOW_SURROGATE(string->buffer[n + 1]))
+    if (isHighSurrogate(cu) && string->length - n >= 2 &&
+        isLowSurrogate(string->buffer[n + 1]))
     {
-        cp = SAL_RTL_COMBINE_SURROGATES(cu, string->buffer[n + 1]);
+        cp = combineSurrogates(cu, string->buffer[n + 1]);
     } else {
         cp = cu;
     }
     while (incrementCodePoints > 0) {
         assert(n < string->length);
         cu = string->buffer[n++];
-        if (SAL_RTL_IS_HIGH_SURROGATE(cu) && n != string->length &&
-            SAL_RTL_IS_LOW_SURROGATE(string->buffer[n]))
+        if (isHighSurrogate(cu) && n != string->length &&
+            isLowSurrogate(string->buffer[n]))
         {
             ++n;
         }
