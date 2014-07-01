@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_66c1a480",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-07-01T14:39:52Z",
+      "side": 1,
+      "message": "would benefit from std::char_traits\u003c\u003e::length once we can require C++11",
+      "revId": "79201164c2ad80b47df63e250fbe5bdf3599f334",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
