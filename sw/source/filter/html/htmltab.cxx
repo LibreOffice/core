@@ -2843,7 +2843,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
     SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
     const SwStartNode *pStNd;
-    if( pTable && pTable->bFirstCell )
+    if (pTable->bFirstCell)
     {
         pNd->GetTxtNode()->ChgFmtColl( pColl );
         pTable->bFirstCell = false;
