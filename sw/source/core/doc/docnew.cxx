@@ -891,6 +891,13 @@ void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
     m_pDocumentSettingManager->ReplaceCompatibilityOptions(rSource.GetDocumentSettingManager());
 }
 
+#ifdef DBG_UTIL
+#define CNTNT_DOC( doc ) \
+    ((doc)->GetNodes().GetEndOfContent().GetIndex() - (doc)->GetNodes().GetEndOfExtras().GetIndex() - 2)
+#define CNTNT_IDX( idx ) \
+    ((idx).GetNode().GetIndex() - GetNodes().GetEndOfExtras().GetIndex() - 1)
+#endif
+
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
@@ -914,7 +921,14 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
+    SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+#endif
     pRet->Append(*this, 0, NULL, bCallInitNew);
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+#endif
 
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
@@ -944,9 +958,35 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
     else
         aCpyPam = SwPaM( aSourceIdx, aSourceEndIdx );
 
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
+                              << std::dec << " " << aSourceIdx.GetNode().GetIndex() );
+    aSourceIdx++;
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
+                                            << std::dec << " " << aSourceIdx.GetNode().GetIndex() );
+    if ( aSourceIdx.GetNode().GetNodeType() != ND_ENDNODE ) {
+        aSourceIdx++;
+        SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType() << std::dec );
+        aSourceIdx--;
+    }
+    aSourceIdx--;
+    SAL_INFO( "sw.docappend", ".." );
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
+                              << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
+    aSourceEndIdx++;
+    SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
+                              << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
+    aSourceEndIdx--;
+    SAL_INFO( "sw.docappend", "Src-Nd: " << CNTNT_DOC( &rSource ) );
+    SAL_INFO( "sw.docappend", "Nd: " << CNTNT_DOC( this ) );
+#endif
+
     SwWrtShell* pTargetShell = GetDocShell()->GetWrtShell();
     sal_uInt16 nPhysPageNumber = 0;
     if ( pTargetShell ) {
+#ifdef DBG_UTIL
+        SAL_INFO( "sw.docappend", "Has target write shell" );
+#endif
         pTargetShell->StartAllAction();
 
         // Otherwise we have to handle SwDummySectionNodes as first node
@@ -963,7 +1003,13 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
         // We always start on an odd physical page number
         if (1 == nPhysPageNumber % 2)
             nPhysPageNumber++;
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "PPNo " << nPhysPageNumber );
+#endif
     }
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "Nd: " << CNTNT_DOC( this ) );
+#endif
 
     // -1, otherwise aFixupIdx would move to new EOC
     SwNodeIndex aFixupIdx( GetNodes().GetEndOfContent(), -1 );
@@ -972,6 +1018,13 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
     SwNodeIndex aTargetIdx( GetNodes().GetEndOfContent() );
     SwPaM aInsertPam( aTargetIdx );
 
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode( true ).GetIndex() - aCpyPam.GetNode( false ).GetIndex() + 1
+                              << " (0x" << std::hex << (int) aCpyPam.GetNode( false ).GetNodeType() << std::dec
+                              << " " << aCpyPam.GetNode( false ).GetIndex()
+                              << " - 0x" << std::hex << (int) aCpyPam.GetNode( true ).GetNodeType() << std::dec
+                              << " " << aCpyPam.GetNode( true ).GetIndex() << ")" );
+#endif
 
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     this->getIDocumentFieldsAccess().LockExpFlds();
@@ -987,9 +1040,14 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
             SwNodeIndex aIndexBefore(rInsPos.nNode);
 
             aIndexBefore--;
-
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "CopyRange In: " << CNTNT_DOC( this ) );
+#endif
             rSource.getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, true );
             // Note: aCpyPam is invalid now
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "CopyRange Out: " << CNTNT_DOC( this ) );
+#endif
 
             ++aIndexBefore;
             SwPaM aPaM(SwPosition(aIndexBefore),
@@ -1039,8 +1097,18 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                     }
                 }
 
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "Idx Del " << CNTNT_IDX( aDelIdx ) );
+    SAL_INFO( "sw.docappend", "Idx Fix " << CNTNT_IDX( aFixupIdx ) );
+#endif
                 // just update the original instead of overwriting
                 SwFmtPageDesc *aDesc = static_cast< SwFmtPageDesc* >( pNewItem );
+#ifdef DBG_UTIL
+if ( aDesc->GetPageDesc() )
+    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
+else
+    SAL_INFO( "sw.docappend", "PD New" );
+#endif
                 if ( nStartPageNumber )
                     aDesc->SetNumOffset( nStartPageNumber );
                 if ( pTargetPageDesc )
@@ -1051,6 +1119,9 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                     pFmt->SetFmtAttr( *aDesc );
                 delete pNewItem;
 
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "Idx " << CNTNT_IDX( aDelIdx ) );
+#endif
                 iDelNodes++;
             }
 
@@ -1064,6 +1135,11 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                 if ( pTargetShell )
                     pTargetShell->SttEndDoc( false );
                 aDelIdx -= (iDelNodes - 1);
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "iDelNodes: " << iDelNodes
+                              << "  Idx: " << aDelIdx.GetNode().GetIndex()
+                              << "  EOE: " << GetNodes().GetEndOfExtras().GetIndex() );
+#endif
                 GetNodes().Delete( aDelIdx, iDelNodes );
             }
         }
@@ -1076,6 +1152,10 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
             SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
             if (FLY_AT_PAGE != aAnchor.GetAnchorId())
                 continue;
+#ifdef DBG_UTIL
+    SAL_INFO( "sw.docappend", "PaAn: " << aAnchor.GetPageNum()
+                              << " => " << aAnchor.GetPageNum() + nPhysPageNumber );
+#endif
             if ( nPhysPageNumber )
                 aAnchor.SetPageNum( aAnchor.GetPageNum() + nPhysPageNumber );
             this->getIDocumentLayoutAccess().CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
