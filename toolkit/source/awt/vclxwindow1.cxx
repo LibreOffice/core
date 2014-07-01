@@ -70,7 +70,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     }
     if( bThrow )
     {
-        com::sun::star::uno::Exception aException;
+        com::sun::star::uno::RuntimeException aException;
         aException.Message = "incorrect window handle type";
         throw aException;
     }
