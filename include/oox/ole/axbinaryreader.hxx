@@ -131,7 +131,7 @@ public:
     void                skipIntProperty() { if( startNextProperty() ) maInStrm.skipAligned< StreamType >(); }
     /** Skips the next boolean property value in the stream, if the respective
         flag in the property mask is set. */
-    void                skipBoolProperty() { startNextProperty(); }
+    void                skipBoolProperty() { (void)startNextProperty(); }
     /** Skips the next pair property in the stream, if the respective flag in
         the property mask is set. */
     void                skipPairProperty() { readPairProperty( maDummyPairData ); }
