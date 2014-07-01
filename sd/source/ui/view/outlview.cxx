@@ -1033,7 +1033,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
         // we already have a layout with a text but the text
         // object was deleted, create a new one
         pPage->InsertAutoLayoutShape( 0,
-                                      (eNewLayout == AUTOLAYOUT_TITLE) ? PRESOBJ_TEXT : PRESOBJ_OUTLINE,
+                                      PRESOBJ_OUTLINE,
                                       false, pPage->GetLayoutRect(), true );
     }
 
