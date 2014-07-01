@@ -24,6 +24,16 @@
 
 class XColorList;
 
+struct Palette
+{
+    typedef std::pair<Color, OString> NamedColor;
+    typedef std::vector< NamedColor > ColorList;
+    Palette(){};
+    Palette(const OUString &rFname);
+    OString maName;
+    ColorList maColors;
+};
+
 class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
 private:
@@ -39,7 +49,8 @@ public:
     sal_uInt32 getColumnCount() const;
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
-    void addEntriesForColorVector(const std::vector<Color>& rColorVector, sal_uInt32 nStartIndex = 1);
+    void loadColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex = 1);
+    void loadPalette(const Palette& rPalette);
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
