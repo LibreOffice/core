@@ -1042,6 +1042,9 @@ void FastSaxParserImpl::produce( CallbackType aType )
 
 bool FastSaxParserImpl::hasNamespaceURL( const OUString& rPrefix ) const
 {
+    if (maEntities.empty())
+        return false;
+
     const Entity& rEntity = getEntity();
 
     if (rEntity.maNamespaceCount.empty())
