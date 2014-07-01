@@ -496,21 +496,27 @@ sal_Bool SfxLibraryContainer::isModified()
     for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
     {
         OUString aName = pNames[ i ];
-        SfxLibrary* pImplLib = getImplLib( aName );
-        if( pImplLib->isModified() )
+        try
         {
-            if ( aName == "Standard" )
+            SfxLibrary* pImplLib = getImplLib( aName );
+            if( pImplLib->isModified() )
             {
-                // this is a workaround that has to be implemented because
-                // empty standard library should stay marked as modified
-                // but should not be treated as modified while it is empty
-                if ( pImplLib->hasElements() )
+                if ( aName == "Standard" )
+                {
+                    // this is a workaround that has to be implemented because
+                    // empty standard library should stay marked as modified
+                    // but should not be treated as modified while it is empty
+                    if ( pImplLib->hasElements() )
+                        return sal_True;
+                }
+                else
+                {
                     return sal_True;
+                }
             }
-            else
-            {
-                return sal_True;
-            }
+        }
+        catch(const css::container::NoSuchElementException&)
+        {
         }
     }
 
