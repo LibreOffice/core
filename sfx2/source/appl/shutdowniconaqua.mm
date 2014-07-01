@@ -267,7 +267,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
+        aArgsList[1].Value = makeAny( false );
 
         ::rtl::OUString  aFilter( rRecentFile.aFilter );
         sal_Int32 nPos = aFilter.indexOf( '|' );
