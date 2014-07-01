@@ -427,7 +427,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*colu
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
 
     return NULL;
 }
@@ -437,7 +437,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
 
     return NULL;
 }
@@ -593,7 +593,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
     return NULL;
 }
 
@@ -601,20 +601,20 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) t
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
     return NULL;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
     return NULL;
 }
 
@@ -1061,7 +1061,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 
 void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRowUpdate::updateLong", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRowUpdate::updateLong", *this );
 }
 
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException, std::exception)
@@ -1250,7 +1250,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw( SQLException,  Runt
 
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& /*bookmark*/ ) throw( SQLException,  RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRowLocate::hashBookmark", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRowLocate::hashBookmark", *this );
     return 0;
 }
 
@@ -1386,7 +1386,7 @@ bool  OResultSet::isBookmarkable() const
 
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
-    ::dbtools::throwFunctionNotSupportedException( "setFetchDirection", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "setFetchDirection", *this );
 
     OSL_ENSURE(_par0>0,"Illegal fetch direction!");
     if ( _par0 > 0 )

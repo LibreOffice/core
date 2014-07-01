@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
 
 void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setString", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setString", *this );
 }
 
 
@@ -171,98 +171,98 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw
 
 void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBoolean", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBoolean", *this );
 
 }
 
 void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setByte", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setByte", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setDate", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setDate", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setTime", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setTime", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setTimestamp", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setTimestamp", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setDouble", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setDouble", *this );
 }
 
 
 
 void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setFloat", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setFloat", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setInt", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setInt", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setLong", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setLong", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setNull", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setNull", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setClob", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBlob", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setArray", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setRef", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectWithInfo", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setObjectWithInfo", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectNull", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setObjectNull", *this );
 }
 
 
@@ -281,26 +281,26 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
 
 void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setShort", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setShort", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBytes", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBytes", *this );
 }
 
 
 
 void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setCharacterStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setCharacterStream", *this );
 }
 
 
 void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBinaryStream", *this );
 }
 
 

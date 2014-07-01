@@ -575,13 +575,13 @@ sal_Bool SAL_CALL Connection::isReadOnly() throw(SQLException, RuntimeException,
 void SAL_CALL Connection::setCatalog(const OUString& /*catalog*/)
     throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException("setCatalog", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException("setCatalog", *this);
 }
 
 OUString SAL_CALL Connection::getCatalog()
     throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException("getCatalog", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException("getCatalog", *this);
     return OUString();
 }
 

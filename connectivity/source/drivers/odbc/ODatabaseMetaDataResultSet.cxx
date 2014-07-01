@@ -195,13 +195,13 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
     return NULL;
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
@@ -353,33 +353,33 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getArray", *this );
     return NULL;
 }
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getClob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getClob", *this );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getBlob", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBlob", *this );
     return NULL;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getRef", *this );
     return NULL;
 }
 
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getObject", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
     return Any();
 }
 

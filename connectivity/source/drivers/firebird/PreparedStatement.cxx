@@ -324,7 +324,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 /*nIndex*/, sal_Bool /*bV
     throw(SQLException, RuntimeException, std::exception)
 {
     // FIREBIRD3: will need to be implemented.
-    ::dbtools::throwFunctionNotSupportedException("XParameters::setBoolean", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setBoolean", *this);
 }
 
 template <typename T>
@@ -354,7 +354,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
     throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException("XParameters::setByte", *this);
+    ::dbtools::throwFunctionNotSupportedSQLException("XParameters::setByte", *this);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)

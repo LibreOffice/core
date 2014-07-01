@@ -211,7 +211,7 @@ sal_Bool SAL_CALL KabResultSet::getBoolean(sal_Int32) throw(SQLException, Runtim
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getBoolean", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getBoolean", NULL);
 
     return sal_False;
 }
@@ -221,7 +221,7 @@ sal_Int8 SAL_CALL KabResultSet::getByte(sal_Int32) throw(SQLException, RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getByte", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getByte", NULL);
 
     sal_Int8 nRet = 0;
     return nRet;
@@ -232,7 +232,7 @@ sal_Int16 SAL_CALL KabResultSet::getShort(sal_Int32) throw(SQLException, Runtime
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getShort", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getShort", NULL);
 
     sal_Int16 nRet = 0;
     return nRet;
@@ -243,7 +243,7 @@ sal_Int32 SAL_CALL KabResultSet::getInt(sal_Int32) throw(SQLException, RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getInt", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getInt", NULL);
 
     sal_Int32 nRet = 0;
     return nRet;
@@ -254,7 +254,7 @@ sal_Int64 SAL_CALL KabResultSet::getLong(sal_Int32) throw(SQLException, RuntimeE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getLong", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getLong", NULL);
 
     return sal_Int64();
 }
@@ -264,7 +264,7 @@ float SAL_CALL KabResultSet::getFloat(sal_Int32) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getFloat", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getFloat", NULL);
 
     float nVal(0);
     return nVal;
@@ -275,7 +275,7 @@ double SAL_CALL KabResultSet::getDouble(sal_Int32) throw(SQLException, RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getDouble", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getDouble", NULL);
 
     double nRet = 0;
     return nRet;
@@ -286,7 +286,7 @@ Sequence< sal_Int8 > SAL_CALL KabResultSet::getBytes(sal_Int32) throw(SQLExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("", NULL);
 
     return Sequence< sal_Int8 >();
 }
@@ -296,7 +296,7 @@ cssu::Date SAL_CALL KabResultSet::getDate(sal_Int32) throw(SQLException, Runtime
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getDate", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getDate", NULL);
 
     cssu::Date aRet;
     return aRet;
@@ -307,7 +307,7 @@ cssu::Time SAL_CALL KabResultSet::getTime(sal_Int32) throw(SQLException, Runtime
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getTime", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getTime", NULL);
 
     cssu::Time nRet;
     return nRet;
@@ -357,7 +357,7 @@ Reference< XInputStream > SAL_CALL KabResultSet::getBinaryStream(sal_Int32) thro
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getBinaryStream", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getBinaryStream", NULL);
 
     return NULL;
 }
@@ -367,7 +367,7 @@ Reference< XInputStream > SAL_CALL KabResultSet::getCharacterStream(sal_Int32) t
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getCharacterStream", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getCharacterStream", NULL);
 
     return NULL;
 }
@@ -377,7 +377,7 @@ Any SAL_CALL KabResultSet::getObject(sal_Int32, const Reference< ::com::sun::sta
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getObject", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getObject", NULL);
 
     return Any();
 }
@@ -387,7 +387,7 @@ Reference< XRef > SAL_CALL KabResultSet::getRef(sal_Int32) throw(SQLException, R
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getRef", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getRef", NULL);
 
     return NULL;
 }
@@ -397,7 +397,7 @@ Reference< XBlob > SAL_CALL KabResultSet::getBlob(sal_Int32) throw(SQLException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getBlob", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getBlob", NULL);
 
     return NULL;
 }
@@ -407,7 +407,7 @@ Reference< XClob > SAL_CALL KabResultSet::getClob(sal_Int32) throw(SQLException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getClob", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getClob", NULL);
 
     return NULL;
 }
@@ -417,7 +417,7 @@ Reference< XArray > SAL_CALL KabResultSet::getArray(sal_Int32) throw(SQLExceptio
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-::dbtools::throwFunctionNotSupportedException("getArray", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("getArray", NULL);
 
     return NULL;
 }

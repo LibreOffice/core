@@ -205,7 +205,7 @@ void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const 
 
 
 
-::dbtools::throwFunctionNotSupportedException("setObjectNull", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setObjectNull", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException)
@@ -213,7 +213,7 @@ void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLE
 
 
 
-::dbtools::throwFunctionNotSupportedException("setBoolean", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setBoolean", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException)
@@ -221,7 +221,7 @@ void SAL_CALL MacabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLExce
 
 
 
-::dbtools::throwFunctionNotSupportedException("setByte", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setByte", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException)
@@ -229,7 +229,7 @@ void SAL_CALL MacabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLEx
 
 
 
-::dbtools::throwFunctionNotSupportedException("setShort", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setShort", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
@@ -237,7 +237,7 @@ void SAL_CALL MacabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLExce
 
 
 
-::dbtools::throwFunctionNotSupportedException("setInt", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setInt", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException)
@@ -245,7 +245,7 @@ void SAL_CALL MacabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLExc
 
 
 
-::dbtools::throwFunctionNotSupportedException("setLong", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setLong", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setFloat(sal_Int32, float) throw(SQLException, RuntimeException)
@@ -253,7 +253,7 @@ void SAL_CALL MacabPreparedStatement::setFloat(sal_Int32, float) throw(SQLExcept
 
 
 
-::dbtools::throwFunctionNotSupportedException("setFloat", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setFloat", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setDouble(sal_Int32, double) throw(SQLException, RuntimeException)
@@ -261,7 +261,7 @@ void SAL_CALL MacabPreparedStatement::setDouble(sal_Int32, double) throw(SQLExce
 
 
 
-::dbtools::throwFunctionNotSupportedException("setDouble", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setDouble", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x) throw(SQLException, RuntimeException)
@@ -279,7 +279,7 @@ void SAL_CALL MacabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_In
 
 
 
-::dbtools::throwFunctionNotSupportedException("setBytes", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setBytes", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
@@ -287,7 +287,7 @@ void SAL_CALL MacabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLE
 
 
 
-::dbtools::throwFunctionNotSupportedException("setDate", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setDate", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
@@ -295,7 +295,7 @@ void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLE
 
 
 
-::dbtools::throwFunctionNotSupportedException("setTime", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setTime", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
@@ -303,7 +303,7 @@ void SAL_CALL MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) t
 
 
 
-::dbtools::throwFunctionNotSupportedException("setTimestamp", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
@@ -311,7 +311,7 @@ void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference
 
 
 
-::dbtools::throwFunctionNotSupportedException("setBinaryStream", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
@@ -319,7 +319,7 @@ void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Refere
 
 
 
-::dbtools::throwFunctionNotSupportedException("setCharacterStream", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException)
@@ -339,7 +339,7 @@ void SAL_CALL MacabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, s
 
 
 
-::dbtools::throwFunctionNotSupportedException("setObjectWithInfo", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setObjectWithInfo", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&) throw(SQLException, RuntimeException)
@@ -347,7 +347,7 @@ void SAL_CALL MacabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&
 
 
 
-::dbtools::throwFunctionNotSupportedException("setRef", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setRef", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&) throw(SQLException, RuntimeException)
@@ -355,7 +355,7 @@ void SAL_CALL MacabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob 
 
 
 
-::dbtools::throwFunctionNotSupportedException("setBlob", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setBlob", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&) throw(SQLException, RuntimeException)
@@ -363,7 +363,7 @@ void SAL_CALL MacabPreparedStatement::setClob(sal_Int32, const Reference< XClob 
 
 
 
-::dbtools::throwFunctionNotSupportedException("setClob", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setClob", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&) throw(SQLException, RuntimeException)
@@ -371,12 +371,12 @@ void SAL_CALL MacabPreparedStatement::setArray(sal_Int32, const Reference< XArra
 
 
 
-::dbtools::throwFunctionNotSupportedException("setArray", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("setArray", NULL);
 }
 
 void SAL_CALL MacabPreparedStatement::clearParameters() throw(SQLException, RuntimeException)
 {
-::dbtools::throwFunctionNotSupportedException("clearParameters", NULL);
+::dbtools::throwFunctionNotSupportedSQLException("clearParameters", NULL);
 }
 
 void MacabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)

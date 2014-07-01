@@ -642,7 +642,7 @@ void SAL_CALL ODBTableDecorator::release() throw()
 
 void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    throwFunctionNotSupportedException( "XNamed::setName", *this );
+    throwFunctionNotSupportedRuntimeException( "XNamed::setName", *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

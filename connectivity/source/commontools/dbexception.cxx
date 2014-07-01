@@ -384,8 +384,9 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
     );
 }
 
-void throwFunctionNotSupportedException( const OUString& _rFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::com::sun::star::uno::Any& _rNextException ) throw ( ::com::sun::star::sdbc::SQLException )
+void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
+    const css::uno::Reference<css::uno::XInterface>& _rxContext,
+    const css::uno::Any& _rNextException) throw (css::sdbc::SQLException)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -398,6 +399,20 @@ void throwFunctionNotSupportedException( const OUString& _rFunctionName, const :
         getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
         0,
         _rNextException
+    );
+}
+
+void throwFunctionNotSupportedRuntimeException(const OUString& _rFunctionName,
+    const css::uno::Reference<css::uno::XInterface>& _rxContext) throw (css::uno::RuntimeException)
+{
+    ::connectivity::SharedResources aResources;
+    const OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_UNSUPPORTED_FUNCTION,
+            "$functionname$", _rFunctionName
+         ) );
+    throw RuntimeException(
+        sError,
+        _rxContext
     );
 }
 

@@ -2983,17 +2983,17 @@ bool ORowSetClone::isNew( )
 
 void SAL_CALL ORowSetClone::execute(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFunctionNotSupportedException( "RowSetClone::XRowSet::execute", *this );
+    throwFunctionNotSupportedSQLException( "RowSetClone::XRowSet::execute", *this );
 }
 
 void SAL_CALL ORowSetClone::addRowSetListener( const Reference< XRowSetListener >& ) throw(RuntimeException, std::exception)
 {
-    throwFunctionNotSupportedException( "RowSetClone::XRowSet", *this );
+    throwFunctionNotSupportedRuntimeException( "RowSetClone::XRowSet", *this );
 }
 
 void SAL_CALL ORowSetClone::removeRowSetListener( const Reference< XRowSetListener >& ) throw(RuntimeException, std::exception)
 {
-    throwFunctionNotSupportedException( "RowSetClone::XRowSet", *this );
+    throwFunctionNotSupportedRuntimeException( "RowSetClone::XRowSet", *this );
 }
 
 } // dbaccess

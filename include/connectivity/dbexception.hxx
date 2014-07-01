@@ -226,13 +226,18 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
 /** throws an exception with SQL state IM001, saying that a certain function is not supported
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
+OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedSQLException(
         const OUString& _rFunctionName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any& _rNextException = ::com::sun::star::uno::Any()
     )
     throw ( ::com::sun::star::sdbc::SQLException );
 
+OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
+        const OUString& _rFunctionName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+    )
+    throw (css::uno::RuntimeException );
 
 /** throws a function sequence (HY010) exception
 */

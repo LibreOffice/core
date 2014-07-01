@@ -570,13 +570,13 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setArray", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setArray", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setRef", *this );
 }
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
@@ -674,7 +674,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::clearBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::clearBatch", *this );
     //  clearParameters(  );
     //  m_aBatchList.erase();
 }
@@ -682,13 +682,13 @@ void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeExce
 
 void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::addBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::addBatch", *this );
 }
 
 
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::executeBatch", *this );
+    ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::executeBatch", *this );
     // not reached, but keep -Werror happy
     return Sequence< sal_Int32 > ();
 }
