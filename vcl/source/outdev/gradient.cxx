@@ -320,7 +320,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
 
         // Polygon for this color step
         aRect.Top() = (long)( fGradientLine + ((double) i) * fScanInc );
-        aRect.Bottom() = (long)( fGradientLine + ( ((double) i) + 1.0 ) * fScanInc + fScanInc*.1 );
+        aRect.Bottom() = (long)( fGradientLine + ( ((double) i) + 1.0 ) * fScanInc );
         aPoly[0] = aRect.TopLeft();
         aPoly[1] = aRect.TopRight();
         aPoly[2] = aRect.BottomRight();
