@@ -79,7 +79,7 @@ public class LibreOfficeMainActivity extends Activity {
 
         try {
             // enable debugging messages as the first thing
-            LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
+            LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
             LibreOfficeKit.init(this);
 
             Office office = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
