@@ -36,6 +36,7 @@ GL3DBarChart::GL3DBarChart(
     mnStepsTotal(0),
     mnMaxX(0),
     mnMaxY(0),
+    mnDistance(0.0),
     mnCornerId(0),
     mbBlockUserInput(false),
     mbNeedsNewRender(true),
