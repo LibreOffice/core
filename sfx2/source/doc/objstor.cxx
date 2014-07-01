@@ -1387,8 +1387,7 @@ bool SfxObjectShell::SaveTo_Impl
 
     bool bOk = false;
     // TODO/LATER: get rid of bOk
-
-    if( bOwnTarget && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+    if (bOwnTarget && pFilter && !(pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER))
     {
         AddLog( OUString( OSL_LOG_PREFIX "Storing in own format."  ) );
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
