@@ -101,7 +101,7 @@ $(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFas
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)) \
 	| tr -d '\r' | $(GPERF) -c -E -G -I  -LC++ -S1 -t  > $@
 
-$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model) | $(writerfilter_WORK)/.dir
+$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model)) > $@
 
@@ -117,7 +117,7 @@ $(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(writerfilter_SRC)/ooxml/tokens-to-xml.sed | $(writerfilter_WORK)/.dir
+$(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(writerfilter_SRC)/ooxml/tokens-to-xml.sed | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)
 	sed -f $(writerfilter_SRC)/ooxml/tokens-to-xml.sed \
 		< $(SRCDIR)/oox/source/token/tokens.txt > $@
@@ -133,6 +133,6 @@ $(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory
 
 $(call gb_CustomTarget_get_target,writerfilter/source) : $(writerfilter_ALL)
 
-$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc) $(call gb_ExternalExecutable_get_dependencies,python) $(writerfilter_WORK)/.dir
+$(writerfilter_ALL) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc) $(call gb_ExternalExecutable_get_dependencies,python) $(writerfilter_WORK)/ooxml/.dir
 
 # vim: set noet sw=4 ts=4:
