@@ -564,13 +564,14 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 
     static const SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
         SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
-//      in fact the following 2, but writer UI does not provide
-//      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
 
     rNum.SetNumberingType( static_cast< sal_Int16 >(( rAV.nfc < 8 ) ?
                     eNumA[ rAV.nfc ] : SVX_NUM_NUMBER_NONE) );
+
     if ((rAV.aBits1 & 0x4) >> 2)
+    {
         rNum.SetIncludeUpperLevels(nSwLevel + 1);
+    }
     rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
     rNum.SetNumAdjust( eAdjA[ rAV.aBits1 & 0x3] );
 
@@ -3745,7 +3746,10 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             rSI.n81Flags = pj->n81Flags;
             rSI.n81BiDiFlags = pj->n81BiDiFlags;
-            rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
+            if (!rSI.IsWW8BuiltInHeadingStyle())
+            {
+                rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
+            }
             rSI.bParaAutoBefore = pj->bParaAutoBefore;
             rSI.bParaAutoAfter = pj->bParaAutoAfter;
 

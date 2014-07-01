@@ -1645,16 +1645,12 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
         }
 
-        if (rStyleInfo.GetOutlineNumrule() == NULL)
+        if (USHRT_MAX > rStyleInfo.nLFOIndex && WW8ListManager::nMaxLevel
+                                                > rStyleInfo.nListLevel)
         {
-            if (
-                 (USHRT_MAX > rStyleInfo.nLFOIndex) &&
-                 (WW8ListManager::nMaxLevel > rStyleInfo.nListLevel)
-               )
-            {
-                RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
-                    rStyleInfo.nListLevel, false);
-            }
+            const bool bApplyListStyle = false;
+            RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex, rStyleInfo.nListLevel,
+                                    bApplyListStyle);
         }
     }
     return bRes;
@@ -1804,34 +1800,10 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
         if (pRule != NULL || !bSetAttr)
         {
-            //#i24136# old is the same as new, and its the outline numbering,
-            //then we don't set the numrule again, and we just take the num node
-            //(the actual outline numbering gets set in SetOutlineNum)
-            using namespace sw::util;
-            bool bUnchangedOutlineNumbering = false;
-            /*
-             If the node is outline numbered, and the new numbering to apply
-             is the one that was chosen to be the outline numbering then all
-             is unchanged
-            */
-            if (pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule())
+            if (bSetAttr && pTxtNd->GetNumRule() != pRule
+                && pTxtNd->GetNumRule() != rDoc.GetOutlineNumRule())
             {
-                bUnchangedOutlineNumbering = true;
-            }
-            if (!bUnchangedOutlineNumbering)
-            {
-                //If its normal numbering, see if its the same as it already
-                //was, if its not, and we have been asked to set it, then set
-                //it to the new one
-                if (bSetAttr)
-                {
-                    const SwNumRule *pNormal = pTxtNd->GetNumRule();
-                    if (pNormal != pRule)
-                    {
-                        pTxtNd->SetAttr
-                            (SwNumRuleItem(pRule->GetName()));
-                    }
-                }
+                pTxtNd->SetAttr(SwNumRuleItem(pRule->GetName()));
             }
             pTxtNd->SetAttrListLevel(nActLevel);
 
@@ -1844,18 +1816,20 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             // #i99822#
             // Direct application of the list level formatting no longer
             // needed for list levels of mode LABEL_ALIGNMENT
-            bool bApplyListLevelIndentDirectlyAtPara( true );
-            if ( pTxtNd->GetNumRule() && nActLevel < MAXLEVEL )
+            bool bApplyListLevelIndentDirectlyAtPara(true);
             {
-                const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get( nActLevel );
-                if ( rFmt.GetPositionAndSpaceMode() ==
-                                            SvxNumberFormat::LABEL_ALIGNMENT )
+                if (pTxtNd->GetNumRule() && nActLevel < MAXLEVEL)
                 {
-                    bApplyListLevelIndentDirectlyAtPara = false;
+                    const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get(nActLevel);
+                    if (rFmt.GetPositionAndSpaceMode()
+                        == SvxNumberFormat::LABEL_ALIGNMENT)
+                    {
+                        bApplyListLevelIndentDirectlyAtPara = false;
+                    }
                 }
             }
 
-            if ( bApplyListLevelIndentDirectlyAtPara )
+            if (bApplyListLevelIndentDirectlyAtPara)
             {
                 SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                         RES_LR_SPACE);
