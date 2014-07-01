@@ -1834,19 +1834,20 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     if ( !m_pImpl || !m_pImpl->m_pDataSource )
         throw DisposedException();
 
-    Reference< XDatabaseDocumentUI > xUI( lcl_getDatabaseDocumentUI( *m_pImpl->m_pDataSource ) );
-    if ( !xUI.is() )
-    {
-        // no XDatabaseDocumentUI -> just execute the respective command
-        m_bOpenInDesign = _bForEditing;
-        Reference< XComponent > xComponent( onCommandOpenSomething( Any(), true, NULL ), UNO_QUERY );
-        OSL_ENSURE( xComponent.is(), "ODocumentDefinition::impl_openUI_nolck_throw: opening the thingie failed." );
-        return xComponent;
-    }
-
     Reference< XComponent > xComponent;
     try
     {
+        Reference< XDatabaseDocumentUI > xUI( lcl_getDatabaseDocumentUI( *m_pImpl->m_pDataSource ) );
+        if ( !xUI.is() )
+        {
+            // no XDatabaseDocumentUI -> just execute the respective command
+            m_bOpenInDesign = _bForEditing;
+            xComponent = Reference<XComponent>(onCommandOpenSomething(Any(), true, NULL), UNO_QUERY);
+            OSL_ENSURE( xComponent.is(), "ODocumentDefinition::impl_openUI_nolck_throw: opening the thingie failed." );
+            return xComponent;
+        }
+
+
         OUString sName( impl_getHierarchicalName( false ) );
         sal_Int32 nObjectType = m_bForm ? DatabaseObject::FORM : DatabaseObject::REPORT;
         aGuard.clear();
@@ -1861,6 +1862,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
         throw WrappedTargetException(
             OUString(), *this, ::cppu::getCaughtException() );
     }
+
     return xComponent;
 }
 
