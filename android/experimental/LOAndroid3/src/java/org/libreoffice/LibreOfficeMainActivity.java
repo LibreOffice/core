@@ -82,11 +82,11 @@ public class LibreOfficeMainActivity extends Activity {
             LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
             LibreOfficeKit.init(this);
 
-            Log.w(LOGTAG, "LOK Handle:" + handle);
             Office office = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
 
-            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            String input = file.getPath() + "/test.odt";
+            //File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            //String input = file.getPath() + "/test.odt";
+            String input = "/assets/test1.odt";
             Document document = office.documentLoad(input);
             if (document == null) {
                 Log.w(LOGTAG, "LOK Document error:" + office.getErrorNative());
