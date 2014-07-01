@@ -755,11 +755,13 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
             char pBuf[256];
             mnCurrentElement = mpVectorBox->GetValue()-1;
             double fValue;
-            mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
-            sprintf( pBuf, "%g", fValue );
-            OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-            mpNumericEdit->SetText( aValue );
-            mpQuantumRangeBox->SelectEntry( aValue );
+            if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
+            {
+                sprintf( pBuf, "%g", fValue );
+                OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
+                mpNumericEdit->SetText( aValue );
+                mpQuantumRangeBox->SelectEntry( aValue );
+            }
         }
         else if( pEdit == mpTopField )
         {
