@@ -820,6 +820,33 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     rWorkShell.SetLabelDoc( sal_False );
 }
 
+#ifdef DBG_UTIL
+
+#define MAX_DOC_DUMP 3
+
+static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
+                         const char *name, int no = 0 )
+{
+    boost::scoped_ptr< utl::TempFile > aTempFile;
+    String sExt( ".odt" );
+    String basename = OUString::createFromAscii( name );
+    if (no > 0 )
+        basename += OUString::number(no) + "-";
+    aTempFile.reset( new utl::TempFile( basename, true, &sExt ) );
+    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
+    INetURLObject aTempFileURL( aTempFile->GetURL() );
+    SfxMedium* pDstMed = new SfxMedium(
+        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+        STREAM_STD_READWRITE );
+    xTargetDocShell->DoSaveAs( *pDstMed );
+    xTargetDocShell->DoSaveCompleted( pDstMed );
+    if( xTargetDocShell->GetError() )
+        SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile->GetURL() );
+    else
+        SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
+}
+#endif
+
 sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
@@ -913,6 +940,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
+#ifdef DBG_UTIL
+                lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+#endif
                 SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
                 pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
@@ -1023,6 +1053,10 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
                         // copy the source document
                         SfxObjectShellLock xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
+#ifdef DBG_UTIL
+                        if ( nDocNo <= MAX_DOC_DUMP )
+                            lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
 
                         {
                             //create a view frame for the document
@@ -1083,10 +1117,18 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 else
                                     pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
+#ifdef DBG_UTIL
+                                if ( nDocNo <= MAX_DOC_DUMP )
+                                    lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
                                 pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
 
                                 // #i72820# calculate layout to be able to find the correct page index
                                 pTargetShell->CalcLayout();
+#ifdef DBG_UTIL
+                                if ( nDocNo <= MAX_DOC_DUMP )
+                                    lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+#endif
                             }
                             else
                             {
@@ -2648,33 +2690,6 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const OUString& _sDataSource
     return xResultSet;
 }
 
-
-#ifdef DBG_UTIL
-
-#define MAX_DOC_DUMP 3
-
-static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
-                         const char *name, int no = 0 )
-{
-    boost::scoped_ptr< utl::TempFile > aTempFile;
-    String sExt( ".odt" );
-    String basename = OUString::createFromAscii( name );
-    if (no > 0 )
-        basename += OUString::number(no) + "-";
-    aTempFile.reset( new utl::TempFile( basename, true, &sExt ) );
-    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
-    INetURLObject aTempFileURL( aTempFile->GetURL() );
-    SfxMedium* pDstMed = new SfxMedium(
-        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-        STREAM_STD_READWRITE );
-    xTargetDocShell->DoSaveAs( *pDstMed );
-    xTargetDocShell->DoSaveCompleted( pDstMed );
-    if( xTargetDocShell->GetError() )
-        SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile->GetURL() );
-    else
-        SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
-}
-#endif
 
 // merge all data into one resulting document and return the number of merged documents
 sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
