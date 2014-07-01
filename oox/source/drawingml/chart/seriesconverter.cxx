@@ -562,6 +562,10 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             Reference< XDataSequence > xValues = xYValueSeq->getValues();
             if( xValues.is() )
                 nDataPointCount = xValues->getData().getLength();
+
+            if (!nDataPointCount)
+                // No values present.  Don't create a data series.
+                return Reference<XDataSeries>();
         }
         // add X values of scatter and bubble charts
         if( !rTypeInfo.mbCategoryAxis )
