@@ -516,7 +516,7 @@ void XMLTextStyleContext::FillPropertySet(
                 (aContextIDs[1].nIndex == -1) ? makeAny( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
         }
 
-        if(XML_STYLE_FAMILY_TABLE_TABLE == IsDefaultStyle() && GetFamily())
+        if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_TABLE == GetFamily())
         {
             OUString sCollapsingBorders("CollapsingBorders");
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ), "property missing?" );
