@@ -943,7 +943,6 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                     SwPageDesc* pTargetPageDesc, bool bDeletePrevious )
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
-    // this ensures, that we have at least two nodes in the SwPaM.
     // @see IDocumentContentOperations::CopyRange
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 1 );
     SwNodeIndex aSourceEndIdx( rSource.GetNodes().GetEndOfContent(), -1 );
