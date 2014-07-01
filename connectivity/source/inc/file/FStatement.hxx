@@ -113,7 +113,7 @@ namespace connectivity
             // create the analyzer
             virtual OSQLAnalyzer* createAnalyzer();
 
-            void closeResultSet () throw( ::com::sun::star::sdbc::SQLException);
+            void closeResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();

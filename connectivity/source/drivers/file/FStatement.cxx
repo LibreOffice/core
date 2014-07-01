@@ -176,8 +176,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException, std::exception
 {
 }
 
-
-void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OStatement_Base::close() throw (SQLException, RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -186,7 +185,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException, s
     dispose();
 }
 
-void OStatement_Base::closeResultSet () throw (SQLException)
+void OStatement_Base::closeResultSet() throw (SQLException, RuntimeException, std::exception)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
