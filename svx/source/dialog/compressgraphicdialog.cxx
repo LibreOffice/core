@@ -116,34 +116,34 @@ void CompressGraphicsDialog::Update()
     switch(aLinkType)
     {
         case GFX_LINK_TYPE_NATIVE_GIF:
-            aGraphicTypeString = "Gif image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_GIF);
             break;
         case GFX_LINK_TYPE_NATIVE_JPG:
-            aGraphicTypeString = "Jpeg image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_JPEG);
             break;
         case GFX_LINK_TYPE_NATIVE_PNG:
-            aGraphicTypeString = "PNG image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PNG);
             break;
         case GFX_LINK_TYPE_NATIVE_TIF:
-            aGraphicTypeString = "TIFF image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_TIFF);
             break;
         case GFX_LINK_TYPE_NATIVE_WMF:
-            aGraphicTypeString = "WMF image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_WMF);
             break;
         case GFX_LINK_TYPE_NATIVE_MET:
-            aGraphicTypeString = "MET image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
             break;
         case GFX_LINK_TYPE_NATIVE_PCT:
-            aGraphicTypeString = "PCT image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
             break;
         case GFX_LINK_TYPE_NATIVE_SVG:
-            aGraphicTypeString = "SVG image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
             break;
         case GFX_LINK_TYPE_NATIVE_BMP:
-            aGraphicTypeString = "BMP image";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_BMP);
             break;
         default:
-            aGraphicTypeString = "Unknown";
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_UNKNOWN);
             break;
     }
     m_pLabelGraphicType->SetText(aGraphicTypeString);
