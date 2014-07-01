@@ -56,9 +56,9 @@ namespace svt { namespace table
 
     namespace
     {
-        template< class ATTRIBUTE_TYPE >
-        void lcl_set( Reference< XGridColumn > const & i_column, void ( SAL_CALL XGridColumn::*i_setter )( ATTRIBUTE_TYPE ),
-            ATTRIBUTE_TYPE i_value )
+        template< class T1, class T2 >
+        void lcl_set( Reference< XGridColumn > const & i_column, void ( SAL_CALL XGridColumn::*i_setter )( T1 ),
+            T2 i_value )
         {
             try
             {
@@ -334,7 +334,7 @@ namespace svt { namespace table
     void UnoGridColumnFacade::setResizable( bool i_resizable )
     {
         ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setResizeable, sal_Bool( i_resizable ) );
+        lcl_set( m_xGridColumn, &XGridColumn::setResizeable, i_resizable );
     }
 
 

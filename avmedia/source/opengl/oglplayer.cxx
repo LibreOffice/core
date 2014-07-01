@@ -205,7 +205,7 @@ sal_Bool SAL_CALL OGLPlayer::isPlaybackLoop() throw ( uno::RuntimeException, std
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    return (sal_Bool)gltf_animation_get_looping(m_pHandle);
+    return gltf_animation_get_looping(m_pHandle) != 0;
 }
 
 void SAL_CALL OGLPlayer::setVolumeDB( sal_Int16 /*nVolumDB*/ ) throw ( uno::RuntimeException, std::exception )

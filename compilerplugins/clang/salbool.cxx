@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <set>
 #include <string>
 
@@ -106,7 +107,10 @@ class SalBool:
     public RecursiveASTVisitor<SalBool>, public loplugin::RewritePlugin
 {
 public:
-    explicit SalBool(InstantiationData const & data): RewritePlugin(data) {}
+    explicit SalBool(InstantiationData const & data):
+        RewritePlugin(data),
+        fullMode_(std::getenv("loplugin:salbool") != nullptr)
+    {}
 
     virtual void run() override;
 
@@ -139,6 +143,7 @@ private:
 
     bool rewrite(SourceLocation location);
 
+    bool fullMode_;
     std::set<VarDecl const *> varDecls_;
 };
 
@@ -178,7 +183,7 @@ void SalBool::run() {
                     }
                 }
             }
-            if (!rewrite(loc)) {
+            if (fullMode_ && !rewrite(loc)) {
                 report(
                     DiagnosticsEngine::Warning,
                     "VarDecl, use \"bool\" instead of \"sal_Bool\"", loc)
@@ -322,13 +327,15 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                     // with a "mismatch" error before the rewriter had a chance
                     // to act upon the definition (but use the heuristic of
                     // assuming pure virtual functions do not have definitions):
-                    if (!((isInMainFile(
-                               compiler.getSourceManager().getSpellingLoc(
-                                   dyn_cast<FunctionDecl>(
-                                       decl->getDeclContext())
-                                   ->getNameInfo().getLoc()))
-                           || f->isDefined() || f->isPure())
-                          && rewrite(loc)))
+                    if (fullMode_
+                        && !((compat::isInMainFile(
+                                  compiler.getSourceManager(),
+                                  compiler.getSourceManager().getSpellingLoc(
+                                      dyn_cast<FunctionDecl>(
+                                          decl->getDeclContext())
+                                      ->getNameInfo().getLoc()))
+                              || f->isDefined() || f->isPure())
+                             && rewrite(loc)))
                     {
                         report(
                             DiagnosticsEngine::Warning,
@@ -409,7 +416,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
                     }
                 }
             }
-            if (!rewrite(loc)) {
+            if (fullMode_ && !rewrite(loc)) {
                 report(
                     DiagnosticsEngine::Warning,
                     "FieldDecl, use \"bool\" instead of \"sal_Bool\"", loc)
@@ -467,11 +474,13 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             // rewriter had a chance to act upon the definition (but use the
             // heuristic of assuming pure virtual functions do not have
             // definitions):
-            if (!((isInMainFile(
-                       compiler.getSourceManager().getSpellingLoc(
-                           decl->getNameInfo().getLoc()))
-                   || f->isDefined() || f->isPure())
-                  && rewrite(loc)))
+            if (fullMode_
+                && !((compat::isInMainFile(
+                          compiler.getSourceManager(),
+                          compiler.getSourceManager().getSpellingLoc(
+                              decl->getNameInfo().getLoc()))
+                      || f->isDefined() || f->isPure())
+                     && rewrite(loc)))
             {
                 report(
                     DiagnosticsEngine::Warning,
@@ -487,7 +496,9 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (isSalBool(decl->getType()) && !rewrite(decl->getLocStart())) {
+    if (fullMode_ && isSalBool(decl->getType())
+        && !rewrite(decl->getLocStart()))
+    {
         report(
             DiagnosticsEngine::Warning,
             "ValueDecl, use \"bool\" instead of \"sal_Bool\"",
@@ -498,7 +509,7 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
-    return compat::isInMainFile(spellingLocation)
+    return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
         && (compiler.getSourceManager().getFilename(spellingLocation)
             == SRCDIR "/cppu/qa/test_any.cxx");
 }

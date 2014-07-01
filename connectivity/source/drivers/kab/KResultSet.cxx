@@ -968,7 +968,7 @@ void KabResultSet::getFastPropertyValue(
     switch (nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
-            _rValue <<= (sal_Bool)sal_False;
+            _rValue <<= false;
             break;
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:

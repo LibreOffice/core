@@ -152,9 +152,9 @@ void SvxPageWindow::Paint(const Rectangle&)
     else
     {
         // Left and right page are different -> draw two pages if possible
-        DrawPage(Point(0,nYPos),false,(sal_Bool)(eUsage & SVX_PAGE_LEFT));
+        DrawPage(Point(0,nYPos),false,(eUsage & SVX_PAGE_LEFT) != 0);
         DrawPage(Point(aSize.Width() + aSize.Width() / 8,nYPos),true,
-            (sal_Bool)(eUsage & SVX_PAGE_RIGHT));
+            (eUsage & SVX_PAGE_RIGHT) != 0);
     }
 }
 
