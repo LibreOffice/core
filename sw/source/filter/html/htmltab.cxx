@@ -2795,7 +2795,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     SwTxtFmtColl *pColl = pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TABLE );
 
     const SwStartNode *pStNd;
-    if( pTable && pTable->bFirstCell )
+    if (pTable->bFirstCell )
     {
         SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
         pNd->GetTxtNode()->ChgFmtColl( pColl );
