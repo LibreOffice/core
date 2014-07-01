@@ -3527,7 +3527,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     {
                         const SvxSetItem* pSetItem = 0;
 
-                        if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
+                        if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, (const SfxPoolItem**)&pSetItem))
                         {
                             // create a new SvxSetItem and get it's ItemSet as new target
                             SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
@@ -3727,7 +3727,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         const SfxItemSet& rSet = xStyle->GetItemSet();
                         const SvxSetItem* pSetItem;
 
-                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
+                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, (const SfxPoolItem**)&pSetItem))
                         {
                             // get from SfxItemSet of the corresponding SfxSetItem
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
@@ -3799,7 +3799,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
                         const SvxSetItem* pSetItem;
-                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
+                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, (const SfxPoolItem**)&pSetItem))
                         {
                             // set at SfxItemSet of the corresponding SfxSetItem
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
