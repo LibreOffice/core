@@ -1925,6 +1925,16 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 
     sCmp = sCmp.toAsciiLowerCase();
 
+    sal_Char c;
+    sal_Int32 nPos;
+    for (nPos = 0; nPos < sCmp.getLength(); ++nPos)
+    {
+        c = sCmp[nPos];
+        if (c != ' ' && c != '\n' && c != '\t' && c != '\r' && c != '\f')
+            break;
+    }
+    sCmp = sCmp.copy(nPos);
+
     // A HTML document must have a '<' in the first line
     sal_Int32 nStart = sCmp.indexOf('<');
     if (nStart == -1)
@@ -1932,8 +1942,6 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     nStart++;
 
     // followed by arbitrary characters followed by a blank or '>'
-    sal_Char c;
-    sal_Int32 nPos;
     for( nPos = nStart; nPos < sCmp.getLength(); ++nPos )
     {
         if( '>'==(c=sCmp[nPos]) || HTML_ISSPACE(c) )
