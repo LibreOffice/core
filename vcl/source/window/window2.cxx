@@ -1428,6 +1428,8 @@ void Window::queue_resize()
     bool bSomeoneCares = queue_ungrouped_resize(this);
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnOptimalWidthCache = -1;
+    pWindowImpl->mnOptimalHeightCache = -1;
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
         std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
@@ -1689,26 +1691,31 @@ void Window::set_width_request(sal_Int32 nWidthRequest)
     }
 }
 
-namespace
+Size Window::get_ungrouped_preferred_size() const
 {
-    Size get_ungrouped_preferred_size(const Window &rWindow)
+    Size aRet(get_width_request(), get_height_request());
+    if (aRet.Width() == -1 || aRet.Height() == -1)
     {
-        Size aRet(rWindow.get_width_request(), rWindow.get_height_request());
-        if (aRet.Width() == -1 || aRet.Height() == -1)
+        //cache gets blown away by queue_resize
+        WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+        if (pWindowImpl->mnOptimalWidthCache == -1 || pWindowImpl->mnOptimalHeightCache == -1)
         {
-            Size aOptimal = rWindow.GetOptimalSize();
-            if (aRet.Width() == -1)
-                aRet.Width() = aOptimal.Width();
-            if (aRet.Height() == -1)
-                aRet.Height() = aOptimal.Height();
+            Size aOptimal(GetOptimalSize());
+            pWindowImpl->mnOptimalWidthCache = aOptimal.Width();
+            pWindowImpl->mnOptimalHeightCache = aOptimal.Height();
         }
-        return aRet;
+
+        if (aRet.Width() == -1)
+            aRet.Width() = pWindowImpl->mnOptimalWidthCache;
+        if (aRet.Height() == -1)
+            aRet.Height() = pWindowImpl->mnOptimalHeightCache;
     }
+    return aRet;
 }
 
 Size Window::get_preferred_size() const
 {
-    Size aRet(get_ungrouped_preferred_size(*this));
+    Size aRet(get_ungrouped_preferred_size());
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     if (pWindowImpl->m_xSizeGroup)
@@ -1726,7 +1733,7 @@ Size Window::get_preferred_size() const
                     continue;
                 if (bIgnoreInHidden && !pOther->IsVisible())
                     continue;
-                Size aOtherSize = get_ungrouped_preferred_size(*pOther);
+                Size aOtherSize = pOther->get_ungrouped_preferred_size();
                 if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_HORIZONTAL)
                     aRet.Width() = std::max(aRet.Width(), aOtherSize.Width());
                 if (eMode == VCL_SIZE_GROUP_BOTH || eMode == VCL_SIZE_GROUP_VERTICAL)

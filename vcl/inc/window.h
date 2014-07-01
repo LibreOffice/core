@@ -242,6 +242,8 @@ public:
     sal_Int32           mnBottomBorder;
     sal_Int32           mnWidthRequest;
     sal_Int32           mnHeightRequest;
+    sal_Int32           mnOptimalWidthCache;
+    sal_Int32           mnOptimalHeightCache;
     long                mnX;
     long                mnY;
     long                mnAbsScreenX;

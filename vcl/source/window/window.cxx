@@ -608,6 +608,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mnBottomBorder                      = 0;                         // bottom border
     mnWidthRequest                      = -1;                        // width request
     mnHeightRequest                     = -1;                        // height request
+    mnOptimalWidthCache                 = -1;                        // optimal width cache
+    mnOptimalHeightCache                = -1;                        // optimal height cache
     mnX                                 = 0;                         // X-Position to Parent
     mnY                                 = 0;                         // Y-Position to Parent
     mnAbsScreenX                        = 0;                         // absolute X-position on screen, used for RTL window positioning

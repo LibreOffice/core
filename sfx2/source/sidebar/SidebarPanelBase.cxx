@@ -218,7 +218,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
         if (isLayoutEnabled(mpControl))
         {
             // widget layout-based sidebar
-            Size aSize(mpControl->GetOptimalSize());
+            Size aSize(mpControl->get_preferred_size());
             return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
         }
         else if (pLayoutableWindow != NULL)
@@ -238,7 +238,7 @@ sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(cssu::RuntimeExcep
     if (isLayoutEnabled(mpControl))
     {
         // widget layout-based sidebar
-        Size aSize(mpControl->GetOptimalSize());
+        Size aSize(mpControl->get_preferred_size());
         return aSize.Width();
     }
     return 0;

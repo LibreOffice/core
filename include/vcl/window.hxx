@@ -1127,6 +1127,19 @@ protected:
     virtual sal_uInt16                  getDefaultAccessibleRole() const;
     virtual OUString                    getDefaultAccessibleName() const;
 
+    /*
+     * Advisory Sizing - what is a good size for this widget
+     *
+     * Retrieves the preferred size of a widget ignoring
+     * "width-request" and "height-request" properties.
+     *
+     * Implement this in sub-classes to tell layout
+     * the preferred widget size.
+     *
+     * Use get_preferred_size to retrieve this value
+     * mediated via height and width requests
+     */
+    virtual Size GetOptimalSize() const;
 private:
 
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;
@@ -1137,6 +1150,20 @@ private:
     SAL_DLLPRIVATE void                 ImplRevokeAccessibleNativeFrame();
     ///@}
 
+    /*
+     * Retrieves the preferred size of a widget taking
+     * into account the "width-request" and "height-request" properties.
+     *
+     * Overrides the result of GetOptimalSize to honor the
+     * width-request and height-request properties.
+     *
+     * So the same as get_ungrouped_preferred_size except
+     * it ignores groups. A building block of get_preferred_size
+     * that access the size cache
+     *
+     * @see get_preferred_size
+     */
+    Size get_ungrouped_preferred_size() const;
 public:
     /// request XCanvas render interface for this window
     ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
@@ -1166,17 +1193,6 @@ public:
     // Clipboard/Selection interfaces
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
-
-    /*
-     * Advisory Sizing - what is a good size for this widget
-     *
-     * Retrieves the preferred size of a widget ignoring
-     * "width-request" and "height-request" properties.
-     *
-     * Implement this in sub-classes to tell layout
-     * the preferred widget size.
-     */
-    virtual Size GetOptimalSize() const;
 
     /*
      * Widgets call this to inform their owner container that the widget wants

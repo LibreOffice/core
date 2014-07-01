@@ -2167,7 +2167,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             case WINDOW_SCROLLBARBOX:
                 return VCLXScrollBar::implGetMinimumSize( GetWindow() );
             default:
-                aSz = GetWindow()->GetOptimalSize();
+                aSz = GetWindow()->get_preferred_size();
         }
     }
 
