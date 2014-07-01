@@ -590,7 +590,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
     {
         // Use only the necessary items for border and background
         const sal_uInt16 nOuter(GetWhich(SID_ATTR_BORDER_OUTER));
-        const sal_uInt16 nInner(GetWhich(SID_ATTR_BORDER_INNER, sal_False));
+        const sal_uInt16 nInner(GetWhich(SID_ATTR_BORDER_INNER, false));
         const sal_uInt16 nShadow(GetWhich(SID_ATTR_BORDER_SHADOW));
 
         if(mbEnableDrawingLayerFillStyles)
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
         const SfxPoolItem* pItem;
 
-        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), sal_False, &pItem))
+        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
             // SID_ATTR_PAGE_FOOTERSET exists, use it's content
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             }
         }
 
-        if(SFX_ITEM_SET == GetItemSet().GetItemState(nInner, sal_False, &pItem))
+        if(SFX_ITEM_SET == GetItemSet().GetItemState(nInner, false, &pItem))
         {
             // The set InfoItem is always required
             pBBSet->Put(*pItem);
@@ -781,7 +781,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
     {
-        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
@@ -825,7 +825,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
     {
-        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 

@@ -143,17 +143,17 @@ void SvxPageWindow::Paint(const Rectangle&)
             aSz = PixelToLogic(GetSizePixel());
             nYPos = (aSz.Height() - aSize.Height()) / 2;
             long nXPos = (aSz.Width() - aSize.Width()) / 2;
-            DrawPage(Point(nXPos,nYPos),sal_True,sal_True);
+            DrawPage(Point(nXPos,nYPos),true,true);
         }
         else
             // Portrait
-            DrawPage(Point((aSz.Width() - aSize.Width()) / 2,nYPos),sal_True,sal_True);
+            DrawPage(Point((aSz.Width() - aSize.Width()) / 2,nYPos),true,true);
     }
     else
     {
         // Left and right page are different -> draw two pages if possible
-        DrawPage(Point(0,nYPos),sal_False,(sal_Bool)(eUsage & SVX_PAGE_LEFT));
-        DrawPage(Point(aSize.Width() + aSize.Width() / 8,nYPos),sal_True,
+        DrawPage(Point(0,nYPos),false,(sal_Bool)(eUsage & SVX_PAGE_LEFT));
+        DrawPage(Point(aSize.Width() + aSize.Width() / 8,nYPos),true,
             (sal_Bool)(eUsage & SVX_PAGE_RIGHT));
     }
 }
