@@ -469,7 +469,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 
     SAL_INFO("vcl.ct",
             "SetFont"
-            << " to "     << mpFontData->GetFamilyName()
+               " to "     << mpFontData->GetFamilyName()
             << ", "       << mpFontData->GetStyleName()
             << " fontid=" << mpFontData->GetFontId()
             << " for "    << pReqFont->GetFamilyName()

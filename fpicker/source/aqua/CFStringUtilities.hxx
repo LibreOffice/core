@@ -141,41 +141,41 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname) {
 }
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const char* retVal) {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << retVal);
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = " << retVal);
 }
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, int retVal) {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << retVal);
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = " << retVal);
 }
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef retVal)
 {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = ");
     CFShow(retVal);
 }
 #else
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef /* retVal */)
 {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = ");
 }
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* retVal)
 {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = ");
     NSLog(const_cast<NSString*>(retVal));
 }
 #else
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* /* retVal */ )
 {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = ");
 }
 #endif
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const OUString& retVal) {
-    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER "returnValue = " << OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 #endif // INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
