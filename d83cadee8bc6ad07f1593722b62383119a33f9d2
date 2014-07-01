@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_c6563806",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-01T10:15:32Z",
+      "side": 1,
+      "message": "we should not crash here, but isn\u0027t this an error that has to be reported (with a silly \"general error\" dialog, of course...)\n\nperhaps a SAL_INFO could be useful here on master?",
+      "revId": "d83cadee8bc6ad07f1593722b62383119a33f9d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
