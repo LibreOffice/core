@@ -284,15 +284,15 @@ int gz_flush(gz_stream * file, int flush)
 */
 local uLong getLong(gz_stream * s)
 {
-    uLong x = (uLong) get_byte(s);
-    int c;
+    uLong x = (unsigned char) get_byte(s);
 
-    x += ((uLong) get_byte(s)) << 8;
-    x += ((uLong) get_byte(s)) << 16;
-    c = get_byte(s);
-    if (c == EOF)
+    x += ((unsigned char) get_byte(s)) << 8;
+    x += ((unsigned char) get_byte(s)) << 16;
+    x += ((unsigned char) get_byte(s)) << 24;
+    if (s->z_eof)
+    {
         s->z_err = Z_DATA_ERROR;
-    x += ((uLong) c) << 24;
+    }
     return x;
 }
 
