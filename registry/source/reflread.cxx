@@ -743,7 +743,7 @@ public:
 
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfReferenceEntries;
-    sal_uInt16      m_REFERENCE_ENTRY_SIZE;
+    size_t          m_REFERENCE_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
