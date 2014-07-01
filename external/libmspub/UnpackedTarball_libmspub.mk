@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libmspub))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libmspub,$(MSPUB_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
+	external/libmspub/0001-fdo-80661-clash-with-a-global-symbol-from-libreoffic.patch \
+))
+
 # vim: set noet sw=4 ts=4:

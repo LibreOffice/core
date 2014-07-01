@@ -1,0 +1,38 @@
+From aedff4411981ed73bdd077ebad66abdf03a172df Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Tue, 1 Jul 2014 10:10:01 +0200
+Subject: [PATCH] fdo#80661 clash with a global symbol from libreoffice
+
+Change-Id: I7d556a5a207b055342a0b369cc0cb800b60014df
+(cherry picked from commit 50e45a89147807dadb301cc7b6ba934806ae269a)
+Signed-off-by: David Tardon <dtardon@redhat.com>
+---
+ src/lib/PolygonUtils.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/lib/PolygonUtils.cpp b/src/lib/PolygonUtils.cpp
+index bd79064..54f800a 100644
+--- a/src/lib/PolygonUtils.cpp
++++ b/src/lib/PolygonUtils.cpp
+@@ -5715,6 +5715,9 @@ Coordinate libmspub::CustomShape::getTextRectangle(double x, double y, double wi
+   return Coordinate(startX, startY, endX, endY);
+ }
+ 
++namespace
++{
++
+ struct LineInfo
+ {
+   WPXPropertyListVector m_vertices;
+@@ -5736,6 +5739,8 @@ struct LineInfo
+ private:
+ };
+ 
++}
++
+ void drawEmulatedLine(boost::shared_ptr<const CustomShape> shape, ShapeType shapeType, const std::vector<Line> &lines,
+                       Vector2D center, VectorTransformation2D transform,
+                       double x, double y, double scaleX, double scaleY,
+-- 
+1.9.3
+
