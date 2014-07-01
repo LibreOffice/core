@@ -106,11 +106,13 @@ public:
                             const SwPaM* pCopiedPaM = NULL,
                             bool bMakeNewFrms = true,
                             bool bDelRedlines = true,
-                            bool bCopyFlyAtFly = false ) const;
+                            bool bCopyFlyAtFly = false,
+                            const bool bMergedFirstNode = false ) const;
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
                             const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
-                            const bool bCopyFlyAtFly = false ) const;
+                            const bool bCopyFlyAtFly = false,
+                            const bool bMergedFirstNode = false ) const;
 
     /// Parameters for _Rst and lcl_SetTxtFmtColl
     //originallyfrom docfmt.cxx
