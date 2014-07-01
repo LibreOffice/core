@@ -1126,7 +1126,7 @@ void MergedSettings::getJRELocations(
     rtl_uString *** parLocations, sal_Int32 * size) const
 {
     osl::MutexGuard guard(FwkMutex::get());
-    OSL_ASSERT(parLocations != NULL && size != NULL);
+    assert(parLocations != NULL && size != NULL);
 
     *parLocations = (rtl_uString **)
         rtl_allocateMemory(sizeof(rtl_uString*) * m_JRELocations.size());

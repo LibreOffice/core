@@ -359,8 +359,6 @@ bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
     if( pSttTxtNd )
     {
         bool bOneNode = nSttNode == nEndNode;
-        sal_Int32 nLen = bOneNode ? nEndCntnt - nSttCntnt
-                                : pSttTxtNd->GetTxt().getLength() - nSttCntnt;
         SwRegHistory aRHst( *pSttTxtNd, pHistory );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
@@ -370,7 +368,7 @@ bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                 pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // the length might have changed (!!Fields!!)
-        nLen = ((bOneNode)
+        sal_Int32 nLen = ((bOneNode)
                     ? pEnd->nContent.GetIndex()
                     : pSttTxtNd->GetTxt().getLength())
             - pStt->nContent.GetIndex();

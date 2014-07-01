@@ -416,7 +416,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     // Here only the fixed properties identified "other adjustable, the
     // retrieved by GetViewData (saves time).
 
-    DBG_ASSERT( pDoc, "NULL-Document inserted ?!" );
+    assert(pDoc && "NULL-Document inserted ?!");
 
     GetParentFrame();
     const SfxMedium *pMed = pDoc->GetMedium();

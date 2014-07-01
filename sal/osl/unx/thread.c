@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <assert.h>
 #include "system.h"
 #include <string.h>
 #if defined(OPENBSD)
@@ -202,7 +202,7 @@ static void* osl_thread_start_Impl (void* pData)
     int terminate;
     Thread_Impl* pImpl= (Thread_Impl*)pData;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 

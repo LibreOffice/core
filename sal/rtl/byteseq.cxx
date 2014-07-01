@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
 #include <string.h>
 
 #include <osl/diagnose.h>
@@ -78,7 +79,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
     sal_Sequence * pSequence, * pNew;
     sal_Int32 nElements;
 
-    OSL_ENSURE( ppSequence, "### null ptr!" );
+    assert(ppSequence && "### null ptr!");
     pSequence = *ppSequence;
     nElements = pSequence->nElements;
 

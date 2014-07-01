@@ -295,7 +295,7 @@ ErrCode SvAsyncLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer,
 ErrCode SvAsyncLockBytes::FillAppend(const void * pBuffer, sal_Size nCount,
                                      sal_Size * pWritten)
 {
-    sal_Size nTheWritten;
+    sal_Size nTheWritten(0);
     ErrCode nError = SvOpenLockBytes::WriteAt(m_nSize, pBuffer, nCount,
                                               &nTheWritten);
     if (!nError)
@@ -1822,7 +1822,7 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
             }
         }
     }
-    DBG_ASSERT(pBuf,"Possibly Reallocate failed");
+    assert(pBuf && "Possibly Reallocate failed");
     memcpy( pBuf+nPos, pData, (size_t)nCount);
 
     nPos += nCount;

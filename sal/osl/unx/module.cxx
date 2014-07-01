@@ -25,7 +25,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.h>
-
+#include <assert.h>
 #include "system.h"
 
 #ifdef AIX
@@ -169,7 +169,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 oslModule osl_loadModuleRelativeAscii(
     oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode)
 {
-    SAL_WARN_IF(relativePath == 0, "sal.osl", "illegal argument");
+    assert(relativePath && "illegal argument");
     if (relativePath[0] == '/') {
         return osl_loadModuleAscii(relativePath, mode);
     } else {

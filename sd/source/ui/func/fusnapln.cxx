@@ -101,7 +101,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            OSL_ASSERT(pPV!=NULL);
+            assert(pPV!=NULL);
             aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
             pPV->LogicToPagePos(aLinePos);
             bLineExist = true;

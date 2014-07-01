@@ -214,7 +214,7 @@ sal_Int32 TransliterationWrapper::compareString( const OUString& rStr1, const OU
 
 bool TransliterationWrapper::isEqual( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    sal_Int32 nMatch1, nMatch2;
+    sal_Int32 nMatch1(0), nMatch2(0);
     bool bMatch = equals(
         rStr1, 0, rStr1.getLength(), nMatch1,
         rStr2, 0, rStr2.getLength(), nMatch2 );
@@ -223,7 +223,7 @@ bool TransliterationWrapper::isEqual( const OUString& rStr1, const OUString& rSt
 
 bool TransliterationWrapper::isMatch( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    sal_Int32 nMatch1, nMatch2;
+    sal_Int32 nMatch1(0), nMatch2(0);
     equals(
         rStr1, 0, rStr1.getLength(), nMatch1,
         rStr2, 0, rStr2.getLength(), nMatch2 );

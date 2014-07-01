@@ -105,8 +105,7 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
         OSL_ENSURE(pURI, "isInternalContext: URI null");
         if (pURI) {
             unsigned char *pContextURI(librdf_uri_as_string(pURI));
-            OSL_ENSURE(pContextURI,
-                "isInternalContext: URI string null");
+            assert(pContextURI && "isInternalContext: URI string null");
             // if prefix matches reserved uri, it is RDFa context
             if (!strncmp(reinterpret_cast<char *>(pContextURI),
                     s_nsOOo, sizeof(s_nsOOo)-1)) {

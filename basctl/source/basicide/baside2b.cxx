@@ -1955,7 +1955,7 @@ void StackWindow::UpdateCalls()
                 for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
                 {
                     SbxVariable* pVar = pParams->Get( nParam );
-                    DBG_ASSERT( pVar, "Parameter?!" );
+                    assert(pVar && "Parameter?!");
                     if ( !pVar->GetName().isEmpty() )
                     {
                         aEntry += pVar->GetName();

@@ -3155,7 +3155,6 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
-    sal_Int16 nLookAt =  globalSearchOptions.GetWordOnly() ?  excel::XlLookAt::xlPart : excel::XlLookAt::xlWhole;
     sal_Int16 nSearchOrder = globalSearchOptions.GetRowDirection() ? excel::XlSearchOrder::xlByRows : excel::XlSearchOrder::xlByColumns;
 
     uno::Reference< util::XSearchable > xSearch( mxRange, uno::UNO_QUERY );
@@ -3207,7 +3206,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         // LookAt
         if ( LookAt.hasValue() )
         {
-            nLookAt =  ::comphelper::getINT16( LookAt );
+            sal_Int16 nLookAt = ::comphelper::getINT16( LookAt );
             bool bSearchWords = false;
             if ( nLookAt == excel::XlLookAt::xlPart )
                 bSearchWords = false;

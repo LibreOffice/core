@@ -2172,7 +2172,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
     OSL_ENSURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
 
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >(_pParent->GetUserData());
-    OSL_ENSURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
+    assert(pData && "SbaTableQueryBrowser::OnExpandEntry: No user data!");
 #if OSL_DEBUG_LEVEL > 0
     SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
     OSL_ENSURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");

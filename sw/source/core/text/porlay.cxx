@@ -601,7 +601,7 @@ SwScriptInfo::~SwScriptInfo()
 // Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
 sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
 {
-    SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
+    assert((pSI || pTxt) && "How should I determine the script type?");
     sal_uInt16 nScript;
 
     // First we try to use our SwScriptInfo

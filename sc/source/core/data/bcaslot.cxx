@@ -226,7 +226,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     }
     else
     {
-        if ( !rpArea->GetBroadcaster().HasListeners() )
+        if (rpArea && !rpArea->GetBroadcaster().HasListeners())
         {
             ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
             if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))

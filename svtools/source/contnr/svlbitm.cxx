@@ -137,7 +137,7 @@ SvButtonState SvLBoxButtonData::ConvertToButtonState( sal_uInt16 nItemFlags ) co
 
 SvTreeListEntry* SvLBoxButtonData::GetActEntry() const
 {
-    DBG_ASSERT( pImpl, "-SvLBoxButtonData::GetActEntry(): don't use me that way!" );
+    assert(pImpl && "-SvLBoxButtonData::GetActEntry(): don't use me that way!");
     return pImpl->pEntry;
 }
 

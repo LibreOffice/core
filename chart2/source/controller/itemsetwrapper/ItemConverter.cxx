@@ -85,7 +85,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
-    OSL_ASSERT( pRanges != NULL );
+    assert(pRanges != NULL);
     OSL_ASSERT( m_xPropertySetInfo.is());
     OSL_ASSERT( m_xPropertySet.is());
 

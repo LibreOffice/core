@@ -2386,7 +2386,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
     // current Page/Controller
     FmFormPage* pCurrentPage = m_pShell->GetCurPage();
-    DBG_ASSERT(pCurrentPage!=NULL, "FmXFormShell::OnSearchContextRequest : no page !");
+    assert(pCurrentPage && "FmXFormShell::OnSearchContextRequest : no page !");
     // Search all SdrControls of this page...
     OUString sControlSource, aName;
 

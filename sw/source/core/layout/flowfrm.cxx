@@ -230,7 +230,7 @@ bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
                     if ( ! pSet )
                         pSet = pNxt->GetAttrSet();
 
-                    OSL_ENSURE( pSet, "No AttrSet to check keep attribute" );
+                    assert(pSet && "No AttrSet to check keep attribute");
 
                     if ( pSet->GetPageDesc().GetPageDesc() )
                         bKeep = false;

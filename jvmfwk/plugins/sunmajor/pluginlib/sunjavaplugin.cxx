@@ -40,6 +40,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
+#include "osl/process.h"
 #include "osl/thread.hxx"
 #include "osl/file.hxx"
 #include "rtl/instance.hxx"
@@ -634,13 +635,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 #if defined UNX && !defined MACOSX
     //Setting the JAVA_HOME is needed for awt
-    OUString javaHome("JAVA_HOME=");
+    OUString javaHome("JAVA_HOME");
     OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
     javaHome += sPathLocation;
-    OString osJavaHome = OUStringToOString(
-        javaHome, osl_getThreadTextEncoding());
-    putenv(strdup(osJavaHome.getStr()));
+    osl_setEnvironment(javaHome.pData, javaHome.pData);
 #endif
 
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);

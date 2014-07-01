@@ -68,10 +68,10 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     const Reference < XPropertySet >& rPropSet ) const
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for embedded");
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
-    OSL_ENSURE( pFrame, "SwXFrame missing" );
+    assert(pFrame && "SwXFrame missing");
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();

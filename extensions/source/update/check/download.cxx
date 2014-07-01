@@ -152,9 +152,9 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 
     OutData *out = reinterpret_cast < OutData * > (clientp);
 
-    OSL_ASSERT( out );
+    assert(out);
 
-    if( ! out->StopCondition.check() )
+    if (out && !out->StopCondition.check())
     {
         double fPercent = 0;
         if ( dltotal + out->Offset )

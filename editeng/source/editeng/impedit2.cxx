@@ -1194,7 +1194,7 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIt
 
 EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
 {
-    OSL_ENSURE( pView, "No View - No Cursor Movement!" );
+    assert(pView && "No View - No Cursor Movement!");
 
     const ParaPortion* pPPortion = FindParaPortion( rPaM.GetNode() );
     OSL_ENSURE( pPPortion, "No matching portion found: CursorUp ");

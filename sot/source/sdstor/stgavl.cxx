@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include "stgavl.hxx"
+#include <assert.h>
 
 StgAvlNode::StgAvlNode()
 {
@@ -142,7 +143,7 @@ StgAvlNode* StgAvlNode::RotLL()
 
 StgAvlNode* StgAvlNode::RotLR()
 {
-    OSL_ENSURE( pLeft && pLeft->pRight, "The pointer is not allowed to be NULL!" );
+    assert(pLeft && pLeft->pRight && "The pointer is not allowed to be NULL!");
     StgAvlNode* pHeavy = pLeft;
     StgAvlNode* pNewRoot = pHeavy->pRight;
 

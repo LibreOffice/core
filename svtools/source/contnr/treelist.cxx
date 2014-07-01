@@ -1051,7 +1051,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
 
 void SvTreeList::SelectAll( SvListView* pView, bool bSelect )
 {
-    DBG_ASSERT(pView,"SelectAll:NoView");
+    assert(pView && "SelectAll:NoView");
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {

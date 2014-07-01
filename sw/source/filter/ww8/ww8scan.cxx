@@ -1845,7 +1845,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
 
     rPLCF.advance();
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )        // No beginning?
+    if (!pData || (((sal_uInt8*)pData)[0] & 0x1f) != 0x13)        // No beginning?
         goto Err;
 
     rF.nId = ((sal_uInt8*)pData)[1];
@@ -1932,7 +1932,7 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
     WW8_CP nNextPieceCp  = nBehindTextCp; // Initialization, important for Ver6
     do
     {
-        bool bIsUnicode, bPosOk;
+        bool bIsUnicode(false), bPosOk(false);
         WW8_FC fcAct = WW8Cp2Fc(nAktStartCp,&bIsUnicode,&nNextPieceCp,&bPosOk);
 
         // Probably aimed beyond file end, doesn't matter!

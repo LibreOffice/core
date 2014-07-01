@@ -1175,7 +1175,7 @@ void SbiParser::SubFunc()
 
 void SbiParser::DefProc( bool bStatic, bool bPrivate )
 {
-    sal_uInt16 l1 = nLine, l2 = nLine;
+    sal_uInt16 l1 = nLine;
     bool bSub = ( eCurTok == SUB );
     bool bProperty = ( eCurTok == PROPERTY );
     PropertyMode ePropertyMode = PROPERTY_MODE_NONE;
@@ -1279,7 +1279,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     pProc->Define();
     OpenBlock( eExit );
     StmntBlock( bSub ? ENDSUB : (bProperty ? ENDPROPERTY : ENDFUNC) );
-    l2 = nLine;
+    sal_uInt16 l2 = nLine;
     pProc->SetLine1( l1 );
     pProc->SetLine2( l2 );
     pPool = &aPublics;

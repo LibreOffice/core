@@ -806,7 +806,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
     // Figure out lossless size
     sal_uInt8 *pImageData, *pAlphaData;
-    sal_uInt32 width, height;
+    sal_uInt32 width(0), height(0);
 
     getBitmapData( bmpSource, pImageData, pAlphaData, width, height );
     sal_uInt32 raw_size = width * height * 4;

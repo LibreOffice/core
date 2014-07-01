@@ -864,7 +864,7 @@ extern "C"
 static void SAL_CALL unoenv_computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
 {
-    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    assert(pEnv && ppOId && pInterface && "### null ptr!");
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );

@@ -529,15 +529,13 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     return pKey->getStringListValue(valueName, pValueList, pLen);
 }
 
-
 //  getUnicodeListValue
-
 RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
                                                rtl_uString* keyName,
                                                sal_Unicode*** pValueList,
                                                sal_uInt32* pLen)
 {
-    OSL_PRECOND((pValueList != 0) && (pLen != 0), "registry::getUnicodeListValue(): invalid parameter");
+    assert((pValueList != 0) && (pLen != 0) && "registry::getUnicodeListValue(): invalid parameter");
     *pValueList = 0, *pLen = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);

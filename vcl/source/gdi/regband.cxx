@@ -818,7 +818,7 @@ bool ImplRegionBand::IsInside( long nX )
 
 long ImplRegionBand::GetXLeftBoundary() const
 {
-    DBG_ASSERT( mpFirstSep != NULL, "ImplRegionBand::XLeftBoundary -> no separation in band!" );
+    assert(mpFirstSep && "ImplRegionBand::XLeftBoundary -> no separation in band!");
 
     return mpFirstSep->mnXLeft;
 }

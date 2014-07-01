@@ -60,7 +60,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
                 * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
             typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
             TYPELIB_DANGER_GET( (typelib_TypeDescription **) &pTXInterfaceDescr, type_XInterface );
-            OSL_ASSERT( pTXInterfaceDescr->ppAllMembers );
+            assert(pTXInterfaceDescr->ppAllMembers);
             typelib_typedescriptionreference_getDescription(
                 &g_pQITD, pTXInterfaceDescr->ppAllMembers[ 0 ] );
             TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *) pTXInterfaceDescr );
