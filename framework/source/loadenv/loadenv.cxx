@@ -176,8 +176,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                 throw css::lang::IllegalArgumentException(
-                    ("Unsupported URL <" + sURL + ">" + ": \"" + ex.m_sMessage
-                     + "\""),
+                    "Unsupported URL <" + sURL + ">: \"" + ex.m_sMessage + "\"",
                     xLoader, 1);
 
             default:

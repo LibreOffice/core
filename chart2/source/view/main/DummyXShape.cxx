@@ -221,7 +221,7 @@ void SAL_CALL DummyXShape::setPropertyValue( const OUString& rName, const uno::A
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO("chart2", "DummyXShape::setProperty: " << rName << " " << "Any");
+    SAL_INFO("chart2", "DummyXShape::setProperty: " << rName << " Any");
     maProperties[rName] = rValue;
     if(rName == "Transformation")
     {

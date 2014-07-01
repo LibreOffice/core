@@ -316,13 +316,13 @@ void SessionManagerClient::SaveYourselfProc(
     Bool
     )
 {
-    SAL_INFO("vcl.sm", "Session: save yourself," <<
-        "save_type " <<
+    SAL_INFO("vcl.sm", "Session: save yourself, "
+        "save_type "
             " local: " << (save_type == SmSaveLocal) <<
             " global: " << (save_type == SmSaveGlobal) <<
             " both: " << (save_type == SmSaveBoth) <<
         " shutdown: " << shutdown <<
-        " interact_style: " <<
+        " interact_style: "
             " SmInteractStyleNone: " << (interact_style == SmInteractStyleNone) <<
             " SmInteractStyleErrors: " << (interact_style == SmInteractStyleErrors) <<
             " SmInteractStyleErrors: " << (interact_style == SmInteractStyleAny));

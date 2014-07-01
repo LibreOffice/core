@@ -2201,7 +2201,7 @@ void ScViewData::WriteUserData(OUString& rData)
     else
         rData += "0";
 
-    rData += ";" + OUString::number( nTabNo ) + ";" + TAG_TABBARWIDTH +
+    rData += ";" + OUString::number( nTabNo ) + ";" TAG_TABBARWIDTH +
              OUString::number( pView->GetTabBarWidth() );
 
     SCTAB nTabCount = pDoc->GetTableCount();

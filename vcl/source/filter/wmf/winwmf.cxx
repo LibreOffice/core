@@ -1152,7 +1152,7 @@ bool WMFReader::ReadHeader()
             aPlaceableBound = aExtRect;
 
             SAL_INFO("vcl.wmf", "External header size "
-                    << " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                       " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
                     << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
 
             pOut->SetMapMode( pExternalHeader->mapMode );
@@ -1176,7 +1176,7 @@ bool WMFReader::ReadHeader()
                                     aPlaceableBound.Bottom() / fRatio);
 
                 SAL_INFO("vcl.wmf", "Placeable bounds "
-                    << " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                       " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
                     << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
             }
         }
@@ -1188,8 +1188,7 @@ bool WMFReader::ReadHeader()
     Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
 
-    SAL_INFO("vcl.wmf", "WMF size "
-                    << " w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
+    SAL_INFO("vcl.wmf", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
 
     Size aDevExt( 10000, 10000 );
     if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
@@ -1201,8 +1200,7 @@ bool WMFReader::ReadHeader()
     }
     pOut->SetDevExt( aDevExt );
 
-    SAL_INFO("vcl.wmf", "Dev size "
-                    << " w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
+    SAL_INFO("vcl.wmf", "Dev size  w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
 
     // read the METAHEADER
     sal_uInt32 nMetaKey(0);
@@ -1636,21 +1634,21 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
         {
             rPlaceableBound = Rectangle(aWinOrg, *aWinExt);
             SAL_INFO("vcl.wmf", "Window dimension "
-                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else if (aViewportExt)
         {
             rPlaceableBound = Rectangle(aViewportOrg, *aViewportExt);
             SAL_INFO("vcl.wmf", "Viewport dimension "
-                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else if (bBoundsDetermined)
         {
             rPlaceableBound = aBound;
             SAL_INFO("vcl.wmf", "Determined dimension "
-                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else
@@ -1660,7 +1658,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
             rPlaceableBound.Right() = aMaxWidth;
             rPlaceableBound.Bottom() = aMaxWidth;
             SAL_INFO("vcl.wmf", "Default dimension "
-                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
     }

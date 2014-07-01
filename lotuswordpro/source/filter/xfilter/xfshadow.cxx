@@ -73,16 +73,16 @@ OUString XFShadow::ToString()
     switch(m_ePosition)
     {
     case enumXFShadowRightBottom:
-        buf = m_aColor.ToString() + " " + strOff + "cm" + " " + strOff + "cm";
+        buf = m_aColor.ToString() + " " + strOff + "cm " + strOff + "cm";
         break;
     case enumXFShadowRightTop:
-        buf = m_aColor.ToString() + " " + strOff + "cm" + " -" + strOff + "cm";
+        buf = m_aColor.ToString() + " " + strOff + "cm -" + strOff + "cm";
         break;
     case enumXFShadowLeftBottom:
-        buf = m_aColor.ToString() + " -" + strOff + "cm" + " " + strOff + "cm";
+        buf = m_aColor.ToString() + " -" + strOff + "cm " + strOff + "cm";
         break;
     case enumXFShadowLeftTop:
-        buf = m_aColor.ToString() + " -" + strOff + "cm" + " -" + strOff + "cm";
+        buf = m_aColor.ToString() + " -" + strOff + "cm -" + strOff + "cm";
         break;
     default:
         buf = m_aColor.ToString();

@@ -89,8 +89,8 @@ namespace ww8
 #endif
         }
 
-        SAL_INFO( "sw.ww8.level2", "<WW8Struct-getUString" << " offset=\"" << nOffset
-            << "\" count=\"" << nCount << "\"" << ">" << aResult << "</WW8Struct-getUString>" );
+        SAL_INFO( "sw.ww8.level2", "<WW8Struct-getUString offset=\"" << nOffset
+            << "\" count=\"" << nCount << "\">" << aResult << "</WW8Struct-getUString>" );
 
         return aResult;
 

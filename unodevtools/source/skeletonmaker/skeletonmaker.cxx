@@ -104,15 +104,15 @@ void printUsageAndExit(const char* programname, const char* version)
 {
     std::cerr
         << "\n using: " << programname << "\n"
-        << "            dump [<options>] -t <type> ...\n"
-        << "        " << programname << "\n"
-        << "            component [<options>] -n <name> -t <type> ...\n"
-        << "        " << programname << "\n"
-        << "            calc-add-in [<options>] -n <name> -t <add-in_service>\n"
-        << "        " << programname << "\n"
-        << "            add-on [<options>] -n <name> -p <protocol_name:command,...>\n"
-        << "        " << programname << " -V, --version\n"
-        << "        " << programname << " -h, --help\n"
+           "            dump [<options>] -t <type> ...\n"
+           "        " << programname << "\n"
+           "            component [<options>] -n <name> -t <type> ...\n"
+           "        " << programname << "\n"
+           "            calc-add-in [<options>] -n <name> -t <add-in_service>\n"
+           "        " << programname << "\n"
+           "            add-on [<options>] -n <name> -p <protocol_name:command,...>\n"
+           "        " << programname << " -V, --version\n"
+           "        " << programname << " -h, --help\n"
         << usageText
         << programname << " Version " << version << "\n\n";
 }

@@ -17,14 +17,14 @@
 void WriteUsage()
 {
     std::cout
-        << "Syntax: Treex [-r Root] -i FileIn -o FileOut"
-        << " [-m DataBase] [-l Lang]\n"
-        << " Root:  Path to root of localized xhp files\n"
-        << " FileIn:   Source files (*.tree)\n"
-        << " FileOut:  Destination file (*.*)\n"
-        << " DataBase: Mergedata (*.po)\n"
-        << " Lang: Restrict the handled languages; one element of\n"
-        << " (de, en-US, ...) or all\n";
+        << ("Syntax: Treex [-r Root] -i FileIn -o FileOut"
+            " [-m DataBase] [-l Lang]\n"
+            " Root:  Path to root of localized xhp files\n"
+            " FileIn:   Source files (*.tree)\n"
+            " FileOut:  Destination file (*.*)\n"
+            " DataBase: Mergedata (*.po)\n"
+            " Lang: Restrict the handled languages; one element of\n"
+            " (de, en-US, ...) or all\n");
 }
 
 

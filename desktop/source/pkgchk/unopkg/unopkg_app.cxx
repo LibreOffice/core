@@ -268,8 +268,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                         dp_misc::writeConsoleError(
                                  "\nERROR: unexpected option " +
                                  cmdArg +
-                                 "!\n" +
-                                 "       Use " + APP_NAME + " " +
+                                 "!\n       Use " APP_NAME " " +
                                  toString(info_help) +
                                  " to print all options.\n");
                         return 1;
@@ -537,14 +536,13 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         {
             dp_misc::writeConsoleError(
                 "\nERROR: unknown sub-command " +
-                subCommand + "!\n" +
-                "       Use " + APP_NAME + " " +
+                subCommand + "!\n       Use " APP_NAME " " +
                 toString(info_help) + " to print all options.\n");
             return 1;
         }
 
         if (option_verbose)
-            dp_misc::writeConsole(OUString("\n") + APP_NAME + " done.\n");
+            dp_misc::writeConsole("\n" APP_NAME " done.\n");
         //Force to release all bridges which connect us to the child processes
         dp_misc::disposeBridges(xLocalComponentContext);
         return 0;

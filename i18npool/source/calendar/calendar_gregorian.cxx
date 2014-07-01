@@ -691,7 +691,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
                 DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
             }
-            SAL_INFO( "i18npool", "Calendar_gregorian::setValue:" <<
+            SAL_INFO( "i18npool", "Calendar_gregorian::setValue:"
                     "  nZone0 " << nZone0 << ", nDST0 " << nDST0 <<
                     ", nZone1 " << nZone1 << ", nDST1 " << nDST1 <<
                     ", nZone2 " << nZone2 << ", nDST2 " << nDST2 <<

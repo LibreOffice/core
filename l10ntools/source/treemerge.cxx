@@ -262,8 +262,8 @@ void TreeParser::Merge(
         if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
         {
             std::cerr
-                << "Treex error: given language conflicts with "
-                << "language of Mergedata file: "
+                << ("Treex error: given language conflicts with language of"
+                    " Mergedata file: ")
                 << m_sLang.getStr() << " - "
                 << vLanguages[0].getStr() << std::endl;
             delete pMergeDataFile;

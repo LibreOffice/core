@@ -370,7 +370,7 @@ void SwCSS1Parser::SetTableTxtColl( bool bHeader )
                          pStyleEntry->GetPropertyInfo(), this );
     }
 
-    OUString sTmp = sTag + " " + OOO_STRING_SVTOOLS_HTML_parabreak;
+    OUString sTmp = sTag + " " OOO_STRING_SVTOOLS_HTML_parabreak;
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
     {
@@ -960,7 +960,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 }
                 else
                 {
-                    OUString sTmp = aToken2 + " " + OOO_STRING_SVTOOLS_HTML_parabreak;
+                    OUString sTmp = aToken2 + " " OOO_STRING_SVTOOLS_HTML_parabreak;
 
                     if( CSS1_SCRIPT_ALL == nScript )
                     {

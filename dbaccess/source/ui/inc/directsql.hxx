@@ -112,7 +112,7 @@ namespace dbaui
     {   \
         const sal_Char* pError = impl_CheckInvariants();    \
         if (pError) \
-            SAL_WARN("dbaccess.ui", methodname << ": " << pError);   \
+            SAL_WARN("dbaccess.ui", methodname ": " << pError);   \
     }
 #else
 #define CHECK_INVARIANTS(methodname)

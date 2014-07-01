@@ -302,7 +302,7 @@ void JavaMigration::migrateJavarc()
         return;
 
     OUString sValue;
-    rtl::Bootstrap javaini(m_sUserDir + "/user/config/" + SAL_CONFIGFILE("java"));
+    rtl::Bootstrap javaini(m_sUserDir + "/user/config/" SAL_CONFIGFILE("java"));
     bool bSuccess = javaini.getFrom("Home", sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
@@ -415,11 +415,11 @@ void SAL_CALL  JavaMigration::setPropertyValue(
             bool val;
             if (!(aValue >>= val))
                 throw MalformedDataException(
-                       OUString("[Service implementation ") + IMPL_NAME +
+                       "[Service implementation " IMPL_NAME
                        "] XLayerHandler::setPropertyValue received wrong type for Enable property", 0, Any());
             if (jfw_setEnabled(val) != JFW_E_NONE)
                 throw WrappedTargetException(
-                       OUString("[Service implementation ") + IMPL_NAME +
+                       "[Service implementation " IMPL_NAME
                        "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", 0, Any());
 
             break;
@@ -429,12 +429,12 @@ void SAL_CALL  JavaMigration::setPropertyValue(
              OUString cp;
              if (!(aValue >>= cp))
                  throw MalformedDataException(
-                           OUString("[Service implementation ") + IMPL_NAME +
+                           "[Service implementation " IMPL_NAME
                            "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", 0, Any());
 
              if (jfw_setUserClassPath(cp.pData) != JFW_E_NONE)
                  throw WrappedTargetException(
-                       OUString("[Service implementation ") +  IMPL_NAME +
+                       "[Service implementation " IMPL_NAME
                        "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", 0, Any());
              break;
          }

@@ -540,8 +540,7 @@ void printMethods(std::ostream & o,
             if ( defaultbody ) {
                 o << "\n" << indentation << "{\n";
                 if (i->returnType != "void") {
-                    o << indentation << "    // TODO: Exchange the default return "
-                      << "implementation for \"" << i->name << "\" !!!\n";
+                    o << indentation << "    // TODO: Exchange the default return implementation for \"" << i->name << "\" !!!\n";
                     o << indentation << "    // NOTE: "
                         "Default initialized polymorphic structs can cause problems"
                         "\n" << indentation << "    // because of missing default "
@@ -664,7 +663,7 @@ void printMapsToJavaType(
     codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments, const char * javaTypeSort)
 {
-    o << "maps to Java " << "1.5" << " ";
+    o << "maps to Java 1.5 ";
     if (javaTypeSort != 0) {
         o << javaTypeSort << ' ';
     }

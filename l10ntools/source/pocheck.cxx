@@ -272,9 +272,11 @@ static void checkFunctionNames(const OString& aLanguage)
     {
         if( it->second > 1 )
         {
-            std::cout << "ERROR: Spreadsheet function name translations must be unique.\n" <<
-                "Language: " << aLanguage <<
-                "\nDuplicated translation is: " << it->first << "\n\n";
+            std::cout
+                << ("ERROR: Spreadsheet function name translations must be"
+                    " unique.\nLanguage: ")
+                << aLanguage << "\nDuplicated translation is: " << it->first
+                << "\n\n";
         }
     }
 
@@ -377,12 +379,14 @@ static void checkVerticalBar(const OString& aLanguage)
         if( !aPoEntry.isFuzzy() && aPoEntry.getMsgId().endsWith("|") &&
             !aPoEntry.getMsgStr().isEmpty() && !aPoEntry.getMsgStr().endsWith("|") )
         {
-            std::cout << "ERROR: Missing '|' character at the end of translated string.\n" <<
-                "It causes runtime error in installer.\n" <<
-                "File: " << aPoPath << std::endl <<
-                "Language: " << aLanguage << std::endl <<
-                "English:   " << aPoEntry.getMsgId() << std::endl <<
-                "Localized: " << aPoEntry.getMsgStr() << std::endl << std::endl;
+            std::cout
+                << ("ERROR: Missing '|' character at the end of translated"
+                    " string.\nIt causes runtime error in installer.\nFile: ")
+                << aPoPath << std::endl
+                << "Language: " << aLanguage << std::endl
+                << "English:   " << aPoEntry.getMsgId() << std::endl
+                << "Localized: " << aPoEntry.getMsgStr() << std::endl
+                << std::endl;
             bError = true;
         }
         else
@@ -425,11 +429,13 @@ static void checkMathSymbolNames(const OString& aLanguage)
         if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_UI_SYMBOL_NAMES" &&
             !aPoEntry.getMsgStr().isEmpty() && (aPoEntry.getMsgStr().indexOf(" ") != -1) )
         {
-            std::cout << "ERROR: Math symbol names must not contain spaces.\n" <<
-                "File: " << aPoPath << std::endl <<
-                "Language: " << aLanguage << std::endl <<
-                "English:   " << aPoEntry.getMsgId() << std::endl <<
-                "Localized: " << aPoEntry.getMsgStr() << std::endl << std::endl;
+            std::cout
+                << "ERROR: Math symbol names must not contain spaces.\nFile: "
+                << aPoPath << std::endl
+                << "Language: " << aLanguage << std::endl
+                << "English:   " << aPoEntry.getMsgId() << std::endl
+                << "Localized: " << aPoEntry.getMsgStr() << std::endl
+                << std::endl;
             bError = true;
         }
         else

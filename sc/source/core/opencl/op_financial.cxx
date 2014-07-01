@@ -1080,7 +1080,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
         ss << "            arg0 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;" << ";\n";
+        ss << "            i++;;\n";
         ss << "            arg1 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef  ISNAN
@@ -1150,7 +1150,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
         ss << "            arg0 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;" << ";\n";
+        ss << "            i++;;\n";
         ss << "            arg1 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef  ISNAN
@@ -1183,7 +1183,7 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
         ss << "            arg0 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-        ss << "            i++;" << ";\n";
+        ss << "            i++;;\n";
         ss << "            arg1 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef  ISNAN
@@ -2221,7 +2221,7 @@ void OpYield::GenSlidingWindowFunction(
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n\t";
-    ss << "double tmp = " <<"0"<<";\n\t";
+    ss << "double tmp = 0;\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
     ss << "double tmp000;\n\t";
     ss << "double tmp001;\n\t";
@@ -2377,7 +2377,7 @@ void OpSLN::GenSlidingWindowFunction(std::stringstream &ss,
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
-    ss << "    double tmp = " <<"0"<<";\n";
+    ss << "    double tmp = 0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double wert;\n";
     ss << "    double rest;\n";
@@ -2461,7 +2461,7 @@ void OpYieldmat::GenSlidingWindowFunction(
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n\t";
-    ss << "double tmp = " <<"0"<<";\n\t";
+    ss << "double tmp = 0;\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
     ss << "double tmp000;\n\t";
     ss << "double tmp001;\n\t";
@@ -4471,7 +4471,7 @@ void OpYielddisc::GenSlidingWindowFunction(
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n\t";
-    ss << "double tmp = " <<"0"<<";\n\t";
+    ss << "double tmp = 0;\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
     ss << "double tmp000;\n\t";
     ss << "double tmp001;\n\t";
@@ -4978,7 +4978,7 @@ vSubArguments)
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
-    ss << "    double result = " <<"0"<<";\n";
+    ss << "    double result = 0;\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double zins;\n";
     ss << "    double zzr;\n";

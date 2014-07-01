@@ -1118,7 +1118,7 @@ bool SwTableAutoFmtTbl::Load()
 bool SwTableAutoFmtTbl::Save() const
 {
     SvtPathOptions aPathOpt;
-    const OUString sNm( aPathOpt.GetUserConfigPath() + "/" + AUTOTABLE_FORMAT_NAME );
+    const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );
     SfxMedium aStream(sNm, STREAM_STD_WRITE );
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }

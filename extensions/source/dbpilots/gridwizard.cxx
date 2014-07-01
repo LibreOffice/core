@@ -217,7 +217,7 @@ namespace dbp
                 }
                 catch(const Exception&)
                 {
-                    SAL_WARN( "extensions.dbpilots", "OGridWizard::implApplySettings: " <<
+                    SAL_WARN( "extensions.dbpilots", "OGridWizard::implApplySettings: "
                               "unexpected exception while creating the grid column for field " <<
                               pFormFieldName->getStr() << "!" );
                 }

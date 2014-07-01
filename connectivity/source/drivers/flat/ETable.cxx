@@ -951,7 +951,7 @@ void OFlatTable::setRowPos(const vector<TRowPositionInFile>::size_type rowNum, c
     {
         SAL_WARN_IF(m_aRowPosToFilePos[rowNum] != rowPos,
                     "connectivity.flat",
-                    "Setting position for row " << rowNum << " to (" << rowPos.first << ", " << rowPos.second << "), " <<
+                    "Setting position for row " << rowNum << " to (" << rowPos.first << ", " << rowPos.second << "), "
                     "but already had different position (" << m_aRowPosToFilePos[rowNum].first << ", " << m_aRowPosToFilePos[rowNum].second << ")");
         m_aRowPosToFilePos[rowNum] = rowPos;
     }

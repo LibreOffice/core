@@ -40,7 +40,7 @@ void generateIncludes(std::ostream & o,
     o << "#include \"sal/config.h\"\n";
     if (serviceobject) {
         o << "#include \"cppuhelper/factory.hxx\"\n"
-          << "#include \"cppuhelper/implementationentry.hxx\"\n";
+             "#include \"cppuhelper/implementationentry.hxx\"\n";
     } else {
         o << "#include \"com/sun/star/uno/XComponentContext.hpp\"\n";
     }
@@ -147,12 +147,12 @@ void generateCompHelperDefinition(std::ostream & o,
     short nbrackets = generateNamespace(o, implname, true, nm);
 
     o << "::rtl::OUString SAL_CALL _getImplementationName() {\n"
-      << "    return ::rtl::OUString(\n"
-      << "        \"" << implname << "\");\n}\n\n";
+         "    return ::rtl::OUString(\n"
+         "        \"" << implname << "\");\n}\n\n";
 
     o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL "
         "_getSupportedServiceNames()\n{\n    css::uno::Sequence< "
-      << "::rtl::OUString >" << " s(" << services.size() << ");\n";
+        "::rtl::OUString > s(" << services.size() << ");\n";
 
     std::set< OUString >::const_iterator iter = services.begin();
     short i=0;
@@ -165,9 +165,9 @@ void generateCompHelperDefinition(std::ostream & o,
     o << "    return s;\n}\n\n";
 
     o << "css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
-      << "\n    const css::uno::Reference< css::uno::XComponentContext > & "
-      << "context)\n{\n"
-      << "    return static_cast< ::cppu::OWeakObject * >(new "
+         "\n    const css::uno::Reference< css::uno::XComponentContext > & "
+         "context)\n{\n"
+         "    return static_cast< ::cppu::OWeakObject * >(new "
       << classname <<  "(context));\n}\n\n";
 
     // close namepsace
@@ -180,21 +180,21 @@ void generateCompHelperDefinition(std::ostream & o,
 void generateCompFunctions(std::ostream & o, const OString & nmspace)
 {
     o << "static ::cppu::ImplementationEntry const entries[] = {\n"
-      << "    { &" << nmspace << "::_create,\n      &"
+         "    { &" << nmspace << "::_create,\n      &"
       << nmspace << "::_getImplementationName,\n      &"
       << nmspace << "::_getSupportedServiceNames,\n"
-      << "      &::cppu::createSingleComponentFactory, 0, 0 },\n"
-      << "    { 0, 0, 0, 0, 0, 0 }\n};\n\n";
+         "      &::cppu::createSingleComponentFactory, 0, 0 },\n"
+         "    { 0, 0, 0, 0, 0, 0 }\n};\n\n";
 
     o << "extern \"C\" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(\n"
-      << "    const char * implName, void * serviceManager, void * registryKey)\n{\n"
-      << "    return ::cppu::component_getFactoryHelper(\n"
-      << "        implName, serviceManager, registryKey, entries);\n}\n\n";
+         "    const char * implName, void * serviceManager, void * registryKey)\n{\n"
+         "    return ::cppu::component_getFactoryHelper(\n"
+         "        implName, serviceManager, registryKey, entries);\n}\n\n";
 
     o << "extern \"C\" sal_Bool SAL_CALL component_writeInfo(\n"
-      << "    void * serviceManager, void * registryKey)\n{\n"
-      << "    return ::cppu::component_writeInfoHelper("
-      << "serviceManager, registryKey, entries);\n}\n";
+         "    void * serviceManager, void * registryKey)\n{\n"
+         "    return ::cppu::component_writeInfoHelper("
+         "serviceManager, registryKey, entries);\n}\n";
 }
 
 void generateXPropertySetBodies(std::ostream& o,
@@ -508,7 +508,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 {
     o << classname << "::" << classname
       << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n"
-      << "    m_xContext(context),    m_locale()\n{\n";
+         "    m_xContext(context),    m_locale()\n{\n";
 
     if (options.backwardcompatible) {
         o << "     try {\n";
@@ -631,7 +631,7 @@ OString generateClassDefinition(std::ostream& o,
             parentname.append("::cppu::WeakComponentImplHelper");
             parentname.append(static_cast<sal_Int32>(interfaces.size()));
             o << "    private ::cppu::BaseMutex,\n"
-              << "    public ::cppu::WeakComponentImplHelper"
+                 "    public ::cppu::WeakComponentImplHelper"
               << interfaces.size() << "<";
         } else {
             parentname.append("::cppu::WeakImplHelper");
@@ -657,8 +657,8 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     o << "\n{\npublic:\n"
-      << "    explicit " << classname << "("
-      << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
+         "    explicit " << classname << "("
+         "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
 
     // generate component/service helper functions
 //     o << "    // component and service helper functions:\n"
@@ -706,9 +706,9 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
-      << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n"
-      << "    // destructor is private and will be called indirectly by the release call"
-      << "    virtual ~" << classname << "() {}\n\n";
+         "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n"
+         "    // destructor is private and will be called indirectly by the release call"
+         "    virtual ~" << classname << "() {}\n\n";
 
     if (options.componenttype == 2) {
         o << "    typedef boost::unordered_map< ::sal_Int32, rtl::OUString, "
@@ -801,7 +801,7 @@ OString generateClassDefinition(std::ostream& o,
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
               << scopedCppName(u2b(propertyhelper)) << " >(\n"
-              << "        context, static_cast< Implements >(\n            ";
+                 "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
                 != propinterfaces.end()) {
@@ -851,22 +851,22 @@ void generateXServiceInfoBodies(std::ostream& o,
                                 OString const & comphelpernamespace)
 {
     o << "// com.sun.star.uno.XServiceInfo:\n"
-      << "::rtl::OUString SAL_CALL " << classname << "getImplementationName() "
-      << "throw (css::uno::RuntimeException)\n{\n    "
-      << "return " << comphelpernamespace << "::_getImplementationName();\n}\n\n";
+         "::rtl::OUString SAL_CALL " << classname << "getImplementationName() "
+         "throw (css::uno::RuntimeException)\n{\n    "
+         "return " << comphelpernamespace << "::_getImplementationName();\n}\n\n";
 
     o << "sal_Bool SAL_CALL " << classname
       << "supportsService(::rtl::OUString const & "
-      << "serviceName) throw (css::uno::RuntimeException)\n{\n    "
-      << "css::uno::Sequence< ::rtl::OUString > serviceNames = "
+         "serviceName) throw (css::uno::RuntimeException)\n{\n    "
+         "css::uno::Sequence< ::rtl::OUString > serviceNames = "
       << comphelpernamespace << "::_getSupportedServiceNames();\n    "
-      << "for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {\n    "
-      << "    if (serviceNames[i] == serviceName)\n            return sal_True;\n"
-      << "    }\n    return sal_False;\n}\n\n";
+         "for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {\n    "
+         "    if (serviceNames[i] == serviceName)\n            return sal_True;\n"
+         "    }\n    return sal_False;\n}\n\n";
 
     o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL " << classname
       << "getSupportedServiceNames() throw (css::uno::RuntimeException)\n{\n    "
-      << "return " << comphelpernamespace
+         "return " << comphelpernamespace
       << "::_getSupportedServiceNames();\n}\n\n";
 }
 

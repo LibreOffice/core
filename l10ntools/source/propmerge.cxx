@@ -175,8 +175,8 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
         {
             std::cerr
-                << "Propex error: given language conflicts with "
-                << "language of Mergedata file: "
+                << ("Propex error: given language conflicts with language of"
+                    " Mergedata file: ")
                 << m_sLang.getStr() << " - "
                 << vLanguages[0].getStr() << std::endl;
             delete pMergeDataFile;

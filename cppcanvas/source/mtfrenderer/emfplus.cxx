@@ -1053,8 +1053,7 @@ namespace cppcanvas
 
                 OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
-                SAL_INFO("cppcanvas.emf", "EMF+\tfont\n"
-                           << "EMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
+                SAL_INFO("cppcanvas.emf", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
                 SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
                 if( length > 0 && length < 0x4000 ) {
@@ -1804,7 +1803,7 @@ namespace cppcanvas
                                     polygon.append (Map (x + width, y + height));
                                     polygon.append (Map (x, y + height));
 
-                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << "," << " " << width << "x" << height);
+                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
                                 } else {
                                     /* Single's */
                                     float x, y, width, height;
@@ -1816,7 +1815,7 @@ namespace cppcanvas
                                     polygon.append (Map (x + width, y + height));
                                     polygon.append (Map (x, y + height));
 
-                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << "," << " " << width << "x" << height);
+                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
                                 }
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);

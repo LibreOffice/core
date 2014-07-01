@@ -1414,8 +1414,8 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
     else
     {
-        SAL_WARN("sw.core", "Invalid Pool Id: " << nId << " should be within " <<
-            "[" << int(RES_POOLCHR_BEGIN) << "," << int(RES_POOLCHR_END) << ") or " <<
+        SAL_WARN("sw.core", "Invalid Pool Id: " << nId << " should be within "
+            "[" << int(RES_POOLCHR_BEGIN) << "," << int(RES_POOLCHR_END) << ") or "
             "[" << int(RES_POOLFRM_BEGIN) << "," << int(RES_POOLFRM_END) << ")");
         bFnd = false;
     }

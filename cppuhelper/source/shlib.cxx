@@ -239,9 +239,9 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     if (constructor.isEmpty()) {
         rtl::OUString sym;
         if (prefix == "direct") {
-            sym = implementation.replace('.', '_') + "_" + COMPONENT_GETFACTORY;
+            sym = implementation.replace('.', '_') + "_" COMPONENT_GETFACTORY;
         } else if (!prefix.isEmpty()) {
-            sym = prefix + "_" + COMPONENT_GETFACTORY;
+            sym = prefix + "_" COMPONENT_GETFACTORY;
         } else {
             sym = COMPONENT_GETFACTORY;
         }

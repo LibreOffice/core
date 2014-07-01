@@ -4576,7 +4576,7 @@ void ScXMLExport::WriteExternalRefCaches()
             if (!pTable.get() || !pTable->isReferenced())
                 continue;
 
-            AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, "'" + *pUrl + "'" + "#" + *itr);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, "'" + *pUrl + "'#" + *itr);
             AddAttribute(XML_NAMESPACE_TABLE, XML_PRINT, GetXMLToken(XML_FALSE));
             AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sExternalRefTabStyleName);
             SvXMLElementExport aElemTable(*this, XML_NAMESPACE_TABLE, XML_TABLE, true, true);

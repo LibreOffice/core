@@ -96,17 +96,17 @@ void generateXServiceInfoBodies(std::ostream& o)
 {
     o << "    // com.sun.star.lang.XServiceInfo:\n";
     o << "    public String getImplementationName() {\n"
-      << "         return m_implementationName;\n    }\n\n";
+         "         return m_implementationName;\n    }\n\n";
 
     o << "    public boolean supportsService( String sService ) {\n"
-      << "        int len = m_serviceNames.length;\n\n"
-      << "        for( int i=0; i < len; i++) {\n"
-      << "            if (sService.equals(m_serviceNames[i]))\n"
-      << "                return true;\n"
-      << "        }\n        return false;\n    }\n\n";
+         "        int len = m_serviceNames.length;\n\n"
+         "        for( int i=0; i < len; i++) {\n"
+         "            if (sService.equals(m_serviceNames[i]))\n"
+         "                return true;\n"
+         "        }\n        return false;\n    }\n\n";
 
     o << "    public String[] getSupportedServiceNames() {\n"
-      << "        return m_serviceNames;\n    }\n\n";
+         "        return m_serviceNames;\n    }\n\n";
 }
 
 void generateXPropertySetBodies(std::ostream& o)
@@ -798,7 +798,7 @@ void generateClassDefinition(std::ostream& o,
             if (propertyhelper.getLength() > 1) {
                 o << propcomment
                   << "        m_prophlp = new PropertySetMixin(m_xContext, this,\n"
-                  << "            new Type(" << propertyhelper
+                     "            new Type(" << propertyhelper
                   << ".class), null);\n";
             }
         }

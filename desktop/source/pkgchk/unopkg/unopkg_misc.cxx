@@ -112,15 +112,15 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
-        dp_misc::TRACE(OUString(__FILE__) + ": identified option \'"
-            + "\'" + OUString( option_info->m_short_option ) + "\n");
+        dp_misc::TRACE(__FILE__ ": identified option \'\'"
+            + OUString( option_info->m_short_option ) + "\n");
         return true;
     }
     if (arg[ 1 ] == '-' && rtl_ustr_ascii_compare(
             arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
-        dp_misc::TRACE(OUString( __FILE__) + ": identified option \'"
+        dp_misc::TRACE(__FILE__ ": identified option \'"
             + OUString::createFromAscii(option_info->m_name) + "\'\n");
         return true;
     }

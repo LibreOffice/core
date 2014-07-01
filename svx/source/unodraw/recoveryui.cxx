@@ -248,7 +248,7 @@ static OUString GetCrashConfigDir()
 
 static OUString GetUnsentURL()
 {
-    OUString aURL = GetCrashConfigDir() + "/" + LCKFILE;
+    OUString aURL = GetCrashConfigDir() + "/" LCKFILE;
     return aURL;
 }
 

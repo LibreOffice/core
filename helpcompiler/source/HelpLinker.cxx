@@ -357,8 +357,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
             SAL_WARN("helpcompiler",
                 "ERROR: input list entry '"
                     << xhpFileName
-                    << "' has the wrong extension (only files with extension .xhp "
-                    << "are accepted)");
+                    << "' has the wrong extension (only files with extension .xhp are accepted)");
 
             continue;
         }

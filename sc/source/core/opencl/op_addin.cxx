@@ -39,7 +39,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double N = 0.0;\n";
     if(vSubArguments.size() != 2)
     {
-        ss << "    return DBL_MAX;\n" << "}\n";
+        ss << "    return DBL_MAX;\n}\n";
         return ;
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -68,7 +68,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -104,7 +104,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }

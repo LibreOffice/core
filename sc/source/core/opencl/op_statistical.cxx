@@ -1257,7 +1257,7 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double fFlag = 0.0;\n";
     if(vSubArguments.size() != 3)
     {
-        ss << "    return DBL_MAX;\n" << "}\n";
+        ss << "    return DBL_MAX;\n}\n";
         return ;
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1287,7 +1287,7 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1328,7 +1328,7 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1371,7 +1371,7 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1577,7 +1577,7 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double sigma = 0.0;\n";
     if(vSubArguments.size() != 3)
     {
-        ss << "    return DBL_MAX;\n" << "}\n";
+        ss << "    return DBL_MAX;\n}\n";
         return ;
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1606,7 +1606,7 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1642,7 +1642,7 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1715,7 +1715,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double kum = 0.0;\n";
     if(vSubArguments.size() != 4)
     {
-        ss << "    return DBL_MAX;\n" << "}\n";
+        ss << "    return DBL_MAX;\n}\n";
         return ;
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -1744,7 +1744,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1780,7 +1780,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1816,7 +1816,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -1852,7 +1852,7 @@ void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -2601,7 +2601,7 @@ void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double fDF = 0.0;\n";
     if(vSubArguments.size() != 2)
     {
-        ss << "    return DBL_MAX;\n" << "}\n";
+        ss << "    return DBL_MAX;\n}\n";
         return ;
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -2631,7 +2631,7 @@ void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -2672,7 +2672,7 @@ void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    return DBL_MAX;\n" << "}\n";
+            ss << "    return DBL_MAX;\n}\n";
             return ;
         }
     }
@@ -2814,7 +2814,7 @@ void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0)" << ";\n";
+            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
         }
     }
     i = vSubArguments.size();
@@ -3045,7 +3045,7 @@ void OpStDevP::GenSlidingWindowFunction(std::stringstream &ss,
         }
         if (i == 0)
         {
-            ss << "    fMean = fSum * pow(fCount,-1.0)" << ";\n";
+            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
         }
     }
     i = vSubArguments.size();

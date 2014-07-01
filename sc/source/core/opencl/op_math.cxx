@@ -2457,7 +2457,7 @@ void OpBitLshift::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
-    ss << "    return floor(" << "shift_amount >= 0 ? ";
+    ss << "    return floor(shift_amount >= 0 ? ";
     ss << "num * pow(2.0, shift_amount) : ";
     ss << "num / pow(2.0, fabs(shift_amount)));\n";
     ss << "}";

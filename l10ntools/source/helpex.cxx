@@ -37,14 +37,14 @@
 void WriteUsage()
 {
     std::cout
-        << " Syntax: Helpex -[m]i FileIn -o FileOut [-m DataBase] [-l Lang]\n"
-        << " FileIn + i:   Source file (*.xhp)\n"
-        << " FileIn + -mi: File including paths of source files"
-        << " (only for merge)\n"
-        << " FileOut:  Destination file (*.*) or files (in case of -mi)\n"
-        << " DataBase: Mergedata (*.po)\n"
-        << " Lang: Restrict the handled languages; one element of\n"
-        << " (de, en-US, ...) or all\n";
+        << (" Syntax: Helpex -[m]i FileIn -o FileOut [-m DataBase] [-l Lang]\n"
+            " FileIn + i:   Source file (*.xhp)\n"
+            " FileIn + -mi: File including paths of source files"
+            " (only for merge)\n"
+            " FileOut:  Destination file (*.*) or files (in case of -mi)\n"
+            " DataBase: Mergedata (*.po)\n"
+            " Lang: Restrict the handled languages; one element of\n"
+            " (de, en-US, ...) or all\n");
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {

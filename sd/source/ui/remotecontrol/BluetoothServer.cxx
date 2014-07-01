@@ -1279,7 +1279,7 @@ void SAL_CALL BluetoothServer::run()
                 }
                 else
                     SAL_INFO( "sdremote.bluetooth", "unknown incoming dbus message, "
-                              << " type: " << dbus_message_get_type( pMsg )
+                                 " type: " << dbus_message_get_type( pMsg )
                               << " path: '" << dbus_message_get_path( pMsg )
                               << "' interface: '" << dbus_message_get_interface( pMsg )
                               << "' member: '" << dbus_message_get_member( pMsg ) );

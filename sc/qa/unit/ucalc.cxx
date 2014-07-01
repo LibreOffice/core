@@ -177,7 +177,7 @@ void Test::tearDown()
         if ((dfscaled) >= (time)) \
         { \
             std::ostringstream os; \
-            os << message << " took " << dfscaled << " pseudo-cycles (" << df << " real-time seconds), expected: " << time << " pseudo-cycles."; \
+            os << message " took " << dfscaled << " pseudo-cycles (" << df << " real-time seconds), expected: " << time << " pseudo-cycles."; \
             CPPUNIT_FAIL(os.str().c_str()); \
         } \
     } while (false)

@@ -770,7 +770,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         bCase = m_xMetaData->supportsMixedCaseQuotedIdentifiers();
         aSelectColumns = m_aSqlIterator.getSelectColumns();
 
-        OUStringBuffer aSQL( m_aPureSelectSQL + STR_WHERE + " ( 0 = 1 )");
+        OUStringBuffer aSQL( m_aPureSelectSQL + STR_WHERE " ( 0 = 1 )");
 
         // preserve the original WHERE clause
         // #i102234#

@@ -113,9 +113,8 @@ namespace
             if (sOut.isEmpty())
                 continue;
 
-            aDestination << " <e "
-                << "g=\"" << aI->second->sGID.getStr() << "\" "
-                << "i=\"" << aI->second->sLID.getStr() << "\">"
+            aDestination << " <e g=\"" << aI->second->sGID.getStr() << "\" i=\""
+                << aI->second->sLID.getStr() << "\">"
                 << helper::QuotHTML(sOut).getStr() << "</e>\n";
         }
 

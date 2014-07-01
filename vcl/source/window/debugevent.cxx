@@ -111,9 +111,9 @@ void DebugEventInjector::InjectMenuEvent()
 
     SAL_INFO( "vcl.debugevent",
               "Injected menu event " << aEvent.mpMenu
-              << " (" << aEvent.mnId << ") "
-              << "'" << ((Menu *)aEvent.mpMenu)->GetItemText( aEvent.mnId ) << "'"
-              << " -> " << bHandled );
+              << " (" << aEvent.mnId << ") '"
+              << ((Menu *)aEvent.mpMenu)->GetItemText( aEvent.mnId ) << "' -> "
+              << bHandled );
 }
 
 static void InitKeyEvent( SalKeyEvent &rKeyEvent )

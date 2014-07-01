@@ -95,12 +95,12 @@ void writeUsage(const OString& rName, const OString& rFileType)
     std::cout
         << " Syntax: " << rName.getStr()
         << " -i FileIn -o FileOut [-m DataBase] [-l Lang] [-b]\n"
-        << " FileIn:   Source files (" << rFileType.getStr() << ")\n"
-        << " FileOut:  Destination file (*.*)\n"
-        << " DataBase: Mergedata (*.po)\n"
-        << " Lang: Restrict the handled language; one element of\n"
-        << " (de, en-US, ...) or all\n"
-        << " -b:   Add UTF-8 Byte Order Mark to FileOut(use with -m option)\n";
+           " FileIn:   Source files (" << rFileType.getStr() << ")\n"
+           " FileOut:  Destination file (*.*)\n"
+           " DataBase: Mergedata (*.po)\n"
+           " Lang: Restrict the handled language; one element of\n"
+           " (de, en-US, ...) or all\n"
+           " -b:   Add UTF-8 Byte Order Mark to FileOut(use with -m option)\n";
 }
 
 void writePoEntry(

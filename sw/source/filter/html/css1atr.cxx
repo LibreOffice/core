@@ -3274,7 +3274,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                 sOut += " ";
 
             sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US) +
-                "(\'" + OOO_STRING_SVTOOLS_HTML_O_data +  ":" + aGraphicInBase64 + "\')";
+                "(\'" OOO_STRING_SVTOOLS_HTML_O_data ":" + aGraphicInBase64 + "\')";
 
             if( pRepeat )
             {

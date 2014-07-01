@@ -871,13 +871,11 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                         theMapBcp47::get().insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
                 if (res.second)
                 {
-                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted '" << pImpl->maBcp47 << "'"
-                            << " for 0x" << ::std::hex << mnLangID);
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID);
                 }
                 else
                 {
-                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "'"
-                            << " for 0x" << ::std::hex << mnLangID << " have 0x"
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID << " have 0x"
                             << ::std::hex << (*res.first).second->mnLangID);
                 }
             }
@@ -885,8 +883,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             {
                 if (!pImpl->mbInitializedBcp47)
                     pImpl->convertLocaleToBcp47();
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "'"
-                        << " for 0x" << ::std::hex << mnLangID << " round-trip to 0x" << ::std::hex << nLang);
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID << " round-trip to 0x" << ::std::hex << nLang);
             }
         }
     }

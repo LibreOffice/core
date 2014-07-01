@@ -386,8 +386,7 @@ void printSetPropertyMixinBody(
 
         o << "    css::uno::Any v;\n";
         if (optional) {
-            o << "    if(" << buffer1.makeStringAndClear() << ")\n    {\n"
-              << "        v <<= " << buffer2.makeStringAndClear() << ";\n    }\n";
+            o << "    if(" << buffer1.makeStringAndClear() << ")\n    {\n        v <<= " << buffer2.makeStringAndClear() << ";\n    }\n";
         } else {
             o << "    v <<= " << buffer2.makeStringAndClear() << ";\n\n";
         }

@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 
 #define SFX_ASSERT( bCondition, nId, sMessage ) SAL_WARN_IF( \
-    !(bCondition), "svl", (sMessage) << ", with ID/pos " << (nId));
+    !(bCondition), "svl", sMessage ", with ID/pos " << (nId));
 
 #endif
 

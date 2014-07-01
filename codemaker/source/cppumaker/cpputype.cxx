@@ -2562,7 +2562,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out) {
     dec();
     out << indent() << "}\n";
     dec();
-    out << indent() << "};\n" << " }" << " }\n\n";
+    out << indent() << "};\n } }\n\n";
     dumpGetCppuTypePreamble(out);
     out << indent() << "return *detail::" << staticTypeClass;
     dumpTemplateParameters(out);
@@ -3785,8 +3785,7 @@ void SingletonType::dumpHxxFile(
     inc();
     o << indent() << "assert(the_context.is());\n" << indent()
       << "::css::uno::Reference< " << scopedBaseName
-      << " > instance;\n"
-      << ("#if defined LO_URE_CURRENT_ENV && defined "
+      << (" > instance;\n#if defined LO_URE_CURRENT_ENV && defined "
           "LO_URE_CTOR_ENV_")
       << name_.replaceAll(".", "_dot_")
       << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
@@ -3803,7 +3802,7 @@ void SingletonType::dumpHxxFile(
                       " ::css::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("
           "::rtl::OUString( \"/singletons/")
-      << name_ << "\" )) >>= instance;\n" << "#endif\n"
+      << name_ << "\" )) >>= instance;\n#endif\n"
       << indent() << "if (!instance.is()) {\n";
     inc();
     o << indent()

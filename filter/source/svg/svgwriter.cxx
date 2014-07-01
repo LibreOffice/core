@@ -1092,8 +1092,7 @@ bool SVGTextWriter::nextTextPortion()
                         }
 
 #if OSL_DEBUG_LEVEL > 0
-                        sInfo += "text field type: " + sFieldName + "; " +
-                                 "content: " + xTextField->getPresentation( /* show command: */ sal_False ) + "; ";
+                        sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ sal_False ) + "; ";
 #endif
                         if( sFieldName.equalsAscii( "DateTime" ) || sFieldName.equalsAscii( "Header" )
                                 || sFieldName.equalsAscii( "Footer" ) || sFieldName.equalsAscii( "PageNumber" ) )
@@ -1253,9 +1252,9 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
         Point   aRot( maTextPos );
         OUString aTransform =
                 OUString("translate(") + OUString::number( aRot.X() ) +
-                "," + OUString::number( aRot.Y() ) + ")" +
-                " rotate(" + OUString::number( rFont.GetOrientation() * -0.1 ) +
-                ")" + " translate(" + OUString::number( -aRot.X() ) +
+                "," + OUString::number( aRot.Y() ) + ") rotate(" +
+                OUString::number( rFont.GetOrientation() * -0.1 ) +
+                ") translate(" + OUString::number( -aRot.X() ) +
                 "," + OUString::number( -aRot.Y() ) + ")";
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
@@ -2435,13 +2434,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         Point   aRot( aPos );
         OUString  aTransform =
-                OUString("translate") +
-                "(" + OUString::number( aRot.X() ) +
-                "," + OUString::number( aRot.Y() ) + ")" +
-                " rotate" +
-                "(" + OUString::number( rFont.GetOrientation() * -0.1 ) + ")" +
-                " translate" +
-                "(" + OUString::number( -aRot.X() ) +
+                "translate(" + OUString::number( aRot.X() ) +
+                "," + OUString::number( aRot.Y() ) + ") rotate(" +
+                OUString::number( rFont.GetOrientation() * -0.1 ) +
+                ") translate(" + OUString::number( -aRot.X() ) +
                 "," + OUString::number( -aRot.Y() ) + ")";
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );

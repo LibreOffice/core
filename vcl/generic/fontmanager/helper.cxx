@@ -50,7 +50,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
         bOnce = true;
         OUString aIni;
         Bootstrap::get( "BRAND_BASE_DIR", aInstallationRootPath );
-        aIni = aInstallationRootPath + "/" LIBO_ETC_FOLDER "/" + SAL_CONFIGFILE( "bootstrap" );
+        aIni = aInstallationRootPath + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
         Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( "CustomDataUrl", aConfigPath );
         aBootstrap.getFrom( "UserInstallation", aUserPath );

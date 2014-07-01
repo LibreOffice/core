@@ -1207,9 +1207,8 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 bSkipCompile = true;
                 pCode = pPreviousCell->pCode;
 
-                SAL_INFO( "sc", "merged '" << aFormula << "' == "
-                          "'" << aShouldBe << "'" <<
-                          " extend group to " << xGroup->mnLength );
+                SAL_INFO( "sc", "merged '" << aFormula << "' == '" << aShouldBe
+                          << "'extend group to " << xGroup->mnLength );
             }
         }
     }
