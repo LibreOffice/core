@@ -1750,7 +1750,7 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
     bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
-    if( rObj.mpImpl )
+    if (mpImpl && rObj.mpImpl)
         *mpImpl = *rObj.mpImpl;
     return *this;
 }
