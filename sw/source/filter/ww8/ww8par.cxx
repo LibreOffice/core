@@ -4555,13 +4555,13 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     }
     else //ordinary case
     {
-    //Modify here for #119405, by easyfan, 2012-05-24
-    mbOnLoadingMain = true;
-    //End of modification, by easyfan
-        ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
-    //Modify here for #119405, by easyfan, 2012-05-24
-    mbOnLoadingMain = false;
-    //End of modification, by easyfan
+        //Modify here for #119405, by easyfan, 2012-05-24
+        mbOnLoadingMain = true;
+        //End of modification, by easyfan
+        ReadText( 0, pWwFib->ccpText, MAN_MAINTEXT );
+        //Modify here for #119405, by easyfan, 2012-05-24
+        mbOnLoadingMain = false;
+        //End of modification, by easyfan
     }
 
     ::SetProgressState(nProgress, mpDocShell);    // Update
@@ -5256,17 +5256,12 @@ void SwWW8ImplReader::SetOutlineStyles()
         }
     }
 
-    if ( pChosenWW8ListStyle == NULL )
-    {
-        // no WW8 list style for Outline Style found --> nothing to do
-        return;
-    }
-
     // - set list level properties of Outline Style - ODF's list style applied by default to headings
     // - assign corresponding Heading Paragraph Styles to the Outline Style
     // - If a heading Paragraph Styles is not applying the WW8 list style which had been chosen as
     //   the one which provides the list level properties for the Outline Style, its assignment to
-    //   the Outline Style is removed and a potential applied WW8 list style is assigned directly.
+    //   the Outline Style is removed. A potential applied WW8 list style is assigned directly and
+    //   its default outline level is applied.
     SwNumRule aOutlineRule( *rDoc.GetOutlineNumRule() );
     bool bAppliedChangedOutlineStyle = false;
     std::vector< SwWW8StyInf* >::iterator aStylesIterEnd =
@@ -5283,18 +5278,21 @@ void SwWW8ImplReader::SetOutlineStyles()
             continue;
         }
 
-#if OSL_DEBUG_LEVEL > 1
-        ASSERT( pStyleInf->mnWW8OutlineLevel == pStyleInf->nListLevel,
-                "WW8 import - <SwWW8ImplReader::SetOutlineStyles()> - it is not expected that WW8 Built-In Heading styles have different outline level and list level" );
-#endif
-        const SwNumFmt& rRule = pChosenWW8ListStyle->Get( pStyleInf->mnWW8OutlineLevel );
-        aOutlineRule.Set( pStyleInf->mnWW8OutlineLevel, rRule );
-        bAppliedChangedOutlineStyle = true;
+        if ( pChosenWW8ListStyle != NULL
+             && pStyleInf->mnWW8OutlineLevel == pStyleInf->nListLevel )
+        {
+            const SwNumFmt& rRule = pChosenWW8ListStyle->Get( pStyleInf->mnWW8OutlineLevel );
+            aOutlineRule.Set( pStyleInf->mnWW8OutlineLevel, rRule );
+            bAppliedChangedOutlineStyle = true;
+        }
+
         // in case that there are more styles on this level ignore them
         nOutlineStyleListLevelWithAssignment |= nOutlineStyleListLevelOfWW8BuiltInHeadingStyle;
 
         SwTxtFmtColl* pTxtFmtColl = static_cast<SwTxtFmtColl*>(pStyleInf->pFmt);
-        if ( pStyleInf->GetOutlineNumrule() != pChosenWW8ListStyle )
+        if ( pStyleInf->GetOutlineNumrule() != pChosenWW8ListStyle
+             || ( pStyleInf->nListLevel < WW8ListManager::nMaxLevel
+                  && pStyleInf->mnWW8OutlineLevel != pStyleInf->nListLevel ) )
         {
             // WW8 Built-In Heading Style does not apply the chosen one.
             // --> delete assignment to OutlineStyle, but keep its current outline level
@@ -5304,6 +5302,10 @@ void SwWW8ImplReader::SetOutlineStyles()
             {
                 pTxtFmtColl->SetFmtAttr( SwNumRuleItem( pStyleInf->GetOutlineNumrule()->GetName() ) );
             }
+            // apply default outline level of WW8 Built-in Heading Style
+            const sal_uInt8 nOutlineLevel =
+                    SwWW8StyInf::WW8OutlineLevelToOutlinelevel( pStyleInf->mnWW8OutlineLevel );
+            pTxtFmtColl->SetFmtAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, nOutlineLevel ) );
         }
         else
         {

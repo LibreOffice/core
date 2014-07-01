@@ -636,28 +636,35 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 //   Hilfroutinen fuer Kapitelnummerierung und Aufzaehlung / Gliederung
 //---------------------------------------------------------------------
 
-static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
+static void SetBaseAnlv(
+    SwNumFmt &rNum,
+    WW8_ANLV &rAV,
+    sal_uInt8 nSwLevel )
 {
-    static SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-        SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC };
+    static SvxExtNumType eNumA[8] =
+    { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+      SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
+      SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC };
 
-    static SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
-        SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
-//          eigentlich folgende 2, aber Writer-UI bietet es nicht an
-//      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
+    static SvxAdjust eAdjA[4] =
+    { SVX_ADJUST_LEFT, SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
 
-    rNum.SetNumberingType( static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 ) ?
-                    eNumA[SVBT8ToByte( rAV.nfc ) ] : SVX_NUM_NUMBER_NONE) );
+    rNum.SetNumberingType(
+        static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 )
+            ? eNumA[SVBT8ToByte( rAV.nfc ) ]
+            : SVX_NUM_NUMBER_NONE) );
+
     if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
+    {
         rNum.SetIncludeUpperLevels(nSwLevel + 1);
+    }
     rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
-//  rNum.eNumAdjust = eAdjA[rAV.jc];
+
     rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
-    sal_Int16 nIndent = Abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
-    if( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
+    sal_Int16 nIndent = Abs( (sal_Int16) SVBT16ToShort( rAV.dxaIndent ) );
+    if ( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
         rNum.SetLSpace( nIndent );
@@ -877,11 +884,9 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
-        // <--
         aNR = *rDoc.GetOutlineNumRule();
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
@@ -4035,7 +4040,10 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             rSI.n81Flags = pj->n81Flags;
             rSI.n81BiDiFlags = pj->n81BiDiFlags;
-            rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
+            if ( !rSI.IsWW8BuiltInHeadingStyle() )
+            {
+                rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
+            }
             rSI.bParaAutoBefore = pj->bParaAutoBefore;
             rSI.bParaAutoAfter = pj->bParaAutoAfter;
 

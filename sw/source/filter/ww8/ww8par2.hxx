@@ -208,6 +208,12 @@ public:
     {
         sWWStyleName = rName;
         nWWStyleId = nId;
+
+        // apply default WW8 outline level to WW8 Built-in Heading styles
+        if ( IsWW8BuiltInHeadingStyle() )
+        {
+            mnWW8OutlineLevel = nWWStyleId - 1;
+        }
     }
 
     const String& GetOrgWWName() const
