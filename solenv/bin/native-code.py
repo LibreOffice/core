@@ -37,6 +37,7 @@ core_factory_list = [
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
+    ("libstoragefdlo.a", "storagefd_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
