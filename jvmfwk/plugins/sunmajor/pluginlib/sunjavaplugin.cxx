@@ -638,8 +638,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     OUString javaHome("JAVA_HOME");
     OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
-    javaHome += sPathLocation;
-    osl_setEnvironment(javaHome.pData, javaHome.pData);
+    osl_setEnvironment(javaHome.pData, sPathLocation.pData);
 #endif
 
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
