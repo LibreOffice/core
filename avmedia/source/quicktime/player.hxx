@@ -76,8 +76,8 @@ private:
     float                   mnUnmutedVolume;
     double                  mnStopTime;
 
-    sal_Bool                mbMuted;
-    sal_Bool                mbInitialized;
+    bool                mbMuted;
+    bool                mbInitialized;
 
     oslCondition            maSizeCondition;
 };

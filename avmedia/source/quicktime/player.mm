@@ -236,7 +236,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     OSL_TRACE( "set mute: %d muted: %d unmuted volume: %lf", bSet, mbMuted, mnUnmutedVolume );
 
     // change the volume to 0 or the unmuted volume
-    if(  mpMovie && mbMuted != bSet )
+    if(  mpMovie && mbMuted != bool(bSet) )
     {
         [mpMovie setMuted: bSet ];
         mbMuted = bSet;

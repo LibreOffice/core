@@ -34,7 +34,7 @@ void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException, std::except
 
 sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
         media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
