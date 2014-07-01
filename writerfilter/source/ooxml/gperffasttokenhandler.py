@@ -15,6 +15,7 @@ import sys
 class ContentHandler(xml.sax.handler.ContentHandler):
     def __init__(self):
         self.inFasttoken = False
+        self.chars = []
 
     def startElement(self, name, attrs):
         if name == "fasttoken":
@@ -22,12 +23,15 @@ class ContentHandler(xml.sax.handler.ContentHandler):
 
     def endElement(self, name):
         if name == "fasttoken":
+            chars = "".join(self.chars)
+            token = chars.replace('-', '_')
+            print("%s, OOXML_%s" % (token, token))
+            self.chars = []
             self.inFasttoken = False
 
     def characters(self, characters):
         if self.inFasttoken:
-            token = characters.replace('-', '_')
-            print("%s, OOXML_%s" % (token, token))
+            self.chars.append(characters)
 
 print("""
 %{
