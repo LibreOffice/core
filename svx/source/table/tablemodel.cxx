@@ -1124,12 +1124,12 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     // merge first cell
     CellRef xOriginCell( dynamic_cast< Cell* >( getCellByPosition( nCol, nRow ).get() ) );
-    if( xOriginCell.is() )
-    {
-        if( bUndo )
-            xOriginCell->AddUndo();
-        xOriginCell->merge( nColSpan, nRowSpan );
-    }
+    if(!xOriginCell.is())
+        return;
+
+    if( bUndo )
+        xOriginCell->AddUndo();
+    xOriginCell->merge( nColSpan, nRowSpan );
 
     sal_Int32 nTempCol = nCol + 1;
 
@@ -1151,9 +1151,6 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     }
 }
 
-
-
-
 void TableModel::updateRows()
 {
     sal_Int32 nRow = 0;
@@ -1164,8 +1161,6 @@ void TableModel::updateRows()
     }
 }
 
-
-
 void TableModel::updateColumns()
 {
     sal_Int32 nColumn = 0;
@@ -1175,8 +1170,6 @@ void TableModel::updateColumns()
         (*iter++)->mnColumn = nColumn++;
     }
 }
-
-
 
 } }
 
