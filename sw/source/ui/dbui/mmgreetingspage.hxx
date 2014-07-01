@@ -95,34 +95,10 @@ public:
 
 class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 {
-    CheckBox            m_aGreetingLineCB;
+    FixedText           *m_pBodyFT;
+    VclMultiLineEdit    *m_pBodyMLE;
 
-    CheckBox            m_aPersonalizedCB;
-
-    FixedText           m_aFemaleFT;
-    ListBox             m_aFemaleLB;
-    PushButton          m_aFemalePB;
-
-    FixedText           m_aMaleFT;
-    ListBox             m_aMaleLB;
-    PushButton          m_aMalePB;
-
-    FixedInfo           m_aFemaleFI;
-    FixedText           m_aFemaleColumnFT;
-    ListBox             m_aFemaleColumnLB;
-    FixedText           m_aFemaleFieldFT;
-    ComboBox            m_aFemaleFieldCB;
-
-    FixedText           m_aNeutralFT;
-    ComboBox            m_aNeutralCB;
-
-    FixedText           m_aBodyFT;
-    MultiLineEdit       m_aBodyMLE;
-    FixedLine           m_aSeparatorFL;
-
-    OKButton            m_aOK;
-    CancelButton        m_aCancel;
-    HelpButton          m_aHelp;
+    OKButton            *m_pOK;
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(OKHdl, void *);
@@ -130,8 +106,8 @@ public:
     SwMailBodyDialog(Window* pParent, SwMailMergeWizard* pWizard);
     virtual ~SwMailBodyDialog();
 
-    void            SetBody(const OUString& rBody ) {m_aBodyMLE.SetText(rBody);}
-    OUString        GetBody() const {return m_aBodyMLE.GetText();}
+    void            SetBody(const OUString& rBody ) {m_pBodyMLE->SetText(rBody);}
+    OUString        GetBody() const {return m_pBodyMLE->GetText();}
 };
 #endif
 

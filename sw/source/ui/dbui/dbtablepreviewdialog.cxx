@@ -23,8 +23,6 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <dbui.hrc>
-#include <dbtablepreviewdialog.hrc>
 #include <unomid.h>
 
 using namespace ::com::sun::star;
@@ -36,21 +34,20 @@ using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
-    m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
-    m_pBeamerWIN( new Window(this, SW_RES( WIN_BEAMER ))),
-    m_aOK( this, SW_RES(                   PB_OK  ))
+    SfxModalDialog(pParent, "TablePreviewDialog", "modules/swriter/ui/tablepreviewdialog.ui")
 {
-    FreeResource();
+    get(m_pDescriptionFI, "description");
+    get(m_pBeamerWIN, "beamer");
+
     const beans::PropertyValue* pValues = rValues.getConstArray();
     for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
     {
         if ( pValues[nValue].Name == "Command" )
         {
-            OUString sDescription = m_aDescriptionFI.GetText();
+            OUString sDescription = m_pDescriptionFI->GetText();
             OUString sTemp;
             pValues[nValue].Value >>= sTemp;
-            m_aDescriptionFI.SetText(sDescription.replaceFirst("%1", sTemp));
+            m_pDescriptionFI->SetText(sDescription.replaceFirst("%1", sTemp));
             break;
         }
     }
@@ -83,10 +80,7 @@ SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
     if(m_xFrame.is())
     {
         m_xFrame->setComponent(NULL, NULL);
-        m_xFrame->dispose();
     }
-    else
-        delete m_pBeamerWIN;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

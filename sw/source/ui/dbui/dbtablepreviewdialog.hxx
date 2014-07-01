@@ -31,9 +31,8 @@ namespace com{ namespace sun{ namespace star{
 
 class SwDBTablePreviewDialog : public SfxModalDialog
 {
-    FixedInfo       m_aDescriptionFI;
+    FixedText*      m_pDescriptionFI;
     Window*         m_pBeamerWIN;
-    OKButton        m_aOK;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >         m_xFrame;
 public:
