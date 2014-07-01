@@ -264,9 +264,17 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
     }
 
     if (dragOp == NSDragOperationNone)
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        SetThemeCursor(kThemeNotAllowedCursor);
+#else
         [[NSCursor operationNotAllowedCursor] set];
+#endif
     else if (dragOp == NSDragOperationCopy)
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        SetThemeCursor(kThemeCopyArrowCursor);
+#else
         [[NSCursor dragCopyCursor] set];
+#endif
     else
         [[NSCursor arrowCursor] set];
 
