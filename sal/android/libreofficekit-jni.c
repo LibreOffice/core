@@ -71,6 +71,10 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     const char *cacheDirPath;
     const char *apkFilePath;
 
+    const char program_dir[] = "/program";
+    size_t data_dir_len;
+    char *full_program_dir;
+
     (void) clazz;
 
     dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
@@ -123,8 +127,17 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     extract_files(UNPACK_TREE, UNPACK_TREE, 0);
     extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
 
+    // LibreOfficeKit expects a path to the program/ directory
+    data_dir_len = strlen(data_dir);
+    full_program_dir = malloc(data_dir_len + sizeof(program_dir));
+
+    strncpy(full_program_dir, data_dir, data_dir_len);
+    strncpy(full_program_dir + data_dir_len, program_dir, sizeof(program_dir));
+
     // Initialize LibreOfficeKit
-    gpOffice = libreofficekit_hook(data_dir);
+    gpOffice = libreofficekit_hook(full_program_dir);
+
+    free(full_program_dir);
     if (!gpOffice)
     {
         LOGE("libreofficekit_hook returned null");
