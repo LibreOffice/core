@@ -533,9 +533,9 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
     fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }
 
-static void initialize_uno(const OUString &aAppURL)
+static void initialize_uno(const OUString &aAppProgramURL)
 {
-    rtl::Bootstrap::setIniFilename(aAppURL + "/" + LIBO_ETC_FOLDER + "/" + SAL_CONFIGFILE("soffice"));
+    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" + SAL_CONFIGFILE("soffice"));
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     fprintf(stderr, "Uno initialized %d\n", xContext.is());
@@ -545,7 +545,7 @@ static void initialize_uno(const OUString &aAppURL)
 
     // set UserInstallation to user profile dir in test/user-template
 //    rtl::Bootstrap aDefaultVars;
-//    aDefaultVars.set(OUString("UserInstallation"), aAppURL + "../registry" );
+//    aDefaultVars.set(OUString("UserInstallation"), aAppProgramURL + "../registry" );
     // configmgr setup ?
 }
 
