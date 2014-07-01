@@ -64,7 +64,7 @@ public:
     // The following method is called when a SvxShape-object is to be created.
     // Derived classes may obtain at this point a derivation or an object
     // that is aggregating a SvxShape.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw (std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 typedef cppu::WeakAggImplHelper4

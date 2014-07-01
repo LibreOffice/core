@@ -300,7 +300,8 @@ SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape
     return SvxFmDrawPage::_CreateSdrObject( xShape );
 }
 
-uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const throw (std::exception)
+uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) const
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape >  xRet;
     if(pObj->ISA(SwVirtFlyDrawObj) || pObj->GetObjInventor() == SWGInventor)
