@@ -225,11 +225,11 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         {
             // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
             // einer Tabelle steht
-            const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
+            const sal_uInt16 eType = rSh.GetFrmType(0,true);
             if(!(FRMTYPE_BODY & eType) ||
                 rSh.GetSelectionType() & nsSelectionType::SEL_TBL)
             {
-                aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
+                aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,true));
                 rPage.PageCreated(aSet);
             }
         }
