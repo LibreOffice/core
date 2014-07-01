@@ -55,7 +55,8 @@ SdrObject* OReportDrawPage::_CreateSdrObject(const uno::Reference< drawing::XSha
     return SvxDrawPage::_CreateSdrObject( xDescr );
 }
 
-uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pObj ) const throw (std::exception)
+uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pObj ) const
+    throw (uno::RuntimeException, std::exception)
 {
     OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
     if ( !pBaseObj )
