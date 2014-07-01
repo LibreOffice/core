@@ -53,7 +53,11 @@ ifdef gb_SHELL
 SHELL := $(gb_SHELL)
 else
 ifeq ($(OS_FOR_BUILD),WNT)
+ifeq ($(GNUMAKE_WIN_NATIVE),TRUE)
 SHELL := $(shell cygpath -m /bin/sh)
+else
+SHELL := /bin/sh
+endif
 else
 SHELL := /bin/sh
 endif
