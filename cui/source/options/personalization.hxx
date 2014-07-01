@@ -25,13 +25,14 @@ class SvxPersonalizationTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 private:
-    RadioButton *m_pNoPersona;              ///< Just the default look, without any bitmap
-    RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
-    RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
-    PushButton *m_pSelectPersona;           ///< Let the user select in the 'own' case
-    PushButton *m_vDefaultPersonaImages[3]; ///< Buttons to show the default persona images
-    PushButton *m_vExtensionPersonas[3];    ///< Buttons to show the last 3 personas installed via extensions
-    OUString m_aPersonaSettings;            ///< Header and footer images + color to be set in the settings.
+    RadioButton *m_pNoPersona;                  ///< Just the default look, without any bitmap
+    RadioButton *m_pDefaultPersona;             ///< Use the built-in bitmap
+    RadioButton *m_pOwnPersona;                 ///< Use the user-defined bitmap
+    PushButton *m_pSelectPersona;               ///< Let the user select in the 'own' case
+    PushButton *m_vDefaultPersonaImages[3];     ///< Buttons to show the default persona images
+    PushButton *m_pExtensionPersonaPreview;     ///< Buttons to show the last 3 personas installed via extensions
+    ListBox* m_pPersonaList;                    ///< The ListBox to show the list of installed personas
+    OUString m_aPersonaSettings;                ///< Header and footer images + color to be set in the settings.
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;
@@ -52,7 +53,7 @@ public:
     void SetPersonaSettings( const OUString );
 
     void LoadDefaultImages();
-    void LoadExtensionImages();
+    void LoadExtensionThemes();
 
 private:
     /// Handle the Persona selection
@@ -65,7 +66,7 @@ private:
     DECL_LINK( DefaultPersona, PushButton* );
 
     /// Handle the Personas installed through extensions selection
-    DECL_LINK( InstalledPersona, PushButton* );
+    DECL_LINK( SelectInstalledPersona, ListBox* );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.
