@@ -70,9 +70,6 @@ public:
         The position can be in the same or in an another document. It can also
         be within the range!
 
-        \warning The range has to include at least two nodes or has to be a
-        SwDoc::IsColumnSelection!
-
         Normally this functions should work only with content nodes. But there
         is a special case used by SwDoc::Append, which starts the SwPaM at the
         content start node. This position doesn't contain any content:
