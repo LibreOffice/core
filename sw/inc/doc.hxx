@@ -624,7 +624,8 @@ private:
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
                             const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
-                            const bool bCopyFlyAtFly = false ) const;
+                            const bool bCopyFlyAtFly = false,
+                            const bool bMergedFirstNode = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, bool, bool );
@@ -1079,7 +1080,8 @@ public:
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
-                            sal_Bool bCopyFlyAtFly = sal_False ) const;
+                            sal_Bool bCopyFlyAtFly = sal_False,
+                            sal_Bool bMergedFirstNode = sal_False ) const;
 
     bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
