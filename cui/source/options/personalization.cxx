@@ -245,15 +245,16 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
 
     get( m_vExtensionPersonas[0], "extension1" );
-    m_vExtensionPersonas[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+    m_vExtensionPersonas[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
 
     get( m_vExtensionPersonas[1], "extension2" );
-    m_vExtensionPersonas[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+    m_vExtensionPersonas[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
 
     get( m_vExtensionPersonas[2], "extension3" );
-    m_vExtensionPersonas[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+    m_vExtensionPersonas[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
 
     LoadDefaultImages();
+    LoadExtensionImages();
 }
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
@@ -360,13 +361,18 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         m_vDefaultPersonaImages[nIndex]->Show();
         m_vDefaultPersonaImages[nIndex++]->SetModeImage( Image( aBmp ) );
     }
+}
 
+void SvxPersonalizationTabPage::LoadExtensionImages()
+{
     // See if any extensions are used to install personas. If yes, load them.
 
+    GraphicFilter aFilter;
+    Graphic aGraphic;
+    sal_Int32 nIndex = 0;
     css::uno::Sequence<OUString> installedPersonas( officecfg::Office::Common::Misc::PersonasList::get()->getElementNames() );
     sal_Int32 nLength = installedPersonas.getLength();
     sal_Int32 nCount = 0;
-    nIndex = 0;
 
     if( nLength == 0 )
         return;
@@ -442,6 +448,12 @@ IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
     }
 
+    return 0;
+}
+
+IMPL_LINK( SvxPersonalizationTabPage, InstalledPersona, PushButton*, pButton )
+{
+    m_pOwnPersona->Check();
     for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
     {
         if( pButton == m_vExtensionPersonas[nIndex] )

@@ -52,6 +52,7 @@ public:
     void SetPersonaSettings( const OUString );
 
     void LoadDefaultImages();
+    void LoadExtensionImages();
 
 private:
     /// Handle the Persona selection
@@ -62,6 +63,9 @@ private:
 
     /// Handle the default Persona selection
     DECL_LINK( DefaultPersona, PushButton* );
+
+    /// Handle the Personas installed through extensions selection
+    DECL_LINK( InstalledPersona, PushButton* );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.
