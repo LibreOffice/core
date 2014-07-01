@@ -34,4 +34,54 @@ String STR_IMAGE_CAPACITY
     Text [ en-US ] = "$(CAPACITY) kiB" ;
 };
 
+String STR_IMAGE_GIF
+{
+    Text [ en-US ] = "Gif image";
+};
+
+String STR_IMAGE_JPEG
+{
+    Text [ en-US ] = "Jpeg image";
+};
+
+String STR_IMAGE_PNG
+{
+    Text [ en-US ] = "PNG image";
+};
+
+String STR_IMAGE_TIFF
+{
+    Text [ en-US ] = "TIFF image";
+};
+
+String STR_IMAGE_WMF
+{
+    Text [ en-US ] = "WMF image";
+};
+
+String STR_IMAGE_MET
+{
+    Text [ en-US ] = "MET image";
+};
+
+String STR_IMAGE_PCT
+{
+    Text [ en-US ] = "PCT image";
+};
+
+String STR_IMAGE_SVG
+{
+    Text [ en-US ] = "SVG image";
+};
+
+String STR_IMAGE_BMP
+{
+    Text [ en-US ] = "BMP image";
+};
+
+String STR_IMAGE_UNKNOWN
+{
+    Text [ en-US ] = "Unknown";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
