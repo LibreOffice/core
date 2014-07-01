@@ -87,7 +87,6 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
 
     // If *.dae file is not in the local file system, then copy it to a temp folder for the conversion
-    // KMZ covnerter need a temp folder in all case, because it creates temp files next to the source file
     OUString sInput = rSourceURL;
     const INetURLObject aSourceURLObj(rSourceURL);
     if( aSourceURLObj.GetProtocol() != INET_PROT_FILE )
