@@ -1196,7 +1196,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
     if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
     {
-        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
@@ -1240,7 +1240,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
     if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
     {
-        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich,sal_False));
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich,false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
