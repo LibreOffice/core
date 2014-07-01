@@ -943,21 +943,23 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                 //copy the styles from the source to the target document
                 pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, true );
+
                 //determine the page style and number used at the start of the source document
                 pSourceShell->SttEndDoc(true);
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
-                // copy compatibility options
-                lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
-                // #72821# copy dynamic defaults
-                lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
+
                 // #i72517#
                 const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
                 const SwFrmFmt& rMaster = pSourcePageDesc->GetMaster();
                 bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
                                                 rMaster.GetFooter().IsActive();
 
+                // copy compatibility options
+                lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
+                // #72821# copy dynamic defaults
+                lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
             }
 
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
@@ -1047,18 +1049,24 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
 
-                        {
                             //create a view frame for the document
-                            SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
+                            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
                             //request the layout calculation
-                            SwWrtShell& rWorkShell =
-                                    static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
-                            rWorkShell.CalcLayout();
-                            SwDoc* pWorkDoc = ((SwDocShell*)(&xWorkDocSh))->GetDoc();
+                            SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
+                            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
+
+                            SwDoc* pWorkDoc = rWorkShell.GetDoc();
                             SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
                             pWorkDoc->SetDBManager( this );
+                            pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+
+                            // #i69485# lock fields to prevent access to the result set while calculating layout
+                            rWorkShell.LockExpFlds();
+                            rWorkShell.CalcLayout();
+                            rWorkShell.UnlockExpFlds();
+
                             SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
-                            pWorkDoc->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
+                            rWorkShell.SwViewShell::UpdateFlds();
                             SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                             pWorkDoc->RemoveInvisibleContent();
@@ -1226,7 +1234,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
                             }
                             pWorkDoc->SetDBManager( pOldDBManager );
-                        }
+
                         xWorkDocSh->DoClose();
                     }
                 }
@@ -2728,7 +2736,8 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
     SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
     bool bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
-    //save the settings of the first
+
+    //determine the page style and number used at the start of the source document
     rSourceShell.SttEndDoc(true);
     sal_uInt16 nStartingPageNo = rSourceShell.GetVirtPageNum();
     OUString sModifiedStartingPageDesc;
@@ -2752,11 +2761,13 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
+
         //initiate SelectShell() to create sub shells
         pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
         SwWrtShell* pTargetShell = pTargetView->GetWrtShellPtr();
         SwDoc* pTargetDoc = pTargetShell->GetDoc();
 
+        //copy the styles from the source to the target document
         pTargetView->GetDocShell()->_LoadStyles( *rSourceView.GetDocShell(), true );
 
         // #i63806#
@@ -2807,6 +2818,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 SwDBManager* pWorkDBManager = pWorkDoc->GetDBManager();
                 pWorkDoc->SetDBManager( this );
                 pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+
                 SwUndoId nLastUndoId(UNDO_EMPTY);
                 if (rWorkShell.GetLastUndoInfo(0, & nLastUndoId))
                 {
@@ -2815,14 +2827,16 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                         rWorkShell.Undo();
                     }
                 }
+
                 // #i69485# lock fields to prevent access to the result set while calculating layout
                 rWorkShell.LockExpFlds();
                 // create a layout
                 rWorkShell.CalcLayout();
                 rWorkShell.UnlockExpFlds();
-                SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+
+            SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
             rWorkShell.SwViewShell::UpdateFlds();
-                SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+            SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
 
             // strip invisible content and convert fields to text
             rWorkShell.RemoveInvisibleContent();
