@@ -843,6 +843,69 @@ static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
     return bRet;
 }
 
+#define NUMRULE_STATE \
+     int aNumRuleState = SFX_ITEM_UNKNOWN; \
+     SwNumRuleItem aNumRuleItem; \
+     int aListIdState = SFX_ITEM_UNKNOWN; \
+     SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() ); \
+
+#define PUSH_NUMRULE_STATE \
+     lcl_PushNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTxtNd );
+
+#define POP_NUMRULE_STATE \
+     lcl_PopNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTxtNd, rPam );
+
+static void lcl_PushNumruleState( int &aNumRuleState, SwNumRuleItem &aNumRuleItem,
+                                  int &aListIdState, SfxStringItem &aListIdItem,
+                                  const SwTxtNode *pDestTxtNd )
+{
+    // Safe numrule item at destination.
+    // #i86492# - Safe also <ListId> item of destination.
+    const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
+    if (pAttrSet != NULL)
+    {
+        const SfxPoolItem * pItem = NULL;
+        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
+        if (SFX_ITEM_SET == aNumRuleState)
+            aNumRuleItem = *((SwNumRuleItem *) pItem);
+
+        aListIdState =
+            pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
+        if (SFX_ITEM_SET == aListIdState)
+        {
+            aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        }
+    }
+}
+
+static void lcl_PopNumruleState( int aNumRuleState, const SwNumRuleItem &aNumRuleItem,
+                                 int aListIdState, const SfxStringItem &aListIdItem,
+                                 SwTxtNode *pDestTxtNd, const SwPaM& rPam )
+{
+    /* If only a part of one paragraph is copied
+       restore the numrule at the destination. */
+    // #i86492# - restore also <ListId> item
+    if ( !lcl_MarksWholeNode(rPam) )
+    {
+        if (SFX_ITEM_SET == aNumRuleState)
+        {
+            pDestTxtNd->SetAttr(aNumRuleItem);
+        }
+        else
+        {
+            pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
+        }
+        if (SFX_ITEM_SET == aListIdState)
+        {
+            pDestTxtNd->SetAttr(aListIdItem);
+        }
+        else
+        {
+            pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
+        }
+    }
+}
+
 bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         const bool bMakeNewFrms, const bool bCopyAll,
         SwPaM *const pCpyRange ) const
@@ -1006,28 +1069,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
-                // Safe numrule item at destination.
-                // #i86492# - Safe also <ListId> item of destination.
-                int aNumRuleState = SFX_ITEM_UNKNOWN;
-                SwNumRuleItem aNumRuleItem;
-                int aListIdState = SFX_ITEM_UNKNOWN;
-                SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+                NUMRULE_STATE
+                if( bCopyCollFmt && bOneNode )
                 {
-                    const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
-                    if (pAttrSet != NULL)
-                    {
-                        const SfxPoolItem * pItem = NULL;
-                        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
-                        if (SFX_ITEM_SET == aNumRuleState)
-                            aNumRuleItem = *((SwNumRuleItem *) pItem);
-
-                        aListIdState =
-                            pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
-                        if (SFX_ITEM_SET == aListIdState)
-                        {
-                            aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-                        }
-                    }
+                    PUSH_NUMRULE_STATE
                 }
 
                 if( !bCopyOk )
@@ -1047,29 +1092,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     if( bCopyCollFmt )
                     {
                         pSttTxtNd->CopyCollFmt( *pDestTxtNd );
-
-                        /* If only a part of one paragraph is copied
-                           restore the numrule at the destination. */
-                        // #i86492# - restore also <ListId> item
-                        if ( !lcl_MarksWholeNode(rPam) )
-                        {
-                            if (SFX_ITEM_SET == aNumRuleState)
-                            {
-                                pDestTxtNd->SetAttr(aNumRuleItem);
-                            }
-                            else
-                            {
-                                pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
-                            }
-                            if (SFX_ITEM_SET == aListIdState)
-                            {
-                                pDestTxtNd->SetAttr(aListIdItem);
-                            }
-                            else
-                            {
-                                pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
-                            }
-                        }
+                        POP_NUMRULE_STATE
                     }
 
                     break;
@@ -1151,31 +1174,14 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 bStartIsTxtNode = sal_True;
             }
 
-            // Save numrule at destination
-            // #i86492# - Safe also <ListId> item of destination.
-            int aNumRuleState = SFX_ITEM_UNKNOWN;
-            SwNumRuleItem aNumRuleItem;
-            int aListIdState = SFX_ITEM_UNKNOWN;
-            SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+            const bool bEmptyDestNd = pDestTxtNd->GetTxt().isEmpty();
+
+            NUMRULE_STATE
+            if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
-                const SfxItemSet* pAttrSet = pDestTxtNd->GetpSwAttrSet();
-                if (pAttrSet != NULL)
-                {
-                    const SfxPoolItem * pItem = NULL;
-
-                    aNumRuleState =
-                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
-                    if (SFX_ITEM_SET == aNumRuleState)
-                        aNumRuleItem = *((SwNumRuleItem *) pItem);
-
-                    aListIdState =
-                        pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
-                    if (SFX_ITEM_SET == aListIdState)
-                        aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-                }
+                PUSH_NUMRULE_STATE
             }
 
-            const bool bEmptyDestNd = pDestTxtNd->GetTxt().isEmpty();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
                             pEnd->nContent.GetIndex() );
 
@@ -1183,31 +1189,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
                 pEndTxtNd->CopyCollFmt( *pDestTxtNd );
-
                 if ( bOneNode )
                 {
-                    /* If only a part of one paragraph is copied
-                       restore the numrule at the destination. */
-                    // #i86492# - restore also <ListId> item
-                    if ( !lcl_MarksWholeNode(rPam) )
-                    {
-                        if (SFX_ITEM_SET == aNumRuleState)
-                        {
-                            pDestTxtNd->SetAttr(aNumRuleItem);
-                        }
-                        else
-                        {
-                            pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
-                        }
-                        if (SFX_ITEM_SET == aListIdState)
-                        {
-                            pDestTxtNd->SetAttr(aListIdItem);
-                        }
-                        else
-                        {
-                            pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
-                        }
-                    }
+                    POP_NUMRULE_STATE
                 }
             }
         }
