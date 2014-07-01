@@ -3276,12 +3276,6 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     if (pFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = pFmt->GetCntnt().GetCntntIdx()->GetNode();
-#if OSL_DEBUG_LEVEL > 1
-        const SwStartNode* p1 = aPam.GetNode()->FindFlyStartNode();
-        const SwStartNode* p2 = rNode.FindFlyStartNode();
-        (void)p1;
-        (void)p2;
-#endif
         if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
         {
             aRef = static_cast<text::XWordCursor*>(
