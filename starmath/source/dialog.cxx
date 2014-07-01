@@ -1200,16 +1200,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbolSet(Window *pPa
 void SmShowSymbolSetWindow::calccols()
 {
     // Height of 16pt in pixels (matching 'aOutputSize')
-    nLen = (sal_uInt16) LogicToPixel(Size(0, 16), MapMode(MAP_POINT)).Height();
+    nLen = LogicToPixel(Size(0, 16), MapMode(MAP_POINT)).Height();
 
     Size aOutputSize = GetOutputSizePixel();
 
-    nColumns = sal::static_int_cast< sal_uInt16 >(aOutputSize.Width() / nLen);
+    nColumns = aOutputSize.Width() / nLen;
     if (nColumns > 2  && nColumns % 2 != 0)
         --nColumns;
-    nRows = sal::static_int_cast< sal_uInt16 >(aOutputSize.Height() / nLen);
-    nColumns = std::max<sal_uInt16>(1, nColumns);
-    nRows = std::max<sal_uInt16>(1, nRows);
+    nRows = aOutputSize.Height() / nLen;
+    nColumns = std::max<long>(1, nColumns);
+    nRows = std::max<long>(1, nRows);
 
     nXOffset = (aOutputSize.Width() - (nColumns * nLen)) / 2;
     nYOffset = (aOutputSize.Height() - (nRows * nLen)) / 2;
@@ -1232,7 +1232,7 @@ void SmShowSymbolSetWindow::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
 
 void SmShowSymbolSetWindow::SetScrollBarRange()
 {
-    if (static_cast< sal_uInt16 >(aSymbolSet.size()) > (nColumns * nRows))
+    if (aSymbolSet.size() > static_cast<size_t>(nColumns * nRows))
     {
         m_pVScrollBar->SetRange(Range(0, ((aSymbolSet.size() + (nColumns - 1)) / nColumns) - nRows));
         m_pVScrollBar->Enable(true);

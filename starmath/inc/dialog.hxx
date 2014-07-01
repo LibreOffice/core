@@ -259,9 +259,9 @@ class SmShowSymbolSetWindow : public Control
     SymbolPtrVec_t aSymbolSet;
     Link        aSelectHdlLink;
     Link        aDblClickHdlLink;
-    sal_uInt16  nLen;
-    sal_uInt16  nRows, nColumns;
-    sal_uInt16  nXOffset, nYOffset;
+    long        nLen;
+    long        nRows, nColumns;
+    long        nXOffset, nYOffset;
     sal_uInt16  nSelectSymbol;
 
     void SetScrollBarRange();
