@@ -39,7 +39,11 @@ PathFormat()
             fi
         done
         if test "$pf_conv_to_dos" = "yes"; then
-            formatted_path=`cygpath -sm "$formatted_path"`
+            if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+                formatted_path=`cygpath -sm "$formatted_path"`
+            else
+                formatted_path=`cygpath -d "$formatted_path"`
+            fi
             if test $? -ne 0;  then
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
@@ -185,6 +189,57 @@ cd $srcdir
 SRC_ROOT=`pwd`
 cd $BUILDDIR
 x_Cygwin=[\#]
+
+dnl ===================================================================
+dnl Search all the common names for GNU make
+dnl ===================================================================
+AC_MSG_CHECKING([for GNU make])
+
+# try to use our own make if it is available and GNUMAKE was not already defined
+if test -z "$GNUMAKE"; then
+    if test -x "/opt/lo/bin/make"; then
+        GNUMAKE="/opt/lo/bin/make"
+    fi
+fi
+
+GNUMAKE_WIN_NATIVE=
+for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
+    if test -n "$a"; then
+        $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+        if test $? -eq 0;  then
+            if test "$build_os" = "cygwin"; then
+                if test -n "$($a -v | grep 'Built for Windows')" ; then
+                    GNUMAKE="$(cygpath -m "$(which "$(cygpath -u $a)")")"
+                    GNUMAKE_WIN_NATIVE="TRUE"
+                else
+                    GNUMAKE=`which $a`
+                fi
+            else
+                GNUMAKE=`which $a`
+            fi
+            break
+        fi
+    fi
+done
+AC_MSG_RESULT($GNUMAKE)
+if test -z "$GNUMAKE"; then
+    AC_MSG_ERROR([not found. install GNU make.])
+else
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+        AC_MSG_NOTICE([Using a native Win32 gnumake version.])
+    fi
+fi
+
+win_short_path_for_make()
+{
+    local_short_path="$1"
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+        cygpath -sm "$local_short_path"
+    else
+        cygpath -u "$(cygpath -d "$local_short_path")"
+    fi
+}
+
 
 if test "$build_os" = "cygwin"; then
     PathFormat "$SRC_ROOT"
@@ -2308,8 +2363,13 @@ pathmunge ()
 {
     if test -n "$1"; then
         if test "$build_os" = "cygwin"; then
-            PathFormat "$1"
-            new_path=`cygpath -sm "$formatted_path"`
+            if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+                PathFormat "$1"
+                new_path=`cygpath -sm "$formatted_path"`
+            else
+                PathFormat "$1"
+                new_path=`cygpath -u "$formatted_path"`
+            fi
         else
             new_path="$1"
         fi
@@ -3676,7 +3736,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
 
-        VC_PRODUCT_DIR=`cygpath -sm "$VC_PRODUCT_DIR"`
+        VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
         AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
         dnl ===========================================================
@@ -3726,7 +3786,7 @@ if test "$_os" = "WINNT"; then
             fi
 
             # This gives us a posix path with 8.3 filename restrictions
-            CC=`cygpath -sm "$CC"`
+            CC=`win_short_path_for_make "$CC"`
         fi
 
         if test -n "$CC"; then
@@ -4095,8 +4155,11 @@ cygwin*)
     GUIBASE=not-used
     OS=WNT
     RTL_OS=Windows
-    P_SEP=";"
-
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+        P_SEP=";"
+    else
+        P_SEP=:
+    fi
     case "$host_cpu" in
     i*86|x86_64)
         if test "$BITNESS_OVERRIDE" = 64; then
@@ -4967,36 +5030,6 @@ else
 fi
 AC_SUBST(ENABLE_PCH)
 
-dnl ===================================================================
-dnl Search all the common names for GNU make
-dnl ===================================================================
-AC_MSG_CHECKING([for GNU make])
-
-# try to use our own make if it is available and GNUMAKE was not already defined
-if test -z "$GNUMAKE"; then
-    if test -x "/opt/lo/bin/make"; then
-        GNUMAKE="/opt/lo/bin/make"
-    fi
-fi
-
-for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
-    if test -n "$a"; then
-        $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
-        if test $? -eq 0;  then
-            if test "$build_os" = "cygwin"; then
-                GNUMAKE=$(cygpath -m $(which $(cygpath -u $a)))
-            else
-                GNUMAKE=`which $a`
-            fi
-            break
-        fi
-    fi
-done
-AC_MSG_RESULT($GNUMAKE)
-if test -z "$GNUMAKE"; then
-    AC_MSG_ERROR([not found. install GNU make.])
-fi
-
 TAB=`printf '\t'`
 
 AC_MSG_CHECKING([the GNU make version])
@@ -5062,7 +5095,7 @@ fi
 # find if gnumake support file function
 AC_MSG_CHECKING([whether GNU make supports the 'file' function])
 TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
 fi
 $SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
@@ -5083,6 +5116,7 @@ fi
 rm -rf $TESTGMAKEFILEFUNC
 AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
 AC_SUBST(GNUMAKE)
+AC_SUBST(GNUMAKE_WIN_NATIVE)
 
 _make_ver_check=`$GNUMAKE --version | grep LibreOffice`
 STALE_MAKE=
@@ -5091,7 +5125,7 @@ if test "$_make_ver_check" = ""; then
    STALE_MAKE=TRUE
 fi
 
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     SHELL_BASH=$(cygpath -m $(which bash))
 else
     SHELL_BASH=`which bash`
@@ -5394,7 +5428,7 @@ if test "$build_os" = "cygwin"; then
     fi
 
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
-    MIDL_PATH=`cygpath -sm "$MIDL_PATH"`
+    MIDL_PATH=`win_short_path_for_make "$MIDL_PATH"`
 
     dnl Check csc.exe
     AC_MSG_CHECKING([for csc.exe])
@@ -5408,7 +5442,7 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_RESULT([$CSC_PATH/csc.exe])
     fi
 
-    CSC_PATH=`cygpath -sm "$CSC_PATH"`
+    CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
 
     dnl Check al.exe
     AC_MSG_CHECKING([for al.exe])
@@ -5433,7 +5467,7 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_RESULT([$AL_PATH/al.exe])
     fi
 
-    AL_PATH=`cygpath -sm "$AL_PATH"`
+    AL_PATH=`win_short_path_for_make "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
@@ -6854,7 +6888,7 @@ if test "$ENABLE_JAVA" != ""; then
                 AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $bitness-bit JDK])
             fi
         else
-            test "$build_os" = "cygwin" && with_jdk_home=`cygpath -sm "$with_jdk_home"`
+            test "$build_os" = "cygwin" && with_jdk_home=`win_short_path_for_make "$with_jdk_home"`
             howfound="you passed"
         fi
     fi
@@ -6894,7 +6928,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVAINTERPRETER" | $GREP -i '\.exe$'` = x; then
             JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
         fi
-        JAVAINTERPRETER=`cygpath -sm "$JAVAINTERPRETER"`
+        JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
     elif test $_os = Darwin -a "$BITNESS_OVERRIDE" = ""; then
         dnl HACK:  There currently is only a 32 bit version of LibreOffice for Mac OS X,
         dnl and Tiger Java complains about -d32 while Snow Leopard Java needs it
@@ -7040,7 +7074,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVACOMPILER" | $GREP -i '\.exe$'` = x; then
             JAVACOMPILER="${JAVACOMPILER}.exe"
         fi
-        JAVACOMPILER=`cygpath -sm "$JAVACOMPILER"`
+        JAVACOMPILER=`win_short_path_for_make "$JAVACOMPILER"`
     fi
 
     if test `$JAVACOMPILER -version 2>&1 | $GREP -c "Eclipse Java Compiler"` -gt 0; then
@@ -7084,7 +7118,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
-        JAVADOC=`cygpath -sm "$JAVADOC"`
+        JAVADOC=`win_short_path_for_make "$JAVADOC"`
     fi
 
     if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
@@ -7506,7 +7540,7 @@ AC_PATH_PROG(GPERF, gperf)
 if test -z "$GPERF"; then
     AC_MSG_ERROR([gperf not found but needed. Install it.])
 fi
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     GPERF=`cygpath -m $GPERF`
 fi
 AC_MSG_CHECKING([gperf version])
@@ -9883,7 +9917,7 @@ else
 fi
 
 AC_PATH_PROG(FLEX, flex)
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     FLEX=`cygpath -m $FLEX`
 fi
 if test -z "$FLEX"; then
@@ -9926,7 +9960,7 @@ else
     GNUPATCH=$PATCH
 fi
 
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     GNUPATCH=`cygpath -m $GNUPATCH`
 fi
 
@@ -9950,7 +9984,7 @@ else
     fi
 fi
 
-if test "$build_os" = "cygwin"; then
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     GNUCP=`cygpath -m $GNUCP`
 fi
 
@@ -12940,7 +12974,9 @@ else
 
     cygwin*)
         # Win32 make needs native paths
-        LO_PATH=`cygpath -p -m "$PATH"`
+        if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+            LO_PATH=`cygpath -p -m "$PATH"`
+        fi
         pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
         pathmunge "$ASM_HOME" "before"
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
