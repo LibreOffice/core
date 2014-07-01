@@ -92,6 +92,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_BoundBox(0)
     , m_BoundBoxNormal(0)
     , m_TextTexCoordBuf(0)
+    , m_TextTexCoordBufBatch(0)
     , m_RoundBarMesh()
     , m_RenderVertexBuf(0)
     , m_RenderTexCoordBuf(0)
@@ -105,6 +106,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_BatchColorBuf(0)
     , m_Batch3DUBOBuffer(0)
     , m_Batch3DActualSizeLight(0)
+    , m_iLightNum(0)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
