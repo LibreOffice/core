@@ -2089,6 +2089,13 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
         bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
         OUString aStr( getString( _rxModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL ) ) );
 
+        //fdo#42747 the min/max/first/last of vcl NumericFormatters needs to be
+        //multiplied by the no of decimal places. See also
+        //VclBuilder::mungeAdjustment
+        int nMul = rtl_math_pow10Exp(1, m_nScale);
+        nMin *= nMul;
+        nMax *= nMul;
+
         static_cast< LongCurrencyField* >( m_pWindow )->SetUseThousandSep( bThousand );
         static_cast< LongCurrencyField* >( m_pWindow )->SetDecimalDigits( m_nScale );
         static_cast< LongCurrencyField* >( m_pWindow )->SetCurrencySymbol( aStr );
