@@ -1712,14 +1712,18 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
     rStrm << nRecordType << nDummyFlags << nTableType;
 
     // General flags
+    sal_uInt16 nFlags = 0x0001;
+#if 0
+    // for doc purpose
+    sal_uInt16 nFlags = 0x0000;
     bool bEnableRefresh = true;
     bool bPCacheInvalid = false;
     bool bOlapPTReport  = false;
 
-    sal_uInt16 nFlags = 0x0000;
     if (bEnableRefresh) nFlags |= 0x0001;
     if (bPCacheInvalid) nFlags |= 0x0002;
     if (bOlapPTReport)  nFlags |= 0x0004;
+#endif
     rStrm << nFlags;
 
     // Feature-specific options.  The value differs depending on the table
