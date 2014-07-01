@@ -802,7 +802,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
-    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
 };
 
 inline SwpHints & SwTxtNode::GetSwpHints()
