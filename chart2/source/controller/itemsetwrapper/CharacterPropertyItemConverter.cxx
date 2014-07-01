@@ -556,7 +556,6 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     return bChanged;
 }
 
-
 } //  namespace wrapper
 } //  namespace chart
 

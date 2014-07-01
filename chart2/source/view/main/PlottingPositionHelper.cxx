@@ -419,7 +419,6 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     return aRet;
 }
 
-
 uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformationScaledLogicToScene() const
 {
     if( !m_xTransformationLogicToScene.is() )

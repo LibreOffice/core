@@ -2002,7 +2002,6 @@ void VSeriesPlotter::setCoordinateSystemResolution( const Sequence< sal_Int32 >&
     m_aCoordinateSystemResolution = rCoordinateSystemResolution;
 }
 
-
 bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
 {
     return ChartTypeHelper::isSeriesInFrontOfAxisLine( m_xChartTypeModel );

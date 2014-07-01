@@ -48,8 +48,6 @@ ReferenceSizeProvider::ReferenceSizeProvider(
         m_bUseAutoScale( getAutoResizeState( xChartDoc ) == AUTO_RESIZE_YES )
 {}
 
-
-
 void ReferenceSizeProvider::impl_setValuesAtTitled(
     const Reference< XTitled > & xTitled )
 {

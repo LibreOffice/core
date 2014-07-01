@@ -49,7 +49,6 @@ VAxisBase::~VAxisBase()
 {
 }
 
-
 void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {

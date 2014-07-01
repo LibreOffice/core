@@ -179,7 +179,6 @@ void CreationWizard::enterState(WizardState nState)
         svt::RoadmapWizard::enterState(nState);
 }
 
-
 void CreationWizard::setInvalidPage( TabPage * /* pTabPage */ )
 {
     m_bCanTravel = false;

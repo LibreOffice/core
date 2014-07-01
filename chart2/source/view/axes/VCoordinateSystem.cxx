@@ -147,7 +147,6 @@ void VCoordinateSystem::setTransformationSceneToScreen(
     }
 }
 
-
 //better performance for big data
 uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
@@ -200,7 +199,6 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
 
     return aResolution;
 }
-
 
 Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
 {

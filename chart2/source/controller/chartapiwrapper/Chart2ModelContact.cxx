@@ -90,7 +90,6 @@ Reference< frame::XModel > Chart2ModelContact::getChartModel() const
     return Reference< frame::XModel >( m_xChartModel.get(), uno::UNO_QUERY );
 }
 
-
 Reference< chart2::XChartDocument > Chart2ModelContact::getChart2Document() const
 {
     return Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY );

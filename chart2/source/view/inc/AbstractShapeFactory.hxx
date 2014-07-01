@@ -33,7 +33,6 @@ class OpenGLWindow;
 
 namespace chart {
 
-
 // Be careful here not to clash with the SYMBOL_FOO #defines in
 // <rsc/rsc-vcl-shared-types.hxx>
 enum SymbolEnum { Symbol_Square=0
@@ -249,7 +248,6 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );
-
 
     static void makeShapeInvisible( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape >& xShape );

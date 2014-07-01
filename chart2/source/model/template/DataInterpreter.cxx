@@ -57,7 +57,6 @@ DataInterpreter::DataInterpreter(
 DataInterpreter::~DataInterpreter()
 {}
 
-
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,

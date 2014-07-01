@@ -228,8 +228,6 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     }
 }
 
-
-
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         ExplicitScaleData& rExplicitScale,
         ExplicitIncrementData& rExplicitIncrement,

@@ -783,7 +783,6 @@ sal_Int32 DataBrowserModel::getCategoryColumnCount()
     return nLastTextColumnIndex+1;
 }
 
-
 void DataBrowserModel::updateFromModel()
 {
     if( !m_xChartDocument.is())

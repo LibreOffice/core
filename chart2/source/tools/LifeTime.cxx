@@ -316,7 +316,6 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     m_bOwnership            = bDeliverOwnership && bMyVeto;
 }
 
-
     void CloseableLifeTimeManager
 ::impl_apiCallCountReachedNull()
 {
@@ -335,7 +334,6 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
         return; //behave as passive as possible, if disposed or closed already
     if( m_bDisposed || m_bInDispose )
         return; //behave as passive as possible, if disposed or closed already
-
 
     m_bClosed = true;
 

@@ -675,7 +675,6 @@ void VDiagram::createShapes_3d()
     adjustPosAndSize_3d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
 
-
 ::basegfx::B2IRectangle VDiagram::getCurrentRectangle()
 {
     return BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes);

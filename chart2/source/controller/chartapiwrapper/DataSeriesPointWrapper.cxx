@@ -545,7 +545,6 @@ bool DataSeriesPointWrapper::isSupportingAreaProperties()
     return ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
 }
 
-
 Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
 {
     Reference< chart2::XDataSeries > xSeries( m_xDataSeries );

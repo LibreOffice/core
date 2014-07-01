@@ -399,7 +399,6 @@ uno::Reference< drawing::XShape >
     return pText;
 }
 
-
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& , const awt::Point& rPos,

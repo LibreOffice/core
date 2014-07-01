@@ -683,7 +683,6 @@ void AreaChart::createShapes()
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
 
-
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
@@ -848,7 +847,6 @@ void AreaChart::createShapes()
                         continue;
                     }
                     aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
-
 
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)

@@ -305,7 +305,6 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     }
 }
 
-
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
 void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
@@ -638,7 +637,6 @@ IMPL_LINK_NOARG(SchAttribTabDlg, OKPressed)
     m_bOKPressed = true;
     return m_aOriginalOKClickHdl.Call( this );
 }
-
 
 } //namespace chart
 

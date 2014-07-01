@@ -62,7 +62,6 @@
 #include <map>
 #include <boost/unordered_map.hpp>
 
-
 namespace chart {
 
 namespace dummy {
@@ -150,7 +149,6 @@ public:
     virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -29,7 +29,6 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include "RangeSelectionListener.hxx"
 
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 class Dialog;

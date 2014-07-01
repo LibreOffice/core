@@ -67,7 +67,6 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 {
 }
 
-
 Date NumberFormatterWrapper::getNullDate() const
 {
     sal_uInt16 nYear = 1899,nDay = 30,nMonth = 12;

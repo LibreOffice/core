@@ -1035,8 +1035,6 @@ void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
         this->setDiagram( xDiagram );
 }
 
-
-
 void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAddIn )
 {
     if( m_xAddIn == xAddIn )

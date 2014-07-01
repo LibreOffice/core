@@ -17,7 +17,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "CommonConverters.hxx"
 
 #include <rtl/ustring.hxx>
@@ -39,7 +38,6 @@
 #include <com/sun/star/beans/Property.hpp>
 
 #include <com/sun/star/awt/XBitmap.hpp>
-
 
 #define ENABLE_DEBUG_PROPERTIES 0
 
@@ -184,7 +182,6 @@ awt::Point SAL_CALL DummyXShape::getPosition()
 {
     return maPosition;
 }
-
 
 void SAL_CALL DummyXShape::setPosition( const awt::Point& rPoint )
     throw(uno::RuntimeException, std::exception)
@@ -1190,7 +1187,6 @@ void DummyChart::clear()
     maUNOShapes.clear();
     maShapes.clear();
 }
-
 
 }
 

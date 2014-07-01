@@ -140,7 +140,6 @@ Reference< chart2::data::XDataSequence > ExplicitCategoriesProvider::getOriginal
     return 0;
 }
 
-
 bool ExplicitCategoriesProvider::hasComplexCategories() const
 {
     return m_aSplitCategoriesList.getLength() > 1;

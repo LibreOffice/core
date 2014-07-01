@@ -166,7 +166,6 @@ public:
     double  transformToAngleDegree( double fLogicValueOnAngleAxis, bool bDoScaling=true ) const;
     double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
 
-
     virtual ::com::sun::star::drawing::Position3D
             transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const SAL_OVERRIDE;
     virtual ::com::sun::star::drawing::Position3D

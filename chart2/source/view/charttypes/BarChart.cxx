@@ -453,7 +453,6 @@ void BarChart::createShapes()
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
 
-
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     //iterate through all x values per indices

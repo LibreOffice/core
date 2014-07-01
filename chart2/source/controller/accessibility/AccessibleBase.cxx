@@ -442,7 +442,6 @@ void AccessibleBase::KillAllChildren()
     m_bChildrenInitialized = false;
 }
 
-
 void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
 {
     m_aAccInfo = rNewInfo;
@@ -453,7 +452,6 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
     BroadcastAccEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any(),
                        true /* global notification */ );
 }
-
 
 // ________ (XComponent::dispose) ________
 void SAL_CALL AccessibleBase::disposing()

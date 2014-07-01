@@ -487,7 +487,6 @@ void ChartController::execute_Paint( const Rectangle& rRect )
             xProp->setPropertyValue( "Resolution", uno::makeAny( aResolution ));
         }
 
-
         uno::Reference< util::XUpdatable > xUpdatable( m_xChartView, uno::UNO_QUERY );
         if( xUpdatable.is() )
             xUpdatable->update();
@@ -1241,7 +1240,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     if( bHasLegend )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteLegend" );
                 }
-
 
                 xPopupMenu->insertSeparator( -1 );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramType" );

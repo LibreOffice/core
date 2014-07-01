@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "charttest.hxx"
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>

@@ -64,12 +64,10 @@ void ItemConverter::resetPropertySet(
     }
 }
 
-
 SfxItemSet ItemConverter::CreateEmptyItemSet() const
 {
     return SfxItemSet( GetItemPool(), GetWhichPairs() );
 }
-
 
 void ItemConverter::_disposing( const lang::EventObject& rSource )
 {

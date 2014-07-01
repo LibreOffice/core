@@ -1052,7 +1052,6 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly,
     //line or Polygon
     m_Polygon3DInfo.lineOnly = lineOnly;
 
-
     // if line only, use line color
     if (m_Polygon3DInfo.lineOnly)
     {
@@ -1061,7 +1060,6 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly,
 
     //fillStyle
     m_Polygon3DInfo.fillStyle= fillStyle;
-
 
     //material specular;
     m_Polygon3DInfo.material.specular = getColorAsVector(specular);
@@ -1693,7 +1691,6 @@ void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uIn
     m_TextInfoList.push_back(aTextInfo);
 
 }
-
 
 void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt8> &bitmapBuf,
                    ::Size maSizePixels,

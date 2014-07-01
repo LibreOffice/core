@@ -313,7 +313,6 @@ void VDataSeries::doSortByXValues()
     }
 }
 
-
 void VDataSeries::releaseShapes()
 {
     m_xGroupShape.set(0);
@@ -422,7 +421,6 @@ void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
         nAttachedAxisIndex = 0;
     m_nAxisIndex = nAttachedAxisIndex;
 }
-
 
 double VDataSeries::getXValue( sal_Int32 index ) const
 {
@@ -891,7 +889,6 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
     return this->getPropertiesOfSeries();
 }
 
-
 DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1008,7 +1005,6 @@ void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
 {
     m_nMissingValueTreatment = nMissingValueTreatment;
 }
-
 
 VDataSeries::VDataSeries()
     : m_nPolygonIndex(0)

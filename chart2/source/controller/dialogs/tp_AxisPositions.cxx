@@ -76,7 +76,6 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
 //     get(m_pCB_MinorGrid, "CB_MINOR_GRID");
 //     get(m_pPB_MinorGrid, "PB_MINOR_GRID");
 
-
     m_pLB_CrossesAt->SetSelectHdl( LINK( this, AxisPositionsTabPage, CrossesAtSelectHdl ) );
     m_pLB_CrossesAt->SetDropDownLineCount( m_pLB_CrossesAt->GetEntryCount() );
 

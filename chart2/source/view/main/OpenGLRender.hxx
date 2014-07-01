@@ -122,7 +122,6 @@ public:
 
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
 
-
 private:
 #if 0
         //for performance

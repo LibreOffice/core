@@ -218,7 +218,6 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::R
     }
 }
 
-
 } // anonymous namespace
 
 namespace chart

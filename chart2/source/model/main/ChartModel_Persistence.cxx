@@ -294,7 +294,6 @@ void SAL_CALL ChartModel::storeToURL(
         return; //behave passive if already disposed or closed or throw exception @todo?
     //do not change the internal state of the document here
 
-
     aGuard.clear();
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);

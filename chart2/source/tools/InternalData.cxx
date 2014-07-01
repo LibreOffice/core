@@ -486,8 +486,6 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     dump();
 }
 
-
-
 void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNewRowLabels )
 {
     m_aRowLabels = rNewRowLabels;
@@ -497,7 +495,6 @@ void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNew
     else
         enlargeData( 0, nNewRowCount );
 }
-
 
 void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& rNewColumnLabels )
 {

@@ -1514,5 +1514,4 @@ com_sun_star_comp_chart2_ChartController_get_implementation(css::uno::XComponent
     return cppu::acquire(new chart::ChartController(context));
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

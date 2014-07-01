@@ -181,7 +181,6 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
     return true;
 }
 
-
 void ImplOPropertySet::cloneInterfaceProperties()
 {
     ::std::for_each( m_aProperties.begin(), m_aProperties.end(),

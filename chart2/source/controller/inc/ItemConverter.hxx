@@ -117,7 +117,6 @@ public:
 
 protected:
 
-
     /** implement this method to provide an array of which-ranges of the form:
 
         const sal_uInt16 aMyPairs[] =

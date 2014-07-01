@@ -24,7 +24,6 @@
 #include <svl/itemset.hxx>
 #include <boost/scoped_ptr.hpp>
 
-
 class SvNumberFormatter;
 
 namespace chart

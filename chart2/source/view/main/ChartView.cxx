@@ -2399,7 +2399,6 @@ void formatPage(
         if( !xShapeFactory.is() )
             return;
 
-
         //format page
         tPropertyNameValueMap aNameValueMap;
         aNameValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny( drawing::LineStyle_NONE )));
@@ -2750,7 +2749,6 @@ void ChartView::createShapes()
         SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper->getSdrModel().EnableUndo( true );
     }
-
 
     if(maTimeBased.bTimeBased)
     {
@@ -3255,7 +3253,6 @@ void ChartView::createShapes3D()
         m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, *pWindow));
     }
 
-
     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
     OSL_ASSERT( xDataSeriesContainer.is());
     if( !xDataSeriesContainer.is() )
@@ -3273,7 +3270,6 @@ void ChartView::createShapes3D()
     }
 
     boost::scoped_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
-
 
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 

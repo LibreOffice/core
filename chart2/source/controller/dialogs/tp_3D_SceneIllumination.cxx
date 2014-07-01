@@ -67,7 +67,6 @@ void LightButton::switchLightOn(bool bOn)
     }
 }
 
-
 struct LightSource
 {
     long nDiffuseColor;

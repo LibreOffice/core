@@ -66,7 +66,6 @@ ChartType::~ChartType()
     m_aDataSeries.clear();
 }
 
-
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )

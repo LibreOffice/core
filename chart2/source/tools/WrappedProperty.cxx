@@ -37,7 +37,6 @@ WrappedProperty::~WrappedProperty()
 {
 }
 
-
 OUString WrappedProperty::getInnerName() const
 {
     return m_aInnerName;

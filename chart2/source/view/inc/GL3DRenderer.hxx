@@ -160,7 +160,6 @@ struct TextInfoBatch
     std::vector<glm::vec3> textureCoordList;
 };
 
-
 struct BatchBarInfo
 {
     std::vector <glm::mat4> modelMatrixList;

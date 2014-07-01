@@ -750,7 +750,6 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString const &textValue, Font aFont
     return CreateTextTexture(aBitmap,aPos,aSize,rotation,aTrans);
 }
 
-
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {

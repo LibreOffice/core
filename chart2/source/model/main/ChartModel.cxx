@@ -1363,7 +1363,6 @@ OUString SAL_CALL ChartModel::dump()
     return OUString();
 }
 
-
 void ChartModel::setTimeBased(bool bTimeBased)
 {
     mbTimeBased = bTimeBased;
@@ -1408,7 +1407,6 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
-
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {
@@ -1432,7 +1430,6 @@ void ChartModel::update()
     if(mpChartView)
         mpChartView->updateOpenGLWindow();
 }
-
 
 }  // namespace chart
 

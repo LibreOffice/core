@@ -220,7 +220,6 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
         }
     }
 
-
     std::vector< sal_Int32 > aResultPointCount;//per polygon index
 
     //apply clipping:

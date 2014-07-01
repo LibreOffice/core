@@ -130,7 +130,6 @@ void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
     m_nStartColumn = nStartColumn;
 }
 
-
 void SeriesHeaderEdit::SetShowWarningBox( bool bShowWarning )
 {
     m_bShowWarningBox = bShowWarning;
@@ -312,8 +311,6 @@ void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
     m_spSeriesName->setStartColumn( nStartCol );
 }
 
-
-
 void SeriesHeader::Show()
 {
     m_spSymbol->Show();
@@ -477,7 +474,6 @@ DataBrowser::DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
     RenewTable();
     SetClean();
 }
-
 
 DataBrowser::~DataBrowser()
 {
@@ -728,7 +724,6 @@ bool DataBrowser::SetReadOnly( bool bNewState )
     return bResult;
 }
 
-
 void DataBrowser::SetClean()
 {
     m_bIsDirty = false;
@@ -798,7 +793,6 @@ bool DataBrowser::IsDataValid()
 
     return bValid;
 }
-
 
 void DataBrowser::CellModified()
 {

@@ -721,7 +721,6 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     }
     while( pCurrent != pStart );
 
-
     bool bAlternativeMoveDirection = false;
     if( !tryMoveLabels( pFirstBorder, pSecondBorder, pCenter, bSingleCenter, bAlternativeMoveDirection, rPageSize ) )
         tryMoveLabels( pFirstBorder, pSecondBorder, pCenter, bSingleCenter, bAlternativeMoveDirection, rPageSize );

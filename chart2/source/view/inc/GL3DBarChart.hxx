@@ -108,7 +108,6 @@ private:
                 sal_Int32 nIndex, sal_Int32 nSeriesIndex);
     };
 
-
     std::map<sal_uInt32, const BarInformation> maBarMap;
     bool mbBlockUserInput;
     bool mbNeedsNewRender;

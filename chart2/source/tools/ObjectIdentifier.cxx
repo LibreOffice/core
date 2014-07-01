@@ -1544,8 +1544,6 @@ bool ObjectIdentifier::isAdditionalShape() const
     return m_xAdditionalShape.is();
 }
 
-
-
 Any ObjectIdentifier::getAny() const
 {
     Any aAny;

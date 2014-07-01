@@ -746,7 +746,6 @@ void ObjectKeyNavigation::setCurrentSelection( const ObjectHierarchy::tOID& rOID
     m_aCurrentOID = rOID;
 }
 
-
 bool ObjectKeyNavigation::first()
 {
     ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );

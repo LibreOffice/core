@@ -52,7 +52,6 @@ StockDataInterpreter::StockDataInterpreter(
 StockDataInterpreter::~StockDataInterpreter()
 {}
 
-
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,

@@ -40,9 +40,7 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
         aExistenceList[nN]=false;
 }
 
-
 // SchAxisDlg
-
 
 SchAxisDlg::SchAxisDlg(Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)

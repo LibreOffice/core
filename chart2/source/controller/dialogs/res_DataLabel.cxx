@@ -337,7 +337,6 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     else
         m_pLB_Separator->SelectEntryPos( 0 );
 
-
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SFX_ITEM_SET )
     {
         sal_Int32 nPlacement = ((const SfxInt32Item*)pPoolItem)->GetValue();

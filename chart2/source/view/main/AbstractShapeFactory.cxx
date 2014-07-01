@@ -109,7 +109,6 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
 #endif
     }
 
-
     if(!pShapeFactory)
         pShapeFactory = new ShapeFactory(xFactory);
 
