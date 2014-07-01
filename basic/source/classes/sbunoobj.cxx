@@ -4974,7 +4974,6 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
 
-            bool bMaybeVoid = false;
             OUString aName( pVar->GetName() );
             StructFieldInfo::iterator it = maFields.find( aName );
 
@@ -4991,10 +4990,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
                 }
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
-            if( bMaybeVoid )
-            {
-                aPropStr.appendAscii( "/void" );
-            }
+
             aPropStr.appendAscii( " " );
             aPropStr.append( pVar->GetName() );
 
