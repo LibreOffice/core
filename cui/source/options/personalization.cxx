@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -244,17 +245,13 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     get( m_vDefaultPersonaImages[2], "default3" );
     m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
 
-    get( m_vExtensionPersonas[0], "extension1" );
-    m_vExtensionPersonas[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
+    get( m_pPersonaList, "installed_personas" );
+    m_pPersonaList->SetSelectHdl( LINK( this, SvxPersonalizationTabPage, SelectInstalledPersona ) );
 
-    get( m_vExtensionPersonas[1], "extension2" );
-    m_vExtensionPersonas[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
-
-    get( m_vExtensionPersonas[2], "extension3" );
-    m_vExtensionPersonas[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, InstalledPersona ) );
+    get( m_pExtensionPersonaPreview, "persona_preview" );
 
     LoadDefaultImages();
-    LoadExtensionImages();
+    LoadExtensionThemes();
 }
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
@@ -363,37 +360,28 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     }
 }
 
-void SvxPersonalizationTabPage::LoadExtensionImages()
+void SvxPersonalizationTabPage::LoadExtensionThemes()
 {
     // See if any extensions are used to install personas. If yes, load them.
 
-    GraphicFilter aFilter;
-    Graphic aGraphic;
-    sal_Int32 nIndex = 0;
     css::uno::Sequence<OUString> installedPersonas( officecfg::Office::Common::Misc::PersonasList::get()->getElementNames() );
     sal_Int32 nLength = installedPersonas.getLength();
-    sal_Int32 nCount = 0;
 
     if( nLength == 0 )
         return;
 
-    if( nLength > 3 )
-        nIndex = nLength - 3;
+    m_pPersonaList->Show();
 
-    for( ; nIndex < nLength; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < nLength; nIndex++ )
     {
         Reference< XPropertySet > xPropertySet( officecfg::Office::Common::Misc::PersonasList::get()->getByName( installedPersonas[nIndex] ), UNO_QUERY_THROW );
         OUString aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aAccentColor, aPersonaSettings;
-        Any aValue = xPropertySet->getPropertyValue( "Preview" );
-        aValue >>= aPreviewFile;
-        INetURLObject aURLObj( aPreviewFile );
-        aFilter.ImportGraphic( aGraphic, aURLObj );
-        Bitmap aBmp = aGraphic.GetBitmap();
-        m_vExtensionPersonas[nCount]->Show();
-        m_vExtensionPersonas[nCount++]->SetModeImage( Image( aBmp ) );
-
-        aValue = xPropertySet->getPropertyValue( "Name" );
+        Any aValue = xPropertySet->getPropertyValue( "Name" );
         aValue >>= aPersonaName;
+        m_pPersonaList->InsertEntry( aPersonaName );
+
+        aValue = xPropertySet->getPropertyValue( "Preview" );
+        aValue >>= aPreviewFile;
 
         aValue = xPropertySet->getPropertyValue( "Header" );
         aValue >>= aHeaderFile;
@@ -407,7 +395,7 @@ void SvxPersonalizationTabPage::LoadExtensionImages()
         aValue = xPropertySet->getPropertyValue( "AccentColor" );
         aValue >>= aAccentColor;
 
-        aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        aPersonaSettings = aPreviewFile + ";" + aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
         rtl::Bootstrap::expandMacros( aPersonaSettings );
         m_vExtensionPersonaSettings.push_back( aPersonaSettings );
     }
@@ -451,14 +439,23 @@ IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
     return 0;
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, InstalledPersona, PushButton*, pButton )
+IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )
 {
-    m_pOwnPersona->Check();
-    for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
-    {
-        if( pButton == m_vExtensionPersonas[nIndex] )
-            m_aPersonaSettings = m_vExtensionPersonaSettings[nIndex];
-    }
+    // Get the details of the selected theme.
+    m_pExtensionPersonaPreview->Show();
+    sal_Int32 nSelectedPos = m_pPersonaList->GetSelectEntryPos();
+    OUString aSettings = m_vExtensionPersonaSettings[nSelectedPos];
+    sal_Int32 nIndex = aSettings.indexOf( ';', 0 );
+    OUString aPreviewFile = aSettings.copy( 0, nIndex );
+    m_aPersonaSettings = aSettings.copy( nIndex + 1 );
+
+    // Show the preview file in the button.
+    GraphicFilter aFilter;
+    Graphic aGraphic;
+    INetURLObject aURLObj( aPreviewFile );
+    aFilter.ImportGraphic( aGraphic, aURLObj );
+    Bitmap aBmp = aGraphic.GetBitmap();
+    m_pExtensionPersonaPreview->SetModeImage( Image( aBmp ) );
 
     return 0;
 }
