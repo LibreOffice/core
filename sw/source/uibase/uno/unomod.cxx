@@ -429,7 +429,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
     }
 }
 
-void SwXPrintSettings::_postSetValues ()
+void SwXPrintSettings::_postSetValues()
     throw (UnknownPropertyException, PropertyVetoException,
            IllegalArgumentException, WrappedTargetException,
            RuntimeException)
@@ -437,8 +437,10 @@ void SwXPrintSettings::_postSetValues ()
     mpPrtOpt = NULL;
 }
 
-void SwXPrintSettings::_preGetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+void SwXPrintSettings::_preGetValues()
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException)
 {
     switch (meType)
     {
