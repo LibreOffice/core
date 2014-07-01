@@ -1707,19 +1707,19 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
 
-    SCCOL nDestCol = rParam.aRefVariableCell.Col();
-    SCROW nDestRow = rParam.aRefVariableCell.Row();
-    SCTAB nDestTab = rParam.aRefVariableCell.Tab();
-
-    ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
-    if (!aTester.IsEditable())
-    {
-        ErrorMessage(aTester.GetMessageId());
-        return;
-    }
-
     if ( pDoc )
     {
+        SCCOL nDestCol = rParam.aRefVariableCell.Col();
+        SCROW nDestRow = rParam.aRefVariableCell.Row();
+        SCTAB nDestTab = rParam.aRefVariableCell.Tab();
+
+        ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+        if (!aTester.IsEditable())
+        {
+            ErrorMessage(aTester.GetMessageId());
+            return;
+        }
+
         OUString  aTargetValStr;
         if ( rParam.pStrTargetVal != NULL )
             aTargetValStr = *(rParam.pStrTargetVal);
