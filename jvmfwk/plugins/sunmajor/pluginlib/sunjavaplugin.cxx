@@ -635,10 +635,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 #if defined UNX && !defined MACOSX
     //Setting the JAVA_HOME is needed for awt
-    OUString javaHome("JAVA_HOME");
     OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
-    osl_setEnvironment(javaHome.pData, sPathLocation.pData);
+    osl_setEnvironment(OUString("JAVA_HOME").pData, sPathLocation.pData);
 #endif
 
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
