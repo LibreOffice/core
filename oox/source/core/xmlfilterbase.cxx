@@ -171,6 +171,7 @@ struct XmlFilterBaseImpl
 {
     typedef RefMap< OUString, Relations > RelationsMap;
 
+    Reference<XComponentContext>   mxContext;
     FastParser                     maFastParser;
     const OUString                 maBinSuffix;
     const OUString                 maVmlSuffix;
@@ -182,6 +183,7 @@ struct XmlFilterBaseImpl
 };
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    mxContext(rxContext),
     maFastParser( rxContext ),
     maBinSuffix( ".bin" ),
     maVmlSuffix( ".vml" )
@@ -272,7 +274,9 @@ OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( const OUStrin
 
 bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
 {
-    return importFragment(rxHandler, mxImpl->maFastParser);
+    FastParser aParser(mxImpl->mxContext);
+    registerNamespaces(aParser);
+    return importFragment(rxHandler, aParser);
 }
 
 bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler, FastParser& rParser )
