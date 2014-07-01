@@ -26,6 +26,7 @@
 #include <limits>
 
 #include <string.h>
+#include <wchar.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 #include <boost/static_assert.hpp>
@@ -45,18 +46,12 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
 }
 */
 
-#define rtl_str_ImplCopy( _pDest, _pSrc, _nCount )                  \
-{                                                                   \
-    IMPL_RTL_STRCODE*       __mm_pDest      = _pDest;               \
-    const IMPL_RTL_STRCODE* __mm_pSrc       = _pSrc;                \
-    sal_Int32               __mm_nCount     = _nCount;              \
-    while ( __mm_nCount > 0 )                                       \
-    {                                                               \
-        *__mm_pDest = *__mm_pSrc;                                   \
-        __mm_pDest++;                                               \
-        __mm_pSrc++;                                                \
-        __mm_nCount--;                                              \
-    }                                                               \
+static inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* _pDest,
+                                     const IMPL_RTL_STRCODE* _pSrc,
+                                     sal_Int32 _nCount )
+{
+    // take advantage of builtin optimisations
+    memcpy( _pDest, _pSrc, _nCount * sizeof(IMPL_RTL_STRCODE));
 }
 
 /* ======================================================================= */
@@ -66,10 +61,24 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLength )( const IMPL_RTL_STRCODE* pStr )
     SAL_THROW_EXTERN_C()
 {
-    const IMPL_RTL_STRCODE* pTempStr = pStr;
-    while( *pTempStr )
-        pTempStr++;
-    return pTempStr-pStr;
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    return strlen( pStr);
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    {
+        // take advantage of builtin optimisations
+        return wcslen((wchar_t*)pStr);
+    }
+    else
+    {
+        const IMPL_RTL_STRCODE* pTempStr = pStr;
+        while( *pTempStr )
+            pTempStr++;
+        return pTempStr-pStr;
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -78,16 +87,30 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
                                                 const IMPL_RTL_STRCODE* pStr2 )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32 nRet;
-    while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
-                     ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr2)))) == 0) &&
-            *pStr2 )
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    return strcmp( pStr1, pStr2);
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
-        pStr1++;
-        pStr2++;
+        // take advantage of builtin optimisations
+        return wcscmp((wchar_t*)pStr1, (wchar_t*)pStr2);
     }
+    else
+    {
+        sal_Int32 nRet;
+        while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
+                         ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr2)))) == 0) &&
+                *pStr2 )
+        {
+            pStr1++;
+            pStr2++;
+        }
 
-    return nRet;
+        return nRet;
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -98,18 +121,36 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
                                                            sal_Int32 nStr2Len )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32 nRet = nStr1Len - nStr2Len;
-    int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
+    sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
+    return nRet == 0 ? nStr1Len - nStr2Len : nRet;
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    {
+        // take advantage of builtin optimisations
+        sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
+        sal_Int32 nRet = wcsncmp((wchar_t*)pStr1, (wchar_t*)pStr2, nMin);
+        return nRet == 0 ? nStr1Len - nStr2Len : nRet;
+    }
+    else
+    {
+        sal_Int32 nRet = nStr1Len - nStr2Len;
+        int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
 
-    --pStr1;
-    --pStr2;
-    while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
+        --pStr1;
+        --pStr2;
+        while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
 
-    if( nCount >= 0 )
-        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))
-             - ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+        if( nCount >= 0 )
+            nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))
+                 - ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
 
-    return nRet;
+        return nRet;
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -121,25 +162,47 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
                                                                     sal_Int32 nShortenedLength )
     SAL_THROW_EXTERN_C()
 {
-    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32               nRet;
-    while ( (nShortenedLength > 0) &&
-            (pStr1 < pStr1End) && (pStr2 < pStr2End) )
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
+    sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
+    if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
+        return nStr1Len - nStr2Len;
+    return nRet;
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
-        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
-        if ( nRet )
-            return nRet;
-
-        nShortenedLength--;
-        pStr1++;
-        pStr2++;
+        // take advantage of builtin optimisations
+        sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
+        sal_Int32 nRet = wcsncmp((wchar_t*)pStr1, (wchar_t*)pStr2, nMin);
+        if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
+            return nStr1Len - nStr2Len;
+        return nRet;
     }
+    else
+    {
+        const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
+        const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
+        sal_Int32               nRet;
+        while ( (nShortenedLength > 0) &&
+                (pStr1 < pStr1End) && (pStr2 < pStr2End) )
+        {
+            nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
+                   ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+            if ( nRet )
+                return nRet;
 
-    if ( nShortenedLength <= 0 )
-        return 0;
-    return nStr1Len - nStr2Len;
+            nShortenedLength--;
+            pStr1++;
+            pStr2++;
+        }
+
+        if ( nShortenedLength <= 0 )
+            return 0;
+        return nStr1Len - nStr2Len;
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -272,16 +335,32 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
                                                     IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
-    const IMPL_RTL_STRCODE* pTempStr = pStr;
-    while ( *pTempStr )
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    const IMPL_RTL_STRCODE* p = strchr(pStr, c);
+    return p ? p - pStr : -1;
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
-        if ( *pTempStr == c )
-            return pTempStr-pStr;
-
-        pTempStr++;
+        // take advantage of builtin optimisations
+        wchar_t* p = wcschr((wchar_t*)pStr, (wchar_t)c);
+        return p ? p - (wchar_t*)pStr : -1;
     }
+    else
+    {
+        const IMPL_RTL_STRCODE* pTempStr = pStr;
+        while ( *pTempStr )
+        {
+            if ( *pTempStr == c )
+                return pTempStr-pStr;
 
-    return -1;
+            pTempStr++;
+        }
+
+        return -1;
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -291,6 +370,12 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
                                                                IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    IMPL_RTL_STRCODE* p = (IMPL_RTL_STRCODE*) memchr(pStr, c, nLen);
+    return p ? p - pStr : -1;
+#else
     const IMPL_RTL_STRCODE* pTempStr = pStr;
     while ( nLen > 0 )
     {
@@ -302,6 +387,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
     }
 
     return -1;
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -310,7 +396,23 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
                                                         IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
-    return IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ), c );
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    const IMPL_RTL_STRCODE* p = strrchr(pStr, c);
+    return p ? p - pStr : -1;
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    {
+        // take advantage of builtin optimisations
+        wchar_t* p = wcsrchr((wchar_t*)pStr, (wchar_t)c);
+        return p ? p - (wchar_t*)pStr : -1;
+    }
+    else
+    {
+        return IMPL_RTL_STRNAME( lastIndexOfChar_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ), c );
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -339,8 +441,24 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
                                                    const IMPL_RTL_STRCODE* pSubStr )
     SAL_THROW_EXTERN_C()
 {
-    return IMPL_RTL_STRNAME( indexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
-                                                      pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
+// same as "if sal_Char mode"
+#ifndef IMPL_RTL_INTERN
+    // take advantage of builtin optimisations
+    const IMPL_RTL_STRCODE* p = strstr(pStr, pSubStr);
+    return p ? p - pStr : -1;
+#else
+    if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    {
+        // take advantage of builtin optimisations
+        wchar_t* p = wcsstr((wchar_t*)pStr, (wchar_t*)pSubStr);
+        return p ? p - (wchar_t*)pStr : -1;
+    }
+    else
+    {
+       return IMPL_RTL_STRNAME( indexOfStr_WithLength )( pStr, IMPL_RTL_STRNAME( getLength )( pStr ),
+                                                         pSubStr, IMPL_RTL_STRNAME( getLength )( pSubStr ) );
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------- */
@@ -354,7 +472,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr_WithLength )( const IMPL_RTL_STR
     /* faster search for a single character */
     if ( nSubLen < 2 )
     {
-        /* an empty SubString is always not foundable */
+        /* an empty SubString is always not findable */
         if ( nSubLen == 1 )
         {
             IMPL_RTL_STRCODE        c = *pSubStr;
@@ -428,7 +546,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
     /* faster search for a single character */
     if ( nSubLen < 2 )
     {
-        /* an empty SubString is always not foundable */
+        /* an empty SubString is always not findable */
         if ( nSubLen == 1 )
         {
             IMPL_RTL_STRCODE c = *pSubStr;
