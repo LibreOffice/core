@@ -2152,13 +2152,13 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     {
         OUString gallery("");
         // try the gallery first, then the program path:
-        if ( aPersona == "own")
+        if ( aPersona == "own" && !aPersonaSettings.startsWith( "vnd.sun.star.expand" ) )
         {
             gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
             rtl::Bootstrap::expandMacros( gallery );
             gallery += "/user/gallery/personas/";
         }
-        else if ( aPersona == "default" && !aPersonaSettings.startsWith( "vnd.sun.star.expand" ) )
+        else if ( aPersona == "default" )
         {
             gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
             gallery += "/gallery/personas/";
