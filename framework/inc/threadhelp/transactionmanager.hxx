@@ -68,7 +68,6 @@ enum ERejectReason
                     e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
                     But sometimes he dont need this feature - will handle it by himself.
                     Then we must differ between some exception-modi:
-                        E_NOEXCEPTIONS          We never throw any exceptions! User handle it private and looks for ERejectReason.
                         E_HARDEXCEPTIONS        We throw exceptions for all working modes different from E_WORK!
                         E_SOFTEXCEPTIONS        We throw exceptions for all working modes different from E_WORK AND E_INCLOSE!
                                                 This mode is useful for impl-methods which should be callable from dispose() method!
@@ -96,7 +95,6 @@ enum ERejectReason
 *//*-*************************************************************************************************************/
 enum EExceptionMode
 {
-    E_NOEXCEPTIONS  ,
     E_HARDEXCEPTIONS,
     E_SOFTEXCEPTIONS
 };
