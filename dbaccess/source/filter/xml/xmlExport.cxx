@@ -170,10 +170,10 @@ namespace dbaxml
         }
     }
 
-    class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
+    class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:
-        OSpecialHanldeXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
+        OSpecialHandleXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
         {
         }
         /** this method is called for every item that has the
@@ -225,10 +225,10 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
-    m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
+    m_xColumnExportHelper = new OSpecialHandleXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
-    m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
-    m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper( true));
+    m_xCellExportHelper = new OSpecialHandleXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
+    m_xRowExportHelper = new OSpecialHandleXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper( true));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,

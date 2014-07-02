@@ -161,10 +161,10 @@ namespace rptxml
 
 
 
-    class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
+    class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:
-        OSpecialHanldeXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
+        OSpecialHandleXMLExportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
         {
         }
         /** this method is called for every item that has the
@@ -275,17 +275,17 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     m_xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper1);
 
     m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap( false, true);
-    m_xCellStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(m_xCellStylesPropertySetMapper);
+    m_xCellStylesExportPropertySetMapper = new OSpecialHandleXMLExportPropertyMapper(m_xCellStylesPropertySetMapper);
     m_xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
     rtl::Reference < XMLPropertySetMapper > xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory, true);
-    m_xColumnStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
+    m_xColumnStylesExportPropertySetMapper = new OSpecialHandleXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
 
     rtl::Reference < XMLPropertySetMapper > xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, true);
-    m_xRowStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(xRowStylesPropertySetMapper);
+    m_xRowStylesExportPropertySetMapper = new OSpecialHandleXMLExportPropertyMapper(xRowStylesPropertySetMapper);
 
     rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
-    m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
+    m_xParaPropMapper = new OSpecialHandleXMLExportPropertyMapper( xPropMapper);
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     OUString aPrefix( 'P');
