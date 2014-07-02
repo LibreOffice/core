@@ -81,11 +81,11 @@ namespace comphelper
         sal_Int64   implGetForeignControlledStates( ) const;
 
         /// sets the accessible parent component
-        virtual void    setAccessibleParent(
+        void setAccessibleParent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccParent );
 
         /// sets or resets a bit of the foreign controlled states
-        virtual void    setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
+        void setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
 
     protected:
         OAccessibleImplementationAccess( );
