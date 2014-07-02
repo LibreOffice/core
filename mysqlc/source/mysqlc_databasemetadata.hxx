@@ -45,7 +45,7 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
             OConnection&    m_rConnection;
-            sal_Bool        m_bUseCatalog;
+            bool        m_bUseCatalog;
         protected:
             sql::DatabaseMetaData * meta;
             OUString        identifier_quote_string;
@@ -57,9 +57,9 @@ namespace connectivity
             OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() );
             OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() );
             sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() );
-            sal_Bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() );
-            sal_Bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg );
-            sal_Bool impl_getRSTypeMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType );
+            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() );
+            bool impl_getBoolMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg );
+            bool impl_getRSTypeMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType );
 
         public:
             inline const OConnection& getOwnConnection() const { return m_rConnection; }

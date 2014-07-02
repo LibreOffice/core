@@ -81,7 +81,7 @@ void lcl_setRows_throw(const Reference< XResultSet >& _xResultSet,sal_Int32 _nTy
 /* {{{ ODatabaseMetaData::ODatabaseMetaData() -I- */
 ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     :m_rConnection(_rCon)
-    ,m_bUseCatalog(sal_True)
+    ,m_bUseCatalog(true)
     ,meta(_rCon.getConnectionSettings().cppConnection->getMetaData())
     ,identifier_quote_string_set(false)
 {
@@ -200,10 +200,10 @@ sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, 
 
 
 /* {{{ ODatabaseMetaData::impl_getBoolMetaData() -I- */
-sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() )
+bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
-    sal_Bool boolMetaData(0);
+    bool boolMetaData(false);
     try {
         boolMetaData = (meta->*_Method)() ? sal_True : sal_False;
     } catch (const sql::MethodNotImplementedException &) {
@@ -219,10 +219,10 @@ sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bo
 
 
 /* {{{ ODatabaseMetaData::impl_getBoolMetaData() -I- */
-sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg )
+bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
-    sal_Bool boolMetaData(0);
+    bool boolMetaData(false);
     try {
         boolMetaData = (meta->*_Method)( _arg ) ? sal_True : sal_False;
     } catch (const sql::MethodNotImplementedException &) {
@@ -238,7 +238,7 @@ sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bo
 
 
 /* {{{ ODatabaseMetaData::impl_getRSTypeMetaData() -I- */
-sal_Bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType )
+bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType )
 {
     int resultSetType(sql::ResultSet::TYPE_FORWARD_ONLY);
     switch ( _resultSetType ) {

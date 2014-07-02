@@ -28,11 +28,11 @@ struct TypeInfoDef {
     const char *literalSuffix;
     const char *createParams;
     sal_Int16 nullable;
-    sal_Bool caseSensitive;
+    bool caseSensitive;
     sal_Int16 searchable;
-    sal_Bool isUnsigned;
-    sal_Bool fixedPrecScale;
-    sal_Bool autoIncrement;
+    bool isUnsigned;
+    bool fixedPrecScale;
+    bool autoIncrement;
     const char *localTypeName;
     sal_Int32 minScale;
     sal_Int32 maxScale;

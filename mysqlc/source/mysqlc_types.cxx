@@ -36,11 +36,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "BIT",                                       // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -58,11 +58,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "BOOL",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -80,11 +80,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "TINYINT",                                   // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -102,11 +102,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "BIGINT",                                    // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -124,11 +124,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "LONG VARBINARY",                            // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -146,11 +146,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "MEDIUMBLOB",                                // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -168,11 +168,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "LONGBLOB",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -190,11 +190,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "BLOB",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -212,11 +212,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "TINYBLOB",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -234,11 +234,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "(M)",                                       // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "VARBINARY",                                 // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -256,11 +256,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "(M)",                                       // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_True,                                    // case sensitive
+        true,                                    // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "VARBINARY",                                 // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -278,11 +278,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "LONG VARCHAR",                              // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -300,11 +300,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "MEDIUMTEXT",                                // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -322,11 +322,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "LONGTEXT",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -344,11 +344,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "TEXT",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -366,11 +366,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "TINYTEXT",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -388,11 +388,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "(M)",                                       // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "NUMERIC",                                   // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -410,11 +410,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M[,D])] [ZEROFILL]",                      // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "DECIMAL",                                   // local type name
         -308,                                        // minimum scale
         308,                                         // maximum scale
@@ -432,11 +432,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M[,D])] [ZEROFILL]",                      // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "NUMERIC",                                   // local type name
         -308,                                        // minimum scale
         308,                                         // maximum scale
@@ -454,11 +454,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "INTEGER",                                   // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -476,11 +476,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "INT",                                       // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -498,11 +498,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "MEDIUMINT",                                 // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -520,11 +520,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]",               // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_True,                                    // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        true,                                    // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "SMALLINT",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -542,11 +542,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M,D)] [ZEROFILL]",                        // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "FLOAT",                                     // local type name
         -38,                                         // minimum scale
         38,                                          // maximum scale
@@ -564,11 +564,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M,D)] [ZEROFILL]",                        // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "DOUBLE",                                    // local type name
         -308,                                        // minimum scale
         308,                                         // maximum scale
@@ -586,11 +586,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M,D)] [ZEROFILL]",                        // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "DOUBLE PRECISION",                          // local type name
         -308,                                        // minimum scale
         308,                                         // maximum scale
@@ -608,11 +608,11 @@ TypeInfoDef mysqlc_types[] = {
         "",                                          // Literal suffix
         "[(M,D)] [ZEROFILL]",                        // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_True,                                    // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        true,                                    // auto_increment
         "REAL",                                      // local type name
         -308,                                        // minimum scale
         308,                                         // maximum scale
@@ -630,11 +630,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "(M)",                                       // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "VARCHAR",                                   // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -652,11 +652,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "ENUM",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -674,11 +674,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "SET",                                       // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -696,11 +696,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "DATE",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -718,11 +718,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "TIME",                                      // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -740,11 +740,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                          // Literal suffix
         "",                                          // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "DATETIME",                                  // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -762,11 +762,11 @@ TypeInfoDef mysqlc_types[] = {
         "'",                                         // Literal suffix
         "[(M)]",                                     // Create params
         com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
-        sal_False,                                   // case sensitive
+        false,                                   // case sensitive
         com::sun::star::sdbc::ColumnSearch::FULL,    // searchable
-        sal_False,                                   // unsignable
-        sal_False,                                   // fixed_prec_scale
-        sal_False,                                   // auto_increment
+        false,                                   // unsignable
+        false,                                   // fixed_prec_scale
+        false,                                   // auto_increment
         "TIMESTAMP",                                 // local type name
         0,                                           // minimum scale
         0,                                           // maximum scale
@@ -777,7 +777,7 @@ TypeInfoDef mysqlc_types[] = {
 
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        0, 0, 0, 0, 0, 0, 0, false, 0, false, false, false, 0, 0, 0, 0, 0, 0
     }
 };
 

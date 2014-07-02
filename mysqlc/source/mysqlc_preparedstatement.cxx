@@ -204,7 +204,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    sal_Bool success = sal_False;
+    bool success = false;
     try {
         success = ((sql::PreparedStatement *)cppStatement)->execute()? sal_True:sal_False;
     } catch (const sql::SQLException &e) {

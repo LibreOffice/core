@@ -67,9 +67,9 @@ OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     ,m_xMetaData(NULL)
     ,m_rDriver(_rDriver)
     ,cppDriver(_cppDriver)
-    ,m_bClosed(sal_False)
-    ,m_bUseCatalog(sal_False)
-    ,m_bUseOldDateFormat(sal_False)
+    ,m_bClosed(false)
+    ,m_bUseCatalog(false)
+    ,m_bUseOldDateFormat(false)
 {
     OSL_TRACE("OConnection::OConnection");
     m_rDriver.acquire();
@@ -106,7 +106,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     MutexGuard aGuard(m_aMutex);
 
     sal_Int32 nIndex;
-    sal_Bool  bEmbedded = sal_False;
+    bool  bEmbedded = false;
     OUString token;
     OUString aHostName("localhost");
     sal_Int32 nPort = 3306;
@@ -121,7 +121,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     if (url.startsWith(MYSQLC_URI_PREFIX)) {
         nIndex = 12;
     } else {
-        bEmbedded = sal_True;
+        bEmbedded = true;
         nIndex = 20;
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OConnection::construct (embedded MySQL)", *this);
     }
@@ -169,7 +169,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
         }
     }
 
-    if (bEmbedded == sal_False) {
+    if (!bEmbedded) {
         try {
             sql::ConnectOptionsMap connProps;
             std::string host_str = OUStringToOString(aHostName, m_settings.encoding).getStr();
@@ -348,7 +348,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    sal_Bool autoCommit = sal_False;
+    bool autoCommit = false;
     try {
         autoCommit = m_settings.cppConnection->getAutoCommit() == true ? sal_True : sal_False;
     } catch (const sql::SQLException & e) {
@@ -651,7 +651,7 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    m_bClosed   = sal_True;
+    m_bClosed   = true;
     m_xMetaData = WeakReference< XDatabaseMetaData >();
 
     dispose_ChildImpl();

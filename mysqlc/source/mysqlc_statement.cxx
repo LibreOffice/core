@@ -179,7 +179,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     checkDisposed(rBHelper.bDisposed);
     const OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
 
-    sal_Bool success = false;
+    bool success = false;
     try {
         success = cppStatement->execute(OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr())? sal_True:sal_False;
     } catch (const sql::SQLException &e) {
@@ -401,7 +401,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
     throw (IllegalArgumentException)
 {
     OSL_TRACE("OCommonStatement::convertFastPropertyValue");
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }

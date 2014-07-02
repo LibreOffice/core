@@ -77,7 +77,7 @@ namespace connectivity
             OUString schema;
             OUString quoteIdentifier;
             OUString connectionURL;
-            sal_Bool readOnly;
+            bool readOnly;
         };
 
         class MysqlCDriver;
@@ -115,9 +115,9 @@ namespace connectivity
             MysqlCDriver&   m_rDriver;      // Pointer to the owning driver object
             sql::Driver*    cppDriver;
 
-            sal_Bool    m_bClosed;
-            sal_Bool    m_bUseCatalog;  // should we use the catalog on filebased databases
-            sal_Bool    m_bUseOldDateFormat;
+            bool    m_bClosed;
+            bool    m_bUseCatalog;  // should we use the catalog on filebased databases
+            bool    m_bUseOldDateFormat;
 
 
             void        buildTypeInfo() throw(SQLException);
@@ -227,7 +227,7 @@ namespace connectivity
             OUString transFormPreparedStatement(const OUString& _sSQL);
 
             // should we use the catalog on filebased databases
-            inline sal_Bool             isCatalogUsed()     const { return m_bUseCatalog; }
+            inline bool             isCatalogUsed()     const { return m_bUseCatalog; }
             inline OUString             getUserName()       const { return m_sUser; }
             inline const MysqlCDriver&  getDriver()         const { return m_rDriver;}
             inline rtl_TextEncoding     getTextEncoding()   const { return m_settings.encoding; }

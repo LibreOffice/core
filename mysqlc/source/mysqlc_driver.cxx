@@ -342,7 +342,7 @@ void release(oslInterlockedCount& _refCount,
 /* }}} */
 
 /* {{{ connectivity::mysqlc::checkDisposed() -I- */
-void checkDisposed(sal_Bool _bThrow)
+void checkDisposed(bool _bThrow)
     throw (DisposedException)
 {
     if (_bThrow) {
