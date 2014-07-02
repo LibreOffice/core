@@ -1210,6 +1210,13 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                             nMaxLen = 2;
                             nMaxVal = 31;
                             break;
+                        default:
+                            // This merely exists against
+                            // -Werror=maybe-uninitialized, which is nonsense
+                            // after the (c == 'M' || c == 'D') check above,
+                            // but ...
+                            nMaxLen = 2;
+                            nMaxVal = 31;
                     }
                     bOk = (sStrArray[nNext].getLength() <= nMaxLen);
                     if (bOk)
