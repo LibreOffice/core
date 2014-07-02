@@ -2168,6 +2168,16 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         if ( rHeaderFooterBitmap.IsEmpty() )
             rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" + aName );
     }
+
+    // Something went wrong. Probably, the images are missing. Clear the persona properties in the registry.
+
+    if( rHeaderFooterBitmap.IsEmpty() )
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+        officecfg::Office::Common::Misc::Persona::set( "no", batch );
+        officecfg::Office::Common::Misc::PersonaSettings::set( "", batch );
+        batch->commit();
+    }
 }
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
