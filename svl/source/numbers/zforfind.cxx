@@ -1186,6 +1186,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     }
     nDatePatternStart = nStartPatternAt; // remember start particle
 
+    const sal_Int32 nMonthsInYear = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
+
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
     {
         sal_uInt16 nNext = nDatePatternStart;
@@ -1195,12 +1197,46 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
         sal_Int32 nPat = 0;
         for ( ; nPat < rPat.getLength() && bOk && nNext < nAnzStrings; ++nPat, ++nNext)
         {
-            switch (rPat[nPat])
+            const sal_Unicode c = rPat[nPat];
+            switch (c)
             {
             case 'Y':
             case 'M':
             case 'D':
                 bOk = IsNum[nNext];
+                if (bOk && (c == 'M' || c == 'D'))
+                {
+                    // Check the D and M cases for plausibility. This also
+                    // prevents recognition of date instead of number with a
+                    // numeric group input if date separator is identical to
+                    // group separator, for example with D.M as a pattern and
+                    // #.### as a group.
+                    sal_Int32 nMaxLen, nMaxVal;
+                    switch (c)
+                    {
+                        case 'M':
+                            nMaxLen = 2;
+                            nMaxVal = nMonthsInYear;
+                            break;
+                        case 'D':
+                            nMaxLen = 2;
+                            nMaxVal = 31;
+                            break;
+                        default:
+                            // This merely exists against
+                            // -Werror=maybe-uninitialized, which is nonsense
+                            // after the (c == 'M' || c == 'D') check above,
+                            // but ...
+                            nMaxLen = 2;
+                            nMaxVal = 31;
+                    }
+                    bOk = (sStrArray[nNext].getLength() <= nMaxLen);
+                    if (bOk)
+                    {
+                        sal_Int32 nNum = sStrArray[nNext].toInt32();
+                        bOk = (1 <= nNum && nNum <= nMaxVal);
+                    }
+                }
                 if (bOk)
                     ++nDatePatternNumbers;
                 break;
