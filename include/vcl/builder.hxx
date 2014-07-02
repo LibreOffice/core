@@ -297,6 +297,9 @@ public:
     OString get_by_window(const ::Window *pWindow) const;
     void delete_by_window(const ::Window *pWindow);
 
+    //release ownership of pWindow, i.e. don't delete it
+    void drop_ownership(const ::Window *pWindow);
+
     //apply the properties of rProps to pWindow
     static void set_properties(::Window *pWindow, const stringmap &rProps);
 

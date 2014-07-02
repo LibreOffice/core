@@ -2998,12 +2998,17 @@ void VclBuilder::delete_by_name(const OString& sID)
 
 void VclBuilder::delete_by_window(const Window *pWindow)
 {
+    drop_ownership(pWindow);
+    delete pWindow;
+}
+
+void VclBuilder::drop_ownership(const Window *pWindow)
+{
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_pWindow == pWindow)
         {
-            delete aI->m_pWindow;
             m_aChildren.erase(aI);
             break;
         }
