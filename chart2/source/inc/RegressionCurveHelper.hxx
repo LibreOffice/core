@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <svx/chrtitem.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <vector>
@@ -70,19 +71,6 @@ public:
     static void removeMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt );
 
-    enum tRegressionType
-    {
-        REGRESSION_TYPE_NONE,
-        REGRESSION_TYPE_LINEAR,
-        REGRESSION_TYPE_LOG,
-        REGRESSION_TYPE_EXP,
-        REGRESSION_TYPE_POWER,
-        REGRESSION_TYPE_POLYNOMIAL,
-        REGRESSION_TYPE_MOVING_AVERAGE,
-        REGRESSION_TYPE_MEAN_VALUE,
-        REGRESSION_TYPE_UNKNOWN
-    };
-
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
@@ -100,10 +88,10 @@ public:
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
-    static tRegressionType getFirstRegressTypeNotMeanValueLine(
+    static SvxChartRegress getFirstRegressTypeNotMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    static tRegressionType getRegressionType(
+    static SvxChartRegress getRegressionType(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
@@ -113,7 +101,7 @@ public:
     */
     static css::uno::Reference<css::chart2::XRegressionCurve>
         addRegressionCurve(
-            tRegressionType eType,
+            SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
             const css::uno::Reference<css::uno::XComponentContext>& xContext,
             const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
@@ -129,7 +117,7 @@ public:
 
     static css::uno::Reference<css::chart2::XRegressionCurve>
         changeRegressionCurveType(
-            tRegressionType eType,
+            SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegressionCurveContainer,
             css::uno::Reference<css::chart2::XRegressionCurve>& xRegressionCurve,
             const css::uno::Reference<css::uno::XComponentContext>& xContext );

@@ -29,7 +29,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/chrtitem.hxx>
 
 #include <functional>
 #include <algorithm>
@@ -38,36 +37,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
-::chart::RegressionCurveHelper::tRegressionType lcl_convertRegressionType( SvxChartRegress eRegress )
-{
-    ::chart::RegressionCurveHelper::tRegressionType eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_NONE;
-    switch( eRegress )
-    {
-        case CHREGRESS_LINEAR:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LINEAR;
-            break;
-        case CHREGRESS_LOG:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LOG;
-            break;
-        case CHREGRESS_EXP:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_EXP;
-            break;
-        case CHREGRESS_POWER:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER;
-            break;
-        case CHREGRESS_POLYNOMIAL:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL;
-            break;
-        case CHREGRESS_MOVING_AVERAGE:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE;
-            break;
-        case CHREGRESS_NONE:
-            break;
-    }
-    return eType;
-}
-
 template <class T, class D>
 bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, const OUString& aPropertyID)
 {
@@ -181,8 +150,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
     {
         case SCHATTR_REGRESSION_TYPE:
         {
-            SvxChartRegress eRegress = static_cast< SvxChartRegress >(
-                static_cast< sal_Int32 >( RegressionCurveHelper::getRegressionType( xCurve )));
+            SvxChartRegress eRegress = RegressionCurveHelper::getRegressionType(xCurve);
             SvxChartRegress eNewRegress = static_cast< const SvxChartRegressItem & >(
                 rItemSet.Get( nWhichId )).GetValue();
             if( eRegress != eNewRegress )
@@ -192,7 +160,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                 // currently the only way to handle the type in the
                 // regression curve properties dialog
                 xCurve = RegressionCurveHelper::changeRegressionCurveType(
-                            lcl_convertRegressionType( eNewRegress ),
+                            eNewRegress,
                             m_xCurveContainer,
                             xCurve,
                             uno::Reference< uno::XComponentContext >());
@@ -284,8 +252,7 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
     {
         case SCHATTR_REGRESSION_TYPE:
         {
-            sal_Int32 aRegressionType = static_cast< sal_Int32 >(RegressionCurveHelper::getRegressionType(xCurve));
-            SvxChartRegress eRegress = static_cast< SvxChartRegress >(aRegressionType);
+            SvxChartRegress eRegress = RegressionCurveHelper::getRegressionType(xCurve);
             rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
         }
         break;

@@ -68,35 +68,6 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
     return xResult;
 }
 
-::chart::RegressionCurveHelper::tRegressionType lcl_convertRegressionType( SvxChartRegress eRegress )
-{
-    ::chart::RegressionCurveHelper::tRegressionType eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_NONE;
-    switch( eRegress )
-    {
-        case CHREGRESS_LINEAR:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LINEAR;
-            break;
-        case CHREGRESS_LOG:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_LOG;
-            break;
-        case CHREGRESS_EXP:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_EXP;
-            break;
-        case CHREGRESS_POWER:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER;
-            break;
-        case CHREGRESS_POLYNOMIAL:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL;
-            break;
-        case CHREGRESS_MOVING_AVERAGE:
-            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE;
-            break;
-        case CHREGRESS_NONE:
-            break;
-    }
-    return eType;
-}
-
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
     // todo: use a valid context
@@ -262,24 +233,11 @@ StatisticsItemConverter::StatisticsItemConverter(
         ItemConverter( rPropertySet, rItemPool ),
         m_xModel( xModel )
 {
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_NONE ) ==
-                static_cast< int >( CHREGRESS_NONE ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_LINEAR ) ==
-                static_cast< int >( CHREGRESS_LINEAR ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_LOG ) ==
-                static_cast< int >( CHREGRESS_LOG ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_EXP ) ==
-                static_cast< int >( CHREGRESS_EXP ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_POWER ) ==
-                static_cast< int >( CHREGRESS_POWER ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL ) ==
-                static_cast< int >( CHREGRESS_POLYNOMIAL ));
-    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE ) ==
-                static_cast< int >( CHREGRESS_MOVING_AVERAGE ));
 }
 
 StatisticsItemConverter::~StatisticsItemConverter()
-{}
+{
+}
 
 const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
 {
@@ -476,14 +434,12 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if ( xCurve.is() )
                 {
                     SvxChartRegress eOldRegress(
-                        static_cast< SvxChartRegress >(
-                            static_cast< sal_Int32 >(
-                                RegressionCurveHelper::getRegressionType( xCurve ))));
+                                RegressionCurveHelper::getRegressionType(xCurve));
 
                     if( eOldRegress != eRegress )
                     {
                         xCurve = RegressionCurveHelper::changeRegressionCurveType(
-                                                lcl_convertRegressionType( eRegress ),
+                                                eRegress,
                                                 xContainer,
                                                 xCurve,
                                                 uno::Reference< uno::XComponentContext >());
@@ -756,11 +712,10 @@ void StatisticsItemConverter::FillSpecialItem(
 
         case SCHATTR_REGRESSION_TYPE:
         {
-            SvxChartRegress eRegress = static_cast< SvxChartRegress >(
-                static_cast< sal_Int32 >(
+            SvxChartRegress eRegress =
                     RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
                         uno::Reference< chart2::XRegressionCurveContainer >(
-                            GetPropertySet(), uno::UNO_QUERY ) )));
+                            GetPropertySet(), uno::UNO_QUERY ) );
             rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
         }
         break;

@@ -56,27 +56,27 @@ Any lcl_getRegressionDefault()
     return aRet;
 }
 
-::com::sun::star::chart::ChartRegressionCurveType lcl_getRegressionCurveType( RegressionCurveHelper::tRegressionType eRegressionType )
+::com::sun::star::chart::ChartRegressionCurveType lcl_getRegressionCurveType(SvxChartRegress eRegressionType)
 {
     ::com::sun::star::chart::ChartRegressionCurveType eRet = ::com::sun::star::chart::ChartRegressionCurveType_NONE;
     switch(eRegressionType)
     {
-        case RegressionCurveHelper::REGRESSION_TYPE_LINEAR:
+        case CHREGRESS_LINEAR:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_LINEAR;
             break;
-        case RegressionCurveHelper::REGRESSION_TYPE_LOG:
+        case CHREGRESS_LOG:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM;
             break;
-        case RegressionCurveHelper::REGRESSION_TYPE_EXP:
+        case CHREGRESS_EXP:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL;
             break;
-        case RegressionCurveHelper::REGRESSION_TYPE_POWER:
+        case CHREGRESS_POWER:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_POWER;
             break;
-        case RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL:
+        case CHREGRESS_POLYNOMIAL:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL;
             break;
-        /*case RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE:
+        /*case CHREGRESS_MOVING_AVERAGE:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE;
             break;*/
         default:
@@ -86,27 +86,27 @@ Any lcl_getRegressionDefault()
     return eRet;
 }
 
-RegressionCurveHelper::tRegressionType lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionCurveType eRegressionCurveType )
+SvxChartRegress lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionCurveType eRegressionCurveType )
 {
-    RegressionCurveHelper::tRegressionType eRet;
-    switch(eRegressionCurveType)
+    SvxChartRegress eRet;
+    switch (eRegressionCurveType)
     {
         case ::com::sun::star::chart::ChartRegressionCurveType_LINEAR:
-            eRet = RegressionCurveHelper::REGRESSION_TYPE_LINEAR;
+            eRet = CHREGRESS_LINEAR;
             break;
         case ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM:
-            eRet = RegressionCurveHelper::REGRESSION_TYPE_LOG;
+            eRet = CHREGRESS_LOG;
             break;
         case ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL:
-            eRet = RegressionCurveHelper::REGRESSION_TYPE_EXP;
+            eRet = CHREGRESS_EXP;
             break;
         case ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL:
         //case ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE:
         case ::com::sun::star::chart::ChartRegressionCurveType_POWER:
-            eRet = RegressionCurveHelper::REGRESSION_TYPE_POWER;
+            eRet = CHREGRESS_POWER;
             break;
         default:
-            eRet = RegressionCurveHelper::REGRESSION_TYPE_NONE;
+            eRet = CHREGRESS_NONE;
             break;
     }
     return eRet;
@@ -831,6 +831,7 @@ WrappedRegressionCurvesProperty::WrappedRegressionCurvesProperty(
         , lcl_getRegressionDefault(), spChart2ModelContact, ePropertyType  )
 {
 }
+
 WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
 {
 }
@@ -854,7 +855,7 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
 
     if( xRegressionCurveContainer.is() && xRegressionCurve.is() )
     {
-        RegressionCurveHelper::tRegressionType eNewRegressionType = lcl_getRegressionType( aNewValue );
+        SvxChartRegress eNewRegressionType = lcl_getRegressionType( aNewValue );
 
         RegressionCurveHelper::changeRegressionCurveType(
                         eNewRegressionType,
