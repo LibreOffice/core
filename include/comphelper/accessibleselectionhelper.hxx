@@ -62,7 +62,7 @@ namespace comphelper
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual void
-            implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
+            implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
             throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) = 0;
 
     protected:

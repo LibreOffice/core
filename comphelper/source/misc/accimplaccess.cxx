@@ -84,7 +84,7 @@ namespace comphelper
     }
 
 
-    void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const bool _bSet )
+    void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
         OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < sizeof( sal_Int64 ) * 8, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
 
