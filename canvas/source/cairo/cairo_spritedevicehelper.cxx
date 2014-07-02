@@ -85,16 +85,16 @@ namespace cairocanvas
         // _always_ will have exactly one backbuffer
     }
 
-    sal_Bool SpriteDeviceHelper::showBuffer( bool, sal_Bool )
+    bool SpriteDeviceHelper::showBuffer( bool, bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
-        return sal_False;
+        return false;
     }
 
-    sal_Bool SpriteDeviceHelper::switchBuffer( bool, sal_Bool )
+    bool SpriteDeviceHelper::switchBuffer( bool, bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
-        return sal_False;
+        return false;
     }
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
