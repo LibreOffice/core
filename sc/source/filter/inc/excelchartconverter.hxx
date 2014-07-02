@@ -37,10 +37,10 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc ) SAL_OVERRIDE;
 
     /** Creates a data sequence from the passed formula. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-                        createDataSequence(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& rxDataProvider,
-                            const ::oox::drawingml::chart::DataSequenceModel& rDataSeq ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+        createDataSequence(
+            const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
+            const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) SAL_OVERRIDE;
 };
 
 } // namespace xls

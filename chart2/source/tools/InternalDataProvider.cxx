@@ -492,79 +492,155 @@ void InternalDataProvider::lcl_decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
-    OUString aRangeRepresentation = rRangeRepresentation;
-    if( aRangeRepresentation.indexOf('{') >= 0 )
+    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, OUString());
+    if (xSeq.is())
+        return xSeq;
+
+    xSeq.set(new UncachedDataSequence(this, rRangeRepresentation));
+    addDataSequenceToMap(rRangeRepresentation, xSeq);
+    return xSeq;
+}
+
+uno::Reference<chart2::data::XDataSequence>
+InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole )
+{
+    if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
     {
-        ::std::vector< double > aNewData;
-        ::std::vector< uno::Any > aNewLabels;
-        OUString    aToken;
-        sal_Int32   nCategories     = 0;
-        sal_Int32   nIndex          = 0;
-        bool        bValues         = true;
-        bool        bLabelSet       = false;
-        OUString str = aRangeRepresentation.replace('{',' ').replace('}',' ');
+        // Not an array string.
+        return uno::Reference<chart2::data::XDataSequence>();
+    }
 
-        m_aInternalData.clearDefaultData();
-        sal_Int32 n = m_aInternalData.getColumnCount();
-        if( n )
-            n = n - 1;
+    bool bAllNumeric = true;
+    uno::Reference<chart2::data::XDataSequence> xSeq;
 
-        do
+    const sal_Unicode* p = rArrayStr.getStr();
+    const sal_Unicode* pEnd = p + rArrayStr.getLength();
+    const sal_Unicode* pElem = NULL;
+    OUString aElem;
+
+    std::vector<OUString> aRawElems;
+    ++p; // Skip the first '{'.
+    --pEnd; // Skip the last '}'.
+    bool bInQuote = false;
+    for (; p != pEnd; ++p)
+    {
+        if (*p == '"')
         {
-            // TODO: This will be problematic if ';' is used in label names
-            // '"' character also needs to be considered in such cases
-            aToken = str.getToken(0,';',nIndex);
-            if( aToken.isEmpty() )
-                break;
-            if( aToken.indexOf('"') < 0 )
+            bInQuote = !bInQuote;
+            if (bInQuote)
             {
-                aNewData.push_back( aToken.toDouble() );
+                // Opening quote.
+                bAllNumeric = false;
+                ++p;
+                if (p == pEnd)
+                    break;
+                pElem = p;
             }
             else
             {
-                aNewLabels.push_back( uno::makeAny(aToken.replace('"', ' ').trim()) );
-                if( !nCategories &&
-                   ( !m_aInternalData.getComplexColumnLabel(n).size() ||
-                     !m_aInternalData.getComplexColumnLabel(n).front().hasValue() ) )
-                {
-                    m_aInternalData.setComplexColumnLabel( n,  aNewLabels );
-                    bLabelSet = true;
-                }
-                else
-                {
-                    m_aInternalData.setComplexRowLabel(nCategories, aNewLabels);
-                    if(nCategories==1 && bLabelSet)
-                    {
-                        ::std::vector< uno::Any > aLabels;
-                        m_aInternalData.setComplexRowLabel( 0, m_aInternalData.getComplexColumnLabel( n ) );
-                        m_aInternalData.setComplexColumnLabel( n, aLabels );
-                    }
-                }
-                aNewLabels.pop_back();
-                nCategories++;
-                bValues = false;
-            }
-        } while( nIndex >= 0 );
+                // Closing quote.
+                if (pElem)
+                    aElem = OUString(pElem, p-pElem);
+                aRawElems.push_back(aElem);
+                pElem = NULL;
+                aElem = OUString();
 
-        if( bValues )
-        {
-            m_aInternalData.insertColumn( n );
-            m_aInternalData.setColumnValues( n, aNewData );
-            aRangeRepresentation = OUString::number( n );
+                ++p; // Skip '"'.
+                if (p == pEnd)
+                    break;
+            }
         }
-        else if( nCategories > 1 )
+        else if (bInQuote)
         {
-            aRangeRepresentation = lcl_aCategoriesRangeName;
+            // Do nothing.
+        }
+        else if (*p == ';')
+        {
+            // element separator.
+            if (pElem)
+                aElem = OUString(pElem, p-pElem);
+            aRawElems.push_back(aElem);
+            pElem = NULL;
+            aElem = OUString();
+        }
+        else if (!pElem)
+            pElem = p;
+    }
+
+    if (pElem)
+    {
+        aElem = OUString(pElem, p-pElem);
+        aRawElems.push_back(aElem);
+    }
+
+    if (rRole == "values-y" || rRole == "values-first" || rRole == "values-last" ||
+        rRole == "values-min" || rRole == "values-max")
+    {
+        // Column values.  Append a new data column and populate it.
+
+        std::vector<double> aValues;
+        aValues.reserve(aRawElems.size());
+        for (size_t i = 0; i < aRawElems.size(); ++i)
+            aValues.push_back(aRawElems[i].toDouble());
+        sal_Int32 n = m_aInternalData.appendColumn();
+
+        m_aInternalData.setColumnValues(n, aValues);
+
+        OUString aRangeRep = OUString::number(n);
+        xSeq.set(new UncachedDataSequence(this, aRangeRep));
+        lcl_addDataSequenceToMap(aRangeRep, xSeq);
+    }
+    else if (rRole == "values-x")
+    {
+        std::vector<double> aValues;
+        aValues.reserve(aRawElems.size());
+        if (bAllNumeric)
+        {
+            for (size_t i = 0; i < aRawElems.size(); ++i)
+                aValues.push_back(aRawElems[i].toDouble());
         }
         else
         {
-            aRangeRepresentation = lcl_aLabelRangePrefix+OUString::number( n );
+            for (size_t i = 0; i < aRawElems.size(); ++i)
+                aValues.push_back(i+1);
+        }
+
+        sal_Int32 n = m_aInternalData.appendColumn();
+        m_aInternalData.setColumnValues(n, aValues);
+
+        OUString aRangeRep = OUString::number(n);
+        xSeq.set(new UncachedDataSequence(this, aRangeRep));
+        lcl_addDataSequenceToMap(aRangeRep, xSeq);
+    }
+    else if (rRole == "categories")
+    {
+        // Category labels.
+
+        for (size_t i = 0; i < aRawElems.size(); ++i)
+        {
+            std::vector<uno::Any> aLabels(1, uno::makeAny(aRawElems[i]));
+            m_aInternalData.setComplexRowLabel(i, aLabels);
+        }
+
+        xSeq.set(new UncachedDataSequence(this, lcl_aCategoriesRangeName));
+        lcl_addDataSequenceToMap(lcl_aCategoriesRangeName, xSeq);
+    }
+    else if (rRole == "label")
+    {
+        // Data series label.  There should be only one element.  This always
+        // goes to the last data column.
+        sal_Int32 nColSize = m_aInternalData.getColumnCount();
+        if (!aRawElems.empty() && nColSize)
+        {
+            std::vector<uno::Any> aLabels(1, uno::makeAny(aRawElems[0]));
+            m_aInternalData.setComplexColumnLabel(nColSize-1, aLabels);
+
+            OUString aRangeRep = lcl_aLabelRangePrefix + OUString::number(nColSize-1);
+            xSeq.set(new UncachedDataSequence(this, aRangeRep));
+            lcl_addDataSequenceToMap(aRangeRep, xSeq);
         }
     }
 
-    Reference< chart2::data::XDataSequence > xSeq(
-        new UncachedDataSequence( this, aRangeRepresentation ));
-    lcl_addDataSequenceToMap( aRangeRepresentation, xSeq );
     return xSeq;
 }
 
@@ -763,6 +839,14 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     }
 
     return Reference< chart2::data::XDataSequence >();
+}
+
+Reference<chart2::data::XDataSequence> SAL_CALL
+InternalDataProvider::createDataSequenceByValueArray(
+    const OUString& aRole, const OUString& aRangeRepresentation )
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+{
+    return createDataSequenceFromArray(aRangeRepresentation, aRole);
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
