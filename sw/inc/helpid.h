@@ -365,8 +365,6 @@
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
 
 #define HID_MM_SELECTDBTABLEDDIALOG                             "SW_HID_MM_SELECTDBTABLEDDIALOG"
-#define HID_MM_DBTABLEPREVIEWDIALOG                             "SW_HID_MM_DBTABLEPREVIEWDIALOG"
-#define HID_MM_MAILBODY                                         "SW_HID_MM_MAILBODY"
 #define HID_MM_SENDMAILS                                        "SW_HID_MM_SENDMAILS"
 #define HID_MM_SENDMAILS_STATUSLB                               "SW_HID_MM_SENDMAILS_STATUSLB"
 #define HID_MAILMERGECHILD                                      "SW_HID_MAILMERGECHILD"
