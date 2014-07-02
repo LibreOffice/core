@@ -64,7 +64,6 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_document
     pEnv->ReleaseStringUTFChars(documentPath, aCharDocumentPath);
 
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    LOGI("D( %s ): %d", aCloneDocumentPath, (int) pLibreOfficeKit);
 
     LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
     return (jlong) (intptr_t) pDocument;
@@ -93,12 +92,17 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocu
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTileNative
-    (JNIEnv* pEnv, jobject aObject, jobject /*aByteBuffer*/,
+    (JNIEnv* pEnv, jobject aObject, jobject aByteBuffer,
     jint nCanvasWidth, jint nCanvasHeight, jint nTilePosX, jint nTilePosY,
     jint nTileWidth, jint nTileHeight)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    return pDocument->pClass->paintTile(pDocument, NULL, nCanvasWidth, nCanvasHeight, NULL, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
+    jlong capacity = pEnv->GetDirectBufferCapacity(aByteBuffer);
+    int nStride = 0;
+    pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, &nStride, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    (void) nStride;
 }
 
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeightNative
