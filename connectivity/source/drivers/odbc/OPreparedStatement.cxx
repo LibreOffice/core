@@ -769,9 +769,8 @@ SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 // putParamData
 // Puts parameter data from a previously bound input stream.  The
 // input stream was bound using SQL_LEN_DATA_AT_EXEC.
-
-
-void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
+void OPreparedStatement::putParamData (sal_Int32 index)
+    throw (SQLException, RuntimeException)
 {
     // Sanity check the parameter index
     if ((index < 1) ||
