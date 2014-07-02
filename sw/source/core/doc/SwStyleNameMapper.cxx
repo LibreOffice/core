@@ -468,9 +468,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         break;
         default:
         {
-            // TODO: Is there a better way of failing here?
-            *pHashPointer = new NameToIdHash( 0 );
-            return **pHashPointer;
+            assert(false && "unknown pool family");
         }
         break;
     }
