@@ -25,6 +25,7 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"
+#include <boost/unordered_map.hpp>
 
 #include <vector>
 
@@ -141,10 +142,13 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     class SwPoolFmtList
     {
         std::vector<OUString> maImpl;
+        typedef boost::unordered_map<OUString, sal_uInt32, OUStringHash> UniqueHash;
+        UniqueHash maUnique;
+        void rehash();
     public:
         SwPoolFmtList() {}
         void Append( char cChar, const OUString& rStr );
-        void Erase() { maImpl.clear(); }
+        void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
         bool empty() { return maImpl.empty(); }
         sal_uInt32 FindName(SfxStyleFamily eFam, const OUString &rName);

@@ -321,11 +321,25 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFmtList::FindName(SfxStyleFamily eFam,
             break;
         }
         const OUString sSrch = OUString(cStyle) + rName;
-        for(size_t i = 0; i < maImpl.size(); ++i)
-            if(maImpl[i] == sSrch)
-                return i;
+
+        UniqueHash::const_iterator it = maUnique.find(sSrch);
+        if (it != maUnique.end())
+        {
+            sal_uInt32 nIdx = it->second;
+            assert (nIdx < maImpl.size());
+            assert (maImpl.size() == maUnique.size());
+            return nIdx;
+        }
     }
     return SAL_MAX_UINT32;
+}
+
+void SwStyleSheetIterator::SwPoolFmtList::rehash()
+{
+    maUnique.clear();
+    for (size_t i = 0; i < maImpl.size(); i++)
+        maUnique[maImpl[i]] = i;
+    assert (maImpl.size() == maUnique.size());
 }
 
 void SwStyleSheetIterator::SwPoolFmtList::RemoveName(SfxStyleFamily eFam,
@@ -334,18 +348,22 @@ void SwStyleSheetIterator::SwPoolFmtList::RemoveName(SfxStyleFamily eFam,
     sal_uInt32 nTmpPos = FindName( eFam, rName );
     if( nTmpPos < maImpl.size() )
         maImpl.erase(maImpl.begin() + nTmpPos);
+
+    // assumption: this seldom occurs, the iterator is built, then emptied.
+    rehash();
+    assert (maImpl.size() == maUnique.size());
 }
 
 // Add Strings to the list of templates
 void SwStyleSheetIterator::SwPoolFmtList::Append( char cChar, const OUString& rStr )
 {
     const OUString aStr = OUString(cChar) + rStr;
-    for(std::vector<OUString>::const_iterator i = maImpl.begin();
-        i != maImpl.end(); ++i)
-    {
-        if(*i == aStr)
-            return;
-    }
+
+    UniqueHash::const_iterator it = maUnique.find(aStr);
+    if (it != maUnique.end())
+        return;
+
+    maUnique[aStr] = (sal_uInt32)maImpl.size();
     maImpl.push_back(aStr);
 }
 
@@ -2553,7 +2571,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     // Delete old list
     bFirstCalled = true;
     nLastPos = 0;
-    aLst.Erase();
+    aLst.clear();
 
     // Delete current
     mxIterSheet->Reset();
@@ -3010,7 +3028,7 @@ void SwStyleSheetIterator::InvalidateIterator()
     // this iterator not use a map?
     bFirstCalled = false;
     nLastPos = 0;
-    aLst.Erase();
+    aLst.clear();
 }
 
 void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
