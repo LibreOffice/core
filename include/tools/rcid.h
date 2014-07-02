@@ -81,7 +81,7 @@
 #define RSC_MULTILISTBOX        (RSC_NOTYPE + 0x56)
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
 #define RSC_FIXEDLINE           (RSC_NOTYPE + 0x58)
-#define RSC_FIXEDBITMAP         (RSC_NOTYPE + 0x59)
+
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
 #define RSC_GROUPBOX            (RSC_NOTYPE + 0x5c)
 #define RSC_SCROLLBAR           (RSC_NOTYPE + 0x5d)

@@ -750,26 +750,6 @@ RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
     return pClassFixedText;
 }
 
-RscTop * RscTypCont::InitClassFixedBitmap( RscTop * pSuper, RscTop * pClassBitmap )
-{
-    Atom        nId;
-    RscTop *    pClassFixedBitmap;
-
-    // Klasse anlegen
-    nId = pHS->getID( "FixedBitmap" );
-    pClassFixedBitmap = new RscClass( nId, RSC_FIXEDBITMAP, pSuper );
-    pClassFixedBitmap->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassFixedBitmap );
-
-    INS_WINBIT(pClassFixedBitmap,Scale)
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Fixed", VARNAME );
-    pClassFixedBitmap->SetVariable( nId, pClassBitmap, 0, 0, RSC_FIXEDBITMAP_BITMAP );
-
-    return pClassFixedBitmap;
-}
-
 RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage )
 {
     Atom        nId;

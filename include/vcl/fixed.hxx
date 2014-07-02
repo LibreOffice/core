@@ -124,10 +124,7 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
-
 // - FixedBitmap -
-
-
 class VCL_DLLPUBLIC FixedBitmap : public Control
 {
 private:
@@ -146,7 +143,6 @@ protected:
 
 public:
     explicit        FixedBitmap( Window* pParent, WinBits nStyle = 0 );
-    explicit        FixedBitmap( Window* pParent, const ResId& );
     virtual         ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

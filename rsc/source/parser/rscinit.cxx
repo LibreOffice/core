@@ -91,7 +91,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMultiListBox;
     RscTop   *  pClassComboBox;
     RscTop   *  pClassFixedText;
-    RscTop   *  pClassFixedBitmap;
     RscTop   *  pClassFixedImage;
     RscTop   *  pClassGroupBox;
     RscTop   *  pClassKeyCode;
@@ -459,9 +458,6 @@ void RscTypCont::Init()
 
     pClassFixedText = InitClassFixedText( pClassControl );
     pRoot->Insert( pClassFixedText );
-
-    pClassFixedBitmap = InitClassFixedBitmap( pClassControl, pClassBitmap );
-    pRoot->Insert( pClassFixedBitmap );
 
     pClassFixedImage = InitClassFixedImage( pClassControl, pClassImage );
     pRoot->Insert( pClassFixedImage );

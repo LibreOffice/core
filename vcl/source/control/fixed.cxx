@@ -761,18 +761,6 @@ FixedBitmap::FixedBitmap( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-FixedBitmap::FixedBitmap( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_FIXEDBITMAP )
-{
-    rResId.SetRT( RSC_FIXEDBITMAP );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 FixedBitmap::~FixedBitmap()
 {
 }
