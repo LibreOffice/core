@@ -1994,7 +1994,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
                 pNewComparison = new OSQLParseNode(OUString("="),SQL_NODE_EQUAL,SQL_EQUAL);
                 break;
             default:
-                SAL_WARN( "connectivity.parse", "OSQLParseNode::negateSearchCondition: unexpected node type!" );
+                assert(false && "OSQLParseNode::negateSearchCondition: unexpected node type!");
                 break;
             }
             pSearchCondition->replace(pComparison, pNewComparison);
