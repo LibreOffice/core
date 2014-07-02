@@ -104,7 +104,7 @@ namespace connectivity
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
-            void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
+            void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void setWarning (const ::com::sun::star::sdbc::SQLWarning &ex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
             bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);

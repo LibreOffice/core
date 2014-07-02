@@ -217,9 +217,8 @@ void OStatement_Base::reset() throw (SQLException)
 
 // clearMyResultSet
 // If a ResultSet was created for this Statement, close it
-
-
-void OStatement_Base::clearMyResultSet () throw (SQLException)
+void OStatement_Base::clearMyResultSet()
+    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
