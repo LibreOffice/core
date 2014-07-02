@@ -39,7 +39,9 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#ifdef AUTORECOVERY_ON
 #include <com/sun/star/frame/theAutoRecovery.hpp>
+#endif
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/SessionListener.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -82,7 +84,9 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <officecfg/Office/Common.hxx>
+#ifdef AUTORECOVERY_ON
 #include <officecfg/Office/Recovery.hxx>
+#endif
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -1076,8 +1080,12 @@ void Desktop::HandleBootstrapErrors(
 
 bool Desktop::isUIOnSessionShutdownAllowed()
 {
+#ifdef AUTORECOVERY_ON
     return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
         ::get();
+#else
+    return true;
+#endif
 }
 
 
@@ -1097,7 +1105,9 @@ bool Desktop::isUIOnSessionShutdownAllowed()
             Because the user may be logged out last time from it's
             unix session...
 */
-void impl_checkRecoveryState(bool& bCrashed           ,
+
+#ifdef AUTORECOVERY_ON
+void impl_checkRecoveryState(bool& bCrashed,
                              bool& bRecoveryDataExists,
                              bool& bSessionDataExists )
 {
@@ -1109,14 +1119,16 @@ void impl_checkRecoveryState(bool& bCrashed           ,
     bRecoveryDataExists = elements && !session;
     bSessionDataExists = elements && session;
 }
-
+#endif
 
 /*  @short  start the recovery wizard.
 
     @param  bEmergencySave
             differs between EMERGENCY_SAVE and RECOVERY
 */
-bool impl_callRecoveryUI(bool bEmergencySave     ,
+
+#ifdef AUTORECOVERY_ON
+bool impl_callRecoveryUI(bool bEmergencySave,
                          bool bExistsRecoveryData)
 {
     static OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
@@ -1147,20 +1159,25 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     aRet >>= bRet;
     return !bEmergencySave || bRet;
 }
+#endif
 
 /*
  * Save all open documents so they will be reopened
  * the next time the application is started
  *
- * returns sal_True if at least one document could be saved...
+ * returns true if at least one document could be saved...
  *
  */
 
 bool Desktop::SaveTasks()
 {
+#ifdef AUTORECOVERY_ON
     return impl_callRecoveryUI(
-        true , // sal_True => force emergency save
+        true , // true => force emergency save
         false);
+#else
+    return false;
+#endif
 }
 
 namespace {
@@ -1262,18 +1279,20 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     }
 
     bInException = true;
-    const CommandLineArgs& rArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
-    bool bRestart                           = false;
-    bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
-                                                    ( !rArgs.IsHeadless()                     ) &&
-                                                    (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
-                                                    ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
-                                                  );
-    if ( bAllowRecoveryAndSessionManagement )
+    bool bRestart                = false;
+#ifdef AUTORECOVERY_ON
+    const CommandLineArgs& rArgs = GetCommandLineArgs();
+    bool bAllowRecovery = (
+                            !rArgs.IsNoRestore() && // option to work without recovery
+                            (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
+                            ( Application::IsInExecute() ) // crashes during startup and shutdown should be ignored (they indicates a corrupt installation)
+                          );
+    bool bAllowSessionManagement = !rArgs.IsHeadless();
+    if ( bAllowRecovery && bAllowSessionManagement )
         bRestart = SaveTasks();
+#endif
 
     FlushConfiguration();
 
@@ -1520,13 +1539,15 @@ int Desktop::Main()
         SetSplashScreenProgress(50);
 
         // Backing Component
-        bool bCrashed            = false;
         bool bExistsRecoveryData = false;
         bool bExistsSessionData  = false;
 
+#ifdef AUTORECOVERY_ON
         SAL_INFO( "desktop.app", "{ impl_checkRecoveryState" );
+        bool bCrashed = false;
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         SAL_INFO( "desktop.app", "} impl_checkRecoveryState" );
+#endif
 
         OUString pidfileName = rCmdLineArgs.GetPidfileName();
         if ( !pidfileName.isEmpty() )
@@ -2218,12 +2239,6 @@ void Desktop::PreloadConfigurationData()
 
 void Desktop::OpenClients()
 {
-
-    // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
-    // should be created
-    Reference < XComponent > xFirst;
-    bool bRecovery = false;
-
     const CommandLineArgs& rArgs = GetCommandLineArgs();
 
     if (!rArgs.IsQuickstart())
@@ -2302,6 +2317,14 @@ void Desktop::OpenClients()
         }
     }
 
+    bool bAllowSessionManagement = !rArgs.IsHeadless();
+
+#ifdef AUTORECOVERY_ON
+    // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
+    // should be created
+    Reference < XComponent > xFirst;
+    bool bRecovery = false;
+
     // Disable AutoSave feature in case "--norestore" or a similar command line switch is set on the command line.
     // The reason behind: AutoSave/EmergencySave/AutoRecovery share the same data.
     // But the require that all documents, which are saved as backup should exists inside
@@ -2309,9 +2332,9 @@ void Desktop::OpenClients()
     // but no document inside memory corrspond to this data.
     // Furter it's not acceptable to recover such documents without any UI. It can
     // need some time, where the user wont see any results and wait for finishing the office startup ...
-    bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
+    bool bAllowRecovery = !rArgs.IsNoRestore();
 
-    if ( ! bAllowRecoveryAndSessionManagement )
+    if ( ! bAllowRecovery )
     {
         try
         {
@@ -2347,7 +2370,7 @@ void Desktop::OpenClients()
             try
             {
                 bRecovery = impl_callRecoveryUI(
-                    false          , // false => force recovery instead of emergency save
+                    false, // false => force recovery instead of emergency save
                     bExistsRecoveryData);
             }
             catch(const css::uno::Exception& e)
@@ -2355,7 +2378,11 @@ void Desktop::OpenClients()
                 SAL_WARN( "desktop.app", "Error during recovery" << e.Message);
             }
         }
+    }
+#endif
 
+    if ( bAllowSessionManagement )
+    {
         Reference< XSessionManagerListener2 > xSessionListener;
         try
         {
@@ -2368,18 +2395,23 @@ void Desktop::OpenClients()
             SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
 
-        if ( !bExistsRecoveryData && xSessionListener.is() )
+#ifdef AUTORECOVERY_ON
+        if ( bAllowRecovery )
         {
-            // session management
-            try
+            if ( !bExistsRecoveryData && xSessionListener.is() )
             {
-                xSessionListener->doRestore();
-            }
-            catch(const com::sun::star::uno::Exception& e)
-            {
-                SAL_WARN( "desktop.app", "Error in session management" << e.Message);
+                // session management
+                try
+                {
+                    xSessionListener->doRestore();
+                }
+                catch(const com::sun::star::uno::Exception& e)
+                {
+                    SAL_WARN( "desktop.app", "Error in session management" << e.Message);
+                }
             }
         }
+#endif
     }
 
     OfficeIPCThread::EnableRequests();
@@ -2456,6 +2488,7 @@ void Desktop::OpenClients()
         // soffice was started as tray icon ...
         return;
 
+#ifdef AUTORECOVERY_ON
     if ( bRecovery )
     {
         ShowBackingComponent(0);
@@ -2464,6 +2497,9 @@ void Desktop::OpenClients()
     {
         OpenDefault();
     }
+#else
+    OpenDefault();
+#endif
 }
 
 void Desktop::OpenDefault()

@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_sdk_api,sofficeapp))
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
+    $(if $(filter TRUE,$(ENABLE_AUTORECOVERY)),-DAUTORECOVERY_ON) \
     $(if $(filter WNT,$(OS)),-DENABLE_QUICKSTART_APPLET) \
     $(if $(filter MACOSX,$(OS)),-DENABLE_QUICKSTART_APPLET) \
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \

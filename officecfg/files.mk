@@ -44,7 +44,7 @@ officecfg_XCSFILES := \
     Office/PresentationMinimizer \
     Office/PresenterScreen \
     Office/ProtocolHandler \
-    Office/Recovery \
+    $(if $(filter TRUE,$(ENABLE_AUTORECOVERY)),Office/Recovery) \
     Office/ReportDesign \
     Office/Scripting \
     Office/Security \

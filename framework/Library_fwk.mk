@@ -104,7 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
     framework/source/services/ContextChangeEventMultiplexer \
-    framework/source/services/autorecovery \
+    $(if $(filter TRUE,$(ENABLE_AUTORECOVERY)),framework/source/services/autorecovery) \
     framework/source/services/desktop \
     framework/source/services/frame \
     framework/source/services/modulemanager \
