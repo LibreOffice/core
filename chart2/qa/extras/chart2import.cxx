@@ -279,10 +279,17 @@ void Chart2ImportTest::testDOCChartSeries()
 void Chart2ImportTest::testDOCXChartSeries()
 {
     load("/chart2/qa/extras/data/docx/", "chart.docx");
-    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), seriesList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), seriesList[2]);
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
 }
 
 void Chart2ImportTest::testPPTChartSeries()
@@ -299,11 +306,18 @@ void Chart2ImportTest::testPPTChartSeries()
 void Chart2ImportTest::testPPTXChartSeries()
 {
     //test chart series names for pptx
-    uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions("/chart2/qa/extras/data/pptx/", "chart.pptx");
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[3]);
+    load("/chart2/qa/extras/data/pptx/", "chart.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
 
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
 }
 
 void Chart2ImportTest::testODPChartSeries()
