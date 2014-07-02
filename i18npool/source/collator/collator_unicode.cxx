@@ -333,6 +333,10 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             if (func && funclen) {
                 const sal_uInt8* ruleImage=func();
                 size_t ruleImageSize = funclen();
+
+#if (U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM <= 2)
+                uca_base = new RuleBasedCollator(static_cast<UChar*>(NULL), status);
+#else
                 // Not only changed ICU 53.1 the API behavior that a negative
                 // length (ruleImageSize) now leads to failure, but also that
                 // the base RuleBasedCollator passed as uca_base here needs to
@@ -344,6 +348,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 // NULL (default) locale does not.
                 uca_base = static_cast<RuleBasedCollator*>(icu::Collator::createInstance(
                             icu::Locale::getRoot(), status));
+#endif
                 if (! U_SUCCESS(status)) throw RuntimeException();
                 collator = new RuleBasedCollator(
                         reinterpret_cast<const uint8_t*>(ruleImage), ruleImageSize, uca_base, status);
