@@ -835,7 +835,8 @@ void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& /*rSource
 {
 }
 
-void XPlugin_Impl::propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw(std::exception)
+void XPlugin_Impl::propertyChange(const com::sun::star::beans::PropertyChangeEvent& rEvent)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
 

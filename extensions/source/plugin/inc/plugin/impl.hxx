@@ -262,7 +262,8 @@ public:
 
     // com::sun::star::beans::XPropertyChangeListener
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& rSource ) throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class PluginManager
