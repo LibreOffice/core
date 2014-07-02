@@ -103,7 +103,7 @@ namespace connectivity
             virtual void setResultSetType(sal_Int32 _par0)          ;
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
 
-            void reset () throw( ::com::sun::star::sdbc::SQLException);
+            void reset() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void setWarning (const ::com::sun::star::sdbc::SQLWarning &ex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);

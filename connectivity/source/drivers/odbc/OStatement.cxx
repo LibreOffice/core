@@ -196,8 +196,8 @@ void SAL_CALL OStatement::clearBatch(  ) throw(SQLException, RuntimeException, s
 
 }
 
-
-void OStatement_Base::reset() throw (SQLException)
+void OStatement_Base::reset()
+    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
