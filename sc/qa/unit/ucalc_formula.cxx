@@ -3303,7 +3303,7 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
             cerr << "row " << (i+1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'"
-                << " criterion='" << aChecks[i].pVal << "'" << endl;
+                " criterion='" << aChecks[i].pVal << "'" << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for MATCH", false);
         }
     }
@@ -3343,7 +3343,7 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrS
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
             cerr << "column " << char('A'+i) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'"
-                << " criterion='" << aChecks[i].pVal << "'" << endl;
+                " criterion='" << aChecks[i].pVal << "'" << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for horizontal MATCH", false);
         }
     }
