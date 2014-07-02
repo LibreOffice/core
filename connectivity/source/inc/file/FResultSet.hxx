@@ -148,7 +148,8 @@ namespace connectivity
             inline bool isCount() const { return m_bIsCount; }
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
-            const ORowSetValue& getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
+            const ORowSetValue& getValue(sal_Int32 columnIndex)
+                throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // clear insert row
             void clearInsertRow();
