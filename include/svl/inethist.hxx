@@ -25,9 +25,9 @@
 #include <tools/urlobj.hxx>
 
 class INetURLHistory_Impl;
-class INetURLHistory : public SfxBroadcaster
+class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
 {
-    struct StaticInstance
+    struct SAL_DLLPRIVATE StaticInstance
     {
         INetURLHistory * operator()();
     };
@@ -39,25 +39,25 @@ class INetURLHistory : public SfxBroadcaster
 
     /** Construction/Destruction.
     */
-    INetURLHistory (void);
-    virtual ~INetURLHistory (void);
+    SAL_DLLPRIVATE INetURLHistory (void);
+    SAL_DLLPRIVATE virtual ~INetURLHistory (void);
 
     /** Implementation.
     */
-    static void NormalizeUrl_Impl (INetURLObject &rUrl);
+    SAL_DLLPRIVATE static void NormalizeUrl_Impl (INetURLObject &rUrl);
 
-    SVL_DLLPUBLIC void PutUrl_Impl   (const INetURLObject &rUrl);
-    SVL_DLLPUBLIC bool QueryUrl_Impl (const INetURLObject &rUrl);
+    void PutUrl_Impl   (const INetURLObject &rUrl);
+    bool QueryUrl_Impl (const INetURLObject &rUrl);
 
     /** Not implemented.
     */
-    INetURLHistory (const INetURLHistory&);
-    INetURLHistory& operator= (const INetURLHistory&);
+    SAL_DLLPRIVATE INetURLHistory (const INetURLHistory&);
+    SAL_DLLPRIVATE INetURLHistory& operator= (const INetURLHistory&);
 
 public:
     /** GetOrCreate.
     */
-    SVL_DLLPUBLIC static INetURLHistory* GetOrCreate (void);
+    static INetURLHistory* GetOrCreate (void);
 
     /** QueryProtocol.
     */
