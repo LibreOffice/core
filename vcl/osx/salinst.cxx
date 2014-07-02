@@ -1049,7 +1049,16 @@ NSImage* CreateNSImage( const Image& rImage )
     NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( aSize.Width(), aSize.Height() )];
     if( pImage )
     {
-        [pImage lockFocusFlipped:YES];
+        // lockFocusFlipped isn't available before OSX 10.6
+        if ([pImage respondsToSelector:@selector(lockFocusFlipped:)])
+        {
+            [pImage lockFocusFlipped:YES];
+        }
+        else
+        {
+            [pImage setFlipped:YES];
+            [pImage lockFocus];
+        }
 
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
