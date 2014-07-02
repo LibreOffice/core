@@ -122,7 +122,7 @@ namespace connectivity
             */
             virtual OResultSet* createResulSet();
 
-            SQLLEN getRowCount () throw( ::com::sun::star::sdbc::SQLException);
+            SQLLEN getRowCount() throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
 
             void disposeResultSet();

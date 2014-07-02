@@ -235,7 +235,8 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     m_xResultSet.clear();
 }
 
-SQLLEN OStatement_Base::getRowCount () throw( SQLException)
+SQLLEN OStatement_Base::getRowCount()
+    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
