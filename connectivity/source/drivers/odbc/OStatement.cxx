@@ -296,7 +296,8 @@ bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
 // Sets the warning
 
 
-void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
+void OStatement_Base::setWarning (const SQLWarning &ex)
+    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
