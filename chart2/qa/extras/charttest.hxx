@@ -50,6 +50,10 @@ public:
     void reload( const OUString& rFilterName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
 
+    uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
+
+    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
+
     virtual void setUp();
     virtual void tearDown();
 protected:
@@ -203,6 +207,91 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     CPPUNIT_ASSERT(xChartData.is());
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
+}
+
+uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )
+{
+    Reference<drawing::XDrawPageSupplier> xPageSupp(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPageSupp.is());
+
+    Reference<drawing::XDrawPage> xPage = xPageSupp->getDrawPage();
+    CPPUNIT_ASSERT(xPage.is());
+
+    Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProps.is());
+
+    Reference<frame::XModel> xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    CPPUNIT_ASSERT(xDocModel.is());
+
+    uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
+    return xChartDoc;
+}
+
+uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
+    sal_Int32 nPage, sal_Int32 nShape )
+{
+    uno::Reference<chart::XChartDocument> xEmpty;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY);
+    if (!xPages.is())
+        return xEmpty;
+
+    uno::Reference<drawing::XDrawPage> xPage(
+        xPages->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY_THROW);
+    if (!xPage.is())
+        return xEmpty;
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), uno::UNO_QUERY);
+    if (!xShapeProps.is())
+        return xEmpty;
+
+    uno::Reference<frame::XModel> xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    if (!xDocModel.is())
+        return xEmpty;
+
+    uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
+    return xChartDoc;
+}
+
+std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Reference<chart2::XChartType>& xCT )
+{
+    OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
+
+    Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDSCont.is());
+    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+
+    std::vector<uno::Sequence<uno::Any> > aRet;
+    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+    {
+        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDSrc.is());
+        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+        {
+            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+            CPPUNIT_ASSERT(xValues.is());
+            Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
+            if (!xPropSet.is())
+                continue;
+
+            OUString aRoleName;
+            xPropSet->getPropertyValue("Role") >>= aRoleName;
+            if (aRoleName == aLabelRole)
+            {
+                Reference<chart2::data::XLabeledDataSequence> xLabel = aDataSeqs[j];
+                CPPUNIT_ASSERT(xLabel.is());
+                Reference<chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
+                CPPUNIT_ASSERT(xDS2.is());
+                uno::Sequence<uno::Any> aData = xDS2->getData();
+                aRet.push_back(aData);
+            }
+        }
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
