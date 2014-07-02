@@ -96,6 +96,17 @@ public:
     void setEventSource( ::com::sun::star::uno::XInterface* pxEventSource )
         { mpxEventSource = pxEventSource; }
 
+    void insertCheck(const OUString& aName, const css::uno::Any& aElement)
+        throw (css::lang::IllegalArgumentException,
+               css::container::ElementExistException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception);
+
+    void insertNoCheck(const OUString& aName, const css::uno::Any& aElement)
+        throw (css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception);
+
     // Methods XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

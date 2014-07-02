@@ -186,20 +186,24 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     }
 }
 
-
-// Methods XNameContainer
-void NameContainer::insertByName( const OUString& aName, const Any& aElement )
+void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
+{
+    NameContainerNameMap::iterator aIt = mHashMap.find(aName);
+    if( aIt != mHashMap.end() )
+    {
+        throw ElementExistException();
+    }
+    insertNoCheck(aName, aElement);
+}
+
+void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
+    throw(IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     Type aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
         throw IllegalArgumentException();
-    }
-    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    if( aIt != mHashMap.end() )
-    {
-        throw ElementExistException();
     }
 
     sal_Int32 nCount = mNames.getLength();
@@ -234,6 +238,13 @@ void NameContainer::insertByName( const OUString& aName, const Any& aElement )
         aEvent.Changes[ 0 ].Element <<= aElement;
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
+}
+
+// Methods XNameContainer
+void NameContainer::insertByName( const OUString& aName, const Any& aElement )
+    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
+{
+    insertCheck(aName, aElement);
 }
 
 void NameContainer::removeByName( const OUString& aName )
@@ -2492,7 +2503,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             }
             else
             {
-                pImplLib->maNameContainer.insertByName( aElementName, aAny );
+                pImplLib->maNameContainer.insertNoCheck(aElementName, aAny);
             }
         }
         pImplLib->implSetModified( false );
