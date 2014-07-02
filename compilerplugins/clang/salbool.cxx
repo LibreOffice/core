@@ -52,15 +52,20 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     return false;
 }
 
-bool canOverrideTemplateArgumentMember(CXXMethodDecl const * decl) {
-    CXXRecordDecl const * r = dyn_cast<CXXRecordDecl>(decl->getDeclContext());
-    assert(r != nullptr);
-    for (auto b = r->bases_begin(); b != r->bases_end(); ++b) {
-        if (b->getType()->isTemplateTypeParmType()) {
-            return true;
-        }
+enum class OverrideKind { NO, YES, MAYBE };
+
+OverrideKind getOverrideKind(FunctionDecl const * decl) {
+    CXXMethodDecl const * m = dyn_cast<CXXMethodDecl>(decl);
+    if (m == nullptr) {
+        return OverrideKind::NO;
     }
-    return false;
+    if (m->size_overridden_methods() != 0 || m->hasAttr<OverrideAttr>()) {
+        return OverrideKind::YES;
+    }
+    if (!dyn_cast<CXXRecordDecl>(m->getDeclContext())->hasAnyDependentBases()) {
+        return OverrideKind::NO;
+    }
+    return OverrideKind::MAYBE;
 }
 
 //TODO: current implementation is not at all general, just tests what we
@@ -284,11 +289,8 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                           || hasBoolOverload(f)))
                   || f->isDeleted()))
             {
-                CXXMethodDecl const * m = dyn_cast<CXXMethodDecl>(f);
-                //XXX: canOverrideTemplateArgumentMember(m) does not require
-                // !m->isVirtual()
-                if ((m == nullptr || !m->isVirtual()))
-                {
+                OverrideKind k = getOverrideKind(f);
+                if (k != OverrideKind::YES) {
                     SourceLocation loc { decl->getLocStart() };
                     TypeSourceInfo * tsi = decl->getTypeSourceInfo();
                     if (tsi != nullptr) {
@@ -326,7 +328,14 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                     // definition (in a main file only processed later) to fail
                     // with a "mismatch" error before the rewriter had a chance
                     // to act upon the definition (but use the heuristic of
-                    // assuming pure virtual functions do not have definitions):
+                    // assuming pure virtual functions do not have definitions);
+                    // also, do not automatically rewrite functions that could
+                    // implicitly override depend base functions (and thus stop
+                    // doing so after the rewrite; note that this is less
+                    // dangerous for return types than for parameter types,
+                    // where the function would still implicitly override and
+                    // cause a compilation error due to the incompatible return
+                    // type):
                     if (fullMode_
                         && !((compat::isInMainFile(
                                   compiler.getSourceManager(),
@@ -335,12 +344,18 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                                           decl->getDeclContext())
                                       ->getNameInfo().getLoc()))
                               || f->isDefined() || f->isPure())
-                             && rewrite(loc)))
+                             && k != OverrideKind::MAYBE && rewrite(loc)))
                     {
                         report(
                             DiagnosticsEngine::Warning,
-                            "ParmVarDecl, use \"bool\" instead of \"sal_Bool\"",
+                            ("ParmVarDecl, use \"bool\" instead of"
+                             " \"sal_Bool\"%0"),
                             loc)
+                            << (k == OverrideKind::MAYBE
+                                ? (" (unless this member function overrides a"
+                                   " dependent base member function, even"
+                                   " though it is not marked 'override')")
+                                : "")
                             << decl->getSourceRange();
                     }
                 }
@@ -437,12 +452,8 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
     }
     if (isSalBool(compat::getReturnType(*decl).getNonReferenceType())) {
         FunctionDecl const * f = decl->getCanonicalDecl();
-        CXXMethodDecl const * m = dyn_cast<CXXMethodDecl>(f);
-        //XXX: canOverrideTemplateArgumentMember(m) does not require
-        // !m->isVirtual()
-        if ((m == nullptr || !m->isVirtual()
-             || (m->size_overridden_methods() == 0
-                 && !canOverrideTemplateArgumentMember(m)))
+        OverrideKind k = getOverrideKind(f);
+        if (k != OverrideKind::YES
             && !(hasCLanguageLinkageType(f)
                  || (isInUnoIncludeFile(
                          compiler.getSourceManager().getSpellingLoc(
@@ -484,7 +495,13 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             {
                 report(
                     DiagnosticsEngine::Warning,
-                    "use \"bool\" instead of \"sal_Bool\" as return type", loc)
+                    "use \"bool\" instead of \"sal_Bool\" as return type%0",
+                    loc)
+                    << (k == OverrideKind::MAYBE
+                        ? (" (unless this member function overrides a dependent"
+                           " base member function, even though it is not marked"
+                           " 'override')")
+                        : "")
                     << decl->getSourceRange();
             }
         }
