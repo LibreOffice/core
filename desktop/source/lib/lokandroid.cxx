@@ -19,7 +19,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
+// #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
 
 /* LibreOfficeKit */
 
@@ -99,7 +99,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
     unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
-    jlong capacity = pEnv->GetDirectBufferCapacity(aByteBuffer);
+//    jlong capacity = pEnv->GetDirectBufferCapacity(aByteBuffer);
     int nStride = 0;
     pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, &nStride, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     (void) nStride;
