@@ -162,7 +162,6 @@
 #define HID_DSADMIN_PORTNUMBER                            "DBACCESS_HID_DSADMIN_PORTNUMBER"
 
 #define HID_APP_HELP_TEXT                                 "DBACCESS_HID_APP_HELP_TEXT"
-#define HID_EXPLORERDLG_COLLECTION                        "DBACCESS_HID_EXPLORERDLG_COLLECTION"
 #define UID_APP_DATABASE_VIEW                             "DBACCESS_UID_APP_DATABASE_VIEW"
 #define UID_APP_TASKS_VIEW                                "DBACCESS_UID_APP_TASKS_VIEW"
 #define UID_APP_CONTAINER_VIEW                            "DBACCESS_UID_APP_CONTAINER_VIEW"
