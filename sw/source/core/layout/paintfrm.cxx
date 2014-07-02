@@ -6528,9 +6528,29 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 const bool bConsiderBackgroundTransparency = IsFlyFrm();
                 bool bDone(false);
 
-                if(pOut && aFillAttributes.get() && aFillAttributes->isUsed())
+                // #i125189# We are also done when the new DrawingLayer FillAttributes are used
+                // or the FillStyle is set (different from XFILL_NONE)
+                if(pOut && aFillAttributes.get())
                 {
-                    bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRect, *pOut);
+                    if(aFillAttributes->isUsed())
+                    {
+                        // check if really something is painted
+                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRect, *pOut);
+                    }
+
+                    if(!bDone)
+                    {
+                        // if not, still a FillStyle could be set but the transparency is at 100%,
+                        // thus need to check the model data itself for FillStyle (do not rely on
+                        // SdrAllFillAttributesHelper since it already contains optimized information,
+                        // e.g. transparency leads to no fill)
+                        const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+
+                        if(XFILL_NONE != eFillStyle)
+                        {
+                            bDone = true;
+                        }
+                    }
                 }
 
                 if(!bDone)
@@ -7423,13 +7443,42 @@ bool SwFrm::GetBackgroundBrush(
         //     --> Status Quo: background transparency have to be
         //                     considered for fly frames
         const bool bConsiderBackgroundTransparency = pFrm->IsFlyFrm();
+
+        // #i125189# Do not base the decision for using the parent's fill style for this
+        // frame when the new DrawingLayer FillAttributes are used on the SdrAllFillAttributesHelper
+        // information. There the data is already optimized to no fill in the case that the
+        // transparence is at 100% while no fill is the criteria for derivation
+        bool bNewDrawingLayerFillStyleIsUsedAndNotNoFill(false);
+
+        if(rFillAttributes.get())
+        {
+            // the new DrawingLayer FillStyle is used
+            if(rFillAttributes->isUsed())
+            {
+                // it's not XFILL_NONE
+                bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
+            }
+            else
+            {
+                // maybe optimized already when 100% transparency is used somewhere, need to test
+                // XFillStyleItem directly from the model data
+                const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pFrm->GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+
+                if(XFILL_NONE != eFillStyle)
+                {
+                    bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
+                }
+            }
+        }
+
         // OD 20.08.2002 #99657#
         //     add condition:
         //     If <bConsiderBackgroundTransparency> is set - see above -,
         //     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
         if (
-            // done when FillAttributesare set
-            (rFillAttributes.get() && rFillAttributes->isUsed()) ||
+            // #i125189# Done when the new DrawingLayer FillAttributes are used and
+            // not XFILL_NONE (see above)
+            bNewDrawingLayerFillStyleIsUsedAndNotNoFill ||
 
             // done when SvxBrushItem is used
             !rBack.GetColor().GetTransparency() || rBack.GetGraphicPos() != GPOS_NONE ||
