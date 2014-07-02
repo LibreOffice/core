@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_06a1c0a9",
+        "filename": "sc/source/core/data/documen9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "wonder why this is disabled?",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_26c5dc5a",
+        "filename": "sc/source/core/data/documen9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "leftover printf",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_e6a5b4b5",
+        "filename": "svx/source/dialog/pagectrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "\"(sal_Bool)(eUsage \u0026 SVX_PAGE_LEFT)\" is a rather odd cast?",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_e68c9437",
+        "filename": "sw/inc/unoprnms.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "why do we need to over-abstract a string constant to such an extent that we can\u0027t grep for property names any more?",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_e6c014e3",
+        "filename": "sw/source/core/doc/docnew.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "the GetDocumentDrawModelManager does not exist on this branch",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_86f8307e",
+        "filename": "sw/source/core/uibase/app/docst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "so first we require FAMILY_FRAME and then we\u0027d allow FAMILY_PARA too? something is wrong here...",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_26903cec",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4863,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "this is quite wrong: SwXAutoStyle::mpSet is an alias of the core internal cached automatic style, it must be used read-only here or the core auto-styles get messed up!",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_06bc206b",
+        "filename": "xmloff/source/text/txtstyli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 1,
+      "message": "this one was already fixed somewhere?",
+      "revId": "4ead0009a815007983c0f1635c107185e43c83e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_0688a021",
+        "filename": "sw/inc/cmdid.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 0,
+      "message": "wonder why this does not remove FN_UNO_FIRST_SHARE_CONTENT ?",
+      "revId": "841fe2a12ea24c5f1ed61e48e15939b3b05acc5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_e62ff4f4",
+        "filename": "sw/source/core/uibase/shells/basesh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-02T14:51:38Z",
+      "side": 0,
+      "message": "is this disableItem no longer needed or moved somewhere else?",
+      "revId": "841fe2a12ea24c5f1ed61e48e15939b3b05acc5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
