@@ -70,23 +70,19 @@ OverrideKind getOverrideKind(FunctionDecl const * decl) {
 
 //TODO: current implementation is not at all general, just tests what we
 // encounter in practice:
-bool hasBoolOverload(FunctionDecl const * decl) {
-    if (isa<CXXMethodDecl>(decl)) {
-        unsigned n = decl->getNumParams();
-        CXXRecordDecl const * r = dyn_cast<CXXRecordDecl>(
-            decl->getDeclContext());
-        assert(r != nullptr);
-        for (auto m = r->method_begin(); m != r->method_end(); ++m) {
-            if (m->getDeclName() == decl->getDeclName()
-                && m->getNumParams() == n)
-            {
+bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
+    unsigned n = decl->getNumParams();
+    for (auto d: decl->getDeclContext()->lookup(decl->getDeclName())) {
+        FunctionDecl const * f = dyn_cast<FunctionDecl>(d);
+        if (f != nullptr && (!mustBeDeleted || f->isDeleted())) {
+            if (f->getNumParams() == n) {
                 bool hasSB = false;
                 for (unsigned i = 0; i != n; ++i) {
                     QualType t1 { decl->getParamDecl(i)->getType() };
                     bool isSB = isSalBool(t1);
                     bool isSBRef = !isSB && t1->isReferenceType()
                         && isSalBool(t1.getNonReferenceType());
-                    QualType t2 { m->getParamDecl(i)->getType() };
+                    QualType t2 { f->getParamDecl(i)->getType() };
                     if (!(isSB
                           ? t2->isBooleanType()
                           : isSBRef
@@ -286,8 +282,8 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                               f->getNameInfo().getLoc()))
                       && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()
                           || decl->getType()->isReferenceType()
-                          || hasBoolOverload(f)))
-                  || f->isDeleted()))
+                          || hasBoolOverload(f, false)))
+                  || f->isDeleted() || hasBoolOverload(f, true)))
             {
                 OverrideKind k = getOverrideKind(f);
                 if (k != OverrideKind::YES) {

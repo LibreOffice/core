@@ -113,6 +113,8 @@ void writeData_(oslFileHandle handle, char const * begin, sal_Int32 length) {
     }
 }
 
+void writeValueContent_(oslFileHandle, bool) SAL_DELETED_FUNCTION;
+    // silence lopluign:salbool
 void writeValueContent_(oslFileHandle handle, sal_Bool value) {
     if (value) {
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("true"));
