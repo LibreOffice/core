@@ -116,8 +116,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
 
         {
                 // Forward the call to the list child.
-                VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                if ( pList == NULL )
+            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            if ( pList == NULL )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -139,8 +139,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VCLEVENT_DROPDOWN_OPEN:
         {
-                 VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                 if ( pList == NULL )
+            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            if ( pList == NULL )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -154,8 +154,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VCLEVENT_DROPDOWN_CLOSE:
         {
-                 VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                 if ( pList == NULL )
+            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            if ( pList == NULL )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -175,17 +175,16 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VCLEVENT_COMBOBOX_SELECT:
         {
-                 VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                 if (pList != NULL)
-                 {
-                        Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
-                        if ( xText.is() )
+             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+             if (pList != NULL)
+             {
+                Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
+                if ( xText.is() )
                 {
                     ::rtl::OUString sText = xText->getSelectedText();
                     if ( sText.isEmpty() )
                         sText = xText->getText();
-                            pList->UpdateSelection_Acc (sText, m_bIsDropDownBox);
-                    //if(m_bIsDropDownBox && !pList->IsInDropDown())
+                    pList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
                     if (m_bIsDropDownBox || ( !m_bIsDropDownBox && m_aBoxType==COMBOBOX))
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
 
@@ -195,7 +194,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
 
                 }
-                    }
+            }
             break;
         }
         //case VCLEVENT_DROPDOWN_OPEN:
@@ -260,30 +259,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                 }
             }
             break;
-        /*
-        // MT: Not sending VCLEVENT_LISTBOX_STATEUPDATE, see comment in ListBox::SelectEntryPos
-        case VCLEVENT_LISTBOX_STATEUPDATE:
-        {
-            // Need to update the INDETERMINATE state sometimes
-            if (m_bIsDropDownBox && m_aBoxType==LISTBOX)
-            {
-                sal_Int32 nSelectedEntryCount = 0;
-                ListBox* pListBox = static_cast< ListBox* >( GetWindow() );
-                if (pListBox != NULL && pListBox->GetEntryCount() > 0)
-                {
-                    nSelectedEntryCount = pListBox->GetSelectEntryCount();
-                    Any aOldValue;
-                    Any aNewValue;
-                    if ( nSelectedEntryCount == 0)
-                        aNewValue <<= AccessibleStateType::INDETERMINATE;
-                    else
-                        aOldValue <<= AccessibleStateType::INDETERMINATE;
-                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
-                }
-            }
-            break;
-        }
-        */
         default:
             VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
     }
@@ -403,7 +378,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent (void)
 
 //=====  XAccessibleAction  ===================================================
 
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount (void)
+sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
     throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex> aGuard (GetMutex());
