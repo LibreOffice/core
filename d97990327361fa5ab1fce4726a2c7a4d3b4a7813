@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_a6020c6e",
+        "filename": "sw/source/ui/dbui/dbtablepreviewdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-02T10:58:07Z",
+      "side": 0,
+      "message": "I wonder why this dispose line went away.\n\nAh, I see now on removing it, a double-delete, a better solution I think for me to add a method to the builder to allow transferring ownership to something else",
+      "revId": "d97990327361fa5ab1fce4726a2c7a4d3b4a7813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
