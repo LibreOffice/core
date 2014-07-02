@@ -71,14 +71,14 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-const char TEMPLATEBAR_SAVE[] = "template_save";
-const char TEMPLATEBAR_OPEN[] = "open";
-const char TEMPLATEBAR_EDIT[] = "edit";
-const char TEMPLATEBAR_PROPERTIES[] = "properties";
-const char TEMPLATEBAR_DEFAULT[] = "default";
-const char TEMPLATEBAR_MOVE[] = "move";
-const char TEMPLATEBAR_EXPORT[] = "export";
-const char TEMPLATEBAR_DELETE[] = "template_delete";
+//const char TEMPLATEBAR_SAVE[] = "template_save";
+//const char TEMPLATEBAR_OPEN[] = "open";
+//const char TEMPLATEBAR_EDIT[] = "edit";
+//const char TEMPLATEBAR_PROPERTIES[] = "properties";
+//const char TEMPLATEBAR_DEFAULT[] = "default";
+//const char TEMPLATEBAR_MOVE[] = "move";
+//const char TEMPLATEBAR_EXPORT[] = "export";
+//const char TEMPLATEBAR_DELETE[] = "template_delete";
 
 const int nButtonsFontSize = 15;
 float fMultiplier = 1.2f;
@@ -125,8 +125,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpHelpButton, "help");
     get(mpExtensionsButton, "extensions");
 
-    get(mpViewBar, "action_view");
-    get(mpTemplateBar, "action_templates");
+    //get(mpViewBar, "action_view");
+    //get(mpTemplateBar, "action_templates");
 
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
@@ -281,21 +281,21 @@ void BackingWindow::initControls()
 
     mpCurrentView = mpLocalView;
 
-    mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
-    mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
+    //mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    //mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
     //mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
     //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
-    mpViewBar->Hide();
-    mpViewBar->HideItem("import");
+    //mpViewBar->Hide();
+    //mpViewBar->HideItem("import");
 
-    mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
-    mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
+    //mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    //mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
     //mpTemplateBar->SetClickHdl( LINK( this, BackingWindow,TBXTemplateHdl ) );
     //mpTemplateBar->SetDoubleClickHdl( LINK(this, BackingWindow, OpenTemplateHdl) );
     //mpTemplateBar->SetDropdownClickHdl(LINK(this, BackingWindow,TBXDropdownHdl));
 
     //set handlers
-    mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
+    //mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
     mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
 
@@ -494,207 +494,6 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
-//Editing related method
-/*
-void BackingWindow::OnTemplateImport ()
-{
-    size_t nDialogType =
-        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-
-    sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
-
-    // add "All" filter
-    aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
-                        OUString(FILEDIALOG_FILTER_ALL) );
-
-    // add template filter
-    OUString sFilterExt;
-    OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
-
-    // add filters of modules which are installed
-    SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        sFilterExt += "*.ott;*.stw;*.oth";
-
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-    {
-        if ( !sFilterExt.isEmpty() )
-            sFilterExt += ";";
-
-        sFilterExt += "*.ots;*.stc";
-    }
-
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-    {
-        if ( !sFilterExt.isEmpty() )
-            sFilterExt += ";";
-
-        sFilterExt += "*.otp;*.sti";
-    }
-
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-    {
-        if ( !sFilterExt.isEmpty() )
-            sFilterExt += ";";
-
-        sFilterExt += "*.otg;*.std";
-
-
-    if ( !sFilterExt.isEmpty() )
-        sFilterExt += ";";
-
-    sFilterExt += "*.vor";
-
-    sFilterName += " (";
-    sFilterName += sFilterExt;
-    sFilterName += ")";
-
-    aFileDlg.AddFilter( sFilterName, sFilterExt );
-    aFileDlg.SetCurrentFilter( sFilterName );
-
-    ErrCode nCode = aFileDlg.Execute();
-
-    if ( nCode == ERRCODE_NONE )
-    {
-        com::sun::star::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
-
-        if (aFiles.hasElements())
-        {
-            if (!maSelFolders.empty())
-            {
-                //Import to the selected regions
-                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
-                {
-                    OUString aTemplateList;
-                    TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
-
-                    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
-                    {
-                        if(!mpLocalView->copyFrom(pFolder,aFiles[i]))
-                        {
-                            if (aTemplateList.isEmpty())
-                                aTemplateList = aFiles[i];
-                            else
-                                aTemplateList = aTemplateList + "\n" + aFiles[i];
-                        }
-                    }
-
-                    if (!aTemplateList.isEmpty())
-                    {
-                        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                        aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
-                        ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
-                    }
-                }
-            }
-            else
-            {
-                //Import to current region
-                OUString aTemplateList;
-                for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
-                {
-                    if(!mpLocalView->copyFrom(aFiles[i]))
-                    {
-                        if (aTemplateList.isEmpty())
-                            aTemplateList = aFiles[i];
-                        else
-                            aTemplateList = aTemplateList + "\n" + aFiles[i];
-                    }
-                }
-
-                if (!aTemplateList.isEmpty())
-                {
-                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                    aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
-                    ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
-                }
-            }
-
-            mpLocalView->Invalidate(INVALIDATE_NOERASE);
-            }
-        }
-    }
-}*/
-
-//Editing related method
-/*void BackingWindow::OnFolderDelete()
-{
-    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
-
-    if ( aQueryDlg.Execute() == RET_NO )
-        return;
-
-    OUString aFolderList;
-
-    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders; //Copy to avoid invalidating      an iterator
-
-    for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
-    {
-        if (!mpLocalView->removeRegion((*pIter)->mnId))
-        {
-            if (aFolderList.isEmpty())
-                aFolderList = (*pIter)->maTitle;
-            else
-                aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
-
-            ++pIter;
-            if (pIter == aSelFolders.end())
-                break;
-        }
-    }
-
-    if (!aFolderList.isEmpty())
-    {
-        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
-        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aFolderList)).Execute();
-    }
-}*/
-
-//Editing related method
-/*void BackingWindow::OnFolderNew()
-{
-    InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
-
-    int ret = dlg.Execute();
-
-    if (ret)
-    {
-        OUString aName = dlg.getEntryText();
-
-        mpCurrentView->createRegion(aName);
-    }
-}*/
-
-
-// void BackingWindow::OnRegionState (const ThumbnailViewItem *pItem)
-// {
-//     if (pItem->isSelected())
-//     {
-//         if (maSelFolders.empty() && !mbIsSaveMode)
-//         {
-//             mpViewBar->ShowItem("import");
-//             mpViewBar->ShowItem("delete");
-//             mpViewBar->HideItem("new_folder");
-//         }
-
-//         maSelFolders.insert(pItem);
-//     }
-//     else
-//     {
-//         maSelFolders.erase(pItem);
-
-//         if (maSelFolders.empty() && !mbIsSaveMode)
-//         {
-//             mpViewBar->HideItem("import");
-//             mpViewBar->HideItem("delete");
-//             mpViewBar->ShowItem("new_folder");
-//         }
-//     }
-// }
-
-
 IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
 {
     OUString aNode;
@@ -774,40 +573,19 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 */
         mpAllRecentThumbnails->Hide();
         mpLocalView->Show();
-        mpViewBar->Hide();
-        mpViewBar->HideItem("import");
-        mpViewBar->HideItem("delete");
-        mpViewBar->HideItem("new_folder");
+        //mpViewBar->Hide();
     }
     return 0;
 }
 
-IMPL_LINK_NOARG(BackingWindow, DoubleClickHdl)
-{
-    ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
-
-    OpenTemplateHdl(pItem);
-    return 0;
-}
 
 
-//FIXME: Obvious enough
 IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
 {
     maSelFolders.clear();
     maSelTemplates.clear();
-
-    //mpViewBar->ShowItem("new_folder", mpCurrentView->isNestedRegionAllowed());
-
-    //if (!mbIsSaveMode)
-      //  mpViewBar->ShowItem("import", mpCurrentView->isImportAllowed());
-
-    mpTemplateBar->Hide();
-    mpViewBar->Hide();
-    mpViewBar->HideItem("import");
-    mpViewBar->HideItem("delete");
-    mpViewBar->HideItem("new_folder");
-    //mpActionBar->Show();
+    //mpTemplateBar->Hide();
+    //mpViewBar->Hide();
 
     return 0;
 }
@@ -843,66 +621,6 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
     return 0;
 }
-
-//FIXME: Implement OnSomething() methods
-//IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
-//{
-  //  const size_t nCurItemId = mpViewBar->GetCurItemId();
-
-    /*//if (nCurItemId == mpViewBar->GetItemId("import"))
-      //  OnTemplateImport();
-    else if (nCurItemId == mpViewBar->GetItemId("delete"))
-    {
-        if (mpCurrentView == mpLocalView)
-            OnFolderDelete();
-        //else
-            ////OnRepositoryDelete();
-    }
-    else if (nCurItemId == mpViewBar->GetItemId("new_folder"))
-        OnFolderNew();
-    //else if (nCurItemId == mpViewBar->GetItemId("save"))
-        ////OnTemplateSaveAs();
-    */
-    //return 0;
-//}
-
-//FIXME: Implement OnSomething() methods // might be deleted
-IMPL_LINK_NOARG(BackingWindow,TBXTemplateHdl)
-{
-    //const size_t nCurItemId = mpTemplateBar->GetCurItemId();
-
-    //if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_OPEN))
-        //OnTemplateOpen();
-    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EDIT))
-        //OnTemplateEdit();
-    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_PROPERTIES))
-        //OnTemplateProperties();
-    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DELETE))
-        //OnTemplateDelete();
-    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DEFAULT))
-        //OnTemplateAsDefault();
-    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EXPORT))
-        //OnTemplateExport();
-
-    return 0;
-}
-
-
-IMPL_LINK(BackingWindow, TVItemStateHdl, const ThumbnailViewItem*, pItem)
-{
-    //const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
-
-    //if (pCntItem)
-        //OnRegionState(pItem);
-    //else
-        //FIXME:Move this to here
-        //OnTemplateState(pItem);
-
-    return 0;
-}
-
-
-
 
 struct ImplDelayedDispatch
 {
