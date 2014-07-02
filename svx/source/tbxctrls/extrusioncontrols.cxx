@@ -64,7 +64,7 @@ namespace svx
 |*
 \************************************************************************/
 
-static sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
+static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
 
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
