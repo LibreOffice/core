@@ -169,17 +169,17 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     aBuf.appendAscii( "dict_" ).appendAscii( pLang ).appendAscii( SAL_DLLEXTENSION );
     aEntry.mhModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
     if( aEntry.mhModule ) {
-        sal_IntPtr (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getExistMark").pData );
-        aEntry.maData.existMark = (sal_uInt8*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getIndex1").pData );
-        aEntry.maData.index1 = (sal_Int16*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getIndex2").pData );
-        aEntry.maData.index2 = (sal_Int32*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getLenArray").pData );
-        aEntry.maData.lenArray = (sal_Int32*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getDataArea").pData );
-        aEntry.maData.dataArea = (sal_Unicode*) (*func)();
+        oslGenericFunction func;
+        func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getExistMark" );
+        aEntry.maData.existMark = ((sal_uInt8 const * (*)()) func)();
+        func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getIndex1" );
+        aEntry.maData.index1 = ((sal_Int16 const * (*)()) func)();
+        func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getIndex2" );
+        aEntry.maData.index2 = ((sal_Int32 const * (*)()) func)();
+        func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getLenArray" );
+        aEntry.maData.lenArray = ((sal_Int32 const * (*)()) func)();
+        func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getDataArea" );
+        aEntry.maData.dataArea = ((sal_Unicode const * (*)()) func)();
     }
 
     data = aEntry.maData;
