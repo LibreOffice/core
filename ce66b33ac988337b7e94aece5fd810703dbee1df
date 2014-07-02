@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_e693744e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3509,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-02T08:10:08Z",
+      "side": 1,
+      "message": "The original assert ensured that the two drawing tags are written in separate AlternateContent elements. The new one doesn\u0027t really ensure that. Could you please still use an absolute XPath here, one for the real drawing and one for the floating table?",
+      "revId": "ce66b33ac988337b7e94aece5fd810703dbee1df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_c698786d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-02T08:10:08Z",
+      "side": 1,
+      "message": "The original test asserts the paragraph spacing of the paragraph of the A1 cell, you just removed this; why? Doing the shape -\u003e floating table change is OK, but please don\u0027t remove the \u0027\"...w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing\", \"after\", \"0\")\u0027 part.",
+      "revId": "ce66b33ac988337b7e94aece5fd810703dbee1df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
