@@ -85,7 +85,7 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccParent );
 
         /// sets or resets a bit of the foreign controlled states
-        void setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
+        void setStateBit( const sal_Int16 _nState, const bool _bSet );
 
     protected:
         OAccessibleImplementationAccess( );
