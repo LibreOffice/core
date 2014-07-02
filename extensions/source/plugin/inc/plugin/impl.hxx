@@ -309,7 +309,7 @@ public:
 
     virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException, std::exception ) SAL_OVERRIDE;
 
-    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw(std::exception) SAL_OVERRIDE;
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw() SAL_OVERRIDE;
     virtual OUString SAL_CALL getImplementationName() throw() SAL_OVERRIDE;

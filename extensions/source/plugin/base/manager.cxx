@@ -199,7 +199,7 @@ Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin
     return pImpl;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw(std::exception)
+Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw (RuntimeException, std::exception)
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
     Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;
