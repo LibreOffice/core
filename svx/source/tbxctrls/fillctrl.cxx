@@ -36,6 +36,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include "helpid.hrc"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -317,9 +318,9 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        XGradientEntry* pEntry = new XGradientEntry(mpGradientItem->GetGradientValue(), aTmpStr);
+                        boost::scoped_ptr<XGradientEntry> pEntry(new XGradientEntry(mpGradientItem->GetGradientValue(), aTmpStr));
                         XGradientList aGradientList( "", ""/*TODO?*/ );
-                        aGradientList.Insert( pEntry );
+                        aGradientList.Insert( pEntry.get() );
                         aGradientList.SetDirty( false );
                         const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
 
@@ -330,7 +331,6 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                         }
 
                         aGradientList.Remove( 0 );
-                        delete pEntry;
                     }
                 }
                 else
@@ -363,9 +363,9 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        XHatchEntry* pEntry = new XHatchEntry(mpHatchItem->GetHatchValue(), aTmpStr);
+                        boost::scoped_ptr<XHatchEntry> pEntry(new XHatchEntry(mpHatchItem->GetHatchValue(), aTmpStr));
                         XHatchList aHatchList( "", ""/*TODO?*/ );
-                        aHatchList.Insert( pEntry );
+                        aHatchList.Insert( pEntry.get() );
                         aHatchList.SetDirty( false );
                         const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
 
@@ -376,7 +376,6 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                         }
 
                         aHatchList.Remove( 0 );
-                        delete pEntry;
                     }
                 }
                 else
@@ -409,16 +408,15 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        XBitmapEntry* pEntry = new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr);
+                        boost::scoped_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
                         XBitmapListRef xBitmapList =
                             XPropertyList::CreatePropertyList(XBITMAP_LIST,
                             OUString("TmpList"), ""/*TODO?*/)->AsBitmapList();
-                        xBitmapList->Insert( pEntry );
+                        xBitmapList->Insert( pEntry.get() );
                         xBitmapList->SetDirty( false );
                         mpFillAttrLB->Fill( xBitmapList );
                         mpFillAttrLB->SelectEntryPos(mpFillAttrLB->GetEntryCount() - 1);
                         xBitmapList->Remove( 0 );
-                        delete pEntry;
                     }
                 }
                 else

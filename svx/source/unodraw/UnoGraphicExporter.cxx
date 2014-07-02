@@ -66,7 +66,7 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/flditem.hxx>
 
-#include "boost/scoped_ptr.hpp"
+#include <boost/scoped_ptr.hpp>
 
 #include <UnoGraphicExporter.hxx>
 
@@ -439,7 +439,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
 
     if(bSuccess)
     {
-        SdrView* pView = new SdrView(mpDoc, pVDev);
+        boost::scoped_ptr<SdrView> pView(new SdrView(mpDoc, pVDev));
         pView->SetPageVisible( false );
         pView->SetBordVisible( false );
         pView->SetGridVisible( false );
@@ -451,7 +451,6 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
         pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
-        delete pView;
     }
     else
     {
@@ -713,14 +712,13 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
 
 
-                VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
+                boost::scoped_ptr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
 
                 if( pVDev )
                 {
                     aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
                     aGraphic.SetPrefMapMode( aMap );
                     aGraphic.SetPrefSize( aSize );
-                    delete pVDev;
                 }
             }
             // create a metafile to export a vector format

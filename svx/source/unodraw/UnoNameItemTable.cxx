@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 
 #include "svx/unoapi.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -87,11 +88,10 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
     SfxItemSet* mpInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
     maItemSetVector.push_back( mpInSet );
 
-    NameOrIndex* pNewItem = createItem();
+    boost::scoped_ptr<NameOrIndex> pNewItem(createItem());
     pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
     mpInSet->Put( *pNewItem, mnWhich );
-    delete pNewItem;
 }
 
 // XNameContainer

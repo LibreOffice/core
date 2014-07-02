@@ -52,6 +52,7 @@
 #include "fontworkgallery.hrc"
 
 #include <algorithm>
+#include <boost/scoped_ptr.hpp>
 
 #include "helpid.hrc"
 
@@ -202,10 +203,10 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
     if( nItemId > 0 )
     {
-        FmFormModel* pModel = new FmFormModel();
+        boost::scoped_ptr<FmFormModel> pModel(new FmFormModel());
         pModel->GetItemPool().FreezeIdRanges();
 
-        if( GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel ) )
+        if( GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel.get() ) )
         {
             SdrPage* pPage = pModel->GetPage(0);
             if( pPage && pPage->GetObjCount() )
@@ -237,8 +238,6 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 }
             }
         }
-
-        delete pModel;
     }
 }
 

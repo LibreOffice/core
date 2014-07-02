@@ -34,6 +34,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -356,27 +357,27 @@ SvxLineEndWindow::~SvxLineEndWindow()
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 {
-    XLineEndItem*           pLineEndItem = NULL;
-    XLineStartItem*         pLineStartItem = NULL;
+    boost::scoped_ptr<XLineEndItem> pLineEndItem;
+    boost::scoped_ptr<XLineStartItem> pLineStartItem;
     sal_uInt16                  nId = aLineEndSet.GetSelectItemId();
 
     if( nId == 1 )
     {
-        pLineStartItem  = new XLineStartItem();
+        pLineStartItem.reset(new XLineStartItem());
     }
     else if( nId == 2 )
     {
-        pLineEndItem    = new XLineEndItem();
+        pLineEndItem.reset(new XLineEndItem());
     }
     else if( nId % 2 ) // beginning of line
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
-        pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineStartItem.reset(new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ));
     }
     else // end of line
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
-        pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineEndItem.reset(new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ));
     }
 
     if ( IsInPopupMode() )
@@ -406,9 +407,6 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  OUString( ".uno:LineEndStyle" ),
                                  aArgs );
-
-    delete pLineEndItem;
-    delete pLineStartItem;
 
     return 0;
 }

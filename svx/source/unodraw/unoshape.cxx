@@ -94,6 +94,7 @@
 #include "svx/extrud3d.hxx"
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vcl/wmf.hxx>
 
 using namespace ::osl;
@@ -685,7 +686,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
 
-    E3dView* pView = new E3dView( pModel, &aVDev );
+    boost::scoped_ptr<E3dView> pView(new E3dView( pModel, &aVDev ));
     pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
@@ -717,7 +718,6 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     }
 
     pView->UnmarkAll();
-    delete pView;
 
     return aAny;
 }
