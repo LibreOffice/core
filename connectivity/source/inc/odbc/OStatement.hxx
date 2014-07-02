@@ -108,7 +108,7 @@ namespace connectivity
             void setWarning (const ::com::sun::star::sdbc::SQLWarning &ex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
             bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
-            sal_Int32 getColumnCount () throw( ::com::sun::star::sdbc::SQLException);
+            sal_Int32 getColumnCount() throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
 
             // getResultSet

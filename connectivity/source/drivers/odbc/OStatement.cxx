@@ -310,9 +310,8 @@ void OStatement_Base::setWarning (const SQLWarning &ex)
 
 // getColumnCount
 // Return the number of columns in the ResultSet
-
-
-sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
+sal_Int32 OStatement_Base::getColumnCount()
+    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
