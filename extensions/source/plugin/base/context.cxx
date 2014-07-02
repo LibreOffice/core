@@ -78,7 +78,7 @@ public:
     // ::com::sun::star::io::XOutputStream
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }
@@ -292,7 +292,7 @@ FileSink::~FileSink()
     osl::File::remove( m_aFileName );
 }
 
-void FileSink::closeOutput() throw(std::exception)
+void FileSink::closeOutput() throw (RuntimeException, std::exception)
 {
     if( fp )
         fclose( fp );
