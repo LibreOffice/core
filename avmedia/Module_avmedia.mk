@@ -44,10 +44,12 @@ endif
 endif
 
 ifeq ($(OS),MACOSX)
+ifneq (1050,$(MACOSX_SDK_VERSION))
 ifneq (1060,$(MACOSX_SDK_VERSION))
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaMacAVF \
 ))
+endif
 endif
 endif
 
