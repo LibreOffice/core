@@ -984,61 +984,52 @@ bool XmlScPropHdl_CellProtection::importXML(
     }
     if ((rValue >>= aCellProtection) || bDefault)
     {
-        if (!IsXMLToken(rStrImpValue, XML_NONE))
-        {
-            if (!IsXMLToken(rStrImpValue, XML_HIDDEN_AND_PROTECTED))
-            {
-                if (!IsXMLToken(rStrImpValue, XML_PROTECTED))
-                {
-                    if (!IsXMLToken(rStrImpValue, XML_FORMULA_HIDDEN))
-                    {
-                        sal_Int16 i(0);
-                        while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
-                            ++i;
-                        OUString sFirst(rStrImpValue.copy(0, i));
-                        OUString sSecond(rStrImpValue.copy(i + 1));
-                        aCellProtection.IsFormulaHidden = false;
-                        aCellProtection.IsHidden = false;
-                        aCellProtection.IsLocked = false;
-                        if ((IsXMLToken(sFirst, XML_PROTECTED)) || (IsXMLToken(sSecond, XML_PROTECTED)))
-                            aCellProtection.IsLocked = sal_True;
-                        if ((IsXMLToken(sFirst, XML_FORMULA_HIDDEN)) || (IsXMLToken(sSecond, XML_FORMULA_HIDDEN)))
-                            aCellProtection.IsFormulaHidden = sal_True;
-                        rValue <<= aCellProtection;
-                        bRetval = true;
-                    }
-                    else
-                    {
-                        aCellProtection.IsFormulaHidden = sal_True;
-                        aCellProtection.IsHidden = false;
-                        aCellProtection.IsLocked = false;
-                        rValue <<= aCellProtection;
-                        bRetval = true;
-                    }
-                }
-                else
-                {
-                    aCellProtection.IsFormulaHidden = false;
-                    aCellProtection.IsHidden = false;
-                    aCellProtection.IsLocked = sal_True;
-                    rValue <<= aCellProtection;
-                    bRetval = true;
-                }
-            }
-            else
-            {
-                aCellProtection.IsFormulaHidden = sal_True;
-                aCellProtection.IsHidden = sal_True;
-                aCellProtection.IsLocked = sal_True;
-                rValue <<= aCellProtection;
-                bRetval = true;
-            }
-        }
-        else
+        if (IsXMLToken(rStrImpValue, XML_NONE))
         {
             aCellProtection.IsFormulaHidden = false;
             aCellProtection.IsHidden = false;
             aCellProtection.IsLocked = false;
+            rValue <<= aCellProtection;
+            bRetval = true;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_HIDDEN_AND_PROTECTED))
+        {
+            aCellProtection.IsFormulaHidden = sal_True;
+            aCellProtection.IsHidden = sal_True;
+            aCellProtection.IsLocked = sal_True;
+            rValue <<= aCellProtection;
+            bRetval = true;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_PROTECTED))
+        {
+            aCellProtection.IsFormulaHidden = false;
+            aCellProtection.IsHidden = false;
+            aCellProtection.IsLocked = sal_True;
+            rValue <<= aCellProtection;
+            bRetval = true;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_FORMULA_HIDDEN))
+        {
+            aCellProtection.IsFormulaHidden = sal_True;
+            aCellProtection.IsHidden = false;
+            aCellProtection.IsLocked = false;
+            rValue <<= aCellProtection;
+            bRetval = true;
+        }
+        else
+        {
+            sal_Int16 i(0);
+            while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
+                ++i;
+            OUString sFirst(rStrImpValue.copy(0, i));
+            OUString sSecond(rStrImpValue.copy(i + 1));
+            aCellProtection.IsFormulaHidden = false;
+            aCellProtection.IsHidden = false;
+            aCellProtection.IsLocked = false;
+            if ((IsXMLToken(sFirst, XML_PROTECTED)) || (IsXMLToken(sSecond, XML_PROTECTED)))
+                aCellProtection.IsLocked = sal_True;
+            if ((IsXMLToken(sFirst, XML_FORMULA_HIDDEN)) || (IsXMLToken(sSecond, XML_FORMULA_HIDDEN)))
+                aCellProtection.IsFormulaHidden = sal_True;
             rValue <<= aCellProtection;
             bRetval = true;
         }
