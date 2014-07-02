@@ -175,13 +175,13 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VCLEVENT_COMBOBOX_SELECT:
         {
-             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-             if (pList != NULL && m_xText.is())
-             {
+            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            if (pList != NULL && m_xText.is())
+            {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
                 {
-                    ::rtl::OUString sText = xText->getSelectedText();
+                    OUString sText = xText->getSelectedText();
                     if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
@@ -478,7 +478,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
         Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
         if ( xText.is() )
         {
-            ::rtl::OUString sText = xText->getText();
+            OUString sText = xText->getText();
             aAny <<= sText;
         }
     }
@@ -508,7 +508,7 @@ sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::rtl::OUString  fValue;
+    OUString  fValue;
     bool bValid = (aNumber >>= fValue);
     if( bValid )
     {
@@ -538,7 +538,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
     VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
     if (m_aBoxType == COMBOBOX )
     {
-        ::rtl::OUString sText;
+        OUString sText;
         sal_Int32 nEntryCount = 0;
         ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
         if (pComboBox != NULL)
