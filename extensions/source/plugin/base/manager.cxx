@@ -169,7 +169,8 @@ XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< ::c
     return NULL;
 }
 
-Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw(std::exception)
+Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPluginDescriptions()
+    throw (RuntimeException, std::exception)
 {
     Sequence<com::sun::star::plugin::PluginDescription> aRet;
 

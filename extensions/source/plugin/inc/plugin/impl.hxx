@@ -305,7 +305,8 @@ public:
     virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions(void) throw();
     // calls system specific impl_getPluginDescriptions
     // checks whether plugins are disabled
-    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw(std::exception) SAL_OVERRIDE;
+    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException, std::exception ) SAL_OVERRIDE;
 
