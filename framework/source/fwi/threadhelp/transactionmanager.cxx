@@ -44,7 +44,6 @@ TransactionManager::~TransactionManager()
 }
 
 /*-****************************************************************************************************
-    @interface  ITransactionManager
     @short      set new working mode
     @descr      These implementation knows for states of working: E_INIT, E_WORK, E_CLOSING, E_CLOSE
                 You can step during this ones only from the left to the right side and start at left side again!
@@ -99,7 +98,6 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 }
 
 /*-****************************************************************************************************
-    @interface  ITransactionManager
     @short      get current working mode
     @descr      If you stand in your close() or init() method ... but don't know
                 if you called more then ones(!) ... you can use this function to get
@@ -143,7 +141,6 @@ EWorkingMode TransactionManager::getWorkingMode() const
 }
 
 /*-****************************************************************************************************
-    @interface  ITransactionManager
     @short      start new transaction
     @descr      A guard should use this method to start a new transaction. He should looks for rejected
                 calls to by using parameter eMode and eReason.
@@ -182,7 +179,6 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
 }
 
 /*-****************************************************************************************************
-    @interface  ITransactionManager
     @short      finish transaction
     @descr      A guard should call this method to release current transaction.
 
@@ -206,7 +202,6 @@ void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeExcept
 }
 
 /*-****************************************************************************************************
-    @interface  ITransactionManager
     @short      look for rejected calls
     @descr      Sometimes user need a possibility to get information about rejected calls
                 without starting a transaction!

@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
 #include <boost/noncopyable.hpp>
-#include <threadhelp/itransactionmanager.h>
+#include <threadhelp/transactionmanager.hxx>
 
 namespace framework{
 
@@ -56,7 +56,7 @@ class TransactionGuard : private boost::noncopyable
             @param      "eMode"     enable/disable throwing of exceptions for rejected calls
             @param      "eReason"   returns reason for rejected calls if "eMode=E_NOEXCEPTIONS"!
         *//*-*****************************************************************************************************/
-        inline TransactionGuard( ITransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
+        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
             : m_pManager( &rManager )
         {
             // If exception mode is set to E_HARDEXCETIONS we don't need a buffer to return reason!
@@ -115,7 +115,7 @@ class TransactionGuard : private boost::noncopyable
 
     private:
 
-        ITransactionManager*   m_pManager;   /// pointer to safed transaction manager
+        TransactionManager*   m_pManager;   /// pointer to safed transaction manager
 
 };      //  class TransactionGuard
 

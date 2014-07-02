@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 
 #include <boost/noncopyable.hpp>
-#include <threadhelp/itransactionmanager.h>
 #include <threadhelp/gate.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -35,6 +34,74 @@
 namespace framework{
 
 /*-************************************************************************************************************
+    @descr          Describe different states of a feature of following implementation.
+                    During lifetime of an object different working states occur:
+                        initialization - working - closing - closed
+                    If you wish to implement thread safe classes you should use this feature to protect
+                    your code against calls at wrong time. e.g. you are not full initialized but somewhere
+                    call an interface method (initialize phase means startup time from creating object till
+                    calling specified first method e.g. XInitialization::initialze()!) then you should refuse
+                    this call. The same for closing/disposing the object!
+*//*-*************************************************************************************************************/
+enum EWorkingMode
+{
+    E_INIT       ,   // We stand in a init method   -> some calls are accepted - some one are rejected
+    E_WORK       ,   // Object is ready for working -> all calls are accepted
+    E_BEFORECLOSE,   // We stand in a close method  -> some calls are accepted - some one are rejected
+    E_CLOSE          // Object is dead!             -> all calls are rejected!
+};
+
+/*-************************************************************************************************************
+    @descr          If a request was refused by a transaction manager (internal state different E_WORK ...)
+                    user can check the reason by using this enum values.
+*//*-*************************************************************************************************************/
+enum ERejectReason
+{
+    E_UNINITIALIZED ,
+    E_NOREASON      ,
+    E_INCLOSE       ,
+    E_CLOSED
+};
+
+/*-************************************************************************************************************
+    @descr          A transaction object should support throwing exceptions if user used it at wrong working mode.
+                    e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
+                    But sometimes he dont need this feature - will handle it by himself.
+                    Then we must differ between some exception-modi:
+                        E_NOEXCEPTIONS          We never throw any exceptions! User handle it private and looks for ERejectReason.
+                        E_HARDEXCEPTIONS        We throw exceptions for all working modes different from E_WORK!
+                        E_SOFTEXCEPTIONS        We throw exceptions for all working modes different from E_WORK AND E_INCLOSE!
+                                                This mode is useful for impl-methods which should be callable from dispose() method!
+
+                                                e.g.    void dispose()
+                                                        {
+                                                            m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
+                                                            ...
+                                                            impl_setA( 0 );
+                                                            ...
+                                                            m_aTransactionManager.setWorkingMode( E_CLOSE );
+                                                        }
+
+                                                        void impl_setA( int nA )
+                                                        {
+                                                            ERejectReason       EReason;
+                                                            TransactionGuard    aTransactionGuard( m_aTransactionManager, E_SOFTEXCEPTIONS, eReason );
+
+                                                            m_nA = nA;
+                                                        }
+
+                                                Normaly (if E_HARDEXCEPTIONS was used!) creation of guard
+                                                will throw an exception ... but using of E_SOFTEXCEPTIONS suppress it
+                                                and member "A" can be set.
+*//*-*************************************************************************************************************/
+enum EExceptionMode
+{
+    E_NOEXCEPTIONS  ,
+    E_HARDEXCEPTIONS,
+    E_SOFTEXCEPTIONS
+};
+
+/*-************************************************************************************************************
     @short          implement a transaction manager to support non breakable interface methods
     @descr          Use it to support non breakable interface methods without using any thread
                     synchronization like e.g. mutex, rw-lock!
@@ -42,13 +109,9 @@ namespace framework{
                     Use combination of EExceptionMode and ERejectReason to detect rejected requests
                     and react for it. You can enable automatically throwing of exceptions too.
 
-    @implements     ITransactionManager
-    @base           ITransactionManager
-
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
-                         , private boost::noncopyable
+class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
 {
 
     //  public methods
@@ -56,12 +119,12 @@ class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
     public:
 
                                    TransactionManager           (                                              );
-        virtual                    ~TransactionManager          (                                              );
-        virtual void               setWorkingMode               ( EWorkingMode eMode                           ) SAL_OVERRIDE;
-        virtual EWorkingMode       getWorkingMode               (                                              ) const SAL_OVERRIDE;
-        virtual bool               isCallRejected               ( ERejectReason& eReason                       ) const SAL_OVERRIDE;
-        virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
-        virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
+                                   ~TransactionManager          (                                              );
+        void               setWorkingMode               ( EWorkingMode eMode                           );
+        EWorkingMode       getWorkingMode               (                                              ) const;
+        bool               isCallRejected               ( ERejectReason& eReason                       ) const;
+        void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
 
     //  private methods
 
