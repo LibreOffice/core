@@ -745,7 +745,7 @@ void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-        sal_uInt16 nFlags ) const
+        sal_uInt16 nFlags, bool bExtensionNamespace ) const
 {
     sal_uInt16 nPropTypeFlags = 0;
     for( sal_uInt16 i=0; i<MAX_PROP_TYPES; ++i )
@@ -766,7 +766,11 @@ void SvXMLExportPropertyMapper::exportXML(
                 (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
                 !aIndexArray.empty() )
             {
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE,
+                sal_uInt16 nNamespace = XML_NAMESPACE_STYLE;
+                if(bExtensionNamespace && aPropTokens[i].eToken ==
+                        xmloff::token::XML_GRAPHIC_PROPERTIES)
+                    nNamespace = XML_NAMESPACE_LO_EXT;
+                SvXMLElementExport aElem( rExport, nNamespace,
                                   aPropTokens[i].eToken,
                                   (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0,
                                   false );

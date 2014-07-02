@@ -163,7 +163,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     sal_uInt32 nFamily = 0;
-    if( XML_NAMESPACE_STYLE == nPrefix )
+    if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
             nFamily = XML_TYPE_PROP_GRAPHIC;

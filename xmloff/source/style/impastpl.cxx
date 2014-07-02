@@ -685,10 +685,15 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 XML_NAMESPACE_STYLE, XML_NAME,
                 aExpStyles[i].mpProperties->GetName() );
 
+            bool bExtensionNamespace = false;
             if( rFamily.mbAsFamily )
             {
                 GetExport().AddAttribute(
                     XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
+                if(aStrFamilyName != "graphic" &&
+                        aStrFamilyName != "presentation" &&
+                        aStrFamilyName != "chart" )
+                    bExtensionNamespace = true;
             }
 
             if( !aExpStyles[i].mpParent->isEmpty() )
@@ -741,7 +746,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             rFamily.mxMapper->exportXML(
                 GetExport(),
                 aExpStyles[i].mpProperties->GetProperties(),
-                nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
+                nStart, nEnd, XML_EXPORT_FLAG_IGN_WS, bExtensionNamespace );
 
             pAntiImpl->exportStyleContent(
                 GetExport().GetDocHandler(),

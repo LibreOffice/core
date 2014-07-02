@@ -115,7 +115,7 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if( XML_NAMESPACE_STYLE == nPrefix )
+    if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         sal_uInt32 nFamily = 0;
         if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
