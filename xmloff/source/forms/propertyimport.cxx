@@ -128,11 +128,10 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_ENUM:
         {
             sal_uInt16 nEnumValue(0);
-        #if OSL_DEBUG_LEVEL > 0
-            bool bSuccess =
-        #endif
-            SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
+            bool bSuccess = SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
             OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
+            (void)bSuccess;
+
             if (bEnumAsInt)
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nEnumValue;
