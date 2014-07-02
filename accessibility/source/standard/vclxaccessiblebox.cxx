@@ -175,11 +175,11 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VCLEVENT_COMBOBOX_SELECT:
         {
-                 VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                 if (pList != NULL)
-                 {
-                        Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
-                        if ( xText.is() )
+            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            if (pList != NULL && m_xText.is())
+            {
+                Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
+                if ( xText.is() )
                 {
                     ::rtl::OUString sText = xText->getSelectedText();
                     if ( sText.isEmpty() )
@@ -195,7 +195,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
 
                 }
-                    }
+            }
             break;
         }
         //case VCLEVENT_DROPDOWN_OPEN:
