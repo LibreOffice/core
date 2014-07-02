@@ -623,7 +623,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     {
         ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        while (i != endi)
+        for(; i != endi; ++i)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetCellStylesPropertySetMapper());
             sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
@@ -646,14 +646,13 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                 }
                 break;
             }
-            ++i;
         }
     }
     else if (nFamily == XML_STYLE_FAMILY_TABLE_TABLE)
     {
         ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        while(i != endi)
+        for(; i != endi; ++i)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetTableStylesPropertySetMapper());
             sal_Int16 nContextID(aPropMapper->GetEntryContextId(i->mnIndex));
@@ -692,7 +691,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
         bool bNotFound = true;
         ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        while ((i != endi) && bNotFound)
+        for(; i != endi && bNotFound; ++i)
         {
             if (i->mnIndex != -1)
             {
@@ -793,7 +792,6 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                     break;
                 }
             }
-            ++i;
         }
     }
 }
