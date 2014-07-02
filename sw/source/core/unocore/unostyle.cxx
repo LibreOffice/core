@@ -4869,56 +4869,9 @@ void SwXAutoStyle::setAllPropertiesToDefault(  )
 }
 
 void SwXAutoStyle::setPropertiesToDefault(
-        const uno::Sequence< OUString >& rPropertyNames )
+        const uno::Sequence< OUString >& /*rPropertyNames*/ )
             throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    if( !mpSet.get() )
-    {
-        throw uno::RuntimeException();
-    }
-
-    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == meFamily);
-
-    if(!bTakeCareOfDrawingLayerFillStyle)
-    {
-        return;
-    }
-
-    //UUUU support DrawingLayer FillStyle slots from here on
-    SolarMutexGuard aGuard;
-    const OUString* pNames = rPropertyNames.getConstArray();
-    sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;
-
-    switch(meFamily)
-    {
-        case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;  break;
-        case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_MAP_RUBY_AUTO_STYLE;  break;
-        case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_MAP_PARA_AUTO_STYLE;  break;
-        default: ;
-    }
-
-    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-
-    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
-    {
-        const OUString& rPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
-
-        if(!pEntry)
-        {
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-        }
-
-        switch(pEntry->nWID)
-        {
-            case OWN_ATTR_FILLBMP_MODE:
-            {
-                mpSet->ClearItem(XATTR_FILLBMP_STRETCH);
-                mpSet->ClearItem(XATTR_FILLBMP_TILE);
-            }
-        }
-    }
 }
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
