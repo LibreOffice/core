@@ -18,11 +18,129 @@
  */
 
 #include <com/sun/star/ucb/NameClashResolveRequest.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyName.hpp>
+#include <cppuhelper/typeprovider.hxx>
 #include <ucbhelper/simplenameclashresolverequest.hxx>
 
 using namespace com::sun::star;
-using namespace ucbhelper;
 
+namespace ucbhelper {
+
+/**
+  * This class implements a standard interaction continuation, namely the
+  * interface XInteractionSupplyName. Instances of this class can be passed
+  * along with an interaction request to indicate the possibility to
+  * supply a new name.
+  */
+class InteractionSupplyName : public InteractionContinuation,
+                              public com::sun::star::lang::XTypeProvider,
+                              public com::sun::star::ucb::XInteractionSupplyName
+{
+    OUString m_aName;
+
+public:
+    InteractionSupplyName( InteractionRequest * pRequest )
+    : InteractionContinuation( pRequest ) {}
+
+    // XInterface
+    virtual com::sun::star::uno::Any SAL_CALL
+    queryInterface( const com::sun::star::uno::Type & rType )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire()
+        throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release()
+        throw() SAL_OVERRIDE;
+
+    // XTypeProvider
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    getTypes()
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    getImplementationId()
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // XInteractionContinuation
+    virtual void SAL_CALL select()
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // XInteractionSupplyName
+    virtual void SAL_CALL setName( const OUString& Name )
+        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // Non-interface methods.
+
+    /**
+      * This method returns the name that was supplied by the interaction
+      * handler.
+      *
+      * @return the name.
+      */
+    const OUString & getName() const { return m_aName; }
+};
+
+void SAL_CALL InteractionSupplyName::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL InteractionSupplyName::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+uno::Any SAL_CALL
+InteractionSupplyName::queryInterface( const uno::Type & rType )
+    throw ( uno::RuntimeException, std::exception )
+{
+    uno::Any aRet = cppu::queryInterface( rType,
+                static_cast< lang::XTypeProvider * >( this ),
+                static_cast< task::XInteractionContinuation * >( this ),
+                static_cast< ucb::XInteractionSupplyName * >( this ) );
+
+    return aRet.hasValue()
+            ? aRet : InteractionContinuation::queryInterface( rType );
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
+    throw( uno::RuntimeException, std::exception )
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
+    throw( uno::RuntimeException, std::exception )
+{
+    static cppu::OTypeCollection* pCollection = 0;
+      if ( !pCollection )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<ucb::XInteractionSupplyName>::get() );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
+void SAL_CALL InteractionSupplyName::select()
+    throw( uno::RuntimeException, std::exception )
+{
+    recordSelection();
+}
+
+void SAL_CALL
+InteractionSupplyName::setName( const OUString& Name )
+    throw( uno::RuntimeException, std::exception )
+{
+    m_aName = Name;
+}
+
+SimpleNameClashResolveRequest::~SimpleNameClashResolveRequest() {}
 
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,
@@ -53,6 +171,13 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
         aContinuations[ 2 ] = new InteractionReplaceExistingData( this );
 
     setContinuations( aContinuations );
+}
+
+const OUString SimpleNameClashResolveRequest::getNewName() const
+{
+    return m_xNameSupplier->getName();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

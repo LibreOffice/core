@@ -28,7 +28,6 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
-#include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -622,59 +621,6 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bUseSystemCredentials( bDefaultUseSystemCredentials && bCanUseSystemCredentials )
 {
 }
-
-
-/**
-  * This class implements a standard interaction continuation, namely the
-  * interface XInteractionSupplyName. Instances of this class can be passed
-  * along with an interaction request to indicate the possibility to
-  * supply a new name.
-  */
-class InteractionSupplyName : public InteractionContinuation,
-                              public com::sun::star::lang::XTypeProvider,
-                              public com::sun::star::ucb::XInteractionSupplyName
-{
-    OUString m_aName;
-
-public:
-    InteractionSupplyName( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire()
-        throw() SAL_OVERRIDE;
-    virtual void SAL_CALL release()
-        throw() SAL_OVERRIDE;
-
-    // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
-    getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    // XInteractionSupplyName
-    virtual void SAL_CALL setName( const OUString& Name )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    // Non-interface methods.
-
-    /**
-      * This method returns the name that was supplied by the interaction
-      * handler.
-      *
-      * @return the name.
-      */
-    const OUString & getName() const { return m_aName; }
-};
 
 
 /**

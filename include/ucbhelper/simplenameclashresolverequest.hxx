@@ -26,6 +26,8 @@
 
 namespace ucbhelper {
 
+class InteractionSupplyName;
+
 /**
   * This class implements a simple name clash resolve interaction request.
   * Instances can be passed directly to XInteractionHandler::handle(...). Each
@@ -36,11 +38,12 @@ namespace ucbhelper {
   * @see com::sun::star::ucb::NameClashResolveRequest
   * @see InteractionAbort
   * @see InteractioneplaceExistingData
-  * @see InteractionSupplyName
   */
 class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest : public ucbhelper::InteractionRequest
 {
     rtl::Reference< InteractionSupplyName > m_xNameSupplier;
+
+    virtual ~SimpleNameClashResolveRequest();
 
 public:
     /**
@@ -65,9 +68,7 @@ public:
       *
       * @return the new name, if supplied.
       */
-    const OUString getNewName() const
-    { return m_xNameSupplier->getName(); }
-
+    const OUString getNewName() const;
 };
 
 } // namespace ucbhelper

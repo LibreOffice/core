@@ -56,6 +56,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
