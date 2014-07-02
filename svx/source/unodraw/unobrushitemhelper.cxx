@@ -62,8 +62,9 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         rToSet.Put(XFillStyleItem(XFILL_SOLID));
         rToSet.Put(XFillColorItem(String(), aColor));
 
-        // nTransparency is in range [0..255], convert to [0..100] which is used in XFillTransparenceItem
-        rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 255));
+        // #125189# nTransparency is in range [0..254], convert to [0..100] which is used in
+        // XFillTransparenceItem (caution with the range which is in an *item-specific* range)
+        rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 254));
     }
     else if(GPOS_NONE != rBrush.GetGraphicPos())
     {
@@ -182,8 +183,12 @@ SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, sal_Bool bSea
 
     if(0 != nFillTransparence)
     {
-        // nFillTransparence is in range [0..100] and needs to be in [0..255] unsigned
-        aFillColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
+        // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..254] unsigned
+        // It is necessary to use the maximum of 0xfe for transparence for the SvxBrushItem
+        // since the oxff value is used for special purposes (like no fill and derive from parent)
+        const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
+
+        aFillColor.SetTransparency(aTargetTrans);
     }
 
     return SvxBrushItem(aFillColor, nBackgroundID);
@@ -233,8 +238,12 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
             if(0 != nFillTransparence)
             {
-                // nFillTransparence is in range [0..100] and needs to be in [0..255] unsigned
-                aMixedColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
+                // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..254] unsigned
+                // It is necessary to use the maximum of 0xfe for transparence for the SvxBrushItem
+                // since the oxff value is used for special purposes (like no fill and derive from parent)
+                const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
+
+                aMixedColor.SetTransparency(aTargetTrans);
             }
 
             aRetval = SvxBrushItem(aMixedColor, nBackgroundID);
@@ -263,9 +272,12 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
                 // take half orig transparence, add half transparent, clamp result
                 nFillTransparence = basegfx::clamp((sal_uInt16)((nFillTransparence / 2) + 50), (sal_uInt16)0, (sal_uInt16)255);
 
-                // nFillTransparence is in range [0..100] and needs to be in [0..255] unsigned
-                aHatchColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
+                // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..254] unsigned
+                // It is necessary to use the maximum of 0xfe for transparence for the SvxBrushItem
+                // since the oxff value is used for special purposes (like no fill and derive from parent)
+                const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
+                aHatchColor.SetTransparency(aTargetTrans);
                 aRetval = SvxBrushItem(aHatchColor, nBackgroundID);
             }
 
@@ -316,7 +328,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
             if(0 != nFillTransparence)
             {
-                // nFillTransparence is in range [0..100] and needs to be in [0..100] signed
+                // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..100] signed
                 aRetval.setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
             }
 
