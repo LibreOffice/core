@@ -1439,6 +1439,14 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeS
     return uno::Reference< sheet::XRangeSelection >();
 }
 
+uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    SwChartDataProvider::createDataSequenceByValueArray(
+        const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+            throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+{
+    return uno::Reference<css::chart2::data::XDataSequence>();
+}
+
 void SAL_CALL SwChartDataProvider::dispose(  )
     throw (uno::RuntimeException, std::exception)
 {

@@ -97,6 +97,10 @@ public:
             const OUString& aRangeRepresentation )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+        createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation )
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
