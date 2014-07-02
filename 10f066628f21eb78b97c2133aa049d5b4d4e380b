@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_4676a83f",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-02T07:57:09Z",
+      "side": 1,
+      "message": "Is there a reason we are not doing stuff like the below, which seems to me would better across a wider range of machines:\n\n// lockFocusFlipped not available before OSX 10.6\nif ([pimage respondsToSelector:@selector(lockFocusFlipped:)])\n{\n    [pImage lockFocusFlipped:YES];\n}\nelse\n{\n    [pImage setFlipped: YES];\n    [pImage lockFocus];\n}",
+      "revId": "10f066628f21eb78b97c2133aa049d5b4d4e380b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
