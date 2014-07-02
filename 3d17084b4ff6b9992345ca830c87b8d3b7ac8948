@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_e6993421",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-07-02T13:14:18Z",
+      "side": 1,
+      "message": "Some languages have three letter things, e.g. shs-CA and so on. And some are awesome creations like sr-Latn-SR so the thing to use here is rLanguageTag.makeFallback() and/or rLanguageTag.getFallbackStrings()",
+      "range": {
+        "startLine": 1900,
+        "startChar": 15,
+        "endLine": 1900,
+        "endChar": 19
+      },
+      "revId": "3d17084b4ff6b9992345ca830c87b8d3b7ac8948",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
