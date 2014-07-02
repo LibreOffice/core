@@ -2101,6 +2101,14 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     return xResult;
 }
 
+uno::Reference<chart2::data::XDataSequence> SAL_CALL
+ScChart2DataProvider::createDataSequenceByValueArray(
+    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+{
+    return uno::Reference<chart2::data::XDataSequence>();
+}
+
 uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRangeSelection()
     throw (uno::RuntimeException, std::exception)
 {

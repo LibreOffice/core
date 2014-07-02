@@ -126,6 +126,9 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
         [in] string aRangeRepresentation )
         raises( com::sun::star::lang::IllegalArgumentException );
 
+    XDataSequence createDataSequenceByValueArray( [in] string aRole, [in] string aValueArray )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
     /** Returns a component that is able to change a given range
         representation to another one.  This usually is a
         controller-component that uses the GUI to allow a user to
