@@ -164,7 +164,7 @@ public:
     typedef std::vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
 private:
     OOXMLProperties_t mProperties;
-    std::string msType;
+    OString maType;
 public:
     OOXMLPropertySetImpl();
     virtual ~OOXMLPropertySetImpl();

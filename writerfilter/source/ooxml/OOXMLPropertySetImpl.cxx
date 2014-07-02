@@ -402,8 +402,9 @@ bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t x,
 */
 
 OOXMLPropertySetImpl::OOXMLPropertySetImpl()
-: msType("OOXMLPropertySetImpl")
 {
+    static OString aName("OOXMLPropertySetImpl");
+    maType = aName;
 }
 
 OOXMLPropertySetImpl::~OOXMLPropertySetImpl()
@@ -449,7 +450,7 @@ OOXMLPropertySetImpl::end() const
 
 string OOXMLPropertySetImpl::getType() const
 {
-    return msType;
+    return string(maType.getStr());
 }
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
@@ -497,7 +498,7 @@ OOXMLPropertySet * OOXMLPropertySetImpl::clone() const
 
 void OOXMLPropertySetImpl::setType(const string & rsType)
 {
-    msType = rsType;
+    maType = OString(rsType.c_str(), rsType.size());
 }
 
 #ifdef DEBUG_DOMAINMAPPER
