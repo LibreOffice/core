@@ -83,10 +83,10 @@ public:
 
     /** Creates a data sequence from a formula. Dummy implementation. Derived
         classes have to override this function to actually parse the formula. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-                        createDataSequence(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& rxDataProvider,
-                            const DataSequenceModel& rDataSeq );
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+        createDataSequence(
+            const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
+            const DataSequenceModel& rDataSeq, const OUString& rRole );
 
 private:
                         ChartConverter( const ChartConverter& );

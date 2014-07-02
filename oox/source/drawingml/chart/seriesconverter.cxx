@@ -531,7 +531,7 @@ SeriesConverter::~SeriesConverter()
 
 Reference< XLabeledDataSequence > SeriesConverter::createCategorySequence( const OUString& rRole )
 {
-    return createLabeledDataSequence( SeriesModel::CATEGORIES, rRole, false );
+    return createLabeledDataSequence(SeriesModel::CATEGORIES, rRole, false);
 }
 
 Reference< XLabeledDataSequence > SeriesConverter::createValueSequence( const OUString& rRole )

@@ -78,9 +78,9 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
                 mrModel.maData.insert(std::make_pair<sal_Int32, Any>(1, Any(aTitle.makeStringAndClear())));
             }
         }
-        xDataSeq = getChartConverter()->createDataSequence( getChartDocument()->getDataProvider(), mrModel );
+        xDataSeq = getChartConverter()->createDataSequence(getChartDocument()->getDataProvider(), mrModel, rRole);
 
-        // set sequen   ce role
+        // set sequence role
         PropertySet aSeqProp( xDataSeq );
         aSeqProp.setProperty( PROP_Role, rRole );
     }

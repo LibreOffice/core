@@ -302,6 +302,14 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     return xData;
 }
 
+uno::Reference<chart2::data::XDataSequence>
+SAL_CALL DatabaseDataProvider::createDataSequenceByValueArray(
+    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+        throw (uno::RuntimeException, lang::IllegalArgumentException)
+{
+    return uno::Reference<chart2::data::XDataSequence>();
+}
+
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
 {
     return m_xComplexDescriptionAccess->getComplexRowDescriptions();
