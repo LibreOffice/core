@@ -68,7 +68,8 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
 }
 
 Reference< XDataSequence > ExcelChartConverter::createDataSequence(
-        const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq )
+    const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq,
+    const OUString& /*rRole*/ )
 {
     Reference< XDataSequence > xDataSeq;
     if (!rxDataProvider.is())

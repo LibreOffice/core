@@ -135,6 +135,11 @@ public:
         const OUString& aRangeRepresentation )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+        createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation )
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -232,6 +237,9 @@ private:
         lcl_createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
 
     void lcl_deleteMapReferences( const OUString & rRangeRepresentation );
+
+    css::uno::Reference<css::chart2::data::XDataSequence>
+        createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole );
 
     void lcl_adaptMapReferences(
         const OUString & rOldRangeRepresentation,
