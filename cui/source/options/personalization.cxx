@@ -441,6 +441,8 @@ IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox*, )
 {
+    m_pOwnPersona->Check();
+
     // Get the details of the selected theme.
     m_pExtensionPersonaPreview->Show();
     sal_Int32 nSelectedPos = m_pPersonaList->GetSelectEntryPos();
