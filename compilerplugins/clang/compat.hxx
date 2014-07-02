@@ -160,6 +160,26 @@ inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
 #endif
 }
 
+inline clang::NamedDecl * const * begin(
+    clang::DeclContextLookupConstResult const & result)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return result.begin();
+#else
+    return result.first;
+#endif
+}
+
+inline clang::NamedDecl * const * end(
+    clang::DeclContextLookupConstResult const & result)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return result.end();
+#else
+    return result.second;
+#endif
+}
+
 }
 
 #endif

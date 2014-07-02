@@ -72,8 +72,10 @@ OverrideKind getOverrideKind(FunctionDecl const * decl) {
 // encounter in practice:
 bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
     unsigned n = decl->getNumParams();
-    for (auto d: decl->getDeclContext()->lookup(decl->getDeclName())) {
-        FunctionDecl const * f = dyn_cast<FunctionDecl>(d);
+    DeclContextLookupConstResult res
+        = decl->getDeclContext()->lookup(decl->getDeclName());
+    for (auto d = compat::begin(res); d != compat::end(res); ++d) {
+        FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (f != nullptr && (!mustBeDeleted || f->isDeleted())) {
             if (f->getNumParams() == n) {
                 bool hasSB = false;
