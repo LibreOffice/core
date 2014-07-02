@@ -18,15 +18,6 @@ import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.LayerView;
 
-import org.libreoffice.kit.LibreOfficeKit;
-import org.libreoffice.kit.Office;
-import org.libreoffice.kit.Document;
-
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
-
 public class LibreOfficeMainActivity extends Activity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
@@ -36,10 +27,6 @@ public class LibreOfficeMainActivity extends Activity {
     private static LayerController mLayerController;
     private static GeckoSoftwareLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
-
-    private XComponentContext context;
-    private XMultiComponentFactory mcf;
-    private XComponentLoader componentLoader;
 
     public static LibreOfficeMainActivity mAppContext;
 
@@ -76,26 +63,6 @@ public class LibreOfficeMainActivity extends Activity {
         mAppContext = this;
 
         super.onCreate(savedInstanceState);
-
-        try {
-            // enable debugging messages as the first thing
-            LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
-            LibreOfficeKit.init(this);
-
-            Office office = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
-
-            //File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            //String input = file.getPath() + "/test.odt";
-            String input = "/assets/test1.odt";
-            Document document = office.documentLoad(input);
-            if (document == null) {
-                Log.w(LOGTAG, "LOK Document error:" + office.getErrorNative());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            finish();
-        }
 
         setContentView(R.layout.activity_main);
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");

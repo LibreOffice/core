@@ -121,8 +121,8 @@ public abstract class Layer {
      * This function may block, so you should never call this on the main UI thread.
      */
     public void beginTransaction(LayerView aView) {
-        if (mTransactionLock.isHeldByCurrentThread())
-            throw new RuntimeException("Nested transactions are not supported");
+        //if (mTransactionLock.isHeldByCurrentThread())
+        //    throw new RuntimeException("Nested transactions are not supported");
         mTransactionLock.lock();
         mView = aView;
         mInTransaction = true;

@@ -50,7 +50,6 @@ import org.mozilla.gecko.gfx.TextureReaper;
 import org.mozilla.gecko.gfx.TextureGenerator;
 import org.mozilla.gecko.gfx.TextLayer;
 import org.mozilla.gecko.gfx.TileLayer;
-//import org.mozilla.gecko.GeckoAppShell;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;

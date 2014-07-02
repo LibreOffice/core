@@ -38,11 +38,16 @@
 
 package org.mozilla.gecko.gfx;
 
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.util.Log;
 
+import org.libreoffice.LOKitShell;
+
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -54,18 +59,15 @@ import java.util.ArrayList;
 public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "GeckoMultiTileLayer";
 
-    private final CairoImage mImage;
     private final ArrayList<SubTile> mTiles;
     private IntSize mTileSize;
-    private IntSize mBufferSize;
+    private IntSize mSize;
 
-    public MultiTileLayer(CairoImage image, IntSize tileSize) {
+    public MultiTileLayer(IntSize tileSize) {
         super();
-
-        mImage = image;
         mTileSize = tileSize;
-        mBufferSize = new IntSize(0, 0);
         mTiles = new ArrayList<SubTile>();
+        mSize = new IntSize(0,0);
     }
 
     public void invalidate(Rect dirtyRect) {
@@ -90,67 +92,20 @@ public class MultiTileLayer extends Layer {
         }
     }
 
+    public void setSize(IntSize size) {
+        mSize = size;
+    }
+
     @Override
     public IntSize getSize() {
-        return mImage.getSize();
+        return mSize;
     }
 
     private void validateTiles() {
-        IntSize size = getSize();
-
-        if (size.equals(mBufferSize)) {
-            return;
-        }
-
-        // Regenerate tiles
-        mTiles.clear();
-        int offset = 0;
-        final int format = mImage.getFormat();
-        final ByteBuffer buffer = mImage.getBuffer().slice();
-        final int bpp = CairoUtils.bitsPerPixelForCairoFormat(format) / 8;
-        for (int y = 0; y < size.height; y += mTileSize.height) {
-            for (int x = 0; x < size.width; x += mTileSize.width) {
-                // Create a CairoImage implementation that returns a
-                // tile from the parent CairoImage. It's assumed that
-                // the tiles are stored in series.
-                final IntSize layerSize =
-                        new IntSize(Math.min(mTileSize.width, size.width - x),
-                                Math.min(mTileSize.height, size.height - y));
-                final int tileOffset = offset;
-
-                CairoImage subImage = new CairoImage() {
-                    @Override
-                    public ByteBuffer getBuffer() {
-                        // Create a ByteBuffer that shares the data of the original
-                        // buffer, but is positioned and limited so that only the
-                        // tile data is accessible.
-                        buffer.position(tileOffset);
-                        ByteBuffer tileBuffer = buffer.slice();
-                        tileBuffer.limit(layerSize.getArea() * bpp);
-
-                        return tileBuffer;
-                    }
-
-                    @Override
-                    public IntSize getSize() {
-                        return layerSize;
-                    }
-
-                    @Override
-                    public int getFormat() {
-                        return format;
-                    }
-                };
-
-                mTiles.add(new SubTile(subImage, x, y));
-                offset += layerSize.getArea() * bpp;
-            }
-        }
+        Log.i(LOGTAG, "validateTiles()");
 
         // Set tile origins and resolution
         refreshTileMetrics(getOrigin(), getResolution(), false);
-
-        mBufferSize = size;
     }
 
     @Override
@@ -286,15 +241,10 @@ public class MultiTileLayer extends Layer {
         return validRegion;
     }
 
-    class SubTile extends SingleTileLayer {
-        public int x;
-        public int y;
-
-        public SubTile(CairoImage mImage, int mX, int mY) {
-            super(mImage);
-            x = mX;
-            y = mY;
-        }
+    public void addTile(Bitmap bitmap, int x, int y) {
+        SubTile tile = new SubTile(new BufferedCairoImage(bitmap), x,y);
+        tile.beginTransaction();
+        mTiles.add(tile);
     }
 }
 

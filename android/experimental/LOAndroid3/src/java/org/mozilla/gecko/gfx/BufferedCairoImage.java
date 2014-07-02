@@ -71,7 +71,7 @@ public class BufferedCairoImage extends CairoImage {
         mSize = new IntSize(bitmap.getWidth(), bitmap.getHeight());
         mNeedToFreeBuffer = true;
         // XXX Why is this * 4? Shouldn't it depend on mFormat?
-        mBuffer = /*GeckoAppShell*/LOKitShell.allocateDirectBuffer(mSize.getArea() * 4);
+        mBuffer = LOKitShell.allocateDirectBuffer(mSize.getArea() * 4);
 
         bitmap.copyPixelsToBuffer(mBuffer.asIntBuffer());
     }
@@ -79,7 +79,7 @@ public class BufferedCairoImage extends CairoImage {
     protected void finalize() throws Throwable {
         try {
             if (mNeedToFreeBuffer && mBuffer != null)
-                /*GeckoAppShell*/ LOKitShell.freeDirectBuffer(mBuffer);
+                LOKitShell.freeDirectBuffer(mBuffer);
             mNeedToFreeBuffer = false;
             mBuffer = null;
         } finally {
