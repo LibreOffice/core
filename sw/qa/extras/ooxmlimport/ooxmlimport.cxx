@@ -2173,6 +2173,15 @@ DECLARE_OOXMLIMPORT_TEST(testFootnote, "footnote.docx")
     CPPUNIT_ASSERT(aFootnote.endsWith("bar"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell vertical alignment was NONE, should be CENTER.
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
