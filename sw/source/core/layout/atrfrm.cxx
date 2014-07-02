@@ -1126,6 +1126,36 @@ sal_uInt16  SwFmtSurround::GetValueCount() const
     return SURROUND_END - SURROUND_BEGIN;
 }
 
+namespace
+{
+    text::WrapTextMode SwSurroundToWrapMode(SwSurround eSurround)
+    {
+        text::WrapTextMode eRet;
+        switch(eSurround)
+        {
+            case SURROUND_THROUGHT:
+                eRet = css::text::WrapTextMode_THROUGHT;
+                break;
+            case SURROUND_PARALLEL:
+                eRet = css::text::WrapTextMode_PARALLEL;
+                break;
+            case SURROUND_IDEAL:
+                eRet = css::text::WrapTextMode_DYNAMIC;
+                break;
+            case SURROUND_LEFT:
+                eRet = css::text::WrapTextMode_LEFT;
+                break;
+            case SURROUND_RIGHT:
+                eRet = css::text::WrapTextMode_RIGHT;
+                break;
+            default:
+                eRet = css::text::WrapTextMode_NONE;
+                break;
+        }
+        return eRet;
+    }
+}
+
 bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // here we convert always!
@@ -1134,26 +1164,26 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_SURROUND_SURROUNDTYPE:
-                rVal <<= (text::WrapTextMode)GetSurround();
-        break;
+            rVal <<= SwSurroundToWrapMode(GetSurround());
+            break;
         case MID_SURROUND_ANCHORONLY:
         {
             bool bTmp = IsAnchorOnly();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
+            break;
         }
-                break;
         case MID_SURROUND_CONTOUR:
         {
             bool bTmp = IsContour();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
+            break;
         }
-                break;
         case MID_SURROUND_CONTOUROUTSIDE:
         {
             bool bTmp = IsOutside();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
+            break;
         }
-                break;
         default:
             OSL_ENSURE( !this, "unknown MemberId" );
             bRet = false;
