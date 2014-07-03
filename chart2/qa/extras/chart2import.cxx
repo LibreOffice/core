@@ -37,6 +37,7 @@ public:
     void testPPTChartSeries();
     void testODPChartSeries();
     void testBnc864396();
+    void testBnc882383();
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
     void testFlatODSStackedColumnChart();
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
+    CPPUNIT_TEST(testBnc882383);
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
@@ -343,6 +345,19 @@ void Chart2ImportTest::testBnc864396()
         OUString aExpected = OUString("cat") + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
     }
+}
+
+void Chart2ImportTest::testBnc882383()
+{
+    load("/chart2/qa/extras/data/pptx/", "bnc882383.pptx");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    OUString sGradientName;
+    xPropertySet->getPropertyValue("GradientName") >>= sGradientName;
+    CPPUNIT_ASSERT(!sGradientName.isEmpty());
 }
 
 void Chart2ImportTest::testSimpleStrictXLSX()
