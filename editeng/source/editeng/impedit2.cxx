@@ -3302,7 +3302,6 @@ void ImpEditEngine::UpdateSelections()
                 // Use ParaPortions, as now also hidden paragraphs have to be
                 // taken into account!
                 sal_Int32 nPara = rInf.GetPosition();
-                ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nPara );
                 if (!GetParaPortions().SafeGetObject(nPara)) // Last paragraph
                 {
                     nPara = GetParaPortions().Count()-1;
