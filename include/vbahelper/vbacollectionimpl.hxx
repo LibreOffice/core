@@ -279,13 +279,15 @@ protected:
 
 public:
     ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
     {
         return m_xIndexAccess->getCount();
     }
 
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/)
+         throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException)
     {
         if ( Index1.getValueTypeClass() != css::uno::TypeClass_STRING )
         {
@@ -302,6 +304,7 @@ public:
         Index1 >>= aStringSheet;
         return getItemByStringIndex( aStringSheet );
     }
+
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException)
     {

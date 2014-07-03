@@ -36,7 +36,9 @@ interface XCollection
 
     [attribute, readonly] long Count;
 
-    any  Item( [in] any Index1, [in] any Index2 ) raises(com::sun::star::script::BasicErrorException);
+    any  Item( [in] any Index1, [in] any Index2 )
+        raises (com::sun::star::lang::IndexOutOfBoundsException,
+                com::sun::star::script::BasicErrorException);
 };
 
 }; };
