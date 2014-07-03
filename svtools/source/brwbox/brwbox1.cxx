@@ -2295,8 +2295,8 @@ void BrowseBox::SetMode( BrowserMode nMode )
     }
     else
     {
-        pColSel = 0;
         delete pColSel;
+        pColSel = 0;
     }
 
     if ( bMultiSelection )
