@@ -424,7 +424,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
         long nScroll = nRealDelta * (-1);
         pView->NotifyScrolling( nScroll );
         Rectangle aArea( GetVisibleArea() );
-        nScroll = pView->GetEntryHeight()*nRealDelta;
+        nScroll = pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
         pView->Update();
         pView->Scroll( 0, nScroll, aArea, SCROLL_NOCHILDREN );
