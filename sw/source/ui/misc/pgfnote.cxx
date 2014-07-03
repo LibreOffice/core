@@ -19,6 +19,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
@@ -232,7 +233,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     sal_Int32 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
     if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
         nSelPos = m_pLineColorBox->InsertEntry( pFtnInfo->GetLineColor(),
-                OUString( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
+                SVX_RESSTR(RID_SVXSTR_COLOR_USER) );
 
     m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
     m_pLineColorBox->SelectEntryPos( nSelPos );
