@@ -84,12 +84,10 @@ namespace drawinglayer
             if(!bBehaveCompatibleToPaintVersion
                 && !getSdrLFSTAttribute().getFill().isDefault())
             {
-                basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
-
-                aTransformed.transform(getTransform());
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        aTransformed,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
                         getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
@@ -116,21 +114,19 @@ namespace drawinglayer
                     const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                    aExpandedUnitOutline.transform(getTransform());
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
                             aExpandedUnitOutline,
+                            getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
                 else
                 {
-                    basegfx::B2DPolygon aTransformed(aUnitOutline);
-
-                    aTransformed.transform(getTransform());
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
-                            aTransformed,
+                            aUnitOutline,
+                            getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }

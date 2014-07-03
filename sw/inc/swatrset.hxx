@@ -137,12 +137,6 @@ class SwTblBoxValue;
 
 class SwAttrPool : public SfxItemPool
 {
-private:
-    ///UUUU helpers to add/rmove DrawingLayer ItemPool, used in constructor
-    /// and destructor; still isolated to evtl. allow other use later
-    void createAndAddSecondaryPools();
-    void removeAndDeleteSecondaryPools();
-
     friend void _InitCore();            // For creating/deleting of version maps.
     friend void _FinitCore();
     static sal_uInt16* pVersionMap1;
@@ -278,6 +272,8 @@ public:
     inline const SvxBoxItem               &GetBox( bool = true ) const;
     inline const SvxFmtKeepItem         &GetKeep( bool = true ) const;
     inline const SvxBrushItem           &GetBackground( bool = true ) const;
+    inline const XFillStyleItem           &GetFillStyle( bool = true ) const;
+    inline const XFillGradientItem        &GetFillGradient( bool = true ) const;
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
     inline const SwFmtPageDesc            &GetPageDesc( bool = true ) const;
     inline const SvxFmtBreakItem      &GetBreak( bool = true ) const;

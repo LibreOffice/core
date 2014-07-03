@@ -48,12 +48,10 @@ namespace drawinglayer
             // add fill
             if(!getSdrLFSTAttribute().getFill().isDefault())
             {
-                basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
-
-                aTransformed.transform(getTransform());
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        aTransformed,
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
                         getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
@@ -71,12 +69,10 @@ namespace drawinglayer
             // add line
             if(!getSdrLFSTAttribute().getLine().isDefault())
             {
-                basegfx::B2DPolygon aTransformed(aUnitOutline);
-
-                aTransformed.transform(getTransform());
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolygonLinePrimitive(
-                        aTransformed,
+                        aUnitOutline,
+                        getTransform(),
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
             }

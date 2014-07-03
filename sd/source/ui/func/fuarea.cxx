@@ -65,7 +65,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
         boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
-                                                                        true) : 0);
+                                                                        mpView) : 0);
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

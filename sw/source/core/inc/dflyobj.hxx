@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DFLYOBJ_HXX
 
 #include <svx/svdovirt.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 class SwFlyFrm;
 class SwFrmFmt;

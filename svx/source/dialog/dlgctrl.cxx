@@ -1383,7 +1383,7 @@ void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bit
 void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
                                     const XGradient& rGradient, sal_uInt16 nDist )
 {
-    long nCount = pList.get() ? pList->Count() : 0;
+    long nCount = pList->Count();
     XGradientEntry* pEntry;
     bool bFound = false;
     OUString aStr;

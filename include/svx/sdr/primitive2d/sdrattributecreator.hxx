@@ -66,7 +66,7 @@ namespace drawinglayer
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrFillAttribute SVX_DLLPUBLIC createNewSdrFillAttribute(
+        attribute::SdrFillAttribute createNewSdrFillAttribute(
             const SfxItemSet& rSet);
 
         // #i101508# Support handing over given text-to-border distances
@@ -78,7 +78,7 @@ namespace drawinglayer
             const sal_Int32* pRight = 0,
             const sal_Int32* pLower = 0);
 
-        attribute::FillGradientAttribute SVX_DLLPUBLIC createNewTransparenceGradientAttribute(
+        attribute::FillGradientAttribute createNewTransparenceGradientAttribute(
             const SfxItemSet& rSet);
 
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(

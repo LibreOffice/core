@@ -36,8 +36,6 @@ protected:
     OUString     m_sControlDataStyleName;
     OUString     m_sListStyleName;
     bool         m_bIsNumRuleAlreadyConverted;
-    //UUUU
-    bool         m_bIsFillStyleAlreadyConverted;
 
 protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
