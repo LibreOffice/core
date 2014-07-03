@@ -479,7 +479,7 @@ SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
     if( nNum != USHRT_MAX )
     {
         SwTxtFtn* pTxtFtn = GetAttr();
-        if( &pTxtFtn->GetAttr() && pTxtFtn->GetFtn().GetNumber() == nNum )
+        if( pTxtFtn->GetFtn().GetNumber() == nNum )
         {
             int bla = 5;
             (void)bla;
