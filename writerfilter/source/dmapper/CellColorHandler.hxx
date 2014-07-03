@@ -39,7 +39,8 @@ public:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
+    enum Type {P, C, Others};
+    Type m_eType;
 
 private:
     // Properties
@@ -52,7 +53,7 @@ public:
 
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void setParagraph() { m_bParagraph = true; }
+    void setType(Type type) { m_eType = type; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}

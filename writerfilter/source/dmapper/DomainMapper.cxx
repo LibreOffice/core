@@ -2617,7 +2617,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if( pProperties.get())
         {
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
-            pCellColorHandler->setParagraph();
+            pCellColorHandler->setType(CellColorHandler::P);
             pProperties->resolve(*pCellColorHandler);
             rContext->insert( pCellColorHandler->getProperties(), true );
         }
@@ -3186,6 +3186,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmCBrc
     case NS_sprm::LN_CShd:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                pCellColorHandler->setType(CellColorHandler::C);
+                pProperties->resolve(*pCellColorHandler);
+                rContext->insert( pCellColorHandler->getProperties(), true );
+            }
+        }
         break;  // sprmCShd
     case NS_sprm::LN_CIdslRMarkDel:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
