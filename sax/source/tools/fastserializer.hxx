@@ -120,20 +120,20 @@ public:
 
         This is to be able to change the order of the data being written.
         If you need to write eg.
-          p, r, rPr, [something], /rPr, t, [text], /r, /p,
+          p, r, rPr, [something], /rPr, t, [text], /t, /r, /p,
         but get it in order
           p, r, t, [text], /t, rPr, [something], /rPr, /r, /p,
         simply do
           p, r, mark(), t, [text], /t, mark(), rPr, [something], /rPr,
-          mergeTopMarks( true ), mergeTopMarks(), /r, /p
+          mergeTopMarks( MERGE_MARKS_PREPEND ), mergeTopMarks( MERGE_MARKS_APPEND ), /r, /p
         and you are done.
      */
     void mark( Int32Sequence aOrder = Int32Sequence() );
 
     /** Merge 2 topmost marks.
 
-        There are 3 possibilities - prepend the top before the second top-most
-        mark, append it, or append it later; prepending brings the possibility
+        The possibilities: prepend the top before the second top-most
+        mark, append it, append it later or ignore; prepending brings the possibility
         to switch parts of the output, appending later allows to write some
         output in advance.
 
