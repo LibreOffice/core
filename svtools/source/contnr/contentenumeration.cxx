@@ -34,9 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#include <memory>
-
-
 namespace svt
 {
 

@@ -45,7 +45,6 @@
 #include "svx/svdviter.hxx"
 #include <rtl/ref.hxx>
 #include <set>
-#include <memory>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
