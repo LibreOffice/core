@@ -434,7 +434,6 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
-    REGISTRY_ENTRY_KINDMAP(name, modid, key) \
 
 #define CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
@@ -449,9 +448,6 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
-    REGISTRY_ENTRY_KINDMAP(name, modid, key) \
-
-
 
 #ifdef _MSC_VER
 
