@@ -15,6 +15,11 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <config_oauth2.h>
@@ -120,6 +125,17 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
+        const uno::Reference< com::sun::star::uno::XComponentContext >& 
+            xComponentContext = ::comphelper::getProcessComponentContext();
+
+        uno::Reference< com::sun::star::xml::crypto::XNSSInitializer > 
+            xNSSInitializer = com::sun::star::xml::crypto::NSSInitializer::create( xComponentContext );
+
+        uno::Reference< com::sun::star::xml::crypto::XDigestContext > xDigestContext( 
+                xNSSInitializer->getDigestContext( com::sun::star::xml::crypto::DigestID::SHA256,
+                                                          uno::Sequence< beans::NamedValue >() ),
+                                                          uno::UNO_SET_THROW );
+
         // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
         ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
