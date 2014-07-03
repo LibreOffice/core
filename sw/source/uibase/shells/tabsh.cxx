@@ -271,11 +271,10 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     rSh.StartUndo( UNDO_TABLE_ATTR );
     const SfxPoolItem* pItem = 0;
 
-    SwViewOption aUsrPref( *rSh.GetViewOptions() );
-    sal_uInt16 nBackgroundDestination = aUsrPref.GetTblDest();
     if(SFX_ITEM_SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
-        nBackgroundDestination = ((SfxUInt16Item*)pItem)->GetValue();
+        SwViewOption aUsrPref( *rSh.GetViewOptions() );
+        sal_uInt16 nBackgroundDestination = ((SfxUInt16Item*)pItem)->GetValue();
         aUsrPref.SetTblDest((sal_uInt8)nBackgroundDestination);
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
