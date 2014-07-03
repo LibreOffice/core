@@ -289,8 +289,8 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
     if( ! initialized )
     {
         // re-use strings from ATK library
-        roleMap[accessibility::AccessibleRole::EDIT_BAR] = registerRole("edit bar");
-        roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = registerRole("embedded component");
+        roleMap[accessibility::AccessibleRole::EDIT_BAR] = registerRole("editbar");
+        roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = registerRole("embedded");
         roleMap[accessibility::AccessibleRole::CHART] = registerRole("chart");
         roleMap[accessibility::AccessibleRole::CAPTION] = registerRole("caption");
         roleMap[accessibility::AccessibleRole::DOCUMENT] = registerRole("document frame");
@@ -300,16 +300,16 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::FORM] = registerRole("form");
         roleMap[accessibility::AccessibleRole::GROUP_BOX] = registerRole("grouping");
         roleMap[accessibility::AccessibleRole::COMMENT] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::IMAGE_MAP] = registerRole("image map");
+        roleMap[accessibility::AccessibleRole::TREE_ITEM] = registerRole("tree item");
+        roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("link");
 
         // these don't exist in ATK yet
         roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("end note");
         roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("foot note");
-        roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("hyper link");
         roleMap[accessibility::AccessibleRole::SHAPE] = registerRole("shape");
         roleMap[accessibility::AccessibleRole::TEXT_FRAME] = registerRole("text frame");
-        roleMap[accessibility::AccessibleRole::IMAGE_MAP] = registerRole("image map");
         roleMap[accessibility::AccessibleRole::NOTE] = registerRole("note");
-        roleMap[accessibility::AccessibleRole::TREE_ITEM] = registerRole("tree item");
 
         initialized = true;
     }
