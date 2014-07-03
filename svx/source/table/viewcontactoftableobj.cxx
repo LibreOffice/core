@@ -92,12 +92,10 @@ namespace drawinglayer
             // add fill
             if(!getSdrFTAttribute().getFill().isDefault())
             {
-                basegfx::B2DPolyPolygon aTransformed(aUnitPolyPolygon);
-
-                aTransformed.transform(getTransform());
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        aTransformed,
+                        aUnitPolyPolygon,
+                        getTransform(),
                         getSdrFTAttribute().getFill(),
                         getSdrFTAttribute().getFillFloatTransGradient()));
             }

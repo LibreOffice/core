@@ -62,7 +62,6 @@
 #include <dbg_lay.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sortedobjs.hxx>
-#include <svx/xdef.hxx>
 
 using namespace ::com::sun::star;
 
@@ -298,6 +297,8 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_BACKGROUND:
+        case RES_FILL_STYLE:
+        case RES_FILL_GRADIENT:
             rInvFlags |= 0x28;
             break;
 
@@ -334,11 +335,6 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         default:
-            //UUUU the new FillStyle has to do the same as previous RES_BACKGROUND
-            if(nWhich >= XATTR_FILL_FIRST && nWhich <= XATTR_FILL_LAST)
-            {
-                rInvFlags |= 0x28;
-            }
             /* do Nothing */;
     }
 }

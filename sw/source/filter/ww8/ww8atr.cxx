@@ -112,8 +112,6 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <unobrushitemhelper.hxx>
-#include <svx/xenum.hxx>
 #include <tgrditem.hxx>
 #include <flddropdown.hxx>
 #include <chpfld.hxx>
@@ -296,9 +294,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             {
                 pItem = aI->second;
                 sal_uInt16 nWhich = pItem->Which();
-                // Handle fill attributes just like frame attributes for now.
-                if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
-                     (nWhich >= XATTR_FILL_FIRST && nWhich < XATTR_FILL_LAST))
+                if ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE)
                     AttrOutput().OutputItem( *pItem );
             }
         }
@@ -828,9 +824,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 const SwFrmFmt &rFrmFmt = mpParentFrame->GetFrmFmt();
 
                 SfxItemSet aSet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
-                    RES_FRMATR_END-1,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    0);
+                    RES_FRMATR_END-1);
                 aSet.Set(rFrmFmt.GetAttrSet());
 
                 // Fly als Zeichen werden bei uns zu Absatz-gebundenen
@@ -846,24 +840,6 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 
                 if (SFX_ITEM_SET != aSet.GetItemState(RES_SURROUND))
                     aSet.Put(SwFmtSurround(SURROUND_NONE));
-
-                const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrmFmt.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
-                if (pXFillStyleItem)
-                {
-                    switch (pXFillStyleItem->GetValue())
-                    {
-                    case XFILL_NONE:
-                        break;
-                    case XFILL_SOLID:
-                    {
-                        // Construct an SvxBrushItem, as expected by the exporters.
-                        aSet.Put(sw::getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet()));
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                }
 
                 bOutFlyFrmAttrs = true;
                 //script doesn't matter if not exporting chp
@@ -5443,10 +5419,10 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_BACKGROUND:
             FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
             break;
-        case XATTR_FILLSTYLE:
+        case RES_FILL_STYLE:
             FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
             break;
-        case XATTR_FILLGRADIENT:
+        case RES_FILL_GRADIENT:
             FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
             break;
         case RES_BOX:

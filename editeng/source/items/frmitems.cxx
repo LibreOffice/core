@@ -4004,24 +4004,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
     return pImpl->pGraphicObject;
 }
 
-//UUUU
-sal_Int8 SvxBrushItem::getGraphicTransparency() const
-{
-    return pImpl->nGraphicTransparency;
-}
-
-// -----------------------------------------------------------------------
-//UUUU
-void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
-{
-    if(nNew != pImpl->nGraphicTransparency)
-    {
-        pImpl->nGraphicTransparency = nNew;
-        ApplyGraphicTransparency_Impl();
-    }
-}
-
-// -----------------------------------------------------------------------
 
 
 const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const

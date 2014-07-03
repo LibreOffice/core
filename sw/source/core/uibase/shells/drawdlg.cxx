@@ -81,7 +81,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
-                                                                            true);
+                                                                            pView);
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();

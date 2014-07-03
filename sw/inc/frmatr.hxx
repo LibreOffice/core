@@ -43,6 +43,10 @@ inline const SvxFmtKeepItem &SwAttrSet::GetKeep(bool bInP) const
     { return (const SvxFmtKeepItem&)Get( RES_KEEP,bInP); }
 inline const SvxBrushItem &SwAttrSet::GetBackground(bool bInP) const
     { return (const SvxBrushItem&)Get( RES_BACKGROUND,bInP); }
+inline const XFillStyleItem &SwAttrSet::GetFillStyle(bool bInP) const
+    { return (const XFillStyleItem&)Get( RES_FILL_STYLE,bInP); }
+inline const XFillGradientItem &SwAttrSet::GetFillGradient(bool bInP) const
+    { return (const XFillGradientItem&)Get( RES_FILL_GRADIENT,bInP); }
 inline const SvxShadowItem &SwAttrSet::GetShadow(bool bInP) const
     { return (const SvxShadowItem&)Get( RES_SHADOW,bInP); }
 inline const SvxFmtBreakItem &SwAttrSet::GetBreak(bool bInP) const
@@ -71,8 +75,8 @@ inline const SvxBoxItem &SwFmt::GetBox(bool bInP) const
     { return aSet.GetBox(bInP); }
 inline const SvxFmtKeepItem &SwFmt::GetKeep(bool bInP) const
     { return aSet.GetKeep(bInP); }
-//UUUUinline const SvxBrushItem &SwFmt::GetBackground(sal_Bool bInP) const
-//UUUU  { return aSet.GetBackground(bInP); }
+inline const SvxBrushItem &SwFmt::GetBackground(bool bInP) const
+    { return aSet.GetBackground(bInP); }
 inline const SvxShadowItem &SwFmt::GetShadow(bool bInP) const
     { return aSet.GetShadow(bInP); }
 inline const SvxFmtBreakItem &SwFmt::GetBreak(bool bInP) const
