@@ -365,7 +365,7 @@ void SvxColorDockingWindow::SetSize()
 
     // Scrollbar setzen/entfernen
     WinBits nBits = aColorSet.GetStyle();
-    if ( nLines * nCols >= nCount )
+    if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
@@ -528,7 +528,7 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
 
     // Scrollbar setzen/entfernen
     WinBits nBits = aColorSet.GetStyle();
-    if ( nLines * nCols >= nCount )
+    if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
