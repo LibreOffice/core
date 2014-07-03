@@ -133,6 +133,7 @@
 #include <svx/svxdllapi.h>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <svx/PaletteManager.hxx>
 
 // important im tbxctrls.hxx created HeDaBu !!!
 class SvxLineItem;
@@ -221,7 +222,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
     Color                               mLastColor;
-    sal_uInt16                          nCurrentPalette;
+    PaletteManager                      mrPaletteManager;
     DECL_LINK( SelectedHdl, Color* );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -242,7 +243,7 @@ class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
 {
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
     Color                               mLastColor;
-    sal_uInt16                          nCurrentPalette;
+    PaletteManager                      mrPaletteManager;
     DECL_LINK( SelectedHdl, Color* );
 public:
     SFX_DECL_TOOLBOX_CONTROL();

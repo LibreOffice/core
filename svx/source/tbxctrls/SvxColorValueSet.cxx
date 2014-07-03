@@ -23,85 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-
-// finds first token in rStr from index, separated by whitespace
-// returns position of next token in index
-OString lcl_getToken(const OString& rStr, sal_Int32& index)
-{
-    sal_Int32 substart, toklen = 0;
-
-    while(index < rStr.getLength() &&
-          (rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-        ++index;
-    if(index == rStr.getLength())
-    {
-        index = -1;
-        return OString();
-    }
-    substart = index;
-
-    while(index < rStr.getLength() &&
-          !(rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-    {
-        ++index;
-        ++toklen;
-    }
-
-    while(index < rStr.getLength() &&
-          (rStr[index] == ' ' || rStr[index] == '\n' || rStr[index] == '\t'))
-        ++index;
-    if(index == rStr.getLength())
-        index = -1;
-
-    return rStr.copy(substart, toklen);
-}
-
-Palette::Palette(const OUString &rFname)
-{
-    // TODO add error handling!!!
-    SvFileStream aFile(rFname, STREAM_READ);
-
-    OString aPaletteName;
-    OString aLine;
-
-    aFile.ReadLine(aLine);
-    if( !aLine.startsWith("GIMP Palette") ) return;
-    aFile.ReadLine(aLine);
-    if( aLine.startsWith("Name: ", &aPaletteName) )
-    {
-        aFile.ReadLine(aLine);
-        if( aLine.startsWith("Columns: "))
-            aFile.ReadLine(aLine); // we can ignore this
-    }
-
-    do {
-        if (aLine[0] != '#' && aLine[0] != '\n')
-        {
-            // TODO check if r,g,b are 0<= x <=255, or just clamp?
-            sal_Int32 nIndex = 0;
-            OString token;
-
-            token = lcl_getToken(aLine, nIndex);
-            if(token == "" || nIndex == -1) continue;
-            sal_Int32 r = token.toInt32();
-
-            token = lcl_getToken(aLine, nIndex);
-            if(token == "" || nIndex == -1) continue;
-            sal_Int32 g = token.toInt32();
-
-            token = lcl_getToken(aLine, nIndex);
-            if(token == "") continue;
-            sal_Int32 b = token.toInt32();
-
-            OString name;
-            if(nIndex != -1)
-                name = aLine.copy(nIndex);
-
-            maColors.push_back(std::make_pair(Color(r, g, b), name));
-        }
-    } while (aFile.ReadLine(aLine));
-}
-
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)
 {
@@ -186,9 +107,9 @@ void SvxColorValueSet::loadColorVector(const std::vector<Color>& rColorVector, c
 }
 
 
-void SvxColorValueSet::loadPalette(const Palette& rPalette)
+void SvxColorValueSet::loadPalette(Palette& rPalette)
 {
-    const Palette::ColorList &rColors = rPalette.maColors;
+    const Palette::ColorList &rColors = rPalette.GetPaletteColors();
     Clear();
     int nIx = 1;
     for(Palette::ColorList::const_iterator it = rColors.begin();
