@@ -463,7 +463,7 @@ void ValueSet::Format()
     }
 
     // calculate item size
-    const long nColSpace  = (mnCols - 1) * mnSpacing;
+    const long nColSpace  = (mnCols - 1) * static_cast<long>(mnSpacing);
     const long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
     if ( mnUserItemWidth && !mnUserCols )
     {
