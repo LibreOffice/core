@@ -68,7 +68,7 @@ CBenTOCReader::ReadLabelAndTOC()
         return Err;
 
     unsigned long nLength;
-    if ((Err = cpContainer->GetSize(nLength)) != BenErr_OK)
+    if ((Err = cpContainer->GetSize(&nLength)) != BenErr_OK)
         return Err;
 
     if (TOCOffset > nLength)
