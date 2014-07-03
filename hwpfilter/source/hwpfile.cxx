@@ -81,7 +81,7 @@ HWPFile::~HWPFile()
     }
 }
 
-int HWPFile::ReadHwpFile(HStream & stream)
+int HWPFile::ReadHwpFile(HStream * stream)
 {
     if (Open(stream) != HWP_NoError)
         return State();
@@ -108,7 +108,7 @@ int detect_hwp_version(const char *str)
 
 // HIODev wrapper
 
-int HWPFile::Open(HStream & stream)
+int HWPFile::Open(HStream * stream)
 {
     HStreamIODev *hstreamio = new HStreamIODev(stream);
 

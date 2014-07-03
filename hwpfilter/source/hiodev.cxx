@@ -107,7 +107,7 @@ int HIODev::read4b(void *ptr, int nmemb)
 
 
 // hfileiodev class
-HStreamIODev::HStreamIODev(HStream & stream):_stream(stream)
+HStreamIODev::HStreamIODev(HStream * stream):_stream(stream)
 {
     init();
 }
@@ -128,7 +128,7 @@ void HStreamIODev::init()
 
 bool HStreamIODev::open()
 {
-    if (!(_stream.available()))
+    if (!(_stream->available()))
         return false;
     return true;
 }
@@ -148,7 +148,7 @@ void HStreamIODev::close(void)
     if (_gzfp)
         gz_close(_gzfp);                          /* gz_close() calls stream_closeInput() */
     else
-        _stream.closeInput();
+        _stream->closeInput();
     _gzfp = NULL;
 }
 
@@ -164,7 +164,7 @@ bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;
     if (flag == true)
-        return 0 != (_gzfp = gz_open(_stream));
+        return 0 != (_gzfp = gz_open(*_stream));
     else if (_gzfp)
     {
         gz_flush(_gzfp, Z_FINISH);
@@ -181,7 +181,7 @@ bool HStreamIODev::setCompressed(bool flag)
 
 int HStreamIODev::read1b()
 {
-    int res = (compressed) ? GZREAD(rBuf, 1) : _stream.readBytes(rBuf, 1);
+    int res = (compressed) ? GZREAD(rBuf, 1) : _stream->readBytes(rBuf, 1);
 
     if (res <= 0)
         return -1;
@@ -192,7 +192,7 @@ int HStreamIODev::read1b()
 
 int HStreamIODev::read2b()
 {
-    int res = (compressed) ? GZREAD(rBuf, 2) : _stream.readBytes(rBuf, 2);
+    int res = (compressed) ? GZREAD(rBuf, 2) : _stream->readBytes(rBuf, 2);
 
     if (res <= 0)
         return -1;
@@ -203,7 +203,7 @@ int HStreamIODev::read2b()
 
 int HStreamIODev::read4b()
 {
-    int res = (compressed) ? GZREAD(rBuf, 4) : _stream.readBytes(rBuf, 4);
+    int res = (compressed) ? GZREAD(rBuf, 4) : _stream->readBytes(rBuf, 4);
 
     if (res <= 0)
         return -1;
@@ -216,7 +216,7 @@ int HStreamIODev::read4b()
 int HStreamIODev::readBlock(void *ptr, int size)
 {
     int count =
-        (compressed) ? GZREAD(ptr, size) : _stream.readBytes((byte *) ptr,
+        (compressed) ? GZREAD(ptr, size) : _stream->readBytes((byte *) ptr,
 
         size);
 
@@ -242,7 +242,7 @@ int HStreamIODev::skipBlock(int size)
                 return size - remain;
           }
      }
-    return _stream.skipBytes(size);
+    return _stream->skipBytes(size);
 }
 
 

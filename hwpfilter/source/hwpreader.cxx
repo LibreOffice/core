@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include <comphelper/newarray.hxx>
+#include <o3tl/heap_ptr.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -130,7 +131,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
 
-    HStream stream;
+    o3tl::heap_ptr<HStream> stream(new HStream);
     Sequence < sal_Int8 > aBuffer;
     sal_Int32 nRead, nBlock = 32768, nTotal = 0;
     while( true )
@@ -138,13 +139,13 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
         nRead = xInputStream->readBytes(aBuffer, nBlock);
         if( nRead == 0 )
             break;
-        stream.addData( (const byte *)aBuffer.getConstArray(), nRead );
+        stream->addData( (const byte *)aBuffer.getConstArray(), nRead );
         nTotal += nRead;
     }
 
     if( nTotal == 0 ) return sal_False;
 
-    if (hwpfile.ReadHwpFile(stream))
+    if (hwpfile.ReadHwpFile(stream.release()))
           return sal_False;
 
     if (m_rxDocumentHandler.is())
