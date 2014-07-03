@@ -108,6 +108,7 @@ gb_EXTRAMERGEDLIBS := \
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
 	avmedia \
+	$(if $(filter $(OS),ANDROID),,basebmp) \
 	basegfx \
 	canvastools \
 	configmgr \
@@ -152,6 +153,9 @@ gb_MERGEDLIBS := \
 	uui \
 	vcl \
 	vclopengl \
+	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
+	) \
 	xmlscript \
 	xo \
 	xstor \
