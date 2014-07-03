@@ -79,9 +79,11 @@ Fraction::~Fraction()
 
 void Fraction::init(sal_Int32 nNumerator, sal_Int32 nDenominator)
 {
-    sal_uInt32 nGCD = gcd(abs(nNumerator), abs(nDenominator));
+    // fdo#41068 pass non-negative numbers to gcd
+    sal_Int32 const nGCD = gcd(abs(nNumerator), abs(nDenominator));
 
-    mnNumerator = nNumerator/ nGCD;
+    // fdo#76803 do signed division
+    mnNumerator = nNumerator / nGCD;
     mnDenominator = nDenominator / nGCD;
 }
 
