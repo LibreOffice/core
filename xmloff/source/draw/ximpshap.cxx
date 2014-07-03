@@ -3865,16 +3865,18 @@ void SdXMLCustomShapeContext::EndElement()
             OSL_FAIL( "could not set enhanced customshape geometry" );
         }
 
-        sal_Int32 nUPD( 0 );
-        sal_Int32 nBuild( 0 );
-        GetImport().getBuildIds( nUPD, nBuild );
-        if( ((nUPD >= 640 && nUPD <= 645) || (nUPD == 680)) && (nBuild <= 9221) )
+        sal_Int32 nUPD;
+        sal_Int32 nBuild;
+        if (GetImport().getBuildIds(nUPD, nBuild))
         {
-            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( mxShape, UNO_QUERY );
-            if( xDefaulter.is() )
+            if( ((nUPD >= 640 && nUPD <= 645) || (nUPD == 680)) && (nBuild <= 9221) )
             {
-                OUString aEmptyType;
-                xDefaulter->createCustomShapeDefaults( aEmptyType );
+                Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( mxShape, UNO_QUERY );
+                if( xDefaulter.is() )
+                {
+                    OUString aEmptyType;
+                    xDefaulter->createCustomShapeDefaults( aEmptyType );
+                }
             }
         }
     }
