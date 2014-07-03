@@ -89,6 +89,7 @@ namespace dbp
     {
     public:
         OLCPage( OListComboWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
+        OLCPage( OListComboWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription ) : OControlWizardPage(_pParent, rID, rUIXMLDescription) { }
 
     protected:
         OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }
@@ -107,9 +108,7 @@ namespace dbp
     class OContentTableSelection : public OLCPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aSelectTableLabel;
-        ListBox         m_aSelectTable;
+        ListBox         *m_pSelectTable;
 
     public:
         OContentTableSelection( OListComboWizard* _pParent );
@@ -134,12 +133,9 @@ namespace dbp
     class OContentFieldSelection : public OLCPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aTableFields;
-        ListBox         m_aSelectTableField;
-        FixedText       m_aDisplayedFieldLabel;
-        Edit            m_aDisplayedField;
-        FixedText       m_aInfo;
+        ListBox         *m_pSelectTableField;
+        Edit            *m_pDisplayedField;
+        FixedText       *m_pInfo;
 
 
     public:
@@ -164,12 +160,8 @@ namespace dbp
     class OLinkFieldsPage : public OLCPage
     {
     protected:
-        FixedText       m_aDescription;
-        FixedLine       m_aFrame;
-        FixedText       m_aValueListFieldLabel;
-        ComboBox        m_aValueListField;
-        FixedText       m_aTableFieldLabel;
-        ComboBox        m_aTableField;
+        ComboBox        *m_pValueListField;
+        ComboBox        *m_pTableField;
 
 
     public:

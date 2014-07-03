@@ -36,13 +36,10 @@ namespace dbp
     class OTableSelectionPage : public OControlWizardPage
     {
     protected:
-        FixedLine       m_aData;
-        FixedText       m_aExplanation;
-        FixedText       m_aDatasourceLabel;
-        ListBox         m_aDatasource;
-        PushButton      m_aSearchDatabase;
-        FixedText       m_aTableLabel;
-        ListBox         m_aTable;
+        FixedText       *m_pDatasourceLabel;
+        ListBox         *m_pDatasource;
+        PushButton      *m_pSearchDatabase;
+        ListBox         *m_pTable;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                         m_xDSContext;

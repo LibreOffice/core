@@ -186,51 +186,36 @@ namespace dbp
 
 
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
-        :OGBWPage(_pParent, ModuleRes(RID_PAGE_GROUPRADIOSELECTION))
-        ,m_aFrame               (this, ModuleRes(FL_DATA))
-        ,m_aRadioNameLabel      (this, ModuleRes(FT_RADIOLABELS))
-        ,m_aRadioName           (this, ModuleRes(ET_RADIOLABELS))
-        ,m_aMoveRight           (this, ModuleRes(PB_MOVETORIGHT))
-        ,m_aMoveLeft            (this, ModuleRes(PB_MOVETOLEFT))
-        ,m_aExistingRadiosLabel (this, ModuleRes(FT_RADIOBUTTONS))
-        ,m_aExistingRadios      (this, ModuleRes(LB_RADIOBUTTONS))
+        :OGBWPage(_pParent, "GroupRadioSelectionPage", "modules/sabpilot/ui/groupradioselectionpage.ui")
     {
-        FreeResource();
+        get(m_pRadioName, "radiolabels");
+        get(m_pMoveRight, "toright");
+        get(m_pMoveLeft, "toleft");
+        get(m_pExistingRadios, "radiobuttons");
 
         if (getContext().aFieldNames.getLength())
         {
             enableFormDatasourceDisplay();
         }
-        else
-        {
-            adjustControlForNoDSDisplay(&m_aFrame);
-            adjustControlForNoDSDisplay(&m_aRadioNameLabel);
-            adjustControlForNoDSDisplay(&m_aRadioName);
-            adjustControlForNoDSDisplay(&m_aMoveRight);
-            adjustControlForNoDSDisplay(&m_aMoveLeft);
-            adjustControlForNoDSDisplay(&m_aExistingRadiosLabel);
-            adjustControlForNoDSDisplay(&m_aExistingRadios, true);
-        }
 
-        m_aMoveLeft.SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
-        m_aMoveRight.SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
-        m_aRadioName.SetModifyHdl(LINK(this, ORadioSelectionPage, OnNameModified));
-        m_aExistingRadios.SetSelectHdl(LINK(this, ORadioSelectionPage, OnEntrySelected));
+        m_pMoveLeft->SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
+        m_pMoveRight->SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
+        m_pRadioName->SetModifyHdl(LINK(this, ORadioSelectionPage, OnNameModified));
+        m_pExistingRadios->SetSelectHdl(LINK(this, ORadioSelectionPage, OnEntrySelected));
 
         implCheckMoveButtons();
-        m_aExistingRadios.EnableMultiSelection(true);
+        m_pExistingRadios->EnableMultiSelection(true);
 
-        getDialog()->defaultButton(&m_aMoveRight);
+        getDialog()->defaultButton(m_pMoveRight);
 
-        m_aExistingRadios.SetAccessibleRelationMemberOf(&m_aExistingRadios);
-        m_aExistingRadios.SetAccessibleRelationLabeledBy(&m_aExistingRadiosLabel);
+        m_pExistingRadios->SetAccessibleRelationMemberOf(m_pExistingRadios);
     }
 
 
     void ORadioSelectionPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
-        m_aRadioName.GrabFocus();
+        m_pRadioName->GrabFocus();
     }
 
 
@@ -238,7 +223,7 @@ namespace dbp
     {
         OGBWPage::initializePage();
 
-        m_aRadioName.SetText("");
+        m_pRadioName->SetText("");
 
         // no need to initialize the list of radios here
         // (we're the only one affecting this special setting, so it will be in the same state as last time this
@@ -258,11 +243,11 @@ namespace dbp
         OOptionGroupSettings& rSettings = getSettings();
         rSettings.aLabels.clear();
         rSettings.aValues.clear();
-        rSettings.aLabels.reserve(m_aExistingRadios.GetEntryCount());
-        rSettings.aValues.reserve(m_aExistingRadios.GetEntryCount());
-        for (::svt::WizardTypes::WizardState i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
+        rSettings.aLabels.reserve(m_pExistingRadios->GetEntryCount());
+        rSettings.aValues.reserve(m_pExistingRadios->GetEntryCount());
+        for (::svt::WizardTypes::WizardState i=0; i<m_pExistingRadios->GetEntryCount(); ++i)
         {
-            rSettings.aLabels.push_back(m_aExistingRadios.GetEntry(i));
+            rSettings.aLabels.push_back(m_pExistingRadios->GetEntry(i));
             rSettings.aValues.push_back(OUString::number((i + 1)));
         }
 
@@ -272,25 +257,25 @@ namespace dbp
 
     IMPL_LINK( ORadioSelectionPage, OnMoveEntry, PushButton*, _pButton )
     {
-        bool bMoveLeft = (&m_aMoveLeft == _pButton);
+        bool bMoveLeft = (m_pMoveLeft == _pButton);
         if (bMoveLeft)
         {
-            while (m_aExistingRadios.GetSelectEntryCount())
-                m_aExistingRadios.RemoveEntry(m_aExistingRadios.GetSelectEntryPos(0));
+            while (m_pExistingRadios->GetSelectEntryCount())
+                m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectEntryPos(0));
         }
         else
         {
-            m_aExistingRadios.InsertEntry(m_aRadioName.GetText());
-            m_aRadioName.SetText("");
+            m_pExistingRadios->InsertEntry(m_pRadioName->GetText());
+            m_pRadioName->SetText("");
         }
 
         implCheckMoveButtons();
 
         //adjust the focus
         if (bMoveLeft)
-            m_aExistingRadios.GrabFocus();
+            m_pExistingRadios->GrabFocus();
         else
-            m_aRadioName.GrabFocus();
+            m_pRadioName->GrabFocus();
         return 0L;
     }
 
@@ -311,29 +296,29 @@ namespace dbp
 
     bool ORadioSelectionPage::canAdvance() const
     {
-        return 0 != m_aExistingRadios.GetEntryCount();
+        return 0 != m_pExistingRadios->GetEntryCount();
     }
 
 
     void ORadioSelectionPage::implCheckMoveButtons()
     {
-        bool bHaveSome = (0 != m_aExistingRadios.GetEntryCount());
-        bool bSelectedSome = (0 != m_aExistingRadios.GetSelectEntryCount());
-        bool bUnfinishedInput = (!m_aRadioName.GetText().isEmpty());
+        bool bHaveSome = (0 != m_pExistingRadios->GetEntryCount());
+        bool bSelectedSome = (0 != m_pExistingRadios->GetSelectEntryCount());
+        bool bUnfinishedInput = (!m_pRadioName->GetText().isEmpty());
 
-        m_aMoveLeft.Enable(bSelectedSome);
-        m_aMoveRight.Enable(bUnfinishedInput);
+        m_pMoveLeft->Enable(bSelectedSome);
+        m_pMoveRight->Enable(bUnfinishedInput);
 
         getDialog()->enableButtons(WZB_NEXT, bHaveSome);
 
         if (bUnfinishedInput)
         {
-            if (0 == (m_aMoveRight.GetStyle() & WB_DEFBUTTON))
-                getDialog()->defaultButton(&m_aMoveRight);
+            if (0 == (m_pMoveRight->GetStyle() & WB_DEFBUTTON))
+                getDialog()->defaultButton(m_pMoveRight);
         }
         else
         {
-            if (WB_DEFBUTTON == (m_aMoveRight.GetStyle() & WB_DEFBUTTON))
+            if (WB_DEFBUTTON == (m_pMoveRight->GetStyle() & WB_DEFBUTTON))
                 getDialog()->defaultButton(WZB_NEXT);
         }
     }
