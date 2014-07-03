@@ -672,7 +672,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
-        os.makedirs(os.path.dirname(project_path), exist_ok = True)
+        folder = os.path.dirname(project_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
         project_guid = str(uuid.uuid4()).upper()
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
