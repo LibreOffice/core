@@ -26,9 +26,13 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Share_Config_Sofficecfg_uiconfig_cui_Lang,
 #ifdef DBCONNECTIVITY
              gid_File_Share_Config_Sofficecfg_uiconfig_dbaccess_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_dreport_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sbibliography_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_spropctrlr_Lang,
 #endif
              gid_File_Share_Config_Sofficecfg_uiconfig_desktop_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_filter_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_sabpilot_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_scalc_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_schart_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_sdraw_Lang,
