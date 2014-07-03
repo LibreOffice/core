@@ -49,6 +49,7 @@
 #include "xmlxtexp.hxx"
 
 #include <comphelper/storagehelper.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;
@@ -356,36 +357,36 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 
             char const* pEleName;
             Type aExportType = mxTable->getElementType();
-            SvxXMLTableEntryExporter* pExporter = NULL;
+            boost::scoped_ptr<SvxXMLTableEntryExporter> pExporter;
 
             if( aExportType == cppu::UnoType<sal_Int32>::get() )
             {
-                pExporter = new SvxXMLColorEntryExporter(*this);
+                pExporter.reset(new SvxXMLColorEntryExporter(*this));
                 pEleName = "color-table";
             }
             else if( aExportType == cppu::UnoType< drawing::PolyPolygonBezierCoords >::get() )
             {
-                pExporter = new SvxXMLLineEndEntryExporter(*this);
+                pExporter.reset(new SvxXMLLineEndEntryExporter(*this));
                 pEleName = "marker-table";
             }
             else if( aExportType == cppu::UnoType< drawing::LineDash >::get() )
             {
-                pExporter = new SvxXMLDashEntryExporter(*this);
+                pExporter.reset(new SvxXMLDashEntryExporter(*this));
                 pEleName = "dash-table";
             }
             else if( aExportType == cppu::UnoType< drawing::Hatch >::get() )
             {
-                pExporter = new SvxXMLHatchEntryExporter(*this);
+                pExporter.reset(new SvxXMLHatchEntryExporter(*this));
                 pEleName = "hatch-table";
             }
             else if( aExportType == cppu::UnoType< awt::Gradient >::get() )
             {
-                pExporter = new SvxXMLGradientEntryExporter(*this);
+                pExporter.reset(new SvxXMLGradientEntryExporter(*this));
                 pEleName = "gradient-table";
             }
             else if( aExportType == cppu::UnoType<OUString>::get())
             {
-                pExporter = new SvxXMLBitmapEntryExporter(*this);
+                pExporter.reset(new SvxXMLBitmapEntryExporter(*this));
                 pEleName = "bitmap-table";
             }
             else
@@ -407,7 +408,6 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
                 aAny = mxTable->getByName( *pNames );
                 pExporter->exportEntry( *pNames, aAny );
             }
-            delete pExporter;
 
             bRet = true;
         }

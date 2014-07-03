@@ -43,6 +43,7 @@
 #include <comphelper/classids.hxx>
 #include <map>
 #include "svx/xmleohlp.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -402,9 +403,9 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 pTemp->Seek( 0 );
                 uno::Reference < io::XStream > xStm = xDocStor->openStreamElement( rObjName,
                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStm );
+                boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xStm ));
                 pTemp->ReadStream( *pStream );
-                delete pStream;
+                pStream.reset();
 
                 // TODO/LATER: what to do when other types of objects are based on substream persistence?
                 // This is an ole object

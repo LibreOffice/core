@@ -37,7 +37,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 #define DAY_OFFX                        4
@@ -1084,7 +1084,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                                 bool bMove, bool bExpand, bool bExtended )
 {
-    IntDateSet*  pOldSel = new IntDateSet( *mpSelectTable );
+    boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
     Date    aOldDate = maCurDate;
     Date    aTempDate = rDate;
 
@@ -1181,7 +1181,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
         }
         HideFocus();
         if ( bNewSel )
-            ImplUpdateSelection( pOldSel );
+            ImplUpdateSelection( pOldSel.get() );
         if ( !bNewSel || pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
             ImplUpdateDate( aOldDate );
         // assure focus rectangle is displayed again
@@ -1189,7 +1189,6 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
              || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
             ImplUpdateDate( maCurDate );
     }
-    delete pOldSel;
 }
 
 
@@ -1355,18 +1354,17 @@ void Calendar::ImplEndTracking( bool bCancel )
 
         if ( !bSpinDown )
         {
-            IntDateSet* pOldSel = new IntDateSet( *mpSelectTable );
+            boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
             Date    aOldDate = maCurDate;
             maCurDate       = maOldCurDate;
             *mpSelectTable  = *mpOldSelectTable;
             HideFocus();
-            ImplUpdateSelection( pOldSel );
+            ImplUpdateSelection( pOldSel.get() );
             if ( pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
                 ImplUpdateDate( aOldDate );
             //  assure focus rectangle is displayed again
             if ( HasFocus() || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
                 ImplUpdateDate( maCurDate );
-            delete pOldSel;
         }
     }
 
@@ -1585,7 +1583,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     {
         if ( bMultiSel && bExpand )
         {
-            IntDateSet* pOldSel = new IntDateSet( *mpSelectTable );
+            boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
             Date aOldAnchorDate = maAnchorDate;
             mbSelLeft = aNewDate < maAnchorDate;
             if ( !bExtended )
@@ -1609,8 +1607,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             mbInSelChange = true;
             SelectionChanging();
             mbInSelChange = false;
-            ImplUpdateSelection( pOldSel );
-            delete pOldSel;
+            ImplUpdateSelection( pOldSel.get() );
         }
         else
         {
@@ -1824,40 +1821,30 @@ void Calendar::SelectDate( const Date& rDate, bool bSelect )
     if ( !rDate.IsValidAndGregorian() )
         return;
 
-    IntDateSet* pOldSel;
+    boost::scoped_ptr<IntDateSet> pOldSel;
 
     if ( !mbInSelChange )
-        pOldSel = new IntDateSet( *mpSelectTable );
-    else
-        pOldSel = NULL;
+        pOldSel.reset(new IntDateSet( *mpSelectTable ));
 
     ImplCalendarSelectDate( mpSelectTable, rDate, bSelect );
 
     if ( pOldSel )
-    {
-        ImplUpdateSelection( pOldSel );
-        delete pOldSel;
-    }
+        ImplUpdateSelection( pOldSel.get() );
 }
 
 
 
 void Calendar::SetNoSelection()
 {
-    IntDateSet* pOldSel;
+    boost::scoped_ptr<IntDateSet> pOldSel;
 
     if ( !mbInSelChange )
-        pOldSel = new IntDateSet( *mpSelectTable );
-    else
-        pOldSel = NULL;
+        pOldSel.reset(new IntDateSet( *mpSelectTable ));
 
     ImplCalendarClearSelectDate( mpSelectTable );
 
     if ( pOldSel )
-    {
-        ImplUpdateSelection( pOldSel );
-        delete pOldSel;
-    }
+        ImplUpdateSelection( pOldSel.get() );
 }
 
 

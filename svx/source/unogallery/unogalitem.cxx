@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #define UNOGALLERY_GALLERYITEMTYPE  1
 #define UNOGALLERY_URL              2
@@ -271,7 +272,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                 if( pGalTheme )
                 {
-                    SgaObject* pObj = pGalTheme->ImplReadSgaObject( const_cast< GalleryObject* >( implGetObject() ) );
+                    boost::scoped_ptr<SgaObject> pObj(pGalTheme->ImplReadSgaObject( const_cast< GalleryObject* >( implGetObject() ) ));
 
                     if( pObj )
                     {
@@ -280,8 +281,6 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                             pObj->SetTitle( aNewTitle );
                             pGalTheme->InsertObject( *pObj );
                         }
-
-                        delete pObj;
                     }
                 }
             }

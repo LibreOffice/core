@@ -690,7 +690,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
     }
 
     SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl();
-    SvxIconChoiceCtrlEntryList_impl* pPaintedEntries = new SvxIconChoiceCtrlEntryList_impl();
+    boost::scoped_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
 
     size_t nPos = 0;
     while( nCount )
@@ -717,7 +717,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
         for( size_t nCur = 0; nCur < nCount; nCur++ )
             pZOrderList->push_back( (*pPaintedEntries)[ nCur ] );
     }
-    delete pPaintedEntries;
+    pPaintedEntries.reset();
 
     if( bResetClipRegion )
         pView->SetClipRegion();

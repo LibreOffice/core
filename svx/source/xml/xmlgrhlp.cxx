@@ -47,6 +47,7 @@
 #include "svx/xmleohlp.hxx"
 
 #include <algorithm>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -312,7 +313,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 
                 if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
                 {
-                    SvMemoryStream* pDest = new SvMemoryStream;
+                    boost::scoped_ptr<SvMemoryStream> pDest(new SvMemoryStream);
                     ZCodec aZCodec( 0x8000, 0x8000 );
                     aZCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
                     mpOStm->Seek( 0 );
@@ -328,7 +329,6 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                             GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&pDeterminedFormat );
                         }
                     }
-                    delete pDest;
                 }
             }
         }
@@ -497,9 +497,8 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
     SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
     if( aStream.xStream.is() )
     {
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
+        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
         GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pStream );
-        delete pStream;
     }
 
     return aGraphic;
@@ -535,7 +534,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             aAny <<= bCompressed;
             xProps->setPropertyValue( "Compressed", aAny );
 
-            SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
+            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else
@@ -581,7 +580,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             }
             uno::Reference < embed::XTransactedObject > xStorage(
                                     aStream.xStorage, uno::UNO_QUERY);
-            delete pStream;
+            pStream.reset();
             aStream.xStream->getOutputStream()->closeOutput();
             if( xStorage.is() )
                 xStorage->commit();
