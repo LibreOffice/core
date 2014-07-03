@@ -2247,6 +2247,11 @@ XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
 {
 }
 
+XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle, sal_uInt16 nWhich_) :
+    SfxEnumItem(nWhich_, sal::static_int_cast< sal_uInt16 >(eFillStyle))
+{
+}
+
 XFillStyleItem::XFillStyleItem(SvStream& rIn) :
     SfxEnumItem(XATTR_FILLSTYLE, rIn)
 {
@@ -2509,6 +2514,22 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nIntensStart   == rGradient.nIntensStart   &&
              nIntensEnd     == rGradient.nIntensEnd     &&
              nStepCount     == rGradient.nStepCount );
+}
+
+Gradient XGradient::VclGradient() const
+{
+    Gradient aGradient;
+    aGradient.SetStyle((GradientStyle)eStyle);
+    aGradient.SetStartColor(aStartColor);
+    aGradient.SetEndColor(aEndColor);
+    aGradient.SetAngle(nAngle);
+    aGradient.SetBorder(nBorder);
+    aGradient.SetOfsX(nOfsX);
+    aGradient.SetOfsY(nOfsY);
+    aGradient.SetStartIntensity(nIntensStart);
+    aGradient.SetEndIntensity(nIntensEnd);
+    aGradient.SetSteps(nStepCount);
+    return aGradient;
 }
 
 // class XFillGradientItem

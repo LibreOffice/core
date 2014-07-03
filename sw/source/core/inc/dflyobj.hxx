@@ -70,8 +70,7 @@ protected:
 
 public:
     // for paints triggered form ExecutePrimitive
-    void wrap_DoPaintObject(
-            drawinglayer::geometry::ViewInformation2D const&) const;
+    void wrap_DoPaintObject() const;
 
     // for simple access to inner and outer bounds
     basegfx::B2DRange getOuterBound() const;

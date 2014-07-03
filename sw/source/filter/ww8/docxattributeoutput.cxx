@@ -6765,7 +6765,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         bool bImageBackground = false;
-        const SfxPoolItem* pItem = GetExport().HasItem(XATTR_FILLSTYLE);
+        const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
         if (pItem)
         {
             const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
@@ -6880,7 +6880,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
     if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         // <a:gradFill> should be before <a:ln>.
-        const SfxPoolItem* pItem = GetExport().HasItem(XATTR_FILLSTYLE);
+        const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
         if (pItem)
         {
             const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
@@ -6898,7 +6898,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             }
         }
 
-        pItem = GetExport().HasItem(XATTR_FILLGRADIENT);
+        pItem = GetExport().HasItem(RES_FILL_GRADIENT);
         if (pItem)
         {
             const XFillGradientItem* pFillGradient = static_cast<const XFillGradientItem*>(pItem);

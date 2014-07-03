@@ -27,9 +27,6 @@
 #include <swcache.hxx>
 #include <svl/grabbagitem.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
-//UUUU
-#include <unobrushitemhelper.hxx>
-#include <svx/xdef.hxx>
 
 using namespace com::sun::star;
 
@@ -385,61 +382,6 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     return true;
 }
 
-const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
-{
-    if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
-    {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
-
-        // fill the local static SvxBrushItem from the current ItemSet so that
-        // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
-        // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInParents);
-
-        return aSvxBrushItem;
-    }
-
-    return aSet.Get( nWhich, bInParents );
-}
-
-
-SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
-{
-    if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
-    {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        const FillAttributesPtr aFill = getFillAttributes();
-
-        // check if the new fill attributes are used
-        if(aFill.get() && aFill->isUsed())
-        {
-            // if yes, fill the local SvxBrushItem using the new fill attributes
-            // as good as possible to have an instance for the pointer to point
-            // to and return as state that it is set
-            static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
-
-            aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bSrchInParent);
-            if( ppItem )
-                *ppItem = &aSvxBrushItem;
-
-            return SFX_ITEM_SET;
-        }
-
-        // if not, reset pointer and return SFX_ITEM_DEFAULT to signal that
-        // the item is not set
-        if( ppItem )
-            *ppItem = NULL;
-
-        return SFX_ITEM_DEFAULT;
-    }
-
-    return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
-}
-
-
 bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 {
     if ( IsInCache() || IsInSwFntCache() )
@@ -448,50 +390,9 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
         CheckCaching( nWhich );
     }
 
-    bool bRet = false;
-
-    //UUUU
-    if(RES_BACKGROUND == rAttr.Which() && RES_FLYFRMFMT == Which())
-    {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        SfxItemSet aTempSet(*aSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
-        const SvxBrushItem& rSource = static_cast< const SvxBrushItem& >(rAttr);
-
-        // fill a local ItemSet with the attributes corresponding as good as possible
-        // to the new fill properties [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and set these
-        // as ItemSet
-        sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
-
-        if(IsModifyLocked())
-        {
-            if( ( bRet = aSet.Put( aTempSet ) ) )
-            {
-                aSet.SetModifyAtAttr( this );
-            }
-        }
-        else
-        {
-            SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
-
-            bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
-
-            if(bRet)
-            {
-                aSet.SetModifyAtAttr(this);
-
-                SwAttrSetChg aChgOld(aSet, aOld);
-                SwAttrSetChg aChgNew(aSet, aNew);
-
-                ModifyNotification(&aChgOld, &aChgNew);
-            }
-        }
-
-        return bRet;
-    }
-
     // if Modify is locked then no modifications will be sent;
     // but call Modify always for FrmFmts
+    bool bRet = false;
     const sal_uInt16 nFmtWhich = Which();
     if( IsModifyLocked() ||
         ( !GetDepends() &&
@@ -538,73 +439,16 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     }
     SetInSwFntCache( false );
 
-    bool bRet = false;
-
-    //UUUU Usel local copy to be able to apply needed changes, e.g. call
-    // CheckForUniqueItemForLineFillNameOrIndex which is needed for NameOrIndex stuff
-    SfxItemSet aTempSet(rSet);
-
-    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
-    // and evtl. correct that item to ensure unique names for that type. This call may
-    // modify/correct entries inside of the given SfxItemSet
-    if(GetDoc())
-    {
-        GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
-    }
-
-    //UUUU
-    if(RES_FLYFRMFMT == Which())
-    {
-        const SfxPoolItem* pSource = 0;
-
-        if(SFX_ITEM_SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
-        {
-            //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-            OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-
-            // copy all items to be set anyways to a local ItemSet with is also prepared for the new
-            // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
-            // corresponding as good as possible to the new fill properties and set the whole ItemSet
-            const SvxBrushItem& rSource(static_cast< const SvxBrushItem& >(*pSource));
-            sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
-
-            if(IsModifyLocked())
-            {
-                if( ( bRet = aSet.Put( aTempSet ) ) )
-                {
-                    aSet.SetModifyAtAttr( this );
-                }
-            }
-            else
-            {
-                SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
-
-                bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
-
-                if(bRet)
-                {
-                    aSet.SetModifyAtAttr(this);
-
-                    SwAttrSetChg aChgOld(aSet, aOld);
-                    SwAttrSetChg aChgNew(aSet, aNew);
-
-                    ModifyNotification(&aChgOld, &aChgNew);
-                }
-            }
-
-            return bRet;
-        }
-    }
-
     // if Modify is locked then no modifications will be sent;
     // but call Modify always for FrmFmts
+    bool bRet = false;
     const sal_uInt16 nFmtWhich = Which();
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( ( bRet = aSet.Put( aTempSet )) )
+        if( ( bRet = aSet.Put( rSet )) )
             aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
@@ -616,7 +460,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                   aNew( *aSet.GetPool(), aSet.GetRanges() );
-        bRet = aSet.Put_BC( aTempSet, &aOld, &aNew );
+        bRet = aSet.Put_BC( rSet, &aOld, &aNew );
         if( bRet )
         {
             // some special treatments for attributes
@@ -781,35 +625,6 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
         m_pGrabBagItem.reset(new SfxGrabBagItem);
 
     m_pGrabBagItem->PutValue(rVal);
-}
-
-//UUUU
-const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
-{
-    if(RES_FLYFRMFMT == Which())
-    {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
-
-        // fill the local static SvxBrushItem from the current ItemSet so that
-        // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
-        // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInP);
-
-        return aSvxBrushItem;
-    }
-
-    return aSet.GetBackground(bInP);
-}
-
-//UUUU
-FillAttributesPtr SwFmt::getFillAttributes() const
-{
-    // FALLBACKBREAKHERE return empty pointer
-    OSL_ENSURE(false, "getFillAttributes() call only valid for RES_FLYFRMFMT currently (!)");
-
-    return FillAttributesPtr();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

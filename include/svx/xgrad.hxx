@@ -75,6 +75,7 @@ public:
     sal_uInt16         GetStartIntens() const           { return nIntensStart; }
     sal_uInt16         GetEndIntens() const             { return nIntensEnd; }
     sal_uInt16         GetSteps() const                 { return nStepCount; }
+    Gradient VclGradient() const;
 };
 
 #endif
