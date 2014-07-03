@@ -52,8 +52,10 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const SAL_OVERRIDE;
 
-            /// apply contained clipPath to given geometry
-            void apply(drawinglayer::primitive2d::Primitive2DSequence& rTarget) const;
+            /// apply contained clipPath to given geometry #i124852# transform may be needed
+            void apply(
+                drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+                const basegfx::B2DHomMatrix* pTransform) const;
 
             /// x content, set if found in current context
             const SvgNumber& getX() const { return maX; }
