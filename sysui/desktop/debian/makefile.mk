@@ -81,7 +81,7 @@ $(DEBFILES) : makefile.mk control postinst postrm prerm
     -$(RM) $(@:d)$(@:f:s/_/ /:1)_*
     $(RM) -r $(MISC)$/$(@:b)
     dmake $(MISC)$/$(@:b)$/DEBIAN$/{control postinst postrm prerm} 
-    @chmod -R o-w $(MISC)$/$(@:b)
+    @chmod -R go-w $(MISC)$/$(@:b)
     @chmod a+rx $(MISC)$/$(@:b)$/DEBIAN $(MISC)/$(@:b)/DEBIAN/post* $(MISC)/$(@:b)/DEBIAN/pre*
     @chmod g-s $(MISC)/$(@:b)/DEBIAN
     @mkdir -p $(PKGDIR)
