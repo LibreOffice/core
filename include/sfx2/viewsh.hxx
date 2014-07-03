@@ -104,7 +104,7 @@ private: \
 public: \
     static SfxViewShell  *CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView); \
     static void           RegisterFactory( sal_uInt16 nPrio = USHRT_MAX ); \
-    static SfxViewFactory&Factory() { return *pFactory; } \
+    static SfxViewFactory*Factory() { return pFactory; } \
     static void           InitFactory()
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
@@ -119,7 +119,7 @@ public: \
     void Class::InitFactory()
 
 #define SFX_VIEW_REGISTRATION(DocClass) \
-            DocClass::Factory().RegisterViewFactory( Factory() )
+            DocClass::Factory().RegisterViewFactory( *Factory() )
 
 class SfxInPlaceClient;
 typedef ::std::vector< SfxInPlaceClient* > SfxInPlaceClientList;

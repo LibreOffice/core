@@ -207,7 +207,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
     if( pGroup && pGroup->GetCount() )
     {
         // query which view is registered. In WebWriter there is no normal view
-        sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
+        sal_uInt16 nViewId = 0 != SwView::Factory() ? 2 : 6;
         const OUString sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
         if( 6 == nViewId )
