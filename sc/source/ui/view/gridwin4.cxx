@@ -341,46 +341,44 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = pOutDev->LogicToPixel( rRect );
-
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
 
     SCTAB nTab = pViewData->GetTabNo();
 
-    Rectangle aMirroredPixel = aPixRect;
+    Rectangle aMirroredRect = rRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
-        long nWidth = GetSizePixel().Width();
-        aMirroredPixel.Left()  = nWidth - 1 - aPixRect.Right();
-        aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
+        long nWidth = PixelToLogic(GetSizePixel()).Width();
+        aMirroredRect.Left()  = nWidth - 1 - rRect.Right();
+        aMirroredRect.Right() = nWidth - 1 - rRect.Left();
     }
 
-    long nScrX = pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ) ).getX();/*ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );*/
-    while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
+    long nScrX = pDoc->GetColWidth( nX1, nTab );
+    while ( nScrX <= aMirroredRect.Left() && nX1 < MAXCOL )
     {
         ++nX1;
-        nScrX += pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ) ).getX();
+        nScrX += pDoc->GetColWidth( nX1, nTab );
     }
     SCCOL nX2 = nX1;
-    while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
+    while ( nScrX <= aMirroredRect.Right() && nX2 < MAXCOL )
     {
         ++nX2;
-        nScrX += pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX2, nTab ), 0 ) ).getX();
+        nScrX += pDoc->GetColWidth( nX2, nTab );
     }
 
     long nScrY = 0;
-    while ( nScrY < aPixRect.Top() && nY1 < MAXROW )
+    while ( nScrY < rRect.Top() && nY1 < MAXROW )
     {
         ++nY1;
-        nScrY += pOutDev->LogicToPixel( Point( 0, pDoc->GetRowHeight( nY1, nTab ) ) ).getY();
+        nScrY += pDoc->GetRowHeight( nY1, nTab );
     }
     SCROW nY2 = nY1;
-    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
+    while ( nScrY <= rRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
-        nScrY += pOutDev->LogicToPixel( Point( 0, pDoc->GetRowHeight( nY2, nTab ) ) ).getY();
+        nScrY += pDoc->GetRowHeight( nY2, nTab );
     }
 
     // We specifically need to set the visible range here -- by default it is
