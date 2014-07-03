@@ -39,7 +39,7 @@ private:
     SfxPrinter_Impl*        pImpl;
     bool                    bKnown;
 
-    SAL_DLLPRIVATE void operator =(SfxPrinter &); // not defined
+    SAL_DLLPRIVATE void operator =(SfxPrinter &) SAL_DELETED_FUNCTION;
 
     SAL_DLLPRIVATE void UpdateFonts_Impl();
 
@@ -48,9 +48,6 @@ public:
                             SfxPrinter( SfxItemSet *pTheOptions,
                                         const OUString &rPrinterName );
                             SfxPrinter( SfxItemSet *pTheOptions,
-                                        const JobSetup &rTheOrigJobSetup );
-                            SfxPrinter( SfxItemSet *pTheOptions,
-                                        const OUString &rPrinterName,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
                             virtual ~SfxPrinter();
