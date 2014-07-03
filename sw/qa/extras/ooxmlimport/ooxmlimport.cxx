@@ -2230,6 +2230,13 @@ DECLARE_OOXMLIMPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo80555, "fdo80555.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3318), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(245), xShape->getPosition().Y);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

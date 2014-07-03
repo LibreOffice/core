@@ -782,9 +782,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyPosition(xShapeProps);
 
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                        if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+                        if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape") ||
+                                xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
                         {
                             // Position of the groupshape should be set after children have been added.
+                            // fdo#80555: also set position for graphic shapes here
                             m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                         }
                         m_pImpl->applyRelativePosition(xShapeProps);
