@@ -3927,15 +3927,15 @@ $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR
 	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.rdf : $(SRCDIR)/extras/source/autotext/lang/%.rdf \
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.rdf : $(SRCDIR)/extras/source/autotext/lang/%.rdf
 	$(call gb_Output_announce,$*.rdf,$(true),CPY,1)
 	cp $< $@
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.svm : $(SRCDIR)/extras/source/autotext/lang/%.svm \
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.svm : $(SRCDIR)/extras/source/autotext/lang/%.svm
 	$(call gb_Output_announce,$*.svm,$(true),CPY,1)
 	cp $< $@
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.png : $(SRCDIR)/extras/source/autotext/lang/%.png \
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.png : $(SRCDIR)/extras/source/autotext/lang/%.png
 	$(call gb_Output_announce,$*.png,$(true),CPY,1)
 	cp $< $@
 
