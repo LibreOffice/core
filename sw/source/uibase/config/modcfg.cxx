@@ -95,7 +95,7 @@ bool SwModuleOptions::SetCapOption(bool bHTML, const InsCaptionOpt* pOpt)
     }
     else if (pOpt)
     {
-        if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
+        if(pOpt->GetObjType() == OLE_CAP)
         {
             bool bFound = false;
             for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
