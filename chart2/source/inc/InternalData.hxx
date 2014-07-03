@@ -66,15 +66,15 @@ public:
     /// @return the index of the newly appended row
     sal_Int32 appendRow();
 
-    sal_Int32 getRowCount() const { return m_nRowCount;}
-    sal_Int32 getColumnCount() const { return m_nColumnCount;}
+    sal_Int32 getRowCount() const;
+    sal_Int32 getColumnCount() const;
 
     typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
-    tVecVecAny getComplexRowLabels() const { return m_aRowLabels;}
+    tVecVecAny getComplexRowLabels() const;
     void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
-    tVecVecAny getComplexColumnLabels() const { return m_aColumnLabels;}
+    tVecVecAny getComplexColumnLabels() const;
 
     void dump() const;
 

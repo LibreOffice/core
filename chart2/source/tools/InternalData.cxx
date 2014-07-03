@@ -376,6 +376,16 @@ sal_Int32 InternalData::appendRow()
     return getRowCount() - 1;
 }
 
+sal_Int32 InternalData::getRowCount() const
+{
+    return m_nRowCount;
+}
+
+sal_Int32 InternalData::getColumnCount() const
+{
+    return m_nColumnCount;
+}
+
 void InternalData::insertRow( sal_Int32 nAfterIndex )
 {
     // note: -1 is allowed, as we insert after the given index
@@ -496,6 +506,11 @@ void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNew
         enlargeData( 0, nNewRowCount );
 }
 
+InternalData::tVecVecAny InternalData::getComplexRowLabels() const
+{
+    return m_aRowLabels;
+}
+
 void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& rNewColumnLabels )
 {
     m_aColumnLabels = rNewColumnLabels;
@@ -504,6 +519,11 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
         m_aColumnLabels.resize( m_nColumnCount );
     else
         enlargeData( nNewColumnCount, 0 );
+}
+
+InternalData::tVecVecAny InternalData::getComplexColumnLabels() const
+{
+    return m_aColumnLabels;
 }
 
 #ifdef DEBUG_INTERNAL_DATA
