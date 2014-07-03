@@ -303,6 +303,9 @@ PrinterGfx::DrawText (
                       const sal_Int32* pDeltaArray
                       )
 {
+    if (!nLen)
+        return;
+
     fontID nRestoreFont = mnFontID;
 
     // setup font[substitutes] and map the string into the symbol area in case of
