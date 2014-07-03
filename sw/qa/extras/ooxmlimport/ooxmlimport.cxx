@@ -2173,6 +2173,13 @@ DECLARE_OOXMLIMPORT_TEST(testFootnote, "footnote.docx")
     CPPUNIT_ASSERT(aFootnote.endsWith("bar"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo80555, "fdo80555.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3318), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(245), xShape->getPosition().Y);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
