@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_b1800848",
+        "filename": "include/sax/fshelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-03T13:36:21Z",
+      "side": 1,
+      "message": "sax/source/tools/fastserializer.hxx has documentation that describes these enumeration items, that should be updated for the new MERGE_MARKS_IGNORE.",
+      "revId": "e64a2d2c4f90bb6800ca8feb2f2944da04828887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
