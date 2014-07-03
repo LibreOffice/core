@@ -1318,13 +1318,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         pRealSlot->GetSlotId(), pRealSlot->GetWhich(rPool), pRealSlot, pCache );
     rFound.push_back( pFound );
 
-    sal_uInt16 nSlot = pRealSlot->GetSlotId();
-    if ( !(nSlot >= SID_VERB_START && nSlot <= SID_VERB_END) )
-    {
-        pInterface = pInterface->GetRealInterfaceForSlot( pRealSlot );
-        DBG_ASSERT (pInterface,"Slot in the given shell is not found");
-    }
-
     // Search through the bindings for slots served by the same function. This ,    // will only affect slots which are present in the found interface.
 
     // The position of the  Statecaches in StateCache-Array
