@@ -1059,7 +1059,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     oslSecurity pSecurity = osl_getCurrentSecurity ();
-    const oslProcessError eErr =
+    oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.pData,
                                             args,
                                             nArgs,
@@ -1115,6 +1115,39 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
         osl_closeFile(pOut);
     if( pErr )
         osl_closeFile(pErr);
+    eErr = osl_joinProcess(aProcess);
+    if (eErr == osl_Process_E_None)
+    {
+        oslProcessInfo info;
+        info.Size = sizeof info;
+        eErr = osl_getProcessInfo(aProcess, osl_Process_EXITCODE, &info);
+        if (eErr == osl_Process_E_None)
+        {
+            if (info.Code != 0)
+            {
+                SAL_WARN(
+                    "sdext.pdfimport",
+                    "getProcessInfo of " << converterURL
+                        << " failed with exit code " << info.Code);
+                bRet = false;
+            }
+        }
+        else
+        {
+            SAL_WARN(
+                "sdext.pdfimport",
+                "getProcessInfo of " << converterURL << " failed with "
+                    << +eErr);
+            bRet = false;
+        }
+    }
+    else
+    {
+        SAL_WARN(
+            "sdext.pdfimport",
+            "joinProcess of " << converterURL << " failed with " << +eErr);
+        bRet = false;
+    }
     osl_freeProcessHandle(aProcess);
     return bRet;
 }
