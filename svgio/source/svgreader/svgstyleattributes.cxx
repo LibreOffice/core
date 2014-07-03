@@ -1130,7 +1130,8 @@ namespace svgio
 
                     if(mpClip)
                     {
-                        mpClip->apply(aSource);
+                        // #i124852# transform may be needed when userSpaceOnUse
+                        mpClip->apply(aSource, pTransform);
                     }
                 }
 
@@ -1143,7 +1144,8 @@ namespace svgio
 
                         if(mpMask)
                         {
-                            mpMask->apply(aSource);
+                            // #i124852# transform may be needed when userSpaceOnUse
+                            mpMask->apply(aSource, pTransform);
                         }
                     }
 

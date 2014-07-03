@@ -132,7 +132,9 @@ namespace svgio
             }
         }
 
-        void SvgClipPathNode::apply(drawinglayer::primitive2d::Primitive2DSequence& rContent) const
+        void SvgClipPathNode::apply(
+            drawinglayer::primitive2d::Primitive2DSequence& rContent,
+            const basegfx::B2DHomMatrix* pTransform) const
         {
             if(rContent.hasElements() && Display_none != getDisplay())
             {
@@ -178,6 +180,14 @@ namespace svgio
                             basegfx::tools::createScaleTranslateB2DHomMatrix(
                                 aContentRange.getRange(),
                                 aContentRange.getMinimum()));
+                    }
+                    else // userSpaceOnUse
+                    {
+                        // #i124852#
+                        if(pTransform)
+                        {
+                            aClipPolyPolygon.transform(*pTransform);
+                        }
                     }
 
                     // #124313# try to avoid creating an embedding to a MaskPrimitive2D if

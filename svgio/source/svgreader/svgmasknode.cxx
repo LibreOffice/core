@@ -197,7 +197,9 @@ namespace svgio
             }
         }
 
-        void SvgMaskNode::apply(drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
+        void SvgMaskNode::apply(
+            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            const basegfx::B2DHomMatrix* pTransform) const
         {
             if(rTarget.hasElements() && Display_none != getDisplay())
             {
@@ -258,6 +260,19 @@ namespace svgio
                                     aMaskTarget));
 
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                        }
+                        else // userSpaceOnUse
+                        {
+                            // #i124852#
+                            if(pTransform)
+                            {
+                                const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        *pTransform,
+                                        aMaskTarget));
+
+                                aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                            }
                         }
 
                         // embed content to a ModifiedColorPrimitive2D since the definitions
