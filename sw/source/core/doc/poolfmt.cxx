@@ -62,7 +62,6 @@
 #include <poolfmt.hrc>
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
-#include <svx/xdef.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -1314,9 +1313,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
                 aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
                 aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );
             }
-
-            //UUUU for styles of FlyFrames do not set the FillStyle to make it a derived attribute
-            aSet.ClearItem(XATTR_FILLSTYLE);
         }
         break;
     case RES_POOLFRM_GRAPHIC:

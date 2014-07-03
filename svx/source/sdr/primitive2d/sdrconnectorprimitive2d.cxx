@@ -53,6 +53,7 @@ namespace drawinglayer
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolygonLinePrimitive(
                         getUnitPolygon(),
+                        basegfx::B2DHomMatrix(),
                         getSdrLSTAttribute().getLine(),
                         getSdrLSTAttribute().getLineStartEnd()));
             }

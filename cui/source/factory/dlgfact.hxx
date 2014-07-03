@@ -660,7 +660,7 @@ public:
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
-                                                            bool bShadow ) SAL_OVERRIDE;
+                                                            const SdrView* pSdrView = NULL ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj = NULL,

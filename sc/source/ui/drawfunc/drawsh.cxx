@@ -421,7 +421,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
         pViewData->GetDialogParent(), &aNewAttr,
-        pViewData->GetDocument()->GetDrawLayer(), true));
+        pViewData->GetDocument()->GetDrawLayer(), pView));
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
