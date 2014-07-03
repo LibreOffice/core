@@ -31,11 +31,9 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
 #include <svl/stritem.hxx>
-#include <unotools/pathoptions.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
 #include <svl/isethint.hxx>
@@ -1019,7 +1017,7 @@ void SvxFontNameBox_Impl::Select()
 #endif
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
-                                          sal_uInt16&                rnCurrentPalette_,
+                                          PaletteManager&            rPaletteManager,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
@@ -1029,11 +1027,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     aColorSet   ( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
     aButtonLeft ( this ),
     aButtonRight( this ),
+    aPaletteName( this ),
     maCommand( rCommand ),
     nNavButtonWidth ( 20 ),
     nNavButtonHeight( 20 ),
-    rnCurrentPalette( rnCurrentPalette_ ),
-    nNumOfPalettes( 1 )
+    mrPaletteManager( rPaletteManager )
 
 {
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
@@ -1067,9 +1065,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
     }
 
-    if( SfxObjectShell::Current()->GetDocColors().size() > 0 )
-        nNumOfPalettes++;
-
     aButtonLeft.SetText("<");
     aButtonLeft.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepLeftClickHdl ) );
     aButtonLeft.Show();
@@ -1084,49 +1079,20 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetText( rWndTitle );
     aColorSet.Show();
 
+    aPaletteName.Show();
+
     AddStatusListener( OUString( ".uno:ColorTableState" ));
     AddStatusListener( maCommand );
 
-    ReloadColorSet();
+    Update();
 }
 
-void SvxColorWindow_Impl::ReloadColorSet()
+
+void SvxColorWindow_Impl::Update()
 {
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    long nColorCount = 0;
+    mrPaletteManager.ReloadColorSet(aColorSet);
 
-    if( rnCurrentPalette == 0 )
-    {
-        const SfxPoolItem* pItem = NULL;
-        XColorListRef pColorList;
-
-        if ( pDocSh )
-        {
-            if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-                pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
-        }
-
-        if ( !pColorList.is() )
-            pColorList = XColorList::CreateStdColorList();
-
-
-        if ( pColorList.is() )
-        {
-            nColorCount = pColorList->Count();
-            aColorSet.Clear();
-            aColorSet.addEntriesForXColorList(*pColorList);
-        }
-    }
-    else if( rnCurrentPalette == nNumOfPalettes - 1 )
-    {
-        // Add doc colors to palette
-        std::vector<Color> aColors = pDocSh->GetDocColors();
-        nColorCount = aColors.size();
-        aColorSet.Clear();
-        aColorSet.addEntriesForColorVector(aColors);
-    }
-
-    const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
+    const Size aNewSize(aColorSet.layoutAllVisible(mrPaletteManager.GetColorCount()));
     aColorSet.SetOutputSizePixel(aNewSize);
     static sal_Int32 nAdd = 4;
 
@@ -1138,6 +1104,10 @@ void SvxColorWindow_Impl::ReloadColorSet()
 
     aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
     aButtonRight.SetPosPixel(Point(aNewSize.Width() + nAdd - nNavButtonWidth, aNewSize.Height() + nAdd + 1));
+
+    aPaletteName.SetSizePixel(Size(150, nNavButtonHeight));
+    aPaletteName.SetPosPixel(Point(nNavButtonWidth, aNewSize.Height() + nAdd + 1));
+    aPaletteName.SetText(mrPaletteManager.GetPaletteName());
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1151,7 +1121,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, rnCurrentPalette, theSlotId, GetFrame(), GetText(), GetParent() );
+    return new SvxColorWindow_Impl( maCommand, mrPaletteManager, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
@@ -1193,15 +1163,15 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepLeftClickHdl)
 {
-    rnCurrentPalette = (rnCurrentPalette - 1) % nNumOfPalettes;
-    ReloadColorSet();
+    mrPaletteManager.PrevPalette();
+    Update();
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepRightClickHdl)
 {
-    rnCurrentPalette = (rnCurrentPalette + 1) % nNumOfPalettes;
-    ReloadColorSet();
+    mrPaletteManager.NextPalette();
+    Update();
     return 0;
 }
 
@@ -2238,8 +2208,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nId,
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_AUTO ),
-    nCurrentPalette( 0 )
+    mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 
@@ -2293,7 +2262,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
-                            nCurrentPalette,
+                            mrPaletteManager,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
@@ -2401,8 +2370,7 @@ SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_BLACK ),
-    nCurrentPalette( 0 )
+    mLastColor( COL_BLACK )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     addStatusListener( OUString( ".uno:XLineColor" ) );
@@ -2423,7 +2391,7 @@ SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
-                            nCurrentPalette,
+                            mrPaletteManager,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXSTR_LINECOLOR ),

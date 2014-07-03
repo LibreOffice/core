@@ -19,20 +19,11 @@
 #ifndef INCLUDED_SVX_SVXCOLORVALUESET_HXX
 #define INCLUDED_SVX_SVXCOLORVALUESET_HXX
 
+#include <svx/Palette.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/svxdllapi.h>
 
 class XColorList;
-
-struct Palette
-{
-    typedef std::pair<Color, OString> NamedColor;
-    typedef std::vector< NamedColor > ColorList;
-    Palette(){};
-    Palette(const OUString &rFname);
-    OString maName;
-    ColorList maColors;
-};
 
 class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
@@ -50,7 +41,7 @@ public:
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
     void loadColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex = 1);
-    void loadPalette(const Palette& rPalette);
+    void loadPalette(Palette& rPalette);
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };

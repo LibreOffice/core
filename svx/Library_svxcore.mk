@@ -343,6 +343,8 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/table/viewcontactoftableobj \
     svx/source/tbxctrls/extrusioncontrols \
     svx/source/tbxctrls/fontworkgallery \
+    svx/source/tbxctrls/Palette \
+    svx/source/tbxctrls/PaletteManager \
     svx/source/tbxctrls/tbcontrl \
     svx/source/tbxctrls/tbxcolorupdate \
     svx/source/tbxctrls/SvxColorValueSet \

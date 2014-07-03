@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/PaletteManager.hxx>
 
 
 // class SvxColorWindow_Impl --------------------------------------------------
@@ -43,15 +44,15 @@ private:
     SvxColorValueSet aColorSet;
     PushButton aButtonLeft;
     PushButton aButtonRight;
+    FixedText  aPaletteName;
     OUString  maCommand;
     Link maSelectedLink;
 
     const sal_uInt16 nNavButtonWidth;
     const sal_uInt16 nNavButtonHeight;
-    sal_uInt16& rnCurrentPalette;
-    sal_uInt16 nNumOfPalettes;
+    PaletteManager& mrPaletteManager;
 
-    void ReloadColorSet();
+    void Update();
 
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( StepLeftClickHdl, void * );
@@ -63,7 +64,7 @@ protected:
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,
-                         sal_uInt16& rnCurrentPalette_,
+                         PaletteManager& rPaletteManager,
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
