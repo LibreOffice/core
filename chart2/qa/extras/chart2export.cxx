@@ -37,7 +37,7 @@ public:
     void testStockChart();
     void testBarChart();
     void testCrosses();
-    void testScatterChart();
+    void testScatterChartTextXValues();
     void testChartDataTable();
     void testChartExternalData();
     void testEmbeddingsGrabBag();
@@ -71,7 +71,7 @@ public:
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
-    CPPUNIT_TEST(testScatterChart);
+    CPPUNIT_TEST(testScatterChartTextXValues);
     CPPUNIT_TEST(testChartDataTable);
     CPPUNIT_TEST(testChartExternalData);
     CPPUNIT_TEST(testEmbeddingsGrabBag);
@@ -518,9 +518,9 @@ void Chart2ExportTest::testCrosses()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
 }
 
-void Chart2ExportTest::testScatterChart()
+void Chart2ExportTest::testScatterChartTextXValues()
 {
-    load("/chart2/qa/extras/data/docx/", "fdo77216.docx");
+    load("/chart2/qa/extras/data/docx/", "scatter-chart-text-x-values.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     if (!pXmlDoc)
        return;
