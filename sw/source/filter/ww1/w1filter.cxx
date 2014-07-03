@@ -588,9 +588,8 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             if (!Ww1PlainText::IsChar(c))
                 sResult += OUString(c); //~ mdt: handle special chars
             ++(*this);
-            pData = GetData();
         }
-        OSL_ENSURE(pData->chGet()==21, "Ww1PlainText");
+        OSL_ENSURE(GetData()->chGet()==21, "Ww1PlainText");
         bool bKnown = true;
         OSL_ENSURE(pField==0, "Ww1PlainText");
         if (pField != 0)
