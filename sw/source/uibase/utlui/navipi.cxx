@@ -1163,8 +1163,8 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
                 rData.HasFormat( nFmt = SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ))
     {
         INetBookmark aBkmk( aEmptyOUStr, aEmptyOUStr );
-        rData.GetINetBookmark( nFmt, aBkmk );
-        sFileName = aBkmk.GetURL();
+        if (rData.GetINetBookmark(nFmt, aBkmk))
+            sFileName = aBkmk.GetURL();
     }
     if( !sFileName.isEmpty() )
     {
