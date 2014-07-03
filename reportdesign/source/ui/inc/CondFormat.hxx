@@ -74,13 +74,12 @@ namespace rptui
         typedef ::std::vector< ConditionPtr >       Conditions;
 
         OModuleClient   m_aModuleClient;
-        Window          m_aConditionPlayground;
+        Window*         m_pConditionPlayground;
         Conditions      m_aConditions;
-        FixedLine       m_aSeparator;
-        OKButton        m_aPB_OK;
-        CancelButton    m_aPB_CANCEL;
-        HelpButton      m_aPB_Help;
-        ScrollBar       m_aCondScroll;
+        OKButton*       m_pPB_OK;
+        CancelButton*   m_pPB_CANCEL;
+        HelpButton*     m_pPB_Help;
+        ScrollBar*      m_pCondScroll;
 
         ::rptui::OReportController&                         m_rController;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >

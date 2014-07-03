@@ -37,6 +37,8 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/dbreport,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/ui/backgrounddialog \
 	reportdesign/uiconfig/dbreport/ui/chardialog \
+	reportdesign/uiconfig/dbreport/ui/condformatdialog \
+	reportdesign/uiconfig/dbreport/ui/conditionwin \
 	reportdesign/uiconfig/dbreport/ui/datetimedialog \
 	reportdesign/uiconfig/dbreport/ui/pagedialog \
 	reportdesign/uiconfig/dbreport/ui/pagenumberdialog \

@@ -85,26 +85,24 @@ namespace rptui
 
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
-        :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
-        ,m_aConditionPlayground( this, ModuleRes( WND_COND_PLAYGROUND ) )
-        ,m_aSeparator(this,     ModuleRes(FL_SEPARATOR1))
-        ,m_aPB_OK(this,         ModuleRes(PB_OK))
-        ,m_aPB_CANCEL(this,     ModuleRes(PB_CANCEL))
-        ,m_aPB_Help(this,       ModuleRes(PB_HELP))
-        ,m_aCondScroll( this,   ModuleRes( SB_ALL_CONDITIONS ) )
+        :ModalDialog( _pParent, "CondFormat", "modules/dbreport/ui/condformatdialog.ui" )
         ,m_rController( _rController )
         ,m_xFormatConditions( _rxFormatConditions )
         ,m_bDeletingCondition( false )
     {
+        get(m_pConditionPlayground, "condPlaygroundDrawingarea");
+        get(m_pPB_OK, "ok");
+        get(m_pPB_CANCEL, "cancel");
+        get(m_pPB_Help, "help");
+        get(m_pCondScroll, "condScrollbar");
+
         OSL_ENSURE( m_xFormatConditions.is(), "ConditionalFormattingDialog::ConditionalFormattingDialog: ReportControlModel is NULL -> Prepare for GPF!" );
 
         m_xCopy.set( m_xFormatConditions->createClone(), UNO_QUERY_THROW );
 
-        m_aCondScroll.SetScrollHdl( LINK( this, ConditionalFormattingDialog, OnScroll ) );
+        m_pCondScroll->SetScrollHdl( LINK( this, ConditionalFormattingDialog, OnScroll ) );
 
         impl_initializeConditions();
-
-        FreeResource();
     }
 
 
@@ -164,7 +162,7 @@ namespace rptui
             ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
 
-            ConditionPtr pCon( new Condition( &m_aConditionPlayground, *this, m_rController ) );
+            ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
             pCon->setCondition( xCond );
             m_aConditions.insert( m_aConditions.begin() + _nNewCondIndex, pCon );
 
@@ -316,7 +314,7 @@ namespace rptui
         long nConditionHeight = LogicToPixel( Size( 0, CONDITION_HEIGHT ), MAP_APPFONT ).Height();
         size_t nVisibleConditions = ::std::min( impl_getConditionCount(), MAX_CONDITIONS );
         Size aPlaygroundSize( nConditionWidth, nVisibleConditions * nConditionHeight );
-        m_aConditionPlayground.SetSizePixel( aPlaygroundSize );
+        m_pConditionPlayground->SetSizePixel( aPlaygroundSize );
         _out_rBelowLastVisible = Point( 0, aPlaygroundSize.Height() );
 
         // position the single conditions
@@ -339,17 +337,15 @@ namespace rptui
         impl_layoutConditions( aPos );
 
         // scrollbar size and visibility
-        m_aCondScroll.setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
+        m_pCondScroll->setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
         if ( !impl_needScrollBar() )
             // normalize the position, so it can, in all situations, be used as top index
-            m_aCondScroll.SetThumbPos( 0 );
+            m_pCondScroll->SetThumbPos( 0 );
 
-        // the separator and the buttons below it
-        aPos += LogicToPixel( Point( 0 , RELATED_CONTROLS ), MAP_APPFONT );
-        m_aSeparator.setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
+        //the buttons below it
 
         aPos += LogicToPixel( Point( 0 , UNRELATED_CONTROLS ), MAP_APPFONT );
-        Window* pWindows[] = { &m_aPB_OK, &m_aPB_CANCEL, &m_aPB_Help };
+        Window* pWindows[] = { m_pPB_OK, m_pPB_CANCEL, m_pPB_Help };
         for ( size_t i= 0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i )
         {
             pWindows[i]->setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
@@ -366,7 +362,7 @@ namespace rptui
             sal_Int32 nCount = m_xCopy->getCount();
             for ( sal_Int32 i = 0; i < nCount ; ++i )
             {
-                ConditionPtr pCon( new Condition( &m_aConditionPlayground, *this, m_rController ) );
+                ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
                 Reference< XFormatCondition > xCond( m_xCopy->getByIndex(i), UNO_QUERY );
                 pCon->setCondition( xCond );
                 pCon->updateToolbar( xCond.get() );
@@ -527,13 +523,13 @@ namespace rptui
             const Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             while   (   ( pPlaygroundCandidate )
                     &&  ( pPlaygroundCandidate != this )
-                    &&  ( pPlaygroundCandidate != &m_aConditionPlayground )
+                    &&  ( pPlaygroundCandidate != m_pConditionPlayground )
                     )
             {
                 pConditionCandidate = pConditionCandidate->GetParent();
                 pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             }
-            if ( pPlaygroundCandidate == &m_aConditionPlayground )
+            if ( pPlaygroundCandidate == m_pConditionPlayground )
             {
                 impl_ensureConditionVisible( dynamic_cast< const Condition& >( *pConditionCandidate ).getConditionIndex() );
             }
@@ -547,7 +543,7 @@ namespace rptui
 
     size_t ConditionalFormattingDialog::impl_getFirstVisibleConditionIndex() const
     {
-        return (size_t)m_aCondScroll.GetThumbPos();
+        return (size_t)m_pCondScroll->GetThumbPos();
     }
 
 
@@ -576,9 +572,9 @@ namespace rptui
     {
         long nMax = ( impl_getConditionCount() > MAX_CONDITIONS ) ? impl_getConditionCount() - MAX_CONDITIONS + 1 : 0;
 
-        m_aCondScroll.SetRangeMin( 0 );
-        m_aCondScroll.SetRangeMax( nMax );
-        m_aCondScroll.SetVisibleSize( 1 );
+        m_pCondScroll->SetRangeMin( 0 );
+        m_pCondScroll->SetRangeMax( nMax );
+        m_pCondScroll->SetVisibleSize( 1 );
     }
 
 
@@ -586,8 +582,8 @@ namespace rptui
     {
         OSL_PRECOND( _nTopCondIndex + MAX_CONDITIONS <= impl_getConditionCount(),
             "ConditionalFormattingDialog::impl_scrollTo: illegal index!" );
-        m_aCondScroll.SetThumbPos( _nTopCondIndex );
-        OnScroll( &m_aCondScroll );
+        m_pCondScroll->SetThumbPos( _nTopCondIndex );
+        OnScroll( m_pCondScroll );
     }
 
 
