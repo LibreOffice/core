@@ -421,11 +421,9 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
 }
 
 //  TabWindowService
-
 IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 {
-
-    if ( !pEvent && !pEvent->ISA(VclWindowEvent))
+    if (!pEvent || !pEvent->ISA(VclWindowEvent))
         return 0;
 
     sal_uLong           nEventId = pEvent->GetId();
