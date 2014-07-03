@@ -494,7 +494,7 @@ static const sal_Int32 spnFilledPropIds[] =
     PROP_FillStyle,
     PROP_Color,
     PROP_Transparency,
-    PROP_INVALID,
+    PROP_FillTransparenceGradientName,
     PROP_GradientName,
     PROP_FillBitmapName,
     PROP_FillBitmapMode,
