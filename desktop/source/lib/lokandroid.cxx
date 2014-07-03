@@ -19,8 +19,6 @@
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
-// #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
-
 /* LibreOfficeKit */
 
 jfieldID getHandleField(JNIEnv* pEnv, jobject aObject)
@@ -70,14 +68,14 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_document
 }
 
 /* Document */
-extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPartNative
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
     (JNIEnv* pEnv, jobject aObject, jint aPart)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
     pDocument->pClass->setPart(pDocument, aPart);
 }
 
-extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getNumberOfPartsNative
+extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getNumberOfParts
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
@@ -99,13 +97,12 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
     unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
-//    jlong capacity = pEnv->GetDirectBufferCapacity(aByteBuffer);
     int nStride = 0;
     pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, &nStride, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     (void) nStride;
 }
 
-extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeightNative
+extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeight
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
@@ -115,7 +112,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     return nHeight;
 }
 
-extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentWidthNative
+extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentWidth
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);

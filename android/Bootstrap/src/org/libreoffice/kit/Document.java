@@ -15,43 +15,23 @@ public class Document {
 
     private final long handle;
 
-    private native void setPartNative(long handle, int part);
-    private native int getNumberOfPartsNative(long handle);
-    private native int getDocumentTypeNative(long handle);
-    private native void paintTileNative(long handle, ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
-    private native long getDocumentHeightNative(long handle);
-    private native long getDocumentWidthNative(long handle);
+    public native void setPart(int part);
+    public native int getNumberOfParts();
+    public native long getDocumentHeight();
+    public native long getDocumentWidth();
+
+    private native int getDocumentTypeNative();
+    private native void paintTileNative(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
 
     public Document(long handle) {
         this.handle = handle;
     }
 
-    public boolean saveAs(String url) {
-        return false;
-    }
-
     public int getDocumentType() {
-        return getDocumentTypeNative(handle);
-    }
-
-    public int getNumberOfParts() {
-        return getNumberOfPartsNative(handle);
-    }
-
-    public void setPart(int part) {
-        setPartNative(handle, part);
+        return getDocumentTypeNative();
     }
 
     public void paintTile(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight) {
-        paintTileNative(handle, buffer, canvasWidth, canvasHeight, tilePositionX, tilePositionY, tileWidth, tileHeight);
+        paintTileNative(buffer, canvasWidth, canvasHeight, tilePositionX, tilePositionY, tileWidth, tileHeight);
     }
-
-    public long getDocumentWidth() {
-        return getDocumentWidthNative(handle);
-    }
-
-    public long getDocumentHeight() {
-        return getDocumentHeightNative(handle);
-    }
-
 }

@@ -19,15 +19,15 @@ public class Office {
         this.handle = handle;
     }
 
-    public native String getErrorNative();
+    public native String getError();
 
     private native long documentLoadNative(String url);
 
     public Document documentLoad(String url) {
-        long handle = documentLoadNative(url);
+        long documentHandle = documentLoadNative(url);
         Document document = null;
-        if (handle > 0) {
-            document = new Document(handle);
+        if (documentHandle > 0) {
+            document = new Document(documentHandle);
         }
         return document;
     }
