@@ -341,8 +341,16 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     bIsInPaint = true;
 
-    SCCOL nX1 = pViewData->GetPosX(eHWhich);
-    SCROW nY1 = pViewData->GetPosY(eVWhich);
+    // If we're doing tiled rendering we'll have a different output device here,
+    // and we could really be at a completely random position, hence we
+    // iterate from 0.
+    SCCOL nX1 = 0;
+    SCROW nY1 = 0;
+    if ( pOutDev == this )
+    {
+        nX1 = pViewData->GetPosX(eHWhich);
+        nY1 = pViewData->GetPosY(eVWhich);
+    }
 
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -381,6 +389,14 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         nScrY += pDoc->GetRowHeight( nY2, nTab );
     }
 
+    // Bit hacky -- but Draw starts drawing with nX1/nY1 being at
+    // the output devices origin, so we make sure we start drawing
+    // with cell A1 at the origin etc.
+    if ( pOutDev != this )
+    {
+        nX1 = 0;
+        nY1 = 0;
+    }
     // We specifically need to set the visible range here -- by default it is
     // set in UpdateVisibleRange which however uses the viewdata, which is
     // completely irrelevant for tiled rendering.
