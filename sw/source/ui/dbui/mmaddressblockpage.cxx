@@ -33,7 +33,6 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
-#include <mmaddressblockpage.hrc>
 #include <globals.hrc>
 #include <dbui.hrc>
 #include <helpid.h>

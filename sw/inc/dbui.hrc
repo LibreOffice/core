@@ -66,6 +66,12 @@
 #define ST_NAME                 (RC_DBUI_BEGIN + 35)
 #define ST_TABLE                (RC_DBUI_BEGIN + 36)
 #define ST_QUERY                (RC_DBUI_BEGIN + 37)
+#define ST_SALUTATIONPREVIEW    (RC_DBUI_BEGIN + 38)
+#define ST_SALUTATIONMATCHING   (RC_DBUI_BEGIN + 39)
+#define ST_SALUTATIONELEMENT    (RC_DBUI_BEGIN + 40)
+#define ST_ADDRESSELEMENT       (RC_DBUI_BEGIN + 41)
+#define ST_MATCHESTO            (RC_DBUI_BEGIN + 42)
+#define ST_PREVIEW              (RC_DBUI_BEGIN + 43)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0
