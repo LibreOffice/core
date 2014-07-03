@@ -19,9 +19,6 @@ $(eval $(call gb_Module_add_targets,basebmp,\
 ))
 endif
 
-$(eval $(call gb_Module_add_targets,basebmp,\
-))
-
 $(eval $(call gb_Module_add_check_targets,basebmp,\
     CppunitTest_basebmp \
 ))
