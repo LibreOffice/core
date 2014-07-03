@@ -56,39 +56,19 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Edit(_pParent,_rResId)
-,m_pParent(_pParent)
-,m_aFormula(this)
+ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *pFormula)
+    : m_pParent(pParent)
+    , m_pSubEdit(pSubEdit)
+    , m_pFormula(pFormula)
 {
-    m_pSubEdit = new Edit(this,0);
-    SetSubEdit(m_pSubEdit);
     m_pSubEdit->EnableRTL( false );
     m_pSubEdit->SetPosPixel( Point() );
 
-    m_aFormula.SetText(OUString("..."));
-    m_aFormula.SetClickHdl( LINK( this, ConditionField, OnFormula ) );
-    m_aFormula.Show();
-    m_pSubEdit->Show();
-    Resize();
+    m_pFormula->SetText(OUString("..."));
+    m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
 }
 
-ConditionField::~ConditionField()
-{
-    SetSubEdit(NULL);
-    delete m_pSubEdit;
-}
-
-void ConditionField::Resize()
-{
-    Edit::Resize();
-    const Size aSize = GetOutputSizePixel();
-    const Size aButtonSize( LogicToPixel( Size( 12, 0 ), MAP_APPFONT ).Width(),aSize.Height());
-    const Point aButtonPos(aSize.Width() - aButtonSize.Width(), 0);
-    m_aFormula.SetPosSizePixel(aButtonPos,aButtonSize);
-    m_pSubEdit->SetPosSizePixel(Point(0,0),Size(aButtonPos.X() ,aSize.Height()));
-}
-
-IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
+IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton )
 {
     OUString sFormula(m_pSubEdit->GetText());
     const sal_Int32 nLen = sFormula.getLength();
@@ -97,7 +77,7 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
         ReportFormula aFormula( sFormula );
         sFormula = aFormula.getCompleteFormula();
     }
-    uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(this);
+    uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(_pClickedButton);
     uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
     if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
     {
@@ -108,7 +88,6 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
 }
 
 // class SvxColorWindow_Impl --------------------------------------------------
-
 #ifndef WB_NO_DIRECTSELECT
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
@@ -227,21 +206,9 @@ IMPL_LINK_NOARG(OColorPopup, SelectHdl)
 
 
 Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
-    :Control(_pParent, ModuleRes(WIN_CONDITION))
+    :VclHBox(_pParent)
     ,m_rController( _rController )
     ,m_rAction( _rAction )
-    ,m_aHeader(this,            ModuleRes(FL_CONDITION_HEADER))
-    ,m_aConditionType(this,       ModuleRes(LB_COND_TYPE))
-    ,m_aOperationList( this,    ModuleRes(LB_OP))
-    ,m_aCondLHS(this,           ModuleRes(ED_CONDITION_LHS))
-    ,m_aOperandGlue(this,            ModuleRes(FT_AND))
-    ,m_aCondRHS(this,           ModuleRes(ED_CONDITION_RHS))
-    ,m_aActions(this,           ModuleRes(TB_FORMAT))
-    ,m_aPreview(this,           ModuleRes(CRTL_FORMAT_PREVIEW))
-    ,m_aMoveUp( this,           ModuleRes( BTN_MOVE_UP ) )
-    ,m_aMoveDown( this,         ModuleRes( BTN_MOVE_DOWN ) )
-    ,m_aAddCondition( this,     ModuleRes( BTN_ADD_CONDITION ) )
-    ,m_aRemoveCondition( this,  ModuleRes( BTN_REMOVE_CONDITION ) )
     ,m_pColorFloat(NULL)
     ,m_pBtnUpdaterFontColor(NULL)
     ,m_pBtnUpdaterBackgroundColor(NULL)
@@ -249,63 +216,86 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
-    FreeResource();
-    m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
-    m_aCondLHS.GrabFocus();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/dbreport/ui/conditionwin.ui");
 
-    m_aConditionType.SetSelectHdl( LINK( this, Condition, OnTypeSelected ) );
+    get(m_pHeader, "headerLabel");
+    get(m_pConditionType, "typeCombobox");
+    get(m_pOperationList, "opCombobox");
+    m_pCondLHS = new ConditionField(this, get<Edit>("lhsEntry"), get<PushButton>("lhsButton"));
+    get(m_pOperandGlue, "andLabel");
+    m_pCondRHS = new ConditionField(this, get<Edit>("rhsEntry"), get<PushButton>("rhsButton"));
+    get(m_pActions, "formatToolbox");
+    get(m_pPreview, "previewDrawingarea");
+    get(m_pMoveUp, "upButton");
+    get(m_pMoveDown, "downButton");
+    get(m_pAddCondition, "addButton");
+    get(m_pRemoveCondition, "removeButton");
 
-    m_aOperationList.SetDropDownLineCount( 10 );
-    m_aOperationList.SetSelectHdl( LINK( this, Condition, OnOperationSelected ) );
+    m_pActions->SetStyle(m_pActions->GetStyle()|WB_LINESPACING);
+    m_pCondLHS->GrabFocus();
 
-    m_aActions.SetSelectHdl(LINK(this, Condition, OnFormatAction));
-    m_aActions.SetDropdownClickHdl( LINK( this, Condition, DropdownClick ) );
-    setToolBox(&m_aActions);
+    m_pConditionType->SetSelectHdl( LINK( this, Condition, OnTypeSelected ) );
 
-    m_aMoveUp.SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_aMoveDown.SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_aAddCondition.SetClickHdl( LINK( this, Condition, OnConditionAction ) );
-    m_aRemoveCondition.SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+    m_pOperationList->SetDropDownLineCount( 10 );
+    m_pOperationList->SetSelectHdl( LINK( this, Condition, OnOperationSelected ) );
 
-    m_aMoveUp.SetStyle( m_aMoveUp.GetStyle() | WB_NOPOINTERFOCUS );
-    m_aMoveDown.SetStyle( m_aMoveDown.GetStyle() | WB_NOPOINTERFOCUS );
-    m_aAddCondition.SetStyle( m_aMoveUp.GetStyle() | WB_NOPOINTERFOCUS | WB_CENTER | WB_VCENTER );
-    m_aRemoveCondition.SetStyle( m_aMoveDown.GetStyle() | WB_NOPOINTERFOCUS | WB_CENTER | WB_VCENTER );
+    m_pActions->SetSelectHdl(LINK(this, Condition, OnFormatAction));
+    m_pActions->SetDropdownClickHdl( LINK( this, Condition, DropdownClick ) );
+    setToolBox(m_pActions);
 
-    Font aFont( m_aAddCondition.GetFont() );
+    m_pMoveUp->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+    m_pMoveDown->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+    m_pAddCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+    m_pRemoveCondition->SetClickHdl( LINK( this, Condition, OnConditionAction ) );
+
+    m_pMoveUp->SetStyle( m_pMoveUp->GetStyle() | WB_NOPOINTERFOCUS );
+    m_pMoveDown->SetStyle( m_pMoveDown->GetStyle() | WB_NOPOINTERFOCUS );
+    m_pAddCondition->SetStyle( m_pAddCondition->GetStyle() | WB_NOPOINTERFOCUS );
+    m_pRemoveCondition->SetStyle( m_pRemoveCondition->GetStyle() | WB_NOPOINTERFOCUS );
+
+    Font aFont( m_pAddCondition->GetFont() );
     aFont.SetWeight( WEIGHT_BOLD );
-    m_aAddCondition.SetFont( aFont );
-    m_aRemoveCondition.SetFont( aFont );
+    m_pAddCondition->SetFont( aFont );
+    m_pRemoveCondition->SetFont( aFont );
 
-    m_aOperandGlue.SetStyle( m_aOperandGlue.GetStyle() | WB_VCENTER );
+    m_pOperandGlue->SetStyle( m_pOperandGlue->GetStyle() | WB_VCENTER );
 
-    m_aConditionType.SelectEntryPos( 0 );
-    m_aOperationList.SelectEntryPos( 0 );
+    m_pConditionType->SelectEntryPos( 0 );
+    m_pOperationList->SelectEntryPos( 0 );
 
-    // the toolbar got its site automatically, ensure that the preview is positioned
-    // right of it
-    Size aRelatedControls( LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ) );
-    Point aToolbarPos( m_aActions.GetPosPixel() );
-    Size aToolbarSize( m_aActions.GetSizePixel() );
-    m_aPreview.setPosSizePixel( aToolbarPos.X() + aToolbarSize.Width() + 2 * aRelatedControls.Width(),
-        0, 0, 0, WINDOW_POSSIZE_X );
-
-    // ensure the toolbar is vertically centered, relative to the preview
-    Size aPreviewSize( m_aPreview.GetSizePixel() );
-    m_aActions.setPosSizePixel( 0, aToolbarPos.Y() + ( aPreviewSize.Height() - aToolbarSize.Height() ) / 2, 0, 0, WINDOW_POSSIZE_Y );
+    m_nBoldId = m_pActions->GetItemId(".uno:Bold");
+    m_nItalicId = m_pActions->GetItemId(".uno:Italic");
+    m_nUnderLineId = m_pActions->GetItemId(".uno:Underline");
+    m_nBackgroundColorId = m_pActions->GetItemId(".uno:BackgroundColor");
+    m_nFontColorId = m_pActions->GetItemId(".uno:FontColor");
+    m_nFontDialogId = m_pActions->GetItemId(".uno:FontDialog");
 
     m_pBtnUpdaterBackgroundColor = new ::svx::ToolboxButtonColorUpdater(
-                                            SID_BACKGROUND_COLOR, SID_BACKGROUND_COLOR, &m_aActions );
+                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions );
     m_pBtnUpdaterFontColor = new ::svx::ToolboxButtonColorUpdater(
-                                            SID_ATTR_CHAR_COLOR2, SID_ATTR_CHAR_COLOR2, &m_aActions );
+                                            SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions );
 
     Show();
-
-    impl_layoutAll();
 
     ConditionalExpressionFactory::getKnownConditionalExpressions( m_aConditionalExpressions );
 }
 
+sal_uInt16 Condition::mapToolbarItemToSlotId(sal_uInt16 nItemId) const
+{
+    if (nItemId == m_nBoldId)
+        return SID_ATTR_CHAR_WEIGHT;
+    if (nItemId == m_nItalicId)
+        return SID_ATTR_CHAR_POSTURE;
+    if (nItemId == m_nUnderLineId)
+        return SID_ATTR_CHAR_UNDERLINE;
+    if (nItemId == m_nBackgroundColorId)
+        return SID_BACKGROUND_COLOR;
+    if (nItemId == m_nFontColorId)
+        return SID_ATTR_CHAR_COLOR2;
+    if (nItemId == m_nFontDialogId)
+        return SID_CHAR_DLG;
+    return 0;
+}
 
 Condition::~Condition()
 {
@@ -313,32 +303,31 @@ Condition::~Condition()
 
     delete m_pColorFloat;
     delete m_pBtnUpdaterFontColor;
+    delete m_pCondLHS;
+    delete m_pCondRHS;
     delete m_pBtnUpdaterBackgroundColor;
 }
 
 IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 {
-    sal_uInt16 nId( m_aActions.GetCurItemId() );
+    sal_uInt16 nId( m_pActions->GetCurItemId() );
     if ( !m_pColorFloat )
-        m_pColorFloat = new OColorPopup(&m_aActions,this);
+        m_pColorFloat = new OColorPopup(m_pActions,this);
 
     sal_uInt16 nTextId = 0;
-    switch(nId)
+    if (nId == m_nFontColorId)
     {
-        case SID_ATTR_CHAR_COLOR2:
-            nTextId = STR_CHARCOLOR;
-            break;
-        case SID_BACKGROUND_COLOR:
-            nTextId = STR_CHARBACKGROUND;
-            break;
-        default:
-            break;
+        nTextId = STR_CHARCOLOR;
+    }
+    else if (nId == m_nBackgroundColorId)
+    {
+        nTextId = STR_CHARBACKGROUND;
     }
     if ( nTextId )
         m_pColorFloat->SetText(OUString(ModuleRes(nTextId)));
-    m_pColorFloat->SetSlotId(nId);
-    m_pColorFloat->SetPosPixel(m_aActions.GetItemPopupPosition(nId,m_pColorFloat->GetSizePixel()));
-    m_pColorFloat->StartPopupMode(&m_aActions);
+    m_pColorFloat->SetSlotId(mapToolbarItemToSlotId(nId));
+    m_pColorFloat->SetPosPixel(m_pActions->GetItemPopupPosition(nId,m_pColorFloat->GetSizePixel()));
+    m_pColorFloat->StartPopupMode(m_pActions);
     m_pColorFloat->StartSelection();
 
     return 1;
@@ -347,20 +336,19 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 IMPL_LINK( Condition, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
     Color aCol(COL_AUTO);
-    ApplyCommand(m_aActions.GetCurItemId(),aCol);
+    ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),aCol);
     return 0L;
 }
 
-
 IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
 {
-    if ( _pClickedButton == &m_aMoveUp )
+    if ( _pClickedButton == m_pMoveUp )
         m_rAction.moveConditionUp( getConditionIndex() );
-    else if ( _pClickedButton == &m_aMoveDown )
+    else if ( _pClickedButton == m_pMoveDown )
         m_rAction.moveConditionDown( getConditionIndex() );
-    else if ( _pClickedButton == &m_aAddCondition )
+    else if ( _pClickedButton == m_pAddCondition )
         m_rAction.addCondition( getConditionIndex() );
-    else if ( _pClickedButton == &m_aRemoveCondition )
+    else if ( _pClickedButton == m_pRemoveCondition )
         m_rAction.deleteCondition( getConditionIndex() );
     return 0L;
 }
@@ -375,136 +363,33 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
 
-void Condition::setImageList(sal_Int16 _eBitmapSet)
+void Condition::setImageList(sal_Int16 /*_eBitmapSet*/)
 {
+#if 0
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         nN = IMG_CONDFORMAT_DLG_LC;
-    m_aActions.SetImageList(ImageList(ModuleRes(nN)));
+    m_pActions->SetImageList(ImageList(ModuleRes(nN)));
+#endif
 }
 
-void Condition::resizeControls(const Size& _rDiff)
+void Condition::resizeControls(const Size& /*_rDiff*/)
 {
+#if 0
     // we use large images so we must change them
     if ( _rDiff.Width() || _rDiff.Height() )
     {
         Invalidate();
     }
+#endif
 }
-
-void Condition::Paint( const Rectangle& rRect )
-{
-    Control::Paint(rRect);
-
-    // draw border
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    ColorChanger aColors( this, rStyleSettings.GetShadowColor(), rStyleSettings.GetDialogColor() );
-    DrawRect( impl_getToolBarBorderRect() );
-}
-
-void Condition::StateChanged( StateChangedType nType )
-{
-    Control::StateChanged( nType );
-
-    if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-    {
-        // Check if we need to get new images for normal/high contrast mode
-        checkImageList();
-    }
-    else if ( nType == STATE_CHANGE_TEXT )
-    {
-        // The physical toolbar changed its outlook and shows another logical toolbar!
-        // We have to set the correct high contrast mode on the new tbx manager.
-        checkImageList();
-    }
-}
-
-void Condition::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Control::DataChanged( rDCEvt );
-
-    if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-        ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-        ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
-    {
-        // Check if we need to get new images for normal/high contrast mode
-        checkImageList();
-    }
-}
-
 
 void Condition::GetFocus()
 {
-    Control::GetFocus();
+    VclHBox::GetFocus();
     if ( !m_bInDestruction )
-        m_aCondLHS.GrabFocus();
+        m_pCondLHS->GrabFocus();
 }
-
-
-void Condition::Resize()
-{
-    Control::Resize();
-    impl_layoutAll();
-}
-
-
-Rectangle Condition::impl_getToolBarBorderRect() const
-{
-    const Point aToolbarPos( m_aActions.GetPosPixel() );
-    const Size aToolbarSize( m_aActions.GetSizePixel() );
-    const Size aRelatedControls = LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT );
-
-    Rectangle aBorderRect( aToolbarPos, aToolbarSize );
-    aBorderRect.Left() -= aRelatedControls.Width();
-    aBorderRect.Top() -= aRelatedControls.Height();
-    aBorderRect.Right() += aRelatedControls.Width();
-    aBorderRect.Bottom() += aRelatedControls.Height();
-
-    return aBorderRect;
-}
-
-
-void Condition::impl_layoutAll()
-{
-    // if our width changed, resize/-position some controls
-    const Size aSize( GetOutputSizePixel() );
-    if ( aSize.Width() == m_nLastKnownWindowWidth )
-        return;
-
-    m_nLastKnownWindowWidth = aSize.Width();
-
-    const Size aRelatedControls( LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT ) );
-    const Size aUnrelatedControls( LogicToPixel( Size( UNRELATED_CONTROLS, 0 ), MAP_APPFONT ) );
-    const Point aRow1( LogicToPixel( Point( 0, ROW_1_POS ), MAP_APPFONT ) );
-    const Point aRow3( LogicToPixel( Point( 0, ROW_3_POS ), MAP_APPFONT ) );
-
-    // resize the header line
-    m_aHeader.setPosSizePixel( 0, 0, aSize.Width() - 2 * aRelatedControls.Width(), 0, WINDOW_POSSIZE_WIDTH );
-
-    // position the up/down buttons
-    const Size aButtonSize( LogicToPixel( Size( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ), MAP_APPFONT ) );
-    Point aButtonPos( aSize.Width() - aUnrelatedControls.Width() - aButtonSize.Width(), aRow1.Y() );
-    m_aMoveUp.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
-    aButtonPos.Move( 0, aButtonSize.Height() + aRelatedControls.Height() );
-    m_aMoveDown.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
-
-    // resize the preview
-    const long nNewPreviewRight = aButtonPos.X() - aRelatedControls.Width();
-
-    const Point aPreviewPos( m_aPreview.GetPosPixel() );
-    OSL_ENSURE( aPreviewPos.X() < nNewPreviewRight, "Condition::impl_layoutAll: being *that* small should not be allowed!" );
-    m_aPreview.setPosSizePixel( 0, 0, nNewPreviewRight - aPreviewPos.X(), 0, WINDOW_POSSIZE_WIDTH );
-
-    // position the add/remove buttons
-    aButtonPos = Point( nNewPreviewRight - aButtonSize.Width(), aRow3.Y() );
-    m_aRemoveCondition.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
-    aButtonPos.Move( -( aButtonSize.Width() + aRelatedControls.Width() ), 0 );
-    m_aAddCondition.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
-
-    // layout the operands input controls
-    impl_layoutOperands();
-}
-
 
 IMPL_LINK( Condition, OnTypeSelected, ListBox*, /*_pNotInterestedIn*/ )
 {
@@ -519,7 +404,6 @@ IMPL_LINK( Condition, OnOperationSelected, ListBox*, /*_pNotInterestedIn*/ )
     return 0L;
 }
 
-
 void Condition::impl_layoutOperands()
 {
     const ConditionType eType( impl_getCurrentConditionType() );
@@ -533,42 +417,11 @@ void Condition::impl_layoutOperands()
                 )
             );
 
-    const Size aRelatedControls( LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ) );
-    const Rectangle aPreviewRect( m_aPreview.GetPosPixel(), m_aPreview.GetSizePixel() );
-
     // the "condition type" list box
-    const Rectangle aCondTypeRect( m_aConditionType.GetPosPixel(), m_aConditionType.GetSizePixel() );
-    const Point aOpListPos( aCondTypeRect.Right() + aRelatedControls.Width(), aCondTypeRect.Top() );
-    const Size aOpListSize( LogicToPixel( Size( COND_OP_WIDTH, 60 ), MAP_APPFONT ) );
-    m_aOperationList.setPosSizePixel( aOpListPos.X(), aOpListPos.Y(),aOpListSize.Width(), aOpListSize.Height() );
-    m_aOperationList.Show( !bIsExpression );
-
-    // the LHS input field
-    Point aLHSPos( aOpListPos.X() + aOpListSize.Width() + aRelatedControls.Width(), aOpListPos.Y() );
-    if ( bIsExpression )
-        aLHSPos.X() = aOpListPos.X();
-    Size aLHSSize( LogicToPixel( Size( EDIT_WIDTH, EDIT_HEIGHT ), MAP_APPFONT ) );
-    if ( !bHaveRHS )
-        aLHSSize.Width() = aPreviewRect.Right() - aLHSPos.X();
-    m_aCondLHS.setPosSizePixel( aLHSPos.X(), aLHSPos.Y(), aLHSSize.Width(), aLHSSize.Height() );
-
-    if ( bHaveRHS )
-    {
-        // the "and" text being the glue between LHS and RHS
-        const Point aOpGluePos( aLHSPos.X() + aLHSSize.Width() + aRelatedControls.Width(), aLHSPos.Y() );
-        const Size aOpGlueSize( m_aOperandGlue.GetTextWidth( m_aOperandGlue.GetText() ) + aRelatedControls.Width(), aLHSSize.Height() );
-        m_aOperandGlue.setPosSizePixel( aOpGluePos.X(), aOpGluePos.Y(), aOpGlueSize.Width(), aOpGlueSize.Height() );
-
-        // the RHS input field
-        const Point aRHSPos( aOpGluePos.X() + aOpGlueSize.Width() + aRelatedControls.Width(), aOpGluePos.Y() );
-        const Size aRHSSize( aPreviewRect.Right() - aRHSPos.X(), aLHSSize.Height() );
-        m_aCondRHS.setPosSizePixel( aRHSPos.X(), aRHSPos.Y(), aRHSSize.Width(), aRHSSize.Height() );
-    }
-
-    m_aOperandGlue.Show( bHaveRHS );
-    m_aCondRHS.Show( bHaveRHS );
+    m_pOperationList->Show( !bIsExpression );
+    m_pOperandGlue->Show( bHaveRHS );
+    m_pCondRHS->Show( bHaveRHS );
 }
-
 
 void Condition::impl_setCondition( const OUString& _rConditionFormula )
 {
@@ -612,10 +465,10 @@ void Condition::impl_setCondition( const OUString& _rConditionFormula )
     }
 
     // update UI
-    m_aConditionType.SelectEntryPos( (sal_uInt16)eType );
-    m_aOperationList.SelectEntryPos( (sal_uInt16)eOperation );
-    m_aCondLHS.SetText( sLHS );
-    m_aCondRHS.SetText( sRHS );
+    m_pConditionType->SelectEntryPos( (sal_uInt16)eType );
+    m_pOperationList->SelectEntryPos( (sal_uInt16)eOperation );
+    m_pCondLHS->SetText( sLHS );
+    m_pCondRHS->SetText( sRHS );
 
     // re-layout
     impl_layoutOperands();
@@ -648,11 +501,12 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( _xReportControlFormat.is() )
     {
-        sal_uInt16 nItemCount = m_aActions.GetItemCount();
+        sal_uInt16 nItemCount = m_pActions->GetItemCount();
         for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
-            sal_uInt16 nItemId = m_aActions.GetItemId(j);
-            m_aActions.CheckItem( nItemId, m_rController.isFormatCommandEnabled( nItemId, _xReportControlFormat ) );
+            sal_uInt16 nItemId = m_pActions->GetItemId(j);
+            m_pActions->CheckItem( nItemId, m_rController.isFormatCommandEnabled(mapToolbarItemToSlotId(nItemId),
+                _xReportControlFormat ) );
         }
 
         try
@@ -663,9 +517,9 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
             aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );
             aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
             aFont.SetColor( _xReportControlFormat->getCharColor() );
-            m_aPreview.SetFont( aFont, aFont, aFont );
-            m_aPreview.SetBackColor( _xReportControlFormat->getControlBackground() );
-            m_aPreview.SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
+            m_pPreview->SetFont( aFont, aFont, aFont );
+            m_pPreview->SetBackColor( _xReportControlFormat->getControlBackground() );
+            m_pPreview->SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
         }
         catch( const Exception& )
         {
@@ -679,8 +533,8 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
     const ConditionType eType( impl_getCurrentConditionType() );
     const ComparisonOperation eOperation( impl_getCurrentComparisonOperation() );
 
-    const OUString sLHS( m_aCondLHS.GetText() );
-    const OUString sRHS( m_aCondRHS.GetText() );
+    const OUString sLHS( m_pCondLHS->GetText() );
+    const OUString sRHS( m_pCondRHS->GetText() );
 
     OUString sUndecoratedFormula( sLHS );
 
@@ -702,17 +556,17 @@ void Condition::setConditionIndex( size_t _nCondIndex, size_t _nCondCount )
     m_nCondIndex = _nCondIndex;
     OUString sHeader( ModuleRes( STR_NUMBERED_CONDITION ) );
     sHeader = sHeader.replaceFirst( "$number$", OUString::number( _nCondIndex + 1) );
-    m_aHeader.SetText( sHeader );
+    m_pHeader->SetText( sHeader );
 
-    m_aMoveUp.Enable( _nCondIndex > 0 );
+    m_pMoveUp->Enable( _nCondIndex > 0 );
     OSL_PRECOND( _nCondCount > 0, "Condition::setConditionIndex: having no conditions at all is nonsense!" );
-    m_aMoveDown.Enable( _nCondIndex < _nCondCount - 1 );
+    m_pMoveDown->Enable( _nCondIndex < _nCondCount - 1 );
 }
 
 
 bool Condition::isEmpty() const
 {
-    return m_aCondLHS.GetText().isEmpty();
+    return m_pCondLHS->GetText().isEmpty();
 }
 
 

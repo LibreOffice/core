@@ -73,13 +73,9 @@ namespace rptui
         typedef ::std::vector< ConditionPtr >       Conditions;
 
         OModuleClient   m_aModuleClient;
-        Window          m_aConditionPlayground;
+        Window*         m_pConditionPlayground;
         Conditions      m_aConditions;
-        FixedLine       m_aSeparator;
-        OKButton        m_aPB_OK;
-        CancelButton    m_aPB_CANCEL;
-        HelpButton      m_aPB_Help;
-        ScrollBar       m_aCondScroll;
+        ScrollBar*      m_pCondScroll;
 
         ::rptui::OReportController&                         m_rController;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >
@@ -88,6 +84,7 @@ namespace rptui
                                                             m_xCopy;
 
         bool    m_bDeletingCondition;
+        bool    m_bConstructed;
 
     public:
         ConditionalFormattingDialog(
@@ -134,7 +131,7 @@ namespace rptui
         void    impl_layoutAll();
 
         /// does the layout for the condition windows
-        void    impl_layoutConditions( Point& _out_rBelowLastVisible );
+        void    impl_layoutConditions();
 
         /// called when the number of conditions has changed in any way
         void    impl_conditionCountChanged();
@@ -154,9 +151,6 @@ namespace rptui
         /// returns the index of the last visible condition
         size_t  impl_getLastVisibleConditionIndex() const;
 
-        /// determines the width of a Condition
-        long    impl_getConditionWidth() const;
-
         /// focuses the condition with the given index, making it visible if necessary
         void    impl_focusCondition( size_t _nCondIndex );
 
@@ -171,6 +165,9 @@ namespace rptui
 
         /// ensures the condition with the given index is visible
         void    impl_ensureConditionVisible( size_t _nCondIndex );
+
+        /// set the preferred height of the action_area
+        void    impl_setPrefHeight(bool bFirst);
     };
 
 

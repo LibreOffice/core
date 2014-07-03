@@ -80,39 +80,56 @@ namespace rptui
         }
     };
 
+    void ConditionalFormattingDialog::impl_setPrefHeight(bool bFirst)
+    {
+        if (!m_bConstructed && !bFirst)
+            return;
+
+        //allow dialog to resize itself
+        size_t nCount = impl_getConditionCount();
+        if (nCount)
+        {
+            long nHeight = m_aConditions[0]->get_preferred_size().Height();
+            size_t nVisibleConditions = ::std::min(nCount, MAX_CONDITIONS);
+            nHeight *= nVisibleConditions;
+            if (nHeight != m_pConditionPlayground->get_height_request())
+            {
+                m_pConditionPlayground->set_height_request(nHeight);
+                if (!isCalculatingInitialLayoutSize() && !bFirst)
+                    setOptimalLayoutSize();
+            }
+        }
+    }
 
     // class ConditionalFormattingDialog
-
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
-        :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
-        ,m_aConditionPlayground( this, ModuleRes( WND_COND_PLAYGROUND ) )
-        ,m_aSeparator(this,     ModuleRes(FL_SEPARATOR1))
-        ,m_aPB_OK(this,         ModuleRes(PB_OK))
-        ,m_aPB_CANCEL(this,     ModuleRes(PB_CANCEL))
-        ,m_aPB_Help(this,       ModuleRes(PB_HELP))
-        ,m_aCondScroll( this,   ModuleRes( SB_ALL_CONDITIONS ) )
+        :ModalDialog( _pParent, "CondFormat", "modules/dbreport/ui/condformatdialog.ui" )
         ,m_rController( _rController )
         ,m_xFormatConditions( _rxFormatConditions )
         ,m_bDeletingCondition( false )
+        ,m_bConstructed( false )
     {
+        get(m_pConditionPlayground, "condPlaygroundDrawingarea");
+        get(m_pCondScroll, "condScrollbar");
+
         OSL_ENSURE( m_xFormatConditions.is(), "ConditionalFormattingDialog::ConditionalFormattingDialog: ReportControlModel is NULL -> Prepare for GPF!" );
 
         m_xCopy.set( m_xFormatConditions->createClone(), UNO_QUERY_THROW );
 
-        m_aCondScroll.SetScrollHdl( LINK( this, ConditionalFormattingDialog, OnScroll ) );
+        m_pCondScroll->SetScrollHdl( LINK( this, ConditionalFormattingDialog, OnScroll ) );
 
         impl_initializeConditions();
 
-        FreeResource();
-    }
+        impl_setPrefHeight(true);
 
+        m_bConstructed = true;
+    }
 
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
         m_aConditions.clear();
     }
-
 
     void ConditionalFormattingDialog::impl_updateConditionIndicies()
     {
@@ -126,17 +143,17 @@ namespace rptui
         }
     }
 
-
     void ConditionalFormattingDialog::impl_conditionCountChanged()
     {
         if ( m_aConditions.empty() )
             impl_addCondition_nothrow( 0 );
 
+        impl_setPrefHeight(false);
+
         impl_updateScrollBarRange();
         impl_updateConditionIndicies();
         impl_layoutAll();
     }
-
 
     void ConditionalFormattingDialog::addCondition( size_t _nAddAfterIndex )
     {
@@ -164,11 +181,9 @@ namespace rptui
             ::comphelper::copyProperties(m_xCopy.get(),xCond.get());
             m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
 
-            ConditionPtr pCon( new Condition( &m_aConditionPlayground, *this, m_rController ) );
+            ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
             pCon->setCondition( xCond );
             m_aConditions.insert( m_aConditions.begin() + _nNewCondIndex, pCon );
-
-            pCon->setPosSizePixel( 0, 0, impl_getConditionWidth(), 0, WINDOW_POSSIZE_WIDTH );
         }
         catch( const Exception& )
         {
@@ -276,29 +291,18 @@ namespace rptui
         impl_updateConditionIndicies();
 
         // re-layout all conditions
-        Point aDummy;
-        impl_layoutConditions( aDummy );
+        impl_layoutConditions();
 
         // ensure the moved condition is visible
         impl_ensureConditionVisible( nNewConditionIndex );
     }
-
-
-    long ConditionalFormattingDialog::impl_getConditionWidth() const
-    {
-        const Size aDialogSize( GetOutputSizePixel() );
-        const Size aScrollBarWidth( LogicToPixel( Size( SCROLLBAR_WIDTH + UNRELATED_CONTROLS, 0 ), MAP_APPFONT ) );
-        return aDialogSize.Width() - aScrollBarWidth.Width();
-    }
-
 
     IMPL_LINK( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/ )
     {
         size_t nFirstCondIndex( impl_getFirstVisibleConditionIndex() );
         size_t nFocusCondIndex = impl_getFocusedConditionIndex( nFirstCondIndex );
 
-        Point aDummy;
-        impl_layoutConditions( aDummy );
+        impl_layoutConditions();
 
         if ( nFocusCondIndex < nFirstCondIndex )
             impl_focusCondition( nFirstCondIndex );
@@ -308,15 +312,15 @@ namespace rptui
         return 0;
     }
 
-
-    void ConditionalFormattingDialog::impl_layoutConditions( Point& _out_rBelowLastVisible )
+    void ConditionalFormattingDialog::impl_layoutConditions()
     {
+#if 0
         // position the condition's playground
         long nConditionWidth = impl_getConditionWidth();
         long nConditionHeight = LogicToPixel( Size( 0, CONDITION_HEIGHT ), MAP_APPFONT ).Height();
         size_t nVisibleConditions = ::std::min( impl_getConditionCount(), MAX_CONDITIONS );
         Size aPlaygroundSize( nConditionWidth, nVisibleConditions * nConditionHeight );
-        m_aConditionPlayground.SetSizePixel( aPlaygroundSize );
+        m_pConditionPlayground->SetSizePixel( aPlaygroundSize );
         _out_rBelowLastVisible = Point( 0, aPlaygroundSize.Height() );
 
         // position the single conditions
@@ -329,34 +333,18 @@ namespace rptui
             (*cond)->setPosSizePixel( aConditionPos.X(), aConditionPos.Y(), nConditionWidth, nConditionHeight );
             aConditionPos.Move( 0, nConditionHeight );
         }
+#endif
     }
-
 
     void ConditionalFormattingDialog::impl_layoutAll()
     {
         // condition's positions
-        Point aPos;
-        impl_layoutConditions( aPos );
+        impl_layoutConditions();
 
-        // scrollbar size and visibility
-        m_aCondScroll.setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
+        // scrollbar visibility
         if ( !impl_needScrollBar() )
             // normalize the position, so it can, in all situations, be used as top index
-            m_aCondScroll.SetThumbPos( 0 );
-
-        // the separator and the buttons below it
-        aPos += LogicToPixel( Point( 0 , RELATED_CONTROLS ), MAP_APPFONT );
-        m_aSeparator.setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
-
-        aPos += LogicToPixel( Point( 0 , UNRELATED_CONTROLS ), MAP_APPFONT );
-        Window* pWindows[] = { &m_aPB_OK, &m_aPB_CANCEL, &m_aPB_Help };
-        for ( size_t i= 0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i )
-        {
-            pWindows[i]->setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
-        }
-
-        aPos += LogicToPixel( Point( 0, BUTTON_HEIGHT + RELATED_CONTROLS ), MAP_APPFONT );
-        setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
+            m_pCondScroll->SetThumbPos( 0 );
     }
 
     void ConditionalFormattingDialog::impl_initializeConditions()
@@ -366,7 +354,7 @@ namespace rptui
             sal_Int32 nCount = m_xCopy->getCount();
             for ( sal_Int32 i = 0; i < nCount ; ++i )
             {
-                ConditionPtr pCon( new Condition( &m_aConditionPlayground, *this, m_rController ) );
+                ConditionPtr pCon( new Condition( m_pConditionPlayground, *this, m_rController ) );
                 Reference< XFormatCondition > xCond( m_xCopy->getByIndex(i), UNO_QUERY );
                 pCon->setCondition( xCond );
                 pCon->updateToolbar( xCond.get() );
@@ -380,7 +368,6 @@ namespace rptui
 
         impl_conditionCountChanged();
     }
-
 
     void ConditionalFormattingDialog::applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor )
     {
@@ -527,13 +514,13 @@ namespace rptui
             const Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             while   (   ( pPlaygroundCandidate )
                     &&  ( pPlaygroundCandidate != this )
-                    &&  ( pPlaygroundCandidate != &m_aConditionPlayground )
+                    &&  ( pPlaygroundCandidate != m_pConditionPlayground )
                     )
             {
                 pConditionCandidate = pConditionCandidate->GetParent();
                 pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             }
-            if ( pPlaygroundCandidate == &m_aConditionPlayground )
+            if ( pPlaygroundCandidate == m_pConditionPlayground )
             {
                 impl_ensureConditionVisible( dynamic_cast< const Condition& >( *pConditionCandidate ).getConditionIndex() );
             }
@@ -547,7 +534,7 @@ namespace rptui
 
     size_t ConditionalFormattingDialog::impl_getFirstVisibleConditionIndex() const
     {
-        return (size_t)m_aCondScroll.GetThumbPos();
+        return (size_t)m_pCondScroll->GetThumbPos();
     }
 
 
@@ -576,9 +563,9 @@ namespace rptui
     {
         long nMax = ( impl_getConditionCount() > MAX_CONDITIONS ) ? impl_getConditionCount() - MAX_CONDITIONS + 1 : 0;
 
-        m_aCondScroll.SetRangeMin( 0 );
-        m_aCondScroll.SetRangeMax( nMax );
-        m_aCondScroll.SetVisibleSize( 1 );
+        m_pCondScroll->SetRangeMin( 0 );
+        m_pCondScroll->SetRangeMax( nMax );
+        m_pCondScroll->SetVisibleSize( 1 );
     }
 
 
@@ -586,8 +573,8 @@ namespace rptui
     {
         OSL_PRECOND( _nTopCondIndex + MAX_CONDITIONS <= impl_getConditionCount(),
             "ConditionalFormattingDialog::impl_scrollTo: illegal index!" );
-        m_aCondScroll.SetThumbPos( _nTopCondIndex );
-        OnScroll( &m_aCondScroll );
+        m_pCondScroll->SetThumbPos( _nTopCondIndex );
+        OnScroll( m_pCondScroll );
     }
 
 

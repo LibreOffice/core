@@ -35,25 +35,6 @@
 #define IMAGE_BUTTON_WIDTH  12
 #define IMAGE_BUTTON_HEIGHT 14
 
-#define FL_CONDITION_HEADER         2
-#define CRTL_FORMAT_PREVIEW         3
-#define TB_FORMAT                   4
-#define LB_COND_TYPE                5
-#define LB_OP                       6
-#define ED_CONDITION_LHS            7
-#define FT_AND                      8
-#define PB_OK                       9
-#define PB_CANCEL                   10
-#define PB_HELP                     11
-#define FL_SEPARATOR1               12
-#define ED_CONDITION_RHS            13
-#define SB_ALL_CONDITIONS           18
-#define WND_COND_PLAYGROUND         19
-#define BTN_MOVE_UP                 20
-#define BTN_MOVE_DOWN               21
-#define BTN_ADD_CONDITION           22
-#define BTN_REMOVE_CONDITION        23
-
 #define ROW_0_POS       ( RELATED_CONTROLS )
 #define ROW_0_HEIGHT    ( FIXEDTEXT_HEIGHT )
 #define ROW_1_POS       ( ROW_0_POS + ROW_0_HEIGHT + UNRELATED_CONTROLS )

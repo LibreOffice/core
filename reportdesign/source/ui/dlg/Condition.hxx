@@ -33,6 +33,8 @@
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 
 #include <memory>
 
@@ -45,39 +47,48 @@ namespace rptui
     class IConditionalFormatAction;
     class Condition;
 
-    class ConditionField : public Edit
+    class ConditionField
     {
         Condition*  m_pParent;
         Edit*       m_pSubEdit;
-        PushButton  m_aFormula;
+        PushButton* m_pFormula;
 
         DECL_LINK( OnFormula,   Button* );
     public:
-        ConditionField( Condition* pParent, const ResId& rResId );
-        virtual ~ConditionField();
-        virtual void Resize() SAL_OVERRIDE;
+        ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *pFormula);
+        void GrabFocus() { m_pSubEdit->GrabFocus(); }
+        void Show(bool bShow) { m_pSubEdit->Show(bShow); m_pFormula->Show(bShow); }
+        void SetText(const OUString& rText) { m_pSubEdit->SetText(rText); }
+        OUString GetText() const { return m_pSubEdit->GetText(); }
     };
-
 
     //= Condition
 
-    class Condition :public Control
+    class Condition :public VclHBox
                     ,public dbaui::OToolBoxHelper
+                    ,public VclBuilderContainer
     {
+        sal_uInt16                  m_nBoldId;
+        sal_uInt16                  m_nItalicId;
+        sal_uInt16                  m_nUnderLineId;
+        sal_uInt16                  m_nBackgroundColorId;
+        sal_uInt16                  m_nFontColorId;
+        sal_uInt16                  m_nFontDialogId;
+
         ::rptui::OReportController& m_rController;
         IConditionalFormatAction&   m_rAction;
-        FixedLine                   m_aHeader;
-        ListBox                     m_aConditionType;
-        ListBox                     m_aOperationList;
-        ConditionField              m_aCondLHS;
-        FixedText                   m_aOperandGlue;
-        ConditionField              m_aCondRHS;
-        ToolBox                     m_aActions;
-        SvxFontPrevWindow           m_aPreview;
-        ImageButton                 m_aMoveUp;
-        ImageButton                 m_aMoveDown;
-        PushButton                  m_aAddCondition;
-        PushButton                  m_aRemoveCondition;
+        FixedText*                  m_pHeader;
+        ListBox*                    m_pConditionType;
+        ListBox*                    m_pOperationList;
+        ConditionField*             m_pCondLHS;
+        FixedText*                  m_pOperandGlue;
+        ConditionField*             m_pCondRHS;
+        ToolBox*                    m_pActions;
+        SvxFontPrevWindow*          m_pPreview;
+        PushButton*                 m_pMoveUp;
+        PushButton*                 m_pMoveDown;
+        PushButton*                 m_pAddCondition;
+        PushButton*                 m_pRemoveCondition;
         OColorPopup*                m_pColorFloat;
 
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
@@ -139,19 +150,13 @@ namespace rptui
 
         inline ::rptui::OReportController& getController() const { return m_rController; }
 
+        sal_uInt16 mapToolbarItemToSlotId(sal_uInt16 nItemId) const;
+
     protected:
-        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
     private:
-        void    impl_layoutAll();
         void    impl_layoutOperands();
-
-        /// determines the rectangle to be occupied by the toolbar, including the border drawn around it
-        Rectangle   impl_getToolBarBorderRect() const;
 
         inline  ConditionType
                     impl_getCurrentConditionType() const;
@@ -169,13 +174,13 @@ namespace rptui
 
     inline ConditionType Condition::impl_getCurrentConditionType() const
     {
-        return sal::static_int_cast< ConditionType >( m_aConditionType.GetSelectEntryPos() );
+        return sal::static_int_cast< ConditionType >( m_pConditionType->GetSelectEntryPos() );
     }
 
 
     inline ComparisonOperation Condition::impl_getCurrentComparisonOperation() const
     {
-        return sal::static_int_cast< ComparisonOperation >( m_aOperationList.GetSelectEntryPos() );
+        return sal::static_int_cast< ComparisonOperation >( m_pOperationList->GetSelectEntryPos() );
     }
 
 
