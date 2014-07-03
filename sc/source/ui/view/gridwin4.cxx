@@ -625,7 +625,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     // define drawing layer map mode and paint rectangle
     MapMode aDrawMode = pOutDev->GetMapMode();
+    Point aOrigin = aDrawMode.GetOrigin();
     aDrawMode.SetMapUnit( MAP_100TH_MM );
+    aDrawMode.SetOrigin( (aOrigin * 2540l) / 1440l );
     Rectangle aDrawingRectLogic;
 
     {
