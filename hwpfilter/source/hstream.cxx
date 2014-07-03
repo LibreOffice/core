@@ -66,9 +66,4 @@ int HStream::available() const
     return size - pos;
 }
 
-
-void HStream::closeInput()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

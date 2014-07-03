@@ -46,10 +46,7 @@ class HStream
  * @returns Size of remained stream
  */
         int available() const;
-/**
- * remove the stream from this object.
- */
-        void closeInput();
+
     private:
         int size;
         byte *seq;

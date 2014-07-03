@@ -146,9 +146,7 @@ void HStreamIODev::close(void)
 /* 플러시한 후 닫는다. */
     this->flush();
     if (_gzfp)
-        gz_close(_gzfp);                          /* gz_close() calls stream_closeInput() */
-    else
-        _stream->closeInput();
+        gz_close(_gzfp);
     _gzfp = NULL;
 }
 
