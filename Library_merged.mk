@@ -30,6 +30,12 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	headless \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,merged,\
 	icu_headers \
 	icui18n \

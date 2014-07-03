@@ -54,6 +54,9 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
             SAL_DLLPREFIX
 #endif
             "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
+    // vclplug_svp is in libmerged
+    if (rModuleBase == "svp")
+        aModule = VCLPLUG_SVP_DLL_NAME;
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
