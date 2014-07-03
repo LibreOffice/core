@@ -42,6 +42,8 @@
 #define RID_STR_TYPE_QUERY              (RID_STRING_START +  8 )
 #define RID_STR_TYPE_TABLE              (RID_STRING_START +  9 )
 #define RID_STR_TYPE_COMMAND            (RID_STRING_START + 10 )
+#define RID_STR_FIELDINFO_LISTBOX       (RID_STRING_START + 11 )
+#define RID_STR_FIELDINFO_COMBOBOX      (RID_STRING_START + 12 )
 
 // please adjust RID_STRING_END (below) when adding new strings
 #define RID_STRING_END                  RID_STR_TIMEPOSTFIX
@@ -97,8 +99,6 @@
 // local ids
 
 // FixedLine
-
-#define FL_DATA                     1
 #define FL_DEFAULTSELECTION         2
 #define FL_OPTIONVALUES             3
 #define FL_DATABASEFIELD_EXPL       4
@@ -108,9 +108,6 @@
 
 // FixedText
 
-#define FT_DATASOURCE                1
-#define FT_TABLE                     2
-#define FT_RADIOLABELS               3
 #define FT_RADIOBUTTONS              4
 #define FT_DEFAULTSELECTION          5
 #define FT_OPTIONVALUES_EXPL         6
@@ -119,51 +116,17 @@
 #define FT_DATABASEFIELD_QUEST       9
 #define FT_NAMEIT                   10
 #define FT_THATSALL                 11
-#define FT_SELECTTABLE_LABEL        12
-#define FT_TABLEFIELDS              13
-#define FT_DISPLAYEDFIELD           14
-#define FT_CONTENTFIELD_INFO        15
-#define FT_VALUELISTFIELD           16
-#define FT_TABLEFIELD               17
-#define FT_EXPLANATION              18
-#define FT_EXISTING_FIELDS          19
-#define FT_SELECTED_FIELDS          20
-#define FT_FIELDLINK_DESC           21
-#define FT_FORMDATASOURCELABEL      22
-#define FT_FORMDATASOURCE           23
-#define FT_FORMTABLELABEL           24
-#define FT_FORMTABLE                25
-#define FT_FORMCONTENTTYPELABEL     26
-#define FT_FORMCONTENTTYPE          27
 
 // ListBox
 
-#define LB_DATASOURCE               1
-#define LB_TABLE                    2
 #define LB_RADIOBUTTONS             3
 #define LB_DEFSELECTIONFIELD        3
 #define LB_STOREINFIELD             4
-#define LB_SELECTTABLE              5
-#define LB_SELECTFIELD              6
-#define LB_EXISTING_FIELDS          7
-#define LB_SELECTED_FIELDS          8
 
 // Edit
 
-#define ET_RADIOLABELS              1
 #define ET_OPTIONVALUE              2
 #define ET_NAMEIT                   3
-#define ET_DISPLAYEDFIELD           4
-
-// PushButton
-
-#define PB_MOVETORIGHT              1
-#define PB_MOVETOLEFT               2
-#define PB_FIELDRIGHT               3
-#define PB_ALLFIELDSRIGHT           4
-#define PB_FIELDLEFT                5
-#define PB_ALLFIELDSLEFT            6
-#define PB_FORMDATASOURCE           7
 
 // RadioButton
 
@@ -172,20 +135,10 @@
 #define RB_STOREINFIELD_YES         3
 #define RB_STOREINFIELD_NO          4
 
-// ComboBox
-
-#define CMB_VALUELISTFIELD          1
-#define CMB_TABLEFIELD              2
-
-// String
-
-#define STR_FIELDINFO_LISTBOX       1
-#define STR_FIELDINFO_COMBOBOX      2
-
 // Image
 
-#define IMG_TABLE                   1
-#define IMG_QUERY                   3
+#define IMG_TABLE                   ( RID_DIALOG_START + 1 )
+#define IMG_QUERY                   ( RID_DIALOG_START + 2 )
 
 #define WINDOW_SIZE_X       260
 #define WINDOW_SIZE_Y       185

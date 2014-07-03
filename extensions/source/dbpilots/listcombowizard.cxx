@@ -275,24 +275,21 @@ namespace dbp
 
 
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
-        :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aSelectTableLabel    (this, ModuleRes(FT_SELECTTABLE_LABEL))
-        ,m_aSelectTable         (this, ModuleRes(LB_SELECTTABLE))
+        :OLCPage(_pParent, "TableSelectionPage", "modules/sabpilot/ui/contenttablepage.ui")
     {
-        FreeResource();
+        get(m_pSelectTable, "table");
 
         enableFormDatasourceDisplay();
 
-        m_aSelectTable.SetDoubleClickHdl(LINK(this, OContentTableSelection, OnTableDoubleClicked));
-        m_aSelectTable.SetSelectHdl(LINK(this, OContentTableSelection, OnTableSelected));
+        m_pSelectTable->SetDoubleClickHdl(LINK(this, OContentTableSelection, OnTableDoubleClicked));
+        m_pSelectTable->SetSelectHdl(LINK(this, OContentTableSelection, OnTableSelected));
     }
 
 
     void OContentTableSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
-        m_aSelectTable.GrabFocus();
+        m_pSelectTable->GrabFocus();
     }
 
 
@@ -301,7 +298,7 @@ namespace dbp
         if (!OLCPage::canAdvance())
             return false;
 
-        return 0 != m_aSelectTable.GetSelectEntryCount();
+        return 0 != m_pSelectTable->GetSelectEntryCount();
     }
 
 
@@ -325,21 +322,21 @@ namespace dbp
         OLCPage::initializePage();
 
         // fill the list with the table name
-        m_aSelectTable.Clear();
+        m_pSelectTable->Clear();
         try
         {
             Reference< XNameAccess > xTables = getTables(true);
             Sequence< OUString > aTableNames;
             if (xTables.is())
                 aTableNames = xTables->getElementNames();
-            fillListBox(m_aSelectTable, aTableNames);
+            fillListBox(*m_pSelectTable, aTableNames);
         }
         catch(const Exception&)
         {
             OSL_FAIL("OContentTableSelection::initializePage: could not retrieve the table names!");
         }
 
-        m_aSelectTable.SelectEntry(getSettings().sListContentTable);
+        m_pSelectTable->SelectEntry(getSettings().sListContentTable);
     }
 
 
@@ -349,7 +346,7 @@ namespace dbp
             return false;
 
         OListComboSettings& rSettings = getSettings();
-        rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
+        rSettings.sListContentTable = m_pSelectTable->GetSelectEntry();
         if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return false;
@@ -362,25 +359,20 @@ namespace dbp
 
 
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
-        :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aTableFields         (this, ModuleRes(FT_TABLEFIELDS))
-        ,m_aSelectTableField    (this, ModuleRes(LB_SELECTFIELD))
-        ,m_aDisplayedFieldLabel (this, ModuleRes(FT_DISPLAYEDFIELD))
-        ,m_aDisplayedField      (this, ModuleRes(ET_DISPLAYEDFIELD))
-        ,m_aInfo                (this, ModuleRes(FT_CONTENTFIELD_INFO))
+        :OLCPage(_pParent, "FieldSelectionPage", "modules/sabpilot/ui/contentfieldpage.ui")
     {
-        m_aInfo.SetText(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX).toString());
-        FreeResource();
-        m_aSelectTableField.SetSelectHdl(LINK(this, OContentFieldSelection, OnFieldSelected));
-        m_aSelectTableField.SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
+        get(m_pSelectTableField, "selectfield");
+        get(m_pDisplayedField, "displayfield");
+        get(m_pInfo, "info");
+        m_pInfo->SetText(ModuleRes( isListBox() ? RID_STR_FIELDINFO_LISTBOX : RID_STR_FIELDINFO_COMBOBOX).toString());
+        m_pSelectTableField->SetSelectHdl(LINK(this, OContentFieldSelection, OnFieldSelected));
+        m_pSelectTableField->SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
 
 
     void OContentFieldSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
-        m_aTableFields.GrabFocus();
     }
 
 
@@ -389,10 +381,10 @@ namespace dbp
         OLCPage::initializePage();
 
         // fill the list of fields
-        fillListBox(m_aSelectTableField, getTableFields(true));
+        fillListBox(*m_pSelectTableField, getTableFields(true));
 
-        m_aSelectTableField.SelectEntry(getSettings().sListContentField);
-        m_aDisplayedField.SetText(getSettings().sListContentField);
+        m_pSelectTableField->SelectEntry(getSettings().sListContentField);
+        m_pDisplayedField->SetText(getSettings().sListContentField);
     }
 
 
@@ -401,13 +393,13 @@ namespace dbp
         if (!OLCPage::canAdvance())
             return false;
 
-        return 0 != m_aSelectTableField.GetSelectEntryCount();
+        return 0 != m_pSelectTableField->GetSelectEntryCount();
     }
 
 
     IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, /*NOTINTERESTEDIN*/ )
     {
-        if (m_aSelectTableField.GetSelectEntryCount())
+        if (m_pSelectTableField->GetSelectEntryCount())
             getDialog()->travelNext();
         return 0L;
     }
@@ -416,7 +408,7 @@ namespace dbp
     IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         updateDialogTravelUI();
-        m_aDisplayedField.SetText(m_aSelectTableField.GetSelectEntry());
+        m_pDisplayedField->SetText(m_pSelectTableField->GetSelectEntry());
         return 0L;
     }
 
@@ -426,7 +418,7 @@ namespace dbp
         if (!OLCPage::commitPage(_eReason))
             return false;
 
-        getSettings().sListContentField = m_aSelectTableField.GetSelectEntry();
+        getSettings().sListContentField = m_pSelectTableField->GetSelectEntry();
 
         return true;
     }
@@ -436,27 +428,22 @@ namespace dbp
 
 
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
-        :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
-        ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aValueListFieldLabel (this, ModuleRes(FT_VALUELISTFIELD))
-        ,m_aValueListField      (this, ModuleRes(CMB_VALUELISTFIELD))
-        ,m_aTableFieldLabel     (this, ModuleRes(FT_TABLEFIELD))
-        ,m_aTableField          (this, ModuleRes(CMB_TABLEFIELD))
+        :OLCPage(_pParent, "FieldLinkPage", "modules/sabpilot/ui/fieldlinkpage.ui")
     {
-        FreeResource();
+        get(m_pValueListField, "valuefield");
+        get(m_pTableField, "listtable");
 
-        m_aValueListField.SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
-        m_aTableField.SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
-        m_aValueListField.SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
-        m_aTableField.SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
+        m_pValueListField->SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
+        m_pTableField->SetModifyHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
+        m_pValueListField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
+        m_pTableField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
     }
 
 
     void OLinkFieldsPage::ActivatePage()
     {
         OLCPage::ActivatePage();
-        m_aValueListField.GrabFocus();
+        m_pValueListField->GrabFocus();
     }
 
 
@@ -465,13 +452,13 @@ namespace dbp
         OLCPage::initializePage();
 
         // fill the value list
-        fillListBox(m_aValueListField, getContext().aFieldNames);
+        fillListBox(*m_pValueListField, getContext().aFieldNames);
         // fill the table field list
-        fillListBox(m_aTableField, getTableFields(true));
+        fillListBox(*m_pTableField, getTableFields(true));
 
         // the initial selections
-        m_aValueListField.SetText(getSettings().sLinkedFormField);
-        m_aTableField.SetText(getSettings().sLinkedListField);
+        m_pValueListField->SetText(getSettings().sLinkedFormField);
+        m_pTableField->SetText(getSettings().sLinkedListField);
 
         implCheckFinish();
     }
@@ -486,8 +473,8 @@ namespace dbp
 
     void OLinkFieldsPage::implCheckFinish()
     {
-        bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_aValueListField.GetEntryPos(m_aValueListField.GetText()));
-        bInvalidSelection |= (COMBOBOX_ENTRY_NOTFOUND == m_aTableField.GetEntryPos(m_aTableField.GetText()));
+        bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_pValueListField->GetEntryPos(m_pValueListField->GetText()));
+        bInvalidSelection |= (COMBOBOX_ENTRY_NOTFOUND == m_pTableField->GetEntryPos(m_pTableField->GetText()));
         getDialog()->enableButtons(WZB_FINISH, !bInvalidSelection);
     }
 
@@ -504,8 +491,8 @@ namespace dbp
         if (!OLCPage::commitPage(_eReason))
             return false;
 
-        getSettings().sLinkedFormField = m_aValueListField.GetText();
-        getSettings().sLinkedListField = m_aTableField.GetText();
+        getSettings().sLinkedFormField = m_pValueListField->GetText();
+        getSettings().sLinkedListField = m_pTableField->GetText();
 
         return true;
     }

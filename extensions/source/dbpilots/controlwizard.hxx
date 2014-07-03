@@ -57,7 +57,6 @@ namespace dbp
     class OControlWizardPage : public OControlWizardPage_Base
     {
     protected:
-        FixedLine*      m_pFormSettingsSeparator;
         FixedText*      m_pFormDatasourceLabel;
         FixedText*      m_pFormDatasource;
         FixedText*      m_pFormContentTypeLabel;
@@ -76,6 +75,7 @@ namespace dbp
 
     public:
         OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
+        OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription );
         virtual ~OControlWizardPage();
 
     protected:
@@ -128,7 +128,7 @@ namespace dbp
         const OControlWizardContext&    getContext() const { return m_aContext; }
         bool                        updateContext(const OAccessRegulator&);
         void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
         /** returns the com.sun.star.task.InteractionHandler

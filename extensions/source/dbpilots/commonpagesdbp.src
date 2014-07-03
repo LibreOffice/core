@@ -19,82 +19,17 @@
 
 #include "dbpresid.hrc"
 
-TabPage RID_PAGE_TABLESELECTION
+
+Image IMG_TABLE
 {
-    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION";
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ en-US ] = "Data";
+    ImageBitmap = Bitmap { File = "sx03188.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
 
-    FixedLine FL_DATA
-    {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-        Text [ en-US ]  = "Data";
-    };
-    FixedText FT_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 21 ) ;
-        WordBreak = TRUE;
-        Group = TRUE;
-        Text [ en-US ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
-    };
-    FixedText FT_DATASOURCE
-    {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , 8) ;
-        Group = TRUE;
-        Text [ en-US ] = "~Data source:";
-    };
-    ListBox LB_DATASOURCE
-    {
-        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_DATASOURCE";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 27 , 14 ) ;
-        SVLook = TRUE ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        AutoHScroll = TRUE ;
-    };
-
-    PushButton PB_FORMDATASOURCE
-    {
-        HelpID = "extensions:PushButton:RID_PAGE_TABLESELECTION:PB_FORMDATASOURCE";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 + WINDOW_HALF_SIZE_X - 24 , 25  ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text [ en-US ] = "~...";
-    };
-
-    FixedText FT_TABLE
-    {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 46 ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 14 , 8) ;
-        Group = TRUE;
-        Text [ en-US ] = "~Table / Query:";
-    };
-    ListBox LB_TABLE
-    {
-        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_TABLE";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 57  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 6 - 57 ) ;
-        SVLook = TRUE ;
-        Border = TRUE ;
-        Sort = TRUE;
-        AutoHScroll = TRUE ;
-    };
-
-    Image IMG_TABLE
-    {
-        ImageBitmap = Bitmap { File = "sx03188.bmp"; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-    };
-
-    Image IMG_QUERY
-    {
-        ImageBitmap = Bitmap { File = "sx03202.bmp"; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-    };
+Image IMG_QUERY
+{
+    ImageBitmap = Bitmap { File = "sx03202.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -149,53 +84,6 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
         Text [ en-US ] = "~No, I only want to save the value in the form.";
-    };
-};
-
-TabPage RID_PAGE_FORM_DATASOURCE_STATUS
-{
-    HelpID = "extensions:TabPage:RID_PAGE_FORM_DATASOURCE_STATUS";
-    FixedLine FL_FORMSETINGS
-    {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-        Text [ en-US ] = "Form";
-    };
-    FixedText FT_FORMDATASOURCELABEL
-    {
-        Pos = MAP_APPFONT ( 7 , 15 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "Data source";
-    };
-    FixedText FT_FORMDATASOURCE
-    {
-        Pos = MAP_APPFONT ( 7 + 60 + 3 , 15 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X / 2 - 80 - 3 , 19 ) ;
-        WordBreak = TRUE;
-    };
-
-    FixedText FT_FORMCONTENTTYPELABEL
-    {
-        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 15 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "Content type";
-    };
-    FixedText FT_FORMCONTENTTYPE
-    {
-        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 15 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
-    };
-
-    FixedText FT_FORMTABLELABEL
-    {
-        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 26 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "Content";
-    };
-    FixedText FT_FORMTABLE
-    {
-        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 26 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
     };
 };
 

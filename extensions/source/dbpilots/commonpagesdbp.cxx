@@ -35,6 +35,7 @@
 #include <connectivity/dbtools.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/docfilt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -59,32 +60,28 @@ namespace dbp
 
 
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
-        :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
-        ,m_aData            (this, ModuleRes(FL_DATA))
-        ,m_aExplanation     (this, ModuleRes(FT_EXPLANATION))
-        ,m_aDatasourceLabel (this, ModuleRes(FT_DATASOURCE))
-        ,m_aDatasource      (this, ModuleRes(LB_DATASOURCE))
-        ,m_aSearchDatabase  (this, ModuleRes(PB_FORMDATASOURCE))
-        ,m_aTableLabel      (this, ModuleRes(FT_TABLE))
-        ,m_aTable           (this, ModuleRes(LB_TABLE))
+        :OControlWizardPage(_pParent, "TableSelectionPage", "modules/sabpilot/ui/tableselectionpage.ui")
     {
-        FreeResource();
+        get(m_pTable,"table");
+        get(m_pDatasource, "datasource");
+        get(m_pDatasourceLabel, "datasourcelabel");
+        get(m_pSearchDatabase, "search");
 
         implCollectDatasource();
 
-        m_aDatasource.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
-        m_aTable.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
-        m_aTable.SetDoubleClickHdl(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
-        m_aSearchDatabase.SetClickHdl(LINK(this, OTableSelectionPage, OnSearchClicked));
+        m_pDatasource->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_pTable->SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_pTable->SetDoubleClickHdl(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
+        m_pSearchDatabase->SetClickHdl(LINK(this, OTableSelectionPage, OnSearchClicked));
 
-        m_aDatasource.SetDropDownLineCount(10);
+        m_pDatasource->SetDropDownLineCount(10);
     }
 
 
     void OTableSelectionPage::ActivatePage()
     {
         OControlWizardPage::ActivatePage();
-        m_aDatasource.GrabFocus();
+        m_pDatasource->GrabFocus();
     }
 
 
@@ -93,10 +90,10 @@ namespace dbp
         if (!OControlWizardPage::canAdvance())
             return false;
 
-        if (0 == m_aDatasource.GetSelectEntryCount())
+        if (0 == m_pDatasource->GetSelectEntryCount())
             return false;
 
-        if (0 == m_aTable.GetSelectEntryCount())
+        if (0 == m_pTable->GetSelectEntryCount())
             return false;
 
         return true;
@@ -117,14 +114,11 @@ namespace dbp
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
             if ( bEmbedded )
             {
-                m_aDatasource.Hide();
-                m_aDatasourceLabel.Hide();
-                m_aSearchDatabase.Hide();
-                m_aTableLabel.SetPosPixel(m_aDatasourceLabel.GetPosPixel());
-                m_aTable.SetPosPixel(m_aDatasource.GetPosPixel());
-                m_aDatasource.InsertEntry(sDataSourceName);
+                VclVBox *_pSourceBox = get<VclVBox>("sourcebox");
+                _pSourceBox->Hide();
+                m_pDatasource->InsertEntry(sDataSourceName);
             }
-            m_aDatasource.SelectEntry(sDataSourceName);
+            m_pDatasource->SelectEntry(sDataSourceName);
 
             implFillTables(xConnection);
 
@@ -134,13 +128,13 @@ namespace dbp
             OSL_VERIFY( rContext.xForm->getPropertyValue("CommandType") >>= nCommandType );
 
             // search the entry of the given type with the given name
-            for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
+            for ( sal_uInt16 nLookup = 0; nLookup < m_pTable->GetEntryCount(); ++nLookup )
             {
-                if (sCommand.equals(m_aTable.GetEntry(nLookup)))
+                if (sCommand.equals(m_pTable->GetEntry(nLookup)))
                 {
-                    if ( reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
+                    if ( reinterpret_cast< sal_IntPtr >( m_pTable->GetEntryData( nLookup ) ) == nCommandType )
                     {
-                        m_aTable.SelectEntryPos( nLookup );
+                        m_pTable->SelectEntryPos( nLookup );
                         break;
                     }
                 }
@@ -166,11 +160,11 @@ namespace dbp
             {
                 xOldConn = getFormConnection();
 
-                OUString sDataSource = m_aDatasource.GetSelectEntry();
+                OUString sDataSource = m_pDatasource->GetSelectEntry();
                 rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
             }
-            OUString sCommand = m_aTable.GetSelectEntry();
-            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
+            OUString sCommand = m_pTable->GetSelectEntry();
+            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_pTable->GetEntryData( m_pTable->GetSelectEntryPos() ) );
 
             rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
             rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );
@@ -208,9 +202,9 @@ namespace dbp
             OUString sDataSourceName = aFileDlg.GetPath();
             ::svt::OFileNotation aFileNotation(sDataSourceName);
             sDataSourceName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
-            m_aDatasource.InsertEntry(sDataSourceName);
-            m_aDatasource.SelectEntry(sDataSourceName);
-            LINK(this, OTableSelectionPage, OnListboxSelection).Call(&m_aDatasource);
+            m_pDatasource->InsertEntry(sDataSourceName);
+            m_pDatasource->SelectEntry(sDataSourceName);
+            LINK(this, OTableSelectionPage, OnListboxSelection).Call(m_pDatasource);
         }
         return 0L;
     }
@@ -225,7 +219,7 @@ namespace dbp
 
     IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
     {
-        if (&m_aDatasource == _pBox)
+        if (m_pDatasource == _pBox)
         {   // new data source selected
             implFillTables();
         }
@@ -257,7 +251,7 @@ namespace dbp
 
     void OTableSelectionPage::implFillTables(const Reference< XConnection >& _rxConn)
     {
-        m_aTable.Clear();
+        m_pTable->Clear();
 
         WaitObject aWaitCursor(this);
 
@@ -275,7 +269,7 @@ namespace dbp
             // connect to the data source
             try
             {
-                OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
+                OUString sCurrentDatasource = m_pDatasource->GetSelectEntry();
                 if (!sCurrentDatasource.isEmpty())
                 {
                     // obtain the DS object
@@ -359,14 +353,11 @@ namespace dbp
         }
 
         Image aTableImage, aQueryImage;
-        {
-            ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
+        aTableImage = Image( ModuleRes( IMG_TABLE ) );
+        aQueryImage = Image( ModuleRes( IMG_QUERY ) );
 
-            aTableImage = Image( ModuleRes( IMG_TABLE ) );
-            aQueryImage = Image( ModuleRes( IMG_QUERY ) );
-        }
-        lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
-        lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
+        lcl_fillEntries( *m_pTable, aTableNames, aTableImage, CommandType::TABLE );
+        lcl_fillEntries( *m_pTable, aQueryNames, aQueryImage, CommandType::QUERY );
     }
 
 
@@ -376,7 +367,7 @@ namespace dbp
         {
             m_xDSContext = getContext().xDatasourceContext;
             if (m_xDSContext.is())
-                fillListBox(m_aDatasource, m_xDSContext->getElementNames());
+                fillListBox(*m_pDatasource, m_xDSContext->getElementNames());
         }
         catch (const Exception&)
         {

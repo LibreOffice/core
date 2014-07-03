@@ -75,6 +75,7 @@ namespace dbp
     {
     public:
         OGridPage( OGridWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
+        OGridPage( OGridWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription ) : OControlWizardPage(_pParent, _rID, _rUIXMLDescription) { }
 
     protected:
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
@@ -86,15 +87,12 @@ namespace dbp
     class OGridFieldsSelection : public OGridPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aExistFieldsLabel;
-        ListBox         m_aExistFields;
-        PushButton      m_aSelectOne;
-        PushButton      m_aSelectAll;
-        PushButton      m_aDeselectOne;
-        PushButton      m_aDeselectAll;
-        FixedText       m_aSelFieldsLabel;
-        ListBox         m_aSelFields;
+        ListBox         *m_pExistFields;
+        PushButton      *m_pSelectOne;
+        PushButton      *m_pSelectAll;
+        PushButton      *m_pDeselectOne;
+        PushButton      *m_pDeselectAll;
+        ListBox         *m_pSelFields;
 
     public:
         OGridFieldsSelection( OGridWizard* _pParent );
