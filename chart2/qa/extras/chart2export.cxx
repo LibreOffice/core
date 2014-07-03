@@ -521,6 +521,45 @@ void Chart2ExportTest::testCrosses()
 void Chart2ExportTest::testScatterChartTextXValues()
 {
     load("/chart2/qa/extras/data/docx/", "scatter-chart-text-x-values.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    // Make sure we have exactly 3 data series.
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), aLabels[0][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), aLabels[1][0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
+
+    std::vector<std::vector<double> > aYValues = getDataSeriesYValuesFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aYValues.size());
+
+    // Check the Y values of "Series 1".
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aYValues[0].size());
+    CPPUNIT_ASSERT_EQUAL(4.3, aYValues[0][0]);
+    CPPUNIT_ASSERT_EQUAL(2.5, aYValues[0][1]);
+    CPPUNIT_ASSERT_EQUAL(3.5, aYValues[0][2]);
+    CPPUNIT_ASSERT_EQUAL(4.5, aYValues[0][3]);
+
+    // And "Series 2".
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aYValues[1].size());
+    CPPUNIT_ASSERT_EQUAL(2.4, aYValues[1][0]);
+    CPPUNIT_ASSERT_EQUAL(4.4, aYValues[1][1]);
+    CPPUNIT_ASSERT_EQUAL(1.8, aYValues[1][2]);
+    CPPUNIT_ASSERT_EQUAL(2.8, aYValues[1][3]);
+
+    // And "Series 3".
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aYValues[2].size());
+    CPPUNIT_ASSERT_EQUAL(2.0, aYValues[2][0]);
+    CPPUNIT_ASSERT_EQUAL(2.0, aYValues[2][1]);
+    CPPUNIT_ASSERT_EQUAL(3.0, aYValues[2][2]);
+    CPPUNIT_ASSERT_EQUAL(5.0, aYValues[2][3]);
+
+    // Test the export.
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     if (!pXmlDoc)
        return;

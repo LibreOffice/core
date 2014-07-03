@@ -324,6 +324,52 @@ uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XC
     return seriesList;
 }
 
+std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Reference<chart2::XChartType>& xCT )
+{
+    Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDSCont.is());
+    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+
+    double fNan;
+    rtl::math::setNan(&fNan);
+
+    std::vector<std::vector<double> > aRet;
+    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+    {
+        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDSrc.is());
+        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+        {
+            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+            CPPUNIT_ASSERT(xValues.is());
+            Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
+            if (!xPropSet.is())
+                continue;
+
+            OUString aRoleName;
+            xPropSet->getPropertyValue("Role") >>= aRoleName;
+            if (aRoleName == "values-y")
+            {
+                uno::Sequence<uno::Any> aData = xValues->getData();
+                std::vector<double> aValues;
+                aValues.reserve(aData.getLength());
+                for (sal_Int32 nVal = 0; nVal < aData.getLength(); ++nVal)
+                {
+                    double fVal;
+                    if (aData[nVal] >>= fVal)
+                        aValues.push_back(fVal);
+                    else
+                        aValues.push_back(fNan);
+                }
+                aRet.push_back(aValues);
+            }
+        }
+    }
+
+    return aRet;
+}
+
 std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Reference<chart2::XChartType>& xCT )
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
