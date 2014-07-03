@@ -83,15 +83,13 @@ SvxPageWindow::SvxPageWindow(Window* pParent)
 {
     // Count in Twips by default
     SetMapMode(MapMode(MAP_TWIP));
-    aWinSize = GetOutputSizePixel();
+    aWinSize = GetOptimalSize();
     aWinSize.Height() -= 4;
     aWinSize.Width() -= 4;
 
     aWinSize = PixelToLogic(aWinSize);
     SetBackground();
 }
-
-
 
 SvxPageWindow::~SvxPageWindow()
 {
