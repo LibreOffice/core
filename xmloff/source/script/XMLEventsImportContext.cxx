@@ -174,11 +174,13 @@ bool XMLEventsImportContext::GetEventSequence(
     }
 
     // if we're not at the end, set the sequence
-    bool bRet = (aIter != aCollectEvents.end());
-    if (bRet)
+    if (aIter != aCollectEvents.end())
+    {
         rSequence = aIter->second;
+        return true;
+    }
 
-    return bRet;
+    return false;
 }
 
 void XMLEventsImportContext::AddEventValues(
