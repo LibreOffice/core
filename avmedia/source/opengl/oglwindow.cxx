@@ -22,6 +22,7 @@ OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEve
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
     , m_aLastMousePos(Point())
     , m_bIsOrbitMode( false )
+    , m_fCameraDistance(0.0)
 {
 }
 
@@ -274,6 +275,17 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                         if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
                         if(nCode == KEY_D)vMoveBy += vStrafe*(0.0005f*fModelSize);
                     }
+                    else
+                    {
+                        // Limit zooming in orbit mode
+                        m_fCameraDistance += vMoveBy.z;
+                        if ((m_fCameraDistance < 0.5 * fModelSize && vMoveBy.z < 0.0 ) ||
+                            (m_fCameraDistance > 2 * fModelSize && vMoveBy.z > 0.0 ))
+                        {
+                            m_fCameraDistance -= vMoveBy.z;
+                            vMoveBy = glm::vec3(0.0);
+                        }
+                    }
                 }
                 gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
             }
@@ -288,6 +300,12 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                 {
                     gltf_orbit_mode_start(&m_rHandle);
                     m_bIsOrbitMode = true;
+                    // Set default camera distance
+                    glm::vec3 vEye;
+                    glm::vec3 vView;
+                    glm::vec3 vUp;
+                    gltf_get_camera_pos(&m_rHandle, &vEye,&vView,&vUp);
+                    m_fCameraDistance = vEye.z - gltf_get_model_center_pos(&m_rHandle)->z - (gltf_get_model_size(&m_rHandle)/2.0);
                 }
             }
             else if(nCode == KEY_F)
