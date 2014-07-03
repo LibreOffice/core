@@ -1006,13 +1006,54 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                         basegfx::tools::createScaleTranslateB2DHomMatrix(
                             aTargetRange.getRange(),
                             aTargetRange.getMinimum()));
-                    drawinglayer::primitive2d::Primitive2DSequence aContent;
+                    drawinglayer::primitive2d::Primitive2DSequence aContent(1);
+                    bool bDone(false);
 
-                    aContent.realloc(1);
-                    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
-                        aTargetTransform,
-                        rGrfObj.GetGraphic(),
-                        aGrfAttr);
+                    // #i125171# The mechanism to get lossless jpegs into pdf is based on having the original
+                    // file data (not the bitmap data) at the Graphic in the GfxLink (which has *nothing* to
+                    // do with the graphic being linked). This works well for DrawingLayer GraphicObjects (linked
+                    // and unlinked) but fails for linked Writer GraphicObjects. These have the URL in the
+                    // GraphicObject, but no GfxLink with the original file data when it's a linked graphic.
+                    // Since this blows up PDF size by a factor of 10 (the graphics get embedded as pixel maps
+                    // then) it is okay to add this workarund: In the needed case, load the graphic in a way to
+                    // get the GfxLink in the needed form and use that Graphic temporarily. Do this only when
+                    // - we have PDF export
+                    // - the GraphicObject is linked
+                    // - the Graphic has no GfxLink
+                    // - LosslessCompression is activated
+                    // - it's indeed a jpeg graphic (could be checked by the url ending, but is more reliable to check later)
+                    // In all other cases (normal repaint, print, etc...) use the available Graphic with the
+                    // already loaded pixel graphic as before this change.
+                    if(pOut->GetExtOutDevData() && rGrfObj.HasLink() && !rGrfObj.GetGraphic().IsLink())
+                    {
+                        const vcl::PDFExtOutDevData* pPDFExt = dynamic_cast< const vcl::PDFExtOutDevData* >(pOut->GetExtOutDevData());
+
+                        if(pPDFExt && pPDFExt->GetIsLosslessCompression())
+                        {
+                            Graphic aTempGraphic;
+                            INetURLObject aURL(rGrfObj.GetLink());
+
+                            if(GRFILTER_OK == GraphicFilter::GetGraphicFilter()->ImportGraphic(aTempGraphic, aURL))
+                            {
+                                if(aTempGraphic.IsLink() && GFX_LINK_TYPE_NATIVE_JPG == aTempGraphic.GetLink().GetType())
+                                {
+                                    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+                                        aTargetTransform,
+                                        aTempGraphic,
+                                        aGrfAttr);
+                                    bDone = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!bDone)
+                    {
+                        aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+                            aTargetTransform,
+                            rGrfObj.GetGraphic(),
+                            aGrfAttr);
+                    }
 
                     paintUsingPrimitivesHelper(
                         *pOut,
