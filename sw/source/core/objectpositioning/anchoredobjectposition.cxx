@@ -78,16 +78,16 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // determine contact object
     {
         mpContact = static_cast<SwContact*>(GetUserCall( &mrDrawObj ));
-        OSL_ENSURE( mpContact,
-                "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing SwContact-object." );
+        assert(mpContact &&
+                "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing SwContact-object.");
     }
 
     // determine anchored object, the object belongs to
     {
         // #i26791#
         mpAnchoredObj = mpContact->GetAnchoredObj( &mrDrawObj );
-        OSL_ENSURE( mpAnchoredObj,
-                "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchored object." );
+        assert(mpAnchoredObj &&
+                "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchored object.");
     }
 
     // determine frame, the object is anchored at
@@ -102,8 +102,8 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     {
         // #i28701#
         mpFrmFmt = &mpAnchoredObj->GetFrmFmt();
-        OSL_ENSURE( mpFrmFmt,
-                "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format." );
+        assert(mpFrmFmt &&
+                "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format.");
     }
 
     // #i62875# - determine attribute value of <Follow-Text-Flow>

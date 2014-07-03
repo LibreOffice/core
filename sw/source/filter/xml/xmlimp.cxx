@@ -722,10 +722,10 @@ void SwXMLImport::endDocument( void )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
-        OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+        assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
         OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-        OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
+        assert(pTxtCrsr && "SwXTextCursor missing");
         SwPaM *pPaM = pTxtCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {

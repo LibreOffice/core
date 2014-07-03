@@ -83,7 +83,7 @@ void ComputedExpression::setExpression( const OUString& rExpression )
 
 bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
 {
-    OSL_ENSURE( pExpression != NULL, "no expression?" );
+    assert(pExpression && "no expression?");
 
     // call RegExp engine
     SearchOptions aSearchOptions;

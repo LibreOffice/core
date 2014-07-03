@@ -1818,13 +1818,13 @@ void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
 
 const ScDocOptions& ScDocument::GetDocOptions() const
 {
-    OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
+    assert(pDocOptions && "No DocOptions! :-(");
     return *pDocOptions;
 }
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
+    assert(pDocOptions && "No DocOptions! :-(");
 
     *pDocOptions = rOpt;
     xPoolHelper->SetFormTableOpt(rOpt);
@@ -1832,13 +1832,13 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 
 const ScViewOptions& ScDocument::GetViewOptions() const
 {
-    OSL_ENSURE( pViewOptions, "No ViewOptions! :-(" );
+    assert(pViewOptions && "No ViewOptions! :-(");
     return *pViewOptions;
 }
 
 void ScDocument::SetViewOptions( const ScViewOptions& rOpt )
 {
-    OSL_ENSURE( pViewOptions, "No ViewOptions! :-(" );
+    assert(pViewOptions && "No ViewOptions! :-(");
     *pViewOptions = rOpt;
 }
 

@@ -61,9 +61,9 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
         SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+    assert(pFact && "SwAbstractDialogFactory fail!");
     pAbstDlg = pFact->CreateIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
-    OSL_ENSURE(pAbstDlg, "Dialogdiet fail!");
+    assert(pAbstDlg && "Dialogdiet fail!");
     pWindow = pAbstDlg->GetWindow();
     pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
                         // -> Show() will invoke StateChanged() and save pos

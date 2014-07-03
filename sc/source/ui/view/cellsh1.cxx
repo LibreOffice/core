@@ -2795,8 +2795,8 @@ void ScCellShell::ExecuteFillSingleEdit()
 
 IMPL_LINK_NOARG(ScCellShell, DialogClosed)
 {
-    OSL_ENSURE( pImpl->m_pLinkedDlg, "ScCellShell::DialogClosed(): invalid request" );
-    OSL_ENSURE( pImpl->m_pRequest, "ScCellShell::DialogClosed(): invalid request" );
+    assert(pImpl->m_pLinkedDlg && "ScCellShell::DialogClosed(): invalid request");
+    assert(pImpl->m_pRequest && "ScCellShell::DialogClosed(): invalid request");
     OUString sFile, sFilter, sOptions, sSource;
     sal_uLong nRefresh = 0;
 

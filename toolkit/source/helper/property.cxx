@@ -363,7 +363,7 @@ sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
 const OUString& GetPropertyName( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
-    DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
+    assert(pImplPropertyInfo && "Invalid PropertyId!");
     return pImplPropertyInfo->aName;
 }
 

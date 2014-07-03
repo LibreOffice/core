@@ -1584,7 +1584,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
         }
     }
 
-    OSL_ENSURE( pRet, "SwCellFrm::FindStartRowSpanCell: No result" );
+    assert(pRet && "SwCellFrm::FindStartRowSpanCell: No result");
 
     return *pRet;
 }

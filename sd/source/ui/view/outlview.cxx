@@ -1083,7 +1083,7 @@ bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, bool ) const
 {
     OutlinerView* pOlView = GetViewByWindow(
                                 mrOutlineViewShell.GetActiveWindow());
-    DBG_ASSERT(pOlView, "keine OutlinerView gefunden");
+    assert(pOlView && "keine OutlinerView gefunden");
 
     rTargetSet.Put( pOlView->GetAttribs(), false );
     return true;

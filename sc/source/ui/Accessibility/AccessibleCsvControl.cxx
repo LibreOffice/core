@@ -190,7 +190,7 @@ void ScAccessibleCsvControl::ensureAlive() const throw( DisposedException )
 
 ScCsvControl& ScAccessibleCsvControl::implGetControl() const
 {
-    OSL_ENSURE( mpControl, "ScAccessibleCsvControl::implGetControl - missing control" );
+    assert(mpControl && "ScAccessibleCsvControl::implGetControl - missing control");
     return *mpControl;
 }
 

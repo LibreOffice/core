@@ -1047,7 +1047,8 @@ sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen, bool bVer8)
 
 bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSprms )
 {
-    OSL_ENSURE( !nVarLen || pSprms, "Item pointer missing" );
+    assert((!nVarLen || pSprms) && "Item pointer missing");
+
     OSL_ENSURE( nVarLen < ( ( ePlc == PAP ) ? 497U : 502U ), "Sprms too long !" );
 
     if( bCombined )

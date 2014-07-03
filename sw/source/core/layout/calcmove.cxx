@@ -1735,7 +1735,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 /// between the pFrm's FtnBoss and the pNxt's FtnBoss.
 static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
-    OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
+    assert(pFrm && pNxt && "lcl_IsNextFtnBoss: No Frames?");
     pFrm = pFrm->FindFtnBossFrm();
     pNxt = pNxt->FindFtnBossFrm();
     // If pFrm is a last column, we use the page instead.

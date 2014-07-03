@@ -1245,11 +1245,11 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
     if ( nType )
     {
         ScInputHandler* pHdl = GetMyInputHdl();
-        OSL_ENSURE( pHdl, "no ScInputHandler" );
+        assert(pHdl && "no ScInputHandler");
 
         EditView* pTopView   = pHdl->GetTopView();
         EditView* pTableView = pHdl->GetTableView();
-        OSL_ENSURE( pTableView, "no EditView" );
+        assert(pTableView && "no EditView");
 
         pHdl->DataChanging();
 

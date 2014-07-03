@@ -44,7 +44,7 @@ ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr, const 
     , rOutAttrs(*pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    assert(pFact && "Dialogdiet fail!");
 
     if (rDialog == "BackgroundDialog")
     {

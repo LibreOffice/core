@@ -140,7 +140,7 @@ ExcelToSc& XclImpRoot::GetOldFmlaConverter() const
 
 XclImpSst& XclImpRoot::GetSst() const
 {
-    OSL_ENSURE( mrImpData.mxSst, "XclImpRoot::GetSst - invalid call, wrong BIFF" );
+    assert(mrImpData.mxSst && "XclImpRoot::GetSst - invalid call, wrong BIFF");
     return *mrImpData.mxSst;
 }
 
@@ -193,7 +193,7 @@ XclImpNameManager& XclImpRoot::GetNameManager() const
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
 {
-    OSL_ENSURE( mrImpData.mxLinkMgr, "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
+    assert(mrImpData.mxLinkMgr && "XclImpRoot::GetLinkManager - invalid call, wrong BIFF");
     return *mrImpData.mxLinkMgr;
 }
 
@@ -210,44 +210,44 @@ XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
-    OSL_ENSURE( mrImpData.mxCondFmtMgr, "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
+    assert(mrImpData.mxCondFmtMgr && "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF");
     return *mrImpData.mxCondFmtMgr;
 }
 
 XclImpValidationManager& XclImpRoot::GetValidationManager() const
 {
-    OSL_ENSURE( mrImpData.mxValidMgr, "XclImpRoot::GetValidationManager - invalid call, wrong BIFF" );
+    assert(mrImpData.mxValidMgr && "XclImpRoot::GetValidationManager - invalid call, wrong BIFF");
     return *mrImpData.mxValidMgr;
 }
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 {
     // TODO still in old RootData
-    OSL_ENSURE( GetOldRoot().pAutoFilterBuffer, "XclImpRoot::GetFilterManager - invalid call, wrong BIFF" );
+    assert(GetOldRoot().pAutoFilterBuffer && "XclImpRoot::GetFilterManager - invalid call, wrong BIFF");
     return *GetOldRoot().pAutoFilterBuffer;
 }
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
-    OSL_ENSURE( mrImpData.mxWebQueryBfr, "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
+    assert(mrImpData.mxWebQueryBfr && "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF");
     return *mrImpData.mxWebQueryBfr;
 }
 
 XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
-    OSL_ENSURE( mrImpData.mxPTableMgr, "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
+    assert(mrImpData.mxPTableMgr && "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF");
     return *mrImpData.mxPTableMgr;
 }
 
 XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
 {
-    OSL_ENSURE( mrImpData.mxTabProtect, "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    assert(mrImpData.mxTabProtect && "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF");
     return *mrImpData.mxTabProtect;
 }
 
 XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
 {
-    OSL_ENSURE( mrImpData.mxDocProtect, "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    assert(mrImpData.mxDocProtect && "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF");
     return *mrImpData.mxDocProtect;
 }
 

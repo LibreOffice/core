@@ -446,7 +446,8 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t;
+    assert(t.pEnv && "Java Enviroment geloescht worden!");
     {
         createStatement(t.pEnv);
 

@@ -54,10 +54,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+            assert(pFact && "SwAbstractDialogFactory fail!");
 
             boost::scoped_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION ));
-            OSL_ENSURE(pDialog, "Dialogdiet fail!");
+            assert(pDialog && "Dialogdiet fail!");
             if ( pDialog )
             {
                 pDialog->Execute();
@@ -67,10 +67,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            assert(pFact && "Dialogdiet fail!");
             boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 pMDI, *m_pWrtShell, true));
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            assert(pDlg && "Dialogdiet fail!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );

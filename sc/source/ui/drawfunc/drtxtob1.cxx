@@ -45,12 +45,12 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+    assert(pFact && "ScAbstractFactory create fail!");
 
     boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
         pViewData->GetDialogParent(), &rArgs,
         pViewData->GetSfxDocShell()));
-    OSL_ENSURE(pDlg, "Dialog create fail!");
+    assert(pDlg && "Dialog create fail!");
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
         pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);

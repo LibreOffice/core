@@ -165,7 +165,7 @@ bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDes
                 if (bCase(strFieldName,OUString(m_pListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-                    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
+                    assert(pInf && "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
 
                     rInfo->SetTabWindow(this);
                     rInfo->SetField(strFieldName);

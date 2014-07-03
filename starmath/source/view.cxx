@@ -2007,8 +2007,8 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 
 IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
-    SAL_WARN_IF( !_pFileDlg, "starmath", "SmViewShell::DialogClosedHdl(): no file dialog" );
-    SAL_WARN_IF( !pImpl->pDocInserter, "starmath", "ScDocShell::DialogClosedHdl(): no document inserter" );
+    assert(_pFileDlg && "SmViewShell::DialogClosedHdl(): no file dialog");
+    assert(pImpl->pDocInserter && "ScDocShell::DialogClosedHdl(): no document inserter");
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {

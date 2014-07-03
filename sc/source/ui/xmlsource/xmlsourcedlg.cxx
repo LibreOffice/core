@@ -456,7 +456,7 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
     while (pParent)
     {
         pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
-        OSL_ASSERT(pUserData);
+        assert(pUserData);
         if (pUserData->maLinkedPos.IsValid())
         {
             // This parent is already linked.

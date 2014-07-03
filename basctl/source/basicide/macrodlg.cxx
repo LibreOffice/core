@@ -287,7 +287,7 @@ void MacroChooser::DeleteMacro()
 
         // mark current doc as modified:
         StarBASIC* pBasic = FindBasic(pMethod);
-        DBG_ASSERT( pBasic, "Basic?!" );
+        assert(pBasic && "Basic?!");
         BasicManager* pBasMgr = FindBasicManager( pBasic );
         DBG_ASSERT( pBasMgr, "BasMgr?" );
         ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );

@@ -267,7 +267,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     ToolBox*            pToolBox = &GetToolBox();
     SvxFmAbsRecWin*     pWin = (SvxFmAbsRecWin*)( pToolBox->GetItemWindow(nId) );
 
-    DBG_ASSERT( pWin, "Control not found!" );
+    assert(pWin && "Control not found!");
 
     if (pState)
     {

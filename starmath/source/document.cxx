@@ -403,7 +403,7 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
 {
     if (!pEditEngineItemPool)
         GetEditEngine();
-    OSL_ENSURE( pEditEngineItemPool, "EditEngineItemPool missing" );
+    assert(pEditEngineItemPool && "EditEngineItemPool missing");
     return *pEditEngineItemPool;
 }
 
