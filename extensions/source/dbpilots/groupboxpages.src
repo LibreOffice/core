@@ -19,67 +19,6 @@
 
 #include "dbpresid.hrc"
 
-TabPage RID_PAGE_GROUPRADIOSELECTION
-{
-    HelpID = "extensions:TabPage:RID_PAGE_GROUPRADIOSELECTION";
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ en-US ] = "Data";
-
-    FixedLine FL_DATA
-    {
-        Pos = MAP_APPFONT ( 4 , 40  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-    };
-    FixedText FT_RADIOLABELS
-    {
-        Pos = MAP_APPFONT ( 7 , 52  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 24 ) ;
-        WordBreak = TRUE;
-        Group = TRUE;
-        Text [ en-US ] = "Which ~names do you want to give the option fields?";
-    };
-    Edit ET_RADIOLABELS
-    {
-        HelpID = "extensions:Edit:RID_PAGE_GROUPRADIOSELECTION:ET_RADIOLABELS";
-        Pos = MAP_APPFONT ( 7 , 79  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 12 ) ;
-        SVLook = TRUE ;
-        Border = TRUE ;
-    };
-    PushButton PB_MOVETORIGHT
-    {
-        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETORIGHT";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79  ) ;
-        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
-        Text = "~>>";
-    };
-    PushButton PB_MOVETOLEFT
-    {
-        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETOLEFT";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79 + ITEM_BUTTON_SIZE_Y + 3 ) ;
-        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
-        Text = "~<<";
-    };
-    FixedText FT_RADIOBUTTONS
-    {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 52  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, 8 ) ;
-        Group = TRUE;
-        Text [ en-US ] = "~Option fields";
-    };
-    ListBox LB_RADIOBUTTONS
-    {
-        HelpID = "extensions:ListBox:RID_PAGE_GROUPRADIOSELECTION:LB_RADIOBUTTONS";
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 79  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 79 - 6 ) ;
-        SVLook = TRUE ;
-        Border = TRUE ;
-        AutoHScroll = TRUE ;
-        Sort = FALSE;
-    };
-};
-
 TabPage RID_PAGE_DEFAULTFIELDSELECTION
 {
     HelpID = "extensions:TabPage:RID_PAGE_DEFAULTFIELDSELECTION";

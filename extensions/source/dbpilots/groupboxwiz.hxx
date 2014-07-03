@@ -80,6 +80,7 @@ namespace dbp
     {
     public:
         OGBWPage( OControlWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
+        OGBWPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription ) : OControlWizardPage(_pParent, _rID, _rUIXMLDescription) { }
 
     protected:
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
@@ -91,13 +92,10 @@ namespace dbp
     class ORadioSelectionPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aRadioNameLabel;
-        Edit            m_aRadioName;
-        PushButton      m_aMoveRight;
-        PushButton      m_aMoveLeft;
-        FixedText       m_aExistingRadiosLabel;
-        ListBox         m_aExistingRadios;
+        Edit            *m_pRadioName;
+        PushButton      *m_pMoveRight;
+        PushButton      *m_pMoveLeft;
+        ListBox         *m_pExistingRadios;
 
     public:
         ORadioSelectionPage( OControlWizard* _pParent );

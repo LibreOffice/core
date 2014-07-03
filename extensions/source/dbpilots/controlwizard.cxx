@@ -44,6 +44,7 @@
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 
 
 namespace dbp
@@ -84,7 +85,18 @@ namespace dbp
 
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId )
         :OControlWizardPage_Base( _pParent, _rResId )
-        ,m_pFormSettingsSeparator(NULL)
+        ,m_pFormDatasourceLabel(NULL)
+        ,m_pFormDatasource(NULL)
+        ,m_pFormContentTypeLabel(NULL)
+        ,m_pFormContentType(NULL)
+        ,m_pFormTableLabel(NULL)
+        ,m_pFormTable(NULL)
+    {
+    }
+
+
+    OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription )
+        :OControlWizardPage_Base( _pParent, rID, rUIXMLDescription )
         ,m_pFormDatasourceLabel(NULL)
         ,m_pFormDatasource(NULL)
         ,m_pFormContentTypeLabel(NULL)
@@ -97,13 +109,6 @@ namespace dbp
 
     OControlWizardPage::~OControlWizardPage()
     {
-        delete m_pFormSettingsSeparator;
-        delete m_pFormDatasourceLabel;
-        delete m_pFormDatasource;
-        delete m_pFormContentTypeLabel;
-        delete m_pFormContentType;
-        delete m_pFormTableLabel;
-        delete m_pFormTable;
     }
 
 
@@ -177,20 +182,18 @@ namespace dbp
 
     void OControlWizardPage::enableFormDatasourceDisplay()
     {
-        if (m_pFormSettingsSeparator)
+        if (m_pFormContentType)
             // nothing to do
             return;
 
-        ModuleRes aModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS);
-        OLocalResourceAccess aLocalControls(aModuleRes, RSC_TABPAGE);
-
-        m_pFormSettingsSeparator    = new FixedLine(this,  ModuleRes(FL_FORMSETINGS));
-        m_pFormDatasourceLabel      = new FixedText(this,  ModuleRes(FT_FORMDATASOURCELABEL));
-        m_pFormDatasource           = new FixedText(this,  ModuleRes(FT_FORMDATASOURCE));
-        m_pFormContentTypeLabel     = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPELABEL));
-        m_pFormContentType          = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPE));
-        m_pFormTableLabel           = new FixedText(this,  ModuleRes(FT_FORMTABLELABEL));
-        m_pFormTable                = new FixedText(this,  ModuleRes(FT_FORMTABLE));
+        VclFrame *_pFrame = get<VclFrame>("sourceframe");
+        _pFrame->Show();
+        get(m_pFormContentType,"contenttype");
+        get(m_pFormContentTypeLabel,"contenttypelabel");
+        get(m_pFormDatasource, "datasource");
+        get(m_pFormDatasourceLabel, "datasourcelabel");
+        get(m_pFormTable,"formtable");
+        get(m_pFormTableLabel,"formtablelabel");
 
         const OControlWizardContext& rContext = getContext();
         if ( rContext.bEmbedded )

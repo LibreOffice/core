@@ -295,37 +295,33 @@ namespace dbp
 
 
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
-        :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aExistFieldsLabel    (this, ModuleRes(FT_EXISTING_FIELDS))
-        ,m_aExistFields         (this, ModuleRes(LB_EXISTING_FIELDS))
-        ,m_aSelectOne           (this, ModuleRes(PB_FIELDRIGHT))
-        ,m_aSelectAll           (this, ModuleRes(PB_ALLFIELDSRIGHT))
-        ,m_aDeselectOne         (this, ModuleRes(PB_FIELDLEFT))
-        ,m_aDeselectAll         (this, ModuleRes(PB_ALLFIELDSLEFT))
-        ,m_aSelFieldsLabel      (this, ModuleRes(FT_SELECTED_FIELDS))
-        ,m_aSelFields           (this, ModuleRes(LB_SELECTED_FIELDS))
+        :OGridPage(_pParent, "GridFieldsSelection", "modules/sabpilot/ui/gridfieldsselectionpage.ui")
     {
-        FreeResource();
+        get(m_pExistFields,"existingfields");
+        get(m_pSelectOne,"fieldright");
+        get(m_pSelectAll,"allfieldsright");
+        get(m_pDeselectOne,"fieldleft");
+        get(m_pDeselectAll,"allfieldsleft");
+        get(m_pSelFields,"selectedfields");
 
         enableFormDatasourceDisplay();
 
-        m_aSelectOne.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
-        m_aSelectAll.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
-        m_aDeselectOne.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
-        m_aDeselectAll.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
+        m_pSelectOne->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
+        m_pSelectAll->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
+        m_pDeselectOne->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
+        m_pDeselectAll->SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
 
-        m_aExistFields.SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
-        m_aSelFields.SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
-        m_aExistFields.SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
-        m_aSelFields.SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
+        m_pExistFields->SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
+        m_pSelFields->SetSelectHdl(LINK(this, OGridFieldsSelection, OnEntrySelected));
+        m_pExistFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
+        m_pSelFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
 
     void OGridFieldsSelection::ActivatePage()
     {
         OGridPage::ActivatePage();
-        m_aExistFields.GrabFocus();
+        m_pExistFields->GrabFocus();
     }
 
 
@@ -341,16 +337,16 @@ namespace dbp
         OGridPage::initializePage();
 
         const OControlWizardContext& rContext = getContext();
-        fillListBox(m_aExistFields, rContext.aFieldNames);
+        fillListBox(*m_pExistFields, rContext.aFieldNames);
 
-        m_aSelFields.Clear();
+        m_pSelFields->Clear();
         const OGridSettings& rSettings = getSettings();
         const OUString* pSelected = rSettings.aSelectedFields.getConstArray();
         const OUString* pEnd = pSelected + rSettings.aSelectedFields.getLength();
         for (; pSelected < pEnd; ++pSelected)
         {
-            m_aSelFields.InsertEntry(*pSelected);
-            m_aExistFields.RemoveEntry(*pSelected);
+            m_pSelFields->InsertEntry(*pSelected);
+            m_pExistFields->RemoveEntry(*pSelected);
         }
 
         implCheckButtons();
@@ -363,13 +359,13 @@ namespace dbp
             return false;
 
         OGridSettings& rSettings = getSettings();
-        sal_uInt16 nSelected = m_aSelFields.GetEntryCount();
+        sal_uInt16 nSelected = m_pSelFields->GetEntryCount();
 
         rSettings.aSelectedFields.realloc(nSelected);
         OUString* pSelected = rSettings.aSelectedFields.getArray();
 
         for (sal_uInt16 i=0; i<nSelected; ++i, ++pSelected)
-            *pSelected = m_aSelFields.GetEntry(i);
+            *pSelected = m_pSelFields->GetEntry(i);
 
         return true;
     }
@@ -377,19 +373,19 @@ namespace dbp
 
     void OGridFieldsSelection::implCheckButtons()
     {
-        m_aSelectOne.Enable(m_aExistFields.GetSelectEntryCount() != 0);
-        m_aSelectAll.Enable(m_aExistFields.GetEntryCount() != 0);
+        m_pSelectOne->Enable(m_pExistFields->GetSelectEntryCount() != 0);
+        m_pSelectAll->Enable(m_pExistFields->GetEntryCount() != 0);
 
-        m_aDeselectOne.Enable(m_aSelFields.GetSelectEntryCount() != 0);
-        m_aDeselectAll.Enable(m_aSelFields.GetEntryCount() != 0);
+        m_pDeselectOne->Enable(m_pSelFields->GetSelectEntryCount() != 0);
+        m_pDeselectAll->Enable(m_pSelFields->GetEntryCount() != 0);
 
-        getDialog()->enableButtons(WZB_FINISH, 0 != m_aSelFields.GetEntryCount());
+        getDialog()->enableButtons(WZB_FINISH, 0 != m_pSelFields->GetEntryCount());
     }
 
 
     IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox*, _pList)
     {
-        PushButton* pSimulateButton = &m_aExistFields == _pList ? &m_aSelectOne : &m_aDeselectOne;
+        PushButton* pSimulateButton = m_pExistFields == _pList ? m_pSelectOne : m_pDeselectOne;
         if (pSimulateButton->IsEnabled())
             return OnMoveOneEntry( pSimulateButton );
         else
@@ -406,13 +402,13 @@ namespace dbp
 
     IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, PushButton*, _pButton)
     {
-        bool bMoveRight = (&m_aSelectOne == _pButton);
-        ListBox& rMoveTo = bMoveRight ? m_aSelFields : m_aExistFields;
+        bool bMoveRight = (m_pSelectOne == _pButton);
+        ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
 
         // the index of the selected entry
-        sal_uInt16 nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
+        sal_uInt16 nSelected = bMoveRight ? m_pExistFields->GetSelectEntryPos() : m_pSelFields->GetSelectEntryPos();
         // the (original) relative position of the entry
-        sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
+        sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_pExistFields->GetEntryData(nSelected) : m_pSelFields->GetEntryData(nSelected));
 
         sal_uInt16 nInsertPos = SAL_MAX_UINT16;
         if (!bMoveRight)
@@ -427,7 +423,7 @@ namespace dbp
         }
 
         // the text of the entry to move
-        OUString sMovingEntry = bMoveRight ? m_aExistFields.GetEntry(nSelected) : m_aSelFields.GetEntry(nSelected);
+        OUString sMovingEntry = bMoveRight ? m_pExistFields->GetEntry(nSelected) : m_pSelFields->GetEntry(nSelected);
 
         // insert the entry
         nInsertPos = rMoveTo.InsertEntry(sMovingEntry, nInsertPos);
@@ -437,21 +433,21 @@ namespace dbp
         // remove the entry from it's old list
         if (bMoveRight)
         {
-            sal_Int32 nSelectPos = m_aExistFields.GetSelectEntryPos();
-            m_aExistFields.RemoveEntry(nSelected);
-            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aExistFields.GetEntryCount()))
-                m_aExistFields.SelectEntryPos(nSelectPos);
+            sal_Int32 nSelectPos = m_pExistFields->GetSelectEntryPos();
+            m_pExistFields->RemoveEntry(nSelected);
+            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pExistFields->GetEntryCount()))
+                m_pExistFields->SelectEntryPos(nSelectPos);
 
-            m_aExistFields.GrabFocus();
+            m_pExistFields->GrabFocus();
         }
         else
         {
-            sal_Int32 nSelectPos = m_aSelFields.GetSelectEntryPos();
-            m_aSelFields.RemoveEntry(nSelected);
-            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aSelFields.GetEntryCount()))
-                m_aSelFields.SelectEntryPos(nSelectPos);
+            sal_Int32 nSelectPos = m_pSelFields->GetSelectEntryPos();
+            m_pSelFields->RemoveEntry(nSelected);
+            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pSelFields->GetEntryCount()))
+                m_pSelFields->SelectEntryPos(nSelectPos);
 
-            m_aSelFields.GrabFocus();
+            m_pSelFields->GrabFocus();
         }
 
         implCheckButtons();
@@ -461,10 +457,10 @@ namespace dbp
 
     IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, PushButton*, _pButton)
     {
-        bool bMoveRight = (&m_aSelectAll == _pButton);
-        m_aExistFields.Clear();
-        m_aSelFields.Clear();
-        fillListBox(bMoveRight ? m_aSelFields : m_aExistFields, getContext().aFieldNames);
+        bool bMoveRight = (m_pSelectAll == _pButton);
+        m_pExistFields->Clear();
+        m_pSelFields->Clear();
+        fillListBox(bMoveRight ? *m_pSelFields : *m_pExistFields, getContext().aFieldNames);
 
         implCheckButtons();
         return 0;
