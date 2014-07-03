@@ -585,7 +585,7 @@ void ValueSet::Format()
         }
 
         // draw items
-        sal_uLong nFirstItem = mnFirstLine * mnCols;
+        sal_uLong nFirstItem = static_cast<sal_uLong>(mnFirstLine) * mnCols;
         sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
 
         maItemListRect.Left() = x;
