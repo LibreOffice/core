@@ -3303,12 +3303,11 @@ void ImpEditEngine::UpdateSelections()
                 // taken into account!
                 sal_Int32 nPara = rInf.GetPosition();
                 ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nPara );
-                if ( !pPPortion ) // Last paragraph
+                if (!GetParaPortions().SafeGetObject(nPara)) // Last paragraph
                 {
                     nPara = GetParaPortions().Count()-1;
-                    pPPortion = GetParaPortions()[nPara];
                 }
-                OSL_ENSURE( pPPortion, "Empty Document in UpdateSelections ?" );
+                assert(GetParaPortions()[nPara] && "Empty Document in UpdateSelections ?");
                 // Do not end up from a hidden paragraph:
                 sal_Int32 nCurPara = nPara;
                 sal_Int32 nLastPara = GetParaPortions().Count()-1;
