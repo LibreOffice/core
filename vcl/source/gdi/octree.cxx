@@ -260,9 +260,9 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
     for( sal_uLong nIndex = 0; nIndex < nColors; nIndex++ )
     {
         const BitmapColor&  rColor = rPal[ (sal_uInt16) nIndex ];
-        const sal_uInt8         cRed = rColor.GetRed();
-        const sal_uInt8         cGreen = rColor.GetGreen();
-        const sal_uInt8         cBlue = rColor.GetBlue();
+        const long          cRed = rColor.GetRed();
+        const long          cGreen = rColor.GetGreen();
+        const long          cBlue = rColor.GetBlue();
 
         rdist = cRed - x2;
         gdist = cGreen - x2;
