@@ -19,8 +19,11 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 
-#include <rtl/alloc.h>
+#include <sal/config.h>
 
+#include <cassert>
+
+#include <rtl/alloc.h>
 
 namespace com
 {
@@ -395,8 +398,10 @@ public:
 
         @return UNacquired interface pointer
     */
-    inline interface_type * SAL_CALL operator -> () const
-        { return castFromXInterface(_pInterface); }
+    inline interface_type * SAL_CALL operator -> () const {
+        assert(_pInterface != 0);
+        return castFromXInterface(_pInterface);
+    }
 
     /** Gets interface pointer. This call does not acquire the interface.
 

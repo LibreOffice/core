@@ -20,8 +20,11 @@
 #ifndef INCLUDED_RTL_REF_HXX
 #define INCLUDED_RTL_REF_HXX
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <osl/interlck.h>
 
 namespace rtl
@@ -160,7 +163,7 @@ public:
      */
     inline reference_type * SAL_CALL operator->() const
     {
-        OSL_PRECOND(m_pBody, "Reference::operator->() : null body");
+        assert(m_pBody != 0);
         return m_pBody;
     }
 
@@ -169,7 +172,7 @@ public:
     */
     inline reference_type & SAL_CALL operator*() const
     {
-        OSL_PRECOND(m_pBody, "Reference::operator*() : null body");
+        assert(m_pBody != 0);
         return *m_pBody;
     }
 
