@@ -1470,6 +1470,8 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, bool bFlush, const Reference<
 {
     // fill buffer with blanks
     AllocBuffer();
+    if (!m_pBuffer)
+        return false;
     memset(m_pBuffer, 0, m_aHeader.db_slng);
     m_pBuffer[0] = ' ';
 
