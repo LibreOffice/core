@@ -478,16 +478,11 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     SfxPrinter *pDocPrinter = GetPrinter();
 
     // Evaluate Printer Options
-    bool bOriToDoc = false;
-    bool bSizeToDoc = false;
-    if ( &pDocPrinter->GetOptions() )
-    {
-        sal_uInt16 nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
-        const SfxFlagItem *pFlagItem = 0;
-        pDocPrinter->GetOptions().GetItemState( nWhich, false, (const SfxPoolItem**) &pFlagItem );
-        bOriToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION) : sal_False;
-        bSizeToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE) : sal_False;
-    }
+    sal_uInt16 nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
+    const SfxFlagItem *pFlagItem = 0;
+    pDocPrinter->GetOptions().GetItemState( nWhich, false, (const SfxPoolItem**) &pFlagItem );
+    bool bOriToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION);
+    bool bSizeToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE);
 
     // Determine the previous format and size
     Orientation eOldOri = pDocPrinter->GetOrientation();

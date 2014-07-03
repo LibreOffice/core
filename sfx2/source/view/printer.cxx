@@ -109,6 +109,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
     bKnown(true)
 
 {
+    assert(pOptions);
     pImpl = new SfxPrinter_Impl;
 }
 
@@ -121,6 +122,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
     pOptions        ( pTheOptions )
 
 {
+    assert(pOptions);
     pImpl = new SfxPrinter_Impl;
     bKnown = GetName() == rTheOrigJobSetup.GetPrinterName();
 
@@ -138,6 +140,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
     bKnown          ( GetName() == rPrinterName )
 
 {
+    assert(pOptions);
     pImpl = new SfxPrinter_Impl;
 }
 
@@ -149,6 +152,7 @@ SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
     pOptions( rPrinter.GetOptions().Clone() ),
     bKnown  ( rPrinter.IsKnown() )
 {
+    assert(pOptions);
     SetJobSetup( rPrinter.GetJobSetup() );
     SetPrinterProps( &rPrinter );
     SetMapMode( rPrinter.GetMapMode() );
