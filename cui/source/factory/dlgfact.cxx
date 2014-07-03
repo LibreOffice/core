@@ -1515,9 +1515,9 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
 AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
-                                                            bool bShadow)
+                                                            const SdrView* pSdrView )
 {
-    SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel, bShadow );
+    SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel,pSdrView );
     return new AbstractSvxAreaTabDialog_Impl( pDlg );
 }
 
