@@ -702,7 +702,7 @@ bool
     the XSelectionSupplier of the controller.
 */
 void
-    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;

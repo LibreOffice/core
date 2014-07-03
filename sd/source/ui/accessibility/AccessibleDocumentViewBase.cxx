@@ -729,7 +729,7 @@ bool
 
 // return nothing in default case
 void
-    AccessibleDocumentViewBase::implSelect( sal_Int32, sal_Bool )
+    AccessibleDocumentViewBase::implSelect( sal_Int32, bool )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 }

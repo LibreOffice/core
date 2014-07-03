@@ -273,7 +273,7 @@ private:
 
     // return nothing in default case
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 protected:

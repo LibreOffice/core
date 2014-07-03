@@ -42,7 +42,7 @@ namespace comphelper
 
     void SAL_CALL OCommonAccessibleSelection::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        implSelect( nChildIndex, sal_True );
+        implSelect( nChildIndex, true );
     }
 
 
@@ -54,13 +54,13 @@ namespace comphelper
 
     void SAL_CALL OCommonAccessibleSelection::clearAccessibleSelection(  ) throw (RuntimeException)
     {
-        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, sal_False );
+        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, false );
     }
 
 
     void SAL_CALL OCommonAccessibleSelection::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
-        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, sal_True );
+        implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, true );
     }
 
 
@@ -102,7 +102,7 @@ namespace comphelper
 
     void SAL_CALL OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        implSelect( nSelectedChildIndex, sal_False );
+        implSelect( nSelectedChildIndex, false );
     }
 
 

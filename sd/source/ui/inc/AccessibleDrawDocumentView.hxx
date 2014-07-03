@@ -138,7 +138,7 @@ protected:
             reps. children.
     */
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 private:
     ::sd::ViewShell* mpSdViewSh;
