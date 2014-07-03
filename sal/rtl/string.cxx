@@ -240,7 +240,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 aTextEncInfo.MaximumCharSize    = 8;
             }
 
-            nNewLen = nLength*aTextEncInfo.AverageCharSize;
+            nNewLen = nLength * static_cast<sal_Size>(aTextEncInfo.AverageCharSize);
             nMaxCharLen = aTextEncInfo.MaximumCharSize;
         }
 
