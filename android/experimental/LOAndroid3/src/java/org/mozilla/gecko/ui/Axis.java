@@ -88,7 +88,7 @@ abstract class Axis {
     private float mTouchPos;                /* Position of the most recent touch event on the current drag. */
     private float mLastTouchPos;            /* Position of the touch event before touchPos. */
     private float mVelocity;                /* Velocity in this direction; pixels per animation frame. */
-    public boolean mScrollingDisabled;      /* Whether movement on this axis is locked. */
+    private boolean mScrollingDisabled;     /* Whether movement on this axis is locked. */
     private boolean mDisableSnap;           /* Whether overscroll snapping is disabled. */
     private float mDisplacement;
 
@@ -147,7 +147,7 @@ abstract class Axis {
     }
 
     private Overscroll getOverscroll() {
-        boolean minus = (getOrigin() < 0.0f);
+        boolean minus = getOrigin() < 0.0f;
         boolean plus = (getViewportEnd() > getPageLength());
         if (minus && plus) {
             return Overscroll.BOTH;
@@ -164,10 +164,14 @@ abstract class Axis {
     // overscrolled on this axis, returns 0.
     private float getExcess() {
         switch (getOverscroll()) {
-            case MINUS:     return -getOrigin();
-            case PLUS:      return getViewportEnd() - getPageLength();
-            case BOTH:      return getViewportEnd() - getPageLength() - getOrigin();
-            default:        return 0.0f;
+            case MINUS:
+                return -getOrigin();
+            case PLUS:
+                return getViewportEnd() - getPageLength();
+            case BOTH:
+                return getViewportEnd() - getPageLength() - getOrigin();
+            default:
+                return 0.0f;
         }
     }
 
@@ -176,8 +180,7 @@ abstract class Axis {
      * possible and this axis has not been scroll locked while panning. Otherwise, returns false.
      */
     private boolean scrollable() {
-        return getViewportLength() <= getPageLength() - MIN_SCROLLABLE_DISTANCE &&
-                !mScrollingDisabled;
+        return getViewportLength() <= getPageLength() - MIN_SCROLLABLE_DISTANCE && !mScrollingDisabled;
     }
 
     /*

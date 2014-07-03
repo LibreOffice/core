@@ -16,16 +16,10 @@ import java.nio.ByteBuffer;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.libreoffice.kit.LibreOfficeKit;
-import org.libreoffice.kit.Office;
-import org.libreoffice.kit.Document;
-
 public class LOKitThread extends Thread {
     private static final String LOGTAG = "GeckoThread";
     private static final int TILE_SIZE = 256;
-
-    public Office mOffice;
-    public Document mDocument;
+    private TileProvider mTileProvider;
 
     public ConcurrentLinkedQueue<LOEvent> gEvents = new ConcurrentLinkedQueue<LOEvent>();
     private ViewportMetrics mViewportMetrics;
@@ -33,55 +27,40 @@ public class LOKitThread extends Thread {
     LOKitThread() {
     }
 
-    private void openDocument() {
-        // enable debugging messages as the first thing
-        LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
-        LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
-
-        mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
-        String input = "/assets/test1.odt";
-        mDocument = mOffice.documentLoad(input);
-    }
-
-    private synchronized boolean draw() throws InterruptedException {
+    private boolean draw() throws InterruptedException {
         final LibreOfficeMainActivity application = LibreOfficeMainActivity.mAppContext;
 
-        openDocument();
+        if (mTileProvider == null)
+            mTileProvider = new LOKitTileProvider(application.getLayerController());
 
-        long height = mDocument.getDocumentHeight();
-        long width  = mDocument.getDocumentWidth();
+        int pageWidth = mTileProvider.getPageWidth();
+        int pageHeight = mTileProvider.getPageHeight();
 
-        Log.e(LOGTAG, "Document Size: " + width + " " + height);
+        String metadata = createJson(0, 0, pageWidth, pageHeight, pageWidth, pageHeight, 0, 0, 1.0);
+        mViewportMetrics = new ViewportMetrics();
 
-        int pageWidth = 1024;
-        int pageHeight = 1024;
+        boolean shouldContinue = application.getLayerClient().beginDrawing(pageWidth, pageHeight, TILE_SIZE, TILE_SIZE, metadata);
 
-        String metadata = createJson(0, 0, 256, 256, pageWidth, pageHeight, 0, 0, 1.0);
-
-        Rect bufferRect = application.getLayerClient().beginDrawing(256, 256, TILE_SIZE, TILE_SIZE, metadata);
-
-        /*if (bufferRect == null) {
-            Log.e(LOGTAG, "beginDrawing - false");
+        if (!shouldContinue) {
             return false;
-        }*/
+        }
 
-        Log.e(LOGTAG, "Filling tiles..");
+        Log.i(LOGTAG, "Filling tiles..");
 
-        ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
+        int x = 0;
+        int y = 0;
+        for (Bitmap bitmap : mTileProvider.getTileIterator()) {
+            application.getLayerClient().addTile(bitmap, x, y);
+            x += TILE_SIZE;
+            if (x > pageWidth) {
+                x = 0;
+                y += TILE_SIZE;
+            }
+        }
 
-        Log.e(LOGTAG, "PaintTile..");
+        Log.i(LOGTAG, "End Draw");
 
-        mDocument.paintTile(buffer, 256, 256, 1024, 1024, 4096, 4096);
-
-        Log.e(LOGTAG, "EndPaintTile..");
-
-        Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(buffer);
-
-        application.getLayerClient().addTile(bitmap, 0, 0);
-
-        Log.e(LOGTAG, "EndDrawing..");
-        application.getLayerClient().endDrawing(0, 0, 256, 256);
+        application.getLayerClient().endDrawing(0, 0, pageWidth, pageHeight);
 
         return true;
     }
@@ -143,22 +122,20 @@ public class LOKitThread extends Thread {
         try {
             boolean drawn = false;
             while (true) {
-
                 if (!gEvents.isEmpty()) {
                     processEvent(gEvents.poll());
                 } else {
                     if (!drawn) {
                         drawn = draw();
                     }
-                    Thread.sleep(2000L);
+                    Thread.sleep(100L);
                 }
             }
         } catch (InterruptedException ex) {
-
         }
     }
 
-    private synchronized void processEvent(LOEvent event) throws InterruptedException {
+    private void processEvent(LOEvent event) throws InterruptedException {
         switch (event.mType) {
             case LOEvent.VIEWPORT:
                 mViewportMetrics = event.getViewport();

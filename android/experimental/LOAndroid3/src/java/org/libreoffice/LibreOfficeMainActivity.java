@@ -11,8 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.os.Environment;
-import java.io.File;
 
 import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
@@ -63,9 +61,11 @@ public class LibreOfficeMainActivity extends Activity {
         mAppContext = this;
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
         setContentView(R.layout.activity_main);
-        Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
         // setup gecko layout
         mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);

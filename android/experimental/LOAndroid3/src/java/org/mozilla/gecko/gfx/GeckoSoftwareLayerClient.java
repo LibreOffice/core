@@ -41,7 +41,7 @@ package org.mozilla.gecko.gfx;
 import org.libreoffice.LOKitShell;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerClient;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.LayerRenderer;
 import org.mozilla.gecko.gfx.MultiTileLayer;
@@ -77,20 +77,11 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         mFormat = CairoImage.FORMAT_ARGB32;
     }
 
-    /*protected void finalize() throws Throwable {
-        try {
-            if (mBuffer != null)
-                LOKitShell.freeDirectBuffer(mBuffer);
-            mBuffer = null;
-        } finally {
-            super.finalize();
-        }
-    }*/
-
     public void setLayerController(LayerController layerController) {
         super.setLayerController(layerController);
 
         layerController.setRoot(mTileLayer);
+
         if (mGeckoViewport != null) {
             layerController.setViewportMetrics(mGeckoViewport);
         }
@@ -104,7 +95,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         if(mTileLayer == null)
             mTileLayer = new MultiTileLayer(TILE_SIZE);
 
-        getLayerController().setRoot(mTileLayer);
+        mLayerController.setRoot(mTileLayer);
 
         // Force a resize event to be sent because the results of this
         // are different depending on what tile system we're using
@@ -114,22 +105,11 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     }
 
     @Override
-    protected boolean shouldDrawProceed(int tileWidth, int tileHeight) {
-        // Make sure the tile-size matches. If it doesn't, we could crash trying
-        // to access invalid memory.
-        if (tileWidth != TILE_SIZE.width || tileHeight != TILE_SIZE.height) {
-            Log.e(LOGTAG, "Aborting draw, incorrect tile size of " + tileWidth + "x" + tileHeight);
-            return false;
-        }
-        return true;
-    }
+    public boolean beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata) {
+        boolean shouldContinue = super.beginDrawing(width, height, tileWidth, tileHeight, metadata);
 
-    @Override
-    public Rect beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata) {
-        Rect bufferRect = super.beginDrawing(width, height, tileWidth, tileHeight, metadata);
-
-        if (bufferRect == null) {
-            return bufferRect;
+        if (!shouldContinue) {
+            return shouldContinue;
         }
 
         // If the window size has changed, reallocate the buffer to match.
@@ -137,7 +117,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
             mBufferSize = new IntSize(width, height);
         }
 
-        return bufferRect;
+        return shouldContinue;
     }
 
     @Override
@@ -145,76 +125,6 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         if (mTileLayer instanceof MultiTileLayer) {
             ((MultiTileLayer)mTileLayer).invalidate(updatedRect);
         }
-    }
-
-    /*private void copyPixelsFromMultiTileLayer(Bitmap target) {
-        Canvas c = new Canvas(target);
-        ByteBuffer tileBuffer = mBuffer.slice();
-        int bpp = CairoUtils.bitsPerPixelForCairoFormat(mFormat) / 8;
-
-        for (int y = 0; y < mBufferSize.height; y += TILE_SIZE.height) {
-            for (int x = 0; x < mBufferSize.width; x += TILE_SIZE.width) {
-                // Calculate tile size
-                IntSize tileSize = new IntSize(Math.min(mBufferSize.width - x, TILE_SIZE.width),
-                        Math.min(mBufferSize.height - y, TILE_SIZE.height));
-
-                // Create a Bitmap from this tile
-                Bitmap tile = Bitmap.createBitmap(tileSize.width, tileSize.height,
-                        CairoUtils.cairoFormatTobitmapConfig(mFormat));
-                tile.copyPixelsFromBuffer(tileBuffer.asIntBuffer());
-
-                // Copy the tile to the master Bitmap and recycle it
-                c.drawBitmap(tile, x, y, null);
-                tile.recycle();
-
-                // Progress the buffer to the next tile
-                tileBuffer.position(tileSize.getArea() * bpp);
-                tileBuffer = tileBuffer.slice();
-            }
-        }
-    }*/
-
-    @Override
-    protected void tileLayerUpdated() {
-        /* No-op. */
-    }
-
-    @Override
-    public Bitmap getBitmap() {
-        if (mTileLayer == null)
-            return null;
-
-        // Begin a tile transaction, otherwise the buffer can be destroyed while
-        // we're reading from it.
-        /*beginTransaction(mTileLayer);
-        try {
-            if (mBuffer == null || mBufferSize.width <= 0 || mBufferSize.height <= 0)
-                return null;
-            try {
-                Bitmap b = null;
-
-                if (mTileLayer instanceof MultiTileLayer) {
-                    b = Bitmap.createBitmap(mBufferSize.width, mBufferSize.height,CairoUtils.cairoFormatTobitmapConfig(mFormat));
-                    copyPixelsFromMultiTileLayer(b);
-                } else {
-                    Log.w(LOGTAG, "getBitmap() called on a layer (" + mTileLayer + ") we don't know how to get a bitmap from");
-                }
-
-                return b;
-            } catch (OutOfMemoryError oom) {
-                Log.w(LOGTAG, "Unable to create bitmap", oom);
-                return null;
-            }
-        } finally {
-            endTransaction(mTileLayer);
-        }*/
-
-        return null;
-    }
-
-    @Override
-    public int getType() {
-        return LAYER_CLIENT_TYPE_SOFTWARE;
     }
 
     @Override
@@ -235,3 +145,4 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         }
     }
 }
+

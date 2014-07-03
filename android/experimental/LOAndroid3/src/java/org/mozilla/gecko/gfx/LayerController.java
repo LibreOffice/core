@@ -88,7 +88,7 @@ public class LayerController {
     private boolean mWaitForTouchListeners;
     private PanZoomController mPanZoomController;
     private OnTouchListener mOnTouchListener;       /* The touch listener. */
-    private LayerClient mLayerClient;               /* The layer client. */
+    private GeckoLayerClient mLayerClient;               /* The layer client. */
     /* The new color for the checkerboard. */
     private int mCheckerboardColor;
     private boolean mCheckerboardShouldShowChecks;
@@ -111,11 +111,11 @@ public class LayerController {
         mForceRedraw = true;
     }
 
-    public LayerClient getLayerClient() {
+    public GeckoLayerClient getLayerClient() {
         return mLayerClient;
     }
 
-    public void setLayerClient(LayerClient layerClient) {
+    public void setLayerClient(GeckoLayerClient layerClient) {
         mLayerClient = layerClient;
         layerClient.setLayerController(this);
     }
