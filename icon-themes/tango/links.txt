@@ -285,6 +285,8 @@ cmd/lc_pie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/sc_pie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
+cmd/lc_showsinglepage.png cmd/lc_adddirect.png
+cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 sfx2/res/sortascending.png cmd/lc_sortascending.png
 svx/res/symphony/Line_color.png cmd/sc_xlinecolor.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png

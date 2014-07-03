@@ -7270,6 +7270,30 @@ SfxVoidItem ShowTwoPages FN_SHOW_TWO_PAGES
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem ShowSinglePage FN_SHOW_SINGLE_PAGE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
 
 [

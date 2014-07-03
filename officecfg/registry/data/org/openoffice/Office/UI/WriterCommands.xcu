@@ -927,7 +927,15 @@
       </node>
       <node oor:name=".uno:ShowTwoPages" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Preview: Two Pages</value>
+          <value xml:lang="en-US">Two Pages Preview</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShowSinglePage" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Single Page Preview</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -943,7 +951,7 @@
       </node>
       <node oor:name=".uno:ShowMultiplePages" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Preview: Multiple Pages</value>
+          <value xml:lang="en-US">Multiple Pages Preview</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

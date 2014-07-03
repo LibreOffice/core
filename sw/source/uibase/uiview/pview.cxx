@@ -739,6 +739,10 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             pViewWin->CalcWish( nRow, 2 );
             break;
 
+        case FN_SHOW_SINGLE_PAGE:
+            pViewWin->CalcWish( nRow, 1 );
+            break;
+
         case FN_PREVIEW_ZOOM:
         case SID_ATTR_ZOOM:
         {

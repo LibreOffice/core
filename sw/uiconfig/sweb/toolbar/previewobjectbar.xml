@@ -24,6 +24,7 @@
  <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc" toolbar:helpid="20907"/>
  <toolbar:toolbaritem xlink:href=".uno:GoToEndOfDoc" toolbar:helpid="20908"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowSinglePage"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages" toolbar:helpid="21251"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages" toolbar:helpid="21252"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowBookview"/>
