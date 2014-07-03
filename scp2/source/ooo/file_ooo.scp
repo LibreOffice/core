@@ -529,9 +529,13 @@ UI_FILELIST_ALL_LANG(basicide, modules/BasicIDE)
 UI_FILELIST_ALL_LANG(cui, cui)
 #ifdef DBCONNECTIVITY
 UI_FILELIST_ALL_LANG(dbaccess, dbaccess)
+UI_FILELIST_ALL_LANG(dbreport, modules/dbreport)
+UI_FILELIST_ALL_LANG(sbibliography, modules/sbibliography)
+UI_FILELIST_ALL_LANG(spropctrlr, modules/spropctrlr)
 #endif
 UI_FILELIST_ALL_LANG(desktop, desktop)
 UI_FILELIST_ALL_LANG(filter, filter)
+UI_FILELIST_ALL_LANG(sabpilot, modules/sabpilot)
 UI_FILELIST_ALL_LANG(scalc, modules/scalc)
 UI_FILELIST_ALL_LANG(schart, modules/schart)
 UI_FILELIST_ALL_LANG(sdraw, modules/sdraw)
