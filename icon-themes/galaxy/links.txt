@@ -2,3 +2,5 @@ cmd/lc_datastreamsplay.png avmedia/res/avl02049.png
 cmd/sc_datastreamsplay.png avmedia/res/av02049.png
 cmd/lc_datastreamsstop.png avmedia/res/avl02051.png
 cmd/sc_datastreamsstop.png avmedia/res/av02051.png
+cmd/lc_showsinglepage.png cmd/lc_adddirect.png
+cmd/sc_showsinglepage.png cmd/sc_adddirect.png

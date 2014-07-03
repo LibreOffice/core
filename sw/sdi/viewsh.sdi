@@ -203,6 +203,12 @@ interface TextPrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_SHOW_SINGLE_PAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     FN_SHOW_MULTIPLE_PAGES // status(final|play)
     [
         ExecMethod = Execute ;

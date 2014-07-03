@@ -812,6 +812,7 @@
 #define FN_PRINT_PAGEPREVIEW        (FN_PGPREVIEW + 3)
 #define FN_CLOSE_PAGEPREVIEW        (FN_PGPREVIEW + 4)
 #define FN_SHOW_BOOKVIEW            (FN_PGPREVIEW + 5)
+#define FN_SHOW_SINGLE_PAGE         (FN_PGPREVIEW + 6)
 
 // Region: Setting Attributes
 #define FN_OPAQUE                       (FN_FRAME + 1)
