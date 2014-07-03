@@ -266,12 +266,18 @@ public:
                                                        const OUString & rUrl);
 
     // helper accessors
-    inline XDashListRef  AsDashList();
-    inline XHatchListRef AsHatchList();
-    inline XColorListRef AsColorList();
-    inline XBitmapListRef AsBitmapList();
-    inline XLineEndListRef AsLineEndList();
-    inline XGradientListRef AsGradientList();
+    static inline XDashListRef AsDashList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XHatchListRef AsHatchList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XColorListRef AsColorList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XBitmapListRef AsBitmapList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XLineEndListRef AsLineEndList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XGradientListRef AsGradientList(
+        rtl::Reference<XPropertyList> const & plist);
 };
 
 
@@ -429,12 +435,24 @@ public:
 
 
 // FIXME: could add type checking too ...
-inline XDashListRef  XPropertyList::AsDashList() { return XDashListRef( static_cast<XDashList *> (this) ); }
-inline XHatchListRef XPropertyList::AsHatchList() { return XHatchListRef( static_cast<XHatchList *> (this) ); }
-inline XColorListRef XPropertyList::AsColorList() { return XColorListRef( static_cast<XColorList *> (this) ); }
-inline XBitmapListRef XPropertyList::AsBitmapList() { return XBitmapListRef( static_cast<XBitmapList *> (this) ); }
-inline XLineEndListRef XPropertyList::AsLineEndList() { return XLineEndListRef( static_cast<XLineEndList *> (this) ); }
-inline XGradientListRef XPropertyList::AsGradientList() { return XGradientListRef( static_cast<XGradientList *> (this) ); }
+inline XDashListRef  XPropertyList::AsDashList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XDashListRef( static_cast<XDashList *> (plist.get()) ); }
+inline XHatchListRef XPropertyList::AsHatchList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XHatchListRef( static_cast<XHatchList *> (plist.get()) ); }
+inline XColorListRef XPropertyList::AsColorList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XColorListRef( static_cast<XColorList *> (plist.get()) ); }
+inline XBitmapListRef XPropertyList::AsBitmapList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XBitmapListRef( static_cast<XBitmapList *> (plist.get()) ); }
+inline XLineEndListRef XPropertyList::AsLineEndList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XLineEndListRef( static_cast<XLineEndList *> (plist.get()) ); }
+inline XGradientListRef XPropertyList::AsGradientList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XGradientListRef( static_cast<XGradientList *> (plist.get()) ); }
 
 #endif // INCLUDED_SVX_XTABLE_HXX
 

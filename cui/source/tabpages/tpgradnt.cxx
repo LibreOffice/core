@@ -644,8 +644,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
             aPathURL.removeFinalSlash();
 
             // save list
-            XGradientListRef pGrdList = XPropertyList::CreatePropertyList(
-                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsGradientList();
+            XGradientListRef pGrdList = XPropertyList::AsGradientList(
+                XPropertyList::CreatePropertyList(
+                    XGRADIENT_LIST,
+                    aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
             pGrdList->SetName( aURL.getName() );
 
             if ( pGrdList->Load() )

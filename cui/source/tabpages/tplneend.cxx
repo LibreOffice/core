@@ -570,7 +570,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XLineEndListRef pLeList = XPropertyList::CreatePropertyList(XLINE_END_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsLineEndList();
+            XLineEndListRef pLeList = XPropertyList::AsLineEndList(
+                XPropertyList::CreatePropertyList(
+                    XLINE_END_LIST,
+                    aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {

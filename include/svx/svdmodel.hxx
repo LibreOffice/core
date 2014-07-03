@@ -597,12 +597,12 @@ public:
     void             SetPropertyList( XPropertyListRef p ) { maProperties[ p->Type() ] = p; }
 
     // friendlier helpers
-    XDashListRef     GetDashList() const     { return GetPropertyList( XDASH_LIST )->AsDashList(); }
-    XHatchListRef    GetHatchList() const    { return GetPropertyList( XHATCH_LIST )->AsHatchList(); }
-    XColorListRef    GetColorList() const    { return GetPropertyList( XCOLOR_LIST )->AsColorList(); }
-    XBitmapListRef   GetBitmapList() const   { return GetPropertyList( XBITMAP_LIST )->AsBitmapList(); }
-    XLineEndListRef  GetLineEndList() const  { return GetPropertyList( XLINE_END_LIST )->AsLineEndList(); }
-    XGradientListRef GetGradientList() const { return GetPropertyList( XGRADIENT_LIST )->AsGradientList(); }
+    XDashListRef     GetDashList() const     { return XPropertyList::AsDashList(GetPropertyList( XDASH_LIST )); }
+    XHatchListRef    GetHatchList() const    { return XPropertyList::AsHatchList(GetPropertyList( XHATCH_LIST )); }
+    XColorListRef    GetColorList() const    { return XPropertyList::AsColorList(GetPropertyList( XCOLOR_LIST )); }
+    XBitmapListRef   GetBitmapList() const   { return XPropertyList::AsBitmapList(GetPropertyList( XBITMAP_LIST )); }
+    XLineEndListRef  GetLineEndList() const  { return XPropertyList::AsLineEndList(GetPropertyList( XLINE_END_LIST )); }
+    XGradientListRef GetGradientList() const { return XPropertyList::AsGradientList(GetPropertyList( XGRADIENT_LIST )); }
 
     // The DrawingEngine only references the StyleSheetPool, whoever
     // made it needs to delete it.

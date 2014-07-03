@@ -29,8 +29,9 @@ using namespace com::sun::star;
 
 XColorListRef XColorList::CreateStdColorList()
 {
-    return XPropertyList::CreatePropertyList(
-        XCOLOR_LIST, SvtPathOptions().GetPalettePath(), "" )->AsColorList();
+    return XPropertyList::AsColorList(
+        XPropertyList::CreatePropertyList(
+            XCOLOR_LIST, SvtPathOptions().GetPalettePath(), ""));
 }
 
 XColorListRef XColorList::GetStdColorList()

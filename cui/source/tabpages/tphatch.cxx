@@ -685,8 +685,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XHatchListRef pHatchList = XPropertyList::CreatePropertyList(
-                XHATCH_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsHatchList();
+            XHatchListRef pHatchList = XPropertyList::AsHatchList(
+                XPropertyList::CreatePropertyList(
+                    XHATCH_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" ));
             pHatchList->SetName( aURL.getName() );
             if( pHatchList->Load() )
             {

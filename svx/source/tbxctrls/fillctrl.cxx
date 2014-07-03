@@ -410,8 +410,9 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
 
                         boost::scoped_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
                         XBitmapListRef xBitmapList =
-                            XPropertyList::CreatePropertyList(XBITMAP_LIST,
-                            OUString("TmpList"), ""/*TODO?*/)->AsBitmapList();
+                            XPropertyList::AsBitmapList(
+                                XPropertyList::CreatePropertyList(
+                                    XBITMAP_LIST, "TmpList", ""/*TODO?*/));
                         xBitmapList->Insert( pEntry.get() );
                         xBitmapList->SetDirty( false );
                         mpFillAttrLB->Fill( xBitmapList );

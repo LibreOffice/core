@@ -155,8 +155,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 
         if ( aDlg.Execute() == ERRCODE_NONE )
         {
-            XColorListRef pList = XPropertyList::CreatePropertyListFromURL(
-                                        meType, aDlg.GetPath() )->AsColorList();
+            XColorListRef pList = XPropertyList::AsColorList(
+                XPropertyList::CreatePropertyListFromURL(
+                    meType, aDlg.GetPath()));
             if( pList->Load() )
             {
                 // check whether the table may be deleted:

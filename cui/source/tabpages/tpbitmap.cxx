@@ -791,8 +791,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
             aPathURL.removeFinalSlash();
 
             // save table
-            XBitmapListRef pBmpList = XPropertyList::CreatePropertyList(
-                XBITMAP_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsBitmapList();
+            XBitmapListRef pBmpList = XPropertyList::AsBitmapList(
+                XPropertyList::CreatePropertyList(
+                    XBITMAP_LIST, aPathURL.GetMainURL(INetURLObject::NO_DECODE),
+                    ""));
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {
