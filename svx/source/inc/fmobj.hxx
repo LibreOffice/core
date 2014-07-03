@@ -27,7 +27,7 @@
 
 // FmFormObj
 
-class FmFormObj: public SdrUnoObj
+class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
@@ -45,41 +45,41 @@ class FmFormObj: public SdrUnoObj
                             // only to be used for comparison with the current ref device!
 
 public:
-    SVX_DLLPUBLIC FmFormObj(const OUString& rModelName);
-    SVX_DLLPUBLIC FmFormObj();
+    FmFormObj(const OUString& rModelName);
+    FmFormObj();
 
-    TYPEINFO_OVERRIDE();
+    TYPEINFO_VISIBILITY_OVERRIDE(SAL_DLLPRIVATE);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >&
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >&
         GetOriginalEvents() const { return aEvts; }
-    sal_Int32
+    SAL_DLLPRIVATE sal_Int32
         GetOriginalIndex() const { return m_nPos; }
 
-    void SetObjEnv(
+    SAL_DLLPRIVATE void SetObjEnv(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm,
             const sal_Int32 nIdx,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts );
-    void ClearObjEnv();
+    SAL_DLLPRIVATE void ClearObjEnv();
 
 public:
-    virtual ~FmFormObj();
-    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ~FmFormObj();
+    SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
-    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
-    virtual void NbcReformatText() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void NbcReformatText() SAL_OVERRIDE;
 
-    virtual FmFormObj* Clone() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual FmFormObj* Clone() const SAL_OVERRIDE;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
-    FmFormObj& operator= (const FmFormObj& rObj);
+    SAL_DLLPRIVATE FmFormObj& operator= (const FmFormObj& rObj);
 
-    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
-    virtual void clonedFrom(const FmFormObj* _pSource);
+    SAL_DLLPRIVATE virtual void clonedFrom(const FmFormObj* _pSource);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(
                   const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& _rTopLevelDestContainer);
 
@@ -89,28 +89,28 @@ public:
         is a virtual object whose referenced object is an FmFormObj, then this referenced
         object is returned. In all other cases, NULL is returned.
     */
-    static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
-    static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
+    SAL_DLLPRIVATE static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
+    SAL_DLLPRIVATE static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
 
-    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) SAL_OVERRIDE;
 
 protected:
-    virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) SAL_OVERRIDE;
-    virtual void        BrkCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
 
     // #i70852# overload Layer interface to force to FormColtrol layer
-    virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
-    virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
 
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from
         its parent.
     */
-    void    impl_isolateControlModel_nothrow();
+    SAL_DLLPRIVATE void    impl_isolateControlModel_nothrow();
 
     /** forwards the reference device of our SdrModel to the control model
     */
-    void    impl_checkRefDevice_nothrow( bool _force = false );
+    SAL_DLLPRIVATE void    impl_checkRefDevice_nothrow( bool _force = false );
 };
 
 

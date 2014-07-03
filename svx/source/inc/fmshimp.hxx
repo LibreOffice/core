@@ -144,7 +144,7 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class FmXFormShell   :public FmXFormShell_BASE
+class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools
                                     ,public ::svx::IControllerFeatureInvalidation
@@ -161,7 +161,7 @@ class FmXFormShell   :public FmXFormShell_BASE
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_aSearchForms;
 
-    struct InvalidSlotInfo {
+    struct SAL_DLLPRIVATE InvalidSlotInfo {
         sal_uInt16 id;
         sal_uInt8   flags;
         inline InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
@@ -244,103 +244,103 @@ class FmXFormShell   :public FmXFormShell_BASE
 
 public:
     // attribute access
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+    SAL_DLLPRIVATE inline const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
                 getHostFrame() const { return m_xAttachedFrame; }
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&
+    SAL_DLLPRIVATE inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&
                 getExternallyDisplayedForm() const { return m_xExternalDisplayedForm; }
 
-    inline bool
+    SAL_DLLPRIVATE inline bool
                 didPrepareClose() const { return m_bPreparedClose; }
-    inline void
+    SAL_DLLPRIVATE inline void
                 didPrepareClose( bool _bDid ) { m_bPreparedClose = _bDid; }
 
 public:
-    FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
+    SAL_DLLPRIVATE FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE)
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
-    virtual ~FmXFormShell();
+    SAL_DLLPRIVATE virtual ~FmXFormShell();
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // EventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // XSelectionChangeListener
-    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::form::XFormControllerListener
-    virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    void EnableTrackProperties( bool bEnable) { m_bTrackProperties = bEnable; }
-    bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
+    SAL_DLLPRIVATE void EnableTrackProperties( bool bEnable) { m_bTrackProperties = bEnable; }
+    SAL_DLLPRIVATE bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
     // activation handling
-    void        viewActivated( FmFormView& _rCurrentView, bool _bSyncAction = false );
-    void        viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivateController = true );
+    SAL_DLLPRIVATE void        viewActivated( FmFormView& _rCurrentView, bool _bSyncAction = false );
+    SAL_DLLPRIVATE void        viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivateController = true );
 
     // IControllerFeatureInvalidation
-    virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) SAL_OVERRIDE;
 
-    void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
+    SAL_DLLPRIVATE void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxForForm
     );
 
     // stuff
-    void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-    void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
     /** updates m_xForms, to be either <NULL/>, if we're in alive mode, or our current page's forms collection,
         if in design mode
     */
-    void UpdateForms( bool _bInvalidate );
+    SAL_DLLPRIVATE void UpdateForms( bool _bInvalidate );
 
-    void ExecuteSearch();               // execute SID_FM_SEARCH
-    void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
+    SAL_DLLPRIVATE void ExecuteSearch();               // execute SID_FM_SEARCH
+    SAL_DLLPRIVATE void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
 
-    bool        GetY2KState(sal_uInt16& n);
-    void        SetY2KState(sal_uInt16 n);
+    SAL_DLLPRIVATE bool        GetY2KState(sal_uInt16& n);
+    SAL_DLLPRIVATE void        SetY2KState(sal_uInt16 n);
 
 protected:
     // activation handling
-    inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
+    SAL_DLLPRIVATE inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    SAL_DLLPRIVATE inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
     // form handling
     /// load or unload the forms on a page
-            void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
-            void        smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
+    SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
+    SAL_DLLPRIVATE         void        smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
 
 
-    void startListening();
-    void stopListening();
+    SAL_DLLPRIVATE void startListening();
+    SAL_DLLPRIVATE void stopListening();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
         impl_getControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& i_rxModel,
             const FmFormObj& i_rKnownFormObj
         );
 
     // sammelt in strNames die Namen aller Formulare
-    static void impl_collectFormSearchContexts_nothrow(
+    SAL_DLLPRIVATE static void impl_collectFormSearchContexts_nothrow(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxStartingPoint,
         const OUString& _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
@@ -349,173 +349,173 @@ protected:
     /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
         builds only) and <TRUE/> is returned.
     */
-    bool    impl_checkDisposed() const;
+    SAL_DLLPRIVATE bool    impl_checkDisposed() const;
 
 public:
     // methode fuer nicht designmode (alive mode)
-    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false );
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveController() const {return m_xActiveController;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getNavController() const {return m_xNavigationController;}
+    SAL_DLLPRIVATE void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false );
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveController() const {return m_xActiveController;}
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getNavController() const {return m_xNavigationController;}
 
-    inline const ::svx::ControllerFeatures& getActiveControllerFeatures() const
+    SAL_DLLPRIVATE inline const ::svx::ControllerFeatures& getActiveControllerFeatures() const
         { return m_aActiveControllerFeatures; }
-    inline const ::svx::ControllerFeatures& getNavControllerFeatures() const
+    SAL_DLLPRIVATE inline const ::svx::ControllerFeatures& getNavControllerFeatures() const
         { return m_aNavControllerFeatures.isAssigned() ? m_aNavControllerFeatures : m_aActiveControllerFeatures; }
 
     /** announces a new "current selection"
         @return
             <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
-    bool    setCurrentSelection( const InterfaceBag& _rSelection );
+    SAL_DLLPRIVATE bool    setCurrentSelection( const InterfaceBag& _rSelection );
 
     /** sets the new selection to the last known marked controls
     */
-    bool    selectLastMarkedControls();
+    SAL_DLLPRIVATE bool    selectLastMarkedControls();
 
     /** retrieves the current selection
     */
-    SVX_DLLPUBLIC void    getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const;
+    void    getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const;
 
     /** sets a new current selection as indicated by a mark list
         @return
             <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
-    bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
+    SAL_DLLPRIVATE bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
 
     /// returns the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
                 getCurrentForm() const { return m_xCurrentForm; }
-    void        forgetCurrentForm();
+    SAL_DLLPRIVATE void        forgetCurrentForm();
     /// returns whether the last known marking contained only controls
-    bool    onlyControlsAreMarked() const { return !m_aLastKnownMarkedControls.empty(); }
+    SAL_DLLPRIVATE bool    onlyControlsAreMarked() const { return !m_aLastKnownMarkedControls.empty(); }
 
     /// determines whether the current selection consists of exactly the given object
-    bool    isSolelySelected(
+    SAL_DLLPRIVATE bool    isSolelySelected(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject
             );
 
     /// handles a MouseButtonDown event of the FmFormView
-    void handleMouseButtonDown( const SdrViewEvent& _rViewEvent );
+    SAL_DLLPRIVATE void handleMouseButtonDown( const SdrViewEvent& _rViewEvent );
     /// handles the request for showing the "Properties"
-    void handleShowPropertiesRequest();
+    SAL_DLLPRIVATE void handleShowPropertiesRequest();
 
-    bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
-    bool hasDatabaseBar() const {return m_bDatabaseBar;}
-    bool canNavigate() const    {return m_xNavigationController.is();}
+    SAL_DLLPRIVATE bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
+    SAL_DLLPRIVATE bool hasDatabaseBar() const {return m_bDatabaseBar;}
+    SAL_DLLPRIVATE bool canNavigate() const    {return m_xNavigationController.is();}
 
-    void ShowSelectionProperties( bool bShow );
-    bool IsPropBrwOpen() const;
+    SAL_DLLPRIVATE void ShowSelectionProperties( bool bShow );
+    SAL_DLLPRIVATE bool IsPropBrwOpen() const;
 
-    void DetermineSelection(const SdrMarkList& rMarkList);
-    void SetSelection(const SdrMarkList& rMarkList);
-    void SetSelectionDelayed();
+    SAL_DLLPRIVATE void DetermineSelection(const SdrMarkList& rMarkList);
+    SAL_DLLPRIVATE void SetSelection(const SdrMarkList& rMarkList);
+    SAL_DLLPRIVATE void SetSelectionDelayed();
 
-    void SetDesignMode(bool bDesign);
+    SAL_DLLPRIVATE void SetDesignMode(bool bDesign);
 
-    bool    GetWizardUsing() const { return m_bUseWizards; }
-    void    SetWizardUsing(bool _bUseThem);
+    SAL_DLLPRIVATE bool    GetWizardUsing() const { return m_bUseWizards; }
+    SAL_DLLPRIVATE void    SetWizardUsing(bool _bUseThem);
 
         // Setzen des Filtermodus
-    bool isInFilterMode() const {return m_bFilterMode;}
-    void startFiltering();
-    void stopFiltering(bool bSave);
+    SAL_DLLPRIVATE bool isInFilterMode() const {return m_bFilterMode;}
+    SAL_DLLPRIVATE void startFiltering();
+    SAL_DLLPRIVATE void stopFiltering(bool bSave);
 
-    static PopupMenu* GetConversionMenu();
+    SAL_DLLPRIVATE static PopupMenu* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
 
     /// checks whethere a given control conversion slot can be applied to the current selection
-           bool canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot );
+    SAL_DLLPRIVATE        bool canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot );
     /// enables or disables all conversion slots in a menu, according to the current selection
-           void checkControlConversionSlotsForCurrentSelection( Menu& rMenu );
+    SAL_DLLPRIVATE        void checkControlConversionSlotsForCurrentSelection( Menu& rMenu );
     /// executes a control conversion slot for a given object
-           bool executeControlConversionSlot( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxObject, sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE        bool executeControlConversionSlot( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxObject, sal_uInt16 _nSlotId );
     /** executes a control conversion slot for the current selection
         @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
-           bool executeControlConversionSlot( sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE        bool executeControlConversionSlot( sal_uInt16 _nSlotId );
     /// checks whether the given slot id denotes a control conversion slot
-    static bool isControlConversionSlot( sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE static bool isControlConversionSlot( sal_uInt16 _nSlotId );
 
-    void    ExecuteTextAttribute( SfxRequest& _rReq );
-    void    GetTextAttributeState( SfxItemSet& _rSet );
-    bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
-    void    ForgetActiveControl();
-    void    SetControlActivationHandler( const Link& _rHdl );
+    SAL_DLLPRIVATE void    ExecuteTextAttribute( SfxRequest& _rReq );
+    SAL_DLLPRIVATE void    GetTextAttributeState( SfxItemSet& _rSet );
+    SAL_DLLPRIVATE bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
+    SAL_DLLPRIVATE void    ForgetActiveControl();
+    SAL_DLLPRIVATE void    SetControlActivationHandler( const Link& _rHdl );
 
     /// classifies our host document
-    ::svxform::DocumentType
+    SAL_DLLPRIVATE ::svxform::DocumentType
             getDocumentType() const;
-    bool    isEnhancedForm() const;
+    SAL_DLLPRIVATE bool    isEnhancedForm() const;
 
     /// determines whether our host document is currently read-only
-    bool    IsReadonlyDoc() const;
+    SAL_DLLPRIVATE bool    IsReadonlyDoc() const;
 
     // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
     // Funktionen laesst sich das abfragen/erzwingen
-    inline bool IsSelectionUpdatePending();
-    void        ForceUpdateSelection(bool bLockInvalidation);
+    SAL_DLLPRIVATE inline bool IsSelectionUpdatePending();
+    SAL_DLLPRIVATE void        ForceUpdateSelection(bool bLockInvalidation);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          getContextDocument() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          getContextDocument() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
         // if the form belongs to the controller (extern) displaying a grid, the according internal form will
         // be displayed, _xForm else
 
     // check if the current control of the active controller has the focus
-    bool    HasControlFocus() const;
+    SAL_DLLPRIVATE bool    HasControlFocus() const;
 
 private:
-    DECL_LINK(OnFoundData, FmFoundRecordInformation*);
-    DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
-    DECL_LINK(OnSearchContextRequest, FmSearchContext*);
-    DECL_LINK(OnTimeOut, void*);
-    DECL_LINK(OnFirstTimeActivation, void*);
-    DECL_LINK(OnFormsCreated, FmFormPage*);
+    DECL_DLLPRIVATE_LINK(OnFoundData, FmFoundRecordInformation*);
+    DECL_DLLPRIVATE_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
+    DECL_DLLPRIVATE_LINK(OnSearchContextRequest, FmSearchContext*);
+    DECL_DLLPRIVATE_LINK(OnTimeOut, void*);
+    DECL_DLLPRIVATE_LINK(OnFirstTimeActivation, void*);
+    DECL_DLLPRIVATE_LINK(OnFormsCreated, FmFormPage*);
 
-    void LoopGrids(sal_Int16 nWhat);
+    SAL_DLLPRIVATE void LoopGrids(sal_Int16 nWhat);
 
     // Invalidierung von Slots
-    void    InvalidateSlot( sal_Int16 nId, bool bWithId );
-    void    UpdateSlot( sal_Int16 nId );
+    SAL_DLLPRIVATE void    InvalidateSlot( sal_Int16 nId, bool bWithId );
+    SAL_DLLPRIVATE void    UpdateSlot( sal_Int16 nId );
     // Locking der Invalidierung - wenn der interne Locking-Counter auf 0 geht, werden alle aufgelaufenen Slots
     // (asynchron) invalidiert
-    void    LockSlotInvalidation(bool bLock);
+    SAL_DLLPRIVATE void    LockSlotInvalidation(bool bLock);
 
-    DECL_LINK(OnInvalidateSlots, void*);
+    DECL_DLLPRIVATE_LINK(OnInvalidateSlots, void*);
 
-    void    CloseExternalFormViewer();
+    SAL_DLLPRIVATE void    CloseExternalFormViewer();
         // closes the task-local beamer displaying a grid view for a form
 
     // ConfigItem related stuff
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
-    virtual void Commit() SAL_OVERRIDE;
-    void implAdjustConfigCache();
+    SAL_DLLPRIVATE virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void Commit() SAL_OVERRIDE;
+    SAL_DLLPRIVATE void implAdjustConfigCache();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
             getControlContainerForView();
 
     /** finds and sets a default for m_xCurrentForm, if it is currently NULL
     */
-    void    impl_defaultCurrentForm_nothrow();
+    SAL_DLLPRIVATE void    impl_defaultCurrentForm_nothrow();
 
     /** sets m_xCurrentForm to the provided form, and udpates everything which
         depends on the current form
     */
-    void    impl_updateCurrentForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxNewCurForm );
+    SAL_DLLPRIVATE void    impl_updateCurrentForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxNewCurForm );
 
     /** adds or removes ourself as XEventListener at m_xActiveController
     */
-    void    impl_switchActiveControllerListening( const bool _bListen );
+    SAL_DLLPRIVATE void    impl_switchActiveControllerListening( const bool _bListen );
 
     /** add an element
     */
-    void    impl_AddElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_AddElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
     /** remove an element
     */
-    void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
 
     // asyncronous cursor actions/navigation slot handling
@@ -526,14 +526,14 @@ public:
         @param _nSlot
             the slot to execute
     */
-    void    ExecuteFormSlot( sal_Int32 _nSlot );
+    SAL_DLLPRIVATE void    ExecuteFormSlot( sal_Int32 _nSlot );
 
     /** determines whether the current form slot is currently enabled
     */
-    bool    IsFormSlotEnabled( sal_Int32 _nSlot, ::com::sun::star::form::runtime::FeatureState* _pCompleteState = NULL );
+    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, ::com::sun::star::form::runtime::FeatureState* _pCompleteState = NULL );
 
 protected:
-    DECL_LINK( OnLoadForms, FmFormPage* );
+    DECL_DLLPRIVATE_LINK( OnLoadForms, FmFormPage* );
 };
 
 

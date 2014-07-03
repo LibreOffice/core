@@ -94,7 +94,7 @@ class SfxListener;
 class GalleryTheme;
 class GalleryThemeCacheEntry;
 
-class Gallery : public SfxBroadcaster
+class SVX_DLLPUBLIC Gallery : public SfxBroadcaster
 {
     // only for gengal utility!
     friend Gallery* createGallery( const OUString& );
@@ -111,43 +111,43 @@ private:
     rtl_TextEncoding            nReadTextEncoding;
     bool                        bMultiPath;
 
-    void                        ImplLoad( const OUString& rMultiPath );
-    void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
+    SAL_DLLPRIVATE void         ImplLoad( const OUString& rMultiPath );
+    SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
 
-    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const OUString& rThemeName );
-    GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );
+    GalleryThemeEntry*          ImplGetThemeEntry( const OUString& rThemeName );
+    SAL_DLLPRIVATE GalleryThemeEntry* ImplGetThemeEntry( sal_uIntPtr nThemeId );
 
-    GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
-    void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
+    SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
+    SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
-                                SVX_DLLPUBLIC Gallery( const OUString& rMultiPath );
-                                SVX_DLLPUBLIC virtual ~Gallery();
+                                Gallery( const OUString& rMultiPath );
+                                virtual ~Gallery();
 
 public:
 
-    SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
+    static Gallery*             GetGalleryInstance();
 
-    size_t                      GetThemeCount() const { return aThemeList.size(); }
-    const GalleryThemeEntry*    GetThemeInfo( size_t nPos )
+    SAL_DLLPRIVATE size_t       GetThemeCount() const { return aThemeList.size(); }
+    SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( size_t nPos )
                                 { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
-    const GalleryThemeEntry*    GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
+    SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
-    SVX_DLLPUBLIC bool          HasTheme( const OUString& rThemeName );
-    OUString                    GetThemeName( sal_uIntPtr nThemeId ) const;
+    bool                        HasTheme( const OUString& rThemeName );
+    SAL_DLLPRIVATE OUString     GetThemeName( sal_uIntPtr nThemeId ) const;
 
-    SVX_DLLPUBLIC bool          CreateTheme( const OUString& rThemeName );
-    bool                        RenameTheme( const OUString& rOldName, const OUString& rNewName );
-    SVX_DLLPUBLIC bool          RemoveTheme( const OUString& rThemeName );
+    bool                        CreateTheme( const OUString& rThemeName );
+    SAL_DLLPRIVATE bool         RenameTheme( const OUString& rOldName, const OUString& rNewName );
+    bool                        RemoveTheme( const OUString& rThemeName );
 
-    SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const OUString& rThemeName, SfxListener& rListener );
-    SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
+    GalleryTheme*               AcquireTheme( const OUString& rThemeName, SfxListener& rListener );
+    void                        ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:
 
-    const INetURLObject&        GetUserURL() const { return aUserURL; }
-    const INetURLObject&        GetRelativeURL() const { return aRelURL; }
+    SAL_DLLPRIVATE const INetURLObject& GetUserURL() const { return aUserURL; }
+    SAL_DLLPRIVATE const INetURLObject& GetRelativeURL() const { return aRelURL; }
 
-    bool                        IsMultiPath() const { return bMultiPath; }
+    SAL_DLLPRIVATE bool         IsMultiPath() const { return bMultiPath; }
 };
 
 #endif // INCLUDED_SVX_GALLERY1_HXX
