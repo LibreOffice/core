@@ -40,7 +40,7 @@ class XFillGradientItem;
 class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
-class Graphic;
+class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
 class SwFrmFmts;
@@ -72,7 +72,7 @@ bool DrawFillAttributes(
 
 void paintGraphicUsingPrimitivesHelper(
         OutputDevice & rOutputDevice,
-        Graphic const& rGraphic, GraphicAttr const& rGraphicAttr,
+        GraphicObject const& rGraphicObj, GraphicAttr const& rGraphicAttr,
         SwRect const& rAlignedGrfArea);
 
 // method to align rectangle.

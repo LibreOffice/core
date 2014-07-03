@@ -1817,7 +1817,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     if (pGrf->GetGraphic().getSvgData().get())
     {   // fdo#68927 - SVGs are rasterized badly by DrawWithPDFHandling
         paintGraphicUsingPrimitivesHelper(*pOut,
-                pGrf->GetGraphic(), pGrf->GetAttr(), aAlignedGrfRect);
+                *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
     }
     else
     {
