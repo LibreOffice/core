@@ -19,8 +19,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_osl_process,\
 	$(gb_UWINAPI) \
 ))
 
-# Depend on to be tested executable
-$(call gb_CppunitTest_get_target,sal_osl_process) : \
-	$(call gb_Executable_get_target,osl_process_child)
+$(eval $(call gb_CppunitTest_use_executable,sal_osl_process,osl_process_child))
 
 # vim: set noet sw=4 ts=4:
