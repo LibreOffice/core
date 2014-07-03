@@ -34,6 +34,12 @@ public:
     void testDOCChartSeries();
     void testDOCXChartSeries();
     void testPPTXChartSeries();
+    /**
+     * Original data contains 3 series but 2 of them are hidden. For now, we
+     * detect and skip those hidden series on import (since we don't support
+     * hidden columns for internal data table yet).
+     */
+    void testPPTXHiddenDataSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
     void testBnc864396();
@@ -62,6 +68,7 @@ public:
  */
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
+    CPPUNIT_TEST(testPPTXHiddenDataSeries);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testSimpleStrictXLSX);
@@ -322,6 +329,38 @@ void Chart2ImportTest::testPPTXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), aLabels[1][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
+}
+
+void Chart2ImportTest::testPPTXHiddenDataSeries()
+{
+    load("/chart2/qa/extras/data/pptx/", "stacked-bar-chart-hidden-series.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xCT.is());
+
+    // There should be only one data series present.
+    std::vector<uno::Sequence<uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aLabels.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[0][0].get<OUString>());
+
+    // Test the internal data.
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<Sequence<OUString> > aCategories = xDescAccess->getComplexRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Category 1"), aCategories[0][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Category 2"), aCategories[1][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Category 3"), aCategories[2][0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Category 4"), aCategories[3][0]);
 }
 
 void Chart2ImportTest::testODPChartSeries()
