@@ -68,10 +68,12 @@ private:
     glTFHandle& m_rHandle;
     OpenGLContext& m_rContext;
     Window& m_rEventHandler;
+
     bool m_bVisible;
     com::sun::star::media::ZoomLevel meZoomLevel;
     Point m_aLastMousePos;
     bool m_bIsOrbitMode;
+    double m_fCameraDistance;
 };
 
 } // namespace ogl
