@@ -82,7 +82,9 @@ namespace
             m_bImageSeen(false)
         {}
 
-        virtual ~TestSink()
+        virtual ~TestSink() {}
+
+        void check()
         {
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", 79400, m_aPageSize.Width, 0.00000001);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Height", 59500, m_aPageSize.Height, 0.0000001 );
@@ -458,16 +460,15 @@ namespace
     public:
         void testXPDFParser()
         {
-            pdfi::ContentSinkSharedPtr pSink( new TestSink() );
-            pdfi::xpdf_ImportFromFile( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
-                                       pSink,
-                                       uno::Reference< task::XInteractionHandler >(),
-                                       OUString(),
-                                       getComponentContext() );
-
-            // make destruction explicit, a bunch of things are
-            // checked in the destructor
-            pSink.reset();
+            boost::shared_ptr<TestSink> pSink( new TestSink() );
+            CPPUNIT_ASSERT(
+                pdfi::xpdf_ImportFromFile(
+                    getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                    pSink,
+                    uno::Reference< task::XInteractionHandler >(),
+                    OUString(),
+                    getComponentContext() ) );
+            pSink->check();
         }
 
         void testOdfDrawExport()
