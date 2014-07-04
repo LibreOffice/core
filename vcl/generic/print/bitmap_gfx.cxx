@@ -410,9 +410,16 @@ void
 PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
                         const PrinterBmp& rBitmap)
 {
-    double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
-    double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
-
+    double fScaleX = (double)rDest.GetWidth();
+    double fScaleY = (double)rDest.GetHeight();
+    if(rSrc.GetWidth() > 0)
+    {
+        fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
+    }
+    if(rSrc.GetHeigth() > 0)
+    {
+        fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
+    }
     PSGSave ();
     PSTranslate (rDest.BottomLeft());
     PSScale (fScaleX, fScaleY);
