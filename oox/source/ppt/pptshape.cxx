@@ -149,7 +149,6 @@ void PPTShape::addShape(
                             sServiceName = OUString();
                         else {
                             sServiceName = "com.sun.star.presentation.SubtitleShape";
-                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                         }
                     }
                     break;
