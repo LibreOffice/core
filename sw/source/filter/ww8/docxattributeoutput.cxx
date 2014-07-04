@@ -4199,6 +4199,13 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
         sFileExtension = "docm";
     }
+    //Implementation for embedded Word 97-2003 document was missing
+    else if( sProgID == "Word.Document.8" )
+    {
+        sMediaType = "application/msword";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "doc";
+    }
     else
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
