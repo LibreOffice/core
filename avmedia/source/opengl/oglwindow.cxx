@@ -266,7 +266,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     {
                         // Limit zooming in orbit mode
                         m_fCameraDistance += vMoveBy.z;
-                        if ((m_fCameraDistance < 0.75 * fModelSize && vMoveBy.z < 0.0 ) ||
+                        if ((m_fCameraDistance < 0.5 * fModelSize && vMoveBy.z < 0.0 ) ||
                             (m_fCameraDistance > 2 * fModelSize && vMoveBy.z > 0.0 ))
                         {
                             m_fCameraDistance -= vMoveBy.z;
@@ -292,7 +292,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     glm::vec3 vView;
                     glm::vec3 vUp;
                     gltf_get_camera_pos(&m_rHandle, &vEye,&vView,&vUp);
-                    m_fCameraDistance = vEye.z - gltf_get_model_center_pos(&m_rHandle)->z;
+                    m_fCameraDistance = vEye.z - gltf_get_model_center_pos(&m_rHandle)->z - (gltf_get_model_size(&m_rHandle)/2.0);
                 }
             }
             else if(nCode == KEY_F)
