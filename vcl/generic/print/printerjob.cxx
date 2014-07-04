@@ -478,7 +478,9 @@ PrinterJob::EndJob()
                 }
             }
             else
-                chmod( aFileName.getStr(), mnFileMode );
+            {
+                (void)chmod( aFileName.getStr(), mnFileMode );
+            }
         }
         if (pDestFILE == NULL)
             pDestFILE = fopen (aFileName.getStr(), "w");
