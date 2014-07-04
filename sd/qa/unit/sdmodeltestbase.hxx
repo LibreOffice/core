@@ -179,6 +179,14 @@ protected:
         utl::TempFile aTempFile(OUString(), true, &aExt);
         aTempFile.EnableKillingFile();
         save(pShell, pFormat, aTempFile);
+        if(nExportType == ODP)
+        {
+            BootstrapFixture::validate(aTempFile.GetURL(), test::ODF);
+        }
+        else if(nExportType == PPTX)
+        {
+            // BootstrapFixture::validate(aTempFile.GetURL(), test::OOXML);
+        }
         return loadURL(aTempFile.GetURL());
     }
 
