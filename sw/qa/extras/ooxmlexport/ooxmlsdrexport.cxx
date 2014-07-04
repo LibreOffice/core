@@ -1513,6 +1513,12 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aSubViewSize[0].Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
+{
+    // The problem was that the shape in the header wasn't in the background.
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
