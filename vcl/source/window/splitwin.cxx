@@ -2637,7 +2637,6 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
 {
 #ifdef DBG_UTIL
     sal_uInt16 nDbgDummy;
-    DBG_ASSERT( ImplFindSet( mpMainSet, nSetId ), "SplitWindow::InsertItem() - Set not exists" );
     DBG_ASSERT( !ImplFindItem( mpMainSet, nId, nDbgDummy ), "SplitWindow::InsertItem() - Id already exists" );
 #endif
 
@@ -2646,6 +2645,13 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
         nSize = 1;
 
     ImplSplitSet* pSet       = ImplFindSet( mpMainSet, nSetId );
+#ifdef DBG_UTIL
+    DBG_ASSERT( pSet, "SplitWindow::InsertItem() - Set not exists" );
+#endif
+    if(!pSet)
+    {
+        return;
+    }
     ImplSplitSet* pNewSet;
     ImplSplitItem* pItem;
 
