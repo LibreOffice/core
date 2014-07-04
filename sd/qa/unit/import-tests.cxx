@@ -47,8 +47,6 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
-#include <config_features.h>
-
 using namespace ::com::sun::star;
 
 /// Impress import filters tests.
