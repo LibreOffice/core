@@ -1303,8 +1303,9 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
         {
             // default width for box at the end of an incomplete line
             SwTableBoxFmt *const pNewFmt = rDoc.MakeTableBoxFmt();
+            size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFmt->SetFmtAttr( SwFmtFrmSize(ATT_VAR_SIZE,
-                        (USHRT_MAX / nMaxBoxes) * (nMissing + 1)) );
+                        nWidth * (nMissing + 1)) );
             pNewFmt->Add(rBoxes.back());
         }
     }
