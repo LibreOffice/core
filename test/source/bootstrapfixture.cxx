@@ -171,8 +171,8 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
 
     int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr(), 0,
-        returnValue);
+        OUStringToOString(OUString("failed to execute: ") + aCommand,
+            RTL_TEXTENCODING_UTF8).getStr(), 0, returnValue);
 
     OString aContentString = loadFile(aOutput.GetURL());
     OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
