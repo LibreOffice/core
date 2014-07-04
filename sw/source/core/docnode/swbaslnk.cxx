@@ -463,7 +463,7 @@ const SwNode* SwBaseLink::GetAnchor() const
 
 bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 {
-    SwServerObjectRef aRef( (SwServerObject*)GetObj() );
+    tools::SvRef<SwServerObject> aRef( (SwServerObject*)GetObj() );
     if( aRef.Is() )
     {
         // As it's a ServerObject, we query all contained Links

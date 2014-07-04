@@ -1292,7 +1292,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     bool bRecursion = false;
                     if( pSrcDoc == pDoc )
                     {
-                        SwServerObjectRef refObj( (SwServerObject*)
+                        tools::SvRef<SwServerObject> refObj( (SwServerObject*)
                                         pDoc->CreateLinkSource( sRange ));
                         if( refObj.Is() )
                         {

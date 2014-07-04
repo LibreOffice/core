@@ -155,7 +155,7 @@ namespace sw {
             virtual ~DdeBookmark();
 
         private:
-            SwServerObjectRef m_aRefObj;
+            tools::SvRef<SwServerObject> m_aRefObj;
         };
 
         class Bookmark

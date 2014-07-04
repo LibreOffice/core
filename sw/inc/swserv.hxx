@@ -76,11 +76,6 @@ public:
     void SetDdeBookmark( ::sw::mark::IMark& rBookmark);
 };
 
-#ifndef SW_DECL_SWSERVEROBJECT_DEFINED
-#define SW_DECL_SWSERVEROBJECT_DEFINED
-typedef tools::SvRef<SwServerObject> SwServerObjectRef;
-#endif
-
 #endif // INCLUDED_SW_INC_SWSERV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

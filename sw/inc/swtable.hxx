@@ -58,12 +58,7 @@ class SwUndoTblCpyTbl;
 class SwBoxSelection;
 struct SwSaveRowSpan;
 struct Parm;
-
-#ifndef SW_DECL_SWSERVEROBJECT_DEFINED
-#define SW_DECL_SWSERVEROBJECT_DEFINED
 class SwServerObject;
-typedef tools::SvRef<SwServerObject> SwServerObjectRef;
-#endif
 
 class SwTableLines : public std::vector<SwTableLine*> {
 public:
@@ -99,7 +94,7 @@ class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 protected:
     SwTableLines aLines;
     SwTableSortBoxes m_TabSortContentBoxes;
-    SwServerObjectRef refObj;   // In case DataServer -> pointer is set.
+    tools::SvRef<SwServerObject> refObj;   // In case DataServer -> pointer is set.
 
     SwHTMLTableLayout *pHTMLLayout;
 

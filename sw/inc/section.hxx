@@ -40,12 +40,7 @@ class SwDoc;
 class SwSection;
 class SwSectionNode;
 class SwTOXBase;
-
-#ifndef SW_DECL_SWSERVEROBJECT_DEFINED
-#define SW_DECL_SWSERVEROBJECT_DEFINED
 class SwServerObject;
-typedef tools::SvRef<SwServerObject> SwServerObjectRef;
-#endif
 
 typedef std::vector<SwSection*> SwSections;
 
@@ -154,7 +149,7 @@ class SW_DLLPUBLIC SwSection
 private:
     mutable SwSectionData m_Data;
 
-    SwServerObjectRef m_RefObj; // Set if DataServer.
+    tools::SvRef<SwServerObject> m_RefObj; // Set if DataServer.
     ::sfx2::SvBaseLinkRef m_RefLink;
 
     SAL_DLLPRIVATE void ImplSetHiddenFlag(
