@@ -766,7 +766,7 @@ void SdFiltersTest::testBnc870237()
 namespace {
 
 void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
-        FontWeight eWeight, FontItalic eItalic)
+        bool bCheckWeight, FontWeight eWeight, bool bCheckItalic, FontItalic eItalic)
 {
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
@@ -779,15 +779,23 @@ void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
         {
             CPPUNIT_ASSERT_EQUAL( nColor, pCharColor->GetValue().GetColor());
         }
-        const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
-        if( pWeight )
+
+        if(bCheckWeight)
         {
-            CPPUNIT_ASSERT_EQUAL( eWeight, pWeight->GetWeight());
+            const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
+            if( pWeight )
+            {
+                CPPUNIT_ASSERT_EQUAL( eWeight, pWeight->GetWeight());
+            }
         }
-        const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
-        if( pPosture )
+
+        if(bCheckItalic)
         {
-            CPPUNIT_ASSERT_EQUAL( eItalic, pPosture->GetPosture());
+            const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
+            if( pPosture )
+            {
+                CPPUNIT_ASSERT_EQUAL( eItalic, pPosture->GetPosture());
+            }
         }
     }
 
@@ -810,13 +818,15 @@ void SdFiltersTest::testBnc870233_1()
     // First shape has red, bold font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        checkFontAttributes(pObj, sal_uInt32(0xff0000), WEIGHT_BOLD, ITALIC_NONE);
+        checkFontAttributes(pObj, sal_uInt32(0xff0000),
+                true, WEIGHT_BOLD, true, ITALIC_NONE);
     }
 
     // Second shape has blue, italic font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        checkFontAttributes(pObj, sal_uInt32(0x0000ff), WEIGHT_NORMAL, ITALIC_NORMAL);
+        checkFontAttributes(pObj, sal_uInt32(0x0000ff),
+                true, WEIGHT_NORMAL, true, ITALIC_NORMAL);
     }
 
     xDocShRef->DoClose();
@@ -837,52 +847,22 @@ void SdFiltersTest::testBnc870233_2()
     // First smart art has blue font color (direct formatting)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
-        std::vector<EECharAttrib> rLst;
-        aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-            if( pCharColor )
-            {
-                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff), pCharColor->GetValue().GetColor());
-            }
-        }
+        checkFontAttributes(pObj, sal_uInt32(0x0000ff),
+                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
     }
 
     // Second smart art has "dk2" font color (style)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
-        std::vector<EECharAttrib> rLst;
-        aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-            if( pCharColor )
-            {
-                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x1F497D), pCharColor->GetValue().GetColor());
-            }
-        }
+        checkFontAttributes(pObj, sal_uInt32(0x1F497D),
+                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
     }
 
     // Third smart art has white font color (style)
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 2 ) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
-        std::vector<EECharAttrib> rLst;
-        aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-            if( pCharColor )
-            {
-                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0xffffff), pCharColor->GetValue().GetColor());
-            }
-        }
+        checkFontAttributes(pObj, sal_uInt32(0xffffff),
+                false, WEIGHT_DONTKNOW, false, ITALIC_NONE);
     }
 
     xDocShRef->DoClose();
