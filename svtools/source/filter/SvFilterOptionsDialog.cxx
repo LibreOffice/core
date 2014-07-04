@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -249,15 +250,15 @@ sal_Int16 SvFilterOptionsDialog::execute()
             FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, meFieldUnit );
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
 
-            ResMgr* pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
-            aFltCallDlgPara.pResMgr = pResMgr;
+            boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));
+            aFltCallDlgPara.pResMgr = pResMgr.get();
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
             if ( ExportDialog( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat ).Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
-            delete pResMgr;
+            pResMgr.reset();
 
             // taking the out parameter from the dialog
             maFilterDataSequence = aFltCallDlgPara.aFilterData;

@@ -37,6 +37,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -210,13 +211,12 @@ void GraphicObject::ImplAutoSwapIn()
 
                             if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
                             {
-                                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
+                                boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ ));
 
                                 if( pIStm )
                                 {
                                     ReadGraphic( *pIStm, maGraphic );
                                     mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
-                                    delete pIStm;
                                 }
                             }
                         }
@@ -1218,12 +1218,9 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
         Graphic     aGraphic;
         if ( !aURL.isEmpty() )
         {
-            SvStream*   pStream = utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
+            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ ));
             if( pStream )
-            {
                 GraphicConverter::Import( *pStream, aGraphic );
-                delete pStream;
-            }
         }
 
         return GraphicObject( aGraphic );

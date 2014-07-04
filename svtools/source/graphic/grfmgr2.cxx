@@ -33,7 +33,7 @@
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include <svtools/grfmgr.hxx>
-
+#include <boost/scoped_array.hpp>
 
 // - defines -
 
@@ -275,10 +275,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     bool    bHMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
     bool    bVMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-    long*   pMapIX = new long[ aUnrotatedWidth ];
-    long*   pMapFX = new long[ aUnrotatedWidth ];
-    long*   pMapIY = new long[ aUnrotatedHeight ];
-    long*   pMapFY = new long[ aUnrotatedHeight ];
+    boost::scoped_array<long> pMapIX(new long[ aUnrotatedWidth ]);
+    boost::scoped_array<long> pMapFX(new long[ aUnrotatedWidth ]);
+    boost::scoped_array<long> pMapIY(new long[ aUnrotatedHeight ]);
+    boost::scoped_array<long> pMapFY(new long[ aUnrotatedHeight ]);
 
     double fRevScaleX;
     double fRevScaleY;
@@ -372,10 +372,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     const double        fSinAngle = sin( nRot10 * F_PI1800 );
     const long          aTargetWidth  = nEndX - nStartX + 1L;
     const long          aTargetHeight = nEndY - nStartY + 1L;
-    long*               pCosX = new long[ aTargetWidth ];
-    long*               pSinX = new long[ aTargetWidth ];
-    long*               pCosY = new long[ aTargetHeight ];
-    long*               pSinY = new long[ aTargetHeight ];
+    boost::scoped_array<long> pCosX(new long[ aTargetWidth ]);
+    boost::scoped_array<long> pSinX(new long[ aTargetWidth ]);
+    boost::scoped_array<long> pCosY(new long[ aTargetHeight ]);
+    boost::scoped_array<long> pSinY(new long[ aTargetHeight ]);
     long                nUnRotX, nUnRotY, nSinY, nCosY;
     sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
     bool                bRet = false;
@@ -739,8 +739,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                 if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != NULL ) )
                 {
-                    long*       pMapLX = new long[ aUnrotatedWidth ];
-                    long*       pMapLY = new long[ aUnrotatedHeight ];
+                    boost::scoped_array<long> pMapLX(new long[ aUnrotatedWidth ]);
+                    boost::scoped_array<long> pMapLY(new long[ aUnrotatedHeight ]);
                     BitmapColor aTestB;
 
                     if( pMAcc )
@@ -783,8 +783,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                         }
                     }
 
-                    delete[] pMapLX;
-                    delete[] pMapLY;
+                    pMapLX.reset();
+                    pMapLY.reset();
 
                     if( pMAcc )
                         aMsk.ReleaseAccess( pMAcc );
@@ -804,16 +804,6 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     }
     else
         rOutBmpEx = aOutBmp;
-
-    delete[] pSinX;
-    delete[] pCosX;
-    delete[] pSinY;
-    delete[] pCosY;
-
-    delete[] pMapIX;
-    delete[] pMapFX;
-    delete[] pMapIY;
-    delete[] pMapFY;
 
     return bRet;
 }

@@ -43,6 +43,7 @@
 #include <svtools/grfmgr.hxx>
 #include "provider.hxx"
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -236,7 +237,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
         OString aResMgrName(OUStringToOString(
             rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
 
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() );
+        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() ));
 
         if( pResMgr )
         {
@@ -296,8 +297,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
                     xRet = pUnoGraphic;
                 }
             }
-
-            delete pResMgr;
         }
     }
 
@@ -384,7 +383,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     OUString                                aPath;
-    SvStream*                               pIStm = NULL;
+    boost::scoped_ptr<SvStream>             pIStm;
 
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
@@ -443,7 +442,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     if( xIStm.is() )
     {
-        pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
+        pIStm.reset(::utl::UcbStreamHelper::CreateStream( xIStm ));
     }
     else if( !aPath.isEmpty() )
     {
@@ -462,7 +461,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             xRet = implLoadStandardImage( aPath );
 
         if( !xRet.is() )
-            pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ );
+            pIStm.reset(::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ ));
     }
     else if( xBtm.is() )
     {
@@ -495,8 +494,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
                 xRet = pUnoGraphic;
             }
         }
-
-        delete pIStm;
     }
 
     return xRet;
@@ -729,7 +726,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 {
     SolarMutexGuard g;
 
-    SvStream*   pOStm = NULL;
+    boost::scoped_ptr<SvStream> pOStm;
     OUString    aPath;
     sal_Int32   i;
 
@@ -743,7 +740,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             OUString aURL;
 
             aValue >>= aURL;
-            pOStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_WRITE | STREAM_TRUNC );
+            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aURL, STREAM_WRITE | STREAM_TRUNC ));
             aPath = aURL;
         }
         else if (aName == "OutputStream")
@@ -753,7 +750,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             aValue >>= xOStm;
 
             if( xOStm.is() )
-                pOStm = ::utl::UcbStreamHelper::CreateStream( xOStm );
+                pOStm.reset(::utl::UcbStreamHelper::CreateStream( xOStm ));
         }
     }
 
@@ -846,7 +843,6 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                 }
             }
         }
-        delete pOStm;
     }
 }
 
