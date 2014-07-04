@@ -1196,15 +1196,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            XColorListRef pColorList = ((SvxColorListItem *)pState)->GetColorList();
-            const long nColorCount(pColorList->Count());
-            const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
-            aColorSet.SetOutputSizePixel(aNewSize);
-            static sal_Int32 nAdd = 4;
-
-            SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
-            aColorSet.Clear();
-            aColorSet.addEntriesForXColorList(*pColorList);
+            Update();
         }
         else if ( SFX_ITEM_DEFAULT <= eState )
         {
