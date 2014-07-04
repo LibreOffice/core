@@ -3168,7 +3168,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if(aStartArrow.Count())
                         {
                             mapCurShape->maShapePolyPoly = aStartArrow;
-                            mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+
+                            if( pElementId ) // #i124825# pElementId is optinal, may be zero
+                            {
+                                mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                            }
 
                             ImplWriteShape( *mapCurShape );
                         }
@@ -3176,7 +3180,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if(aEndArrow.Count())
                         {
                             mapCurShape->maShapePolyPoly = aEndArrow;
-                            mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+
+                            if( pElementId ) // #i124825# pElementId is optinal, may be zero
+                            {
+                                mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                            }
 
                             ImplWriteShape( *mapCurShape );
                         }
