@@ -416,7 +416,7 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
     {
         fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
     }
-    if(rSrc.GetHeigth() > 0)
+    if(rSrc.GetHeight() > 0)
     {
         fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
     }
