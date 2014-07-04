@@ -707,6 +707,15 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
     rtl_freeMemory(pBuffer);
 
+    /* check for 'reasonable' value */
+    /* surely 10 millions entry in a registry list should be enough */
+    if(valueSize > 40000000)
+    {
+        pValueList = NULL;
+        *pLen = 0;
+        rtl_freeMemory(pBuffer);
+        return REG_INVALID_VALUE;
+    }
     pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
 
     if ( rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, readBytes) )
@@ -727,12 +736,20 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     sal_uInt32 len = 0;
     readUINT32(pBuffer, len);
 
+    /* make sure the declared size of the arry is consistant with the amount of data we have read */
+    if(len > (valueSize - 4) / 4)
+    {
+        pValueList = NULL;
+        *pLen = 0;
+        rtl_freeMemory(pBuffer);
+        return REG_INVALID_VALUE;
+    }
     *pLen = len;
     sal_Int32* pVList = (sal_Int32*)rtl_allocateZeroMemory(len * sizeof(sal_Int32));
 
     sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
 
-    for (sal_uInt32 i=0; i < len; i++)
+    for (sal_uInt32 i = 0; i < len; i++)
     {
         readINT32(pBuffer+offset, pVList[i]);
         offset += 4;
