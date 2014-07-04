@@ -300,8 +300,13 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
     }
     else if (m_aBoxType == LISTBOX && !b_IsDropDownList)
     {
-        if ( aNewValue.hasValue())
+        if ( aNewValue.hasValue() || aOldValue.hasValue() )
         {
+            NotifyAccessibleEvent(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    aOldValue,
+                    aNewValue );
+
             NotifyListItem(aNewValue);
         }
     }
