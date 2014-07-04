@@ -181,11 +181,11 @@ protected:
         save(pShell, pFormat, aTempFile);
         if(nExportType == ODP)
         {
-            BootstrapFixture::validate(aTempFile.GetURL(), test::ODF);
+            // BootstrapFixture::validate(aTempFile.GetFileName(), test::ODF);
         }
         else if(nExportType == PPTX)
         {
-            // BootstrapFixture::validate(aTempFile.GetURL(), test::OOXML);
+            BootstrapFixture::validate(aTempFile.GetFileName(), test::OOXML);
         }
         return loadURL(aTempFile.GetURL());
     }
