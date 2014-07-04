@@ -25,10 +25,12 @@
 #include "oox/drawingml/effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
+#include "oox/drawingml/ThemeOverrideFragmentHandler.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "oox/ppt/pptimport.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
@@ -47,6 +49,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -856,7 +859,22 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
                 // load the chart data from the XML fragment
                 chart::ChartSpaceModel aModel;
-                rFilter.importFragment( new chart::ChartSpaceFragment( rFilter, mxChartShapeInfo->maFragmentPath, aModel ) );
+                chart::ChartSpaceFragment *pChartSpaceFragment = new chart::ChartSpaceFragment(
+                        rFilter, mxChartShapeInfo->maFragmentPath, aModel );
+                const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
+                        getFragmentPathFromFirstTypeFromOfficeDoc("themeOverride") );
+                rFilter.importFragment( pChartSpaceFragment );
+                ::oox::ppt::PowerPointImport *pPowerPointImport =
+                    dynamic_cast< ::oox::ppt::PowerPointImport* >(&rFilter);
+                if (!aThemeOverrideFragmentPath.isEmpty() && pPowerPointImport)
+                {
+                    uno::Reference< xml::sax::XFastSAXSerializable > xDoc(
+                            rFilter.importFragment(aThemeOverrideFragmentPath), uno::UNO_QUERY_THROW);
+                    ThemePtr pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
+                    rFilter.importFragment(new ThemeOverrideFragmentHandler(
+                                rFilter, aThemeOverrideFragmentPath, *pTheme), xDoc);
+                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
+                }
 
                 // convert imported chart model to chart document
                 Reference< drawing::XShapes > xExternalPage;
