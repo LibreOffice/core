@@ -50,6 +50,7 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
+    SlidePersistPtr                                         getActualSlidePersist() const { return mpActualSlidePersist; };
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
     std::map< OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
