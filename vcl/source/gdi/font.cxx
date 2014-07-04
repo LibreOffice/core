@@ -300,8 +300,7 @@ void Font::SetFillColor( const Color& rColor )
     if ( rColor.GetTransparency() )
         mpImplFont->mbTransparent = true;
     if (GetUnderline() == UNDERLINE_SINGLE ) {
-        fprintf(stderr, "I'm setting a filling (from Font) of (%d,%d,%d) \n",
-            rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
+        SAL_INFO("vcl.gdi", "I'm setting a filling (from Font) of (" << rColor.GetRed() << "," << rColor.GetGreen() << "," << rColor.GetBlue() << ")");
     }
 }
 
