@@ -35,7 +35,6 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/thread.h>
-#include <oox/drawingml/theme.hxx>
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/vbaproject.hxx>
@@ -102,7 +101,6 @@ using namespace ::com::sun::star::uno;
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
-using ::oox::drawingml::Theme;
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
