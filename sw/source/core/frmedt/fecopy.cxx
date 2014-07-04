@@ -723,10 +723,10 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
         // cursor of the ring points to identical document positions. Then
         // we should avoid double insertion of text portions...
         while( nCursorCount > 1 && *pCurrCrsr->GetPoint() ==
-            *(dynamic_cast<SwPaM*>(pCurrCrsr->GetPrev())->GetPoint()) )
+            *(static_cast<SwPaM*>(pCurrCrsr->GetPrev())->GetPoint()) )
         {
             --nCursorCount;
-            pCurrCrsr = dynamic_cast<SwPaM*>(pCurrCrsr->GetNext());
+            pCurrCrsr = static_cast<SwPaM*>(pCurrCrsr->GetNext());
             pStartCursor = pCurrCrsr;
         }
         SwPosition aStartPos( *pStartCursor->GetPoint() );
@@ -758,7 +758,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                 }
                 else // as long as we find more insert positions in the cursor ring
                 {    // we'll take them
-                    pCurrCrsr = dynamic_cast<SwPaM*>(pCurrCrsr->GetNext());
+                    pCurrCrsr = static_cast<SwPaM*>(pCurrCrsr->GetNext());
                     aInsertPos = *pCurrCrsr->GetPoint();
                     --nCursorCount;
                 }
