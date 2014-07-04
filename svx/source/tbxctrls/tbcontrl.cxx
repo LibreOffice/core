@@ -1084,11 +1084,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     AddStatusListener( OUString( ".uno:ColorTableState" ));
     AddStatusListener( maCommand );
 
-    Update();
+    UpdateGUI();
 }
 
 
-void SvxColorWindow_Impl::Update()
+void SvxColorWindow_Impl::UpdateGUI()
 {
     mrPaletteManager.ReloadColorSet(aColorSet);
 
@@ -1164,14 +1164,14 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepLeftClickHdl)
 {
     mrPaletteManager.PrevPalette();
-    Update();
+    UpdateGUI();
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepRightClickHdl)
 {
     mrPaletteManager.NextPalette();
-    Update();
+    UpdateGUI();
     return 0;
 }
 
@@ -1196,7 +1196,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            Update();
+            UpdateGUI();
         }
         else if ( SFX_ITEM_DEFAULT <= eState )
         {
@@ -2254,7 +2254,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
-                            mrPaletteManager,
+                            mPaletteManager,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
@@ -2383,7 +2383,7 @@ SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
-                            mrPaletteManager,
+                            mPaletteManager,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXSTR_LINECOLOR ),

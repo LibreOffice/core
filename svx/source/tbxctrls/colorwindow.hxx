@@ -52,7 +52,7 @@ private:
     const sal_uInt16 nNavButtonHeight;
     PaletteManager& mrPaletteManager;
 
-    void Update();
+    void UpdateGUI();
 
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( StepLeftClickHdl, void * );
