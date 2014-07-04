@@ -763,6 +763,38 @@ void SdFiltersTest::testBnc870237()
     xDocShRef->DoClose();
 }
 
+namespace {
+
+void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
+        FontWeight eWeight, FontItalic eItalic)
+{
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
+    std::vector<EECharAttrib> rLst;
+    aEdit.GetCharAttribs(0, rLst);
+    for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+    {
+        const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
+        if( pCharColor )
+        {
+            CPPUNIT_ASSERT_EQUAL( nColor, pCharColor->GetValue().GetColor());
+        }
+        const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
+        if( pWeight )
+        {
+            CPPUNIT_ASSERT_EQUAL( eWeight, pWeight->GetWeight());
+        }
+        const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
+        if( pPosture )
+        {
+            CPPUNIT_ASSERT_EQUAL( eItalic, pPosture->GetPosture());
+        }
+    }
+
+}
+
+}
+
 void SdFiltersTest::testBnc870233_1()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_1.pptx"));
@@ -778,55 +810,13 @@ void SdFiltersTest::testBnc870233_1()
     // First shape has red, bold font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
-        std::vector<EECharAttrib> rLst;
-        aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-            if( pCharColor )
-            {
-                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0xff0000), pCharColor->GetValue().GetColor());
-            }
-            const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
-            if( pWeight )
-            {
-                CPPUNIT_ASSERT_EQUAL( WEIGHT_BOLD, pWeight->GetWeight());
-            }
-            const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
-            if( pPosture )
-            {
-                CPPUNIT_ASSERT_EQUAL( ITALIC_NONE, pPosture->GetPosture());
-            }
-        }
+        checkFontAttributes(pObj, sal_uInt32(0xff0000), WEIGHT_BOLD, ITALIC_NONE);
     }
 
     // Second shape has blue, italic font
     {
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
-        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
-        std::vector<EECharAttrib> rLst;
-        aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
-            if( pCharColor )
-            {
-                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff), pCharColor->GetValue().GetColor());
-            }
-            const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
-            if( pWeight )
-            {
-                CPPUNIT_ASSERT_EQUAL( WEIGHT_NORMAL, pWeight->GetWeight());
-            }
-            const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
-            if( pPosture )
-            {
-                CPPUNIT_ASSERT_EQUAL( ITALIC_NORMAL, pPosture->GetPosture());
-            }
-        }
+        checkFontAttributes(pObj, sal_uInt32(0x0000ff), WEIGHT_NORMAL, ITALIC_NORMAL);
     }
 
     xDocShRef->DoClose();
