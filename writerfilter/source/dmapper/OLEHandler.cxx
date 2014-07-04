@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <OLEHandler.hxx>
+#include <dmapper/DomainMapper.hxx>
 #include <PropertyMap.hxx>
 #include "GraphicHelpers.hxx"
 
@@ -45,11 +46,12 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-OLEHandler::OLEHandler() :
+OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
 LoggedProperties(dmapper_logger, "OLEHandler"),
 m_nDxaOrig(0),
 m_nDyaOrig(0),
-    m_nWrapMode(1)
+    m_nWrapMode(1),
+    m_rDomainMapper(rDomainMapper)
 {
 }
 
@@ -104,6 +106,10 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 
                 try
                 {
+                    // Shapes in the header or footer should be in the background.
+                    if (m_rDomainMapper.IsInHeaderFooter())
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(false));
+
                     m_aShapeSize = xTempShape->getSize();
                     m_aShapePosition = xTempShape->getPosition();
 

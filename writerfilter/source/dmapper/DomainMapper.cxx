@@ -2217,7 +2217,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) )
         {
-            OLEHandlerPtr pOLEHandler( new OLEHandler );
+            OLEHandlerPtr pOLEHandler( new OLEHandler(*this) );
             pProperties->resolve(*pOLEHandler);
             if ( pOLEHandler->isOLEObject( ) )
             {
