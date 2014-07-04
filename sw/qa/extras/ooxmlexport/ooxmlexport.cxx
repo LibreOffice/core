@@ -2082,6 +2082,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     CPPUNIT_ASSERT(contents.match("15"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
+{
+    // The problem was that the shape in the header wasn't in the background.
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
