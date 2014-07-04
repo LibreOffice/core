@@ -111,6 +111,7 @@ class BackingWindow
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
 
     DECL_LINK(ClickHdl, Button*);
+    DECL_LINK(ActivateHdl, Button*);
     DECL_LINK(ExtLinkClickHdl, Button*);
     DECL_LINK(OpenRegionHdl, void*);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);

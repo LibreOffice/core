@@ -34,6 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
 
+#include <vcl/menubtn.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -302,7 +303,20 @@ void BackingWindow::initControls()
      *Filter and the bars*/
 
     setupButton( mpOpenButton );
-    setupButton( mpTemplateButton );
+    //setupButton( mpTemplateButton );
+    Font aFont(mpTemplateButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    mpTemplateButton->SetControlFont(aFont);
+
+    // color that fits the theme
+    mpTemplateButton->SetControlForeground(aButtonsText);
+
+
+    mpTemplateButton->SetDropDown( PUSHBUTTON_DROPDOWN_MENUBUTTON );
+    MenuButton *pMenuButton = static_cast<MenuButton*> (mpTemplateButton);
+    pMenuButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    pMenuButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ));
+    //pMenuButton->Activate();
 
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
@@ -575,6 +589,21 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
+IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
+{
+    printf("---------------------------------");
+    MenuButton *pMenuButton = static_cast<MenuButton*> (pButton);
+    PopupMenu *pFilterMenu = new PopupMenu;
+
+    //pFilterMenu->SetSelectHdl(LINK( this, BackingWindow, FilterMenuSelectHdl));
+    pFilterMenu->InsertItem(0, "Writer");
+
+
+    pMenuButton->SetPopupMenu( pFilterMenu );
+
+
+    return 0;
+}
 
 
 IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
