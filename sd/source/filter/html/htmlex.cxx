@@ -3154,7 +3154,7 @@ EasyFile::EasyFile()
 EasyFile::~EasyFile()
 {
     if( bOpen )
-        close();
+        (void)close();
 }
 
 sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
