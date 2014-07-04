@@ -270,9 +270,12 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                         pDoc->GetFormatTable()->GetInputLineString( rItem.mfVal, 0, aValStr);
                     else if (rItem.meType == ScQueryEntry::ByDate)
                     {
-                        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                        pFormatter->GetInputLineString( rItem.mfVal,
-                                pFormatter->GetStandardFormat( NUMBERFORMAT_DATE), aValStr);
+                        if(pDoc)
+                        {
+                            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                            pFormatter->GetInputLineString( rItem.mfVal,
+                                                            pFormatter->GetStandardFormat( NUMBERFORMAT_DATE), aValStr);
+                        }
                     }
                     else
                     {
