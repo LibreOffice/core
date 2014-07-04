@@ -10,7 +10,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <sdr/contact/viewcontactofopenglobj.hxx>
 #include <sdr/contact/viewobjectcontactofopenglobj.hxx>
-#include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <svdoopengl.hxx>
 #include <tools/gen.hxx>
 
