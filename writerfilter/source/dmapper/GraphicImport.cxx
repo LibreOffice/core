@@ -196,10 +196,6 @@ public:
     sal_Int32 nTopPosition;
     sal_Int32 nRightPosition;
     sal_Int32 nBottomPosition;
-    sal_Int32 nLeftCrop;
-    sal_Int32 nTopCrop;
-    sal_Int32 nRightCrop;
-    sal_Int32 nBottomCrop;
 
     bool      bUseSimplePos;
     sal_Int32 zOrder;
@@ -271,10 +267,6 @@ public:
         ,nTopPosition(0)
         ,nRightPosition(0)
         ,nBottomPosition(0)
-        ,nLeftCrop(0)
-        ,nTopCrop (0)
-        ,nRightCrop (0)
-        ,nBottomCrop(0)
         ,bUseSimplePos(false)
         ,zOrder(-1)
         ,nHoriOrient(   text::HoriOrientation::NONE )
@@ -1076,15 +1068,6 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-------------------------------------------------------------------------
-    crop is stored as "fixed float" as 16.16 fraction value
-    related to width/or height
-  -----------------------------------------------------------------------*/
-void lcl_CalcCrop( sal_Int32& nCrop, sal_Int32 nRef )
-{
-    nCrop = ((nCrop >> 16   ) * nRef )
-       + (((nCrop & 0xffff) * nRef ) >> 16);
-}
 
 uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const beans::PropertyValues& aMediaProperties )
 {
@@ -1291,28 +1274,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
                                                            aContourPolyPolygon);
-
-                if( aGraphicSize.Width && aGraphicSize.Height )
-                {
-                    //todo: i71651 graphic size is not provided by the GraphicDescriptor
-                    lcl_CalcCrop( m_pImpl->nTopCrop, aGraphicSize.Height );
-                    lcl_CalcCrop( m_pImpl->nBottomCrop, aGraphicSize.Height );
-                    lcl_CalcCrop( m_pImpl->nLeftCrop, aGraphicSize.Width );
-                    lcl_CalcCrop( m_pImpl->nRightCrop, aGraphicSize.Width );
-
-
-                    // We need a separate try-catch here, otherwise a bad crop setting will also nuke the size settings as well.
-                    try
-                    {
-                        xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
-                                uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
-                    }
-                    catch (const uno::Exception& e)
-                    {
-                        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
-                    }
-                }
-
             }
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
