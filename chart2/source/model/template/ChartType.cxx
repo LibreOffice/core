@@ -26,6 +26,7 @@
 #include "CloneHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "ContainerHelper.hxx"
+#include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -56,7 +57,11 @@ ChartType::ChartType( const ChartType & rOther ) :
     m_xContext( rOther.m_xContext ),
     m_bNotifyChanges( true )
 {
-    CloneHelper::CloneRefVector< Reference< chart2::XDataSeries > >( rOther.m_aDataSeries, m_aDataSeries );
+    {
+        SolarMutexGuard g; // access to rOther.m_aDataSeries
+        CloneHelper::CloneRefVector<Reference<chart2::XDataSeries> >(
+                rOther.m_aDataSeries, m_aDataSeries);
+    }
     ModifyListenerHelper::addListenerToAllElements( m_aDataSeries, m_xModifyEventForwarder );
 }
 
@@ -150,6 +155,8 @@ void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& 
     throw (lang::IllegalArgumentException,
            uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     impl_addDataSeriesWithoutNotification( xDataSeries );
     fireModifyEvent();
 }
@@ -160,6 +167,8 @@ void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries 
 {
     if( !xDataSeries.is())
         throw container::NoSuchElementException();
+
+    SolarMutexGuard g;
 
     tDataSeriesContainerType::iterator aIt(
             ::std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries ) );
@@ -177,6 +186,8 @@ void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries 
 Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
     throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     return ContainerHelper::ContainerToSequence( m_aDataSeries );
 }
 
@@ -184,6 +195,8 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
     throw (lang::IllegalArgumentException,
            uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     m_bNotifyChanges = false;
     try
     {
@@ -309,7 +322,14 @@ void ChartType::firePropertyChangeEvent()
 
 void ChartType::fireModifyEvent()
 {
-    if( m_bNotifyChanges )
+    bool bNotifyChanges;
+
+    {
+        SolarMutexGuard g;
+        bNotifyChanges = m_bNotifyChanges;
+    }
+
+    if (bNotifyChanges)
         m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
