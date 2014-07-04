@@ -1503,7 +1503,6 @@ bool SdPublishingDlg::Save()
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( OUString( "designs.sod" ) );
     SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
-    aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();
 
