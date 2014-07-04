@@ -524,7 +524,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     }
                     else
                     {
-                        if ( aSnapRect != aBoundRect )
+                        if ( aSnapRect != aBoundRect && aSnapRect.GetWidth() > 0 && aSnapRect.GetHeight() > 0)
                         {
                             const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                             aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
