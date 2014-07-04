@@ -770,7 +770,6 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
 
 void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException, std::exception )
 {
-    impl_checkDisposed();
 
     if (m_xActiveController == e.Source)
     {
