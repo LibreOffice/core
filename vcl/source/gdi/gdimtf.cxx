@@ -324,7 +324,7 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 
         for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
         {
-            if( !Hook() )
+            if( !Hook() && pAction )
             {
                 pAction->Duplicate();
                 rMtf.AddAction( pAction );
@@ -360,7 +360,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             size_t  i  = 0;
             for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
-                if( !Hook() )
+                if( !Hook() && pAction )
                 {
                     MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                     if( pAction->GetType() == META_COMMENT_ACTION &&
