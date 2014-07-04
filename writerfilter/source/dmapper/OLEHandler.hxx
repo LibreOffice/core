@@ -40,6 +40,7 @@ namespace com{ namespace sun{ namespace star{
 namespace writerfilter {
 namespace dmapper
 {
+class DomainMapper;
 /** Handler for OLE objects
  */
 class OLEHandler : public LoggedProperties
@@ -63,6 +64,7 @@ class OLEHandler : public LoggedProperties
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
+    DomainMapper& m_rDomainMapper;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
@@ -73,7 +75,7 @@ class OLEHandler : public LoggedProperties
                                         const OUString& sObjectName );
 
 public:
-    OLEHandler();
+    OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler();
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
