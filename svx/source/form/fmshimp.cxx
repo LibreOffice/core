@@ -894,7 +894,6 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
 
 void FmXFormShell::disposing()
 {
-    impl_checkDisposed();
 
     FmXFormShell_BASE::disposing();
 
