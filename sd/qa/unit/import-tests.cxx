@@ -548,7 +548,7 @@ void SdFiltersTest::testFdo72998()
 // FIXME copypasta
 std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 {
-    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: << rColor.GetBlue()";
+    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: " << rColor.GetBlue();
     return rStrm;
 }
 
