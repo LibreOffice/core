@@ -2170,9 +2170,18 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
             {
                 WW8_CP nStart = GetAnnotationStart(nAtnIndex);
                 WW8_CP nEnd = GetAnnotationEnd(GetAnnotationEndIndex(nAtnIndex));
+                //It is unfortunately fragile and wrong to assume that two
+                //character positions in the original word document, which is
+                //what nStart and nEnd are, will equate to the same length in
+                //the destination writer document.
+                //
+                //Better would be, while writing the content into the writer
+                //document to store the equivalent writer document positions
+                //that relate to each annotation index as the parser passes
+                //those points.
                 sal_Int32 nLen = nEnd - nStart;
                 if( nLen )
-                 {
+                {
                     if (pPaM->GetPoint()->nContent.GetIndex() >= nLen)
                     {
                         pPaM->SetMark();
@@ -2184,24 +2193,28 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
                         nLen -= pPaM->GetPoint()->nContent.GetIndex();
 
                         SwTxtNode* pTxtNode = 0;
-                        // Find first text node which affected by the comment
-                        while( pPaM->GetPoint()->nNode >= 0 )
+
+                        // Find first text node which is affected by the comment
+                        while (nLen > 0)
                         {
-                            SwNode* pNode = 0;
-                            // Find previous text node
-                            do
+                            // Move to previous content node
+                            bool bSuccess = pPaM->Move(fnMoveBackward, fnGoNode);
+
+                            if (!bSuccess)
                             {
-                                pPaM->GetPoint()->nNode--;
-                                nLen--; // End line character
-                                pNode = &pPaM->GetPoint()->nNode.GetNode();
+                                nLen = 0;
+                                break;
                             }
-                            while( !pNode->IsTxtNode() && pPaM->GetPoint()->nNode >= 0 );
+
+                            --nLen; // End line character
+
+                            SwNode& rNode = pPaM->GetPoint()->nNode.GetNode();
 
                             // Subtract previous text node's length
-                            if( pNode->IsTxtNode() )
+                            if (rNode.IsTxtNode())
                             {
-                                pTxtNode = pNode->GetTxtNode();
-                                if( nLen < pTxtNode->Len() )
+                                pTxtNode = rNode.GetTxtNode();
+                                if (nLen < pTxtNode->Len())
                                     break;
                                 else
                                     nLen -= pTxtNode->Len();
