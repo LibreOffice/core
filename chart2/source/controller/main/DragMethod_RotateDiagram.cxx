@@ -115,9 +115,9 @@ void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
 
         //calculate new angle
         double fX = F_PI / 2.0 * (double)(rPnt.Y() - m_aStartPos.Y())
-                / (double)m_aReferenceRect.GetHeight();
+            / m_aReferenceRect.GetHeight() > 0 ? (double)m_aReferenceRect.GetHeight() : 1.0;
         double fY = F_PI * (double)(rPnt.X() - m_aStartPos.X())
-                / (double)m_aReferenceRect.GetWidth();
+            / m_aReferenceRect.GetWidth() > 0 ? (double)m_aReferenceRect.GetWidth() : 1.0;
 
         if( m_eRotationDirection != ROTATIONDIRECTION_Y )
             m_fAdditionalYAngleRad = fY;
