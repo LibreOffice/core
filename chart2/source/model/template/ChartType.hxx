@@ -140,7 +140,8 @@ protected:
      DECLARE_XTYPEPROVIDER()
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
+        const m_xModifyEventForwarder;
 
 private:
     void impl_addDataSeriesWithoutNotification(
@@ -149,12 +150,14 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
+        const m_xContext;
 
     typedef
         ::std::vector< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > >
         tDataSeriesContainerType;
+
+    // --- mutable members: the following members need mutex guard ---
 
     tDataSeriesContainerType  m_aDataSeries;
 
