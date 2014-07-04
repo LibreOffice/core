@@ -1030,18 +1030,28 @@ bool MozPluginTabPage::installPlugin()
 #ifdef UNIX
     // get the real file referred by .so lnk file
     char* pHome = getpwuid(getuid())->pw_dir;
+    if(!pHome)
+    {
+        return false;
+    }
     OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
-    remove(lnkFilePath.getStr());
+    (void)remove(lnkFilePath.getStr());
 
     // create the dirs if necessary
     struct stat buf;
     char tmpDir[NPP_PATH_MAX] = {0};
-    sprintf(tmpDir, "%s/.mozilla", pHome);
+    snprintf(tmpDir, NPP_PATH_MAX, "%s/.mozilla", pHome);
     if (0 > stat(lnkFilePath.getStr(), &buf))
     {
-        mkdir(tmpDir, 0755);
+        if(mkdir(tmpDir, 0755))
+        {
+            return false;
+        }
         strcat(tmpDir, "/plugins");
-        mkdir(tmpDir, 0755);
+        if(mkdir(tmpDir, 0755))
+        {
+            return false;
+        }
     }
 
     // get the real file path
