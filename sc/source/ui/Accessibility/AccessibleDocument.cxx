@@ -471,8 +471,8 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     {
         OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
         SortedShapes::iterator aItr;
-        FindShape(pCurrentChild->GetXShape(), aItr);
-        if (aItr != maZOrderedShapes.end() && (*aItr))
+
+        if (FindShape(pCurrentChild->GetXShape(), aItr) || (aItr != maZOrderedShapes.end() && (*aItr)))
         {
             if ((*aItr)->pAccShape)
             {
