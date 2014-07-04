@@ -316,6 +316,8 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Fnt_Opensymb,
+	gid_File_Fnt_Caladea,
+	gid_File_Fnt_Carlito,
 	gid_File_Fnt_DejaVu,
 	gid_File_Fnt_Gentium,
 	gid_File_Fnt_LibSansNarrow,
