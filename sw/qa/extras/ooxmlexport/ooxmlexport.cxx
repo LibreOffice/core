@@ -3731,6 +3731,20 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
                 "/word/embeddings/oleObject1.sldm");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
+{
+    // This UT for DOCX embedded with binary excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/msword']",
+                "PartName",
+                "/word/embeddings/oleObject1.doc");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
