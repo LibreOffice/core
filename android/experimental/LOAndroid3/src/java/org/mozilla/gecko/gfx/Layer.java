@@ -195,6 +195,7 @@ public abstract class Layer {
      * update is complete.
      */
     protected boolean performUpdates(RenderContext context) {
+
         if (mNewOrigin != null) {
             mOrigin = mNewOrigin;
             mNewOrigin = null;

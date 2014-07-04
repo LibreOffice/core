@@ -53,8 +53,6 @@ import java.util.ArrayList;
 
 /**
  * Encapsulates the logic needed to draw a layer made of multiple tiles.
- * <p/>
- * TODO: Support repeating.
  */
 public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "GeckoMultiTileLayer";

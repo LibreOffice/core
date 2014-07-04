@@ -18,7 +18,7 @@ public class LOKitShell {
 
     public static int getDpi() {
         DisplayMetrics metrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
-        return (int) metrics.density * 200;
+        return (int) metrics.density * 160;
     }
 
     public static ByteBuffer allocateDirectBuffer(int size) {

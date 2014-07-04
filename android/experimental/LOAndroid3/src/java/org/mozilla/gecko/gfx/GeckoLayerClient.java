@@ -89,7 +89,7 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
 
     protected abstract boolean setupLayer();
 
-    protected abstract void updateLayerAfterDraw(Rect updatedRect);
+    protected abstract void updateLayerAfterDraw();
 
     protected abstract IntSize getBufferSize();
 
@@ -109,38 +109,23 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
         sendResizeEventIfNecessary();
     }
 
-    public boolean beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata) {
-        Log.e(LOGTAG, "### beginDrawing " + width + " " + height + " " + tileWidth + " " + tileHeight);
-
+    public boolean beginDrawing(ViewportMetrics viewportMetrics) {
        if (setupLayer()) {
             Log.e(LOGTAG, "### Cancelling due to layer setup");
             return false;
         }
-
-        try {
-            JSONObject viewportObject = new JSONObject(metadata);
-            mNewGeckoViewport = new ViewportMetrics(viewportObject);
-            Log.e(LOGTAG, "### beginDrawing new Gecko viewport " + mNewGeckoViewport);
-        } catch (JSONException e) {
-            Log.e(LOGTAG, "Aborting draw, bad viewport description: " + metadata);
-            return false;
-        }
-
+        mNewGeckoViewport = viewportMetrics;
         mTileLayer.beginTransaction();
+
         return true;
     }
 
-    /*
-     * TODO: Would be cleaner if this took an android.graphics.Rect instead, but that would require
-     * a little more JNI magic.
-     */
-    public void endDrawing(int x, int y, int width, int height) {
+    public void endDrawing() {
         synchronized (mLayerController) {
             try {
                 updateViewport(!mUpdateViewportOnEndDraw);
                 mUpdateViewportOnEndDraw = false;
-                Rect rect = new Rect(x, y, x + width, y + height);
-                updateLayerAfterDraw(rect);
+                updateLayerAfterDraw();
             } finally {
                 mTileLayer.endTransaction();
             }

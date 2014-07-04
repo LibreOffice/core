@@ -88,8 +88,8 @@ public class LOKitTileProvider implements TileProvider {
             ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
             Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
-            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) Math.round(mPositionWidth), (int) Math.round(mPositionHeight), (int) Math.round(mTileWidth + pixelToTwip(1, mDPI)), (int) Math.round(mTileHeight+ pixelToTwip(1, mDPI)));
-
+            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE,
+                    (int) Math.round(mPositionWidth), (int) Math.round(mPositionHeight), (int) Math.round(mTileWidth + pixelToTwip(1, mDPI)), (int) Math.round(mTileHeight+ pixelToTwip(1, mDPI)));
 
             bitmap.copyPixelsFromBuffer(buffer);
 

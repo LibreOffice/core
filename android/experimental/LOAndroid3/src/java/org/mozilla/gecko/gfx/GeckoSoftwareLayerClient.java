@@ -105,25 +105,9 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     }
 
     @Override
-    public boolean beginDrawing(int width, int height, int tileWidth, int tileHeight, String metadata) {
-        boolean shouldContinue = super.beginDrawing(width, height, tileWidth, tileHeight, metadata);
-
-        if (!shouldContinue) {
-            return shouldContinue;
-        }
-
-        // If the window size has changed, reallocate the buffer to match.
-        if (mBufferSize.width != width || mBufferSize.height != height) {
-            mBufferSize = new IntSize(width, height);
-        }
-
-        return shouldContinue;
-    }
-
-    @Override
-    protected void updateLayerAfterDraw(Rect updatedRect) {
+    protected void updateLayerAfterDraw() {
         if (mTileLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer)mTileLayer).invalidate(updatedRect);
+            ((MultiTileLayer)mTileLayer).invalidate();
         }
     }
 
