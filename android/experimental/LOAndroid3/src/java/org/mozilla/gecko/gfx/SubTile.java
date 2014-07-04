@@ -1,8 +1,5 @@
 package org.mozilla.gecko.gfx;
 
-/**
-* Created by quikee on 29.6.2014.
-*/
 public class SubTile extends SingleTileLayer {
     public int x;
     public int y;

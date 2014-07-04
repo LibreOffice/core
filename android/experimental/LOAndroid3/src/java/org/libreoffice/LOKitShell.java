@@ -17,15 +17,8 @@ public class LOKitShell {
     private static final String LOGTAG = LOKitShell.class.getSimpleName();
 
     public static int getDpi() {
-        return 96;
-    }
-
-    public static int getScreenDepth() {
-        return 24;
-    }
-
-    public static float computeRenderIntegrity() {
-        return 0.0f;
+        DisplayMetrics metrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
+        return (int) metrics.density * 200;
     }
 
     public static ByteBuffer allocateDirectBuffer(int size) {
@@ -43,7 +36,6 @@ public class LOKitShell {
 
         return directBuffer;
     }
-
 
     public static void freeDirectBuffer(ByteBuffer buffer) {
         if (buffer == null) {

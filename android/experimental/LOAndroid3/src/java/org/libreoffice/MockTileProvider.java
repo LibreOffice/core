@@ -3,13 +3,17 @@ package org.libreoffice;
 import android.graphics.Bitmap;
 
 import org.apache.http.MethodNotSupportedException;
+import org.mozilla.gecko.gfx.BufferedCairoImage;
+import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.LayerController;
+import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class MockTileProvider implements TileProvider {
     private final LayerController layerController;
+    private static final int TILE_SIZE = 256;
 
     public MockTileProvider(LayerController layerController) {
         this.layerController = layerController;
@@ -29,10 +33,13 @@ public class MockTileProvider implements TileProvider {
         return new MockTileIterator(layerController);
     }
 
-    public class MockTileIterator implements TileIterator, Iterator<Bitmap> {
+    public class MockTileIterator implements TileIterator, Iterator<SubTile> {
         private final LayerController layerController;
 
         private int tileNumber = 1;
+
+        private int x = 0;
+        private int y = 0;
 
         public MockTileIterator(LayerController layerController) {
             this.layerController = layerController;
@@ -44,11 +51,23 @@ public class MockTileProvider implements TileProvider {
         }
 
         @Override
-        public Bitmap next() {
+        public SubTile next() {
             String imageName = "d" + tileNumber;
             tileNumber++;
             Bitmap bitmap = layerController.getDrawable(imageName);
-            return bitmap;
+
+            CairoImage image = new BufferedCairoImage(bitmap);
+            SubTile tile = new SubTile(image, x, y);
+            tile.beginTransaction();
+
+            x += TILE_SIZE;
+
+            if (x > getPageWidth()) {
+                x = 0;
+                y += TILE_SIZE;
+            }
+
+            return tile;
         }
 
         @Override
@@ -57,7 +76,7 @@ public class MockTileProvider implements TileProvider {
         }
 
         @Override
-        public Iterator<Bitmap> iterator() {
+        public Iterator<SubTile> iterator() {
             return this;
         }
     }

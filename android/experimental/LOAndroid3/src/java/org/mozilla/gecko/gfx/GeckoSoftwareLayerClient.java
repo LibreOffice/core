@@ -139,9 +139,9 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         return TILE_SIZE;
     }
 
-    public void addTile(Bitmap bitmap, int x, int y) {
+    public void addTile(SubTile tile) {
         if (mTileLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer)mTileLayer).addTile(bitmap, x, y);
+            ((MultiTileLayer)mTileLayer).addTile(tile);
         }
     }
 }

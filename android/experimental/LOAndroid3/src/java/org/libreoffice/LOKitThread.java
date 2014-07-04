@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.util.JsonWriter;
 import android.util.Log;
 
+import org.mozilla.gecko.gfx.SubTile;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
 import java.io.IOException;
@@ -47,15 +48,8 @@ public class LOKitThread extends Thread {
 
         Log.i(LOGTAG, "Filling tiles..");
 
-        int x = 0;
-        int y = 0;
-        for (Bitmap bitmap : mTileProvider.getTileIterator()) {
-            application.getLayerClient().addTile(bitmap, x, y);
-            x += TILE_SIZE;
-            if (x > pageWidth) {
-                x = 0;
-                y += TILE_SIZE;
-            }
+        for (SubTile tile : mTileProvider.getTileIterator()) {
+            application.getLayerClient().addTile(tile);
         }
 
         Log.i(LOGTAG, "End Draw");

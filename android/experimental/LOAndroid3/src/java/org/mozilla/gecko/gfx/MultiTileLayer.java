@@ -241,9 +241,7 @@ public class MultiTileLayer extends Layer {
         return validRegion;
     }
 
-    public void addTile(Bitmap bitmap, int x, int y) {
-        SubTile tile = new SubTile(new BufferedCairoImage(bitmap), x,y);
-        tile.beginTransaction();
+    public void addTile(SubTile tile) {
         mTiles.add(tile);
     }
 }

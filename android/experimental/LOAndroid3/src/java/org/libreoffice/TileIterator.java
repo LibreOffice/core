@@ -1,6 +1,6 @@
 package org.libreoffice;
 
-import android.graphics.Bitmap;
+import org.mozilla.gecko.gfx.SubTile;
 
-public interface TileIterator extends Iterable<Bitmap> {
+public interface TileIterator extends Iterable<SubTile> {
 }
