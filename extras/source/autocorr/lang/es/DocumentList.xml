@@ -13,8 +13,8 @@
   <block-list:block block-list:abbreviated-name="./." block-list:name="÷"/>
   <block-list:block block-list:abbreviated-name=".*//." block-list:name="·"/>
   <block-list:block block-list:abbreviated-name="//-" block-list:name="•"/>
-  <block-list:block block-list:abbreviated-name="//>" block-list:name="►"/>
-  <block-list:block block-list:abbreviated-name="//<" block-list:name="◄"/>
+  <block-list:block block-list:abbreviated-name="//&gt;" block-list:name="►"/>
+  <block-list:block block-list:abbreviated-name="//&lt;" block-list:name="◄"/>
   <block-list:block block-list:abbreviated-name="//_" block-list:name="▼"/>
   <block-list:block block-list:abbreviated-name="//^" block-list:name="▲"/>
   <block-list:block block-list:abbreviated-name="//o" block-list:name="Ø"/>
@@ -26,8 +26,8 @@
   <block-list:block block-list:abbreviated-name="//r" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name="//i" block-list:name="∫"/>
   <block-list:block block-list:abbreviated-name="//l" block-list:name="ℓ"/>
-  <block-list:block block-list:abbreviated-name="^>" block-list:name="↗"/>
-  <block-list:block block-list:abbreviated-name="_>" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name="^&gt;" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name="_&gt;" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/3" block-list:name="⅓"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
