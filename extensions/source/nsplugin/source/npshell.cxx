@@ -708,8 +708,10 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     char* pfilename = NULL;
     if (NULL != (pfilename = strrchr(url, '/')))
     {
-        strcpy(filename, pfilename+1);
-    } else {
+        strncat(filename, pfilename+1, 1024);
+    }
+    else
+    {
         return;
     }
 
