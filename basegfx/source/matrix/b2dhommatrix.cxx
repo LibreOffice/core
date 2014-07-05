@@ -25,8 +25,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
-
 namespace basegfx
 {
     class Impl2DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 3 >

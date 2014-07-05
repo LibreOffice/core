@@ -21,8 +21,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-
-
 namespace basegfx
 {
     B2DPoint& B2DPoint::operator=( const ::basegfx::B2DTuple& rPoint )

@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-
 namespace basegfx
 {
     namespace tools

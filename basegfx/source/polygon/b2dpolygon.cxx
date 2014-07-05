@@ -29,8 +29,6 @@
 #include <vector>
 #include <algorithm>
 
-
-
 struct CoordinateData2D : public basegfx::B2DPoint
 {
 public:
@@ -51,8 +49,6 @@ public:
         *this *= rMatrix;
     }
 };
-
-
 
 class CoordinateDataArray2D
 {
@@ -206,8 +202,6 @@ public:
     }
 };
 
-
-
 class ControlVectorPair2D
 {
     basegfx::B2DVector                          maPrevVector;
@@ -248,8 +242,6 @@ public:
         ::std::swap(maPrevVector, maNextVector);
     }
 };
-
-
 
 class ControlVectorArray2D
 {
@@ -472,8 +464,6 @@ public:
     }
 };
 
-
-
 class ImplBufferedData
 {
 private:
@@ -567,8 +557,6 @@ public:
         return *mpB2DRange;
     }
 };
-
-
 
 class ImplB2DPolygon
 {
@@ -1105,8 +1093,6 @@ public:
         }
     }
 };
-
-
 
 namespace basegfx
 {

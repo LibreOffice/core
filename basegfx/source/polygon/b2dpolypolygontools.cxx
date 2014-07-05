@@ -26,8 +26,6 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <numeric>
 
-
-
 namespace basegfx
 {
     namespace tools
@@ -647,7 +645,6 @@ namespace basegfx
             return aRes;
         }
 
-
         // converters for com::sun::star::drawing::PointSequence
 
         B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
@@ -691,7 +688,6 @@ namespace basegfx
                 rPointSequenceSequenceRetval.realloc(0);
             }
         }
-
 
         // converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
 

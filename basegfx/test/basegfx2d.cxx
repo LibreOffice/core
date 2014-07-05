@@ -213,7 +213,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D (round-trip)",
                                aExport.equalsAscii(sExportString1));
 
-
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D",
                                tools::importFromSvgD( aPoly, aPath3, false, 0 ));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
@@ -693,7 +692,6 @@ public:
 
 }; // class b2dhommatrix
 
-
 class b2dpoint : public CppUnit::TestFixture
 {
 public:
@@ -712,7 +710,6 @@ public:
     CPPUNIT_TEST(EmptyMethod);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpoint
-
 
 class b2dpolygon : public CppUnit::TestFixture
 {
@@ -778,7 +775,6 @@ public:
     CPPUNIT_TEST(testBasics);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygon
-
 
 class b2dpolygontools : public CppUnit::TestFixture
 {
@@ -968,7 +964,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b1Xrange
 
-
 class b1ibox : public CppUnit::TestFixture
 {
 public:
@@ -1027,7 +1022,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b1ibox
 
-
 class b2Xrange : public CppUnit::TestFixture
 {
 public:
@@ -1067,7 +1061,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b2Xrange
 
-
 class b2ibox : public CppUnit::TestFixture
 {
 public:
@@ -1099,7 +1092,6 @@ public:
     CPPUNIT_TEST(TestBox);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2ibox
-
 
 class b2dtuple : public CppUnit::TestFixture
 {
@@ -1284,8 +1276,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2drange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolyrange);
@@ -1301,9 +1291,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
 } // namespace basegfx2d
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

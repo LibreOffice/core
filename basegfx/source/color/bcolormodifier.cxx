@@ -19,16 +19,12 @@
 
 #include <basegfx/color/bcolormodifier.hxx>
 
-
-
 namespace basegfx
 {
     BColorModifier::~BColorModifier()
     {
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -49,8 +45,6 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-
-
 namespace basegfx
 {
     BColorModifier_invert::~BColorModifier_invert()
@@ -67,8 +61,6 @@ namespace basegfx
         return ::basegfx::BColor(1.0 - aSourceColor.getRed(), 1.0 - aSourceColor.getGreen(), 1.0 - aSourceColor.getBlue());
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -88,8 +80,6 @@ namespace basegfx
         return ::basegfx::BColor(fAlpha, fAlpha, fAlpha);
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -115,8 +105,6 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-
-
 namespace basegfx
 {
     BColorModifier_interpolate::~BColorModifier_interpolate()
@@ -140,8 +128,6 @@ namespace basegfx
         return interpolate(maBColor, aSourceColor, mfValue);
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -175,8 +161,6 @@ namespace basegfx
         }
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -227,8 +211,6 @@ namespace basegfx
         }
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -310,8 +292,6 @@ namespace basegfx
         }
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {

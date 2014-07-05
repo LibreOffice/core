@@ -22,8 +22,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <list>
 
-
-
 namespace basegfx
 {
     namespace trapezoidhelper
@@ -56,11 +54,9 @@ namespace basegfx
             const B2DPoint& getEnd() const { return *mpEnd; }
         };
 
-
         // define vector of simple edges
 
         typedef ::std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
-
 
         // helper class for holding a traversing edge. It will always have some
         // distance in YPos. The slope (in a numerically useful form, see comments) is
@@ -179,15 +175,12 @@ namespace basegfx
             }
         };
 
-
         // define double linked list of edges (for fast random insert)
 
         typedef ::std::list< TrDeEdgeEntry > TrDeEdgeEntries;
 
     } // end of anonymous namespace
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {
@@ -898,8 +891,6 @@ namespace basegfx
     } // end of anonymous namespace
 } // end of namespace basegfx
 
-
-
 namespace basegfx
 {
     B2DTrapezoid::B2DTrapezoid(
@@ -950,8 +941,6 @@ namespace basegfx
         return aRetval;
     }
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {

@@ -83,7 +83,6 @@ bool eliminate(     Matrix&         matrix,
     return true;
 }
 
-
 /** Retrieve solution vector of linear system by substituting backwards.
 
     This operation _relies_ on the previous successful
@@ -129,7 +128,6 @@ bool substitute(    const Matrix&   matrix,
     /* everything went well */
     return true;
 }
-
 
 /** This method determines solution of given linear system, if any
 

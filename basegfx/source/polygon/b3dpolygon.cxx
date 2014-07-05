@@ -28,8 +28,6 @@
 #include <vector>
 #include <algorithm>
 
-
-
 class CoordinateData3D
 {
     basegfx::B3DPoint                               maPoint;
@@ -66,8 +64,6 @@ public:
         maPoint *= rMatrix;
     }
 };
-
-
 
 class CoordinateDataArray3D
 {
@@ -249,8 +245,6 @@ public:
     }
 };
 
-
-
 class BColorArray
 {
     typedef ::std::vector< ::basegfx::BColor > BColorDataVector;
@@ -408,8 +402,6 @@ public:
         }
     }
 };
-
-
 
 class NormalsArray3D
 {
@@ -578,8 +570,6 @@ public:
     }
 };
 
-
-
 class TextureCoordinate2D
 {
     typedef ::std::vector< ::basegfx::B2DPoint > TextureData2DVector;
@@ -746,8 +736,6 @@ public:
         }
     }
 };
-
-
 
 class ImplB3DPolygon
 {
@@ -1504,8 +1492,6 @@ public:
         invalidatePlaneNormal();
     }
 };
-
-
 
 namespace basegfx
 {

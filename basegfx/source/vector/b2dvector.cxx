@@ -58,7 +58,6 @@ namespace basegfx
         return *this;
     }
 
-
     double B2DVector::getLength() const
     {
         if(fTools::equalZero(mfX))
@@ -72,8 +71,6 @@ namespace basegfx
 
         return hypot( mfX, mfY );
     }
-
-
 
     double B2DVector::angle( const B2DVector& rVec ) const
     {

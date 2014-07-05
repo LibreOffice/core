@@ -29,8 +29,6 @@
 
 #include <algorithm>
 
-
-
 namespace basegfx
 {
     namespace
@@ -110,12 +108,8 @@ namespace basegfx
             void setNext(EdgeEntry* pNext) { mpNext = pNext; }
         };
 
-
-
         typedef ::std::vector< EdgeEntry > EdgeEntries;
         typedef ::std::vector< EdgeEntry* > EdgeEntryPointers;
-
-
 
         class Triangulator
         {
@@ -388,8 +382,6 @@ namespace basegfx
 
     } // end of anonymous namespace
 } // end of namespace basegfx
-
-
 
 namespace basegfx
 {

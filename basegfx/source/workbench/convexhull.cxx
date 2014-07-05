@@ -23,8 +23,6 @@
 
 #include "bezierclip.hxx"
 
-
-
 /* Implements the theta function from Sedgewick: Algorithms in XXX, chapter 24 */
 template <class PointType> double theta( const PointType& p1, const PointType& p2 )
 {
@@ -148,7 +146,6 @@ template <class PointType, class CmpFunctor> typename PointType::value_type ccw(
  reducing a cluster of theta-equal points to only one. This
  single point can then be treated correctly.
 */
-
 
 /* Implementation of Graham's convex hull algorithm, see Sedgewick: Algorithms in XXX, chapter 25 */
 Polygon2D convexHull( const Polygon2D& rPoly )

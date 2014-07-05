@@ -29,8 +29,6 @@
 #include <basegfx/tools/rectcliptools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
-
 namespace basegfx
 {
     namespace tools
@@ -337,8 +335,6 @@ namespace basegfx
             return aRetval;
         }
 
-
-
         B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
             B2DPolyPolygon aRetval;
@@ -461,8 +457,6 @@ namespace basegfx
             return aRetval;
         }
 
-
-
         B2DPolyPolygon clipPolygonOnPolyPolygon(const B2DPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
             B2DPolyPolygon aRetval;
@@ -474,8 +468,6 @@ namespace basegfx
 
             return aRetval;
         }
-
-
 
         /*
         * let a plane be defined as
@@ -778,8 +770,6 @@ namespace basegfx
 
             return aResult;
         }
-
-
 
     } // end of namespace tools
 } // end of namespace basegfx

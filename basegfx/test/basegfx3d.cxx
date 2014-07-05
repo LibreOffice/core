@@ -53,7 +53,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b3dhommatrix
 
-
 class b3dpoint : public CppUnit::TestFixture
 {
 public:
@@ -82,7 +81,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b3dpoint
 
-
 class b3drange : public CppUnit::TestFixture
 {
 public:
@@ -108,7 +106,6 @@ public:
     CPPUNIT_TEST(EmptyMethod);
     CPPUNIT_TEST_SUITE_END();
 }; // class b3drange
-
 
 class b3dtuple : public CppUnit::TestFixture
 {
@@ -138,7 +135,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b3dtuple
 
-
 class b3dvector : public CppUnit::TestFixture
 {
 public:
@@ -165,16 +161,12 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b3dvector
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dhommatrix);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dpoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3drange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dvector);
 } // namespace basegfx3d
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

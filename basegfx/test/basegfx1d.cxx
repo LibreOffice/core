@@ -55,7 +55,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b1drange
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx1d::b1drange);
 } // namespace basegfx1d
 

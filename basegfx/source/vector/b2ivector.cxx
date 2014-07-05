@@ -30,7 +30,6 @@ namespace basegfx
         return *this;
     }
 
-
     B2IVector& B2IVector::operator*=( const B2DHomMatrix& rMat )
     {
         mnX = fround( rMat.get(0,0)*mnX +

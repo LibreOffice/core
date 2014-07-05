@@ -57,7 +57,6 @@ inline bool compare(const B2DPoint& left, const B2DPoint& right)
         || (left.getX()==right.getX() && left.getY()<right.getY());
 }
 
-
 class boxclipper : public CppUnit::TestFixture
 {
 private:
@@ -427,7 +426,6 @@ public:
     CPPUNIT_TEST(getPolyPolygon);
     CPPUNIT_TEST_SUITE_END();
 };
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::boxclipper);
 } // namespace basegfx2d

@@ -20,8 +20,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-
-
 namespace basegfx
 {
     B3DVector& B3DVector::normalize()

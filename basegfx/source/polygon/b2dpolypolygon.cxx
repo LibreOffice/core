@@ -27,8 +27,6 @@
 #include <functional>
 #include <algorithm>
 
-
-
 class ImplB2DPolyPolygon
 {
     basegfx::B2DPolygonVector                   maPolygons;
@@ -174,8 +172,6 @@ public:
             return &(maPolygons.back())+1;
     }
 };
-
-
 
 namespace basegfx
 {

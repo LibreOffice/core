@@ -21,8 +21,6 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <algorithm>
 
-
-
 namespace basegfx
 {
     B2DCubicBezierHelper::B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions)

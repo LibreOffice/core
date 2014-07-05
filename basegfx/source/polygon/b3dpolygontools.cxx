@@ -29,8 +29,6 @@
 #include <basegfx/tuple/b3ituple.hxx>
 #include <numeric>
 
-
-
 namespace basegfx
 {
     namespace tools

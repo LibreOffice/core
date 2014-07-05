@@ -21,8 +21,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-
-
 namespace basegfx { namespace tools
 {
     BColor rgb2hsl(const BColor& rRGBColor)

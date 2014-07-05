@@ -22,7 +22,6 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 
-
 // implementations of the 3D raster converter
 
 namespace basegfx

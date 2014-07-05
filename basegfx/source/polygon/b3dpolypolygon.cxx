@@ -27,8 +27,6 @@
 #include <vector>
 #include <algorithm>
 
-
-
 class ImplB3DPolyPolygon
 {
     typedef ::std::vector< ::basegfx::B3DPolygon >  PolygonVector;
@@ -201,8 +199,6 @@ public:
             return &(maPolygons.back())+1;
     }
 };
-
-
 
 namespace basegfx
 {

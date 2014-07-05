@@ -27,8 +27,6 @@
 #include "bezierclip.hxx"
 #include "gauss.hxx"
 
-
-
 // what to test
 #define WITH_ASSERTIONS
 //#define WITH_CONVEXHULL_TEST
@@ -43,18 +41,12 @@
 //#define WITH_SAFEFOCUSPARAM_DETAILED_TEST
 #define WITH_BEZIERCLIP_TEST
 
-
-
-
-
 /* Implementation of the so-called 'Fat-Line Bezier Clipping Algorithm' by Sederberg et al.
  *
  * Actual reference is: T. W. Sederberg and T Nishita: Curve
  * intersection using Bezier clipping. In Computer Aided Design, 22
  * (9), 1990, pp. 538--549
  */
-
-
 
 /* Misc helper
  * ===========
@@ -74,20 +66,14 @@ int fallFac( int n, int k )
     return res;
 }
 
-
-
 int fac( int n )
 {
     return fallFac(n, n);
 }
 
-
-
 /* Bezier fat line clipping part
  * =============================
  */
-
-
 
 void Impl_calcFatLine( FatLine& line, const Bezier& c )
 {
@@ -107,7 +93,6 @@ void Impl_calcFatLine( FatLine& line, const Bezier& c )
     }
 
     line.c = -(line.a*c.p0.x + line.b*c.p0.y);
-
 
     // Determine bounding fat line from it
     // ===================================
@@ -270,7 +255,6 @@ bool Impl_calcSafeParams( double&           t1,
     return bIntersection;
 }
 
-
 /* calculates two t's for the given bernstein polynomial: the first is
  * the intersection of the min value line with the convex hull from
  * the left, the second is the intersection of the max value line with
@@ -340,8 +324,6 @@ bool Impl_calcSafeParams_clip( double&          t1,
 #endif
 }
 
-
-
 void Impl_deCasteljauAt( Bezier&        part1,
                          Bezier&        part2,
                          const Bezier&  input,
@@ -388,8 +370,6 @@ void Impl_deCasteljauAt( Bezier&        part1,
         part1.p3.x = part2.p0.x;                                    part1.p3.y = part2.p0.y;
     }
 }
-
-
 
 void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1, double t2_c1,
                                const Bezier& c2_part, const FatLine& bounds_c2 )
@@ -473,8 +453,6 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
     offset += 1;
 }
 
-
-
 void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
                                  const Bezier& c2, const Bezier& c2_part,
                                  double t1_c1, double t2_c1 )
@@ -547,8 +525,6 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
 
     offset += 1;
 }
-
-
 
 /** determine parameter ranges [0,t1) and (t2,1] on c1, where c1 is guaranteed to lie outside c2.
       Returns false, if the two curves don't even intersect.
@@ -628,13 +604,9 @@ bool Impl_calcClipRange( double&        t1,
     return false;
 }
 
-
-
 /* Tangent intersection part
  * =========================
  */
-
-
 
 void Impl_calcFocus( Bezier& res, const Bezier& c )
 {
@@ -692,7 +664,6 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
 
     // (P0.y - P1.y)c0 + (P3.y - P2.y)c1 = (P3.x - P0.x)/3
     // (P1.x - P0.x)c0 + (P2.x - P3.x)c1 = (P3.y - P0.y)/3
-
 
     // so, this is what we calculate here (determine c0 and c1):
     fMatrix[0] = c.p1.x - c.p0.x;
@@ -761,8 +732,6 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     res.p3.y = c.p3.y + 3*fRes[1]*(c.p3.x - c.p2.x);
 }
 
-
-
 bool Impl_calcSafeParams_focus( double&         t1,
                                 double&         t2,
                                 const Bezier&   curve,
@@ -796,7 +765,6 @@ bool Impl_calcSafeParams_focus( double&         t1,
 
     // d_i = \sum_{j+k=i, j\in\{0,...,n\}, k\in\{0,...,n-1\}} \frac{\binom{n}{j}\binom{n-1}{k}}{\binom{2n-1}{i}} n (P_{k+1} - P_k)^T(P_j - F)
 
-
     // Okay, but F is now not a single point, but itself a curve
     // F(u). Thus, for every value of u, we get a different 2n-1
     // bezier curve from the above equation. Therefore, we have a
@@ -821,13 +789,11 @@ bool Impl_calcSafeParams_focus( double&         t1,
     // \fallfac are so-called falling factorials (see Concrete
     // Mathematics, p. 47 for a definition).
 
-
     // now, for tensor product bezier curves, the convex hull property
     // holds, too. Thus, we simply project the control points (t_{ij},
     // u_{ij}, d_{ij}) onto the (t,d) plane and calculate the
     // intersections of the convex hull with the t axis, as for the
     // bezier clipping case.
-
 
     // calc polygon of control points (t_{ij}, d_{ij}):
 
@@ -899,8 +865,6 @@ bool Impl_calcSafeParams_focus( double&         t1,
     return bRet;
 #endif
 }
-
-
 
 /** Calc all values t_i on c1, for which safeRanges functor does not
     give a safe range on c1 and c2.
@@ -1144,8 +1108,6 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
     }
 }
 
-
-
 struct ClipBezierFunctor
 {
     bool operator()( double& t1_c1,
@@ -1158,8 +1120,6 @@ struct ClipBezierFunctor
         return Impl_calcClipRange( t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part );
     }
 };
-
-
 
 struct BezierTangencyFunctor
 {
@@ -1186,8 +1146,6 @@ struct BezierTangencyFunctor
         return bRet;
     }
 };
-
-
 
 /** Perform a bezier clip (curve against curve)
 
@@ -1476,7 +1434,6 @@ int main(int argc, const char *argv[])
              << c1_part3.p2.y << ","
              << c1_part3.p3.y << ",t) title \"left " << i << "\"";
 
-
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
             cout << ",\\" << endl;
         else
@@ -1574,7 +1531,6 @@ int main(int argc, const char *argv[])
              << focus.p1.y << ","
              << focus.p2.y << ","
              << focus.p3.y << ",t) title \"focus " << i << "\"";
-
 
         if( i+1<sizeof(someCurves)/sizeof(Bezier) )
             cout << ",\\" << endl;

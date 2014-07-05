@@ -32,7 +32,6 @@
 
 using namespace ::basegfx;
 
-
 namespace basegfx2d
 {
 
@@ -156,7 +155,6 @@ public:
     CPPUNIT_TEST(verifyMixedClips);
     CPPUNIT_TEST_SUITE_END();
 };
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::clipstate);
 } // namespace basegfx2d

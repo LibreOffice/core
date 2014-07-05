@@ -35,7 +35,6 @@
 #include <deque>
 #include <list>
 
-
 namespace basegfx
 {
     namespace
@@ -49,7 +48,6 @@ namespace basegfx
 
         class ImplPolygon;
         typedef o3tl::vector_pool<ImplPolygon> VectorOfPolygons;
-
 
         /** This class represents an active edge
 
@@ -147,7 +145,6 @@ namespace basegfx
         // Needs to be list - various places hold ptrs to elements
         typedef std::list< ActiveEdge > ListOfEdges;
 
-
         /** Element of the sweep line event list
 
             As the sweep line traverses across the overall area,
@@ -233,7 +230,6 @@ namespace basegfx
         };
 
         typedef std::vector< SweepLineEvent > VectorOfEvents;
-
 
         /** Smart point container for B2DMultiRange::getPolyPolygon()
 

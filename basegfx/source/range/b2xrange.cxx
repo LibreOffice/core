@@ -21,7 +21,6 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 
-
 namespace basegfx
 {
     namespace

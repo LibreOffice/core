@@ -34,7 +34,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-
 using namespace ::com::sun::star;
 
 namespace basegfx
