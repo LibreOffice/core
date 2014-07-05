@@ -415,7 +415,7 @@ namespace basegfx
 
             void solveHorizontalEdges(TrDeSimpleEdges& rTrDeSimpleEdges)
             {
-                if(rTrDeSimpleEdges.size() && maTrDeEdgeEntries.size())
+                if(!rTrDeSimpleEdges.empty() && !maTrDeEdgeEntries.empty())
                 {
                     // there were horizontal edges. These can be excluded, but
                     // cuts with other edges need to be solved and added before
