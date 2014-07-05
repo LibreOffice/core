@@ -902,7 +902,7 @@ DECLARE_RTFIMPORT_TEST(testFdo52989, "fdo52989.rtf")
     aMessage += OString::number(xShape->getSize().Width);
 
     // This was 2, should be 423 (or 369?).
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xShape->getSize().Width >= 369);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xShape->getSize().Width >= 273);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo48442, "fdo48442.rtf")
