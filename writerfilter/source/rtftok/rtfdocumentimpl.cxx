@@ -40,6 +40,7 @@
 #include <tools/mapunit.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <oox/mathml/import.hxx>
@@ -4168,7 +4169,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_NOFCHARSWS:
         if (m_xDocumentProperties.is())
         {
-            uno::Sequence<beans::NamedValue> aSet = m_xDocumentProperties->getDocumentStatistics();
+            comphelper::SequenceAsHashMap aSeq = m_xDocumentProperties->getDocumentStatistics();
             OUString aName;
             switch (nKeyword)
             {
@@ -4190,18 +4191,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             if (!aName.isEmpty())
             {
-                bool bFound = false;
-                int nLen = aSet.getLength();
-                for (int i = 0; i < nLen; ++i)
-                    if (aSet[i].Name.equals(aName))
-                        aSet[i].Value = uno::makeAny(sal_Int32(nParam));
-                if (!bFound)
-                {
-                    aSet.realloc(nLen + 1);
-                    aSet[nLen].Name = aName;
-                    aSet[nLen].Value = uno::makeAny(sal_Int32(nParam));
-                }
-                m_xDocumentProperties->setDocumentStatistics(aSet);
+                aSeq[aName] = uno::makeAny(sal_Int32(nParam));
+                m_xDocumentProperties->setDocumentStatistics(aSeq.getAsConstNamedValueList());
             }
         }
         break;
