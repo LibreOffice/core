@@ -1768,6 +1768,12 @@ DECLARE_RTFIMPORT_TEST(testColumnBreak, "column-break.rtf")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo73241, "fdo73241.rtf")
+{
+    // This was 2, page break in table wasn't ignored.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
