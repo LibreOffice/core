@@ -77,7 +77,7 @@ writerfilter_SRC_ooxml_GperfFastTokenHandler_py=$(writerfilter_SRC)/ooxml/gperff
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
 writerfilter_SRC_ooxml_NamespaceIds_xsl=$(writerfilter_SRC)/ooxml/namespaceids.xsl
 writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.py
-writerfilter_SRC_ooxml_QNameToStr_xsl=$(writerfilter_SRC)/ooxml/qnametostr.xsl
+writerfilter_SRC_ooxml_QNameToStr_py=$(writerfilter_SRC)/ooxml/qnametostr.py
 writerfilter_SRC_ooxml_ResourceIds_py=$(writerfilter_SRC)/ooxml/resourceids.py
 
 $(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.xsl $(writerfilter_GEN_ooxml_Model_processed)
@@ -109,9 +109,9 @@ $(writerfilter_GEN_ooxml_NamespaceIds_hxx) : $(writerfilter_SRC_ooxml_NamespaceI
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_xsl) $(writerfilter_SRC_ooxml_FactoryTools_xsl) $(writerfilter_GEN_ooxml_Model_processed)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_QNameToStr_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
+$(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_QNameToStr_py) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
 $(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds_py) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
