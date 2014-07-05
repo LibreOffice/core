@@ -120,6 +120,8 @@ int OpenGLRender::InitOpenGL()
     //TODO: moggi: get the information from the context
     mbArbMultisampleSupported = true;
 
+    aContext.init();
+
     if (glewIsSupported("framebuffer_object") != GLEW_OK)
     {
         SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
@@ -344,6 +346,7 @@ void OpenGLRender::renderDebug()
 
 void OpenGLRender::prepareToRender()
 {
+    aContext.setWinSize(Size(m_iWidth, m_iHeight));
     glViewport(0, 0, m_iWidth, m_iHeight);
     if (!m_FboID[0])
     {

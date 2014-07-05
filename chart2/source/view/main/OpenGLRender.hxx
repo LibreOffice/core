@@ -119,6 +119,8 @@ public:
 
 private:
 
+    OpenGLContext aContext;
+
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTarget;
 
 #if 0
