@@ -124,23 +124,26 @@ static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
                 *pstr++ = '/';
 
             *pstr = '\0';
-
-            strcat(path, pszName);
-
-            if (access(path, 0) == 0)
+            size_t reminder = PATH_MAX - strlen(path);
+            if(reminder > strlen(pszName))
             {
-                char szRealPathBuf[PATH_MAX] = "";
+                strncat(path, pszName, reminder);
 
-                if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
-                    return osl_Process_E_Unknown;
+                if (access(path, 0) == 0)
+                {
+                    char szRealPathBuf[PATH_MAX + 1] = "";
 
-                strcpy(pszBuffer, path);
+                    if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
+                        return osl_Process_E_Unknown;
 
-                return osl_Process_E_None;
+                    strcpy(pszBuffer, path);
+
+                    return osl_Process_E_None;
+                }
+
+                if (*pchr == ':')
+                    pchr++;
             }
-
-            if (*pchr == ':')
-                pchr++;
         }
     }
 
