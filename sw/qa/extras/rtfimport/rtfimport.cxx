@@ -1667,6 +1667,12 @@ DECLARE_RTFIMPORT_TEST(testFontOverride, "font-override.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo73241, "fdo73241.rtf")
+{
+    // This was 2, page break in table wasn't ignored.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

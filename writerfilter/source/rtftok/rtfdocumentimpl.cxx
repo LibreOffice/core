@@ -2193,6 +2193,10 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAGE:
             {
+                // Ignore page breaks inside tables.
+                if (m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back())
+                    break;
+
                 // If we're inside a continous section, we should send a section break, not a page one.
                 RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
                 // Unless we're on a title page.
