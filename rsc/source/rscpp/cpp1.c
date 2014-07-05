@@ -24,11 +24,11 @@
 #include "cppdef.h"
 #include "cpp.h"
 
-FILE *pCppOut = NULL;
-FILE *pCppIn  = NULL;
+FILE* pCppOut = NULL;
+FILE* pCppIn  = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-FILE *pDefOut = NULL;       /* ER  evtl. #define's dump */
+FILE* pDefOut = NULL;       /* ER  evtl. #define's dump */
 #endif
 
 #ifdef B200
@@ -54,18 +54,18 @@ extern unsigned _heaplen = 30000;
  *              to the current file/macro.  infile->parent to the includer,
  *              etc.  infile->fd is NULL if this input stream is a macro.
  */
-int             line;                   /* Current line number          */
-int             wrongline;              /* Force #line to compiler      */
-char            token[IDMAX + 1];       /* Current input token          */
-int             errors;                 /* cpp error counter            */
-FILEINFO        *infile = NULL;         /* Current input file           */
+int line;                   /* Current line number          */
+int wrongline;              /* Force #line to compiler      */
+char token[IDMAX + 1];      /* Current input token          */
+int errors;                 /* cpp error counter            */
+FILEINFO* infile = NULL;    /* Current input file           */
 #if OSL_DEBUG_LEVEL > 1
-int             debug;                  /* TRUE if debugging now        */
-int             bDumpDefs;              /* TRUE if #define's dump req.  */
+int debug;                  /* TRUE if debugging now        */
+int bDumpDefs;              /* TRUE if #define's dump req.  */
 #ifdef EVALDEFS
-int             bIsInEval;              /* TRUE if #define eval now     */
-char            EvalBuf[NEVALBUF + 1];  /* evaluation buffer            */
-int             nEvalOff = 0;           /* offset to free buffer pos    */
+int bIsInEval;              /* TRUE if #define eval now     */
+char EvalBuf[NEVALBUF + 1]; /* evaluation buffer            */
+int nEvalOff = 0;           /* offset to free buffer pos    */
 #endif
 #endif
 /*
@@ -78,8 +78,8 @@ int             nEvalOff = 0;           /* offset to free buffer pos    */
  * This can be disabled by falsifying rec_recover.  (Nothing does this
  * currently: it is a hook for an eventual invocation flag.)
  */
-int             recursion;              /* Infinite recursion counter   */
-int             rec_recover = TRUE;     /* Unwind recursive macros      */
+int recursion;              /* Infinite recursion counter   */
+int rec_recover = TRUE;     /* Unwind recursive macros      */
 
 /*
  * instring is set TRUE when a string is scanned.  It modifies the
@@ -97,8 +97,8 @@ int             rec_recover = TRUE;     /* Unwind recursive macros      */
  * instring and inmarcor are parameters to the get() routine which
  * were made global for speed.
  */
-int             instring = FALSE;       /* TRUE if scanning string      */
-int             inmacro = FALSE;        /* TRUE if #defining a macro    */
+int instring = FALSE;       /* TRUE if scanning string      */
+int inmacro = FALSE;        /* TRUE if #defining a macro    */
 
 /*
  * work[] and workp are used to store one piece of text in a temporay
@@ -109,8 +109,8 @@ int             inmacro = FALSE;        /* TRUE if #defining a macro    */
  * data won't be overwritten.  The extra byte in the allocation is
  * needed for string formal replacement.
  */
-char            work[NWORK + 1];        /* Work buffer                  */
-char            *workp;                 /* Work buffer pointer          */
+char work[NWORK + 1];        /* Work buffer                  */
+char* workp;                 /* Work buffer pointer          */
 
 /*
  * keepcomments is set TRUE by the -C option.  If TRUE, comments
@@ -127,10 +127,10 @@ char            *workp;                 /* Work buffer pointer          */
  * __FILE__, and __DATE__.  If nflag > 1, absolutely no symbols
  * are predefined.
  */
-int             keepcomments = FALSE;   /* Write out comments flag      */
-int             cflag = FALSE;          /* -C option (keep comments)    */
-int             eflag = FALSE;          /* -E option (never fail)       */
-int             nflag = 0;              /* -N option (no predefines)    */
+int keepcomments = FALSE;   /* Write out comments flag      */
+int cflag = FALSE;          /* -C option (keep comments)    */
+int eflag = FALSE;          /* -E option (never fail)       */
+int nflag = 0;              /* -N option (no predefines)    */
 
 /*
  * ifstack[] holds information about nested #if's.  It is always
@@ -141,15 +141,15 @@ int             nflag = 0;              /* -N option (no predefines)    */
  * ifstack[0] holds the compiling flag.  It is TRUE if compilation
  * is currently enabled.  Note that this must be initialized TRUE.
  */
-char            ifstack[BLK_NEST] = { TRUE };   /* #if information      */
-char            *ifptr = ifstack;               /* -> current ifstack[] */
+char ifstack[BLK_NEST] = { TRUE };   /* #if information      */
+char* ifptr = ifstack;               /* -> current ifstack[] */
 
 /*
  * incdir[] stores the -i directories (and the system-specific
  * #include <...> directories.
  */
-char    *incdir[NINCLUDE];              /* -i directories               */
-char    **incend = incdir;              /* -> free space in incdir[]    */
+char* incdir[NINCLUDE];              /* -i directories               */
+char** incend = incdir;              /* -> free space in incdir[]    */
 
 /*
  * This is the table used to predefine target machine and operating
@@ -157,7 +157,8 @@ char    **incend = incdir;              /* -> free space in incdir[]    */
  * Note: it is not clear that this is part of the Ansi Standard.
  * The -N option suppresses preset definitions.
  */
-char    *preset[] = {                   /* names defined at cpp start   */
+char* preset[] =
+{                   /* names defined at cpp start   */
 #ifdef  MACHINE
         MACHINE,
 #endif
@@ -177,13 +178,14 @@ char    *preset[] = {                   /* names defined at cpp start   */
  * The value of these predefined symbols must be recomputed whenever
  * they are evaluated.  The order must not be changed.
  */
-char    *magic[] = {                    /* Note: order is important     */
+char* magic[] =
+{                    /* Note: order is important     */
         "__LINE__",
         "__FILE__",
         NULL                            /* Must be last                 */
 };
 
-static char     *sharpfilename = NULL;
+static char* sharpfilename = NULL;
 
 int nRunde = 0;
 
@@ -230,363 +232,385 @@ void InitCpp1()
 
 int MAIN(int argc, char** argv)
 {
-        int    i;
-        char **useargv, **pfargv;
+    int    i;
+    char** useargv;
+    char** pfargv;
 
+    if( nRunde == 0 )
+    {
+        pCppIn = stdin;
+        pCppOut = stdout;
+    }
 
-if( nRunde == 0 )
-{
-    pCppIn = stdin;
-    pCppOut = stdout;
-}
-
-nRunde++;
-        InitCpp1();
-        InitCpp2();
-        InitCpp3();
-        InitCpp4();
-        InitCpp5();
-        InitCpp6();
+    nRunde++;
+    InitCpp1();
+    InitCpp2();
+    InitCpp3();
+    InitCpp4();
+    InitCpp5();
+    InitCpp6();
 
 #if HOST == SYS_VMS
-        argc = getredirection(argc, argv);      /* vms >file and <file  */
+    argc = getredirection(argc, argv);      /* vms >file and <file  */
 #endif
-        initdefines();                          /* O.S. specific def's  */
-        if ( argv[argc-1][0] == '@' )
-        {
-            i = readoptions( argv[1], &pfargv );    /* Command file */
-            useargv=pfargv;
-        }
-        else
-        {
-            i = dooptions(argc, argv);              /* Command line -flags  */
-            useargv=argv;
-        }
-        switch (i) {
+    initdefines();                          /* O.S. specific def's  */
+    if ( argv[argc-1][0] == '@' )
+    {
+        i = readoptions( argv[1], &pfargv );    /* Command file */
+        useargv=pfargv;
+    }
+    else
+    {
+        i = dooptions(argc, argv);              /* Command line -flags  */
+        useargv=argv;
+    }
+    switch (i)
+    {
 #if OSL_DEBUG_LEVEL > 1
-        case 4:
-            if ( bDumpDefs )
-            {
-                /*
-                 * Get defBase file, "-" means use stdout.
-                 */
-                if (!streq(useargv[3], "-")) {
-#if HOST == SYS_VMS
-                    /*
-                     * On vms, reopen stdout with "vanilla rms" attributes.
-                     */
-                    if ((i = creat(useargv[3], 0, "rat=cr", "rfm=var")) == -1
-                     || dup2(i, fileno(stdout)) == -1) {
-#else
-                    pDefOut = fopen( useargv[3], "w" );
-                    if( pDefOut == NULL ) {
-#endif
-                        perror(useargv[3]);
-                        cerror("Can't open output file \"%s\"", useargv[3]);
-                        exit(IO_ERROR);
-                    }
-                }                           /* Continue by opening output    */
-            }
-#endif
-        case 3:
+    case 4:
+        if ( bDumpDefs )
+        {
             /*
-             * Get output file, "-" means use stdout.
+             * Get defBase file, "-" means use stdout.
              */
-            if (!streq(useargv[2], "-")) {
+            if (!streq(useargv[3], "-"))
+            {
 #if HOST == SYS_VMS
                 /*
                  * On vms, reopen stdout with "vanilla rms" attributes.
                  */
-                if ((i = creat(useargv[2], 0, "rat=cr", "rfm=var")) == -1
-                 || dup2(i, fileno(stdout)) == -1) {
+                if ((i = creat(useargv[3], 0, "rat=cr", "rfm=var")) == -1
+                    || dup2(i, fileno(stdout)) == -1)
 #else
-                pCppOut = fopen( useargv[2], "w" );
-                if( pCppOut == NULL ) {
+                pDefOut = fopen( useargv[3], "w" );
+                if( pDefOut == NULL )
 #endif
-                    perror(useargv[2]);
-                    cerror("Can't open output file \"%s\"", useargv[2]);
+                {
+                    perror(useargv[3]);
+                    cerror("Can't open output file \"%s\"", useargv[3]);
                     exit(IO_ERROR);
                 }
-            }                           /* Continue by opening input    */
-        case 2:                         /* One file -> stdin            */
+            }                           /* Continue by opening output    */
+        }
+#endif
+    case 3:
+        /*
+         * Get output file, "-" means use stdout.
+         */
+        if (!streq(useargv[2], "-"))
+        {
+#if HOST == SYS_VMS
             /*
-             * Open input file, "-" means use stdin.
+             * On vms, reopen stdout with "vanilla rms" attributes.
              */
-            if (!streq(useargv[1], "-")) {
-                pCppIn = fopen( useargv[1], "r" );
-                if( pCppIn == NULL) {
-                    perror(useargv[1]);
-                    cerror("Can't open input file \"%s\"", useargv[1]);
-                    exit(IO_ERROR);
-                }
-                strcpy(work, useargv[1]);  /* Remember input filename      */
-                break;
-            }                           /* Else, just get stdin         */
-        case 0:                         /* No args?                     */
-        case 1:                         /* No files, stdin -> stdout    */
-#if (HOST == SYS_UNIX) || (HOST == SYS_UNKNOWN)
-            work[0] = EOS;              /* Unix can't find stdin name   */
+            if ((i = creat(useargv[2], 0, "rat=cr", "rfm=var")) == -1
+                || dup2(i, fileno(stdout)) == -1)
 #else
-            fgetname(stdin, work);      /* Vax-11C, Decus C know name   */
+            pCppOut = fopen( useargv[2], "w" );
+            if( pCppOut == NULL )
 #endif
+            {
+                perror(useargv[2]);
+                cerror("Can't open output file \"%s\"", useargv[2]);
+                exit(IO_ERROR);
+            }
+        }                           /* Continue by opening input    */
+    case 2:                         /* One file -> stdin            */
+        /*
+         * Open input file, "-" means use stdin.
+         */
+        if (!streq(useargv[1], "-"))
+        {
+            pCppIn = fopen( useargv[1], "r" );
+            if( pCppIn == NULL)
+            {
+                perror(useargv[1]);
+                cerror("Can't open input file \"%s\"", useargv[1]);
+                exit(IO_ERROR);
+            }
+            strcpy(work, useargv[1]);  /* Remember input filename      */
             break;
-
-        default:
-            exit(IO_ERROR);             /* Can't happen                 */
-        }
-
-        setincdirs();                   /* Setup -I include directories */
-        addfile( pCppIn, work);           /* "open" main input file       */
-#if OSL_DEBUG_LEVEL > 1
-        if (debug > 0 || bDumpDefs)
-            dumpdef("preset #define symbols");
-#endif
-        if( pCppIn != stdin )
-            rewind( pCppIn );
-
-        cppmain();                      /* Process main file            */
-
-        if ((i = (ifptr - &ifstack[0])) != 0) {
-#if OLD_PREPROCESSOR
-            ciwarn("Inside #ifdef block at end of input, depth = %d", i);
+        }                           /* Else, just get stdin         */
+    case 0:                         /* No args?                     */
+    case 1:                         /* No files, stdin -> stdout    */
+#if (HOST == SYS_UNIX) || (HOST == SYS_UNKNOWN)
+        work[0] = EOS;              /* Unix can't find stdin name   */
 #else
-            cierror("Inside #ifdef block at end of input, depth = %d", i);
+        fgetname(stdin, work);      /* Vax-11C, Decus C know name   */
 #endif
-        }
-#if OSL_DEBUG_LEVEL > 1
-        if( pDefOut != stdout && pDefOut != stderr )
-            fclose( pDefOut );
-#endif
-        if( pCppOut != stdout && pCppOut != stderr )
-            fclose( pCppOut );
+        break;
 
-        if (errors > 0) {
-            fprintf(stderr, (errors == 1)
+    default:
+        exit(IO_ERROR);             /* Can't happen                 */
+    }
+
+    setincdirs();                   /* Setup -I include directories */
+    addfile( pCppIn, work);           /* "open" main input file       */
+#if OSL_DEBUG_LEVEL > 1
+    if (debug > 0 || bDumpDefs)
+        dumpdef("preset #define symbols");
+#endif
+    if( pCppIn != stdin )
+        rewind( pCppIn );
+
+    cppmain();                      /* Process main file            */
+
+    if ((i = (ifptr - &ifstack[0])) != 0)
+    {
+#if OLD_PREPROCESSOR
+        ciwarn("Inside #ifdef block at end of input, depth = %d", i);
+#else
+        cierror("Inside #ifdef block at end of input, depth = %d", i);
+#endif
+    }
+#if OSL_DEBUG_LEVEL > 1
+    if( pDefOut != stdout && pDefOut != stderr )
+        fclose( pDefOut );
+#endif
+    if( pCppOut != stdout && pCppOut != stderr )
+        fclose( pCppOut );
+
+    if (errors > 0)
+    {
+        fprintf(stderr, (errors == 1)
                 ? "%d error in preprocessor\n"
                 : "%d errors in preprocessor\n", errors);
-            if (!eflag)
-                exit(IO_ERROR);
-        }
+        if (!eflag)
+            exit(IO_ERROR);
+    }
 #ifdef NOMAIN                  /* BP */ /* kein exit im der LIB-Version */
-        return( IO_NORMAL );
+    return( IO_NORMAL );
 #else
-        exit(IO_NORMAL);                /* No errors or -E option set   */
+    exit(IO_NORMAL);                /* No errors or -E option set   */
 #endif
 
 }
 
-FILE_LOCAL
-void cppmain()
 /*
  * Main process for cpp -- copies tokens from the current input
  * stream (main file, include file, or a macro) to the output
  * file.
  */
+void cppmain()
 {
-        int            c;              /* Current character    */
-        int            counter;        /* newlines and spaces  */
+    int c;              /* Current character    */
+    int counter;        /* newlines and spaces  */
 
-        /*
-         * Explicitly output a #line at the start of cpp output so
-         * that lint (etc.) knows the name of the original source
-         * file.  If we don't do this explicitly, we may get
-         * the name of the first #include file instead.
-         * We also seem to need a blank line following that first #line.
-         */
+    /*
+     * Explicitly output a #line at the start of cpp output so
+     * that lint (etc.) knows the name of the original source
+     * file.  If we don't do this explicitly, we may get
+     * the name of the first #include file instead.
+     * We also seem to need a blank line following that first #line.
+     */
 #ifdef EVALDEFS
-        if ( !bIsInEval )
+    if ( !bIsInEval )
 #endif
-        {
-            sharp();
-            PUTCHAR('\n');
+    {
+        sharp();
+        PUTCHAR('\n');
+    }
+    /*
+     * This loop is started "from the top" at the beginning of each line
+     * wrongline is set TRUE in many places if it is necessary to write
+     * a #line record.  (But we don't write them when expanding macros.)
+     *
+     * The counter variable has two different uses:  at
+     * the start of a line, it counts the number of blank lines that
+     * have been skipped over.  These are then either output via
+     * #line records or by outputting explicit blank lines.
+     * When expanding tokens within a line, the counter remembers
+     * whether a blank/tab has been output.  These are dropped
+     * at the end of the line, and replaced by a single blank
+     * within lines.
+     */
+    for (;;)
+    {
+        counter = 0;                        /* Count empty lines    */
+        for (;;)
+        {                                   /* For each line, ...   */
+            while (type[(c = get())] == SPA) /* Skip leading blanks */
+                ;                           /* in this line.        */
+            if (c == '\n')                  /* If line's all blank, */
+                ++counter;                  /* Do nothing now       */
+            else if (c == '#')
+            {            /* Is 1st non-space '#' */
+                keepcomments = FALSE;       /* Don't pass comments  */
+                counter = control(counter); /* Yes, do a #command   */
+                keepcomments = (cflag && compiling);
+            }
+            else if (c == EOF_CHAR)         /* At end of file?      */
+            {
+                break;
+            }
+            else if (!compiling)
+            {                               /* #ifdef false?        */
+                skipnl();                   /* Skip to newline      */
+                counter++;                  /* Count it, too.       */
+            }
+            else
+            {
+                break;                      /* Actual token         */
+            }
+        }
+        if (c == EOF_CHAR)                  /* Exit process at      */
+            break;                          /* End of file          */
+        /*
+         * If the loop didn't terminate because of end of file, we
+         * know there is a token to compile.  First, clean up after
+         * absorbing newlines.  counter has the number we skipped.
+         */
+        if ((wrongline && infile->fp != NULL) || counter > 4)
+            sharp();                        /* Output # line number */
+        else
+        {                                   /* If just a few, stuff */
+            while (--counter >= 0)          /* them out ourselves   */
+                PUTCHAR('\n');
         }
         /*
-         * This loop is started "from the top" at the beginning of each line
-         * wrongline is set TRUE in many places if it is necessary to write
-         * a #line record.  (But we don't write them when expanding macros.)
-         *
-         * The counter variable has two different uses:  at
-         * the start of a line, it counts the number of blank lines that
-         * have been skipped over.  These are then either output via
-         * #line records or by outputting explicit blank lines.
-         * When expanding tokens within a line, the counter remembers
-         * whether a blank/tab has been output.  These are dropped
-         * at the end of the line, and replaced by a single blank
-         * within lines.
+         * Process each token on this line.
          */
-        for (;;) {
-            counter = 0;                        /* Count empty lines    */
-            for (;;) {                          /* For each line, ...   */
-                while (type[(c = get())] == SPA) /* Skip leading blanks */
-                    ;                           /* in this line.        */
-                if (c == '\n')                  /* If line's all blank, */
-                    ++counter;                  /* Do nothing now       */
-                else if (c == '#') {            /* Is 1st non-space '#' */
-                    keepcomments = FALSE;       /* Don't pass comments  */
-                    counter = control(counter); /* Yes, do a #command   */
-                    keepcomments = (cflag && compiling);
-                }
-                else if (c == EOF_CHAR)         /* At end of file?      */
+        unget();                            /* Reread the char.     */
+        for (;;)
+        {                                   /* For the whole line,  */
+            do
+            {                            /* Token concat. loop   */
+                for (counter = 0; type[(c = get())] == SPA;)
                 {
-                    break;
-                }
-                else if (!compiling) {          /* #ifdef false?        */
-                    skipnl();                   /* Skip to newline      */
-                    counter++;                  /* Count it, too.       */
-                }
-                else {
-                    break;                      /* Actual token         */
-                }
-            }
-            if (c == EOF_CHAR)                  /* Exit process at      */
-                break;                          /* End of file          */
-            /*
-             * If the loop didn't terminate because of end of file, we
-             * know there is a token to compile.  First, clean up after
-             * absorbing newlines.  counter has the number we skipped.
-             */
-            if ((wrongline && infile->fp != NULL) || counter > 4)
-                sharp();                        /* Output # line number */
-            else {                              /* If just a few, stuff */
-                while (--counter >= 0)          /* them out ourselves   */
-                    PUTCHAR('\n');
-            }
-            /*
-             * Process each token on this line.
-             */
-            unget();                            /* Reread the char.     */
-            for (;;) {                          /* For the whole line,  */
-                do {                            /* Token concat. loop   */
-                    for (counter = 0; type[(c = get())] == SPA;) {
 #if COMMENT_INVISIBLE
-                        if (c != COM_SEP)
-                            counter++;
-#else
-                        counter++;              /* Skip over blanks     */
+                    if (c != COM_SEP)
 #endif
-                    }
-                    if (c == EOF_CHAR || c == '\n')
-                        goto end_line;          /* Exit line loop       */
-                    else if (counter > 0)       /* If we got any spaces */
-                        PUTCHAR(' ');           /* Output one space     */
-                    c = macroid(c);             /* Grab the token       */
-                } while (type[c] == LET && catenate());
-                if (c == EOF_CHAR || c == '\n') /* From macro exp error */
-                    goto end_line;              /* Exit line loop       */
-                switch (type[c]) {
-                case LET:
-                    fputs(token, pCppOut);       /* Quite ordinary token */
+                    counter++;              /* Skip over blanks     */
+
+                }
+                if (c == EOF_CHAR || c == '\n')
+                    goto end_line;          /* Exit line loop       */
+                else if (counter > 0)       /* If we got any spaces */
+                    PUTCHAR(' ');           /* Output one space     */
+                c = macroid(c);             /* Grab the token       */
+            }
+            while (type[c] == LET && catenate());
+
+            if (c == EOF_CHAR || c == '\n') /* From macro exp error */
+                goto end_line;              /* Exit line loop       */
+
+            switch (type[c])
+            {
+            case LET:
+                fputs(token, pCppOut);       /* Quite ordinary token */
 #ifdef EVALDEFS
+                {
+                    int len;
+                    if ( bIsInEval
+                         && nEvalOff + (len=strlen(token)) < NEVALBUF )
                     {
-                        int len;
-                        if ( bIsInEval
-                                && nEvalOff + (len=strlen(token)) < NEVALBUF )
-                        {
-                            strcpy( &EvalBuf[nEvalOff], token );
-                            nEvalOff += len;
-                        }
+                        strcpy( &EvalBuf[nEvalOff], token );
+                        nEvalOff += len;
                     }
+                }
 #endif
-                    break;
+                break;
 
 
-                case DIG:                       /* Output a number      */
-                case DOT:                       /* Dot may begin floats */
+            case DIG:                       /* Output a number      */
+            case DOT:                       /* Dot may begin floats */
 #ifdef EVALDEFS
-                    if ( bIsInEval )
-                        scannumber(c, outputEval);
-                    else
-                        scannumber(c, output);
-#else
+                if ( bIsInEval )
+                    scannumber(c, outputEval);
+                else
                     scannumber(c, output);
-#endif
-                    break;
-
-                case QUO:                       /* char or string const */
-                    scanstring(c, output);      /* Copy it to output    */
-                    break;
-
-                default:                        /* Some other character */
-                    cput(c);                    /* Just output it       */
-#ifdef EVALDEFS
-                    if ( bIsInEval && nEvalOff < NEVALBUF )
-                        EvalBuf[nEvalOff++] = c;
-#endif
-                    break;
-                }                               /* Switch ends          */
-            }                                   /* Line for loop        */
-end_line:   if (c == '\n') {                    /* Compiling at EOL?    */
-                PUTCHAR('\n');                  /* Output newline, if   */
-                if (infile->fp == NULL)         /* Expanding a macro,   */
-                    wrongline = TRUE;           /* Output # line later  */
-            }
-        }                                       /* Continue until EOF   */
-#ifdef EVALDEFS
-        if ( bIsInEval )
-            EvalBuf[nEvalOff++] = '\0';
-#endif
-}
-
-void output(int c)
-/*
- * Output one character to stdout -- output() is passed as an
- * argument to scanstring()
- */
-{
-#if COMMENT_INVISIBLE
-        if (c != TOK_SEP && c != COM_SEP)
 #else
-        if (c != TOK_SEP)
+                scannumber(c, output);
 #endif
-            PUTCHAR(c);
-}
+                break;
 
+            case QUO:                       /* char or string const */
+                scanstring(c, output);      /* Copy it to output    */
+                break;
+
+            default:                        /* Some other character */
+                cput(c);                    /* Just output it       */
 #ifdef EVALDEFS
-outputEval(c)
-int             c;
-/*
- * Output one character to stdout -- output() is passed as an
- * argument to scanstring()
- */
-{
-#if COMMENT_INVISIBLE
-        if (c != TOK_SEP && c != COM_SEP)
-#else
-        if (c != TOK_SEP)
+                if ( bIsInEval && nEvalOff < NEVALBUF )
+                    EvalBuf[nEvalOff++] = c;
 #endif
-        {
-            PUTCHAR(c);
-            if ( bIsInEval && nEvalOff < NEVALBUF )
-                EvalBuf[nEvalOff++] = c;
+                break;
+            }                               /* Switch ends          */
+        }                                   /* Line for loop        */
+      end_line:
+        if (c == '\n')
+        {                                   /* Compiling at EOL?    */
+            PUTCHAR('\n');                  /* Output newline, if   */
+            if (infile->fp == NULL)         /* Expanding a macro,   */
+                wrongline = TRUE;           /* Output # line later  */
         }
+    }                                       /* Continue until EOF   */
+#ifdef EVALDEFS
+    if ( bIsInEval )
+        EvalBuf[nEvalOff++] = '\0';
+#endif
+}
+
+/*
+ * Output one character to stdout -- output() is passed as an
+ * argument to scanstring()
+ */
+void output(int c)
+{
+#if COMMENT_INVISIBLE
+    if (c != TOK_SEP && c != COM_SEP)
+#else
+    if (c != TOK_SEP)
+#endif
+        PUTCHAR(c);
+}
+
+#ifdef EVALDEFS
+/*
+ * Output one character to stdout -- output() is passed as an
+ * argument to scanstring()
+ */
+int outputEval(int c)
+{
+#if COMMENT_INVISIBLE
+    if (c != TOK_SEP && c != COM_SEP)
+#else
+    if (c != TOK_SEP)
+#endif
+    {
+        PUTCHAR(c);
+        if ( bIsInEval && nEvalOff < NEVALBUF )
+            EvalBuf[nEvalOff++] = c;
+    }
 }
 #endif
 
 
-FILE_LOCAL
-void sharp()
 /*
  * Output a line number line.
  */
+void sharp()
 {
-        char           *name;
+    char* name;
 
-        if (keepcomments)                       /* Make sure # comes on */
-            PUTCHAR('\n');                      /* a fresh, new line.   */
-        fprintf( pCppOut, "#%s %d", LINE_PREFIX, line);
-        if (infile->fp != NULL) {
-            name = (infile->progname != NULL)
-                ? infile->progname : infile->filename;
-            if (sharpfilename == NULL
-                || (sharpfilename != NULL && !streq(name, sharpfilename)) ) {
-                if (sharpfilename != NULL)
-                    free(sharpfilename);
-                sharpfilename = savestring(name);
-                fprintf( pCppOut, " \"%s\"", name);
-             }
+    if (keepcomments)                       /* Make sure # comes on */
+        PUTCHAR('\n');                      /* a fresh, new line.   */
+
+    fprintf( pCppOut, "#%s %d", LINE_PREFIX, line);
+    if (infile->fp != NULL)
+    {
+        name = (infile->progname != NULL) ? infile->progname : infile->filename;
+        if (sharpfilename == NULL ||
+            (sharpfilename != NULL && !streq(name, sharpfilename)))
+        {
+            if (sharpfilename != NULL)
+                free(sharpfilename);
+            sharpfilename = savestring(name);
+            fprintf( pCppOut, " \"%s\"", name);
         }
-        PUTCHAR('\n');
-        wrongline = FALSE;
+    }
+    PUTCHAR('\n');
+    wrongline = FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
