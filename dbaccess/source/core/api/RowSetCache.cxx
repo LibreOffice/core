@@ -1595,7 +1595,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 
                 if(bCheck)
                 { // here we know that we have to check on which side our table resides
-                    const OSQLParseNode* pTableRef = pJoin->getByRule(::connectivity::OSQLParseNode::qualified_join);
+                    const OSQLParseNode* pTableRef;
                     if(bLeftSide)
                         pTableRef = pJoin->getChild(0);
                     else
