@@ -170,112 +170,112 @@ hchar_string DateCode::GetString()
 
         switch (*fmt)
         {
-            case '0':
-                add_zero = true;
+        case '0':
+            add_zero = true;
+            break;
+        case '1':
+            num = date[YEAR];
+            form = "%04d";
+            break;
+        case '!':
+            num = date[YEAR] % 100;
+            break;
+        case '2':
+            num = date[MONTH];
+            break;
+        case '@':
+            memcpy(cbuf, eng_mon + (date[MONTH] - 1) * 3, 3);
+            cbuf[3] = '.';
+            cbuf[4] = 0;
                 break;
-            case '1':
-                num = date[YEAR];
-                form = "%04d";
+        case '*':
+            strncat(cbuf, en_mon[date[MONTH] - 1], 256);
+            break;
+        case '3':                             /* 'D' is day of korean */
+            num = date[DAY];
+            break;
+        case '#':
+            num = date[DAY];
+            switch (date[DAY] % 10)
+            {
+            case 1:
+                form = "%dst";
                 break;
-            case '!':
-                num = date[YEAR] % 100;
+            case 2:
+                form = "%dnd";
                 break;
-            case '2':
-                num = date[MONTH];
-                break;
-            case '@':
-                memcpy(cbuf, eng_mon + (date[MONTH] - 1) * 3, 3);
-                cbuf[3] = '.';
-                cbuf[4] = 0;
-                break;
-            case '*':
-                strcpy(cbuf, en_mon[date[MONTH] - 1]);
-                break;
-            case '3':                             /* 'D' is day of korean */
-                num = date[DAY];
-                break;
-            case '#':
-                num = date[DAY];
-                switch (date[DAY] % 10)
-                {
-                    case 1:
-                        form = "%dst";
-                        break;
-                    case 2:
-                        form = "%dnd";
-                        break;
-                    case 3:
-                        form = "%drd";
-                        break;
-                    default:
-                        form = "%dth";
-                        break;
-                }
-                break;
-            case '4':
-                num = date[HOUR] - ((date[HOUR] > 12) ? 12 : 0);
-                break;
-            case '$':
-                num = date[HOUR];
-                break;
-            case '5':
-            case '%':
-                num = date[MIN];
-                break;
-            case '6':
-                ret.push_back(kor_week[date[WEEK]]);
-                break;
-            case '^':
-                memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
-                cbuf[3] = '.';
-                cbuf[4] = 0;
-                break;
-            case '_':
-                strcpy(cbuf, en_week[date[WEEK]]);
-                break;
-            case '7':
-                ret.push_back(0xB5A1);
-                ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
-                break;
-            case '&':
-                strcpy(cbuf, (is_pm) ? "p.m." : "a.m.");
-                break;
-            case '+':
-                strcpy(cbuf, (is_pm) ? "P.M." : "A.M.");
-                break;
-            case '8':                             // 2.5 feature
-            case '9':
-#if 0
-// LATER
-                mkcurfilename(cbuf, *fmt);
-                for (i = 0; cbuf[i] != 0 && slen > 1; i++)
-                {                                 //for hangle filename
-                    if (cbuf[i] & 0x80 && cbuf[i + 1] != 0)
-                    {
-                        *d++ = (cbuf[i] << 8) | cbuf[i + 1];
-                        i++;
-                    }
-                    else
-                        *d++ = cbuf[i];
-                    slen--;
-                }
-#endif
-                cbuf[0] = 0;
-                break;
-            case '~':                             // 3.0b feature
-                if (fmt[1] == 0)
-                    break;
-                fmt++;
-                if (*fmt == '6')
-                {
-                    ret.push_back(china_week[date[WEEK]]);
-                    break;
-                }
+            case 3:
+                form = "%drd";
                 break;
             default:
-                if (*fmt == '\\' && *++fmt == 0)
-                    goto done;
-                ret.push_back(*fmt);
+                form = "%dth";
+                break;
+            }
+            break;
+        case '4':
+            num = date[HOUR] - ((date[HOUR] > 12) ? 12 : 0);
+            break;
+        case '$':
+            num = date[HOUR];
+            break;
+        case '5':
+        case '%':
+            num = date[MIN];
+            break;
+        case '6':
+            ret.push_back(kor_week[date[WEEK]]);
+            break;
+        case '^':
+            memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
+            cbuf[3] = '.';
+            cbuf[4] = 0;
+            break;
+        case '_':
+            strncat(cbuf, en_week[date[WEEK]], 256);
+            break;
+        case '7':
+            ret.push_back(0xB5A1);
+            ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
+            break;
+        case '&':
+            strncat(cbuf, (is_pm) ? "p.m." : "a.m.", 256);
+            break;
+        case '+':
+            strncat(cbuf, (is_pm) ? "P.M." : "A.M.", 256);
+            break;
+        case '8':                             // 2.5 feature
+        case '9':
+#if 0
+// LATER
+            mkcurfilename(cbuf, *fmt);
+            for (i = 0; cbuf[i] != 0 && slen > 1; i++)
+            {                                 //for hangle filename
+                if (cbuf[i] & 0x80 && cbuf[i + 1] != 0)
+                {
+                    *d++ = (cbuf[i] << 8) | cbuf[i + 1];
+                    i++;
+                }
+                else
+                    *d++ = cbuf[i];
+                slen--;
+            }
+#endif
+            cbuf[0] = 0;
+            break;
+        case '~':                             // 3.0b feature
+            if (fmt[1] == 0)
+                break;
+            fmt++;
+            if (*fmt == '6')
+            {
+                ret.push_back(china_week[date[WEEK]]);
+                break;
+            }
+            break;
+        default:
+            if (*fmt == '\\' && *++fmt == 0)
+                goto done;
+            ret.push_back(*fmt);
         }
         if (num != -1)
             sprintf(cbuf, form, num);
