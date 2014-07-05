@@ -131,11 +131,15 @@ long ScColumn::GetNeededSize(
             return 0;
     }
 
-    //      conditional formatting
+    // conditional formatting
     const SfxItemSet* pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
 
-    //  line break?
+    // fdo#80813 - fetching conditional result (GetCondResult) above can cause
+    // a re-calculate which can delete and re-set the pattern we fetched.
+    if (!rOptions.pPattern)
+        pPattern = pAttrArray->GetPattern( nRow );
 
+    //  line break?
     const SfxPoolItem* pCondItem;
     SvxCellHorJustify eHorJust;
     if (pCondSet &&
