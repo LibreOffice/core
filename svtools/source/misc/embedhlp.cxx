@@ -49,6 +49,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -432,14 +433,13 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         return;
     }
 
-    SvStream* pGraphicStream = GetGraphicStream( bUpdate );
+    boost::scoped_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         if( mpImpl->pGraphic )
             rGF.ImportGraphic( *mpImpl->pGraphic, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImpl->mnGraphicVersion++;
-        delete pGraphicStream;
     }
 }
 
@@ -531,7 +531,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
-    SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
+    boost::scoped_ptr<SvStream> pGraphicStream(::utl::UcbStreamHelper::CreateStream( xInGrStream ));
 
     if ( pGraphicStream )
     {
@@ -542,12 +542,10 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         if ( mpImpl->pContainer )
         {
             pGraphicStream->Seek( 0 );
-            uno::Reference< io::XInputStream > xInSeekGrStream = new ::utl::OSeekableInputStreamWrapper( pGraphicStream );
+            uno::Reference< io::XInputStream > xInSeekGrStream = new ::utl::OSeekableInputStreamWrapper( pGraphicStream.get() );
 
             mpImpl->pContainer->InsertGraphicStream( xInSeekGrStream, mpImpl->aPersistName, rMediaType );
         }
-
-        delete pGraphicStream;
     }
 
     mpImpl->bNeedUpdate = false;

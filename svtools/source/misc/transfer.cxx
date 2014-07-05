@@ -59,7 +59,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 // - Namespaces -
 
@@ -351,11 +351,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                        boost::scoped_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC ));
                         GDIMetaFile     aMtf;
 
                         ReadGDIMetaFile( *pSrcStm, aMtf );
-                        delete pSrcStm;
+                        pSrcStm.reset();
 
                         Graphic         aGraphic( aMtf );
                         SvMemoryStream  aDstStm( 65535, 65535 );
@@ -381,11 +381,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                        boost::scoped_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC ));
                         GDIMetaFile     aMtf;
 
                         ReadGDIMetaFile( *pSrcStm, aMtf );
-                        delete pSrcStm;
+                        pSrcStm.reset();
 
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
@@ -2017,22 +2017,21 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
                     if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
                     {
-                        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
-                                                                                  STREAM_STD_READ );
+                        boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
+                                                                                  STREAM_STD_READ ));
 
                         if( !pStream || pStream->GetError() )
                         {
                             DataFlavor aFileContentFlavor;
 
                             aSeq.realloc( 0 );
-                            delete pStream;
-                            pStream = NULL;
+                            pStream.reset();
 
                             if (SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor))
                             {
                                 aSeq = GetSequence(aFileContentFlavor, OUString());
                                 if (aSeq.getLength())
-                                    pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
+                                    pStream.reset(new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ ));
                             }
                         }
 
@@ -2053,8 +2052,6 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
                                     break;
                                 }
                             }
-
-                            delete pStream;
                         }
                     }
                 }

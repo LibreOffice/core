@@ -28,7 +28,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 
 static sal_uInt16 aWndFunc(
@@ -89,29 +89,28 @@ static sal_uInt16 aWndFunc(
     aErr = aErr.replaceAll("$(ACTION)", aAction);
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
-    MessBox* pBox;
+    boost::scoped_ptr<MessBox> pBox;
     switch ( nFlags & 0xf000 )
     {
         case ERRCODE_MSG_ERROR:
-            pBox = new ErrorBox(pWin, eBits, aErr);
+            pBox.reset(new ErrorBox(pWin, eBits, aErr));
             break;
 
         case ERRCODE_MSG_WARNING:
-            pBox = new WarningBox(pWin, eBits, aErr);
+            pBox.reset(new WarningBox(pWin, eBits, aErr));
             break;
 
         case ERRCODE_MSG_INFO:
-            pBox = new InfoBox(pWin, aErr);
+            pBox.reset(new InfoBox(pWin, aErr));
             break;
 
         case ERRCODE_MSG_QUERY:
-            pBox = new QueryBox(pWin, eBits, aErr);
+            pBox.reset(new QueryBox(pWin, eBits, aErr));
             break;
 
         default:
         {
             SAL_WARN( "svtools.misc", "no MessBox type");
-            pBox = NULL;
             return ERRCODE_BUTTON_OK;
         }
     }
@@ -138,7 +137,6 @@ static sal_uInt16 aWndFunc(
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
             break;
     }
-    delete pBox;
     return nRet;
 }
 
@@ -278,7 +276,7 @@ bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 {
     bool bRet = false;
-    ResMgr* pResMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
+    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
     if( pResMgr )
     {
         ResId aId(RID_ERRHDL, *pResMgr );
@@ -289,7 +287,6 @@ bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
             bRet = true;
         }
     }
-    delete pResMgr;
     return bRet;
 }
 
@@ -306,7 +303,7 @@ bool SfxErrorHandler::GetMessageString(
 
 {
     bool bRet = false;
-    ResId *pResId= new ResId(nId, *pMgr);
+    boost::scoped_ptr<ResId> pResId(new ResId(nId, *pMgr));
 
     ErrorResource_Impl aEr(*pResId, (sal_uInt16)lErrId);
     if(aEr)
@@ -319,7 +316,6 @@ bool SfxErrorHandler::GetMessageString(
         bRet = true;
     }
 
-    delete pResId;
     return bRet;
 }
 

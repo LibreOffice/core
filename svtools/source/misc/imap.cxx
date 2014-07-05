@@ -32,7 +32,7 @@
 
 #include <string.h>
 #include <math.h>
-
+#include <boost/scoped_ptr.hpp>
 
 
 #define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
@@ -78,7 +78,6 @@ sal_uInt16 IMapObject::GetVersion() const
 
 void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    IMapCompat*             pCompat;
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
     rOStm.WriteUInt16( GetType() );
@@ -92,13 +91,11 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.WriteUChar( bActive );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
-    pCompat = new IMapCompat( rOStm, STREAM_WRITE );
+    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, STREAM_WRITE ));
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aName, eEncoding); // V5
-
-    delete pCompat;
 }
 
 
@@ -110,7 +107,6 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
 void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 {
-    IMapCompat*         pCompat;
     rtl_TextEncoding    nTextEncoding;
 
     // read on type and version
@@ -124,7 +120,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 
     // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
-    pCompat = new IMapCompat( rIStm, STREAM_READ );
+    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, STREAM_READ ));
 
     ReadIMapObject( rIStm );
 
@@ -137,8 +133,6 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
         if ( nReadVersion >= 0x0005 )
             aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
     }
-
-    delete pCompat;
 }
 
 bool IMapObject::IsEqual( const IMapObject& rEqObj )
