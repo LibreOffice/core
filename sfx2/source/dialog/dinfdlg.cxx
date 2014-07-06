@@ -2019,9 +2019,10 @@ IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl)
 void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bInteractive )
 {
     m_pPropertiesWin->AddLine( sName, rAny );
-    m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetVisibleLineCount() + 1 );
-    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < m_pPropertiesWin->GetVisibleLineCount() * m_pPropertiesWin->GetLineHeight() )
-        m_pVertScroll->DoScroll( m_pPropertiesWin->GetVisibleLineCount() + 1 );
+    long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
+    m_pVertScroll->SetRangeMax(nLineCount + 1);
+    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
+        m_pVertScroll->DoScroll(nLineCount + 1);
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
