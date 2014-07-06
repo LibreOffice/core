@@ -33,7 +33,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/comma_at_end_of_enumerator_list.patch \
 	external/libgltf/patches/extra_semicolon.patch \
 	external/libgltf/patches/stop_a_potential_memory_leak.patch \
-	external/libgltf/patches/wrong_shader_program_delete.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
