@@ -18,33 +18,33 @@ class ContentHandler(xml.sax.handler.ContentHandler):
 
     def startDocument(self):
         print("""
-#include "ooxml/resourceids.hxx"
-#include "resourcemodel/QNameToString.hxx"
+#ifndef INCLUDED_OOXML_NAMESPACESIDS_HXX
+#define INCLUDED_OOXML_NAMESPACESIDS_HXX
 
-namespace writerfilter
-{
+#include <map>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+#include <string>
 
-void QNameToString::init_ooxml()
-{
-#ifdef DEBUG_DOMAINMAPPER
-    /* ooxml */
+#include <resourcemodel/WW8ResourceModel.hxx>
+
+namespace writerfilter {
+namespace ooxml {
+using namespace ::std;
+using namespace ::com::sun::star;
 """)
 
     def endDocument(self):
-        print("""#endif
-}
-
-}
-""")
+        print("""
+}}
+#endif //INCLUDED_OOXML_NAMESPACESIDS_HXX""")
 
     def startElement(self, name, attrs):
-        for k, v in list(attrs.items()):
-            if k == "tokenid":
-                if v.startswith("ooxml:"):
-                    token = v.replace('ooxml:', '')
-                    if token not in self.tokens:
-                        print("""    mMap[NS_ooxml::LN_%s] = "ooxml:%s";""" % (token, token))
-                        self.tokens.append(token)
+        if name == "namespace-alias":
+            token = """const sal_uInt32 NS_%s = %s;""" % (attrs["alias"], attrs["id"])
+            if token not in self.tokens:
+                self.tokens.append(token)
+                print(token)
 
 parser = xml.sax.make_parser()
 parser.setContentHandler(ContentHandler())
