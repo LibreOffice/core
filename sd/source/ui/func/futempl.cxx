@@ -186,15 +186,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
             // at the moment, the dialog to enter the name of the template is still opened
-            mpView->AreObjectsMarked();
-                SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
-                if(p)
-                {
-                    pSSPool->Remove(p);
-                    p = 0;
-                }
-                pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
-                pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
+            if(p)
+            {
+                pSSPool->Remove(p);
+                p = 0;
+            }
+            pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
+            pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
         }
         break;
 
