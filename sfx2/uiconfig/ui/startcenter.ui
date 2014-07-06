@@ -260,7 +260,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="help">
-                            <property name="label">gtk-help</property>
+                            <property name="label">He_lp</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
