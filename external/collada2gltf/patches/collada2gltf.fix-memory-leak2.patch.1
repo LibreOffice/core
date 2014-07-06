@@ -1,0 +1,18 @@
+diff -ur collada2gltf.org/COLLADA2GLTFWriter.cpp collada2gltf/COLLADA2GLTFWriter.cpp
+--- collada2gltf.org/COLLADA2GLTFWriter.cpp	2014-07-06 06:42:01.305850400 +0200
++++ collada2gltf/COLLADA2GLTFWriter.cpp	2014-07-06 06:45:57.000840753 +0200
+@@ -75,10 +75,13 @@
+                 
+ 		COLLADAFW::Root root(&this->_loader, this);
+         this->_loader.registerExtraDataCallbackHandler(this->_extraDataHandler);
+-		if (!root.loadDocument(asset->getInputFilePath()))
++		if (!root.loadDocument(asset->getInputFilePath())) {
++                    delete _extraDataHandler;
+ 			return false;
++                }
+         
+         asset->write();
++        delete _extraDataHandler;
+                 
+ 		return true;
+ 	}
