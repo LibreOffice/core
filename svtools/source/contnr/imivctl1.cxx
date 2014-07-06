@@ -3606,14 +3606,14 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
     Point aPos( rPos );
     aPos.X() -= LROFFS_WINBORDER;
     aPos.Y() -= TBOFFS_WINBORDER;
-    sal_uInt16 nMaxCol = (sal_uInt16)(aVirtOutputSize.Width() / nGridDX);
+    long nMaxCol = aVirtOutputSize.Width() / nGridDX;
     if( nMaxCol )
         nMaxCol--;
-    sal_uInt16 nGridX = (sal_uInt16)(aPos.X() / nGridDX);
+    long nGridX = aPos.X() / nGridDX;
     if( nGridX > nMaxCol )
         nGridX = nMaxCol;
-    sal_uInt16 nGridY = (sal_uInt16)(aPos.Y() / nGridDY);
-    sal_uInt16 nGridsX = (sal_uInt16)(aOutputSize.Width() / nGridDX);
+    long nGridY = aPos.Y() / nGridDY;
+    long nGridsX = aOutputSize.Width() / nGridDX;
     sal_uLong nGrid = (nGridY * nGridsX) + nGridX;
     long nMiddle = (nGridX * nGridDX) + (nGridDX / 2);
     if( rPos.X() < nMiddle )
