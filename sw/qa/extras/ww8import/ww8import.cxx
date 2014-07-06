@@ -278,6 +278,53 @@ DECLARE_WW8IMPORT_TEST(testBnc875715, "bnc875715.doc")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xSections->getByIndex(0), "SectionLeftMargin"));
 }
 
+DECLARE_WW8IMPORT_TEST(testFdo77844, "fdo77844.doc")
+{
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // check that the first page has no header
+    xCursor->jumpToFirstPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<style::XStyle> pageStyle(
+        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(!headerIsOn);
+
+    // check that the second page has a header
+    xCursor->jumpToPage(2);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyle.set(
+        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(headerIsOn);
+
+    // check that the third page has a header
+    xCursor->jumpToPage(3);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyle.set(
+        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(headerIsOn);
+
+    // check that the fourth page has no header
+    // (#if'd out as this is not yet imported correctly)
+#if 0
+    xCursor->jumpToPage(4);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyle.set(
+        pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(!headerIsOn);
+#endif
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
