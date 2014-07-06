@@ -2009,8 +2009,9 @@ IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 
 IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl)
 {
-    m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetVisibleLineCount() + 1 );
-    if ( m_pPropertiesWin->GetOutputSizePixel().Height() < m_pPropertiesWin->GetVisibleLineCount() * m_pPropertiesWin->GetLineHeight() )
+    long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
+    m_pVertScroll->SetRangeMax(nLineCount + 1);
+    if ( m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
         m_pVertScroll->DoScrollAction ( SCROLL_LINEUP );
     return 0;
 }
