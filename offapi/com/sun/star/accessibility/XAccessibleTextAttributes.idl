@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
 
 module com { module sun { module star { module accessibility {
 
@@ -52,7 +53,8 @@ interface XAccessibleTextAttributes
             object.
     */
     sequence<::com::sun::star::beans::PropertyValue>
-        getDefaultAttributes ( [in] sequence<string> RequestedAttributes );
+        getDefaultAttributes ( [in] sequence<string> RequestedAttributes )
+        raises ( ::com::sun::star::beans::UnknownPropertyException );
 
     /** Get the run attribute set for the specified position.
 

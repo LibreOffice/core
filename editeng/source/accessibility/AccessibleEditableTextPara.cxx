@@ -2447,7 +2447,7 @@ namespace accessibility
     // XAccessibleTextAttributes
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDefaultAttributes(
             const uno::Sequence< OUString >& rRequestedAttributes )
-        throw (uno::RuntimeException, std::exception)
+        throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
