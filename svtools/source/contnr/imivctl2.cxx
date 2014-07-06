@@ -635,9 +635,9 @@ GridId IcnGridMap_Impl::GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY )
 {
     Create();
     if( _pView->nWinBits & WB_ALIGN_TOP )
-        return nGridX + ( nGridY * _nGridCols );
+        return nGridX + ( static_cast<GridId>(nGridY) * _nGridCols );
     else
-        return nGridY + ( nGridX * _nGridRows );
+        return nGridY + ( static_cast<GridId>(nGridX) * _nGridRows );
 }
 
 GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos, bool* pbClipped )
