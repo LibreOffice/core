@@ -1,0 +1,54 @@
+From 059fcd2878071616cedb5116a0b2f75b5edbdbe0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Sun, 6 Jul 2014 15:34:41 +0100
+Subject: [PATCH] mark the fails as no-return
+
+that might help clang scan-build understand that execution won't continue after
+they fail
+---
+ include/cppunit/Asserter.h | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/include/cppunit/Asserter.h b/include/cppunit/Asserter.h
+index 94dadaa..ad981b5 100644
+--- a/include/cppunit/Asserter.h
++++ b/include/cppunit/Asserter.h
+@@ -42,17 +42,24 @@ class Message;
+  *                    CPPUNIT_SOURCELINE() )
+  * \endcode
+  */
++
++#if defined __GNUC__
++#   define NORETURN __attribute__((noreturn))
++#else
++#   define NORETURN
++#endif
++
+ struct Asserter
+ {
+   /*! \brief Throws a Exception with the specified message and location.
+    */
+-  static void CPPUNIT_API fail( const Message &message, 
++  NORETURN static void CPPUNIT_API fail( const Message &message, 
+                                 const SourceLine &sourceLine = SourceLine() );
+ 
+   /*! \brief Throws a Exception with the specified message and location.
+    * \deprecated Use fail( Message, SourceLine ) instead.
+    */
+-  static void CPPUNIT_API fail( std::string message, 
++  NORETURN static void CPPUNIT_API fail( std::string message, 
+                                 const SourceLine &sourceLine = SourceLine() );
+ 
+   /*! \brief Throws a Exception with the specified message and location.
+@@ -111,7 +118,7 @@ struct Asserter
+    *                          what are the differences between the expected and actual value.
+    * \param shortDescription Short description for the failure message.
+    */
+-  static void CPPUNIT_API failNotEqual( std::string expected, 
++  NORETURN static void CPPUNIT_API failNotEqual( std::string expected, 
+                                         std::string actual, 
+                                         const SourceLine &sourceLine,
+                                         const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-- 
+1.9.3
+
