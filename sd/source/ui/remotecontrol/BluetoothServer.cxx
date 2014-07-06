@@ -769,27 +769,22 @@ setDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
     DBusMessage *pMsg = pProperties->getMethodCall( "Set" );
 
     DBusMessageIter itIn;
-    if(!dbus_message_iter_init_append( pMsg, &itIn ))
-    {
-        SAL_WARN( "sdremote.bluetooth", "error init dbus" );
-    }
-    else
-    {
-        const char* pInterface = "org.bluez.Adapter1";
-        dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pInterface );
-        dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pPropertyName );
+    dbus_message_iter_init_append( pMsg, &itIn );
+    const char* pInterface = "org.bluez.Adapter1";
+    dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pInterface );
+    dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pPropertyName );
 
-        {
-            DBusMessageIter varIt;
-            dbus_message_iter_open_container( &itIn, DBUS_TYPE_VARIANT,
-                                              DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
-            dbus_bool_t bDBusBoolean = bBoolean;
-            dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bDBusBoolean );
-            dbus_message_iter_close_container( &itIn, &varIt );
-        }
-
-        pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+    {
+        DBusMessageIter varIt;
+        dbus_message_iter_open_container( &itIn, DBUS_TYPE_VARIANT,
+                                        DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
+        dbus_bool_t bDBusBoolean = bBoolean;
+        dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bDBusBoolean );
+        dbus_message_iter_close_container( &itIn, &varIt );
     }
+
+    pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+
     if( !pMsg )
     {
         SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
@@ -917,45 +912,48 @@ DBusHandlerResult ProfileMessageFunction
             }
 
             DBusMessageIter it;
-            dbus_message_iter_init(pMessage, &it);
-
-            char* pPath;
-            dbus_message_iter_get_basic(&it, &pPath);
-            SAL_INFO("sdremote.bluetooth", "Adapter path:" << pPath);
-
-            if (!dbus_message_iter_next(&it))
-                SAL_WARN("sdremote.bluetooth", "not enough parameters passed");
-
-            // DBUS_TYPE_UNIX_FD == 'h' -- doesn't exist in older versions
-            // of dbus (< 1.3?) hence defined manually for now
-            if ('h' == dbus_message_iter_get_arg_type(&it))
+            if (!dbus_message_iter_init(pMessage, &it))
+                SAL_WARN( "sdremote.bluetooth", "error init dbus" );
+            else
             {
+                char* pPath;
+                dbus_message_iter_get_basic(&it, &pPath);
+                SAL_INFO("sdremote.bluetooth", "Adapter path:" << pPath);
 
-                int nDescriptor;
-                dbus_message_iter_get_basic(&it, &nDescriptor);
-                std::vector<Communicator*>* pCommunicators = (std::vector<Communicator*>*) user_data;
+                if (!dbus_message_iter_next(&it))
+                    SAL_WARN("sdremote.bluetooth", "not enough parameters passed");
 
-                // Bluez gives us non-blocking sockets, but our code relies
-                // on blocking behaviour.
-                (void)fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
+                // DBUS_TYPE_UNIX_FD == 'h' -- doesn't exist in older versions
+                // of dbus (< 1.3?) hence defined manually for now
+                if ('h' == dbus_message_iter_get_arg_type(&it))
+                {
 
-                SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
-                Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nDescriptor ) );
-                pCommunicators->push_back( pCommunicator );
-                pCommunicator->launch();
+                    int nDescriptor;
+                    dbus_message_iter_get_basic(&it, &nDescriptor);
+                    std::vector<Communicator*>* pCommunicators = (std::vector<Communicator*>*) user_data;
+
+                    // Bluez gives us non-blocking sockets, but our code relies
+                    // on blocking behaviour.
+                    (void)fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
+
+                    SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
+                    Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nDescriptor ) );
+                    pCommunicators->push_back( pCommunicator );
+                    pCommunicator->launch();
+                }
+
+                // For some reason an (empty?) reply is expected.
+                DBusMessage* pRet = dbus_message_new_method_return(pMessage);
+                dbus_connection_send(pConnection, pRet, NULL);
+                dbus_message_unref(pRet);
+
+                // We could read the remote profile version and features here
+                // (i.e. they are provided as part of the DBusMessage),
+                // however for us they are irrelevant (as our protocol handles
+                // equivalent functionality independently of whether we're on
+                // bluetooth or normal network connection).
+                return DBUS_HANDLER_RESULT_HANDLED;
             }
-
-            // For some reason an (empty?) reply is expected.
-            DBusMessage* pRet = dbus_message_new_method_return(pMessage);
-            dbus_connection_send(pConnection, pRet, NULL);
-            dbus_message_unref(pRet);
-
-            // We could read the remote profile version and features here
-            // (i.e. they are provided as part of the DBusMessage),
-            // however for us they are irrelevant (as our protocol handles
-            // equivalent functionality independently of whether we're on
-            // bluetooth or normal network connection).
-            return DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (OString(dbus_message_get_member(pMessage)).equals("RequestDisconnection"))
         {
