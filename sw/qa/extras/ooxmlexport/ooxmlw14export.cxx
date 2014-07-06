@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <string>
 
 class Test : public SwModelTestBase
@@ -659,8 +657,6 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx"
     }
 }
 
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
