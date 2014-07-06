@@ -932,7 +932,7 @@ DBusHandlerResult ProfileMessageFunction
 
                 // Bluez gives us non-blocking sockets, but our code relies
                 // on blocking behaviour.
-                fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
+                (void)fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
 
                 SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
                 Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nDescriptor ) );
