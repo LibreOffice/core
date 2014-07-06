@@ -262,8 +262,8 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             // determine frame formats of at-frame anchored objects
             const SwNodeIndex* pCntntIdx = 0;
             if (pFmt->Which() != RES_DRAWFRMFMT)
-                pFmt->GetCntnt().GetCntntIdx();
-            if ( pCntntIdx )
+                pCntntIdx = pFmt->GetCntnt().GetCntntIdx();
+            if (pCntntIdx)
             {
                 const SwFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
                 if ( pTbl )
