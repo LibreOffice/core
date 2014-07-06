@@ -273,7 +273,7 @@ SfxItemPool& SfxShell::GetPool() const
 */
 
 {
-    DBG_ASSERT( pPool, "no pool" );
+    assert(pPool && "no pool");
     return *pPool;
 }
 

@@ -105,7 +105,7 @@ OSortIndex::~OSortIndex()
 
 void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 {
-    OSL_ENSURE(pKeyValue,"Can not be null here!");
+    assert(pKeyValue && "Can not be null here!");
     if(m_bFrozen)
     {
         m_aKeyValues.push_back(TIntValuePairVector::value_type(pKeyValue->getValue(),(OKeyValue *)NULL));
@@ -114,8 +114,6 @@ void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
     else
         m_aKeyValues.push_back(TIntValuePairVector::value_type(pKeyValue->getValue(),pKeyValue));
 }
-
-
 
 void OSortIndex::Freeze()
 {

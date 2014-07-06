@@ -408,10 +408,10 @@ namespace dbtools
             }
             else
             {
-                if  ( pParseNode->count() >= 3 )
+                if (pParseNode->count() >= 3)
                 {
                     OSQLParseNode* pValueNode = pParseNode->getChild(2);
-                    OSL_ENSURE( pValueNode, "OPredicateInputController::getPredicateValue: invalid node child!" );
+                    assert(pValueNode && "OPredicateInputController::getPredicateValue: invalid node child!");
                     if ( !_bForStatementUse )
                     {
                         if ( SQL_NODE_STRING == pValueNode->getNodeType() )
