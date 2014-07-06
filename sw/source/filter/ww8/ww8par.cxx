@@ -2377,6 +2377,9 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
         long nLen;
         sal_uInt8 nNumber = 5;
 
+        // This loops through the 6 flags WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST}
+        // corresponding to bit fields in grpfIhdt indicating which
+        // header/footer(s) are present in this section
         for( sal_uInt8 nI = 0x20; nI; nI >>= 1, nNumber-- )
         {
             if (nI & grpfIhdt)
@@ -2394,6 +2397,12 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true: false;
                 bool bUseFirst
                     = (nI & ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST )) ? true: false;
+
+                // If we are loading a first-page header/footer which is not
+                // actually enabled in this section (it still needs to be
+                // loaded as it may be inherited by a later section)
+                bool bDisabledFirst = bUseFirst && !rSection.HasTitlePage();
+
                 bool bFooter
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
 
@@ -2408,7 +2417,8 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                 {
                     bIsFooter = true;
                     //#i17196# Cannot have left without right
-                    if (!pPD->GetMaster().GetFooter().GetFooterFmt())
+                    if (!bDisabledFirst
+                            && !pPD->GetMaster().GetFooter().GetFooterFmt())
                         pPD->GetMaster().SetFmtAttr(SwFmtFooter(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
@@ -2420,7 +2430,8 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                 {
                     bIsHeader = true;
                     //#i17196# Cannot have left without right
-                    if (!pPD->GetMaster().GetHeader().GetHeaderFmt())
+                    if (!bDisabledFirst
+                            && !pPD->GetMaster().GetHeader().GetHeaderFmt())
                         pPD->GetMaster().SetFmtAttr(SwFmtHeader(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
