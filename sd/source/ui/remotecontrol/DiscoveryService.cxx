@@ -152,21 +152,28 @@ void SAL_CALL DiscoveryService::run()
         memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
-        recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
-        OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
-        if ( aString == "LOREMOTE_SEARCH" )
+        if(recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen ) > 0)
         {
-            OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
-            aStringBuffer.append( OUStringToOString(
-                osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
-                .append( "\n\n" );
-            if ( sendto( mSocket, aStringBuffer.getStr(),
-                aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
-                         sizeof(aAddr) ) <= 0 )
+            OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
+            if ( aString == "LOREMOTE_SEARCH" )
             {
-                // Read error or closed socket -- we are done.
-                return;
+                OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
+                aStringBuffer.append( OUStringToOString(
+                                              osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
+                    .append( "\n\n" );
+                if ( sendto( mSocket, aStringBuffer.getStr(),
+                             aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
+                             sizeof(aAddr) ) <= 0 )
+                {
+                    // Write error or closed socket -- we are done.
+                    return;
+                }
             }
+        }
+        else
+        {
+            // Read error or closed socket -- we are done.
+            return;
         }
     }
 }
