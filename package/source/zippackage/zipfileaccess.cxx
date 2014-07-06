@@ -244,10 +244,20 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     if ( aIter == m_pZipFile->GetEntryHash().end() )
         throw container::NoSuchElementException(THROW_WHERE );
 
-    uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
-                                                                                ::rtl::Reference< EncryptionData >(),
-                                                                                false,
-                                                                                m_aMutexHolder ) );
+    uno::Reference< io::XInputStream > xEntryStream;
+    try
+    {
+        xEntryStream  = m_pZipFile->getDataStream((*aIter).second,
+                                                  ::rtl::Reference< EncryptionData >(),
+                                                  false,
+                                                  m_aMutexHolder);
+    }
+    catch (const io::IOException& e)
+    {
+        throw lang::WrappedTargetException( "This package is unusable!",
+                  static_cast < OWeakObject * > ( this ),
+                                        makeAny(e));
+    }
 
     if ( !xEntryStream.is() )
         throw uno::RuntimeException(THROW_WHERE );
