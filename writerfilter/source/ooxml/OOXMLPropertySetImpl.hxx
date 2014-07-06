@@ -78,9 +78,6 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
 #ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const SAL_OVERRIDE;
-#endif
-    virtual Kind getKind() SAL_OVERRIDE;
-#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
 #endif
     virtual Sprm * clone() SAL_OVERRIDE;
@@ -325,8 +322,6 @@ public:
 
     int getValue() const { return mnValue;}
 };
-
-Sprm::Kind SprmKind(sal_uInt32 nSprmCode);
 
 }  // namespace ooxml
 } // namespace writerfilter

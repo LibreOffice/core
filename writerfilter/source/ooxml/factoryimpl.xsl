@@ -223,68 +223,6 @@ string fastTokenToId(sal_uInt32 nToken)
   </xsl:text>
 </xsl:template>
 
-  <!--
-      Generates case labels for mapping from token ids to a single kind
-      of sprm.
-
-      @param kind     the sprm kind for which to generate the case labels
-  -->
-  
-  <xsl:template name="sprmkindcase">
-    <xsl:param name="kind"/>
-    <xsl:for-each select="key('resources-with-kind', $kind)/element">
-      <xsl:if test="generate-id(.) = generate-id(key('sprms-with-code', @tokenid))">
-      <xsl:text>
-     case </xsl:text>
-     <xsl:call-template name="idtoqname">
-       <xsl:with-param name="id" select="@tokenid"/>
-     </xsl:call-template>
-     <xsl:text>: //</xsl:text>
-     <xsl:value-of select="ancestor::resource/@name"/>
-     <xsl:text>, </xsl:text>
-     <xsl:value-of select="@name"/>
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:template>
-
-  <!--
-      Generates SprmKind.
-  -->
-  <xsl:template name="sprmkind">
-    <xsl:text>
-Sprm::Kind SprmKind(sal_uInt32 nSprmCode)
-{
-    Sprm::Kind nResult = Sprm::UNKNOWN;
-
-    switch (nSprmCode)
-    {</xsl:text>
-    <xsl:call-template name="sprmkindcase">
-      <xsl:with-param name="kind">paragraph</xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>
-      nResult = Sprm::PARAGRAPH;
-      break;</xsl:text>
-    <xsl:call-template name="sprmkindcase">
-      <xsl:with-param name="kind">character</xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>
-      nResult = Sprm::CHARACTER;
-      break;</xsl:text>
-    <xsl:call-template name="sprmkindcase">
-      <xsl:with-param name="kind">table</xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>
-      nResult = Sprm::TABLE;
-      break;</xsl:text>
-    <xsl:text>
-    default:
-      break;
-    }
-
-    return nResult;
-}</xsl:text>
-  </xsl:template>
-
 <xsl:template name="getfastparser">
 <xsl:text>
 uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
@@ -327,7 +265,6 @@ namespace ooxml {
     <xsl:call-template name="factoryfornamespace"/>
     <xsl:call-template name="factorycreatefromstart"/>
     <xsl:call-template name="fasttokentoid"/>
-    <xsl:call-template name="sprmkind"/>
     <xsl:call-template name="getfastparser"/>
     <xsl:text>
 /// @endcond

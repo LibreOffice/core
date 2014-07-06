@@ -348,7 +348,6 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef std::auto_ptr<Sprm> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
 
     /**
        Returns id of the SPRM.
@@ -375,11 +374,6 @@ public:
 
      */
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() = 0;
-
-    /**
-       Returns the kind of this SPRM.
-    */
-    virtual Kind getKind() = 0;
 
     /**
        Returns name of sprm.

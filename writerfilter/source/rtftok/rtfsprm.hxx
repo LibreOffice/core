@@ -110,7 +110,6 @@ public:
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
-    virtual Kind getKind() SAL_OVERRIDE;
 #ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const SAL_OVERRIDE;
     virtual std::string toString() const SAL_OVERRIDE;

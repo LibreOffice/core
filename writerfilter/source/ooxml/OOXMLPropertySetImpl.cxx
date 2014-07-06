@@ -143,11 +143,6 @@ string OOXMLPropertyImpl::toString() const
 }
 #endif
 
-Sprm::Kind OOXMLPropertyImpl::getKind()
-{
-    return SprmKind(getId());
-}
-
 Sprm * OOXMLPropertyImpl::clone()
 {
     return new OOXMLPropertyImpl(*this);

@@ -51,11 +51,6 @@ writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
     return m_pValue->getProperties();
 }
 
-Sprm::Kind RTFSprm::getKind()
-{
-    return Sprm::UNKNOWN;
-}
-
 #ifdef DEBUG_DOMAINMAPPER
 std::string RTFSprm::getName() const
 {
