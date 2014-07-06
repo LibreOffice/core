@@ -769,22 +769,27 @@ setDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
     DBusMessage *pMsg = pProperties->getMethodCall( "Set" );
 
     DBusMessageIter itIn;
-    dbus_message_iter_init_append( pMsg, &itIn );
-    const char* pInterface = "org.bluez.Adapter1";
-    dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pInterface );
-    dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pPropertyName );
-
+    if(!dbus_message_iter_init_append( pMsg, &itIn ))
     {
-        DBusMessageIter varIt;
-        dbus_message_iter_open_container( &itIn, DBUS_TYPE_VARIANT,
-                                        DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
-        dbus_bool_t bDBusBoolean = bBoolean;
-        dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bDBusBoolean );
-        dbus_message_iter_close_container( &itIn, &varIt );
+        SAL_WARN( "sdremote.bluetooth", "error init dbus" );
     }
+    else
+    {
+        const char* pInterface = "org.bluez.Adapter1";
+        dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pInterface );
+        dbus_message_iter_append_basic( &itIn, DBUS_TYPE_STRING, &pPropertyName );
 
-    pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+        {
+            DBusMessageIter varIt;
+            dbus_message_iter_open_container( &itIn, DBUS_TYPE_VARIANT,
+                                              DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
+            dbus_bool_t bDBusBoolean = bBoolean;
+            dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bDBusBoolean );
+            dbus_message_iter_close_container( &itIn, &varIt );
+        }
 
+        pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+    }
     if( !pMsg )
     {
         SAL_WARN( "sdremote.bluetooth", "no valid reply / timeout" );
