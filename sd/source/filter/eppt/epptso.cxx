@@ -1243,10 +1243,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
             if ( xPropSet.is() )
             {
-                ImplGetPropertyValue( xPropSet, OUString( "TabStop" ) );
-                sal_Int32 nTabStop( 0 );
-                if ( mAny >>= nTabStop )
-                    nDefaultTabSizeSrc = nTabStop;
+                if(ImplGetPropertyValue( xPropSet, OUString( "TabStop" ) ))
+                {
+                    sal_Int32 nTabStop( 0 );
+                    if ( mAny >>= nTabStop )
+                        nDefaultTabSizeSrc = nTabStop;
+                }
             }
             const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
             sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
