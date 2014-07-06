@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_file,collada2gltf,.,external/collada2gltf/G
 
 $(eval $(call gb_UnpackedTarball_add_patches,collada2gltf,\
 	external/collada2gltf/patches/wrong_uri_usage.patch.1 \
+	external/collada2gltf/patches/collada2gltf.new-delete-mismatch.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

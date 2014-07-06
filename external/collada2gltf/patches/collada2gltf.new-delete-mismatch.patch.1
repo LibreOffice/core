@@ -1,0 +1,12 @@
+diff -ur collada2gltf.org/GLTF/GLTFAccessorCache.cpp collada2gltf/GLTF/GLTFAccessorCache.cpp
+--- collada2gltf.org/GLTF/GLTFAccessorCache.cpp	2014-07-06 02:10:04.803518202 +0200
++++ collada2gltf/GLTF/GLTFAccessorCache.cpp	2014-07-06 02:10:58.623515999 +0200
+@@ -22,7 +22,7 @@
+     }
+ 
+     GLTFAccessorCache::~GLTFAccessorCache() {
+-        delete this->m_pData;
++        delete[] this->m_pData;
+     }
+     
+     bool GLTFAccessorCache::operator<(const GLTFAccessorCache& rhs) const {
