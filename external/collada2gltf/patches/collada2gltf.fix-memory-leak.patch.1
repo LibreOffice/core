@@ -1,0 +1,25 @@
+diff -ur collada2gltf.org/shaders/commonProfileShaders.cpp collada2gltf/shaders/commonProfileShaders.cpp
+--- collada2gltf.org/shaders/commonProfileShaders.cpp	2014-07-06 04:20:31.152197885 +0200
++++ collada2gltf/shaders/commonProfileShaders.cpp	2014-07-06 04:27:21.681181083 +0200
+@@ -495,6 +495,10 @@
+             this->_profile = profile;
+             this->_instanceProgram = new GLSLProgram(profile);
+         }
++
++        ~Pass() {
++            delete _instanceProgram;
++        }
+         
+         GLSLProgram* instanceProgram() {
+             return this->_instanceProgram;
+@@ -1188,6 +1192,10 @@
+             fragmentShader->appendCode("}\n");
+             
+         }
++
++        ~Technique() {
++            delete _pass;
++        }
+         
+         shared_ptr <GLTF::JSONObject> parameters() {
+             return _parameters;
