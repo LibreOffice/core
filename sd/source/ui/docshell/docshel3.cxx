@@ -289,27 +289,30 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             }
             else
             {
-                // setting the new language...
-                if (!aNewLangTxt.isEmpty())
+                if( mpViewShell )
                 {
-                    const OUString aDocumentLangPrefix("Default_");
-                    const OUString aStrNone("LANGUAGE_NONE");
-                    const OUString aStrResetLangs("RESET_LANGUAGES");
-                    sal_Int32 nPos = -1;
-                    if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
+                    // setting the new language...
+                    if (!aNewLangTxt.isEmpty())
                     {
-                        aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
+                        const OUString aDocumentLangPrefix("Default_");
+                        const OUString aStrNone("LANGUAGE_NONE");
+                        const OUString aStrResetLangs("RESET_LANGUAGES");
+                        sal_Int32 nPos = -1;
+                        if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
+                        {
+                            aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        if (aNewLangTxt == aStrNone)
+                            lcl_setLanguage( mpViewShell->GetDoc(), OUString() );
+                        else if (aNewLangTxt == aStrResetLangs)
+                            lcl_setLanguage( mpViewShell->GetDoc(), OUString(), true );
+                        else
+                            lcl_setLanguage( mpViewShell->GetDoc(), aNewLangTxt );
                     }
-                    else
-                    {
-                        break;
-                    }
-                    if (aNewLangTxt == aStrNone)
-                        lcl_setLanguage( mpViewShell->GetDoc(), OUString() );
-                    else if (aNewLangTxt == aStrResetLangs)
-                        lcl_setLanguage( mpViewShell->GetDoc(), OUString(), true );
-                    else
-                        lcl_setLanguage( mpViewShell->GetDoc(), aNewLangTxt );
                 }
             }
         }
