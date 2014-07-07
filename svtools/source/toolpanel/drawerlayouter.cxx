@@ -57,9 +57,6 @@ namespace svt
     }
 
 
-    IMPLEMENT_IREFERENCE( DrawerDeckLayouter )
-
-
     Rectangle DrawerDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );

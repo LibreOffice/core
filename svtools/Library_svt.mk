@@ -216,7 +216,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/toolpanel/paneldecklisteners \
     svtools/source/toolpanel/paneltabbar \
     svtools/source/toolpanel/paneltabbarpeer \
-    svtools/source/toolpanel/refbase \
     svtools/source/toolpanel/tabbargeometry \
     svtools/source/toolpanel/tablayouter \
     svtools/source/toolpanel/toolpanel \

@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -70,7 +71,7 @@ namespace svt
 
     //= IAccessibleFactory
 
-    class IAccessibleFactory : public ::rtl::IReference
+    class IAccessibleFactory : public virtual ::salhelper::SimpleReferenceObject
     {
     public:
         virtual IAccessibleTabListBox*
@@ -172,7 +173,7 @@ namespace svt
             ) = 0;
 
     protected:
-        ~IAccessibleFactory() {}
+        virtual ~IAccessibleFactory() {}
     };
 
 

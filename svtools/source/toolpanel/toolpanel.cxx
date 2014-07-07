@@ -38,10 +38,6 @@ namespace svt
     {
     }
 
-
-    IMPLEMENT_IREFERENCE( ToolPanelBase )
-
-
 } // namespace svt
 
 

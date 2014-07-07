@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 
 #include <svtools/toolpanel/toolpanel.hxx>
-#include <svtools/toolpanel/refbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 namespace svt
@@ -32,8 +32,7 @@ namespace svt
     //= DummyPanel
 
     /// is a dummy implementation of the IToolPanel interface
-    class DummyPanel    :public RefBase
-                        ,public IToolPanel
+    class DummyPanel    :public IToolPanel
     {
     public:
         DummyPanel();
@@ -52,8 +51,6 @@ namespace svt
                     CreatePanelAccessible(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
                     ) SAL_OVERRIDE;
-
-        DECLARE_IREFERENCE()
     };
 
 

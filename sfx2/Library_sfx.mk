@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     i18nlangtag \
     i18nutil \
     sal \
+    salhelper \
     sax \
     sb \
     sot \

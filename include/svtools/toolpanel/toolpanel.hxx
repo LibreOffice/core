@@ -21,8 +21,9 @@
 #define INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANEL_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/toolpanel/refbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
@@ -44,7 +45,7 @@ namespace svt
 
     /** abstract interface for a single tool panel
     */
-    class SVT_DLLPUBLIC IToolPanel : public ::rtl::IReference
+    class SVT_DLLPUBLIC IToolPanel : public salhelper::SimpleReferenceObject
     {
     public:
         /// retrieves the display name of the panel
@@ -118,15 +119,11 @@ namespace svt
         but still being abstract
     */
     class SVT_DLLPUBLIC ToolPanelBase   :public IToolPanel
-                                        ,public RefBase
                                         ,public ::boost::noncopyable
     {
     protected:
         ToolPanelBase();
         virtual ~ToolPanelBase();
-
-    public:
-        DECLARE_IREFERENCE()
     };
 
 

@@ -52,14 +52,7 @@ namespace svt
         protected:
             virtual ~AccessibleDummyFactory();
 
-        private:
-            oslInterlockedCount m_refCount;
-
         public:
-            // IReference
-            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
             // IAccessibleFactory
             virtual IAccessibleTabListBox*
                 createAccessibleTabListBox(
@@ -205,7 +198,6 @@ namespace svt
 
 
         AccessibleDummyFactory::AccessibleDummyFactory()
-            : m_refCount(0)
         {
         }
 
@@ -214,22 +206,6 @@ namespace svt
         {
         }
 
-
-        oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
-        {
-            return osl_atomic_increment( &m_refCount );
-        }
-
-
-        oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
-        {
-            if ( 0 == osl_atomic_decrement( &m_refCount ) )
-            {
-                delete this;
-                return 0;
-            }
-            return m_refCount;
-        }
     }
 
 

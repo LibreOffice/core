@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/toolpanel/refbase.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/decklayouter.hxx>
 
@@ -41,8 +40,7 @@ namespace svt
 
     /** a class which implements a tool panel selector in the form of the classical drawers
     */
-    class SVT_DLLPUBLIC DrawerDeckLayouter  :public RefBase
-                                            ,public IDeckLayouter
+    class SVT_DLLPUBLIC DrawerDeckLayouter  :public IDeckLayouter
                                             ,public IToolPanelDeckListener
     {
     public:
@@ -51,9 +49,6 @@ namespace svt
             IToolPanelDeck& i_rPanels
         );
         virtual ~DrawerDeckLayouter();
-
-        // IReference
-        DECLARE_IREFERENCE()
 
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) SAL_OVERRIDE;

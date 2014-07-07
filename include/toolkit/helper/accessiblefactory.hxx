@@ -58,7 +58,7 @@ namespace toolkit
 
     //= IAccessibleFactory
 
-    class IAccessibleFactory : public salhelper::SimpleReferenceObject
+    class IAccessibleFactory : public virtual salhelper::SimpleReferenceObject
     {
     public:
         /** creates an accessible context for a button window
