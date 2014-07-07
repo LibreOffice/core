@@ -119,7 +119,10 @@ protected:
     void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&maVD); checkClip(); }
     void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&maVD); checkClip(); }
     void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&maVD); checkClip(); }
-    void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
+
+    // #i125211# The MetaCommentAction needs to advance (if used), thus
+    // give current metafile and index which may be changed
+    void DoAction(MetaCommentAction& rAct, GDIMetaFile& rMtf, sal_uLong& a);
 
     // missing actions added
     void DoAction(MetaTextRectAction& rAct);
