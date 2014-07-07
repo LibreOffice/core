@@ -90,7 +90,7 @@ storeError ILockBytes::readAt (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nB
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
-    sal_uInt64 const src_size = nOffset + nBytes;
+    sal_uInt64 const src_size = static_cast<sal_uInt64>(nOffset) + nBytes;
     if (src_size > SAL_MAX_UINT32)
         return store_E_CantSeek;
 
@@ -112,7 +112,7 @@ storeError ILockBytes::writeAt (sal_uInt32 nOffset, void const * pBuffer, sal_uI
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
-    sal_uInt64 const dst_size = nOffset + nBytes;
+    sal_uInt64 const dst_size = static_cast<sal_uInt64>(nOffset) + nBytes;
     if (dst_size > SAL_MAX_UINT32)
         return store_E_CantSeek;
 
