@@ -45,6 +45,7 @@ import android.graphics.Region;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,14 +54,14 @@ import java.util.List;
 public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "GeckoMultiTileLayer";
 
-    private final ArrayList<SubTile> mTiles;
+    private final List<SubTile> mTiles;
     private IntSize mTileSize;
     private IntSize mSize;
 
     public MultiTileLayer(IntSize tileSize) {
         super();
         mTileSize = tileSize;
-        mTiles = new ArrayList<SubTile>();
+        mTiles = Collections.synchronizedList(new ArrayList<SubTile>());
         mSize = new IntSize(0,0);
     }
 
