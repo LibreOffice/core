@@ -39,16 +39,12 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
@@ -56,7 +52,6 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.GeckoEventListener;
 import org.mozilla.gecko.util.FloatUtils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class GeckoLayerClient implements GeckoEventListener {
@@ -72,7 +67,6 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
-
     // mUpdateViewportOnEndDraw is used to indicate that we received a
     // viewport update notification while drawing. therefore, when the
     // draw finishes, we need to update the entire viewport rather than
@@ -80,8 +74,6 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     // inside a transaction, so no synchronization is needed.
     private boolean mUpdateViewportOnEndDraw;
     private String mLastCheckerboardColor;
-
-    protected LayerController mLayerController;
 
     public GeckoLayerClient(Context context) {
         mScreenSize = new IntSize(0, 0);
@@ -110,7 +102,7 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     }
 
     public boolean beginDrawing(ViewportMetrics viewportMetrics) {
-       if (setupLayer()) {
+        if (setupLayer()) {
             Log.e(LOGTAG, "### Cancelling due to layer setup");
             return false;
         }

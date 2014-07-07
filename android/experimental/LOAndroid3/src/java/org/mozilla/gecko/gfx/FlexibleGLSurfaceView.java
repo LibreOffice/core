@@ -46,8 +46,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import org.libreoffice.LibreOfficeMainActivity;
-
 public class FlexibleGLSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String LOGTAG = "GeckoFlexibleGLSurfaceView";
 
@@ -151,8 +149,7 @@ public class FlexibleGLSurfaceView extends SurfaceView implements SurfaceHolder.
         return mController;
     }
 
-    public synchronized void surfaceChanged(SurfaceHolder holder, int format, int width,
-                                            int height) {
+    public synchronized void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         mController.sizeChanged(width, height);
         if (mGLThread != null) {
             mGLThread.surfaceChanged(width, height);
@@ -178,25 +175,6 @@ public class FlexibleGLSurfaceView extends SurfaceView implements SurfaceHolder.
 
         if (mListener != null) {
             mListener.compositionPauseRequested();
-        }
-    }
-
-    // Called from the compositor thread
-    public static GLController registerCxxCompositor() {
-        try {
-            Log.e(LOGTAG, "### registerCxxCompositor point A");
-            System.out.println("register layer comp");
-            Log.e(LOGTAG, "### registerCxxCompositor point B");
-            FlexibleGLSurfaceView flexView = (FlexibleGLSurfaceView) /*GeckoApp*/LibreOfficeMainActivity.mAppContext.getLayerController().getView();
-            Log.e(LOGTAG, "### registerCxxCompositor point C: " + flexView);
-            try {
-                flexView.destroyGLThread().join();
-            } catch (InterruptedException e) {}
-            Log.e(LOGTAG, "### registerCxxCompositor point D: " + flexView.getGLController());
-            return flexView.getGLController();
-        } catch (Exception e) {
-            Log.e(LOGTAG, "### Exception! " + e);
-            return null;
         }
     }
 

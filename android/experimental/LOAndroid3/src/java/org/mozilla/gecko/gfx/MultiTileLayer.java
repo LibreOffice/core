@@ -38,18 +38,14 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
-import org.libreoffice.LOKitShell;
-
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Encapsulates the logic needed to draw a layer made of multiple tiles.
@@ -241,6 +237,10 @@ public class MultiTileLayer extends Layer {
 
     public void addTile(SubTile tile) {
         mTiles.add(tile);
+    }
+
+    public List<SubTile> getTiles() {
+        return mTiles;
     }
 }
 

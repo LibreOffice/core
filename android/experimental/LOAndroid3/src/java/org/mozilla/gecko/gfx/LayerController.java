@@ -276,15 +276,6 @@ public class LayerController {
         return BitmapFactory.decodeResource(mContext.getResources(), resourceID, options);
     }
 
-    public Bitmap getDrawable16(String name) {
-        Resources resources = mContext.getResources();
-        int resourceID = resources.getIdentifier(name, "drawable", mContext.getPackageName());
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        return BitmapFactory.decodeResource(mContext.getResources(), resourceID, options);
-    }
-
     /**
      * Scrolls the viewport by the given offset. You must hold the monitor while calling this.
      */
@@ -293,9 +284,7 @@ public class LayerController {
         origin.offset(point.x, point.y);
         mViewportMetrics.setOrigin(origin);
         Log.d(LOGTAG, "scrollBy: " + mViewportMetrics);
-
         notifyLayerClientOfGeometryChange();
-        //GeckoApp.mAppContext.repositionPluginViews(false);
         mView.requestRender();
     }
 
@@ -310,7 +299,6 @@ public class LayerController {
         // We assume the zoom level will only be modified by the
         // PanZoomController, so no need to notify it of this change.
         notifyLayerClientOfGeometryChange();
-        //GeckoApp.mAppContext.repositionPluginViews(false);
         mView.requestRender();
     }
 
@@ -327,8 +315,9 @@ public class LayerController {
      * the geometry changed.
      */
     public void notifyLayerClientOfGeometryChange() {
-        if (mLayerClient != null)
+        if (mLayerClient != null) {
             mLayerClient.geometryChanged();
+        }
     }
 
     /**

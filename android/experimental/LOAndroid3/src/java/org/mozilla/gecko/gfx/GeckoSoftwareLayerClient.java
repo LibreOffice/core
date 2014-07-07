@@ -38,24 +38,11 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.libreoffice.LOKitShell;
-import org.mozilla.gecko.gfx.CairoImage;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.LayerRenderer;
-import org.mozilla.gecko.gfx.MultiTileLayer;
-import org.mozilla.gecko.gfx.PointUtils;
-import org.mozilla.gecko.gfx.WidgetTileLayer;
-//import org.mozilla.gecko.GeckoAppShell;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.Log;
-import java.nio.ByteBuffer;
+
+import java.util.List;
+
 
 /**
  * Transfers a software-rendered Gecko to an ImageLayer so that it can be rendered by our
@@ -127,6 +114,13 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         if (mTileLayer instanceof MultiTileLayer) {
             ((MultiTileLayer)mTileLayer).addTile(tile);
         }
+    }
+
+    public List<SubTile> getTiles() {
+        if (mTileLayer instanceof MultiTileLayer) {
+            return ((MultiTileLayer)mTileLayer).getTiles();
+        }
+        return null;
     }
 }
 
