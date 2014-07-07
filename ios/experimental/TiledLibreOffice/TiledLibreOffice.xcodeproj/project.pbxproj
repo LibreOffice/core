@@ -724,6 +724,37 @@
 		BE9F4609186839C100B8BE69 /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
 		BE9F460A186839C100B8BE69 /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
 		BE9F460B186839C100B8BE69 /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
+		BEAB8059194604400083BBB6 /* button.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button.cxx; path = ../../../vcl/source/control/button.cxx; sourceTree = "<group>"; };
+		BEAB805A194604400083BBB6 /* combobox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = combobox.cxx; path = ../../../vcl/source/control/combobox.cxx; sourceTree = "<group>"; };
+		BEAB805B194604400083BBB6 /* ctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctrl.cxx; path = ../../../vcl/source/control/ctrl.cxx; sourceTree = "<group>"; };
+		BEAB805C194604400083BBB6 /* edit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = edit.cxx; path = ../../../vcl/source/control/edit.cxx; sourceTree = "<group>"; };
+		BEAB805D194604400083BBB6 /* field.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = field.cxx; path = ../../../vcl/source/control/field.cxx; sourceTree = "<group>"; };
+		BEAB805E194604400083BBB6 /* field2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = field2.cxx; path = ../../../vcl/source/control/field2.cxx; sourceTree = "<group>"; };
+		BEAB805F194604400083BBB6 /* fixed.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fixed.cxx; path = ../../../vcl/source/control/fixed.cxx; sourceTree = "<group>"; };
+		BEAB8060194604400083BBB6 /* fixedhyper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fixedhyper.cxx; path = ../../../vcl/source/control/fixedhyper.cxx; sourceTree = "<group>"; };
+		BEAB8061194604400083BBB6 /* group.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = group.cxx; path = ../../../vcl/source/control/group.cxx; sourceTree = "<group>"; };
+		BEAB8062194604400083BBB6 /* ilstbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ilstbox.cxx; path = ../../../vcl/source/control/ilstbox.cxx; sourceTree = "<group>"; };
+		BEAB8063194604400083BBB6 /* imgctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgctrl.cxx; path = ../../../vcl/source/control/imgctrl.cxx; sourceTree = "<group>"; };
+		BEAB8064194604400083BBB6 /* longcurr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = longcurr.cxx; path = ../../../vcl/source/control/longcurr.cxx; sourceTree = "<group>"; };
+		BEAB8065194604400083BBB6 /* lstbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lstbox.cxx; path = ../../../vcl/source/control/lstbox.cxx; sourceTree = "<group>"; };
+		BEAB8066194604400083BBB6 /* menubtn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = menubtn.cxx; path = ../../../vcl/source/control/menubtn.cxx; sourceTree = "<group>"; };
+		BEAB8067194604400083BBB6 /* morebtn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = morebtn.cxx; path = ../../../vcl/source/control/morebtn.cxx; sourceTree = "<group>"; };
+		BEAB8068194604400083BBB6 /* prgsbar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prgsbar.cxx; path = ../../../vcl/source/control/prgsbar.cxx; sourceTree = "<group>"; };
+		BEAB8069194604400083BBB6 /* quickselectionengine.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = quickselectionengine.cxx; path = ../../../vcl/source/control/quickselectionengine.cxx; sourceTree = "<group>"; };
+		BEAB806A194604400083BBB6 /* scrbar.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrbar.cxx; path = ../../../vcl/source/control/scrbar.cxx; sourceTree = "<group>"; };
+		BEAB806B194604400083BBB6 /* slider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = slider.cxx; path = ../../../vcl/source/control/slider.cxx; sourceTree = "<group>"; };
+		BEAB806C194604400083BBB6 /* spinbtn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinbtn.cxx; path = ../../../vcl/source/control/spinbtn.cxx; sourceTree = "<group>"; };
+		BEAB806D194604400083BBB6 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../../../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
+		BEAB806E194604400083BBB6 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../../../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
+		BEAB806F194604400083BBB6 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../../../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
+		BEAB807119460AE10083BBB6 /* textdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textdata.cxx; path = ../../../vcl/source/edit/textdata.cxx; sourceTree = "<group>"; };
+		BEAB807219460AE10083BBB6 /* textdoc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textdoc.cxx; path = ../../../vcl/source/edit/textdoc.cxx; sourceTree = "<group>"; };
+		BEAB807319460AE10083BBB6 /* texteng.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = texteng.cxx; path = ../../../vcl/source/edit/texteng.cxx; sourceTree = "<group>"; };
+		BEAB807419460AE10083BBB6 /* textundo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textundo.cxx; path = ../../../vcl/source/edit/textundo.cxx; sourceTree = "<group>"; };
+		BEAB807519460AE10083BBB6 /* textview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textview.cxx; path = ../../../vcl/source/edit/textview.cxx; sourceTree = "<group>"; };
+		BEAB807619460AE10083BBB6 /* txtattr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = txtattr.cxx; path = ../../../vcl/source/edit/txtattr.cxx; sourceTree = "<group>"; };
+		BEAB807719460AE10083BBB6 /* vclmedit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclmedit.cxx; path = ../../../vcl/source/edit/vclmedit.cxx; sourceTree = "<group>"; };
+		BEAB807819460AE10083BBB6 /* xtextedt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xtextedt.cxx; path = ../../../vcl/source/edit/xtextedt.cxx; sourceTree = "<group>"; };
 		BECA60DB1910271F00B24A7E /* autorecovery.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autorecovery.cxx; path = ../../../framework/source/services/autorecovery.cxx; sourceTree = "<group>"; };
 		BECA60DC1910271F00B24A7E /* ContextChangeEventMultiplexer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ContextChangeEventMultiplexer.cxx; path = ../../../framework/source/services/ContextChangeEventMultiplexer.cxx; sourceTree = "<group>"; };
 		BECA60DD1910271F00B24A7E /* desktop.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = desktop.cxx; path = ../../../framework/source/services/desktop.cxx; sourceTree = "<group>"; };
@@ -833,6 +864,8 @@
 			isa = PBXGroup;
 			children = (
 				BE0899121860D78B0021A679 /* app */,
+				BEAB8058194603EC0083BBB6 /* control */,
+				BEAB807019460A920083BBB6 /* edit */,
 				BE6F3D7B192E287400D6FCC0 /* filter */,
 				BE35B5431886C4CC001B7439 /* gdi */,
 				BE35B53B18869D2B001B7439 /* headless */,
@@ -1787,6 +1820,51 @@
 				BE9F46031868396500B8BE69 /* uno2cpp.cxx */,
 			);
 			name = bridges;
+			sourceTree = "<group>";
+		};
+		BEAB8058194603EC0083BBB6 /* control */ = {
+			isa = PBXGroup;
+			children = (
+				BEAB8059194604400083BBB6 /* button.cxx */,
+				BEAB805A194604400083BBB6 /* combobox.cxx */,
+				BEAB805B194604400083BBB6 /* ctrl.cxx */,
+				BEAB805C194604400083BBB6 /* edit.cxx */,
+				BEAB805D194604400083BBB6 /* field.cxx */,
+				BEAB805E194604400083BBB6 /* field2.cxx */,
+				BEAB805F194604400083BBB6 /* fixed.cxx */,
+				BEAB8060194604400083BBB6 /* fixedhyper.cxx */,
+				BEAB8061194604400083BBB6 /* group.cxx */,
+				BEAB8062194604400083BBB6 /* ilstbox.cxx */,
+				BEAB8063194604400083BBB6 /* imgctrl.cxx */,
+				BEAB8064194604400083BBB6 /* longcurr.cxx */,
+				BEAB8065194604400083BBB6 /* lstbox.cxx */,
+				BEAB8066194604400083BBB6 /* menubtn.cxx */,
+				BEAB8067194604400083BBB6 /* morebtn.cxx */,
+				BEAB8068194604400083BBB6 /* prgsbar.cxx */,
+				BEAB8069194604400083BBB6 /* quickselectionengine.cxx */,
+				BEAB806A194604400083BBB6 /* scrbar.cxx */,
+				BEAB806B194604400083BBB6 /* slider.cxx */,
+				BEAB806C194604400083BBB6 /* spinbtn.cxx */,
+				BEAB806D194604400083BBB6 /* spinfld.cxx */,
+				BEAB806E194604400083BBB6 /* tabctrl.cxx */,
+				BEAB806F194604400083BBB6 /* throbber.cxx */,
+			);
+			name = control;
+			sourceTree = "<group>";
+		};
+		BEAB807019460A920083BBB6 /* edit */ = {
+			isa = PBXGroup;
+			children = (
+				BEAB807119460AE10083BBB6 /* textdata.cxx */,
+				BEAB807219460AE10083BBB6 /* textdoc.cxx */,
+				BEAB807319460AE10083BBB6 /* texteng.cxx */,
+				BEAB807419460AE10083BBB6 /* textundo.cxx */,
+				BEAB807519460AE10083BBB6 /* textview.cxx */,
+				BEAB807619460AE10083BBB6 /* txtattr.cxx */,
+				BEAB807719460AE10083BBB6 /* vclmedit.cxx */,
+				BEAB807819460AE10083BBB6 /* xtextedt.cxx */,
+			);
+			name = edit;
 			sourceTree = "<group>";
 		};
 		BECA60D9191026BA00B24A7E /* framework */ = {
