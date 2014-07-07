@@ -460,14 +460,14 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+// These PropIds arrays will be indexed into using a ShapePropertyId enum (include/oox/drawingml/shapepropertymap.hxx)
 
 /** Property identifiers for common chart objects, to be used in ShapePropertyInfo. */
 static const sal_Int32 spnCommonPropIds[] =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradientName,
+    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_INVALID, PROP_FillGradientName,
     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
 };
@@ -477,7 +477,7 @@ static const sal_Int32 spnLinearPropIds[] =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_Color, PROP_Transparency, PROP_LineDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID
 };
@@ -487,7 +487,7 @@ static const sal_Int32 spnFilledPropIds[] =
 {
     PROP_BorderStyle, PROP_BorderWidth, PROP_BorderColor, PROP_BorderTransparency, PROP_BorderDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_FillStyle, PROP_Color, PROP_Transparency, PROP_GradientName,
+    PROP_FillStyle, PROP_Color, PROP_Transparency, PROP_INVALID, PROP_GradientName,
     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
 };
