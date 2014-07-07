@@ -163,15 +163,15 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
 
             AxisConverter aXAxisConv( *this, *xXAxis );
-            aXAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
+            aXAxisConv.convertFromModel( xCoordSystem, aTypeGroups, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
             AxisConverter aYAxisConv( *this, *xYAxis );
-            aYAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xXAxis.get(), nAxesSetIdx, API_Y_AXIS );
+            aYAxisConv.convertFromModel( xCoordSystem, aTypeGroups, xXAxis.get(), nAxesSetIdx, API_Y_AXIS );
 
             if( rFirstTypeGroup.isDeep3dChart() )
             {
                 ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ) );
                 AxisConverter aZAxisConv( *this, *xZAxis );
-                aZAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, 0, nAxesSetIdx, API_Z_AXIS );
+                aZAxisConv.convertFromModel( xCoordSystem, aTypeGroups, 0, nAxesSetIdx, API_Z_AXIS );
             }
 
             // convert all chart type groups, this converts all series data and formatting
