@@ -692,19 +692,24 @@ public:
     }
 };
 
+struct SvxIconSelectorToolBoxItem
+{
+    Image aImg;
+    OUString aText;
+    void* pData;
+};
+
 class SvxIconSelectorDialog : public ModalDialog
 {
 private:
-    FixedText       aFtDescription;
-    ToolBox         aTbSymbol;
-    FixedText       aFtNote;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnImport;
-    PushButton      aBtnDelete;
-    FixedLine       aFlSeparator;
+    ToolBox*        pTbSymbol;
+    FixedText*      pFtNote;
+    PushButton*     pBtnImport;
+    PushButton*     pBtnDelete;
+    Size            aTbSize;
     sal_uInt16      m_nNextId;
+
+    std::vector<SvxIconSelectorToolBoxItem> aTbItems;
 
     sal_Int32       m_nExpectedSize;
 
@@ -742,6 +747,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
         GetSelectedIcon();
 
+    void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+
     DECL_LINK( SelectHdl, ToolBox * );
     DECL_LINK( ImportHdl, PushButton * );
     DECL_LINK( DeleteHdl, PushButton * );
@@ -766,10 +773,8 @@ public:
 class SvxIconChangeDialog : public ModalDialog
 {
 private:
-    FixedImage       aFImageInfo;
-    OKButton         aBtnOK;
-    FixedText        aDescriptionLabel;
-    VclMultiLineEdit aLineEditDescription;
+    FixedImage*         pFImageInfo;
+    VclMultiLineEdit*   pLineEditDescription;
 public:
     SvxIconChangeDialog(Window *pWindow, const OUString& aMessage);
 };

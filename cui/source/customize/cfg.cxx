@@ -4743,39 +4743,41 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 * The SvxIconSelectorDialog class
 *
 *******************************************************************************/
+class ToolBox;
+
 SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     const uno::Reference< css::ui::XImageManager >& rXImageManager,
     const uno::Reference< css::ui::XImageManager >& rXParentImageManager )
     :
-    ModalDialog          ( pWindow, CUI_RES( MD_ICONSELECTOR ) ),
-    aFtDescription       ( this, CUI_RES( FT_SYMBOLS ) ),
-    aTbSymbol            ( this, CUI_RES( TB_SYMBOLS ) ),
-    aFtNote              ( this, CUI_RES( FT_NOTE ) ),
-    aBtnOK               ( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel           ( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp             ( this, CUI_RES( BTN_HELP ) ),
-    aBtnImport           ( this, CUI_RES( BTN_IMPORT ) ),
-    aBtnDelete           ( this, CUI_RES( BTN_DELETE ) ),
-    aFlSeparator         ( this, CUI_RES( FL_SEPARATOR ) ),
+    ModalDialog          ( pWindow, "IconSelector", "cui/ui/iconselectordialog.ui" ),
     m_nNextId            ( 0 ),
     m_xImageManager      ( rXImageManager ),
     m_xParentImageManager( rXParentImageManager )
 {
-    FreeResource();
+    get(pTbSymbol, "symbolsToolbar");
+    get(pFtNote, "noteLabel");
+    get(pBtnImport, "importButton");
+    get(pBtnDelete, "deleteButton");
+
+    aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MAP_APPFONT));
+    pTbSymbol->set_width_request(aTbSize.Width());
+    pTbSymbol->set_height_request(aTbSize.Height() - 20);
+    pTbSymbol->SetLineCount(4);
+    pTbSymbol->SetStyle(WB_BORDER);
 
     typedef ::boost::unordered_map< OUString,
                              bool,
                              OUStringHash,
                              ::std::equal_to< OUString > > ImageInfo;
 
-    aTbSymbol.SetPageScroll( true );
+    pTbSymbol->SetPageScroll( true );
 
     bool bLargeIcons = GetImageType() & css::ui::ImageType::SIZE_LARGE;
     m_nExpectedSize = bLargeIcons ? 26 : 16;
 
     if ( m_nExpectedSize != 16 )
     {
-        aFtNote.SetText( replaceSixteen( aFtNote.GetText(), m_nExpectedSize ) );
+        pFtNote->SetText( replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
     }
 
     uno::Reference< uno::XComponentContext > xComponentContext =
@@ -4802,7 +4804,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
     else
     {
-        aBtnImport.Enable( false );
+        pBtnImport->Enable( false );
     }
 
     aDirectory += "soffice.cfg/import";
@@ -4841,6 +4843,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     sal_uInt16 nId = 1;
     ImageInfo::const_iterator pConstIter = mImageInfo.begin();
     uno::Sequence< OUString > name( 1 );
+    SvxIconSelectorToolBoxItem aItem;
     while ( pConstIter != mImageInfo.end() )
     {
         name[ 0 ] = pConstIter->first;
@@ -4848,12 +4851,17 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            aTbSymbol.InsertItem( nId, img, pConstIter->first );
+            pTbSymbol->InsertItem( nId, img, pConstIter->first );
+            aItem.aImg = img;
+            aItem.aText = pConstIter->first;
 
             graphics[ 0 ]->acquire();
 
-            aTbSymbol.SetItemData(
+            pTbSymbol->SetItemData(
                 nId, static_cast< void * > ( graphics[ 0 ].get() ) );
+
+            aItem.pData = static_cast< void * > ( graphics[ 0 ].get() );
+            aTbItems.push_back(aItem);
 
             ++nId;
         }
@@ -4902,15 +4910,20 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            aTbSymbol.InsertItem( nId, img, pConstIter->first );
+            pTbSymbol->InsertItem( nId, img, pConstIter->first );
+            aItem.aImg = img;
+            aItem.aText = pConstIter->first;
 
             uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
 
             if ( xGraphic.is() )
                 xGraphic->acquire();
 
-            aTbSymbol.SetItemData(
+            pTbSymbol->SetItemData(
                 nId, static_cast< void * > ( xGraphic.get() ) );
+
+            aItem.pData = static_cast< void * > ( xGraphic.get() );
+            aTbItems.push_back(aItem);
 
             ++nId;
         }
@@ -4918,28 +4931,58 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         ++pConstIter;
     }
 
-    aBtnDelete.Enable( false );
-    aTbSymbol.SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
-    aBtnImport.SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
-    aBtnDelete.SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
+    pBtnDelete->Enable( false );
+    pTbSymbol->SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
+    pBtnImport->SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
+    pBtnDelete->SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
 
-    m_nNextId = aTbSymbol.GetItemCount()+1;
+    m_nNextId = pTbSymbol->GetItemCount()+1;
 }
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
-    sal_uInt16 nCount = aTbSymbol.GetItemCount();
+    sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
     for (sal_uInt16 n = 0; n < nCount; ++n )
     {
-        sal_uInt16 nId = aTbSymbol.GetItemId(n);
+        sal_uInt16 nId = pTbSymbol->GetItemId(n);
 
         uno::XInterface* xi = static_cast< uno::XInterface* >(
-            aTbSymbol.GetItemData( nId ) );
+            pTbSymbol->GetItemData( nId ) );
 
         if ( xi != NULL )
         {
             xi->release();
+        }
+    }
+}
+
+void SvxIconSelectorDialog::Paint(const Rectangle& rRect)
+{
+    ModalDialog::Paint(rRect);
+
+    Size aSize = pTbSymbol->GetSizePixel();
+    if(aSize != aTbSize)
+    {
+        aTbSize = aSize;
+        long rowWidth = 0;
+        sal_uInt16 nId = 1;
+
+        pTbSymbol->SetLineCount(aSize.Height() / 37);
+        pTbSymbol->Clear();
+
+        for(auto it = aTbItems.cbegin(); it != aTbItems.cend(); ++it)
+        {
+            pTbSymbol->InsertItem(nId, it->aImg, it->aText);
+            rowWidth += pTbSymbol->GetItemContentSize( nId ).Width() + 10;
+            if( rowWidth > aTbSize.Width())
+            {
+                rowWidth = pTbSymbol->GetItemContentSize( nId ).Width() + 10;
+                pTbSymbol->InsertBreak(pTbSymbol->GetItemCount() - 1);
+            }
+
+            pTbSymbol->SetItemData(nId, it->pData);
+            ++nId;
         }
     }
 }
@@ -4949,14 +4992,14 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     uno::Reference< graphic::XGraphic > result;
 
     sal_uInt16 nId;
-    for ( sal_uInt16 n = 0; n < aTbSymbol.GetItemCount(); ++n )
+    for ( sal_uInt16 n = 0; n < pTbSymbol->GetItemCount(); ++n )
     {
-        nId = aTbSymbol.GetItemId( n );
-        if ( aTbSymbol.IsItemChecked( nId ) )
+        nId = pTbSymbol->GetItemId( n );
+        if ( pTbSymbol->IsItemChecked( nId ) )
         {
             result = uno::Reference< graphic::XGraphic >(
                 reinterpret_cast< graphic::XGraphic* >(
-                    aTbSymbol.GetItemData( nId ) ) );
+                    pTbSymbol->GetItemData( nId ) ) );
         }
     }
 
@@ -4967,29 +5010,29 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
 {
     (void)pToolBox;
 
-    sal_uInt16 nCount = aTbSymbol.GetItemCount();
+    sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
     for (sal_uInt16 n = 0; n < nCount; ++n )
     {
-        sal_uInt16 nId = aTbSymbol.GetItemId( n );
+        sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
-        if ( aTbSymbol.IsItemChecked( nId ) )
+        if ( pTbSymbol->IsItemChecked( nId ) )
         {
-            aTbSymbol.CheckItem( nId, false );
+            pTbSymbol->CheckItem( nId, false );
         }
     }
 
-    sal_uInt16 nId = aTbSymbol.GetCurItemId();
-    aTbSymbol.CheckItem( nId );
+    sal_uInt16 nId = pTbSymbol->GetCurItemId();
+    pTbSymbol->CheckItem( nId );
 
-    OUString aSelImageText = aTbSymbol.GetItemText( nId );
+    OUString aSelImageText = pTbSymbol->GetItemText( nId );
     if ( m_xImportedImageManager->hasImage( GetImageType(), aSelImageText ) )
     {
-        aBtnDelete.Enable( true );
+        pBtnDelete->Enable( true );
     }
     else
     {
-        aBtnDelete.Enable( false );
+        pBtnDelete->Enable( false );
     }
 
     return 0;
@@ -5032,18 +5075,18 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
     if ( WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute() == RET_OK )
     {
-        sal_uInt16 nCount = aTbSymbol.GetItemCount();
+        sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
         for (sal_uInt16 n = 0; n < nCount; ++n )
         {
-            sal_uInt16 nId = aTbSymbol.GetItemId( n );
+            sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
-            if ( aTbSymbol.IsItemChecked( nId ) )
+            if ( pTbSymbol->IsItemChecked( nId ) )
             {
-                OUString aSelImageText = aTbSymbol.GetItemText( nId );
+                OUString aSelImageText = pTbSymbol->GetItemText( nId );
                 uno::Sequence< OUString > URLs(1);
                 URLs[0] = aSelImageText;
-                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
+                pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
                 m_xImportedImageManager->removeImages( GetImageType(), URLs );
                 uno::Reference< css::ui::XUIConfigurationPersistence >
                     xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
@@ -5093,17 +5136,17 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     }
 
     bool   bResult( false );
-    sal_uInt16 nCount = aTbSymbol.GetItemCount();
+    sal_uInt16 nCount = pTbSymbol->GetItemCount();
     for (sal_uInt16 n = 0; n < nCount; ++n )
     {
-        sal_uInt16 nId = aTbSymbol.GetItemId( n );
+        sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
-        if ( OUString( aTbSymbol.GetItemText( nId ) ) == aURL )
+        if ( OUString( pTbSymbol->GetItemText( nId ) ) == aURL )
         {
             try
             {
                 // replace/insert image with provided URL
-                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
+                pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
                 aMediaProps[0].Value <<= aURL;
 
                 Image aImage( xGraphic );
@@ -5113,7 +5156,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                     BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
-                aTbSymbol.InsertItem( nId,aImage, aURL, 0, 0 ); //modify
+                pTbSymbol->InsertItem( nId,aImage, aURL, 0, 0 ); //modify
 
                 xGraphic = aImage.GetXGraphic();
 
@@ -5277,12 +5320,12 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 }
                 if ( bOK && !!aImage )
                 {
-                    aTbSymbol.InsertItem( nId, aImage, aURL, 0, 0 );
+                    pTbSymbol->InsertItem( nId, aImage, aURL, 0, 0 );
 
                     xGraphic = aImage.GetXGraphic();
                     xGraphic->acquire();
 
-                    aTbSymbol.SetItemData(
+                    pTbSymbol->SetItemData(
                         nId, static_cast< void * > ( xGraphic.get() ) );
                     uno::Sequence< OUString > aImportURL( 1 );
                     aImportURL[ 0 ] = aURL;
@@ -5371,18 +5414,19 @@ sal_uInt16 SvxIconReplacementDialog :: ShowDialog()
 *******************************************************************************/
 SvxIconChangeDialog::SvxIconChangeDialog(
     Window *pWindow, const OUString& aMessage)
-    :
-    ModalDialog            ( pWindow, CUI_RES( MD_ICONCHANGE ) ),
-    aFImageInfo            (this, CUI_RES( FI_INFO ) ),
-    aBtnOK                 (this, CUI_RES(MD_BTN_OK)),
-    aDescriptionLabel      (this, CUI_RES(FTCHGE_DESCRIPTION)),
-    aLineEditDescription   (this, CUI_RES(EDT_ADDR))
+    :ModalDialog(pWindow, "IconChange", "cui/ui/iconchangedialog.ui")
 {
-    FreeResource();
-    aFImageInfo.SetImage(InfoBox::GetStandardImage());
-    aLineEditDescription.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-    aLineEditDescription.EnableCursor( false );
-    aLineEditDescription.SetText(aMessage);
+    get(pFImageInfo, "infoImage");
+    get(pLineEditDescription, "addrTextview");
+
+    Size aSize(get_preferred_size());
+    set_width_request(aSize.Width() + 46);
+    set_height_request(aSize.Height() + 100);
+
+    pFImageInfo->SetImage(InfoBox::GetStandardImage());
+    pLineEditDescription->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+    pLineEditDescription->EnableCursor( false );
+    pLineEditDescription->SetText(aMessage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
