@@ -20,7 +20,7 @@
         <prop oor:name="URLPattern"><value>private:factory/swriter</value></prop>
         <prop oor:name="Extensions"><value>odt</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.oasis.opendocument.text</value></prop>
-        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>writer8</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">Writer 8</value>
