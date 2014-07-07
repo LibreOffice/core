@@ -23942,7 +23942,6 @@
       <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
     </resource>
     <resource name="CT_FramePr" resource="Properties" tag="frame">
-      <kind name="paragraph"/>
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
       <attribute name="w" tokenid="ooxml:CT_FramePr_w"/>
@@ -24297,14 +24296,12 @@
       <element name="customXmlMoveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd"/>
     </resource>
     <resource name="CT_NumPr" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="ilvl" tokenid="ooxml:CT_NumPr_ilvl"/>
       <element name="numId" tokenid="ooxml:CT_NumPr_numId"/>
       <element name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
       <element name="ins" tokenid="ooxml:CT_NumPr_ins"/>
     </resource>
     <resource name="CT_PBdr" resource="Properties" tag="paragraph">
-      <kind name="paragraph"/>
       <element name="top" tokenid="ooxml:CT_PBdr_top"/>
       <element name="left" tokenid="ooxml:CT_PBdr_left"/>
       <element name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
@@ -24327,7 +24324,6 @@
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="CT_PPrBase" resource="Properties" tag="paragraph">
-      <kind name="paragraph"/>
       <element name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
       <element name="keepNext" tokenid="ooxml:CT_PPrBase_keepNext"/>
       <element name="keepLines" tokenid="ooxml:CT_PPrBase_keepLines"/>
@@ -24867,7 +24863,6 @@
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
     <resource name="EG_RPrBase" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" resource="Properties" tag="paragraph">
-      <kind name="paragraph"/>
       <element name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <element name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <element name="b" tokenid="ooxml:EG_RPrBase_b"/>
@@ -25143,7 +25138,6 @@
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_TcBorders" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcBorders_top"/>
       <element name="start" tokenid="ooxml:CT_TcBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TcBorders_left"/>
@@ -25156,7 +25150,6 @@
       <element name="tr2bl" tokenid="ooxml:CT_TcBorders_tr2bl"/>
     </resource>
     <resource name="CT_TcMar" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcMar_top"/>
       <element name="start" tokenid="ooxml:CT_TcMar_start"/>
       <element name="left" tokenid="ooxml:CT_TcMar_left"/>
@@ -25176,7 +25169,6 @@
       <attribute name="val" tokenid="ooxml:CT_HMerge_val" action="setValue"/>
     </resource>
     <resource name="CT_TcPrBase" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="cnfStyle" tokenid="ooxml:CT_TcPrBase_cnfStyle"/>
       <element name="tcW" tokenid="ooxml:CT_TcPrBase_tcW"/>
       <element name="gridSpan" tokenid="ooxml:CT_TcPrBase_gridSpan"/>
@@ -25211,7 +25203,6 @@
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="CT_TrPrBase" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
 <!--      <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/> -->
@@ -25229,7 +25220,6 @@
       <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore" action="handleGridBefore"/>
     </resource>
     <resource name="CT_TrPr" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
       <element name="del" tokenid="ooxml:CT_TrPr_del"/>
       <element name="trPrChange" tokenid="ooxml:CT_TrPr_trPrChange"/>
@@ -25265,7 +25255,6 @@
       <element name="right" tokenid="ooxml:CT_TblCellMar_right"/>
     </resource>
     <resource name="CT_TblBorders" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TblBorders_top"/>
       <element name="start" tokenid="ooxml:CT_TblBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TblBorders_left"/>
@@ -25276,7 +25265,6 @@
       <element name="insideV" tokenid="ooxml:CT_TblBorders_insideV"/>
     </resource>
     <resource name="CT_TblPrBase" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="tblStyle" tokenid="ooxml:CT_TblPrBase_tblStyle"/>
       <element name="tblpPr" tokenid="ooxml:CT_TblPrBase_tblpPr"/>
       <element name="tblOverlap" tokenid="ooxml:CT_TblPrBase_tblOverlap"/>
@@ -25294,7 +25282,6 @@
       <element name="tblLook" tokenid="ooxml:CT_TblPrBase_tblLook"/>
     </resource>
     <resource name="CT_TblPr" resource="Properties" tag="table">
-      <kind name="table"/>
       <element name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
       <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
@@ -25692,7 +25679,6 @@
       <attribute name="legacyIndent" tokenid="ooxml:CT_LvlLegacy_legacyIndent"/>
     </resource>
     <resource name="CT_Lvl" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="start" tokenid="ooxml:CT_Lvl_start"/>
       <element name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
       <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
@@ -25718,12 +25704,10 @@
       <attribute name="val" tokenid="ooxml:CT_MultiLevelType_val" action="setValue"/>
     </resource>
     <resource name="CT_NumPicBullet" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="pict" tokenid="ooxml:CT_NumPicBullet_pict"/>
       <attribute name="numPicBulletId" tokenid="ooxml:CT_NumPicBullet_numPicBulletId"/>
     </resource>
     <resource name="CT_AbstractNum" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
       <element name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
       <element name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
@@ -25734,19 +25718,16 @@
       <attribute name="abstractNumId" tokenid="ooxml:CT_AbstractNum_abstractNumId"/>
     </resource>
     <resource name="CT_NumLvl" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
       <element name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
       <attribute name="ilvl" tokenid="ooxml:CT_NumLvl_ilvl"/>
     </resource>
     <resource name="CT_Num" resource="Properties" tag="numbering">
-      <kind name="paragraph"/>
       <element name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
       <element name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
       <attribute name="numId" tokenid="ooxml:CT_Num_numId"/>
     </resource>
     <resource name="CT_Numbering" resource="PropertyTable" tokenid="ooxml:NUMBERING" tag="numbering">
-      <kind name="paragraph"/>
       <element name="numPicBullet" tokenid="ooxml:CT_Numbering_numPicBullet"/>
       <element name="abstractNum" tokenid="ooxml:CT_Numbering_abstractNum"/>
       <element name="num" tokenid="ooxml:CT_Numbering_num"/>
@@ -25852,7 +25833,6 @@
       <action name="start" action="handleFontRel"/>
     </resource>
     <resource name="CT_Font" resource="Properties" tag="font">
-      <kind name="character"/>
       <element name="altName" tokenid="ooxml:CT_Font_altName"/>
       <element name="panose1" tokenid="ooxml:CT_Font_panose1"/>
       <element name="charset" tokenid="ooxml:CT_Font_charset"/>
