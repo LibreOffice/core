@@ -40,6 +40,7 @@ public:
      * hidden columns for internal data table yet).
      */
     void testPPTXHiddenDataSeries();
+    void testPPTXStackedNonStackedYAxis();
     void testPPTChartSeries();
     void testODPChartSeries();
     void testBnc864396();
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testPPTXHiddenDataSeries);
+    CPPUNIT_TEST(testPPTXStackedNonStackedYAxis);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testBnc882383);
@@ -363,6 +365,65 @@ void Chart2ImportTest::testPPTXHiddenDataSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Category 2"), aCategories[1][0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Category 3"), aCategories[2][0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Category 4"), aCategories[3][0]);
+}
+
+void Chart2ImportTest::testPPTXStackedNonStackedYAxis()
+{
+    load("/chart2/qa/extras/data/pptx/", "stacked-non-stacked-mix-y-axis.pptx");
+
+    // 1st chart is a normal stacked column.
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    OUString aTitle = getTitleString(xTitled);
+    CPPUNIT_ASSERT_EQUAL(OUString("Stacked"), aTitle);
+
+    // Get the Y-axis.
+    Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+
+    sal_Int32 nNumberFormat = getNumberFormatFromAxis(xYAxis);
+    sal_Int16 nType = getNumberFormatType(xChartDoc, nNumberFormat);
+    CPPUNIT_ASSERT_MESSAGE("Y axis should be a normal number format.", (nType & util::NumberFormat::NUMBER));
+    CPPUNIT_ASSERT_MESSAGE("Y axis should NOT be a percent format.", !(nType & util::NumberFormat::PERCENT));
+
+    // 2nd chart is a percent-stacked column.
+    xChartDoc.set(getChartDocFromDrawImpress(1, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xTitled.set(xChartDoc, uno::UNO_QUERY_THROW);
+    aTitle = getTitleString(xTitled);
+    CPPUNIT_ASSERT_EQUAL(OUString("100% Stacked"), aTitle);
+
+    // Get the Y-axis.
+    xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+
+    // Get the number format of the Y-axis.
+    nNumberFormat = getNumberFormatFromAxis(xYAxis);
+    nType = getNumberFormatType(xChartDoc, nNumberFormat);
+    CPPUNIT_ASSERT_MESSAGE("Y axis should be a percent format.", (nType & util::NumberFormat::PERCENT));
+
+    // 3rd chart is a mixture of normal-stacked column with a percent-stacked
+    // area chart series.  Excel in this case sets the Y-axis to be
+    // non-percent axis and we should do the same for interoperability.
+    xChartDoc.set(getChartDocFromDrawImpress(2, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xTitled.set(xChartDoc, uno::UNO_QUERY_THROW);
+    aTitle = getTitleString(xTitled);
+    CPPUNIT_ASSERT_EQUAL(OUString("Stacked column mixed with 100% stacked area"), aTitle);
+
+    // Get the Y-axis.
+    xYAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+
+    // Get the number format of the Y-axis.
+    nNumberFormat = getNumberFormatFromAxis(xYAxis);
+    nType = getNumberFormatType(xChartDoc, nNumberFormat);
+    CPPUNIT_ASSERT_MESSAGE("Y axis should be a normal number format.", (nType & util::NumberFormat::NUMBER));
+    CPPUNIT_ASSERT_MESSAGE("Y axis should NOT be a percent format.", !(nType & util::NumberFormat::PERCENT));
 }
 
 void Chart2ImportTest::testODPChartSeries()

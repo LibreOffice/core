@@ -482,16 +482,42 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     return seriesList;
 }
 
-OUString getTitleString( const Reference<chart2::XTitled>& xTitled, sal_Int32 nIndex = 0 )
+OUString getTitleString( const Reference<chart2::XTitled>& xTitled )
 {
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
     uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
-    CPPUNIT_ASSERT(aFSSeq.getLength() > nIndex);
-    uno::Reference<chart2::XFormattedString> xFS = aFSSeq[nIndex];
-    CPPUNIT_ASSERT(xFS.is());
+    OUString aText;
+    for (sal_Int32 i = 0; i < aFSSeq.getLength(); ++i)
+        aText += aFSSeq[i]->getString();
 
-    return xFS->getString();
+    return aText;
+}
+
+sal_Int32 getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )
+{
+    Reference<beans::XPropertySet> xPS(xAxis, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPS.is());
+    sal_Int32 nNumberFormat = -1;
+    bool bSuccess = xPS->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    CPPUNIT_ASSERT(bSuccess);
+
+    return nNumberFormat;
+}
+
+sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nNumberFormat )
+{
+    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
+    Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+    CPPUNIT_ASSERT(xNumberFormats.is());
+
+    Reference<beans::XPropertySet> xNumPS = xNumberFormats->getByKey(nNumberFormat);
+    CPPUNIT_ASSERT(xNumPS.is());
+
+    sal_Int16 nType = util::NumberFormat::UNDEFINED;
+    xNumPS->getPropertyValue("Type") >>= nType;
+
+    return nType;
 }
 
 #endif // INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
