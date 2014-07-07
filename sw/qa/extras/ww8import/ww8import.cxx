@@ -473,6 +473,13 @@ DECLARE_WW8IMPORT_TEST(testFdp80333, "fdo80333.doc")
 
 #endif
 
+DECLARE_WW8IMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-columns.doc")
+{
+    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
+    // table width was restricted by a column
+    CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

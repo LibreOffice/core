@@ -2202,6 +2202,13 @@ DECLARE_OOXMLIMPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-columns.docx")
+{
+    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
+    // table width was restricted by a column
+    CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
