@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <osl/diagnose.h>
 #include "SysShExec.hxx"
 #include <osl/file.hxx>

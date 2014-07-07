@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 
 #include "calendar_gregorian.hxx"
 #include "localedata.hxx"
