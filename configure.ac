@@ -1004,7 +1004,7 @@ AC_ARG_ENABLE(python,
         [Enables or disables Python support at run-time and build-time.
          Also specifies what Python to use. 'auto' is the default.
          'fully-internal' even forces the internal version for uses of Python
-         during the build (for testing purposes, mainly).]))
+         during the build.]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
@@ -7977,18 +7977,20 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 2.5 needed to build LO.
-# runtime requires Python 3 compatible version (>= 2.6)
+# Checking for a Python interpreter with version >= 2.6.
+# Build and runtime requires Python 3 compatible version (>= 2.6).
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     # This allows a lack of system python with no error, we use internal one in that case.
-    AM_PATH_PYTHON([2.5],, [:])
+    AM_PATH_PYTHON([2.6],, [:])
     # Clean PYTHON_VERSION checked below if cross-compiling
     PYTHON_VERSION=""
     if test "$PYTHON" != ":"; then
         PYTHON_FOR_BUILD=$PYTHON
+    else
+        enable_python=fully-internal
     fi
 fi
 AC_SUBST(PYTHON_FOR_BUILD)
@@ -8068,7 +8070,7 @@ if test $enable_python = system; then
         10.7|10.8)
             python_version=2.7;;
         *)
-            # ???
+            # 10.9 etc.
             python_version=2.7;;
         esac
         PYTHON=python$python_version
