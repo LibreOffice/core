@@ -11,6 +11,7 @@
 
 #include <map>
 #include <vector>
+#include <cstring>
 
 #include "osl/file.h"
 #include "osl/file.hxx"
