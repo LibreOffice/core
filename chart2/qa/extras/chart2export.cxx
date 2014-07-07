@@ -63,6 +63,9 @@ public:
     void testFdo78290ScatterChartMarkerX();
     void testFdo78290CombinationChartMarkerX();
     void testAxisNumberFormatODS();
+    void testfdo80996DOCX();
+    void testfdo80996XLSX();
+    void testfdo80996PPTX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -97,6 +100,9 @@ public:
     CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
     CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
     CPPUNIT_TEST(testAxisNumberFormatODS);
+    CPPUNIT_TEST(testfdo80996DOCX);
+    CPPUNIT_TEST(testfdo80996XLSX);
+    // CPPUNIT_TEST(testfdo80996PPTX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1007,6 +1013,33 @@ void Chart2ExportTest::testLabelStringODS()
 
     aLabelString = xLabelSeq->getSourceRangeRepresentation();
     CPPUNIT_ASSERT_EQUAL(OUString("\"LabelName\""), aLabelString);
+}
+
+void Chart2ExportTest::testfdo80996DOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo80996.docx");
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls");
+}
+
+void Chart2ExportTest::testfdo80996XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "fdo80996.xlsx");
+
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls");
+}
+
+void Chart2ExportTest::testfdo80996PPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "fdo80996.pptx");
+
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
