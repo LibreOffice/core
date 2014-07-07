@@ -1,6 +1,6 @@
---- a/a/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
-+++ b/b/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
-@@ -104,6 +104,9 @@
+--- a/a/nss/Makefile
++++ b/b/nss/Makefile
+@@ -69,6 +69,9 @@
  ifeq ($(OS_TARGET),WIN95)
  NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
  endif
@@ -10,9 +10,33 @@
  ifdef USE_DEBUG_RTL
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
+--- a/a/nspr/configure.in
++++ b/b/nspr/configure.in
+@@ -1374,7 +1374,9 @@
+             ;;
+     esac
+     if test "`echo $CC | grep -c '\-arch '`" = "0"; then
+-        CC="$CC -arch $CPU_ARCH"
++        if test "$CPU_ARCH" != "ppc"; then
++            CC="$CC -arch $CPU_ARCH"
++        fi
+     fi
+     AC_CHECK_HEADER(crt_externs.h)
+     DSO_CFLAGS=-fPIC
 --- a/a/nspr/configure
 +++ b/b/nspr/configure
-@@ -3888,7 +3889,7 @@
+@@ -3864,7 +3864,9 @@
+             ;;
+     esac
+     if test "`echo $CC | grep -c '\-arch '`" = "0"; then
+-        CC="$CC -arch $CPU_ARCH"
++        if test "$CPU_ARCH" != "ppc"; then
++            CC="$CC -arch $CPU_ARCH"
++        fi
+     fi
+     ac_safe=`echo "crt_externs.h" | sed 'y%./+-%__p_%'`
+ echo $ac_n "checking for crt_externs.h""... $ac_c" 1>&6
+@@ -3900,7 +3902,7 @@
  fi
  
      DSO_CFLAGS=-fPIC
@@ -23,7 +47,7 @@
      STRIP="$STRIP -x -S"
 --- a/a/nss/coreconf/Darwin.mk
 +++ b/b/nss/coreconf/Darwin.mk
-@@ -39,8 +39,12 @@
+@@ -7,8 +7,12 @@
  
  DEFAULT_COMPILER = gcc
  
@@ -38,7 +62,7 @@
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
-@@ -57,19 +57,25 @@
+@@ -19,11 +23,15 @@
  
  ifeq (,$(filter-out i%86,$(CPU_ARCH)))
  ifdef USE_64
@@ -54,17 +78,12 @@
  override CPU_ARCH	= x86
  endif
  else
- ifeq (arm,$(CPU_ARCH))
+@@ -31,17 +39,20 @@
  # Nothing set for arm currently.
  else
  OS_REL_CFLAGS	= -Dppc
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch ppc
-+endif
+-CC              += -arch ppc
  endif
- endif
- 
-@@ -64,12 +64,16 @@
  endif
  
  ifneq (,$(MACOS_SDK_DIR))
@@ -82,7 +101,7 @@
          # GCC <= 3
          DARWIN_SDK_FRAMEWORKS = -F$(MACOS_SDK_DIR)/System/Library/Frameworks
          ifneq (,$(shell find $(MACOS_SDK_DIR)/Library/Frameworks -maxdepth 0))
-@@ -150,7 +150,7 @@
+@@ -104,7 +115,7 @@
  # May override this with different compatibility and current version numbers.
  DARWIN_DYLIB_VERSIONS = -compatibility_version 1 -current_version 1
  # May override this with -bundle to create a loadable module.
