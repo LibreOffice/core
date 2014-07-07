@@ -111,12 +111,20 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 
     switch( nResult )
     {
+#if MACOSX_SDK_VERSION >= 101000
+    case NSModalResponseOK:
+#else
     case NSOKButton:
+#endif
         OSL_TRACE("Dialog returned with OK");
         retVal = ExecutableDialogResults::OK;
         break;
 
+#if MACOSX_SDK_VERSION >= 101000
+    case NSModalResponseCancel:
+#else
     case NSCancelButton:
+#endif
         OSL_TRACE("Dialog was cancelled!");
         retVal = ExecutableDialogResults::CANCEL;
         break;
