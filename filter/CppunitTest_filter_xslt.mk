@@ -9,11 +9,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,filter_xslt))
 
-$(eval $(call gb_CppunitTest_use_api,filter_xslt,\
-	offapi \
-	udkapi \
-))
-
+$(eval $(call gb_CppunitTest_use_sdk_api,filter_xslt))
 $(eval $(call gb_CppunitTest_use_ure,filter_xslt))
 $(eval $(call gb_CppunitTest_use_vcl,filter_xslt))
 
