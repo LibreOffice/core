@@ -1,0 +1,12 @@
+# -*- Mode: Diff -*-
+--- firebird/src/jrd/os/win32/mod_loader.cpp
++++ firebird/src/jrd/os/win32/mod_loader.cpp
+@@ -97,6 +97,8 @@
+ 					"mscvr100.dll",
+ #elif _MSC_VER == 1700
+ 					"mscvr110.dll",
++#elif _MSC_VER == 1800
++					"mscvr120.dll",
+ #else
+                     #error Specify CRT DLL name here !
+ #endif

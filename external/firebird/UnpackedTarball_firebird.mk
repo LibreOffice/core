@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-cygwin-msvc.patch.1 \
+	external/firebird/firebird-vs2013.patch.1 \
 ))
 endif
 
