@@ -30,12 +30,14 @@ namespace oox { class ModelObjectHelper; }
 namespace oox {
 namespace drawingml {
 
-
-
 /** Enumeration for various properties related to drawing shape formatting.
 
     This is an abstraction for shape formatting properties that have different
     names in various implementations, e.g. drawing shapes vs. chart objects.
+
+    If you *insert* ids into this list, then update spnCommonPropIds, spnLinearPropIds
+    and spnFilledPropIds of oox/source/drawingml/chart/objectformatter.cxx if
+    the newly inserted enum is inside the range they cover
  */
 enum ShapePropertyId
 {
@@ -68,8 +70,6 @@ enum ShapePropertyId
     SHAPEPROP_FillBitmapNameFromUrl,
     SHAPEPROP_END
 };
-
-
 
 struct OOX_DLLPUBLIC ShapePropertyInfo
 {
