@@ -49,13 +49,13 @@ namespace CPPU_CURRENT_NAMESPACE
 
 namespace arm
 {
-#if defined(__arm)
+#if defined(__arm) || defined(__i386)
     enum armlimits {
         MAX_GPR_REGS = 4,
         MAX_FPR_REGS = 8
     };
     bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
-#elif defined(__arm64)
+#elif defined(__arm64) || defined(__x86_64)
     enum armlimits {
         MAX_GPR_REGS = 8,
         MAX_FPR_REGS = 8
