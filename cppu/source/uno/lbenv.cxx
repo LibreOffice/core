@@ -1006,7 +1006,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     const OUString & rEnvDcp )
 {
-    OSL_ENSURE( pppEnvs && pnLen && memAlloc, "### null ptr!" );
+    assert(pppEnvs && pnLen && memAlloc && "### null ptr!");
 
     // max size
     uno_Environment ** ppFound = (uno_Environment **)alloca(
@@ -1144,7 +1144,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppEnv, "### null ptr!" );
+    assert(ppEnv && "### null ptr!");
     if (*ppEnv)
         (*(*ppEnv)->release)( *ppEnv );
 
@@ -1152,12 +1152,11 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
 }
 
-
 CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppEnv, "### null ptr!" );
+    assert(ppEnv && "### null ptr!");
     OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
 
     EnvironmentsData & rData = theEnvironmentsData::get();
@@ -1174,7 +1173,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
         }
     }
 }
-
 
 CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,

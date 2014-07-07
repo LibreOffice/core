@@ -82,7 +82,7 @@ VirtualMachine::~VirtualMachine()
 
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 {
-    OSL_ENSURE(pAttached != 0, "bad parameter");
+    assert(pAttached != 0 && "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
     if (n != JNI_OK && n != JNI_EDETACHED) {

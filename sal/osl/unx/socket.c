@@ -25,7 +25,7 @@
 #include <osl/signal.h>
 
 #include <rtl/alloc.h>
-
+#include <assert.h>
 #include <ctype.h>
 #include <sal/types.h>
 
@@ -552,8 +552,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     struct sockaddr* pAddr1 = NULL;
     struct sockaddr* pAddr2 = NULL;
 
-    OSL_ASSERT(Addr1);
-    OSL_ASSERT(Addr2);
+    assert(Addr1 && Addr2);
     pAddr1 = &(Addr1->m_sockaddr);
     pAddr2 = &(Addr2->m_sockaddr);
 

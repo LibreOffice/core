@@ -817,7 +817,7 @@ void InterfaceIdlClassImpl::initMembers()
 
         typelib_TypeDescription * pTD = 0;
         typelib_typedescriptionreference_getDescription( &pTD, ppAllMembers[nPos] );
-        OSL_ENSURE( pTD, "### cannot get type description!" );
+        assert(pTD && "### cannot get type description!");
         pSortedMemberInit[nIndex].first = ((typelib_InterfaceMemberTypeDescription *)pTD)->pMemberName;
         pSortedMemberInit[nIndex].second = pTD;
     }

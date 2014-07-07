@@ -2370,7 +2370,7 @@ void SfxViewFrame::StateView_Impl
         return;
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set with no Range");
+    assert(pRanges && "Set with no Range");
     while ( *pRanges )
     {
         for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )

@@ -2872,7 +2872,7 @@ void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
                                        const sal_Unicode * pEnd)
 {
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
+    assert(pBegin && pBegin <= pEnd &&
                "INetMIMEOutputSink::writeSequence(): Bad sequence");
 
     sal_Char * pBufferBegin = new sal_Char[pEnd - pBegin];

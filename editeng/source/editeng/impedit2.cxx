@@ -3223,7 +3223,7 @@ void ImpEditEngine::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int3
     if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
     {
         const EditLine* pLine = pPPortion->GetLines()[nLine];
-        OSL_ENSURE( pLine, "Line not found: GetLineBoundaries" );
+        assert(pLine && "Line not found: GetLineBoundaries");
         rStart = pLine->GetStart();
         rEnd   = pLine->GetEnd();
     }

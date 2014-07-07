@@ -456,7 +456,7 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
         aDestRange  ( rItem.aDestRange ),
         bNewSheet   ( rItem.bNewSheet )
 {
-    OSL_ENSURE(rItem.pSaveData, "pSaveData");
+    assert(rItem.pSaveData && "pSaveData");
     pSaveData = new ScDPSaveData(*rItem.pSaveData);
 }
 

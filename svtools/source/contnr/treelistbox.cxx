@@ -3813,22 +3813,19 @@ void SvTreeListBox::ExcecuteContextMenuAction( sal_uInt16 )
 
 void SvTreeListBox::EnableContextMenuHandling( void )
 {
-    DBG_ASSERT( pImp, "-SvTreeListBox::EnableContextMenuHandling(): No implementation!" );
-
+    assert(pImp && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
     pImp->bContextMenuHandling = true;
 }
 
 void SvTreeListBox::EnableContextMenuHandling( bool b )
 {
-    DBG_ASSERT( pImp, "-SvTreeListBox::EnableContextMenuHandling(): No implementation!" );
-
+    assert(pImp && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
     pImp->bContextMenuHandling = b;
 }
 
 bool SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
 {
-    DBG_ASSERT( pImp, "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!" );
-
+    assert(pImp && "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!");
     return pImp->bContextMenuHandling;
 }
 

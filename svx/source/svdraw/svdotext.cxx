@@ -1917,7 +1917,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if (IsAutoFit() && !mbInDownScale)
         {
-            OSL_ASSERT(pEdtOutl);
+            assert(pEdtOutl);
             mbInDownScale = true;
 
             // sucks that we cannot disable paints via

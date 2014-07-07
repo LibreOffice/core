@@ -459,7 +459,7 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
                                             sal_Int32** pValueList,
                                             sal_uInt32* pLen)
 {
-    OSL_PRECOND((pValueList != 0) && (pLen != 0), "registry::getLongListValue(): invalid parameter");
+    assert((pValueList != 0) && (pLen != 0) && "registry::getLongListValue(): invalid parameter");
     *pValueList = 0, *pLen = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);

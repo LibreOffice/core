@@ -131,7 +131,7 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
 
 StgAvlNode* StgAvlNode::RotLL()
 {
-    OSL_ENSURE( pLeft, "The pointer is not allowed to be NULL!" );
+    assert(pLeft && "The pointer is not allowed to be NULL!");
     StgAvlNode *pHeavy = pLeft;
     pLeft = pHeavy->pRight;
     pHeavy->pRight = this;
@@ -172,10 +172,9 @@ StgAvlNode* StgAvlNode::RotLR()
 }
 
 // perform RR rotation and return new root
-
 StgAvlNode* StgAvlNode::RotRR()
 {
-    OSL_ENSURE( pRight, "The pointer is not allowed to be NULL!" );
+    assert(pRight && "The pointer is not allowed to be NULL!" );
     StgAvlNode* pHeavy = pRight;
     pRight = pHeavy->pLeft;
     pHeavy->pLeft = this;
@@ -184,10 +183,9 @@ StgAvlNode* StgAvlNode::RotRR()
 }
 
 // perform the RL rotation and return the new root
-
 StgAvlNode* StgAvlNode::RotRL()
 {
-    OSL_ENSURE( pRight && pRight->pLeft, "The pointer is not allowed to be NULL!" );
+    assert(pRight && pRight->pLeft && "The pointer is not allowed to be NULL!");
     StgAvlNode* pHeavy = pRight;
     StgAvlNode* pNewRoot = pHeavy->pLeft;
     pHeavy->pLeft = pNewRoot->pRight;
@@ -297,7 +295,8 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
     short nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
     if( !nRes )
         return false;
-    OSL_ENSURE( pPivot && pPrev, "The pointers may not be NULL!" );
+
+    assert(pPivot && pPrev && "The pointers may not be NULL!");
 
     // add new node
     if( nRes < 0 )

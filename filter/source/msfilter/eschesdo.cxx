@@ -960,21 +960,18 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
     }
 }
 
-
 void ImplEscherExSdr::ImplWriteCurrentPage()
 {
-    DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer" );
+    assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer");
     ImplWritePage( *mpSolverContainer, NORMAL );
     ImplExitPage();
 }
 
-
 sal_uInt32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxmlExport )
 {
-    DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteShape: no SolverContainer" );
+    assert(mpSolverContainer && "ImplEscherExSdr::ImplWriteShape: no SolverContainer");
     return ImplWriteShape( rObj, *mpSolverContainer, NORMAL, ooxmlExport );
 }
-
 
 void EscherEx::AddSdrPage( const SdrPage& rPage )
 {

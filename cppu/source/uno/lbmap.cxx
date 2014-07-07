@@ -631,7 +631,7 @@ void SAL_CALL uno_getMappingByName(
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppMapping && pFrom && pTo, "### null ptr!" );
+    assert(ppMapping && pFrom && pTo && "### null ptr!");
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );

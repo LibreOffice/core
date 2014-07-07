@@ -49,7 +49,7 @@ namespace unopkg {
 
 OUString toString( OptionInfo const * info )
 {
-    OSL_ASSERT( info != 0 );
+    assert(info != 0);
     OUStringBuffer buf;
     buf.appendAscii("--");
     buf.appendAscii(info->m_name);
@@ -98,7 +98,7 @@ OptionInfo const * getOptionInfo(
 
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
-    OSL_ASSERT( option_info != 0 );
+    assert(option_info != 0);
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
 

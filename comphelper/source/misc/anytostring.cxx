@@ -61,7 +61,7 @@ void appendValue( OUStringBuffer & buf,
         buf.append( "void" );
         return;
     }
-    OSL_ASSERT( val != 0 );
+    assert(val != 0);
 
     if (prependType &&
         typeRef->eTypeClass != typelib_TypeClass_STRING &&

@@ -596,7 +596,7 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* p
 
 sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
 {
-    DBG_ASSERT(pView,"GetVisCount:No View");
+    assert(pView && "GetVisCount:No View");
     if( !pView->HasViewData() )
         return 0;
     if ( pView->nVisibleCount )

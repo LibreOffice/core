@@ -221,7 +221,7 @@ void Writer::sendRequest(
             typelib_InterfaceMethodTypeDescription * mtd =
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
                     member.get());
-            OSL_ASSERT(mtd->pInterface != 0);
+            assert(mtd->pInterface != 0);
             if (!t.is()) {
                 t = css::uno::TypeDescription(&mtd->pInterface->aBase);
             }

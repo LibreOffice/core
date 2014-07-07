@@ -86,10 +86,10 @@ private:
         virtual sal_uInt32  GetDepth () const SAL_OVERRIDE;
 };
 
-SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer) :
-        mpBmpBuffer (pBuffer)
+SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
+    : mpBmpBuffer(pBuffer)
 {
-    DBG_ASSERT (mpBmpBuffer, "SalPrinterBmp::SalPrinterBmp () can't acquire Bitmap");
+    assert(mpBmpBuffer && "SalPrinterBmp::SalPrinterBmp () can't acquire Bitmap");
 
     // calibrate scanline buffer
     if( BMP_SCANLINE_ADJUSTMENT( mpBmpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )

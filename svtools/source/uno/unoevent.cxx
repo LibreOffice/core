@@ -53,7 +53,7 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
         mpSupportedMacroItems(pSupportedMacroItems),
         mnMacroItems(0)
 {
-    DBG_ASSERT(pSupportedMacroItems != NULL, "Need a list of supported events!");
+    assert(pSupportedMacroItems != NULL && "Need a list of supported events!");
 
     for( ; mpSupportedMacroItems[mnMacroItems].mnEvent != 0; mnMacroItems++) ;
 }

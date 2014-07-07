@@ -216,8 +216,7 @@ void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence
 sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Sequence *pSequence2 )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( pSequence1 );
-    OSL_ASSERT( pSequence2 );
+    assert(pSequence1 && pSequence2);
     if (pSequence1 == pSequence2)
     {
         return sal_True;
