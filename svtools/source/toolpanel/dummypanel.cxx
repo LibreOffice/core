@@ -42,9 +42,6 @@ namespace svt
     }
 
 
-    IMPLEMENT_IREFERENCE( DummyPanel )
-
-
     void DummyPanel::Activate( Window& )
     {
     }

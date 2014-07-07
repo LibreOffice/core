@@ -92,9 +92,6 @@ namespace svt
     }
 
 
-    IMPLEMENT_IREFERENCE( TabDeckLayouter )
-
-
     TabItemContent TabDeckLayouter::GetTabItemContent() const
     {
         if ( lcl_checkDisposed( *m_pData ) )

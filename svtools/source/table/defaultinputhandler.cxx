@@ -32,7 +32,7 @@ namespace svt { namespace table
 {
 
 
-    typedef ::rtl::Reference< IMouseFunction >  PMouseFunction;
+    typedef ::rtl::Reference< MouseFunction >  PMouseFunction;
     typedef ::std::vector< PMouseFunction >     MouseFunctions;
     struct DefaultInputHandler_Impl
     {
@@ -61,7 +61,7 @@ namespace svt { namespace table
     namespace
     {
         bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
-            FunctionResult ( IMouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
+            FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
         {
             if ( i_impl.pActiveFunction.is() )
             {
@@ -118,19 +118,19 @@ namespace svt { namespace table
 
     bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseMove );
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseMove );
     }
 
 
     bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown );
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseDown );
     }
 
 
     bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp );
+        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseUp );
     }
 
 

@@ -24,7 +24,7 @@
 #include <svtools/toolpanel/decklayouter.hxx>
 #include <svtools/toolpanel/tabalignment.hxx>
 #include <svtools/toolpanel/tabitemcontent.hxx>
-#include <svtools/toolpanel/refbase.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <memory>
 
@@ -44,8 +44,7 @@ namespace svt
 
     //= TabDeckLayouter
 
-    class SVT_DLLPUBLIC TabDeckLayouter :public RefBase
-                                        ,public IDeckLayouter
+    class SVT_DLLPUBLIC TabDeckLayouter :public IDeckLayouter
                                         ,public ::boost::noncopyable
     {
     public:
@@ -82,9 +81,6 @@ namespace svt
                                 const size_t i_nChildIndex,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
                             ) SAL_OVERRIDE;
-
-        // IReference
-        DECLARE_IREFERENCE()
 
     private:
         ::std::auto_ptr< TabDeckLayouter_Data > m_pData;

@@ -87,15 +87,8 @@ inline bool hasFloatingChild(Window *pWindow)
 class AccessibleFactory :public ::toolkit::IAccessibleFactory
                         ,public ::svt::IAccessibleFactory
 {
-private:
-    oslInterlockedCount m_refCount;
-
 public:
     AccessibleFactory();
-
-    // IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     // ::toolkit::IAccessibleFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
@@ -228,28 +221,11 @@ protected:
 };
 
 AccessibleFactory::AccessibleFactory()
-    :m_refCount( 0 )
 {
 }
 
 AccessibleFactory::~AccessibleFactory()
 {
-}
-
-oslInterlockedCount SAL_CALL AccessibleFactory::acquire()
-{
-    return osl_atomic_increment( &m_refCount );
-}
-
-oslInterlockedCount SAL_CALL AccessibleFactory::release()
-{
-    if ( 0 == osl_atomic_decrement( &m_refCount ) )
-    {
-        delete this;
-        return 0;
-    }
-
-    return m_refCount;
 }
 
 Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar )

@@ -30,27 +30,6 @@ namespace svt { namespace table
 
 
 
-    //= MouseFunction
-
-
-    oslInterlockedCount MouseFunction::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount MouseFunction::release()
-    {
-        oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
-        if ( newCount == 0 )
-        {
-            delete this;
-            return 0;
-        }
-        return newCount;
-    }
-
-
     //= ColumnResize
 
 

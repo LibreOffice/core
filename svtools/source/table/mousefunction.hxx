@@ -23,6 +23,7 @@
 #include <svtools/table/tabletypes.hxx>
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -48,40 +49,18 @@ namespace svt { namespace table
     };
 
 
-    //= IMouseFunction
+    //= MouseFunction
 
-    class IMouseFunction : public ::rtl::IReference, public ::boost::noncopyable
+    class MouseFunction : public ::salhelper::SimpleReferenceObject, public ::boost::noncopyable
     {
     public:
+        MouseFunction() {}
         virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
         virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
 
     protected:
-        virtual ~IMouseFunction() { }
-    };
-
-
-    //= MouseFunction
-
-    class MouseFunction : public IMouseFunction
-    {
-    public:
-        MouseFunction()
-            :m_refCount( 0 )
-        {
-        }
-    protected:
-        virtual ~MouseFunction()
-        {
-        }
-
-    public:
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-    private:
-        oslInterlockedCount m_refCount;
+        virtual ~MouseFunction() { }
     };
 
 
@@ -96,7 +75,7 @@ namespace svt { namespace table
         }
 
     public:
-        // IMouseFunction
+        // MouseFunction
         virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
@@ -117,7 +96,7 @@ namespace svt { namespace table
         }
 
     public:
-        // IMouseFunction
+        // MouseFunction
         virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
@@ -138,7 +117,7 @@ namespace svt { namespace table
         }
 
     public:
-        // IMouseFunction
+        // MouseFunction
         virtual FunctionResult  handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseDown( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) SAL_OVERRIDE;

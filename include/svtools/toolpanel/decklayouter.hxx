@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <boost/optional.hpp>
 
@@ -40,7 +41,7 @@ namespace svt
 
     //= IDeckLayouter
 
-    class IDeckLayouter : public ::rtl::IReference
+    class IDeckLayouter : public salhelper::SimpleReferenceObject
     {
     public:
         /** re-arranges the elements of the tool deck, taking into account the
