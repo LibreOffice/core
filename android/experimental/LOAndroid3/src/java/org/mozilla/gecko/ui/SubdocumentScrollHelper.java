@@ -40,19 +40,9 @@ package org.mozilla.gecko.ui;
 
 import android.graphics.PointF;
 import android.os.Handler;
-import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mozilla.gecko.GeckoEventListener;
-
-class SubdocumentScrollHelper implements GeckoEventListener {
-    private static final String LOGTAG = "GeckoSubdocumentScrollHelper";
-
-    private static String MESSAGE_PANNING_OVERRIDE = "Panning:Override";
-    private static String MESSAGE_CANCEL_OVERRIDE = "Panning:CancelOverride";
-    private static String MESSAGE_SCROLL = "Gesture:Scroll";
-    private static String MESSAGE_SCROLL_ACK = "Gesture:ScrollAck";
+class SubdocumentScrollHelper  {
+    private static final String LOGTAG = SubdocumentScrollHelper.class.getSimpleName();
 
     private final PanZoomController mPanZoomController;
     private final Handler mUiHandler;
@@ -64,12 +54,7 @@ class SubdocumentScrollHelper implements GeckoEventListener {
 
     SubdocumentScrollHelper(PanZoomController controller) {
         mPanZoomController = controller;
-        // mUiHandler will be bound to the UI thread since that's where this constructor runs
         mUiHandler = new Handler();
-
-        //GeckoAppShell.registerGeckoEventListener(MESSAGE_PANNING_OVERRIDE, this);
-        //GeckoAppShell.registerGeckoEventListener(MESSAGE_CANCEL_OVERRIDE, this);
-        //GeckoAppShell.registerGeckoEventListener(MESSAGE_SCROLL_ACK, this);
     }
 
     boolean scrollBy(PointF displacement) {
@@ -84,15 +69,6 @@ class SubdocumentScrollHelper implements GeckoEventListener {
 
         mOverrideScrollAck = false;
         mOverrideScrollPending = false;
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("x", displacement.x);
-            json.put("y", displacement.y);
-        } catch (JSONException e) {
-            Log.e(LOGTAG, "Error forming subwindow scroll message: ", e);
-        }
-        //GeckoAppShell.sendEventToGecko(GeckoEvent.createBroadcastEvent(MESSAGE_SCROLL, json.toString()));
 
         return true;
     }
@@ -109,32 +85,4 @@ class SubdocumentScrollHelper implements GeckoEventListener {
         return mScrollSucceeded;
     }
 
-    // GeckoEventListener implementation
-
-    public void handleMessage(final String event, final JSONObject message) {
-        // this comes in on the gecko thread; hand off the handling to the UI thread
-        mUiHandler.post(new Runnable() {
-            public void run() {
-                Log.i(LOGTAG, "Got message: " + event);
-                try {
-                    if (MESSAGE_PANNING_OVERRIDE.equals(event)) {
-                        mOverridePanning = true;
-                        mOverrideScrollAck = true;
-                        mOverrideScrollPending = false;
-                        mScrollSucceeded = true;
-                    } else if (MESSAGE_CANCEL_OVERRIDE.equals(event)) {
-                        mOverridePanning = false;
-                    } else if (MESSAGE_SCROLL_ACK.equals(event)) {
-                        mOverrideScrollAck = true;
-                        mScrollSucceeded = message.getBoolean("scrolled");
-                        if (mOverridePanning && mOverrideScrollPending) {
-                            scrollBy(mPanZoomController.getDisplacement());
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e(LOGTAG, "Exception handling message", e);
-                }
-            }
-        });
-    }
 }
