@@ -52,8 +52,8 @@ class NodeMap
     iterator end() { return maImpl.end(); }
     const_iterator end() const { return maImpl.end(); }
 
-    rtl::Reference<Node> &operator[](const OUString &aStr) { return maImpl[aStr]; clearCache(); }
-    std::pair<iterator,bool> insert(const value_type &vt) { return maImpl.insert(vt); clearCache(); }
+    rtl::Reference<Node> &operator[](const OUString &aStr) { return maImpl[aStr]; /* clearCache(); */ }
+    std::pair<iterator,bool> insert(const value_type &vt) { return maImpl.insert(vt); /* clearCache(); */ }
     void clear() { maImpl.clear(); clearCache(); }
     void erase(const iterator &it) { maImpl.erase(it); clearCache(); }
     void erase(const OUString &aStr) { maImpl.erase(aStr); clearCache(); }
