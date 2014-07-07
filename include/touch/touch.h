@@ -106,7 +106,7 @@ typedef basegfx::B1DRange MLODpxSize;
 
 typedef long long MLORip;
 
-static const MLORip LO_TWIPS_TO_MLO_RIP_RATIO = 10L;
+static const MLORip LO_TWIPS_TO_MLO_RIP_RATIO = 1L;
 
 struct MLORipSize
 {
