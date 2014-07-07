@@ -60,12 +60,10 @@ public:
     virtual             ~AxisConverter();
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
-    void                convertFromModel(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
-                            TypeGroupConverter& rTypeGroup,
-                            const AxisModel* pCrossingAxis,
-                            sal_Int32 nAxesSetIdx,
-                            sal_Int32 nAxisIdx );
+    void convertFromModel(
+        const css::uno::Reference<css::chart2::XCoordinateSystem>& rxCoordSystem,
+        RefVector<TypeGroupConverter>& rTypeGroups, const AxisModel* pCrossingAxis,
+        sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx );
 };
 
 
