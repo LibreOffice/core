@@ -301,7 +301,7 @@ bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
         const Rectangle& aBoundRect = aRectangles[0];
         m_aDevice = basebmp::subsetBitmapDevice(
             m_aOrigDevice,
-            basegfx::B2IBox(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+            basegfx::B2IBox(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right() + 1,aBoundRect.Bottom() + 1) );
 
         m_bClipSetup = true;
     }
