@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
@@ -29,7 +30,7 @@
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
@@ -605,12 +606,27 @@ void SvXMLEmbeddedObjectHelper::Flush()
 }
 
 // XGraphicObjectResolver: alien objects!
-OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const OUString& aURL )
+OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL(const OUString& rURL)
     throw(RuntimeException, std::exception)
 {
     MutexGuard          aGuard( maMutex );
 
-    return ImplInsertEmbeddedObjectURL( aURL );
+    OUString sRet;
+    try
+    {
+        sRet = ImplInsertEmbeddedObjectURL(rURL);
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        throw WrappedTargetRuntimeException(
+            "SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL non-RuntimeException",
+            static_cast<uno::XWeak*>(this), uno::makeAny(e));
+    }
+    return sRet;
 }
 
 // XNameAccess: alien objects!
