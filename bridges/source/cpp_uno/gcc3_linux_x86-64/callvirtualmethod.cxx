@@ -48,20 +48,14 @@
 void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     void * pThis, sal_uInt32 nVtableIndex, void * pRegisterReturn,
     typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
-    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, double * pFPR,
-    sal_uInt32 nFPR)
+    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, double * pFPR)
 {
-    // Should not happen, but...
-    if ( nFPR > x86_64::MAX_SSE_REGS )
-        nFPR = x86_64::MAX_SSE_REGS;
-
     // Work around Clang -fsanitize=address "inline assembly requires more
     // registers than available" error:
     struct Data {
         sal_uInt64 pMethod;
         sal_uInt64 * pGPR;
         double * pFPR;
-        sal_uInt64 nFPR;
         // Return values:
         sal_uInt64 rax;
         sal_uInt64 rdx;
@@ -70,7 +64,6 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     } data;
     data.pGPR = pGPR;
     data.pFPR = pFPR;
-    data.nFPR = nFPR;
 
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
@@ -113,14 +106,13 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
 
         // Perform the call
         "movq 0%0, %%r11\n\t"
-        "movq 24%0, %%rax\n\t"
         "call *%%r11\n\t"
 
         // Fill the return values
-        "movq   %%rax, 32%0\n\t"
-        "movq   %%rdx, 40%0\n\t"
-        "movsd %%xmm0, 48%0\n\t"
-        "movsd %%xmm1, 56%0\n\t"
+        "movq   %%rax, 24%0\n\t"
+        "movq   %%rdx, 32%0\n\t"
+        "movsd %%xmm0, 40%0\n\t"
+        "movsd %%xmm1, 48%0\n\t"
         :: "o" (data),
           "m" ( pCallStack ) // dummy input to prevent the compiler from optimizing the alloca out
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r10", "r11",

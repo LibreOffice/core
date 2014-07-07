@@ -232,8 +232,7 @@ static void cpp_call(
                 pAdjustedThisPtr, aVtableSlot.index,
                 pCppReturn, pReturnTypeRef, bSimpleReturn,
                 pStackStart, ( pStack - pStackStart ),
-                pGPR,
-                pFPR, nFPR );
+                pGPR, pFPR );
         } catch (const Exception &) {
             throw;
         } catch (const std::exception & e) {
