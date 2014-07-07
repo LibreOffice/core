@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <cassert>
 
@@ -435,7 +435,7 @@ public:
     VolumeInfo( sal_uInt32 nMask )
         : _nMask( nMask )
     {
-        memset( &_aInfo, 0, sizeof( oslVolumeInfo ));
+        std::memset( &_aInfo, 0, sizeof( oslVolumeInfo ));
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
@@ -683,7 +683,7 @@ public:
     FileStatus(sal_uInt32 nMask)
         : _nMask(nMask)
     {
-        memset(&_aStatus, 0, sizeof(_aStatus));
+        std::memset(&_aStatus, 0, sizeof(_aStatus));
         _aStatus.uStructSize = sizeof(_aStatus);
     }
 
