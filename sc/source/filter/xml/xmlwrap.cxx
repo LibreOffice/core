@@ -210,7 +210,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            OStringBuffer aError("SAX parse exception catched while importing:\n");
+            OStringBuffer aError("SAX parse exception caught while importing:\n");
             aError.append(OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL(aError.getStr());
 #endif
@@ -246,7 +246,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            OStringBuffer aError("SAX exception catched while importing:\n");
+            OStringBuffer aError("SAX exception caught while importing:\n");
             aError.append(OUStringToOString(r.Message,
                 RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL(aError.getStr());
@@ -259,7 +259,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     catch( const packages::zip::ZipIOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("Zip exception catched while importing:\n");
+        OStringBuffer aError("Zip exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL( aError.getStr() );
@@ -271,7 +271,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     catch( const io::IOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("IO exception catched while importing:\n");
+        OStringBuffer aError("IO exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -283,7 +283,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     catch( const uno::Exception& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("uno exception catched while importing:\n");
+        OStringBuffer aError("uno exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
