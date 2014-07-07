@@ -4953,7 +4953,9 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
         // If the table is wider than the text area, then don't create a fly
         // for the table: no wrapping will be performed anyway, but multi-page
         // tables will be broken.
-        pTabPos->bNoFly = nTableWidth >= nTextAreaWidth;
+        // If there are columns, do create a fly, as the flow of the columns
+        // would otherwise restrict the table.
+        pTabPos->bNoFly = nTableWidth >= nTextAreaWidth  && maSectionManager.CurrentSectionColCount() < 2;
     }
     return bRet;
 }

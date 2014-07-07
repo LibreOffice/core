@@ -913,8 +913,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         // tables will be broken.
         // If the position is relative to the edge of the page, then we always
         // create the fly.
+        // If there are columns, always create the fly, otherwise the columns would
+        // restrict geometry of the table.
         if ( ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME ) ||
-             ( rInfo.m_nTableWidth < nTextAreaWidth ) )
+             ( rInfo.m_nTableWidth < nTextAreaWidth ) || ColumnCount() + 1 >= 2 )
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();

@@ -2290,6 +2290,13 @@ DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-columns.docx")
+{
+    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
+    // table width was restricted by a column
+    CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
