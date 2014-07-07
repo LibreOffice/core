@@ -38,7 +38,7 @@ namespace rtl
 #undef rtl
 #endif
 
-namespace internal
+namespace libreoffice_internal
 {
 /*
 These templates use SFINAE (Substitution failure is not an error) to help distinguish the various

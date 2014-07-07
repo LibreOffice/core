@@ -147,12 +147,12 @@ public:
     }
 
     template< typename T >
-    OUStringBuffer( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    OUStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
         : pData(NULL)
-        , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
+        , nCapacity( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -164,7 +164,7 @@ public:
      * @internal
      */
     template< typename T >
-    OUStringBuffer( T&, typename internal::ExceptConstCharArrayDetector< T >::Type = internal::Dummy() )
+    OUStringBuffer( T&, typename libreoffice_internal::ExceptConstCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
         pData = 0;
         nCapacity = 10;
@@ -176,7 +176,7 @@ public:
      * @internal
      */
     template< typename T >
-    OUStringBuffer( const T&, typename internal::ExceptCharArrayDetector< T >::Type = internal::Dummy() )
+    OUStringBuffer( const T&, typename libreoffice_internal::ExceptCharArrayDetector< T >::Type = libreoffice_internal::Dummy() )
     {
         pData = 0;
         nCapacity = 10;
@@ -485,11 +485,11 @@ public:
         @since LibreOffice 3.6
      */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
+    typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
-            internal::ConstCharArrayDetector< T, void >::size - 1 );
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -581,8 +581,8 @@ public:
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* and sal_Unicode* overloads, which are handled elsewhere).
     template< typename T >
-    typename internal::Enable< void,
-        !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
+    typename libreoffice_internal::Enable< void,
+        !libreoffice_internal::CharPtrDetector< T* >::ok && !libreoffice_internal::SalUnicodePtrDetector< T* >::ok >::Type
         append( T* ) SAL_DELETED_FUNCTION;
     /// @endcond
 
@@ -806,11 +806,11 @@ public:
         @since LibreOffice 3.6
      */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, offset, literal,
-            internal::ConstCharArrayDetector< T, void >::size - 1 );
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -1189,12 +1189,12 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal,
-            internal::ConstCharArrayDetector< T, void >::size - 1);
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
         return ret < 0 ? ret : ret + fromIndex;
     }
 
@@ -1252,11 +1252,11 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_lastIndexOfAscii_WithLength(
-            pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
+            pData->buffer, pData->length, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
     }
 
     /**

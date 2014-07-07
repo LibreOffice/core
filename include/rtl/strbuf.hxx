@@ -157,7 +157,7 @@ public:
         @since LibreOffice 3.6
      */
     template< typename T >
-    OStringBuffer( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy())
+    OStringBuffer( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
         : pData(NULL)
     {
         sal_Int32 length = rtl_str_getLength( value );
@@ -166,7 +166,7 @@ public:
     }
 
     template< typename T >
-    OStringBuffer( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy())
+    OStringBuffer( T& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
         : pData(NULL)
     {
         sal_Int32 length = rtl_str_getLength( value );
@@ -186,12 +186,12 @@ public:
       @param    literal       a string literal
     */
     template< typename T >
-    OStringBuffer( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy())
+    OStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy())
         : pData(NULL)
-        , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
+        , nCapacity( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_string_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -451,13 +451,13 @@ public:
         @return  this string buffer.
      */
     template< typename T >
-    typename internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
+    typename libreoffice_internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
     {
         return append( str, rtl_str_getLength( str ) );
     }
 
     template< typename T >
-    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
+    typename libreoffice_internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
     {
         return append( str, rtl_str_getLength( str ) );
     }
@@ -468,11 +468,11 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
+    typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -556,8 +556,8 @@ public:
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* overload, which is handled elsewhere).
     template< typename T >
-    typename internal::Enable< void,
-        !internal::CharPtrDetector< T* >::ok >::Type
+    typename libreoffice_internal::Enable< void,
+        !libreoffice_internal::CharPtrDetector< T* >::ok >::Type
         append( T* ) SAL_DELETED_FUNCTION;
     /// @endcond
 
@@ -684,13 +684,13 @@ public:
         @return     this string buffer.
      */
     template< typename T >
-    typename internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
+    typename libreoffice_internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
     {
         return insert( offset, str, rtl_str_getLength( str ) );
     }
 
     template< typename T >
-    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& str )
+    typename libreoffice_internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& str )
     {
         return insert( offset, str, rtl_str_getLength( str ) );
     }
@@ -701,11 +701,11 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    typename libreoffice_internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 

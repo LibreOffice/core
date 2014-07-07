@@ -156,14 +156,14 @@ public:
       @param    value       a NULL-terminated character array.
     */
     template< typename T >
-    OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    OString( const T& value, typename libreoffice_internal::CharPtrDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
 
     template< typename T >
-    OString( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    OString( T& value, typename libreoffice_internal::NonConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
@@ -180,14 +180,14 @@ public:
       @param    literal       a string literal
     */
     template< typename T >
-    OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    OString( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
     {
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         pData = 0;
-        if( internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
+        if( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
             rtl_string_new( &pData );
         else
-            rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
+            rtl_string_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -276,14 +276,14 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal )
+    typename libreoffice_internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal )
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        if( internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        if( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 == 0 ) // empty string
             rtl_string_new( &pData );
         else
-            rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
+            rtl_string_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
 
@@ -513,13 +513,13 @@ public:
                 false, otherwise.
     */
     template< typename T >
-    typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const
+    typename libreoffice_internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
 
     template< typename T >
-    typename internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const
+    typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
@@ -530,14 +530,14 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        if ( pData->length != libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 )
             return false;
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
-                                                          literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+                                                          literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -595,13 +595,13 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_str_shortenedCompare_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex,
-            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1) == 0;
+            literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1) == 0;
     }
 
     /**
@@ -668,12 +668,12 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+            literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -704,13 +704,13 @@ public:
      @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
         T & literal, OString * rest = 0) const
     {
         RTL_STRING_CONST_FUNCTION
         bool b = match(literal, 0);
         if (b && rest != 0) {
-            *rest = copy(internal::ConstCharArrayDetector< T, void >::size - 1);
+            *rest = copy(libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
         }
         return b;
     }
@@ -744,18 +744,18 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith(
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type endsWith(
         T & literal, OString * rest = 0) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        bool b = internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
-            && match(literal, getLength() - ( internal::ConstCharArrayDetector< T, void >::size - 1 ));
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        bool b = libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
+            && match(literal, getLength() - ( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 ));
         if (b && rest != 0) {
             *rest = copy(
                 0,
                 (getLength()
-                 - (internal::ConstCharArrayDetector< T, void >::size - 1)));
+                 - (libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1)));
         }
         return b;
     }
@@ -792,25 +792,25 @@ public:
                         { return rStr1.compareTo( rStr2 ) >= 0; }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value )
+    friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value )
     {
         return rStr1.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value )
+    friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value )
     {
         return rStr1.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 )
+    friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 )
     {
         return rStr2.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 )
+    friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 )
     {
         return rStr2.compareTo( value ) == 0;
     }
@@ -821,13 +821,13 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal )
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        return rStr.getLength() == libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1
             && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
-                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+                libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -836,35 +836,35 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr )
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        return rStr.getLength() == libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1
             && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
-                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+                libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value )
+    friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value )
     {
         return !(operator == ( rStr1, value ));
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value )
+    friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value )
     {
         return !(operator == ( rStr1, value ));
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 )
+    friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 )
     {
         return !(operator == ( value, rStr2 ));
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 )
+    friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 )
     {
         return !(operator == ( value, rStr2 ));
     }
@@ -875,7 +875,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal )
     {
         return !( rStr == literal );
     }
@@ -886,7 +886,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr )
     {
         return !( literal == rStr );
     }
@@ -981,12 +981,12 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
+    typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         sal_Int32 n = rtl_str_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
+            pData->buffer + fromIndex, pData->length - fromIndex, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
         return n < 0 ? n : n + fromIndex;
     }
 
