@@ -359,7 +359,7 @@ class ControllerProperties
         aPreviewFrame.size.width -= 2*(aMargins.width+1);
         aPreviewFrame.size.height -= 61;
         mpPreview = [[NSImageView alloc] initWithFrame: aPreviewFrame];
-        [mpPreview setImageScaling: NSScaleProportionally];
+        [mpPreview setImageScaling: NSImageScaleProportionallyDown];
         [mpPreview setImageAlignment: NSImageAlignCenter];
         [mpPreview setImageFrameStyle: NSImageFrameNone];
         [mpPreviewBox addSubview: [mpPreview autorelease]];
