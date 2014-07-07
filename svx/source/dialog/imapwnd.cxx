@@ -55,8 +55,8 @@ using ::com::sun::star::uno::Reference;
 
 #define TRANSCOL Color( COL_WHITE )
 
-IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame ) :
-            GraphCtrl( pParent, rResId ),
+IMapWindow::IMapWindow( Window* pParent, WinBits nBits, const Reference< XFrame >& rxDocumentFrame ) :
+            GraphCtrl( pParent, nBits ),
             DropTargetHelper( this ),
             mxDocumentFrame( rxDocumentFrame )
 {

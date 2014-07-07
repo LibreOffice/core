@@ -131,7 +131,7 @@ protected:
 
 public:
 
-                        IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
+                        IMapWindow( Window* pParent, WinBits nBits, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         virtual ~IMapWindow();
 
     bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );

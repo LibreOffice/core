@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/fontworkgallerydialog \
 	svx/uiconfig/ui/fontworkspacingdialog \
 	svx/uiconfig/ui/headfootformatpage \
+	svx/uiconfig/ui/imapdialog \
 	svx/uiconfig/ui/linkwarndialog \
 	svx/uiconfig/ui/namespacedialog \
 	svx/uiconfig/ui/optgridpage \
