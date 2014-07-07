@@ -64,6 +64,7 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     protected ViewportMetrics mGeckoViewport;
     /* The viewport that Gecko will display when drawing is finished */
     protected ViewportMetrics mNewGeckoViewport;
+    protected LayerController mLayerController;
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;

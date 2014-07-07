@@ -37,8 +37,10 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.libreoffice.LOKitShell;
 import android.graphics.Color;
+
+import org.libreoffice.DirectBufferAllocator;
+
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
@@ -61,7 +63,7 @@ public class CheckerboardImage extends CairoImage {
     /** Creates a new checkerboard image. */
     public CheckerboardImage() {
         int bpp = CairoUtils.bitsPerPixelForCairoFormat(FORMAT);
-        mBuffer = LOKitShell.allocateDirectBuffer(SIZE * SIZE * bpp / 8);
+        mBuffer = DirectBufferAllocator.allocate(SIZE * SIZE * bpp / 8);
         update(true, Color.WHITE);
     }
 
@@ -145,7 +147,7 @@ public class CheckerboardImage extends CairoImage {
     protected void finalize() throws Throwable {
         try {
             if (mBuffer != null) {
-                LOKitShell.freeDirectBuffer(mBuffer);
+                DirectBufferAllocator.free(mBuffer);
             }
         } finally {
             super.finalize();

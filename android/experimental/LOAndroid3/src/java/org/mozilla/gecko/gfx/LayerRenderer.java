@@ -39,21 +39,9 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.libreoffice.LOKitShell;
-import org.mozilla.gecko.gfx.BufferedCairoImage;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.Layer.RenderContext;
-import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.NinePatchTileLayer;
-import org.mozilla.gecko.gfx.SingleTileLayer;
-import org.mozilla.gecko.gfx.TextureReaper;
-import org.mozilla.gecko.gfx.TextureGenerator;
-import org.mozilla.gecko.gfx.TextLayer;
-import org.mozilla.gecko.gfx.TileLayer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
@@ -61,16 +49,19 @@ import android.graphics.RegionIterator;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+
+import org.libreoffice.DirectBufferAllocator;
+import org.mozilla.gecko.gfx.Layer.RenderContext;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * The layer renderer implements the rendering logic for a layer view.
@@ -186,7 +177,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         // Initialize the FloatBuffer that will be used to store all vertices and texture
         // coordinates in draw() commands.
-        ByteBuffer byteBuffer = LOKitShell.allocateDirectBuffer(COORD_BUFFER_SIZE * 4);
+        ByteBuffer byteBuffer = DirectBufferAllocator.allocate(COORD_BUFFER_SIZE * 4);
         byteBuffer.order(ByteOrder.nativeOrder());
         mCoordBuffer = byteBuffer.asFloatBuffer();
     }

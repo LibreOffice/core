@@ -47,7 +47,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 
-import org.libreoffice.LOKitShell;
+import org.libreoffice.DirectBufferAllocator;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.nio.ByteBuffer;
@@ -128,7 +128,7 @@ public class ScrollbarLayer extends TileLayer {
         // just create an empty image for now, it will get drawn
         // on demand anyway
         int imageSize = IntSize.nextPowerOfTwo(BAR_SIZE);
-        ByteBuffer buffer = LOKitShell.allocateDirectBuffer(imageSize * imageSize * 4);
+        ByteBuffer buffer = DirectBufferAllocator.allocate(imageSize * imageSize * 4);
         CairoImage image = new BufferedCairoImage(buffer, imageSize, imageSize,
                 CairoImage.FORMAT_ARGB32);
         return new ScrollbarLayer(image, vertical, buffer);
@@ -136,8 +136,9 @@ public class ScrollbarLayer extends TileLayer {
 
     protected void finalize() throws Throwable {
         try {
-            if (!mFinalized && mBuffer != null)
-                LOKitShell.freeDirectBuffer(mBuffer);
+            if (!mFinalized && mBuffer != null) {
+                DirectBufferAllocator.free(mBuffer);
+            }
             mFinalized = true;
         } finally {
             super.finalize();

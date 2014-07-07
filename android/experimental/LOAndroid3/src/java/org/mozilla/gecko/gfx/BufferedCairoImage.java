@@ -39,7 +39,7 @@ package org.mozilla.gecko.gfx;
 
 import android.graphics.Bitmap;
 
-import org.libreoffice.LOKitShell;
+import org.libreoffice.DirectBufferAllocator;
 
 import java.nio.ByteBuffer;
 
@@ -71,15 +71,16 @@ public class BufferedCairoImage extends CairoImage {
         mSize = new IntSize(bitmap.getWidth(), bitmap.getHeight());
         mNeedToFreeBuffer = true;
         // XXX Why is this * 4? Shouldn't it depend on mFormat?
-        mBuffer = LOKitShell.allocateDirectBuffer(mSize.getArea() * 4);
+        mBuffer = DirectBufferAllocator.allocate(mSize.getArea() * 4);
 
         bitmap.copyPixelsToBuffer(mBuffer.asIntBuffer());
     }
 
     protected void finalize() throws Throwable {
         try {
-            if (mNeedToFreeBuffer && mBuffer != null)
-                LOKitShell.freeDirectBuffer(mBuffer);
+            if (mNeedToFreeBuffer && mBuffer != null) {
+                DirectBufferAllocator.free(mBuffer);
+            }
             mNeedToFreeBuffer = false;
             mBuffer = null;
         } finally {
