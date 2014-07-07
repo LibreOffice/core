@@ -27,19 +27,6 @@ namespace xmloff
     {
     }
 
-    oslInterlockedCount SAL_CALL PropertyHandlerBase::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-    oslInterlockedCount SAL_CALL PropertyHandlerBase::release()
-    {
-        oslInterlockedCount decremented = osl_atomic_decrement( &m_refCount );
-        if ( 0 == decremented )
-            delete this;
-        return decremented;
-    }
-
 } // namespace xmloff
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <map>
 #include <vector>
@@ -35,7 +36,7 @@ namespace xmloff
     typedef ::std::map< PropertyId, ::com::sun::star::uno::Any >    PropertyValues;
 
     //= IPropertyHandler
-    class IPropertyHandler : public ::rtl::IReference
+    class IPropertyHandler : public ::salhelper::SimpleReferenceObject
     {
     public:
         /** retrieves the XML attribute value for the given property values

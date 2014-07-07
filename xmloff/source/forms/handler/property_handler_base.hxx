@@ -22,8 +22,6 @@
 
 #include "forms/property_handler.hxx"
 
-#include <osl/interlck.h>
-
 namespace xmloff
 {
 
@@ -31,19 +29,9 @@ namespace xmloff
     class PropertyHandlerBase : public IPropertyHandler
     {
     protected:
-        PropertyHandlerBase()
-            :m_refCount( 0 )
-        {
-        }
+        PropertyHandlerBase() {}
 
         virtual ~PropertyHandlerBase();
-
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-    private:
-        oslInterlockedCount m_refCount;
     };
 
 } // namespace xmloff
