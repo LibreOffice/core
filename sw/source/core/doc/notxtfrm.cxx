@@ -77,6 +77,8 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <svtools/filter.hxx>
 
 using namespace com::sun::star;
 
