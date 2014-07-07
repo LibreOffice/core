@@ -803,15 +803,15 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 {
-    SvColorDialog* pColorDlg = new SvColorDialog( GetParentDialog() );
+    SvColorDialog pColorDlg( GetParentDialog() );
 
-    pColorDlg->SetColor (aCurrentColor);
-    pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );
+    pColorDlg.SetColor (aCurrentColor);
+    pColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
 
-    if( pColorDlg->Execute() == RET_OK )
+    if( pColorDlg.Execute() == RET_OK )
     {
         sal_uInt16 nK = 0;
-        Color aPreviewColor = pColorDlg->GetColor();
+        Color aPreviewColor = pColorDlg.GetColor();
         aCurrentColor = aPreviewColor;
         if (eCM != CM_RGB)
         {
@@ -836,7 +836,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 
         m_pCtlPreviewNew->Invalidate();
     }
-    delete( pColorDlg );
 
     return 0;
 }
