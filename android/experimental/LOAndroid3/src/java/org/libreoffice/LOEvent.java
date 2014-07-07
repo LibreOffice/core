@@ -1,7 +1,6 @@
 package org.libreoffice;
 
 import android.graphics.Rect;
-import android.util.Log;
 
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.ViewportMetrics;
@@ -20,9 +19,9 @@ public class LOEvent {
 
     ViewportMetrics viewportMetrics;
 
-    public LOEvent(int type, int width, int height, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
+    public LOEvent(int type, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
         mType = type;
-        mTypeString = "Size Changed";
+        mTypeString = "Size Changed: " + widthPixels + " "+ heightPixels;
     }
 
     public LOEvent(int type, IntSize tileSize) {
@@ -45,8 +44,8 @@ public class LOEvent {
         return new LOEvent(DRAW, rect);
     }
 
-    public static LOEvent sizeChanged(int width, int height, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
-        return new LOEvent(SIZE_CHANGED, width, height, widthPixels, heightPixels, tileWidth, tileHeight);
+    public static LOEvent sizeChanged(int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
+        return new LOEvent(SIZE_CHANGED, widthPixels, heightPixels, tileWidth, tileHeight);
     }
 
     public static LOEvent tileSize(IntSize tileSize) {
