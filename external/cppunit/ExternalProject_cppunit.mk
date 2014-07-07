@@ -17,7 +17,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
 	    PROFILEFLAGS="$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) \
+			$(if $(filter 110 120,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) \
 				/p:VisualStudioVersion=11.0)" \
 		&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=$${PROFILEFLAGS}  \
 		&& cd ../DllPlugInTester \
