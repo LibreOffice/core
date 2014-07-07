@@ -239,6 +239,7 @@ public:
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
+    sal_Int16 ColumnCount() const { return m_nColumnCount; }
     void SetColumnDistance( sal_Int32 nDist ) { m_nColumnDistance = nDist; }
     void AppendColumnWidth( sal_Int32 nWidth ) { m_aColWidth.push_back( nWidth ); }
     void AppendColumnSpacing( sal_Int32 nDist ) {m_aColDistance.push_back( nDist ); }
