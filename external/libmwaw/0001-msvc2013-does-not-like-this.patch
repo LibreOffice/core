@@ -1,0 +1,25 @@
+From f61d5c4ba6812aac5539084f6b23816fbb51b132 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Mon, 7 Jul 2014 19:37:25 +0200
+Subject: [PATCH] msvc2013 does not like this
+
+---
+ src/lib/RagTimeParser.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/RagTimeParser.cxx b/src/lib/RagTimeParser.cxx
+index 2fb8e41..0f7d9e8 100644
+--- a/src/lib/RagTimeParser.cxx
++++ b/src/lib/RagTimeParser.cxx
+@@ -2404,7 +2404,7 @@ bool RagTimeParser::sendPicture(int zId, MWAWPosition const &position)
+     }
+     input->seek(pict.m_pos.begin(), librevenge::RVNG_SEEK_SET);
+     shared_ptr<MWAWPict> thePict(MWAWPictData::get(input, pictSize));
+-    bool ok=thePict;
++    bool ok=bool(thePict);
+     if (ok) {
+       librevenge::RVNGBinaryData data;
+       std::string type;
+-- 
+1.9.3
+
