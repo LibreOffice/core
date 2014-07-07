@@ -23,6 +23,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <swundo.hxx>

@@ -1397,7 +1397,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         if (SdrObject *pObject = ReadGrafPrimitive( nLeft, &aDo, aSet ))
         {
             pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
-            SwFrmFmt *pFrm = rDoc.InsertDrawObj( *pPaM, *pObject, aSet );
+            SwFrmFmt *pFrm = rDoc.getIDocumentContentOperations().InsertDrawObj( *pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
             pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFrm);
         }
@@ -2659,7 +2659,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 pWWZOrder->InsertTextLayerObject(pObject);
             }
 
-            pRetFrmFmt = rDoc.InsertDrawObj(*pPaM, *pObject, aFlySet );
+            pRetFrmFmt = rDoc.getIDocumentContentOperations().InsertDrawObj(*pPaM, *pObject, aFlySet );
 
             OSL_ENSURE(pRetFrmFmt->GetAnchor().GetAnchorId() ==
                 eAnchor, "Not the anchor type requested!");
@@ -2979,7 +2979,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             // as a linked graphic -
             if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
             {
-                pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, OUString(), 0,
+                pRetFrmFmt = rDoc.getIDocumentContentOperations().Insert(*pPaM, aGrfName, OUString(), 0,
                     &rFlySet, &aGrSet, NULL);
                 bDone = true;
             }
@@ -2987,7 +2987,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         if (!bDone)
         {
             const Graphic& rGraph = pGrf->GetGraphic();
-            pRetFrmFmt = rDoc.Insert(*pPaM, OUString(), OUString(), &rGraph,
+            pRetFrmFmt = rDoc.getIDocumentContentOperations().Insert(*pPaM, OUString(), OUString(), &rGraph,
                 &rFlySet, &aGrSet, NULL);
         }
     }

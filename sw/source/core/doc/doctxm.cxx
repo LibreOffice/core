@@ -539,7 +539,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
                    TOX'. Append text node behind TOX' section. */
 
                 SwPosition aInsPos(*pMyNode->EndOfSectionNode());
-                AppendTxtNode(aInsPos);
+                getIDocumentContentOperations().AppendTxtNode(aInsPos);
 
                 SwPaM aTmpPam1(aInsPos);
                 aSearchPam = aTmpPam1;

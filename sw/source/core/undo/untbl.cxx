@@ -1009,7 +1009,6 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
         : nLineCount;
 
     SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
-<<<<<<< HEAD
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     size_t n = 0;
     for( ; n < aParent.GetTabLines().size(); ++n )
@@ -1793,7 +1792,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         // first disconnect box from node, otherwise ~SwTableBox would
         // access pBox->pSttNd, deleted by DeleteSection
         aDelNodes[i].first->RemoveFromTable();
-        rDoc.DeleteSection(rDoc.GetNodes()[ aDelNodes[i].second ]);
+        rDoc.getIDocumentContentOperations().DeleteSection(rDoc.GetNodes()[ aDelNodes[i].second ]);
     }
 
     // Remove boxes from table structure
@@ -2063,7 +2062,7 @@ CHECKTABLE(pTblNd->GetTable())
             }
 
             delete pBox;
-            rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
+            rDoc.getIDocumentContentOperations().DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
     }
 CHECKTABLE(pTblNd->GetTable())
@@ -2101,7 +2100,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-    pDoc->MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
+    pDoc->getIDocumentContentOperations().MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
         IDocumentContentOperations::DOC_NO_DELFRMS :
         IDocumentContentOperations::DOC_MOVEDEFAULT );
     ++aTmp;

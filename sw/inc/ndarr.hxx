@@ -64,6 +64,8 @@ class SwUndoTblToTxt;
 class SwUndoTxtToTbl;
 struct SwPosition;
 
+namespace sw { class DocumentContentOperationsManager; }
+
 // class SwNodes
 
 typedef SwNode * SwNodePtr;
@@ -88,6 +90,7 @@ class SW_DLLPUBLIC SwNodes
     friend class SwDoc;
     friend class SwNode;
     friend class SwNodeIndex;
+    friend class ::sw::DocumentContentOperationsManager;
 
     SwNodeIndex* pRoot;                 ///< List of all indices on nodes.
 

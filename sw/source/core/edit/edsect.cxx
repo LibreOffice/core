@@ -20,6 +20,7 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
@@ -415,7 +416,7 @@ bool SwEditShell::DoSpecialInsert()
         SwPosition aInsertPos( aInsertIndex );
 
         // insert a new text node, and set the cursor
-        bRet = GetDoc()->AppendTxtNode( aInsertPos );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aInsertPos );
         *pCursorPos = aInsertPos;
 
         // call AttrChangeNotify for the UI

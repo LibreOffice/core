@@ -1152,7 +1152,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp) ?
                 ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0 );
-        rCursor.GetDoc()->ReplaceRange( *pCrsr,
+        rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,
             bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
@@ -1177,7 +1177,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         // they are not in ReplaceSet
         if( !pSet->Count() )
         {
-            pCrsr->GetDoc()->InsertItemSet( *pCrsr, *pReplSet, 0 );
+            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, *pReplSet, 0 );
         }
         else
         {
@@ -1198,7 +1198,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pItem = aIter.NextItem();
             }
             aSet.Put( *pReplSet );
-            pCrsr->GetDoc()->InsertItemSet( *pCrsr, aSet, 0 );
+            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, aSet, 0 );
         }
 
         return FIND_NO_RING;

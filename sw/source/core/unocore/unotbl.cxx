@@ -34,6 +34,7 @@
 #include <swtblfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
@@ -2353,12 +2354,12 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
             const SwTable *pTable = 0;
             if( 0 != aPam.Start()->nContent.GetIndex() )
             {
-                pDoc->SplitNode(*aPam.Start(), false );
+                pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false );
             }
             //TODO: if it is the last paragraph than add another one!
             if( aPam.HasMark() )
             {
-                pDoc->DeleteAndJoin(aPam);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
                 aPam.DeleteMark();
             }
             pTable = pDoc->InsertTable( SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),

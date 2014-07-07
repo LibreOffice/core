@@ -187,7 +187,7 @@ void SwDocTest::testDocStat()
     SwPaM aPaM(aIdx);
 
     OUString sText("Hello World");
-    m_pDoc->InsertString(aPaM, sText);
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sText);
 
     CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
 
@@ -230,15 +230,15 @@ void SwDocTest::testModelToViewHelper()
         SwFmtFtn aFtn;
         aFtn.SetNumStr(OUString("foo"));
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("AAAAA BBBBB "));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA BBBBB "));
         SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
         sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->InsertString(aPaM, OUString(" CCCCC "));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" CCCCC "));
         nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->InsertString(aPaM, OUString(" DDDDD"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" DDDDD"));
         CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
 
         //set start of selection to first B
@@ -248,7 +248,7 @@ void SwDocTest::testModelToViewHelper()
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
         //set character attribute hidden on range
         SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-        m_pDoc->InsertPoolItem(aPaM, aHidden, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden, 0 );
         aPaM.DeleteMark();
 
         //turn on red-lining and show changes
@@ -261,7 +261,7 @@ void SwDocTest::testModelToViewHelper()
         aPaM.SetMark();
         //set end of selection to second last B
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
-        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+        m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         aPaM.DeleteMark();
 
         {
@@ -400,8 +400,8 @@ void SwDocTest::testModelToViewHelper()
                 aModelToViewHelper.getFieldPositions().size());
         }
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("AAAAA"));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA"));
         IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
         sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
                 pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
@@ -410,7 +410,7 @@ void SwDocTest::testModelToViewHelper()
         vListEntries[0] = "BBBBB";
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
-        m_pDoc->InsertString(aPaM, OUString("CCCCC"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
                 pTxtNode->GetTxt().getLength());
@@ -473,13 +473,13 @@ void SwDocTest::testSwScanner()
     {
         const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
 
-        m_pDoc->InsertString(aPaM, OUString(IDEOGRAPHICFULLSTOP_D,
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(IDEOGRAPHICFULLSTOP_D,
             SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D)));
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_CHINESE_SIMPLIFIED, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
-        m_pDoc->InsertPoolItem(aPaM, aCJKLangItem, 0 );
-        m_pDoc->InsertPoolItem(aPaM, aWestLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem, 0 );
 
         SwDocStat aDocStat;
         pTxtNode = aPaM.GetNode().GetTxtNode();
@@ -508,14 +508,14 @@ void SwDocTest::testSwScanner()
             0x0020, 0x0064, 0x006F, 0x0065, 0x0073, 0x0020, 0x0074, 0x0068,
             0x0069, 0x0073, 0x0020, 0x0064, 0x006F, 0x003F, 0x0020, 0x0020
         };
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString(test,
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(test,
             SAL_N_ELEMENTS(test)));
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
-        m_pDoc->InsertPoolItem(aPaM, aCJKLangItem, 0 );
-        m_pDoc->InsertPoolItem(aPaM, aWestLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem, 0 );
 
         SwDocStat aDocStat;
         pTxtNode = aPaM.GetNode().GetTxtNode();
@@ -537,8 +537,8 @@ void SwDocTest::testSwScanner()
             0x0065, 0x0065, 0x2019
         };
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
         CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
@@ -554,8 +554,8 @@ void SwDocTest::testSwScanner()
             0x006C, 0x0065, 0x0072, 0x3000, 0x00BB
         };
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
@@ -566,8 +566,8 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
         SwFmtFtn aFtn;
@@ -591,16 +591,16 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
             (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), OUString("An Author"),
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
-        m_pDoc->InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
 
-        m_pDoc->InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
@@ -616,8 +616,8 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
 
         const char aString[] = "Lorem ipsum";
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString(aString));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aString));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
@@ -630,7 +630,7 @@ void SwDocTest::testSwScanner()
         //delete everything except the first word
         aPaM.SetMark(); //set start of selection to current pos
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   //set end of selection to fifth char of current node
-        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+        m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         //"real underlying text should be the same"
         CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt(), OUString(aString));
 
@@ -679,8 +679,8 @@ void SwDocTest::testSwScanner()
 
         OUString sTemplate("ThisXis a test.");
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', ' '));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', ' '));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
@@ -688,8 +688,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" = ")));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" = ")));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -697,8 +697,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 17);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" _ ")));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" _ ")));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -706,8 +706,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 17);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" -- ")));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" -- ")));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -715,8 +715,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 18);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', '_'));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '_'));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
@@ -724,8 +724,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', '-'));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '-'));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
@@ -733,8 +733,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2012));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2012));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
@@ -742,8 +742,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2015));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2015));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
@@ -753,8 +753,8 @@ void SwDocTest::testSwScanner()
 
         //But default configuration should, msword-alike treak emdash
         //and endash as word separators for word-counting
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2013));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2013));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
@@ -762,8 +762,8 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2014));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2014));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
@@ -773,8 +773,8 @@ void SwDocTest::testSwScanner()
 
         const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
         OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), sChunk));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), sChunk));
         pTxtNode = aPaM.GetNode().GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
@@ -792,14 +792,14 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    m_pDoc->InsertString(aPaM, OUString("Paragraph 1"));
-    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
+    m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, OUString("graphic anchor>><<graphic anchor"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("graphic anchor>><<graphic anchor"));
     SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
-    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+    m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, OUString("Paragraph 3"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
 
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
@@ -809,7 +809,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwFmtAnchor aAnchor(FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
-    SwFlyFrmFmt *pFrame = m_pDoc->Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
+    SwFlyFrmFmt *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
     CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
 
     CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
@@ -821,7 +821,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     aPaM.SetMark();
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
-    m_pDoc->DeleteRange(aPaM);
+    m_pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
 #ifdef DEBUG_AS_HTML
     {
@@ -908,7 +908,7 @@ void SwDocTest::randomTest()
             switch (getRand (i < 50 ? 3 : 6)) {
             // insert ops first
             case 0: {
-                if (!m_pDoc->InsertString(aCrs, getRandString())) {
+                if (!m_pDoc->getIDocumentContentOperations().InsertString(aCrs, getRandString())) {
 //                    fprintf (stderr, "failed to insert string !\n");
                 }
                 break;
@@ -925,17 +925,17 @@ void SwDocTest::randomTest()
             case 3: // deletion
                 switch (getRand(6)) {
                 case 0:
-                    m_pDoc->DelFullPara(aCrs);
+                    m_pDoc->getIDocumentContentOperations().DelFullPara(aCrs);
                     break;
                 case 1:
-                    m_pDoc->DeleteRange(aCrs);
+                    m_pDoc->getIDocumentContentOperations().DeleteRange(aCrs);
                     break;
                 case 2:
-                    m_pDoc->DeleteAndJoin(aCrs, !!getRand(1));
+                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aCrs, !!getRand(1));
                     break;
                 case 3:
                 default:
-                    m_pDoc->Overwrite(aCrs, getRandString());
+                    m_pDoc->getIDocumentContentOperations().Overwrite(aCrs, getRandString());
                     break;
                 }
                 break;
@@ -949,7 +949,7 @@ void SwDocTest::randomTest()
                          IDocumentContentOperations::DOC_MOVEREDLINES |
                          IDocumentContentOperations::DOC_NO_DELFRMS);
                 SwPosition aTo(getRandomPosition(m_pDoc, i/10));
-                m_pDoc->MoveRange(aCrs, aTo, nFlags);
+                m_pDoc->getIDocumentContentOperations().MoveRange(aCrs, aTo, nFlags);
                 break;
             }
 
@@ -983,7 +983,7 @@ translitTest(SwDoc & rDoc, SwPaM & rPaM, sal_uInt32 const nType)
 {
     utl::TransliterationWrapper aTrans(
             ::comphelper::getProcessComponentContext(), nType);
-    rDoc.TransliterateText(rPaM, aTrans);
+    rDoc.getIDocumentContentOperations().TransliterateText(rPaM, aTrans);
     return rPaM.GetTxt();
 }
 
@@ -992,7 +992,7 @@ void SwDocTest::testTransliterate()
     // just some simple test to see if it's totally broken
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    m_pDoc->InsertString(aPaM, OUString("foobar"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("foobar"));
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 0;
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetTxt());
@@ -1024,19 +1024,19 @@ void SwDocTest::testMarkMove()
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
         SwPaM aPaM(aIdx);
-        m_pDoc->InsertString(aPaM, OUString("Paragraph 1"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
         pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::BOOKMARK);
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("Paragraph 2"));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 2"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
         pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::BOOKMARK);
 
-        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, OUString("Paragraph 3"));
+        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
         pMarksAccess->makeMark(aPaM, OUString("Para3"), IDocumentMarkAccess::BOOKMARK);
@@ -1083,7 +1083,7 @@ void SwDocTest::testMarkMove()
         SwPaM aPaM(aIdx, aIdx, -1);
         aPaM.GetPoint()->nContent += 5;
         aPaM.GetMark()->nContent += 6;
-        m_pDoc->DeleteAndJoin(aPaM);
+        m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);
     }
     pBM1 = pMarksAccess->findMark("Para1")->get();
     pBM2 = pMarksAccess->findMark("Para2")->get();
@@ -1119,7 +1119,7 @@ void SwDocTest::testMarkMove()
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
         SwPosition aPos(aIdx);
         aPos.nContent += 8;
-        m_pDoc->SplitNode(aPos, false);
+        m_pDoc->getIDocumentContentOperations().SplitNode(aPos, false);
     }
     pBM1 = pMarksAccess->findMark("Para1")->get();
     pBM2 = pMarksAccess->findMark("Para2")->get();

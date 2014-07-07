@@ -197,7 +197,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
         // sonst ist sie schon gesetzt.
         if( !rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
         {
-            rDoc.InsertPoolItem( rPam, SwFmtPageDesc(
+            rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFmtPageDesc(
                 rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
         }
     }
@@ -508,10 +508,10 @@ SvParserState SwHTMLParser::CallParser()
     {
         const SwPosition* pPos = pPam->GetPoint();
 
-        pDoc->SplitNode( *pPos, false );
+        pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
         *pSttNdIdx = pPos->nNode.GetIndex()-1;
-        pDoc->SplitNode( *pPos, false );
+        pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
         SwPaM aInsertionRangePam( *pPos );
 
@@ -1213,7 +1213,7 @@ void SwHTMLParser::NextToken( int nToken )
             {
                 if( !bDocInitalized )
                     DocumentDetected();
-                pDoc->InsertString( *pPam, aToken );
+                pDoc->getIDocumentContentOperations().InsertString( *pPam, aToken );
 
                 // if there are temporary paragraph attributes and the
                 // paragraph isn't empty then the paragraph attributes
@@ -1268,7 +1268,7 @@ void SwHTMLParser::NextToken( int nToken )
 
             if( pPageDesc )
             {
-                pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+                pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
             }
         }
         break;
@@ -1424,11 +1424,11 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NONBREAKSPACE:
-        pDoc->InsertString( *pPam, OUString(CHAR_HARDBLANK) );
+        pDoc->getIDocumentContentOperations().InsertString( *pPam, OUString(CHAR_HARDBLANK) );
         break;
 
     case HTML_SOFTHYPH:
-        pDoc->InsertString( *pPam, OUString(CHAR_SOFTHYPHEN) );
+        pDoc->getIDocumentContentOperations().InsertString( *pPam, OUString(CHAR_SOFTHYPHEN) );
         break;
 
     case HTML_LINEFEEDCHAR:
@@ -1468,7 +1468,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             if( !bDocInitalized )
                 DocumentDetected();
-            pDoc->InsertString( *pPam, aToken );
+            pDoc->getIDocumentContentOperations().InsertString( *pPam, aToken );
 
             // if there are temporary paragraph attributes and the
             // paragraph isn't empty then the paragraph attributes
@@ -2128,7 +2128,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
 
     SwPosition aOldPos( *pPam->GetPoint() );
 
-    bool bRet = pDoc->AppendTxtNode( *pPam->GetPoint() );
+    bool bRet = pDoc->getIDocumentContentOperations().AppendTxtNode( *pPam->GetPoint() );
 
     // Zeichen-Attribute aufspalten und ggf keine setzen, die ueber den
     // ganzen Absatz gesetzt sind
@@ -2882,7 +2882,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         eJumpTo = JUMPTO_NONE;
                     }
 
-                    pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
+                    pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2964,7 +2964,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
+        pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
 
         aFields.pop_front();
         delete pAttr;
@@ -4985,7 +4985,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 OUString aTmp( ' ' );
-                pDoc->InsertString( *pPam, aTmp );
+                pDoc->getIDocumentContentOperations().InsertString( *pPam, aTmp );
                 EndAttr( aAttrTab.pKerning );
             }
         }
@@ -5184,7 +5184,7 @@ void SwHTMLParser::InsertLineBreak()
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
         OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
-        pDoc->InsertString( *pPam, sTmp );
+        pDoc->getIDocumentContentOperations().InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
     {

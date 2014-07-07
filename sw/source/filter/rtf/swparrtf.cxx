@@ -59,11 +59,11 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     const SwPosition* pPos = rPam.GetPoint();
 
     // Step 2: Split once and remember the node that has been split.
-    rDoc.SplitNode( *pPos, false );
+    rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
     *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
     // Step 3: Split again.
-    rDoc.SplitNode( *pPos, false );
+    rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
 
     // Step 4: Insert all content into the new node
     rPam.Move( fnMoveBackward );

@@ -310,7 +310,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
     UnoActionContext aCont(pNewDoc);
-    pNewDoc->DeleteAndJoin(aPam);
+    pNewDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
     aPam.DeleteMark();
     SwFmtFtn aFootNote(m_pImpl->m_bIsEndnote);
     if (!m_pImpl->m_sLabel.isEmpty())
@@ -325,7 +325,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
+    pNewDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFootNote, nInsertFlags);
 
     SwTxtFtn *const pTxtAttr = static_cast<SwTxtFtn*>(
         aPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
@@ -378,7 +378,7 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException, std::exceptio
     SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
     const sal_Int32 nPos = pTxtFtn->GetStart();
     SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
-    GetDoc()->DeleteAndJoin( aPam );
+    GetDoc()->getIDocumentContentOperations().DeleteAndJoin( aPam );
 }
 
 void SAL_CALL

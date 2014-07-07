@@ -705,7 +705,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                     SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
                                    *pSrcPaM->GetMark() );
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
-                    pDoc->CopyRange( aSrcPaM, aDstPos, false );
+                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, false );
 
                     nColRepeat--;
                 }
@@ -2640,7 +2640,7 @@ void SwXMLTableContext::MakeTable()
     if (!pRows || pRows->empty() || !GetColumnCount())
     {
         OSL_FAIL("invalid table: no cells; deleting...");
-        pTableNode->GetDoc()->DeleteSection( pTableNode );
+        pTableNode->GetDoc()->getIDocumentContentOperations().DeleteSection( pTableNode );
         pTableNode = 0;
         pBox1 = 0;
         pSttNd1 = 0;

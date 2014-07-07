@@ -18,6 +18,7 @@
 #include <edtwin.hxx>
 #include <fmtpdsc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
 #include <PostItMgr.hxx>
@@ -277,7 +278,7 @@ void SwPageBreakWin::Select( )
                     aSet.Put( SwFmtPageDesc( NULL ) );
 
                     SwPaM aPaM( *pNd );
-                    pNd->GetDoc()->InsertItemSet( aPaM, aSet, nsSetAttrMode::SETATTR_DEFAULT );
+                    pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet( aPaM, aSet, nsSetAttrMode::SETATTR_DEFAULT );
 
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
                 }

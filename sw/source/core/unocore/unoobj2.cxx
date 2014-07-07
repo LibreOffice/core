@@ -317,7 +317,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
                 ( (bTableMode) ||
                   (*pCurrent->GetPoint() != *pCurrent->GetMark()) ))
             {
-                pDoc->InsertItemSet(*pCurrent, rSet, nFlags);
+                pDoc->getIDocumentContentOperations().InsertItemSet(*pCurrent, rSet, nFlags);
             }
             pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
         } while (pCurrent != &rPam);
@@ -326,7 +326,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     }
     else
     {
-        pDoc->InsertItemSet( rPam, rSet, nFlags );
+        pDoc->getIDocumentContentOperations().InsertItemSet( rPam, rSet, nFlags );
     }
 
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
@@ -842,7 +842,7 @@ throw (uno::RuntimeException)
         m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
         if (aCursor.HasMark())
         {
-            m_pImpl->m_rDoc.DeleteAndJoin(aCursor);
+            m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
         }
 
         if (!rText.isEmpty())
@@ -1675,7 +1675,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
     if (rCursor.HasMark())
     {
-        pDoc->DeleteAndJoin(rCursor);
+        pDoc->getIDocumentContentOperations().DeleteAndJoin(rCursor);
     }
     if (!rString.isEmpty())
     {

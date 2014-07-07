@@ -418,7 +418,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwPaM aTmp(*aPam.Start());
     if (bAbsorb && aPam.HasMark())
     {
-        m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+        m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
     }
 
     sal_Unicode cIns = 0;
@@ -427,12 +427,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case text::ControlCharacter::PARAGRAPH_BREAK :
             // a table cell now becomes an ordinary text cell!
             m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-            m_pImpl->m_pDoc->SplitNode( *aTmp.GetPoint(), false );
+            m_pImpl->m_pDoc->getIDocumentContentOperations().SplitNode( *aTmp.GetPoint(), false );
             break;
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
             m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-            m_pImpl->m_pDoc->AppendTxtNode( *aTmp.GetPoint() );
+            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTxtNode( *aTmp.GetPoint() );
 
             const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
                     xTextRange, uno::UNO_QUERY);
@@ -460,7 +460,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     if (cIns)
     {
-        m_pImpl->m_pDoc->InsertString( aTmp, OUString(cIns), nInsertFlags );
+        m_pImpl->m_pDoc->getIDocumentContentOperations().InsertString( aTmp, OUString(cIns), nInsertFlags );
     }
 
     if (bAbsorb)
@@ -654,7 +654,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         const SwNodeIndex aTblIdx( *pTblNode, -1 );
         SwPosition aBefore(aTblIdx);
-        bRet = GetDoc()->AppendTxtNode( aBefore );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
         pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
     }
     else if (pXSection && pXSection->GetFmt() &&
@@ -665,7 +665,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         const SwNodeIndex aSectIdx( *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
-        bRet = GetDoc()->AppendTxtNode( aBefore );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
         pTxtNode = aBefore.nNode.GetNode().GetTxtNode();
     }
     if (!bRet || !pTxtNode)
@@ -713,7 +713,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         SwEndNode *const pTableEnd = pTblNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
-        bRet = GetDoc()->AppendTxtNode( aTableEnd );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aTableEnd );
         pTxtNode = aTableEnd.nNode.GetNode().GetTxtNode();
     }
     else if (pXSection && pXSection->GetFmt() &&
@@ -723,7 +723,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         SwSectionNode *const pSectNode = pSectFmt->GetSectionNode();
         SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
-        bRet = GetDoc()->AppendTxtNode( aEnd );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aEnd );
         pTxtNode = aEnd.nNode.GetNode().GetTxtNode();
     }
     if (!bRet || !pTxtNode)
@@ -764,7 +764,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aTblIdx);
-            bRet = GetDoc()->DelFullPara( aBefore );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aBefore );
         }
     }
     else if (pXSection && pXSection->GetFmt() &&
@@ -777,7 +777,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aSectIdx);
-            bRet = GetDoc()->DelFullPara( aBefore );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aBefore );
         }
     }
     if(!bRet)
@@ -818,7 +818,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aPaM(aTblIdx);
-            bRet = GetDoc()->DelFullPara( aPaM );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aPaM );
         }
     }
     else if (pXSection && pXSection->GetFmt() &&
@@ -831,7 +831,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aAfter(aSectIdx);
-            bRet = GetDoc()->DelFullPara( aAfter );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( aAfter );
         }
     }
     if(!bRet)
@@ -959,10 +959,10 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
         while(aStartIdx < aEndIdx);
         if(bInsertNodes)
         {
-            GetDoc()->AppendTxtNode( aStartPos );
+            GetDoc()->getIDocumentContentOperations().AppendTxtNode( aStartPos );
             SwPosition aEndPos(aEndIdx.GetNode());
             SwPaM aPam(aEndPos);
-            GetDoc()->AppendTxtNode( *aPam.Start() );
+            GetDoc()->getIDocumentContentOperations().AppendTxtNode( *aPam.Start() );
         }
     }
 
@@ -1294,7 +1294,7 @@ SwXText::Impl::finishOrAppendParagraph(
         aPam = aStartPam;
         aPam.SetMark();
     }
-    m_pDoc->AppendTxtNode( *aPam.GetPoint() );
+    m_pDoc->getIDocumentContentOperations().AppendTxtNode( *aPam.GetPoint() );
     // remove attributes from the previous paragraph
     m_pDoc->ResetAttrs(aPam);
     // in case of finishParagraph the PaM needs to be moved to the
@@ -1594,7 +1594,7 @@ SwXText::convertToTextFrame(
             }
             const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTblIdx);
-            bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
+            bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
             aStartPam.DeleteMark();
             *aStartPam.GetPoint() = aBefore;
             pStartStartNode = aStartPam.GetNode().StartOfSectionNode();
@@ -1604,7 +1604,7 @@ SwXText::convertToTextFrame(
             SwTableNode *const pEndTableNode = pEndStartNode->FindTableNode();
             SwEndNode *const pTableEnd = pEndTableNode->EndOfSectionNode();
             SwPosition aTableEnd(*pTableEnd);
-            bParaAfterInserted = GetDoc()->AppendTxtNode( aTableEnd );
+            bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aTableEnd );
             pEndPam->DeleteMark();
             *pEndPam->GetPoint() = aTableEnd;
             pEndStartNode = pEndPam->GetNode().StartOfSectionNode();
@@ -1622,7 +1622,7 @@ SwXText::convertToTextFrame(
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
                 aDelete.MovePara(fnParaCurr, fnParaEnd);
-                GetDoc()->DelFullPara(aDelete);
+                GetDoc()->getIDocumentContentOperations().DelFullPara(aDelete);
             }
             if (bParaAfterInserted)
             {
@@ -1632,7 +1632,7 @@ SwXText::convertToTextFrame(
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
                 aDelete.MovePara(fnParaCurr, fnParaEnd);
-                GetDoc()->DelFullPara(aDelete);
+                GetDoc()->getIDocumentContentOperations().DelFullPara(aDelete);
             }
             throw lang::IllegalArgumentException();
         }
@@ -1646,7 +1646,7 @@ SwXText::convertToTextFrame(
     && aStartPam.End()->nNode == pEndPam->End()->nNode )
     {
         SwPosition aEnd(*aStartPam.End());
-        bParaAfterInserted = GetDoc()->AppendTxtNode( aEnd );
+        bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
     }
@@ -1716,7 +1716,7 @@ SwXText::convertToTextFrame(
                     }
                 }
             }
-            m_pImpl->m_pDoc->DelFullPara(aStartPam);
+            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aStartPam);
         }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
@@ -1741,20 +1741,20 @@ SwXText::convertToTextFrame(
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame
-            m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pFrameCursor->GetPaM());
         }
         if (bParaAfterInserted)
         {
             xFrameTextCursor->gotoEnd(sal_False);
             if (!bParaBeforeInserted)
-                m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
+                m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pFrameCursor->GetPaM());
             else
             {
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
                 SwPaM aPaM(*pFrameCursor->GetPaM()->GetNode().FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
                 // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
                 aPaM.GetPoint()->nNode--;
-                m_pImpl->m_pDoc->DelFullPara(aPaM);
+                m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
         }
     }
@@ -1898,7 +1898,7 @@ void SwXText::Impl::ConvertCell(
         // align the beginning - if necessary
         if (aStartCellPam.Start()->nContent.GetIndex())
         {
-            m_pDoc->SplitNode(*aStartCellPam.Start(), false);
+            m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
         }
     }
     else
@@ -1917,7 +1917,7 @@ void SwXText::Impl::ConvertCell(
             }
             else
             {
-                m_pDoc->SplitNode(*aStartCellPam.Start(), false);
+                m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
             }
         }
         else if (nStartCellNodeIndex == (nLastNodeEndIndex + 1))
@@ -1936,7 +1936,7 @@ void SwXText::Impl::ConvertCell(
     if (aEndCellPam.End()->nContent.GetIndex() <
             aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
     {
-        m_pDoc->SplitNode(*aEndCellPam.End(), false);
+        m_pDoc->getIDocumentContentOperations().SplitNode(*aEndCellPam.End(), false);
         // take care that the new start/endcell is moved to the right position
         // aStartCellPam has to point to the start of the new (previous) node
         // aEndCellPam has to point to the end of the new (previous) node
@@ -2337,7 +2337,7 @@ throw (uno::RuntimeException, std::exception)
 
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
-    m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM(), rPos, false );
+    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange( *pCursor->GetPaM(), rPos, false );
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)

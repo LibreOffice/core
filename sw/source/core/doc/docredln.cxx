@@ -28,6 +28,7 @@
 #include <doc.hxx>
 #include <docredln.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
@@ -781,10 +782,10 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
                                     pEnd->nNode--;
                                     pEnd->nContent.Assign(
                                         pEnd->nNode.GetNode().GetTxtNode(), 0);
-                                    DelFullPara( *pNewRedl );
+                                    getIDocumentContentOperations().DelFullPara( *pNewRedl );
                                 }
                                 else
-                                    DeleteAndJoin( *pNewRedl );
+                                    getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
 
                                 bCompress = true;
                             }
@@ -800,7 +801,7 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
                                 if( bCallDelete )
                                 {
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    DeleteAndJoin( *pRedl );
+                                    getIDocumentContentOperations().DeleteAndJoin( *pRedl );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                 }
@@ -827,7 +828,7 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    DeleteAndJoin( aPam );
+                                    getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                     n = 0;      // re-initialize
@@ -853,7 +854,7 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    DeleteAndJoin( aPam );
+                                    getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                     n = 0;      // re-initialize
@@ -1241,7 +1242,7 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
             // The ShowMode needs to be retained!
             meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
-            DeleteAndJoin( *pNewRedl );
+            getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
             meRedlineMode = eOld;
         }
         delete pNewRedl, pNewRedl = 0;
@@ -1880,17 +1881,17 @@ static bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                 rDoc.SetRedlineMode_intern( (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE)));
 
                 if( pCSttNd && pCEndNd )
-                    rDoc.DeleteAndJoin( aPam );
+                    rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                 else
                 {
-                    rDoc.DeleteRange( aPam );
+                    rDoc.getIDocumentContentOperations().DeleteRange( aPam );
 
                     if( pCSttNd && !pCEndNd )
                     {
                         aPam.GetBound( true ).nContent.Assign( 0, 0 );
                         aPam.GetBound( false ).nContent.Assign( 0, 0 );
                         aPam.DeleteMark();
-                        rDoc.DelFullPara( aPam );
+                        rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                     }
                 }
                 rDoc.SetRedlineMode_intern( eOld );
@@ -1990,17 +1991,17 @@ static bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                 rDoc.SetRedlineMode_intern( (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE)));
 
                 if( pCSttNd && pCEndNd )
-                    rDoc.DeleteAndJoin( aPam );
+                    rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                 else
                 {
-                    rDoc.DeleteRange( aPam );
+                    rDoc.getIDocumentContentOperations().DeleteRange( aPam );
 
                     if( pCSttNd && !pCEndNd )
                     {
                         aPam.GetBound( true ).nContent.Assign( 0, 0 );
                         aPam.GetBound( false ).nContent.Assign( 0, 0 );
                         aPam.DeleteMark();
-                        rDoc.DelFullPara( aPam );
+                        rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                     }
                 }
                 rDoc.SetRedlineMode_intern( eOld );
@@ -3103,11 +3104,11 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
                 // could have changed, but we don't touch these.
                 SfxItemSet aTmp( *pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
-                pDoc->InsertItemSet( rPam, aTmp, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, aTmp, 0 );
             }
             else
             {
-                pDoc->InsertItemSet( rPam, *pSet, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *pSet, 0 );
             }
         }
         rPam.DeleteMark();
@@ -3171,7 +3172,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     std::vector<sal_uInt16>::const_iterator it;
     for( it = aWhichIds.begin(); it != aWhichIds.end(); ++it )
     {
-        pDoc->InsertPoolItem( rPam, *GetDfltAttr( *it ),
+        pDoc->getIDocumentContentOperations().InsertPoolItem( rPam, *GetDfltAttr( *it ),
             nsSetAttrMode::SETATTR_DONTEXPAND );
     }
 
@@ -3355,7 +3356,7 @@ SwRangeRedline::~SwRangeRedline()
     {
         // delete the ContentSection
         if( !GetDoc()->IsInDtor() )
-            GetDoc()->DeleteSection( &pCntntSect->GetNode() );
+            GetDoc()->getIDocumentContentOperations().DeleteSection( &pCntntSect->GetNode() );
         delete pCntntSect;
     }
     delete pRedlineData;
@@ -3614,12 +3615,12 @@ void SwRangeRedline::MoveToSection()
             SwNodeIndex aNdIdx( *pTxtNd );
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
             if( pCSttNd && pCEndNd )
-                pDoc->MoveAndJoin( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                pDoc->getIDocumentContentOperations().MoveAndJoin( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
             else
             {
                 if( pCSttNd && !pCEndNd )
                     bDelLastPara = true;
-                pDoc->MoveRange( aPam, aPos,
+                pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
                     IDocumentContentOperations::DOC_MOVEDEFAULT );
             }
         }
@@ -3629,7 +3630,7 @@ void SwRangeRedline::MoveToSection()
                                             SwNormalStartNode );
 
             SwPosition aPos( *pSttNd->EndOfSectionNode() );
-            pDoc->MoveRange( aPam, aPos,
+            pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
                 IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
@@ -3681,7 +3682,7 @@ void SwRangeRedline::CopyToSection()
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
-            pDoc->CopyRange( *this, aPos, false );
+            pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, false );
 
             // Take over the style from the EndNode if needed
             // We don't want this in Doc::Copy
@@ -3706,13 +3707,13 @@ void SwRangeRedline::CopyToSection()
             if( pCEndNd )
             {
                 SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->CopyRange( *this, aPos, false );
+                pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, false );
             }
             else
             {
                 SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
                 SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-                pDoc->CopyWithFlyInFly( aRg, 0, aInsPos );
+                pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
             }
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
@@ -3752,13 +3753,13 @@ void SwRangeRedline::DelCopyOfSection()
         if( pCSttNd && pCEndNd )
         {
             // #i100466# - force a <join next> on <delete and join> operation
-            pDoc->DeleteAndJoin( aPam, true );
+            pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam, true );
         }
         else if( pCSttNd || pCEndNd )
         {
             if( pCSttNd && !pCEndNd )
                 bDelLastPara = true;
-            pDoc->DeleteRange( aPam );
+            pDoc->getIDocumentContentOperations().DeleteRange( aPam );
 
             if( bDelLastPara )
             {
@@ -3795,12 +3796,12 @@ void SwRangeRedline::DelCopyOfSection()
                 aPam.GetBound( true ).nContent.Assign( 0, 0 );
                 aPam.GetBound( false ).nContent.Assign( 0, 0 );
                 aPam.DeleteMark();
-                pDoc->DelFullPara( aPam );
+                pDoc->getIDocumentContentOperations().DelFullPara( aPam );
             }
         }
         else
         {
-            pDoc->DeleteRange( aPam );
+            pDoc->getIDocumentContentOperations().DeleteRange( aPam );
         }
 
         if( pStt == GetPoint() )
@@ -3875,11 +3876,11 @@ void SwRangeRedline::MoveFromSection()
             {
                 aPos.nNode--;
 
-                pDoc->AppendTxtNode( aPos );
+                pDoc->getIDocumentContentOperations().AppendTxtNode( aPos );
             }
             else
             {
-                pDoc->MoveRange( aPam, aPos,
+                pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
                     IDocumentContentOperations::DOC_MOVEALLFLYS );
             }
 
@@ -3911,7 +3912,7 @@ void SwRangeRedline::MoveFromSection()
         // Note: Such condition is e.g. a "delete" change tracking only containing a table.
         if ( &pCntntSect->GetNode() == pKeptCntntSectNode )
         {
-            pDoc->DeleteSection( &pCntntSect->GetNode() );
+            pDoc->getIDocumentContentOperations().DeleteSection( &pCntntSect->GetNode() );
         }
         delete pCntntSect, pCntntSect = 0;
 

@@ -160,7 +160,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
-        pMyDoc->AppendTxtNode( rPos );
+        pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
         pCrsr->SetMark();
     }
 
@@ -202,7 +202,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
-        pMyDoc->AppendTxtNode( rPos );
+        pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
     }
 
     InsertTableOf( rTOX );
@@ -233,7 +233,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     rPos.nContent.Assign( 0, 0 );
 
     SwDoc* pMyDoc = GetDoc();
-    pMyDoc->AppendTxtNode( rPos );
+    pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
     EndAllAction();
     return true;
 }
@@ -263,7 +263,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
         rPos.nNode = nDelIdx - 1;
         rPos.nContent.Assign( 0, 0 );
 
-        pMyDoc->AppendTxtNode( rPos );
+        pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
         ++nDelIdx;
     }
 
@@ -278,7 +278,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
             else
                 rPos.nNode = pMyDoc->GetNodes().GetEndOfContent();
             rPos.nNode--;
-            if( !pMyDoc->DelFullPara( *pCrsr ) )
+            if( !pMyDoc->getIDocumentContentOperations().DelFullPara( *pCrsr ) )
                 Delete();
         }
         break;
@@ -333,7 +333,7 @@ bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     else
         aInsPos  = pMyDoc->GetNodes().GetEndOfContent();
 
-    bool bRet = pMyDoc->MoveNodeRange( aRg, aInsPos,
+    bool bRet = pMyDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aInsPos,
         static_cast<IDocumentContentOperations::SwMoveFlags>(
               IDocumentContentOperations::DOC_MOVEALLFLYS
             | IDocumentContentOperations::DOC_CREATEUNDOOBJ ));

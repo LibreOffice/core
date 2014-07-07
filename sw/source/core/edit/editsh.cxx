@@ -67,7 +67,7 @@ void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCrsr )
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
 
-        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, OUString(c));
+        const bool bSuccess = GetDoc()->getIDocumentContentOperations().InsertString(*PCURCRSR, OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
         (void) bSuccess;
 
@@ -95,7 +95,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
         do {
             //OPT: GetSystemCharSet
             const bool bSuccess =
-                GetDoc()->InsertString(*_pStartCrsr, rStr, nInsertFlags);
+                GetDoc()->getIDocumentContentOperations().InsertString(*_pStartCrsr, rStr, nInsertFlags);
             OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
 
             if (bSuccess)
@@ -165,9 +165,9 @@ void SwEditShell::Overwrite(const OUString &rStr)
 {
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
-        if( !GetDoc()->Overwrite(*PCURCRSR, rStr ) )
+        if( !GetDoc()->getIDocumentContentOperations().Overwrite(*PCURCRSR, rStr ) )
         {
-            OSL_FAIL( "Doc->Overwrite(Str) failed." );
+            OSL_FAIL( "Doc->getIDocumentContentOperations().Overwrite(Str) failed." );
         }
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
     FOREACHPAM_END()
@@ -182,7 +182,7 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     FOREACHPAM_START(GetCrsr())
         // Here, a table cell becomes a normal text cell.
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
-        GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
+        GetDoc()->getIDocumentContentOperations().SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
     FOREACHPAM_END()
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
@@ -204,7 +204,7 @@ bool SwEditShell::AppendTxtNode()
 
     FOREACHPAM_START(GetCrsr())
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
-        bRet = GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
     FOREACHPAM_END()
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
@@ -305,7 +305,7 @@ void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
                     const Graphic* pGraphic, const GraphicObject* pGrfObj )
 {
     StartAllAction();
-    mpDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );
+    mpDoc->getIDocumentContentOperations().ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );
     EndAllAction();
 }
 
@@ -511,9 +511,9 @@ void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 
         const SwNodeIndex& rNd = pCrsr->GetPoint()->nNode;
         SwPaM aPam( rNd, rStr.getLength(), rNd, 0 );
-        if( !GetDoc()->Overwrite( aPam, rStr ) )
+        if( !GetDoc()->getIDocumentContentOperations().Overwrite( aPam, rStr ) )
         {
-            OSL_FAIL( "Doc->Overwrite(Str) failed." );
+            OSL_FAIL( "Doc->getIDocumentContentOperations().Overwrite(Str) failed." );
         }
 
         EndAllAction();
@@ -1064,13 +1064,13 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
         FOREACHPAM_START(GetCrsr())
 
         if( PCURCRSR->HasMark() )
-            GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+            GetDoc()->getIDocumentContentOperations().TransliterateText( *PCURCRSR, aTrans );
 
         FOREACHPAM_END()
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     }
     else
-        GetDoc()->TransliterateText( *pCrsr, aTrans );
+        GetDoc()->getIDocumentContentOperations().TransliterateText( *pCrsr, aTrans );
 
     EndAllAction();
 }

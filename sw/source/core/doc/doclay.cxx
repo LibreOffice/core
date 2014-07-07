@@ -64,6 +64,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -299,7 +300,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         {
             SwNode *pNode = &pCntIdx->GetNode();
             ((SwFmtCntnt&)pFmt->GetFmtAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
-            DeleteSection( pNode );
+            getIDocumentContentOperations().DeleteSection( pNode );
         }
 
         // Delete the character for FlyFrames anchored as char (if necessary)
@@ -450,7 +451,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt(
         //contact object itself. They should be managed by SwUndoInsLayFmt.
         const ::sw::DrawUndoGuard drawUndoGuard(GetIDocumentUndoRedo());
 
-        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, NULL, false, true, true );
+        pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aIdx, NULL, false, true, true );
     }
     else
     {
@@ -796,7 +797,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                         GetNodes().MakeTxtNode( aRg.aStart,
                                     (SwTxtFmtColl*)GetDfltTxtFmtColl() );
 
-                    MoveNodeRange( aRg, aPos.nNode, DOC_MOVEDEFAULT );
+                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, IDocumentContentOperations::DOC_MOVEDEFAULT );
                 }
                 else
                 {
@@ -833,7 +834,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
                     {
-                        CopyRange( *pTmp, aPos, false );
+                        getIDocumentContentOperations().CopyRange( *pTmp, aPos, false );
                     }
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
@@ -846,7 +847,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
                     {
-                        DeleteAndJoin( *pTmp );
+                        getIDocumentContentOperations().DeleteAndJoin( *pTmp );
                     }
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
@@ -861,116 +862,6 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
     return pFmt;
 }
 
-// Insert drawing object, which has to be already inserted in the DrawModel
-SwDrawFrmFmt* SwDoc::InsertDrawObj(
-    const SwPaM &rRg,
-    SdrObject& rDrawObj,
-    const SfxItemSet& rFlyAttrSet )
-{
-    SwDrawFrmFmt* pFmt = MakeDrawFrmFmt( OUString(), GetDfltFrmFmt() );
-
-    const SwFmtAnchor* pAnchor = 0;
-    rFlyAttrSet.GetItemState( RES_ANCHOR, false, (const SfxPoolItem**) &pAnchor );
-    pFmt->SetFmtAttr( rFlyAttrSet );
-
-    // Didn't set the Anchor yet?
-    // DrawObjecte must never end up in the Header/Footer!
-    RndStdIds eAnchorId = pAnchor != NULL ? pAnchor->GetAnchorId() : pFmt->GetAnchor().GetAnchorId();
-    const bool bIsAtCntnt = (FLY_AT_PAGE != eAnchorId);
-
-    const SwNodeIndex* pChkIdx = 0;
-    if ( pAnchor == NULL )
-    {
-        pChkIdx = &rRg.GetPoint()->nNode;
-    }
-    else if ( bIsAtCntnt )
-    {
-        pChkIdx =
-            pAnchor->GetCntntAnchor() ? &pAnchor->GetCntntAnchor()->nNode : &rRg.GetPoint()->nNode;
-    }
-
-    // allow drawing objects in header/footer, but control objects aren't allowed in header/footer.
-    if( pChkIdx != NULL
-        && ::CheckControlLayer( &rDrawObj )
-        && IsInHeaderFooter( *pChkIdx ) )
-    {
-        // apply at-page anchor format
-        eAnchorId = FLY_AT_PAGE;
-        pFmt->SetFmtAttr( SwFmtAnchor( eAnchorId ) );
-    }
-    else if( pAnchor == NULL
-             || ( bIsAtCntnt
-                  && pAnchor->GetCntntAnchor() == NULL ) )
-    {
-        // apply anchor format
-        SwFmtAnchor aAnch( pAnchor != NULL ? *pAnchor : pFmt->GetAnchor() );
-        eAnchorId = aAnch.GetAnchorId();
-        if ( eAnchorId == FLY_AT_FLY )
-        {
-            SwPosition aPos( *rRg.GetNode().FindFlyStartNode() );
-            aAnch.SetAnchor( &aPos );
-        }
-        else
-        {
-            aAnch.SetAnchor( rRg.GetPoint() );
-            if ( eAnchorId == FLY_AT_PAGE )
-            {
-                eAnchorId = rDrawObj.ISA( SdrUnoObj ) ? FLY_AS_CHAR : FLY_AT_PARA;
-                aAnch.SetType( eAnchorId );
-            }
-        }
-        pFmt->SetFmtAttr( aAnch );
-    }
-
-    // insert text attribute for as-character anchored drawing object
-    if ( eAnchorId == FLY_AS_CHAR )
-    {
-        bool bAnchorAtPageAsFallback = true;
-        const SwFmtAnchor& rDrawObjAnchorFmt = pFmt->GetAnchor();
-        if ( rDrawObjAnchorFmt.GetCntntAnchor() != NULL )
-        {
-            SwTxtNode* pAnchorTxtNode =
-                    rDrawObjAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-            if ( pAnchorTxtNode != NULL )
-            {
-                const sal_Int32 nStt = rDrawObjAnchorFmt.GetCntntAnchor()->nContent.GetIndex();
-                SwFmtFlyCnt aFmt( pFmt );
-                pAnchorTxtNode->InsertItem( aFmt, nStt, nStt );
-                bAnchorAtPageAsFallback = false;
-            }
-        }
-
-        if ( bAnchorAtPageAsFallback )
-        {
-            OSL_ENSURE( false, "SwDoc::InsertDrawObj(..) - missing content anchor for as-character anchored drawing object --> anchor at-page" );
-            pFmt->SetFmtAttr( SwFmtAnchor( FLY_AT_PAGE ) );
-        }
-    }
-
-    SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
-
-    // Create Frames if necessary
-    if( GetCurrentViewShell() )
-    {
-        // create layout representation
-        pFmt->MakeFrms();
-        // #i42319# - follow-up of #i35635#
-        // move object to visible layer
-        // #i79391#
-        if ( pContact->GetAnchorFrm() )
-        {
-            pContact->MoveObjToVisibleLayer( &rDrawObj );
-        }
-    }
-
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFmt(pFmt, 0, 0) );
-    }
-
-    SetModified();
-    return pFmt;
-}
 
 /*
  * paragraph frames - o.k. if the PaM includes the paragraph from the beginning

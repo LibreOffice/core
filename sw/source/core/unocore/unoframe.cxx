@@ -1560,7 +1560,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     throw uno::RuntimeException();
                 }
                 SwPaM aGrfPaM(*pGrfNode);
-                pFmt->GetDoc()->ReRead( aGrfPaM, sGrfName, sFltName, 0,
+                pFmt->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, sGrfName, sFltName, 0,
                                         pGrfObj );
             }
             delete pGrfObj;
@@ -1582,7 +1582,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     }
                     SwPaM aGrfPaM(*pGrfNode);
                     Graphic aGraphic( xGraphic );
-                    pFmt->GetDoc()->ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, 0 );
+                    pFmt->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, 0 );
                 }
             }
         }
@@ -2815,9 +2815,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
 
             pFmt =
-                pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet,
+                pGrfObj ? pDoc->getIDocumentContentOperations().Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet,
                                         pParentFrmFmt )
-                        : pDoc->Insert( aPam, sGraphicURL, sFltName, &aGraphic,
+                        : pDoc->getIDocumentContentOperations().Insert( aPam, sGraphicURL, sFltName, &aGraphic,
                                         &aFrmSet, &aGrSet, pParentFrmFmt  );
             delete pGrfObj;
             if(pFmt)
@@ -2922,7 +2922,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     // TODO/LATER: Is it the only possible aspect here?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
-                    pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
+                    pFmt2 = pDoc->getIDocumentContentOperations().Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
                     assert(pFmt2 && "Doc->Insert(notxt) failed.");
 
                     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
@@ -2938,7 +2938,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
                 SwFlyFrmFmt* pFrmFmt = 0;
-                pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
+                pFrmFmt = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
                 if(!m_sName.isEmpty())
@@ -2964,7 +2964,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
                 SwFlyFrmFmt* pFrmFmt = 0;
-                pFrmFmt = pDoc->Insert( aPam, xObj, &aFrmSet, NULL, NULL );
+                pFrmFmt = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrmSet, NULL, NULL );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
                 if(!m_sName.isEmpty())

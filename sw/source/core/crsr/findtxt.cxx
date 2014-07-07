@@ -582,7 +582,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp)
                 ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
-        rCursor.GetDoc()->ReplaceRange( *pCrsr,
+        rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,
             bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );

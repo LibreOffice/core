@@ -225,7 +225,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
     }
 
-    pDoc2->InsertPoolItem( rPam, aRefMark, nInsertFlags );
+    pDoc2->getIDocumentContentOperations().InsertPoolItem( rPam, aRefMark, nInsertFlags );
 
     if( bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
@@ -358,7 +358,7 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException, std::exc
                                   : nStt + 1;
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
-                m_pImpl->m_pDoc->DeleteAndJoin( aPam );
+                m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
             }
         }
     }
@@ -432,7 +432,7 @@ throw (uno::RuntimeException, std::exception)
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
                 // deletes the m_pImpl->m_pDoc member in the SwXReferenceMark!
-                m_pImpl->m_pDoc->DeleteAndJoin( aPam );
+                m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
                 // The aPam will keep the correct and functional doc though
 
                 m_pImpl->m_sMarkName = rName;
@@ -958,7 +958,7 @@ SwXMeta::dispose() throw (uno::RuntimeException, std::exception)
             // -1 because of CH_TXTATR
             SwPaM aPam( *pTxtNode, nMetaStart - 1, *pTxtNode, nMetaEnd );
             SwDoc * const pDoc( pTxtNode->GetDoc() );
-            pDoc->DeleteAndJoin( aPam );
+            pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
 
             // removal should call Modify and do the dispose
             OSL_ENSURE(m_pImpl->m_bIsDisposed, "zombie meta");
@@ -1029,7 +1029,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         : ::boost::shared_ptr< ::sw::Meta>(
             pDoc->GetMetaFieldManager().makeMetaField()) );
     SwFmtMeta meta(pMeta, i_nWhich); // this is cloned by Insert!
-    const bool bSuccess( pDoc->InsertPoolItem( aPam, meta, nInsertFlags ) );
+    const bool bSuccess( pDoc->getIDocumentContentOperations().InsertPoolItem( aPam, meta, nInsertFlags ) );
     SwTxtAttr * const pTxtAttr( pMeta->GetTxtAttr() );
     if (!bSuccess)
     {

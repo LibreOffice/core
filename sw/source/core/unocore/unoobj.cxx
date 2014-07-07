@@ -792,7 +792,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         {
             if (pCurrent->HasMark())
             {
-                pDoc->DeleteAndJoin(*pCurrent);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCurrent);
             }
             if(nTxtLen)
             {

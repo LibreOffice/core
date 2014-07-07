@@ -791,11 +791,11 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                 }
             }
         }
-        pFmt = GetDoc()->Insert(*pCursor, rGrfName,
+        pFmt = GetDoc()->getIDocumentContentOperations().Insert(*pCursor, rGrfName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
                                 pGrfAttrSet, pFrmFmt );
-        OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );
+        OSL_ENSURE( pFmt, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
         pCursor = dynamic_cast<SwShellCrsr*>(pCursor->GetNext());
     } while( pCursor != pStartCursor );
@@ -831,9 +831,9 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     SET_CURR_SHELL( this );
     StartAllAction();
         FOREACHPAM_START(GetCrsr())
-            pFmt = GetDoc()->Insert(*PCURCRSR, xObj,
+            pFmt = GetDoc()->getIDocumentContentOperations().Insert(*PCURCRSR, xObj,
                                     pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-            OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );
+            OSL_ENSURE( pFmt, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
         FOREACHPAM_END()
     EndAllAction();
@@ -876,7 +876,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         ::lcl_FindAnchorPos( *this, *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
-    SwDrawFrmFmt* pFmt = GetDoc()->InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
+    SwDrawFrmFmt* pFmt = GetDoc()->getIDocumentContentOperations().InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
 
     // move object to visible layer
     SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
@@ -1783,7 +1783,7 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltNam
         // delete "Sdr-Object", insert the graphic instead
         DelSelectedObj();
 
-        GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
+        GetDoc()->getIDocumentContentOperations().Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
 
         EndUndo();
         EndAllAction();

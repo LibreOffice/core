@@ -81,7 +81,7 @@ SwExtTextInput::~SwExtTextInput()
                 if ( bLang )
                 {
                     SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->InsertPoolItem(*this, aLangItem, 0 );
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem, 0 );
                 }
             }
             rIdx = nSttCnt;
@@ -100,8 +100,8 @@ SwExtTextInput::~SwExtTextInput()
                     {
                         rIdx = nSttCnt;
                         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
-                        pDoc->Overwrite( *this, sTxt.copy( 0, nOWLen ) );
-                        pDoc->InsertString( *this, sTxt.copy( nOWLen ) );
+                        pDoc->getIDocumentContentOperations().Overwrite( *this, sTxt.copy( 0, nOWLen ) );
+                        pDoc->getIDocumentContentOperations().InsertString( *this, sTxt.copy( nOWLen ) );
                         pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
@@ -111,7 +111,7 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->Overwrite( *this, sTxt );
+                        pDoc->getIDocumentContentOperations().Overwrite( *this, sTxt );
                     }
                 }
             }
@@ -121,7 +121,7 @@ SwExtTextInput::~SwExtTextInput()
 
                 if( bInsText )
                 {
-                    pDoc->InsertString( *this, sTxt );
+                    pDoc->getIDocumentContentOperations().InsertString( *this, sTxt );
                 }
             }
         }

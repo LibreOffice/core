@@ -655,11 +655,11 @@ void SwXMLImport::startDocument()
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
-            pDoc->SplitNode( *pPos, false );
+            pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
             // Split again.
-            pDoc->SplitNode( *pPos, false );
+            pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );

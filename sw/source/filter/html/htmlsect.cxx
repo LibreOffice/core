@@ -199,7 +199,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 (const SwStartNode *) &rCntntStIdx.GetNode();
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
-            pDoc->DelFullPara( aDelPam );
+            pDoc->getIDocumentContentOperations().DelFullPara( aDelPam );
 
             // Die Seitenvorlage aktualisieren
             for( sal_uInt16 i=0; i < pDoc->GetPageDescCnt(); i++ )

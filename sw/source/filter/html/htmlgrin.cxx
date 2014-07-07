@@ -713,7 +713,7 @@ IMAGE_SETEVENT:
     {
         aEmptyGrf.SetDefaultType();
     }
-    SwFrmFmt *pFlyFmt = pDoc->Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
+    SwFrmFmt *pFlyFmt = pDoc->getIDocumentContentOperations().Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();

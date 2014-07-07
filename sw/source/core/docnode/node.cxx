@@ -1932,7 +1932,7 @@ const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() co
 IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return &GetDoc()->getIDocumentLinksAdministration(); }
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
-IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
+IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return &GetDoc()->getIDocumentContentOperations(); }
 IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc()->getIDocumentListItems(); } // #i83479#
 
 const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }

@@ -67,11 +67,11 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
-            GetDoc()->InsertPoolItem( aTmp, rMark, 0 );
+            GetDoc()->getIDocumentContentOperations().InsertPoolItem( aTmp, rMark, 0 );
         }
         else if( *pEnd != *pStt )
         {
-            GetDoc()->InsertPoolItem(
+            GetDoc()->getIDocumentContentOperations().InsertPoolItem(
                 *PCURCRSR, rMark, nsSetAttrMode::SETATTR_DONTEXPAND );
         }
 

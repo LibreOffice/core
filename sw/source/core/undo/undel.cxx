@@ -249,7 +249,7 @@ SwUndoDelete::SwUndoDelete(
                     SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
                     SwPosition aSplitPos( *pEndTxtNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    pDoc->SplitNode( aSplitPos, false );
+                    pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, true );
                     aRg.aEnd--;
                 }
@@ -273,7 +273,7 @@ SwUndoDelete::SwUndoDelete(
                     SwNodeRange aMvRg( *pSttTxtNd, 0, *pSttTxtNd, 1 );
                     SwPosition aSplitPos( *pSttTxtNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    pDoc->SplitNode( aSplitPos, false );
+                    pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, true );
                     aRg.aStart--;
                 }
@@ -787,7 +787,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pSttStr && !bFromTableCopy )
             {
                 sal_uLong nOldIdx = aPos.nNode.GetIndex();
-                pDoc->SplitNode( aPos, false );
+                pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
                 // After the split all objects are anchored at the first
                 // paragraph, but the pHistory of the fly frame formats relies
                 // on anchoring at the start of the selection
@@ -814,7 +814,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 if (nSttCntnt < pNd->GetTxt().getLength())
                 {
                     sal_uLong nOldIdx = aPos.nNode.GetIndex();
-                    pDoc->SplitNode( aPos, false );
+                    pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
                     if( bBackSp )
                         lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 }
@@ -1062,10 +1062,10 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         rPam.End()->nNode--;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
             *rPam.GetMark() = *rPam.GetPoint();
-        rDoc.DelFullPara( rPam );
+        rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     }
     else
-        rDoc.DeleteAndJoin( rPam );
+        rDoc.getIDocumentContentOperations().DeleteAndJoin( rPam );
 }
 
 void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
@@ -1084,9 +1084,9 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
         rPam.Move( fnMoveForward, fnGoCntnt );
     }
     if( bDelFullPara )
-        rDoc.DelFullPara( rPam );
+        rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     else
-        rDoc.DeleteAndJoin( rPam );
+        rDoc.getIDocumentContentOperations().DeleteAndJoin( rPam );
     rContext.m_bDeleteRepeated = true;
 }
 

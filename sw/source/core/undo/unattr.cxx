@@ -842,14 +842,14 @@ void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
     // RefMarks are not repeat capable
     if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, false ) )
     {
-        rContext.GetDoc().InsertItemSet( rContext.GetRepeatPaM(),
+        rContext.GetDoc().getIDocumentContentOperations().InsertItemSet( rContext.GetRepeatPaM(),
                                            m_AttrSet, m_nInsertFlags );
     }
     else if ( 1 < m_AttrSet.Count() )
     {
         SfxItemSet aTmpSet( m_AttrSet );
         aTmpSet.ClearItem( RES_TXTATR_REFMARK );
-        rContext.GetDoc().InsertItemSet( rContext.GetRepeatPaM(),
+        rContext.GetDoc().getIDocumentContentOperations().InsertItemSet( rContext.GetRepeatPaM(),
                                            aTmpSet, m_nInsertFlags );
     }
 }
@@ -865,7 +865,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineMode_t eOld = rDoc.GetRedlineMode();
         rDoc.SetRedlineMode_intern(static_cast<RedlineMode_t>(
                     eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-        rDoc.InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
+        rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
 
         if ( ULONG_MAX != m_nNodeIndex )
         {
@@ -886,7 +886,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        rDoc.InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
+        rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
     }
 }
 

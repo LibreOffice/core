@@ -1905,7 +1905,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         if (aPam.HasMark() &&
             m_pImpl->m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION)
         {
-            pDoc->DeleteAndJoin(aPam);
+            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
         }
 
         SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
@@ -1923,10 +1923,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         {
             // Make sure we always insert the field at the end
             SwPaM aEnd(*aPam.End(), *aPam.End());
-            pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aEnd, aFmt, nInsertFlags);
         }
         else
-            pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFmt, nInsertFlags);
 
         SwTxtAttr* pTxtAttr = aPam.GetNode().GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
@@ -1981,7 +1981,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 SwFmtFld aFmtFld( *pPostItField );
                 delete pPostItField;
                 SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
-                m_pImpl->m_pDoc->InsertPoolItem( aEnd, aFmtFld, nsSetAttrMode::SETATTR_DEFAULT );
+                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFmtFld, nsSetAttrMode::SETATTR_DEFAULT );
                 // delete former annotation
                 {
                     const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
@@ -1989,7 +1989,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     SwPaM aPam( rTxtNode, pTxtFld->GetStart() );
                     aPam.SetMark();
                     aPam.Move();
-                    m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+                    m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
                 }
                 // keep inserted annotation
                 {

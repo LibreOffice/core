@@ -34,6 +34,7 @@
 #include <mdiexp.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
 #include <frmtool.hxx>
@@ -273,7 +274,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
-                CopyFlyInFlyImpl(aRange, 0, aTmp);
+                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtHeader( pFmt ) );
@@ -349,7 +350,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, false );
                 aTmp = *pSttNd;
-                CopyFlyInFlyImpl(aRange, 0, aTmp);
+                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtFooter( pFmt ) );

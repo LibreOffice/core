@@ -230,7 +230,7 @@ sal_uLong SwASCIIParser::CallParser()
 
                 // !!!!!
                 OSL_ENSURE( !this, "Have to change - hard attr. to para. style" );
-                pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }
         delete pItemSet, pItemSet = 0;
@@ -371,7 +371,7 @@ sal_uLong SwASCIIParser::ReadChars()
                 // We skip the last one at the end
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
-                    pDoc->SplitNode( *pPam->GetPoint(), false );
+                    pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
             }
         }
 
@@ -425,8 +425,8 @@ sal_uLong SwASCIIParser::ReadChars()
                         {
                             InsertText( OUString( pLastStt ));
                         }
-                        pDoc->SplitNode( *pPam->GetPoint(), false );
-                        pDoc->InsertPoolItem(
+                        pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
+                        pDoc->getIDocumentContentOperations().InsertPoolItem(
                             *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
@@ -458,7 +458,7 @@ sal_uLong SwASCIIParser::ReadChars()
                 sal_Unicode c = *pStt;
                 *pStt = 0;
                 InsertText( OUString( pLastStt ));
-                pDoc->SplitNode( *pPam->GetPoint(), false );
+                pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
                 pLastStt = pStt;
                 nLineLen = 0;
                 *pStt = c;
@@ -470,7 +470,7 @@ sal_uLong SwASCIIParser::ReadChars()
         {
             // We found a CR/LF, thus save the text
             InsertText( OUString( pLastStt ));
-            pDoc->SplitNode( *pPam->GetPoint(), false );
+            pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;
             nLineLen = 0;
         }
@@ -486,7 +486,7 @@ sal_uLong SwASCIIParser::ReadChars()
 
 void SwASCIIParser::InsertText( const OUString& rStr )
 {
-    pDoc->InsertString( *pPam, rStr );
+    pDoc->getIDocumentContentOperations().InsertString( *pPam, rStr );
     pDoc->UpdateRsid( *pPam, rStr.getLength() );
     pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
 

@@ -1063,7 +1063,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
             UnoActionContext aContext(pDoc);
 
             if(pUnoCrsr->HasMark())
-                pDoc->DeleteAndJoin(*pUnoCrsr);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCrsr);
 
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
             sal_Int32 nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
@@ -1130,12 +1130,12 @@ bool DocInsertStringSplitCR(
         OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.copy( nStartIdx, nIdx - nStartIdx );
         if (!aTxt.isEmpty() &&
-            !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
+            !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
             OSL_FAIL( "Doc->Insert(Str) failed." );
             bOK = false;
         }
-        if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
+        if (!rDoc.getIDocumentContentOperations().SplitNode( *rNewCursor.GetPoint(), false ) )
         {
             OSL_FAIL( "SplitNode failed" );
             bOK = false;
@@ -1145,7 +1145,7 @@ bool DocInsertStringSplitCR(
     }
     aTxt = rText.copy( nStartIdx );
     if (!aTxt.isEmpty() &&
-        !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
+        !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
         OSL_FAIL( "Doc->Insert(Str) failed." );
         bOK = false;

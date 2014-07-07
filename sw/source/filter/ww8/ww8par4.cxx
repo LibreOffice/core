@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <IDocumentContentOperations.hxx>
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -237,7 +238,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
-        pRet = rDoc.InsertOLE(*pPaM, sNewName, rObject.GetAspect(), pFlySet, &rGrfSet, 0);
+        pRet = rDoc.getIDocumentContentOperations().InsertOLE(*pPaM, sNewName, rObject.GetAspect(), pFlySet, &rGrfSet, 0);
     }
     delete pMathFlySet;
     return pRet;
@@ -294,14 +295,14 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else
-            pFmt = rDoc.InsertDrawObj(*pPaM, *pRet, *pFlySet );
+            pFmt = rDoc.getIDocumentContentOperations().InsertDrawObj(*pPaM, *pRet, *pFlySet );
     }
     else if (
                 GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
                 GRAPHIC_BITMAP == aGraph.GetType()
             )
     {
-        pFmt = rDoc.Insert(*pPaM, OUString(), OUString(), &aGraph, pFlySet,
+        pFmt = rDoc.getIDocumentContentOperations().Insert(*pPaM, OUString(), OUString(), &aGraph, pFlySet,
             pGrfSet, NULL);
     }
     delete pTempSet;

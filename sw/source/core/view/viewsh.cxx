@@ -2529,7 +2529,7 @@ const IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() const { r
 IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() { return mpDoc; }
 const IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() const { return mpDoc; }
 IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() { return mpDoc; }
-IDocumentContentOperations* SwViewShell::getIDocumentContentOperations() { return mpDoc; }
+IDocumentContentOperations* SwViewShell::getIDocumentContentOperations() { return &mpDoc->getIDocumentContentOperations(); }
 IDocumentStylePoolAccess* SwViewShell::getIDocumentStylePoolAccess() { return mpDoc; }
 const IDocumentStatistics* SwViewShell::getIDocumentStatistics() const { return mpDoc; }
 

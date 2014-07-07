@@ -33,6 +33,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -312,7 +313,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
                     // All Flys in the section
-                    CopyFlyInFlyImpl( aRg, 0, aIdx );
+                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl( aRg, 0, aIdx );
 
                     // And what's with all the Bookmarks?
                     // ?????

@@ -31,6 +31,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
@@ -768,7 +769,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
             if( pUndo && pUndo->IsDelBox() )
                 ((SwUndoTblNdsChg*)pUndo)->SaveSection( pSttNd );
             else
-                pSttNd->GetDoc()->DeleteSection( pSttNd );
+                pSttNd->GetDoc()->getIDocumentContentOperations().DeleteSection( pSttNd );
         }
 
         // Also delete the Line?
@@ -1985,7 +1986,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, false );
+                pFromDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, false );
                 // Delete the initial TextNode
                 pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
             }

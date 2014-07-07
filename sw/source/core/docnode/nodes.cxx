@@ -1514,7 +1514,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
                 ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
-                pInsDoc->SplitNode( rPos, false );
+                pInsDoc->getIDocumentContentOperations().SplitNode( rPos, false );
             }
             else
             {
@@ -1579,7 +1579,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 {
                     SwDoc* const pInsDoc = pDestNd->GetDoc();
                     ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
-                    pInsDoc->SplitNode( rPos, false );
+                    pInsDoc->getIDocumentContentOperations().SplitNode( rPos, false );
                 }
                 else
                 {

@@ -1850,7 +1850,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
 
             for( sal_uInt16 n = 0; n < aFPos.nParaCnt + aFPos.nColumnCnt; ++n )
             {
-                GetDoc()->AppendTxtNode( aPos );
+                GetDoc()->getIDocumentContentOperations().AppendTxtNode( aPos );
                 if( !n && pNextFmt )
                 {
                     *m_pCurCrsr->GetPoint() = aPos;
@@ -1859,7 +1859,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 if( n < aFPos.nColumnCnt )
                 {
                     *m_pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->InsertPoolItem( *m_pCurCrsr,
+                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr,
                             SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
                 }
             }
@@ -1885,7 +1885,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
-                    GetDoc()->InsertItemSet( *m_pCurCrsr, aSet, 0 );
+                    GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurCrsr, aSet, 0 );
                 }
                 else {
                     OSL_ENSURE( !this, "No CntntNode" );
@@ -1901,7 +1901,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if (aFPos.nSpaceCnt)
                         comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
                     if (!sInsert.isEmpty())
-                        GetDoc()->InsertString( *m_pCurCrsr, sInsert.makeStringAndClear());
+                        GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurCrsr, sInsert.makeStringAndClear());
                 }
                 // no break - still need to set orientation
             case FILL_MARGIN:
@@ -1919,7 +1919,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->InsertPoolItem( *m_pCurCrsr, aAdj, 0 );
+                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr, aAdj, 0 );
                 }
                 break;
             }

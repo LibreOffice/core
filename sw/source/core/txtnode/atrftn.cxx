@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <fmtftn.hxx>
@@ -281,7 +282,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
             {
                 // 1) Die Section fuer die Fussnote wird beseitigt
                 // Es kann sein, dass die Inserts schon geloescht wurden.
-                pDoc->DeleteSection( &m_pStartNode->GetNode() );
+                pDoc->getIDocumentContentOperations().DeleteSection( &m_pStartNode->GetNode() );
             }
             else
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
@@ -362,7 +363,7 @@ void SwTxtFtn::CopyFtn(
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, NULL, true );
+        m_pTxtNode->GetDoc()->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aEnd, NULL, true );
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE

@@ -21,6 +21,8 @@
 #define INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
+using rtl::OUString;
 
 class SwPaM;
 struct SwPosition;

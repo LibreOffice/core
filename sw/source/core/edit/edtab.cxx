@@ -100,7 +100,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
-        GetDoc()->SplitNode( *pPos, false );
+        GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
     }
 
     // If called from a shell the adjust item is propagated
@@ -221,7 +221,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
-        GetDoc()->SplitNode( *pPos, false );
+        GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
     }
 
     const SwInsertTableOptions aInsTblOpts( rInsTblOpts.mnInsMode | tabopts::DEFAULT_BORDER,

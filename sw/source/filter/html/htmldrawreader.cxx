@@ -200,7 +200,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     aFrmSet.Put( aAnchor );
 
-    pDoc->InsertDrawObj( *pPam, *pNewDrawObj, aFrmSet );
+    pDoc->getIDocumentContentOperations().InsertDrawObj( *pPam, *pNewDrawObj, aFrmSet );
 }
 
 static void PutEEPoolItem( SfxItemSet &rEEItemSet,

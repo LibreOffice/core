@@ -1271,7 +1271,7 @@ void SAL_CALL SwXParagraph::dispose() throw (uno::RuntimeException, std::excepti
         // select paragraph
         {
             SwParaSelection aParaSel( aCursor );
-            pTxtNode->GetDoc()->DelFullPara(aCursor);
+            pTxtNode->GetDoc()->getIDocumentContentOperations().DelFullPara(aCursor);
         }
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
         m_pImpl->m_EventListeners.disposeAndClear(ev);

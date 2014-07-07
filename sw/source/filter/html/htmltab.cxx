@@ -5354,7 +5354,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                         pNd = pTblStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
-                    pDoc->MoveNodeRange( aSrcRg, aDstIdx,
+                    pDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
                         IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // Wenn die Caption vor der Tabelle eingefuegt wurde muss
@@ -5372,7 +5372,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 // Die Section wird jetzt nicht mehr gebraucht.
                 pPam->SetMark();
                 pPam->DeleteMark();
-                pDoc->DeleteSection( (SwStartNode *)pCapStNd );
+                pDoc->getIDocumentContentOperations().DeleteSection( (SwStartNode *)pCapStNd );
                 pTable->SetCaption( 0, false );
             }
 
@@ -5422,7 +5422,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         {
             pPam->SetMark();
             pPam->DeleteMark();
-            pDoc->DeleteSection( (SwStartNode *)pCapStNd );
+            pDoc->getIDocumentContentOperations().DeleteSection( (SwStartNode *)pCapStNd );
             pCurTable->SetCaption( 0, false );
         }
     }

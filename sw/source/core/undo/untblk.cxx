@@ -307,7 +307,7 @@ void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
     SwPaM aPam( rContext.GetDoc().GetNodes().GetEndOfContent() );
     SetPaM( aPam );
     SwPaM & rRepeatPaM( rContext.GetRepeatPaM() );
-    aPam.GetDoc()->CopyRange( aPam, *rRepeatPaM.GetPoint(), false );
+    aPam.GetDoc()->getIDocumentContentOperations().CopyRange( aPam, *rRepeatPaM.GetPoint(), false );
 }
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )

@@ -27,6 +27,7 @@
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1370,7 +1371,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
                 aCpyPam.GetPoint()->nContent = nSrcTo;
-                aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
+                aCpyPam.GetDoc()->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
                     false );
                 pDstDoc->GetIDocumentUndoRedo().DoUndo( bUndo );
 
@@ -1545,7 +1546,7 @@ void SwCompareData::ShowDelete(
     SwNodeIndex aInsPos( *pLineNd, nOffset );
     SwNodeIndex aSavePos( aInsPos, -1 );
 
-    ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, 0, aInsPos );
+    ((SwCompareData&)rData).rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
     rDoc.SetModified();
     ++aSavePos;
 
@@ -1887,7 +1888,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        pSrcRedl->GetDoc()->CopyRange(
+        pSrcRedl->GetDoc()->getIDocumentContentOperations().CopyRange(
                 *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
                 *pDestRedl->GetPoint(), false );
 

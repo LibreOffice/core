@@ -37,6 +37,7 @@
 #include <switerator.hxx>
 #include <fieldhint.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentContentOperations.hxx>
 
 /// count field types with a ResId, if 0 count all
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
@@ -202,7 +203,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         : nsSetAttrMode::SETATTR_DEFAULT;
 
     FOREACHPAM_START(GetCrsr()) // for each PaM
-        const bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
+        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     FOREACHPAM_END()

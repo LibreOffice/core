@@ -104,11 +104,11 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
         // so that also the DelPam be moved,  include it in the
         // Shell-Cursr-Ring !!
         _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, rDelPam );
-        pDoc->DeleteAndJoin( rDelPam );
+        pDoc->getIDocumentContentOperations().DeleteAndJoin( rDelPam );
     }
     else
     {
-        pDoc->DeleteRange( rDelPam );
+        pDoc->getIDocumentContentOperations().DeleteRange( rDelPam );
     }
 }
 
@@ -126,7 +126,7 @@ bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
-    rEditSh.GetDoc()->InsertString( aPam, rTxt );
+    rEditSh.GetDoc()->getIDocumentContentOperations().InsertString( aPam, rTxt );
     if( !bUndoIdInitialized )
     {
         bUndoIdInitialized = true;
@@ -181,7 +181,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         {
             if (nPos == pNd->GetTxt().getLength()) // at the End do an Insert
             {
-                pDoc->InsertString( *pPam, rTxt );
+                pDoc->getIDocumentContentOperations().InsertString( *pPam, rTxt );
             }
             else
             {
@@ -190,7 +190,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
                         pNd->GetTxt().getLength(), nPos + nSourceLength);
-                pDoc->ReplaceRange( *pPam, rTxt, false );
+                pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
             }
@@ -202,12 +202,12 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
                         pNd->GetTxt().getLength(), nPos + nSourceLength);
-                pDoc->ReplaceRange( *pPam, rTxt, false );
+                pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
             }
             else
-                pDoc->Overwrite( *pPam, rTxt );
+                pDoc->getIDocumentContentOperations().Overwrite( *pPam, rTxt );
         }
 
         if( bUndoIdInitialized )
@@ -334,7 +334,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 '.' != pFnd->GetLong()[ pFnd->GetLong().getLength() - 1 ] )
             {
                 // replace the selection
-                pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);
+                pDoc->getIDocumentContentOperations().ReplaceRange( aPam, pFnd->GetLong(), false);
                 bRet = true;
             }
         }
@@ -375,7 +375,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
 
-                pAutoDoc->CopyRange( aCpyPam, *aPam.GetPoint(), false );
+                pAutoDoc->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(), false );
 
                 aExpItem.RestoreDontExpandItems( *aPam.GetPoint() );
 

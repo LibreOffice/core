@@ -22,6 +22,7 @@
 #include <unotextrange.hxx>
 #include <unocrsr.hxx>
 #include "doc.hxx"
+#include <IDocumentContentOperations.hxx>
 #include <tools/datetime.hxx>
 #include "poolfmt.hxx"
 #include "unoredline.hxx"
@@ -637,7 +638,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // delete 'deleted' redlines and forget about the whole thing
         if (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType)
         {
-            pDoc->DeleteRange(aPaM);
+            pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
             // And what about the "deleted nodes"?
             // They have to be deleted as well (#i80689)!
             if( bIgnoreRedlines && pRedlineInfo->pContentIndex != NULL )
@@ -648,7 +649,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
                 {
                     SwNodeIndex aEnd( *pEnd, 1 );
                     SwPaM aDel( aIdx, aEnd );
-                    pDoc->DeleteRange(aDel);
+                    pDoc->getIDocumentContentOperations().DeleteRange(aDel);
                 }
             }
         }

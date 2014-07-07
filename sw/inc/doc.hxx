@@ -24,7 +24,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <IDocumentContentOperations.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
 #include <IDocumentStatistics.hxx>
@@ -193,6 +192,7 @@ class IDocumentLinksAdministration;
 class IDocumentListItems;
 class IDocumentListsAccess;
 class IDocumentOutlineNodes;
+class IDocumentContentOperations;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -211,6 +211,7 @@ namespace sw {
     class DocumentListItemsManager;
     class DocumentListsManager;
     class DocumentOutlineNodesManager;
+    class DocumentContentOperationsManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -250,7 +251,6 @@ class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentRedlineAccess,
     public IDocumentFieldsAccess,
-    public IDocumentContentOperations,
     public IDocumentStylePoolAccess,
     public IDocumentLineNumberAccess,
     public IDocumentStatistics,
@@ -258,6 +258,7 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentLayoutAccess,
     public IDocumentExternalData
 {
+    friend class ::sw::DocumentContentOperationsManager;
 
     friend void _InitCore();
     friend void _FinitCore();
@@ -292,6 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
     const ::boost::scoped_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
     const ::boost::scoped_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
+    const ::boost::scoped_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -427,26 +429,10 @@ private:
     // private methods
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
-    /** Only for internal use and therefore private.
-     Copy a range within the same or to another document.
-     Position may not lie within range! */
-    bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,
-            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
-
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
                                 SwFrmFmt* = 0 );
-
-    SwFlyFrmFmt* _InsNoTxtNode( const SwPosition&rPos, SwNoTxtNode*,
-                                const SfxItemSet* pFlyAttrSet,
-                                const SfxItemSet* pGrfAttrSet,
-                                SwFrmFmt* = 0 );
-
-    void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
-                            const sal_Int32 nEndContentIndex,
-                            const SwNodeIndex& rStartIdx,
-                            const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const OUString&, SwFmt*, bool, bool );
@@ -507,11 +493,6 @@ private:
 
     void InitTOXTypes();
     void Paste( const SwDoc& );
-    bool DeleteAndJoinImpl(SwPaM&, const bool);
-    bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
-    bool DeleteRangeImpl(SwPaM&, const bool unused = false);
-    bool DeleteRangeImplImpl(SwPaM &);
-    bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
 
 public:
     enum DocumentType {
@@ -645,52 +626,14 @@ public:
     bool containsUpdatableFields();
 
     // IDocumentContentOperations
-    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll) const SAL_OVERRIDE;
-    virtual void DeleteSection(SwNode* pNode) SAL_OVERRIDE;
-    virtual bool DeleteRange(SwPaM&) SAL_OVERRIDE;
-    virtual bool DelFullPara(SwPaM&) SAL_OVERRIDE;
-    // Add optional parameter <bForceJoinNext>, default value <false>
-    // Needed for hiding of deletion redlines
-    virtual bool DeleteAndJoin( SwPaM&,
-                                const bool bForceJoinNext = false ) SAL_OVERRIDE;
-    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool Overwrite(const SwPaM &rRg, const OUString& rStr) SAL_OVERRIDE;
-    virtual bool InsertString(const SwPaM &rRg, const OUString&,
-              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) SAL_OVERRIDE;
+    IDocumentContentOperations const & getIDocumentContentOperations() const;
+    IDocumentContentOperations & getIDocumentContentOperations();
+    ::sw::DocumentContentOperationsManager const & GetDocumentContentOperationsManager() const;
+    ::sw::DocumentContentOperationsManager & GetDocumentContentOperationsManager();
+
+    virtual void SetModified(SwPaM &rPaM);
     virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
     virtual bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
-    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
-    virtual SwDrawFrmFmt* InsertDrawObj(
-        const SwPaM &rRg,
-        SdrObject& rDrawObj,
-        const SfxItemSet& rFlyAttrSet ) SAL_OVERRIDE;
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
-
-    // Add a para for the char attribute exp...
-    virtual bool InsertPoolItem(
-        const SwPaM &rRg,
-        const SfxPoolItem&,
-        const SetAttrMode nFlags,
-        const bool bExpandCharToPara=false) SAL_OVERRIDE;
-
-    virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-                                const SetAttrMode nFlags) SAL_OVERRIDE;
-    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) SAL_OVERRIDE;
-    virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) SAL_OVERRIDE;
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
-    virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart) SAL_OVERRIDE;
-    virtual bool AppendTxtNode(SwPosition& rPos) SAL_OVERRIDE;
-        virtual void SetModified(SwPaM &rPaM);
-    virtual bool ReplaceRange(SwPaM& rPam, const OUString& rNewStr,
-                              const bool bRegExReplace) SAL_OVERRIDE;
-    virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) SAL_OVERRIDE;
 
     // IDocumentStylePoolAccess
     virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
@@ -844,14 +787,6 @@ public:
     SwFlyFrmFmt* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
-
-    void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const sal_Int32 nEndContentIndex,
-                            const SwNodeIndex& rInsPos,
-                            const SwPaM* pCopiedPaM = NULL,
-                            bool bMakeNewFrms = true,
-                            bool bDelRedlines = true,
-                            bool bCopyFlyAtFly = false ) const;
 
     //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
@@ -1043,6 +978,7 @@ public:
     void ChkCondColls();
 
     const SwGrfFmtColl* GetDfltGrfFmtColl() const   { return mpDfltGrfFmtColl; }
+    SwGrfFmtColl* GetDfltGrfFmtColl()  { return mpDfltGrfFmtColl; }
     const SwGrfFmtColls *GetGrfFmtColls() const     { return mpGrfFmtCollTbl; }
     SwGrfFmtColl *MakeGrfFmtColl(const OUString &rFmtName,
                                     SwGrfFmtColl *pDerivedFrom);
@@ -1592,6 +1528,7 @@ public:
     // Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
     SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return mpACEWord; }
+    void DeleteAutoCorrExceptWord();
 
     const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 

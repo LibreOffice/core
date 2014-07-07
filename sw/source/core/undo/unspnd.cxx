@@ -156,7 +156,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
         rPam.GetPoint()->nContent.Assign( pTNd, nCntnt );
 
         SwDoc* pDoc = rPam.GetDoc();
-        pDoc->SplitNode( *rPam.GetPoint(), bChkTblStt );
+        pDoc->getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), bChkTblStt );
 
         if( pHistory )
             pHistory->SetTmpEnd( pHistory->Count() );
@@ -186,7 +186,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoSplitNode::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rContext.GetDoc().SplitNode(
+    rContext.GetDoc().getIDocumentContentOperations().SplitNode(
         *rContext.GetRepeatPaM().GetPoint(), bChkTblStt );
 }
 

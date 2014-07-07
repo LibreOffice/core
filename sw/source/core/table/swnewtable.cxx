@@ -29,6 +29,7 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <cstdlib>
 #include <vector>
 #include <set>
@@ -893,7 +894,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     {
                         pDoc->GetIDocumentUndoRedo().DoUndo(false);
                     }
-                    pDoc->AppendTxtNode( *aPam.GetPoint() );
+                    pDoc->getIDocumentContentOperations().AppendTxtNode( *aPam.GetPoint() );
                     if( pUndo )
                     {
                         pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
@@ -903,7 +904,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
                     else
                     {
-                        pDoc->MoveNodeRange( aRg, rInsPosNd,
+                        pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
                             IDocumentContentOperations::DOC_NO_DELFRMS );
                     }
                 }

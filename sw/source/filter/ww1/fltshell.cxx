@@ -565,7 +565,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwSetExpField aFld((SwSetExpFieldType*)pFT, pB->GetValSys());
                 aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
                 MakePoint(rEntry, pDoc, aRegion);
-                pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
+                pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
                 MoveAttrs( *(aRegion.GetPoint()) );
             }
             if ( ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) &&
@@ -685,11 +685,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 nEnd = rEntry.GetEndCP();
                 if (rEntry.IsParaEnd())
                 {
-                    pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0, true);
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0, true);
                 }
                 else
                 {
-                    pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0);
                 }
             }
         }
@@ -1030,10 +1030,10 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, bool 
         const SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
         if (pPos->nContent.GetIndex() && !pSttNd->GetTxt().isEmpty())
                                             // insert position not in empty line
-            pDoc->SplitNode( *pPos, false );        // make new line
+            pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );        // make new line
         if (!pSttNd->GetTxt().isEmpty())
         {   // InsertPos not on empty line
-            pDoc->SplitNode( *pPos, false );        // new line
+            pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );        // new line
             pPaM->Move( fnMoveBackward );   // go to empty line
         }
 
@@ -1108,7 +1108,7 @@ SwFltShell::~SwFltShell()
 SwFltShell& SwFltShell::operator << ( const OUString& rStr )
 {
     OSL_ENSURE(eSubMode != Style, "char insert while in style-mode");
-    GetDoc().InsertString( *pPaM, rStr );
+    GetDoc().getIDocumentContentOperations().InsertString( *pPaM, rStr );
     return *this;
 }
 
@@ -1145,7 +1145,7 @@ OUString SwFltShell::QuoteStr( const OUString& rIn )
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 {
     OSL_ENSURE( eSubMode != Style, "char insert while in style-mode");
-    GetDoc().InsertString( *pPaM, OUString(c) );
+    GetDoc().getIDocumentContentOperations().InsertString( *pPaM, OUString(c) );
     return *this;
 }
 
@@ -1161,26 +1161,26 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
                         OUString::createFromAscii( pErr ));
     //, VVF_INVISIBLE
-    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+    GetDoc().getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return *this;
 }
 
 SwFltShell& SwFltShell::operator << (Graphic& rGraphic)
 {
     // embedded image !!
-    GetDoc().Insert(*pPaM, OUString(), OUString(), &rGraphic, NULL, NULL, NULL);
+    GetDoc().getIDocumentContentOperations().Insert(*pPaM, OUString(), OUString(), &rGraphic, NULL, NULL, NULL);
     return *this;
 }
 
 void SwFltShell::NextParagraph()
 {
-    GetDoc().AppendTxtNode(*pPaM->GetPoint());
+    GetDoc().getIDocumentContentOperations().AppendTxtNode(*pPaM->GetPoint());
 }
 
 void SwFltShell::NextPage()
 {
     NextParagraph();
-    GetDoc().InsertPoolItem(*pPaM,
+    GetDoc().getIDocumentContentOperations().InsertPoolItem(*pPaM,
         SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
 }
 
@@ -1272,7 +1272,7 @@ SwFltShell& SwFltShell::EndItem( sal_uInt16 nAttrId )
 
 SwFltShell& SwFltShell::operator << (const SwField& rField)
 {
-    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(rField), 0);
+    GetDoc().getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(rField), 0);
     return *this;
 }
 
@@ -1996,7 +1996,7 @@ void SwFltShell::BeginFootnote()
     //  be applied to PMW
 
     SwFmtFtn aFtn;
-    GetDoc().InsertPoolItem(*pPaM, aFtn, 0);
+    GetDoc().getIDocumentContentOperations().InsertPoolItem(*pPaM, aFtn, 0);
     OSL_ENSURE(pSavedPos == NULL, "SwFltShell");
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
@@ -2093,7 +2093,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
     }
     else
     {
-        GetDoc().InsertPoolItem( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
+        GetDoc().getIDocumentContentOperations().InsertPoolItem( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
     }
     pNewPD->WriteUseOn( // all pages
      (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE));

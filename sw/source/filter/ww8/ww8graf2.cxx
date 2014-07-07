@@ -366,7 +366,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
     aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
-    SwFlyFrmFmt* pFlyFmt = rDoc.Insert(*pPaM, rFileName, OUString(), pGraph,
+    SwFlyFrmFmt* pFlyFmt = rDoc.getIDocumentContentOperations().Insert(*pPaM, rFileName, OUString(), pGraph,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
@@ -393,7 +393,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     if( !pFlyFmt )                          // dann eben als Graphic
     {
 
-        pFlyFmt = rDoc.Insert( *pPaM, rFileName, OUString(), pGraph, &aFlySet,
+        pFlyFmt = rDoc.getIDocumentContentOperations().Insert( *pPaM, rFileName, OUString(), pGraph, &aFlySet,
             &rGrfSet, NULL);
     }
 
@@ -655,12 +655,12 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                             if (!pRet)
                             {
-                                pRet = rDoc.Insert(*pPaM, OUString(), OUString(),
+                                pRet = rDoc.getIDocumentContentOperations().Insert(*pPaM, OUString(), OUString(),
                                     &rGraph, &aAttrSet, &aGrSet, NULL );
                             }
                         }
                         else
-                            pRet = rDoc.InsertDrawObj(*pPaM, *pObject, aAttrSet );
+                            pRet = rDoc.getIDocumentContentOperations().InsertDrawObj(*pPaM, *pObject, aAttrSet );
                     }
                 }
 

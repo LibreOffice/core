@@ -137,7 +137,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // #i92993#
                 // Begin with start node of page header/footer to assure that
                 // complete content is checked for cursors and the complete content
-                // is deleted on below made method call <pDoc->DeleteSection(pNode)>
+                // is deleted on below made method call <pDoc->getIDocumentContentOperations().DeleteSection(pNode)>
                 SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 0 );
                 // If there is a Crsr registered in one of the nodes, we need to call the
                 // ParkCrsr in an (arbitrary) shell.
@@ -166,7 +166,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
             ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
             OSL_ENSURE( pNode, "A big problem." );
-            pDoc->DeleteSection( pNode );
+            pDoc->getIDocumentContentOperations().DeleteSection( pNode );
         }
         delete pFmt;
     }

@@ -72,7 +72,7 @@ namespace
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
             SwPaM aStartPaM(rStart);
-            io_pDoc->InsertString(aStartPaM, OUString(aStartMark));
+            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(aStartMark));
             rStart.nContent--;
             pField->SetMarkStartPos( rStart );
         }
@@ -85,7 +85,7 @@ namespace
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
             SwPaM aEndPaM(rEnd);
-            io_pDoc->InsertString(aEndPaM, OUString(aEndMark));
+            io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
             rEnd.nContent++;
         }
 
@@ -108,7 +108,7 @@ namespace
         {
             SwPaM aStart(rStart, rStart);
             aStart.End()->nContent++;
-            io_pDoc->DeleteRange(aStart);
+            io_pDoc->getIDocumentContentOperations().DeleteRange(aStart);
         }
 
         const SwPosition& rEnd = pField->GetMarkEnd();
@@ -121,7 +121,7 @@ namespace
         {
             SwPaM aEnd(rEnd, rEnd);
             aEnd.Start()->nContent--;
-            io_pDoc->DeleteRange(aEnd);
+            io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
         }
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);

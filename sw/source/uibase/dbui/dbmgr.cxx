@@ -79,6 +79,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
 #include <dbui.hrc>
@@ -1093,7 +1094,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
                                     {
                                         //append a paragraph
-                                        pWorkDoc->AppendTxtNode( aTestPos );
+                                        pWorkDoc->getIDocumentContentOperations().AppendTxtNode( aTestPos );
                                     }
                                 }
                                 pTargetShell->Paste( rWorkShell.GetDoc(), true );
@@ -2901,7 +2902,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
                 {
                     //append a paragraph
-                    pWorkDoc->AppendTxtNode( aTestPos );
+                    pWorkDoc->getIDocumentContentOperations().AppendTxtNode( aTestPos );
                 }
             }
 

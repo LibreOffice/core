@@ -1480,7 +1480,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+                        pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0);
                     }
                 }
             }
@@ -1637,7 +1637,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->InsertPoolItem(aPaM, *rEntry.pAttr, 0);
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr, 0);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -2258,7 +2258,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     SwPaM aEnd(*pPaM->End(), *pPaM->End());
     pCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
-    rDoc.InsertPoolItem(aEnd, SwFmtFld(aPostIt), 0);
+    rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFmtFld(aPostIt), 0);
     pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
 
     // If this is a range, create the associated fieldmark.
@@ -2551,7 +2551,7 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 
     bFirstPara = false;
 
-    rDoc.AppendTxtNode(rPos);
+    rDoc.getIDocumentContentOperations().AppendTxtNode(rPos);
 
     // We can flush all anchored graphics at the end of a paragraph.
     pAnchorStck->Flush();
@@ -3395,19 +3395,19 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
     {
         if (rAddString.getLength() <= nCharsLeft)
         {
-            rDoc.InsertString(*pPaM, rAddString);
+            rDoc.getIDocumentContentOperations().InsertString(*pPaM, rAddString);
         }
         else
         {
-            rDoc.InsertString(*pPaM, rAddString.copy(0, nCharsLeft));
+            rDoc.getIDocumentContentOperations().InsertString(*pPaM, rAddString.copy(0, nCharsLeft));
             AppendTxtNode(*pPaM->GetPoint());
-            rDoc.InsertString(*pPaM, rAddString.copy(nCharsLeft));
+            rDoc.getIDocumentContentOperations().InsertString(*pPaM, rAddString.copy(nCharsLeft));
         }
     }
     else
     {
         AppendTxtNode(*pPaM->GetPoint());
-        rDoc.InsertString(*pPaM, rAddString);
+        rDoc.getIDocumentContentOperations().InsertString(*pPaM, rAddString);
     }
 
     bReadTable = false;
@@ -3427,7 +3427,7 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
         {
             for(sal_uInt16 nCh = 0; nCh < nEnd - rPos; ++nCh)
             {
-                rDoc.InsertString( *pPaM, OUString(cSymbol) );
+                rDoc.getIDocumentContentOperations().InsertString( *pPaM, OUString(cSymbol) );
             }
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
         }
@@ -3524,7 +3524,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwPageNumberField aFld(
                     (SwPageNumberFieldType*)rDoc.GetSysFldType(
                     RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
-                rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
             }
             break;
         case 0xe:
@@ -3537,7 +3537,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwCntntNode *pCntNd=pPaM->GetCntntNode();
                 if (pCntNd!=NULL && pCntNd->Len()>0) // if par is empty not break is needed
                     AppendTxtNode(*pPaM->GetPoint());
-                rDoc.InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
@@ -3572,13 +3572,13 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             bRet = HandlePageBreakChar();
             break;
         case 0x1e:              // Non-breaking hyphen
-            rDoc.InsertString( *pPaM, OUString(CHAR_HARDHYPHEN) );
+            rDoc.getIDocumentContentOperations().InsertString( *pPaM, OUString(CHAR_HARDHYPHEN) );
             break;
         case 0x1f:              // Non-required hyphens
-            rDoc.InsertString( *pPaM, OUString(CHAR_SOFTHYPHEN) );
+            rDoc.getIDocumentContentOperations().InsertString( *pPaM, OUString(CHAR_SOFTHYPHEN) );
             break;
         case 0xa0:              // Non-breaking spaces
-            rDoc.InsertString( *pPaM, OUString(CHAR_HARDBLANK)  );
+            rDoc.getIDocumentContentOperations().InsertString( *pPaM, OUString(CHAR_HARDBLANK)  );
             break;
         case 0x1:
             /*
@@ -4100,7 +4100,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 {
                     AppendTxtNode(*pPaM->GetPoint());
                 }
-                rDoc.InsertPoolItem(*pPaM,
+                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM,
                     SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bFirstParaOfPage = true;
                 bPgSecBreak = false;
@@ -4361,7 +4361,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
             rIdx.GetNode().GetCntntNode(), 0);
         SwPaM aPage(aPamStart);
 
-        rDoc.InsertPoolItem(aPage, rPgDesc, 0);
+        rDoc.getIDocumentContentOperations().InsertPoolItem(aPage, rPgDesc, 0);
     }
 }
 
@@ -4426,7 +4426,7 @@ void wwSectionManager::InsertSegments()
         if ( aIter->maSep.bkc == 1 && aIter->maSep.ccolM1 > 0 )
         {
             SwPaM start( aIter->maStart );
-            mrReader.rDoc.InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+            mrReader.rDoc.getIDocumentContentOperations().InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             continue;
         }
 
@@ -4608,7 +4608,7 @@ void wwSectionManager::InsertSegments()
         {
             SwNodeIndex aIdx(*pTxtNd);
             SwPaM aTest(aIdx);
-            mrReader.rDoc.DelFullPara(aTest);
+            mrReader.rDoc.getIDocumentContentOperations().DelFullPara(aTest);
             pTxtNd = 0;
         }
     }
@@ -4623,7 +4623,7 @@ void wwExtraneousParas::delete_all_from_doc()
         SwTxtNode *pTxtNode = *aI;
         SwNodeIndex aIdx(*pTxtNode);
         SwPaM aTest(aIdx);
-        m_rDoc.DelFullPara(aTest);
+        m_rDoc.getIDocumentContentOperations().DelFullPara(aTest);
     }
     m_aTxtNodes.clear();
 }
@@ -5058,13 +5058,13 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         const SwPosition* pPos = pPaM->GetPoint();
 
         // split current paragraph to get new paragraph for the insertion
-        rDoc.SplitNode( *pPos, false );
+        rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
 
         // another split, if insertion position was not at the end of the current paragraph.
         SwTxtNode const*const pTxtNd = pPos->nNode.GetNode().GetTxtNode();
         if ( pTxtNd->GetTxt().getLength() )
         {
-            rDoc.SplitNode( *pPos, false );
+            rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
             // move PaM back to the newly empty paragraph
             pPaM->Move( fnMoveBackward );
         }

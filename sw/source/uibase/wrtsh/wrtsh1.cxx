@@ -1204,7 +1204,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         const SwTwips nWidthOfTabs = pTxtNode
                                      ? pTxtNode->GetWidthOfLeadingTabs()
                                      : 0;
-        GetDoc()->RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
+        GetDoc()->getIDocumentContentOperations().RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
         const bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
         const bool bRightToLeft = IsInRightToLeftText();

@@ -201,8 +201,8 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
         OUString const aEntry( GetField()->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
-        pDoc->DeleteRange( *pPaM );
-        pDoc->InsertString( *pPaM, aEntry );
+        pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
+        pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     }
 }
 
@@ -464,7 +464,7 @@ void SwTxtFld::DeleteTxtFld( const SwTxtFld& rTxtFld )
         GetPamForTxtFld(rTxtFld, pPamForTxtFld);
         if (pPamForTxtFld.get() != NULL)
         {
-            rTxtFld.GetTxtNode().GetDoc()->DeleteAndJoin(*pPamForTxtFld);
+            rTxtFld.GetTxtNode().GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPamForTxtFld);
         }
     }
 }

@@ -39,6 +39,7 @@
 #include <doc.hxx>
 #include <unocrsr.hxx>
 #include <IMark.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -343,7 +344,7 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
             }
         }
         if (!pPam) { return false; }
-        bRet = pDoc->CopyRange( *pPam, aPos, false ) || bRet;
+        bRet = pDoc->getIDocumentContentOperations().CopyRange( *pPam, aPos, false ) || bRet;
     }
 
     pInsDoc->UnlockExpFlds();

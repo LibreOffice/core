@@ -368,7 +368,7 @@ SwDocShell::~SwDocShell()
     if( mpDoc )
     {
         mpDoc->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
-        SwChartDataProvider *pPCD = mpDoc->getIDocumentChartDataProvdiderAccess().GetChartDataProvider();
+        SwChartDataProvider *pPCD = mpDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
         if (pPCD)
             pPCD->dispose();
     }

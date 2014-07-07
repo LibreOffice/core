@@ -191,7 +191,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
                     pClpDoc->CloneSdrObj( *pObj, false, true );
 
                 SwPaM aTemp(aPos);
-                pClpDoc->InsertDrawObj(aTemp, *pNew, aSet );
+                pClpDoc->getIDocumentContentOperations().InsertDrawObj(aTemp, *pNew, aSet );
             }
             else
             {
@@ -375,7 +375,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     aSet.Put( aAnchor );
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
                                                 GetDoc() == pDestDoc, true );
-                    pFmt = pDestDoc->InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
+                    pFmt = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *pDestShell->GetCrsr(), *pNew, aSet );
                 }
                 else
                     pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
@@ -797,7 +797,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
                 aIndexBefore--;
-                pClpDoc->CopyRange( rCopy, rInsPos, false );
+                pClpDoc->getIDocumentContentOperations().CopyRange( rCopy, rInsPos, false );
                 {
                     ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
@@ -1031,7 +1031,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
 
                 aIndexBefore--;
 
-                pClpDoc->CopyRange( aCpyPam, rInsPos, false );
+                pClpDoc->getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, false );
                 // Note: aCpyPam is invalid now
 
                 ++aIndexBefore;
@@ -1060,7 +1060,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             {
                 //remove the paragraph in front of the table
                 SwPaM aPara(aInsertPosition);
-                GetDoc()->DelFullPara(aPara);
+                GetDoc()->getIDocumentContentOperations().DelFullPara(aPara);
             }
             //additionally copy page bound frames
             if( bIncludingPageFrames && pClpDoc->GetSpzFrmFmts()->size() )
@@ -1140,7 +1140,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         StartUndo(UNDO_INSERT);
         SwNodeIndex aTblIdx(  *pTableNode, -1 );
         SwPosition aBefore(aTblIdx);
-        if(GetDoc()->AppendTxtNode( aBefore ))
+        if(GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore ))
         {
             SwPaM aTmp(aBefore);
             aCpyPam = aTmp;
@@ -1167,7 +1167,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         //remove the paragraph in the second doc, too
         SwNodeIndex aIdx( rToFill.GetDoc()->GetNodes().GetEndOfExtras(), 2 );
         SwPaM aPara( aIdx ); //DocStart
-        rToFill.GetDoc()->DelFullPara(aPara);
+        rToFill.GetDoc()->getIDocumentContentOperations().DelFullPara(aPara);
     }
     // now the page bound objects
     // additionally copy page bound frames
@@ -1432,7 +1432,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     DelSelectedObj();
 
-                    GetDoc()->InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
+                    GetDoc()->getIDocumentContentOperations().InsertDrawObj( *GetCrsr(), *pNewObj, aFrmSet );
                 }
                 else
                 {

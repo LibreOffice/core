@@ -40,6 +40,7 @@
 #include "unoframe.hxx"
 #include "doc.hxx"
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentContentOperations.hxx>
 #include "unocoll.hxx"
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -285,7 +286,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
-                pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
                                         ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                         &aItemSet,
                                         NULL,
@@ -339,7 +340,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         // TODO/LATER: Actually it should be set here
         if( pTxtCrsr )
         {
-            pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
+            pFrmFmt = pDoc->getIDocumentContentOperations().InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
             pOLENd = lcl_GetOLENode( pFrmFmt );
         }
         aObjName = aName;
@@ -586,7 +587,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             uno::UNO_QUERY_THROW );
 
         {
-            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
@@ -646,7 +647,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                             Size( nWidth, nHeight ),
                             MAP_100TH_MM );
 
-    SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+    SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
                                        ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                                        &aAppletImpl.GetItemSet(),
                                        NULL,
@@ -719,7 +720,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                         makeAny( OUString( rMimeType ) ) );
             }
 
-            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
@@ -870,7 +871,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
-            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,

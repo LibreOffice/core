@@ -253,7 +253,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         rDoc.DeleteRedline( aTmp, true, USHRT_MAX );
     }
 
-    rDoc.DelFullPara(rPam);
+    rDoc.getIDocumentContentOperations().DelFullPara(rPam);
 
     SwPaM *const pPam = & rPam;
     pPam->DeleteMark();

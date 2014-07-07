@@ -21,6 +21,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -95,7 +96,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     else
     {
         SwPaM aPaM( *((SwCntntFrm*)pFlow)->GetNode() );
-        GetDoc()->InsertPoolItem( aPaM, aNew, 0 );
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew, 0 );
     }
     EndAllActionAndCall();
 }

@@ -461,7 +461,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
-        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        pDoc->getIDocumentContentOperations().Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // Namen am FrmFmt setzen
     if( !aName.isEmpty() )
@@ -633,7 +633,7 @@ void SwHTMLParser::EndObject()
 
         // und in das Dok einfuegen
         SwFrmFmt* pFlyFmt =
-            pDoc->Insert( *pPam,
+            pDoc->getIDocumentContentOperations().Insert( *pPam,
                     ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &pAppletImpl->GetItemSet(),
                     NULL,
@@ -765,7 +765,7 @@ void SwHTMLParser::EndApplet()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
-        pDoc->Insert( *pPam,
+        pDoc->getIDocumentContentOperations().Insert( *pPam,
                     ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &pAppletImpl->GetItemSet(),
                     NULL,
@@ -935,7 +935,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
-        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        pDoc->getIDocumentContentOperations().Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =

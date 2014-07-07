@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
@@ -77,7 +78,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
                 !rNd.IsInProtectSect() )
             {
                 // delete everything
-                GetDoc()->DeleteAndJoin( aDelPam );
+                GetDoc()->getIDocumentContentOperations().DeleteAndJoin( aDelPam );
                 SaveTblBoxCntnt( aDelPam.GetPoint() );
             }
 
@@ -95,7 +96,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             // want to delete the table node before the first cell as well.
             aPam.Start()->nNode = aPam.Start()->nNode.GetNode().FindTableNode()->GetIndex();
         // delete everything
-        GetDoc()->DeleteAndJoin( aPam );
+        GetDoc()->getIDocumentContentOperations().DeleteAndJoin( aPam );
         SaveTblBoxCntnt( aPam.GetPoint() );
     }
 
@@ -220,7 +221,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                 ++pNextInsert;
             }
             else if( IsBlockMode() )
-                GetDoc()->SplitNode( *pPos, false );
+                GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
         }
 
         // Only for a selection (non-text nodes have selection but Point/GetMark are equal)
@@ -235,7 +236,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = false;
         }
 
-        const bool bSuccess( GetDoc()->CopyRange( *PCURCRSR, *pPos, false ) );
+        const bool bSuccess( GetDoc()->getIDocumentContentOperations().CopyRange( *PCURCRSR, *pPos, false ) );
         if (!bSuccess)
             continue;
 
@@ -304,7 +305,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         FOREACHPAM_START(GetCrsr())
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
-                bRet = GetDoc()->ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )
+                bRet = GetDoc()->getIDocumentContentOperations().ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )
                     || bRet;
                 SaveTblBoxCntnt( PCURCRSR->GetPoint() );
             }
@@ -329,7 +330,7 @@ bool SwEditShell::DelFullPara()
         {
             SET_CURR_SHELL( this );
             StartAllAction();
-            bRet = GetDoc()->DelFullPara( *pCrsr );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( *pCrsr );
             EndAllAction();
         }
     }

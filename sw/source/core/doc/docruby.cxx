@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <docary.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
@@ -126,7 +127,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         // set/reset the attribute
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() )
                         {
-                            InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
+                            getIDocumentContentOperations().InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
                         }
                         else
                         {
@@ -138,7 +139,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         aCheckEntry.GetText() != pEntry->GetText() )
                     {
                         // text is changed, so replace the original
-                        ReplaceRange( aPam, pEntry->GetText(), false );
+                        getIDocumentContentOperations().ReplaceRange( aPam, pEntry->GetText(), false );
                     }
                     aPam.DeleteMark();
                 }
@@ -158,10 +159,10 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
                             !pEntry->GetText().isEmpty() )
                         {
-                            InsertString( aPam, pEntry->GetText() );
+                            getIDocumentContentOperations().InsertString( aPam, pEntry->GetText() );
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().getLength();
-                            InsertPoolItem(
+                            getIDocumentContentOperations().InsertPoolItem(
                                 aPam, pEntry->GetRubyAttr(), nsSetAttrMode::SETATTR_DONTEXPAND );
                         }
                         else

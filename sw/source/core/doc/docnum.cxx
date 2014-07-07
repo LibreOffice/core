@@ -887,7 +887,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         }
         if (!sListId.isEmpty())
         {
-            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            getIDocumentContentOperations().InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
     }
 
@@ -927,7 +927,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ), 0 );
+        getIDocumentContentOperations().InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ), 0 );
     }
 
     if ( bResetIndentAttrs
@@ -953,7 +953,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ), 0 );
+        getIDocumentContentOperations().InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ), 0 );
     }
 }
 
@@ -1260,7 +1260,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 bool SwDoc::NoNum( const SwPaM& rPam )
 {
 
-    bool bRet = SplitNode( *rPam.GetPoint(), false );
+    bool bRet = getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), false );
     // Do we actually use Numbering at all?
     if( bRet )
     {
@@ -1913,12 +1913,12 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                        found. The new position to insert the moved
                        paragraph at is before the inserted
                        paragraph. */
-                    AppendTxtNode(*aInsPam.GetPoint());
+                    getIDocumentContentOperations().AppendTxtNode(*aInsPam.GetPoint());
                     aInsPos = *aInsPam.GetPoint();
                 }
             }
 
-            CopyRange( aPam, aInsPos, false );
+            getIDocumentContentOperations().CopyRange( aPam, aInsPos, false );
             if( bDelLastPara )
             {
                 // We need to remove the last empty Node again
@@ -2004,7 +2004,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
     }
 
-    MoveNodeRange( aMvRg, aIdx, DOC_MOVEREDLINES );
+    getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx, IDocumentContentOperations::DOC_MOVEREDLINES );
 
     if( pUndo )
     {

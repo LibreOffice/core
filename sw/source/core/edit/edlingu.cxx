@@ -562,7 +562,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
         DelSoftHyph( *pCrsr );
         pSttPos->nContent += nHyphPos;
         SwPaM aRg( *pSttPos );
-        pDoc->InsertString( aRg, OUString(CHAR_SOFTHYPHEN) );
+        pDoc->getIDocumentContentOperations().InsertString( aRg, OUString(CHAR_SOFTHYPHEN) );
     }
     // revoke selection
     pCrsr->DeleteMark();
@@ -1169,11 +1169,11 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
                     // change text ...
-                    mpDoc->DeleteAndJoin(*pCrsr);
+                    mpDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrsr);
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
-                    mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
+                    mpDoc->getIDocumentContentOperations().InsertString(*pCrsr, aCurrentNewPortion->sText);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
@@ -1203,7 +1203,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
             pCrsr->GetMark()->nContent = aCurrentEndPosition->nRight;
 
             // delete the sentence completely
-            mpDoc->DeleteAndJoin(*pCrsr);
+            mpDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrsr);
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
             while(aCurrentNewPortion != rNewPortions.end())
             {
@@ -1221,7 +1221,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
                     SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 // insert the new string
-                mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
+                mpDoc->getIDocumentContentOperations().InsertString(*pCrsr, aCurrentNewPortion->sText);
 
                 // set the cursor to the end of the inserted string
                 *pCrsr->Start() = *pCrsr->End();

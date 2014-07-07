@@ -528,7 +528,7 @@ void SwHTMLParser::NewField()
         }
         else
         {
-            pDoc->InsertPoolItem( *pPam, SwFmtFld(*pFld), 0 );
+            pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtFld(*pFld), 0 );
             delete pFld;
         }
         bInField = true;
@@ -566,7 +566,7 @@ void SwHTMLParser::EndField()
             break;
         }
 
-        pDoc->InsertPoolItem( *pPam, SwFmtFld(*pField), 0 );
+        pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtFld(*pField), 0 );
         delete pField;
         pField = 0;
     }

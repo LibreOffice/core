@@ -299,7 +299,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         sChar += OUString(pTxt->GetTxt()[--nPos]);
         pPaM->SetMark();
         pPaM->GetMark()->nContent--;
-        rDoc.DeleteRange( *pPaM );
+        rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         pPaM->DeleteMark();
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
         pFN = pTxt->InsertItem(aFtn, nPos, nPos);
@@ -354,7 +354,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pReffingStck->Delete(*pPaM);
-                rDoc.DeleteRange( *pPaM );
+                rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
                 pPaM->DeleteMark();
             }
         }

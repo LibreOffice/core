@@ -96,6 +96,7 @@
 #include <DocumentListItemsManager.hxx>
 #include <DocumentListsManager.hxx>
 #include <DocumentOutlineNodesManager.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -207,6 +208,7 @@ SwDoc::SwDoc()
     m_pDocumentListItemsManager( new ::sw::DocumentListItemsManager() ),
     m_pDocumentListsManager( new ::sw::DocumentListsManager( *this ) ),
     m_pDocumentOutlineNodesManager( new ::sw::DocumentOutlineNodesManager( *this ) ),
+    m_pDocumentContentOperationsManager( new ::sw::DocumentContentOperationsManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -963,7 +965,7 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             aIndexBefore--;
 
-            rSource.CopyRange( aCpyPam, rInsPos, true );
+            rSource.getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, true );
             // Note: aCpyPam is invalid now
 
             ++aIndexBefore;
@@ -980,7 +982,7 @@ void SwDoc::Paste( const SwDoc& rSource )
         {
             //remove the paragraph in front of the table
             SwPaM aPara(aInsertPosition);
-            this->DelFullPara(aPara);
+            this->getIDocumentContentOperations().DelFullPara(aPara);
         }
         //additionally copy page bound frames
         if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->size() )

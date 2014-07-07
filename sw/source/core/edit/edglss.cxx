@@ -144,7 +144,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
             SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
-            pMyDoc->CopyRange( aCpyPam, aInsPos, false );
+            pMyDoc->getIDocumentContentOperations().CopyRange( aCpyPam, aInsPos, false );
 
             nRet = rBlock.PutDoc();
         }
@@ -224,7 +224,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 {
                     PCURCRSR->SetMark();
                     PCURCRSR->Move( fnMoveForward, fnGoCntnt );
-                    bRet = GetDoc()->CopyRange( *PCURCRSR, aPos, false )
+                    bRet = GetDoc()->getIDocumentContentOperations().CopyRange( *PCURCRSR, aPos, false )
                         || bRet;
                     PCURCRSR->Exchange();
                     PCURCRSR->DeleteMark();
@@ -241,7 +241,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                     // but we want to copy the table and the start node before
                     // the first cell as well.
                     aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
-                bRet = GetDoc()->CopyRange( aPaM, aPos, false ) || bRet;
+                bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, false ) || bRet;
             }
 
         FOREACHPAM_END()

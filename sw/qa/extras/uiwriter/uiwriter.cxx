@@ -100,11 +100,11 @@ void SwUiWriterTest::testReplaceForward()
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
 
     SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
     lcl_selectCharacters(aPaM, 5, 9);
-    pDoc->ReplaceRange(aPaM, OUString("toto"), false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTxtNode->GetTxt());
 
@@ -150,11 +150,11 @@ void SwUiWriterTest::testReplaceBackward()
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->InsertString(aPaM, OUString("toto titi tutu"));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("toto titi tutu"));
     SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
-    pDoc->ReplaceRange(aPaM, OUString("toto"), false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTxtNode->GetTxt());
 

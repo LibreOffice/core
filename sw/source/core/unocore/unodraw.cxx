@@ -725,7 +725,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if ( !pTemp )
         pTemp = pPam;
     UnoActionContext aAction(pDoc);
-    pDoc->InsertDrawObj( *pTemp, *pObj, aSet );
+    pDoc->getIDocumentContentOperations().InsertDrawObj( *pTemp, *pObj, aSet );
     SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
     if(pFmt)
         pFmt->Add(pShape);

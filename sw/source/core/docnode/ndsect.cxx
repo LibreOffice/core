@@ -248,7 +248,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             }
             else if( pSttPos->nContent.GetIndex() )
             {
-                SplitNode( *pSttPos, false );
+                getIDocumentContentOperations().SplitNode( *pSttPos, false );
             }
 
             if( pPrvNd && 2 == nRegionRet )
@@ -262,7 +262,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
                 {
                     sal_Int32 nCntnt = pSttPos->nContent.GetIndex();
-                    SplitNode( *pEndPos, false );
+                    getIDocumentContentOperations().SplitNode( *pEndPos, false );
 
                     SwTxtNode* pTNd;
                     if( pEndPos->nNode.GetIndex() == pSttPos->nNode.GetIndex() )
@@ -306,7 +306,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             {
                 pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, true );
             }
-            SplitNode( *pPos, false );
+            getIDocumentContentOperations().SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
                 pPos->nNode, *pFmt, rNewData, pTOXBase, 0, true);
         }
@@ -550,7 +550,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
             SwNodeIndex aUpdIdx( *pIdx );
-            DeleteSection( (SwNode*)pSectNd );
+            getIDocumentContentOperations().DeleteSection( (SwNode*)pSectNd );
             if( pFtnEndAtTxtEnd )
                 GetFtnIdxs().UpdateFtn( aUpdIdx );
             SetModified();

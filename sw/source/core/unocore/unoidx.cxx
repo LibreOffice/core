@@ -1344,7 +1344,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     UnoActionContext aAction(pDoc);
     if (aPam.HasMark())
     {
-        pDoc->DeleteAndJoin(aPam);
+        pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
     }
 
     SwTOXBase & rTOXBase = m_pImpl->m_pProps->GetTOXBase();
@@ -1956,7 +1956,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
     }
 
-    pDoc->InsertPoolItem(rPam, rMark, nInsertFlags);
+    pDoc->getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags);
     if (bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
         rPam.Exchange();

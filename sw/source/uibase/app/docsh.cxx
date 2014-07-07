@@ -1104,11 +1104,7 @@ void SwDocShell::LoadingFinished()
     // enables the document modification again.
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
-<<<<<<< HEAD
-    const bool bHasDocToStayModified( mpDoc->IsModified() && mpDoc->LinksUpdated() );
-=======
-    const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->getIDocumentLinksAdministration().LinksUpdated() );
->>>>>>> Refactored IDocumentLinksAdministration out of SwDoc.
+    const bool bHasDocToStayModified( mpDoc->IsModified() && mpDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
     FinishedLoading( SFX_LOADED_ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
@@ -1131,11 +1127,7 @@ void SwDocShell::CancelTransfers()
 {
     // Cancel all links from LinkManager
     aFinishedTimer.Stop();
-<<<<<<< HEAD
-    mpDoc->GetLinkManager().CancelTransfers();
-=======
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().CancelTransfers();
->>>>>>> Refactored IDocumentLinksAdministration out of SwDoc.
+    mpDoc->getIDocumentLinksAdministration().GetLinkManager().CancelTransfers();
     SfxObjectShell::CancelTransfers();
 }
 

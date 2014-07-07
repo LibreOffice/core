@@ -133,7 +133,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aFld.SetHelp(aFormula.sHelp);
         aFld.SetToolTip(aFormula.sToolTip);
 
-        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
         return FLD_OK;
     }
     else
@@ -253,7 +253,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
         }
 
-        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
         return FLD_OK;
     }
     else

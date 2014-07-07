@@ -224,7 +224,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             pTmpDoc->DeleteRedline( *pPam, true, USHRT_MAX );
         }
         pPam->DeleteMark();
-        pTmpDoc->DelFullPara( *pPam );
+        pTmpDoc->getIDocumentContentOperations().DelFullPara( *pPam );
         pPam->GetPoint()->nContent.Assign( pPam->GetCntntNode(), 0 );
     }
     else
@@ -302,7 +302,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
     if( bIsAppend )
     {
         pPam->GetPoint()->nNode = nNode - 1;
-        pTmpDoc->AppendTxtNode( *pPam->GetPoint() );
+        pTmpDoc->getIDocumentContentOperations().AppendTxtNode( *pPam->GetPoint() );
 
         pPam->SetMark();
         pPam->Move( fnMoveBackward );
@@ -400,13 +400,13 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     case ND_TEXTNODE:
         if( bIsAppend )
         {
-            rDoc.AppendTxtNode( *rContext.GetRepeatPaM().GetPoint() );
+            rDoc.getIDocumentContentOperations().AppendTxtNode( *rContext.GetRepeatPaM().GetPoint() );
         }
         else
         {
             OUString const aTxt( static_cast<SwTxtNode*>(pCNd)->GetTxt() );
             ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-            rDoc.InsertString( rContext.GetRepeatPaM(),
+            rDoc.getIDocumentContentOperations().InsertString( rContext.GetRepeatPaM(),
                 aTxt.copy(nCntnt - nLen, nLen) );
         }
         break;
@@ -418,7 +418,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             if( pGrfNd->IsGrfLink() )
                 pGrfNd->GetFileFilterNms( &sFile, &sFilter );
 
-            rDoc.Insert( rContext.GetRepeatPaM(), sFile, sFilter,
+            rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(), sFile, sFilter,
                                 &pGrfNd->GetGrf(),
                                 0/* Graphics collection*/, NULL, NULL );
         }
@@ -438,7 +438,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             if (aCnt.StoreEmbeddedObject(rSwOLE.GetOleRef(), aName, true, OUString(), OUString()))
             {
                 uno::Reference < embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
-                rDoc.Insert( rContext.GetRepeatPaM(),
+                rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(),
                     svt::EmbeddedObjectRef( aNew,
                         static_cast<SwOLENode*>(pCNd)->GetAspect() ),
                     NULL, NULL, NULL );
@@ -678,7 +678,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         // move it out of the way so it is not registered at deleted node
         aIdx.Assign(0, 0);
 
-        pDoc->DeleteAndJoin( rPam );
+        pDoc->getIDocumentContentOperations().DeleteAndJoin( rPam );
         rPam.DeleteMark();
         pNd = rPam.GetNode().GetTxtNode();
         OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
@@ -688,7 +688,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_bSplitNext )
     {
         SwPosition aPos( *pNd, aIdx );
-        pDoc->SplitNode( aPos, false );
+        pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
         pNd->RestoreMetadata(m_pMetadataUndoEnd);
         pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
         aIdx.Assign( pNd, m_nSttCnt );
@@ -770,7 +770,7 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
             delete pHistory, pHistory = 0;
     }
 
-    rDoc.ReplaceRange( rPam, m_sIns, m_bRegExp );
+    rDoc.getIDocumentContentOperations().ReplaceRange( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
 }
 

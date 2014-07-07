@@ -653,7 +653,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // Make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     if( pStt->nContent.GetIndex() )
-        SplitNode( *pStt, false );
+        getIDocumentContentOperations().SplitNode( *pStt, false );
 
     bool bEndCntnt = 0 != pEnd->nContent.GetIndex();
 
@@ -663,7 +663,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         if( pEnd->nNode.GetNode().GetCntntNode()->Len() != pEnd->nContent.GetIndex()
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
-            SplitNode( *pEnd, false );
+            getIDocumentContentOperations().SplitNode( *pEnd, false );
             ((SwNodeIndex&)pEnd->nNode)--;
             ((SwIndex&)pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetCntntNode(), 0 );
@@ -1146,7 +1146,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     if( pStt->nContent.GetIndex() )
-        SplitNode( *pStt, false );
+        getIDocumentContentOperations().SplitNode( *pStt, false );
 
     bool bEndCntnt = 0 != pEnd->nContent.GetIndex();
 
@@ -1156,7 +1156,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         if( pEnd->nNode.GetNode().GetCntntNode()->Len() != pEnd->nContent.GetIndex()
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
-            SplitNode( *pEnd, false );
+            getIDocumentContentOperations().SplitNode( *pEnd, false );
             ((SwNodeIndex&)pEnd->nNode)--;
             ((SwIndex&)pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetCntntNode(), 0 );
@@ -2072,7 +2072,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             }
 
             pTblNd->DelFrms();
-            DeleteSection( pTblNd );
+            getIDocumentContentOperations().DeleteSection( pTblNd );
         }
         SetModified();
         SetFieldsDirty( true, NULL, 0 );

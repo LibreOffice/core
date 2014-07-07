@@ -246,10 +246,10 @@ void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.Overwrite(*pAktPam, OUString(aInsStr[0]));
+        rDoc.getIDocumentContentOperations().Overwrite(*pAktPam, OUString(aInsStr[0]));
     }
     for( sal_Int32 n = 1; n < aInsStr.getLength(); ++n )
-        rDoc.Overwrite( *pAktPam, OUString(aInsStr[n]) );
+        rDoc.getIDocumentContentOperations().Overwrite( *pAktPam, OUString(aInsStr[n]) );
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -377,7 +377,7 @@ void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
 {
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
-    rDoc.TransliterateText( rPam, aTrans );
+    rDoc.getIDocumentContentOperations().TransliterateText( rPam, aTrans );
 }
 
 void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,

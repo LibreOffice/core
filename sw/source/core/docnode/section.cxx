@@ -34,6 +34,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentLinksAdministrationManager.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -1312,7 +1313,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                             pCpyPam->Start()->nNode > rInsPos ||
                             rInsPos >= pCpyPam->End()->nNode )
                         {
-                            pSrcDoc->CopyRange( *pCpyPam, *pPam->GetPoint(),
+                            pSrcDoc->getIDocumentContentOperations().CopyRange( *pCpyPam, *pPam->GetPoint(),
                                     false );
                         }
                         delete pCpyPam;
@@ -1343,7 +1344,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, NULL, bCreateFrm );
+                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pCpyRg, 0, rInsPos, NULL, bCreateFrm );
                     ++aSave;
 
                     if( !bCreateFrm )

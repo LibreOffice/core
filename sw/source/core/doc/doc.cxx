@@ -27,6 +27,7 @@
 #include <DocumentListItemsManager.hxx>
 #include <DocumentListsManager.hxx>
 #include <DocumentOutlineNodesManager.hxx>
+#include <DocumentContentOperationsManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -340,6 +341,26 @@ IDocumentOutlineNodes & SwDoc::getIDocumentOutlineNodes()
     return *m_pDocumentOutlineNodesManager;
 }
 
+//IDocumentContentOperations
+IDocumentContentOperations const & SwDoc::getIDocumentContentOperations() const
+{
+    return *m_pDocumentContentOperationsManager;
+}
+
+IDocumentContentOperations & SwDoc::getIDocumentContentOperations()
+{
+    return *m_pDocumentContentOperationsManager;
+}
+
+::sw::DocumentContentOperationsManager const & SwDoc::GetDocumentContentOperationsManager() const
+{
+    return *m_pDocumentContentOperationsManager;
+}
+::sw::DocumentContentOperationsManager & SwDoc::GetDocumentContentOperationsManager()
+{
+    return *m_pDocumentContentOperationsManager;
+}
+
 /* Implementations the next Interface here */
 
 /*
@@ -356,363 +377,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
     GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
 }
 
-bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
-{
-    SwCntntNode *pNode = rPos.nNode.GetNode().GetCntntNode();
-    if(0 == pNode)
-        return false;
 
-    {
-        // BUG 26675: Send DataChanged before deleting, so that we notice which objects are in scope.
-        //            After that they can be before/after the position.
-        SwDataChanged aTmp( this, rPos );
-    }
-
-    SwUndoSplitNode* pUndo = 0;
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().ClearRedo();
-        // insert the Undo object (currently only for TextNode)
-        if( pNode->IsTxtNode() )
-        {
-            pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
-        }
-    }
-
-    // Update the rsid of the old and the new node unless
-    // the old node is split at the beginning or at the end
-    SwTxtNode *pTxtNode =  rPos.nNode.GetNode().GetTxtNode();
-    const sal_Int32 nPos = rPos.nContent.GetIndex();
-    if( pTxtNode && nPos && nPos != pTxtNode->Len() )
-    {
-        UpdateParRsid( pTxtNode );
-    }
-
-    //JP 28.01.97: Special case for SplitNode at table start:
-    //             If it is at the beginning of a Doc/Fly/Footer/... or right at after a table
-    //             then insert a paragraph before it.
-    if( bChkTableStart && !rPos.nContent.GetIndex() && pNode->IsTxtNode() )
-    {
-        sal_uLong nPrevPos = rPos.nNode.GetIndex() - 1;
-        const SwTableNode* pTblNd;
-        const SwNode* pNd = GetNodes()[ nPrevPos ];
-        if( pNd->IsStartNode() &&
-            SwTableBoxStartNode == ((SwStartNode*)pNd)->GetStartNodeType() &&
-            0 != ( pTblNd = GetNodes()[ --nPrevPos ]->GetTableNode() ) &&
-            ((( pNd = GetNodes()[ --nPrevPos ])->IsStartNode() &&
-               SwTableBoxStartNode != ((SwStartNode*)pNd)->GetStartNodeType() )
-               || ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsTableNode() )
-               || pNd->IsCntntNode() ))
-        {
-            if( pNd->IsCntntNode() )
-            {
-                //JP 30.04.99 Bug 65660:
-                // There are no page breaks outside of the normal body area,
-                // so this is not a valid condition to insert a paragraph.
-                if( nPrevPos < GetNodes().GetEndOfExtras().GetIndex() )
-                    pNd = 0;
-                else
-                {
-                    // Only if the table has page breaks!
-                    const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
-                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, false) &&
-                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, false ) )
-                        pNd = 0;
-                }
-            }
-
-            if( pNd )
-            {
-                SwTxtNode* pTxtNd = GetNodes().MakeTxtNode(
-                                        SwNodeIndex( *pTblNd ),
-                                        GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
-                if( pTxtNd )
-                {
-                    ((SwPosition&)rPos).nNode = pTblNd->GetIndex()-1;
-                    ((SwPosition&)rPos).nContent.Assign( pTxtNd, 0 );
-
-                    // only add page breaks/styles to the body area
-                    if( nPrevPos > GetNodes().GetEndOfExtras().GetIndex() )
-                    {
-                        SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
-                        const SfxPoolItem *pItem;
-                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_PAGEDESC,
-                            false, &pItem ) )
-                        {
-                            pTxtNd->SetAttr( *pItem );
-                            pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
-                        }
-                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_BREAK,
-                            false, &pItem ) )
-                        {
-                            pTxtNd->SetAttr( *pItem );
-                            pFrmFmt->ResetFmtAttr( RES_BREAK );
-                        }
-                    }
-
-                    if( pUndo )
-                        pUndo->SetTblFlag();
-                    SetModified();
-                    return true;
-                }
-            }
-        }
-    }
-
-    const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
-    pCntntStore->Save( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), SAVEFLY_SPLIT );
-    // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
-    OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
-    pNode = pNode->SplitCntntNode( rPos );
-    if (pNode)
-    {
-        // move all bookmarks, TOXMarks, FlyAtCnt
-        if( !pCntntStore->Empty() )
-            pCntntStore->Restore( this, rPos.nNode.GetIndex()-1, 0, true );
-
-        // To-Do - add 'SwExtraRedlineTbl' also ?
-        if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
-        {
-            SwPaM aPam( rPos );
-            aPam.SetMark();
-            aPam.Move( fnMoveBackward );
-            if( IsRedlineOn() )
-                AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
-            else
-                SplitRedline( aPam );
-        }
-    }
-
-    SetModified();
-    return true;
-}
-
-bool SwDoc::AppendTxtNode( SwPosition& rPos )
-{
-    // create new node before EndOfContent
-    SwTxtNode * pCurNode = rPos.nNode.GetNode().GetTxtNode();
-    if( !pCurNode )
-    {
-        // so then one can be created!
-        SwNodeIndex aIdx( rPos.nNode, 1 );
-        pCurNode = GetNodes().MakeTxtNode( aIdx,
-                        GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-    }
-    else
-        pCurNode = (SwTxtNode*)pCurNode->AppendNode( rPos );
-
-    rPos.nNode++;
-    rPos.nContent.Assign( pCurNode, 0 );
-
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
-    }
-
-    // To-Do - add 'SwExtraRedlineTbl' also ?
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
-    {
-        SwPaM aPam( rPos );
-        aPam.SetMark();
-        aPam.Move( fnMoveBackward );
-        if( IsRedlineOn() )
-            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
-        else
-            SplitRedline( aPam );
-    }
-
-    SetModified();
-    return true;
-}
-
-bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
-        const enum InsertFlags nInsertMode )
-{
-    // fetching DoesUndo is surprisingly expensive
-    bool bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-    if (bDoesUndo)
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called!
-
-    const SwPosition& rPos = *rRg.GetPoint();
-
-    if( mpACEWord )                  // add to auto correction
-    {
-        if( 1 == rStr.getLength() && mpACEWord->IsDeleted() )
-        {
-            mpACEWord->CheckChar( rPos, rStr[ 0 ] );
-        }
-        delete mpACEWord, mpACEWord = 0;
-    }
-
-    SwTxtNode *const pNode = rPos.nNode.GetNode().GetTxtNode();
-    if(!pNode)
-        return false;
-
-    SwDataChanged aTmp( rRg );
-
-    if (!bDoesUndo || !GetIDocumentUndoRedo().DoesGroupUndo())
-    {
-        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
-        if (bDoesUndo)
-        {
-            SwUndoInsert * const pUndo( new SwUndoInsert(rPos.nNode,
-                    rPos.nContent.GetIndex(), ins.getLength(), nInsertMode));
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
-        }
-    }
-    else
-    {   // if Undo and grouping is enabled, everything changes!
-        SwUndoInsert * pUndo = NULL;
-
-        // don't group the start if hints at the start should be expanded
-        if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
-        {
-            SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
-            SwUndoInsert *const pUndoInsert(
-                dynamic_cast<SwUndoInsert *>(pLastUndo) );
-            if (pUndoInsert && pUndoInsert->CanGrouping(rPos))
-            {
-                pUndo = pUndoInsert;
-            }
-        }
-
-        CharClass const& rCC = GetAppCharClass();
-        sal_Int32 nInsPos = rPos.nContent.GetIndex();
-
-        if (!pUndo)
-        {
-            pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
-                            !rCC.isLetterNumeric( rStr, 0 ) );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
-        }
-
-        OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
-
-        for (sal_Int32 i = 0; i < ins.getLength(); ++i)
-        {
-            nInsPos++;
-            // if CanGrouping() returns true, everything has already been done
-            if (!pUndo->CanGrouping(ins[i]))
-            {
-                pUndo = new SwUndoInsert(rPos.nNode, nInsPos, 1, nInsertMode,
-                            !rCC.isLetterNumeric(ins, i));
-                GetIDocumentUndoRedo().AppendUndo( pUndo );
-            }
-        }
-    }
-
-    // To-Do - add 'SwExtraRedlineTbl' also ?
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
-    {
-        SwPaM aPam( rPos.nNode, aTmp.GetCntnt(),
-                    rPos.nNode, rPos.nContent.GetIndex());
-        if( IsRedlineOn() )
-        {
-            AppendRedline(
-                new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
-        }
-        else
-        {
-            SplitRedline( aPam );
-        }
-    }
-
-    SetModified();
-    return true;
-}
-
-SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
-                                    const SfxItemSet* pFlyAttrSet,
-                                    const SfxItemSet* pGrfAttrSet,
-                                    SwFrmFmt* pFrmFmt)
-{
-    SwFlyFrmFmt *pFmt = 0;
-    if( pNode )
-    {
-        pFmt = _MakeFlySection( rPos, *pNode, FLY_AT_PARA,
-                                pFlyAttrSet, pFrmFmt );
-        if( pGrfAttrSet )
-            pNode->SetAttr( *pGrfAttrSet );
-    }
-    return pFmt;
-}
-
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
-                            const OUString& rGrfName,
-                            const OUString& rFltName,
-                            const Graphic* pGraphic,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
-{
-    if( !pFrmFmt )
-        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
-    SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfName, rFltName, pGraphic,
-                            mpDfltGrfFmtColl );
-    SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    return pSwFlyFrmFmt;
-}
-
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
-{
-    if( !pFrmFmt )
-        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
-    SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfObj, mpDfltGrfFmtColl );
-    SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    return pSwFlyFrmFmt;
-}
-
-SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
-                        const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet,
-                        SwFrmFmt* pFrmFmt )
-{
-    if( !pFrmFmt )
-    {
-        sal_uInt16 nId = RES_POOLFRM_OLE;
-        SvGlobalName aClassName( xObj->getClassID() );
-        if (SotExchange::IsMath(aClassName))
-            nId = RES_POOLFRM_FORMEL;
-
-        pFrmFmt = GetFrmFmtFromPool( nId );
-    }
-    return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeOLENode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            xObj,
-                            mpDfltGrfFmtColl ),
-                            pFlyAttrSet, pGrfAttrSet,
-                            pFrmFmt );
-}
-
-SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const OUString& rObjName,
-                        sal_Int64 nAspect,
-                        const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet,
-                        SwFrmFmt* pFrmFmt )
-{
-    if( !pFrmFmt )
-        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_OLE );
-
-    return _InsNoTxtNode( *rRg.GetPoint(),
-                            GetNodes().MakeOLENode(
-                                SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                                rObjName,
-                                nAspect,
-                                mpDfltGrfFmtColl,
-                                0 ),
-                            pFlyAttrSet, pGrfAttrSet,
-                            pFrmFmt );
-}
 
 /// @returns the field type of the Doc
 SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
@@ -992,7 +657,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         aPam.Move( fnMoveBackward, fnGoDoc );
         aPam.SetMark();
         aPam.Move( fnMoveForward, fnGoDoc );
-        rPostItDoc.DeleteRange( aPam );
+        rPostItDoc.getIDocumentContentOperations().DeleteRange( aPam );
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );
 
@@ -1022,7 +687,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 const bool bNewPage = nPostItMode == POSTITS_ENDPAGE &&
                         !bIsFirstPostIt && nPhyPageNum != nLastPageNum;
 
-                lcl_FormatPostIt( rData.m_pPostItShell->GetDoc(), aPam,
+                lcl_FormatPostIt( &rData.m_pPostItShell->GetDoc()->getIDocumentContentOperations(), aPam,
                         rPostIt.GetPostIt(), bNewPage, bIsFirstPostIt, nVirtPg, nLineNo );
                 bIsFirstPostIt = false;
 
@@ -1584,30 +1249,6 @@ void SwDoc::ResetModified()
     }
 }
 
-void SwDoc::ReRead( SwPaM& rPam, const OUString& rGrfName,
-                    const OUString& rFltName, const Graphic* pGraphic,
-                    const GraphicObject* pGrafObj )
-{
-    SwGrfNode *pGrfNd;
-    if( ( !rPam.HasMark()
-         || rPam.GetPoint()->nNode.GetIndex() == rPam.GetMark()->nNode.GetIndex() )
-         && 0 != ( pGrfNd = rPam.GetPoint()->nNode.GetNode().GetGrfNode() ) )
-    {
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
-        }
-
-        // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
-        if( RES_MIRROR_GRAPH_DONT != pGrfNd->GetSwAttrSet().
-                                                GetMirrorGrf().GetValue() )
-            pGrfNd->SetAttr( SwMirrorGrf() );
-
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, true );
-        SetModified();
-    }
-}
-
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
@@ -1813,12 +1454,12 @@ bool SwDoc::RemoveInvisibleContent()
                      ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
                        !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
                 {
-                    DeleteRange( aPam );
+                    getIDocumentContentOperations().DeleteRange( aPam );
                 }
                 else
                 {
                     aPam.DeleteMark();
-                    DelFullPara( aPam );
+                    getIDocumentContentOperations().DelFullPara( aPam );
                 }
             }
         }
@@ -1846,12 +1487,12 @@ bool SwDoc::RemoveInvisibleContent()
                      ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
                        !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )
                 {
-                    DeleteRange( aPam );
+                    getIDocumentContentOperations().DeleteRange( aPam );
                 }
                 else
                 {
                     aPam.DeleteMark();
-                    DelFullPara( aPam );
+                    getIDocumentContentOperations().DelFullPara( aPam );
                 }
             }
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
@@ -1931,14 +1572,14 @@ bool SwDoc::RemoveInvisibleContent()
                                                 &aPam.GetPoint()->nNode );
                         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-                        DeleteRange( aPam );
+                        getIDocumentContentOperations().DeleteRange( aPam );
                     }
                     else
                     {
                         // delete the whole section
                         aPam.SetMark();
                         aPam.GetPoint()->nNode = *pSectNd->EndOfSectionNode();
-                        DelFullPara( aPam );
+                        getIDocumentContentOperations().DelFullPara( aPam );
                     }
 
                 }
@@ -2069,11 +1710,11 @@ bool SwDoc::ConvertFieldsToText()
                     aPam1.Move();
                     //insert first to keep the field's attributes
                     if (!sText.isEmpty())
-                        InsertString( aPam1, sText );
+                        getIDocumentContentOperations().InsertString( aPam1, sText );
                     SwPaM aPam2(*pTxtFld->GetpTxtNode(), pTxtFld->GetStart());
                     aPam2.SetMark();
                     aPam2.Move();
-                    DeleteAndJoin(aPam2);//remove the field
+                    getIDocumentContentOperations().DeleteAndJoin(aPam2);//remove the field
                     bRet=true;
                 }
             }

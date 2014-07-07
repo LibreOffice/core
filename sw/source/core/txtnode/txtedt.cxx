@@ -1081,7 +1081,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
         aSet.Put( aFontItem );
     }
 
-    GetDoc()->InsertItemSet( rPaM, aSet, 0 );
+    GetDoc()->getIDocumentContentOperations().InsertItemSet( rPaM, aSet, 0 );
     // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
     //                     <- because since there is no selection the flag to garbage
     //                     <- collect all attributes is set, and therefore attributes spanned

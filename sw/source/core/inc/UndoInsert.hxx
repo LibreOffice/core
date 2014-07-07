@@ -30,6 +30,7 @@ class Graphic;
 class SwGrfNode;
 class SwUndoDelete;
 class SwUndoFmtAttr;
+namespace sw { class DocumentContentOperationsManager; }
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
@@ -45,7 +46,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
-    friend class SwDoc;     // actually only SwDoc::Insert( String )
+    friend class ::sw::DocumentContentOperationsManager;     // actually only DocumentContentOperationsManager::InsertString, because it uses CanGrouping
     bool CanGrouping( sal_Unicode cIns );
     bool CanGrouping( const SwPosition& rPos );
 
