@@ -258,6 +258,13 @@ gb_LinkTarget_LDFLAGS := \
 
 gb_DEBUG_CFLAGS := -Zi
 
+ifeq ($(VCVER),120)
+# Use -FS with VS2013: "Force Synchronous PDB Writes. Forces writes to
+# the program database (PDB) file--created by /Zi or /ZI--to be
+# serialized through MSPDBSRV.EXE"
+gb_DEBUG_CFLAGS+=-FS
+endif
+
 # this does not use CFLAGS so it is not overridable
 ifneq ($(ENABLE_CRASHDUMP),)
 gb_CFLAGS+=-Zi
