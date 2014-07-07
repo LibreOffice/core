@@ -53,15 +53,10 @@ import java.util.List;
 public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     private static final String LOGTAG = "GeckoSoftwareLayerClient";
 
-    private int mFormat;
-    private IntSize mViewportSize;
-    private IntSize mBufferSize;
     private static final IntSize TILE_SIZE = new IntSize(256, 256);
 
     public GeckoSoftwareLayerClient(Context context) {
         super(context);
-        mBufferSize = new IntSize(0,0);
-        mFormat = CairoImage.FORMAT_ARGB32;
     }
 
     public void setLayerController(LayerController layerController) {
@@ -98,12 +93,6 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         }
     }
 
-    @Override
-    protected IntSize getBufferSize() {
-        return new IntSize(
-            ((mScreenSize.width + LayerController.MIN_BUFFER.width - 1) / TILE_SIZE.width + 1) * TILE_SIZE.width,
-            ((mScreenSize.height + LayerController.MIN_BUFFER.height - 1) / TILE_SIZE.height + 1) * TILE_SIZE.height);
-    }
 
     @Override
     protected IntSize getTileSize() {

@@ -45,13 +45,10 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import org.json.JSONObject;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
-import org.mozilla.gecko.GeckoEventListener;
 import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.PointUtils;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 import org.mozilla.gecko.util.FloatUtils;
 
@@ -64,9 +61,7 @@ import java.util.TimerTask;
  * Many ideas are from Joe Hewitt's Scrollability:
  *   https://github.com/joehewitt/scrollability/
  */
-public class PanZoomController
-        extends GestureDetector.SimpleOnGestureListener
-        implements SimpleScaleGestureDetector.SimpleScaleGestureListener, GeckoEventListener {
+public class PanZoomController extends GestureDetector.SimpleOnGestureListener implements SimpleScaleGestureDetector.SimpleScaleGestureListener {
     // The distance the user has to pan before we recognize it as such (e.g. to avoid 1-pixel pans
     // between the touch-down and touch-up of a click). In units of density-independent pixels.
     public static final float PAN_THRESHOLD = 1 / 16f * LOKitShell.getDpi();
@@ -125,43 +120,6 @@ public class PanZoomController
         mMainThread = LibreOfficeMainActivity.mAppContext.getMainLooper().getThread();
 
         mState = PanZoomState.NOTHING;
-    }
-
-    public void handleMessage(String event, JSONObject message) {
-        Log.i(LOGTAG, "Got message: " + event);
-        try {
-            if (MESSAGE_ZOOM_RECT.equals(event)) {
-                float x = (float) message.getDouble("x");
-                float y = (float) message.getDouble("y");
-                final RectF zoomRect = new RectF(x, y,
-                        x + (float) message.getDouble("w"),
-                        y + (float) message.getDouble("h"));
-                mController.post(new Runnable() {
-                    public void run() {
-                        animatedZoomTo(zoomRect);
-                    }
-                });
-            } else if (MESSAGE_ZOOM_PAGE.equals(event)) {
-                FloatSize pageSize = mController.getPageSize();
-
-                RectF viewableRect = mController.getViewport();
-                float y = viewableRect.top;
-                // attempt to keep zoom keep focused on the center of the viewport
-                float newHeight = viewableRect.height() * pageSize.width / viewableRect.width();
-                float dh = viewableRect.height() - newHeight; // increase in the height
-                final RectF r = new RectF(0.0f,
-                        y + dh / 2,
-                        pageSize.width,
-                        y + dh / 2 + newHeight);
-                mController.post(new Runnable() {
-                    public void run() {
-                        animatedZoomTo(r);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Log.e(LOGTAG, "Exception handling message \"" + event + "\":", e);
-        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {

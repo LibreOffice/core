@@ -68,7 +68,6 @@ public class LayerController {
      * smooth, asynchronous scrolling. Depending on a device's support for NPOT
      * textures, this may be rounded up to the nearest power of two.
      */
-    public static final IntSize MIN_BUFFER = new IntSize(512, 1024);
     private static final String LOGTAG = "GeckoLayerController";
     /* If the visible rect is within the danger zone (measured in pixels from each edge of a tile),
      * we start aggressively redrawing to minimize checkerboarding. */
@@ -79,10 +78,7 @@ public class LayerController {
     private static final int PREVENT_DEFAULT_TIMEOUT = 200;
     private Layer mRootLayer;                   /* The root layer. */
     private LayerView mView;                    /* The main rendering view. */
-    /*
-     * The panning and zooming controller, which interprets pan and zoom gestures for us and
-     * updates our visible rect appropriately.
-     */
+
     private Context mContext;                   /* The current context. */
     private ViewportMetrics mViewportMetrics;   /* The current viewport metrics. */
     private boolean mWaitForTouchListeners;
@@ -100,7 +96,6 @@ public class LayerController {
 
     public LayerController(Context context) {
         mContext = context;
-
         mForceRedraw = true;
         mViewportMetrics = new ViewportMetrics();
         mPanZoomController = new PanZoomController(this);

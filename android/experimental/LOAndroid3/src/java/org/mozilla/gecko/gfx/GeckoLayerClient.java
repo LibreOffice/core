@@ -40,30 +40,27 @@ package org.mozilla.gecko.gfx;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import org.json.JSONObject;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
-import org.mozilla.gecko.GeckoEventListener;
 import org.mozilla.gecko.util.FloatUtils;
 
-import java.util.regex.Pattern;
-
-public abstract class GeckoLayerClient implements GeckoEventListener {
+public abstract class GeckoLayerClient {
     private static final String LOGTAG = "GeckoLayerClient";
     private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
-    private static Pattern sColorPattern;
     protected IntSize mScreenSize;
     protected Layer mTileLayer;
+
     /* The viewport that Gecko is currently displaying. */
     protected ViewportMetrics mGeckoViewport;
+
     /* The viewport that Gecko will display when drawing is finished */
     protected ViewportMetrics mNewGeckoViewport;
+
     protected LayerController mLayerController;
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
@@ -83,8 +80,6 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     protected abstract boolean setupLayer();
 
     protected abstract void updateLayerAfterDraw();
-
-    protected abstract IntSize getBufferSize();
 
     protected abstract IntSize getTileSize();
 
@@ -171,12 +166,11 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
         }
 
         mScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
-        IntSize bufferSize = getBufferSize();
         IntSize tileSize = getTileSize();
 
         Log.e(LOGTAG, "### Screen-size changed to " + mScreenSize);
 
-        LOEvent event = LOEvent.sizeChanged(bufferSize.width, bufferSize.height,
+        LOEvent event = LOEvent.sizeChanged(
                 metrics.widthPixels, metrics.heightPixels,
                 tileSize.width, tileSize.height);
         LOKitShell.sendEvent(event);
@@ -217,8 +211,6 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
     private void adjustViewport() {
         ViewportMetrics viewportMetrics = new ViewportMetrics(mLayerController.getViewportMetrics());
 
-        PointF viewportOffset = viewportMetrics.getOptimumViewportOffset(getBufferSize());
-        viewportMetrics.setViewportOffset(viewportOffset);
         viewportMetrics.setViewport(viewportMetrics.getClampedViewport());
 
         LOKitShell.sendEvent(LOEvent.viewport(viewportMetrics));
@@ -228,21 +220,6 @@ public abstract class GeckoLayerClient implements GeckoEventListener {
         }
 
         mLastViewportChangeTime = System.currentTimeMillis();
-    }
-
-    public void handleMessage(String event, JSONObject message) {
-        if ("Viewport:UpdateAndDraw".equals(event)) {
-            Log.e(LOGTAG, "### Java side Viewport:UpdateAndDraw()!");
-            mUpdateViewportOnEndDraw = true;
-
-            // Redraw everything.
-            IntSize bufferSize = getBufferSize();
-            Rect rect = new Rect(0, 0, bufferSize.width, bufferSize.height);
-            LOKitShell.sendEvent(LOEvent.draw(rect));
-        } else if ("Viewport:UpdateLater".equals(event)) {
-            Log.e(LOGTAG, "### Java side Viewport:UpdateLater()!");
-            mUpdateViewportOnEndDraw = true;
-        }
     }
 
     public void geometryChanged() {
