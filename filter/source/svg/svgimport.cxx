@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/XImportFilter.hpp>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <unotools/mediadescriptor.hxx>
@@ -45,8 +46,8 @@
 using namespace ::com::sun::star;
 using namespace ::svgi;
 
-bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+bool SVGFilter::implImport(const Sequence< PropertyValue >& rDescriptor)
+    throw (RuntimeException, std::exception)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInputStream;
@@ -95,8 +96,22 @@ bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDstDoc);
 
+    bool bRet = false;
     SVGReader aReader(mxContext, xInputStream, xInternalHandler);
-    return aReader.parseAndConvert();
+    try
+    {
+        bRet = aReader.parseAndConvert();
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        throw css::lang::WrappedTargetRuntimeException("SVGFilter::implImport non-RuntimeException",
+            static_cast<uno::XWeak*>(this), uno::makeAny(e));
+    }
+    return bRet;
 }
 
 

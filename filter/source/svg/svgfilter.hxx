@@ -266,7 +266,7 @@ private:
 
     Link                                maOldFieldHdl;
 
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
     Reference< XWriter >                implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
