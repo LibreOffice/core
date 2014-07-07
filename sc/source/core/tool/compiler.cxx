@@ -3418,7 +3418,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         return true;
     }
 
-    if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
+    if ( (cSymbol[0] == '#' || cSymbol[0] == '$' || cSymbol[0] == '[') && cSymbol[1] == 0 &&
             !bAutoCorrect )
     {   // special case to speed up broken [$]#REF documents
         /* FIXME: ISERROR(#REF!) would be valid and true and the formula to
