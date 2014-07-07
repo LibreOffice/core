@@ -26,6 +26,7 @@ $(eval $(call gb_Library_use_libraries,acc,\
     cppu \
     cppuhelper \
     sal \
+    salhelper \
     i18nlangtag \
     sot \
     svl \

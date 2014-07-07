@@ -58,14 +58,7 @@ namespace toolkit
     protected:
         virtual ~AccessibleDummyFactory();
 
-    private:
-        oslInterlockedCount m_refCount;
-
     public:
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
         // IAccessibleFactory
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXButton* /*_pXWindow*/ ) SAL_OVERRIDE
@@ -131,30 +124,12 @@ namespace toolkit
 
 
     AccessibleDummyFactory::AccessibleDummyFactory()
-        : m_refCount(0)
     {
     }
 
 
     AccessibleDummyFactory::~AccessibleDummyFactory()
     {
-    }
-
-
-    oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_refCount;
     }
 
 

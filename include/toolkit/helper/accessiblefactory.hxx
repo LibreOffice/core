@@ -21,8 +21,8 @@
 #define INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
@@ -58,7 +58,7 @@ namespace toolkit
 
     //= IAccessibleFactory
 
-    class IAccessibleFactory : public ::rtl::IReference
+    class IAccessibleFactory : public salhelper::SimpleReferenceObject
     {
     public:
         /** creates an accessible context for a button window
@@ -122,7 +122,7 @@ namespace toolkit
             createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) = 0;
 
     protected:
-        ~IAccessibleFactory() {}
+        virtual ~IAccessibleFactory() {}
     };
 
 
