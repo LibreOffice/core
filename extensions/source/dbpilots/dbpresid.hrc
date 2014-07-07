@@ -59,20 +59,13 @@
 
 // tab pages
 
-#define RID_PAGE_TABLESELECTION             ( RID_PAGE_START +  1 )
-#define RID_PAGE_GROUPRADIOSELECTION        ( RID_PAGE_START +  2 )
 #define RID_PAGE_DEFAULTFIELDSELECTION      ( RID_PAGE_START +  3 )
 #define RID_PAGE_OPTIONVALUES               ( RID_PAGE_START +  4 )
 #define RID_PAGE_OPTION_DBFIELD             ( RID_PAGE_START +  5 )
 #define RID_PAGE_OPTIONS_FINAL              ( RID_PAGE_START +  6 )
-#define RID_PAGE_LCW_CONTENTSELECTION_TABLE ( RID_PAGE_START +  7 )
-#define RID_PAGE_LCW_CONTENTSELECTION_FIELD ( RID_PAGE_START +  8 )
-#define RID_PAGE_LCW_FIELDLINK              ( RID_PAGE_START +  9 )
-#define RID_PAGE_GW_FIELDSELECTION          ( RID_PAGE_START + 10 )
-#define RID_PAGE_FORM_DATASOURCE_STATUS     ( RID_PAGE_START + 11 )
 
 // please adjust RID_PAGE_END (below) when adding new tab pages
-#define RID_PAGE_END                        RID_PAGE_GW_FIELDSELECTION
+#define RID_PAGE_END                        RID_PAGE_OPTIONS_FINAL
 
 // ErrorBox
 
