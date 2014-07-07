@@ -232,7 +232,7 @@ static void cpp_call(
                 pAdjustedThisPtr, aVtableSlot.index,
                 pCppReturn, pReturnTypeRef, bSimpleReturn,
                 pStackStart, ( pStack - pStackStart ),
-                pGPR, nGPR,
+                pGPR,
                 pFPR, nFPR );
         } catch (const Exception &) {
             throw;

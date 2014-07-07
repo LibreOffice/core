@@ -48,14 +48,12 @@
 void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     void * pThis, sal_uInt32 nVtableIndex, void * pRegisterReturn,
     typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
-    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, sal_uInt32 nGPR,
-    double * pFPR, sal_uInt32 nFPR)
+    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, double * pFPR,
+    sal_uInt32 nFPR)
 {
     // Should not happen, but...
     if ( nFPR > x86_64::MAX_SSE_REGS )
         nFPR = x86_64::MAX_SSE_REGS;
-    if ( nGPR > x86_64::MAX_GPR_REGS )
-        nGPR = x86_64::MAX_GPR_REGS;
 
     // Work around Clang -fsanitize=address "inline assembly requires more
     // registers than available" error:
