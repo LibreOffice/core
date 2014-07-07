@@ -4364,7 +4364,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 const OUString& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.getStr();
                 const sal_Unicode* p = p1 + rStr.getLength();
-                while ( p1 < p-- )
+                while (k && p1 < p--)
                 {
                     const sal_Unicode c = *p;
                     k--;
