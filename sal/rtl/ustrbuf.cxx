@@ -155,7 +155,7 @@ void rtl_uStringbuffer_insertUtf32(
 {
     sal_Unicode buf[2];
     sal_Int32 len;
-    OSL_ASSERT(c <= 0x10FFFF && !(c >= 0xD800 && c <= 0xDFFF));
+    assert(c <= 0x10FFFF && !(c >= 0xD800 && c <= 0xDFFF));
     if (c <= 0xFFFF) {
         buf[0] = (sal_Unicode) c;
         len = 1;

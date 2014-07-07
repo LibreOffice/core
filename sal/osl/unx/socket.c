@@ -27,6 +27,8 @@
 #include <rtl/alloc.h>
 #include <assert.h>
 #include <ctype.h>
+#include <assert.h>
+
 #include <sal/types.h>
 
 #include "sockimpl.h"
@@ -480,7 +482,7 @@ static oslSocketAddr __osl_createSocketAddrWithFamily(
 {
     oslSocketAddr pAddr;
 
-    OSL_ASSERT( family == osl_Socket_FamilyInet );
+    assert( family == osl_Socket_FamilyInet );
 
     pAddr = __osl_createSocketAddr();
     switch( family )
@@ -683,15 +685,15 @@ oslSocketResult SAL_CALL osl_setAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
 {
     oslSocketResult res = osl_Socket_Error;
 
-    OSL_ASSERT( pAddr );
-    OSL_ASSERT( pByteSeq );
+    assert( pAddr );
+    assert( pByteSeq );
 
     if( pAddr && pByteSeq )
     {
         struct sockaddr_in * pSystemInetAddr;
 
-        OSL_ASSERT( pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE( osl_Socket_FamilyInet ) );
-        OSL_ASSERT( pByteSeq->nElements == 4 );
+        assert( pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE( osl_Socket_FamilyInet ) );
+        assert( pByteSeq->nElements == 4 );
 
         pSystemInetAddr = (struct sockaddr_in * ) &(pAddr->m_sockaddr);
         memcpy( &(pSystemInetAddr->sin_addr) , pByteSeq->elements , 4 );
@@ -704,8 +706,8 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
 {
     oslSocketResult res = osl_Socket_Error;
 
-    OSL_ASSERT( pAddr );
-    OSL_ASSERT( ppByteSeq );
+    assert( pAddr );
+    assert( ppByteSeq );
 
     if( pAddr && ppByteSeq )
     {
@@ -790,20 +792,20 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     if (_osl_isFullQualifiedDomainName(he->h_name))
     {
         cn= strdup(he->h_name);
-        OSL_ASSERT(cn);
+        assert(cn);
         if (cn == NULL)
             return ((oslHostAddr)NULL);
     }
     else
     {
         cn =_osl_getFullQualifiedDomainName (he->h_name);
-        OSL_ASSERT(cn);
+        assert(cn);
         if (cn == NULL)
             return ((oslHostAddr)NULL);
     }
 
     pSockAddr = __osl_createSocketAddr();
-    OSL_ASSERT(pSockAddr);
+    assert(pSockAddr);
     if (pSockAddr == NULL)
     {
         free(cn);
@@ -825,7 +827,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
         /* future extensions for new families might be implemented here */
 
         OSL_TRACE("_osl_hostentToHostAddr: unknown address family.");
-        OSL_ASSERT(sal_False);
+        assert(sal_False);
 
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
@@ -833,7 +835,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     }
 
     pAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
     if (pAddr == NULL)
     {
         __osl_destroySocketAddr( pSockAddr );
@@ -882,17 +884,17 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
     oslHostAddr pHostAddr;
     sal_Char            *cn;
 
-    OSL_ASSERT(pszHostname && pAddr);
+    assert(pszHostname && pAddr);
     if ((pszHostname == NULL) || (pAddr == NULL))
         return ((oslHostAddr)NULL);
 
     cn = strdup(pszHostname);
-    OSL_ASSERT(cn);
+    assert(cn);
     if (cn == NULL)
         return ((oslHostAddr)NULL);
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
-    OSL_ASSERT(pHostAddr);
+    assert(pHostAddr);
     if (pHostAddr == NULL)
     {
         free (cn);
@@ -948,7 +950,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 
 oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
 
     if (pAddr == NULL)
         return ((oslHostAddr)NULL);
@@ -972,7 +974,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
 
 oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
 
     if (pAddr)
         return osl_psz_createHostAddr (pAddr->pHostName, pAddr->pSockAddr);
@@ -1003,7 +1005,7 @@ const sal_Char* SAL_CALL osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
 
 oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr (const oslHostAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
 
     if (pAddr)
         return ((oslSocketAddr)(pAddr->pSockAddr));
@@ -1195,7 +1197,7 @@ void SAL_CALL osl_destroySocketAddr(oslSocketAddr pAddr)
 
 oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(oslSocketAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
 
     if (pAddr)
         return FAMILY_FROM_NATIVE(pAddr->m_sockaddr.sa_family);
@@ -1205,7 +1207,7 @@ oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(oslSocketAddr pAddr)
 
 sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
     if( pAddr )
     {
         struct sockaddr_in* pSystemInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
@@ -1218,7 +1220,7 @@ sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr pAddr)
 
 sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Port)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
     if( pAddr )
     {
         struct sockaddr_in* pSystemInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
@@ -1287,7 +1289,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, r
 oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
                                                   sal_Char *pBuffer, sal_uInt32 BufferSize)
 {
-    OSL_ASSERT(pAddr);
+    assert(pAddr);
 
     if( pAddr )
     {
@@ -1474,7 +1476,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     socklen_t AddrLen;
     struct sockaddr Addr;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return 0;
@@ -1496,7 +1498,7 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket,
 {
     int nRet;
 
-    OSL_ASSERT(pSocket && pAddr );
+    assert(pSocket && pAddr );
     if ( pSocket == 0 || pAddr == 0 )
     {
         return sal_False;
@@ -1520,7 +1522,7 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket pSocket,
 {
     int nRet;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return sal_False;
@@ -1681,7 +1683,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     oslSocket pConnectionSockImpl;
 
     socklen_t AddrLen = sizeof(struct sockaddr);
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return 0;
@@ -1716,7 +1718,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         return 0;
     }
 
-    OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
+    assert(AddrLen == sizeof(struct sockaddr));
 
 #if defined(LINUX)
     if ( pSocket->m_bIsInShutdown == sal_True )
@@ -1766,7 +1768,7 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket pSocket,
 {
     int nRead;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         OSL_TRACE("osl_receiveSocket : Invalid socket");
@@ -1811,7 +1813,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
         pSystemSockAddr = &(pSenderAddr->m_sockaddr);
     }
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         OSL_TRACE("osl_receiveFromSocket : Invalid socket");
@@ -1847,7 +1849,7 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket pSocket,
 {
     int nWritten;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         OSL_TRACE("osl_sendSocket : Invalid socket");
@@ -1893,7 +1895,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
         AddrLen = sizeof( struct sockaddr );
     }
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         OSL_TRACE("osl_sendToSocket : Invalid socket");
@@ -1932,7 +1934,7 @@ sal_Int32 SAL_CALL osl_readSocket (
     sal_uInt32 BytesRead= 0;
     sal_uInt32 BytesToRead= n;
 
-    OSL_ASSERT( pSocket);
+    assert( pSocket);
 
     /* loop until all desired bytes were read or an error occurred */
     while (BytesToRead > 0)
@@ -1965,7 +1967,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
     sal_uInt32 BytesToSend= n;
     sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
 
-    OSL_ASSERT( pSocket );
+    assert( pSocket );
 
     while (BytesToSend > 0)
     {
@@ -1998,7 +2000,7 @@ sal_Bool __osl_socket_poll (
     int           timeout;
     int           result;
 
-    OSL_ASSERT(0 != pSocket);
+    assert(0 != pSocket);
     if (0 == pSocket)
       return sal_False; /* EINVAL */
 
@@ -2044,7 +2046,7 @@ sal_Bool __osl_socket_poll (
     struct timeval tv;
     int            result;
 
-    OSL_ASSERT(0 != pSocket);
+    assert(0 != pSocket);
     if (0 == pSocket)
       return sal_False; /* EINVAL */
 
@@ -2088,7 +2090,7 @@ sal_Bool __osl_socket_poll (
 sal_Bool SAL_CALL osl_isReceiveReady (
     oslSocket pSocket, const TimeValue* pTimeout)
 {
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if (pSocket == NULL)
     {
         /* ENOTSOCK */
@@ -2101,7 +2103,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
 sal_Bool SAL_CALL osl_isSendReady (
     oslSocket pSocket, const TimeValue* pTimeout)
 {
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if (pSocket == NULL)
     {
         /* ENOTSOCK */
@@ -2114,7 +2116,7 @@ sal_Bool SAL_CALL osl_isSendReady (
 sal_Bool SAL_CALL osl_isExceptionPending (
     oslSocket pSocket, const TimeValue* pTimeout)
 {
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if (pSocket == NULL)
     {
         /* ENOTSOCK */
@@ -2129,7 +2131,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
 {
     int nRet;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return sal_False;
@@ -2154,7 +2156,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
 {
     socklen_t nOptLen = (socklen_t) BufferLen;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return -1;
@@ -2183,7 +2185,7 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
 {
     int nRet;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return sal_False;
@@ -2212,7 +2214,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket pSocket,
     int flags;
     int nRet;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return sal_False;
@@ -2242,7 +2244,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
 {
     int flags;
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return sal_False;
@@ -2263,7 +2265,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
     int Type=0;
     socklen_t TypeSize= sizeof(Type);
 
-    OSL_ASSERT(pSocket);
+    assert(pSocket);
     if ( pSocket == 0 )
     {
         return osl_Socket_TypeInvalid;
@@ -2337,7 +2339,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 
     pSet= (TSocketSetImpl*)malloc(sizeof(TSocketSetImpl));
 
-    OSL_ASSERT(pSet);
+    assert(pSet);
 
     if(pSet)
     {
@@ -2357,7 +2359,7 @@ void SAL_CALL osl_destroySocketSet(oslSocketSet Set)
 void SAL_CALL osl_clearSocketSet(oslSocketSet Set)
 {
     TSocketSetImpl* pSet;
-    OSL_ASSERT(Set);
+    assert(Set);
     if ( Set == 0 )
     {
         return;
@@ -2373,8 +2375,8 @@ void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
     TSocketSetImpl* pSet;
 
-    OSL_ASSERT(Set);
-    OSL_ASSERT(pSocket);
+    assert(Set);
+    assert(pSocket);
 
     if ( Set == 0 || pSocket == 0)
     {
@@ -2394,8 +2396,8 @@ void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
     TSocketSetImpl* pSet;
 
-    OSL_ASSERT(Set);
-    OSL_ASSERT(pSocket);
+    assert(Set);
+    assert(pSocket);
 
     if ( Set == 0 || pSocket == 0)
     {
@@ -2423,8 +2425,8 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
     TSocketSetImpl* pSet;
 
-    OSL_ASSERT(Set);
-    OSL_ASSERT(pSocket);
+    assert(Set);
+    assert(pSocket);
     if ( Set == 0 || pSocket == 0 )
     {
         return sal_False;

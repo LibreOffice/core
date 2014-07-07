@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
+
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
@@ -188,20 +190,20 @@ static rtl_Locale * _parse_locale( const char * locale )
 
             /* convert language code to unicode */
             rtl_string2UString( &pLanguage, locale, offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-            OSL_ASSERT(pLanguage != NULL);
+            assert(pLanguage != NULL);
 
             /* convert country code to unicode */
             if( len >= offset+3 && '_' == locale[offset] )
             {
                 rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-                OSL_ASSERT(pCountry != NULL);
+                assert(pCountry != NULL);
                 offset += 3;
             }
 
             /* convert variant code to unicode - do not rely on "." as delimiter */
             if( len > offset ) {
                 rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-                OSL_ASSERT(pVariant != NULL);
+                assert(pVariant != NULL);
             }
 
             ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
@@ -620,7 +622,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         language = _pair_search (codeset, _nl_language_list, SAL_N_ELEMENTS( _nl_language_list ) );
     }
 
-    OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
+    assert( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */

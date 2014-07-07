@@ -231,7 +231,7 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
     oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) Directory;
     oslFileError err = osl_File_E_None;
 
-    OSL_ASSERT( Directory );
+    assert( Directory );
 
     if( NULL == pDirImpl )
         return osl_File_E_INVAL;
@@ -287,8 +287,8 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     rtl_uString*      ustrFilePath = NULL;
     struct dirent*    pEntry;
 
-    OSL_ASSERT(Directory);
-    OSL_ASSERT(pItem);
+    assert(Directory);
+    assert(pItem);
 
     if ((NULL == Directory) || (NULL == pItem))
         return osl_File_E_INVAL;
@@ -323,7 +323,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     /* convert file name to unicode */
     rtl_string2UString( &ustrFileName, pEntry->d_name, strlen( pEntry->d_name ),
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-    OSL_ASSERT(ustrFileName != 0);
+    assert(ustrFileName != 0);
 
 #endif
 
@@ -351,7 +351,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     rtl_uString* ustrSystemPath = NULL;
     oslFileError osl_error      = osl_File_E_INVAL;
 
-    OSL_ASSERT((0 != ustrFileURL) && (0 != pItem));
+    assert((0 != ustrFileURL) && (0 != pItem));
     if ((0 == ustrFileURL) || (0 == ustrFileURL->length) || (0 == pItem))
         return osl_File_E_INVAL;
 
@@ -406,7 +406,7 @@ oslFileError osl_createDirectoryWithFlags(
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
+    assert( ustrDirectoryURL );
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -426,7 +426,7 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
+    assert( ustrDirectoryURL );
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -586,8 +586,8 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     char destPath[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
-    OSL_ASSERT( ustrDestURL );
+    assert( ustrFileURL );
+    assert( ustrDestURL );
 
     /* convert source url to system path */
     eRet = FileURLToPath( srcPath, PATH_MAX, ustrFileURL );
@@ -613,8 +613,8 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     char destPath[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
-    OSL_ASSERT( ustrDestURL );
+    assert( ustrFileURL );
+    assert( ustrDestURL );
 
     /* convert source url to system path */
     eRet = FileURLToPath( srcPath, PATH_MAX, ustrFileURL );
@@ -639,7 +639,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
+    assert( ustrFileURL );
 
     /* convert file url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );

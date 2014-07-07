@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <assert.h>
+
 #include "readwrite_helper.h"
 
 #include <osl/diagnose.h>
@@ -18,7 +20,7 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
     unsigned char* dataToWrite = data;
 
     // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
+    assert(dataSize == (sal_uInt32)nToWrite);
     while ( nToWrite ) {
         sal_Int32 nWritten = write(fd, dataToWrite, nToWrite);
         if ( nWritten < 0 ) {
@@ -29,7 +31,7 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 
         }
 
-        OSL_ASSERT(nWritten > 0);
+        assert(nWritten > 0);
         nToWrite -= nWritten;
         dataToWrite += nWritten;
     }
@@ -43,7 +45,7 @@ sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count )
     unsigned char* bufferForReading = buffer;
 
     // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(count == (sal_uInt32)nToRead);
+    assert(count == (sal_uInt32)nToRead);
     while ( nToRead ) {
         sal_Int32 nRead = read(fd, bufferForReading, nToRead);
         if ( nRead < 0 ) {

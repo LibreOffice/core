@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include "osl/file.h"
 
 #include "osl/diagnose.h"
@@ -110,8 +112,8 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
-    OSL_ASSERT( pInfo );
+    assert( ustrDirectoryURL );
+    assert( pInfo );
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -326,7 +328,7 @@ static oslFileError osl_psz_getVolumeInformation (
             rtl_str_getLength(__OSL_STATFS_TYPENAME(sfs)),
             osl_getThreadTextEncoding(),
             OUSTRING_TO_OSTRING_CVTFLAGS);
-        OSL_ASSERT(pInfo->ustrFileSystemName != 0);
+        assert(pInfo->ustrFileSystemName != 0);
 
         pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
     }
@@ -353,7 +355,7 @@ static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ust
         rtl_str_getLength( pszStr ),
         osl_getThreadTextEncoding(),
         OUSTRING_TO_OSTRING_CVTFLAGS );
-    OSL_ASSERT(*ustrValid != 0);
+    assert(*ustrValid != 0);
 
     return *ustrValid;
 }

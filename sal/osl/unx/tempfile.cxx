@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -49,7 +50,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
         pValue = "/tmp";
 
     rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-    OSL_ASSERT(ustrTempPath != NULL);
+    assert( ustrTempPath != NULL );
     error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
     rtl_uString_release( ustrTempPath );
 
@@ -97,7 +98,7 @@ static void osl_gen_random_name_impl_(rtl_uString** rand_name)
             RAND_NAME_LENGTH,
             RTL_TEXTENCODING_ASCII_US,
             OSTRING_TO_OUSTRING_CVTFLAGS);
-    OSL_ASSERT(*rand_name != NULL);
+    assert(*rand_name != NULL);
 }
 
 /*****************************************************************

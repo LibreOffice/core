@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include "rtl/locale.h"
 
 #include "osl/diagnose.h"
@@ -200,7 +202,7 @@ extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal
  */
 void rtl_locale_init()
 {
-  OSL_ASSERT(g_pLocaleTable == 0);
+  assert(g_pLocaleTable == 0);
   rtl_hashtable_init(&g_pLocaleTable, 1);
 }
 

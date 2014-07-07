@@ -24,6 +24,7 @@
 
 #include <pthread.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #if defined LINUX /* bad hack */
 int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
@@ -45,7 +46,7 @@ oslMutex SAL_CALL osl_createMutex()
     pthread_mutexattr_t aMutexAttr;
     int nRet=0;
 
-    OSL_ASSERT(pMutex);
+    assert(pMutex);
 
     if ( pMutex == 0 )
     {
@@ -73,7 +74,7 @@ oslMutex SAL_CALL osl_createMutex()
 
 void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    assert(pMutex);
 
     if ( pMutex != 0 )
     {
@@ -94,7 +95,7 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    assert(pMutex);
 
     if ( pMutex != 0 )
     {
@@ -116,7 +117,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    assert(pMutex);
 
     if ( pMutex )
     {
@@ -134,7 +135,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 
 sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
 {
-    OSL_ASSERT(pMutex);
+    assert(pMutex);
 
     if ( pMutex )
     {

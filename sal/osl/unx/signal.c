@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
+
 /* system headers */
 #include "system.h"
 
@@ -880,7 +882,7 @@ void CallSystemHandler(int Signal)
                     break;
 
                 default:            /* should never happen */
-                    OSL_ASSERT(0);
+                    assert(0);
             }
         }
         else
@@ -986,7 +988,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
 {
     oslSignalHandlerImpl* pHandler;
 
-    OSL_ASSERT(Handler != NULL);
+    assert(Handler != NULL);
     if ( Handler == 0 )
     {
         return 0;
@@ -1019,7 +1021,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 {
     oslSignalHandlerImpl *pHandler, *pPrevious = NULL;
 
-    OSL_ASSERT(Handler != NULL);
+    assert(Handler != NULL);
 
     if (! bInitSignal)
         bInitSignal = InitSignal();

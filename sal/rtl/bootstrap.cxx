@@ -72,7 +72,7 @@ bool isPathnameUrl(rtl::OUString const & url) {
 }
 
 bool resolvePathnameUrl(rtl::OUString * url) {
-    OSL_ASSERT(url !=  NULL);
+    assert(url !=  NULL);
     if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
             url->copy(RTL_CONSTASCII_LENGTH(VND_SUN_STAR_PATHNAME)), *url) ==
@@ -137,7 +137,7 @@ bool find(
     NameValueList const & list, rtl::OUString const & key,
     rtl::OUString * value)
 {
-    OSL_ASSERT(value != NULL);
+    assert(value != NULL);
     for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i) {
         if (i->sName == key) {
             *value = i->sValue;
@@ -155,7 +155,7 @@ namespace {
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
 {
-    OSL_ASSERT(value != NULL);
+    assert(value != NULL);
     static NameValueList *pNameValueList = 0;
     if( ! pNameValueList )
     {
@@ -665,7 +665,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
                 p_bootstrap_map->insert(
                     bootstrap_map::t::value_type( iniName, that ) ) );
             (void) insertion; // WaE: unused variable
-            OSL_ASSERT( insertion.second );
+            assert( insertion.second );
         }
         else
         {
@@ -694,7 +694,7 @@ void SAL_CALL rtl_bootstrap_args_close (
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
-    OSL_ASSERT(
+    assert(
         p_bootstrap_map->find( that->_iniName )->second == that );
     --that->_nRefCount;
     if (that->_nRefCount == 0)
@@ -711,7 +711,7 @@ void SAL_CALL rtl_bootstrap_args_close (
         {
             ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
             if (erased != 1) {
-                OSL_ASSERT( false );
+                assert( false );
             }
             delete that;
         }
@@ -835,7 +835,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(
 void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT(value != NULL);
+    assert(value != NULL);
     rtl::OUStringBuffer b;
     for (sal_Int32 i = 0; i < value->length; ++i) {
         sal_Unicode c = value->buffer[i];
@@ -857,7 +857,7 @@ int hex(sal_Unicode c) {
 }
 
 sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
-    OSL_ASSERT(
+    assert(
         pos != NULL && *pos >= 0 && *pos < text.getLength() && escaped != NULL);
     sal_Unicode c = text[(*pos)++];
     if (c == '\\') {

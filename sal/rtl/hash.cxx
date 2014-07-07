@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include "hash.hxx"
 #include "strimp.hxx"
 #include <osl/diagnose.h>
@@ -118,7 +120,7 @@ rtl_str_hash_resize (sal_uInt32        nNewSize)
     StringHashTable *pNewHash;
     StringHashTable *pHash = getHashTable();
 
-    OSL_ASSERT (nNewSize > pHash->nEntries);
+    assert (nNewSize > pHash->nEntries);
 
     pNewHash = rtl_str_hash_new (nNewSize);
 
@@ -205,7 +207,7 @@ rtl_str_hash_remove (rtl_uString       *pString)
         if (n >= pHash->nSize)
             n = 0;
     }
-    OSL_ASSERT (pHash->pData[n] != 0);
+    assert (pHash->pData[n] != 0);
     if (pHash->pData[n] == NULL)
         return;
 

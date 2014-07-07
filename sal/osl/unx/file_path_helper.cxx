@@ -208,7 +208,7 @@ private:
         while (!done() && *m_path_segment_end && (*m_path_segment_end != m_separator))
             ++m_path_segment_end;
 
-        OSL_ASSERT(m_path_segment_end <= m_end);
+        assert(m_path_segment_end <= m_end);
     }
 
 private:

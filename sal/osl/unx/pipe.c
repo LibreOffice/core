@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
+
 #include "system.h"
 
 #include <osl/pipe.h>
@@ -437,13 +439,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     int     s, flags;
     oslPipe pAcceptedPipe;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
     if ( pPipe == 0 )
     {
         return NULL;
     }
 
-    OSL_ASSERT(strlen(pPipe->m_Name) > 0);
+    assert(strlen(pPipe->m_Name) > 0);
 
 #if defined(LINUX)
     pPipe->m_bIsAccepting = sal_True;
@@ -473,7 +475,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         /* alloc memory */
         pAcceptedPipe = __osl_createPipeImpl();
 
-        OSL_ASSERT(pAcceptedPipe);
+        assert(pAcceptedPipe);
         if(pAcceptedPipe==NULL)
         {
             close(s);
@@ -503,7 +505,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 {
     int nRet = 0;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     if ( pPipe == 0 )
     {
@@ -530,7 +532,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 {
     int nRet=0;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     if ( pPipe == 0 )
     {
@@ -563,7 +565,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -590,7 +592,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
 
-    OSL_ASSERT( pPipe );
+    assert( pPipe );
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;

@@ -83,7 +83,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
         RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0, 0,
         sal_True);
     nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
+    assert(nLen < RTL_STR_MAX_VALUEOFFLOAT);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
     rtl_string_release(pResult);
     return nLen;
@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
         RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
         0, sal_True);
     nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
+    assert(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
     rtl_string_release(pResult);
     return nLen;
@@ -180,7 +180,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                                                   sal_uInt32 nFlags,
                                                   bool bCheckErrors)
 {
-    OSL_ASSERT(pTarget != NULL
+    assert(pTarget != NULL
                && (pSource != NULL || nLength == 0)
                && nLength >= 0
                && (nLength == 0 || rtl_isOctetTextEncoding(nEncoding)));
@@ -211,7 +211,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 if ( *pTarget )
                     rtl_string_release( *pTarget );
                 *pTarget = rtl_string_ImplAlloc( nLength );
-                OSL_ASSERT(*pTarget != NULL);
+                assert(*pTarget != NULL);
                 pBuffer = (*pTarget)->buffer;
                 do
                 {
@@ -250,7 +250,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         for (;;)
         {
             pTemp = rtl_string_ImplAlloc( nNewLen );
-            OSL_ASSERT(pTemp != NULL);
+            assert(pTemp != NULL);
             nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
                                                    pSource, nLength,
                                                    pTemp->buffer, nNewLen,
@@ -280,7 +280,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         if ( nNewLen > nDestBytes+8 )
         {
             rtl_String* pTemp2 = rtl_string_ImplAlloc( nDestBytes );
-            OSL_ASSERT(pTemp2 != NULL);
+            assert(pTemp2 != NULL);
             rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestBytes );
             rtl_freeMemory( pTemp );
             pTemp = pTemp2;

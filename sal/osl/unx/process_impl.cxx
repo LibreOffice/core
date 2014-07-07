@@ -144,7 +144,7 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
     oslProcessError result = osl_Process_E_NotFound;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ASSERT(g_command_args.m_nCount > 0);
+    assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > 0)
     {
         /* CommandArgs set. Obtain argv[0]. */
@@ -180,7 +180,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     oslProcessError result = osl_Process_E_NotFound;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ASSERT(g_command_args.m_nCount > 0);
+    assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
@@ -287,7 +287,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
                 ppustrValue,
                 p_env_var, strlen(p_env_var), encoding,
                 OSTRING_TO_OUSTRING_CVTFLAGS);
-            OSL_ASSERT(*ppustrValue != NULL);
+            assert(*ppustrValue != NULL);
 
             result = osl_Process_E_None;
         }

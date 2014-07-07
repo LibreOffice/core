@@ -29,6 +29,7 @@
 #include <rtl/textenc.h>
 #include <rtl/alloc.h>
 #include <sal/macros.h>
+#include <assert.h>
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
@@ -157,7 +158,7 @@ Thread_Impl* osl_thread_construct_Impl (void)
 
 static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
 {
-    OSL_ASSERT(ppImpl);
+    assert(ppImpl);
     if (*ppImpl)
     {
         pthread_cond_destroy  (&((*ppImpl)->m_Cond));
@@ -358,7 +359,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return; /* EINVAL */
 
@@ -378,7 +379,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return; /* EINVAL */
 
@@ -448,7 +449,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return; /* EINVAL */
 
@@ -471,11 +472,11 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     int terminate;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return sal_False; /* EINVAL */
 
-    OSL_ASSERT(pthread_equal (pthread_self(), pImpl->m_hThread));
+    assert(pthread_equal (pthread_self(), pImpl->m_hThread));
     if (!(pthread_equal (pthread_self(), pImpl->m_hThread)))
         return sal_False; /* EINVAL */
 
@@ -767,7 +768,7 @@ void SAL_CALL osl_setThreadPriority (
 
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return; /* EINVAL */
 
@@ -813,7 +814,7 @@ void SAL_CALL osl_setThreadPriority (
             break;
 
         case osl_Thread_PriorityUnknown:
-            OSL_ASSERT(sal_False);      /* only fools try this...*/
+            assert(sal_False);      /* only fools try this...*/
 
             /* let release-version behave friendly */
             return;
@@ -846,7 +847,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     oslThreadPriority Priority = osl_Thread_PriorityNormal;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
+    assert(pImpl);
     if (!pImpl)
         return osl_Thread_PriorityUnknown; /* EINVAL */
 
@@ -965,7 +966,7 @@ static void osl_thread_textencoding_init_Impl (void)
 
     /* determine default text encoding */
     defaultEncoding = osl_getTextEncodingFromLocale(NULL);
-    OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
+    assert(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
 
     /*
     Tools string functions call abort() on an unknown encoding so ASCII

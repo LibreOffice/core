@@ -102,7 +102,7 @@ static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
 
     path[0] = '\0';
 
-    OSL_ASSERT(pszName != NULL);
+    assert(pszName != NULL);
 
     if ( pszName == 0 )
     {
@@ -248,7 +248,7 @@ static void ChildStatusProc(void *pData)
 
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
         {
-            OSL_ASSERT(geteuid() == 0);     /* must be root */
+            assert(geteuid() == 0);     /* must be root */
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)", errno, strerror(errno));
@@ -626,7 +626,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     if (pszImageName == NULL)
         pszImageName = pszArguments[0];
 
-    OSL_ASSERT(pszImageName != NULL);
+    assert(pszImageName != NULL);
 
     if ( pszImageName == 0 )
     {
@@ -802,7 +802,7 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
     {
         oslProcessImpl *pChild, *pPrev = NULL;
 
-        OSL_ASSERT(ChildListMutex != NULL);
+        assert(ChildListMutex != NULL);
 
         if ( ChildListMutex == 0 )
         {
@@ -1176,7 +1176,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     oslProcessError osl_error = osl_Process_E_None;
 
     OSL_PRECOND(Process, "osl_joinProcess: Invalid parameter");
-    OSL_ASSERT(ChildListMutex);
+    assert(ChildListMutex);
 
     if (NULL == Process || 0 == ChildListMutex)
         return osl_Process_E_Unknown;

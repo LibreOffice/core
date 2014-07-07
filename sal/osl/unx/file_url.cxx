@@ -567,7 +567,7 @@ namespace
 
         sal_Int32 len = rtl_ustr_getLength(path_resolved_so_far);
 
-        OSL_ASSERT(len < PATH_MAX);
+        assert(len < PATH_MAX);
 
         resolved_path = rtl::OUString(path_resolved_so_far, len);
 
@@ -615,7 +615,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
     if (FileBase::E_None == rc)
     {
         rc = (FileBase::RC) osl_getFileURLFromSystemPath(resolved_path.pData, pustrAbsoluteURL);
-        OSL_ASSERT(FileBase::E_None == rc);
+        assert(FileBase::E_None == rc);
     }
 
     return oslFileError(rc);
@@ -700,7 +700,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
             oslFileError osl_error =
 #endif
                 osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
-            OSL_ASSERT(osl_File_E_None == osl_error);
+            assert(osl_File_E_None == osl_error);
             bfound = true;
         }
     }
@@ -751,7 +751,7 @@ namespace
             sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
         {
-            OSL_ASSERT(m_converter != 0);
+            assert(m_converter != 0);
             return rtl_convertUnicodeToText (
                 m_converter, 0, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
         }
@@ -804,7 +804,7 @@ namespace
             sal_Char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
         {
-            OSL_ASSERT(m_converter != 0);
+            assert(m_converter != 0);
             return rtl_convertTextToUnicode (
                 m_converter, 0, pSrcBuf, nSrcBytes, pDstBuf, nDstChars, nFlags, pInfo, pSrcCvtBytes);
         }
