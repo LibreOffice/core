@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck packageinfo
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck packageinfo internal.clean
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -79,6 +79,11 @@ $(foreach m,$(1),$(call gb_Top_GbuildModuleRules,$(notdir $(m)),$(m)))
 endef
 
 gbuild_modules := $(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk $(SRCDIR)/external/*/Module_*.mk)))
+
+gbuild_internal_modules := $(filter-out odk external,$(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk))))
+
+internal.clean: $(addsuffix .clean,$(gbuild_internal_modules))
+
 
 $(eval $(call gb_Top_GbuildModulesRules,$(gbuild_modules)))
 
