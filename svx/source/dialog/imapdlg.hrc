@@ -23,10 +23,6 @@
 
 /******************************************************************************/
 
-#define RID_SVXDLG_IMAP         (RID_SVX_IMAPDLG_START)
-#define RID_SVXCTL_IMAP         (RID_SVX_IMAPDLG_START + 7)
-
-#define TBX_IMAPDLG1            1
 #define TBI_APPLY               1
 #define TBI_OPEN                2
 #define TBI_SAVEAS              3
@@ -48,13 +44,6 @@
 
 #define TBI_UNDO                40
 #define TBI_REDO                41
-
-#define FT_URL                  1
-#define FT_TEXT                 2
-#define CBB_URL                 1
-#define EDT_TEXT                1
-
-#define STB_STATUS              1
 
 #define IL_IMAPDLG              1024
 

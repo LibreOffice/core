@@ -82,15 +82,51 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     friend class IMapOwnData;
     friend class IMapWindow;
 
-    ToolBox             aTbxIMapDlg1;
-    FixedText           aFtURL;
-    SvtURLBox           maURLBox;
-    FixedText           aFtText;
-    Edit                aEdtText;
-    FixedText           maFtTarget;
-    ComboBox            maCbbTarget;
-    StatusBar           aStbStatus;
+    ToolBox             *m_pTbxIMapDlg1;
+    FixedText           *m_pFtURL;
+    SvtURLBox           *m_pURLBox;
+    FixedText           *m_pFtText;
+    Edit                *m_pEdtText;
+    FixedText           *m_pFtTarget;
+    ComboBox            *m_pCbbTarget;
+    StatusBar           *m_pStbStatus;
     ImageList           maImageList;
+
+    sal_uInt16          mnApplyId;
+    sal_uInt16          mnOpenId;
+    sal_uInt16          mnSaveAsId;
+    sal_uInt16          mnSelectId;
+    sal_uInt16          mnRectId;
+    sal_uInt16          mnCircleId;
+    sal_uInt16          mnPolyId;
+    sal_uInt16          mnFreePolyId;
+    sal_uInt16          mnPolyEditId;
+    sal_uInt16          mnPolyMoveId;
+    sal_uInt16          mnPolyInsertId;
+    sal_uInt16          mnPolyDeleteId;
+    sal_uInt16          mnUndoId;
+    sal_uInt16          mnRedoId;
+    sal_uInt16          mnActiveId;
+    sal_uInt16          mnMacroId;
+    sal_uInt16          mnPropertyId;
+
+    Image               maApplyImg;
+    Image               maOpenImg;
+    Image               maSaveAsImg;
+    Image               maSelectImg;
+    Image               maRectImg;
+    Image               maCircleImg;
+    Image               maPolyImg;
+    Image               maFreePolyImg;
+    Image               maPolyEditImg;
+    Image               maPolyMoveImg;
+    Image               maPolyInsertImg;
+    Image               maPolyDeleteImg;
+    Image               maUndoImg;
+    Image               maRedoImg;
+    Image               maActiveImg;
+    Image               maMacroImg;
+    Image               maPropertyImg;
 
     Size                aLastSize;
     IMapWindow*         pIMapWnd;
@@ -118,7 +154,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 public:
 
                         SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    Window* pParent, const ResId& rResId );
+                                    Window* pParent );
                         virtual ~SvxIMapDlg();
 
     void                SetExecState( bool bEnable );

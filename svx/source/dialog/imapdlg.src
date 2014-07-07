@@ -20,253 +20,34 @@
 #include "helpid.hrc"
 #include "imapdlg.hrc"
 
- // RID_SVXDLG_IMAP ----------------------------------------------------
-ModelessDialog RID_SVXDLG_IMAP
-{
-    HelpID = "svx:ModelessDialog:RID_SVXDLG_IMAP";
-    OutputSize = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 270 , 213 ) ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    ToolBox TBX_IMAPDLG1
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        HelpId = HID_IMAPDLG_TOOLBOX ;
-
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_APPLY ;
-                HelpId = HID_IMAPDLG_APPLY ;
-                Text [ en-US ] = "Apply" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_OPEN ;
-                HelpId = HID_IMAPDLG_OPEN ;
-                Text [ en-US ] = "Open..." ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_SAVEAS ;
-                HelpId = HID_IMAPDLG_SAVEAS ;
-
-                Text [ en-US ] = "Save..." ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_SELECT ;
-                HelpId = HID_IMAPDLG_SELECT ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-                Text [ en-US ] = "Select" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_RECT ;
-                HelpId = HID_IMAPDLG_RECT ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-                Text [ en-US ] = "Rectangle" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_CIRCLE ;
-                HelpId = HID_IMAPDLG_CIRCLE ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-                Text [ en-US ] = "Ellipse" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_POLY ;
-                HelpId = HID_IMAPDLG_POLY ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-                Text [ en-US ] = "Polygon" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_FREEPOLY ;
-                HelpId = HID_IMAPDLG_FREEPOLY ;
-                Text [ en-US ] = "Freeform Polygon" ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_POLYEDIT ;
-                HelpId = HID_IMAPDLG_POLYEDIT ;
-                Text [ en-US ] = "Edit Points" ;
-                AutoCheck = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_POLYMOVE ;
-                HelpId = HID_IMAPDLG_POLYMOVE ;
-                Text [ en-US ] = "Move Points" ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_POLYINSERT ;
-                HelpId = HID_IMAPDLG_POLYINSERT ;
-                Text [ en-US ] = "Insert Points" ;
-                RadioCheck = TRUE ;
-                AutoCheck = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_POLYDELETE ;
-                HelpId = HID_IMAPDLG_POLYDELETE ;
-                Text [ en-US ] = "Delete Points" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_UNDO ;
-                HelpId = HID_IMAPDLG_UNDO ;
-                Text [ en-US ] = "Undo " ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_REDO ;
-                HelpId = HID_IMAPDLG_REDO ;
-                Text [ en-US ] = "Redo" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_ACTIVE ;
-                HelpId = HID_IMAPDLG_ACTIVE ;
-                Text [ en-US ] = "Active" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_MACRO ;
-                HelpId = HID_IMAPDLG_MACRO ;
-                Text [ en-US ] = "Macro..." ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_PROPERTY ;
-                HelpId = HID_IMAPDLG_PROPERTY ;
-                Text [ en-US ] = "Properties..." ;
-            };
-        };
-    };
-
-    FixedText FT_URL
-    {
-        Pos = MAP_APPFONT ( 6 , 25 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
-        Text [ en-US ] = "Address:" ;
-    };
-    ComboBox CBB_URL
-    {
-        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:CBB_URL";
-        Pos = MAP_APPFONT ( 39 , 23 ) ;
-        Size = MAP_APPFONT ( 225 , 69 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        AutoSize = TRUE ;
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_TEXT
-    {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
-        Text [ en-US ] = "Text:" ;
-    };
-    Edit EDT_TEXT
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT";
-        Border = TRUE ;
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 39 , 41 ) ;
-        Size = MAP_APPFONT ( 143 , 12 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-    };
-    Text [ en-US ] = "ImageMap Editor" ;
-
-    FixedText RID_SVXCTL_FT_TARGET
-    {
-        Pos = MAP_APPFONT ( 188 , 43 ) ;
-        Size = MAP_APPFONT ( 22 , 12 ) ;
-        Text [ en-US ] = "Frame:" ;
-    };
-     // nur temporaer
-    ComboBox RID_SVXCTL_CBB_TARGET
-    {
-        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:RID_SVXCTL_CBB_TARGET";
-        Border = TRUE ;
-        Sort = TRUE ;
-        Pos = MAP_APPFONT ( 213 , 41 ) ;
-        Size = MAP_APPFONT ( 51 , 50 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HScroll = TRUE ;
-    };
-
 #define IMAPDLG_IDLIST \
-        IdList =            \
-        {                   \
-            TBI_APPLY ; \
-            TBI_OPEN ;  \
-            TBI_SAVEAS ;    \
-            TBI_SELECT ;    \
-            TBI_RECT ;  \
-            TBI_CIRCLE ;    \
-            TBI_POLY ;  \
-            TBI_FREEPOLY ;  \
-            TBI_POLYEDIT ;  \
-            TBI_POLYMOVE ; \
-            TBI_POLYINSERT ;    \
-            TBI_POLYDELETE ;    \
-            TBI_UNDO ;  \
-            TBI_REDO ;  \
-            TBI_ACTIVE ; \
-            TBI_MACRO ; \
-            TBI_PROPERTY ; \
-        };                 \
-        IdCount = { 17 ; };
+    IdList =            \
+    {                   \
+        TBI_APPLY ; \
+        TBI_OPEN ;  \
+        TBI_SAVEAS ;    \
+        TBI_SELECT ;    \
+        TBI_RECT ;  \
+        TBI_CIRCLE ;    \
+        TBI_POLY ;  \
+        TBI_FREEPOLY ;  \
+        TBI_POLYEDIT ;  \
+        TBI_POLYMOVE ; \
+        TBI_POLYINSERT ;    \
+        TBI_POLYDELETE ;    \
+        TBI_UNDO ;  \
+        TBI_REDO ;  \
+        TBI_ACTIVE ; \
+        TBI_MACRO ; \
+        TBI_PROPERTY ; \
+    };                 \
+    IdCount = { 17 ; };
 
-    ImageList IL_IMAPDLG
-    {
-        Prefix = "id";
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
-        IMAPDLG_IDLIST
-    };
-};
-
-Control RID_SVXCTL_IMAP
+ImageList IL_IMAPDLG
 {
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 6 , 56 ) ;
-    HelpId = HID_IMAPDLG_GRAPHWND ;
+    Prefix = "id";
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+    IMAPDLG_IDLIST
 };
 
 /******************************************************************************/
