@@ -696,106 +696,108 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 
     OString aDel(", ");
-    OStringBuffer aOut;
+    OString aOut;
     if( aVolatile )
-        aOut.append(aVolatile.GetSvIdlString( SvHash_Volatile() ));
+        aOut = aVolatile.GetSvIdlString( SvHash_Volatile() );
     else if( !aCachable )
         // because of Default == TRUE, only when no other is set
-        aOut.append(aCachable.GetSvIdlString( SvHash_Cachable() ));
-    else
+        aOut = aCachable.GetSvIdlString( SvHash_Cachable() );
+    else {
+        aOut = "";
         aDel = OString();
+    }
 
     if( aToggle )
     {
-        aOut.append(aDel).append(aToggle.GetSvIdlString( SvHash_Toggle() ));
+        aOut += aDel + aToggle.GetSvIdlString( SvHash_Toggle() );
         aDel = ", ";
     }
     if( aAutoUpdate )
     {
-        aOut.append(aDel).append(aAutoUpdate.GetSvIdlString( SvHash_AutoUpdate() ));
+        aOut += aDel + aAutoUpdate.GetSvIdlString( SvHash_AutoUpdate() );
         aDel = ", ";
     }
 
     OString aDel1(", ");
     if( aAsynchron )
-        aOut.append(aDel).append(aAsynchron.GetSvIdlString( SvHash_Asynchron() ));
+        aOut += aDel + aAsynchron.GetSvIdlString( SvHash_Asynchron() );
     else if( !aSynchron )
     {
         // because of Default == TRUE, only when no other is set
-        aOut.append(aDel).append(aSynchron.GetSvIdlString( SvHash_Synchron() ));
+        aOut += aDel + aSynchron.GetSvIdlString( SvHash_Synchron() );
     }
     else
         aDel1 = aDel;
 
     aDel = ", ";
     if( aRecordManual )
-        aOut.append(aDel1).append(aRecordManual.GetSvIdlString( SvHash_RecordManual() ));
+        aOut +=aDel1 + aRecordManual.GetSvIdlString( SvHash_RecordManual() );
     else if( aNoRecord )
-        aOut.append(aDel1).append(aNoRecord.GetSvIdlString( SvHash_NoRecord() ));
+        aOut +=aDel1 + aNoRecord.GetSvIdlString( SvHash_NoRecord() );
     else if( !aRecordPerSet )
         // because of Default == TRUE, only when no other is set
-        aOut.append(aDel1).append(aRecordPerSet.GetSvIdlString( SvHash_RecordPerSet() ));
+        aOut +=aDel1 + aRecordPerSet.GetSvIdlString( SvHash_RecordPerSet() );
     else if( aRecordPerItem )
-        aOut.append(aDel1).append(aRecordPerItem.GetSvIdlString( SvHash_RecordPerItem() ));
+        aOut +=aDel1 + aRecordPerItem.GetSvIdlString( SvHash_RecordPerItem() );
     else
         aDel = aDel1;
 
     if( aRecordAbsolute )
     {
-        aOut.append(aDel).append(aRecordAbsolute.GetSvIdlString( SvHash_RecordAbsolute() ));
+        aOut += aDel + aRecordAbsolute.GetSvIdlString( SvHash_RecordAbsolute() );
         aDel = ", ";
     }
     if( aHasDialog )
     {
-        aOut.append(aDel).append(aHasDialog.GetSvIdlString( SvHash_HasDialog() ));
+        aOut += aDel + aHasDialog.GetSvIdlString( SvHash_HasDialog() );
         aDel = ", ";
     }
     if( aMenuConfig )
     {
-        aOut.append(aDel).append(aMenuConfig.GetSvIdlString( SvHash_MenuConfig() ));
+        aOut += aDel + aMenuConfig.GetSvIdlString( SvHash_MenuConfig() );
         aDel = ", ";
     }
     if( aToolBoxConfig )
     {
-        aOut.append(aDel).append(aToolBoxConfig.GetSvIdlString( SvHash_ToolBoxConfig() ));
+        aOut += aDel + aToolBoxConfig.GetSvIdlString( SvHash_ToolBoxConfig() );
         aDel = ", ";
     }
     if( aStatusBarConfig )
     {
-        aOut.append(aDel).append(aStatusBarConfig.GetSvIdlString( SvHash_StatusBarConfig() ));
+        aOut += aDel + aStatusBarConfig.GetSvIdlString( SvHash_StatusBarConfig() );
         aDel = ", ";
     }
     if( aAccelConfig )
     {
-        aOut.append(aDel).append(aAccelConfig.GetSvIdlString( SvHash_AccelConfig() ));
+        aOut += aDel + aAccelConfig.GetSvIdlString( SvHash_AccelConfig() );
         aDel = ", ";
     }
     if( aFastCall )
     {
-        aOut.append(aDel).append(aFastCall.GetSvIdlString( SvHash_FastCall() ));
+        aOut += aDel + aFastCall.GetSvIdlString( SvHash_FastCall() );
         aDel = ", ";
     }
     if( aContainer )
     {
-        aOut.append(aDel).append(aContainer.GetSvIdlString( SvHash_Container() ));
+        aOut += aDel + aContainer.GetSvIdlString( SvHash_Container() );
         aDel = ", ";
     }
     if( aImageRotation )
     {
-        aOut.append(aDel).append(aImageRotation.GetSvIdlString( SvHash_ImageRotation() ));
+        aOut += aDel + aImageRotation.GetSvIdlString( SvHash_ImageRotation() );
         aDel = ", ";
     }
 
     if( aImageReflection )
     {
-        aOut.append(aDel).append(aImageReflection.GetSvIdlString( SvHash_ImageReflection() ));
+        aOut += aDel + aImageReflection.GetSvIdlString( SvHash_ImageReflection() );
         aDel = ", ";
     }
 
     if( !aOut.isEmpty() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( aOut.getStr() ) << endl;
+        rOutStm.WriteOString( aOut ) << endl;
     }
 }
 
