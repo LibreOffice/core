@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 
 #include <limits.h>
+#include <algorithm>
 #include <ostream>
 #include <cstdlib>
 
