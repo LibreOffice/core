@@ -80,7 +80,7 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
         {
             if( pCrsr->HasMark() || !bAppendLine )
                 bRet = false;
-            else
+            else if (pTblNd)
             {
                 // if there is no list anymore then create new one
                 if ( !pTableBox )
