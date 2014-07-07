@@ -4400,30 +4400,29 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (nParam >= 0)
         {
             m_aStates.top().aDrawingObject.nPolyLineCount = nParam;
-            m_aStates.top().aDrawingObject.aPolyLinePoints.realloc(nParam);
         }
         break;
     case RTF_DPPTX:
     {
         RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
 
-        if (!rDrawingObject.aPolyLinePoints.hasElements())
+        if (rDrawingObject.aPolyLinePoints.empty())
             dispatchValue(RTF_DPPOLYCOUNT, 2);
 
-        rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].X = convertTwipToMm100(nParam);
+        rDrawingObject.aPolyLinePoints.push_back(awt::Point(convertTwipToMm100(nParam), 0));
     }
     break;
     case RTF_DPPTY:
     {
         RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
-        if (rDrawingObject.aPolyLinePoints.hasElements())
+        if (!rDrawingObject.aPolyLinePoints.empty())
         {
-            rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].Y = convertTwipToMm100(nParam);
+            rDrawingObject.aPolyLinePoints.back().Y = convertTwipToMm100(nParam);
             rDrawingObject.nPolyLineCount--;
             if (rDrawingObject.nPolyLineCount == 0)
             {
                 uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence(1);
-                aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints;
+                aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints.getAsConstList();
                 rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
             }
         }
