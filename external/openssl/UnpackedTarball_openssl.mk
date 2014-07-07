@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	$(if $(filter MSC,$(COM)),external/openssl/openssl-1.0.1g-msvc2012-winxp.patch.1) \
 	$(if $(filter SOLARIS,$(OS)),external/openssl/opensslsol.patch) \
 	$(if $(filter IOS,$(OS)),external/openssl/opensslios.patch) \
+	$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),external/openssl/opensslosxppc.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
