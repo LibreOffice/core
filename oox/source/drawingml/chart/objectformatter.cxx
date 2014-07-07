@@ -460,7 +460,7 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
     return 0;
 }
 
-
+// These PropIds arrays will be indexed into using a ShapePropertyId enum (include/oox/drawingml/shapepropertymap.hxx)
 
 /** Property identifiers for common chart objects, to be used in ShapePropertyInfo. */
 static const sal_Int32 spnCommonPropIds[] =
@@ -478,7 +478,7 @@ static const sal_Int32 spnLinearPropIds[] =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_Color, PROP_Transparency, PROP_LineDashName,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_END_LIST
@@ -502,6 +502,7 @@ static const sal_Int32 spnFilledPropIds[] =
     PROP_FillStyle,
     PROP_Color,
     PROP_Transparency,
+    PROP_INVALID,
     PROP_GradientName,
     PROP_FillBitmapName,
     PROP_FillBitmapMode,
