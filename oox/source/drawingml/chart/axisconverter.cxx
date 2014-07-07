@@ -301,13 +301,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         // number format ------------------------------------------------------
 
         if( (aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT) )
-        {
-            bool bPercent = false;
-            if( mrModel.maNumberFormat.maFormatCode.indexOf('%') >= 0)
-                bPercent = true;
-            mrModel.maNumberFormat.mbSourceLinked = false;
-            getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat, bPercent );
-        }
+            getFormatter().convertNumberFormat(aAxisProp, mrModel.maNumberFormat, false);
 
         // position of crossing axis ------------------------------------------
 

@@ -1088,11 +1088,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     if( mxData->mxNumFmts.is() )
     {
         sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
-        if( rNumberFormat.mbSourceLinked || rNumberFormat.maFormatCode.isEmpty() )
-        {
-            rPropSet.setAnyProperty( nPropId, Any() );
-        }
-        else try
+        try
         {
             sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general") ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
@@ -1105,6 +1101,8 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
             OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
                 append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
         }
+
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
     }
 }
 
