@@ -113,8 +113,12 @@ string processccargs(vector<string> rawargs) {
                 exit(1);
             }
         }
-        else if(*i == "-g")
+        else if(*i == "-g") {
             args.append("-Zi");
+#if _MSC_VER >= 1800
+            args.append(" -FS");
+#endif
+        }
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
             for(size_t pos=(*i).find("\"",0); pos!=string::npos; pos=(*i).find("\"",pos)) {
