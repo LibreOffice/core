@@ -107,6 +107,26 @@ sal_Int32 lclGetTickMark( sal_Int32 nToken )
     return NONE;
 }
 
+/**
+ * The groups is of percent type only when all of its members are of percent
+ * type.
+ */
+bool isPercent( const RefVector<TypeGroupConverter>& rTypeGroups )
+{
+    if (rTypeGroups.empty())
+        return false;
+
+    RefVector<TypeGroupConverter>::const_iterator it = rTypeGroups.begin(), itEnd = rTypeGroups.end();
+    for (; it != itEnd; ++it)
+    {
+        TypeGroupConverter& rConv = **it;
+        if (!rConv.isPercent())
+            return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 // ============================================================================
@@ -120,16 +140,20 @@ AxisConverter::~AxisConverter()
 {
 }
 
-void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCoordSystem,
-        TypeGroupConverter& rTypeGroup, const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
+void AxisConverter::convertFromModel(
+    const Reference< XCoordinateSystem >& rxCoordSystem,
+    RefVector<TypeGroupConverter>& rTypeGroups, const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
 {
+    if (rTypeGroups.empty())
+        return;
+
     Reference< XAxis > xAxis;
     try
     {
         namespace cssc = ::com::sun::star::chart;
         namespace cssc2 = ::com::sun::star::chart2;
 
-        const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
+        const TypeGroupInfo& rTypeInfo = rTypeGroups.front()->getTypeInfo();
         ObjectFormatter& rFormatter = getFormatter();
 
         // create the axis object (always)
@@ -189,7 +213,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                         currently). */
                     aScaleData.AxisType = (bDateAxis && !mrModel.mbAuto) ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
                     aScaleData.AutoDateAxis = mrModel.mbAuto;
-                    aScaleData.Categories = rTypeGroup.createCategorySequence();
+                    aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
                 }
                 else
                 {
@@ -199,11 +223,11 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             break;
             case API_Y_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
-                aScaleData.AxisType = rTypeGroup.isPercent() ? cssc2::AxisType::PERCENT : cssc2::AxisType::REALNUMBER;
+                aScaleData.AxisType = isPercent(rTypeGroups) ? cssc2::AxisType::PERCENT : cssc2::AxisType::REALNUMBER;
             break;
             case API_Z_AXIS:
                 OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( serAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:serAx)" );
-                OSL_ENSURE( rTypeGroup.isDeep3dChart(), "AxisConverter::convertFromModel - series axis not supported by this chart type" );
+                OSL_ENSURE( rTypeGroups.front()->isDeep3dChart(), "AxisConverter::convertFromModel - series axis not supported by this chart type" );
                 aScaleData.AxisType = cssc2::AxisType::SERIES;
             break;
         }
@@ -330,7 +354,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         // axis title ---------------------------------------------------------
 
         // in radar charts, title objects may exist, but are not shown
-        if( mrModel.mxTitle.is() && (rTypeGroup.getTypeInfo().meTypeCategory != TYPECATEGORY_RADAR) )
+        if( mrModel.mxTitle.is() && (rTypeGroups.front()->getTypeInfo().meTypeCategory != TYPECATEGORY_RADAR) )
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
