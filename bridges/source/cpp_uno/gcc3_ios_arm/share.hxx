@@ -61,8 +61,6 @@ namespace arm
         MAX_FPR_REGS = 8
     };
     bool return_in_x8( typelib_TypeDescriptionReference *pTypeRef );
-#else
-#error wtf
 #endif
 }
 
