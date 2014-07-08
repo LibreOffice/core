@@ -62,6 +62,17 @@ sal_uInt16 Date::GetDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
     return ImplDaysInMonth( nMonth, nYear);
 }
 
+long Date::GetAsNormalizedDays() const
+{
+    // This is a very common datum we often calculate from.
+    if (nDate == 18991230) // 1899-12-30
+    {
+        assert(DateToDays( GetDay(), GetMonth(), GetYear() ) == 693594);
+        return 693594;
+    }
+    return DateToDays( GetDay(), GetMonth(), GetYear() );
+}
+
 long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     long nDays;
@@ -173,7 +184,7 @@ void Date::SetYear( sal_uInt16 nNewYear )
 
 DayOfWeek Date::GetDayOfWeek() const
 {
-    return (DayOfWeek)((sal_uIntPtr)(DateToDays( GetDay(), GetMonth(), GetYear() )-1) % 7);
+    return (DayOfWeek)((sal_uIntPtr)(GetAsNormalizedDays()-1) % 7);
 }
 
 sal_uInt16 Date::GetDayOfYear() const
@@ -263,7 +274,8 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
             {
                 // next x_Sunday == first x_Sunday in the new year
                 // == still the same week!
-                long nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+                long nTempDays = GetAsNormalizedDays();
+
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
                 sal_uInt16  nDay;
                 sal_uInt16  nMonth;
@@ -405,7 +417,7 @@ Date& Date::operator +=( long nDays )
     if (nDays == 0)
         return *this;
 
-    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    long nTempDays = GetAsNormalizedDays();
 
     nTempDays += nDays;
     if ( nTempDays > MAX_DAYS )
@@ -430,7 +442,7 @@ Date& Date::operator -=( long nDays )
     if (nDays == 0)
         return *this;
 
-    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    long nTempDays = GetAsNormalizedDays();
 
     nTempDays -= nDays;
     if ( nTempDays > MAX_DAYS )
@@ -451,7 +463,7 @@ Date& Date::operator ++()
     sal_uInt16  nDay;
     sal_uInt16  nMonth;
     sal_uInt16  nYear;
-    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    long nTempDays = GetAsNormalizedDays();
 
     if ( nTempDays < MAX_DAYS )
     {
@@ -468,7 +480,7 @@ Date& Date::operator --()
     sal_uInt16  nDay;
     sal_uInt16  nMonth;
     sal_uInt16  nYear;
-    long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
+    long nTempDays = GetAsNormalizedDays();
 
     if ( nTempDays > 1 )
     {
@@ -509,10 +521,9 @@ Date operator -( const Date& rDate, long nDays )
 
 long operator -( const Date& rDate1, const Date& rDate2 )
 {
-    sal_uIntPtr  nTempDays1 = Date::DateToDays( rDate1.GetDay(), rDate1.GetMonth(),
-                                    rDate1.GetYear() );
-    sal_uIntPtr  nTempDays2 = Date::DateToDays( rDate2.GetDay(), rDate2.GetMonth(),
-                                    rDate2.GetYear() );
+    sal_uIntPtr nTempDays1 = rDate1.GetAsNormalizedDays();
+    sal_uIntPtr nTempDays2 = rDate2.GetAsNormalizedDays();
+
     return nTempDays1 - nTempDays2;
 }
 
