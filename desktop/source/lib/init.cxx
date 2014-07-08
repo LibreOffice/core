@@ -181,7 +181,8 @@ extern "C"
 static void doc_destroy(LibreOfficeKitDocument* pThis);
 static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static LibreOfficeKitDocumentType doc_getDocumentType(LibreOfficeKitDocument* pThis);
-static int doc_getNumberOfParts(LibreOfficeKitDocument* pThis);
+static int doc_getParts(LibreOfficeKitDocument* pThis);
+static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
@@ -210,7 +211,8 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->destroy = doc_destroy;
             m_pDocumentClass->saveAs = doc_saveAs;
             m_pDocumentClass->getDocumentType = doc_getDocumentType;
-            m_pDocumentClass->getNumberOfParts = doc_getNumberOfParts;
+            m_pDocumentClass->getParts = doc_getParts;
+            m_pDocumentClass->getPart = doc_getPart;
             m_pDocumentClass->setPart = doc_setPart;
             m_pDocumentClass->paintTile = doc_paintTile;
             m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
@@ -420,17 +422,46 @@ static LibreOfficeKitDocumentType doc_getDocumentType (LibreOfficeKitDocument* p
     return LOK_DOCTYPE_OTHER;
 }
 
-static int doc_getNumberOfParts (LibreOfficeKitDocument* pThis)
+static int doc_getParts (LibreOfficeKitDocument* pThis)
 {
-    (void) pThis;
-    // Assume writer document for now.
-    return 1;
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return 0;
+    }
+
+    return pDoc->getParts();
+}
+
+static int doc_getPart (LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return 0;
+    }
+
+    return pDoc->getPart();
 }
 
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
 {
-    (void) pThis;
-    (void) nPart;
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->setPart( nPart );
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,
