@@ -76,7 +76,7 @@ public class BufferedCairoImage extends CairoImage {
         mFormat = CairoUtils.bitmapConfigToCairoFormat(bitmap.getConfig());
         mSize = new IntSize(bitmap.getWidth(), bitmap.getHeight());
 
-        int bpp = CairoUtils.bitsPerPixelForCairoFormat(mFormat);
+        int bpp = CairoUtils.bitsPerPixelForCairoFormat(mFormat) / 8;
         mBuffer = DirectBufferAllocator.allocate(mSize.getArea() * bpp);
         bitmap.copyPixelsToBuffer(mBuffer.asIntBuffer());
     }

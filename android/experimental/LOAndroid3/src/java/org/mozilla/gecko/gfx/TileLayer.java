@@ -81,6 +81,7 @@ public abstract class TileLayer extends Layer {
         if (mTextureIDs != null) {
             TextureReaper.get().add(mTextureIDs);
         }
+        mImage.destroy();
     }
 
     /**
