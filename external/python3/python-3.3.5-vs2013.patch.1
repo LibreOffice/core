@@ -1,0 +1,14 @@
+-*- Mode:Diff -*-
+--- python3/PC/pyconfig.h
++++ python3/PC/pyconfig.h
+@@ -602,6 +602,10 @@
+ /* Define if you have readlink.  */
+ /* #undef HAVE_READLINK */
+ 
++#if defined(_MSC_VER) && _MSC_VER >= 1800
++#define HAVE_ROUND
++#endif
++
+ /* Define if you have select.  */
+ /* #undef HAVE_SELECT */
+ 
