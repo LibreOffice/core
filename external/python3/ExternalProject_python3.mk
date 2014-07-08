@@ -39,6 +39,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				/ToolsVersion:4.0, \
 				/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) \
 				/p:VisualStudioVersion=11.0) \
+			$(if $(filter 120,$(VCVER)), \
+				/p:PlatformToolset=$(if $(filter 81,$(WINDOWS_SDK_VERSION)),v120) \
+				/p:VisualStudioVersion=12.0) \
 	,PCBuild)
 
 else
