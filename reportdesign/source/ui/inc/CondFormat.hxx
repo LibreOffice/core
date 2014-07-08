@@ -27,6 +27,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -75,6 +76,7 @@ namespace rptui
         OModuleClient   m_aModuleClient;
         Window*         m_pConditionPlayground;
         Conditions      m_aConditions;
+        VclScrolledWindow* m_pScrollWindow;
         ScrollBar*      m_pCondScroll;
 
         ::rptui::OReportController&                         m_rController;

@@ -62,7 +62,6 @@ ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *p
     , m_pFormula(pFormula)
 {
     m_pSubEdit->EnableRTL( false );
-    m_pSubEdit->SetPosPixel( Point() );
 
     m_pFormula->SetText(OUString("..."));
     m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
@@ -159,7 +158,6 @@ void OColorPopup::KeyInput( const KeyEvent& rKEvt )
     m_aColorSet.KeyInput(rKEvt);
 }
 
-
 void OColorPopup::Resize()
 {
     Size aSize = GetOutputSizePixel();
@@ -167,7 +165,6 @@ void OColorPopup::Resize()
     aSize.Height() -= 4;
     m_aColorSet.SetPosSizePixel( Point(2,2), aSize );
 }
-
 
 void OColorPopup::StartSelection()
 {
