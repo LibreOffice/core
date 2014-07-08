@@ -160,6 +160,11 @@ public class CheckerboardImage extends CairoImage {
     }
 
     @Override
+    public void destroy() {
+
+    }
+
+    @Override
     public IntSize getSize() {
         return new IntSize(SIZE, SIZE);
     }
