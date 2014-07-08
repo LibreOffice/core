@@ -1011,6 +1011,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     aColorSet   ( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
     aButtonLeft ( this ),
     aButtonRight( this ),
+    aButtonPicker( this ),
     aPaletteName( this ),
     maCommand( rCommand ),
     nNavButtonWidth ( 20 ),
@@ -1050,18 +1051,27 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     }
 
     aButtonLeft.SetText("<");
+    aButtonLeft.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
     aButtonLeft.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepLeftClickHdl ) );
     aButtonLeft.Show();
 
     aButtonRight.SetText(">");
+    aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
     aButtonRight.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepRightClickHdl ) );
     aButtonRight.Show();
+
+    aButtonPicker.SetText("P");
+    aButtonPicker.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
+    aButtonPicker.SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
+    aButtonPicker.Show();
+
+    aPaletteName.SetSizePixel(Size(150, nNavButtonHeight));
+    aColorSet.Show();
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
     SetHelpId( HID_POPUP_COLOR );
     aColorSet.SetHelpId( HID_POPUP_COLOR_CTRL );
     SetText( rWndTitle );
-    aColorSet.Show();
 
     aPaletteName.Show();
 
@@ -1083,13 +1093,12 @@ void SvxColorWindow_Impl::UpdateGUI()
     //TODO: Move left/right buttons above the colors
     SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd + nNavButtonHeight));
 
-    aButtonLeft.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
     aButtonLeft.SetPosPixel(Point(0, aNewSize.Height() + nAdd + 1));
 
-    aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
     aButtonRight.SetPosPixel(Point(aNewSize.Width() + nAdd - nNavButtonWidth, aNewSize.Height() + nAdd + 1));
 
-    aPaletteName.SetSizePixel(Size(150, nNavButtonHeight));
+    aButtonPicker.SetPosPixel(Point(aNewSize.Width() + nAdd - 2 * nNavButtonWidth, aNewSize.Height() + nAdd + 1));
+
     aPaletteName.SetPosPixel(Point(nNavButtonWidth, aNewSize.Height() + nAdd + 1));
     aPaletteName.SetText(mrPaletteManager.GetPaletteName());
 }
@@ -1156,6 +1165,12 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, StepRightClickHdl)
 {
     mrPaletteManager.NextPalette();
     UpdateGUI();
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
+{
+    mrPaletteManager.PopupColorPicker();
     return 0;
 }
 
@@ -2183,8 +2198,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_AUTO )
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 
@@ -2193,27 +2207,27 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     {
         case SID_ATTR_CHAR_COLOR:
             addStatusListener( OUString( ".uno:Color" ));
-            mLastColor = COL_RED;
+            mPaletteManager.SetLastColor( COL_RED );
             break;
 
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( ".uno:CharColorExt" ));
-            mLastColor = COL_RED;
+            mPaletteManager.SetLastColor( COL_RED );
             break;
 
         case SID_BACKGROUND_COLOR:
             addStatusListener( OUString( ".uno:BackgroundColor" ));
-            mLastColor = COL_YELLOW;
+            mPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( OUString( ".uno:CharBackgroundExt" ));
-            mLastColor = COL_YELLOW;
+            mPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_FRAME_LINECOLOR:
             addStatusListener( OUString( ".uno:FrameLineColor" ));
-            mLastColor = COL_BLUE;
+            mPaletteManager.SetLastColor( COL_BLUE );
             break;
 
         case SID_EXTRUSION_3D_COLOR:
@@ -2222,6 +2236,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     }
 
     pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
+    mPaletteManager.SetBtnUpdater( pBtnUpdater.get() );
 }
 
 SvxColorToolBoxControl::~SvxColorToolBoxControl()
@@ -2274,7 +2289,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
 {
     pBtnUpdater->Update( *pColor );
-    mLastColor = *pColor;
+    mPaletteManager.SetLastColor( *pColor );
     return 0;
 }
 
@@ -2336,21 +2351,24 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aParamName;
-    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
+    aArgs[0].Value = makeAny( (sal_uInt32)( mPaletteManager.GetLastColor().GetColor() ));
     Dispatch( aCommand, aArgs );
 }
+
+// class SvxLineColorToolBoxControl ----------------------------------------
 
 SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_BLACK )
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     addStatusListener( OUString( ".uno:XLineColor" ) );
     pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
+    mPaletteManager.SetLastColor( COL_BLACK );
+    mPaletteManager.SetBtnUpdater( pBtnUpdater.get() );
 }
 
 SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
@@ -2384,7 +2402,7 @@ SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
 IMPL_LINK(SvxLineColorToolBoxControl, SelectedHdl, Color*, pColor)
 {
     pBtnUpdater->Update( *pColor );
-    mLastColor = *pColor;
+    mPaletteManager.SetLastColor( *pColor );
     return 0;
 }
 
@@ -2401,7 +2419,7 @@ void SvxLineColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = "XLineColor";
-    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
+    aArgs[0].Value = makeAny( (sal_uInt32)( mPaletteManager.GetLastColor().GetColor() ));
     Dispatch( OUString( ".uno:XLineColor" ), aArgs );
 }
 

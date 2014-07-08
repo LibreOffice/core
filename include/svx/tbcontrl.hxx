@@ -221,7 +221,6 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     using SfxToolBoxControl::StateChanged;
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
-    Color                               mLastColor;
     PaletteManager                      mPaletteManager;
     DECL_LINK( SelectedHdl, Color* );
 public:
@@ -242,7 +241,6 @@ public:
 class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
 {
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
-    Color                               mLastColor;
     PaletteManager                      mPaletteManager;
     DECL_LINK( SelectedHdl, Color* );
 public:
