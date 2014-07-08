@@ -7,14 +7,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.LayerView;
 
 public class LibreOfficeMainActivity extends Activity {
 
@@ -61,7 +58,6 @@ public class LibreOfficeMainActivity extends Activity {
         mAppContext = this;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
@@ -82,13 +78,14 @@ public class LibreOfficeMainActivity extends Activity {
             mGeckoLayout.addView(mLayerController.getView(), 0);
         }
 
-        mLayerController.notifyLayerClientOfGeometryChange();
-
         sLOKitThread = new LOKitThread();
         sLOKitThread.start();
 
-
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - UI almost up");
+    }
+
+    public LOKitThread getLOKitThread() {
+        return sLOKitThread;
     }
 
     public static GeckoSoftwareLayerClient getLayerClient() {
