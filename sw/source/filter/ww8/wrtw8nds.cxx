@@ -2733,9 +2733,14 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     const SfxPoolItem* pI;
     if( pSet)
     {
-        bool bNoPageBreak = true;
+        bool bNoPageBreak = false;
         if ( SFX_ITEM_ON != pSet->GetItemState(RES_PAGEDESC, true, &pI)
             || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() )
+        {
+            bNoPageBreak = true;
+        }
+
+        if (bNoPageBreak)
         {
             if (SFX_ITEM_ON != pSet->GetItemState(RES_BREAK, true, &pI))
                 bNoPageBreak = true;
