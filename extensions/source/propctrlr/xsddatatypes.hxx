@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xsd {
@@ -40,7 +41,7 @@ namespace pcr
 
     //= XSDDataType
 
-    class XSDDataType : public ::rtl::IReference
+    class XSDDataType : public salhelper::SimpleReferenceObject
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >
@@ -49,19 +50,12 @@ namespace pcr
                             m_xFacetInfo;
 
     protected:
-        oslInterlockedCount m_refCount;
-
-    protected:
         inline ::com::sun::star::xsd::XDataType* getDataTypeInterface() const { return m_xDataType.get(); }
 
     public:
         XSDDataType(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >& _rxDataType
         );
-
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
         /// retrieves the underlying UNO component
         inline const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >&

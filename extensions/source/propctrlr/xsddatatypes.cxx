@@ -51,28 +51,10 @@ namespace pcr
 
     XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
         :m_xDataType( _rxDataType )
-        ,m_refCount( 0 )
     {
         DBG_ASSERT( m_xDataType.is(), "XSDDataType::XSDDataType: invalid UNO object!" );
         if ( m_xDataType.is() )
             m_xFacetInfo = m_xDataType->getPropertySetInfo();
-    }
-
-
-    oslInterlockedCount SAL_CALL XSDDataType::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL XSDDataType::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-           delete this;
-           return 0;
-        }
-        return m_refCount;
     }
 
 

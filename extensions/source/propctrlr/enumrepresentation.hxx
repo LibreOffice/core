@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <vector>
 
@@ -34,7 +35,7 @@ namespace pcr
 
     //= IPropertyEnumRepresentation
 
-    class SAL_NO_VTABLE IPropertyEnumRepresentation : public ::rtl::IReference
+    class SAL_NO_VTABLE IPropertyEnumRepresentation : public salhelper::SimpleReferenceObject
     {
     public:
         /** retrieves all descriptions of all possible values of the enumeration property

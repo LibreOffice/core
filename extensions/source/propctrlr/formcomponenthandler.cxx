@@ -2968,32 +2968,13 @@ namespace pcr
         protected:
             SQLCommandPropertyUI( const Reference< XPropertySet >& _rxObject )
                 : m_xObject(_rxObject)
-                , m_refCount(0)
             {
                 if ( !m_xObject.is() )
                     throw NullPointerException();
             }
 
-            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
-            {
-                return osl_atomic_increment( &m_refCount );
-            }
-
-            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
-            {
-                if ( 0 == osl_atomic_decrement( &m_refCount ) )
-                {
-                    delete this;
-                    return 0;
-                }
-                return m_refCount;
-            }
-
         protected:
             Reference< XPropertySet >   m_xObject;
-
-        private:
-            oslInterlockedCount         m_refCount;
         };
 
 

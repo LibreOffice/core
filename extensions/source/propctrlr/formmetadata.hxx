@@ -72,7 +72,6 @@ namespace pcr
     class DefaultEnumRepresentation : public IPropertyEnumRepresentation
     {
     private:
-        oslInterlockedCount         m_refCount;
         const IPropertyInfoService& m_rMetaData;
         ::com::sun::star::uno::Type m_aType;
         const sal_Int32             m_nPropertyId;
@@ -95,10 +94,6 @@ namespace pcr
                                     SAL_CALL getDescriptions() const SAL_OVERRIDE;
         virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
         virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
-
-        // IReference implementqation
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         DefaultEnumRepresentation();                                                // never implemented

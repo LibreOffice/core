@@ -580,8 +580,7 @@ namespace pcr
 
 
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
-        :m_refCount( 0 )
-        ,m_rMetaData( _rInfo )
+        :m_rMetaData( _rInfo )
         ,m_aType( _rType )
         ,m_nPropertyId( _nPropertyId )
     {
@@ -663,23 +662,6 @@ namespace pcr
             OSL_FAIL( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
         }
         return sReturn;
-    }
-
-
-    oslInterlockedCount SAL_CALL DefaultEnumRepresentation::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL DefaultEnumRepresentation::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-           delete this;
-           return 0;
-        }
-        return m_refCount;
     }
 
 

@@ -66,7 +66,6 @@ namespace pcr
         public IPropertyEnumRepresentation, private boost::noncopyable
     {
     private:
-        oslInterlockedCount                 m_refCount;
         Reference< XEnumTypeDescription >   m_xTypeDescription;
         Type                                m_aEnumType;
 
@@ -79,17 +78,12 @@ namespace pcr
         virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
         virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
 
-        // IReference implementqation
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
     };
 
     EnumRepresentation::EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType )
-        :m_refCount( 0 )
-        ,m_aEnumType( _rEnumType )
+        :m_aEnumType( _rEnumType )
     {
         try
         {
@@ -178,21 +172,6 @@ namespace pcr
              OSL_FAIL( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
         }
         return sDescription;
-    }
-
-    oslInterlockedCount SAL_CALL EnumRepresentation::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-    oslInterlockedCount SAL_CALL EnumRepresentation::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-           delete this;
-           return 0;
-        }
-        return m_refCount;
     }
 
     typedef ::cppu::WeakImplHelper1 <   XActionListener

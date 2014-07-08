@@ -31,6 +31,7 @@
 #include <tools/link.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 namespace pcr
@@ -189,7 +190,7 @@ namespace pcr
 
     /** an adapter to forward changed SQL command property values to a component
     */
-    class ISQLCommandAdapter : public ::rtl::IReference
+    class ISQLCommandAdapter : public salhelper::SimpleReferenceObject
     {
     public:
         /// retrieves the current SQL command of the component
