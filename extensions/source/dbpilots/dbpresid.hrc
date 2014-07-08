@@ -59,13 +59,10 @@
 
 // tab pages
 
-#define RID_PAGE_DEFAULTFIELDSELECTION      ( RID_PAGE_START +  3 )
-#define RID_PAGE_OPTIONVALUES               ( RID_PAGE_START +  4 )
 #define RID_PAGE_OPTION_DBFIELD             ( RID_PAGE_START +  5 )
-#define RID_PAGE_OPTIONS_FINAL              ( RID_PAGE_START +  6 )
 
 // please adjust RID_PAGE_END (below) when adding new tab pages
-#define RID_PAGE_END                        RID_PAGE_OPTIONS_FINAL
+#define RID_PAGE_END                        RID_PAGE_OPTION_DBFIELD
 
 // ErrorBox
 
@@ -92,39 +89,21 @@
 // local ids
 
 // FixedLine
-#define FL_DEFAULTSELECTION         2
-#define FL_OPTIONVALUES             3
 #define FL_DATABASEFIELD_EXPL       4
-#define FL_NAMEIT                   5
 #define FL_FRAME                    6
 #define FL_FORMSETINGS              7
 
 // FixedText
 
-#define FT_RADIOBUTTONS              4
-#define FT_DEFAULTSELECTION          5
-#define FT_OPTIONVALUES_EXPL         6
-#define FT_OPTIONVALUES              7
 #define FT_DATABASEFIELD_EXPL        8
 #define FT_DATABASEFIELD_QUEST       9
-#define FT_NAMEIT                   10
-#define FT_THATSALL                 11
 
 // ListBox
 
-#define LB_RADIOBUTTONS             3
-#define LB_DEFSELECTIONFIELD        3
 #define LB_STOREINFIELD             4
-
-// Edit
-
-#define ET_OPTIONVALUE              2
-#define ET_NAMEIT                   3
 
 // RadioButton
 
-#define RB_DEFSELECTION_YES         1
-#define RB_DEFSELECTION_NO          2
 #define RB_STOREINFIELD_YES         3
 #define RB_STOREINFIELD_NO          4
 

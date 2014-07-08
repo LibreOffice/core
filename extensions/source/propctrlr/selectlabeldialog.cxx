@@ -48,40 +48,38 @@ namespace pcr
 
 
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
-        :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
-        ,m_aMainDesc(this, PcrRes(1))
-        ,m_aControlTree(this, PcrRes(1))
-        ,m_aNoAssignment(this, PcrRes(1))
-        ,m_aSeparator(this, PcrRes(1))
-        ,m_aOk(this, PcrRes(1))
-        ,m_aCancel(this, PcrRes(1))
+        :ModalDialog(pParent, "LabelSelectionDialog", "modules/spropctrlr/ui/labelselectiondialog.ui")
         ,m_aModelImages(PcrRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
         ,m_pInitialSelection(NULL)
         ,m_pLastSelected(NULL)
         ,m_bHaveAssignableControl(false)
     {
-        // initialize the TreeListBox
-        m_aControlTree.SetSelectionMode( SINGLE_SELECTION );
-        m_aControlTree.SetDragDropMode( 0 );
-        m_aControlTree.EnableInplaceEditing( false );
-        m_aControlTree.SetStyle(m_aControlTree.GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+        get(m_pMainDesc, "label");
+        get(m_pControlTree, "control");
+        get(m_pNoAssignment, "noassignment");
 
-        m_aControlTree.SetNodeBitmaps( m_aModelImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ), m_aModelImages.GetImage( RID_SVXIMG_EXPANDEDNODE ) );
-        m_aControlTree.SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
-        m_aControlTree.SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+        // initialize the TreeListBox
+        m_pControlTree->SetSelectionMode( SINGLE_SELECTION );
+        m_pControlTree->SetDragDropMode( 0 );
+        m_pControlTree->EnableInplaceEditing( false );
+        m_pControlTree->SetStyle(m_pControlTree->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+
+        m_pControlTree->SetNodeBitmaps( m_aModelImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ), m_aModelImages.GetImage( RID_SVXIMG_EXPANDEDNODE ) );
+        m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+        m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
 
         // fill the description
-        OUString sDescription = m_aMainDesc.GetText();
+        OUString sDescription = m_pMainDesc->GetText();
         sal_Int16 nClassID = FormComponentType::CONTROL;
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
 
-        sDescription = sDescription.replaceAll(OUString("$control_class$"),
+        sDescription = sDescription.replaceAll(OUString("$controlclass$"),
             GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
         OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
-        sDescription = sDescription.replaceAll(OUString("$control_name$"), sName);
-        m_aMainDesc.SetText(sDescription);
+        sDescription = sDescription.replaceAll(OUString("$controlname$"), sName);
+        m_pMainDesc->SetText(sDescription);
 
         // search for the root of the form hierarchy
         Reference< XChild >  xCont(m_xControlModel, UNO_QUERY);
@@ -113,51 +111,51 @@ namespace pcr
 
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
-            SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
+            SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = NULL;
             m_bHaveAssignableControl = false;
             InsertEntries(xSearch, pRoot);
-            m_aControlTree.Expand(pRoot);
+            m_pControlTree->Expand(pRoot);
         }
 
         if (m_pInitialSelection)
         {
-            m_aControlTree.MakeVisible(m_pInitialSelection, true);
-            m_aControlTree.Select(m_pInitialSelection, true);
+            m_pControlTree->MakeVisible(m_pInitialSelection, true);
+            m_pControlTree->Select(m_pInitialSelection, true);
         }
         else
         {
-            m_aControlTree.MakeVisible(m_aControlTree.First(), true);
-            if (m_aControlTree.FirstSelected())
-                m_aControlTree.Select(m_aControlTree.FirstSelected(), false);
-            m_aNoAssignment.Check(true);
+            m_pControlTree->MakeVisible(m_pControlTree->First(), true);
+            if (m_pControlTree->FirstSelected())
+                m_pControlTree->Select(m_pControlTree->FirstSelected(), false);
+            m_pNoAssignment->Check(true);
         }
 
         if (!m_bHaveAssignableControl)
         {   // no controls which can be assigned
-            m_aNoAssignment.Check(true);
-            m_aNoAssignment.Enable(false);
+            m_pNoAssignment->Check(true);
+            m_pNoAssignment->Enable(false);
         }
 
-        m_aNoAssignment.SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
-        m_aNoAssignment.GetClickHdl().Call(&m_aNoAssignment);
+        m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
+        m_pNoAssignment->GetClickHdl().Call(m_pNoAssignment);
 
-        FreeResource();
+        //FreeResource();
     }
 
 
     OSelectLabelDialog::~OSelectLabelDialog()
     {
         // delete the entry datas of the listbox entries
-        SvTreeListEntry* pLoop = m_aControlTree.First();
+        SvTreeListEntry* pLoop = m_pControlTree->First();
         while (pLoop)
         {
             void* pData = pLoop->GetUserData();
             if (pData)
                 delete (Reference< XPropertySet > *)pData;
-            pLoop = m_aControlTree.Next(pLoop);
+            pLoop = m_pControlTree->Next(pLoop);
         }
 
     }
@@ -197,18 +195,18 @@ namespace pcr
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
                     Image aFormImage = m_aModelImages.GetImage( RID_SVXIMG_FORM );
-                    SvTreeListEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
+                    SvTreeListEntry* pCont = m_pControlTree->InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
                     if (nContChildren)
                     {
-                        m_aControlTree.Expand(pCont);
+                        m_pControlTree->Expand(pCont);
                         ++nChildren;
                     }
                     else
                     {   // oops, no valid children -> remove the entry
-                        m_aControlTree.ModelIsRemoving(pCont);
-                        m_aControlTree.GetModel()->Remove(pCont);
-                        m_aControlTree.ModelHasRemoved(pCont);
+                        m_pControlTree->ModelIsRemoving(pCont);
+                        m_pControlTree->GetModel()->Remove(pCont);
+                        m_pControlTree->ModelHasRemoved(pCont);
                     }
                 }
                 continue;
@@ -224,7 +222,7 @@ namespace pcr
                 makeStringAndClear();
 
             // all requirements met -> insert
-            SvTreeListEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
+            SvTreeListEntry* pCurrent = m_pControlTree->InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
             pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
             ++nChildren;
 
@@ -240,17 +238,17 @@ namespace pcr
 
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB)
     {
-        DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
+        DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
-        SvTreeListEntry* pSelected = m_aControlTree.FirstSelected();
+        SvTreeListEntry* pSelected = m_pControlTree->FirstSelected();
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
         if (pData)
             m_xSelectedControl = Reference< XPropertySet > (*(Reference< XPropertySet > *)pData);
 
-        m_aNoAssignment.SetClickHdl(Link());
-        m_aNoAssignment.Check(pData == NULL);
-        m_aNoAssignment.SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
+        m_pNoAssignment->SetClickHdl(Link());
+        m_pNoAssignment->Check(pData == NULL);
+        m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
 
         return 0L;
     }
@@ -258,37 +256,37 @@ namespace pcr
 
     IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton)
     {
-        DBG_ASSERT(pButton == &m_aNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
+        DBG_ASSERT(pButton == m_pNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
         (void)pButton;
 
-        if (m_aNoAssignment.IsChecked())
-            m_pLastSelected = m_aControlTree.FirstSelected();
+        if (m_pNoAssignment->IsChecked())
+            m_pLastSelected = m_pControlTree->FirstSelected();
         else
         {
             DBG_ASSERT(m_bHaveAssignableControl, "OSelectLabelDialog::OnNoAssignmentClicked");
             // search the first assignable entry
-            SvTreeListEntry* pSearch = m_aControlTree.First();
+            SvTreeListEntry* pSearch = m_pControlTree->First();
             while (pSearch)
             {
                 if (pSearch->GetUserData())
                     break;
-                pSearch = m_aControlTree.Next(pSearch);
+                pSearch = m_pControlTree->Next(pSearch);
             }
             // and select it
             if (pSearch)
             {
-                m_aControlTree.Select(pSearch);
+                m_pControlTree->Select(pSearch);
                 m_pLastSelected = pSearch;
             }
         }
 
         if (m_pLastSelected)
         {
-            m_aControlTree.SetSelectHdl(Link());
-            m_aControlTree.SetDeselectHdl(Link());
-            m_aControlTree.Select(m_pLastSelected, !m_aNoAssignment.IsChecked());
-            m_aControlTree.SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
-            m_aControlTree.SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+            m_pControlTree->SetSelectHdl(Link());
+            m_pControlTree->SetDeselectHdl(Link());
+            m_pControlTree->Select(m_pLastSelected, !m_pNoAssignment->IsChecked());
+            m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
+            m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
         }
 
         return 0L;

@@ -40,12 +40,9 @@ namespace pcr
             :public ModalDialog
             ,public PcrClient
     {
-        FixedText       m_aMainDesc;
-        SvTreeListBox   m_aControlTree;
-        CheckBox        m_aNoAssignment;
-        FixedLine       m_aSeparator;
-        OKButton        m_aOk;
-        CancelButton    m_aCancel;
+        FixedText       *m_pMainDesc;
+        SvTreeListBox   *m_pControlTree;
+        CheckBox        *m_pNoAssignment;
 
         ImageList       m_aModelImages;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
@@ -62,7 +59,7 @@ namespace pcr
         OSelectLabelDialog(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
         virtual ~OSelectLabelDialog();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_aNoAssignment.IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
 
     protected:
         sal_Int32 InsertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
