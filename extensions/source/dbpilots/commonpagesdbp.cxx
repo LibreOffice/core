@@ -388,6 +388,15 @@ namespace dbp
     }
 
 
+    OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription )
+        :OControlWizardPage(_pParent, _rID, _rUIXMLDescription)
+        ,m_pYes(NULL)
+        ,m_pNo(NULL)
+        ,m_pList(NULL)
+    {
+    }
+
+
     void OMaybeListSelectionPage::announceControls(RadioButton& _rYesButton, RadioButton& _rNoButton, ListBox& _rSelection)
     {
         m_pYes = &_rYesButton;

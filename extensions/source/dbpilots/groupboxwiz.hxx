@@ -122,11 +122,9 @@ namespace dbp
     class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDefaultSelectionLabel;
-        RadioButton     m_aDefSelYes;
-        RadioButton     m_aDefSelNo;
-        ListBox         m_aDefSelection;
+        RadioButton     *m_pDefSelYes;
+        RadioButton     *m_pDefSelNo;
+        ListBox         *m_pDefSelection;
 
     public:
         ODefaultFieldSelectionPage( OControlWizard* _pParent );
@@ -145,12 +143,8 @@ namespace dbp
     class OOptionValuesPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDescription;
-        FixedText       m_aValueLabel;
-        Edit            m_aValue;
-        FixedText       m_aOptionsLabel;
-        ListBox         m_aOptions;
+        Edit            *m_pValue;
+        ListBox         *m_pOptions;
 
         StringArray     m_aUncommittedValues;
         ::svt::WizardTypes::WizardState
@@ -193,10 +187,7 @@ namespace dbp
     class OFinalizeGBWPage : public OGBWPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aNameLabel;
-        Edit            m_aName;
-        FixedText       m_aThatsAll;
+        Edit            *m_pName;
 
     public:
         OFinalizeGBWPage( OControlWizard* _pParent );
