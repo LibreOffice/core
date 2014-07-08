@@ -33,6 +33,7 @@ private:
     PushButton *m_pExtensionPersonaPreview;     ///< Buttons to show the last 3 personas installed via extensions
     ListBox* m_pPersonaList;                    ///< The ListBox to show the list of installed personas
     OUString m_aPersonaSettings;                ///< Header and footer images + color to be set in the settings.
+    FixedText *m_pExtensionLabel;               ///< The "select persona installed via extensions" label
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;
