@@ -66,7 +66,7 @@ CBenObject::IsNamedObject()
 pCBenProperty
 CBenObject::UseProperty(BenObjectID PropertyID)
 {
-    pCBenIDListElmt pPrev;
+    pCUtListElmt pPrev;
     return (pCBenProperty) FindID(&cProperties, PropertyID, &pPrev);
 }
 

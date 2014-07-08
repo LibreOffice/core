@@ -287,7 +287,7 @@ CBenTOCReader::ReadTOC()
                         return Err;
                     }
 
-                    pCBenNamedObjectListElmt pPrevNamedObjectListElmt;
+                    pCUtListElmt pPrevNamedObjectListElmt;
                     if (FindNamedObject(&cpContainer->GetNamedObjects(),
                       sBuffer, &pPrevNamedObjectListElmt) != NULL)
                     {
@@ -342,10 +342,10 @@ CBenTOCReader::ReadTOC()
 
                     if (pObject == NULL)
                         pObject = new CBenObject(cpContainer, ObjectID,
-                          (pCBenObject) cpContainer->GetObjects().GetLast());
+                          cpContainer->GetObjects().GetLast());
 
                     pProperty = new CBenProperty(pObject, PropertyID, TypeID,
-                      (pCBenProperty) pObject->GetProperties().GetLast());
+                      pObject->GetProperties().GetLast());
 
                     if ((Err = ReadSegments(&pProperty->UseValue(),
                       &LookAhead)) != BenErr_OK)

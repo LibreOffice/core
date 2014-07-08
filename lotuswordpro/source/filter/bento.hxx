@@ -144,7 +144,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
 class CBenIDListElmt : public CUtListElmt
 {
 public: // Internal methods
-    CBenIDListElmt(BenObjectID ID, pCBenIDListElmt pPrev) : CUtListElmt(pPrev)
+    CBenIDListElmt(BenObjectID ID, pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cID = ID; }
     CBenIDListElmt(BenObjectID ID) { cID = ID; }
     BenObjectID GetID() { return cID; }
@@ -157,7 +157,7 @@ class CBenNamedObjectListElmt : public CUtListElmt
 {
 public: // Methods
     // added to remove warning
-    CBenNamedObjectListElmt(pCBenNamedObjectListElmt pPrev) : CUtListElmt(pPrev)
+    CBenNamedObjectListElmt(pCUtListElmt pPrev) : CUtListElmt(pPrev)
       { cpNamedObject = NULL; }
     void SetNamedObject(pCBenNamedObject pObj)
     {
@@ -255,7 +255,7 @@ public:
     BenObjectID GetObjectID() { return GetID(); }
 public: // Internal methods
     CBenObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
-      pCBenIDListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
+      pCUtListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
       { cpContainer = pContainer; }
     CUtList& GetProperties() { return cProperties; }
 
@@ -320,7 +320,7 @@ public:
 public: // Internal methods
     // changed to remove WARNING here
     CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
-      BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :
+      BenObjectID TypeID, pCUtListElmt pPrevProperty) :
       CBenIDListElmt(PropertyID, pPrevProperty), cValue(TypeID)
     {
         cpObject = pObject;
@@ -403,7 +403,7 @@ public: // Methods
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt);
+    pCUtListElmt pPrevNamedObjectListElmt);
     const char * GetName() { return csName.data(); }
 
     const char * GetNameCStr() { return csName.c_str(); }
@@ -424,7 +424,7 @@ class CBenPropertyName : public CBenNamedObject
 public: // Internal methods
     CBenPropertyName(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
+    pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsPropertyName() SAL_OVERRIDE;
@@ -435,7 +435,7 @@ class CBenTypeName : public CBenNamedObject
 public: // Internal methods
     CBenTypeName(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
+    pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsTypeName() SAL_OVERRIDE;

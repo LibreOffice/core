@@ -117,7 +117,7 @@ BenError
 LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
   pCBenPropertyName * ppPropertyName)
 {
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt;
+    pCUtListElmt pPrevNamedObjectListElmt;
     pCBenNamedObject pNamedObject = FindNamedObject(&cNamedObjects,
       sPropertyName, &pPrevNamedObjectListElmt);
 
@@ -129,7 +129,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     }
     else
     {
-        pCBenIDListElmt pPrevObject;
+        pCUtListElmt pPrevObject;
         if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != NULL)
             return BenErr_DuplicateObjectID;
 
