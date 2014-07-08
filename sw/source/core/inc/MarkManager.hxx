@@ -87,11 +87,6 @@ namespace sw {
 
             void dumpAsXml(xmlTextWriterPtr w);
 
-            // Marks exclusive annotation marks
-            virtual const_iterator_t getCommonMarksBegin() const SAL_OVERRIDE;
-            virtual const_iterator_t getCommonMarksEnd() const SAL_OVERRIDE;
-            virtual sal_Int32 getCommonMarksCount() const SAL_OVERRIDE;
-
             // Annotation Marks
             virtual const_iterator_t getAnnotationMarksBegin() const SAL_OVERRIDE;
             virtual const_iterator_t getAnnotationMarksEnd() const SAL_OVERRIDE;

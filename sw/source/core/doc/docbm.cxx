@@ -347,7 +347,6 @@ namespace sw { namespace mark
         , m_vBookmarks()
         , m_vFieldmarks()
         , m_vAnnotationMarks()
-        , m_vCommonMarks()
         , m_pDoc(&rDoc)
     { }
 
@@ -436,12 +435,10 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                lcl_InsertMarkSorted(m_vCommonMarks, pMark);
                 lcl_InsertMarkSorted(m_vBookmarks, pMark);
                 break;
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-                lcl_InsertMarkSorted(m_vCommonMarks, pMark);
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
             case IDocumentMarkAccess::ANNOTATIONMARK:
@@ -450,7 +447,6 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
             case IDocumentMarkAccess::DDE_BOOKMARK:
             case IDocumentMarkAccess::UNO_BOOKMARK:
-                lcl_InsertMarkSorted(m_vCommonMarks, pMark);
                 // no special array for these
                 break;
         }
@@ -858,16 +854,6 @@ namespace sw { namespace mark
                     {
                         OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                     }
-
-                    ppBookmark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    if ( ppBookmark != m_vCommonMarks.end() )
-                    {
-                        m_vCommonMarks.erase(ppBookmark);
-                    }
-                    else
-                    {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Bookmark not found in common mark container.");
-                    }
                 }
                 break;
 
@@ -883,16 +869,6 @@ namespace sw { namespace mark
                     else
                     {
                         OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
-                    }
-
-                    ppFieldmark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    if ( ppFieldmark != m_vCommonMarks.end() )
-                    {
-                        m_vCommonMarks.erase(ppFieldmark);
-                    }
-                    else
-                    {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Fieldmark not found in common mark container.");
                     }
                 }
                 break;
@@ -914,17 +890,7 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
             case IDocumentMarkAccess::DDE_BOOKMARK:
             case IDocumentMarkAccess::UNO_BOOKMARK:
-                {
-                    IDocumentMarkAccess::iterator_t ppOtherMark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    if ( ppOtherMark != m_vCommonMarks.end() )
-                    {
-                        m_vCommonMarks.erase(ppOtherMark);
-                    }
-                    else
-                    {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Navigator Reminder, DDE Mark or Uno Makr not found in common mark container.");
-                    }
-                }
+                // no special marks container
                 break;
         }
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(ppMark->get());
@@ -980,8 +946,6 @@ namespace sw { namespace mark
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
         m_aMarkNamesSet.clear();
-
-        m_vCommonMarks.clear();
 
         m_vAnnotationMarks.clear();
 
@@ -1069,21 +1033,6 @@ namespace sw { namespace mark
     IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos) const
         { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getCommonMarksBegin() const
-    {
-        return m_vCommonMarks.begin();
-    }
-
-    IDocumentMarkAccess::const_iterator_t MarkManager::getCommonMarksEnd() const
-    {
-        return m_vCommonMarks.end();
-    }
-
-    sal_Int32 MarkManager::getCommonMarksCount() const
-    {
-        return m_vCommonMarks.size();
-    }
-
     IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksBegin() const
     {
         return m_vAnnotationMarks.begin();
@@ -1143,7 +1092,6 @@ namespace sw { namespace mark
 
     void MarkManager::sortSubsetMarks()
     {
-        sort(m_vCommonMarks.begin(), m_vCommonMarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vBookmarks.begin(), m_vBookmarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vAnnotationMarks.begin(), m_vAnnotationMarks.end(), &lcl_MarkOrderingByStart);

@@ -252,11 +252,6 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition& pos) const=0;
         virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const=0;
 
-        // Marks exclusive annotation marks
-        virtual const_iterator_t getCommonMarksBegin() const = 0;
-        virtual const_iterator_t getCommonMarksEnd() const = 0;
-        virtual sal_Int32 getCommonMarksCount() const = 0;
-
         // Annotation Marks
         virtual const_iterator_t getAnnotationMarksBegin() const = 0;
         virtual const_iterator_t getAnnotationMarksEnd() const = 0;
