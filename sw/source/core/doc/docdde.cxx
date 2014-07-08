@@ -62,8 +62,8 @@ namespace
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
-        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getCommonMarksBegin();
-            ppMark != rMarkAccess.getCommonMarksEnd();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getAllMarksBegin();
+            ppMark != rMarkAccess.getAllMarksEnd();
             ppMark++)
         {
             if ( IDocumentMarkAccess::GetType( *(ppMark->get()) ) == IDocumentMarkAccess::DDE_BOOKMARK)
