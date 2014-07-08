@@ -1,0 +1,35 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
+    <!-- A special case: There are tools that export HTML with .xls
+    extension. Allow to detect these early to avoid going through the
+    whole list of detectors. This also avoids the risk of misdetection
+    as something else, as there are some formats that are text files and
+    the detection is just a heuristic (e.g., wp1 or wp42 supported by
+    libwpd). -->
+    <node oor:name="calc_HTML" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.PlainTextFilterDetect</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>xls</value></prop>
+        <prop oor:name="MediaType"><value>text/html</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"/>
+        <prop oor:name="UIName">
+            <value>HTML Table</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>
