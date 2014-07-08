@@ -41,25 +41,11 @@ namespace dbaccess
 
     // SettingsImport
     SettingsImport::SettingsImport()
-        :m_refCount( 0 )
     {
     }
 
     SettingsImport::~SettingsImport()
     {
-    }
-
-    oslInterlockedCount SAL_CALL SettingsImport::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-    oslInterlockedCount SAL_CALL SettingsImport::release()
-    {
-        oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
-        if ( newCount == 0 )
-            delete this;
-        return newCount;
     }
 
     void SettingsImport::startElement( const Reference< XAttributeList >& i_rAttributes )

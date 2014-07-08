@@ -23,6 +23,7 @@
 #include <connectivity/CommonTools.hxx>
 #include "connectivity/FValue.hxx"
 #include <comphelper/types.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace dbaccess
 {
@@ -30,29 +31,18 @@ namespace dbaccess
     typedef ::rtl::Reference< ORowSetValueVector >                      ORowSetRow;
     typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
-    class ORowSetOldRowHelper
+    class ORowSetOldRowHelper : public salhelper::SimpleReferenceObject
     {
-        oslInterlockedCount         m_refCount;
         ORowSetRow                  m_aRow;
 
         ORowSetOldRowHelper& operator=(const ORowSetOldRowHelper& _rRH);
         ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh);
     public:
-        ORowSetOldRowHelper() : m_refCount(0){}
+        ORowSetOldRowHelper(){}
         ORowSetOldRowHelper(const ORowSetRow& _rRow)
-            : m_refCount(0)
-            , m_aRow(_rRow)
+            : m_aRow(_rRow)
         {}
 
-        void acquire()
-        {
-            osl_atomic_increment( &m_refCount );
-        }
-        void release()
-        {
-            if (! osl_atomic_decrement( &m_refCount ))
-                delete this;
-        }
         inline ORowSetRow getRow() const { return m_aRow; }
         inline void clearRow() { m_aRow = NULL; }
         inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }

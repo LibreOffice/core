@@ -25,6 +25,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace dbaccess
 {
@@ -35,16 +36,12 @@ namespace dbaccess
         It would be nice if the DocumentSettingsContext would not be that tightly interwoven with the SvXMLImport
         class, so we could re-use it here ...
     */
-    class SettingsImport : public ::rtl::IReference
+    class SettingsImport : public salhelper::SimpleReferenceObject
     {
     public:
         SettingsImport();
 
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-        // own overriables
+        // own overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
         ) = 0;
@@ -66,7 +63,6 @@ namespace dbaccess
         const OUStringBuffer&    getAccumulatedCharacters() const    { return m_aCharacters; }
 
     private:
-        oslInterlockedCount     m_refCount;
         // value of the config:name attribute, if any
         OUString         m_sItemName;
         // value of the config:type attribute, if any
