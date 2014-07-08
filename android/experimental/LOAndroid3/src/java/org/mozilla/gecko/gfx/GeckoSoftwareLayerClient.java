@@ -74,8 +74,9 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     @Override
     protected boolean setupLayer() {
         Log.i(LOGTAG, "Creating MultiTileLayer");
-        if(mTileLayer == null)
+        if(mTileLayer == null) {
             mTileLayer = new MultiTileLayer(TILE_SIZE);
+        }
 
         mLayerController.setRoot(mTileLayer);
 

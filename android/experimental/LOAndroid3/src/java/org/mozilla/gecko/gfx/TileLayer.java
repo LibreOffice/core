@@ -38,16 +38,12 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Region;
 import android.opengl.GLES20;
 import android.util.Log;
+
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 /**
  * Base class for tile layers, which encapsulate the logic needed to draw textured tiles in OpenGL
@@ -82,8 +78,9 @@ public abstract class TileLayer extends Layer {
 
     @Override
     protected void finalize() throws Throwable {
-        if (mTextureIDs != null)
+        if (mTextureIDs != null) {
             TextureReaper.get().add(mTextureIDs);
+        }
     }
 
     /**
