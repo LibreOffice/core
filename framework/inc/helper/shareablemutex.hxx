@@ -27,6 +27,9 @@
 namespace framework
 {
 
+/**
+ * This acts like a rtl::Reference<osl::Mutex>
+ */
 class FWI_DLLPUBLIC ShareableMutex
 {
     public:
@@ -34,12 +37,15 @@ class FWI_DLLPUBLIC ShareableMutex
         ShareableMutex( const ShareableMutex& rShareableMutex );
         const ShareableMutex& operator=( const ShareableMutex& rShareableMutex );
 
-        ~ShareableMutex();
+        ~ShareableMutex() { m_pMutexRef->release(); }
 
+        /** acquire the shared mutex */
         void acquire();
+        /** release the shared mutex */
         void release();
 
     private:
+        /* ShareableMutex::MutexRef will destroy itself when the last ShareableMutex pointing to it is destroyed */
         struct MutexRef
         {
             MutexRef() : m_refCount(0) {}
@@ -58,7 +64,7 @@ class FWI_DLLPUBLIC ShareableMutex
             osl::Mutex          m_oslMutex;
         };
 
-        MutexRef* pMutexRef;
+        MutexRef* m_pMutexRef;
 };
 
 class ShareGuard

@@ -24,43 +24,32 @@ namespace framework
 
 ShareableMutex::ShareableMutex()
 {
-    pMutexRef = new MutexRef;
-    pMutexRef->acquire();
+    m_pMutexRef = new MutexRef;
+    m_pMutexRef->acquire();
 }
 
 ShareableMutex::ShareableMutex( const ShareableMutex& rShareableMutex )
 {
-    pMutexRef = rShareableMutex.pMutexRef;
-    if ( pMutexRef )
-        pMutexRef->acquire();
+    m_pMutexRef = rShareableMutex.m_pMutexRef;
+    m_pMutexRef->acquire();
 }
 
 const ShareableMutex& ShareableMutex::operator=( const ShareableMutex& rShareableMutex )
 {
-    if ( rShareableMutex.pMutexRef )
-        rShareableMutex.pMutexRef->acquire();
-    if ( pMutexRef )
-        pMutexRef->release();
-    pMutexRef = rShareableMutex.pMutexRef;
+    rShareableMutex.m_pMutexRef->acquire();
+    m_pMutexRef->release();
+    m_pMutexRef = rShareableMutex.m_pMutexRef;
     return *this;
-}
-
-ShareableMutex::~ShareableMutex()
-{
-    if ( pMutexRef )
-        pMutexRef->release();
 }
 
 void ShareableMutex::acquire()
 {
-    if ( pMutexRef )
-        pMutexRef->m_oslMutex.acquire();
+    m_pMutexRef->m_oslMutex.acquire();
 }
 
 void ShareableMutex::release()
 {
-    if ( pMutexRef )
-        pMutexRef->m_oslMutex.release();
+    m_pMutexRef->m_oslMutex.release();
 }
 
 }
