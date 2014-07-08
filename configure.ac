@@ -2943,8 +2943,15 @@ if test $_os = Darwin; then
         AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
         10.5)
-            CC="${gccprefix}gcc-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="${gccprefix}g++-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            _gcc_version=`gcc -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+            _gcc42_version=`gcc-4.2 -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+            if test "$_gcc_version" -gt "$_gcc42_version"; then
+                CC="gcc -mmacosx-version-min=$with_macosx_version_min_required"
+                CXX="g++ -mmacosx-version-min=$with_macosx_version_min_required"
+            else
+                CC="gcc-4.2 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CXX="g++-4.2 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            fi
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             ;;
         10.6)
@@ -3474,9 +3481,12 @@ if test "$GCC" = "yes" -a -z "$COM_GCC_IS_CLANG"; then
 
     if test "$_os" = "Darwin"; then
         if test "$with_macosx_sdk" = "10.5"; then
-            # use gcc 4.2 for OS X SDK 10.5
+            # use gcc-4.2 for OS X SDK 10.5 when "plain" gcc is not more recent
             if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.2"; then
-                export CC="$GCC_HOME/bin/gcc-4.2" # make CC finally available to config.guess
+                _gcc42_version=`$GCC_HOME/bin/gcc-4.2 -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+                if test "$GCC_VERSION" -le "$_gcc42_version"; then
+                    export CC=$GCC_HOME/bin/gcc-4.2
+                fi
             fi
             AC_MSG_RESULT([using CC=$CC])
         fi
