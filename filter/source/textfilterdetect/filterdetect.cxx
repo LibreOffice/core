@@ -132,7 +132,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
     OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
     aExt = aExt.toAsciiLowerCase();
 
-    if (aType == "generic_HTML")
+    if ((aType == "generic_HTML") || (aType == "calc_HTML"))
     {
         uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
         if (!xInStream.is() || !IsHTMLStream(xInStream))
@@ -141,12 +141,10 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         // Decide which filter to use based on the document service first,
         // then on extension if that's not available.
 
-        if (aDocService == CALC_DOCSERVICE)
+        if ((aDocService == CALC_DOCSERVICE) || (aType == "calc_HTML"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WRITER_HTML_FILTER);
-        else if (aExt == "xls")
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
         else
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(WEB_HTML_FILTER);
     }

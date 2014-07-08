@@ -512,6 +512,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
 	calc_DIF \
 	calc_ODS_FlatXML \
+	calc_HTML \
 	generic_HTML \
 	generic_Text \
 	calc_Lotus \
