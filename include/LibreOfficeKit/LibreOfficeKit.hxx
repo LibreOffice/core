@@ -49,9 +49,14 @@ public:
         return mpDoc->pClass->getDocumentType(mpDoc);
     }
 
-    inline int getNumberOfParts()
+    inline int getParts()
     {
-        return mpDoc->pClass->getNumberOfParts(mpDoc);
+        return mpDoc->pClass->getParts(mpDoc);
+    }
+
+    inline int getPart()
+    {
+        return mpDoc->pClass->getPart(mpDoc);
     }
 
     inline void setPart(int nPart)
@@ -75,7 +80,7 @@ public:
 
     inline void getDocumentSize(long* pWidth, long* pHeight)
     {
-        mpDoc->getDocumentSize(mpDoc, pWidth, pHeight);
+        mpDoc->pClass->getDocumentSize(mpDoc, pWidth, pHeight);
     }
 #endif // LOK_USE_UNSTABLE_API
 };

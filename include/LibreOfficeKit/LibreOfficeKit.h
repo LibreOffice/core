@@ -77,8 +77,9 @@ struct _LibreOfficeKitDocumentClass
 
   // Part refers to either indivual sheets in a Spreadsheet, or slides
   // in a Slideshow, and has no relevance for wrtier documents.
-  int (*getNumberOfParts) (LibreOfficeKitDocument* pThis);
+  int (*getParts) (LibreOfficeKitDocument* pThis);
 
+  int (*getPart)          (LibreOfficeKitDocument* pThis);
   void (*setPart)         (LibreOfficeKitDocument* pThis,
                            int nPart);
 
