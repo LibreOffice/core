@@ -250,6 +250,8 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
 
     get( m_pExtensionPersonaPreview, "persona_preview" );
 
+    get ( m_pExtensionLabel, "extensions_label" );
+
     LoadDefaultImages();
     LoadExtensionThemes();
 }
@@ -371,6 +373,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
         return;
 
     m_pPersonaList->Show();
+    m_pExtensionLabel->Show();
 
     for( sal_Int32 nIndex = 0; nIndex < nLength; nIndex++ )
     {
