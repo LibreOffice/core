@@ -12,6 +12,7 @@ $(eval $(call gb_UIConfig_UIConfig,modules/spropctrlr))
 $(eval $(call gb_UIConfig_add_uifiles,modules/spropctrlr,\
 	extensions/uiconfig/spropctrlr/ui/controlfontdialog \
 	extensions/uiconfig/spropctrlr/ui/datatypedialog \
+	extensions/uiconfig/spropctrlr/ui/labelselectiondialog \
 	extensions/uiconfig/spropctrlr/ui/taborder \
 ))
 

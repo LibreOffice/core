@@ -19,55 +19,6 @@
 
 #include "formresid.hrc"
 
-ModalDialog RID_DLG_SELECTLABELCONTROL
-{
-    HelpID = "extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL";
-    OutputSize = TRUE;
-    Size = MAP_APPFONT( 200, 151 );
-    Moveable = TRUE;
-    Closeable = TRUE;
-    FixedText 1
-    {
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 188, 20 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "These are control fields that can be used as label fields for the $control_class$ $control_name$.";
-    };
-    Control 1
-    {
-        Pos = MAP_APPFONT( 6, 29 );
-        Size = MAP_APPFONT( 188, 83 );
-        TabStop = TRUE;
-        Border  = TRUE ;
-    };
-    CheckBox 1
-    {
-        HelpID = "extensions:CheckBox:RID_DLG_SELECTLABELCONTROL:1";
-        Pos = MAP_APPFONT( 6, 115 );
-        Size = MAP_APPFONT( 188, 8 );
-        Text [ en-US ] = "~No assignment";
-    };
-    FixedLine 1
-    {
-        Pos = MAP_APPFONT( 3, 126 );
-        Size = MAP_APPFONT( 194, 2 );
-    };
-    OKButton 1
-    {
-        Pos = MAP_APPFONT ( 91 , 131 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton 1
-    {
-        Pos = MAP_APPFONT ( 144 , 131 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Label Field Selection";
-};
-
 String RID_STR_FORMS
 {
     Text [ en-US ] = "Forms" ;
