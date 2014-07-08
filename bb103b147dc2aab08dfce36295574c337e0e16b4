@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ab14d0d_bb25875d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 7993,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-08T13:31:34Z",
+      "side": 1,
+      "message": "this looks lke it overrides the user\u0027s explicit configuration e.g. if you do\n--enable-python\u003dsystem it will silently override it to fully-internal ?\n\nit is better to produce an error message in that case, so the user\nknows that the requested configuration is not available.\n\nof course if \"auto\" or no explicit preference is given you may set this.",
+      "revId": "bb103b147dc2aab08dfce36295574c337e0e16b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
