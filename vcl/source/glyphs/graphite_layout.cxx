@@ -40,6 +40,8 @@
 #include <deque>
 
 // Platform
+#include <config_global.h>
+
 #include <svsys.h>
 
 #include <salgdi.hxx>
@@ -86,7 +88,7 @@ static FILE * grLog()
 
 namespace
 {
-    inline long round(const float n) {
+    inline long round_to_long(const float n) {
         return long(n + (n < 0 ? -0.5 : 0.5));
     }
 
@@ -344,8 +346,8 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             baseSlot = gr_slot_next_sibling_attachment(baseSlot);
         }
     }
-    long nXOffset = round(fMinX * fScaling);
-    mnWidth = round(fMaxX * fScaling) - nXOffset + nDxOffset;
+    long nXOffset = round_to_long(fMinX * fScaling);
+    mnWidth = round_to_long(fMaxX * fScaling) - nXOffset + nDxOffset;
     if (mnWidth < 0)
     {
         // This can happen when there was no base inside the range
@@ -416,8 +418,8 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
         nextOrigin = nextGlyphOrigin;
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
-    int scaledGlyphPos = round(gr_slot_origin_X(gi) * scaling);
-    int glyphWidth = round((nextOrigin - gOrigin) * scaling);
+    int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling);
+    int glyphWidth = round_to_long((nextOrigin - gOrigin) * scaling);
 //    if (glyphWidth < 0)
 //    {
 //        nextOrigin = gOrigin;
@@ -459,11 +461,11 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     GlyphItem aGlyphItem(mvGlyphs.size(),
         glyphId,
         Point(scaledGlyphPos + rDXOffset,
-            round((-gr_slot_origin_Y(gi) * scaling))),
+            round_to_long((-gr_slot_origin_Y(gi) * scaling))),
         nGlyphFlags,
         glyphWidth);
     if (glyphId != static_cast<long>(GF_DROPPED))
-        aGlyphItem.mnOrigWidth = round(gr_slot_advance_X(gi, mpFace, mpFont) * scaling);
+        aGlyphItem.mnOrigWidth = round_to_long(gr_slot_advance_X(gi, mpFace, mpFont) * scaling);
     mvGlyphs.push_back(aGlyphItem);
 
     // update the offset if this glyph was dropped
