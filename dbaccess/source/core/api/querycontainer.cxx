@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/QueryDefinition.hpp>
 
@@ -181,7 +182,14 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
     }
 
     implAppend( sNewObjectName, xNewObject );
-    notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ContainerListemers );
+    try
+    {
+        notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ContainerListemers );
+    }
+    catch (const WrappedTargetException& e)
+    {
+        throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
+    }
 }
 
 // XDrop
