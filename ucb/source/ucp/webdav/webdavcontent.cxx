@@ -3448,7 +3448,17 @@ const Content::ResourceType & Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
-    return getResourceType( xEnv, m_xResAccess );
+    boost::scoped_ptr< DAVResourceAccess > xResAccess;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+    }
+    const Content::ResourceType & ret = getResourceType( xEnv, xResAccess );
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+    }
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
