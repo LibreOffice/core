@@ -80,6 +80,7 @@ namespace dbp
 
     public:
         OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId );
+        OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
 
     protected:
         DECL_LINK( OnRadioSelected, RadioButton* );

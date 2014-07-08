@@ -328,19 +328,16 @@ namespace dbp
 
 
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
-        :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_DEFAULTFIELDSELECTION))
-        ,m_aFrame                   (this, ModuleRes(FL_DEFAULTSELECTION))
-        ,m_aDefaultSelectionLabel   (this, ModuleRes(FT_DEFAULTSELECTION))
-        ,m_aDefSelYes               (this, ModuleRes(RB_DEFSELECTION_YES))
-        ,m_aDefSelNo                (this, ModuleRes(RB_DEFSELECTION_NO))
-        ,m_aDefSelection            (this, ModuleRes(LB_DEFSELECTIONFIELD))
+        :OMaybeListSelectionPage(_pParent, "DefaultFieldSelectionPage", "modules/sabpilot/ui/defaultfieldselectionpage.ui")
     {
-        FreeResource();
+        get(m_pDefSelYes, "defaultselectionyes");
+        get(m_pDefSelNo, "defaultselectionno");
+        get(m_pDefSelection, "defselectionfield");
 
-        announceControls(m_aDefSelYes, m_aDefSelNo, m_aDefSelection);
-        m_aDefSelection.SetDropDownLineCount(10);
-        m_aDefSelection.SetAccessibleRelationLabeledBy( &m_aDefSelYes );
-        m_aDefSelection.SetAccessibleRelationMemberOf(&m_aDefaultSelectionLabel);
+        announceControls(*m_pDefSelYes, *m_pDefSelNo, *m_pDefSelection);
+        m_pDefSelection->SetDropDownLineCount(10);
+        m_pDefSelection->SetAccessibleRelationLabeledBy( m_pDefSelYes );
+        m_pDefSelection->SetStyle(WB_DROPDOWN);
     }
 
 
@@ -351,12 +348,12 @@ namespace dbp
         const OOptionGroupSettings& rSettings = getSettings();
 
         // fill the listbox
-        m_aDefSelection.Clear();
+        m_pDefSelection->Clear();
         for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )
-            m_aDefSelection.InsertEntry(*aLoop);
+            m_pDefSelection->InsertEntry(*aLoop);
 
 
         implInitialize(rSettings.sDefaultField);
@@ -379,21 +376,15 @@ namespace dbp
 
 
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
-        :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONVALUES))
-        ,m_aFrame               (this, ModuleRes(FL_OPTIONVALUES))
-        ,m_aDescription         (this, ModuleRes(FT_OPTIONVALUES_EXPL))
-        ,m_aValueLabel          (this, ModuleRes(FT_OPTIONVALUES))
-        ,m_aValue               (this, ModuleRes(ET_OPTIONVALUE))
-        ,m_aOptionsLabel        (this, ModuleRes(FT_RADIOBUTTONS))
-        ,m_aOptions             (this, ModuleRes(LB_RADIOBUTTONS))
+        :OGBWPage(_pParent, "OptionValuesPage", "modules/sabpilot/ui/optionvaluespage.ui")
         ,m_nLastSelection((::svt::WizardTypes::WizardState)-1)
     {
-        FreeResource();
+        get(m_pValue, "optionvalue");
+        get(m_pOptions, "radiobuttons");
 
-        m_aOptions.SetSelectHdl(LINK(this, OOptionValuesPage, OnOptionSelected));
+        m_pOptions->SetSelectHdl(LINK(this, OOptionValuesPage, OnOptionSelected));
 
-        m_aOptions.SetAccessibleRelationMemberOf(&m_aOptions);
-        m_aOptions.SetAccessibleRelationLabeledBy(&m_aOptionsLabel);
+        m_pOptions->SetAccessibleRelationMemberOf(m_pOptions);
     }
 
 
@@ -407,7 +398,7 @@ namespace dbp
     void OOptionValuesPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
-        m_aValue.GrabFocus();
+        m_pValue->GrabFocus();
     }
 
 
@@ -417,12 +408,12 @@ namespace dbp
         {
             // save the value for the last option
             DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
-            m_aUncommittedValues[m_nLastSelection] = m_aValue.GetText();
+            m_aUncommittedValues[m_nLastSelection] = m_pValue->GetText();
         }
 
-        m_nLastSelection = m_aOptions.GetSelectEntryPos();
+        m_nLastSelection = m_pOptions->GetSelectEntryPos();
         DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
-        m_aValue.SetText(m_aUncommittedValues[m_nLastSelection]);
+        m_pValue->SetText(m_aUncommittedValues[m_nLastSelection]);
     }
 
 
@@ -435,20 +426,20 @@ namespace dbp
         DBG_ASSERT(rSettings.aLabels.size() == rSettings.aValues.size(), "OOptionValuesPage::initializePage: inconsistent data!");
 
         // fill the list with all available options
-        m_aOptions.Clear();
+        m_pOptions->Clear();
         m_nLastSelection = -1;
         for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )
-            m_aOptions.InsertEntry(*aLoop);
+            m_pOptions->InsertEntry(*aLoop);
 
         // remember the values ... can't set them directly in the settings without the explicit commit call
         // so we need have a copy of the values
         m_aUncommittedValues = rSettings.aValues;
 
         // select the first entry
-        m_aOptions.SelectEntryPos(0);
+        m_pOptions->SelectEntryPos(0);
         implTraveledOptions();
     }
 
@@ -489,20 +480,16 @@ namespace dbp
 
 
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
-        :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONS_FINAL))
-        ,m_aFrame           (this, ModuleRes(FL_NAMEIT))
-        ,m_aNameLabel       (this, ModuleRes(FT_NAMEIT))
-        ,m_aName            (this, ModuleRes(ET_NAMEIT))
-        ,m_aThatsAll        (this, ModuleRes(FT_THATSALL))
+        :OGBWPage(_pParent, "OptionsFinalPage", "modules/sabpilot/ui/optionsfinalpage.ui")
     {
-        FreeResource();
+        get(m_pName, "nameit");
     }
 
 
     void OFinalizeGBWPage::ActivatePage()
     {
         OGBWPage::ActivatePage();
-        m_aName.GrabFocus();
+        m_pName->GrabFocus();
     }
 
 
@@ -517,7 +504,7 @@ namespace dbp
         OGBWPage::initializePage();
 
         const OOptionGroupSettings& rSettings = getSettings();
-        m_aName.SetText(rSettings.sControlLabel);
+        m_pName->SetText(rSettings.sControlLabel);
     }
 
 
@@ -526,7 +513,7 @@ namespace dbp
         if (!OGBWPage::commitPage(_eReason))
             return false;
 
-        getSettings().sControlLabel = m_aName.GetText();
+        getSettings().sControlLabel = m_pName->GetText();
 
         return true;
     }

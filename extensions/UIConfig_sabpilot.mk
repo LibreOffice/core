@@ -13,11 +13,14 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sabpilot,\
 	extensions/uiconfig/sabpilot/ui/contentfieldpage \
 	extensions/uiconfig/sabpilot/ui/contenttablepage \
 	extensions/uiconfig/sabpilot/ui/datasourcepage \
+	extensions/uiconfig/sabpilot/ui/defaultfieldselectionpage \
 	extensions/uiconfig/sabpilot/ui/fieldassignpage \
 	extensions/uiconfig/sabpilot/ui/fieldlinkpage \
 	extensions/uiconfig/sabpilot/ui/gridfieldsselectionpage \
 	extensions/uiconfig/sabpilot/ui/groupradioselectionpage \
 	extensions/uiconfig/sabpilot/ui/invokeadminpage \
+	extensions/uiconfig/sabpilot/ui/optionsfinalpage \
+	extensions/uiconfig/sabpilot/ui/optionvaluespage \
 	extensions/uiconfig/sabpilot/ui/selecttablepage \
 	extensions/uiconfig/sabpilot/ui/selecttypepage \
 	extensions/uiconfig/sabpilot/ui/tableselectionpage \
