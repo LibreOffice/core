@@ -56,7 +56,6 @@ public:
                                             , bool _bSupportMatrix
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = NULL );
-                    virtual ~FormulaModalDialog();
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;
@@ -96,7 +95,6 @@ public:
                                     , bool _bSupportMatrix
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = NULL );
-                    virtual ~FormulaDlg();
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;

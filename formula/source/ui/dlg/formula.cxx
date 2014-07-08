@@ -1641,24 +1641,17 @@ void FormulaDlg_Impl::SetEdSelection()
     } // if( pEd )
 }
 
-
 FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
                                             , IFunctionManager* _pFunctionMgr
-                                            , IControlReferenceHandler* _pDlg ) :
-        ModalDialog( pParent, ModuleRes(RID_FORMULADLG_FORMULA_MODAL) ),
-        m_pImpl( new FormulaDlg_Impl(this,_bSupportFunctionResult
-                                            , _bSupportResult
-                                            , _bSupportMatrix
-                                            ,this,_pFunctionMgr,_pDlg))
+                                            , IControlReferenceHandler* _pDlg )
+    : ModalDialog(pParent, "FormulaDialog", "formula/ui/formuladialog.ui")
+    , m_pImpl(new FormulaDlg_Impl(this,_bSupportFunctionResult,
+        _bSupportResult, _bSupportMatrix, this, _pFunctionMgr, _pDlg))
 {
-    FreeResource();
     SetText(m_pImpl->aTitle1);
-}
-FormulaModalDialog::~FormulaModalDialog()
-{
 }
 
 void FormulaModalDialog::Update(const OUString& _sExp)
@@ -1666,12 +1659,10 @@ void FormulaModalDialog::Update(const OUString& _sExp)
     m_pImpl->Update(_sExp);
 }
 
-
 void FormulaModalDialog::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
-
 
 bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
 {
@@ -1682,10 +1673,12 @@ void FormulaModalDialog::Update()
 {
     m_pImpl->Update();
 }
+
 ::std::pair<RefButton*,RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
+
 void FormulaModalDialog::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton )
 {
     m_pImpl->RefInputStartAfter( pEdit, pButton );
@@ -1745,10 +1738,6 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     SetText(m_pImpl->aTitle1);
 }
 
-FormulaDlg::~FormulaDlg()
-{
-}
-
 void FormulaDlg::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
@@ -1759,7 +1748,6 @@ void FormulaDlg::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
-
 
 FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
