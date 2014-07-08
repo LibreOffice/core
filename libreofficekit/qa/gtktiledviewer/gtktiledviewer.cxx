@@ -117,6 +117,29 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
     }
 }
 
+void populatePartSelector( GtkComboBoxText* pSelector, LOKDocView* pView )
+{
+    char sText[10];
+    for ( int i = 0; i < lok_docview_get_parts(pView); i++ )
+    {
+        sprintf( sText, "%i", i+1 );
+        gtk_combo_box_text_append_text( pSelector, sText );
+    }
+    gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
+}
+
+void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
+{
+    int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
+
+    // We don't really care about the quad view for now -- it's only purpose
+    // is to check that the edges of tiles aren't messed up, and no real
+    // reason to maintain it to be able to show other document parts etc.
+    if ( pDocView )
+    {
+        lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
+    }
+}
 
 int main( int argc, char* argv[] )
 {
@@ -165,6 +188,15 @@ int main( int argc, char* argv[] )
     GtkToolItem* pSeparator1 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator1, -1);
 
+    GtkToolItem* pPartSelectorToolItem = gtk_tool_item_new();
+    GtkWidget* pComboBox = gtk_combo_box_text_new();
+    gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
+    g_signal_connect( G_OBJECT(pComboBox), "changed", G_CALLBACK(changePart), NULL );
+
+    GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
+
     GtkToolItem* pEnableQuadView = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label( GTK_TOOL_BUTTON(pEnableQuadView), "Use Quad View" );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pEnableQuadView, -1 );
@@ -181,6 +213,7 @@ int main( int argc, char* argv[] )
 
     pFileName = argv[2];
     lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
+    populatePartSelector( GTK_COMBO_BOX_TEXT(pComboBox), LOK_DOCVIEW(pDocView) );
 
     gtk_main();
 
