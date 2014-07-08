@@ -132,7 +132,6 @@
 #define RID_SVXSTR_INCORRECT_PASSWORD           (RID_SFX_APP_START + 213)
 #define RID_SVXSTR_FORWARD_ERRMSSG              (RID_SFX_APP_START + 214)
 
-#define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
 
 #endif // #ifndef _SFX_APP_HRC
 
