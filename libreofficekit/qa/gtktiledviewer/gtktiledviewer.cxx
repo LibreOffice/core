@@ -14,6 +14,7 @@
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include "../lokdocview_quad/lokdocview_quad.h"
 
 static int help()
 {
@@ -22,6 +23,10 @@ static int help()
 }
 
 static GtkWidget* pDocView;
+static GtkWidget* pDocViewQuad;
+static GtkWidget* pVBox;
+static LibreOfficeKit* pOffice;
+static char* pFileName;
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
@@ -30,7 +35,17 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     const char *sName = gtk_tool_button_get_stock_id( GTK_TOOL_BUTTON(pButton) );
 
     float fZoom = 0;
-    const float fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
+    float fCurrentZoom;
+
+    if ( pDocView )
+    {
+        fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
+    }
+    else if ( pDocViewQuad )
+    {
+        fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocView) );
+    }
+
     if ( strcmp(sName, "gtk-zoom-in") == 0)
     {
         for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
@@ -63,9 +78,45 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( fZoom != 0 )
     {
-        lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fZoom );
+        if ( pDocView )
+        {
+            lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fZoom );
+        }
+        else if ( pDocViewQuad )
+        {
+            lok_docview_quad_set_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad), fZoom );
+        }
     }
 }
+
+void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
+{
+    if ( pDocView )
+    {
+        const float fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
+        gtk_widget_destroy( pDocView );
+        pDocView = 0;
+        pDocViewQuad = lok_docview_quad_new( pOffice );
+        gtk_container_add( GTK_CONTAINER(pVBox), pDocViewQuad );
+        gtk_widget_show( pDocViewQuad );
+
+        lok_docview_quad_set_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad), fCurrentZoom );
+        lok_docview_quad_open_document( LOK_DOCVIEW_QUAD(pDocViewQuad), pFileName );
+    }
+    else if ( pDocViewQuad )
+    {
+        const float fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad) );
+        gtk_widget_destroy( pDocViewQuad );
+        pDocViewQuad = 0;
+        pDocView = lok_docview_new( pOffice );
+        gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
+        gtk_widget_show( pDocView );
+
+        lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fCurrentZoom );
+        lok_docview_open_document( LOK_DOCVIEW(pDocView), pFileName );
+    }
+}
+
 
 int main( int argc, char* argv[] )
 {
@@ -79,7 +130,7 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    LibreOfficeKit* pOffice = lok_init( argv[1] );
+    pOffice = lok_init( argv[1] );
 
     gtk_init( &argc, &argv );
 
@@ -88,7 +139,7 @@ int main( int argc, char* argv[] )
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 800, 600);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
-    GtkWidget* pVBox = gtk_vbox_new( FALSE, 0 );
+    pVBox = gtk_vbox_new( FALSE, 0 );
     gtk_container_add( GTK_CONTAINER(pWindow), pVBox );
 
     // Toolbar
@@ -111,14 +162,24 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
     g_signal_connect( G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL );
 
+    GtkToolItem* pSeparator1 = gtk_separator_tool_item_new();
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator1, -1);
+
+    GtkToolItem* pEnableQuadView = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label( GTK_TOOL_BUTTON(pEnableQuadView), "Use Quad View" );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pEnableQuadView, -1 );
+    g_signal_connect( G_OBJECT(pEnableQuadView), "toggled", G_CALLBACK(changeQuadView), NULL );
+
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Docview
     pDocView = lok_docview_new( pOffice );
+    pDocViewQuad = 0;
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
     gtk_widget_show_all( pWindow );
 
+    pFileName = argv[2];
     lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
 
     gtk_main();
