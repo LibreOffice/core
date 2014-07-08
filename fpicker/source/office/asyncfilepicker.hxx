@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 class SvtFileView;
 class SvtFileDialog;
@@ -39,7 +40,7 @@ namespace svt
 
     //= AsyncPickerAction
 
-    class AsyncPickerAction : public ::rtl::IReference
+    class AsyncPickerAction : public salhelper::SimpleReferenceObject
     {
     public:
         enum Action
@@ -50,7 +51,6 @@ namespace svt
         };
 
     private:
-        mutable oslInterlockedCount m_refCount;
         Action                      m_eAction;
         SvtFileView*                m_pView;
         SvtFileDialog*              m_pDialog;
@@ -82,10 +82,6 @@ namespace svt
 
         /// cancels the running action
         void cancel();
-
-        // IReference overridables
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     protected:
         virtual ~AsyncPickerAction();

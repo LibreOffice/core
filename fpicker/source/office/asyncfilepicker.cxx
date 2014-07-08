@@ -29,8 +29,7 @@
 namespace svt
 {
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
-        :m_refCount ( 0        )
-        ,m_eAction  ( _eAction )
+        :m_eAction  ( _eAction )
         ,m_pView    ( _pView   )
         ,m_pDialog  ( _pDialog )
         ,m_bRunning ( false    )
@@ -42,23 +41,6 @@ namespace svt
 
     AsyncPickerAction::~AsyncPickerAction()
     {
-    }
-
-
-    oslInterlockedCount SAL_CALL AsyncPickerAction::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL AsyncPickerAction::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_refCount;
     }
 
 

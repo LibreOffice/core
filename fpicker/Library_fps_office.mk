@@ -25,6 +25,7 @@ $(eval $(call gb_Library_use_libraries,fps_office,\
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	svl \
 	svt \
 	tk \
