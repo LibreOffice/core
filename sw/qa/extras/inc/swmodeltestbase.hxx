@@ -78,6 +78,19 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
+#if 1
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+
+// For testing during development of a test, you want to use
+// DECLARE_OOXMLEXPORT_TEST_ONLY, and change the above to #if 0
+// Of course, don't forget to set back to #if 1 when you are done :-)
+#else
+#define DECLARE_OOXMLEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+
+#undef DECLARE_OOXMLEXPORT_TEST
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
+#endif
+
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
