@@ -2310,7 +2310,7 @@ void ScOutputData::DrawNoteMarks()
                 {
                     if (bFirst)
                     {
-                        mpDev->SetLineColor();
+                        mpDev->SetLineColor(COL_WHITE);
 
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
@@ -2333,7 +2333,7 @@ void ScOutputData::DrawNoteMarks()
                         }
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
-                        mpDev->DrawRect( Rectangle( nMarkX,nPosY,nMarkX+2*nLayoutSign,nPosY+2 ) );
+                        mpDev->DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
