@@ -34,7 +34,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
-#include "dde.hrc"
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -55,15 +54,10 @@ namespace sfx2
 
 class SvDDELinkEditDialog : public ModalDialog
 {
-    FixedText aFtDdeApp;
-    Edit aEdDdeApp;
-    FixedText aFtDdeTopic;
-    Edit aEdDdeTopic;
-    FixedText aFtDdeItem;
-    Edit aEdDdeItem;
-    FixedLine aGroupDdeChg;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
+    Edit            *m_pEdDdeApp;
+    Edit            *m_pEdDdeTopic;
+    Edit            *m_pEdDdeItem;
+    OKButton        *m_pOKButton;
 
     DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
 public:
@@ -72,46 +66,40 @@ public:
 };
 
 SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
-    : ModalDialog( pParent, SfxResId( MD_DDE_LINKEDIT ) ),
-    aFtDdeApp( this, SfxResId( FT_DDE_APP ) ),
-    aEdDdeApp( this, SfxResId( ED_DDE_APP ) ),
-    aFtDdeTopic( this, SfxResId( FT_DDE_TOPIC ) ),
-    aEdDdeTopic( this, SfxResId( ED_DDE_TOPIC ) ),
-    aFtDdeItem( this, SfxResId( FT_DDE_ITEM ) ),
-    aEdDdeItem( this, SfxResId( ED_DDE_ITEM ) ),
-    aGroupDdeChg( this, SfxResId( GROUP_DDE_CHG ) ),
-    aOKButton1( this, SfxResId( 1 ) ),
-    aCancelButton1( this, SfxResId( 1 ) )
+    : ModalDialog( pParent, "LinkEditDialog", "sfx/ui/linkeditdialog.ui" )
 {
-    FreeResource();
+    get(m_pOKButton, "ok");
+    get(m_pEdDdeApp, "app");
+    get(m_pEdDdeTopic, "file");
+    get(m_pEdDdeItem, "category");
 
     OUString sServer, sTopic, sItem;
     pLink->GetLinkManager()->GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
 
-    aEdDdeApp.SetText( sServer );
-    aEdDdeTopic.SetText( sTopic );
-    aEdDdeItem.SetText( sItem );
+    m_pEdDdeApp->SetText( sServer );
+    m_pEdDdeTopic->SetText( sTopic );
+    m_pEdDdeItem->SetText( sItem );
 
-    aEdDdeApp.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    aEdDdeTopic.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    aEdDdeItem.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeApp->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeTopic->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_pEdDdeItem->SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
 
-    aOKButton1.Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
+    m_pOKButton->Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
 }
 
 OUString SvDDELinkEditDialog::GetCmd() const
 {
-    OUString sCmd( aEdDdeApp.GetText() ), sRet;
-    ::sfx2::MakeLnkName( sRet, &sCmd, aEdDdeTopic.GetText(), aEdDdeItem.GetText() );
+    OUString sCmd( m_pEdDdeApp->GetText() ), sRet;
+    ::sfx2::MakeLnkName( sRet, &sCmd, m_pEdDdeTopic->GetText(), m_pEdDdeItem->GetText() );
     return sRet;
 }
 
 IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
 {
     (void)pEdit; // unused variable
-    pThis->aOKButton1.Enable( !pThis->aEdDdeApp.GetText().isEmpty() &&
-                              !pThis->aEdDdeTopic.GetText().isEmpty() &&
-                              !pThis->aEdDdeItem.GetText().isEmpty() );
+    pThis->m_pOKButton->Enable( !pThis->m_pEdDdeApp->GetText().isEmpty() &&
+                              !pThis->m_pEdDdeTopic->GetText().isEmpty() &&
+                              !pThis->m_pEdDdeItem->GetText().isEmpty() );
     return 0;
 }
 
