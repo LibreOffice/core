@@ -21,6 +21,7 @@ LO_WORKDIR = @WORKDIR@
 // variables are prefixed with XCODE_ to make it clear in configure.ac
 // what they will be used for.
 ARCHS = @XCODE_ARCHS@
+VALID_ARCHS = @XCODE_ARCHS@
 CLANG_CXX_LIBRARY = @XCODE_CLANG_CXX_LIBRARY@
 DEBUG_INFORMATION_FORMAT=@XCODE_DEBUG_INFORMATION_FORMAT@
 
