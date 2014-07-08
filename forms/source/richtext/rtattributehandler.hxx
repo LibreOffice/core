@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class SfxItemSet;
 class SfxPoolItem;
@@ -32,21 +33,7 @@ class SfxItemPool;
 namespace frm
 {
 
-    class ReferenceBase : public ::rtl::IReference
-    {
-    protected:
-        oslInterlockedCount m_refCount;
-
-    public:
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-    protected:
-        virtual ~ReferenceBase();
-    };
-
-    class IAttributeHandler : public ::rtl::IReference
+    class IAttributeHandler : public salhelper::SimpleReferenceObject
     {
     public:
         virtual     AttributeId     getAttributeId( ) const = 0;
@@ -54,11 +41,10 @@ namespace frm
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const = 0;
 
     protected:
-        ~IAttributeHandler() {}
+        virtual ~IAttributeHandler() {}
     };
 
-    class AttributeHandler  :public ReferenceBase
-                            ,public IAttributeHandler
+    class AttributeHandler  : public IAttributeHandler
     {
     private:
         AttributeId     m_nAttribute;
@@ -85,10 +71,6 @@ namespace frm
 
         // pseudo-abstract
         virtual     AttributeCheckState  implGetCheckState( const SfxPoolItem& _rItem ) const;
-
-        // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     protected:
         virtual ~AttributeHandler();

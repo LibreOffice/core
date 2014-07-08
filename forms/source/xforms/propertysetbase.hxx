@@ -25,6 +25,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 // include for inlined helper function below
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -41,18 +42,13 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 /** base class which encapsulates accessing (reading/writing) concrete property values
 */
-class PropertyAccessorBase : public ::rtl::IReference
+class PropertyAccessorBase : public salhelper::SimpleReferenceObject
 {
-private:
-    oslInterlockedCount m_refCount;
-
 protected:
-    PropertyAccessorBase() : m_refCount( 0 ) { }
+    PropertyAccessorBase() { }
     virtual ~PropertyAccessorBase();
 
 public:
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const = 0;
     virtual void    setValue( const com::sun::star::uno::Any& rValue ) = 0;

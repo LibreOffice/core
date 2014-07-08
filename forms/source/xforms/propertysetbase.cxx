@@ -44,21 +44,6 @@ PropertyAccessorBase::~PropertyAccessorBase()
 {
 }
 
-oslInterlockedCount SAL_CALL PropertyAccessorBase::acquire()
-{
-    return ++m_refCount;
-}
-
-oslInterlockedCount SAL_CALL PropertyAccessorBase::release()
-{
-    if ( --m_refCount == 0 )
-    {
-        delete this;
-        return 0;
-    }
-    return m_refCount;
-}
-
 PropertySetBase::PropertySetBase( )
     :m_pProperties( NULL )
 {

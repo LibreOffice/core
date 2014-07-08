@@ -40,25 +40,6 @@ namespace frm
 {
 
 
-    //= ReferenceBase
-
-
-    oslInterlockedCount SAL_CALL ReferenceBase::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL ReferenceBase::release()
-    {
-        return osl_atomic_decrement( &m_refCount );
-    }
-
-
-    ReferenceBase::~ReferenceBase()
-    {
-    }
-
     AttributeHandler::AttributeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :m_nAttribute( _nAttributeId )
         ,m_nWhich    ( _nWhichId     )
@@ -68,18 +49,6 @@ namespace frm
 
     AttributeHandler::~AttributeHandler()
     {
-    }
-
-
-    oslInterlockedCount SAL_CALL AttributeHandler::acquire()
-    {
-        return ReferenceBase::acquire();
-    }
-
-
-    oslInterlockedCount SAL_CALL AttributeHandler::release()
-    {
-        return ReferenceBase::release();
     }
 
 
