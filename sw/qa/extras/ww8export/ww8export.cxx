@@ -8,7 +8,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
 
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
