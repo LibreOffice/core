@@ -19,6 +19,7 @@ define TiledLibreOfficeXcodeBuild
 		xcodebuild \
 			-project experimental/TiledLibreOffice/TiledLibreOffice.xcodeproj \
 			-target TiledLibreOffice \
+			-sdk $(XCODEBUILD_SDK) \
 			-arch $(XCODE_ARCHS) \
 			-configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 			$(1) \
