@@ -161,7 +161,11 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZoom )
 {
     pDocView->fZoom = fZoom;
-    renderDocument( pDocView );
+
+    if ( pDocView->pDocument )
+    {
+        renderDocument( pDocView );
+    }
     // TODO: maybe remember and reset positiong?
 }
 
