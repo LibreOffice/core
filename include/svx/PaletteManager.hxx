@@ -21,6 +21,7 @@
 
 #include <svx/SvxColorValueSet.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/tbxcolorupdate.hxx>
 
 class PaletteManager
 {
@@ -28,7 +29,9 @@ class PaletteManager
     sal_uInt16  mnCurrentPalette;
 
     long        mnColorCount;
+    svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
+    Color       mLastColor;
     std::vector<Palette> maPalettes;
 public:
     PaletteManager();
@@ -38,6 +41,10 @@ public:
     void        NextPalette();
     long        GetColorCount();
     OUString    GetPaletteName();
+    const Color& GetLastColor();
+    void        SetLastColor(const Color& rLastColor);
+    void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
+    void        PopupColorPicker();
 };
 
 #endif // INCLUDED_SVX_PALETTEMANAGER_HXX

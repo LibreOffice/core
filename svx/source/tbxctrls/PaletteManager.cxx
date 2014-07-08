@@ -23,11 +23,13 @@
 #include <sfx2/objsh.hxx>
 #include "svx/drawitem.hxx"
 #include <svx/dialogs.hrc>
+#include <svtools/colrdlg.hxx>
 
 PaletteManager::PaletteManager() :
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
-    mnColorCount(0)
+    mnColorCount(0),
+    mLastColor(COL_AUTO)
 {
     LoadPalettes();
     mnNumOfPalettes += maPalettes.size();
@@ -125,6 +127,33 @@ OUString PaletteManager::GetPaletteName()
         return OUString("Document colors");
     else
         return OStringToOUString(maPalettes[mnCurrentPalette - 1].GetPaletteName(), RTL_TEXTENCODING_ASCII_US);
+}
+
+const Color& PaletteManager::GetLastColor()
+{
+    return mLastColor;
+}
+
+void PaletteManager::SetLastColor(const Color& rLastColor)
+{
+    mLastColor = rLastColor;
+}
+
+void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
+{
+    mpBtnUpdater = pBtnUpdater;
+}
+
+void PaletteManager::PopupColorPicker()
+{
+    SvColorDialog aColorDlg( 0 );
+    aColorDlg.SetColor ( mLastColor );
+    aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
+    if( aColorDlg.Execute() == RET_OK )
+    {
+        mpBtnUpdater->Update( aColorDlg.GetColor() );
+        mLastColor = aColorDlg.GetColor();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

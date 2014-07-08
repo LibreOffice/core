@@ -44,6 +44,7 @@ private:
     SvxColorValueSet aColorSet;
     PushButton aButtonLeft;
     PushButton aButtonRight;
+    PushButton aButtonPicker;
     FixedText  aPaletteName;
     OUString  maCommand;
     Link maSelectedLink;
@@ -57,6 +58,7 @@ private:
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( StepLeftClickHdl, void * );
     DECL_LINK( StepRightClickHdl, void * );
+    DECL_LINK( OpenPickerClickHdl, void * );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
