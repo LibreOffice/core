@@ -461,6 +461,24 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
 }
 
+void ScModelObj::setPart( int nPart )
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    pViewData->SetTabNo( nPart );
+}
+
+int ScModelObj::getParts()
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    return rDoc.GetTableCount();
+}
+
+int ScModelObj::getPart()
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    return pViewData->GetTabNo();
+}
+
 Size ScModelObj::getDocumentSize()
 {
     // TODO: not sure what we want to do here, maybe just return the size for a certain
