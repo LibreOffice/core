@@ -2,14 +2,10 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 
-import org.apache.http.MethodNotSupportedException;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.SubTile;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class MockTileProvider implements TileProvider {
     private final LayerController layerController;
@@ -26,58 +22,23 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public int getPageHeight() {
-        return 630;
+        return 630*5;
     }
 
-    public TileIterator getTileIterator() {
-        return new MockTileIterator(layerController);
-    }
+    @Override
+    public SubTile createTile(int x, int y) {
+        int tiles = (getPageWidth() / TILE_SIZE) + 1;
+        int tileNumber = (y / TILE_SIZE) * tiles + (x / TILE_SIZE);
+        tileNumber %= 9;
+        tileNumber += 1; // 0 to 1 based numbering
 
-    public class MockTileIterator implements TileIterator, Iterator<SubTile> {
-        private final LayerController layerController;
+        String imageName = "d" + tileNumber;
+        Bitmap bitmap = layerController.getDrawable(imageName);
 
-        private int tileNumber = 1;
+        CairoImage image = new BufferedCairoImage(bitmap);
+        SubTile tile = new SubTile(image, x, y);
+        tile.beginTransaction();
 
-        private int x = 0;
-        private int y = 0;
-
-        public MockTileIterator(LayerController layerController) {
-            this.layerController = layerController;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return tileNumber <= 9;
-        }
-
-        @Override
-        public SubTile next() {
-            String imageName = "d" + tileNumber;
-            tileNumber++;
-            Bitmap bitmap = layerController.getDrawable(imageName);
-
-            CairoImage image = new BufferedCairoImage(bitmap);
-            SubTile tile = new SubTile(image, x, y);
-            tile.beginTransaction();
-
-            x += TILE_SIZE;
-
-            if (x > getPageWidth()) {
-                x = 0;
-                y += TILE_SIZE;
-            }
-
-            return tile;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Iterator<SubTile> iterator() {
-            return this;
-        }
+        return tile;
     }
 }
