@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -3781,6 +3783,20 @@ DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
     if (xmlDocPtr pXmlDoc = parseExport())
         // Page break was exported as section break, this was 0
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
+{
+    // vml image was not rendered
+    // As there are also numPicBullets in the file,
+    // the fragmentPath was not changed hence relationships were not resolved.
+
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> xImage(image, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(148), xBitmap->getSize().Height );
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
