@@ -46,7 +46,7 @@ namespace pcr
         ,m_xTranslatedEventSource( _rxTranslatedEventSource )
     {
         if ( !m_xDelegator.is() )
-            throw NullPointerException();
+            throw RuntimeException();
     }
 
 
