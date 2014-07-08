@@ -3163,6 +3163,8 @@ if test $_os = iOS; then
 
     AC_MSG_RESULT($sysroot)
 
+    XCODEBUILD_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
+
     if test "$enable_ios_simulator" = yes; then
         if test "$BITNESS_OVERRIDE" = 64; then
             XCODE_ARCHS=x86_64
@@ -3225,6 +3227,7 @@ fi
 
 AC_SUBST(XCODE_CLANG_CXX_LIBRARY)
 AC_SUBST(XCODE_ARCHS)
+AC_SUBST(XCODEBUILD_SDK)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
