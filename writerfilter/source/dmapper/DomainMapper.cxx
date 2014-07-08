@@ -1413,18 +1413,21 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_endnote:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
+
         case NS_rtf::LN_BOOKMARKNAME:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             // sStringValue contains the bookmark name
             sLocalBookmarkName = sStringValue;
         break;
+
         case NS_rtf::LN_IBKL:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0.5 */
             //contains the bookmark identifier - has to be added to the bookmark name imported before
             //if it is already available then the bookmark should be inserted
-            m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
+            m_pImpl->AddBookmark( sLocalBookmarkName, nIntValue );
             sLocalBookmarkName = ::rtl::OUString();
         break;
+
         case NS_rtf::LN_LISTLEVEL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
