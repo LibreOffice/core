@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_set_include,sfx/res,\
 
 $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/appl/app.src \
-    sfx2/source/appl/dde.src \
     sfx2/source/appl/newhelp.src \
     sfx2/source/appl/sfx.src \
     sfx2/source/bastyp/fltfnc.src \
