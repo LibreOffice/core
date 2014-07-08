@@ -222,6 +222,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo49940, "fdo49940.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testN74745, "n74745.docx")
+{
+    uno::Reference<text::XTextRange > paragraph = getParagraph(3);
+    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("09/02/14"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN751077, "n751077.docx")
 {
 /*
