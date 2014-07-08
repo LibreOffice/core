@@ -3603,6 +3603,18 @@ dnl ===================================================================
 dnl  Check which Visual Studio or MinGW compiler is used
 dnl ===================================================================
 
+find_msvc_msbuild()
+{
+    # Return value: $msvc_msbuild
+
+    unset msvc_msbuild
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/12.0/MSBuildOverrideTasksPath"
+    if test -n "$regvalue"; then
+        msvc_msbuild=$regvalue
+        return
+    fi
+}
+
 map_vs_year_to_version()
 {
     # Return value: $vsversion
@@ -3897,6 +3909,15 @@ if test "$_os" = "WINNT"; then
         # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
         AC_SUBST(CXX_X64_BINARY)
         AC_SUBST(LINK_X64_BINARY)
+
+        # Check for msbuild path
+        AC_MSG_CHECKING([Checking VCVER: $VCVER])
+        if test "$VCVER" = "120"; then
+            AC_MSG_CHECKING([Checking find_msvc_msbuild ...])
+            find_msvc_msbuild
+            AC_MSG_CHECKING([found it in $msvc_msbuild])
+            MSVC_MSBUILD_PATH=`cygpath -d "$msvc_msbuild"`
+        fi
     else
         AC_MSG_CHECKING([the compiler is MinGW])
         MACHINE_PREFIX=`$CC -dumpmachine`
@@ -5297,8 +5318,9 @@ find_al()
 
     unset altest
 
-    for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
+    for x in v8.1A v8.0A v7.1A v7.1 v7.0A; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+        AC_MSG_RESULT([Check $reg_get_value_32])
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
             return
@@ -5337,8 +5359,15 @@ find_winsdk_version()
             return
         fi
         ;;
-    8.*)
+    8.0)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            return
+        fi
+        ;;
+    8.1*)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             return
@@ -9747,6 +9776,8 @@ if test "$_os" = "WINNT"; then
 
         if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
             have_windows_sdk_libs=yes
+        elif test -f "$WINDOWS_SDK_HOME/lib/winv6.3/um/$WINDOWS_SDK_ARCH/user32.lib"; then
+            have_windows_sdk_libs=yes
         elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$WINDOWS_SDK_ARCH/user32.lib"; then
             have_windows_sdk_libs=yes
         else
@@ -9792,6 +9823,9 @@ the  Windows SDK are installed.])
             add_warning "If a build created with VS 2012 should run on Windows XP,"
             add_warning "use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)"
         fi
+    elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=81
+        AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
@@ -12780,6 +12814,9 @@ if test "$build_os" = "cygwin"; then
         if test "$WINDOWS_SDK_VERSION" = "80"; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
         fi
+        if test "$WINDOWS_SDK_VERSION" = "81"; then
+            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/winv6.3/um/x86"
+        fi
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
@@ -13001,6 +13038,9 @@ else
                 pathmunge "$JAVA_HOME/jre/bin/hotspot" "before"
             fi
             pathmunge "$JAVA_HOME/bin" "before"
+        fi
+        if test "$VCVER" = "120"; then
+           pathmunge $MSVC_MSBUILD_PATH "before"
         fi
         ;;
 
