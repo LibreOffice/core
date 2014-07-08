@@ -1238,6 +1238,9 @@ void Dialog::queue_resize()
         return;
     if (!isLayoutEnabled())
         return;
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnOptimalWidthCache = -1;
+    pWindowImpl->mnOptimalHeightCache = -1;
     maLayoutTimer.Start();
 }
 
