@@ -44,9 +44,8 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Encapsulates the logic needed to draw a layer made of multiple tiles.
@@ -61,7 +60,7 @@ public class MultiTileLayer extends Layer {
     public MultiTileLayer(IntSize tileSize) {
         super();
         mTileSize = tileSize;
-        mTiles = Collections.synchronizedList(new ArrayList<SubTile>());
+        mTiles = new CopyOnWriteArrayList<SubTile>();
         mSize = new IntSize(0,0);
     }
 
