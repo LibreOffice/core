@@ -174,4 +174,21 @@ SAL_DLLPUBLIC_EXPORT float lok_docview_get_zoom ( LOKDocView* pDocView )
     return pDocView->fZoom;
 }
 
+SAL_DLLPUBLIC_EXPORT int lok_docview_get_parts( LOKDocView* pDocView )
+{
+    return pDocView->pDocument->pClass->getParts( pDocView->pDocument );
+}
+
+SAL_DLLPUBLIC_EXPORT int lok_docview_get_part( LOKDocView* pDocView )
+{
+    return pDocView->pDocument->pClass->getPart( pDocView->pDocument );
+}
+
+SAL_DLLPUBLIC_EXPORT void lok_docview_set_part( LOKDocView* pDocView, int nPart)
+{
+    pDocView->pDocument->pClass->setPart( pDocView->pDocument, nPart );
+    renderDocument( pDocView );
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

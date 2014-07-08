@@ -58,6 +58,11 @@ void            lok_docview_set_zoom        (LOKDocView* pDocView,
                                              float fZoom);
 float           lok_docview_get_zoom        (LOKDocView* pDocView);
 
+int             lok_docview_get_parts       (LOKDocView* pDocView);
+int             lok_docview_get_part        (LOKDocView* pDocView);
+void            lok_docview_set_part        (LOKDocView* pDocView,
+                                             int nPart);
+
 #ifdef __cplusplus
 }
 #endif
