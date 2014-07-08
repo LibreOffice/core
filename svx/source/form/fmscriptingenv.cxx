@@ -148,7 +148,6 @@ namespace svxform
 
     private:
         ::osl::Mutex            m_aMutex;
-        oslInterlockedCount     m_refCount;
         ListenerImplementation  m_pScriptListener;
         FmFormModel&            m_rFormModel;
         bool                    m_bDisposed;
@@ -164,10 +163,6 @@ namespace svxform
         virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
         virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
         virtual void dispose() SAL_OVERRIDE;
-
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
@@ -804,8 +799,7 @@ namespace svxform
 
 
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
-        :m_refCount( 0 )
-        ,m_pScriptListener( NULL )
+        :m_pScriptListener( NULL )
         ,m_rFormModel( _rModel )
         ,m_bDisposed( false )
     {
@@ -853,23 +847,6 @@ namespace svxform
     void FormScriptingEnvironment::revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager )
     {
         impl_registerOrRevoke_throw( _rxManager, false );
-    }
-
-
-    oslInterlockedCount SAL_CALL FormScriptingEnvironment::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL FormScriptingEnvironment::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-           delete this;
-           return 0;
-        }
-        return m_refCount;
     }
 
 

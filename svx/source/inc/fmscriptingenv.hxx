@@ -22,6 +22,7 @@
 
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class FmFormModel;
 
@@ -35,7 +36,7 @@ namespace svxform
     /** describes the interface implemented by a component which handles scripting requirements
         in a form/control environment.
     */
-    class SAL_NO_VTABLE IFormScriptingEnvironment : public ::rtl::IReference
+    class SAL_NO_VTABLE IFormScriptingEnvironment : public ::salhelper::SimpleReferenceObject
     {
     public:
         /** registers an XEventAttacherManager whose events should be monitored and handled
