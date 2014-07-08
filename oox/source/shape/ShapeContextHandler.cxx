@@ -205,7 +205,19 @@ ShapeContextHandler::getDrawingShapeContext()
            (new oox::vml::DrawingFragment
             ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
     }
-
+    else
+    {
+        // Reset the handler if fragment path has changed
+        OUString sHandlerFragmentPath = dynamic_cast<ContextHandler *>(mxDrawingFragmentHandler.get())->getFragmentPath();
+        if ( !msRelationFragmentPath.equals(sHandlerFragmentPath) )
+        {
+            mxDrawingFragmentHandler.clear();
+            mxDrawingFragmentHandler.set
+              (dynamic_cast<ContextHandler *>
+               (new oox::vml::DrawingFragment
+                ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
+        }
+    }
     return mxDrawingFragmentHandler;
 }
 
