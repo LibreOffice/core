@@ -4615,7 +4615,7 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = MNC_IGNORE;
     HMENU hMenu = (HMENU) lParam;
-    OUString aMnemonic( "&" + (sal_Unicode) LOWORD(wParam) );
+    OUString aMnemonic( "&" + OUString((sal_Unicode) LOWORD(wParam)) );
     aMnemonic = aMnemonic.toAsciiLowerCase();   // we only have ascii mnemonics
 
     // search the mnemonic in the current menu
