@@ -16,6 +16,24 @@
       "revId": "f52a7257cc574119fdec2e5b4d75108c7c20347b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ab14d0d_5b9323a4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-07-08T10:05:20Z",
+      "side": 1,
+      "message": "My intension was to return an error message and not one of the jump-options, but I see now that I should have tested first if the error type is something else then NA...",
+      "parentUuid": "1ab14d0d_bb7b477b",
+      "revId": "f52a7257cc574119fdec2e5b4d75108c7c20347b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
