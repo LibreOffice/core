@@ -2185,6 +2185,41 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     }
 }
 
+void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
+                            int nOutputWidth, int nOutputHeight,
+                            int nTilePosX, int nTilePosY,
+                            long nTileWidth, long nTileHeight )
+{
+    (void) rDevice;
+    (void) nOutputWidth;
+    (void) nOutputHeight;
+    (void) nTilePosX;
+    (void) nTilePosY;
+    (void) nTileWidth;
+    (void) nTileHeight;
+}
+
+void SdXImpressDocument::setPart( int nPart )
+{
+    (void) nPart;
+}
+
+int SdXImpressDocument::getParts()
+{
+    return mpDoc->GetPageCount();
+}
+
+int SdXImpressDocument::getPart()
+{
+    return 0;
+}
+
+Size SdXImpressDocument::getDocumentSize()
+{
+    return Size( 100, 100 );
+}
+
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);
