@@ -259,15 +259,15 @@
       </define>
     </grammar>
     <resource name="CT_OfficeStyleSheet" resource="Table" tokenid="ooxml:THEMETABLE"/>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Properties" tag="shape">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Hyperlink_r_id"/>
     </resource>
-    <resource name="theme" resource="Stream" tag="theme">
+    <resource name="theme" resource="Stream">
       <element name="theme" tokenid="ooxml:THEMETABLE"/>
     </resource>
-    <resource name="themeOverride" resource="Stream" tag="theme"/>
-    <resource name="themeManager" resource="Stream" tag="theme"/>
-    <resource name="hlinkClick" resource="Properties" tag="shape">
+    <resource name="themeOverride" resource="Stream"/>
+    <resource name="themeManager" resource="Stream"/>
+    <resource name="hlinkClick" resource="Properties">
       <element name="hlinkClick" tokenid="ooxml:hlinkClick_hlinkClick"/>
     </resource>
   </namespace>
@@ -1191,7 +1191,7 @@
       <value name="hlink" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_hlink">hlink</value>
       <value name="folHlink" tokenid="ooxml:Value_drawingml_ST_ColorSchemeIndex_folHlink">folHlink</value>
     </resource>
-    <resource name="CT_ColorScheme" resource="Properties" tag="theme">
+    <resource name="CT_ColorScheme" resource="Properties">
       <element name="dk1" tokenid="ooxml:CT_ColorScheme_dk1"/>
       <element name="lt1" tokenid="ooxml:CT_ColorScheme_lt1"/>
       <element name="dk2" tokenid="ooxml:CT_ColorScheme_dk2"/>
@@ -1207,39 +1207,39 @@
       <element name="extLst" tokenid="ooxml:CT_ColorScheme_extLst"/>
       <attribute name="name" tokenid="ooxml:CT_ColorScheme_name"/>
     </resource>
-    <resource name="CT_SupplementalFont" resource="Properties" tag="theme">
+    <resource name="CT_SupplementalFont" resource="Properties">
       <attribute name="script" tokenid="ooxml:CT_SupplementalFont_script"/>
       <attribute name="typeface" tokenid="ooxml:CT_SupplementalFont_typeface"/>
     </resource>
-    <resource name="CT_FontCollection" resource="Properties" tag="theme">
+    <resource name="CT_FontCollection" resource="Properties">
       <element name="latin" tokenid="ooxml:CT_FontCollection_latin"/>
       <element name="ea" tokenid="ooxml:CT_FontCollection_ea"/>
       <element name="cs" tokenid="ooxml:CT_FontCollection_cs"/>
       <element name="font" tokenid="ooxml:CT_FontCollection_font"/>
       <element name="extLst" tokenid="ooxml:CT_FontCollection_extLst"/>
     </resource>
-    <resource name="CT_FontScheme" resource="Properties" tag="theme">
+    <resource name="CT_FontScheme" resource="Properties">
       <element name="majorFont" tokenid="ooxml:CT_FontScheme_majorFont"/>
       <element name="minorFont" tokenid="ooxml:CT_FontScheme_minorFont"/>
       <element name="extLst" tokenid="ooxml:CT_FontScheme_extLst"/>
       <attribute name="name" tokenid="ooxml:CT_FontScheme_name"/>
     </resource>
-    <resource name="CT_FillStyleList" resource="Properties" tag="theme"/>
-    <resource name="CT_LineStyleList" resource="Properties" tag="theme">
+    <resource name="CT_FillStyleList" resource="Properties"/>
+    <resource name="CT_LineStyleList" resource="Properties">
       <element name="ln" tokenid="ooxml:CT_LineStyleList_ln"/>
     </resource>
-    <resource name="CT_EffectStyleList" resource="Properties" tag="theme">
+    <resource name="CT_EffectStyleList" resource="Properties">
       <element name="effectStyle" tokenid="ooxml:CT_EffectStyleList_effectStyle"/>
     </resource>
-    <resource name="CT_BackgroundFillStyleList" resource="Properties" tag="theme"/>
-    <resource name="CT_StyleMatrix" resource="Properties" tag="theme">
+    <resource name="CT_BackgroundFillStyleList" resource="Properties"/>
+    <resource name="CT_StyleMatrix" resource="Properties">
       <element name="fillStyleLst" tokenid="ooxml:CT_StyleMatrix_fillStyleLst"/>
       <element name="lnStyleLst" tokenid="ooxml:CT_StyleMatrix_lnStyleLst"/>
       <element name="effectStyleLst" tokenid="ooxml:CT_StyleMatrix_effectStyleLst"/>
       <element name="bgFillStyleLst" tokenid="ooxml:CT_StyleMatrix_bgFillStyleLst"/>
       <attribute name="name" tokenid="ooxml:CT_StyleMatrix_name"/>
     </resource>
-    <resource name="CT_BaseStyles" resource="Properties" tag="theme">
+    <resource name="CT_BaseStyles" resource="Properties">
       <element name="clrScheme" tokenid="ooxml:CT_BaseStyles_clrScheme"/>
       <element name="fontScheme" tokenid="ooxml:CT_BaseStyles_fontScheme"/>
       <element name="fmtScheme" tokenid="ooxml:CT_BaseStyles_fmtScheme"/>
@@ -1618,7 +1618,7 @@
     <resource name="ST_TextFontSize" resource="Integer" generated="yes"/>
     <resource name="ST_Panose" resource="Hex" generated="yes"/>
     <resource name="ST_TextTypeface" resource="String" generated="yes"/>
-    <resource name="CT_TextFont" resource="Properties" tag="character">
+    <resource name="CT_TextFont" resource="Properties">
       <attribute name="typeface" tokenid="ooxml:CT_TextFont_typeface"/>
       <attribute name="panose" tokenid="ooxml:CT_TextFont_panose"/>
       <attribute name="pitchFamily" tokenid="ooxml:CT_TextFont_pitchFamily"/>
@@ -2815,7 +2815,7 @@
       <value name="shdw19" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw19">shdw19</value>
       <value name="shdw20" tokenid="ooxml:Value_drawingml_ST_PresetShadowVal_shdw20">shdw20</value>
     </resource>
-    <resource name="CT_SolidColorFillProperties" resource="Properties" tag="shape"/>
+    <resource name="CT_SolidColorFillProperties" resource="Properties"/>
     <resource name="ST_PathShadeType" resource="List" generated="yes">
       <value name="shape" tokenid="ooxml:Value_drawingml_ST_PathShadeType_shape">shape</value>
       <value name="circle" tokenid="ooxml:Value_drawingml_ST_PathShadeType_circle">circle</value>
@@ -2827,7 +2827,7 @@
       <value name="y" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_y">y</value>
       <value name="xy" tokenid="ooxml:Value_drawingml_ST_TileFlipMode_xy">xy</value>
     </resource>
-    <resource name="CT_GradientStop" resource="Properties" tag="shape">
+    <resource name="CT_GradientStop" resource="Properties">
       <attribute name="pos" tokenid="ooxml:CT_GradientStop_pos"/>
     </resource>
     <resource name="CT_TileInfoProperties" resource="Properties">
@@ -2838,10 +2838,10 @@
       <attribute name="flip" tokenid="ooxml:CT_TileInfoProperties_flip"/>
       <attribute name="algn" tokenid="ooxml:CT_TileInfoProperties_algn"/>
     </resource>
-    <resource name="CT_StretchInfoProperties" resource="Properties" tag="shape">
+    <resource name="CT_StretchInfoProperties" resource="Properties">
       <element name="fillRect" tokenid="ooxml:CT_StretchInfoProperties_fillRect"/>
     </resource>
-    <resource name="EG_FillModeProperties" resource="Properties" tag="shape">
+    <resource name="EG_FillModeProperties" resource="Properties">
       <element name="tile" tokenid="ooxml:EG_FillModeProperties_tile"/>
       <element name="stretch" tokenid="ooxml:EG_FillModeProperties_stretch"/>
     </resource>
@@ -2852,7 +2852,7 @@
       <value name="hqprint" tokenid="ooxml:Value_drawingml_ST_BlipCompression_hqprint">hqprint</value>
       <value name="none" tokenid="ooxml:Value_drawingml_ST_BlipCompression_none">none</value>
     </resource>
-    <resource name="CT_Blip" resource="Properties" tag="shape">
+    <resource name="CT_Blip" resource="Properties">
       <element name="alphaBiLevel" tokenid="ooxml:CT_Blip_alphaBiLevel"/>
       <element name="alphaCeiling" tokenid="ooxml:CT_Blip_alphaCeiling"/>
       <element name="alphaFloor" tokenid="ooxml:CT_Blip_alphaFloor"/>
@@ -2873,7 +2873,7 @@
       <element name="extLst" tokenid="ooxml:CT_Blip_extLst"/>
       <attribute name="cstate" tokenid="ooxml:CT_Blip_cstate"/>
     </resource>
-    <resource name="CT_BlipFillProperties" resource="Properties" tag="shape">
+    <resource name="CT_BlipFillProperties" resource="Properties">
       <element name="blip" tokenid="ooxml:CT_BlipFillProperties_blip"/>
       <element name="srcRect" tokenid="ooxml:CT_BlipFillProperties_srcRect"/>
       <attribute name="dpi" tokenid="ooxml:CT_BlipFillProperties_dpi"/>
@@ -2942,7 +2942,7 @@
       <value name="darken" tokenid="ooxml:Value_drawingml_ST_BlendMode_darken">darken</value>
       <value name="lighten" tokenid="ooxml:Value_drawingml_ST_BlendMode_lighten">lighten</value>
     </resource>
-    <resource name="EG_Effect" resource="Properties" tag="shape">
+    <resource name="EG_Effect" resource="Properties">
       <element name="cont" tokenid="ooxml:EG_Effect_cont"/>
       <element name="effect" tokenid="ooxml:EG_Effect_effect"/>
       <element name="alphaBiLevel" tokenid="ooxml:EG_Effect_alphaBiLevel"/>
@@ -2978,7 +2978,7 @@
       <value name="sib" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_sib">sib</value>
       <value name="tree" tokenid="ooxml:Value_drawingml_ST_EffectContainerType_tree">tree</value>
     </resource>
-    <resource name="CT_EffectContainer" resource="Properties" tag="shape">
+    <resource name="CT_EffectContainer" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_EffectContainer_type"/>
       <attribute name="name" tokenid="ooxml:CT_EffectContainer_name"/>
     </resource>
@@ -3274,12 +3274,12 @@
       <value name="med" tokenid="ooxml:Value_drawingml_ST_LineEndLength_med">med</value>
       <value name="lg" tokenid="ooxml:Value_drawingml_ST_LineEndLength_lg">lg</value>
     </resource>
-    <resource name="CT_LineEndProperties" resource="Properties" tag="shape">
+    <resource name="CT_LineEndProperties" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_LineEndProperties_type"/>
       <attribute name="w" tokenid="ooxml:CT_LineEndProperties_w"/>
       <attribute name="len" tokenid="ooxml:CT_LineEndProperties_len"/>
     </resource>
-    <resource name="EG_LineFillProperties" resource="Properties" tag="shape">
+    <resource name="EG_LineFillProperties" resource="Properties">
       <element name="noFill" tokenid="ooxml:EG_LineFillProperties_noFill"/>
       <element name="solidFill" tokenid="ooxml:EG_LineFillProperties_solidFill"/>
       <element name="gradFill" tokenid="ooxml:EG_LineFillProperties_gradFill"/>
@@ -3314,7 +3314,7 @@
       <value name="thinThick" tokenid="ooxml:Value_drawingml_ST_CompoundLine_thinThick">thinThick</value>
       <value name="tri" tokenid="ooxml:Value_drawingml_ST_CompoundLine_tri">tri</value>
     </resource>
-    <resource name="CT_LineProperties" resource="Properties" tag="shape">
+    <resource name="CT_LineProperties" resource="Properties">
       <element name="headEnd" tokenid="ooxml:CT_LineProperties_headEnd"/>
       <element name="tailEnd" tokenid="ooxml:CT_LineProperties_tailEnd"/>
       <element name="extLst" tokenid="ooxml:CT_LineProperties_extLst"/>
@@ -3408,7 +3408,7 @@
         </optional>
       </define>
     </grammar>
-    <resource name="CT_ShapeProperties" resource="Properties" tag="shape">
+    <resource name="CT_ShapeProperties" resource="Properties">
       <element name="xfrm" tokenid="ooxml:CT_ShapeProperties_xfrm"/>
       <element name="ln" tokenid="ooxml:CT_ShapeProperties_ln"/>
       <element name="scene3d" tokenid="ooxml:CT_ShapeProperties_scene3d"/>
@@ -4506,44 +4506,44 @@
       <attribute name="val" tokenid="ooxml:CT_Angle_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="CT_PositiveFixedAngle" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_PositiveFixedAngle" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedAngle_val" action="setValue"/>
     </resource>
     <resource name="ST_Percentage" resource="Integer" generated="yes"/>
-    <resource name="CT_Percentage" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_Percentage" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Percentage_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_PositivePercentage" resource="Value">
       <action name="characters" action="positivePercentage"/>
     </resource>
-    <resource name="CT_PositivePercentage" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_PositivePercentage" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val" action="setValue"/>
     </resource>
-    <resource name="CT_FixedPercentage" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_FixedPercentage" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FixedPercentage_val" action="setValue"/>
     </resource>
-    <resource name="CT_PositiveFixedPercentage" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_PositiveFixedPercentage" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val" action="setValue"/>
     </resource>
-    <resource name="CT_Point2D" resource="Properties" tag="shape">
+    <resource name="CT_Point2D" resource="Properties">
       <attribute name="x" tokenid="ooxml:CT_Point2D_x"/>
       <attribute name="y" tokenid="ooxml:CT_Point2D_y"/>
     </resource>
-    <resource name="CT_PositiveSize2D" resource="Properties" tag="shape">
+    <resource name="CT_PositiveSize2D" resource="Properties">
       <attribute name="cx" tokenid="ooxml:CT_PositiveSize2D_cx"/>
       <attribute name="cy" tokenid="ooxml:CT_PositiveSize2D_cy"/>
     </resource>
-    <resource name="CT_ScRgbColor" resource="Properties" tag="shape">
+    <resource name="CT_ScRgbColor" resource="Properties">
       <attribute name="r" tokenid="ooxml:CT_ScRgbColor_r"/>
       <attribute name="g" tokenid="ooxml:CT_ScRgbColor_g"/>
       <attribute name="b" tokenid="ooxml:CT_ScRgbColor_b"/>
     </resource>
     <resource name="ST_HexBinary3" resource="Hex" generated="yes"/>
-    <resource name="CT_SRgbColor" resource="Properties" tag="shape">
+    <resource name="CT_SRgbColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
     </resource>
-    <resource name="CT_HslColor" resource="Properties" tag="shape">
+    <resource name="CT_HslColor" resource="Properties">
       <attribute name="hue" tokenid="ooxml:CT_HslColor_hue"/>
       <attribute name="sat" tokenid="ooxml:CT_HslColor_sat"/>
       <attribute name="lum" tokenid="ooxml:CT_HslColor_lum"/>
@@ -4580,7 +4580,7 @@
       <value name="menuHighlight" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuHighlight">menuHighlight</value>
       <value name="menuBar" tokenid="ooxml:Value_drawingml_ST_SystemColorVal_menuBar">menuBar</value>
     </resource>
-    <resource name="CT_SystemColor" resource="Properties" tag="shape">
+    <resource name="CT_SystemColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SystemColor_val"/>
       <attribute name="lastClr" tokenid="ooxml:CT_SytemColor_lastClr"/>
     </resource>
@@ -4603,7 +4603,7 @@
       <value name="dk2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_dk2">dk2</value>
       <value name="lt2" tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_lt2">lt2</value>
     </resource>
-    <resource name="CT_SchemeColor" resource="Properties" tag="shape">
+    <resource name="CT_SchemeColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
     </resource>
     <resource name="ST_PresetColorVal" resource="List">
@@ -4748,10 +4748,10 @@
       <value tokenid="0xffff00">yellow</value>
       <value tokenid="0x9acd32">yellowGreen</value>
     </resource>
-    <resource name="CT_PresetColor" resource="Properties" tag="shape">
+    <resource name="CT_PresetColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_PresetColor_val"/>
     </resource>
-    <resource name="CT_Transform2D" resource="Properties" tag="shape">
+    <resource name="CT_Transform2D" resource="Properties">
       <element name="off" tokenid="ooxml:CT_Transform2D_off"/>
       <element name="ext" tokenid="ooxml:CT_Transform2D_ext"/>
       <attribute name="rot" tokenid="ooxml:CT_Transform2D_rot"/>
@@ -4770,7 +4770,7 @@
       <value name="br" tokenid="ooxml:Value_drawingml_ST_RectAlignment_br">br</value>
     </resource>
     <resource name="ST_Guid" resource="String" generated="yes"/>
-    <resource name="EG_ColorChoice" resource="Properties" tag="shape">
+    <resource name="EG_ColorChoice" resource="Properties">
       <element name="scrgbClr" tokenid="ooxml:EG_ColorChoice_scrgbClr"/>
       <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
       <element name="hslClr" tokenid="ooxml:EG_ColorChoice_hslClr"/>
@@ -4778,8 +4778,8 @@
       <element name="schemeClr" tokenid="ooxml:EG_ColorChoice_schemeClr"/>
       <element name="prstClr" tokenid="ooxml:EG_ColorChoice_prstClr"/>
     </resource>
-    <resource name="CT_Color" resource="Properties" tag="shape"/>
-    <resource name="CT_ColorMRU" resource="Properties" tag="shape"/>
+    <resource name="CT_Color" resource="Properties"/>
+    <resource name="CT_ColorMRU" resource="Properties"/>
     <resource name="ST_BlackWhiteMode" resource="List" generated="yes">
       <value name="clr" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_clr">clr</value>
       <value name="auto" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_auto">auto</value>
@@ -4793,7 +4793,7 @@
       <value name="white" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_white">white</value>
       <value name="hidden" tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_hidden">hidden</value>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="AG_Blob" resource="Properties" tag="shape">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="AG_Blob" resource="Properties">
       <attribute name="r:embed" tokenid="ooxml:AG_Blob_r_embed"/>
       <attribute name="r:link" tokenid="ooxml:AG_Blob_r_link"/>
     </resource>
@@ -5188,7 +5188,7 @@
         </optional>
       </define>
     </grammar>
-    <resource name="CT_GraphicalObjectFrameLocking" resource="Properties" tag="shape">
+    <resource name="CT_GraphicalObjectFrameLocking" resource="Properties">
       <element name="extLst" tokenid="ooxml:CT_GraphicalObjectFrameLocking_extLst"/>
       <attribute name="noGrp" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noGrp"/>
       <attribute name="noDrilldown" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noDrilldown"/>
@@ -5197,7 +5197,7 @@
       <attribute name="noMove" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noMove"/>
       <attribute name="noResize" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noResize"/>
     </resource>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_NonVisualDrawingProps" resource="Properties" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_NonVisualDrawingProps" resource="Properties">
       <element name="a:hlinkClick" tokenid="ooxml:CT_NonVisualDrawingProps_a_hlinkClick"/>
       <element name="hlinkHover" tokenid="ooxml:CT_NonVisualDrawingProps_hlinkHover"/>
       <element name="extLst" tokenid="ooxml:CT_NonVisualDrawingProps_extLst"/>
@@ -5207,12 +5207,12 @@
       <attribute name="hidden" tokenid="ooxml:CT_NonVisualDrawingProps_hidden"/>
       <attribute name="title" tokenid="ooxml:CT_NonVisualDrawingProps_title"/>
     </resource>
-    <resource name="CT_NonVisualPictureProperties" resource="Properties" tag="shape">
+    <resource name="CT_NonVisualPictureProperties" resource="Properties">
       <element name="picLocks" tokenid="ooxml:CT_NonVisualPictureProperties_picLocks"/>
       <element name="extLst" tokenid="ooxml:CT_NonVisualPictureProperties_extLst"/>
       <attribute name="preferRelativeResize" tokenid="ooxml:CT_NonVisualPictureProperties_preferRelativeResize"/>
     </resource>
-    <resource name="CT_NonVisualGraphicFrameProperties" resource="Properties" tag="shape">
+    <resource name="CT_NonVisualGraphicFrameProperties" resource="Properties">
       <element name="graphicFrameLocks" tokenid="ooxml:CT_NonVisualGraphicFrameProperties_graphicFrameLocks"/>
       <element name="extLst" tokenid="ooxml:CT_NonVisualGraphicFrameProperties_extLst"/>
     </resource>
@@ -5253,7 +5253,7 @@
         </element>
       </define>
     </grammar>
-    <resource name="CT_GraphicalObjectData" resource="Properties" tag="shape">
+    <resource name="CT_GraphicalObjectData" resource="Properties">
       <element name="pic" tokenid="ooxml:CT_GraphicalObjectData_pic"/>
       <element name="relIds" tokenid="ooxml:CT_GraphicalObjectData_relIds"/>
       <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
@@ -5262,10 +5262,10 @@
       <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
-    <resource name="CT_GraphicalObject" resource="Properties" tag="shape">
+    <resource name="CT_GraphicalObject" resource="Properties">
       <element name="graphicData" tokenid="ooxml:CT_GraphicalObject_graphicData"/>
     </resource>
-    <resource name="graphic" resource="Properties" tag="shape">
+    <resource name="graphic" resource="Properties">
       <element name="graphic" tokenid="ooxml:graphic_graphic"/>
     </resource>
   </namespace>
@@ -5336,18 +5336,18 @@
       <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromV_insideMargin">insideMargin</value>
       <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromV_outsideMargin">outsideMargin</value>
     </resource>
-    <resource name="CT_SizeRelH" resource="Properties" tag="shape">
+    <resource name="CT_SizeRelH" resource="Properties">
       <element name="pctWidth" tokenid="ooxml:CT_SizeRelH_pctWidth"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
     </resource>
-    <resource name="CT_SizeRelV" resource="Properties" tag="shape">
+    <resource name="CT_SizeRelV" resource="Properties">
       <element name="pctHeight" tokenid="ooxml:CT_SizeRelV_pctHeight"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelV_relativeFrom"/>
     </resource>
-    <resource name="sizeRelH" resource="Properties" tag="shape">
+    <resource name="sizeRelH" resource="Properties">
       <element name="sizeRelH" tokenid="ooxml:sizeRelH_sizeRelH"/>
     </resource>
-    <resource name="sizeRelV" resource="Properties" tag="shape">
+    <resource name="sizeRelV" resource="Properties">
       <element name="sizeRelV" tokenid="ooxml:sizeRelV_sizeRelV"/>
     </resource>
   </namespace>
@@ -6332,11 +6332,11 @@
     </grammar>
 
     <!-- Simple Types Resource Definitions -->
-    <resource name="CT_String" resource="Value" tag="attribute">
+    <resource name="CT_String" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_SdtCheckbox" resource="Properties" tag="field">
+    <resource name="CT_SdtCheckbox" resource="Properties">
       <element name="checked" tokenid="ooxml:CT_SdtCheckbox_checked">checked</element>
       <element name="checkedState" tokenid="ooxml:CT_SdtCheckbox_checkedState">checkedState</element>
       <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState">uncheckedState</element>
@@ -6587,7 +6587,7 @@
     <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
 
     <!-- Groups Resource Definitions -->
-    <resource name="EG_ColorTransform" resource="Properties" tag="character">
+    <resource name="EG_ColorTransform" resource="Properties">
       <element name="tint" tokenid="ooxml:EG_ColorTransform_tint"/>
       <element name="shade" tokenid="ooxml:EG_ColorTransform_shade"/>
       <element name="alpha" tokenid="ooxml:EG_ColorTransform_alpha"/>
@@ -6599,107 +6599,107 @@
       <element name="lumOff" tokenid="ooxml:EG_ColorTransform_lumOff"/>
       <element name="lumMod" tokenid="ooxml:EG_ColorTransform_lumMod"/>
     </resource>
-    <resource name="EG_ColorChoice" resource="Properties" tag="character">
+    <resource name="EG_ColorChoice" resource="Properties">
       <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
       <element name="schemeClr" tokenid="ooxml:EG_ColorChoice_schemeClr"/>
     </resource>
-    <resource name="EG_FillProperties" resource="Properties" tag="character">
+    <resource name="EG_FillProperties" resource="Properties">
       <element name="noFill" tokenid="ooxml:EG_FillProperties_noFill"/>
       <element name="solidFill" tokenid="ooxml:EG_FillProperties_solidFill"/>
       <element name="gradFill" tokenid="ooxml:EG_FillProperties_gradFill"/>
     </resource>
-    <resource name="EG_ShadeProperties" resource="Properties" tag="character">
+    <resource name="EG_ShadeProperties" resource="Properties">
       <element name="lin" tokenid="ooxml:EG_ShadeProperties_lin"/>
       <element name="path" tokenid="ooxml:EG_ShadeProperties_path"/>
     </resource>
-    <resource name="EG_LineDashProperties" resource="Properties" tag="character">
+    <resource name="EG_LineDashProperties" resource="Properties">
       <element name="prstDash" tokenid="ooxml:EG_LineDashProperties_prstDash"/>
     </resource>
-    <resource name="EG_LineJoinProperties" resource="Properties" tag="character">
+    <resource name="EG_LineJoinProperties" resource="Properties">
       <element name="round" tokenid="ooxml:EG_LineJoinProperties_round"/>
       <element name="bevel" tokenid="ooxml:EG_LineJoinProperties_bevel"/>
       <element name="miter" tokenid="ooxml:EG_LineJoinProperties_miter"/>
     </resource>
 
     <!-- Complex Types Resource Definitions -->
-    <resource name="CT_Glow" resource="Properties" tag="character">
+    <resource name="CT_Glow" resource="Properties">
       <attribute name="rad" tokenid="ooxml:CT_Glow_rad"/>
     </resource>
-    <resource name="CT_SRgbColor" resource="Properties" tag="character">
+    <resource name="CT_SRgbColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
     </resource>
-    <resource name="CT_SchemeColor" resource="Properties" tag="character">
+    <resource name="CT_SchemeColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
     </resource>
-    <resource name="CT_PositiveFixedPercentage" resource="Properties" tag="character">
+    <resource name="CT_PositiveFixedPercentage" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val"/>
     </resource>
-    <resource name="CT_PositivePercentage" resource="Properties" tag="character">
+    <resource name="CT_PositivePercentage" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val"/>
     </resource>
-    <resource name="CT_Percentage" resource="Properties" tag="character">
+    <resource name="CT_Percentage" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Percentage_val"/>
     </resource>
-    <resource name="CT_Empty" resource="Properties" tag="character"/>
-    <resource name="CT_SolidColorFillProperties" resource="Properties" tag="character"/>
-    <resource name="CT_GradientFillProperties" resource="Properties" tag="character">
+    <resource name="CT_Empty" resource="Properties"/>
+    <resource name="CT_SolidColorFillProperties" resource="Properties"/>
+    <resource name="CT_GradientFillProperties" resource="Properties">
       <element name="gsLst" tokenid="ooxml:CT_GradientFillProperties_gsLst"/>
     </resource>
-    <resource name="CT_GradientStopList" resource="Properties" tag="character">
+    <resource name="CT_GradientStopList" resource="Properties">
       <element name="gs" tokenid="ooxml:CT_GradientStopList_gs"/>
     </resource>
-    <resource name="CT_GradientStop" resource="Properties" tag="character">
+    <resource name="CT_GradientStop" resource="Properties">
       <attribute name="pos" tokenid="ooxml:CT_GradientStop_pos"/>
     </resource>
-    <resource name="CT_LinearShadeProperties" resource="Properties" tag="character">
+    <resource name="CT_LinearShadeProperties" resource="Properties">
       <attribute name="ang" tokenid="ooxml:CT_LinearShadeProperties_ang"/>
       <attribute name="scaled" tokenid="ooxml:CT_LinearShadeProperties_scaled"/>
     </resource>
-    <resource name="CT_PathShadeProperties" resource="Properties" tag="character">
+    <resource name="CT_PathShadeProperties" resource="Properties">
       <element name="fillToRect" tokenid="ooxml:CT_PathShadeProperties_fillToRect"/>
       <attribute name="path" tokenid="ooxml:CT_PathShadeProperties_path"/>
     </resource>
-    <resource name="CT_RelativeRect" resource="Properties" tag="character">
+    <resource name="CT_RelativeRect" resource="Properties">
       <attribute name="l" tokenid="ooxml:CT_RelativeRect_l"/>
       <attribute name="t" tokenid="ooxml:CT_RelativeRect_t"/>
       <attribute name="r" tokenid="ooxml:CT_RelativeRect_r"/>
       <attribute name="b" tokenid="ooxml:CT_RelativeRect_b"/>
     </resource>
-    <resource name="CT_PresetLineDashProperties" resource="Properties" tag="character">
+    <resource name="CT_PresetLineDashProperties" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_PresetLineDashProperties_val"/>
     </resource>
-    <resource name="CT_LineJoinMiterProperties" resource="Properties" tag="character">
+    <resource name="CT_LineJoinMiterProperties" resource="Properties">
       <attribute name="lim" tokenid="ooxml:CT_LineJoinMiterProperties_lim"/>
     </resource>
-    <resource name="CT_Camera" resource="Properties" tag="character">
+    <resource name="CT_Camera" resource="Properties">
       <attribute name="prst" tokenid="ooxml:CT_Camera_prst"/>
     </resource>
-    <resource name="CT_LightRig" resource="Properties" tag="character">
+    <resource name="CT_LightRig" resource="Properties">
       <element name="rot" tokenid="ooxml:CT_LightRig_rot"/>
       <attribute name="rig" tokenid="ooxml:CT_LightRig_rig"/>
       <attribute name="dir" tokenid="ooxml:CT_LightRig_dir"/>
     </resource>
-    <resource name="CT_SphereCoords" resource="Properties" tag="character">
+    <resource name="CT_SphereCoords" resource="Properties">
       <attribute name="lat" tokenid="ooxml:CT_SphereCoords_lat"/>
       <attribute name="lon" tokenid="ooxml:CT_SphereCoords_lon"/>
       <attribute name="rev" tokenid="ooxml:CT_SphereCoords_rev"/>
     </resource>
-    <resource name="CT_Bevel" resource="Properties" tag="character">
+    <resource name="CT_Bevel" resource="Properties">
       <attribute name="w" tokenid="ooxml:CT_Bevel_w"/>
       <attribute name="h" tokenid="ooxml:CT_Bevel_h"/>
       <attribute name="prst" tokenid="ooxml:CT_Bevel_prst"/>
     </resource>
-    <resource name="CT_Color" resource="Properties" tag="character"/>
-    <resource name="CT_StyleSet" resource="Properties" tag="character">
+    <resource name="CT_Color" resource="Properties"/>
+    <resource name="CT_StyleSet" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_StyleSet_id"/>
       <attribute name="val" tokenid="ooxml:CT_StyleSet_val"/>
     </resource>
-    <resource name="CT_OnOff" resource="Properties" tag="character">
+    <resource name="CT_OnOff" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_OnOff_val"/>
     </resource>
 
     <!-- Main element content -->
-    <resource name="CT_Shadow" resource="Properties" tag="character">
+    <resource name="CT_Shadow" resource="Properties">
       <attribute name="blurRad" tokenid="ooxml:CT_Shadow_blurRad"/>
       <attribute name="dist" tokenid="ooxml:CT_Shadow_dist"/>
       <attribute name="dir" tokenid="ooxml:CT_Shadow_dir"/>
@@ -6709,7 +6709,7 @@
       <attribute name="ky" tokenid="ooxml:CT_Shadow_ky"/>
       <attribute name="algn" tokenid="ooxml:CT_Shadow_algn"/>
     </resource>
-    <resource name="CT_Reflection" resource="Properties" tag="character">
+    <resource name="CT_Reflection" resource="Properties">
       <attribute name="blurRad" tokenid="ooxml:CT_Reflection_blurRad"/>
       <attribute name="stA" tokenid="ooxml:CT_Reflection_stA"/>
       <attribute name="stPos" tokenid="ooxml:CT_Reflection_stPos"/>
@@ -6724,18 +6724,18 @@
       <attribute name="ky" tokenid="ooxml:CT_Reflection_ky"/>
       <attribute name="algn" tokenid="ooxml:CT_Reflection_algn"/>
     </resource>
-    <resource name="CT_TextOutlineEffect" resource="Properties" tag="character">
+    <resource name="CT_TextOutlineEffect" resource="Properties">
       <attribute name="w" tokenid="ooxml:CT_TextOutlineEffect_w"/>
       <attribute name="cap" tokenid="ooxml:CT_TextOutlineEffect_cap"/>
       <attribute name="cmpd" tokenid="ooxml:CT_TextOutlineEffect_cmpd"/>
       <attribute name="algn" tokenid="ooxml:CT_TextOutlineEffect_algn"/>
     </resource>
-    <resource name="CT_FillTextEffect" resource="Properties" tag="character"/>
-    <resource name="CT_Scene3D" resource="Properties" tag="character">
+    <resource name="CT_FillTextEffect" resource="Properties"/>
+    <resource name="CT_Scene3D" resource="Properties">
       <element name="camera" tokenid="ooxml:CT_Scene3D_camera"/>
       <element name="lightRig" tokenid="ooxml:CT_Scene3D_lightRig"/>
     </resource>
-    <resource name="CT_Props3D" resource="Properties" tag="character">
+    <resource name="CT_Props3D" resource="Properties">
       <element name="bevelT" tokenid="ooxml:CT_Props3D_bevelT"/>
       <element name="bevelB" tokenid="ooxml:CT_Props3D_bevelB"/>
       <element name="extrusionClr" tokenid="ooxml:CT_Props3D_extrusionClr"/>
@@ -6744,53 +6744,53 @@
       <attribute name="contourW" tokenid="ooxml:CT_Props3D_contourW"/>
       <attribute name="prstMaterial" tokenid="ooxml:CT_Props3D_prstMaterial"/>
     </resource>
-    <resource name="CT_Ligatures" resource="Properties" tag="character">
+    <resource name="CT_Ligatures" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Ligatures_val"/>
     </resource>
-    <resource name="CT_NumForm" resource="Properties" tag="character">
+    <resource name="CT_NumForm" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_NumForm_val"/>
     </resource>
-    <resource name="CT_NumSpacing" resource="Properties" tag="character">
+    <resource name="CT_NumSpacing" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_NumSpacing_val"/>
     </resource>
-    <resource name="CT_StylisticSets" resource="Properties" tag="character">
+    <resource name="CT_StylisticSets" resource="Properties">
       <attribute name="styleSet" tokenid="ooxml:CT_StylisticSets_styleSet"/>
     </resource>
 
-    <resource name="glow" resource="Properties" tag="character">
+    <resource name="glow" resource="Properties">
       <element name="glow" tokenid="ooxml:glow_glow"/>
     </resource>
-    <resource name="shadow" resource="Properties" tag="character">
+    <resource name="shadow" resource="Properties">
       <element name="shadow" tokenid="ooxml:shadow_shadow"/>
     </resource>
-    <resource name="reflection" resource="Properties" tag="character">
+    <resource name="reflection" resource="Properties">
       <element name="reflection" tokenid="ooxml:reflection_reflection"/>
     </resource>
-    <resource name="textOutline" resource="Properties" tag="character">
+    <resource name="textOutline" resource="Properties">
       <element name="textOutline" tokenid="ooxml:textOutline_textOutline"/>
     </resource>
-    <resource name="textFill" resource="Properties" tag="character">
+    <resource name="textFill" resource="Properties">
       <element name="textFill" tokenid="ooxml:textFill_textFill"/>
     </resource>
-    <resource name="scene3d" resource="Properties" tag="character">
+    <resource name="scene3d" resource="Properties">
       <element name="scene3d" tokenid="ooxml:scene3d_scene3d"/>
     </resource>
-    <resource name="props3d" resource="Properties" tag="character">
+    <resource name="props3d" resource="Properties">
       <element name="props3d" tokenid="ooxml:props3d_props3d"/>
     </resource>
-    <resource name="ligatures" resource="Properties" tag="character">
+    <resource name="ligatures" resource="Properties">
       <element name="ligatures" tokenid="ooxml:ligatures_ligatures"/>
     </resource>
-    <resource name="numForm" resource="Properties" tag="character">
+    <resource name="numForm" resource="Properties">
       <element name="numForm" tokenid="ooxml:numForm_numForm"/>
     </resource>
-    <resource name="numSpacing" resource="Properties" tag="character">
+    <resource name="numSpacing" resource="Properties">
       <element name="numSpacing" tokenid="ooxml:numSpacing_numSpacing"/>
     </resource>
-    <resource name="stylisticSets" resource="Properties" tag="character">
+    <resource name="stylisticSets" resource="Properties">
       <element name="stylisticSets" tokenid="ooxml:stylisticSets_stylisticSets"/>
     </resource>
-    <resource name="cntxtAlts" resource="Properties" tag="character">
+    <resource name="cntxtAlts" resource="Properties">
       <element name="cntxtAlts" tokenid="ooxml:cntxtAlts_cntxtAlts"/>
     </resource>
   </namespace>
@@ -8306,7 +8306,7 @@
     </resource>
     <resource name="ST_GeomGuideName" resource="String" generated="yes"/>
     <resource name="ST_GeomGuideFormula" resource="String" generated="yes"/>
-    <resource name="CT_GeomGuideList" resource="Properties" tag="shape">
+    <resource name="CT_GeomGuideList" resource="Properties">
       <element name="gd" tokenid="ooxml:CT_GeomGuideList_gd"/>
     </resource>
     <resource name="ST_PathFillMode" resource="List" generated="yes">
@@ -8317,11 +8317,11 @@
       <value name="darken" tokenid="ooxml:Value_drawingml_ST_PathFillMode_darken">darken</value>
       <value name="darkenLess" tokenid="ooxml:Value_drawingml_ST_PathFillMode_darkenLess">darkenLess</value>
     </resource>
-    <resource name="CT_PresetGeometry2D" resource="Properties" tag="shape">
+    <resource name="CT_PresetGeometry2D" resource="Properties">
       <element name="avLst" tokenid="ooxml:CT_PresetGeometry2D_avLst"/>
       <attribute name="prst" tokenid="ooxml:CT_PresetGeometry2D_prst"/>
     </resource>
-    <resource name="CT_CustomGeometry2D" resource="Properties" tag="shape">
+    <resource name="CT_CustomGeometry2D" resource="Properties">
       <element name="avLst" tokenid="ooxml:CT_CustomGeometry2D_avLst"/>
       <element name="gdLst" tokenid="ooxml:CT_CustomGeometry2D_gdLst"/>
       <element name="ahLst" tokenid="ooxml:CT_CustomGeometry2D_ahLst"/>
@@ -8329,7 +8329,7 @@
       <element name="rect" tokenid="ooxml:CT_CustomGeometry2D_rect"/>
       <element name="pathLst" tokenid="ooxml:CT_CustomGeometry2D_pathLst"/>
     </resource>
-    <resource name="EG_Geometry" resource="Properties" tag="shape">
+    <resource name="EG_Geometry" resource="Properties">
       <element name="custGeom" tokenid="ooxml:EG_Geometry_custGeom"/>
       <element name="prstGeom" tokenid="ooxml:EG_Geometry_prstGeom"/>
     </resource>
@@ -8825,14 +8825,14 @@
         </element>
       </define>
     </grammar>
-    <resource name="CT_EffectExtent" resource="Properties" tag="shape">
+    <resource name="CT_EffectExtent" resource="Properties">
       <attribute name="l" tokenid="ooxml:CT_EffectExtent_l"/>
       <attribute name="t" tokenid="ooxml:CT_EffectExtent_t"/>
       <attribute name="r" tokenid="ooxml:CT_EffectExtent_r"/>
       <attribute name="b" tokenid="ooxml:CT_EffectExtent_b"/>
     </resource>
     <resource name="ST_WrapDistance" resource="Integer" generated="yes"/>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties">
       <element name="extent" tokenid="ooxml:CT_Inline_extent"/>
       <element name="effectExtent" tokenid="ooxml:CT_Inline_effectExtent"/>
       <element name="docPr" tokenid="ooxml:CT_Inline_docPr"/>
@@ -8852,13 +8852,13 @@
       <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_right">right</value>
       <value name="largest" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_largest">largest</value>
     </resource>
-    <resource name="CT_WrapPath" resource="Properties" tag="shape">
+    <resource name="CT_WrapPath" resource="Properties">
       <element name="start" tokenid="ooxml:CT_WrapPath_start"/>
       <element name="lineTo" tokenid="ooxml:CT_WrapPath_lineTo"/>
       <attribute name="edited" tokenid="ooxml:CT_WrapPath_edited"/>
     </resource>
-    <resource name="CT_WrapNone" resource="Properties" tag="shape"/>
-    <resource name="CT_WrapSquare" resource="Properties" tag="shape">
+    <resource name="CT_WrapNone" resource="Properties"/>
+    <resource name="CT_WrapSquare" resource="Properties">
       <element name="effectExtent" tokenid="ooxml:CT_WrapSquare_effectExtent"/>
       <attribute name="wrapText" tokenid="ooxml:CT_WrapSquare_wrapText"/>
       <attribute name="distT" tokenid="ooxml:CT_WrapSquare_distT"/>
@@ -8866,24 +8866,24 @@
       <attribute name="distL" tokenid="ooxml:CT_WrapSquare_distL"/>
       <attribute name="distR" tokenid="ooxml:CT_WrapSquare_distR"/>
     </resource>
-    <resource name="CT_WrapTight" resource="Properties" tag="shape">
+    <resource name="CT_WrapTight" resource="Properties">
       <element name="wrapPolygon" tokenid="ooxml:CT_WrapTight_wrapPolygon"/>
       <attribute name="wrapText" tokenid="ooxml:CT_WrapTight_wrapText"/>
       <attribute name="distL" tokenid="ooxml:CT_WrapTight_distL"/>
       <attribute name="distR" tokenid="ooxml:CT_WrapTight_distR"/>
     </resource>
-    <resource name="CT_WrapThrough" resource="Properties" tag="shape">
+    <resource name="CT_WrapThrough" resource="Properties">
       <element name="wrapPolygon" tokenid="ooxml:CT_WrapThrough_wrapPolygon"/>
       <attribute name="wrapText" tokenid="ooxml:CT_WrapThrough_wrapText"/>
       <attribute name="distL" tokenid="ooxml:CT_WrapThrough_distL"/>
       <attribute name="distR" tokenid="ooxml:CT_WrapThrough_distR"/>
     </resource>
-    <resource name="CT_WrapTopBottom" resource="Properties" tag="shape">
+    <resource name="CT_WrapTopBottom" resource="Properties">
       <element name="effectExtent" tokenid="ooxml:CT_WrapTopBottom_effectExtent"/>
       <attribute name="distT" tokenid="ooxml:CT_WrapTopBottom_distT"/>
       <attribute name="distB" tokenid="ooxml:CT_WrapTopBottom_distB"/>
     </resource>
-    <resource name="EG_WrapType" resource="Properties" tag="shape">
+    <resource name="EG_WrapType" resource="Properties">
       <element name="wrapNone" tokenid="ooxml:EG_WrapType_wrapNone"/>
       <element name="wrapSquare" tokenid="ooxml:EG_WrapType_wrapSquare"/>
       <element name="wrapTight" tokenid="ooxml:EG_WrapType_wrapTight"/>
@@ -8906,7 +8906,7 @@
       <value name="insideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_insideMargin">insideMargin</value>
       <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_outsideMargin">outsideMargin</value>
     </resource>
-    <resource name="CT_PosH" resource="Properties" tag="shape">
+    <resource name="CT_PosH" resource="Properties">
       <element name="align" tokenid="ooxml:CT_PosH_align"/>
       <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
@@ -8924,13 +8924,13 @@
       <value name="insideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_insideMargin">insideMargin</value>
       <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_outsideMargin">outsideMargin</value>
     </resource>
-    <resource name="CT_PosV" resource="Properties" tag="shape">
+    <resource name="CT_PosV" resource="Properties">
       <element name="align" tokenid="ooxml:CT_PosV_align"/>
       <element name="posOffset" tokenid="ooxml:CT_PosV_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
     <resource name="ST_EditId" resource="Hex"/>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties">
       <element name="simplePos" tokenid="ooxml:CT_Anchor_simplePos_elem"/>
       <element name="positionH" tokenid="ooxml:CT_Anchor_positionH"/>
       <element name="positionV" tokenid="ooxml:CT_Anchor_positionV"/>
@@ -8953,10 +8953,10 @@
       <attribute name="allowOverlap" tokenid="ooxml:CT_Anchor_allowOverlap"/>
       <attribute name="wp14:anchorId" tokenid="ooxml:CT_Anchor_wp14_anchorId"/>
     </resource>
-    <resource name="inline" resource="Properties" tag="shape">
+    <resource name="inline" resource="Properties">
       <element name="inline" tokenid="ooxml:inline_inline"/>
     </resource>
-    <resource name="anchor" resource="Properties" tag="shape">
+    <resource name="anchor" resource="Properties">
       <element name="anchor" tokenid="ooxml:anchor_anchor"/>
     </resource>
   </namespace>
@@ -10264,27 +10264,27 @@
       </define>
     </grammar>
     <resource name="ST_Integer255" resource="Integer" generated="yes"/>
-    <resource name="CT_Integer255" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_Integer255" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Integer255_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_Integer2" resource="Integer" generated="yes"/>
-    <resource name="CT_Integer2" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_Integer2" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Integer2_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_SpacingRule" resource="Integer" generated="yes"/>
-    <resource name="CT_SpacingRule" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_SpacingRule" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_SpacingRule_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_UnSignedInteger" resource="Integer" generated="yes"/>
-    <resource name="CT_UnSignedInteger" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_UnSignedInteger" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_UnSignedInteger_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_Char" resource="String" generated="yes"/>
-    <resource name="CT_Char" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_Char" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Char_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -10292,12 +10292,12 @@
       <value name="on" tokenid="ooxml:Value_math_ST_OnOff_on">on</value>
       <value name="off" tokenid="ooxml:Value_math_ST_OnOff_off">off</value>
     </resource>
-    <resource name="CT_OnOff" resource="Value" tag="attribute">
+    <resource name="CT_OnOff" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OnOff_val" action="setValue"/>
       <action name="start" action="setDefaultBooleanValue"/>
     </resource>
     <resource name="ST_String" resource="String" generated="yes"/>
-    <resource name="CT_String" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_String" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -10306,7 +10306,7 @@
       <value name="center" tokenid="ooxml:Value_math_ST_XAlign_center">center</value>
       <value name="right" tokenid="ooxml:Value_math_ST_XAlign_right">right</value>
     </resource>
-    <resource name="CT_XAlign" resource="Value" generated="yes" tag="math">
+    <resource name="CT_XAlign" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_XAlign_val" action="setValue"/>
     </resource>
     <resource name="ST_YAlign" resource="List" generated="yes">
@@ -10314,14 +10314,14 @@
       <value name="center" tokenid="ooxml:Value_math_ST_YAlign_center">center</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_YAlign_bot">bot</value>
     </resource>
-    <resource name="CT_YAlign" resource="Value" generated="yes" tag="math">
+    <resource name="CT_YAlign" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_YAlign_val" action="setValue"/>
     </resource>
     <resource name="ST_Shp" resource="List" generated="yes">
       <value name="centered" tokenid="ooxml:Value_math_ST_Shp_centered">centered</value>
       <value name="match" tokenid="ooxml:Value_math_ST_Shp_match">match</value>
     </resource>
-    <resource name="CT_Shp" resource="Value" generated="yes" tag="math">
+    <resource name="CT_Shp" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Shp_val" action="setValue"/>
     </resource>
     <resource name="ST_FType" resource="List" generated="yes">
@@ -10330,21 +10330,21 @@
       <value name="lin" tokenid="ooxml:Value_math_ST_FType_lin">lin</value>
       <value name="noBar" tokenid="ooxml:Value_math_ST_FType_noBar">noBar</value>
     </resource>
-    <resource name="CT_FType" resource="Value" generated="yes" tag="math">
+    <resource name="CT_FType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FType_val" action="setValue"/>
     </resource>
     <resource name="ST_LimLoc" resource="List" generated="yes">
       <value name="undOvr" tokenid="ooxml:Value_math_ST_LimLoc_undOvr">undOvr</value>
       <value name="subSup" tokenid="ooxml:Value_math_ST_LimLoc_subSup">subSup</value>
     </resource>
-    <resource name="CT_LimLoc" resource="Value" generated="yes" tag="math">
+    <resource name="CT_LimLoc" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_LimLoc_val" action="setValue"/>
     </resource>
     <resource name="ST_TopBot" resource="List" generated="yes">
       <value name="top" tokenid="ooxml:Value_math_ST_TopBot_top">top</value>
       <value name="bot" tokenid="ooxml:Value_math_ST_TopBot_bot">bot</value>
     </resource>
-    <resource name="CT_TopBot" resource="Value" generated="yes" tag="math">
+    <resource name="CT_TopBot" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_TopBot_val" action="setValue"/>
     </resource>
     <resource name="ST_Script" resource="List" generated="yes">
@@ -10355,7 +10355,7 @@
       <value name="sansmserif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
       <value name="monospace" tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
     </resource>
-    <resource name="CT_Script" resource="Value" generated="yes" tag="math">
+    <resource name="CT_Script" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Script_val" action="setValue"/>
     </resource>
     <resource name="ST_Style" resource="List">
@@ -10364,7 +10364,7 @@
       <value tokenid="ooxml:Value_ST_Style_i">i</value>
       <value tokenid="ooxml:Value_ST_Style_p">p</value>
     </resource>
-    <resource name="CT_Style" resource="Value" tag="math">
+    <resource name="CT_Style" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
     <resource name="ST_Jc" resource="List" generated="yes">
@@ -10375,11 +10375,11 @@
       <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
       <value name="centerGroup" tokenid="ooxml:Value_math_ST_Jc_centerGroup">centerGroup</value>
     </resource>
-    <resource name="CT_OMathJc" resource="Value" generated="yes" tag="math">
+    <resource name="CT_OMathJc" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
     </resource>
     <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
-    <resource name="CT_TwipsMeasure" resource="Value" generated="yes" tag="math">
+    <resource name="CT_TwipsMeasure" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
@@ -10388,7 +10388,7 @@
       <value name="after" tokenid="ooxml:Value_math_ST_BreakBin_after">after</value>
       <value name="repeat" tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
     </resource>
-    <resource name="CT_BreakBin" resource="Value" generated="yes" tag="math">
+    <resource name="CT_BreakBin" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_BreakBin_val" action="setValue"/>
     </resource>
     <resource name="ST_BreakBinSub" resource="List" generated="yes">
@@ -10396,7 +10396,7 @@
       <value name="mp" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
       <value name="pm" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
     </resource>
-    <resource name="CT_BreakBinSub" resource="Value" generated="yes" tag="math">
+    <resource name="CT_BreakBinSub" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_BreakBinSub_val" action="setValue"/>
     </resource>
   </namespace>
@@ -10550,52 +10550,52 @@
         </element>
       </define>
     </grammar>
-    <resource name="CT_PictureNonVisual" resource="Properties" tag="shape">
+    <resource name="CT_PictureNonVisual" resource="Properties">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
       <element name="cNvPicPr" tokenid="ooxml:CT_PictureNonVisual_cNvPicPr"/>
     </resource>
-    <resource name="CT_Picture" resource="Shape" tag="shape">
+    <resource name="CT_Picture" resource="Shape">
       <element name="nvPicPr" tokenid="ooxml:CT_Picture_nvPicPr"/>
       <element name="blipFill" tokenid="ooxml:CT_Picture_blipFill"/>
       <element name="spPr" tokenid="ooxml:CT_Picture_spPr"/>
     </resource>
-    <resource name="pic" resource="Properties" tag="shape">
+    <resource name="pic" resource="Properties">
       <element name="pic" tokenid="ooxml:pic_pic"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds" resource="Shape" tag="shape">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds" resource="Shape">
       <attribute name="r:dm" tokenid="ooxml:CT_RelIds_dm"/>
       <attribute name="r:lo" tokenid="ooxml:CT_RelIds_lo"/>
       <attribute name="r:qs" tokenid="ooxml:CT_RelIds_qs"/>
       <attribute name="r:cs" tokenid="ooxml:CT_RelIds_cs"/>
     </resource>
-    <resource name="relIds" resource="Shape" tag="shape">
+    <resource name="relIds" resource="Shape">
       <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
     </resource>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_GvmlGroupShape" resource="Shape" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_GvmlGroupShape" resource="Shape">
       <element name="a:nvGrpSpPr" tokenid="ooxml:CT_GvmlGroupShape_nvGrpSpPr"/>
       <element name="a:grpSpPr" tokenid="ooxml:CT_GvmlGroupShape_grpSpPr"/>
     </resource>
-    <resource name="lockedCanvas" resource="Shape" tag="shape">
+    <resource name="lockedCanvas" resource="Shape">
       <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart" resource="Shape" tag="shape">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart" resource="Shape">
       <attribute name="r:id" tokenid="ooxml:CT_RelId_chart"/>
     </resource>
-    <resource name="chart" resource="Shape" tag="shape">
+    <resource name="chart" resource="Shape">
         <element xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" name="c:chart" tokenid="ooxml:c_chart"/>
     </resource>
-    <resource xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="CT_WordprocessingShape" resource="Shape" tag="shape">
+    <resource xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="CT_WordprocessingShape" resource="Shape">
       <element name="wps:cNvSpPr" tokenid="ooxml:CT_WordprocessingShape_cNvSpPr"/>
       <element name="wps:spPr" tokenid="ooxml:CT_WordprocessingShape_spPr"/>
     </resource>
-    <resource name="wsp" resource="Shape" tag="shape">
+    <resource name="wsp" resource="Shape">
       <element xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="wps:wsp" tokenid="ooxml:wps_wsp"/>
     </resource>
-    <resource xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="CT_WordprocessingGroup" resource="Shape" tag="shape">
+    <resource xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="CT_WordprocessingGroup" resource="Shape">
       <element name="wpg:cNvGrpSpPr" tokenid="ooxml:CT_WordprocessingGroup_cNvGrpSpPr"/>
       <element name="wpg:grpSpPr" tokenid="ooxml:CT_WordprocessingGroup_grpSpPr"/>
     </resource>
-    <resource name="wgp" resource="Shape" tag="shape">
+    <resource name="wgp" resource="Shape">
       <element xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
     </resource>
 
@@ -12318,10 +12318,10 @@
       <value name="venn" tokenid="ooxml:Value_vml_ST_EditAs_venn">venn</value>
       <value name="bullseye" tokenid="ooxml:Value_vml_ST_EditAs_bullseye">bullseye</value>
     </resource>
-    <resource name="CT_Background" resource="Properties" tag="shape">
+    <resource name="CT_Background" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_Background_id"/>
     </resource>
-    <resource name="background" resource="Properties" tag="shape">
+    <resource name="background" resource="Properties">
       <element name="background" tokenid="ooxml:background_background"/>
     </resource>
   </namespace>
@@ -14114,10 +14114,10 @@
         </zeroOrMore>
       </define>
     </grammar>
-    <resource name="OLEObject" resource="Properties" tag="ole">
+    <resource name="OLEObject" resource="Properties">
       <element name="OLEObject" tokenid="ooxml:OLEObject_OLEObject"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_OLEObject" resource="Properties" tag="ole">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_OLEObject" resource="Properties">
       <element name="LinkType" tokenid="ooxml:CT_OLEObject_LinkType"/>
       <element name="LockedField" tokenid="ooxml:CT_OLEObject_LockedField"/>
       <element name="FieldCodes" tokenid="ooxml:CT_OLEObject_FieldCodes"/>
@@ -14534,10 +14534,10 @@
         </list>
       </define>
     </grammar>
-    <resource name="wrap" resource="Properties" tag="shape">
+    <resource name="wrap" resource="Properties">
       <element name="wrap" tokenid="ooxml:wrap_wrap"/>
     </resource>
-    <resource name="CT_Wrap" resource="Properties" tag="shape">
+    <resource name="CT_Wrap" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_Wrap_type"/>
       <attribute name="side" tokenid="ooxml:CT_Wrap_side"/>
       <attribute name="anchorx" tokenid="ooxml:CT_Wrap_anchorx"/>
@@ -23442,77 +23442,77 @@
         </zeroOrMore>
       </define>
     </grammar>
-    <resource name="CT_Empty" resource="Stream" tag="content">
+    <resource name="CT_Empty" resource="Stream">
       <action name="end" tokenid="ooxml:EG_RunInnerContent_noBreakHyphen" action="noBreakHyphen"/>
       <action name="end" tokenid="ooxml:EG_RunInnerContent_softHyphen" action="softHyphen"/>
       <action name="end" tokenid="ooxml:EG_RunInnerContent_cr" action="cr"/>
     </resource>
     <resource name="ST_OnOff" resource="Boolean"/>
-    <resource name="CT_OnOff" resource="Value" tag="attribute">
+    <resource name="CT_OnOff" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_OnOff_val" action="setValue"/>
       <action name="start" action="setDefaultBooleanValue"/>
     </resource>
     <resource name="ST_LongHexNumber" resource="Hex"/>
-    <resource name="CT_LongHexNumber" resource="Value" tag="attribute">
+    <resource name="CT_LongHexNumber" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_LongHexNumber_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
     <resource name="ST_ShortHexNumber" resource="Hex"/>
-    <resource name="CT_ShortHexNumber" resource="Value" tag="attribute">
+    <resource name="CT_ShortHexNumber" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_ShortHexNumber_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
     <resource name="ST_UcharHexNumber" resource="Hex"/>
-    <resource name="CT_UcharHexNumber" resource="Value" tag="attribute">
+    <resource name="CT_UcharHexNumber" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_UcharHexNumber_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
     <resource name="ST_DecimalNumber" resource="Integer"/>
-    <resource name="CT_DecimalNumber" resource="Value" tag="attribute">
+    <resource name="CT_DecimalNumber" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_DecimalNumber_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
     <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
-    <resource name="CT_TwipsMeasure" resource="Value" tag="attribute">
+    <resource name="CT_TwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_SignedTwipsMeasure" resource="UniversalMeasure"/>
-    <resource name="CT_SignedTwipsMeasure" resource="Value" tag="attribute">
+    <resource name="CT_SignedTwipsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_PixelsMeasure" resource="Integer" generated="yes"/>
-    <resource name="CT_PixelsMeasure" resource="Value" tag="attribute">
+    <resource name="CT_PixelsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_PixelsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_HpsMeasure" resource="Integer"/>
-    <resource name="CT_HpsMeasure" resource="Value" tag="attribute">
+    <resource name="CT_HpsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_HpsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_SignedHpsMeasure" resource="Integer"/>
-    <resource name="CT_SignedHpsMeasure" resource="Value" tag="attribute">
+    <resource name="CT_SignedHpsMeasure" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_DateTime" resource="String" generated="yes"/>
     <resource name="ST_MacroName" resource="String" generated="yes"/>
-    <resource name="CT_MacroName" resource="Value" generated="yes" tag="attribute">
+    <resource name="CT_MacroName" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MacroName_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="ST_EighthPointMeasure" resource="Integer"/>
     <resource name="ST_PointMeasure" resource="Integer"/>
     <resource name="ST_String" resource="String"/>
-    <resource name="CT_String" resource="Value" tag="attribute">
+    <resource name="CT_String" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
     <resource name="ST_TextScale" resource="Integer"/>
-    <resource name="CT_TextScale" resource="Value" tag="attribute">
+    <resource name="CT_TextScale" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextScale_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
@@ -23535,7 +23535,7 @@
       <value tokenid="16">lightGray</value>
       <value tokenid="0">none</value>
     </resource>
-    <resource name="CT_Highlight" resource="Value" tag="attribute">
+    <resource name="CT_Highlight" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Highlight_val" action="setValue"/>
     </resource>
     <resource name="ST_HexColorAuto" resource="List">
@@ -23543,7 +23543,7 @@
     </resource>
     <resource name="ST_HexColorRGB" resource="Hex"/>
     <resource name="ST_HexColor" resource="Hex"/>
-    <resource name="CT_Color" resource="Properties" tag="attribute">
+    <resource name="CT_Color" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Color_val"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Color_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
@@ -23551,12 +23551,12 @@
     </resource>
     <resource name="ST_LangCode" resource="Hex" generated="yes"/>
     <resource name="ST_Lang" resource="String"/>
-    <resource name="CT_Lang" resource="Value" tag="attribute">
+    <resource name="CT_Lang" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Lang_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_Guid" resource="String"/>
-    <resource name="CT_Guid" resource="Value" tag="attribute">
+    <resource name="CT_Guid" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Guid_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -23580,7 +23580,7 @@
       <value tokenid="43">wavyDouble</value>
       <value tokenid="0">none</value>
     </resource>
-    <resource name="CT_Underline" resource="Properties" tag="character">
+    <resource name="CT_Underline" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Underline_val" default="single"/>
       <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Underline_themeColor"/>
@@ -23596,7 +23596,7 @@
       <value tokenid="5">antsRed</value>
       <value tokenid="6">shimmer</value>
     </resource>
-    <resource name="CT_TextEffect" resource="Value" tag="character">
+    <resource name="CT_TextEffect" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextEffect_val" action="setValue"/>
     </resource>
     <resource name="ST_Border" resource="List">
@@ -23792,7 +23792,7 @@
       <value tokenid="226">zigZag</value>
       <value tokenid="227">zigZagStitch</value>
     </resource>
-    <resource name="CT_Border" resource="Properties" tag="attribute">
+    <resource name="CT_Border" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Border_val"/>
       <attribute name="color" tokenid="ooxml:CT_Border_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
@@ -23845,7 +23845,7 @@
       <value tokenid="60">pct95</value>
       <value tokenid="65535">nil</value>
     </resource>
-    <resource name="CT_Shd" resource="Properties" tag="attribute">
+    <resource name="CT_Shd" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Shd_val"/>
       <attribute name="color" tokenid="ooxml:CT_Shd_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Shd_themeColor"/>
@@ -23856,16 +23856,16 @@
       <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
       <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
     </resource>
-    <resource name="ST_VerticalAlignRun" resource="List" generated="yes" tag="character">
+    <resource name="ST_VerticalAlignRun" resource="List" generated="yes">
       <value name="baseline" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_baseline">baseline</value>
       <value name="superscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_superscript">superscript</value>
       <value name="subscript" tokenid="ooxml:Value_wordprocessingml_ST_VerticalAlignRun_subscript">subscript</value>
     </resource>
-    <resource name="CT_VerticalAlignRun" resource="Value" generated="yes" tag="character">
+    <resource name="CT_VerticalAlignRun" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_VerticalAlignRun_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_FitText" resource="Properties" tag="paragraph">
+    <resource name="CT_FitText" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_FitText_val"/>
       <attribute name="id" tokenid="ooxml:CT_FitText_id"/>
     </resource>
@@ -23876,10 +23876,10 @@
       <value tokenid="3">circle</value>
       <value tokenid="4">underDot</value>
     </resource>
-    <resource name="CT_Em" resource="Value" tag="character">
+    <resource name="CT_Em" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Em_val" action="setValue"/>
     </resource>
-    <resource name="CT_Language" resource="Properties" tag="character">
+    <resource name="CT_Language" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Language_val"/>
       <attribute name="eastAsia" tokenid="ooxml:CT_Language_eastAsia"/>
       <attribute name="bidi" tokenid="ooxml:CT_Language_bidi"/>
@@ -23891,7 +23891,7 @@
       <value tokenid="3">angle</value>
       <value tokenid="4">curly</value>
     </resource>
-    <resource name="CT_EastAsianLayout" resource="Properties" tag="character">
+    <resource name="CT_EastAsianLayout" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_EastAsianLayout_id"/>
       <attribute name="combine" tokenid="ooxml:CT_EastAsianLayout_combine"/>
       <attribute name="combineBrackets" tokenid="ooxml:CT_EastAsianLayout_combineBrackets"/>
@@ -23941,7 +23941,7 @@
       <value name="drop" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_drop">drop</value>
       <value name="margin" tokenid="ooxml:Value_wordprocessingml_ST_DropCap_margin">margin</value>
     </resource>
-    <resource name="CT_FramePr" resource="Properties" tag="frame">
+    <resource name="CT_FramePr" resource="Properties">
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
       <attribute name="w" tokenid="ooxml:CT_FramePr_w"/>
@@ -23977,7 +23977,7 @@
       <value tokenid="4">heavy</value>
       <value tokenid="ooxml:Value_ST_TabTlc_middleDot">middleDot</value>
     </resource>
-    <resource name="CT_TabStop" resource="Properties" tag="paragraph">
+    <resource name="CT_TabStop" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_TabStop_val"/>
       <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
       <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
@@ -23987,7 +23987,7 @@
       <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
       <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
     </resource>
-    <resource name="CT_Spacing" resource="Properties" tag="paragraph">
+    <resource name="CT_Spacing" resource="Properties">
       <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
       <attribute name="beforeLines" tokenid="ooxml:CT_Spacing_beforeLines"/>
       <attribute name="beforeAutospacing" tokenid="ooxml:CT_Spacing_beforeAutospacing"/>
@@ -23997,7 +23997,7 @@
       <attribute name="line" tokenid="ooxml:CT_Spacing_line"/>
       <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
     </resource>
-    <resource name="CT_Ind" resource="Properties" tag="paragraph">
+    <resource name="CT_Ind" resource="Properties">
       <attribute name="end" tokenid="ooxml:CT_Ind_end"/>
       <attribute name="endChars" tokenid="ooxml:CT_Ind_endChars"/>
       <attribute name="start" tokenid="ooxml:CT_Ind_start"/>
@@ -24026,7 +24026,7 @@
       <value tokenid="ooxml:Value_ST_Jc_lowKashida">lowKashida</value>
       <value tokenid="ooxml:Value_ST_Jc_thaiDistribute">thaiDistribute</value>
     </resource>
-    <resource name="CT_Jc" resource="Value" tag="character">
+    <resource name="CT_Jc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Jc_val" action="setValue"/>
     </resource>
     <resource name="ST_View" resource="List" generated="yes">
@@ -24037,7 +24037,7 @@
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_View_normal">normal</value>
       <value name="web" tokenid="ooxml:Value_wordprocessingml_ST_View_web">web</value>
     </resource>
-    <resource name="CT_View" resource="Properties" tag="settings">
+    <resource name="CT_View" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_View_val"/>
     </resource>
     <resource name="ST_Zoom" resource="List" generated="yes">
@@ -24047,11 +24047,11 @@
       <value name="textFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
     </resource>
     <resource name="ST_Percentage" resource="Integer" generated="yes"/>
-    <resource name="CT_Zoom" resource="Properties" tag="settings">
+    <resource name="CT_Zoom" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Zoom_val"/>
       <attribute name="percent" tokenid="ooxml:CT_Zoom_percent"/>
     </resource>
-    <resource name="CT_WritingStyle" resource="Properties" tag="settings">
+    <resource name="CT_WritingStyle" resource="Properties">
       <attribute name="lang" tokenid="ooxml:CT_WritingStyle_lang"/>
       <attribute name="vendorID" tokenid="ooxml:CT_WritingStyle_vendorID"/>
       <attribute name="dllVersion" tokenid="ooxml:CT_WritingStyle_dllVersion"/>
@@ -24063,7 +24063,7 @@
       <value name="clean" tokenid="ooxml:Value_wordprocessingml_ST_Proof_clean">clean</value>
       <value name="dirty" tokenid="ooxml:Value_wordprocessingml_ST_Proof_dirty">dirty</value>
     </resource>
-    <resource name="CT_Proof" resource="Properties" tag="redline">
+    <resource name="CT_Proof" resource="Properties">
       <attribute name="spelling" tokenid="ooxml:CT_Proof_spelling"/>
       <attribute name="grammar" tokenid="ooxml:CT_Proof_grammar"/>
     </resource>
@@ -24072,7 +24072,7 @@
       <value name="letter" tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
       <value name="eMail" tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
     </resource>
-    <resource name="CT_DocType" resource="Properties" tag="document">
+    <resource name="CT_DocType" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocType_val"/>
     </resource>
     <resource name="ST_DocProtect" resource="List" generated="yes">
@@ -24106,7 +24106,7 @@
       <attribute name="hash" tokenid="ooxml:AG_Password_hash"/>
       <attribute name="salt" tokenid="ooxml:AG_Password_salt"/>
     </resource>
-    <resource name="CT_DocProtect" resource="Properties" tag="document">
+    <resource name="CT_DocProtect" resource="Properties">
       <attribute name="edit" tokenid="ooxml:CT_DocProtect_edit"/>
       <attribute name="formatting" tokenid="ooxml:CT_DocProtect_formatting"/>
       <attribute name="enforcement" tokenid="ooxml:CT_DocProtect_enforcement"/>
@@ -24119,7 +24119,7 @@
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDocType_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDocType" resource="Value" generated="yes" tag="mailmerge">
+    <resource name="CT_MailMergeDocType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDocType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24131,7 +24131,7 @@
       <value name="odbc" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_odbc">odbc</value>
       <value name="native" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDataType_native">native</value>
     </resource>
-    <resource name="CT_MailMergeDataType" resource="Value" generated="yes" tag="mailmerge">
+    <resource name="CT_MailMergeDataType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDataType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24141,7 +24141,7 @@
       <value name="email" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_email">email</value>
       <value name="fax" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeDest_fax">fax</value>
     </resource>
-    <resource name="CT_MailMergeDest" resource="Value" generated="yes" tag="mailmerge">
+    <resource name="CT_MailMergeDest" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MailMergeDest_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24149,18 +24149,18 @@
       <value name="null" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_null">null</value>
       <value name="dbColumn" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeOdsoFMDFieldType_dbColumn">dbColumn</value>
     </resource>
-    <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value" generated="yes" tag="mailmerge">
+    <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MailMergeOdsoFMDFieldType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_TrackChangesView" resource="Properties" tag="redline">
+    <resource name="CT_TrackChangesView" resource="Properties">
       <attribute name="markup" tokenid="ooxml:CT_TrackChangesView_markup"/>
       <attribute name="comments" tokenid="ooxml:CT_TrackChangesView_comments"/>
       <attribute name="insDel" tokenid="ooxml:CT_TrackChangesView_insDel"/>
       <attribute name="formatting" tokenid="ooxml:CT_TrackChangesView_formatting"/>
       <attribute name="inkAnnotations" tokenid="ooxml:CT_TrackChangesView_inkAnnotations"/>
     </resource>
-    <resource name="CT_Kinsoku" resource="Properties" tag="character">
+    <resource name="CT_Kinsoku" resource="Properties">
       <attribute name="lang" tokenid="ooxml:CT_Kinsoku_lang"/>
       <attribute name="val" tokenid="ooxml:CT_Kinsoku_val"/>
     </resource>
@@ -24172,7 +24172,7 @@
       <value tokenid="5">tbRlV</value>
       <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">tbLrV</value>
     </resource>
-    <resource name="CT_TextDirection" resource="Value" tag="paragraph">
+    <resource name="CT_TextDirection" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextDirection_val" action="setValue"/>
     </resource>
     <resource name="ST_TextAlignment" resource="List" generated="yes">
@@ -24182,7 +24182,7 @@
       <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
     </resource>
-    <resource name="CT_TextAlignment" resource="Value" generated="yes" tag="paragraph">
+    <resource name="CT_TextAlignment" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_TextAlignment_val" action="setValue"/>
     </resource>
     <resource name="ST_DisplacedByCustomXml" resource="List" generated="yes">
@@ -24193,83 +24193,83 @@
       <value name="cont" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_cont">cont</value>
       <value name="rest" tokenid="ooxml:Value_wordprocessingml_ST_AnnotationVMerge_rest">rest</value>
     </resource>
-    <resource name="CT_Markup" resource="Properties" tag="redline">
+    <resource name="CT_Markup" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_Markup_id"/>
     </resource>
-    <resource name="CT_TrackChange" resource="Properties" tag="redline">
+    <resource name="CT_TrackChange" resource="Properties">
       <attribute name="author" tokenid="ooxml:CT_TrackChange_author"/>
       <attribute name="date" tokenid="ooxml:CT_TrackChange_date"/>
     </resource>
-    <resource name="CT_CellMergeTrackChange" resource="Properties" tag="redline">
+    <resource name="CT_CellMergeTrackChange" resource="Properties">
       <attribute name="vMerge" tokenid="ooxml:CT_CellMergeTrackChange_vMerge"/>
       <attribute name="vMergeOrig" tokenid="ooxml:CT_CellMergeTrackChange_vMergeOrig"/>
     </resource>
-    <resource name="CT_TrackChangeRange" resource="Properties" tag="redline">
+    <resource name="CT_TrackChangeRange" resource="Properties">
       <attribute name="displacedByCustomXml" tokenid="ooxml:CT_TrackChangeRange_displacedByCustomXml"/>
     </resource>
-    <resource name="CT_MarkupRange" resource="Properties" tag="redline">
+    <resource name="CT_MarkupRange" resource="Properties">
       <attribute name="displacedByCustomXml" tokenid="ooxml:CT_MarkupRange_displacedByCustomXml"/>
     </resource>
-    <resource name="CT_MarkupRangeBookmark" resource="Properties" tag="redline">
+    <resource name="CT_MarkupRangeBookmark" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_MarkupRangeBookmark_id"/>
     </resource>
-    <resource name="CT_MarkupRangeCommentStart" resource="Properties" tag="content">
+    <resource name="CT_MarkupRangeCommentStart" resource="Properties">
       <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
     </resource>
-    <resource name="CT_MarkupRangeCommentEnd" resource="Properties" tag="content">
+    <resource name="CT_MarkupRangeCommentEnd" resource="Properties">
       <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeEnd"/>
     </resource>
-    <resource name="CT_BookmarkRange" resource="Properties" tag="reference">
+    <resource name="CT_BookmarkRange" resource="Properties">
       <type name="Bookmark"/>
       <attribute name="colFirst" tokenid="ooxml:CT_BookmarkRange_colFirst"/>
       <attribute name="colLast" tokenid="ooxml:CT_BookmarkRange_colLast"/>
     </resource>
-    <resource name="CT_Bookmark" resource="Properties" tag="reference">
+    <resource name="CT_Bookmark" resource="Properties">
       <type name="Bookmark"/>
       <attribute name="name" tokenid="ooxml:CT_Bookmark_name"/>
     </resource>
-    <resource name="CT_MoveBookmark" resource="Properties" tag="reference">
+    <resource name="CT_MoveBookmark" resource="Properties">
       <attribute name="author" tokenid="ooxml:CT_MoveBookmark_author"/>
       <attribute name="date" tokenid="ooxml:CT_MoveBookmark_date"/>
     </resource>
-    <resource name="CT_Comment" resource="XNote" tag="content">
+    <resource name="CT_Comment" resource="XNote">
       <attribute name="id" action="checkId"/>
       <attribute name="initials" tokenid="ooxml:CT_Comment_initials"/>
     </resource>
-    <resource name="CT_TrackChangeNumbering" resource="Properties" tag="numbering">
+    <resource name="CT_TrackChangeNumbering" resource="Properties">
       <attribute name="original" tokenid="ooxml:CT_TrackChangeNumbering_original"/>
     </resource>
-    <resource name="CT_TblPrExChange" resource="Properties" tag="table">
+    <resource name="CT_TblPrExChange" resource="Properties">
       <element name="tblPrEx" tokenid="ooxml:CT_TblPrExChange_tblPrEx"/>
     </resource>
-    <resource name="CT_TcPrChange" resource="Properties" tag="table">
+    <resource name="CT_TcPrChange" resource="Properties">
       <element name="tcPr" tokenid="ooxml:CT_TcPrChange_tcPr"/>
     </resource>
-    <resource name="CT_TrPrChange" resource="Properties" tag="table">
+    <resource name="CT_TrPrChange" resource="Properties">
       <element name="trPr" tokenid="ooxml:CT_TrPrChange_trPr"/>
     </resource>
-    <resource name="CT_TblGridChange" resource="Properties" tag="table">
+    <resource name="CT_TblGridChange" resource="Properties">
       <element name="tblGrid" tokenid="ooxml:CT_TblGridChange_tblGrid"/>
     </resource>
-    <resource name="CT_TblPrChange" resource="Properties" tag="table">
+    <resource name="CT_TblPrChange" resource="Properties">
       <element name="tblPr" tokenid="ooxml:CT_TblPrChange_tblPr"/>
     </resource>
-    <resource name="CT_SectPrChange" resource="Properties" tag="section">
+    <resource name="CT_SectPrChange" resource="Properties">
       <element name="sectPr" tokenid="ooxml:CT_SectPrChange_sectPr"/>
     </resource>
-    <resource name="CT_PPrChange" resource="Properties" tag="paragraph">
+    <resource name="CT_PPrChange" resource="Properties">
       <element name="pPr" tokenid="ooxml:CT_PPrChange_pPr"/>
     </resource>
-    <resource name="CT_RPrChange" resource="Properties" tag="character">
+    <resource name="CT_RPrChange" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_RPrChange_rPr"/>
       <action name="end" action="tokenproperty"/>
       <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_ParaRPrChange" resource="Properties" tag="character">
+    <resource name="CT_ParaRPrChange" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_ParaRPrChange_rPr"/>
     </resource>
-    <resource name="CT_RunTrackChange" resource="Stream" tag="redlines">
+    <resource name="CT_RunTrackChange" resource="Stream">
       <action name="start" action="tokenproperty"/>
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
@@ -24277,7 +24277,7 @@
       <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="EG_RangeMarkupElements" resource="Properties" tag="redlines">
+    <resource name="EG_RangeMarkupElements" resource="Properties">
       <element name="bookmarkStart" tokenid="ooxml:EG_RangeMarkupElements_bookmarkStart"/>
       <element name="bookmarkEnd" tokenid="ooxml:EG_RangeMarkupElements_bookmarkEnd"/>
       <element name="moveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart"/>
@@ -24295,13 +24295,13 @@
       <element name="customXmlMoveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart"/>
       <element name="customXmlMoveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd"/>
     </resource>
-    <resource name="CT_NumPr" resource="Properties" tag="numbering">
+    <resource name="CT_NumPr" resource="Properties">
       <element name="ilvl" tokenid="ooxml:CT_NumPr_ilvl"/>
       <element name="numId" tokenid="ooxml:CT_NumPr_numId"/>
       <element name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
       <element name="ins" tokenid="ooxml:CT_NumPr_ins"/>
     </resource>
-    <resource name="CT_PBdr" resource="Properties" tag="paragraph">
+    <resource name="CT_PBdr" resource="Properties">
       <element name="top" tokenid="ooxml:CT_PBdr_top"/>
       <element name="left" tokenid="ooxml:CT_PBdr_left"/>
       <element name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
@@ -24309,7 +24309,7 @@
       <element name="between" tokenid="ooxml:CT_PBdr_between"/>
       <element name="bar" tokenid="ooxml:CT_PBdr_bar"/>
     </resource>
-    <resource name="CT_Tabs" resource="Properties" tag="paragraph">
+    <resource name="CT_Tabs" resource="Properties">
       <element name="tab" tokenid="ooxml:CT_Tabs_tab"/>
     </resource>
     <resource name="ST_TextboxTightWrap" resource="List" generated="yes">
@@ -24319,11 +24319,11 @@
       <value name="firstLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_firstLineOnly">firstLineOnly</value>
       <value name="lastLineOnly" tokenid="ooxml:Value_wordprocessingml_ST_TextboxTightWrap_lastLineOnly">lastLineOnly</value>
     </resource>
-    <resource name="CT_TextboxTightWrap" resource="Value" generated="yes" tag="textbox">
+    <resource name="CT_TextboxTightWrap" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_TextboxTightWrap_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_PPrBase" resource="Properties" tag="paragraph">
+    <resource name="CT_PPrBase" resource="Properties">
       <element name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
       <element name="keepNext" tokenid="ooxml:CT_PPrBase_keepNext"/>
       <element name="keepLines" tokenid="ooxml:CT_PPrBase_keepLines"/>
@@ -24358,12 +24358,12 @@
       <element name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
       <element name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
     </resource>
-    <resource name="CT_PPr" resource="Properties" tag="paragraph">
+    <resource name="CT_PPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_PPr_rPr"/>
       <element name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
       <element name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Control" resource="Properties" tag="control">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Control" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_Control_name"/>
       <attribute name="shapeid" tokenid="ooxml:CT_Control_shapeid"/>
       <attribute name="r:id" tokenid="ooxml:CT_Control_r_id"/>
@@ -24378,24 +24378,24 @@
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Rel" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
     </resource>
-    <resource name="CT_PictureBase" resource="Properties" tag="shape"/>
-    <resource name="CT_Object" resource="Shape" tag="shape">
+    <resource name="CT_PictureBase" resource="Properties"/>
+    <resource name="CT_Object" resource="Shape">
       <element name="control" tokenid="ooxml:CT_Object_control"/>
       <attribute name="dxaOrig" tokenid="ooxml:CT_Object_dxaOrig"/>
       <attribute name="dyaOrig" tokenid="ooxml:CT_Object_dyaOrig"/>
       <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_Picture" resource="Shape" tag="shape">
+    <resource name="CT_Picture" resource="Shape">
       <element name="movie" tokenid="ooxml:CT_Picture_movie"/>
       <element name="control" tokenid="ooxml:CT_Picture_control"/>
       <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_Drawing" resource="Properties" tag="shape">
+    <resource name="CT_Drawing" resource="Properties">
       <action name="end" action="handlePicture"/>
     </resource>
-    <resource name="CT_SimpleField" resource="Stream" tag="field">
+    <resource name="CT_SimpleField" resource="Stream">
       <element name="fldData" tokenid="ooxml:CT_SimpleField_fldData"/>
       <attribute name="instr" tokenid="ooxml:CT_SimpleField_instr"/>
       <attribute name="fldLock" tokenid="ooxml:CT_SimpleField_fldLock"/>
@@ -24427,15 +24427,15 @@
       <value name="currentDate" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_currentDate">currentDate</value>
       <value name="calculated" tokenid="ooxml:Value_wordprocessingml_ST_FFTextType_calculated">calculated</value>
     </resource>
-    <resource name="CT_FFTextType" resource="Value" generated="yes" tag="field">
+    <resource name="CT_FFTextType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FFTextType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_FFName" resource="Value" generated="yes" tag="field">
+    <resource name="CT_FFName" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FFName_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_FldChar" resource="Stream" tag="field">
+    <resource name="CT_FldChar" resource="Stream">
       <element name="fldData" tokenid="ooxml:CT_FldChar_fldData"/>
       <element name="ffData" tokenid="ooxml:CT_FldChar_ffData"/>
       <element name="numberingChange" tokenid="ooxml:CT_FldChar_numberingChange"/>
@@ -24452,7 +24452,7 @@
         <cond tokenid="ooxml:CT_FldChar_fldCharType" value="ooxml:Value_ST_FldCharType_end"/>
       </action>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Stream" tag="link">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Stream">
       <attribute name="tgtFrame" tokenid="ooxml:CT_Hyperlink_tgtFrame"/>
       <attribute name="tooltip" tokenid="ooxml:CT_Hyperlink_tooltip"/>
       <attribute name="docLocation" tokenid="ooxml:CT_Hyperlink_docLocation"/>
@@ -24464,7 +24464,7 @@
       <action name="start" action="fieldsep"/>
       <action name="end" action="fieldend"/>
     </resource>
-    <resource name="CT_FFData" resource="Properties" tag="field">
+    <resource name="CT_FFData" resource="Properties">
       <element name="name" tokenid="ooxml:CT_FFData_name"/>
       <element name="enabled" tokenid="ooxml:CT_FFData_enabled"/>
       <element name="calcOnExit" tokenid="ooxml:CT_FFData_calcOnExit"/>
@@ -24478,39 +24478,39 @@
       <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:ffdata"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_FFHelpText" resource="Properties" tag="field">
+    <resource name="CT_FFHelpText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFHelpText_type"/>
       <attribute name="val" tokenid="ooxml:CT_FFHelpText_val"/>
     </resource>
-    <resource name="CT_FFStatusText" resource="Properties" tag="field">
+    <resource name="CT_FFStatusText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFStatusText_type"/>
       <attribute name="val" tokenid="ooxml:CT_FFStatusText_val"/>
     </resource>
-    <resource name="CT_FFCheckBox" resource="Properties" tag="field">
+    <resource name="CT_FFCheckBox" resource="Properties">
       <element name="size" tokenid="ooxml:CT_FFCheckBox_size"/>
       <element name="sizeAuto" tokenid="ooxml:CT_FFCheckBox_sizeAuto"/>
       <element name="default" tokenid="ooxml:CT_FFCheckBox_default"/>
       <element name="checked" tokenid="ooxml:CT_FFCheckBox_checked"/>
     </resource>
-    <resource name="CT_FFDDList" resource="Properties" tag="field">
+    <resource name="CT_FFDDList" resource="Properties">
       <element name="result" tokenid="ooxml:CT_FFDDList_result"/>
       <element name="default" tokenid="ooxml:CT_FFDDList_default"/>
       <element name="listEntry" tokenid="ooxml:CT_FFDDList_listEntry"/>
     </resource>
-    <resource name="CT_FFTextInput" resource="Properties" tag="field">
+    <resource name="CT_FFTextInput" resource="Properties">
       <element name="type" tokenid="ooxml:CT_FFTextInput_type"/>
       <element name="default" tokenid="ooxml:CT_FFTextInput_default"/>
       <element name="maxLength" tokenid="ooxml:CT_FFTextInput_maxLength"/>
       <element name="format" tokenid="ooxml:CT_FFTextInput_format"/>
     </resource>
-    <resource name="ST_SectionMark" resource="List" tag="section">
+    <resource name="ST_SectionMark" resource="List">
       <value tokenid="0">continuous</value>
       <value tokenid="1">nextColumn</value>
       <value tokenid="2">nextPage</value>
       <value tokenid="3">evenPage</value>
       <value tokenid="4">oddPage</value>
     </resource>
-    <resource name="CT_SectType" resource="Value" tag="section">
+    <resource name="CT_SectType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SectType_val" action="setValue"/>
     </resource>
     <resource name="ST_NumberFormat" resource="List">
@@ -24579,13 +24579,13 @@
       <value tokenid="0">portrait</value>
       <value tokenid="1">landscape</value>
     </resource>
-    <resource name="CT_PageSz" resource="Properties" tag="page">
+    <resource name="CT_PageSz" resource="Properties">
       <attribute name="w" tokenid="ooxml:CT_PageSz_w"/>
       <attribute name="h" tokenid="ooxml:CT_PageSz_h"/>
       <attribute name="orient" tokenid="ooxml:CT_PageSz_orient"/>
       <attribute name="code" tokenid="ooxml:CT_PageSz_code"/>
     </resource>
-    <resource name="CT_PageMar" resource="Properties" tag="page">
+    <resource name="CT_PageMar" resource="Properties">
       <attribute name="top" tokenid="ooxml:CT_PageMar_top"/>
       <attribute name="right" tokenid="ooxml:CT_PageMar_right"/>
       <attribute name="bottom" tokenid="ooxml:CT_PageMar_bottom"/>
@@ -24607,7 +24607,7 @@
       <value name="page" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_page">page</value>
       <value name="text" tokenid="ooxml:Value_wordprocessingml_ST_PageBorderOffset_text">text</value>
     </resource>
-    <resource name="CT_PageBorders" resource="Properties" tag="page">
+    <resource name="CT_PageBorders" resource="Properties">
       <element name="top" tokenid="ooxml:CT_PageBorders_top"/>
       <element name="left" tokenid="ooxml:CT_PageBorders_left"/>
       <element name="bottom" tokenid="ooxml:CT_PageBorders_bottom"/>
@@ -24628,23 +24628,23 @@
       <value tokenid="1">newSection</value>
       <value tokenid="2">continuous</value>
     </resource>
-    <resource name="CT_LineNumber" resource="Properties" tag="section">
+    <resource name="CT_LineNumber" resource="Properties">
       <attribute name="countBy" tokenid="ooxml:CT_LineNumber_countBy"/>
       <attribute name="start" tokenid="ooxml:CT_LineNumber_start"/>
       <attribute name="distance" tokenid="ooxml:CT_LineNumber_distance"/>
       <attribute name="restart" tokenid="ooxml:CT_LineNumber_restart"/>
     </resource>
-    <resource name="CT_PageNumber" resource="Properties" tag="page">
+    <resource name="CT_PageNumber" resource="Properties">
       <attribute name="fmt" tokenid="ooxml:CT_PageNumber_fmt"/>
       <attribute name="start" tokenid="ooxml:CT_PageNumber_start"/>
       <attribute name="chapStyle" tokenid="ooxml:CT_PageNumber_chapStyle"/>
       <attribute name="chapSep" tokenid="ooxml:CT_PageNumber_chapSep"/>
     </resource>
-    <resource name="CT_Column" resource="Properties" tag="page">
+    <resource name="CT_Column" resource="Properties">
       <attribute name="space" tokenid="ooxml:CT_Column_space"/>
       <attribute name="w" tokenid="ooxml:CT_Column_w"/>
     </resource>
-    <resource name="CT_Columns" resource="Properties" tag="page">
+    <resource name="CT_Columns" resource="Properties">
       <attribute name="equalWidth" tokenid="ooxml:CT_Columns_equalWidth"/>
       <attribute name="space" tokenid="ooxml:CT_Columns_space"/>
       <attribute name="num" tokenid="ooxml:CT_Columns_num"/>
@@ -24657,7 +24657,7 @@
       <value tokenid="2">both</value>
       <value tokenid="3">bottom</value>
     </resource>
-    <resource name="CT_VerticalJc" resource="Value" tag="page">
+    <resource name="CT_VerticalJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VerticalJc_val" action="setValue"/>
     </resource>
     <resource name="ST_DocGrid" resource="List" generated="yes">
@@ -24666,7 +24666,7 @@
       <value name="linesAndChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
       <value name="snapToChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
     </resource>
-    <resource name="CT_DocGrid" resource="Properties" tag="document">
+    <resource name="CT_DocGrid" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_DocGrid_type"/>
       <attribute name="linePitch" tokenid="ooxml:CT_DocGrid_linePitch"/>
       <attribute name="charSpace" tokenid="ooxml:CT_DocGrid_charSpace"/>
@@ -24682,19 +24682,19 @@
       <value name="continuationSeparator" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
       <value name="continuationNotice" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_continuationNotice">continuationNotice</value>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties" tag="header">
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
       <attribute name="r:id" tokenid="ooxml:CT_HdrFtrRef_id"/>
       <action name="end" action="handleHdrFtr"/>
     </resource>
-    <resource name="EG_HdrFtrReferences" resource="Properties" tag="header">
+    <resource name="EG_HdrFtrReferences" resource="Properties">
       <element name="headerReference" tokenid="ooxml:EG_HdrFtrReferences_headerReference"/>
       <element name="footerReference" tokenid="ooxml:EG_HdrFtrReferences_footerReference"/>
     </resource>
-    <resource name="CT_HdrFtr" resource="Stream" tag="header">
+    <resource name="CT_HdrFtr" resource="Stream">
       <action name="end" action="endParagraphGroup"/>
     </resource>
-    <resource name="EG_SectPrContents" resource="Properties" tag="section">
+    <resource name="EG_SectPrContents" resource="Properties">
       <element name="bidi" tokenid="ooxml:EG_SectPrContents_bidi"/>
       <element name="cols" tokenid="ooxml:EG_SectPrContents_cols"/>
       <element name="docGrid" tokenid="ooxml:EG_SectPrContents_docGrid"/>
@@ -24715,8 +24715,8 @@
       <element name="type" tokenid="ooxml:EG_SectPrContents_type"/>
       <element name="vAlign" tokenid="ooxml:EG_SectPrContents_vAlign"/>
     </resource>
-    <resource name="CT_SectPrBase" resource="Properties" tag="section"/>
-    <resource name="CT_SectPr" resource="Properties" tag="section">
+    <resource name="CT_SectPrBase" resource="Properties"/>
+    <resource name="CT_SectPr" resource="Properties">
       <element name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
       <action name="start" action="setLastParagraphInSection"/>
     </resource>
@@ -24731,7 +24731,7 @@
       <value tokenid="ooxml:Value_ST_BrClear_right">right</value>
       <value tokenid="ooxml:Value_ST_BrClear_all">all</value>
     </resource>
-    <resource name="CT_Br" resource="Properties" tag="content">
+    <resource name="CT_Br" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_Br_type"/>
       <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
       <action name="end" action="handleBreak"/>
@@ -24752,13 +24752,13 @@
       <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
       <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
     </resource>
-    <resource name="CT_PTab" resource="Properties" tag="paragraph">
+    <resource name="CT_PTab" resource="Properties">
       <attribute name="alignment" tokenid="ooxml:CT_PTab_alignment"/>
       <attribute name="relativeTo" tokenid="ooxml:CT_PTab_relativeTo"/>
       <attribute name="leader" tokenid="ooxml:CT_PTab_leader"/>
       <action name="end" action="tab"/>
     </resource>
-    <resource name="CT_Sym" resource="Properties" tag="character">
+    <resource name="CT_Sym" resource="Properties">
       <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
       <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
     </resource>
@@ -24777,29 +24777,29 @@
       <value name="owners" tokenid="ooxml:Value_wordprocessingml_ST_EdGrp_owners">owners</value>
       <value name="current" tokenid="ooxml:Value_wordprocessingml_ST_EdGrp_current">current</value>
     </resource>
-    <resource name="CT_Text" resource="Stream" tag="content">
+    <resource name="CT_Text" resource="Stream">
       <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
       <action name="characters" action="text"/>
     </resource>
-    <resource name="CT_FtnEdnRefChar" resource="Stream" tag="reference">
+    <resource name="CT_FtnEdnRefChar" resource="Stream">
       <action name="end" action="ftnednref"/>
     </resource>
-    <resource name="CT_FtnEdnSep" resource="Stream" tag="reference">
+    <resource name="CT_FtnEdnSep" resource="Stream">
       <action name="end" action="ftnednsep"/>
     </resource>
-    <resource name="CT_FtnEdnCont" resource="Stream" tag="reference">
+    <resource name="CT_FtnEdnCont" resource="Stream">
       <action name="end" action="ftnedncont"/>
     </resource>
-    <resource name="CT_PgNum" resource="Stream" tag="reference">
+    <resource name="CT_PgNum" resource="Stream">
       <action name="end" action="pgNum"/>
     </resource>
-    <resource name="CT_Cr" resource="Stream" tag="content">
+    <resource name="CT_Cr" resource="Stream">
       <action name="end" action="endOfParagraph"/>
     </resource>
-    <resource name="CT_Tab" resource="Stream" tag="content">
+    <resource name="CT_Tab" resource="Stream">
       <action name="end" action="tab"/>
     </resource>
-    <resource name="EG_RunInnerContent" resource="Stream" tag="content">
+    <resource name="EG_RunInnerContent" resource="Stream">
       <element name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
       <element name="t" tokenid="ooxml:EG_RunInnerContent_t"/>
       <element name="delText" tokenid="ooxml:EG_RunInnerContent_delText"/>
@@ -24833,7 +24833,7 @@
       <element name="ptab" tokenid="ooxml:EG_RunInnerContent_ptab"/>
       <element name="lastRenderedPageBreak" tokenid="ooxml:EG_RunInnerContent_lastRenderedPageBreak"/>
     </resource>
-    <resource name="CT_R" resource="Stream" tag="content">
+    <resource name="CT_R" resource="Stream">
       <action name="start" action="startCharacterGroup"/>
     </resource>
     <resource name="ST_Hint" resource="List">
@@ -24851,7 +24851,7 @@
       <value tokenid="ooxml:Value_ST_Theme_minorAscii">minorAscii</value>
       <value tokenid="ooxml:Value_ST_Theme_minorHAnsi">minorHAnsi</value>
     </resource>
-    <resource name="CT_Fonts" resource="Properties" tag="font">
+    <resource name="CT_Fonts" resource="Properties">
       <attribute name="hint" tokenid="ooxml:CT_Fonts_hint"/>
       <attribute name="ascii" tokenid="ooxml:CT_Fonts_ascii"/>
       <attribute name="hAnsi" tokenid="ooxml:CT_Fonts_hAnsi"/>
@@ -24862,7 +24862,7 @@
       <attribute name="eastAsiaTheme" tokenid="ooxml:CT_Fonts_eastAsiaTheme"/>
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
-    <resource name="EG_RPrBase" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" resource="Properties" tag="paragraph">
+    <resource name="EG_RPrBase" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" resource="Properties">
       <element name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <element name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <element name="b" tokenid="ooxml:EG_RPrBase_b"/>
@@ -24915,19 +24915,19 @@
       <element name="w14:stylisticSets" tokenid="ooxml:EG_RPrBase_w14_stylisticSets"/>
       <element name="w14:cntxtAlts" tokenid="ooxml:EG_RPrBase_w14_cntxtAlts"/>
     </resource>
-    <resource name="EG_RPrContent" resource="Properties" tag="character">
+    <resource name="EG_RPrContent" resource="Properties">
       <element name="rPrChange" tokenid="ooxml:EG_RPrContent_rPrChange"/>
     </resource>
-    <resource name="CT_RPr" resource="Properties" tag="character">
+    <resource name="CT_RPr" resource="Properties">
     </resource>
-    <resource name="CT_RPrOriginal" resource="Properties" tag="character"/>
-    <resource name="CT_ParaRPrOriginal" resource="Properties" tag="paragraph"/>
-    <resource name="CT_ParaRPr" resource="Properties" tag="redline">
+    <resource name="CT_RPrOriginal" resource="Properties"/>
+    <resource name="CT_ParaRPrOriginal" resource="Properties"/>
+    <resource name="CT_ParaRPr" resource="Properties">
       <element name="ins" tokenid="ooxml:CT_ParaRPr_ins"/>
       <element name="del" tokenid="ooxml:CT_ParaRPr_del"/>
       <element name="rPrChange" tokenid="ooxml:CT_ParaRPr_rPrChange"/>
     </resource>
-    <resource name="CT_ParaTrackChange" resource="Properties" tag="redline">
+    <resource name="CT_ParaTrackChange" resource="Properties">
       <action name="start" action="tokenproperty"/>
       <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:paratrackchange"/>
       <action name="start" action="clearProps"/>
@@ -24940,7 +24940,7 @@
       <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_right">right</value>
       <value name="rightVertical" tokenid="ooxml:Value_wordprocessingml_ST_RubyAlign_rightVertical">rightVertical</value>
     </resource>
-    <resource name="CT_RubyAlign" resource="Value" generated="yes" tag="character">
+    <resource name="CT_RubyAlign" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_RubyAlign_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24950,7 +24950,7 @@
       <value name="unlocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_unlocked">unlocked</value>
       <value name="sdtContentLocked" tokenid="ooxml:Value_wordprocessingml_ST_Lock_sdtContentLocked">sdtContentLocked</value>
     </resource>
-    <resource name="CT_Lock" resource="Value" generated="yes" tag="content">
+    <resource name="CT_Lock" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Lock_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24959,7 +24959,7 @@
       <value name="date" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_date">date</value>
       <value name="dateTime" tokenid="ooxml:Value_wordprocessingml_ST_SdtDateMappingType_dateTime">dateTime</value>
     </resource>
-    <resource name="CT_SdtDateMappingType" resource="Value" generated="yes" tag="content">
+    <resource name="CT_SdtDateMappingType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_SdtDateMappingType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24975,7 +24975,7 @@
       <value name="gregorianXlitEnglish" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitEnglish">gregorianXlitEnglish</value>
       <value name="gregorianXlitFrench" tokenid="ooxml:Value_wordprocessingml_ST_CalendarType_gregorianXlitFrench">gregorianXlitFrench</value>
     </resource>
-    <resource name="CT_CalendarType" resource="Value" generated="yes" tag="content">
+    <resource name="CT_CalendarType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -24984,7 +24984,7 @@
       <attribute name="xpath" tokenid="ooxml:CT_DataBinding_xpath"/>
       <attribute name="storeItemID" tokenid="ooxml:CT_DataBinding_storeItemID"/>
     </resource>
-    <resource xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" name="CT_SdtPr" resource="Properties" tag="field">
+    <resource xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" name="CT_SdtPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
       <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>
       <element name="lock" tokenid="ooxml:CT_SdtPr_lock"/>
@@ -25008,14 +25008,14 @@
       <element name="group" tokenid="ooxml:CT_SdtPr_group"/>
       <element name="bibliography" tokenid="ooxml:CT_SdtPr_bibliography"/>
     </resource>
-    <resource name="CT_SdtEndPr" resource="Properties" tag="field">
+    <resource name="CT_SdtEndPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtEndPr_rPr"/>
     </resource>
-    <resource name="CT_SdtContentRun" resource="Stream" tag="field"/>
-    <resource name="CT_SdtContentBlock" resource="Stream" tag="field"/>
-    <resource name="CT_SdtContentRow" resource="Stream" tag="field"/>
-    <resource name="CT_SdtContentCell" resource="Stream" tag="field"/>
-    <resource name="CT_SdtBlock" resource="Stream" tag="field">
+    <resource name="CT_SdtContentRun" resource="Stream"/>
+    <resource name="CT_SdtContentBlock" resource="Stream"/>
+    <resource name="CT_SdtContentRow" resource="Stream"/>
+    <resource name="CT_SdtContentCell" resource="Stream"/>
+    <resource name="CT_SdtBlock" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtBlock_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtBlock_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtBlock_sdtContent"/>
@@ -25023,76 +25023,76 @@
       <action name="start" action="startSdt"/>
       <action name="end" action="endSdt"/>
     </resource>
-    <resource name="CT_SdtRun" resource="Stream" tag="field">
+    <resource name="CT_SdtRun" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtRun_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtRun_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtRun_sdtContent"/>
       <action name="start" action="startSdt"/>
       <action name="end" action="endSdt"/>
     </resource>
-    <resource name="CT_SdtCell" resource="Stream" tag="field">
+    <resource name="CT_SdtCell" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtCell_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtCell_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtCell_sdtContent"/>
     </resource>
-    <resource name="CT_SdtRow" resource="Stream" tag="field">
+    <resource name="CT_SdtRow" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtRow_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtRow_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtRow_sdtContent"/>
     </resource>
-    <resource name="CT_SdtDropDownList" resource="Properties" tag="field">
+    <resource name="CT_SdtDropDownList" resource="Properties">
       <element name="listItem" tokenid="ooxml:CT_SdtDropDownList_listItem"/>
     </resource>
-    <resource name="CT_SdtDate" resource="Properties" tag="field">
+    <resource name="CT_SdtDate" resource="Properties">
       <attribute name="fullDate" tokenid="ooxml:CT_SdtDate_fullDate"/>
       <element name="dateFormat" tokenid="ooxml:CT_SdtDate_dateFormat"/>
       <element name="lid" tokenid="ooxml:CT_SdtDate_lid"/>
     </resource>
-    <resource name="CT_SdtDocPart" resource="Properties" tag="field">
+    <resource name="CT_SdtDocPart" resource="Properties">
       <element name="docPartGallery" tokenid="ooxml:CT_SdtDocPart_docPartGallery"/>
       <element name="docPartCategory" tokenid="ooxml:CT_SdtDocPart_docPartCategory"/>
       <element name="docPartUnique" tokenid="ooxml:CT_SdtDocPart_docPartUnique"/>
     </resource>
-    <resource name="CT_SdtListItem" resource="Properties" tag="field">
+    <resource name="CT_SdtListItem" resource="Properties">
       <attribute name="displayText" tokenid="ooxml:CT_SdtListItem_displayText"/>
       <attribute name="value" tokenid="ooxml:CT_SdtListItem_value"/>
     </resource>
-    <resource name="CT_Attr" resource="Properties" tag="content">
+    <resource name="CT_Attr" resource="Properties">
       <attribute name="uri" tokenid="ooxml:CT_Attr_uri"/>
       <attribute name="name" tokenid="ooxml:CT_Attr_name"/>
       <attribute name="val" tokenid="ooxml:CT_Attr_val"/>
     </resource>
-    <resource name="CT_CustomXmlRun" resource="Properties" tag="content">
+    <resource name="CT_CustomXmlRun" resource="Properties">
       <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlRun_customXmlPr"/>
       <attribute name="uri" tokenid="ooxml:CT_CustomXmlRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_CustomXmlRun_element"/>
     </resource>
-    <resource name="CT_CustomXmlBlock" resource="Properties" tag="content">
+    <resource name="CT_CustomXmlBlock" resource="Properties">
       <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlBlock_customXmlPr"/>
       <attribute name="uri" tokenid="ooxml:CT_CustomXmlBlock_uri"/>
       <attribute name="element" tokenid="ooxml:CT_CustomXmlBlock_element"/>
     </resource>
-    <resource name="CT_CustomXmlCell" resource="Properties" tag="content">
+    <resource name="CT_CustomXmlCell" resource="Properties">
       <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlCell_customXmlPr"/>
       <attribute name="uri" tokenid="ooxml:CT_CustomXmlCell_uri"/>
       <attribute name="element" tokenid="ooxml:CT_CustomXmlCell_element"/>
     </resource>
-    <resource name="CT_CustomXmlRow" resource="Properties" tag="content">
+    <resource name="CT_CustomXmlRow" resource="Properties">
       <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlRow_customXmlPr"/>
       <attribute name="uri" tokenid="ooxml:CT_CustomXmlRow_uri"/>
       <attribute name="element" tokenid="ooxml:CT_CustomXmlRow_element"/>
     </resource>
-    <resource name="CT_SmartTagRun" resource="Properties" tag="content">
+    <resource name="CT_SmartTagRun" resource="Properties">
       <element name="smartTagPr" tokenid="ooxml:CT_SmartTagRun_smartTagPr"/>
       <attribute name="uri" tokenid="ooxml:CT_SmartTagRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
-    <resource name="EG_PContent" resource="Properties" tag="content">
+    <resource name="EG_PContent" resource="Properties">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
     </resource>
-    <resource name="CT_P" resource="Stream" tag="content">
+    <resource name="CT_P" resource="Stream">
       <action name="start" action="handleLastParagraphInSection"/>
       <action name="start" action="startParagraphGroup"/>
       <action name="start" action="setHandle"/>
@@ -25105,15 +25105,15 @@
       <value tokenid="ooxml:Value_ST_TblWidth_dxa">dxa</value>
       <value tokenid="ooxml:Value_ST_TblWidth_auto">auto</value>
     </resource>
-    <resource name="CT_Height" resource="Properties" tag="attribute">
+    <resource name="CT_Height" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Height_val"/>
       <attribute name="hRule" tokenid="ooxml:CT_Height_hRule"/>
     </resource>
-    <resource name="CT_TblWidth" resource="Properties" tag="table">
+    <resource name="CT_TblWidth" resource="Properties">
       <attribute name="w" tokenid="ooxml:CT_TblWidth_w"/>
       <attribute name="type" tokenid="ooxml:CT_TblWidth_type"/>
     </resource>
-    <resource name="CT_TblPPr" resource="Properties" tag="table">
+    <resource name="CT_TblPPr" resource="Properties">
       <attribute name="vertAnchor" tokenid="ooxml:CT_TblPPr_vertAnchor"/>
       <attribute name="tblpYSpec" tokenid="ooxml:CT_TblPPr_tblpYSpec"/>
       <attribute name="horzAnchor" tokenid="ooxml:CT_TblPPr_horzAnchor"/>
@@ -25125,19 +25125,19 @@
       <attribute name="topFromText" tokenid="ooxml:CT_TblPPr_topFromText"/>
       <attribute name="bottomFromText" tokenid="ooxml:CT_TblPPr_bottomFromText"/>
     </resource>
-    <resource name="CT_TblGridCol" resource="Value" tag="table">
+    <resource name="CT_TblGridCol" resource="Value">
       <attribute name="w" tokenid="ooxml:CT_TblGridCol_w" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="CT_TblGridBase" resource="Properties" tag="table">
+    <resource name="CT_TblGridBase" resource="Properties">
       <element name="gridCol" tokenid="ooxml:CT_TblGridBase_gridCol"/>
     </resource>
-    <resource name="CT_TblGrid" resource="Properties" tag="table">
+    <resource name="CT_TblGrid" resource="Properties">
       <element name="tblGridChange" tokenid="ooxml:CT_TblGrid_tblGridChange"/>
       <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_TcBorders" resource="Properties" tag="table">
+    <resource name="CT_TcBorders" resource="Properties">
       <element name="top" tokenid="ooxml:CT_TcBorders_top"/>
       <element name="start" tokenid="ooxml:CT_TcBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TcBorders_left"/>
@@ -25149,7 +25149,7 @@
       <element name="tl2br" tokenid="ooxml:CT_TcBorders_tl2br"/>
       <element name="tr2bl" tokenid="ooxml:CT_TcBorders_tr2bl"/>
     </resource>
-    <resource name="CT_TcMar" resource="Properties" tag="table">
+    <resource name="CT_TcMar" resource="Properties">
       <element name="top" tokenid="ooxml:CT_TcMar_top"/>
       <element name="start" tokenid="ooxml:CT_TcMar_start"/>
       <element name="left" tokenid="ooxml:CT_TcMar_left"/>
@@ -25162,13 +25162,13 @@
       <value tokenid="ooxml:Value_ST_Merge_restart">restart</value>
       <default tokenid="ooxml:Value_ST_Merge_continue"/>
     </resource>
-    <resource name="CT_VMerge" resource="Value" tag="table">
+    <resource name="CT_VMerge" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VMerge_val" action="setValue"/>
     </resource>
-    <resource name="CT_HMerge" resource="Value" tag="table">
+    <resource name="CT_HMerge" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_HMerge_val" action="setValue"/>
     </resource>
-    <resource name="CT_TcPrBase" resource="Properties" tag="table">
+    <resource name="CT_TcPrBase" resource="Properties">
       <element name="cnfStyle" tokenid="ooxml:CT_TcPrBase_cnfStyle"/>
       <element name="tcW" tokenid="ooxml:CT_TcPrBase_tcW"/>
       <element name="gridSpan" tokenid="ooxml:CT_TcPrBase_gridSpan"/>
@@ -25185,12 +25185,12 @@
       <element name="cellDel" tokenid="ooxml:CT_TcPrBase_cellDel"/>
       <element name="cellIns" tokenid="ooxml:CT_TcPrBase_cellIns"/>
     </resource>
-    <resource name="CT_TcPr" resource="Properties" tag="table">
+    <resource name="CT_TcPr" resource="Properties">
       <element name="tcPrChange" tokenid="ooxml:CT_TcPr_tcPrChange"/>
       <action name="end" action="propagateCellProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_TcPrInner" resource="Properties" tag="table"/>
+    <resource name="CT_TcPrInner" resource="Properties"/>
     <resource name="CT_Tc" resource="TextTableCell">
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
@@ -25198,11 +25198,11 @@
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_Cnf" resource="String" generated="yes"/>
-    <resource name="CT_Cnf" resource="Value" generated="yes" tag="content">
+    <resource name="CT_Cnf" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_Cnf_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_TrPrBase" resource="Properties" tag="table">
+    <resource name="CT_TrPrBase" resource="Properties">
       <element name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <element name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
 <!--      <element name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/> -->
@@ -25219,14 +25219,14 @@
     <resource name="CT_TrPrBaseGridBefore" resource="TextTableRow">
       <attribute name="val" tokenid="ooxml:CT_TrPrBase_gridBefore" action="handleGridBefore"/>
     </resource>
-    <resource name="CT_TrPr" resource="Properties" tag="table">
+    <resource name="CT_TrPr" resource="Properties">
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
       <element name="del" tokenid="ooxml:CT_TrPr_del"/>
       <element name="trPrChange" tokenid="ooxml:CT_TrPr_trPrChange"/>
       <action name="end" action="propagateRowProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_Row" resource="TextTableRow" tag="table">
+    <resource name="CT_Row" resource="TextTableRow">
       <action name="start" action="startRow"/>
       <action name="end" action="sendRowProperties"/>
       <action name="end" action="sendTableProperties"/>
@@ -25236,17 +25236,17 @@
       <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_fixed">fixed</value>
       <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_autofit">autofit</value>
     </resource>
-    <resource name="CT_TblLayoutType" resource="Value" tag="table">
+    <resource name="CT_TblLayoutType" resource="Value">
       <attribute name="type" tokenid="ooxml:CT_TblLayoutType_type" action="setValue"/>
     </resource>
     <resource name="ST_TblOverlap" resource="List">
       <value tokenid="ooxml:Value_ST_TblOverlap_never">never</value>
       <value tokenid="ooxml:Value_ST_TblOverlap_overlap">overlap</value>
     </resource>
-    <resource name="CT_TblOverlap" resource="Value" tag="table">
+    <resource name="CT_TblOverlap" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TblOverlap_val" action="setValue"/>
     </resource>
-    <resource name="CT_TblCellMar" resource="Properties" tag="table">
+    <resource name="CT_TblCellMar" resource="Properties">
       <element name="top" tokenid="ooxml:CT_TblCellMar_top"/>
       <element name="start" tokenid="ooxml:CT_TblCellMar_start"/>
       <element name="left" tokenid="ooxml:CT_TblCellMar_left"/>
@@ -25254,7 +25254,7 @@
       <element name="end" tokenid="ooxml:CT_TblCellMar_end"/>
       <element name="right" tokenid="ooxml:CT_TblCellMar_right"/>
     </resource>
-    <resource name="CT_TblBorders" resource="Properties" tag="table">
+    <resource name="CT_TblBorders" resource="Properties">
       <element name="top" tokenid="ooxml:CT_TblBorders_top"/>
       <element name="start" tokenid="ooxml:CT_TblBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TblBorders_left"/>
@@ -25264,7 +25264,7 @@
       <element name="insideH" tokenid="ooxml:CT_TblBorders_insideH"/>
       <element name="insideV" tokenid="ooxml:CT_TblBorders_insideV"/>
     </resource>
-    <resource name="CT_TblPrBase" resource="Properties" tag="table">
+    <resource name="CT_TblPrBase" resource="Properties">
       <element name="tblStyle" tokenid="ooxml:CT_TblPrBase_tblStyle"/>
       <element name="tblpPr" tokenid="ooxml:CT_TblPrBase_tblpPr"/>
       <element name="tblOverlap" tokenid="ooxml:CT_TblPrBase_tblOverlap"/>
@@ -25281,29 +25281,29 @@
       <element name="tblCellMar" tokenid="ooxml:CT_TblPrBase_tblCellMar"/>
       <element name="tblLook" tokenid="ooxml:CT_TblPrBase_tblLook"/>
     </resource>
-    <resource name="CT_TblPr" resource="Properties" tag="table">
+    <resource name="CT_TblPr" resource="Properties">
       <element name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
       <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
     </resource>
-    <resource name="CT_Tbl" resource="TextTable" tag="table"/>
+    <resource name="CT_Tbl" resource="TextTable"/>
     <resource name="ST_FtnPos" resource="List">
       <value tokenid="ooxml:Value_ST_FtnPos_pageBottom">pageBottom</value>
       <value tokenid="ooxml:Value_ST_FtnPos_beneathText">beneathText</value>
       <value tokenid="ooxml:Value_ST_FtnPos_sectEnd">sectEnd</value>
       <value tokenid="ooxml:Value_ST_FtnPos_docEnd">docEnd</value>
     </resource>
-    <resource name="CT_FtnPos" resource="Value" tag="reference">
+    <resource name="CT_FtnPos" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FtnPos_val" action="setValue"/>
     </resource>
     <resource name="ST_EdnPos" resource="List">
       <value tokenid="ooxml:Value_ST_EdnPos_sectEnd">sectEnd</value>
       <value tokenid="ooxml:Value_ST_EdnPos_docEnd">docEnd</value>
     </resource>
-    <resource name="CT_EdnPos" resource="Value" tag="reference">
+    <resource name="CT_EdnPos" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_EdnPos_val" action="setValue"/>
     </resource>
-    <resource name="CT_NumFmt" resource="Value" tag="numbering">
+    <resource name="CT_NumFmt" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_NumFmt_val" action="setValue"/>
     </resource>
     <resource name="ST_RestartNumber" resource="List">
@@ -25311,42 +25311,42 @@
       <value tokenid="ooxml:Value_ST_RestartNumber_eachSect">eachSect</value>
       <value tokenid="ooxml:Value_ST_RestartNumber_eachPage">eachPage</value>
     </resource>
-    <resource name="CT_NumRestart" resource="Value" tag="numbering">
+    <resource name="CT_NumRestart" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_NumRestart_val" action="setValue"/>
     </resource>
-    <resource name="CT_FtnEdnRef" resource="Properties" tag="reference">
+    <resource name="CT_FtnEdnRef" resource="Properties">
       <attribute name="customMarkFollows" tokenid="ooxml:CT_FtnEdnRef_customMarkFollows"/>
       <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id" action="setXNoteId"/>
       <action name="end" action="handleXNotes"/>
     </resource>
-    <resource name="CT_FtnEdnSepRef" resource="Properties" tag="reference">
+    <resource name="CT_FtnEdnSepRef" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_FtnEdnSepRef_id"/>
     </resource>
-    <resource name="CT_FtnEdn" resource="XNote" tag="reference">
+    <resource name="CT_FtnEdn" resource="XNote">
       <attribute name="type" tokenid="ooxml:CT_FtnEdn_type" action="checkType"/>
       <attribute name="id" tokenid="ooxml:CT_FtnEdn_id" action="checkId"/>
       <action name="start" action="propagateCharacterProperties"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
-    <resource name="CT_CommentRef" resource="Properties" tag="reference">
+    <resource name="CT_CommentRef" resource="Properties">
       <action name="end" action="handleComment"/>
     </resource>
-    <resource name="EG_FtnEdnNumProps" resource="Properties" tag="reference">
+    <resource name="EG_FtnEdnNumProps" resource="Properties">
       <element name="numStart" tokenid="ooxml:EG_FtnEdnNumProps_numStart"/>
       <element name="numRestart" tokenid="ooxml:EG_FtnEdnNumProps_numRestart"/>
     </resource>
-    <resource name="CT_FtnProps" resource="Properties" tag="reference">
+    <resource name="CT_FtnProps" resource="Properties">
       <element name="pos" tokenid="ooxml:CT_FtnProps_pos"/>
       <element name="numFmt" tokenid="ooxml:CT_FtnProps_numFmt"/>
     </resource>
-    <resource name="CT_EdnProps" resource="Properties" tag="reference">
+    <resource name="CT_EdnProps" resource="Properties">
       <element name="pos" tokenid="ooxml:CT_EdnProps_pos"/>
       <element name="numFmt" tokenid="ooxml:CT_EdnProps_numFmt"/>
     </resource>
-    <resource name="CT_FtnDocProps" resource="Properties" tag="reference">
+    <resource name="CT_FtnDocProps" resource="Properties">
       <element name="footnote" tokenid="ooxml:CT_FtnDocProps_footnote"/>
     </resource>
-    <resource name="CT_EdnDocProps" resource="Properties" tag="reference">
+    <resource name="CT_EdnDocProps" resource="Properties">
       <element name="endnote" tokenid="ooxml:CT_EdnDocProps_endnote"/>
     </resource>
     <resource name="ST_MailMergeSourceType" resource="List" generated="yes">
@@ -25360,11 +25360,11 @@
       <value name="legacy" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_legacy">legacy</value>
       <value name="master" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_master">master</value>
     </resource>
-    <resource name="CT_MailMergeSourceType" resource="Value" generated="yes" tag="mailmerge">
+    <resource name="CT_MailMergeSourceType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_MailMergeSourceType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_MailMerge" resource="Properties" tag="mailmerge">
+    <resource name="CT_MailMerge" resource="Properties">
       <element name="mainDocumentType" tokenid="ooxml:CT_MailMerge_mainDocumentType"/>
       <element name="linkToQuery" tokenid="ooxml:CT_MailMerge_linkToQuery"/>
       <element name="dataType" tokenid="ooxml:CT_MailMerge_dataType"/>
@@ -25395,11 +25395,11 @@
       <value name="1800x1440" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1800x1440">1800x1440</value>
       <value name="1920x1200" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1920x1200">1920x1200</value>
     </resource>
-    <resource name="CT_TargetScreenSz" resource="Value" generated="yes" tag="settings">
+    <resource name="CT_TargetScreenSz" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_TargetScreenSz_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_Compat" resource="Properties" tag="settings">
+    <resource name="CT_Compat" resource="Properties">
       <element name="useSingleBorderforContiguousCells" tokenid="ooxml:CT_Compat_useSingleBorderforContiguousCells"/>
       <element name="wpJustification" tokenid="ooxml:CT_Compat_wpJustification"/>
       <element name="noTabHangInd" tokenid="ooxml:CT_Compat_noTabHangInd"/>
@@ -25467,16 +25467,16 @@
       <element name="cachedColBalance" tokenid="ooxml:CT_Compat_cachedColBalance"/>
       <element name="compatSetting" tokenid="ooxml:CT_Compat_compatSetting"/>
     </resource>
-    <resource name="CT_CompatSetting" resource="Properties" tag="document">
+    <resource name="CT_CompatSetting" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_CompatSetting_name"/>
       <attribute name="uri" tokenid="ooxml:CT_CompatSetting_uri"/>
       <attribute name="val" tokenid="ooxml:CT_CompatSetting_val"/>
     </resource>
-    <resource name="CT_DocVar" resource="Properties" tag="document">
+    <resource name="CT_DocVar" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_DocVar_name"/>
       <attribute name="val" tokenid="ooxml:CT_DocVar_val"/>
     </resource>
-    <resource name="CT_DocRsids" resource="Properties" tag="redline">
+    <resource name="CT_DocRsids" resource="Properties">
       <element name="rsidRoot" tokenid="ooxml:CT_DocRsids_rsidRoot"/>
       <element name="rsid" tokenid="ooxml:CT_DocRsids_rsid"/>
     </resource>
@@ -25485,25 +25485,25 @@
       <value name="compressPunctuation" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuation">compressPunctuation</value>
       <value name="compressPunctuationAndJapaneseKana" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuationAndJapaneseKana">compressPunctuationAndJapaneseKana</value>
     </resource>
-    <resource name="CT_CharacterSpacing" resource="Value" generated="yes" tag="character">
+    <resource name="CT_CharacterSpacing" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_CharacterSpacing_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_SaveThroughXslt" resource="Properties" tag="settings">
+    <resource name="CT_SaveThroughXslt" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_SaveThroughXslt_r_id"/>
       <attribute name="solutionID" tokenid="ooxml:CT_SaveThroughXslt_solutionID"/>
     </resource>
-    <resource name="CT_RPrDefault" resource="Properties" tag="character">
+    <resource name="CT_RPrDefault" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_RPrDefault_rPr"/>
     </resource>
-    <resource name="CT_PPrDefault" resource="Properties" tag="paragraph">
+    <resource name="CT_PPrDefault" resource="Properties">
       <element name="pPr" tokenid="ooxml:CT_PPrDefault_pPr"/>
     </resource>
-    <resource name="CT_DocDefaults" resource="Properties" tag="document">
+    <resource name="CT_DocDefaults" resource="Properties">
       <element name="pPrDefault" tokenid="ooxml:CT_DocDefaults_pPrDefault"/>
       <element name="rPrDefault" tokenid="ooxml:CT_DocDefaults_rPrDefault"/>
     </resource>
-    <resource name="CT_LatentStyles" resource="Properties" tag="document">
+    <resource name="CT_LatentStyles" resource="Properties">
       <attribute name="defLockedState" tokenid="ooxml:CT_LatentStyles_defLockedState"/>
       <attribute name="defUIPriority" tokenid="ooxml:CT_LatentStyles_defUIPriority"/>
       <attribute name="defSemiHidden" tokenid="ooxml:CT_LatentStyles_defSemiHidden"/>
@@ -25512,7 +25512,7 @@
       <attribute name="count" tokenid="ooxml:CT_LatentStyles_count"/>
       <element name="lsdException" tokenid="ooxml:CT_LatentStyles_lsdException"/>
     </resource>
-    <resource name="CT_LsdException" resource="Properties" tag="document">
+    <resource name="CT_LsdException" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_LsdException_name"/>
       <attribute name="locked" tokenid="ooxml:CT_LsdException_locked"/>
       <attribute name="uiPriority" tokenid="ooxml:CT_LsdException_uiPriority"/>
@@ -25540,10 +25540,10 @@
       <attribute name="h" tokenid="ooxml:CT_ReadingModeInkLockDown_h"/>
       <attribute name="fontSz" tokenid="ooxml:CT_ReadingModeInkLockDown_fontSz"/>
     </resource>
-    <resource name="CT_WriteProtection" resource="Properties" tag="document">
+    <resource name="CT_WriteProtection" resource="Properties">
       <attribute name="recommended" tokenid="ooxml:CT_WriteProtection_recommended"/>
     </resource>
-    <resource name="CT_Settings" resource="PropertyTable" tokenid="ooxml:SETTINGS" tag="settings">
+    <resource name="CT_Settings" resource="PropertyTable" tokenid="ooxml:SETTINGS">
       <element name="writeProtection" tokenid="ooxml:CT_Settings_writeProtection"/>
       <element name="view" tokenid="ooxml:CT_Settings_view"/>
       <element name="zoom" tokenid="ooxml:CT_Settings_zoom"/>
@@ -25647,7 +25647,7 @@
       <value name="off" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_off">off</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_auto">auto</value>
     </resource>
-    <resource name="CT_FrameScrollbar" resource="Value" generated="yes" tag="frame">
+    <resource name="CT_FrameScrollbar" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FrameScrollbar_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -25656,7 +25656,7 @@
       <value name="cols" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_cols">cols</value>
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_FrameLayout_none">none</value>
     </resource>
-    <resource name="CT_FrameLayout" resource="Value" generated="yes" tag="frame">
+    <resource name="CT_FrameLayout" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_FrameLayout_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -25665,20 +25665,20 @@
       <value name="space" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_space">space</value>
       <value name="nothing" tokenid="ooxml:Value_wordprocessingml_ST_LevelSuffix_nothing">nothing</value>
     </resource>
-    <resource name="CT_LevelSuffix" resource="Value" generated="yes" tag="numbering">
+    <resource name="CT_LevelSuffix" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_LevelSuffix_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_LevelText" resource="Properties" tag="numbering">
+    <resource name="CT_LevelText" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_LevelText_val"/>
       <attribute name="null" tokenid="ooxml:CT_LevelText_null"/>
     </resource>
-    <resource name="CT_LvlLegacy" resource="Properties" tag="numbering">
+    <resource name="CT_LvlLegacy" resource="Properties">
       <attribute name="legacy" tokenid="ooxml:CT_LvlLegacy_legacy"/>
       <attribute name="legacySpace" tokenid="ooxml:CT_LvlLegacy_legacySpace"/>
       <attribute name="legacyIndent" tokenid="ooxml:CT_LvlLegacy_legacyIndent"/>
     </resource>
-    <resource name="CT_Lvl" resource="Properties" tag="numbering">
+    <resource name="CT_Lvl" resource="Properties">
       <element name="start" tokenid="ooxml:CT_Lvl_start"/>
       <element name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
       <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
@@ -25695,19 +25695,19 @@
       <attribute name="tplc" tokenid="ooxml:CT_Lvl_tplc"/>
       <attribute name="tentative" tokenid="ooxml:CT_Lvl_tentative"/>
     </resource>
-    <resource name="ST_MultiLevelType" resource="List" tag="numbering">
+    <resource name="ST_MultiLevelType" resource="List">
       <value tokenid="ooxml:Value_ST_MultiLevelType_singleLevel">singleLevel</value>
       <value tokenid="ooxml:Value_ST_MultiLevelType_multilevel">multilevel</value>
       <value tokenid="ooxml:Value_ST_MultiLevelType_hybridMultilevel">hybridMultilevel</value>
     </resource>
-    <resource name="CT_MultiLevelType" resource="Value" tag="numbering">
+    <resource name="CT_MultiLevelType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MultiLevelType_val" action="setValue"/>
     </resource>
-    <resource name="CT_NumPicBullet" resource="Properties" tag="numbering">
+    <resource name="CT_NumPicBullet" resource="Properties">
       <element name="pict" tokenid="ooxml:CT_NumPicBullet_pict"/>
       <attribute name="numPicBulletId" tokenid="ooxml:CT_NumPicBullet_numPicBulletId"/>
     </resource>
-    <resource name="CT_AbstractNum" resource="Properties" tag="numbering">
+    <resource name="CT_AbstractNum" resource="Properties">
       <element name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
       <element name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
       <element name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
@@ -25717,17 +25717,17 @@
       <element name="lvl" tokenid="ooxml:CT_AbstractNum_lvl"/>
       <attribute name="abstractNumId" tokenid="ooxml:CT_AbstractNum_abstractNumId"/>
     </resource>
-    <resource name="CT_NumLvl" resource="Properties" tag="numbering">
+    <resource name="CT_NumLvl" resource="Properties">
       <element name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
       <element name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
       <attribute name="ilvl" tokenid="ooxml:CT_NumLvl_ilvl"/>
     </resource>
-    <resource name="CT_Num" resource="Properties" tag="numbering">
+    <resource name="CT_Num" resource="Properties">
       <element name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
       <element name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
       <attribute name="numId" tokenid="ooxml:CT_Num_numId"/>
     </resource>
-    <resource name="CT_Numbering" resource="PropertyTable" tokenid="ooxml:NUMBERING" tag="numbering">
+    <resource name="CT_Numbering" resource="PropertyTable" tokenid="ooxml:NUMBERING">
       <element name="numPicBullet" tokenid="ooxml:CT_Numbering_numPicBullet"/>
       <element name="abstractNum" tokenid="ooxml:CT_Numbering_abstractNum"/>
       <element name="num" tokenid="ooxml:CT_Numbering_num"/>
@@ -25748,7 +25748,7 @@
       <value tokenid="12">seCell</value>
       <value tokenid="13">swCell</value>
     </resource>
-    <resource name="CT_Style_tblStylePr" resource="Properties" tag="style">
+    <resource name="CT_Style_tblStylePr" resource="Properties">
       <element name="pPr" tokenid="ooxml:CT_PPrBase"/>
       <element name="rPr" tokenid="ooxml:EG_RPrBase"/>
       <element name="tblPr" tokenid="ooxml:CT_TblPrBase"/>
@@ -25762,7 +25762,7 @@
       <value tokenid="3">table</value>
       <value tokenid="4">numbering</value>
     </resource>
-    <resource name="CT_Style" resource="Properties" tag="style">
+    <resource name="CT_Style" resource="Properties">
       <element name="name" tokenid="ooxml:CT_Style_name"/>
       <element name="aliases" tokenid="ooxml:CT_Style_aliases"/>
       <element name="basedOn" tokenid="ooxml:CT_Style_basedOn"/>
@@ -25790,9 +25790,9 @@
       <attribute name="default" tokenid="ooxml:CT_Style_default"/>
       <attribute name="customStyle" tokenid="ooxml:CT_Style_customStyle"/>
     </resource>
-    <resource name="CT_Styles" resource="Table" tokenid="ooxml:STYLESHEET" tag="style"/>
+    <resource name="CT_Styles" resource="Table" tokenid="ooxml:STYLESHEET"/>
     <resource name="ST_Panose" resource="Hex"/>
-    <resource name="CT_Panose" resource="Value" tag="font">
+    <resource name="CT_Panose" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Panose_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
@@ -25808,7 +25808,7 @@
       <value tokenid="ooxml:Value_ST_FontFamily_swiss">swiss</value>
       <value tokenid="ooxml:Value_ST_FontFamily_auto">auto</value>
     </resource>
-    <resource name="CT_FontFamily" resource="Value" tag="font">
+    <resource name="CT_FontFamily" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_FontFamily_val" action="setValue"/>
     </resource>
     <resource name="ST_Pitch" resource="List">
@@ -25816,10 +25816,10 @@
       <value tokenid="ooxml:Value_ST_Pitch_variable">variable</value>
       <value tokenid="ooxml:Value_ST_Pitch_default">default</value>
     </resource>
-    <resource name="CT_Pitch" resource="Properties" tag="font">
+    <resource name="CT_Pitch" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Pitch_val"/>
     </resource>
-    <resource name="CT_FontSig" resource="Properties" tag="font">
+    <resource name="CT_FontSig" resource="Properties">
       <attribute name="usb0" tokenid="ooxml:CT_FontSig_usb0"/>
       <attribute name="usb1" tokenid="ooxml:CT_FontSig_usb1"/>
       <attribute name="usb2" tokenid="ooxml:CT_FontSig_usb2"/>
@@ -25827,12 +25827,12 @@
       <attribute name="csb0" tokenid="ooxml:CT_FontSig_csb0"/>
       <attribute name="csb1" tokenid="ooxml:CT_FontSig_csb1"/>
     </resource>
-    <resource name="CT_FontRel" resource="Properties" tag="font">
+    <resource name="CT_FontRel" resource="Properties">
       <attribute name="fontKey" tokenid="ooxml:CT_FontRel_fontKey"/>
       <attribute name="subsetted" tokenid="ooxml:CT_FontRel_subsetted"/>
       <action name="start" action="handleFontRel"/>
     </resource>
-    <resource name="CT_Font" resource="Properties" tag="font">
+    <resource name="CT_Font" resource="Properties">
       <element name="altName" tokenid="ooxml:CT_Font_altName"/>
       <element name="panose1" tokenid="ooxml:CT_Font_panose1"/>
       <element name="charset" tokenid="ooxml:CT_Font_charset"/>
@@ -25847,8 +25847,8 @@
       <element name="embedBoldItalic" tokenid="ooxml:CT_Font_embedBoldItalic"/>
       <attribute name="name" tokenid="ooxml:CT_Font_name"/>
     </resource>
-    <resource name="CT_FontsList" resource="Table" tokenid="ooxml:FONTTABLE" tag="font"/>
-    <resource name="EG_RunLevelElts" resource="Stream" tag="character">
+    <resource name="CT_FontsList" resource="Table" tokenid="ooxml:FONTTABLE"/>
+    <resource name="EG_RunLevelElts" resource="Stream">
       <element name="proofErr" tokenid="ooxml:EG_RunLevelElts_proofErr"/>
       <element name="permStart" tokenid="ooxml:EG_RunLevelElts_permStart"/>
       <element name="permEnd" tokenid="ooxml:EG_RunLevelElts_permEnd"/>
@@ -25859,7 +25859,7 @@
       <element name="moveFrom" tokenid="ooxml:EG_RunLevelElts_moveFrom"/>
       <element name="moveTo" tokenid="ooxml:EG_RunLevelElts_moveTo"/>
     </resource>
-    <resource name="CT_Body" resource="Stream" tag="content">
+    <resource name="CT_Body" resource="Stream">
       <action name="start" action="startSectionGroup"/>
       <!--
       <action name="start" action="footnoteSeparator"/>
@@ -25871,7 +25871,7 @@
       <action name="end" action="endParagraphGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
-    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_ShapeDefaults" resource="Properties" tag="shape">
+    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_ShapeDefaults" resource="Properties">
       <element name="v:fill" tokenid="ooxml:CT_ShapeDefaults_v_fill"/>
       <element name="v:stroke" tokenid="ooxml:CT_ShapeDefaults_v_stroke"/>
       <element name="v:textbox" tokenid="ooxml:CT_ShapeDefaults_v_textbox"/>
@@ -25886,15 +25886,15 @@
       <attribute name="strokecolor" tokenid="ooxml:CT_ShapeDefaults_strokecolor"/>
       <attribute name="allowincell" tokenid="ooxml:CT_ShapeDefaults_allowincell"/>
     </resource>
-    <resource name="CT_Comments" resource="Stream" tag="content">
+    <resource name="CT_Comments" resource="Stream">
       <action name="start" action="startSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
-    <resource name="CT_Footnotes" resource="Stream" tag="reference"/>
-    <resource name="footnotes" resource="Stream" tag="reference"/>
-    <resource name="CT_Endnotes" resource="Stream" tag="reference"/>
-    <resource name="endnotes" resource="Stream" tag="reference"/>
-    <resource name="CT_SmartTagType" resource="Properties" tag="content">
+    <resource name="CT_Footnotes" resource="Stream"/>
+    <resource name="footnotes" resource="Stream"/>
+    <resource name="CT_Endnotes" resource="Stream"/>
+    <resource name="endnotes" resource="Stream"/>
+    <resource name="CT_SmartTagType" resource="Properties">
       <attribute name="namespaceuri" tokenid="ooxml:CT_SmartTagType_namespaceuri"/>
       <attribute name="name" tokenid="ooxml:CT_SmartTagType_name"/>
       <attribute name="url" tokenid="ooxml:CT_SmartTagType_url"/>
@@ -25923,7 +25923,7 @@
       <value name="p" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_p">p</value>
       <value name="pg" tokenid="ooxml:Value_wordprocessingml_ST_DocPartBehavior_pg">pg</value>
     </resource>
-    <resource name="CT_DocPartBehavior" resource="Value" generated="yes" tag="document">
+    <resource name="CT_DocPartBehavior" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_DocPartBehavior_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -25936,7 +25936,7 @@
       <value name="formFld" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_formFld">formFld</value>
       <value name="bbPlcHdr" tokenid="ooxml:Value_wordprocessingml_ST_DocPartType_bbPlcHdr">bbPlcHdr</value>
     </resource>
-    <resource name="CT_DocPartType" resource="Value" generated="yes" tag="document">
+    <resource name="CT_DocPartType" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_DocPartType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
@@ -25980,24 +25980,24 @@
       <value name="custom4" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom4">custom4</value>
       <value name="custom5" tokenid="ooxml:Value_wordprocessingml_ST_DocPartGallery_custom5">custom5</value>
     </resource>
-    <resource name="CT_DocPartGallery" resource="Value" generated="yes" tag="document">
+    <resource name="CT_DocPartGallery" resource="Value" generated="yes">
       <attribute name="val" tokenid="ooxml:CT_DocPartGallery_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_DocPartName" resource="Properties" tag="document">
+    <resource name="CT_DocPartName" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocPartName_val"/>
       <attribute name="decorated" tokenid="ooxml:CT_DocPartName_decorated"/>
     </resource>
-    <resource name="settings" resource="Stream" tag="settings">
+    <resource name="settings" resource="Stream">
       <element name="settings" tokenid="ooxml:settings_settings"/>
     </resource>
-    <resource name="fonts" resource="Stream" tag="font">
+    <resource name="fonts" resource="Stream">
       <element name="fonts" tokenid="ooxml:FONTTABLE"/>
     </resource>
-    <resource name="numbering" resource="Stream" tag="numbering">
+    <resource name="numbering" resource="Stream">
       <element name="numbering" tokenid="ooxml:NUMBERING"/>
     </resource>
-    <resource name="styles" resource="Stream" tag="style">
+    <resource name="styles" resource="Stream">
       <element name="styles" tokenid="ooxml:STYLESHEET"/>
     </resource>
     <resource name="ST_CaptionPos" resource="List" generated="yes">
@@ -26006,7 +26006,7 @@
       <value name="left" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_left">left</value>
       <value name="right" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_right">right</value>
     </resource>
-    <resource name="CT_Caption" resource="Properties" tag="content">
+    <resource name="CT_Caption" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_Caption_name"/>
       <attribute name="pos" tokenid="ooxml:CT_Caption_pos"/>
       <attribute name="chapNum" tokenid="ooxml:CT_Caption_chapNum"/>
@@ -26015,30 +26015,30 @@
       <attribute name="numFmt" tokenid="ooxml:CT_Caption_numFmt"/>
       <attribute name="sep" tokenid="ooxml:CT_Caption_sep"/>
     </resource>
-    <resource name="CT_AutoCaption" resource="Properties" tag="content">
+    <resource name="CT_AutoCaption" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_AutoCaption_name"/>
       <attribute name="caption" tokenid="ooxml:CT_AutoCaption_caption"/>
     </resource>
-    <resource name="CT_AutoCaptions" resource="Properties" tag="content">
+    <resource name="CT_AutoCaptions" resource="Properties">
       <element name="autoCaption" tokenid="ooxml:CT_AutoCaptions_autoCaption"/>
     </resource>
-    <resource name="CT_Captions" resource="Properties" tag="content">
+    <resource name="CT_Captions" resource="Properties">
       <element name="caption" tokenid="ooxml:CT_Captions_caption"/>
       <element name="autoCaptions" tokenid="ooxml:CT_Captions_autoCaptions"/>
     </resource>
-    <resource name="CT_DocumentBase" resource="Properties" tag="content">
+    <resource name="CT_DocumentBase" resource="Properties">
       <element name="background" tokenid="ooxml:CT_DocumentBase_background"/>
     </resource>
-    <resource name="CT_Document" resource="Stream" tag="content"/>
-    <resource name="CT_GlossaryDocument" resource="Stream" tag="content"/>
-    <resource name="document" resource="Stream" tag="content"/>
-    <resource name="glossaryDocument" resource="Stream" tag="content"/>
-    <resource name="CT_TxbxContent" resource="Stream" tag="shape">
+    <resource name="CT_Document" resource="Stream"/>
+    <resource name="CT_GlossaryDocument" resource="Stream"/>
+    <resource name="document" resource="Stream"/>
+    <resource name="glossaryDocument" resource="Stream"/>
+    <resource name="CT_TxbxContent" resource="Stream">
       <action name="start" action="startTxbxContent"/>
       <action name="end" action="endTxbxContent"/>
     </resource>
-    <resource name="CT_OMath" resource="Math" tag="math"/>
-    <resource name="CT_OMathPara" resource="Stream" tag="math"/>
+    <resource name="CT_OMath" resource="Math"/>
+    <resource name="CT_OMathPara" resource="Stream"/>
   </namespace>
 </model>
 <!-- vim: shiftwidth=2 softtabstop=2 expandtab:
