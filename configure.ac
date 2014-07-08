@@ -384,9 +384,9 @@ if test -n "$with_android_ndk"; then
     esac
 
     if test $host_cpu = arm; then
-       android_gnu_prefix=arm-linux-androideabi
+        android_gnu_prefix=arm-linux-androideabi
     elif test $host_cpu = mips; then
-       android_gnu_prefix=mipsel-linux-android
+        android_gnu_prefix=mipsel-linux-android
     elif test $ANDROID_NDK_VERSION = r8; then
         # The prefix used for the x86 tool-chain changed between NDK r8 and r8b
         android_gnu_prefix=i686-android-linux
@@ -2214,9 +2214,9 @@ dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
 
 if test "$enable_library_bin_tar" = "yes" ; then
-   USE_LIBRARY_BIN_TAR=TRUE
+    USE_LIBRARY_BIN_TAR=TRUE
 else
-   USE_LIBRARY_BIN_TAR=
+    USE_LIBRARY_BIN_TAR=
 fi
 AC_SUBST(USE_LIBRARY_BIN_TAR)
 
@@ -3459,8 +3459,8 @@ AC_SUBST(COM_GCC_IS_CLANG)
 
 if test "$CCACHE" != "" -a "$COM_GCC_IS_CLANG" = TRUE; then
     if test -z "$CCACHE_CPP2"; then
-            AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings.])
-            add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
+        AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings.])
+        add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
     fi
 fi
 
@@ -3811,7 +3811,6 @@ if test "$_os" = "WINNT"; then
                 COMEX=13
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
                 if test "$ENABLE_LTO" = TRUE; then
-
                     AC_MSG_WARN([LTO is known to cause problems with MSVC 2010])
                     add_warning "LTO is known to cause problems with MSVC 2010"
                 fi
@@ -5213,13 +5212,13 @@ else
     # Find out which modules are missing.
     missing_perl_modules=
     if ! `$PERL -e 'use Archive::Zip;'>/dev/null 2>&1`; then
-       missing_perl_modules=Archive::Zip
+        missing_perl_modules=Archive::Zip
     fi
     if ! `$PERL -e 'use Cwd;'>/dev/null 2>&1`; then
-       missing_perl_modules="$missing_perl_modules Cwd"
+        missing_perl_modules="$missing_perl_modules Cwd"
     fi
     if ! `$PERL -e 'use Digest::MD5;'>/dev/null 2>&1`; then
-       missing_perl_modules="$missing_perl_modules Digest::MD5"
+        missing_perl_modules="$missing_perl_modules Digest::MD5"
     fi
        AC_MSG_ERROR([
     The missing Perl modules are: $missing_perl_modules
@@ -5546,7 +5545,7 @@ if test "$GXX" = "yes"; then
         glibcxx_threads=yes],[AC_MSG_RESULT([no])])
         AC_LANG_POP([C++])
         if test $glibcxx_threads = yes; then
-              BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
+            BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
         fi
      fi
 fi
@@ -5745,11 +5744,11 @@ dnl ===================================================================
 # We need at least the sys/sdt.h include header.
 AC_CHECK_HEADER([sys/sdt.h], [SDT_H_FOUND='TRUE'], [SDT_H_FOUND='FALSE'])
 if test "$SDT_H_FOUND" = "TRUE"; then
-  # Found sys/sdt.h header, now make sure the c++ compiler works.
-  # Old g++ versions had problems with probes in constructors/destructors.
-  AC_MSG_CHECKING([working sys/sdt.h and c++ support])
-  AC_LANG_PUSH([C++])
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+    # Found sys/sdt.h header, now make sure the c++ compiler works.
+    # Old g++ versions had problems with probes in constructors/destructors.
+    AC_MSG_CHECKING([working sys/sdt.h and c++ support])
+    AC_LANG_PUSH([C++])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
     #include <sys/sdt.h>
     class ProbeClass
     {
@@ -5774,14 +5773,14 @@ if test "$SDT_H_FOUND" = "TRUE"; then
         DTRACE_PROBE2(_test_, dest, name, ref);
       }
     };
-  ]],[[
+    ]],[[
     int i = 64;
     DTRACE_PROBE1(_test_, call, i);
     ProbeClass inst = ProbeClass(i, "call");
     inst.method(24);
-  ]])], [AC_MSG_RESULT([yes]); AC_DEFINE([USE_SDT_PROBES])],
-        [AC_MSG_RESULT([no, sdt.h or c++ compiler too old])])
-  AC_LANG_POP([C++])
+    ]])], [AC_MSG_RESULT([yes]); AC_DEFINE([USE_SDT_PROBES])],
+          [AC_MSG_RESULT([no, sdt.h or c++ compiler too old])])
+    AC_LANG_POP([C++])
 fi
 AC_CONFIG_HEADERS([config_host/config_probes.h])
 
@@ -6870,11 +6869,11 @@ if test "$ENABLE_JAVA" != ""; then
 
         if test -z "$with_jdk_home"; then
             for ver in 1.8 1.7 1.6; do
-               reg_get_value_$bitness "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
-               if test -n "$regvalue"; then
-                   _jdk_home=$regvalue
-                   break
-               fi
+                reg_get_value_$bitness "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+                if test -n "$regvalue"; then
+                    _jdk_home=$regvalue
+                    break
+                fi
             done
             if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
                 with_jdk_home="$_jdk_home"
@@ -7000,8 +6999,7 @@ if test "$ENABLE_JAVA" != ""; then
 you must use the "--with-jdk-home" configure option explicitly])
             fi
 
-           JAVA_HOME=$with_jdk_home
-
+            JAVA_HOME=$with_jdk_home
         else
             JDK=sun
 
@@ -7572,11 +7570,11 @@ else
             AC_MSG_RESULT([$DOXYGEN])
         fi
         if test -n "$DOXYGEN"; then
-           DOXYGEN_VERSION=`$DOXYGEN --version 2>/dev/null`
-           DOXYGEN_NUMVERSION=`echo $DOXYGEN_VERSION | $AWK -F. '{ print \$1*10000 + \$2*100 + \$3 }'`
-           if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
-              AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
-           fi
+            DOXYGEN_VERSION=`$DOXYGEN --version 2>/dev/null`
+            DOXYGEN_NUMVERSION=`echo $DOXYGEN_VERSION | $AWK -F. '{ print \$1*10000 + \$2*100 + \$3 }'`
+            if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
+                AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
+            fi
         fi
     fi
 fi
@@ -8393,59 +8391,68 @@ dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
 if test "$with_java" != "no"; then
-HSQLDB_USE_JDBC_4_1=
-AC_MSG_CHECKING([which hsqldb to use])
-if test "$with_system_hsqldb" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_HSQLDB=TRUE
-    if test -z $HSQLDB_JAR; then
-        HSQLDB_JAR=/usr/share/java/hsqldb.jar
-    fi
-    AC_CHECK_FILE($HSQLDB_JAR, [],
+    HSQLDB_USE_JDBC_4_1=
+    AC_MSG_CHECKING([which hsqldb to use])
+    if test "$with_system_hsqldb" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_HSQLDB=TRUE
+        if test -z $HSQLDB_JAR; then
+            HSQLDB_JAR=/usr/share/java/hsqldb.jar
+        fi
+        AC_CHECK_FILE($HSQLDB_JAR, [],
                [AC_MSG_ERROR(hsqldb.jar not found.)], [])
-    AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
-    export HSQLDB_JAR
-    if $PERL -e 'use Archive::Zip;
+        AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
+        export HSQLDB_JAR
+        if $PERL -e \
+           'use Archive::Zip;
             my $file = "$ENV{'HSQLDB_JAR'}";
             my $zip = Archive::Zip->new( $file );
             my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-            if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
-               push @l, split(/\n/, $mf);
-               foreach my $line (@l) {
-                  if ($line =~ m/Specification-Version:/) {
-                      ($t, $version) = split (/:/,$line);
-                      $version =~ s/^\s//;
-                      ($a, $b, $c, $d) = split (/\./,$version);
-                      if ($c == "0" && $d > "8")  {
-                          exit 0;
-                      } else {
-                          exit 1;
-                      }
-                  }
-               }
-            } else {
+            if ( $mf =~ m/Specification-Version: 1.8.*/ )
+            {
+                push @l, split(/\n/, $mf);
+                foreach my $line (@l)
+                {
+                    if ($line =~ m/Specification-Version:/)
+                    {
+                        ($t, $version) = split (/:/,$line);
+                        $version =~ s/^\s//;
+                        ($a, $b, $c, $d) = split (/\./,$version);
+                        if ($c == "0" && $d > "8")
+                        {
+                            exit 0;
+                        }
+                        else
+                        {
+                            exit 1;
+                        }
+                    }
+                }
+            }
+            else
+            {
                 exit 1;
             }'; then
-        AC_MSG_RESULT([yes])
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([no, you need hsqldb >= 1.8.0.9 but < 1.8.1])
+        fi
     else
-        AC_MSG_ERROR([no, you need hsqldb >= 1.8.0.9 but < 1.8.1])
+        AC_MSG_RESULT([internal])
+        SYSTEM_HSQLDB=
+        BUILD_TYPE="$BUILD_TYPE HSQLDB"
+        AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
+        javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
+        if expr "$javanumver" '>=' 000100060000 > /dev/null; then
+            AC_MSG_RESULT([yes])
+            HSQLDB_USE_JDBC_4_1=TRUE
+        else
+            AC_MSG_RESULT([no])
+        fi
     fi
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_HSQLDB=
-    BUILD_TYPE="$BUILD_TYPE HSQLDB"
-    AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
-    javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
-    if expr "$javanumver" '>=' 000100060000 > /dev/null; then
-        AC_MSG_RESULT([yes])
-        HSQLDB_USE_JDBC_4_1=TRUE
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(SYSTEM_HSQLDB)
-AC_SUBST(HSQLDB_JAR)
-AC_SUBST([HSQLDB_USE_JDBC_4_1])
+    AC_SUBST(SYSTEM_HSQLDB)
+    AC_SUBST(HSQLDB_JAR)
+    AC_SUBST([HSQLDB_USE_JDBC_4_1])
 fi
 
 dnl ===================================================================
@@ -8498,12 +8505,12 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 LIBS=$save_LIBS
             fi
             if test "$with_gssapi" != "no"; then
-              WITH_GSSAPI=TRUE
-              save_LIBS=$LIBS
-              AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                WITH_GSSAPI=TRUE
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                     [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-              GSSAPI_LIBS=$LIBS
-              LIBS=$save_LIBS
+                GSSAPI_LIBS=$LIBS
+                LIBS=$save_LIBS
             fi
             ;;
         WINNT)
@@ -8672,7 +8679,6 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
         ENABLE_FIREBIRD_SDBC="TRUE"
     fi
-
 fi
 AC_SUBST(ENABLE_FIREBIRD_SDBC)
 AC_SUBST(SYSTEM_LIBATOMIC_OPS)
@@ -9113,10 +9119,10 @@ You can use --with-system-icu-for-build=force to use it anyway.])
     fi
 
     if test "$cross_compiling" = "yes"; then
-       if test "$ICU_MAJOR" -ge "50"; then
+        if test "$ICU_MAJOR" -ge "50"; then
             AC_MSG_RESULT([Ignore ICU_MINOR as obviously the libraries don't include the minor version in their names any more])
             ICU_MINOR=""
-       fi
+        fi
     fi
 
     libo_MINGW_CHECK_DLL([icudata][$ICU_MAJOR][$ICU_MINOR])
@@ -10315,7 +10321,7 @@ if test  "$test_gtk" = "yes"; then
         BUILD_TYPE="$BUILD_TYPE GTK"
         GTHREAD_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
-    AC_MSG_CHECKING([whether to enable the systray quickstarter])
+        AC_MSG_CHECKING([whether to enable the systray quickstarter])
         if test "x$enable_systray" = "xyes"; then
             AC_MSG_RESULT([yes])
             PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
