@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 namespace comphelper
@@ -38,16 +39,10 @@ namespace comphelper
 
     /** the very basic instance to hold a description of an event
     */
-    class COMPHELPER_DLLPUBLIC AnyEvent : ::rtl::IReference
+    class COMPHELPER_DLLPUBLIC AnyEvent : public salhelper::SimpleReferenceObject
     {
-    private:
-        oslInterlockedCount m_refCount;
-
     public:
         AnyEvent();
-
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     protected:
         virtual ~AnyEvent();

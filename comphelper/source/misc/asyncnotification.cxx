@@ -38,30 +38,12 @@ namespace comphelper
 
 
     AnyEvent::AnyEvent()
-        :m_refCount( 0 )
     {
     }
 
 
     AnyEvent::~AnyEvent()
     {
-    }
-
-
-    oslInterlockedCount SAL_CALL AnyEvent::acquire()
-    {
-        return osl_atomic_increment( &m_refCount );
-    }
-
-
-    oslInterlockedCount SAL_CALL AnyEvent::release()
-    {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_refCount;
     }
 
 
