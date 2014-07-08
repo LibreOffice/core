@@ -164,14 +164,6 @@ AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 LIBO_THIS_YEAR=`date +%Y`
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 
-# This UPD silly thing must go away soon
-UPD="${LIBO_VERSION_MAJOR}${LIBO_VERSION_MINOR}0"
-AC_SUBST(UPD)
-
-# This too should go away
-SOURCEVERSION="OOO$UPD"
-AC_SUBST(SOURCEVERSION)
-
 dnl ===================================================================
 dnl Product version
 dnl ===================================================================

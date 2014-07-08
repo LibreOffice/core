@@ -265,7 +265,8 @@ sub check_system_environment
     my $error = 0;
 
     my @environmentvariables = qw(
-        WORK_STAMP
+        LIBO_VERSION_MAJOR
+        LIBO_VERSION_MINOR
         OUTPATH
         LOCAL_OUT
         LOCAL_COMMON_OUT
