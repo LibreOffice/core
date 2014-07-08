@@ -2179,7 +2179,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
                 //that relate to each annotation index as the parser passes
                 //those points.
                 sal_Int32 nLen = nEnd - nStart;
-                if( nLen )
+                // the start and end positions are apparently stored in
+                // different arrays, so in an invalid file only one could exist
+                if(SAL_MAX_INT32 != nEnd && SAL_MAX_INT32 != nStart && nLen > 0)
                 {
                     if (pPaM->GetPoint()->nContent.GetIndex() >= nLen)
                     {
