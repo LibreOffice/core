@@ -1059,7 +1059,7 @@ AC_ARG_ENABLE(python,
         [Enables or disables Python support at run-time and build-time.
          Also specifies what Python to use. 'auto' is the default.
          'fully-internal' even forces the internal version for uses of Python
-         during the build (for testing purposes, mainly).]))
+         during the build.]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
@@ -8023,14 +8023,14 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 2.5 needed to build LO.
-# runtime requires Python 3 compatible version (>= 2.6)
+# Checking for a Python interpreter with version >= 2.6.
+# Build and runtime requires Python 3 compatible version (>= 2.6).
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     # This allows a lack of system python with no error, we use internal one in that case.
-    AM_PATH_PYTHON([2.5],, [:])
+    AM_PATH_PYTHON([2.6],, [:])
     # Clean PYTHON_VERSION checked below if cross-compiling
     PYTHON_VERSION=""
     if test "$PYTHON" != ":"; then
@@ -8073,8 +8073,12 @@ no|disable)
         # we actually do check anew.
         unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
         AM_PATH_PYTHON([3.3],, [:])
-        if test "$PYTHON" = :; then
-            AC_MSG_RESULT([internal])
+        if test "$PYTHON" = ":"; then
+            if test -z "$PYTHON_FOR_BUILD"; then
+                AC_MSG_RESULT([fully internal])
+            else
+                AC_MSG_RESULT([internal])
+            fi
             enable_python=internal
         else
             AC_MSG_RESULT([system])
@@ -8103,9 +8107,6 @@ fi
 
 if test $enable_python = system; then
     if test -z "$PYTHON_CFLAGS" -a $_os = Darwin; then
-        # We already have logic above to make sure the system Python
-        # is used only when building against SDK 10.6 or newer.
-
         # Make sure we use the 2.6 Python when building against the
         # 10.6 SDK.
         case $with_macosx_sdk in
@@ -8114,7 +8115,7 @@ if test $enable_python = system; then
         10.7|10.8)
             python_version=2.7;;
         *)
-            # ???
+            # 10.9 etc.
             python_version=2.7;;
         esac
         PYTHON=python$python_version
