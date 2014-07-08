@@ -45,6 +45,8 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 
+#include <vcl/ITiledRenderable.hxx>
+
 #include <editeng/unoipset.hxx>
 
 #include <comphelper/servicehelper.hxx>
@@ -76,7 +78,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::lang::XServiceInfo,
                            public ::com::sun::star::ucb::XAnyCompareFactory,
                            public ::com::sun::star::presentation::XHandoutMasterSupplier,
-                           public ::com::sun::star::view::XRenderable
+                           public ::com::sun::star::view::XRenderable,
+                           public ::vcl::ITiledRenderable
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -217,6 +220,19 @@ public:
     virtual sal_Int32 SAL_CALL getRendererCount( const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // ITiledRenderable
+    virtual void paintTile( VirtualDevice& rDevice,
+                            int nOutputWidth,
+                            int nOutputHeight,
+                            int nTilePosX,
+                            int nTilePosY,
+                            long nTileWidth,
+                            long nTileHeight ) SAL_OVERRIDE;
+    virtual Size getDocumentSize() SAL_OVERRIDE;
+    virtual void setPart(   int nPart ) SAL_OVERRIDE;
+    virtual int  getPart() SAL_OVERRIDE;
+    virtual int  getParts() SAL_OVERRIDE;
 
     // XComponent
 
