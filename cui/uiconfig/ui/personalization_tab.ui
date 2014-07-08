@@ -18,13 +18,14 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="top_padding">6</property>
+            <property name="bottom_padding">6</property>
             <property name="left_padding">12</property>
+            <property name="right_padding">6</property>
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">2</property>
-                <property name="homogeneous">True</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
                     <property name="label" translatable="yes">Plain look, do not use Themes</property>
@@ -169,7 +170,6 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkTreeView" id="installed_personas:border">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection2"/>
