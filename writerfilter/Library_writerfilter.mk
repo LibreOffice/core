@@ -28,11 +28,6 @@ $(eval $(call gb_Library_use_sdk_api,writerfilter))
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 
 $(eval $(call gb_Library_add_defs,writerfilter,\
-	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \
-	-DWRITERFILTER_OOXML_DLLIMPLEMENTATION \
-	-DWRITERFILTER_RESOURCEMODEL_DLLIMPLEMENTATION \
-	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \
-	-DWRITERFILTER_WRITERFILTER_DLLIMPLEMENTATION \
 	$(if $(filter-out 0 1,$(gb_DEBUGLEVEL)), \
 		-DDEBUG_DOMAINMAPPER \
 	) \
