@@ -49,6 +49,8 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
+#include <unotools/securityoptions.hxx>
+
 #define DDELINK_COLD        0
 #define DDELINK_HOT         1
 
@@ -255,13 +257,15 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         }
 
 #if defined(WNT)
-        bool bForbidden = bInWinExec;
-        // TODO: also check the security level
-        static const char* aBadServers[] = { "cmd" };
+        // check the suitability of starting the DDE server
+        const SvtSecurityOptions aSecOpts;
+        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() != eNEVER_EXECUTE);
+        bForbidden |= (bInWinExec != sal_False);
+        static const char* aBadServers[] = { "cmd", "rundll32" };
         for( int i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
-            bForbidden |= (sServer.CompareIgnoreCaseToAscii( aBadServers[i]) == COMPARE_EQUAL);
+            bForbidden |= (sServer.CompareIgnoreCaseToAscii( aBadServers[i]) == COMPARE_EQUAL );
 
-        // try to start the DDE server if it is not there
+        // try to start the DDE server if it is not there already
         if( !bForbidden )
         {
             ByteString aCmdLine( sServer, RTL_TEXTENCODING_ASCII_US );
