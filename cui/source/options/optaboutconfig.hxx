@@ -37,7 +37,6 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    //void setBehaviour( bool bNumeric, int nLengthLimit);
 };
 
 class CuiAboutConfigTabPage : public ModalDialog
@@ -48,7 +47,7 @@ private:
     PushButton* m_pEditBtn;
 
     std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
-    boost::scoped_ptr< svx::OptHeaderTabListBox > m_pPrefBox;
+    boost::scoped_ptr< SvSimpleTable > m_pPrefBox;
 
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
     std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
@@ -57,15 +56,12 @@ private:
     DECL_LINK( ResetBtnHdl_Impl, void * );
 
 public:
-   //static ModalDialog* Create( Window* pParent, const SfxItemSet& rItemset );
-   CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ );
+   CuiAboutConfigTabPage(Window* pParent);
    void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);
-   void     Reset(/* const SfxItemSet&*/ );
+   void     Reset();
    void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
-   virtual bool FillItemSet( /* SfxItemSet& rSet*/ );
-
-   virtual Size GetOptimalSize() const SAL_OVERRIDE;
+   bool FillItemSet();
 };
 
 class CuiAboutConfigValueDialog : public ModalDialog
