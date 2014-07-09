@@ -1076,20 +1076,38 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::exception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
+void DebugHelper::basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::script::BasicErrorException( DetailedMessage.concat( " " ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, OUString() );
 }
 
-void DebugHelper::exception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException )
+void DebugHelper::basicexception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException )
 {
-    exception( OUString(), css::uno::Exception(), err, additionalArgument );
+    basicexception( OUString(), css::uno::Exception(), err, additionalArgument );
 }
-void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+
+void DebugHelper::basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
 {
-    exception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
+    basicexception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
 }
+
+void DebugHelper::runtimeexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException )
+{
+    // #TODO #FIXME ( do we want to support additionalArg here )
+    throw css::uno::RuntimeException( DetailedMessage.concat( " " ).concat( ex.Message ).concat(" ").concat(OUString::number(err)), css::uno::Reference< css::uno::XInterface >() );
+}
+
+void DebugHelper::runtimeexception( int err,  const OUString& additionalArgument ) throw( css::uno::RuntimeException )
+{
+    runtimeexception( OUString(), css::uno::Exception(), err, additionalArgument );
+}
+
+void DebugHelper::runtimeexception( const css::uno::Exception& ex ) throw( css::uno::RuntimeException )
+{
+    runtimeexception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
+}
+
 
 Millimeter::Millimeter():m_nMillimeter(0) {}
 

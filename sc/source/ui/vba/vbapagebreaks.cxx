@@ -71,7 +71,7 @@ public:
         return xIndexAccess;
     }
 
-    sheet::TablePageBreakData getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw ( script::BasicErrorException, uno::RuntimeException);
+    sheet::TablePageBreakData getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw (uno::RuntimeException);
     uno::Any Add( const css::uno::Any& Before ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XIndexAccess
@@ -133,7 +133,7 @@ uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index ) throw (lang::In
     throw lang::IndexOutOfBoundsException();
 }
 
-sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw ( script::BasicErrorException, uno::RuntimeException)
+sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw (uno::RuntimeException)
 {
     sal_Int32 index = -1;
     sheet::TablePageBreakData aTablePageBreakData;
@@ -149,7 +149,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
         aTablePageBreakData = aTablePageBreakDataList[i];
         sal_Int32 nPos = aTablePageBreakData.Position;
         if( nPos > nUsedEnd + 1 )
-            DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+            DebugHelper::runtimeexception(SbERR_METHOD_FAILED, OUString());
         index++;
         if( index == nAPIItemIndex )
             return aTablePageBreakData;
@@ -164,7 +164,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     Before >>= xRange;
     if( !xRange.is() )
     {
-        DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
+        DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
     }
 
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );

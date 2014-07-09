@@ -222,7 +222,7 @@ void SAL_CALL SwVbaRows::SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle
         }
         default:
         {
-            DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
+            DebugHelper::runtimeexception(SbERR_BAD_ARGUMENT, OUString());
         }
     }
 }

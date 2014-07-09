@@ -55,13 +55,13 @@ ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xPar
     try
     {
         if ( !mxModel.is() )
-            DebugHelper::exception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
+            DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
         // mxServiceInfo is unused,
         // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -97,9 +97,9 @@ ScVbaFormat<Ifc1>::setVerticalAlignment( const uno::Any& _oAlignment)   throw (s
         }
         mxPropertySet->setPropertyValue( OUString( SC_UNONAME_CELLVJUS ), aVal );
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
@@ -135,7 +135,7 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aResult;
 }
@@ -175,7 +175,7 @@ ScVbaFormat<Ifc1>::setHorizontalAlignment( const uno::Any& HorizontalAlignment )
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 
 }
@@ -216,7 +216,7 @@ ScVbaFormat<Ifc1>::getHorizontalAlignment(  ) throw (script::BasicErrorException
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
     return NRetAlignment;
 }
@@ -255,7 +255,7 @@ ScVbaFormat<Ifc1>::setOrientation( const uno::Any& _aOrientation ) throw (script
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 template< typename Ifc1 >
@@ -292,7 +292,7 @@ ScVbaFormat<Ifc1>::getOrientation(  ) throw (script::BasicErrorException, uno::R
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return NRetOrientation;
 }
@@ -307,7 +307,7 @@ ScVbaFormat<Ifc1>::setWrapText( const uno::Any& _aWrapText ) throw (script::Basi
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -324,9 +324,9 @@ ScVbaFormat<Ifc1>::getWrapText(  ) throw (script::BasicErrorException, uno::Runt
             aWrap = mxPropertySet->getPropertyValue(aPropName);
         }
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
     return aWrap;
 }
@@ -383,9 +383,9 @@ ScVbaFormat<Ifc1>::getNumberFormatLocal(  ) throw (script::BasicErrorException, 
 
         }
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aRet;
 
@@ -416,7 +416,7 @@ ScVbaFormat<Ifc1>::setNumberFormatLocal( const uno::Any& _oLocalFormatString ) t
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -446,7 +446,7 @@ ScVbaFormat<Ifc1>::setNumberFormat( const uno::Any& _oFormatString ) throw (scri
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 
 }
@@ -469,9 +469,9 @@ ScVbaFormat<Ifc1>::setIndentLevel( const uno::Any& _aLevel ) throw (script::Basi
             mxPropertySet->setPropertyValue( sHoriJust, uno::makeAny( table::CellHoriJustify_LEFT) ) ;
         mxPropertySet->setPropertyValue( OUString( SC_UNONAME_PINDENT ), uno::makeAny( sal_Int16(nLevel * 352.8) ) );
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
@@ -492,9 +492,9 @@ ScVbaFormat<Ifc1>::getIndentLevel(  ) throw (script::BasicErrorException, uno::R
                 NRetIndentLevel = uno::makeAny( sal_Int32(0) );
         }
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return NRetIndentLevel;
 }
@@ -514,9 +514,9 @@ ScVbaFormat<Ifc1>::setLocked( const uno::Any& _aLocked ) throw (script::BasicErr
         aCellProtection.IsLocked = bIsLocked;
         mxPropertySet->setPropertyValue(sCellProt, uno::makeAny( aCellProtection ) );
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -534,9 +534,9 @@ ScVbaFormat<Ifc1>::setFormulaHidden( const uno::Any& FormulaHidden ) throw (scri
         aCellProtection.IsFormulaHidden = bIsFormulaHidden;
         mxPropertySet->setPropertyValue(sCellProt,uno::makeAny(aCellProtection));
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception( SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception( SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -567,9 +567,9 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
             }
         }
     }
-    catch (const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aCellProtection;
 }
@@ -602,7 +602,7 @@ ScVbaFormat<Ifc1>::getFormulaHidden(  ) throw (script::BasicErrorException, uno:
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aBoolRet;
 }
@@ -617,7 +617,7 @@ ScVbaFormat<Ifc1>::setShrinkToFit( const uno::Any& ShrinkToFit ) throw (script::
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString() );
+        DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString() );
     }
 
 }
@@ -635,7 +635,7 @@ ScVbaFormat<Ifc1>::getShrinkToFit(  ) throw (script::BasicErrorException, uno::R
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString());
+        DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
     }
     return aRet;
 }
@@ -659,16 +659,16 @@ ScVbaFormat<Ifc1>::setReadingOrder( const uno::Any& ReadingOrder ) throw (script
                 aVal = uno::makeAny( text::WritingMode_RL_TB );
                 break;
             case excel::Constants::xlContext:
-                DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString());
+                DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
                 break;
             default:
-                DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+                DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
         }
         mxPropertySet->setPropertyValue( OUString( SC_UNONAME_WRITING ), aVal );
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 
 }
@@ -699,7 +699,7 @@ ScVbaFormat<Ifc1>::getReadingOrder(  ) throw (script::BasicErrorException, uno::
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString());
+        DebugHelper::basicexception(SbERR_NOT_IMPLEMENTED, OUString());
     }
     return NRetReadingOrder;
 
@@ -727,7 +727,7 @@ ScVbaFormat< Ifc1 >::getNumberFormat(  ) throw (script::BasicErrorException, uno
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aFormat;
 }
@@ -744,7 +744,7 @@ ScVbaFormat<Ifc1>::isAmbiguous(const OUString& _sPropertyName) throw ( script::B
     }
     catch (const uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return bResult;
 }

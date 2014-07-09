@@ -370,7 +370,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         (nSelection != excel::XlEnableSelection::xlUnlockedCells) &&
         (nSelection != excel::XlEnableSelection::xlNoSelection) )
     {
-        DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
     }
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );

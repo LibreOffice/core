@@ -193,10 +193,10 @@ void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
         case word::WdBreakType::wdSectionBreakNextPage:
         case word::WdBreakType::wdSectionBreakOddPage:
         case word::WdBreakType::wdTextWrappingBreak:
-            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, OUString() );
+            DebugHelper::basicexception( SbERR_NOT_IMPLEMENTED, OUString() );
             break;
         default:
-            DebugHelper::exception( SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::basicexception( SbERR_BAD_PARAMETER, OUString() );
     }
 
     if( eBreakType != style::BreakType_NONE )
@@ -269,7 +269,7 @@ void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw
     }
     if( aStyleType.isEmpty() )
     {
-        DebugHelper::exception( SbERR_INTERNAL_ERROR, OUString() );
+        DebugHelper::runtimeexception( SbERR_INTERNAL_ERROR, OUString() );
     }
 }
 

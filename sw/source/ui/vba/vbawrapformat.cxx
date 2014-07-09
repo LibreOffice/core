@@ -31,7 +31,7 @@ SwVbaWrapFormat::SwVbaWrapFormat( uno::Sequence< uno::Any > const& aArgs, uno::R
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
 }
 
-void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException, script::BasicErrorException)
+void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
 {
     text::WrapTextMode eTextMode = text::WrapTextMode_NONE;
     if( mnSide == word::WdWrapSideType::wdWrapLeft )
@@ -73,7 +73,7 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException, script::BasicErro
             }
             default:
             {
-                DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
+                DebugHelper::runtimeexception(SbERR_BAD_ARGUMENT, OUString());
             }
         }
     }

@@ -200,7 +200,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
             zoom >>= aValue;
             if( aValue )
             {
-                DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+                DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
             }
         }
         else
@@ -208,7 +208,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
             zoom >>= pageScale;
             if(( pageScale < ZOOM_IN )||( pageScale > ZOOM_MAX ))
             {
-                DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+                DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
             }
         }
 
@@ -218,14 +218,14 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
         mxPageProps->setPropertyValue("ScaleToPagesX", uno::makeAny( nScale ));
         mxPageProps->setPropertyValue("ScaleToPagesY", uno::makeAny( nScale ));
     }
-    catch( beans::UnknownPropertyException& )
+    catch (const beans::UnknownPropertyException&)
     {
         if( pageScale == 0 )
         {
-            DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
         }
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 
@@ -467,7 +467,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder() throw (css::uno::RuntimeException,
     return order;
 }
 
-void SAL_CALL ScVbaPageSetup::setOrder( sal_Int32 order) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaPageSetup::setOrder(sal_Int32 order) throw (css::uno::RuntimeException, std::exception)
 {
     bool bOrder = true;
     switch( order )
@@ -478,14 +478,14 @@ void SAL_CALL ScVbaPageSetup::setOrder( sal_Int32 order) throw (css::uno::Runtim
             bOrder = false;
             break;
         default:
-            DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
     }
 
     try
     {
         mxPageProps->setPropertyValue("PrintDownFirst", uno::makeAny( bOrder ));
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
@@ -521,7 +521,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber) thr
         aValue <<= (sal_Int16)firstPageNumber;
         mxPageProps->setPropertyValue("FirstPageNumber", aValue );
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
@@ -534,7 +534,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically() throw (css::uno::Runtime
         uno::Any aValue = mxPageProps->getPropertyValue("CenterVertically");
         aValue >>= centerVertically;
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
     return centerVertically;
@@ -546,7 +546,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically) th
     {
         mxPageProps->setPropertyValue("CenterVertically", uno::makeAny( centerVertically ));
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
@@ -559,7 +559,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally() throw (css::uno::Runti
         uno::Any aValue = mxPageProps->getPropertyValue("CenterHorizontally");
         aValue >>= centerHorizontally;
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
     return centerHorizontally;
@@ -571,7 +571,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally
     {
         mxPageProps->setPropertyValue("CenterHorizontally", uno::makeAny( centerHorizontally ));
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
@@ -584,7 +584,7 @@ sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings() throw (css::uno::RuntimeExc
         uno::Any aValue = mxPageProps->getPropertyValue("PrintHeaders");
         aValue >>= printHeadings;
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
     return printHeadings;

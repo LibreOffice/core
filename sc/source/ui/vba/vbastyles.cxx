@@ -41,7 +41,7 @@ ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent, con
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
@@ -110,12 +110,12 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
                 }
                 else
                 {
-                    DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString() );
+                    DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString() );
                 }
             }
             else
             {
-                DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
+                DebugHelper::basicexception(SbERR_BAD_ARGUMENT, OUString());
             }
         }
 
@@ -131,9 +131,9 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
         }
         aRet.set( Item( uno::makeAny( _sName ), uno::Any() ), uno::UNO_QUERY_THROW );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
     return aRet;
 }
@@ -146,9 +146,9 @@ ScVbaStyles::Delete(const OUString& _sStyleName) throw ( script::BasicErrorExcep
         if (mxNameContainerCellStyles->hasByName( _sStyleName ) )
             mxNameContainerCellStyles->removeByName( _sStyleName );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
 }
 

@@ -34,7 +34,7 @@ private:
     sal_Int32 mnSide;
 
 private:
-    void makeWrap() throw (css::uno::RuntimeException, css::script::BasicErrorException);
+    void makeWrap() throw (css::uno::RuntimeException);
     float getDistance( const OUString& sName ) throw (css::uno::RuntimeException);
     void setDistance( const OUString& sName, float _distance ) throw (css::uno::RuntimeException);
 

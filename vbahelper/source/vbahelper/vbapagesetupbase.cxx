@@ -279,7 +279,7 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
     if( ( orientation != mnOrientPortrait ) &&
         ( orientation != mnOrientLandscape ) )
     {
-        DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
+        DebugHelper::runtimeexception(SbERR_BAD_PARAMETER, OUString() );
     }
 
     try

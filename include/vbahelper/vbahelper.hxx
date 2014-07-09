@@ -240,11 +240,18 @@ public:
 class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
-    static void exception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException );
+    static void basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException );
 
-    static void exception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException );
+    static void basicexception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException );
 
-    static void exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
+    static void basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
+
+    static void runtimeexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException );
+
+    static void runtimeexception( int err,  const OUString& additionalArgument ) throw( css::uno::RuntimeException );
+
+    static void runtimeexception( const css::uno::Exception& ex ) throw( css::uno::RuntimeException );
+
 };
 
     } // vba

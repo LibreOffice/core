@@ -102,7 +102,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
     }
     catch (const uno::Exception& e)
     {
-        DebugHelper::exception(e);
+        DebugHelper::basicexception(e);
     }
 
     if( !bGotTextCursor || !xTextCursor.is() )
@@ -115,7 +115,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         }
         catch (const uno::Exception& e)
         {
-            DebugHelper::exception(e);
+            DebugHelper::basicexception(e);
         }
     }
 
@@ -128,7 +128,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         }
         catch (const uno::Exception& e)
         {
-            DebugHelper::exception(e);
+            DebugHelper::basicexception(e);
         }
     }
     return xTextCursor;

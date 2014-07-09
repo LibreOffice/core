@@ -28,7 +28,7 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
 {
     ScVbaFormatConditions* pFormatConditions = static_cast< ScVbaFormatConditions* >( xFormatConditions.get() );
     if ( !pFormatConditions )
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     return pFormatConditions;
 }
 
@@ -65,9 +65,9 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
         pFormatConditions->removeFormatCondition(msStyleName, false);
         pFormatConditions->Add(_nType, _aOperator, _aFormula1, _aFormula2, mxStyle);
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -101,7 +101,7 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
                 aAPIType = sheet::ConditionOperator_NONE;
             break;
         default:
-            DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+            DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
     return aAPIType;
 }
@@ -151,7 +151,7 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+        DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 

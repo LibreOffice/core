@@ -157,7 +157,7 @@ ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script:
             }
         case sheet::ConditionOperator_NONE:
         default:
-            DebugHelper::exception(SbERR_METHOD_FAILED, OUString("Operator not supported"));
+            DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString("Operator not supported"));
         break;
     }
     return retvalue;
