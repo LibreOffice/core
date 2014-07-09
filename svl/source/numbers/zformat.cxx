@@ -46,6 +46,7 @@
 #include <svl/nfsymbol.hxx>
 
 #include <cmath>
+#include <boost/scoped_ptr.hpp>
 
 using namespace svt;
 
@@ -1853,11 +1854,11 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         // Parse new ones etc.
         OUString aStr( sFormatstring );
         sal_Int32 nCheckPos = 0;
-        SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
-                                                      nCheckPos, maLocale.meLanguage, bStandard );
+        boost::scoped_ptr<SvNumberformat> pFormat(new SvNumberformat( aStr, &rScan, &rISc,
+                                                      nCheckPos, maLocale.meLanguage, bStandard ));
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
         ImpCopyNumberformat( *pFormat );
-        delete pFormat;
+        pFormat.reset();
 
         // Recover states
         eType |= nDefined;

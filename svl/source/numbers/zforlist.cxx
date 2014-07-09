@@ -45,6 +45,7 @@
 
 #include <math.h>
 #include <limits>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -685,7 +686,7 @@ void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
 bool SvNumberFormatter::Load( SvStream& rStream )
 {
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    SvNumberFormatter* pConverter = NULL;
+    boost::scoped_ptr<SvNumberFormatter> pConverter;
 
     ImpSvNumMultipleReadHeader aHdr( rStream );
     sal_uInt16 nVersion;
@@ -725,7 +726,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
                 // different SYSTEM locale
                 if ( !pConverter )
                 {
-                    pConverter = new SvNumberFormatter( m_xContext, eSysLang );
+                    pConverter.reset(new SvNumberFormatter( m_xContext, eSysLang ));
                 }
                 pEntry->ConvertLanguage( *pConverter, eSaveSysLang, eLoadSysLang, true );
             }
@@ -763,10 +764,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
         aHdr.EndEntry();
     }
 
-    if ( pConverter )
-    {
-        delete pConverter;
-    }
+    pConverter.reset();
 
     // generate additional i18n standard formats for all used locales
     LanguageType eOldLanguage = ActLnge;
@@ -1562,11 +1560,11 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    SvNumberformat* p_Entry = new SvNumberformat(sTmpString,
+    boost::scoped_ptr<SvNumberformat> p_Entry(new SvNumberformat(sTmpString,
                                                  pFormatScanner,
                                                  pStringScanner,
                                                  nCheckPos,
-                                                 eLnge);
+                                                 eLnge));
     if (nCheckPos == 0)                                 // String ok
     {
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
@@ -1587,12 +1585,10 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
                 p_Entry->SetStarFormatSupport( false );
             }
         }
-        delete p_Entry;
         return true;
     }
     else
     {
-        delete p_Entry;
         return false;
     }
 }
@@ -1625,15 +1621,15 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         return true;
     }
 
-    SvNumberformat *pEntry = NULL;
+    boost::scoped_ptr<SvNumberformat> pEntry;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString;
 
     if ( bEnglish )
     {
         sTmpString = sFormatString;
-        pEntry = new SvNumberformat( sTmpString, pFormatScanner,
-                                     pStringScanner, nCheckPos, eLnge );
+        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
+                                     pStringScanner, nCheckPos, eLnge ));
     }
     else
     {
@@ -1645,8 +1641,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         LanguageType eFormatLang = LANGUAGE_ENGLISH_US;
         pFormatScanner->SetConvertMode( LANGUAGE_ENGLISH_US, eLnge );
         sTmpString = sFormatString;
-        pEntry = new SvNumberformat( sTmpString, pFormatScanner,
-                                     pStringScanner, nCheckPos, eFormatLang );
+        pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
+                                     pStringScanner, nCheckPos, eFormatLang ));
         pFormatScanner->SetConvertMode( false );
         ChangeIntl( eLnge );
 
@@ -1656,10 +1652,9 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                                  pEntry->GetFormatstring() ) )
             {
                 // other Format
-                delete pEntry;
                 sTmpString = sFormatString;
-                pEntry = new SvNumberformat( sTmpString, pFormatScanner,
-                                             pStringScanner, nCheckPos, eLnge );
+                pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
+                                             pStringScanner, nCheckPos, eLnge ));
             }
             else
             {
@@ -1669,20 +1664,18 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 eFormatLang = eLnge;
                 pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US );
                 sTmpString = sFormatString;
-                SvNumberformat* pEntry2 = new SvNumberformat( sTmpString, pFormatScanner,
-                                                              pStringScanner, nCheckPos2, eFormatLang );
+                boost::scoped_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner,
+                                                              pStringScanner, nCheckPos2, eFormatLang ));
                 pFormatScanner->SetConvertMode( false );
                 ChangeIntl( eLnge );
                 if ( nCheckPos2 == 0 && !xTransliteration->isEqual( sFormatString,
                                                                     pEntry2->GetFormatstring() ) )
                 {
                     // other Format
-                    delete pEntry;
                     sTmpString = sFormatString;
-                    pEntry = new SvNumberformat( sTmpString, pFormatScanner,
-                                                 pStringScanner, nCheckPos, eLnge );
+                    pEntry.reset(new SvNumberformat( sTmpString, pFormatScanner,
+                                                 pStringScanner, nCheckPos, eLnge ));
                 }
-                delete pEntry2;
             }
         }
     }
@@ -1691,10 +1684,8 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
     {
         ImpGenerateCL( eLnge );     // create new standard formats if necessary
         pEntry->GetOutputString( fPreviewNumber, sOutString, ppColor );
-        delete pEntry;
         return true;
     }
-    delete pEntry;
     return false;
 }
 
@@ -1717,11 +1708,11 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    SvNumberformat* p_Entry = new SvNumberformat( sTmpString,
+    boost::scoped_ptr<SvNumberformat> p_Entry(new SvNumberformat( sTmpString,
                                                   pFormatScanner,
                                                   pStringScanner,
                                                   nCheckPos,
-                                                  eLnge);
+                                                  eLnge));
     if (nCheckPos == 0)                          // String ok
     {
         // May have to create standard formats for this locale.
@@ -1746,12 +1737,10 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
                 sOutString = sPreviewString;
             }
         }
-        delete p_Entry;
         return true;
     }
     else
     {
-        delete p_Entry;
         return false;
     }
 }
@@ -1772,11 +1761,11 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     sal_uInt32 nRes;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    SvNumberformat* pEntry = new SvNumberformat(sTmpString,
+    boost::scoped_ptr<SvNumberformat> pEntry(new SvNumberformat(sTmpString,
                                                 pFormatScanner,
                                                 pStringScanner,
                                                 nCheckPos,
-                                                eLnge);
+                                                eLnge));
     if (nCheckPos == 0)                                 // String ok
     {
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
@@ -1787,7 +1776,6 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     {
         nRes = NUMBERFORMAT_ENTRY_NOT_FOUND;
     }
-    delete pEntry;
     return nRes;
 }
 
@@ -1988,8 +1976,8 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
     eLnge = ActLnge;
     OUString aTmpStr( rFormatString );
     sal_Int32 nCheckPos = 0;
-    SvNumberformat* pFormat = new SvNumberformat( aTmpStr, pFormatScanner,
-                                                  pStringScanner, nCheckPos, eLnge );
+    boost::scoped_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner,
+                                                  pStringScanner, nCheckPos, eLnge ));
     if ( nCheckPos == 0 )
     {
         pFormat->GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nAnzLeading );
@@ -2001,7 +1989,6 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
         nPrecision = pFormatScanner->GetStandardPrec();
         nAnzLeading = 0;
     }
-    delete pFormat;
     return nCheckPos;
 }
 
@@ -3698,9 +3685,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     bInitializing = true;
 
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
+    boost::scoped_ptr<LocaleDataWrapper> pLocaleData(new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
-        SvtSysLocale().GetLanguageTag() );
+        SvtSysLocale().GetLanguageTag() ));
     // get user configured currency
     OUString aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
@@ -3835,7 +3822,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         LocaleDataWrapper::outputCheckMessage(
                 "SvNumberFormatter::ImpInitCurrencyTable: system currency not in I18N locale data.");
     }
-    delete pLocaleData;
+    pLocaleData.reset();
     SvtSysLocaleOptions::SetCurrencyChangeLink( STATIC_LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = false;
     bCurrencyTableInitialized = true;

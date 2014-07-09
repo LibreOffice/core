@@ -22,6 +22,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 /*************************************************************************
     UNO III Implementation
@@ -242,7 +243,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
-    SfxPoolItem *pNewItem = 0;
+    boost::scoped_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
@@ -253,23 +254,21 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
         if(FillItem(aSet, rEntry.nWID, false))
         {
             const SfxPoolItem &rItem = aSet.Get(rEntry.nWID);
-            pNewItem = rItem.Clone();
+            pNewItem.reset(rItem.Clone());
         }
     }
     if(!pNewItem && pItem)
     {
-        pNewItem = pItem->Clone();
+        pNewItem.reset(pItem->Clone());
     }
     if(pNewItem)
     {
         if( !pNewItem->PutValue( aVal, rEntry.nMemberId ) )
         {
-            DELETEZ(pNewItem);
             throw IllegalArgumentException();
         }
         // apply new item
         rSet.Put( *pNewItem, rEntry.nWID );
-        delete pNewItem;
     }
 }
 
