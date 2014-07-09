@@ -67,11 +67,7 @@
 #include <svx/svdview.hxx>
 #include "misc.hxx"
 #include "View.hxx"
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#endif
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"
@@ -80,6 +76,7 @@
 #include "unopback.hxx"
 #include "unohelp.hxx"
 #include <vcl/dibtools.hxx>
+#include <svx/svdograf.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -433,7 +430,22 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         {
             SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
             if( pDoc )
-                pObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), sal_True );
+            {
+                // #119287# similar to the code in the SdrObject methods the graphic and ole
+                // SdrObjects need another default style than the rest, see task. Adding here, too.
+                // TTTT: Same as for #119287#: Can be removed in branch aw080 again
+                const bool bIsSdrGrafObj(0 != dynamic_cast< SdrGrafObj* >(pObj));
+                const bool bIsSdrOle2Obj(0 != dynamic_cast< SdrOle2Obj* >(pObj));
+
+                if(bIsSdrGrafObj || bIsSdrOle2Obj)
+                {
+                    pObj->NbcSetStyleSheet(pDoc->GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(), sal_True);
+                }
+                else
+                {
+                    pObj->NbcSetStyleSheet(pDoc->GetDefaultStyleSheet(), sal_True);
+                }
+            }
         }
         return pObj;
     }
