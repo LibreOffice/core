@@ -45,6 +45,7 @@
 
 #include <comphelper/storagehelper.hxx>
 
+#include <boost/current_function.hpp>
 
 using namespace ::com::sun::star;
 
@@ -274,7 +275,13 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     else
     {
         // the mediatype is not known
-        throw beans::IllegalTypeException();
+        OUString aMsg(BOOST_CURRENT_FUNCTION);
+        aMsg += ":";
+        aMsg += OUString::number(__LINE__);
+        aMsg += ": unknown media type '";
+        aMsg += aMediaType;
+        aMsg += "'";
+        throw beans::IllegalTypeException(aMsg);
     }
 
     return nResult;
