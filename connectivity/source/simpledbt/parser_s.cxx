@@ -41,18 +41,6 @@ namespace connectivity
     }
 
 
-    oslInterlockedCount SAL_CALL OSimpleSQLParser::acquire()
-    {
-        return ORefBase::acquire();
-    }
-
-
-    oslInterlockedCount SAL_CALL OSimpleSQLParser::release()
-    {
-        return ORefBase::release();
-    }
-
-
     const IParseContext& OSimpleSQLParser::getContext() const
     {
         return m_aFullParser.getContext();

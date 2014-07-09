@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_STATICDBTOOLS_S_HXX
 
 #include <connectivity/virtualdbtools.hxx>
-#include "refbase.hxx"
 
 
 namespace connectivity
@@ -34,7 +33,6 @@ namespace connectivity
     class ODataAccessStaticTools
             :public simple::IDataAccessTypeConversion
             ,public simple::IDataAccessTools
-            ,public ORefBase
     {
     public:
         ODataAccessStaticTools();
@@ -181,11 +179,6 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
         ) SAL_OVERRIDE;
-
-        // disambiguate IReference
-
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

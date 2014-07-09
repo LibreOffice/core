@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_DBTFACTORY_HXX
 
 #include <connectivity/virtualdbtools.hxx>
-#include "refbase.hxx"
 
 
 namespace connectivity
@@ -31,9 +30,7 @@ namespace connectivity
 
     //= ODataAccessToolsFactory
 
-    class ODataAccessToolsFactory
-            :public simple::IDataAccessToolsFactory
-            ,public ORefBase
+    class ODataAccessToolsFactory : public simple::IDataAccessToolsFactory
     {
     protected:
         ::rtl::Reference< simple::IDataAccessTypeConversion >   m_xTypeConversionHelper;
@@ -41,6 +38,7 @@ namespace connectivity
 
     public:
         ODataAccessToolsFactory();
+        virtual ~ODataAccessToolsFactory() {}
 
         // IDataAccessToolsFactory
         virtual ::rtl::Reference< simple::ISQLParser >  createSQLParser(
@@ -60,9 +58,6 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
         ) SAL_OVERRIDE;
 
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

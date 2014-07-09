@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_PARSENODE_S_HXX
 
 #include <connectivity/virtualdbtools.hxx>
-#include "refbase.hxx"
 
 
 namespace connectivity
@@ -32,9 +31,7 @@ namespace connectivity
 
     //= OSimpleParseNode
 
-    class OSimpleParseNode
-            :public simple::ISQLParseNode
-            ,public ORefBase
+    class OSimpleParseNode : public simple::ISQLParseNode
     {
     protected:
         const OSQLParseNode*    m_pFullNode;
@@ -59,10 +56,6 @@ namespace connectivity
             const sal_Char _cDecSeparator,
             const IParseContext* _pContext
         ) const SAL_OVERRIDE;
-
-        // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

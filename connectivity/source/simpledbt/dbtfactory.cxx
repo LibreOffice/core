@@ -55,18 +55,6 @@ namespace connectivity
     }
 
 
-    oslInterlockedCount SAL_CALL ODataAccessToolsFactory::acquire()
-    {
-        return ORefBase::acquire();
-    }
-
-
-    oslInterlockedCount SAL_CALL ODataAccessToolsFactory::release()
-    {
-        return ORefBase::release();
-    }
-
-
     ::rtl::Reference< simple::IDataAccessTypeConversion > ODataAccessToolsFactory::getTypeConversionHelper()
     {
         return m_xTypeConversionHelper;

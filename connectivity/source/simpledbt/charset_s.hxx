@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_CHARSET_S_HXX
 
 #include <connectivity/virtualdbtools.hxx>
-#include "refbase.hxx"
 #include <connectivity/dbcharset.hxx>
 
 
@@ -32,9 +31,7 @@ namespace connectivity
 
     //= ODataAccessCharSet
 
-    class ODataAccessCharSet
-            :public simple::IDataAccessCharSet
-            ,public ORefBase
+    class ODataAccessCharSet : public simple::IDataAccessCharSet
     {
     protected:
         ::dbtools::OCharsetMap      m_aCharsetInfo;
@@ -46,10 +43,6 @@ namespace connectivity
         sal_Int32   getSupportedTextEncodings(
             ::std::vector< rtl_TextEncoding >& /* [out] */ _rEncs
         ) const SAL_OVERRIDE;
-
-        // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

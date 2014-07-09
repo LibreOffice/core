@@ -50,19 +50,6 @@ namespace connectivity
             delete m_pFullNode;
     }
 
-
-    oslInterlockedCount SAL_CALL OSimpleParseNode::acquire()
-    {
-        return ORefBase::acquire();
-    }
-
-
-    oslInterlockedCount SAL_CALL OSimpleParseNode::release()
-    {
-        return ORefBase::release();
-    }
-
-
     void OSimpleParseNode::parseNodeToStr(OUString& _rString, const Reference< XConnection >& _rxConnection,const IParseContext* _pContext) const
     {
         m_pFullNode->parseNodeToStr( _rString, _rxConnection, _pContext );

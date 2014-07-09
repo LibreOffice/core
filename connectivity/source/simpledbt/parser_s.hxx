@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_SIMPLEDBT_PARSER_S_HXX
 
 #include <connectivity/virtualdbtools.hxx>
-#include "refbase.hxx"
 #include <connectivity/sqlparse.hxx>
 
 
@@ -32,9 +31,7 @@ namespace connectivity
 
     //= OSimpleSQLParser
 
-    class OSimpleSQLParser
-            :public simple::ISQLParser
-            ,public ORefBase
+    class OSimpleSQLParser : public simple::ISQLParser
     {
     protected:
         OSQLParser      m_aFullParser;
@@ -51,10 +48,6 @@ namespace connectivity
         ) const SAL_OVERRIDE;
 
         virtual const IParseContext& getContext() const SAL_OVERRIDE;
-
-        // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

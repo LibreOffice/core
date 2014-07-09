@@ -71,18 +71,6 @@ namespace connectivity
     }
 
 
-    oslInterlockedCount SAL_CALL ODataAccessStaticTools::acquire()
-    {
-        return ORefBase::acquire();
-    }
-
-
-    oslInterlockedCount SAL_CALL ODataAccessStaticTools::release()
-    {
-        return ORefBase::release();
-    }
-
-
     Reference< XConnection> ODataAccessStaticTools::getConnection_withFeedback(const OUString& _rDataSourceName, const OUString& _rUser,
         const OUString& _rPwd, const Reference< XComponentContext>& _rxContext) const
     {

@@ -32,6 +32,7 @@
 #include <vector>
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 //= forward declarations
@@ -112,7 +113,7 @@ namespace connectivity
 
         //= IDataAccessTools
 
-        class OOO_DLLPUBLIC_DBTOOLS IDataAccessTools : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS IDataAccessTools : public virtual salhelper::SimpleReferenceObject
         {
         public:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
@@ -219,7 +220,7 @@ namespace connectivity
             ) = 0;
 
         protected:
-            ~IDataAccessTools() {}
+            virtual ~IDataAccessTools() {}
         };
 
 
@@ -228,7 +229,7 @@ namespace connectivity
         /** simple wrapper for the OCharsetMap
         */
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessCharSet :
-            public ::rtl::IReference
+            public salhelper::SimpleReferenceObject
         {
             // to be extended if necessary ....
         public:
@@ -240,14 +241,14 @@ namespace connectivity
             ) const = 0;
 
         protected:
-            ~IDataAccessCharSet() {}
+            virtual ~IDataAccessCharSet() {}
         };
 
 
         //= IDataAccessTypeConversion
 
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessTypeConversion :
-            public ::rtl::IReference
+            public virtual salhelper::SimpleReferenceObject
         {
         public:
             virtual ::com::sun::star::util::Date getStandardDate() const = 0;
@@ -271,7 +272,7 @@ namespace connectivity
             ) const = 0;
 
         protected:
-            ~IDataAccessTypeConversion() {}
+            virtual ~IDataAccessTypeConversion() {}
         };
 
 
@@ -279,7 +280,7 @@ namespace connectivity
 
         /** a simple version of the OSQLParseNode, with all methods being virtual
         */
-        class OOO_DLLPUBLIC_DBTOOLS ISQLParseNode : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS ISQLParseNode : public salhelper::SimpleReferenceObject
         {
         public:
             virtual void parseNodeToStr(OUString& _rString,
@@ -298,7 +299,7 @@ namespace connectivity
             ) const = 0;
 
         protected:
-            ~ISQLParseNode() {}
+            virtual ~ISQLParseNode() {}
         };
 
 
@@ -306,7 +307,7 @@ namespace connectivity
 
         /** a simple version of the OSQLParser, with all methods being virtual
         */
-        class OOO_DLLPUBLIC_DBTOOLS ISQLParser : public ::rtl::IReference
+        class OOO_DLLPUBLIC_DBTOOLS ISQLParser : public salhelper::SimpleReferenceObject
         {
         public:
             virtual ::rtl::Reference< ISQLParseNode > predicateTree(
@@ -319,7 +320,7 @@ namespace connectivity
             virtual const IParseContext& getContext() const = 0;
 
         protected:
-            ~ISQLParser() {}
+            virtual ~ISQLParser() {}
         };
 
 
@@ -328,7 +329,7 @@ namespace connectivity
         /** the main factory for runtime-loadable tools in the DBTOOLS library
         */
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessToolsFactory :
-            public ::rtl::IReference
+            public salhelper::SimpleReferenceObject
         {
         public:
             /// creates a simple version of the class OSQLParser
@@ -353,7 +354,7 @@ namespace connectivity
             ) = 0;
 
         protected:
-            ~IDataAccessToolsFactory() {}
+            virtual ~IDataAccessToolsFactory() {}
         };
 
 
