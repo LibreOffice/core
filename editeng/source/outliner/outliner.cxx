@@ -1734,7 +1734,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
     if(aDrawPortionHdl.IsSet())
     {
         // FIXME(matteocam)
-        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, std::max(nTextLen,2), rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
+        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, std::min(nTextLen,2), rFont, nPara, nIndex, pDXArray, pWrongSpellVector,
             pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, false, 0, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
