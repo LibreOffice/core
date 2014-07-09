@@ -35,7 +35,6 @@
 
 #include <vcl/outdevstate.hxx>
 
-#include <svsys.h>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <salframe.hxx>
