@@ -25,8 +25,11 @@
 
 using namespace std;
 
-
 namespace writerfilter { namespace dmapper {
+    namespace ConversionHelper{
+        SAL_DLLPUBLIC_IMPORT sal_Int32 convertTwipToMM100(sal_Int32 _t);
+        SAL_DLLPUBLIC_IMPORT sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t);
+    }
 
 SAL_DLLPUBLIC_IMPORT // export just for test
 boost::tuple<OUString, vector<OUString>, vector<OUString> >
@@ -44,9 +47,11 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
+    void testTwipConversions();
     void testFieldParameters();
 
     CPPUNIT_TEST_SUITE(WriterfilterMiscTest);
+    CPPUNIT_TEST(testTwipConversions);
     CPPUNIT_TEST(testFieldParameters);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -57,6 +62,26 @@ void WriterfilterMiscTest::setUp()
 
 void WriterfilterMiscTest::tearDown()
 {
+}
+
+void WriterfilterMiscTest::testTwipConversions()
+{
+    using writerfilter::dmapper::ConversionHelper::convertTwipToMM100;
+    using writerfilter::dmapper::ConversionHelper::convertTwipToMM100Unsigned;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2), convertTwipToMM100(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-17639), convertTwipToMM100(-10000));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-70556), convertTwipToMM100(-40000));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), convertTwipToMM100(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), convertTwipToMM100(10000));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), convertTwipToMM100(40000));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), convertTwipToMM100Unsigned(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), convertTwipToMM100Unsigned(-10000));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), convertTwipToMM100Unsigned(-40000));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), convertTwipToMM100Unsigned(1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(17639), convertTwipToMM100Unsigned(10000));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), convertTwipToMM100Unsigned(40000));
 }
 
 void WriterfilterMiscTest::testFieldParameters()

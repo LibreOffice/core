@@ -23,11 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_misc, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,writerfilter_misc, \
-	$$(INCLUDE) \
-	-I$(SRCDIR)/writerfilter/inc \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_misc, \
 	writerfilter/qa/cppunittests/misc/misc \
 ))
