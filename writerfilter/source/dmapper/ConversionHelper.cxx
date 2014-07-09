@@ -230,6 +230,10 @@ OUString ConvertMSFormatStringToSO(
 
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
+    // It appears that MSO handles large twip values specially, probably legacy 16bit handling,
+    // anything that's bigger than 32767 appears to be simply ignored.
+    if( _t >= 0x8000 )
+        return 0;
     return TWIP_TO_MM100( _t );
 }
 
@@ -237,11 +241,7 @@ sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
 {
     if( _t < 0 )
         return 0;
-    // It appears that MSO handles large twip values specially, probably legacy 16bit handling,
-    // anything that's bigger than 32767 appears to be simply ignored.
-    if( _t >= 0x8000 )
-        return 0;
-    return TWIP_TO_MM100( _t );
+    return convertTwipToMM100( _t );
 }
 
 sal_Int32 convertEMUToMM100(sal_Int32 _t)
