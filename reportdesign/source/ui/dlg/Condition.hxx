@@ -96,7 +96,6 @@ namespace rptui
 
 
         size_t                          m_nCondIndex;
-        long                            m_nLastKnownWindowWidth;
         bool                            m_bInDestruction;
 
         ConditionalExpressions          m_aConditionalExpressions;

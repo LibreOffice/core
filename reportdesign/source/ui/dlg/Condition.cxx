@@ -210,7 +210,6 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_pBtnUpdaterFontColor(NULL)
     ,m_pBtnUpdaterBackgroundColor(NULL)
     ,m_nCondIndex( 0 )
-    ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "modules/dbreport/ui/conditionwin.ui");
