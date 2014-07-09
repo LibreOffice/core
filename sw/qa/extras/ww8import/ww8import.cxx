@@ -496,6 +496,22 @@ DECLARE_WW8IMPORT_TEST(testBnc787942, "bnc787942.doc")
     parseDump("/root/page[1]/body/txt[4]/anchored");
 }
 
+DECLARE_WW8IMPORT_TEST(testFdo81102, "fdo81102.doc")
+{
+    // get page style at beginning of document
+    uno::Reference<text::XTextDocument> textDocument(
+        mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> start(
+        textDocument->getText()->getStart(), uno::UNO_QUERY);
+    OUString pageStyleName = getProperty<OUString>(start, "PageStyleName");
+    uno::Reference<style::XStyle> pageStyle(
+        getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+
+    // check that left and right pages do not share the same header
+    bool headerIsShared = getProperty<bool>(pageStyle, "HeaderIsShared");
+    CPPUNIT_ASSERT(!headerIsShared);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

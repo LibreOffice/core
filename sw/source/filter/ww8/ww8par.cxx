@@ -4320,15 +4320,12 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
 void wwSectionManager::SetUseOn(wwSection &rSection)
 {
-    bool bEven = (rSection.maSep.grpfIhdt & (WW8_HEADER_EVEN|WW8_FOOTER_EVEN)) ?
-        true : false;
-
     bool bMirror = mrReader.pWDop->fMirrorMargins ||
         mrReader.pWDop->doptypography.f2on1;
 
     UseOnPage eUseBase = bMirror ? nsUseOnPage::PD_MIRROR : nsUseOnPage::PD_ALL;
     UseOnPage eUse = eUseBase;
-    if (!bEven)
+    if (!mrReader.pWDop->fFacingPages)
         eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
     if (!rSection.HasTitlePage())
         eUse = (UseOnPage)(eUse | nsUseOnPage::PD_FIRSTSHARE);
