@@ -1654,6 +1654,8 @@ FormulaModalDialog::FormulaModalDialog( Window* pParent
     SetText(m_pImpl->aTitle1);
 }
 
+FormulaModalDialog::~FormulaModalDialog() {}
+
 void FormulaModalDialog::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
@@ -1737,6 +1739,8 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     reverseUniqueHelpIdHack(*this);
     SetText(m_pImpl->aTitle1);
 }
+
+FormulaDlg::~FormulaDlg() {}
 
 void FormulaDlg::Update(const OUString& _sExp)
 {
