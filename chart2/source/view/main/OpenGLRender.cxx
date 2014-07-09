@@ -43,20 +43,12 @@
 using namespace com::sun::star;
 
 #define DEBUG_PNG 0
-#if RENDER_TO_FILE
-#define BMP_HEADER_LEN 54
-#endif
 
 #if DEBUG_PNG
 #include <vcl/pngwrite.hxx>
 #endif
 
 #define GL_PI 3.14159f
-
-#if defined( _WIN32 )
-#define WGL_SAMPLE_BUFFERS_ARB   0x2041
-#define WGL_SAMPLES_ARB          0x2042
-#endif
 
 #define Z_STEP 0.001f
 
