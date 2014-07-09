@@ -243,9 +243,14 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         }
 
 #if defined(WNT)
+        bool bForbidden = bInWinExec;
+        // TODO: also check the security level
+        static const char* aBadServers[] = { "cmd" };
+        for (size_t i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
+            bForbidden |= sServer.equalsAscii(aBadServers[i]);
 
-        // Server not up, try once more to start it.
-        if( !bInWinExec )
+        // try to start the DDE server if it is not there
+        if( !bForbidden )
         {
             OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
             aCmdLine.append(".exe ");
