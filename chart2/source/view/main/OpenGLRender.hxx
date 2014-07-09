@@ -86,7 +86,6 @@ public:
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
     void SetLine2DWidth(int width);
-    BitmapEx GetAsBitmap();
     void SetColor(sal_uInt32 color, sal_uInt8 nAlpha);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO(int wholeFlag);

@@ -208,29 +208,6 @@ int OpenGLRender::InitOpenGL()
     return 0;
 }
 
-BitmapEx OpenGLRender::GetAsBitmap()
-{
-    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
-
-    BitmapEx aBmp = OpenGLHelper::ConvertBGRABufferToBitmapEx(buf.get(), m_iWidth, m_iHeight);
-
-#if DEBUG_PNG // debug PNG writing
-    static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/" ) + OUString::number( nIdx++ ) + ".png";
-    try {
-        vcl::PNGWriter aWriter( aBmp );
-        SvFileStream sOutput( aName, STREAM_WRITE );
-        aWriter.Write( sOutput );
-        sOutput.Close();
-    } catch (...) {
-        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
-    }
-#endif
-
-    return aBmp;
-}
-
 int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 {
     if (m_Line2DPointList.empty())
