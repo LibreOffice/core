@@ -30,6 +30,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 
 // predeclarations
@@ -54,10 +55,8 @@ namespace sdr
         class SVX_DLLPUBLIC OverlayManager
             : private boost::noncopyable
             , protected ::sdr::animation::Scheduler
-            , public rtl::IReference
+            , public salhelper::SimpleReferenceObject
         {
-        private:
-            oslInterlockedCount mnRefCount;
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
             OutputDevice&                               rmOutputDevice;
@@ -137,9 +136,6 @@ namespace sdr
             const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
 
             void InsertEvent(sdr::animation::Event* pNew) { Scheduler::InsertEvent(pNew); }
-
-            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
         };
     } // end of namespace overlay
 } // end of namespace sdr

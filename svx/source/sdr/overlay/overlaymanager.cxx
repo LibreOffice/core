@@ -117,7 +117,6 @@ namespace sdr
 
         OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
         :   Scheduler(),
-            mnRefCount(0),
             rmOutputDevice(rOutputDevice),
             maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
@@ -360,19 +359,6 @@ namespace sdr
                 mnStripeLengthPixel = nNew;
                 ImpStripeDefinitionChanged();
             }
-        }
-
-        oslInterlockedCount OverlayManager::acquire()
-        {
-            return osl_atomic_increment( &mnRefCount );
-        }
-
-        oslInterlockedCount OverlayManager::release()
-        {
-            oslInterlockedCount nCount( osl_atomic_decrement( &mnRefCount ) );
-            if ( nCount == 0 )
-                delete this;
-            return nCount;
         }
 
     } // end of namespace overlay
