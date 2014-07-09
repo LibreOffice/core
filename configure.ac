@@ -972,6 +972,11 @@ AC_ARG_ENABLE(atl,
     ],
 ,)
 
+AC_ARG_ENABLE(extension-windows-64-bit,
+    AS_HELP_STRING([--disable-extension-windows-64-bit],
+        [Disable 64 bit shell extension for Windows.])
+)
+
 AC_ARG_ENABLE(avahi,
     AS_HELP_STRING([--enable-avahi],
         [Determines whether to use Avahi to advertise Impress to remote controls.]),
@@ -3878,11 +3883,10 @@ if test "$_os" = "WINNT"; then
         # building LibreOffice itself as 64-bit code, which is
         # unfinished work and highly experimental.
 
-        BUILD_X64=
+        BUILD_X64=FALSE
         CXX_X64_BINARY=
         LINK_X64_BINARY=
-
-        if test "$BITNESS_OVERRIDE" = ""; then
+        if test "$BITNESS_OVERRIDE" = "" -a "x$enable_extension_windows_64_bit" != "xno"; then
             AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
             if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
                 # Prefer native x64 compiler to cross-compiler, in case we are running
