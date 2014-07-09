@@ -45,6 +45,8 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
+#include <unotools/securityoptions.hxx>
+
 #define DDELINK_ERROR_APP   1
 #define DDELINK_ERROR_DATA  2
 
@@ -243,13 +245,15 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         }
 
 #if defined(WNT)
-        bool bForbidden = bInWinExec;
-        // TODO: also check the security level
-        static const char* aBadServers[] = { "cmd" };
+        // check the suitability of starting the DDE server
+        const SvtSecurityOptions aSecOpts;
+        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() == eNEVER_EXECUTE);
+        bForbidden |= (bInWinExec != false);
+        static const char* aBadServers[] = { "cmd", "rundll32" };
         for (size_t i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
             bForbidden |= sServer.equalsAscii(aBadServers[i]);
 
-        // try to start the DDE server if it is not there
+        // try to start the DDE server if it is not there already
         if( !bForbidden )
         {
             OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
