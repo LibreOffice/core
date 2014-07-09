@@ -33,7 +33,7 @@ $(eval $(call gb_CppunitTest_add_cxxflags,connectivity_ado,\
 ))
 endif
 
-ifeq ($(WINDOWS_SDK_VERSION),80)
+ifneq (,$(filter $(WINDOWS_SDK_VERSION),80 81))
 $(eval $(call gb_CppunitTest_add_defs,connectivity_ado,\
 	-DNTDDI_VERSION=0x0601 \
 ))
