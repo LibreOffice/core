@@ -362,11 +362,10 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             {
                 if( !Hook() && pAction )
                 {
-                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                     if( pAction->GetType() == META_COMMENT_ACTION &&
-                        pCommentAct->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" )
+                        static_cast<MetaCommentAction*>(pAction)->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" )
                     {
-                        ImplDelegate2PluggableRenderer(pCommentAct, pOut);
+                        ImplDelegate2PluggableRenderer(static_cast<MetaCommentAction*>(pAction), pOut);
                     }
                     else
                     {
