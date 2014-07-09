@@ -47,7 +47,6 @@
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14" id="wp14"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordml" alias="w14" id="w14"/>
   <namespace-alias name="http://schemas.microsoft.com/office/drawing/2010/main" alias="a14" id="a14"/>
-  <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>
