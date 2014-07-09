@@ -11563,7 +11563,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="crystal default hicontrast oxygen tango sifr"
+    with_theme="crystal default galaxy hicontrast oxygen tango sifr"
     test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
