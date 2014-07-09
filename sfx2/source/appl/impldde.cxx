@@ -255,9 +255,14 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         }
 
 #if defined(WNT)
+        bool bForbidden = bInWinExec;
+        // TODO: also check the security level
+        static const char* aBadServers[] = { "cmd" };
+        for( int i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
+            bForbidden |= (sServer.CompareIgnoreCaseToAscii( aBadServers[i]) == COMPARE_EQUAL);
 
-        // Server nicht da, starten und nochmal versuchen
-        if( !bInWinExec )
+        // try to start the DDE server if it is not there
+        if( !bForbidden )
         {
             ByteString aCmdLine( sServer, RTL_TEXTENCODING_ASCII_US );
             aCmdLine.Append( ".exe " );
