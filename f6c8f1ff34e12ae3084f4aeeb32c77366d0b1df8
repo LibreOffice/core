@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_f92557ae",
+        "filename": "external/lcms2/ExternalProject_lcms2.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-09T09:32:01Z",
+      "side": 1,
+      "message": "why is there no \"else\" branch to the SDK check? that will result in an empty value if SDK !\u003d 8.1, does that work?\n\n(the conditional for version 110 is just because there is a different value for targeting WindowsXP, with 120 that is not possible so i\u0027m not sure if a conditional is needed)",
+      "revId": "f6c8f1ff34e12ae3084f4aeeb32c77366d0b1df8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
