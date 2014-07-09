@@ -115,51 +115,51 @@ OLEObjCache::~OLEObjCache()
 
 void OLEObjCache::UnloadOnDemand()
 {
-    if (nSize < maObjs.size())
+    if (nSize >= maObjs.size())
+        return;
+
+    // more objects than configured cache size try to remove objects
+    // of course not the freshly inserted one at nIndex=0
+    size_t nCount2 = maObjs.size();
+    size_t nIndex = nCount2-1;
+    while( nIndex && nCount2 > nSize )
     {
-        // more objects than configured cache size try to remove objects
-        // of course not the freshly inserted one at nIndex=0
-        size_t nCount2 = maObjs.size();
-        size_t nIndex = nCount2-1;
-        while( nIndex && nCount2 > nSize )
+        SdrOle2Obj* pUnloadObj = maObjs[nIndex--];
+        if (!pUnloadObj)
+            continue;
+
+        try
         {
-            SdrOle2Obj* pUnloadObj = maObjs[nIndex--];
-            if ( pUnloadObj )
+            // it is important to get object without reinitialization to avoid reentrance
+            uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
+
+            bool bUnload = SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
+
+            // check whether the object can be unloaded before looking for the parent objects
+            if ( xUnloadObj.is() && bUnload )
             {
-                try
+                uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
+                if ( xUnloadModel.is() )
                 {
-                    // it is important to get object without reinitialization to avoid reentrance
-                    uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
-
-                    bool bUnload = SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
-
-                    // check whether the object can be unloaded before looking for the parent objects
-                    if ( xUnloadObj.is() && bUnload )
+                    for (size_t nCheckInd = 0; nCheckInd < maObjs.size(); nCheckInd++)
                     {
-                        uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
-                        if ( xUnloadModel.is() )
+                        SdrOle2Obj* pCacheObj = maObjs[nCheckInd];
+                        if ( pCacheObj && pCacheObj != pUnloadObj )
                         {
-                            for (size_t nCheckInd = 0; nCheckInd < maObjs.size(); nCheckInd++)
-                            {
-                                SdrOle2Obj* pCacheObj = maObjs[nCheckInd];
-                                if ( pCacheObj && pCacheObj != pUnloadObj )
-                                {
-                                    uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
-                                    if ( xUnloadModel == xParentModel )
-                                        bUnload = false; // the object has running embedded objects
-                                }
-                            }
+                            uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
+                            if ( xUnloadModel == xParentModel )
+                                bUnload = false; // the object has running embedded objects
                         }
                     }
-
-                    if ( bUnload && UnloadObj(pUnloadObj) )
-                        // object was successfully unloaded
-                        nCount2--;
                 }
-                catch( uno::Exception& )
-                {}
             }
+
+            if ( bUnload && UnloadObj(pUnloadObj) )
+                // object was successfully unloaded
+                nCount2--;
         }
+        catch( uno::Exception& )
+        {}
     }
 }
 
