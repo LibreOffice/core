@@ -475,18 +475,21 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
     return pImp->pDescr;
 }
 
-
+void SfxFrame::GetDefaultTargetList(TargetList& rList)
+{
+    // An empty string for 'No Target'
+    rList.push_back( OUString() );
+    rList.push_back( OUString( "_top" ) );
+    rList.push_back( OUString( "_parent" ) );
+    rList.push_back( OUString( "_blank" ) );
+    rList.push_back( OUString( "_self" ) );
+}
 
 void SfxFrame::GetTargetList( TargetList& rList ) const
 {
     if ( !GetParentFrame() )
     {
-        // An empty string for 'No Target'
-        rList.push_back( OUString() );
-        rList.push_back( OUString( "_top" ) );
-        rList.push_back( OUString( "_parent" ) );
-        rList.push_back( OUString( "_blank" ) );
-        rList.push_back( OUString( "_self" ) );
+        SfxFrame::GetDefaultTargetList(rList);
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();
@@ -500,8 +503,6 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
         }
     }
 }
-
-
 
 bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {

@@ -149,6 +149,7 @@ public:
     bool                IsParent( SfxFrame* ) const;
 
     sal_uInt32          GetFrameType() const;
+    static void         GetDefaultTargetList( TargetList& );
     void                GetTargetList( TargetList& ) const;
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     void                UpdateDescriptor( SfxObjectShell *pDoc );
