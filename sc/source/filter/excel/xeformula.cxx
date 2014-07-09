@@ -144,7 +144,7 @@ public:
 
     inline sal_uInt8    GetMinParamCount() const { return mrFuncInfo.mnMinParamCount; }
     inline sal_uInt8    GetMaxParamCount() const { return mrFuncInfo.mnMaxParamCount; }
-    inline sal_uInt8    GetParamCount() const { return static_cast< sal_uInt8 >( mxOperands->size() ); }
+    inline size_t       GetParamCount() const { return ( mxOperands->size() ); }
     void                FinishParam( sal_uInt16 nTokPos );
     inline XclExpOperandListRef GetOperandList() const { return mxOperands; }
 
@@ -313,6 +313,7 @@ public:
     bool IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const;
     bool IsRef2D( const ScComplexRefData& rRefData, bool bCheck3DFlag ) const;
 
+
 private:
     const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
     inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( mxData->maTokVec.size() ); }
@@ -401,6 +402,7 @@ private:
     sal_uInt16          PopOperandPos();
 
     void                Append( sal_uInt8 nData );
+    void                Append( size_t nData );
     void                Append( sal_uInt8 nData, size_t nCount );
     void                Append( sal_uInt16 nData );
     void                Append( sal_uInt32 nData );
@@ -447,6 +449,7 @@ private:
     void                AppendExt( sal_uInt16 nData );
     void                AppendExt( double fData );
     void                AppendExt( const OUString& rString );
+
 
 private:
     typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
@@ -1422,7 +1425,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
     AppendTrailingParam( rFuncData );
 
     // check if parameter count fits into the limits of the function
-    sal_uInt8 nParamCount = rFuncData.GetParamCount();
+    size_t nParamCount = rFuncData.GetParamCount();
     if( (rFuncData.GetMinParamCount() <= nParamCount) && (nParamCount <= rFuncData.GetMaxParamCount()) )
     {
         // first put the tAttrSpace tokens, they must not be included in tAttrGoto handling
@@ -1486,7 +1489,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
 
 void XclExpFmlaCompImpl::FinishIfFunction( XclExpFuncData& rFuncData )
 {
-    sal_uInt16 nParamCount = rFuncData.GetParamCount();
+    size_t nParamCount = rFuncData.GetParamCount();
     OSL_ENSURE( (nParamCount == 2) || (nParamCount == 3), "XclExpFmlaCompImpl::FinishIfFunction - wrong parameter count" );
     const ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
     OSL_ENSURE( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishIfFunction - wrong number of tAttr tokens" );
@@ -1500,7 +1503,7 @@ void XclExpFmlaCompImpl::FinishIfFunction( XclExpFuncData& rFuncData )
 
 void XclExpFmlaCompImpl::FinishChooseFunction( XclExpFuncData& rFuncData )
 {
-    sal_uInt16 nParamCount = rFuncData.GetParamCount();
+    size_t nParamCount = rFuncData.GetParamCount();
     ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
     OSL_ENSURE( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishChooseFunction - wrong number of tAttr tokens" );
     // number of choices is parameter count minus 1
@@ -1560,7 +1563,7 @@ XclExpScToken XclExpFmlaCompImpl::ProcessParam( XclExpScToken aTokData, XclExpFu
 void XclExpFmlaCompImpl::PrepareParam( XclExpFuncData& rFuncData )
 {
     // index of this parameter is equal to number of already finished parameters
-    sal_uInt8 nParamIdx = rFuncData.GetParamCount();
+    size_t nParamIdx = rFuncData.GetParamCount();
 
     switch( rFuncData.GetOpCode() )
     {
@@ -1600,7 +1603,7 @@ void XclExpFmlaCompImpl::FinishParam( XclExpFuncData& rFuncData )
     rFuncData.FinishParam( PopOperandPos() );
 
     // append more tokens for parameters of some special functions
-    sal_uInt8 nParamIdx = rFuncData.GetParamCount() - 1;
+    size_t nParamIdx = rFuncData.GetParamCount();
     switch( rFuncData.GetOpCode() )
     {
         case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
@@ -1659,7 +1662,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
 
 void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 {
-    sal_uInt8 nParamCount = rFuncData.GetParamCount();
+    size_t nParamCount = rFuncData.GetParamCount();
     switch( rFuncData.GetOpCode() )
     {
         case ocIf:
@@ -2224,6 +2227,11 @@ void XclExpFmlaCompImpl::Append( sal_uInt8 nData )
     mxData->maTokVec.push_back( nData );
 }
 
+void XclExpFmlaCompImpl::Append( size_t nData )
+{
+    mxData->maTokVec.push_back( nData );
+}
+
 void XclExpFmlaCompImpl::Append( sal_uInt8 nData, size_t nCount )
 {
     mxData->maTokVec.resize( mxData->maTokVec.size() + nCount, nData );
@@ -2414,7 +2422,7 @@ void XclExpFmlaCompImpl::AppendLogicalOperatorToken( sal_uInt16 nXclFuncIdx, sal
 void XclExpFmlaCompImpl::AppendFuncToken( const XclExpFuncData& rFuncData )
 {
     sal_uInt16 nXclFuncIdx = rFuncData.GetXclFuncIdx();
-    sal_uInt8 nParamCount = rFuncData.GetParamCount();
+    size_t nParamCount = rFuncData.GetParamCount();
     sal_uInt8 nRetClass = rFuncData.GetReturnClass();
 
     if( (nXclFuncIdx == EXC_FUNCID_SUM) && (nParamCount == 1) )
