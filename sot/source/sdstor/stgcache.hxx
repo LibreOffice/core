@@ -27,6 +27,7 @@
 #include <stgelem.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
+#include <salhelper/simplereferenceobject.hxx>
 
 class UCBStorageStream;
 class StgPage;
@@ -95,8 +96,8 @@ public:
     void Clear();                           // clear the cache
 };
 
-class StgPage : public rtl::IReference, private boost::noncopyable {
-    sal_uInt32      mnRefCount;
+class StgPage : public salhelper::SimpleReferenceObject, private boost::noncopyable
+{
     const sal_Int32 mnPage;                // page index
     sal_uInt8*      mpData;                // nSize bytes
     short           mnSize;                // size of this page
@@ -110,19 +111,6 @@ public:
     short     GetSize()  { return mnSize; }
 
 public:
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
-    {
-        return ++mnRefCount;
-    }
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
-    {
-        if ( --mnRefCount == 0)
-        {
-            delete this;
-            return 0;
-        }
-        return mnRefCount;
-    }
     static bool IsPageGreater( const StgPage *pA, const StgPage *pB );
 };
 

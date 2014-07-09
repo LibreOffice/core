@@ -37,8 +37,7 @@
 // the correctness of the I/O.
 
 StgPage::StgPage( short nSize, sal_Int32 nPage )
-    : mnRefCount( 0 )
-    , mnPage( nPage )
+    : mnPage( nPage )
     , mpData( new sal_uInt8[ nSize ] )
     , mnSize( nSize )
 {
