@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_79414739",
+        "filename": "sw/source/core/fields/fldbas.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-09T10:27:12Z",
+      "side": 1,
+      "message": "But then why do you use the new method in core? The idea was that only the exporter will use the new method, so existing documents won\u0027t change.",
+      "revId": "3b77163f5fd5cdb61bdb8315ecaf7f46651675c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
