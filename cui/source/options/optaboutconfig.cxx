@@ -216,8 +216,20 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
     {
         Any aNode = xNameAccess->getByName( seqItems[i] );
 
-        Reference< XNameAccess > xNextNameAccess( aNode, uno::UNO_QUERY );
-        if( xNextNameAccess.is() )
+        bool bNotLeaf = false;
+
+        Reference< XNameAccess > xNextNameAccess;
+        try
+        {
+            xNextNameAccess = Reference< XNameAccess >(aNode, uno::UNO_QUERY);
+            bNotLeaf = xNextNameAccess.is();
+        }
+        catch (const RuntimeException& e)
+        {
+            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: exception " << e.Message);
+        }
+
+        if (bNotLeaf)
         {
             // not leaf node
             FillItems( xNextNameAccess );
