@@ -287,7 +287,8 @@ Here is an autogen.input for iOS (device) using Xcode 4.6, on OS X 10.8:
 --enable-debug
 --enable-werror
 
-For the iOS Simulator:
+For the iOS Simulator, but note that building for the simulator is
+broken at the moment (July 2014):
 
 --build=i386-apple-darwin10.7.0
 --host=arm-apple-darwin10
@@ -296,9 +297,9 @@ For the iOS Simulator:
 --enable-debug
 --enable-werror
 
-Note that you will have to install autoconf and automake yourself
-before running autogen.sh. They are no longer included in Xcode 4.3
-and later (not even in the add-on "command line tools").
+You will have to install autoconf and automake yourself before running
+autogen.sh. They are no longer included in Xcode 4.3 and later (not
+even in the add-on "command line tools").
 
 The -mmacosx-version-min=10.7 is necessary when building for the iOS
 simulator to avoid clang replacing simple calls to fprintf with calls
