@@ -1151,6 +1151,12 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
     }
     else  //regular value cell
     {
+        // fdo#62250 absent values are not NaN, set to 0.0
+        // PutValueCell() is called only for a known cell value type,
+        // bIsEmpty==false in all these cases, no sense to check it here.
+        if (::rtl::math::isNan( fValue))
+            fValue = 0.0;
+
         // #i62435# Initialize the value cell's script type if the default
         // style's number format is latin-only. If the cell uses a different
         // format, the script type will be reset when the style is applied.
