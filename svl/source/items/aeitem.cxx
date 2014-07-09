@@ -19,7 +19,8 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
-#include <vector>
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
@@ -31,14 +32,31 @@ struct SfxAllEnumValue_Impl
     OUString aText;
 };
 
-class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl*>
+class SfxAllEnumValueArr : boost::noncopyable
 {
 public:
-    ~SfxAllEnumValueArr()
-    {
-        for( const_iterator it = begin(); it != end(); ++it )
-            delete *it;
+    const SfxAllEnumValue_Impl &operator[](size_t i) const {
+        return mValues[i];
     }
+
+    bool empty() const {
+        return mValues.empty();
+    }
+
+    void Insert(sal_uInt16 n, SfxAllEnumValue_Impl *value) {
+        mValues.insert(mValues.begin() + n, value);
+    }
+
+    void Erase(sal_uInt16 n) {
+        mValues.erase(mValues.begin() + n);
+    }
+
+    size_t size() const {
+        return mValues.size();
+    }
+
+private:
+    boost::ptr_vector<SfxAllEnumValue_Impl> mValues;
 };
 
 
@@ -96,9 +114,9 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     for ( sal_uInt16 nPos = 0; nPos < rCopy.pValues->size(); ++nPos )
     {
         SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
-        pVal->nValue = (*rCopy.pValues)[nPos]->nValue;
-        pVal->aText = (*rCopy.pValues)[nPos]->aText;
-        pValues->insert( pValues->begin() + nPos, pVal );
+        pVal->nValue = (*rCopy.pValues)[nPos].nValue;
+        pVal->aText = (*rCopy.pValues)[nPos].aText;
+        pValues->Insert( nPos, pVal );
     }
 
     if( rCopy.pDisabledValues )
@@ -127,7 +145,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
-    return (*pValues)[nPos]->aText;
+    return (*pValues)[nPos].aText;
 }
 
 
@@ -135,7 +153,7 @@ OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
-    return (*pValues)[nPos]->nValue;
+    return (*pValues)[nPos].nValue;
 }
 
 
@@ -171,7 +189,7 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
     //!O: binaere Suche oder SortArray verwenden
     sal_uInt16 nPos;
     for ( nPos = 0; nPos < pValues->size(); ++nPos )
-        if ( (*pValues)[nPos]->nValue >= nVal )
+        if ( (*pValues)[nPos].nValue >= nVal )
             return nPos;
     return nPos;
 }
@@ -207,7 +225,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
         // remove when exists
         RemoveValue( nValue );
     // then insert
-    pValues->insert( pValues->begin() + _GetPosByValue(nValue), pVal ); //! doppelte?!
+    pValues->Insert( _GetPosByValue(nValue), pVal ); //! doppelte?!
 }
 
 
@@ -220,7 +238,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
 
-    pValues->insert( pValues->begin() + _GetPosByValue(nValue), pVal ); //! doppelte?!
+    pValues->Insert( _GetPosByValue(nValue), pVal ); //! doppelte?!
 }
 
 void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
@@ -249,7 +267,7 @@ void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {
     sal_uInt16 nPos = GetPosByValue(nValue);
     DBG_ASSERT( nPos != USHRT_MAX, "removing value not in enum" );
-    pValues->erase( pValues->begin() + nPos );
+    pValues->Erase( nPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
