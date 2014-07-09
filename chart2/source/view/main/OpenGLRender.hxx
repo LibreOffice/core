@@ -79,9 +79,6 @@ public:
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     void SetSize(int width, int height);
     void Release();
-#if RENDER_TO_FILE
-    int CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
-#endif
     int RenderLine2FBO(int wholeFlag);
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
