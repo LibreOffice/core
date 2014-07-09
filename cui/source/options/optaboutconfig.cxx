@@ -124,21 +124,16 @@ Size CuiCustomMultilineEdit::GetOptimalSize() const
     return LogicToPixel(Size(150, GetTextHeight()), MAP_APPFONT);
 }
 
-Size CuiAboutConfigTabPage::GetOptimalSize() const
-{
-    return LogicToPixel(Size(1024,800),MAP_APPFONT);
-}
-
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
     ModelessDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
     m_pResetBtn( get<PushButton>("reset") ),
     m_pEditBtn( get<PushButton>("edit") ),
     m_vectorOfModified(),
-    m_pPrefBox( new OptHeaderTabListBox( *m_pPrefCtrl,
-                                         WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
+    m_pPrefBox( new SvSimpleTable(*m_pPrefCtrl,
+                                  WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
-    Size aControlSize(200,200);
+    Size aControlSize(LogicToPixel(Size(385, 230), MAP_APPFONT));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
     m_pPrefCtrl->set_height_request(aControlSize.Height());
 
@@ -152,11 +147,14 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSe
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
     rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
 
-    long aTabs[] = {4,900,50,50,50};//TODO: Not works correctly hardcoded for now.
+    long aTabs[] = {4,0,0,0,0};
 
-    aTabs[2] += aTabs[1] + rBar.GetTextWidth(rBar.GetItemText(1));
-    aTabs[3] += aTabs[2] + 160; //rBar.GetTextWidth(rBar.GetItemText(2));
-    aTabs[4] += aTabs[3] + 40; //rBar.GetTextWidth(rBar.GetItemText(3));
+    float fWidth = approximate_char_width();
+
+    aTabs[1] = 0;
+    aTabs[2] = aTabs[1] + fWidth * 65;
+    aTabs[3] = aTabs[2] + fWidth * 20;
+    aTabs[4] = aTabs[3] + fWidth * 8;
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 }
@@ -174,7 +172,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
     m_pPrefBox->Insert( pEntry );
 }
 
-void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
+void CuiAboutConfigTabPage::Reset()
 {
     m_pPrefBox->Clear();
 
@@ -187,7 +185,7 @@ void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
     m_pPrefBox->SetUpdateMode(true);
 }
 
-bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
+bool CuiAboutConfigTabPage::FillItemSet()
 {
     bool bModified = false;
 
