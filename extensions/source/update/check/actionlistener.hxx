@@ -21,8 +21,9 @@
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
-class IActionListener : public rtl::IReference
+class IActionListener : public virtual salhelper::SimpleReferenceObject
 {
     public:
 
@@ -34,7 +35,7 @@ class IActionListener : public rtl::IReference
     virtual void            closeAfterFailure() = 0;
 
 protected:
-    ~IActionListener() {}
+    virtual ~IActionListener() {}
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX

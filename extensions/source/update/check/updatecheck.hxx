@@ -55,7 +55,6 @@ class UpdateCheck :
     public UpdateCheckConfigListener,
     public IActionListener,
     public DownloadInteractionHandler,
-    public salhelper::ReferenceObject,
     public rtl::StaticWithInit< rtl::Reference< UpdateCheck >, UpdateCheckInitData >
 {
     UpdateCheck();
@@ -119,10 +118,6 @@ public:
     void pause() SAL_OVERRIDE;
     void resume() SAL_OVERRIDE;
     void closeAfterFailure() SAL_OVERRIDE;
-
-    // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 private:
 

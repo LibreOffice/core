@@ -17,22 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ref.hxx>
-
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
+
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 /* This interface should be implemented by classes acting
  * as controller (as in the MVC pattern).
  */
 
-struct UpdateCheckConfigListener : public rtl::IReference
+struct UpdateCheckConfigListener : public virtual salhelper::SimpleReferenceObject
 {
     virtual void autoCheckStatusChanged(bool enabled) = 0;
     virtual void autoCheckIntervalChanged() = 0;
 
 protected:
-    ~UpdateCheckConfigListener() {}
+    virtual ~UpdateCheckConfigListener() {}
 };
 
 #endif

@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	test \
 	unotest \
 	$(gb_UWINAPI) \

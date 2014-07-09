@@ -1606,20 +1606,4 @@ UpdateCheck::autoCheckIntervalChanged()
     m_aCondition.set();
 };
 
-
-
-oslInterlockedCount SAL_CALL
-UpdateCheck::acquire()
-{
-    return ReferenceObject::acquire();
-}
-
-
-
-oslInterlockedCount SAL_CALL
-UpdateCheck::release()
-{
-    return ReferenceObject::release();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/conditn.hxx>
 #include <osl/file.h>
+#include <salhelper/simplereferenceobject.hxx>
 
-struct DownloadInteractionHandler : public rtl::IReference
+struct DownloadInteractionHandler : public virtual salhelper::SimpleReferenceObject
 {
     virtual bool checkDownloadDestination(const OUString& rFileName) = 0;
 
@@ -47,7 +48,7 @@ struct DownloadInteractionHandler : public rtl::IReference
     virtual void downloadFinished(const OUString& rFileName) = 0;
 
 protected:
-    ~DownloadInteractionHandler() {}
+    virtual ~DownloadInteractionHandler() {}
 };
 
 

@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,updchk,\
 	cppuhelper \
 	cppu \
 	sal \
+	salhelper \
 ))
 
 ifeq ($(OS),WNT)
