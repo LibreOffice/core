@@ -371,16 +371,10 @@ OpenGLRender::OpenGLRender()
     , m_SymbolShapeID(0)
 {
     //TODO: moggi: use STL
-    memset(&m_Line2DPointList, 0, sizeof(PointList));
-
-    memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
-
-    //TODO: moggi: use STL
     for (size_t i = 0; i < sizeof(m_BackgroundColor) / sizeof(float); i++)
     {
         m_BackgroundColor[i] = 1.0;
     }
-    memset(&m_Area2DPointList, 0, sizeof(m_Area2DPointList));
 }
 
 OpenGLRender::~OpenGLRender()
