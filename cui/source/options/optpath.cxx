@@ -228,8 +228,8 @@ SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
                             0,
                             HIB_LEFT | HIB_VCENTER );
 
-    long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));
-    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(2));
+    long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_TYPE));
+    long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_PATH));
 
     long aTabs[] = {3, 0, 0, 0};
     aTabs[2] = nWidth1 + 12;
