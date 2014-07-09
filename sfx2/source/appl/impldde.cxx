@@ -259,7 +259,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 #if defined(WNT)
         // check the suitability of starting the DDE server
         const SvtSecurityOptions aSecOpts;
-        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() != eNEVER_EXECUTE);
+        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() == eNEVER_EXECUTE);
         bForbidden |= (bInWinExec != sal_False);
         static const char* aBadServers[] = { "cmd", "rundll32" };
         for( int i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
