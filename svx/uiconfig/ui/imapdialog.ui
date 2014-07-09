@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkWindow" id="ImapDialog">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">ImageMap Editor</property>
     <child>
       <object class="GtkBox" id="mainbox">
@@ -26,7 +28,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_APPLY</property>
                 <property name="label" translatable="yes">Apply</property>
                 <property name="icon_name">svx/res/id01.png</property>
@@ -42,7 +43,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_OPEN</property>
                 <property name="label" translatable="yes">Open...</property>
                 <property name="icon_name">svx/res/id02.png</property>
@@ -58,7 +58,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_SAVEAS</property>
                 <property name="label" translatable="yes">Save...</property>
                 <property name="icon_name">svx/res/id03.png</property>
@@ -74,7 +73,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_SELECT</property>
                 <property name="label" translatable="yes">Select</property>
                 <property name="icon_name">svx/res/id04.png</property>
@@ -90,7 +88,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_RECT</property>
                 <property name="label" translatable="yes">Rectangle</property>
                 <property name="icon_name">svx/res/id05.png</property>
@@ -106,7 +103,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_CIRCLE</property>
                 <property name="label" translatable="yes">Ellipse</property>
                 <property name="icon_name">svx/res/id06.png</property>
@@ -122,7 +118,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_POLY</property>
                 <property name="label" translatable="yes">Polygon</property>
                 <property name="icon_name">svx/res/id07.png</property>
@@ -138,7 +133,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_FREEPOLY</property>
                 <property name="label" translatable="yes">Freeform Polygon</property>
                 <property name="icon_name">svx/res/id08.png</property>
@@ -154,7 +148,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_POLYEDIT</property>
                 <property name="label" translatable="yes">Edit Points</property>
                 <property name="icon_name">svx/res/id030.png</property>
@@ -170,7 +163,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_POLYMOVE</property>
                 <property name="label" translatable="yes">Move Points</property>
                 <property name="icon_name">svx/res/id031.png</property>
@@ -186,7 +178,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_POLYINSERT</property>
                 <property name="label" translatable="yes">Insert Points</property>
                 <property name="icon_name">svx/res/id032.png</property>
@@ -202,7 +193,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_POLYDELETE</property>
                 <property name="label" translatable="yes">Delete Points</property>
                 <property name="icon_name">svx/res/id033.png</property>
@@ -218,7 +208,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_UNDO</property>
                 <property name="label" translatable="yes">Undo </property>
                 <property name="icon_name">svx/res/id040.png</property>
@@ -234,7 +223,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_REDO</property>
                 <property name="label" translatable="yes">Redo</property>
                 <property name="icon_name">svx/res/id041.png</property>
@@ -250,7 +238,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_ACTIVE</property>
                 <property name="label" translatable="yes">Active</property>
                 <property name="icon_name">svx/res/id016.png</property>
@@ -266,7 +253,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_MACRO</property>
                 <property name="label" translatable="yes">Macro...</property>
                 <property name="icon_name">svx/res/id018.png</property>
@@ -282,7 +268,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
-                <property name="use_action_appearance">False</property>
                 <property name="action_name">TBI_PROPERTY</property>
                 <property name="label" translatable="yes">Properties...</property>
                 <property name="icon_name">svx/res/id019.png</property>
@@ -304,17 +289,93 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="urlft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Address:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">url</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="svtlo-SvtURLBox" id="url">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="targetft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Frame:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">target</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="text">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="target">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry" id="combobox-entry">
+                        <property name="can_focus">True</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -325,68 +386,11 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Text:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">text</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="targetft">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Frame:</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="text">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="svtlo-SvtURLBox" id="url">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">3</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="target">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="has_entry">True</property>
-                <child internal-child="entry">
-                  <object class="GtkEntry" id="combobox-entry">
-                    <property name="can_focus">False</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
                 <property name="top_attach">1</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
@@ -401,7 +405,6 @@
         </child>
         <child>
           <object class="GtkBox" id="container:border">
-            <property name="height_request">200</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>

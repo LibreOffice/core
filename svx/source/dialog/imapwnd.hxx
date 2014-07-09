@@ -107,6 +107,7 @@ protected:
 
     // GraphCtrl
     virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
     virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;

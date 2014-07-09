@@ -125,12 +125,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeStatusBar(Window *pParent, 
     return new StatusBar(pParent);
 }
 
-SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
-                        Window* _pParent ) :
-        SfxModelessDialog   ( _pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui" ),
-        maImageList         ( SVX_RES( IL_IMAPDLG ) ),
-        pCheckObj           ( NULL ),
-        aIMapItem           ( SID_IMAP_EXEC, *this, *_pBindings )
+SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, Window* _pParent)
+    : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")
+    , maImageList(SVX_RES(IL_IMAPDLG))
+    , pCheckObj(NULL)
+    , aIMapItem(SID_IMAP_EXEC, *this, *_pBindings)
 {
     get(m_pTbxIMapDlg1, "toolbar");
     m_pTbxIMapDlg1->InsertSeparator(3, 5);
@@ -180,10 +179,23 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     get(m_pEdtText, "text");
     get(m_pFtTarget, "targetft");
     get(m_pCbbTarget, "target");
+
+    //lock this down so it doesn't jump around in size
+    //as entries are added later on
+    TargetList aTmpList;
+    SfxFrame::GetDefaultTargetList(aTmpList);
+    for (size_t i = 0, n = aTmpList.size(); i < n; ++i)
+        m_pCbbTarget->InsertEntry(aTmpList[i]);
+    Size aPrefSize(m_pCbbTarget->get_preferred_size());
+    m_pCbbTarget->set_width_request(aPrefSize.Width());
+    m_pCbbTarget->Clear();
+
     get(m_pStbStatus, "statusbar");
 
     VclVBox* _pContainer = get<VclVBox>("container");
     pIMapWnd = new IMapWindow( _pContainer, WB_BORDER, _pBindings->GetActiveFrame() );
+    pIMapWnd->set_hexpand(true);
+    pIMapWnd->set_vexpand(true);
     pIMapWnd->Show();
 
     ApplyImageList();
@@ -235,30 +247,6 @@ SvxIMapDlg::~SvxIMapDlg()
     // Delete URL-List
     delete pIMapWnd;
     delete pOwnData;
-}
-
-void SvxIMapDlg::Resize()
-{
-    Size aMinSize( GetMinOutputSizePixel() );
-    Size aNewSize( GetOutputSizePixel() );
-
-    if ( aNewSize.Height() >= aMinSize.Height() )
-    {
-        VclVBox *_pMainBox = get<VclVBox>("mainbox");
-        _pMainBox->SetSizePixel( aNewSize );
-
-        Size    _aSize( m_pStbStatus->GetSizePixel() );
-        Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
-
-        // Position the EditWindow
-        VclVBox *_pContainer = get<VclVBox>("container");
-        _aSize.Width() = aNewSize.Width() - 6;
-        _aSize.Height() = aPoint.Y() - _pContainer->GetPosPixel().Y() - 12;
-
-        pIMapWnd->SetSizePixel( _aSize );
-
-        aLastSize = aNewSize;
-    }
 }
 
 bool SvxIMapDlg::Close()
@@ -317,7 +305,7 @@ const ImageMap& SvxIMapDlg::GetImageMap() const
 
 void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 {
-    TargetList  aNewList( rTargetList );
+    TargetList aNewList( rTargetList );
 
     pIMapWnd->SetTargetList( aNewList );
 

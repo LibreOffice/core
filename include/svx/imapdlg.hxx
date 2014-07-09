@@ -134,7 +134,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;
 
-    virtual void        Resize() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
 
     DECL_LINK( TbxClickHdl, ToolBox* );

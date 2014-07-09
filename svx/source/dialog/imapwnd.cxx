@@ -75,6 +75,11 @@ IMapWindow::~IMapWindow()
     delete[] pItemInfo;
 }
 
+Size IMapWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(270, 170), MAP_APPFONT);
+}
+
 void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 {
     ReplaceImageMap( rImageMap, false );
