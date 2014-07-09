@@ -36,66 +36,11 @@ namespace store
 const sal_uInt32 OStoreObject::m_nTypeId = sal_uInt32(0x58190322);
 
 /*
- * OStoreObject.
- */
-OStoreObject::OStoreObject (void)
-    : m_nRefCount (0)
-{
-}
-
-/*
- * ~OStoreObject.
- */
-OStoreObject::~OStoreObject (void)
-{
-    OSL_ASSERT(m_nRefCount == 0);
-}
-
-/*
- * operator new.
- */
-void* OStoreObject::operator new (size_t n)
-{
-    return rtl_allocateMemory (n);
-}
-
-/*
- * operator delete.
- */
-void OStoreObject::operator delete (void *p)
-{
-    rtl_freeMemory (p);
-}
-
-/*
  * isKindOf.
  */
 bool OStoreObject::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
-}
-
-/*
- * acquire.
- */
-oslInterlockedCount SAL_CALL OStoreObject::acquire (void)
-{
-    oslInterlockedCount result = osl_atomic_increment (&m_nRefCount);
-    return (result);
-}
-
-/*
- * release.
- */
-oslInterlockedCount SAL_CALL OStoreObject::release (void)
-{
-    oslInterlockedCount result = osl_atomic_decrement (&m_nRefCount);
-    if (result == 0)
-    {
-        // Last reference released.
-        delete this;
-    }
-    return (result);
 }
 
 } // namespace store

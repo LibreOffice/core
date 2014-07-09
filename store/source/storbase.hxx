@@ -21,6 +21,7 @@
 #define INCLUDED_STORE_SOURCE_STORBASE_HXX
 
 #include "sal/config.h"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "boost/static_assert.hpp"
 #include "sal/types.h"
@@ -454,7 +455,7 @@ struct PageData
     /** Allocation.
      */
     class Allocator_Impl;
-    class Allocator : public rtl::IReference
+    class Allocator : public virtual salhelper::SimpleReferenceObject
     {
     public:
         template< class T > T * construct()
@@ -483,7 +484,7 @@ struct PageData
             rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
 
     protected:
-        ~Allocator() {}
+        virtual ~Allocator() {}
 
     private:
         /** Implementation (abstract).

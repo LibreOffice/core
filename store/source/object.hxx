@@ -21,10 +21,9 @@
 #define INCLUDED_STORE_SOURCE_OBJECT_HXX
 
 #include "sal/types.h"
-
 #include "rtl/ref.hxx"
-
 #include "osl/interlck.h"
+#include "salhelper/simplereferenceobject.hxx"
 
 namespace store
 {
@@ -34,7 +33,7 @@ namespace store
  * IStoreHandle interface.
  *
  *======================================================================*/
-class IStoreHandle : public rtl::IReference
+class IStoreHandle : public virtual salhelper::SimpleReferenceObject
 {
 public:
     /** Replaces dynamic_cast type checking.
@@ -42,7 +41,7 @@ public:
     virtual bool isKindOf (sal_uInt32 nTypeId) = 0;
 
 protected:
-    ~IStoreHandle() {}
+    virtual ~IStoreHandle() {}
 };
 
 /** Template helper function as dynamic_cast replacement.
@@ -66,26 +65,16 @@ class OStoreObject : public store::IStoreHandle
 public:
     /** Construction.
      */
-    OStoreObject (void);
-
-    /** Allocation.
-     */
-    static void* operator new (size_t n);
-    static void  operator delete (void *p);
+    OStoreObject() {}
 
     /** IStoreHandle.
      */
     virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
 
-    /** IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire (void) SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release (void) SAL_OVERRIDE;
-
 protected:
     /** Destruction.
      */
-    virtual ~OStoreObject (void);
+    virtual ~OStoreObject() {}
 
 private:
     /** The IStoreHandle TypeId.

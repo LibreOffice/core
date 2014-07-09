@@ -24,6 +24,7 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "store/types.h"
 #include "storbase.hxx"
@@ -36,7 +37,7 @@ namespace store
  * ILockBytes interface.
  *
  *======================================================================*/
-class ILockBytes : public rtl::IReference
+class ILockBytes : public virtual salhelper::SimpleReferenceObject
 {
 public:
     /**
@@ -103,7 +104,7 @@ public:
     storeError flush();
 
 protected:
-    ~ILockBytes() {}
+    virtual ~ILockBytes() {}
 
 private:
     /** Implementation (abstract).

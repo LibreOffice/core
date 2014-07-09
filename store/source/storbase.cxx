@@ -84,17 +84,6 @@ public:
 
     storeError initialize (sal_uInt16 nPageSize);
 
-    /** Delegate multiple inherited rtl::IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
-    {
-        return OStoreObject::acquire();
-    }
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
-    {
-        return OStoreObject::release();
-    }
-
 protected:
     /** Destruction.
      */

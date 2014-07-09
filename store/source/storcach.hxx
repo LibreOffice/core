@@ -35,7 +35,7 @@ namespace store
  *
  *======================================================================*/
 
-class PageCache : public rtl::IReference
+class PageCache : public virtual salhelper::SimpleReferenceObject
 {
 public:
     /** load.
@@ -62,7 +62,7 @@ public:
         sal_uInt32 nOffset);
 
 protected:
-    ~PageCache() {}
+    virtual ~PageCache() {}
 
 private:
     /** Implementation (abstract).

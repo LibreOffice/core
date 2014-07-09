@@ -274,10 +274,6 @@ public:
     // Construction
     explicit PageCache_Impl (sal_uInt16 nPageSize);
 
-    // Delegate multiple inherited IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
 protected:
     // Destruction
     virtual ~PageCache_Impl (void);
@@ -328,16 +324,6 @@ PageCache_Impl::~PageCache_Impl()
         m_hash_shift = highbit(m_hash_size) - 1;
     }
     OSL_TRACE("Hits: %zu, Misses: %zu", m_nHit, m_nMissed);
-}
-
-oslInterlockedCount PageCache_Impl::acquire()
-{
-    return OStoreObject::acquire();
-}
-
-oslInterlockedCount PageCache_Impl::release()
-{
-    return OStoreObject::release();
 }
 
 void PageCache_Impl::rescale_Impl (sal_Size new_size)

@@ -176,7 +176,7 @@ struct PageData
 
     /** Allocation.
      */
-    class Allocator : public rtl::IReference
+    class Allocator : public salhelper::SimpleReferenceObject
     {
     public:
         template< class T > T * construct()

@@ -308,11 +308,6 @@ public:
      */
     explicit FileLockBytes (FileHandle & rFile);
 
-    /** Delegate multiple inherited IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
 protected:
     /** Destruction.
      */
@@ -329,16 +324,6 @@ FileLockBytes::FileLockBytes (FileHandle & rFile)
 FileLockBytes::~FileLockBytes()
 {
     FileHandle::closeFile (m_hFile);
-}
-
-oslInterlockedCount SAL_CALL FileLockBytes::acquire()
-{
-    return OStoreObject::acquire();
-}
-
-oslInterlockedCount SAL_CALL FileLockBytes::release()
-{
-    return OStoreObject::release();
 }
 
 storeError FileLockBytes::initSize_Impl (sal_uInt32 & rnSize)
@@ -548,11 +533,6 @@ public:
      */
     explicit MappedLockBytes (FileMapping & rMapping);
 
-    /** Delegate multiple inherited IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
 protected:
     /* Destruction.
      */
@@ -569,16 +549,6 @@ MappedLockBytes::MappedLockBytes (FileMapping & rMapping)
 MappedLockBytes::~MappedLockBytes()
 {
     FileMapping::unmapFile (m_hFile, m_pData, m_nSize);
-}
-
-oslInterlockedCount SAL_CALL MappedLockBytes::acquire()
-{
-    return OStoreObject::acquire();
-}
-
-oslInterlockedCount SAL_CALL MappedLockBytes::release()
-{
-    return OStoreObject::release();
 }
 
 void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
@@ -696,11 +666,6 @@ public:
      */
     MemoryLockBytes();
 
-    /** Delegate multiple inherited IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
 protected:
     /** Destruction.
      */
@@ -716,16 +681,6 @@ MemoryLockBytes::MemoryLockBytes()
 MemoryLockBytes::~MemoryLockBytes()
 {
     rtl_freeMemory (m_pData);
-}
-
-oslInterlockedCount SAL_CALL MemoryLockBytes::acquire (void)
-{
-    return OStoreObject::acquire();
-}
-
-oslInterlockedCount SAL_CALL MemoryLockBytes::release (void)
-{
-    return OStoreObject::release();
 }
 
 storeError MemoryLockBytes::initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
