@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fabf19d9_5a9315a4",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-07-09T07:05:37Z",
+      "side": 1,
+      "message": "I would prefer \"disable-extension-windows-64bit\"",
+      "revId": "cc957c91fbdef097acafd12d0caf0165e0d682ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fabf19d9_3a906195",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-07-09T07:05:37Z",
+      "side": 1,
+      "message": "--disable-extension-windows-64bit",
+      "revId": "cc957c91fbdef097acafd12d0caf0165e0d682ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
