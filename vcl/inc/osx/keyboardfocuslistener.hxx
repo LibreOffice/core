@@ -23,10 +23,11 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 // - KeyboardFocusListener -
 
-class KeyboardFocusListener : public rtl::IReference
+class KeyboardFocusListener : public salhelper::SimpleReferenceObject
 {
 public:
     virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) = 0;

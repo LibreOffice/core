@@ -20,14 +20,10 @@
 #ifndef INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX
 #define INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX
 
-#include <salhelper/refobj.hxx>
-
 #include "osx/keyboardfocuslistener.hxx"
 #include "osx/osxvcltypes.h"
 
-class AquaA11yFocusListener :
-    public KeyboardFocusListener,
-    public salhelper::ReferenceObject
+class AquaA11yFocusListener : public KeyboardFocusListener
 {
     id m_focusedObject;
 
@@ -43,10 +39,6 @@ public:
 
     // KeyboardFocusListener
     virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) SAL_OVERRIDE;
-
-    // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX
