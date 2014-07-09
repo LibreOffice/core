@@ -469,6 +469,22 @@ DECLARE_WW8IMPORT_TEST(testFdp80333, "fdo80333.doc")
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
+DECLARE_WW8IMPORT_TEST(testFdo81102, "fdo81102.doc")
+{
+    // get page style at beginning of document
+    uno::Reference<text::XTextDocument> textDocument(
+        mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> start(
+        textDocument->getText()->getStart(), uno::UNO_QUERY);
+    OUString pageStyleName = getProperty<OUString>(start, "PageStyleName");
+    uno::Reference<style::XStyle> pageStyle(
+        getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+
+    // check that left and right pages do not share the same header
+    bool headerIsShared = getProperty<bool>(pageStyle, "HeaderIsShared");
+    CPPUNIT_ASSERT(!headerIsShared);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
