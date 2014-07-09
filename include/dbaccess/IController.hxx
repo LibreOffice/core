@@ -22,7 +22,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <dbaccess/IReference.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 
 namespace com { namespace sun { namespace star {
@@ -39,7 +38,7 @@ class NotifyEvent;
 namespace dbaui
 {
     // interface for controller depended calls like commands
-    class DBACCESS_DLLPUBLIC IController : public IReference
+    class DBACCESS_DLLPUBLIC IController
     {
     public:
         /** executes the given command without checking if it is allowed
@@ -121,6 +120,9 @@ namespace dbaui
         /** allows interception of user input, aka mouse clicks and key events
         */
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) = 0;
+
+        virtual void SAL_CALL acquire(  ) throw () = 0;
+        virtual void SAL_CALL release(  ) throw () = 0;
 
     protected:
         ~IController() {}
