@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 // declare system types in sysdata.hxx
-#include <svsys.h>
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
