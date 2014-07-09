@@ -248,14 +248,6 @@ void FontPrevWin_Impl::CheckScript()
     }
     sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
     sal_Int32 nChg = 0;
-    if( com::sun::star::i18n::ScriptType::WEAK == nScript )
-    {
-        nChg = xBreak->endOfScript( aText, nChg, nScript );
-        if (nChg < aText.getLength() && nChg >= 0)
-            nScript = xBreak->getScriptType( aText, nChg );
-        else
-            nScript = com::sun::star::i18n::ScriptType::LATIN;
-    }
 
     do
     {
