@@ -41,7 +41,7 @@ private:
     css::uno::Reference< ooo::vba::word::XRange > mxRange;
 
 private:
-    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
+    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection )
         throw (css::script::BasicErrorException, css::uno::RuntimeException);
     css::uno::Reference< css::text::XTextRange > GetSelectedRange() throw ( css::uno::RuntimeException );

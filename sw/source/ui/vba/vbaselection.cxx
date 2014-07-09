@@ -224,7 +224,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( 
 }
 
 void
-SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend, word::E_DIRECTION eDirection ) throw ( uno::RuntimeException )
+SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend, word::E_DIRECTION eDirection ) throw ( css::script::BasicErrorException, uno::RuntimeException )
 {
     sal_Int32 nUnit = word::WdUnits::wdCharacter;
     sal_Int32 nCount = 1;
