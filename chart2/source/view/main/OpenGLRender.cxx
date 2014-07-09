@@ -240,7 +240,7 @@ int OpenGLRender::RenderLine2FBO(int)
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; i++)
     {
-        Line2DPointList &pointList = m_Line2DShapePointList.front();
+        PointList &pointList = m_Line2DShapePointList.front();
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
@@ -371,7 +371,7 @@ OpenGLRender::OpenGLRender()
     , m_SymbolShapeID(0)
 {
     //TODO: moggi: use STL
-    memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
+    memset(&m_Line2DPointList, 0, sizeof(PointList));
 
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
 
@@ -858,7 +858,7 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 namespace {
 
 // only 2D
-bool checkCCW(const Area2DPointList& rPoints)
+bool checkCCW(const PointList& rPoints)
 {
     if(rPoints.size() < 3)
         return true;
@@ -893,7 +893,7 @@ int OpenGLRender::RenderArea2DShape()
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; ++i)
     {
-        Area2DPointList &pointList = m_Area2DShapePointList.front();
+        PointList &pointList = m_Area2DShapePointList.front();
         bool bIsCCW = checkCCW(pointList); // is it counter clockwise (CCW) or clockwise (CW)
         if(!bIsCCW)
             glFrontFace(GL_CW);
@@ -979,7 +979,7 @@ void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
 void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadius, double nAngleStart, double nAngleWidth)
 {
     double nAngleStep = 1;
-    PieSegment2DPointList aPointList;
+    PointList aPointList;
     // TODO: moggi: GL_TRIANGLE_FAN seems not to work
     bool bInnerRadiusNotZero = true; //!rtl::math::approxEqual(0.0, fInnerRadius);
     size_t nVectorSize = 3*(nAngleWidth/nAngleStep);
@@ -1026,7 +1026,7 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
 
     for (int i = 0; i < listNum; i++)
     {
-        PieSegment2DPointList &pointList = m_PieSegment2DShapePointList.back();
+        PointList &pointList = m_PieSegment2DShapePointList.back();
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0] , GL_STATIC_DRAW);

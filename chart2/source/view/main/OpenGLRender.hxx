@@ -38,8 +38,6 @@ struct PosVecf3
     float z;
 };
 
-typedef std::vector<GLfloat> Line2DPointList;
-
 struct Bubble2DPointList
 {
     float x;
@@ -64,8 +62,6 @@ struct TextInfo
     float nDy;
 };
 
-typedef std::vector<GLfloat> Area2DPointList;
-typedef std::vector<GLfloat> PieSegment2DPointList;
 typedef std::vector<GLfloat> PointList;
 
 // for 3D, use vector to save the points
@@ -159,11 +155,11 @@ private:
 
     GLuint m_RenderTexCoordBuf;
 
-    Line2DPointList m_Line2DPointList;
+    PointList m_Line2DPointList;
 
     float m_fLineWidth;
 
-    std::list <Line2DPointList> m_Line2DShapePointList;
+    std::list <PointList> m_Line2DShapePointList;
 
     glm::vec4 m_2DColor;
 
@@ -186,8 +182,8 @@ private:
     GLuint m_TextTexCoordBuf;
     GLint m_TextTexID;
 
-    Area2DPointList m_Area2DPointList;
-    std::list <Area2DPointList> m_Area2DShapePointList;
+    PointList m_Area2DPointList;
+    std::list <PointList> m_Area2DShapePointList;
 
     GLint m_BackgroundProID;
     GLint m_BackgroundMatrixID;
@@ -196,7 +192,7 @@ private:
 
     float m_BackgroundColor[16];
 
-    std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
+    std::list <PointList> m_PieSegment2DShapePointList;
     PointList m_Symbol2DPointList;
     std::list<PointList> m_Symbol2DShapePointList;
 
