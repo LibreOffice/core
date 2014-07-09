@@ -16,6 +16,24 @@
       "revId": "f6c8f1ff34e12ae3084f4aeeb32c77366d0b1df8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_5948c32d",
+        "filename": "external/lcms2/ExternalProject_lcms2.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-07-09T20:54:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dac4157f_f92557ae",
+      "revId": "f6c8f1ff34e12ae3084f4aeeb32c77366d0b1df8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
