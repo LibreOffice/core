@@ -213,9 +213,9 @@ public:
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 
-    size_t size() const;
-    SdrOle2Obj* operator[](size_t nPos);
-    const SdrOle2Obj* operator[](size_t nPos) const;
+    SVX_DLLPUBLIC size_t size() const;
+    SVX_DLLPUBLIC SdrOle2Obj* operator[](size_t nPos);
+    SVX_DLLPUBLIC const SdrOle2Obj* operator[](size_t nPos) const;
 };
 
 
