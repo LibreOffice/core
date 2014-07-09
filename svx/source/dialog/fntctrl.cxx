@@ -246,11 +246,13 @@ void FontPrevWin_Impl::CheckScript()
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         xBreak = BreakIterator::create(xContext);
     }
-    sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
+
+    sal_uInt16 nScript = 0;
     sal_Int32 nChg = 0;
 
-    do
+    while ( nChg < aText.getLength() )
     {
+        nScript = xBreak->getScriptType( aText, nChg );
         nChg = xBreak->endOfScript( aText, nChg, nScript );
         if (nChg < aText.getLength() && nChg > 0 &&
             (com::sun::star::i18n::ScriptType::WEAK ==
@@ -273,12 +275,7 @@ void FontPrevWin_Impl::CheckScript()
         }
         aScriptType.push_back( nScript );
         aTextWidth.push_back( 0 );
-
-        if( nChg < aText.getLength() )
-            nScript = xBreak->getScriptType( aText, nChg );
-        else
-            break;
-    } while( true );
+    }
 }
 
 /*
