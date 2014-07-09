@@ -33,20 +33,6 @@ class SwRangeRedline;
 
 //  helper classes
 
-class SwPopup : public PopupMenu
-{
-    sal_uInt16          nCurId;
-    virtual void    Select() SAL_OVERRIDE {nCurId = GetCurItemId();}
-
-public:
-    SwPopup() :
-        PopupMenu(),
-        nCurId(USHRT_MAX){}
-
-    sal_uInt16          GetCurId() const { return nCurId; }
-
-};
-
 class SwOutlineContent : public SwContent
 {
     sal_uInt16  nOutlinePos;
