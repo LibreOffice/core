@@ -41,7 +41,7 @@ private:
     bool mbMaySpanEndOfDocument;
 
 private:
-    void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::uno::RuntimeException);
+    void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     void GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw ( css::uno::RuntimeException );
 public:
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, bool _bMaySpanEndOfDocument = false ) throw (css::uno::RuntimeException);

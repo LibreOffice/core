@@ -63,7 +63,7 @@ SwVbaRange::~SwVbaRange()
 {
 }
 
-void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd ) throw (uno::RuntimeException)
+void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd ) throw (css::script::BasicErrorException, uno::RuntimeException)
 {
     if( !mxText.is() )
     {
