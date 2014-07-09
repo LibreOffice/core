@@ -19,7 +19,7 @@
 
 
 #include <unotools/useroptions.hxx>
-
+#include <unotools/syslocale.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -39,6 +39,7 @@
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -210,11 +211,36 @@ void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
 
 OUString SvtUserOptions::Impl::GetFullName () const
 {
-    // TODO international name
-    OUString sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
-    if (!sFullName.isEmpty())
-        sFullName += " ";
-    sFullName += GetToken(USER_OPT_LASTNAME).trim();
+    OUString sFullName;
+    switch (LanguageType const eLang = SvtSysLocale().GetUILanguageTag().getLanguageType())
+    {
+        case LANGUAGE_RUSSIAN:
+            sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
+            if (!sFullName.isEmpty())
+                sFullName += " ";
+            sFullName += GetToken(USER_OPT_FATHERSNAME).trim();
+            if (!sFullName.isEmpty())
+                sFullName += " ";
+            sFullName += GetToken(USER_OPT_LASTNAME).trim();
+            break;
+        default:
+            if (MsLangId::isFamilyNameFirst(eLang))
+            {
+                sFullName = GetToken(USER_OPT_LASTNAME).trim();
+                if (!sFullName.isEmpty())
+                    sFullName += " ";
+                sFullName += GetToken(USER_OPT_FIRSTNAME).trim();
+            }
+            else
+            {
+                sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
+                if (!sFullName.isEmpty())
+                    sFullName += " ";
+                sFullName += GetToken(USER_OPT_LASTNAME).trim();
+            }
+            break;
+    }
+
     return sFullName;
 }
 
