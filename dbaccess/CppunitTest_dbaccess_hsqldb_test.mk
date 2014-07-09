@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsqldb_test, \
     jvmfwk \
     sal \
     subsequenttest \
+    sunjavaplugin \
     utl \
     test \
     tk \

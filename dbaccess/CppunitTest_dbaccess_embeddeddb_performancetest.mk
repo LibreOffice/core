@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_embeddeddb_performancetest, 
     jvmfwk \
     sal \
     subsequenttest \
+    sunjavaplugin \
     utl \
     test \
     tk \
