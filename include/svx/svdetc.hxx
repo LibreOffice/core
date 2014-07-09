@@ -195,9 +195,11 @@ SdrLinkList& ImpGetUserMakeObjUserDataHdl();
 class SdrOle2Obj;
 class AutoTimer;
 
-class OLEObjCache : public std::vector<SdrOle2Obj*>
+class OLEObjCache
 {
-    sal_uIntPtr         nSize;
+    std::vector<SdrOle2Obj*> maObjs;
+
+    size_t         nSize;
     AutoTimer*          pTimer;
 
     void UnloadOnDemand();
@@ -210,6 +212,10 @@ public:
 
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
+
+    size_t size() const;
+    SdrOle2Obj* operator[](size_t nPos);
+    const SdrOle2Obj* operator[](size_t nPos) const;
 };
 
 
