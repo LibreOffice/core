@@ -21,9 +21,6 @@
 #define _SVX_DATANAVI_HRC
 
 // class XFormsInstancePage
-// Controls
-#define TB_ITEMS                10
-#define LB_ITEMS                11
 
 // Menu items
 #define MID_INSERT_CONTROL      100
@@ -34,9 +31,6 @@
 #define TBI_ITEM_ADD_ATTRIBUTE  12
 #define TBI_ITEM_EDIT           13
 #define TBI_ITEM_REMOVE         14
-
-// ImageLists
-#define IL_TBX_BMPS             20
 
 // ImageIndexes
 #define IID_ITEM_ADD            1
