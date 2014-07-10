@@ -229,17 +229,14 @@ public:                                                             \
     inline               ClassName##WeakRef( ) {}                   \
     inline               ClassName##WeakRef( ClassName* pObj ) {    \
         if( pObj ) _xHdl = pObj->GetHdl(); }                        \
-    inline void          Clear() { _xHdl.Clear(); }                 \
     inline ClassName##WeakRef& operator = ( ClassName * pObj ) {    \
         _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
     inline bool            Is() const {                         \
         return _xHdl.Is() && _xHdl->GetObj(); }                     \
-    inline ClassName *     operator &  () const {                   \
-        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
     inline ClassName *     operator -> () const {                   \
         return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
-    inline ClassName &     operator *  () const {                   \
-        return *(ClassName*) _xHdl->GetObj(); }                     \
+    inline ClassName *     operator &  () const {                   \
+        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
     inline operator ClassName * () const {                          \
         return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }  \
 };
