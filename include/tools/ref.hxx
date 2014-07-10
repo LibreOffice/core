@@ -33,13 +33,22 @@ public:
     SvRef(): pObj(0) {}
 
     SvRef(SvRef const & rObj): pObj(rObj.pObj)
-    { if (pObj != 0) pObj->AddNextRef(); }
+    {
+        if (pObj != 0) pObj->AddNextRef();
+    }
 
-    SvRef(T * pObjP): pObj(pObjP) { if (pObj != 0) pObj->AddRef(); }
+    SvRef(T * pObjP): pObj(pObjP)
+    {
+        if (pObj != 0) pObj->AddRef();
+    }
 
-    ~SvRef() { if (pObj != 0) pObj->ReleaseRef(); }
+    ~SvRef()
+    {
+        if (pObj != 0) pObj->ReleaseRef();
+    }
 
-    void Clear() {
+    void Clear()
+    {
         if (pObj != 0) {
             T * pRefObj = pObj;
             pObj = 0;
@@ -47,7 +56,8 @@ public:
         }
     }
 
-    SvRef & operator =(SvRef const & rObj) {
+    SvRef & operator =(SvRef const & rObj)
+    {
         if (rObj.pObj != 0) {
             rObj.pObj->AddNextRef();
         }
@@ -59,15 +69,15 @@ public:
         return *this;
     }
 
-    bool Is() const { return pObj != 0; }
+    bool Is()         const { return pObj != 0; }
 
-    T * operator &() const { return pObj; }
+    T * operator &()  const { return pObj; }
 
     T * operator ->() const { assert(pObj != 0); return pObj; }
 
-    T & operator *() const { assert(pObj != 0); return *pObj; }
+    T & operator *()  const { assert(pObj != 0); return *pObj; }
 
-    operator T *() const { return pObj; }
+    operator T *()    const { return pObj; }
 
 protected:
     T * pObj;
@@ -131,10 +141,10 @@ public:
     }
 };
 
-#define SV_NO_DELETE_REFCOUNT  0x80000000
 
 class TOOLS_DLLPUBLIC SvRefBase
 {
+    static const sal_uIntPtr SV_NO_DELETE_REFCOUNT = 0x80000000;
     sal_uIntPtr nRefCount;
 
 protected:
@@ -142,29 +152,39 @@ protected:
     virtual void    QueryDelete();
 
 public:
-                    SvRefBase() { nRefCount = SV_NO_DELETE_REFCOUNT; }
+                    SvRefBase()
+                    { nRefCount = SV_NO_DELETE_REFCOUNT; }
+
                     SvRefBase( const SvRefBase & /* rObj */ )
                     { nRefCount = SV_NO_DELETE_REFCOUNT; }
-    SvRefBase &     operator = ( const SvRefBase & ) { return *this; }
+
+    SvRefBase &     operator = ( const SvRefBase & )
+                    { return *this; }
 
     void            RestoreNoDelete()
                     {
                         if( nRefCount < SV_NO_DELETE_REFCOUNT )
                             nRefCount += SV_NO_DELETE_REFCOUNT;
                     }
-    sal_uIntPtr     AddNextRef() { return ++nRefCount; }
+
+    sal_uIntPtr     AddNextRef()
+                    { return ++nRefCount; }
+
     sal_uIntPtr     AddRef()
                     {
                         if( nRefCount >= SV_NO_DELETE_REFCOUNT )
                             nRefCount -= SV_NO_DELETE_REFCOUNT;
                         return ++nRefCount;
                     }
+
     void            ReleaseRef()
                     {
                         if( !--nRefCount )
                             QueryDelete();
                     }
-    sal_uIntPtr     GetRefCount() const { return nRefCount; }
+
+    sal_uIntPtr     GetRefCount() const
+                    { return nRefCount; }
 };
 
 typedef tools::SvRef<SvRefBase> SvRefBaseRef;
@@ -177,7 +197,7 @@ class SvCompatWeakHdl : public SvRefBase
 
 public:
     void ResetWeakBase( ) { _pObj = 0; }
-    void* GetObj() { return _pObj; }
+    void* GetObj()        { return _pObj; }
 };
 
 typedef tools::SvRef<SvCompatWeakHdl> SvCompatWeakHdlRef;
