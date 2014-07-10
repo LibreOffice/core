@@ -294,7 +294,7 @@ SwVbaStyles::createEnumeration() throw (uno::RuntimeException)
 
 uno::Any SAL_CALL
 SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
-    throw (script::BasicErrorException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, script::BasicErrorException, uno::RuntimeException)
 {
     //handle WdBuiltinStyle
     sal_Int32 nIndex = 0;
