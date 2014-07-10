@@ -480,7 +480,7 @@ public:
     void                SetFloatingLines( sal_uInt16 nFloatLines );
     sal_uInt16              GetFloatingLines() const;
 
-    void                SetStyle( WinBits nNewStyle ) { mnWinStyle = nNewStyle; }
+    void                SetStyle( WinBits nNewStyle );
     WinBits             GetStyle() const { return mnWinStyle; }
 
     // enable/disable undocking

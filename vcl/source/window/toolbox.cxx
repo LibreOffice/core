@@ -4470,6 +4470,21 @@ bool ToolBox::PrepareToggleFloatingMode()
     return DockingWindow::PrepareToggleFloatingMode();
 }
 
+void ToolBox::SetStyle(WinBits nNewStyle)
+{
+    mnWinStyle = nNewStyle;
+    if (!ImplIsFloatingMode())
+    {
+        bool bOldScroll = mbScroll;
+        mbScroll = (mnWinStyle & WB_SCROLL) ? true : false;
+        if (mbScroll != bOldScroll)
+        {
+            mbFormat = true;
+            ImplFormat();
+        }
+    }
+}
+
 void ToolBox::ToggleFloatingMode()
 {
     DockingWindow::ToggleFloatingMode();
