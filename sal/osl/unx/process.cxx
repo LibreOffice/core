@@ -919,11 +919,14 @@ bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
             return false;
 
         tmp = strrchr(prstatbuf, ')');
-        *tmp = '\0';
-        memset(procstat->command, 0, sizeof(procstat->command));
+        if(tmp)
+        {
+            *tmp = '\0';
 
-        sscanf(prstatbuf, "%d (%15c", &procstat->pid, procstat->command);
-        sscanf(tmp + 2,
+            memset(procstat->command, 0, sizeof(procstat->command));
+
+            sscanf(prstatbuf, "%d (%15c", &procstat->pid, procstat->command);
+            sscanf(tmp + 2,
                "%c"
                "%i %i %i %i %i"
                "%lu %lu %lu %lu %lu"
@@ -943,6 +946,11 @@ bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
                procstat->signal,     procstat->blocked,  procstat->sigignore,   procstat->sigcatch,
                &procstat->wchan,     &procstat->nswap,   &procstat->cnswap
             );
+        }
+        else
+        {
+            bRet = false;
+        }
     }
     return bRet;
 }
