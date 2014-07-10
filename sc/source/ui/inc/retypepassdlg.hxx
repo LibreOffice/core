@@ -63,41 +63,20 @@ private:
     void PopulateDialog();
     void SetDocData();
     void SetTableData(size_t nRowPos, SCTAB nTab);
-    void ResetTableRows();
 
     /** Check the status of all hash values to see if it's okay to enable
         the OK button. */
     void CheckHashStatus();
 
+    void DeleteSheets();
+
 private:
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton*       mpBtnOk;
+    FixedText*      mpTextDocStatus;
+    PushButton*     mpBtnRetypeDoc;
+    VclVBox*        mpSheetsBox;
 
-    FixedInfo       maTextDescription;
-
-    FixedLine       maLineDocument;
-    FixedText       maTextDocStatus;
-    PushButton      maBtnRetypeDoc;
-
-    FixedLine       maLineSheet;
-    FixedText       maTextSheetName1;
-    FixedText       maTextSheetStatus1;
-    PushButton      maBtnRetypeSheet1;
-
-    FixedText       maTextSheetName2;
-    FixedText       maTextSheetStatus2;
-    PushButton      maBtnRetypeSheet2;
-
-    FixedText       maTextSheetName3;
-    FixedText       maTextSheetStatus3;
-    PushButton      maBtnRetypeSheet3;
-
-    FixedText       maTextSheetName4;
-    FixedText       maTextSheetStatus4;
-    PushButton      maBtnRetypeSheet4;
-
-    ScrollBar       maScrollBar;
+    std::vector<VclHBox*> maSheets;
 
     OUString        maTextNotProtected;
     OUString        maTextNotPassProtected;
@@ -107,7 +86,6 @@ private:
 
     DECL_LINK( OKHdl, void* );
     DECL_LINK( RetypeBtnHdl, PushButton* );
-    DECL_LINK( ScrollHdl, void* );
 
     struct TableItem
     {
