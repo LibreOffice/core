@@ -1427,8 +1427,7 @@ void ChartModel::update()
 
     mpChartView->setViewDirty();
     mpChartView->update();
-    if(mpChartView)
-        mpChartView->updateOpenGLWindow();
+    mpChartView->updateOpenGLWindow();
 }
 
 }  // namespace chart
