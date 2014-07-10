@@ -195,11 +195,9 @@ public:
     void* GetObj()        { return _pObj; }
 };
 
-typedef tools::SvRef<SvCompatWeakHdl> SvCompatWeakHdlRef;
-
 class SvCompatWeakBase
 {
-    SvCompatWeakHdlRef _xHdl;
+    tools::SvRef<SvCompatWeakHdl> _xHdl;
 
 public:
     SvCompatWeakHdl* GetHdl() { return _xHdl; }
@@ -212,7 +210,7 @@ public:
 #define SV_DECL_COMPAT_WEAK( ClassName )                            \
 class ClassName##Weak                                               \
 {                                                                   \
-    SvCompatWeakHdlRef _xHdl;                                       \
+    tools::SvRef<SvCompatWeakHdl> _xHdl;                            \
 public:                                                             \
     inline               ClassName##Weak( ) {}                      \
     inline               ClassName##Weak( ClassName* pObj ) {       \
