@@ -1990,22 +1990,11 @@ bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, s
 
 bool SdrOle2Obj::Unload()
 {
+    if (!xObjRef.is())
+        // Already unloaded.
+        return true;
+
     bool bUnloaded = false;
-
-    if( xObjRef.is() )
-    {
-        //TODO/LATER: no refcounting tricks anymore!
-        //"customers" must register as state change listeners
-        // Not necessary in Doc DTor (MM)
-        //sal_uIntPtr nRefCount = (*ppObjRef)->GetRefCount();
-        // prevent Unload if there are external references
-        //if( nRefCount > 2 )
-        //    return false;
-        //DBG_ASSERT( nRefCount == 2, "Wrong RefCount for unload" );
-    }
-    else
-        bUnloaded = true;
-
     if ( pModel && xObjRef.is() )
     {
         bUnloaded = Unload( xObjRef.GetObject(), GetAspect() );
