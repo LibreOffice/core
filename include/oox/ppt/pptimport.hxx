@@ -42,7 +42,7 @@ public:
     virtual ~PowerPointImport();
 
     // from FilterBase
-    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual bool importDocument() SAL_OVERRIDE;
     virtual bool exportDocument() throw() SAL_OVERRIDE;
 
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;

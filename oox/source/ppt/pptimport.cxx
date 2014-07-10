@@ -75,7 +75,7 @@ PowerPointImport::~PowerPointImport()
 {
 }
 
-bool PowerPointImport::importDocument() throw()
+bool PowerPointImport::importDocument()
 {
     /*  to activate the PPTX dumper, define the environment variable
         OOO_PPTXDUMPER and insert the full path to the file
