@@ -673,6 +673,7 @@ public:
     Graphic* mpGraphic;
     // TODO/LATER: do we really need this pointer?
     GraphicObject* mpGraphicObject;
+    OUString maProgName;
     OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
@@ -875,7 +876,15 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
     SetGraphic_Impl( pGrf );
 }
 
+void SdrOle2Obj::SetProgName( const OUString& rName )
+{
+    mpImpl->maProgName = rName;
+}
 
+const OUString& SdrOle2Obj::GetProgName() const
+{
+    return mpImpl->maProgName;
+}
 
 bool SdrOle2Obj::IsEmpty() const
 {
@@ -1666,7 +1675,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
         SetClosedObj( rObj.IsClosedObj() );
 
         mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
-        aProgName = rOle2Obj.aProgName;
+        mpImpl->maProgName = rOle2Obj.mpImpl->maProgName;
         bFrame = rOle2Obj.bFrame;
 
         if (rOle2Obj.mpImpl->mpGraphic)

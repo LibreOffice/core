@@ -65,8 +65,6 @@ protected:
 private:
     SdrOle2ObjImpl*             mpImpl;
 
-    OUString                    aProgName;
-
     // Due to compatibility at SdrTextObj for now
     bool                        bFrame:1;
     bool                        bInDestruction:1;
@@ -117,8 +115,8 @@ public:
 
     // One can add an application name to a SdrOle2Obj, which can be queried for
     // later on (SD needs this for presentation objects).
-    void SetProgName(const OUString& rNam) { aProgName=rNam; }
-    const OUString& GetProgName() const { return aProgName; }
+    void SetProgName( const OUString& rName );
+    const OUString& GetProgName() const;
     bool IsEmpty() const;
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
