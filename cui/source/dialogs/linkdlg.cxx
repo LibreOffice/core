@@ -60,7 +60,7 @@ public:
         {
             SvBaseLink* p = *it;
             if( p )
-                p->ReleaseReference();
+                p->ReleaseRef();
         }
     }
 

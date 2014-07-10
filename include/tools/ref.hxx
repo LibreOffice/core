@@ -37,13 +37,13 @@ public:
 
     SvRef(T * pObjP): pObj(pObjP) { if (pObj != 0) pObj->AddRef(); }
 
-    ~SvRef() { if (pObj != 0) pObj->ReleaseReference(); }
+    ~SvRef() { if (pObj != 0) pObj->ReleaseRef(); }
 
     void Clear() {
         if (pObj != 0) {
             T * pRefObj = pObj;
             pObj = 0;
-            pRefObj->ReleaseReference();
+            pRefObj->ReleaseRef();
         }
     }
 
@@ -54,7 +54,7 @@ public:
         T * pRefObj = pObj;
         pObj = rObj.pObj;
         if (pRefObj != 0) {
-            pRefObj->ReleaseReference();
+            pRefObj->ReleaseRef();
         }
         return *this;
     }
@@ -102,7 +102,7 @@ public:
         {
               T p = *it;
               if( p )
-                  p->ReleaseReference();
+                  p->ReleaseRef();
         }
         base_t::clear();
     }
@@ -126,7 +126,7 @@ public:
         T p = base_t::back();
         base_t::pop_back();
         if( p )
-            p->ReleaseReference();
+            p->ReleaseRef();
         return p;
     }
 };
@@ -159,17 +159,10 @@ public:
                             nRefCount -= SV_NO_DELETE_REFCOUNT;
                         return ++nRefCount;
                     }
-    void            ReleaseReference()
+    void            ReleaseRef()
                     {
                         if( !--nRefCount )
                             QueryDelete();
-                    }
-    sal_uIntPtr     ReleaseRef()
-                    {
-                        sal_uIntPtr n = --nRefCount;
-                        if( !n )
-                            QueryDelete();
-                        return n;
                     }
     sal_uIntPtr     GetRefCount() const { return nRefCount; }
 };
@@ -196,7 +189,7 @@ class SvCompatWeakBase
 public:
     SvCompatWeakHdl* GetHdl() { return _xHdl; }
 
-    // does not use Initalizer due to compiler warnings
+    // does not use initalizer due to compiler warnings
     SvCompatWeakBase( void* pObj ) { _xHdl = new SvCompatWeakHdl( pObj ); }
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 };
