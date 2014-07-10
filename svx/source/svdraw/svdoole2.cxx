@@ -672,7 +672,7 @@ public:
 
     Graphic* mpGraphic;
     // TODO/LATER: do we really need this pointer?
-    GraphicObject*  pGraphicObject;
+    GraphicObject* mpGraphicObject;
     OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
@@ -685,7 +685,7 @@ public:
 
     SdrOle2ObjImpl() :
         mpGraphic(NULL),
-        pGraphicObject(NULL),
+        mpGraphicObject(NULL),
         pLightClient (NULL),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
@@ -697,7 +697,7 @@ public:
     SdrOle2ObjImpl( const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
         mpGraphic(NULL),
-        pGraphicObject(NULL),
+        mpGraphicObject(NULL),
         pLightClient (NULL),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
@@ -709,7 +709,7 @@ public:
     ~SdrOle2ObjImpl()
     {
         delete mpGraphic;
-        delete pGraphicObject;
+        delete mpGraphicObject;
     }
 };
 
@@ -855,14 +855,14 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
     {
         delete mpImpl->mpGraphic;
         mpImpl->mpGraphic = NULL;
-        delete mpImpl->pGraphicObject;
-        mpImpl->pGraphicObject = NULL;
+        delete mpImpl->mpGraphicObject;
+        mpImpl->mpGraphicObject = NULL;
     }
 
     if (pGrf)
     {
         mpImpl->mpGraphic = new Graphic(*pGrf);
-        mpImpl->pGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
+        mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
     }
 
     SetChanged();
@@ -1674,11 +1674,11 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
             if (mpImpl->mpGraphic)
             {
                 delete mpImpl->mpGraphic;
-                delete mpImpl->pGraphicObject;
+                delete mpImpl->mpGraphicObject;
             }
 
             mpImpl->mpGraphic = new Graphic(*rOle2Obj.mpImpl->mpGraphic);
-            mpImpl->pGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
+            mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
