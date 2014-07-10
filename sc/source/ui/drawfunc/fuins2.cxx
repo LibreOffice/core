@@ -37,6 +37,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/soerr.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/svdpagv.hxx>

@@ -39,6 +39,7 @@
 #include <svx/sderitm.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
+#include <svtools/embedhlp.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XUnoControlContainer.hpp>

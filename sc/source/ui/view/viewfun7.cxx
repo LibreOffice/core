@@ -28,6 +28,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xoutbmp.hxx>
+#include <svtools/embedhlp.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

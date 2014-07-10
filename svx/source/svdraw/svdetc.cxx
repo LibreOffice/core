@@ -20,8 +20,6 @@
 #include "sal/config.h"
 
 #include "editeng/forbiddencharacterstable.hxx"
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include "officecfg/Office/Common.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
@@ -48,7 +46,6 @@
 #include <svx/svdoole2.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
 #include <svx/xflbckit.hxx>
@@ -60,6 +57,11 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdrhittesthelper.hxx>
+
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 
 using namespace ::com::sun::star;
 

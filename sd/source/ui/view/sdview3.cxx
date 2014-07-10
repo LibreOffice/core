@@ -53,6 +53,7 @@
 #include <vcl/metaact.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svtools/embedhlp.hxx>
 #include "DrawDocShell.hxx"
 #include "fupoor.hxx"
 #include "tablefunction.hxx"

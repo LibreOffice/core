@@ -41,6 +41,7 @@
 #include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/linkmgr.hxx>

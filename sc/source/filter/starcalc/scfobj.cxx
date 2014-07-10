@@ -27,6 +27,7 @@ using namespace com::sun::star;
 #include <svx/charthelper.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <svtools/embedhlp.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>

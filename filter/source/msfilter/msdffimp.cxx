@@ -135,6 +135,7 @@
 #include <svx/xbitmap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <svtools/embedhlp.hxx>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 

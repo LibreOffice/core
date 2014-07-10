@@ -20,28 +20,26 @@
 #ifndef INCLUDED_SVX_SVDOOLE2_HXX
 #define INCLUDED_SVX_SVDOOLE2_HXX
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdorect.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/gdimtf.hxx>
-#include <sot/storage.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace embed {
+#include <com/sun/star/uno/Reference.h>
 
-class XEmbeddedObject;
+namespace com { namespace sun { namespace star {
 
-}}}}
+namespace awt { class XWindow; }
 
-namespace svt {
+namespace datatransfer { class XTransferable; }
 
-class EmbeddedObjectRef;
+namespace embed { class XEmbeddedObject; }
 
-}
+namespace frame { class XModel; }
 
+}}}
+
+namespace svt { class EmbeddedObjectRef; }
+
+class Graphic;
 class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;
 

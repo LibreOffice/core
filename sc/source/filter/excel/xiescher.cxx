@@ -81,6 +81,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xbitmap.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"

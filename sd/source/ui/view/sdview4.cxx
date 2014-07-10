@@ -38,6 +38,7 @@
 #include <avmedia/modeltools.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include "app.hrc"
 #include "Window.hxx"

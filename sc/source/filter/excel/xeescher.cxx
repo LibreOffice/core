@@ -44,6 +44,7 @@
 #include <editeng/editobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include "editutil.hxx"
 #include "unonames.hxx"

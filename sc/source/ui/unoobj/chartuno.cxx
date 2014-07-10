@@ -34,6 +34,7 @@
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/charthelper.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"

@@ -115,6 +115,8 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <vcl/virdev.hxx>
+#include <svtools/embedhlp.hxx>
+
 #include <algorithm>
 #include <set>
 #include <rtl/strbuf.hxx>

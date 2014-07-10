@@ -29,6 +29,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include "document.hxx"
 #include "table.hxx"
