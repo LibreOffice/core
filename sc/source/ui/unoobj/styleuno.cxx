@@ -535,6 +535,56 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
     ScDocumentLoader aLoader( aURL, aFilter, aFiltOpt );
 
     ScDocShell* pSource = aLoader.GetDocShell();
+
+    loadStylesFromDocShell(pSource, aOptions);
+
+}
+
+uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
+                                                throw(uno::RuntimeException, std::exception)
+{
+    //  return defaults for options (?)
+
+    uno::Sequence<beans::PropertyValue> aSequence(3);
+    beans::PropertyValue* pArray = aSequence.getArray();
+
+    pArray[0].Name = OUString(SC_UNONAME_OVERWSTL );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, true );
+
+    pArray[1].Name = OUString(SC_UNONAME_LOADCELL );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, true );
+
+    pArray[2].Name = OUString(SC_UNONAME_LOADPAGE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, true );
+
+    return aSequence;
+}
+
+// style::XStyleLoader2
+
+void SAL_CALL ScStyleFamiliesObj::loadStylesFromDocument( const uno::Reference < lang::XComponent > & aSourceComponent,
+                        const uno::Sequence<beans::PropertyValue>& aOptions )
+                                throw(io::IOException, uno::RuntimeException, std::exception)
+{
+
+   // Source document docShell
+   if ( !aSourceComponent.is() )
+        throw uno::RuntimeException();
+
+
+   ScDocShell* pDocShellSrc = static_cast<ScDocShell*> (SfxObjectShell::GetShellFromComponent(aSourceComponent));
+
+   loadStylesFromDocShell(pDocShellSrc, aOptions);
+
+}
+
+// private
+
+void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
+                        const uno::Sequence<beans::PropertyValue>& aOptions )
+                                throw(io::IOException, uno::RuntimeException, std::exception)
+{
+
     if ( pSource && pDocShell )
     {
         //  collect options
@@ -561,26 +611,6 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
         pDocShell->LoadStylesArgs( *pSource, bLoadReplace, bLoadCellStyles, bLoadPageStyles );
         pDocShell->SetDocumentModified();   // paint is inside LoadStyles
     }
-}
-
-uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
-                                                throw(uno::RuntimeException, std::exception)
-{
-    //  return defaults for options (?)
-
-    uno::Sequence<beans::PropertyValue> aSequence(3);
-    beans::PropertyValue* pArray = aSequence.getArray();
-
-    pArray[0].Name = OUString(SC_UNONAME_OVERWSTL );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, true );
-
-    pArray[1].Name = OUString(SC_UNONAME_LOADCELL );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, true );
-
-    pArray[2].Name = OUString(SC_UNONAME_LOADPAGE );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, true );
-
-    return aSequence;
 }
 
 ScStyleFamilyObj::ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam) :
