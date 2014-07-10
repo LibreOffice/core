@@ -1102,7 +1102,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     {
         if (bFlipV) {nRotation=(nRotation+18000)%36000;}
     }
-    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
+    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
 void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField )

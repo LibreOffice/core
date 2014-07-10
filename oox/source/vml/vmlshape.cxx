@@ -319,6 +319,12 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     aGrabBag.realloc( length+1 );
                     aGrabBag[length].Name = "VML-Z-ORDER";
                     aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
+                    if(!(maTypeModel.maRotation).isEmpty())
+                    {
+                        aGrabBag.realloc( length+2 );
+                        aGrabBag[length+1].Name = "mso-rotation-angle";
+                        aGrabBag[length+1].Value = uno::makeAny(sal_Int32(NormAngle360((maTypeModel.maRotation.toInt32()) * -100)));
+                    }
                     propertySet->setPropertyValue( "FrameInteropGrabBag", uno::makeAny(aGrabBag) );
                 }
                 else

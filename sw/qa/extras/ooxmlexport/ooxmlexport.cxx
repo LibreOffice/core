@@ -3741,6 +3741,17 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
                 "/word/embeddings/oleObject1.doc");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo80894, "TextFrameRotation.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // Rotation value was not roundtripped for textframe.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+    "rot","16200000");
+}
+
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.
