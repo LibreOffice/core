@@ -39,7 +39,6 @@ namespace frame { class XModel; }
 
 namespace svt { class EmbeddedObjectRef; }
 
-class Graphic;
 class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;
 
@@ -66,7 +65,6 @@ protected:
 private:
     SdrOle2ObjImpl*             mpImpl;
 
-    Graphic*                    pGraphic;
     OUString                    aProgName;
 
     // Due to compatibility at SdrTextObj for now

@@ -670,6 +670,7 @@ class SdrOle2ObjImpl
 public:
     svt::EmbeddedObjectRef mxObjRef;
 
+    Graphic* mpGraphic;
     // TODO/LATER: do we really need this pointer?
     GraphicObject*  pGraphicObject;
     OUString        aPersistName;       // name of object in persist
@@ -683,6 +684,7 @@ public:
     OUString maLinkURL;
 
     SdrOle2ObjImpl() :
+        mpGraphic(NULL),
         pGraphicObject(NULL),
         pLightClient (NULL),
         mbLoadingOLEObjectFailed(false),
@@ -694,6 +696,7 @@ public:
 
     SdrOle2ObjImpl( const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
+        mpGraphic(NULL),
         pGraphicObject(NULL),
         pLightClient (NULL),
         mbLoadingOLEObjectFailed(false),
@@ -701,6 +704,12 @@ public:
         mpObjectLink(NULL)
     {
         mxObjRef.Lock(true);
+    }
+
+    ~SdrOle2ObjImpl()
+    {
+        delete mpGraphic;
+        delete pGraphicObject;
     }
 };
 
@@ -750,7 +759,6 @@ TYPEINIT1(SdrOle2Obj,SdrRectObj);
 
 SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
     mpImpl(new SdrOle2ObjImpl),
-    pGraphic(NULL),
     bFrame(bFrame_),
     bInDestruction(false),
     mbSuppressSetVisAreaSize(false),
@@ -763,7 +771,6 @@ SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
 SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ ) :
     SdrRectObj(rNewRect),
     mpImpl(new SdrOle2ObjImpl(rNewObjRef)),
-    pGraphic(NULL),
     bFrame(bFrame_),
     bInDestruction(false),
     mbSuppressSetVisAreaSize(false),
@@ -798,10 +805,6 @@ SdrOle2Obj::~SdrOle2Obj()
 
     if ( mpImpl->mbConnected )
         Disconnect();
-
-    delete pGraphic;
-
-    delete mpImpl->pGraphicObject;
 
     if(pModifyListener)
     {
@@ -848,18 +851,18 @@ bool SdrOle2Obj::isUiActive() const
 
 void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
 {
-    if ( pGraphic )
+    if (mpImpl->mpGraphic)
     {
-        delete pGraphic;
-        pGraphic = NULL;
+        delete mpImpl->mpGraphic;
+        mpImpl->mpGraphic = NULL;
         delete mpImpl->pGraphicObject;
         mpImpl->pGraphicObject = NULL;
     }
 
-    if (pGrf!=NULL)
+    if (pGrf)
     {
-        pGraphic = new Graphic(*pGrf);
-        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+        mpImpl->mpGraphic = new Graphic(*pGrf);
+        mpImpl->pGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
     }
 
     SetChanged();
@@ -1510,7 +1513,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
 
     if ( mpImpl->mxObjRef.is() )
     {
-        DELETEZ( pGraphic );
+        DELETEZ(mpImpl->mpGraphic);
 
         if ( (mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
             SetResizeProtect(true);
@@ -1666,16 +1669,16 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
         aProgName = rOle2Obj.aProgName;
         bFrame = rOle2Obj.bFrame;
 
-        if( rOle2Obj.pGraphic )
+        if (rOle2Obj.mpImpl->mpGraphic)
         {
-            if( pGraphic )
+            if (mpImpl->mpGraphic)
             {
-                delete pGraphic;
+                delete mpImpl->mpGraphic;
                 delete mpImpl->pGraphicObject;
             }
 
-            pGraphic = new Graphic( *rOle2Obj.pGraphic );
-            mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+            mpImpl->mpGraphic = new Graphic(*rOle2Obj.mpImpl->mpGraphic);
+            mpImpl->pGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
@@ -1905,7 +1908,7 @@ const Graphic* SdrOle2Obj::GetGraphic() const
 {
     if ( mpImpl->mxObjRef.is() )
         return mpImpl->mxObjRef.GetGraphic();
-    return pGraphic;
+    return mpImpl->mpGraphic;
 }
 
 void SdrOle2Obj::GetNewReplacement()
