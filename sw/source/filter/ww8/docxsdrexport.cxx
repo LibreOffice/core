@@ -203,7 +203,8 @@ struct DocxSdrExport::Impl
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
-    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML))
+    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML)),
+      DMLandVMLTextFrameRotation(0)
 {
 }
 
@@ -1272,7 +1273,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                              FSEND);
 
         uno::Any aRotation ;
-        sal_Int32 nRotation = 0;
+        DMLandVMLTextFrameRotation = 0;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
         {
             uno::Sequence< beans::PropertyValue > propList;
@@ -1287,11 +1288,11 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                 }
             }
         }
-        aRotation >>= nRotation ;
-        OString sRotation(OString::number(nRotation));
+        aRotation >>= DMLandVMLTextFrameRotation ;
+        OString sRotation(OString::number((OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(DMLandVMLTextFrameRotation))));
         // Shape properties
         pFS->startElementNS(XML_wps, XML_spPr, FSEND);
-        if (nRotation)
+        if (DMLandVMLTextFrameRotation)
         {
             pFS->startElementNS(XML_a, XML_xfrm,
                                 XML_rot, sRotation.getStr(),
@@ -1465,6 +1466,11 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyAttrList = pFS->createAttrList();
     m_pImpl->m_pTextboxAttrList = pFS->createAttrList();
     m_pImpl->m_aTextFrameStyle = "position:absolute";
+    if(!bTextBoxOnly)
+    {
+        OString sRotation(OString::number(DMLandVMLTextFrameRotation / -100));
+        m_pImpl->m_rExport.SdrExporter().getTextFrameStyle().append(";rotation:").append(sRotation);
+    }
     m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
     m_pImpl->m_pFlyAttrList->add(XML_style, m_pImpl->m_aTextFrameStyle.makeStringAndClear());
 
@@ -1475,7 +1481,6 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         if (!sAnchorId.isEmpty())
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
-
     sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList);
     m_pImpl->m_pFlyAttrList = NULL;
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], m_pImpl->m_pTextboxAttrList);

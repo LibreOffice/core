@@ -101,6 +101,8 @@ public:
     bool isTextBox(const SwFrmFmt& rFrmFmt);
     /// Writes text from Textbox for <w:framePr>
     void writeOnlyTextOfFrame(sw::Frame* pParentFrame);
+
+    sal_Int32 DMLandVMLTextFrameRotation;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
