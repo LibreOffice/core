@@ -492,29 +492,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
 {
     if (rBitmapEx.IsAlpha())
     {
-        Size aDestSizePixel(LogicToPixel(rDestSize));
-
-        BitmapEx aScaledBitmapEx(rBitmapEx);
-        Point aSrcPtPixel(rSrcPtPixel);
-        Size aSrcSizePixel(rSrcSizePixel);
-
-        // we have beautiful scaling algorithms, let's use them
-        if (aDestSizePixel != rSrcSizePixel && rSrcSizePixel.Width() != 0 && rSrcSizePixel.Height() != 0)
-        {
-            double fScaleX = std::abs(aDestSizePixel.Width()  / double(rSrcSizePixel.Width()));
-            double fScaleY = std::abs(aDestSizePixel.Height() / double(rSrcSizePixel.Height()));
-
-            aScaledBitmapEx.Scale(fScaleX, fScaleY);
-
-            // Negative size values are used for mirroring, but Scale already takes
-            // care of mirroring so convert all negative values to positive.
-            aSrcSizePixel = Size(std::abs(aDestSizePixel.Width()),
-                                 std::abs(aDestSizePixel.Height()));
-
-            aSrcPtPixel.X() = rSrcPtPixel.X() * fScaleX;
-            aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
-        }
-        DrawDeviceAlphaBitmap(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
+        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
     }
     else if (!!rBitmapEx)
     {
