@@ -59,6 +59,8 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
 private:
+    SdrOle2ObjImpl*             mpImpl;
+
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     OUString                    aProgName;
@@ -71,21 +73,18 @@ private:
     mutable bool                m_bTypeAsked:1;
     mutable bool                m_bChart:1;
 
-    SdrOle2ObjImpl*             mpImpl;
-
     SvxUnoShapeModifyListener*  pModifyListener;
 
 private:
 
     void ImpSetVisAreaSize();
-    void Init();
 
 public:
     OUString GetStyleString();
     TYPEINFO_OVERRIDE();
 
-    SdrOle2Obj(bool bFrame_ = false);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false);
+    SdrOle2Obj( bool bFrame_ = false );
+    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false );
     virtual ~SdrOle2Obj();
 
     // access to svt::EmbeddedObjectRef

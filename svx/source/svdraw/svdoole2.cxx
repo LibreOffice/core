@@ -734,29 +734,35 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
-SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
-,m_bChart(false)
+
+SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
+    mpImpl(new SdrOle2ObjImpl),
+    pGraphic(NULL),
+    bFrame(bFrame_),
+    bInDestruction(false),
+    mbSuppressSetVisAreaSize(false),
+    m_bTypeAsked(false),
+    m_bChart(false),
+    pModifyListener(NULL)
 {
-    bInDestruction = false;
-    mbSuppressSetVisAreaSize = false;
-    Init();
-    bFrame=bFrame_;
+    xObjRef.Lock(true);
 }
 
-
-
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
-    : SdrRectObj(rNewRect)
-    , xObjRef( rNewObjRef )
-    , m_bTypeAsked(false)
-    , m_bChart(false)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ ) :
+    SdrRectObj(rNewRect),
+    mpImpl(new SdrOle2ObjImpl),
+    xObjRef(rNewObjRef),
+    pGraphic(NULL),
+    bFrame(bFrame_),
+    bInDestruction(false),
+    mbSuppressSetVisAreaSize(false),
+    m_bTypeAsked(false),
+    m_bChart(false),
+    pModifyListener(NULL)
 {
-    bInDestruction = false;
-    mbSuppressSetVisAreaSize = false;
-    Init();
+    xObjRef.Lock(true);
 
     mpImpl->aPersistName = rNewObjName;
-    bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(true);
@@ -764,21 +770,6 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUStrin
     // For math objects, set closed state to transparent
     SetClosedObj(!ImplIsMathObj( xObjRef.GetObject() ));
 }
-
-
-
-void SdrOle2Obj::Init()
-{
-    mpImpl = new SdrOle2ObjImpl;
-    pModifyListener = NULL;
-    pGraphic=NULL;
-    mpImpl->pGraphicObject=NULL;
-    mpImpl->pLightClient = 0;
-
-    xObjRef.Lock( true );
-}
-
-
 
 OUString SdrOle2Obj::GetStyleString()
 {
