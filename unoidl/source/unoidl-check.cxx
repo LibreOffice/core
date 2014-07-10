@@ -194,6 +194,7 @@ void checkMap(
             switch (entA->getSort()) {
             case unoidl::Entity::SORT_MODULE:
                 assert(false && "this cannot happen");
+                //deliberate fall-through anyway
             case unoidl::Entity::SORT_ENUM_TYPE:
                 {
                     rtl::Reference<unoidl::EnumTypeEntity> ent2A(
