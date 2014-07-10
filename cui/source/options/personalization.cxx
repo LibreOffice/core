@@ -112,7 +112,10 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
 IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
 {
     OUString searchTerm;
-    if( pButton ==  m_pSearchButton)
+    if( m_rSearchThread.is() )
+        m_rSearchThread->StopExecution();
+
+    if( pButton ==  m_pSearchButton )
         searchTerm = m_pEdit->GetText();
     else
     {
@@ -146,14 +149,17 @@ IMPL_LINK( SelectPersonaDialog, ActionOK, PushButton*, /* pButton */ )
     }
 
     else
+    {
+        if( m_rSearchThread.is() )
+            m_rSearchThread->StopExecution();
         EndDialog( RET_OK );
+    }
     return 0;
 }
 
 IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
 {
-    if( m_rSearchThread.is() )
-        m_rSearchThread->terminate();
+    m_rSearchThread->StopExecution();
 
     EndDialog( RET_CANCEL );
     return 0;
@@ -161,6 +167,9 @@ IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
 
 IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
 {
+    if( m_rSearchThread.is() )
+        m_rSearchThread->StopExecution();
+
     for( sal_Int32 index = 0; index < 9; index++ )
     {
         if( pButton == m_vResultList[index] )
@@ -526,7 +535,8 @@ SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
                           const OUString& rURL ) :
             Thread( "cuiPersonasSearchThread" ),
             m_pPersonaDialog( pDialog ),
-            m_aURL( rURL )
+            m_aURL( rURL ),
+            m_bExecute( true )
 {
 }
 
@@ -587,6 +597,9 @@ void SearchAndParseThread::execute()
             aFilter.ImportGraphic( aGraphic, aURLObj );
             Bitmap aBmp = aGraphic.GetBitmap();
 
+            if( !m_bExecute )
+                return;
+
             // for VCL to be able to do visual changes in the thread
             SolarMutexGuard aGuard;
             m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
@@ -594,8 +607,10 @@ void SearchAndParseThread::execute()
             m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
         }
 
-        SolarMutexGuard aGuard;
+        if( !m_bExecute )
+            return;
 
+        SolarMutexGuard aGuard;
         sProgress = "";
         m_pPersonaDialog->SetProgress( sProgress );
         m_pPersonaDialog->setOptimalLayoutSize();
@@ -656,6 +671,9 @@ void SearchAndParseThread::execute()
             m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
+
+        if( !m_bExecute )
+            return;
 
         SolarMutexGuard aGuard;
 

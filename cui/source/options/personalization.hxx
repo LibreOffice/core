@@ -116,6 +116,7 @@ private:
 
     SelectPersonaDialog *m_pPersonaDialog;
     OUString m_aURL;
+    bool m_bExecute;
 
     virtual ~SearchAndParseThread();
     virtual void execute() SAL_OVERRIDE;
@@ -125,6 +126,8 @@ public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
                           const OUString& rURL );
+
+    void StopExecution() { m_bExecute = false; }
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
