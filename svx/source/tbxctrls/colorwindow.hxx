@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/PaletteManager.hxx>
+#include <vcl/combobox.hxx>
 
 
 // class SvxColorWindow_Impl --------------------------------------------------
@@ -42,22 +43,19 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 private:
     const sal_uInt16 theSlotId;
     SvxColorValueSet aColorSet;
-    PushButton aButtonLeft;
-    PushButton aButtonRight;
+    ComboBox aPaletteComboBox;
     PushButton aButtonPicker;
-    FixedText  aPaletteName;
     OUString  maCommand;
     Link maSelectedLink;
 
-    const sal_uInt16 nNavButtonWidth;
-    const sal_uInt16 nNavButtonHeight;
+    const sal_uInt16 nButtonWidth;
+    const sal_uInt16 nButtonHeight;
     PaletteManager& mrPaletteManager;
 
     void UpdateGUI();
 
     DECL_LINK( SelectHdl, void * );
-    DECL_LINK( StepLeftClickHdl, void * );
-    DECL_LINK( StepRightClickHdl, void * );
+    DECL_LINK( SelectPaletteHdl, void *);
     DECL_LINK( OpenPickerClickHdl, void * );
 
 protected:
