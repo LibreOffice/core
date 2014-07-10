@@ -18,7 +18,6 @@
  */
 
 #include <svx/Palette.hxx>
-#include <tools/stream.hxx>
 
 // finds first token in rStr from index, separated by whitespace
 // returns position of next token in index
@@ -52,13 +51,17 @@ OString lcl_getToken(const OString& rStr, sal_Int32& index)
     return rStr.copy(substart, toklen);
 }
 
-Palette::Palette(const OUString &rFname) :
-    mbLoaded( false ),
-    maFname( rFname ){}
-
-const OString& Palette::GetPaletteName()
+Palette::Palette( const OUString &rFPath, const OUString &rFName ) :
+    mbLoadedPalette( false ),
+    mbValidPalette( false ),
+    maFName( rFName ),
+    maFPath( rFPath )
 {
-    LoadPalette();
+    LoadPaletteHeader();
+}
+
+const OUString& Palette::GetName()
+{
     return maName;
 }
 
@@ -68,27 +71,52 @@ const Palette::ColorList& Palette::GetPaletteColors()
     return maColors;
 }
 
+bool Palette::IsValid()
+{
+    return mbValidPalette;
+}
+
+bool Palette::ReadPaletteHeader(SvFileStream& rFileStream)
+{
+    OString aLine;
+    OString aName;
+
+    rFileStream.ReadLine(aLine);
+    if( !aLine.startsWith("GIMP Palette") ) return false;
+    rFileStream.ReadLine(aLine);
+    if( aLine.startsWith("Name: ", &aName) )
+    {
+        maName = OStringToOUString(aName, RTL_TEXTENCODING_ASCII_US);
+        rFileStream.ReadLine(aLine);
+        if( aLine.startsWith("Columns: "))
+            rFileStream.ReadLine(aLine); // we can ignore this
+    }
+    else
+    {
+        maName = maFName;
+    }
+    return true;
+}
+
+//TODO make this LoadPaletteHeader and set a bool if palette is incorrect
+void Palette::LoadPaletteHeader()
+{
+    SvFileStream aFile(maFPath, STREAM_READ);
+    mbValidPalette = ReadPaletteHeader( aFile );
+}
+
 void Palette::LoadPalette()
 {
-    if( mbLoaded ) return;
-
-    mbLoaded = true;
+    if( mbLoadedPalette ) return;
+    mbLoadedPalette = true;
 
     // TODO add error handling!!!
-    SvFileStream aFile(maFname, STREAM_READ);
+    SvFileStream aFile(maFPath, STREAM_READ);
+    mbValidPalette = ReadPaletteHeader( aFile );
+
+    if( !mbValidPalette ) return;
 
     OString aLine;
-
-    aFile.ReadLine(aLine);
-    if( !aLine.startsWith("GIMP Palette") ) return;
-    aFile.ReadLine(aLine);
-    if( aLine.startsWith("Name: ", &maName) )
-    {
-        aFile.ReadLine(aLine);
-        if( aLine.startsWith("Columns: "))
-            aFile.ReadLine(aLine); // we can ignore this
-    }
-
     do {
         if (aLine[0] != '#' && aLine[0] != '\n')
         {

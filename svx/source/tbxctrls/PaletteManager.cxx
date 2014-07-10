@@ -25,6 +25,10 @@
 #include <svx/dialogs.hrc>
 #include <svtools/colrdlg.hxx>
 
+#define STR_DEFAULT_PAL         "Default palette"
+#define STR_DOC_COLORS          "Document colors"
+#define STR_DOC_COLOR_PREFIX    "Document Color "
+
 PaletteManager::PaletteManager() :
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
@@ -42,7 +46,9 @@ void PaletteManager::LoadPalettes()
     osl::Directory aDir(aPalPath);
     maPalettes.clear();
     osl::DirectoryItem aDirItem;
-    osl::FileStatus aFileStat(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
+                               osl_FileStatus_Mask_FileURL  |
+                               osl_FileStatus_Mask_Type     );
     if( aDir.open() == osl::FileBase::E_None )
     {
         while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
@@ -50,11 +56,12 @@ void PaletteManager::LoadPalettes()
             aDirItem.getFileStatus(aFileStat);
             if(aFileStat.isRegular() || aFileStat.isLink())
             {
-                OUString aPath = aFileStat.getFileURL();
-                if(aPath.getLength() > 4 &&
-                    aPath.copy(aPath.getLength()-4).toAsciiLowerCase() == ".gpl")
+                OUString aFName = aFileStat.getFileName();
+                if( aFName.endsWithIgnoreAsciiCase(".gpl") )
                 {
-                    maPalettes.push_back(Palette(aPath));
+                    Palette aPalette( aFileStat.getFileURL(), aFName );
+                    if( aPalette.IsValid() )
+                        maPalettes.push_back( aPalette );
                 }
             }
         }
@@ -93,7 +100,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         std::vector<Color> aColors = pDocSh->GetDocColors();
         mnColorCount = aColors.size();
         rColorSet.Clear();
-        rColorSet.loadColorVector(aColors, "Document Color ");
+        rColorSet.loadColorVector(aColors, STR_DOC_COLOR_PREFIX );
     }
     else
     {
@@ -104,14 +111,32 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
 }
 
-void PaletteManager::PrevPalette()
+std::vector<OUString> PaletteManager::GetPaletteList()
 {
-    mnCurrentPalette = mnCurrentPalette == 0 ? mnNumOfPalettes - 1 : mnCurrentPalette - 1;
+    std::vector<OUString> aPaletteNames;
+
+    aPaletteNames.push_back( STR_DEFAULT_PAL );
+
+    for( std::vector<Palette>::iterator it = maPalettes.begin();
+         it != maPalettes.end();
+         ++it)
+    {
+        aPaletteNames.push_back( it->GetName() );
+    }
+
+    aPaletteNames.push_back( STR_DOC_COLORS );
+
+    return aPaletteNames;
 }
 
-void PaletteManager::NextPalette()
+void PaletteManager::SetPalette( sal_Int32 nPos )
 {
-    mnCurrentPalette = mnCurrentPalette == mnNumOfPalettes - 1 ? 0 : mnCurrentPalette + 1;
+    mnCurrentPalette = nPos;
+}
+
+sal_Int32 PaletteManager::GetPalette()
+{
+    return mnCurrentPalette;
 }
 
 long PaletteManager::GetColorCount()
@@ -122,11 +147,11 @@ long PaletteManager::GetColorCount()
 OUString PaletteManager::GetPaletteName()
 {
     if( mnCurrentPalette == 0 )
-        return OUString("Default palette");
+        return OUString( STR_DEFAULT_PAL );
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
-        return OUString("Document colors");
+        return OUString( STR_DOC_COLORS );
     else
-        return OStringToOUString(maPalettes[mnCurrentPalette - 1].GetPaletteName(), RTL_TEXTENCODING_ASCII_US);
+        return maPalettes[mnCurrentPalette - 1].GetName();
 }
 
 const Color& PaletteManager::GetLastColor()

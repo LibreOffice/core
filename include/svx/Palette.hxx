@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/stream.hxx>
 
 class Palette
 {
@@ -28,17 +29,23 @@ public:
     typedef std::pair<Color, OString> NamedColor;
     typedef std::vector< NamedColor > ColorList;
 private:
-    bool        mbLoaded;
-    OUString    maFname;
-    OString     maName;
+    bool        mbLoadedPalette;
+    bool        mbValidPalette;
+    OUString    maFName;
+    OUString    maFPath;
+    OUString    maName;
     ColorList   maColors;
 
-    void LoadPalette();
+    bool        ReadPaletteHeader(SvFileStream& rFileStream);
+    void        LoadPaletteHeader();
+    void        LoadPalette();
 public:
-    Palette(const OUString &rFname);
+    Palette( const OUString &rFPath, const OUString &rFName );
 
-    const OString&      GetPaletteName();
+    const OUString&     GetName();
     const ColorList&    GetPaletteColors();
+
+    bool                IsValid();
 };
 
 #endif // INCLUDED_SVX_PALETTE_HXX

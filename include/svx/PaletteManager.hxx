@@ -37,8 +37,10 @@ public:
     PaletteManager();
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
-    void        PrevPalette();
-    void        NextPalette();
+    std::vector<OUString> GetPaletteList();
+    void        SetPalette( sal_Int32 nPos );
+    sal_Int32   GetPalette();
+
     long        GetColorCount();
     OUString    GetPaletteName();
     const Color& GetLastColor();
