@@ -3739,6 +3739,16 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[1]/w:t", "first");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", "second");
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

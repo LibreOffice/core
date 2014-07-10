@@ -508,9 +508,16 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_nHyperLinkCount = 0;
     }
 
+    if (m_bStartedCharSdt)
+    {
+        // Run-level SDT still open? Close it now.
+        EndSdtBlock();
+        m_bStartedCharSdt = false;
+    }
+
     m_pSerializer->endElementNS( XML_w, XML_p );
     if( !m_bAnchorLinkedToNode )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, /*bPara=*/true );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
@@ -549,7 +556,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 }
 
-void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs )
+void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
+                                         ::sax_fastparser::FastAttributeList*& pSdtPrTokenChildren,
+                                         ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
+                                         bool bPara )
 {
     if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs )
     {
@@ -597,8 +607,11 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
         m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 
         // write the ending tags after the paragraph
-        m_pSerializer->endElementNS( XML_w, XML_sdtContent );
-        m_pSerializer->endElementNS( XML_w, XML_sdt );
+        if (bPara)
+            EndSdtBlock();
+        else
+            // Support multiple runs inside a run-evel SDT: don't close the SDT block yet.
+            m_bStartedCharSdt = true;
 
         // clear sdt status
         nSdtPrToken = 0;
@@ -609,6 +622,12 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
             pSdtPrDataBindingAttrs = NULL;
         }
     }
+}
+
+void DocxAttributeOutput::EndSdtBlock()
+{
+    m_pSerializer->endElementNS( XML_w, XML_sdtContent );
+    m_pSerializer->endElementNS( XML_w, XML_sdt );
 }
 
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph )
@@ -945,6 +964,14 @@ void DocxAttributeOutput::EndRun()
     // before "postponed run start")
     m_pSerializer->mark(); // let's call it "actual run start"
 
+    if (m_bEndCharSdt)
+    {
+        // This is the common case: "close sdt before the current run" was requrested by the next run.
+        EndSdtBlock();
+        m_bEndCharSdt = false;
+        m_bStartedCharSdt = false;
+    }
+
     if ( m_closeHyperlinkInPreviousRun )
     {
         if ( m_startedHyperlink )
@@ -1052,9 +1079,10 @@ void DocxAttributeOutput::EndRun()
     // if there is some redlining in the document, output it
     EndRedline( m_pRedlineData );
 
-    // enclose in a sdt block, if necessary
-    if ( !m_bAnchorLinkedToNode )
-        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
+    // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
+    // (so on export sdt blocks are never nested ATM)
+    if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
+        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, /*bPara=*/false );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
@@ -7693,6 +7721,11 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             m_aTextEffectsGrabBag.realloc(m_aTextEffectsGrabBag.getLength() + 1);
             m_aTextEffectsGrabBag[aLength] = aPropertyValue;
         }
+        else if (i->first == "SdtEndBefore")
+        {
+            if (m_bStartedCharSdt)
+                m_bEndCharSdt = true;
+        }
         else if (i->first == "SdtPr")
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
@@ -7766,6 +7799,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
+      m_bEndCharSdt(false),
+      m_bStartedCharSdt(false),
       m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
       m_endPageRef( false ),

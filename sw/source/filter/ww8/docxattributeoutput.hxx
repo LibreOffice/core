@@ -691,7 +691,9 @@ private:
     void WritePostponedDMLDrawing();
     void WritePostponedCustomShape();
 
-    void WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs );
+    void WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, bool bPara );
+    /// Closes a currently open SDT block.
+    void EndSdtBlock();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
@@ -706,6 +708,10 @@ private:
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
+    /// If the current SDT around runs should be ended before the current run.
+    bool m_bEndCharSdt;
+    /// If an SDT around runs is currently open.
+    bool m_bStartedCharSdt;
     /// Attributes of the run color
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// Attributes of the paragraph background
