@@ -58,6 +58,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
+private:
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     OUString                    aProgName;
@@ -74,7 +75,7 @@ protected:
 
     SvxUnoShapeModifyListener*  pModifyListener;
 
-protected:
+private:
 
     void ImpSetVisAreaSize();
     void Init();
