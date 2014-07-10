@@ -54,8 +54,8 @@ interface XSelection
     void Delete( [in] any Unit, [in] any Count );
     void MoveRight( [in] any Unit, [in] any Count, [in] any Extend ) raises (com::sun::star::script::BasicErrorException);
     void MoveLeft( [in] any Unit, [in] any Count, [in] any Extend ) raises (com::sun::star::script::BasicErrorException);
-    void MoveDown( [in] any Unit, [in] any Count, [in] any Extend );
-    void MoveUp( [in] any Unit, [in] any Count, [in] any Extend );
+    void MoveDown( [in] any Unit, [in] any Count, [in] any Extend ) raises (com::sun::star::script::BasicErrorException);
+    void MoveUp( [in] any Unit, [in] any Count, [in] any Extend ) raises (com::sun::star::script::BasicErrorException);
     void TypeParagraph();
     void InsertParagraph();
     void InsertParagraphBefore();

@@ -420,7 +420,7 @@ SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+SwVbaSelection::MoveLeft(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = 1;
     if( _count.hasValue() )
@@ -439,7 +439,7 @@ SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveDown( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
+SwVbaSelection::MoveDown(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = 1;
 
@@ -459,7 +459,7 @@ SwVbaSelection::MoveDown( const uno::Any& _unit, const uno::Any& _count, const u
 }
 
 void SAL_CALL
-SwVbaSelection::MoveUp( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
+SwVbaSelection::MoveUp(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = 1;
 
