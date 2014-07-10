@@ -148,6 +148,7 @@ OutputDevice::OutputDevice() :
     mbKerning                       = false;
     mbNewFont                       = true;
     mbTextLines                     = false;
+    mbTextBackground                = false;
     mbTextSpecial                   = false;
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
