@@ -67,6 +67,11 @@ struct DocxTableStyleExport::Impl
     void tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor);
 };
 
+void DocxTableStyleExport::CharFormat(css::uno::Sequence<css::beans::PropertyValue>& rRPr)
+{
+    m_pImpl->tableStyleRPr(rRPr);
+}
+
 void DocxTableStyleExport::TableStyles(sal_uInt16 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?

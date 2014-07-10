@@ -11,6 +11,9 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXTABLESTYLEEXPORT_HXX
 
 #include <boost/shared_ptr.hpp>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include <sax/fshelper.hxx>
 
 class SwDoc;
@@ -22,6 +25,10 @@ class DocxTableStyleExport
     boost::shared_ptr<Impl> m_pImpl;
 public:
     void TableStyles(sal_uInt16 nCountStylesToWrite);
+
+    /// Writes <w:rPr>...</w:rPr> based on grab-bagged character properties.
+    void CharFormat(css::uno::Sequence<css::beans::PropertyValue>& rRPr);
+
     void SetSerializer(sax_fastparser::FSHelperPtr pSerializer);
     DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelperPtr pSerializer);
     ~DocxTableStyleExport();

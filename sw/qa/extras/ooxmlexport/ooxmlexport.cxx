@@ -3760,6 +3760,13 @@ DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtDateCharformat, "sdt-date-charformat.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // character formatting (bold) was missing, this was 0
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:rPr/w:b", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

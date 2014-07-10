@@ -4204,6 +4204,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                 OUString sLocale("en-US");
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
+                uno::Sequence<beans::PropertyValue> aCharFormat;
                 if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
                 {
                     for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
@@ -4222,6 +4223,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                             aOriginalDate.SetMonth(aUNODate.Month);
                             aOriginalDate.SetYear(aUNODate.Year);
                         }
+                        else if (aGrabBag[i].Name == "CharFormat")
+                            aGrabBag[i].Value >>= aCharFormat;
                     }
                 }
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
@@ -4282,6 +4285,13 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
                 m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+
+                if (aCharFormat.hasElements())
+                {
+                    m_pTableStyleExport->SetSerializer(m_pSerializer);
+                    m_pTableStyleExport->CharFormat(aCharFormat);
+                }
+
                 RunText(aContentText);
                 m_pSerializer->endElementNS(XML_w, XML_r);
                 m_pSerializer->endElementNS(XML_w, XML_sdtContent);
