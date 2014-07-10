@@ -36,9 +36,12 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/cellalignment \
 	cui/uiconfig/ui/certdialog \
 	cui/uiconfig/ui/charnamepage \
+	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/colorpage \
+	cui/uiconfig/ui/colorpickerdialog \
 	cui/uiconfig/ui/comment \
 	cui/uiconfig/ui/connectortabpage \
+	cui/uiconfig/ui/connpooloptions \
 	cui/uiconfig/ui/croppage \
 	cui/uiconfig/ui/cuiimapdlg \
 	cui/uiconfig/ui/databaselinkdialog \
@@ -51,8 +54,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/formatnumberdialog \
 	cui/uiconfig/ui/fmsearchdialog \
 	cui/uiconfig/ui/gradientpage \
-	cui/uiconfig/ui/colorconfigwin \
-	cui/uiconfig/ui/connpooloptions \
 	cui/uiconfig/ui/customizedialog \
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/distributiondialog \
