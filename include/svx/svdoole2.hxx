@@ -39,7 +39,6 @@ namespace frame { class XModel; }
 
 namespace svt { class EmbeddedObjectRef; }
 
-class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;
 
 class SVX_DLLPUBLIC SdrOle2Obj : public SdrRectObj
