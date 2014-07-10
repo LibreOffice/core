@@ -48,7 +48,7 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw()
+SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation )
 : FragmentHandler2( rFilter, rFragmentPath )
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
