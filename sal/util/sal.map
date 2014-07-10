@@ -675,6 +675,7 @@ LIBO_UDK_4.3 { # symbols available in >= LibO 4.3
         osl_createDirectoryWithFlags;
         rtl_allocateAlignedMemory;
         rtl_freeAlignedMemory;
+        osl_areCommandArgsSet;
 } LIBO_UDK_4.2;
 
 PRIVATE_1.0 {
