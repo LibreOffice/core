@@ -691,7 +691,11 @@ private:
     void WritePostponedDMLDrawing();
     void WritePostponedCustomShape();
 
-    void WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, bool bPara );
+    void WriteSdtBlock(sal_Int32& nSdtPrToken,
+                       ::sax_fastparser::FastAttributeList*& pSdtPrTokenChildren,
+                       ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
+                       OUString& rSdtPrAlias,
+                       bool bPara);
     /// Closes a currently open SDT block.
     void EndSdtBlock();
 
@@ -892,6 +896,7 @@ private:
     sal_Int32 m_nRunSdtPrToken;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrTokenChildren;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
+    OUString m_aRunSdtPrAlias;
 
     std::map<sal_uInt16, css::table::BorderLine2> m_aTableStyleConf;
 

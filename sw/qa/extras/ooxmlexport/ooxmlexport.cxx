@@ -3749,6 +3749,17 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[1]/w:t", "first");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", "second");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // <w:alias> was completely missing.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

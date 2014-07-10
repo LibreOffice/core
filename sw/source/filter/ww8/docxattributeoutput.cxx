@@ -291,7 +291,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
-static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs)
+static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren )
     {
@@ -303,6 +303,8 @@ static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pS
         delete pSdtPrDataBindingAttrs;
         pSdtPrDataBindingAttrs = NULL;
     }
+    if (!rSdtPrAlias.isEmpty())
+        rSdtPrAlias = "";
 }
 
 void DocxAttributeOutput::PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize)
@@ -516,14 +518,15 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
+    OUString aParagraphSdtPrAlias;
     if( !m_bAnchorLinkedToNode )
-        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, /*bPara=*/true );
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, aParagraphSdtPrAlias, /*bPara=*/true );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nParagraphSdtPrToken = 0;
-        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
+        lcl_deleteAndResetTheLists( m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs, aParagraphSdtPrAlias );
     }
 
     //sdtcontent is written so Set m_bParagraphHasDrawing to false
@@ -559,6 +562,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrTokenChildren,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
+                                         OUString& rSdtPrAlias,
                                          bool bPara )
 {
     if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs )
@@ -598,6 +602,11 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
         }
 
+        if (!rSdtPrAlias.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val),
+                                           OUStringToOString(rSdtPrAlias, RTL_TEXTENCODING_UTF8).getStr(),
+                                           FSEND);
+
         m_pSerializer->endElementNS( XML_w, XML_sdtPr );
 
         // sdt contents start tag
@@ -621,6 +630,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             // do not delete yet; it's in xAttrList inside the parser
             pSdtPrDataBindingAttrs = NULL;
         }
+        rSdtPrAlias = "";
     }
 }
 
@@ -1082,13 +1092,13 @@ void DocxAttributeOutput::EndRun()
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
-        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, /*bPara=*/false );
+        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
     else
     {
         //These should be written out to the actual Node and not to the anchor.
         //Clear them as they will be repopulated when the node is processed.
         m_nRunSdtPrToken = 0;
-        lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
+        lcl_deleteAndResetTheLists( m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias );
     }
     m_pSerializer->mergeTopMarks();
 
@@ -7775,6 +7785,11 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            FSNS( XML_w, XML_storeItemID ),
                                            rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
+                }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aRunSdtPrAlias.isEmpty())
+                {
+                    if (!(aPropertyValue.Value >>= m_aRunSdtPrAlias))
+                        SAL_WARN("sw.ww8", "DocxAttributeOutput::CharGrabBag: unexpected sdt alias value");
                 }
                 //do not overwrite the parent node.
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text" && !m_pRunSdtPrTokenChildren)
