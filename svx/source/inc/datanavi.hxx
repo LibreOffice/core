@@ -117,12 +117,17 @@ namespace svxform
     private:
         XFormsPage*             m_pXFormsPage;
         DataGroupType           m_eGroup;
+        sal_uInt16              m_nAddId;
+        sal_uInt16              m_nAddElementId;
+        sal_uInt16              m_nAddAttributeId;
+        sal_uInt16              m_nEditId;
+        sal_uInt16              m_nRemoveId;
 
     protected:
         using SvTreeListBox::ExecuteDrop;
 
     public:
-        DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId );
+        DataTreeListBox( Window* pParent, WinBits nBits );
         virtual ~DataTreeListBox();
 
         virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
@@ -131,6 +136,13 @@ namespace svxform
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
         virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
+        void                    SetGroup(DataGroupType _eGroup);
+        void                    SetXFormsPage(XFormsPage* _pPage);
+        void                    SetToolBoxItemIds(sal_uInt16 _nAddId,
+                                                  sal_uInt16 _nAddElementId,
+                                                  sal_uInt16 _nAddAttributeId,
+                                                  sal_uInt16 _nEditId,
+                                                  sal_uInt16 _nRemoveId);
         void                    DeleteAndClear();
         void                    RemoveEntry( SvTreeListEntry* _pEntry );
     };
@@ -237,8 +249,13 @@ namespace svxform
         MethodString                m_aMethodString;
         ReplaceString               m_aReplaceString;
 
-        ToolBox                     m_aToolBox;
-        DataTreeListBox             m_aItemList;
+        //ToolBox                     *m_pToolBox;
+        DataTreeListBox             *m_pItemList;
+        sal_uInt16                  m_nAddId;
+        sal_uInt16                  m_nAddElementId;
+        sal_uInt16                  m_nAddAttributeId;
+        sal_uInt16                  m_nEditId;
+        sal_uInt16                  m_nRemoveId;
 
         XFormsUIHelper1_ref         m_xUIHelper;
 
@@ -270,6 +287,8 @@ namespace svxform
         virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
+        ToolBox                     *m_pToolBox;
+
         XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
         virtual ~XFormsPage();
 
@@ -284,7 +303,7 @@ namespace svxform
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
-        inline SvTreeListEntry*     GetSelectedItem() const { return m_aItemList.FirstSelected(); }
+        inline SvTreeListEntry*     GetSelectedItem() const { return m_pItemList->FirstSelected(); }
         inline const OUString&      GetInstanceName() const { return m_sInstanceName; }
         inline const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
         inline bool                 GetLinkOnce() const { return m_bLinkOnce; }

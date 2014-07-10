@@ -24,63 +24,6 @@
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
-TabPage RID_SVX_XFORMS_TABPAGES
-{
-    HelpID = "svx:TabPage:RID_SVX_XFORMS_TABPAGES";
-    Hide = TRUE ;
-    DialogControl = TRUE;
-    Size = MAP_APPFONT ( 63 , 100 ) ;
-    ToolBox TB_ITEMS
-    {
-        HelpId = HID_XFORMS_TOOLBOX ;
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_ITEM_ADD ;
-                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
-                Text [ en-US ] = "Add Item" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_ITEM_ADD_ELEMENT ;
-                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
-                Text [ en-US ] = "Add Element" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
-                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
-                Text [ en-US ] = "Add Attribute" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_ITEM_EDIT ;
-                HelpId = HID_XFORMS_TOOLBOX_ITEM_EDIT ;
-                Text [ en-US ] = "Edit" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBI_ITEM_REMOVE ;
-                HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
-                Text [ en-US ] = "Delete" ;
-            };
-        };
-    };
-    Control LB_ITEMS
-    {
-        HelpId = HID_XFORMS_ITEMS_LIST ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 63 , 100 ) ;
-        Border = TRUE ;
-        TabStop = TRUE;
-    };
 #define IMG_LST                 \
 IdList =                        \
 {                               \
@@ -92,14 +35,13 @@ IdList =                        \
 };                              \
 IdCount = { 5 ; } ;
 
-    ImageList IL_TBX_BMPS
-    {
-        Prefix = "tb";
-        MASKCOLOR
-        IMG_LST
-    };
-#undef IMG_LST
+ImageList RID_SVXIMGLIST_XFORMS_TBX
+{
+    Prefix = "tb";
+    MASKCOLOR
+    IMG_LST
 };
+#undef IMG_LST
 
 Window RID_SVXWIN_DATANAVIGATOR
 {

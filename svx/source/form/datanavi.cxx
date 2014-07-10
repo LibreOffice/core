@@ -126,13 +126,9 @@ namespace svxform
 
     // class DataTreeListBox
 
-    DataTreeListBox::DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId ) :
+    DataTreeListBox::DataTreeListBox( Window* pParent, WinBits nBits ) :
 
-        SvTreeListBox( pPage, rResId ),
-
-        m_pXFormsPage   ( pPage ),
-        m_eGroup        ( _eGroup )
-
+        SvTreeListBox( pParent, nBits )
     {
         EnableContextMenuHandling();
 
@@ -215,23 +211,23 @@ namespace svxform
     {
         PopupMenu* pMenu = new PopupMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) );
         if ( DGTInstance == m_eGroup )
-            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD ) );
+            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddId ) );
         else
         {
-            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD_ELEMENT ) );
-            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD_ATTRIBUTE ) );
+            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddElementId ) );
+            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddAttributeId ) );
 
             if ( DGTSubmission == m_eGroup )
             {
-                pMenu->SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
-                pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+                pMenu->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
+                pMenu->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
             }
             else
             {
-                pMenu->SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
-                pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
-                pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+                pMenu->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
+                pMenu->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
+                pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
             }
         }
         m_pXFormsPage->EnableMenuItems( pMenu );
@@ -252,6 +248,29 @@ namespace svxform
         }
     }
 
+    void DataTreeListBox::SetGroup(DataGroupType _eGroup)
+    {
+        m_eGroup = _eGroup;
+    }
+
+    void DataTreeListBox::SetXFormsPage(XFormsPage* _pPage)
+    {
+        m_pXFormsPage = _pPage;
+    }
+
+    void DataTreeListBox::SetToolBoxItemIds(sal_uInt16 _nAddId,
+                           sal_uInt16 _nAddElementId,
+                           sal_uInt16 _nAddAttributeId,
+                           sal_uInt16 _nEditId,
+                           sal_uInt16 _nRemoveId)
+    {
+        m_nAddId = _nAddId;
+        m_nAddElementId = _nAddElementId;
+        m_nAddAttributeId = _nAddAttributeId;
+        m_nEditId = _nEditId;
+        m_nRemoveId = _nRemoveId;
+    }
+
     void DataTreeListBox::DeleteAndClear()
     {
         sal_uIntPtr i, nCount = GetEntryCount();
@@ -268,65 +287,80 @@ namespace svxform
 
     // class XFormsPage
 
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDataTreeListBox(Window *pParent, VclBuilder::stringmap &)
+    {
+        return new DataTreeListBox((XFormsPage*)pParent, WB_BORDER);
+    }
+
     XFormsPage::XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
 
-        TabPage( pParent, SVX_RES( RID_SVX_XFORMS_TABPAGES ) ),
-
-        m_aToolBox      ( this, SVX_RES( TB_ITEMS ) ),
-        m_aItemList     ( this, _eGroup, SVX_RES( LB_ITEMS ) ),
+        TabPage( pParent, "XFormsPage", "svx/ui/xformspage.ui" ),
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
+        m_TbxImageList  ( SVX_RES( RID_SVXIMGLIST_XFORMS_TBX ) ),
         m_bLinkOnce     ( false )
 
     {
-        FreeResource();
+        get(m_pToolBox, "toolbar");
+        get(m_pItemList, "items");
+
+        m_pItemList->SetGroup(_eGroup);
+        m_pItemList->SetXFormsPage( this );
+
+        m_nAddId = m_pToolBox->GetItemId("TBI_ITEM_ADD");
+        m_nAddElementId = m_pToolBox->GetItemId("TBI_ITEM_ADD_ELEMENT");
+        m_nAddAttributeId = m_pToolBox->GetItemId("TBI_ITEM_ADD_ATTRIBUTE");
+        m_nEditId = m_pToolBox->GetItemId("TBI_ITEM_EDIT");
+        m_nRemoveId = m_pToolBox->GetItemId("TBI_ITEM_REMOVE");
+
+        m_pItemList->SetToolBoxItemIds(m_nAddId, m_nAddElementId, m_nAddAttributeId, m_nEditId, m_nRemoveId);
 
         const ImageList& rImageList = m_TbxImageList;
-        m_aToolBox.SetItemImage( TBI_ITEM_ADD, rImageList.GetImage( IID_ITEM_ADD ) );
-        m_aToolBox.SetItemImage( TBI_ITEM_ADD_ELEMENT, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
-        m_aToolBox.SetItemImage( TBI_ITEM_ADD_ATTRIBUTE, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
-        m_aToolBox.SetItemImage( TBI_ITEM_EDIT, rImageList.GetImage( IID_ITEM_EDIT ) );
-        m_aToolBox.SetItemImage( TBI_ITEM_REMOVE, rImageList.GetImage( IID_ITEM_REMOVE ) );
+        m_pToolBox->InsertSeparator(4,5);
+        m_pToolBox->SetItemImage( m_nAddId, rImageList.GetImage( IID_ITEM_ADD ) );
+        m_pToolBox->SetItemImage( m_nAddElementId, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
+        m_pToolBox->SetItemImage( m_nAddAttributeId, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
+        m_pToolBox->SetItemImage( m_nEditId, rImageList.GetImage( IID_ITEM_EDIT ) );
+        m_pToolBox->SetItemImage( m_nRemoveId, rImageList.GetImage( IID_ITEM_REMOVE ) );
 
         if ( DGTInstance == m_eGroup )
-            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD ) );
+            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddId ) );
         else
         {
-            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD_ELEMENT ) );
-            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD_ATTRIBUTE ) );
+            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddElementId ) );
+            m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddAttributeId ) );
 
             if ( DGTSubmission == m_eGroup )
             {
-                m_aToolBox.SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
-                m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
             }
             else
             {
-                m_aToolBox.SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
-                m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
-                m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+                m_pToolBox->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
+                m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
+                m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
             }
         }
 
-        const Size aTbxSz( m_aToolBox.CalcWindowSizePixel() );
-        m_aToolBox.SetSizePixel( aTbxSz );
-        m_aToolBox.SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-        m_aToolBox.SetSelectHdl( LINK( this, XFormsPage, TbxSelectHdl ) );
-        Point aPos = m_aItemList.GetPosPixel();
+        const Size aTbxSz( m_pToolBox->CalcWindowSizePixel() );
+        m_pToolBox->SetSizePixel( aTbxSz );
+        m_pToolBox->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+        m_pToolBox->SetSelectHdl( LINK( this, XFormsPage, TbxSelectHdl ) );
+        Point aPos = m_pItemList->GetPosPixel();
         aPos.Y() = aTbxSz.Height();
-        m_aItemList.SetPosPixel( aPos );
+        m_pItemList->SetPosPixel( aPos );
 
-        m_aItemList.SetSelectHdl( LINK( this, XFormsPage, ItemSelectHdl ) );
-        m_aItemList.SetNodeDefaultImages();
+        m_pItemList->SetSelectHdl( LINK( this, XFormsPage, ItemSelectHdl ) );
+        m_pItemList->SetNodeDefaultImages();
         WinBits nBits = WB_BORDER | WB_TABSTOP | WB_HIDESELECTION | WB_NOINITIALSELECTION;
         if ( DGTInstance == m_eGroup || DGTSubmission == m_eGroup )
             nBits |= WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT;
-        m_aItemList.SetStyle( m_aItemList.GetStyle() | nBits  );
-        m_aItemList.Show();
-        ItemSelectHdl( &m_aItemList );
+        m_pItemList->SetStyle( m_pItemList->GetStyle() | nBits  );
+        m_pItemList->Show();
+        ItemSelectHdl( m_pItemList );
     }
 
     XFormsPage::~XFormsPage()
@@ -335,7 +369,7 @@ namespace svxform
 
     IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
     {
-        DoToolBoxAction( m_aToolBox.GetCurItemId() );
+        DoToolBoxAction( m_pToolBox->GetCurItemId() );
         return 0;
     }
 
@@ -382,7 +416,7 @@ namespace svxform
                     if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
-                        SvTreeListEntry* pEntry = m_aItemList.InsertEntry(
+                        SvTreeListEntry* pEntry = m_pItemList->InsertEntry(
                             sName, aExpImg, aCollImg, _pParent, false, TREELIST_APPEND, pNode );
                         if ( xChild->hasAttributes() )
                         {
@@ -397,7 +431,7 @@ namespace svxform
                                     pNode = new ItemNode( xAttr );
                                     OUString sAttrName =
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
-                                    m_aItemList.InsertEntry(
+                                    m_pItemList->InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
                                         pEntry, false, TREELIST_APPEND, pNode );
                                 }
@@ -421,11 +455,7 @@ namespace svxform
         bool bIsDocModified = false;
         m_pNaviWin->DisableNotify( true );
 
-        switch ( _nToolBoxID )
-        {
-        case TBI_ITEM_ADD:
-        case TBI_ITEM_ADD_ELEMENT:
-        case TBI_ITEM_ADD_ATTRIBUTE:
+        if(_nToolBoxID == m_nAddId || _nToolBoxID == m_nAddElementId || _nToolBoxID == m_nAddAttributeId)
         {
             bHandled = true;
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -442,7 +472,7 @@ namespace svxform
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
                         SvTreeListEntry* pEntry = AddEntry( xNewPropSet );
-                        m_aItemList.Select( pEntry, true );
+                        m_pItemList->Select( pEntry, true );
                         bIsDocModified = true;
                     }
                     catch ( Exception& )
@@ -454,7 +484,7 @@ namespace svxform
             else
             {
                 DataItemType eType = DITElement;
-                SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
+                SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
                 ItemNode* pNode = NULL;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
@@ -474,7 +504,7 @@ namespace svxform
                     DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
                     xParentNode = pParentNode->m_xNode;
                     Reference< css::xml::dom::XNode > xNewNode;
-                    if ( TBI_ITEM_ADD_ELEMENT == _nToolBoxID )
+                    if ( m_nAddElementId == _nToolBoxID )
                     {
                         try
                         {
@@ -524,7 +554,7 @@ namespace svxform
                         if ( xNewNode.is() )
                              xPNode = xNewNode->getParentNode();
                         // attributes don't have parents in the DOM model
-                        DBG_ASSERT( TBI_ITEM_ADD_ATTRIBUTE == _nToolBoxID
+                        DBG_ASSERT( m_nAddAttributeId == _nToolBoxID
                                     || xPNode.is(), "XFormsPage::DoToolboxAction(): node not added" );
                     }
                     catch ( Exception& )
@@ -568,8 +598,8 @@ namespace svxform
                     if ( RET_OK == nReturn )
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( pNode, bIsElement );
-                        m_aItemList.MakeVisible( pNewEntry );
-                        m_aItemList.Select( pNewEntry, true );
+                        m_pItemList->MakeVisible( pNewEntry );
+                        m_pItemList->Select( pNewEntry, true );
                         bIsDocModified = true;
                     }
                     else
@@ -595,7 +625,7 @@ namespace svxform
                     if ( RET_OK == nReturn )
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( xNewBinding );
-                        m_aItemList.Select( pNewEntry, true );
+                        m_pItemList->Select( pNewEntry, true );
                         bIsDocModified = true;
                     }
                     else
@@ -614,16 +644,14 @@ namespace svxform
                 }
             }
         }
-        break;
-
-        case TBI_ITEM_EDIT:
+        else if(_nToolBoxID == m_nEditId)
         {
             bHandled = true;
-            SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
+            SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
             if ( pEntry )
             {
-                if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
-                    pEntry = m_aItemList.GetParent( pEntry );
+                if ( DGTSubmission == m_eGroup && m_pItemList->GetParent( pEntry ) )
+                    pEntry = m_pItemList->GetParent( pEntry );
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
@@ -694,7 +722,7 @@ namespace svxform
                             }
                         }
 
-                        m_aItemList.SetEntryText( pEntry, sNewName );
+                        m_pItemList->SetEntryText( pEntry, sNewName );
                         bIsDocModified = true;
                     }
                 }
@@ -710,9 +738,7 @@ namespace svxform
                 }
             }
         }
-        break;
-
-        case TBI_ITEM_REMOVE:
+        else if(_nToolBoxID == m_nRemoveId)
         {
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
@@ -723,17 +749,13 @@ namespace svxform
             }
             bIsDocModified = RemoveEntry();
         }
-        break;
-
-        case MID_INSERT_CONTROL:
+        else if(_nToolBoxID == MID_INSERT_CONTROL)
         {
             OSL_FAIL( "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
         }
-        break;
-
-        default:
+        else
+        {
             OSL_FAIL( "XFormsPage::DoToolboxAction: unknown ID!" );
-            break;
         }
 
         m_pNaviWin->DisableNotify( false );
@@ -746,7 +768,7 @@ namespace svxform
 
     SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
-        SvTreeListEntry* pParent = m_aItemList.FirstSelected();
+        SvTreeListEntry* pParent = m_pItemList->FirstSelected();
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
@@ -760,7 +782,7 @@ namespace svxform
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return m_aItemList.InsertEntry(
+        return m_pItemList->InsertEntry(
             sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
     }
 
@@ -780,32 +802,32 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
+                pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
                 sEntry += sTemp;
-                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
                 sEntry +=  m_aMethodString.toUI( sTemp );
-                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
                 sEntry += sTemp;
-                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Bind
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += sTemp;
-                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
                 sEntry += m_aReplaceString.toUI( sTemp );
-                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
             }
             catch ( Exception& )
             {
@@ -823,7 +845,7 @@ namespace svxform
                 sName += sDelim;
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
-                pEntry = m_aItemList.InsertEntry(
+                pEntry = m_pItemList->InsertEntry(
                     sName, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
             }
             catch ( Exception& )
@@ -845,45 +867,45 @@ namespace svxform
         {
             try
             {
-                pEntry = m_aItemList.FirstSelected();
+                pEntry = m_pItemList->FirstSelected();
 
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we
                 // assume the latter case and use the parent
-                if( m_aItemList.GetEntry( pEntry, 0 ) == NULL )
+                if( m_pItemList->GetEntry( pEntry, 0 ) == NULL )
                 {
-                    pEntry = m_aItemList.GetModel()->GetParent( pEntry );
+                    pEntry = m_pItemList->GetModel()->GetParent( pEntry );
                 }
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                m_aItemList.SetEntryText( pEntry, sTemp );
+                m_pItemList->SetEntryText( pEntry, sTemp );
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += sTemp;
                 sal_uIntPtr nPos = 0;
-                SvTreeListEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
-                m_aItemList.SetEntryText( pChild, sEntry );
+                SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
+                m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
                 sEntry += sTemp;
-                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
-                m_aItemList.SetEntryText( pChild, sEntry );
+                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
+                m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
                 sEntry += sTemp;
-                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
-                m_aItemList.SetEntryText( pChild, sEntry );
+                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
+                m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
                 sEntry += m_aMethodString.toUI( sTemp );
-                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
-                m_aItemList.SetEntryText( pChild, sEntry );
+                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
+                m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
                 sEntry += m_aReplaceString.toUI( sTemp );
-                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
-                m_aItemList.SetEntryText( pChild, sEntry );
+                pChild = m_pItemList->GetEntry( pEntry, nPos++ );
+                m_pItemList->SetEntryText( pChild, sEntry );
             }
             catch ( Exception& )
             {
@@ -896,9 +918,9 @@ namespace svxform
     bool XFormsPage::RemoveEntry()
     {
         bool bRet = false;
-        SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
+        SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
         if ( pEntry &&
-             ( DGTInstance != m_eGroup || m_aItemList.GetParent( pEntry ) ) )
+             ( DGTInstance != m_eGroup || m_pItemList->GetParent( pEntry ) ) )
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::RemoveEntry(): no model" );
@@ -921,7 +943,7 @@ namespace svxform
                     aQBox.SetMessText( sMessText );
                     if ( aQBox.Execute() == RET_YES )
                     {
-                        SvTreeListEntry* pParent = m_aItemList.GetParent( pEntry );
+                        SvTreeListEntry* pParent = m_pItemList->GetParent( pEntry );
                         DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
                         ItemNode* pParentNode = static_cast< ItemNode* >( pParent->GetUserData() );
                         DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
@@ -978,7 +1000,7 @@ namespace svxform
             }
 
             if ( bRet )
-                m_aItemList.RemoveEntry( pEntry );
+                m_pItemList->RemoveEntry( pEntry );
         }
 
         return bRet;
@@ -996,7 +1018,7 @@ namespace svxform
             switch ( nCode )
             {
                 case KEY_DELETE:
-                    nHandled = DoMenuAction( TBI_ITEM_REMOVE );
+                    nHandled = DoMenuAction( m_nRemoveId );
                     break;
             }
         }
@@ -1007,12 +1029,12 @@ namespace svxform
     void XFormsPage::Resize()
     {
         Size aSize = GetOutputSizePixel();
-        Size aTbxSize = m_aToolBox.GetSizePixel();
+        Size aTbxSize = m_pToolBox->GetSizePixel();
         aTbxSize.Width() = aSize.Width();
-        m_aToolBox.SetSizePixel( aTbxSize );
+        m_pToolBox->SetSizePixel( aTbxSize );
         aSize.Width() -= 4;
         aSize.Height() -= ( 4 + aTbxSize.Height() );
-        m_aItemList.SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
+        m_pItemList->SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
     }
 
     OUString XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
@@ -1137,7 +1159,7 @@ namespace svxform
                                     sEntry += sTemp;
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
-                                    m_aItemList.InsertEntry(
+                                    m_pItemList->InsertEntry(
                                         sEntry, aImage1, aImage2, NULL, false, TREELIST_APPEND, pNode );
                                 }
                             }
@@ -1163,7 +1185,7 @@ namespace svxform
     void XFormsPage::ClearModel()
     {
         m_bHasModel = false;
-        m_aItemList.DeleteAndClear();
+        m_pItemList->DeleteAndClear();
     }
 
     OUString XFormsPage::LoadInstance(
@@ -1227,14 +1249,14 @@ namespace svxform
         bool bEnableEdit = false;
         bool bEnableRemove = false;
 
-        SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
+        SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
         if ( pEntry )
         {
             bEnableAdd = true;
             bool bSubmitChild = false;
-            if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
+            if ( DGTSubmission == m_eGroup && m_pItemList->GetParent( pEntry ) )
             {
-                pEntry = m_aItemList.GetParent( pEntry );
+                pEntry = m_pItemList->GetParent( pEntry );
                 bSubmitChild = true;
             }
             ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
@@ -1242,7 +1264,7 @@ namespace svxform
             {
                 bEnableEdit = true;
                 bEnableRemove = ( bSubmitChild != true );
-                if ( DGTInstance == m_eGroup && !m_aItemList.GetParent( pEntry ) )
+                if ( DGTInstance == m_eGroup && !m_pItemList->GetParent( pEntry ) )
                     bEnableRemove = false;
                 if ( pNode->m_xNode.is() )
                 {
@@ -1265,19 +1287,19 @@ namespace svxform
         else if ( m_eGroup != DGTInstance )
             bEnableAdd = true;
 
-        m_aToolBox.EnableItem( TBI_ITEM_ADD, bEnableAdd );
-        m_aToolBox.EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
-        m_aToolBox.EnableItem( TBI_ITEM_ADD_ATTRIBUTE, bEnableAdd );
-        m_aToolBox.EnableItem( TBI_ITEM_EDIT, bEnableEdit );
-        m_aToolBox.EnableItem( TBI_ITEM_REMOVE, bEnableRemove );
+        m_pToolBox->EnableItem( m_nAddId, bEnableAdd );
+        m_pToolBox->EnableItem( m_nAddElementId, bEnableAdd );
+        m_pToolBox->EnableItem( m_nAddAttributeId, bEnableAdd );
+        m_pToolBox->EnableItem( m_nEditId, bEnableEdit );
+        m_pToolBox->EnableItem( m_nRemoveId, bEnableRemove );
 
         if ( _pMenu )
         {
-            _pMenu->EnableItem( TBI_ITEM_ADD, bEnableAdd );
-            _pMenu->EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
-            _pMenu->EnableItem( TBI_ITEM_ADD_ATTRIBUTE, bEnableAdd );
-            _pMenu->EnableItem( TBI_ITEM_EDIT, bEnableEdit );
-            _pMenu->EnableItem( TBI_ITEM_REMOVE, bEnableRemove );
+            _pMenu->EnableItem( m_nAddId, bEnableAdd );
+            _pMenu->EnableItem( m_nAddElementId, bEnableAdd );
+            _pMenu->EnableItem( m_nAddAttributeId, bEnableAdd );
+            _pMenu->EnableItem( m_nEditId, bEnableEdit );
+            _pMenu->EnableItem( m_nRemoveId, bEnableRemove );
         }
         if ( DGTInstance == m_eGroup )
         {
@@ -1303,12 +1325,12 @@ namespace svxform
                     }
                 }
             }
-            m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( nResId1 ) );
-            m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( nResId2 ) );
+            m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( nResId1 ) );
+            m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( nResId2 ) );
             if ( _pMenu )
             {
-                _pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( nResId1 ) );
-                _pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( nResId2 ) );
+                _pMenu->SetItemText( m_nEditId, SVX_RESSTR( nResId1 ) );
+                _pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( nResId2 ) );
             }
         }
     }
