@@ -858,6 +858,9 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
     // get symbol
     OUString aSymbol( "basicide_choose_macro"  );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
+    SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
+    if (!pSymbol)
+        return OUString();
 #else
 #define pSymbol basicide_choose_macro
 #endif
