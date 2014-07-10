@@ -28,7 +28,7 @@ namespace basebmp
 
 template< class DestIterator, class DestAccessor, typename T >
 void fillImage( DestIterator begin,
-                DestIterator end,
+                const DestIterator& end,
                 DestAccessor ad,
                 const T&     fillVal )
 {
