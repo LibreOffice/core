@@ -189,7 +189,7 @@ hchar_string DateCode::GetString()
             cbuf[4] = 0;
                 break;
         case '*':
-            strncat(cbuf, en_mon[date[MONTH] - 1], 256);
+            strncat(cbuf, en_mon[date[MONTH] - 1], 255);
             break;
         case '3':                             /* 'D' is day of korean */
             num = date[DAY];
