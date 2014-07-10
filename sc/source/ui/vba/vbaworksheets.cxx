@@ -434,7 +434,8 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (cs
 
 //ScVbaCollectionBaseImpl
 uno::Any SAL_CALL
-ScVbaWorksheets::Item( const uno::Any& Index, const uno::Any& Index2  ) throw (uno::RuntimeException)
+ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
+    throw (lang::IndexOutOfBoundsException, script::BasicErrorException, uno::RuntimeException)
 {
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
