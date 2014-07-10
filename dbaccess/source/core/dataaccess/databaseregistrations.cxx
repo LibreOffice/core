@@ -94,8 +94,12 @@ namespace dbaccess
         virtual void SAL_CALL removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
+        void
+                impl_checkValidName_common(const OUString& _rName);
         ::utl::OConfigurationNode
-                impl_checkValidName_throw( const OUString& _rName, const bool _bMustExist );
+                impl_checkValidName_throw_must_exist(const OUString& _rName);
+        ::utl::OConfigurationNode
+                impl_checkValidName_throw_must_not_exist(const OUString& _rName);
 
         void    impl_checkValidLocation_throw( const OUString& _rLocation );
 
@@ -105,21 +109,30 @@ namespace dbaccess
             simply do a "getByName" (equivalent) when we want to retrieve the node for a given registration name.
             Instead, we must search all nodes.
 
-            If _bMustExist is <TRUE/>, and a node with the given display name does not exist, then a NoSuchElementException
-            is thrown.
+            If a node with the given display name does not exist, then a NoSuchElementException is thrown.
 
-            If _bMustExist is <FALSE/>, and a node with the given name already exists, then a ElementExistException is
-            thrown.
-
-            In either case, if no exception is thrown, then a valid node is returned: If the node existed and was allowed
-            to exist, it is returned, if the node did not yet exist, and was required to not exist, a new node is created.
-            However, in this case the root node is not yet committed.
+            If no exception is thrown, then a valid node is returned: If the node existed it is returned.
         */
         ::utl::OConfigurationNode
-                impl_getNodeForName_throw( const OUString& _rName, const bool _bMustExist );
+                impl_getNodeForName_throw_must_exist(const OUString& _rName);
+
+        /** retrieves the configuration node whose "Name" sub node has the given value
+
+            Since we separated the name of the registration node from the "Name" value of the registration, we cannot
+            simply do a "getByName" (equivalent) when we want to retrieve the node for a given registration name.
+            Instead, we must search all nodes.
+
+            If a node with the given name already exists, then a ElementExistException is thrown.
+
+            If no exception is thrown, then a valid node is returned: If the node did not yet exist a new node is created,
+            in this case the root node is not yet committed.
+        */
+        ::utl::OConfigurationNode
+                impl_getNodeForName_throw_must_not_exist(const OUString& _rName);
+
 
         ::utl::OConfigurationNode
-                impl_getNodeForName_nothrow( const OUString& _rName );
+                impl_getNodeForName_nothrow(const OUString& _rName);
 
     private:
         Reference<XComponentContext>        m_aContext;
@@ -159,20 +172,24 @@ namespace dbaccess
         return ::utl::OConfigurationNode();
     }
 
-    ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_throw( const OUString& _rName, const bool _bMustExist )
+    ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_throw_must_exist(const OUString& _rName)
     {
         ::utl::OConfigurationNode aNodeForName( impl_getNodeForName_nothrow( _rName ) );
 
-        if ( aNodeForName.isValid() )
+        if (!aNodeForName.isValid())
         {
-            if ( !_bMustExist )
-                throw ElementExistException( _rName, *this );
-
-            return aNodeForName;
+            throw NoSuchElementException( _rName, *this );
         }
 
-        if ( _bMustExist )
-            throw NoSuchElementException( _rName, *this );
+        return aNodeForName;
+    }
+
+    ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_throw_must_not_exist(const OUString& _rName)
+    {
+        ::utl::OConfigurationNode aNodeForName( impl_getNodeForName_nothrow( _rName ) );
+
+        if (aNodeForName.isValid())
+            throw ElementExistException( _rName, *this );
 
         OUString sNewNodeName;
         {
@@ -198,15 +215,25 @@ namespace dbaccess
         return aNewNode;
     }
 
-    ::utl::OConfigurationNode DatabaseRegistrations::impl_checkValidName_throw( const OUString& _rName, const bool _bMustExist )
+    void DatabaseRegistrations::impl_checkValidName_common(const OUString& _rName)
     {
         if ( !m_aConfigurationRoot.isValid() )
             throw RuntimeException( OUString(), *this );
 
         if ( _rName.isEmpty() )
             throw IllegalArgumentException( OUString(), *this, 1 );
+    }
 
-        return impl_getNodeForName_throw( _rName, _bMustExist );
+    ::utl::OConfigurationNode DatabaseRegistrations::impl_checkValidName_throw_must_exist(const OUString& _rName)
+    {
+        impl_checkValidName_common(_rName);
+        return impl_getNodeForName_throw_must_exist(_rName);
+    }
+
+    ::utl::OConfigurationNode DatabaseRegistrations::impl_checkValidName_throw_must_not_exist(const OUString& _rName)
+    {
+        impl_checkValidName_common(_rName);
+        return impl_getNodeForName_throw_must_not_exist(_rName);
     }
 
     void DatabaseRegistrations::impl_checkValidLocation_throw( const OUString& _rLocation )
@@ -252,7 +279,7 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw( _Name, true );
+        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(_Name);
 
         OUString sLocation;
         OSL_VERIFY( aNodeForName.getNodeValue( getLocationNodeName() ) >>= sLocation );
@@ -267,7 +294,7 @@ namespace dbaccess
 
         // check
         impl_checkValidLocation_throw( _Location );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw( _Name, false );
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_not_exist(_Name);
 
         // register
         aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( _Location ) );
@@ -284,7 +311,7 @@ namespace dbaccess
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         // check
-        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw( _Name, true );
+        ::utl::OConfigurationNode aNodeForName = impl_checkValidName_throw_must_exist(_Name);
 
         // obtain properties for notification
         OUString sLocation;
@@ -310,7 +337,7 @@ namespace dbaccess
 
         // check
         impl_checkValidLocation_throw( _NewLocation );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw( _Name, true );
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(_Name);
 
         if  ( aDataSourceRegistration.isReadonly() )
             throw IllegalAccessException( OUString(), *this );
@@ -332,7 +359,7 @@ namespace dbaccess
     sal_Bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw( _Name, true );
+        ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(_Name);
         return aDataSourceRegistration.isReadonly();
     }
 
