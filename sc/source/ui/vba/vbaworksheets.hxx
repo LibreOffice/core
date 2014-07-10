@@ -62,8 +62,8 @@ public:
     virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // ScVbaWorksheets_BASE
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw
-(css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 )
+        throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 

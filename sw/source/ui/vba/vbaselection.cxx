@@ -400,7 +400,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
 }
 
 void SAL_CALL
-SwVbaSelection::MoveRight( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
+SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = 1;
 
@@ -420,7 +420,7 @@ SwVbaSelection::MoveRight( const uno::Any& _unit, const uno::Any& _count, const 
 }
 
 void SAL_CALL
-SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend ) throw ( uno::RuntimeException, std::exception )
+SwVbaSelection::MoveLeft( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nCount = 1;
     if( _count.hasValue() )
