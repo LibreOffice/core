@@ -11,9 +11,11 @@
 
 #if !defined(MACOSX) && !defined(WNT)
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 class Test : public SwModelTestBase
@@ -56,6 +58,26 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("__Fieldmark__4_1833023242"), getProperty<OUString>(xPropertySet, "Name"));
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+}
+
+DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
+{
+    // the boolean properties of the index were not exported properly
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes(), uno::UNO_QUERY);
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTOCProps(xTOCIndex, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTOCProps, "CreateFromOutline"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTOCProps, "CreateFromMarks"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTOCProps, "CreateFromLevelParagraphStyles"));
+    // check that the source styles are preserved too while at it
+    uno::Reference<container::XIndexReplace> xLevels(
+        getProperty< uno::Reference<container::XIndexReplace> >(xTOCProps,
+            "LevelParagraphStyles"));
+    uno::Sequence<OUString> seq(1);
+    seq[0] = "Heading";
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(seq), xLevels->getByIndex(1));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }
 
 DECLARE_ODFEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
