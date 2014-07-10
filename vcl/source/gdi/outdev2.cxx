@@ -1001,29 +1001,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if(aBmpEx.IsAlpha())
     {
-        Size aDestSizePixel(LogicToPixel(rDestSize));
-
-        BitmapEx aScaledBitmapEx(aBmpEx);
-        Point aSrcPtPixel(rSrcPtPixel);
-        Size aSrcSizePixel(rSrcSizePixel);
-
-        // we have beautiful scaling algorithms, let's use them
-        if (aDestSizePixel != rSrcSizePixel && rSrcSizePixel.Width() != 0 && rSrcSizePixel.Height() != 0)
-        {
-            double fScaleX = std::abs(aDestSizePixel.Width()  / double(rSrcSizePixel.Width()));
-            double fScaleY = std::abs(aDestSizePixel.Height() / double(rSrcSizePixel.Height()));
-
-            aScaledBitmapEx.Scale(fScaleX, fScaleY);
-
-            // Negative size values are used for mirroring, but Scale already takes
-            // care of mirroring so convert all negative values to positive.
-            aSrcSizePixel = Size(std::abs(aDestSizePixel.Width()),
-                                 std::abs(aDestSizePixel.Height()));
-
-            aSrcPtPixel.X() = rSrcPtPixel.X() * fScaleX;
-            aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
-        }
-        ImplDrawAlpha(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
+        ImplDrawAlpha( aBmpEx.GetBitmap(), aBmpEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
         return;
     }
 
@@ -2085,9 +2063,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
         if( !bNativeAlpha
                 &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
         {
-            // The scaling in this code path produces really ugly results - it
-            // does the most trivial scaling with no smoothing.
-
             GDIMetaFile*    pOldMetaFile = mpMetaFile;
             const bool      bOldMap = mbMap;
             mpMetaFile = NULL; // fdo#55044 reset before GetBitmap!
