@@ -379,6 +379,9 @@ void ClientBox::RecalcAll()
             aPos = Point( aEntryRect.Left() + GetTextWidth( sPinText ),
                           aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );
             m_aPinBox.SetPosPixel( aPos );
+            // The text would have it's TOP aligned with the top of
+            // the pin box -- hence we push it down to align baselines.
+            m_sPinTextRect += Point( 0, 4 );
         }
         else
         {
