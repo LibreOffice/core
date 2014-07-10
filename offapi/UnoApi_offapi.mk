@@ -3576,6 +3576,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/style,\
 	XStyle \
 	XStyleFamiliesSupplier \
 	XStyleLoader \
+	XStyleLoader2 \
 	XStyleSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/svg,\

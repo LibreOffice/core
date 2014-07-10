@@ -25,7 +25,7 @@
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/style/XStyleLoader.hpp>
+#include <com/sun/star/style/XStyleLoader2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -36,9 +36,12 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
+
 
 class SfxStyleSheetBase;
 class ScDocShell;
+class SfxObjectShell;
 
 class ScStyleFamilyObj;
 class ScStyleObj;
@@ -46,7 +49,7 @@ class ScStyleObj;
 class ScStyleFamiliesObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::container::XNameAccess,
-                            ::com::sun::star::style::XStyleLoader,
+                            ::com::sun::star::style::XStyleLoader2,
                             ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -94,6 +97,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getStyleLoaderOptions() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+                            //XStyleLoader2
+    virtual void SAL_CALL   loadStylesFromDocument( const ::com::sun::star::uno::Reference <::com::sun::star::lang::XComponent> & aSourceComponent,
+                                const ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::beans::PropertyValue >& aOptions )
+                                        throw(::com::sun::star::io::IOException,
+                                            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -101,6 +110,12 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+private:
+    void loadStylesFromDocShell( ScDocShell* pSource,
+                              const ::com::sun::star::uno::Sequence<
+                                   ::com::sun::star::beans::PropertyValue>& aOptions )
+                                throw(::com::sun::star::io::IOException,
+                                            ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
 class ScStyleFamilyObj : public ::cppu::WeakImplHelper4<
