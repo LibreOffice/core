@@ -69,35 +69,18 @@ private:
         the OK button. */
     void CheckHashStatus();
 
+    void DeleteSheets();
+
 private:
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton*       mpBtnOk;
 
-    FixedInfo       maTextDescription;
+    FixedText*      mpTextDocStatus;
+    PushButton*     mpBtnRetypeDoc;
 
-    FixedLine       maLineDocument;
-    FixedText       maTextDocStatus;
-    PushButton      maBtnRetypeDoc;
+    ScrollBar*      mpScrollBar;
+    VclVBox*        mpSheetsBox;
 
-    FixedLine       maLineSheet;
-    FixedText       maTextSheetName1;
-    FixedText       maTextSheetStatus1;
-    PushButton      maBtnRetypeSheet1;
-
-    FixedText       maTextSheetName2;
-    FixedText       maTextSheetStatus2;
-    PushButton      maBtnRetypeSheet2;
-
-    FixedText       maTextSheetName3;
-    FixedText       maTextSheetStatus3;
-    PushButton      maBtnRetypeSheet3;
-
-    FixedText       maTextSheetName4;
-    FixedText       maTextSheetStatus4;
-    PushButton      maBtnRetypeSheet4;
-
-    ScrollBar       maScrollBar;
+    std::vector<VclHBox*> maSheets;
 
     OUString        maTextNotProtected;
     OUString        maTextNotPassProtected;

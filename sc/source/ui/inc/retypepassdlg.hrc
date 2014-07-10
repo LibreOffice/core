@@ -19,39 +19,11 @@
 
 #include <sc.hrc>
 
-#define BTN_OK                   1
-#define BTN_CANCEL               2
-#define BTN_HELP                 3
-
-#define FT_DESC                 10
-#define FL_DOCUMENT             11
-#define FT_DOCSTATUS            12
-#define BTN_RETYPE_DOC          13
-
-#define FL_SHEET                112
-
-#define FT_SHEETNAME1           113
-#define FT_SHEETSTATUS1         114
-#define BTN_RETYPE_SHEET1       115
-
-#define FT_SHEETNAME2           116
-#define FT_SHEETSTATUS2         117
-#define BTN_RETYPE_SHEET2       118
-
-#define FT_SHEETNAME3           119
-#define FT_SHEETSTATUS3         120
-#define BTN_RETYPE_SHEET3       121
-
-#define FT_SHEETNAME4           122
-#define FT_SHEETSTATUS4         123
-#define BTN_RETYPE_SHEET4       124
-
-#define SB_SCROLL               190
-
-#define STR_NOT_PROTECTED       200
-#define STR_NOT_PASS_PROTECTED  201
-#define STR_HASH_BAD            202
-#define STR_HASH_GOOD           203
-#define STR_HASH_REGENERATED    204
+#define STR_NOT_PROTECTED       256
+#define STR_NOT_PASS_PROTECTED  257
+#define STR_HASH_BAD            258
+#define STR_HASH_GOOD           259
+#define STR_HASH_REGENERATED    260
+#define STR_RETYPE              261
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
