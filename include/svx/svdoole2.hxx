@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDOOLE2_HXX
 #define INCLUDED_SVX_SVDOOLE2_HXX
 
-#include <svtools/embedhlp.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -31,9 +30,17 @@
 #include <sot/storage.hxx>
 #include <svx/svxdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace embed {
 
-//   SdrOle2Obj
+class XEmbeddedObject;
 
+}}}}
+
+namespace svt {
+
+class EmbeddedObjectRef;
+
+}
 
 class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;
@@ -61,7 +68,6 @@ protected:
 private:
     SdrOle2ObjImpl*             mpImpl;
 
-    svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     OUString                    aProgName;
 
@@ -87,10 +93,9 @@ public:
     SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false );
     virtual ~SdrOle2Obj();
 
-    // access to svt::EmbeddedObjectRef
-    const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const { return xObjRef; }
+    const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const;
 
-    sal_Int64 GetAspect() const { return xObjRef.GetViewAspect(); }
+    sal_Int64 GetAspect() const;
     bool isInplaceActive() const;
     bool isUiActive() const;
     void SetAspect( sal_Int64 nAspect );

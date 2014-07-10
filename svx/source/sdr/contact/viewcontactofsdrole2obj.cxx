@@ -33,7 +33,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/charthelper.hxx>
-
+#include <svtools/embedhlp.hxx>
 
 
 namespace sdr

@@ -30,7 +30,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
+#include <svtools/embedhlp.hxx>
 
 
 using namespace com::sun::star;

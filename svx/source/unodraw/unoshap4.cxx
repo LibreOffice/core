@@ -52,7 +52,7 @@
 #include "svx/svdstr.hrc"
 #include <svdoopengl.hxx>
 #include <vcl/wmf.hxx>
-
+#include <svtools/embedhlp.hxx>
 
 
 using namespace ::osl;
