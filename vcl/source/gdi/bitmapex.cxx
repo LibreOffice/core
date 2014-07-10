@@ -525,7 +525,7 @@ bool BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                 {
                     if( IsAlpha() )
                         // cast to use the optimized AlphaMask::CopyPixel
-                        ((AlphaMask*) &aMask)->CopyPixel( rRectDst, rRectSrc, (AlphaMask*)&pBmpExSrc->aMask );
+                        aMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->aMask );
                     else if( IsTransparent() )
                     {
                         AlphaMask* pAlpha = new AlphaMask( aMask );

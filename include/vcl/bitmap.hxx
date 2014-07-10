@@ -512,6 +512,9 @@ public:
                                        const Rectangle& rRectSrc,
                                        const Bitmap* pBmpSrc = NULL );
 
+    bool    CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+                           const Bitmap* pBmpSrc = NULL);
+
     /** Perform boolean operations with another bitmap
 
         @param rMask

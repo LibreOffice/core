@@ -105,9 +105,6 @@ public:
 
     Bitmap  GetBitmap() const;
 
-    bool    CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
-                           const AlphaMask* pAlphaSrc = NULL);
-
     bool    Erase( sal_uInt8 cTransparency );
     bool    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
     bool    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency,
