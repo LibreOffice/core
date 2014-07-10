@@ -189,7 +189,7 @@ class SvCompatWeakBase
 public:
     SvCompatWeakHdl* GetHdl() { return _xHdl; }
 
-    // does not use initalizer due to compiler warnings
+    // does not use initializer due to compiler warnings
     SvCompatWeakBase( void* pObj ) { _xHdl = new SvCompatWeakHdl( pObj ); }
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 };
