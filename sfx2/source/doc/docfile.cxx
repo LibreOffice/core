@@ -207,7 +207,7 @@ public:
     const SfxFilter* pOrigFilter;
     OUString    aOrigURL;
     DateTime         aExpireTime;
-    SfxFrameWeak     wLoadTargetFrame;
+    SfxFrameWeakRef  wLoadTargetFrame;
     SvKeyValueIteratorRef xAttributes;
 
     svtools::AsynchronLink  aDoneLink;

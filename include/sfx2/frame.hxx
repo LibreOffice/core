@@ -209,7 +209,7 @@ private:
     SAL_DLLPRIVATE void Construct_Impl();
 };
 
-SV_DECL_COMPAT_WEAK( SfxFrame )
+SV_DECL_COMPAT_WEAK_REF( SfxFrame )
 
 class SfxFrameIterator
 {
@@ -229,7 +229,7 @@ public:
 class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {
     SfxFrame*               pFrame;
-    SfxFrameWeak            wFrame;
+    SfxFrameWeakRef         wFrame;
     SAL_DLLPRIVATE void SetFramePtr_Impl( SfxFrame* /*pFrameP*/ ) { pFrame = wFrame; }
 
 public:
