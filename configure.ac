@@ -13068,6 +13068,14 @@ fi
 
 
 if test "$STALE_MAKE" = "TRUE" -a "$build_os" = "cygwin"; then
+
+cygwin_arch=`echo $MACHTYPE | sed 's/-.*//'`
+if test "$cygwin_arch" = "x86_64"; then
+    download_make_url=http://users.freedesktop.org/~michael/x86_64/make
+else
+    download_make_url=http://dev-www.libreoffice.org/bin/cygwin/make
+fi
+
 cat << _EOS
 ****************************************************************************
 WARNING:
@@ -13078,14 +13086,15 @@ to install a pre-compiled binary make for cygwin
 
 mkdir -p /opt/lo/bin
 cd /opt/lo/bin
-wget http://dev-www.libreoffice.org/bin/cygwin/make
+wget $download_make_url
 chmod +x make
 
 to install from source:
 place yourself in a working directory of you choice.
 
-git clone git://anongit.freedesktop.org/libreoffice/contrib/dev-tools
-cd dev-tools/make-3.82-gbuild
+git clone https://gerrit.libreoffice.org/p/gnu-make-lo.git
+cd gnu-make-lo
+autoreconf -i
 ./configure --prefix=/opt/lo
 make
 make install
