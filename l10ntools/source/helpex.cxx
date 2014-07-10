@@ -88,7 +88,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             aInput >> sTemp;
             while( !aInput.eof() )
             {
-                const OString sXhpFile( sTemp.data(), sTemp.length() );
+                const OString sXhpFile( sTemp.data(), (sal_Int32)sTemp.length() );
                 HelpParser aParser( sXhpFile );
                 const OString sOutput(
                     aArgs.m_sOutputFile +
