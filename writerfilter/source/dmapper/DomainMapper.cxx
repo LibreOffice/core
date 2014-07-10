@@ -902,6 +902,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
             m_pImpl->SetSdt(false);
+
+            // It's not possible to insert the relevant property to the character context here:
+            // the previous, already sent character context may be still active, so the property would be lost.
+            m_pImpl->setSdtEndDeferred(true);
+
             if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
                 m_pImpl->m_pSdtHelper->createDropDownControl();
         break;
@@ -2653,6 +2658,11 @@ void DomainMapper::lcl_startCharacterGroup()
     if (m_pImpl->m_bFrameBtLr)
         // No support for this in core, work around by char rotation, as we do so for table cells already.
         m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny(sal_Int16(900)));
+    if (m_pImpl->isSdtEndDeferred())
+    {
+        m_pImpl->GetTopContext()->Insert(PROP_SDT_END_BEFORE, uno::makeAny(true), true, CHAR_GRAB_BAG);
+        m_pImpl->setSdtEndDeferred(false);
+    }
 }
 
 void DomainMapper::lcl_endCharacterGroup()

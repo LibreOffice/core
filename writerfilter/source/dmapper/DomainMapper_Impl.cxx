@@ -160,6 +160,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
+        m_bSdtEndDeferred(false),
         m_bStartTOC(false),
         m_bStartTOCHeaderFooter(false),
         m_bStartedTOC(false),
@@ -706,6 +707,15 @@ void DomainMapper_Impl::clearDeferredBreaks()
     m_bIsPageBreakDeferred = false;
 }
 
+void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
+{
+    m_bSdtEndDeferred = bSdtEndDeferred;
+}
+
+bool DomainMapper_Impl::isSdtEndDeferred()
+{
+    return m_bSdtEndDeferred;
+}
 
 void lcl_MoveBorderPropertiesToFrame(comphelper::SequenceAsHashMap& rFrameProperties,
     uno::Reference<text::XTextRange> xStartTextRange,

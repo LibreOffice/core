@@ -319,6 +319,8 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    /// If we want to set "sdt end" on the next character contet.
+    bool                                                                            m_bSdtEndDeferred;
     bool                                                                            m_bStartTOC;
     bool                                                                            m_bStartTOCHeaderFooter;
     /// If we got any text that is the pre-rendered result of the TOC field.
@@ -489,6 +491,10 @@ public:
     bool isBreakDeferred( BreakType deferredBreakType );
     void clearDeferredBreaks();
     void clearDeferredBreak(BreakType deferredBreakType);
+
+    void setSdtEndDeferred(bool bSdtEndDeferred);
+    bool isSdtEndDeferred();
+
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
