@@ -33,7 +33,7 @@ class SfxViewFrame;
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
-class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
+class SfxFrame_Impl : public SfxBroadcaster
 {
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
@@ -57,8 +57,7 @@ public:
     bool                      bMenuBarOn;
 
     SfxFrame_Impl( SfxFrame* pAntiImplP )
-        :SvCompatWeakBase( pAntiImplP )
-        ,nType( 0L )
+        :nType( 0L )
         ,pCurrentViewFrame( NULL )
         ,pDescr( NULL )
         ,nLocks( 0 )
