@@ -1608,7 +1608,7 @@ void XMLSectionExport::ExportBoolean(
 
     // value = value ^ bInvert
     // omit if value == default
-    if ( (bTmp != bInvert) == bDefault )
+    if ( (bTmp != bInvert) != bDefault )
     {
         // export non-default value (since default is omitted)
         GetExport().AddAttribute(XML_NAMESPACE_TEXT,
