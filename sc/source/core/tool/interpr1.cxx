@@ -253,6 +253,11 @@ void ScInterpreter::ScIfError( bool bNAonly )
     {
         default:
             Pop();
+            // Act on implicitly propagated error, if any.
+            if (nOldGlobalError)
+                nGlobalError = nOldGlobalError;
+            if (nGlobalError)
+                bError = true;
             break;
         case svError:
             PopError();
