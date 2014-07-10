@@ -185,6 +185,25 @@ sal_Unicode SvParser::GetNextChar()
                     }
                 }
             }
+            else if( 0xef == c1 || 0xbb == c1 ) // check for UTF-8 BOM
+            {
+                rInput.ReadUChar( c2 );
+                bErr = rInput.IsEof() || rInput.GetError();
+                if( !bErr )
+                {
+                    if( ( 0xef == c1 && 0xbb == c2 ) || ( 0xbb == c1 && 0xef == c2 ) )
+                    {
+                        unsigned char c3(0);
+                        rInput.ReadUChar( c3 );
+                        bErr = rInput.IsEof() || rInput.GetError();
+                        if( !bErr && ( 0xbf == c3 ) )
+                        {
+                            eSrcEnc = RTL_TEXTENCODING_UTF8;
+                            bSeekBack = false;
+                        }
+                    }
+                }
+            }
         }
         if( bSeekBack )
             rInput.Seek( 0 );
