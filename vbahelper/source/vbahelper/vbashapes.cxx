@@ -166,7 +166,8 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
 }
 
 uno::Any SAL_CALL
-ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::RuntimeException)
+ScVbaShapes::Item(const uno::Any& Index, const uno::Any& Index2)
+    throw (lang::IndexOutOfBoundsException, script::BasicErrorException, uno::RuntimeException)
 {
     // I don't think we need to support Array of indices for shapes
 /*

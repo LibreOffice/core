@@ -66,7 +66,8 @@ public:
     virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const css::uno::Any& shapes ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2)
+         throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VBAHELPER_VBASHAPES_HXX
