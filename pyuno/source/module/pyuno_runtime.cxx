@@ -495,7 +495,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         if( com::sun::star::uno::TypeClass_EXCEPTION == a.getValueTypeClass() )
         {
             // add the message in a standard python way !
-            PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
+            PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
 
             // assuming that the Message is always the first member, wuuuu
             void *pData = (void*)a.getValue();
