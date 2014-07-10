@@ -2162,6 +2162,12 @@ bool SdrOle2Obj::IsCalc() const
     return false;
 }
 
+bool SdrOle2Obj::IsUnloadable() const
+{
+    // Right now, chart OLE objects are the only ones exempt from automatic
+    // unloading.
+    return !IsChart();
+}
 
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 {

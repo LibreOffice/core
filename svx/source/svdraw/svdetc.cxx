@@ -165,6 +165,10 @@ void OLEObjCache::UnloadOnDemand()
 
 void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 {
+    if (!pObj->IsUnloadable())
+        // This OLE object is exempt from automatic unloading.
+        return;
+
     if (!maObjs.empty())
     {
         SdrOle2Obj* pExistingObj = maObjs.front();
