@@ -2304,6 +2304,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SdtPr_group:
     case NS_ooxml::LN_CT_SdtPr_text:
     case NS_ooxml::LN_CT_SdtPr_id:
+    case NS_ooxml::LN_CT_SdtPr_alias:
     {
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName;
@@ -2319,6 +2320,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             case NS_ooxml::LN_CT_SdtPr_group:       sName = "ooxml:CT_SdtPr_group"; break;
             case NS_ooxml::LN_CT_SdtPr_text:        sName = "ooxml:CT_SdtPr_text"; break;
             case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
+            case NS_ooxml::LN_CT_SdtPr_alias:       sName = "ooxml:CT_SdtPr_alias"; break;
             default: assert(false);
         };
         enableInteropGrabBag(sName);
@@ -2328,7 +2330,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         if (pProperties.get() != NULL)
             pProperties->resolve(*this);
 
-        m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
+        if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = sName;
+            aValue.Value <<= sStringValue;
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(aValue);
+        }
+        else
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
         m_pImpl->disableInteropGrabBag();
     }
     break;
