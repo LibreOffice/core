@@ -108,7 +108,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxModule*              pModule;
     SfxObjectShellFlags     eFlags;
     bool                bReadOnlyUI;
-    SvRefBaseRef            xHeaderAttributes;
+    tools::SvRef<SvRefBase>  xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >
                             pBaseModel;
     sal_uInt16              nStyleFilter;

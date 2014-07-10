@@ -184,8 +184,6 @@ public:
                     { return nRefCount; }
 };
 
-typedef tools::SvRef<SvRefBase> SvRefBaseRef;
-
 class SvCompatWeakHdl : public SvRefBase
 {
     friend class SvCompatWeakBase;

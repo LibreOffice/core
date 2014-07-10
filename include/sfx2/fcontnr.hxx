@@ -47,16 +47,15 @@ typedef sal_uInt16 SfxFilterContainerFlags;
 
 class SfxRefItem : public SfxPoolItem
 {
-    SvRefBaseRef aRef;
+    tools::SvRef<SvRefBase> maRef;
 public:
+    SfxRefItem( sal_uInt16 nWhichId, const tools::SvRef<SvRefBase>& rValue ) : SfxPoolItem( nWhichId )
+    {   maRef = rValue; }
     virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
     {   return new SfxRefItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
-    {   return ((SfxRefItem&)rL).aRef == aRef; }
-    SfxRefItem( sal_uInt16 nWhichId, const SvRefBaseRef& rValue ) : SfxPoolItem( nWhichId )
-    {   aRef = rValue; }
-    const SvRefBaseRef&      GetValue() const { return aRef; }
-
+    {   return ((SfxRefItem&)rL).maRef == maRef; }
+    const tools::SvRef<SvRefBase>&      GetValue() const { return maRef; }
 };
 
 class SfxFrameWindow
