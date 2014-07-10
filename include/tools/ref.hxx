@@ -28,6 +28,7 @@
 
 namespace tools {
 
+/** T must be a class that extends SvRefBase */
 template<typename T> class SvRef {
 public:
     SvRef(): pObj(0) {}
@@ -142,6 +143,7 @@ public:
 };
 
 
+/** Classes that want to be referenced-counted via SvRef<T>, should extend this base class */
 class TOOLS_DLLPUBLIC SvRefBase
 {
     static const sal_uIntPtr SV_NO_DELETE_REFCOUNT = 0x80000000;
@@ -184,27 +186,36 @@ public:
                     { return nRefCount; }
 };
 
+/** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.
+    This acts as a intermediary between SfxFrameWeak and SfxFrame_Impl.
+*/
 class SvCompatWeakHdl : public SvRefBase
 {
     friend class SvCompatWeakBase;
     void* _pObj;
+
     SvCompatWeakHdl( void* pObj ) : _pObj( pObj ) {}
 
 public:
-    void ResetWeakBase( ) { _pObj = 0; }
+    void  ResetWeakBase( ) { _pObj = 0; }
     void* GetObj()        { return _pObj; }
 };
 
+/** We only have one place that extends this, in sfx2/source/view/impframe.hxx, class SfxFrame_Impl,
+    its function is to notify the SvCompatWeakHdl when an SfxFrame_Impl object is deleted.
+*/
 class SvCompatWeakBase
 {
     tools::SvRef<SvCompatWeakHdl> _xHdl;
 
 public:
-    SvCompatWeakHdl* GetHdl() { return _xHdl; }
-
-    // does not use initializer due to compiler warnings
+    // Does not use initializer due to compiler warnings,
+    // because the lifetime of the _xHdl object can exceed the lifetime of this class.
     SvCompatWeakBase( void* pObj ) { _xHdl = new SvCompatWeakHdl( pObj ); }
+
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
+
+    SvCompatWeakHdl* GetHdl() { return _xHdl; }
 };
 
 #define SV_DECL_COMPAT_WEAK( ClassName )                            \
