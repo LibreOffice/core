@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     i18nutil \
     cppu \
     sal \
+    salhelper \
     xmlreader \
 	$(gb_UWINAPI) \
 ))
