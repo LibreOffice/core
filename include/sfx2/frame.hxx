@@ -75,7 +75,6 @@ class SfxDispatcher;
 class Rectangle;
 class SfxRequest;
 class SfxUnoControllerItem;
-class SvCompatWeakHdl;
 class SystemWindow;
 
 class SfxFrame;
@@ -97,7 +96,7 @@ typedef ::std::vector<OUString> TargetList;
 // from their parent frames.
 
 
-class SFX2_DLLPUBLIC SfxFrame
+class SFX2_DLLPUBLIC SfxFrame : public SvCompatWeakBase<SfxFrame>
 {
     friend class SfxFrameIterator;
     friend class SfxFrameWindow_Impl;
@@ -125,7 +124,6 @@ public:
                         CreateBlankFrame();
     static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
-    SvCompatWeakHdl*    GetHdl();
     Window&             GetWindow() const { return *pWindow;}
     void                CancelTransfers( bool bCancelLoadEnv = true );
     bool                DoClose();
@@ -209,7 +207,7 @@ private:
     SAL_DLLPRIVATE void Construct_Impl();
 };
 
-SV_DECL_COMPAT_WEAK_REF( SfxFrame )
+typedef SvCompatWeakRef<SfxFrame> SfxFrameWeakRef;
 
 class SfxFrameIterator
 {

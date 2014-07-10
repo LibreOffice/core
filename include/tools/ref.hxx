@@ -189,56 +189,63 @@ public:
                     { return nRefCount; }
 };
 
-/** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.
-    This acts as a intermediary between SfxFrameWeak and SfxFrame_Impl.
+template<typename T>
+class SvCompatWeakBase;
+
+/** SvCompatWeakHdl acts as a intermediary between SvCompatWeakRef<T> and T.
 */
+template<typename T>
 class SvCompatWeakHdl : public SvRefBase
 {
-    friend class SvCompatWeakBase;
-    void* _pObj;
+    friend class SvCompatWeakBase<T>;
+    T* _pObj;
 
-    SvCompatWeakHdl( void* pObj ) : _pObj( pObj ) {}
+    SvCompatWeakHdl( T* pObj ) : _pObj( pObj ) {}
 
 public:
     void  ResetWeakBase( ) { _pObj = 0; }
-    void* GetObj()        { return _pObj; }
+    T*    GetObj()        { return _pObj; }
 };
 
-/** We only have one place that extends this, in sfx2/source/view/impframe.hxx, class SfxFrame_Impl,
-    its function is to notify the SvCompatWeakHdl when an SfxFrame_Impl object is deleted.
+/** We only have one place that extends this, in include/sfx2/frame.hxx, class SfxFrame.
+    Its function is to notify the SvCompatWeakHdl when an SfxFrame object is deleted.
 */
+template<typename T>
 class SvCompatWeakBase
 {
-    tools::SvRef<SvCompatWeakHdl> _xHdl;
+    tools::SvRef< SvCompatWeakHdl<T> > _xHdl;
 
 public:
-    // Does not use initializer due to compiler warnings,
-    // because the lifetime of the _xHdl object can exceed the lifetime of this class.
-    SvCompatWeakBase( void* pObj ) { _xHdl = new SvCompatWeakHdl( pObj ); }
+    /** Does not use initializer due to compiler warnings,
+        because the lifetime of the _xHdl object can exceed the lifetime of this class.
+     */
+    SvCompatWeakBase( T* pObj ) { _xHdl = new SvCompatWeakHdl<T>( pObj ); }
 
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 
-    SvCompatWeakHdl* GetHdl() { return _xHdl; }
+    SvCompatWeakHdl<T>* GetHdl() { return _xHdl; }
 };
 
-#define SV_DECL_COMPAT_WEAK_REF( ClassName )                        \
-class ClassName##WeakRef                                            \
-{                                                                   \
-    tools::SvRef<SvCompatWeakHdl> _xHdl;                            \
-public:                                                             \
-    inline               ClassName##WeakRef( ) {}                   \
-    inline               ClassName##WeakRef( ClassName* pObj ) {    \
-        if( pObj ) _xHdl = pObj->GetHdl(); }                        \
-    inline ClassName##WeakRef& operator = ( ClassName * pObj ) {    \
-        _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
-    inline bool            Is() const {                         \
-        return _xHdl.Is() && _xHdl->GetObj(); }                     \
-    inline ClassName *     operator -> () const {                   \
-        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
-    inline ClassName *     operator &  () const {                   \
-        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
-    inline operator ClassName * () const {                          \
-        return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }  \
+/** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.
+*/
+template<typename T>
+class SvCompatWeakRef
+{
+    tools::SvRef< SvCompatWeakHdl<T> > _xHdl;
+public:
+    inline               SvCompatWeakRef( ) {}
+    inline               SvCompatWeakRef( T* pObj )
+                         {  if( pObj ) _xHdl = pObj->GetHdl(); }
+    inline SvCompatWeakRef& operator = ( T * pObj )
+                         {  _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }
+    inline bool          Is() const
+                         { return _xHdl.Is() && _xHdl->GetObj(); }
+    inline T*            operator -> () const
+                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
+    inline T*            operator &  () const
+                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
+    inline operator T* () const
+                         { return _xHdl.Is() ? _xHdl->GetObj() : 0; }
 };
 
 #endif
