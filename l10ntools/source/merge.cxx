@@ -240,7 +240,7 @@ MergeDataFile::MergeDataFile(
         bool bSkipCurrentPOFile = false;
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         const bool bReadAll = sFileName.isEmpty();
-        const OString sPoFileName(sPoFile.data(), sPoFile.length());
+        const OString sPoFileName(sPoFile.data(), (sal_Int32)sPoFile.length());
         PoIfstream aPoInput;
         aPoInput.open( sPoFileName );
         if ( !aPoInput.isOpen() )
