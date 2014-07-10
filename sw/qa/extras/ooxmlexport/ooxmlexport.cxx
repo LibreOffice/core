@@ -3748,6 +3748,8 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[1]/w:t", "first");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", "second");
+    // Make sure the third portion is still outside <w:sdt>.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
