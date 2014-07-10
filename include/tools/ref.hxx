@@ -221,16 +221,16 @@ public:
     SvCompatWeakHdl* GetHdl() { return _xHdl; }
 };
 
-#define SV_DECL_COMPAT_WEAK( ClassName )                            \
-class ClassName##Weak                                               \
+#define SV_DECL_COMPAT_WEAK_REF( ClassName )                        \
+class ClassName##WeakRef                                            \
 {                                                                   \
     tools::SvRef<SvCompatWeakHdl> _xHdl;                            \
 public:                                                             \
-    inline               ClassName##Weak( ) {}                      \
-    inline               ClassName##Weak( ClassName* pObj ) {       \
+    inline               ClassName##WeakRef( ) {}                   \
+    inline               ClassName##WeakRef( ClassName* pObj ) {    \
         if( pObj ) _xHdl = pObj->GetHdl(); }                        \
     inline void          Clear() { _xHdl.Clear(); }                 \
-    inline ClassName##Weak& operator = ( ClassName * pObj ) {       \
+    inline ClassName##WeakRef& operator = ( ClassName * pObj ) {    \
         _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
     inline bool            Is() const {                         \
         return _xHdl.Is() && _xHdl->GetObj(); }                     \

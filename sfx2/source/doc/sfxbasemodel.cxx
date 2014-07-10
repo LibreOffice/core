@@ -4193,8 +4193,8 @@ namespace sfx { namespace intern {
         }
 
     private:
-        bool            m_bSuccess;
-        SfxFrameWeak    m_aWeakFrame;
+        bool             m_bSuccess;
+        SfxFrameWeakRef  m_aWeakFrame;
     };
 } }
 
