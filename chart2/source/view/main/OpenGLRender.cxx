@@ -346,6 +346,7 @@ void OpenGLRender::renderDebug()
 
 void OpenGLRender::prepareToRender()
 {
+    aContext.makeCurrent();
     aContext.setWinSize(Size(m_iWidth, m_iHeight));
     glViewport(0, 0, m_iWidth, m_iHeight);
     if (!m_FboID[0])
