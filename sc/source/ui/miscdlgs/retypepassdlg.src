@@ -19,207 +19,34 @@
 
 #include "retypepassdlg.hrc"
 
-ModalDialog RID_SCDLG_RETYPEPASS
+String STR_NOT_PROTECTED
 {
-    HelpID = "sc:ModalDialog:RID_SCDLG_RETYPEPASS";
-    Text [ en-US ] = "Re-type Password" ;
-    Size = MAP_APPFONT ( 260 , 165 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
+    Text [ en-US ] = "Not protected" ;
+};
 
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 204, 6 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        DefButton = TRUE ;
-    };
+String STR_NOT_PASS_PROTECTED
+{
+    Text [ en-US ] = "Not password-protected" ;
+};
 
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 204, 23 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-    };
+String STR_HASH_BAD
+{
+    Text [ en-US ] = "Hash incompatible" ;
+};
 
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 204, 43 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-    };
+String STR_HASH_GOOD
+{
+    Text [ en-US ] = "Hash compatible" ;
+};
 
-    FixedText FT_DESC
-    {
-        Pos = MAP_APPFONT ( 6, 6 ) ;
-        Size = MAP_APPFONT ( 190, 36 );
+String STR_HASH_REGENERATED
+{
+    Text [ en-US ] = "Hash re-generated" ;
+};
 
-        WordBreak = TRUE ;
-
-        Text [ en-US ] = "The document you are about to export has one or more protected items with password that cannot be exported. Please re-type your password to be able to export your document." ;
-    };
-
-    FixedLine FL_DOCUMENT
-    {
-        Pos = MAP_APPFONT ( 6, 48 );
-        Size = MAP_APPFONT ( 190, 8 );
-
-        Text [ en-US ] = "Document protection" ;
-    };
-
-    FixedText FT_DOCSTATUS
-    {
-        Pos = MAP_APPFONT ( 10, 62 );
-        Size = MAP_APPFONT ( 140, 8 );
-
-        Text [ en-US ] = "Status unknown" ;
-    };
-
-    PushButton BTN_RETYPE_DOC
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_DOC";
-        Pos = MAP_APPFONT ( 158, 59 );
-        Size = MAP_APPFONT ( 30, 14 );
-
-        Text [ en-US ] = "Re-type" ;
-    };
-
-    FixedLine FL_SHEET
-    {
-        Pos = MAP_APPFONT ( 6, 83 );
-        Size = MAP_APPFONT ( 190, 8 );
-
-        Text [ en-US ] = "Sheet protection" ;
-    };
-
-    FixedText FT_SHEETNAME1
-    {
-        Pos = MAP_APPFONT ( 10, 97 );
-        Size = MAP_APPFONT ( 68, 8 );
-
-        Text [ en-US ] = "Sheet1 has a really long name" ;
-    };
-
-    FixedText FT_SHEETSTATUS1
-    {
-        Pos = MAP_APPFONT ( 82, 97 );
-        Size = MAP_APPFONT ( 72, 8 );
-
-        Text [ en-US ] = "Status unknown" ;
-    };
-
-    PushButton BTN_RETYPE_SHEET1
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET1";
-        Pos = MAP_APPFONT ( 158, 94 );
-        Size = MAP_APPFONT ( 30, 14 );
-
-        Text [ en-US ] = "Re-type" ;
-    };
-
-    FixedText FT_SHEETNAME2
-    {
-        Pos = MAP_APPFONT ( 10, 113 );
-        Size = MAP_APPFONT ( 68, 8 );
-
-        Text [ en-US ] = "Sheet2" ;
-    };
-
-    FixedText FT_SHEETSTATUS2
-    {
-        Pos = MAP_APPFONT ( 82, 113 );
-        Size = MAP_APPFONT ( 72, 8 );
-
-        Text [ en-US ] = "Status unknown" ;
-    };
-
-    PushButton BTN_RETYPE_SHEET2
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET2";
-        Pos = MAP_APPFONT ( 158, 110 );
-        Size = MAP_APPFONT ( 30, 14 );
-
-        Text [ en-US ] = "Re-type" ;
-    };
-
-    FixedText FT_SHEETNAME3
-    {
-        Pos = MAP_APPFONT ( 10, 129 );
-        Size = MAP_APPFONT ( 68, 8 );
-
-        Text [ en-US ] = "Sheet3" ;
-    };
-
-    FixedText FT_SHEETSTATUS3
-    {
-        Pos = MAP_APPFONT ( 82, 129 );
-        Size = MAP_APPFONT ( 72, 8 );
-
-        Text [ en-US ] = "Status unknown" ;
-    };
-
-    PushButton BTN_RETYPE_SHEET3
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET3";
-        Pos = MAP_APPFONT ( 158, 126 );
-        Size = MAP_APPFONT ( 30, 14 );
-
-        Text [ en-US ] = "Re-type" ;
-    };
-
-    FixedText FT_SHEETNAME4
-    {
-        Pos = MAP_APPFONT ( 10, 145 );
-        Size = MAP_APPFONT ( 68, 8 );
-
-        Text [ en-US ] = "Sheet4" ;
-    };
-
-    FixedText FT_SHEETSTATUS4
-    {
-        Pos = MAP_APPFONT ( 82, 145 );
-        Size = MAP_APPFONT ( 72, 8 );
-
-        Text [ en-US ] = "Status unknown" ;
-    };
-
-    PushButton BTN_RETYPE_SHEET4
-    {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET4";
-        Pos = MAP_APPFONT ( 158, 142 );
-        Size = MAP_APPFONT ( 30, 14 );
-
-        Text [ en-US ] = "Re-type" ;
-    };
-
-    ScrollBar SB_SCROLL
-    {
-        Pos = MAP_APPFONT ( 190, 94 ) ;
-        Size = MAP_APPFONT (  8, 61 ) ;
-        VScroll = TRUE ;
-    };
-
-    String STR_NOT_PROTECTED
-    {
-        Text [ en-US ] = "Not protected" ;
-    };
-
-    String STR_NOT_PASS_PROTECTED
-    {
-        Text [ en-US ] = "Not password-protected" ;
-    };
-
-    String STR_HASH_BAD
-    {
-        Text [ en-US ] = "Hash incompatible" ;
-    };
-
-    String STR_HASH_GOOD
-    {
-        Text [ en-US ] = "Hash compatible" ;
-    };
-
-    String STR_HASH_REGENERATED
-    {
-        Text [ en-US ] = "Hash re-generated" ;
-    };
+String STR_RETYPE
+{
+    Text [ en-US ] = "Re-type" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
