@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkBox" id="XFormsPage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkToolbar" id="toolbar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <child>
+              <object class="GtkToolButton" id="TBI_ITEM_ADD">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="use_action_appearance">False</property>
+                <property name="action_name">TBI_ITEM_ADD</property>
+                <property name="label" translatable="yes">Add Item</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+        </child>
+        <child>
+              <object class="GtkToolButton" id="TBI_ITEM_ADD_ELEMENT">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="use_action_appearance">False</property>
+                <property name="action_name">TBI_ITEM_ADD_ELEMENT</property>
+                <property name="label" translatable="yes">Add Element</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+        </child>
+        <child>
+              <object class="GtkToolButton" id="TBI_ITEM_ADD_ATTRIBUTE">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="use_action_appearance">False</property>
+                <property name="action_name">TBI_ITEM_ADD_ATTRIBUTE</property>
+                <property name="label" translatable="yes">Add Attribute</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+        </child>
+        <child>
+              <object class="GtkToolButton" id="TBI_ITEM_EDIT">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="use_action_appearance">False</property>
+                <property name="action_name">TBI_ITEM_EDIT</property>
+                <property name="label" translatable="yes">Edit</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+        </child>
+        <child>
+              <object class="GtkToolButton" id="TBI_ITEM_REMOVE">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="use_action_appearance">False</property>
+                <property name="action_name">TBI_ITEM_REMOVE</property>
+                <property name="label" translatable="yes">Delete</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="svxlo-DataTreeListBox" id="items:border">
+        <property name="width_request">150</property>
+        <property name="height_request">200</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeview-selection1"/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

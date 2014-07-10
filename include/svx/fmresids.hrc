@@ -26,6 +26,7 @@
 
 // ImageList-Id's -----------------------------------------------------------
 #define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
+#define RID_SVXIMGLIST_XFORMS_TBX                   (RID_FORMS_START + 1)
 
 // Image-Id's -----------------------------------------------------------
 #define RID_SVXIMG_FORM                             SID_FM_CONFIG
@@ -63,7 +64,6 @@
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
 
 #define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)
-#define RID_SVX_XFORMS_TABPAGES                     (RID_FORMS_START + 20)
 
 // Toolbars ------------------------------------------------------------
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)

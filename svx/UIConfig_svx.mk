@@ -56,6 +56,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/sidebartextpanel \
 	svx/uiconfig/ui/textcontrolchardialog \
 	svx/uiconfig/ui/textcontrolparadialog \
+	svx/uiconfig/ui/xformspage \
 ))
 
 # vim: set noet sw=4 ts=4:
