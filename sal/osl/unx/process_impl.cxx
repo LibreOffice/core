@@ -191,6 +191,11 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     return (result);
 }
 
+int SAL_CALL osl_areCommandArgsSet (void)
+{
+    return (g_command_args.m_nCount > 0);
+}
+
 /***************************************
  osl_setCommandArgs().
  **************************************/
