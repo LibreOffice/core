@@ -34,7 +34,7 @@ extern "C"
 {
 
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char* _pImplName, void * _pServiceManager, void* /*_pRegistryKey*/)
 {
     void* pRet = NULL;
 
@@ -42,7 +42,8 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char*
     {
         Reference< XSingleServiceFactory > xFactory(
             ::cppu::createOneInstanceFactory(
-                _pServiceManager,
+                static_cast<css::lang::XMultiServiceFactory *>(
+                    _pServiceManager),
                 OPoolCollection::getImplementationName_Static(),
                 OPoolCollection::CreateInstance,
                 OPoolCollection::getSupportedServiceNames_Static()
