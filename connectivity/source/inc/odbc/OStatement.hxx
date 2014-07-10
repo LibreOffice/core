@@ -107,7 +107,7 @@ namespace connectivity
             void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void setWarning (const ::com::sun::star::sdbc::SQLWarning &ex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
-            bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
+            bool lockIfNecessary (const OUString& sql) throw (css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getColumnCount() throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
 

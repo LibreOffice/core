@@ -256,9 +256,7 @@ SQLLEN OStatement_Base::getRowCount()
 // If the given SQL statement contains a 'FOR UPDATE' clause, change
 // the concurrency to lock so that the row can then be updated.  Returns
 // true if the concurrency has been changed
-
-
-bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
+bool OStatement_Base::lockIfNecessary (const OUString& sql) throw (SQLException, RuntimeException)
 {
     bool rc = false;
 
