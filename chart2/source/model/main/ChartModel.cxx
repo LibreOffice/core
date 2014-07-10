@@ -1424,10 +1424,12 @@ void ChartModel::update()
         mpChartView = new ChartView( m_xContext, *this);
         xChartView = static_cast< ::cppu::OWeakObject* >( mpChartView );
     }
-
-    mpChartView->setViewDirty();
-    mpChartView->update();
+    if(mpChartView)
+    {
+        mpChartView->setViewDirty();
+        mpChartView->update();
     mpChartView->updateOpenGLWindow();
+    }
 }
 
 }  // namespace chart
