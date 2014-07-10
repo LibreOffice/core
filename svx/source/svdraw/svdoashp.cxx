@@ -37,6 +37,7 @@
 #include <svx/svddrag.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include "svx/svditer.hxx"
@@ -2049,7 +2050,8 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
     }
 }
 
-void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination, const sal_uInt16 nCustomShapeHdlNum, SdrObjCustomShape* pObj ) const
+void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination,
+        const sal_uInt16 nCustomShapeHdlNum, SdrObjCustomShape* pObj, bool bMoveCalloutRectangle ) const
 {
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( pObj ) );
     if ( nCustomShapeHdlNum < aInteractionHandles.size() )
@@ -2060,7 +2062,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination, const 
             try
             {
                 com::sun::star::awt::Point aPt( aDestination.X(), aDestination.Y() );
-                if ( aInteractionHandle.nMode & CUSTOMSHAPE_HANDLE_MOVE_SHAPE )
+                if ( aInteractionHandle.nMode & CUSTOMSHAPE_HANDLE_MOVE_SHAPE && bMoveCalloutRectangle )
                 {
                     sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
                     sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
@@ -2100,7 +2102,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         case HDL_CUSTOMSHAPE1 :
         {
             rDrag.SetEndDragChangesGeoAndAttributes(true);
-            DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), this );
+            DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), this, !rDrag.GetDragMethod()->IsShiftPressed() );
             SetRectsDirty();
             InvalidateRenderGeometry();
             SetChanged();

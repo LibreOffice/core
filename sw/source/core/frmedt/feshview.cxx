@@ -20,6 +20,7 @@
 #include "hintids.hxx"
 
 #include <svx/sdrobjectfilter.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
@@ -613,14 +614,15 @@ void SwFEShell::SetDragMode( sal_uInt16 eDragMode )
 |*
 *************************************************************************/
 
-long SwFEShell::BeginDrag( const Point* pPt, sal_Bool )
+long SwFEShell::BeginDrag( const Point* pPt, sal_Bool bIsShift)
 {
     SdrView *pView = Imp()->GetDrawView();
     if ( pView && pView->AreObjectsMarked() )
     {
         delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
         SdrHdl* pHdl = pView->PickHandle( *pPt );
-        pView->BegDragObj( *pPt, 0, pHdl );
+        if (pView->BegDragObj( *pPt, 0, pHdl ))
+            pView->GetDragMethod()->SetShiftPressed( bIsShift );
         ::FrameNotify( this, FLY_DRAG );
         return 1;
     }

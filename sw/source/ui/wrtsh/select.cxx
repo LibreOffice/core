@@ -662,16 +662,16 @@ void SwWrtShell::SetRedlineModeAndCheckInsMode( sal_uInt16 eMode )
 
 // Edit frame
 
-long SwWrtShell::BeginFrmDrag(const Point *pPt, sal_Bool)
+long SwWrtShell::BeginFrmDrag(const Point *pPt, sal_Bool bIsShift)
 {
     fnDrag = &SwFEShell::Drag;
     if(bStartDrag)
     {
         Point aTmp( nStartDragX, nStartDragY );
-        SwFEShell::BeginDrag( &aTmp, sal_False );
+        SwFEShell::BeginDrag( &aTmp, bIsShift );
     }
     else
-        SwFEShell::BeginDrag( pPt, sal_False );
+        SwFEShell::BeginDrag( pPt, bIsShift );
     return 1;
 }
 
