@@ -121,6 +121,8 @@
       <menu:menuitem menu:id=".uno:PlugInsActive"/>
       <menu:menuitem menu:id=".uno:ImageMapDialog"/>
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:EditDoc"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
