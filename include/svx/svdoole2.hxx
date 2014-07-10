@@ -42,10 +42,12 @@ namespace svt { class EmbeddedObjectRef; }
 class SvxUnoShapeModifyListener;
 class SdrOle2ObjImpl;
 
-class SVX_DLLPUBLIC SdrOle2Obj :  public SdrRectObj
+class SVX_DLLPUBLIC SdrOle2Obj : public SdrRectObj
 {
 private:
+    SdrOle2ObjImpl* mpImpl;
 
+private:
     SVX_DLLPRIVATE void Connect_Impl();
     SVX_DLLPRIVATE void Disconnect_Impl();
     SVX_DLLPRIVATE void Reconnect_Impl();
@@ -56,28 +58,12 @@ private:
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
     // #i118485# helper added
-    SdrObject* createSdrGrafObjReplacement(bool bAddText, bool bUseHCGraphic) const;
+    SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText, bool bUseHCGraphic) const;
+    SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
-
-private:
-    SdrOle2ObjImpl*             mpImpl;
-
-    // Due to compatibility at SdrTextObj for now
-    bool                        bFrame:1;
-    bool                        bInDestruction:1;
-    // #i118524#
-    bool                        mbSuppressSetVisAreaSize:1;
-    mutable bool                m_bTypeAsked:1;
-    mutable bool                m_bChart:1;
-
-    SvxUnoShapeModifyListener*  pModifyListener;
-
-private:
-
-    void ImpSetVisAreaSize();
 
 public:
     OUString GetStyleString();
@@ -106,7 +92,7 @@ public:
 
     // #i118524# Allow suppress SetVisAreaSize in changing methods when call
     // comes from OLE client
-    void setSuppressSetVisAreaSize(bool bNew) { mbSuppressSetVisAreaSize = bNew; }
+    void setSuppressSetVisAreaSize( bool bNew );
 
     // OLE object has got a separate PersistName member now;
     // !!! use ::SetPersistName( ... ) only, if you know what you do !!!

@@ -677,32 +677,50 @@ public:
     OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
-    // New local var to avoid repeated loading if load of OLE2 fails
-    bool            mbLoadingOLEObjectFailed;
-    bool            mbConnected;
+    bool mbFrame:1; // Due to compatibility at SdrTextObj for now
+    bool mbInDestruction:1;
+    bool mbSuppressSetVisAreaSize:1; // #i118524#
+    mutable bool mbTypeAsked:1;
+    mutable bool mbIsChart:1;
+    bool mbLoadingOLEObjectFailed:1; // New local var to avoid repeated loading if load of OLE2 fails
+    bool mbConnected:1;
 
     SdrEmbedObjectLink* mpObjectLink;
     OUString maLinkURL;
 
-    SdrOle2ObjImpl() :
+    SvxUnoShapeModifyListener* mpModifyListener;
+
+    SdrOle2ObjImpl( bool bFrame ) :
         mpGraphic(NULL),
         mpGraphicObject(NULL),
         pLightClient (NULL),
+        mbFrame(bFrame),
+        mbInDestruction(false),
+        mbSuppressSetVisAreaSize(false),
+        mbTypeAsked(false),
+        mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(NULL)
+        mpObjectLink(NULL),
+        mpModifyListener(NULL)
     {
         mxObjRef.Lock(true);
     }
 
-    SdrOle2ObjImpl( const svt::EmbeddedObjectRef& rObjRef ) :
+    SdrOle2ObjImpl( bool bFrame, const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
         mpGraphic(NULL),
         mpGraphicObject(NULL),
         pLightClient (NULL),
+        mbFrame(bFrame),
+        mbInDestruction(false),
+        mbSuppressSetVisAreaSize(false),
+        mbTypeAsked(false),
+        mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(NULL)
+        mpObjectLink(NULL),
+        mpModifyListener(NULL)
     {
         mxObjRef.Lock(true);
     }
@@ -711,6 +729,12 @@ public:
     {
         delete mpGraphic;
         delete mpGraphicObject;
+
+        if (mpModifyListener)
+        {
+            mpModifyListener->invalidate();
+            mpModifyListener->release();
+        }
     }
 };
 
@@ -759,25 +783,13 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
 
 SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
-    mpImpl(new SdrOle2ObjImpl),
-    bFrame(bFrame_),
-    bInDestruction(false),
-    mbSuppressSetVisAreaSize(false),
-    m_bTypeAsked(false),
-    m_bChart(false),
-    pModifyListener(NULL)
+    mpImpl(new SdrOle2ObjImpl(bFrame_))
 {
 }
 
 SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ ) :
     SdrRectObj(rNewRect),
-    mpImpl(new SdrOle2ObjImpl(rNewObjRef)),
-    bFrame(bFrame_),
-    bInDestruction(false),
-    mbSuppressSetVisAreaSize(false),
-    m_bTypeAsked(false),
-    m_bChart(false),
-    pModifyListener(NULL)
+    mpImpl(new SdrOle2ObjImpl(bFrame_, rNewObjRef))
 {
     mpImpl->aPersistName = rNewObjName;
 
@@ -802,16 +814,10 @@ OUString SdrOle2Obj::GetStyleString()
 
 SdrOle2Obj::~SdrOle2Obj()
 {
-    bInDestruction = true;
+    mpImpl->mbInDestruction = true;
 
     if ( mpImpl->mbConnected )
         Disconnect();
-
-    if(pModifyListener)
-    {
-        pModifyListener->invalidate();
-        pModifyListener->release();
-    }
 
     DisconnectFileLink_Impl();
 
@@ -1088,7 +1094,7 @@ void SdrOle2Obj::Connect_Impl()
                 else if ( !mpImpl->mxObjRef.is() )
                 {
                     mpImpl->mxObjRef.Assign( rContainer.GetEmbeddedObject( mpImpl->aPersistName ), mpImpl->mxObjRef.GetViewAspect() );
-                    m_bTypeAsked = false;
+                    mpImpl->mbTypeAsked = false;
                 }
 
                 if ( mpImpl->mxObjRef.GetObject().is() )
@@ -1163,16 +1169,16 @@ void SdrOle2Obj::AddListeners_Impl()
     if( mpImpl->mxObjRef.is() && mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
     {
         // register modify listener
-        if( !pModifyListener )
+        if (!mpImpl->mpModifyListener)
         {
-            ((SdrOle2Obj*)this)->pModifyListener = new SvxUnoShapeModifyListener( (SdrOle2Obj*)this );
-            pModifyListener->acquire();
+            mpImpl->mpModifyListener = new SvxUnoShapeModifyListener(this);
+            mpImpl->mpModifyListener->acquire();
         }
 
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-        if( xBC.is() && pModifyListener )
+        if (xBC.is() && mpImpl->mpModifyListener)
         {
-            uno::Reference< util::XModifyListener > xListener( pModifyListener );
+            uno::Reference<util::XModifyListener> xListener(mpImpl->mpModifyListener);
             xBC->addModifyListener( xListener );
         }
     }
@@ -1205,9 +1211,9 @@ void SdrOle2Obj::RemoveListeners_Impl()
             if ( nState != embed::EmbedStates::LOADED )
             {
                 uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-                if( xBC.is() && pModifyListener )
+                if (xBC.is() && mpImpl->mpModifyListener)
                 {
-                    uno::Reference< util::XModifyListener > xListener( pModifyListener );
+                    uno::Reference<util::XModifyListener> xListener(mpImpl->mpModifyListener);
                     xBC->removeModifyListener( xListener );
                 }
             }
@@ -1518,7 +1524,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         Disconnect();
 
     mpImpl->mxObjRef.Assign( rNewObjRef, GetAspect() );
-    m_bTypeAsked = false;
+    mpImpl->mbTypeAsked = false;
 
     if ( mpImpl->mxObjRef.is() )
     {
@@ -1607,14 +1613,14 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 sal_uInt16 SdrOle2Obj::GetObjIdentifier() const
 {
-    return bFrame ? sal_uInt16(OBJ_FRAME) : sal_uInt16(OBJ_OLE2);
+    return mpImpl->mbFrame ? sal_uInt16(OBJ_FRAME) : sal_uInt16(OBJ_OLE2);
 }
 
 
 
 OUString SdrOle2Obj::TakeObjNameSingul() const
 {
-    OUStringBuffer sName(ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
+    OUStringBuffer sName(ImpGetResStr(mpImpl->mbFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2));
 
     const OUString aName(GetName());
 
@@ -1632,7 +1638,7 @@ OUString SdrOle2Obj::TakeObjNameSingul() const
 
 OUString SdrOle2Obj::TakeObjNamePlural() const
 {
-    return ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
+    return ImpGetResStr(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
 
@@ -1676,7 +1682,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
 
         mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
         mpImpl->maProgName = rOle2Obj.mpImpl->maProgName;
-        bFrame = rOle2Obj.bFrame;
+        mpImpl->mbFrame = rOle2Obj.mpImpl->mbFrame;
 
         if (rOle2Obj.mpImpl->mpGraphic)
         {
@@ -1704,7 +1710,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(
                     OUString aTmp;
                     mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
                         rContainer, xObj, aTmp, rSrcShellID, rDestShellID), rOle2Obj.GetAspect());
-                    m_bTypeAsked = false;
+                    mpImpl->mbTypeAsked = false;
                     mpImpl->aPersistName = aTmp;
                     CheckFileLink_Impl();
                 }
@@ -1724,7 +1730,7 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
     // #i118524# do not again set VisAreaSize when the call comes from OLE client (e.g. ObjectAreaChanged)
-    if(mbSuppressSetVisAreaSize)
+    if (mpImpl->mbSuppressSetVisAreaSize)
         return;
 
     // currently there is no need to recalculate scaling for iconified objects
@@ -1933,7 +1939,10 @@ Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
     return mpImpl->mxObjRef.GetSize( pTargetMapMode );
 }
 
-
+void SdrOle2Obj::setSuppressSetVisAreaSize( bool bNew )
+{
+    mpImpl->mbSuppressSetVisAreaSize = bNew;
+}
 
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
@@ -2031,7 +2040,7 @@ void SdrOle2Obj::GetObjRef_Impl()
         if(!mpImpl->mbLoadingOLEObjectFailed)
         {
             mpImpl->mxObjRef.Assign( pModel->GetPersist()->getEmbeddedObjectContainer().GetEmbeddedObject( mpImpl->aPersistName ), GetAspect() );
-            m_bTypeAsked = false;
+            mpImpl->mbTypeAsked = false;
             CheckFileLink_Impl();
 
             // If loading of OLE object failed, remember that to not invoke a endless
@@ -2073,7 +2082,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                 if (pModel && pModel->GetRefDevice() &&
                     pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
                 {
-                    if(!bInDestruction)
+                    if (!mpImpl->mbInDestruction)
                     {
                         //TODO/LATER: printerchange notification
                         /*
@@ -2128,12 +2137,12 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 bool SdrOle2Obj::IsChart() const
 {
-    if ( !m_bTypeAsked )
+    if (!mpImpl->mbTypeAsked)
     {
-        m_bChart = ChartHelper::IsChart(mpImpl->mxObjRef);
-        m_bTypeAsked = true;
+        mpImpl->mbIsChart = ChartHelper::IsChart(mpImpl->mxObjRef);
+        mpImpl->mbTypeAsked = true;
     }
-    return m_bChart;
+    return mpImpl->mbIsChart;
 }
 
 
