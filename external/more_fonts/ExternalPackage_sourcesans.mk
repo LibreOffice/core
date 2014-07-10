@@ -10,10 +10,18 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcesans,font_sourcesans))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcesans,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	SourceSansPro-BoldItalic.ttf \
+	SourceSansPro-BlackIt.ttf \
+	SourceSansPro-Black.ttf \
+	SourceSansPro-BoldIt.ttf \
 	SourceSansPro-Bold.ttf \
-	SourceSansPro-Italic.ttf \
+	SourceSansPro-ExtraLightIt.ttf \
+	SourceSansPro-ExtraLight.ttf \
+	SourceSansPro-It.ttf \
+	SourceSansPro-LightIt.ttf \
+	SourceSansPro-Light.ttf \
 	SourceSansPro-Regular.ttf \
+	SourceSansPro-SemiboldIt.ttf \
+	SourceSansPro-Semibold.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
