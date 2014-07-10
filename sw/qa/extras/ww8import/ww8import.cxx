@@ -8,8 +8,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -461,8 +459,6 @@ DECLARE_WW8IMPORT_TEST(testFdo77844, "fdo77844.doc")
     CPPUNIT_ASSERT(!headerIsOn);
 #endif
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -8,8 +8,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -345,7 +343,6 @@ DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 #endif
 }
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
