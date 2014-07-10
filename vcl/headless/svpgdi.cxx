@@ -259,8 +259,8 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
         m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
                                                  basegfx::B2IBox (aHitRect.Left(),
                                                                   aHitRect.Top(),
-                                                                  aHitRect.Right(),
-                                                                  aHitRect.Bottom()) );
+                                                                  aHitRect.Right() + 1,
+                                                                  aHitRect.Bottom() + 1) );
         return false;
     }
 //    fprintf (stderr, "URK: complex & slow clipping case\n" );
