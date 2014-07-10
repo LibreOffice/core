@@ -2673,6 +2673,10 @@ void DomainMapper::lcl_startCharacterGroup()
         m_pImpl->GetTopContext()->Insert(PROP_SDT_END_BEFORE, uno::makeAny(true), true, CHAR_GRAB_BAG);
         m_pImpl->setSdtEndDeferred(false);
     }
+
+    // Remember formatting of the date control as it only supports plain strings natively.
+    if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty())
+        enableInteropGrabBag("CharFormat");
 }
 
 void DomainMapper::lcl_endCharacterGroup()
@@ -2785,7 +2789,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
          * create the control early, as in Writer, it's part of the cell, but
          * in OOXML, the sdt contains the cell.
          */
-        m_pImpl->m_pSdtHelper->createDateControl(sText);
+        m_pImpl->m_pSdtHelper->createDateControl(sText, getInteropGrabBag());
         return;
     }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())

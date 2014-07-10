@@ -92,7 +92,7 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
-void SdtHelper::createDateControl(OUString& rContentText)
+void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue aCharFormat)
 {
     uno::Reference<awt::XControlModel> xControlModel(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.DateField"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
@@ -122,7 +122,7 @@ void SdtHelper::createDateControl(OUString& rContentText)
         xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
 
     // append date format to grab bag
-    uno::Sequence<beans::PropertyValue> aGrabBag(4);
+    uno::Sequence<beans::PropertyValue> aGrabBag(5);
     aGrabBag[0].Name = "OriginalDate";
     aGrabBag[0].Value = uno::makeAny(aDate);
     aGrabBag[1].Name = "OriginalContent";
@@ -131,6 +131,7 @@ void SdtHelper::createDateControl(OUString& rContentText)
     aGrabBag[2].Value = uno::makeAny(sDateFormat);
     aGrabBag[3].Name = "Locale";
     aGrabBag[3].Value = uno::makeAny(m_sLocale.makeStringAndClear());
+    aGrabBag[4] = aCharFormat;
 
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag);
