@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_style_XStyleLoader2_idl__
+#define __com_sun_star_style_XStyleLoader2_idl__
+
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+
+module com {  module sun {  module star {  module style {
+
+/** extends XStyleLoader interface to import styles from an already opened calc or writer component.
+
+    @see com::sun::star::style::XStyleLoader
+ */
+interface XStyleLoader2: com::sun::star::style::XStyleLoader
+{
+    /** loads styles from a given document
+        <p>
+         @param aSourceComponent
+             a valid XComponent reference to source doc (calc or writer)
+         @param aOptions
+             Specifies which of the Style families the method should load.
+         The <code>sequence<PropertyValue></code> has the following, optional items:
+         <ul>
+        <li> boolean LoadCellStyles </li>
+        <li> boolean LoadTextStyles </li>
+        <li> boolean LoadFrameStyles </li>
+        <li> boolean LoadPageStyles </li>
+        <li> boolean LoadNumberingStyles </li>
+        <li> boolean OverwriteStyles</li>
+        </ul>
+        If <var>OverwriteStyles</var> is `TRUE`, then all styles
+        will be loaded.  Otherwise, only styles which are not already
+        defined in this document are loaded.</p>
+     <p>As the default, all supported style families are loaded and existing styles are overwritten.</p>
+     */
+    void loadStylesFromDocument( [in] com::sun::star::lang::XComponent aSourceComponent,
+             [in] sequence<com::sun::star::beans::PropertyValue> aOptions )
+            raises( com::sun::star::io::IOException );
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
