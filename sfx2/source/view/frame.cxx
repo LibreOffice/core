@@ -79,12 +79,6 @@ TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SfxUnoFrameItem, SfxPoolItem);
 
-SvCompatWeakHdl* SfxFrame::GetHdl()
-{
-    return pImp->GetHdl();
-}
-
-
 void SfxFrame::Construct_Impl()
 {
     pImp = new SfxFrame_Impl( this );

@@ -296,7 +296,8 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 }
 
 SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
-    :pParentFrame( NULL )
+    :SvCompatWeakBase( this )
+    ,pParentFrame( NULL )
     ,pChildArr( NULL )
     ,pImp( NULL )
     ,pWindow( NULL )
