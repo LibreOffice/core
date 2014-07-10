@@ -127,6 +127,7 @@ private:
     // bitfield
     bool                                    mbMoveOnly : 1;
     bool                                    mbSolidDraggingActive : 1;
+    bool                                    mbShiftPressed : 1;
 
 protected:
     // access for derivated classes to maSdrDragEntries
@@ -193,6 +194,8 @@ public:
 
     void Show();
     void Hide();
+    bool IsShiftPressed() { return mbShiftPressed; }
+    void SetShiftPressed(bool bShiftPressed) { mbShiftPressed = bShiftPressed; }
     virtual void TakeSdrDragComment(OUString& rStr) const=0;
     virtual bool BeginSdrDrag()=0;
     virtual void MoveSdrDrag(const Point& rPnt)=0;
