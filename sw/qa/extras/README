@@ -5,9 +5,9 @@ tests. This file documents how to add new testcases to this framework.
 
 == Import tests
 
-Import tests are the easier ones. First you need to add a new entry to the
-table inside the `run()` method, so the framework will load the specified file
-to `mxComponent`, which represents the UNO model of the document.
+Import tests are the easier ones. First you need to use
+`DECLARE_SW_IMPORT_TEST()`, so the framework will load the specified file to
+`mxComponent`, which represents the UNO model of the document.
 
 The rest of the testcase is about implementing the test method asserting this
 document model: use the UNO API to retrieve properties, then use
@@ -26,6 +26,9 @@ at the `layout.xml` file in the current directory. Once you find the needed
 information in that file, you can write your XPath expression to turn that into
 a testcase.
 
+(Similarly, Shift-F12 produces a `nodes.xml` for the document model dump, but
+it's unlikely that you'll need that in a unit test.)
+
 == Export tests
 
 Export tests are similar. Given that test documents are easier to provide in
@@ -34,14 +37,13 @@ most cases, we will do an import, then do an export (to invoke the code we want
 to test) and then do an import again, so we can do the testing by asserting the
 document model, just like we did for import tests.
 
-Yes, this means that you can test the export code (using this framework) if the
-importer is working correctly. (But that's not so bad, users usually expect a
-feature to work in both the importer and the exporter.)
+Yes, this means that you can only test the export code (using this framework)
+if the importer is working correctly. (But that's not so bad, users usually
+expect a feature to work in both the importer and the exporter.)
 
 The only difference is that in these tests the test method is called twice:
 once after the initial import -- so you can see if the export fails due to an
-import problem in fact -- and once after the export and import.  The test
-method should still assert the document model only, as discussed above.
+import problem in fact -- and once after the export and import.
 
 === Direct XPath assertions
 
@@ -49,14 +51,12 @@ An other alternative is to assert the resulted export document directly.
 Currently this is only implemented for DOCX, which is a zipped XML, so it's
 possible to evaluate XPath checks. A check looks like this:
 
-xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-if (!pXmlDoc)
-    return;
-assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
+if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
 
 It's important to check for the NULL pointer here, it's expected that it'll be
 NULL when the test runs first (after the first import), as there is nothing
-exported yet.
+exported yet. For other XPath assert variants, see the `XmlTestTools` class.
 
 == Helper methods
 
@@ -115,7 +115,7 @@ develop quickly.
 With some experimenting, you'll end up with something like this:
 
 ----
-oStyle = ThisComponent.StyleFamilies.PageStyles.Default
+oStyle = ThisComponent.StyleFamilies.PageStyles.getByName("Default Style")
 xray oStyle.IsLandscape
 ----
 
@@ -124,14 +124,8 @@ when later this test fails for some reason. In cpp, you typically need to be
 more verbose, so the code will look like:
 
 ----
-uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
-uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
-
-sal_Bool bIsLandscape = sal_False;
-xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
-CPPUNIT_ASSERT_EQUAL(sal_True, bIsLandscape);
+uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 ----
 
 == UNO, in more details, various tips:
@@ -253,15 +247,9 @@ page width:
 
 Basic:
 
-ThisComponent.StyleFamilies.PageStyles.Default.Width
+ThisComponent.StyleFamilies.PageStyles.getByName("Default Style").Width
 
 C++:
 
-uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-uno::Reference<style::XStyleFamiliesSupplier> styleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-uno::Reference<container::XNameAccess> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
-uno::Reference<container::XNameAccess> pageStyles;
-styleFamilies->getByName("PageStyles") >>= pageStyles;
-uno::Reference<uno::XInterface> defaultStyle;
-pageStyles->getByName(DEFAULT_STYLE) >>= defaultStyle;
+getStyles("PageStyles")->getByName(DEFAULT_STYLE) >>= defaultStyle;
 sal_Int32 width = getProperty< sal_Int32 >( defaultStyle, "Width" );
