@@ -116,7 +116,6 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     {
         utl::extractDate(aDateTime, aDate);
         xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
-        xPropertySet->setPropertyValue("HelpText", uno::makeAny(OUString("Click here to enter a date")));
     }
     else
         xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
