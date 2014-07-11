@@ -3027,6 +3027,19 @@ DECLARE_OOXMLEXPORT_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testContentTypeDOCX, "fdo80410.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc) // only test the export, not initial import
+       return;
+
+    assertXPath(pXmlDoc,
+        "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.docx']",
+        "ContentType",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
