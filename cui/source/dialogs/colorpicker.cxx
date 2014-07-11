@@ -358,6 +358,9 @@ void ColorFieldControl::UpdateBitmap()
     const sal_Int32 nWidth = aSize.Width();
     const sal_Int32 nHeight = aSize.Height();
 
+    if (nWidth == 0 || nHeight == 0)
+        return;
+
     if( !mpBitmap )
     {
         mpBitmap = new Bitmap( aSize, 24 );
