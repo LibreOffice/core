@@ -144,6 +144,9 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
 
+    if(!m_pOGLWindow)
+        return;
+
     // gltf_animation_start play animation from the time 0.0,
     // but OGLPlayer::start used as play from that time where it was stopped before
     double fTime = gltf_animation_get_time(m_pHandle);
