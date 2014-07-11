@@ -686,11 +686,20 @@ void lcl_GetColumnTypes(
                 }
                 else
                 {
+#if 1
+                    // Adjust length to predefined precision.
+                    nLen = nLen + ( nPrecision - nPrec );
+#else
+    /* If the above override for (nPrecision < nPrec) was not in place then
+     * nPrecision could be 0 and this would be the code path to correctly
+     * calculate nLen. But as is, nPrecision is never 0 here, see CID#982304 */
+
                     // Adjust length to predefined precision.
                     if ( nPrecision )
                         nLen = nLen + ( nPrecision - nPrec );
                     else
                         nLen -= nPrec+1;    // also remove the decimal separator
+#endif
                 }
             }
             if (nFieldLen < nLen)
