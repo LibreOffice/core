@@ -365,8 +365,11 @@ namespace svt
 
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled )
     {
+        // make coverity happy, because then it knows the return value from InsertHyperLabel won't leak
+        assert( _nUniqueId != RMINCOMPLETE );
+
         InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
-            // Todo: YPos is superfluous, if items are always appended
+        // TODO YPos is superfluous, if items are always appended
         UpdatefollowingHyperLabels( _Index + 1 );
     }
 
