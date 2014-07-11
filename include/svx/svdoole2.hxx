@@ -170,13 +170,6 @@ public:
     sal_Bool IsChart() const;
     sal_Bool IsCalc() const;
 
-    /**
-     * Unloadable OLE objects are subject to automatic unloading per memory
-     * setting.  The "Number of objects" setting in the Memory option controls
-     * how many OLE objects can be loaded at any given moment.
-     */
-    bool IsUnloadable() const;
-
     sal_Bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
     void DisconnectFileLink_Impl();
