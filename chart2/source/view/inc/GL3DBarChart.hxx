@@ -21,6 +21,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/openglwin.hxx>
 
+#include <rtl/ref.hxx>
+#include <salhelper/thread.hxx>
+
 namespace chart {
 
 class ExplicitCategoriesProvider;
@@ -34,8 +37,15 @@ class Camera;
 
 }
 
+class RenderThread;
+class RenderOneFrameThread;
+class RenderAnimationThread;
+
 class GL3DBarChart : public GL3DPlotterBase, public IRenderer
 {
+    friend class RenderThread;
+    friend class RenderOneFrameThread;
+    friend class RenderAnimationThread;
 public:
     GL3DBarChart(
         const css::uno::Reference<css::chart2::XChartType>& xChartType,
@@ -61,9 +71,6 @@ private:
     void moveToDefault();
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);
 
-    DECL_LINK(MoveCamera, void*);
-    DECL_LINK(MoveToBar, void*);
-
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -81,11 +88,7 @@ private:
     glm::vec3 maDefaultCameraPosition;
     glm::vec3 maDefaultCameraDirection;
 
-    Timer maTimer;
-    glm::vec3 maStep;
     glm::vec3 maStepDirection;
-    size_t mnStep;
-    size_t mnStepsTotal;
     float mnMaxX;
     float mnMaxY;
     float mnDistance;
@@ -112,6 +115,9 @@ private:
     bool mbBlockUserInput;
     bool mbNeedsNewRender;
     bool mbCameraInit;
+
+    osl::Mutex maMutex;
+    rtl::Reference<RenderThread> mpRenderThread;
 };
 
 }
