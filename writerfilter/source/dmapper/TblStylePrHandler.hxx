@@ -25,6 +25,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
+#include <comphelper/sequenceasvector.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -57,7 +58,7 @@ private:
 
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
-    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
+    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;

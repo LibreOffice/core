@@ -103,7 +103,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TrPrBase:
         case NS_ooxml::LN_CT_TcPrBase:
         {
-            std::vector<beans::PropertyValue> aSavedGrabBag;
+            comphelper::SequenceAsVector<beans::PropertyValue> aSavedGrabBag;
             bool bGrabBag = rSprm.getId() == NS_ooxml::LN_CT_PPrBase ||
                 rSprm.getId() == NS_ooxml::LN_EG_RPrBase ||
                 rSprm.getId() == NS_ooxml::LN_CT_TblPrBase ||
@@ -173,12 +173,7 @@ beans::PropertyValue TblStylePrHandler::getInteropGrabBag(const OUString& aName)
     beans::PropertyValue aRet;
     aRet.Name = aName;
 
-    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
-
-    aRet.Value = uno::makeAny(aSeq);
+    aRet.Value = uno::makeAny(m_aInteropGrabBag.getAsConstList());
     return aRet;
 }
 
