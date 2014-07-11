@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dac4157f_fc78a5fa",
+        "filename": "external/coinmp/UnpackedTarball_coinmp.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-07-11T22:25:26Z",
+      "side": 1,
+      "message": "the below applies to windows-related patches too",
+      "revId": "f7ccf756d56f44672a63f0ad39efbfbe5d3e2bc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dac4157f_3c205df7",
         "filename": "external/coinmp/UnpackedTarball_coinmp.mk",
         "patchSetId": 4
