@@ -16,6 +16,10 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
 ))
 
+$(eval $(call gb_Module_add_check_targets,libreofficekit,\
+    CppunitTest_libreofficekit_tiledrendering \
+))
+
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Executable_gtktiledviewer \
