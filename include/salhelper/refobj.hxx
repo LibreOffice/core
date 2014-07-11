@@ -31,7 +31,7 @@ namespace salhelper
 
 
 
-class ReferenceObject : public rtl::IReference
+class ReferenceObject
 {
     /** Representation.
      */
@@ -63,27 +63,22 @@ public:
 public:
     /** Construction.
      */
-    inline ReferenceObject() : m_nReferenceCount (0)
+    inline ReferenceObject() : m_nReferenceCount(0)
     {}
 
 
-    /** IReference.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
+    void SAL_CALL acquire()
     {
-        return osl_atomic_increment (&m_nReferenceCount);
+        osl_atomic_increment(&m_nReferenceCount);
     }
 
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
+    void SAL_CALL release()
     {
-        oslInterlockedCount result;
-        result = ::osl_atomic_decrement (&m_nReferenceCount);
-        if (result == 0)
+        if (osl_atomic_decrement(&m_nReferenceCount) == 0)
         {
             // Last reference released.
             delete this;
         }
-        return (result);
     }
 
 protected:

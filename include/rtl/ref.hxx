@@ -30,28 +30,7 @@
 namespace rtl
 {
 
-/** Interface for a reference type.
-*/
-class IReference
-{
-public:
-    /** @see osl_incrementInterlockedCount.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() = 0;
-
-    /** @see osl_decrementInterlockedCount.
-     */
-    virtual oslInterlockedCount SAL_CALL release() = 0;
-
-#if !defined _MSC_VER // public -> protected changes mangled names there
-protected:
-#endif
-    ~IReference() {}
-        // avoid warnings about virtual members and non-virtual dtor
-};
-
-
-/** Template reference class for reference type derived from IReference.
+/** Template reference class for reference type.
 */
 template <class reference_type>
 class Reference
