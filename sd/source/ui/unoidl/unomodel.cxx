@@ -87,6 +87,7 @@
 #include <unokywds.hxx>
 #include "FrameView.hxx"
 #include "ClientView.hxx"
+#include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
 #include "app.hrc"
 #include <vcl/pdfextoutdevdata.hxx>
@@ -108,6 +109,7 @@
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+using namespace ::sd;
 
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
@@ -2190,33 +2192,77 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                             int nTilePosX, int nTilePosY,
                             long nTileWidth, long nTileHeight )
 {
-    (void) rDevice;
-    (void) nOutputWidth;
-    (void) nOutputHeight;
-    (void) nTilePosX;
-    (void) nTilePosY;
-    (void) nTileWidth;
-    (void) nTileHeight;
+    // Scaling. Must convert from pixels to twips. We know
+    // that VirtualDevices use a DPI of 96.
+    // We specifically calculate these scales first as we're still
+    // in TWIPs, and might as well minimise the number of conversions.
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+                                Fraction( nTileWidth);
+    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                Fraction( nTileHeight);
+
+    // svx seems to be the only component that works natively in
+    // 100th mm rather than TWIP. It makes most sense just to
+    // convert here and in getDocumentSize, and leave the tiled
+    // rendering API working in TWIPs.
+    nTileWidth = convertTwipToMm100( nTileWidth );
+    nTileHeight = convertTwipToMm100( nTileHeight );
+    nTilePosX = convertTwipToMm100( nTilePosX );
+    nTilePosY = convertTwipToMm100( nTilePosY );
+
+    MapMode aMapMode = rDevice.GetMapMode();
+    aMapMode.SetMapUnit( MAP_100TH_MM );
+    aMapMode.SetOrigin( Point( -nTilePosX,
+                               -nTilePosY) );
+    aMapMode.SetScaleX( scaleX );
+    aMapMode.SetScaleY( scaleY );
+
+    rDevice.SetMapMode( aMapMode );
+
+    rDevice.SetOutputSizePixel( Size(nOutputWidth, nOutputHeight) );
+    mpDoc->GetDocSh()->GetViewShell()->GetView()->CompleteRedraw(
+        &rDevice,
+        Region(
+            Rectangle( Point( nTilePosX, nTilePosY ),
+                       Size( nTileWidth, nTileHeight ) ) ) );
+
+    // TODO: Set page kind in frameview?
 }
 
 void SdXImpressDocument::setPart( int nPart )
 {
-    (void) nPart;
+    DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
+    if (pViewSh)
+    {
+        pViewSh->SwitchPage( nPart );
+    }
 }
 
 int SdXImpressDocument::getParts()
 {
-    return mpDoc->GetPageCount();
+    // TODO: master pages?
+    // Read: drviews1.cxx
+    return mpDoc->GetSdPageCount(PK_STANDARD);
 }
 
 int SdXImpressDocument::getPart()
 {
+    DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
+    if (pViewSh)
+    {
+        return pViewSh->GetCurPageId();
+    }
     return 0;
 }
 
 Size SdXImpressDocument::getDocumentSize()
 {
-    return Size( 100, 100 );
+    SdrPageView* pCurPageView = mpDoc->GetDocSh()->GetViewShell()->GetView()->GetSdrPageView();
+    Size aSize = pCurPageView->GetPageRect().GetSize();
+    // Convert the size in 100th mm to TWIP
+    // See paintTile above for further info.
+    return Size( convertMm100ToTwip( aSize.getWidth() ),
+                 convertMm100ToTwip( aSize.getHeight() ) );
 }
 
 
