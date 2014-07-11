@@ -125,111 +125,6 @@ double CalendarWrapper::getDateTime() const
     return 0.0;
 }
 
-sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
-        sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const
-{
-    sal_Int32 nOffset = 0;
-    try
-    {
-        if ( xC.is() )
-        {
-            nOffset = static_cast<sal_Int32>( xC->getValue( nParentFieldIndex )) * 60000;
-            sal_Int16 nSecondMillis = xC->getValue( nChildFieldIndex );
-            if (nOffset < 0)
-                nOffset -= static_cast<sal_uInt16>( nSecondMillis);
-            else
-                nOffset += static_cast<sal_uInt16>( nSecondMillis);
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "getCombinedOffsetInMillis: Exception caught " << e.Message );
-    }
-    return nOffset;
-}
-
-sal_Int32 CalendarWrapper::getZoneOffsetInMillis() const
-{
-    return getCombinedOffsetInMillis( CalendarFieldIndex::ZONE_OFFSET,
-            CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
-}
-
-sal_Int32 CalendarWrapper::getDSTOffsetInMillis() const
-{
-    return getCombinedOffsetInMillis( CalendarFieldIndex::DST_OFFSET,
-            CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
-}
-
-void CalendarWrapper::setLocalDateTime( double fTimeInDays )
-{
-    try
-    {
-        if ( xC.is() )
-        {
-            // First set a nearby value to obtain the timezone and DST offset.
-            // This is necessary to let ICU choose the corresponding
-            // OlsonTimeZone transitions. Since ICU incorporates also
-            // historical data even the timezone may differ for different
-            // dates! (Which was the cause for #i76623# when the timezone of a
-            // previously set date was used.) Timezone may also include
-            // seconds, so use milliseconds field as well.
-            xC->setDateTime( fTimeInDays );
-            sal_Int32 nZone1 = getZoneOffsetInMillis();
-            sal_Int32 nDST1  = getDSTOffsetInMillis();
-            double fLoc = fTimeInDays - (double)(nZone1 + nDST1) / MILLISECONDS_PER_DAY;
-            xC->setDateTime( fLoc );
-            sal_Int32 nZone2 = getZoneOffsetInMillis();
-            sal_Int32 nDST2  = getDSTOffsetInMillis();
-            // If DSTs differ after calculation, we crossed boundaries. Do it
-            // again, this time using the DST corrected initial value for the
-            // real local time.
-            // See also localtime/gmtime conversion pitfalls at
-            // http://www.erack.de/download/timetest.c
-            if ( nDST1 != nDST2 )
-            {
-                fLoc = fTimeInDays - (double)(nZone2 + nDST2) / MILLISECONDS_PER_DAY;
-                xC->setDateTime( fLoc );
-                // #i17222# If the DST onset rule says to switch from 00:00 to
-                // 01:00 and we tried to set onsetDay 00:00 with DST, the
-                // result was onsetDay-1 23:00 and no DST, which is not what we
-                // want. So once again without DST, resulting in onsetDay
-                // 01:00 and DST. Yes, this seems to be weird, but logically
-                // correct.
-                sal_Int32 nDST3 = getDSTOffsetInMillis();
-                if ( nDST2 != nDST3 && !nDST3 )
-                {
-                    fLoc = fTimeInDays - (double)(nZone2 + nDST3) / MILLISECONDS_PER_DAY;
-                    xC->setDateTime( fLoc );
-                }
-            }
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n",  "setLocalDateTime: Exception caught " << e.Message );
-    }
-}
-
-double CalendarWrapper::getLocalDateTime() const
-{
-    try
-    {
-        if ( xC.is() )
-        {
-            double fTimeInDays = xC->getDateTime();
-            sal_Int32 nZone = getZoneOffsetInMillis();
-            sal_Int32 nDST = getDSTOffsetInMillis();
-            fTimeInDays += (double)(nZone + nDST) / MILLISECONDS_PER_DAY;
-            return fTimeInDays;
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n",  "getLocalDateTime: Exception caught " << e.Message );
-    }
-    return 0.0;
-}
-
 void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
 {
     try
@@ -426,6 +321,33 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
         SAL_WARN( "unotools.i18n", "getPartitiveMonths: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+}
+
+void CalendarWrapper::setLocalDateTime( double fTimeInDays )
+{
+    try
+    {
+        if ( xC.is() )
+            xC->setLocalDateTime( fTimeInDays );
+    }
+    catch (const Exception& e)
+    {
+        SAL_WARN( "unotools.i18n",  "setLocalDateTime: Exception caught " << e.Message );
+    }
+}
+
+double CalendarWrapper::getLocalDateTime() const
+{
+    try
+    {
+        if ( xC.is() )
+            return xC->getLocalDateTime();
+    }
+    catch (const Exception& e)
+    {
+        SAL_WARN( "unotools.i18n",  "getLocalDateTime: Exception caught " << e.Message );
+    }
+    return 0.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
