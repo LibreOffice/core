@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_bcdc6d47",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-07-11T15:29:51Z",
+      "side": 1,
+      "message": "This call to IsPlausableSingleWordSection is checking whether two chained page styles should be combined into a single word section in the output (see comment on lines 1714-1720 above).  If it returns true then the styles *should* be merged, so I think the original logic was correct.",
+      "revId": "1187bec9bb6ba1e712db792d68ae458ad1d08429",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
