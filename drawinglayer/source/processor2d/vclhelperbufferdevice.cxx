@@ -370,7 +370,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpAlpha)
         {
-            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 8);
+            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
             // copy AA flag for new target; masking needs to be smooth
