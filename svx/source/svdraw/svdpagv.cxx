@@ -328,6 +328,8 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
 
             if(pKnownTarget)
             {
+                // This is where it gets lost.
+                pKnownTarget->GetPaintWindow().SetRedrawRegion(Region(rRect));
                 // paint known target
                 pKnownTarget->RedrawLayer(&nID, pRedirector);
             }
