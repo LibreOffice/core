@@ -358,6 +358,9 @@
     <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Document Info Preview" name="svtlo-ODocumentInfoPreview"
+                        generic-name="Document Info Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

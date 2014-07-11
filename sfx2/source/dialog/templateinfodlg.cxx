@@ -24,10 +24,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include "templateinfodlg.hrc"
-
-#define DLG_BORDER_SIZE 12
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -37,34 +33,27 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 
 SfxTemplateInfoDlg::SfxTemplateInfoDlg (Window *pParent)
-    : ModalDialog(pParent,SfxResId(DLG_TEMPLATE_INFORMATION)),
-      maBtnClose(this,SfxResId(BTN_TEMPLATE_INFO_CLOSE)),
-      mpPreviewView(new Window(this)),
-      mpInfoView(new svtools::ODocumentInfoPreview(this,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK))
+    : ModalDialog(pParent, "TemplateInfo", "sfx/ui/templateinfodialog.ui")
 {
-    maBtnClose.SetClickHdl(LINK(this,SfxTemplateInfoDlg,CloseHdl));
+    get(mpBtnClose, "close");
+    get(mpBox, "box");
+    get(mpInfoView, "infoDrawingArea");
+    mpPreviewView = new Window(mpBox);
 
-    Size aWinSize = GetOutputSizePixel();
-    aWinSize.setHeight( aWinSize.getHeight() - 3*DLG_BORDER_SIZE - maBtnClose.GetOutputHeightPixel() );
-    aWinSize.setWidth( (aWinSize.getWidth() - 3*DLG_BORDER_SIZE)/2 );
-    mpInfoView->SetPosSizePixel(Point(DLG_BORDER_SIZE,DLG_BORDER_SIZE),aWinSize);
+    set_width_request(500);
+    set_height_request(400);
 
-    mpPreviewView->SetPosSizePixel(Point(aWinSize.getWidth()+2*DLG_BORDER_SIZE,DLG_BORDER_SIZE),aWinSize);
+    mpBtnClose->SetClickHdl(LINK(this,SfxTemplateInfoDlg,CloseHdl));
 
     xWindow = VCLUnoHelper::GetInterface(mpPreviewView);
 
     m_xFrame = Frame::create( comphelper::getProcessComponentContext() );
     m_xFrame->initialize( xWindow );
-
-    mpPreviewView->Show();
-    mpInfoView->Show();
 }
 
 SfxTemplateInfoDlg::~SfxTemplateInfoDlg()
 {
     m_xFrame->dispose();
-
-    delete mpInfoView;
 }
 
 void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
