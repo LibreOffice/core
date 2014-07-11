@@ -145,6 +145,7 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
         aRect.Left() = GetScrPos( nStart )-nLayoutSign;     // extra pixel for line left of selection
         aRect.Right() = GetScrPos( nEnd+1 )-nLayoutSign;
     }
+    aRect = PixelToLogic( aRect );
     Invalidate(aRect);
 }
 
