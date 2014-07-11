@@ -522,6 +522,9 @@ bool ScToken::Is3DRef() const
             if ( GetSingleRef().IsFlag3D() )
                 return true;
             break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            return true;
         default:
         {
             // added to avoid warnings
@@ -2234,6 +2237,20 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     ScAddress aAbs = rRef1.toAbs(rOldPos);
                     rRef1.SetAddress(aAbs, rNewPos);
                 }
+            }
+            break;
+            case svExternalDoubleRef :
+            {
+                ScSingleRefData& rRef2 = static_cast<ScToken*>(pCode[j])->GetSingleRef2();
+                ScAddress aAbs = rRef2.toAbs(rOldPos);
+                rRef2.SetAddress(aAbs, rNewPos);
+            }
+            //! fallthru
+            case svExternalSingleRef :
+            {
+                ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+                ScAddress aAbs = rRef1.toAbs(rOldPos);
+                rRef1.SetAddress(aAbs, rNewPos);
             }
             break;
             default:
