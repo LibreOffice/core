@@ -16,6 +16,10 @@
 #include <string>
 
 #include <sal/types.h>
+#include <tools/stream.hxx>
+#include <vcl/salbtype.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/pngwrite.hxx>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
@@ -38,6 +42,23 @@ public:
     CPPUNIT_TEST(testOverlay);
     CPPUNIT_TEST_SUITE_END();
 };
+
+// Our dumped .png files end up in
+// workdir/CppunitTest/libreofficekit_tiledrendering.test.core
+
+static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
+                            const int nWidth, const int nHeight )
+{
+    Bitmap aBitmap( Size( nWidth, nHeight ), 32 );
+    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+    memcpy( pWriteAccess->GetBuffer(), pBuffer, 4*nWidth*nHeight );
+
+    BitmapEx aBitmapEx( aBitmap );
+    vcl::PNGWriter aWriter( aBitmapEx );
+    SvFileStream sOutput( rPath, STREAM_WRITE );
+    aWriter.Write( sOutput );
+    sOutput.Close();
+}
 
 void TiledRenderingTest::testOverlay()
 {
@@ -82,6 +103,8 @@ void TiledRenderingTest::testOverlay()
     pDocument->paintTile( pLarge.get(),  nTotalWidthPix, nTotalHeightPix, &nRowStride,
                           0, 0,
                           nTotalWidthDoc, nTotalHeightDoc );
+    dumpRGBABitmap( "large.png", pLarge.get(), nTotalWidthPix, nTotalHeightPix );
+
     scoped_array< unsigned char > pSmall[4];
     for ( int i = 0; i < 4; i++ )
     {
@@ -90,6 +113,8 @@ void TiledRenderingTest::testOverlay()
                               // Tile 0/2: left. Tile 1/3: right. Tile 0/1: top. Tile 2/3: bottom
                               ((i%2 == 0) ?  0 : nTotalWidthDoc / 2), ((i < 2 ) ? 0 : nTotalHeightDoc / 2),
                               nTotalWidthDoc / 2, nTotalHeightDoc / 2);
+        dumpRGBABitmap( "small_" + OUString::number(i) + ".png",
+                        pSmall[i].get(), nTotalWidthPix/2, nTotalHeightPix/2 );
     }
 
     // Iterate over each pixel of the sub-tile, and compare that pixel for every
