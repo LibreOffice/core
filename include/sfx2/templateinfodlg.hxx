@@ -12,6 +12,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 
 namespace svtools {
     class ODocumentInfoPreview;
@@ -36,7 +37,8 @@ protected:
 
 private:
 
-    PushButton maBtnClose;
+    PushButton*   mpBtnClose;
+    VclBox*      mpBox;
 
     Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
     svtools::ODocumentInfoPreview *mpInfoView;
