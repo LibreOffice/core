@@ -3360,8 +3360,7 @@ Content::getBaseURI( const boost::scoped_ptr< DAVResourceAccess > & rResAccess )
     return OUString( rResAccess->getURL() );
 }
 
-//=========================================================================
-const Content::ResourceType & Content::getResourceType(
+Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
                     const boost::scoped_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed )
@@ -3443,8 +3442,7 @@ const Content::ResourceType & Content::getResourceType(
     return m_eResourceType;
 }
 
-//=========================================================================
-const Content::ResourceType & Content::getResourceType(
+Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {

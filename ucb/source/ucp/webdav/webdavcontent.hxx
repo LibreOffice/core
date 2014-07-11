@@ -125,12 +125,12 @@ private:
     const OUString
     getBaseURI( const boost::scoped_ptr< DAVResourceAccess > & rResAccess );
 
-    const ResourceType &
+    ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
 
-    const ResourceType &
+    ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
                      const boost::scoped_ptr< DAVResourceAccess > & rResAccess,
