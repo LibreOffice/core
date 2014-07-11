@@ -310,13 +310,15 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const OUString& rCommandU
 }
 
 GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    CmdImageList( rxContext, OUString() ),
-    m_nRefCount( 0 )
+    CmdImageList( rxContext, OUString() )
 {
 }
 
 GlobalImageList::~GlobalImageList()
 {
+    osl::MutexGuard guard( getGlobalImageListMutex() );
+    // remove global pointer as we destroy the object now
+    pGlobalImageList = 0;
 }
 
 Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
@@ -341,28 +343,6 @@ bool GlobalImageList::hasImage( sal_Int16 nImageType, const OUString& rCommandUR
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return impl_getImageCommandNameVector();
-}
-
-oslInterlockedCount GlobalImageList::acquire()
-{
-    osl_atomic_increment( &m_nRefCount );
-    return m_nRefCount;
-}
-
-oslInterlockedCount GlobalImageList::release()
-{
-    osl::MutexGuard guard( getGlobalImageListMutex() );
-
-    if ( !osl_atomic_decrement( &m_nRefCount ))
-    {
-        oslInterlockedCount nCount( m_nRefCount );
-        // remove global pointer as we destroy the object now
-        pGlobalImageList = 0;
-        delete this;
-        return nCount;
-    }
-
-    return m_nRefCount;
 }
 
 static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )

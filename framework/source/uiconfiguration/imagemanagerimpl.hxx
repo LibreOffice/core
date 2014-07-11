@@ -51,6 +51,7 @@
 
 #include <vcl/image.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace framework
 {
@@ -83,7 +84,7 @@ namespace framework
             OUString                                                                    m_sIconTheme;
     };
 
-    class GlobalImageList : public CmdImageList, public rtl::IReference
+    class GlobalImageList : public CmdImageList, public salhelper::SimpleReferenceObject
     {
         public:
             GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
@@ -93,13 +94,6 @@ namespace framework
             virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
             virtual ::std::vector< OUString >& getImageNames() SAL_OVERRIDE;
             virtual ::std::vector< OUString >& getImageCommandNames() SAL_OVERRIDE;
-
-            // IReference
-            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
-
-        private:
-            oslInterlockedCount                                                              m_nRefCount;
     };
 
     class ImageManagerImpl
