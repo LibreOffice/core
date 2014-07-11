@@ -524,16 +524,11 @@ namespace
 
         bool bTruncateText = rInfo.mbEndOfParagraph; // arbitrary property
 
+        // truncate text
         if ( bTruncateText )
-        {
-            // truncate it at 4
-            int nTruncationPoint = 4;
-            rInfo.mnTextLen = std::min( rInfo.mnTextLen, nTruncationPoint );
-        }
-
-        // END FIXME
-
-        impCreateTextPortionPrimitive(rInfo);
+            impHandleTruncatedPortion(rInfo)
+        else // no chaining or truncating
+            impCreateTextPortionPrimitive(rInfo);
 
         if(rInfo.mbEndOfLine || rInfo.mbEndOfParagraph)
         {
@@ -544,6 +539,15 @@ namespace
         {
             impFlushLinePrimitivesToParagraphPrimitives();
         }
+    }
+
+    void impTextBreakupHandler::impHandleTruncatedPortion(const DrawPortionInfo& rInfo)
+    {
+        // truncate it at 4
+        int nTruncationPoint = 4;
+        DrawPortionInfo rInfoNonConst = rInfo;
+        rInfoNonConst.mnTextLen = std::min( rInfo.mnTextLen, nTruncationPoint );
+        impCreateTextPortionPrimitive(rInfoNonConst);
     }
 
     void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
