@@ -1333,6 +1333,18 @@ MSO_SPT GETVMLShapeType(const OString& aType)
     return i == pDMLToVMLMap->end() ? mso_sptNil : i->second;
 }
 
+bool HasTextBoxContent(sal_uInt32 nShapeType)
+{
+    switch (nShapeType)
+    {
+    case ESCHER_ShpInst_TextPlainText:
+    case ESCHER_ShpInst_TextSlantUp:
+    case ESCHER_ShpInst_TextDeflateInflateDeflate:
+        return false;
+    default:
+        return true;
+    }
+}
 }
 }
 
