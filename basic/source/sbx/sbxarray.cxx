@@ -25,12 +25,6 @@
 
 using namespace std;
 
-struct SbxDim {                 // an array-dimension:
-    SbxDim* pNext;              // Link
-    sal_Int32 nLbound, nUbound; // Limitations
-    sal_Int32 nSize;            // Number of elements
-};
-
 struct SbxVarEntry
 {
     SbxVariableRef mpVar;
@@ -565,15 +559,11 @@ void SbxArray::PutDirect( SbxVariable* pVar, sal_uInt32 nIdx )
 
 SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t ), mbHasFixedSize( false )
 {
-    pFirst = pLast = NULL;
-    nDim = 0;
 }
 
 SbxDimArray::SbxDimArray( const SbxDimArray& rArray )
     : SvRefBase( rArray ), SbxArray( rArray.eType )
 {
-    pFirst = pLast = NULL;
-    nDim = 0;
     *this = rArray;
 }
 
@@ -582,12 +572,7 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
     if( &rArray != this )
     {
         SbxArray::operator=( (const SbxArray&) rArray );
-        SbxDim* p = rArray.pFirst;
-        while( p )
-        {
-            AddDim32( p->nLbound, p->nUbound );
-            p = p->pNext;
-        }
+        m_vDimensions = rArray.m_vDimensions;
         this->mbHasFixedSize = rArray.mbHasFixedSize;
     }
     return *this;
@@ -600,15 +585,7 @@ SbxDimArray::~SbxDimArray()
 
 void SbxDimArray::Clear()
 {
-    SbxDim* p = pFirst;
-    while( p )
-    {
-        SbxDim* q = p->pNext;
-        delete p;
-        p = q;
-    }
-    pFirst = pLast = NULL;
-    nDim   = 0;
+    m_vDimensions.clear();
 }
 
 // Add a dimension
@@ -621,16 +598,11 @@ void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
         eRes = SbxERR_BOUNDS;
         ub = lb;
     }
-    SbxDim* p = new SbxDim;
-    p->nLbound = lb;
-    p->nUbound = ub;
-    p->nSize   = ub - lb + 1;
-    p->pNext   = NULL;
-    if( !pFirst )
-        pFirst = pLast = p;
-    else
-        pLast->pNext = p, pLast = p;
-    nDim++;
+    SbxDim d;
+    d.nLbound = lb;
+    d.nUbound = ub;
+    d.nSize   = ub - lb + 1;
+    m_vDimensions.push_back(d);
     if( eRes )
         SetError( eRes );
 }
@@ -661,17 +633,15 @@ void SbxDimArray::unoAddDim32( sal_Int32 lb, sal_Int32 ub )
 
 bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
 {
-    if( n < 1 || n > nDim )
+    if( n < 1 || n > static_cast<sal_Int32>(m_vDimensions.size()) )
     {
         SetError( SbxERR_BOUNDS );
         rub = rlb = 0;
         return false;
     }
-    SbxDim* p = pFirst;
-    while( --n )
-        p = p->pNext;
-    rub = p->nUbound;
-    rlb = p->nLbound;
+    SbxDim d = m_vDimensions[n - 1];
+    rub = d.nUbound;
+    rlb = d.nLbound;
     return true;
 }
 
@@ -697,18 +667,20 @@ bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
 sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
 {
     sal_uInt32 nPos = 0;
-    for( SbxDim* p = pFirst; p; p = p->pNext )
+    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
+         it != m_vDimensions.end(); ++it )
     {
         sal_Int32 nIdx = *pIdx++;
-        if( nIdx < p->nLbound || nIdx > p->nUbound )
+        if( nIdx < it->nLbound || nIdx > it->nUbound )
         {
             nPos = (sal_uInt32)SBX_MAXINDEX32 + 1; break;
         }
-        nPos = nPos * p->nSize + nIdx - p->nLbound;
+        nPos = nPos * it->nSize + nIdx - it->nLbound;
     }
-    if( nDim == 0 || nPos > SBX_MAXINDEX32 )
+    if( m_vDimensions.empty() || nPos > SBX_MAXINDEX32 )
     {
-        SetError( SbxERR_BOUNDS ); nPos = 0;
+        SetError( SbxERR_BOUNDS );
+        nPos = 0;
     }
     return nPos;
 }
@@ -716,18 +688,21 @@ sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
 sal_uInt16 SbxDimArray::Offset( const short* pIdx )
 {
     long nPos = 0;
-    for( SbxDim* p = pFirst; p; p = p->pNext )
+    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
+         it != m_vDimensions.end(); ++it )
     {
         short nIdx = *pIdx++;
-        if( nIdx < p->nLbound || nIdx > p->nUbound )
+        if( nIdx < it->nLbound || nIdx > it->nUbound )
         {
-            nPos = SBX_MAXINDEX + 1; break;
+            nPos = SBX_MAXINDEX + 1;
+            break;
         }
-        nPos = nPos * p->nSize + nIdx - p->nLbound;
+        nPos = nPos * it->nSize + nIdx - it->nLbound;
     }
-    if( nDim == 0 || nPos > SBX_MAXINDEX )
+    if( m_vDimensions.empty() || nPos > SBX_MAXINDEX )
     {
-        SetError( SbxERR_BOUNDS ); nPos = 0;
+        SetError( SbxERR_BOUNDS );
+        nPos = 0;
     }
     return (sal_uInt16) nPos;
 }
@@ -756,25 +731,29 @@ void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
 sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 {
 #ifndef DISABLE_SCRIPTING
-    if( nDim == 0 || !pPar || ( ( nDim != ( pPar->Count() - 1 ) ) && SbiRuntime::isVBAEnabled() ) )
+    if( m_vDimensions.empty() || !pPar || ( ( m_vDimensions.size() != ( pPar->Count() - 1 ) ) && SbiRuntime::isVBAEnabled() ) )
     {
-        SetError( SbxERR_BOUNDS ); return 0;
+        SetError( SbxERR_BOUNDS );
+        return 0;
     }
 #endif
     sal_uInt32 nPos = 0;
     sal_uInt16 nOff = 1;    // Non element 0!
-    for( SbxDim* p = pFirst; p && !IsError(); p = p->pNext )
+    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
+         it != m_vDimensions.end() && !IsError(); ++it )
     {
         sal_Int32 nIdx = pPar->Get( nOff++ )->GetLong();
-        if( nIdx < p->nLbound || nIdx > p->nUbound )
+        if( nIdx < it->nLbound || nIdx > it->nUbound )
         {
-            nPos = (sal_uInt32) SBX_MAXINDEX32+1; break;
+            nPos = (sal_uInt32) SBX_MAXINDEX32+1;
+            break;
         }
-        nPos = nPos * p->nSize + nIdx - p->nLbound;
+        nPos = nPos * it->nSize + nIdx - it->nLbound;
     }
     if( nPos > (sal_uInt32) SBX_MAXINDEX32 )
     {
-        SetError( SbxERR_BOUNDS ); nPos = 0;
+        SetError( SbxERR_BOUNDS );
+        nPos = 0;
     }
     return nPos;
 }
@@ -799,8 +778,8 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 bool SbxDimArray::StoreData( SvStream& rStrm ) const
 {
-    rStrm.WriteInt16( (sal_Int16) nDim );
-    for( short i = 0; i < nDim; i++ )
+    rStrm.WriteInt16( (sal_Int16) m_vDimensions.size() );
+    for( short i = 0; i < static_cast<short>(m_vDimensions.size()); i++ )
     {
         short lb, ub;
         GetDim( i, lb, ub );
