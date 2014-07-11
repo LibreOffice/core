@@ -77,8 +77,14 @@
 #define STR_FORMAT_HEADER               (RC_DOCVW_BEGIN + 25)
 #define STR_DELETE_FOOTER               (RC_DOCVW_BEGIN + 26)
 #define STR_FORMAT_FOOTER               (RC_DOCVW_BEGIN + 27)
+#define STR_FIRST_HEADER_TITLE          (RC_DOCVW_BEGIN + 28)
+#define STR_LEFT_HEADER_TITLE           (RC_DOCVW_BEGIN + 29)
+#define STR_RIGHT_HEADER_TITLE          (RC_DOCVW_BEGIN + 30)
+#define STR_FIRST_FOOTER_TITLE          (RC_DOCVW_BEGIN + 31)
+#define STR_LEFT_FOOTER_TITLE           (RC_DOCVW_BEGIN + 32)
+#define STR_RIGHT_FOOTER_TITLE          (RC_DOCVW_BEGIN + 33)
 
-#define DOCVW_ACT_END   STR_SMARTTAG_CLICK
+#define DOCVW_ACT_END   STR_RIGHT_FOOTER_TITLE
 
 #if DOCVW_ACT_END > RC_DOCVW_END
 #error Resource-Id Ueberlauf in #file, #line
