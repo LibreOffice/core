@@ -25,7 +25,8 @@ SvRefBase::~SvRefBase()
 
 void SvRefBase::QueryDelete()
 {
-    nRefCount = SV_NO_DELETE_REFCOUNT / 2;
+    bNoDelete = 0;
+    nRefCount = 1 << 30;
     delete this;
 }
 

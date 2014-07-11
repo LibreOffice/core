@@ -146,8 +146,9 @@ public:
 /** Classes that want to be referenced-counted via SvRef<T>, should extend this base class */
 class TOOLS_DLLPUBLIC SvRefBase
 {
-    static const sal_uIntPtr SV_NO_DELETE_REFCOUNT = 0x80000000;
-    sal_uIntPtr nRefCount;
+    // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+    unsigned int bNoDelete : 1;
+    unsigned int nRefCount : 31;
 
 protected:
     virtual         ~SvRefBase();
@@ -155,34 +156,32 @@ protected:
 
 public:
                     SvRefBase()
-                    { nRefCount = SV_NO_DELETE_REFCOUNT; }
-
-    SvRefBase &     operator = ( const SvRefBase & )
-                    { return *this; }
+                    { bNoDelete = 1; }
 
     void            RestoreNoDelete()
                     {
-                        if( nRefCount < SV_NO_DELETE_REFCOUNT )
-                            nRefCount += SV_NO_DELETE_REFCOUNT;
+                        if( !bNoDelete )
+                            bNoDelete = 1;
                     }
 
-    sal_uIntPtr     AddNextRef()
-                    { return ++nRefCount; }
+    void            AddNextRef()
+                    { ++nRefCount; }
 
-    sal_uIntPtr     AddRef()
+    void            AddRef()
                     {
-                        if( nRefCount >= SV_NO_DELETE_REFCOUNT )
-                            nRefCount -= SV_NO_DELETE_REFCOUNT;
-                        return ++nRefCount;
+                        if( bNoDelete )
+                            bNoDelete = 0;
+                        ++nRefCount;
                     }
 
     void            ReleaseRef()
                     {
-                        if( !--nRefCount )
+                        assert( nRefCount >= 1);
+                        if( --nRefCount == 0 && !bNoDelete)
                             QueryDelete();
                     }
 
-    sal_uIntPtr     GetRefCount() const
+    unsigned int    GetRefCount() const
                     { return nRefCount; }
 };
 
