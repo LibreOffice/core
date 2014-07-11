@@ -627,12 +627,11 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
 // the consuming thread.
 void Entity::saveException( const Exception &e )
 {
-    // only store the first exception
-    if( !maSavedException.hasValue() )
-    {
-        maSavedException <<= e;
-        XML_StopParser( mpParser, /* resumable? */ XML_FALSE );
-    }
+    // fdo#81214 - allow the parser to run on after an exception,
+    // unexpectedly some 'startElements' produce an UNO_QUERY_THROW
+    // for XComponent; and yet expect to continue parsing.
+    SAL_WARN("sax", "Unexpected exception from XML parser " << e.Message);
+    maSavedException <<= e;
 }
 
 } // namespace
