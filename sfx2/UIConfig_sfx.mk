@@ -40,10 +40,11 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/securityinfopage \
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/startcenter \
+	sfx2/uiconfig/ui/templatedlg \
+	sfx2/uiconfig/ui/templateinfodialog \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
 	sfx2/uiconfig/ui/versionscmis \
-	sfx2/uiconfig/ui/templatedlg \
 ))
 
 # vim: set noet sw=4 ts=4:

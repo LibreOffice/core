@@ -54,6 +54,11 @@ ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
 
 ODocumentInfoPreview::~ODocumentInfoPreview() {}
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeODocumentInfoPreview(Window *pParent, VclBuilder::stringmap)
+{
+    return new ODocumentInfoPreview(pParent, WB_BORDER | WB_READONLY);
+}
+
 void ODocumentInfoPreview::Resize() {
     m_pEditWin.SetPosSizePixel(Point(0, 0), GetOutputSize());
 }
