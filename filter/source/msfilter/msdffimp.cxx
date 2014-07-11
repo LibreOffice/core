@@ -4601,7 +4601,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             Point aRight( aLeft.X() + 1000, aLeft.Y() );
                             pRet->NbcMirror( aLeft, aRight );
                         }
-                        basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, true ) );
+                        basegfx::B2DPolyPolygon aPoly( static_cast<SdrObjCustomShape*>(pRet)->GetLineGeometry( true ) );
                         SdrObject::Free( pRet );
 
                         pRet = new SdrEdgeObj();

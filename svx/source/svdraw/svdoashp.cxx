@@ -439,7 +439,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
     {
         Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
-            ((SdrObjCustomShape*)this)->mXRenderedCustomShape = xCustomShapeEngine->render();
+            const_cast<SdrObjCustomShape*>(this)->mXRenderedCustomShape = xCustomShapeEngine->render();
     }
     SdrObject* pRenderedCustomShape = mXRenderedCustomShape.is()
                 ? GetSdrObjectFromXShape( mXRenderedCustomShape )
@@ -462,7 +462,8 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
             {
                 // create a clone with all attributes changed to shadow attributes
                 // and translation executed, too.
-                ((SdrObjCustomShape*)this)->mpLastShadowGeometry = ImpCreateShadowObjectClone(*pSdrObject, rOriginalSet);
+                const_cast<SdrObjCustomShape*>(this)->mpLastShadowGeometry =
+                    ImpCreateShadowObjectClone(*pSdrObject, rOriginalSet);
             }
         }
     }
@@ -577,10 +578,10 @@ bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     }
     return bRet;
 }
-basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed )
+basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAllowed ) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    Reference< XCustomShapeEngine > xCustomShapeEngine( pCustomShape->GetCustomShapeEngine() );
+    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
@@ -599,12 +600,12 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomSh
     return aRetval;
 }
 
-std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const
+std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandles() const
 {
     std::vector< SdrCustomShapeInteraction > xRet;
     try
     {
-        Reference< XCustomShapeEngine > xCustomShapeEngine( pCustomShape->GetCustomShapeEngine() );
+        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
         {
             int i;
@@ -1575,7 +1576,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
 
     // taking care of handles that should not been changed
     Rectangle aOld( aRect );
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
     SdrTextObj::NbcResize( rRef, xFact, yFact );
 
@@ -1871,7 +1872,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 // #i38892#
 const SdrGluePointList* SdrObjCustomShape::GetGluePointList() const
 {
-    ((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
+    const_cast<SdrObjCustomShape*>(this)->ImpCheckCustomGluePointsAreAdded();
     return SdrTextObj::GetGluePointList();
 }
 
@@ -1894,7 +1895,7 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
 sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 {
     const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
     return ( aInteractionHandles.size() + nBasicHdlCount );
 }
 
@@ -1907,7 +1908,7 @@ SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
         pH = SdrTextObj::GetHdl( nHdlNum );
     else
     {
-        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
         const sal_uInt32 nCustomShapeHdlNum(nHdlNum - nBasicHdlCount);
 
         if ( nCustomShapeHdlNum < aInteractionHandles.size() )
@@ -1975,42 +1976,42 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
     return true;
 }
 
-void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObjCustomShape* pObj ) const
+void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
 {
-    Rectangle   aOld( pObj->aRect );
-    bool    bOldMirroredX( pObj->IsMirroredX() );
-    bool    bOldMirroredY( pObj->IsMirroredY() );
+    Rectangle   aOld( aRect );
+    bool    bOldMirroredX( IsMirroredX() );
+    bool    bOldMirroredY( IsMirroredY() );
 
     Rectangle aNewRect( rNewRect );
     aNewRect.Justify();
 
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( pObj ) );
+    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-    GeoStat aGeoStat( pObj->GetGeoStat() );
-    if ( aNewRect.TopLeft()!= pObj->aRect.TopLeft() &&
-        ( pObj->aGeo.nDrehWink || pObj->aGeo.nShearWink ) )
+    GeoStat aGeoStat( GetGeoStat() );
+    if ( aNewRect.TopLeft()!= aRect.TopLeft() &&
+        ( aGeo.nDrehWink || aGeo.nShearWink ) )
     {
         Point aNewPos( aNewRect.TopLeft() );
-        if ( pObj->aGeo.nShearWink ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.nTan );
-        if ( pObj->aGeo.nDrehWink )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.nSin, aGeoStat.nCos );
+        if ( aGeo.nShearWink ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.nTan );
+        if ( aGeo.nDrehWink )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.nSin, aGeoStat.nCos );
         aNewRect.SetPos( aNewPos );
     }
-    if ( aNewRect != pObj->aRect )
+    if ( aNewRect != aRect )
     {
-        pObj->SetLogicRect( aNewRect );
-        pObj->InvalidateRenderGeometry();
+        SetLogicRect( aNewRect );
+        InvalidateRenderGeometry();
 
         if ( rNewRect.Left() > rNewRect.Right() )
         {
-            Point aTop( ( pObj->GetSnapRect().Left() + pObj->GetSnapRect().Right() ) >> 1, pObj->GetSnapRect().Top() );
+            Point aTop( ( GetSnapRect().Left() + GetSnapRect().Right() ) >> 1, GetSnapRect().Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            pObj->NbcMirror( aTop, aBottom );
+            NbcMirror( aTop, aBottom );
         }
         if ( rNewRect.Top() > rNewRect.Bottom() )
         {
-            Point aLeft( pObj->GetSnapRect().Left(), ( pObj->GetSnapRect().Top() + pObj->GetSnapRect().Bottom() ) >> 1 );
+            Point aLeft( GetSnapRect().Left(), ( GetSnapRect().Top() + GetSnapRect().Bottom() ) >> 1 );
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            pObj->NbcMirror( aLeft, aRight );
+            NbcMirror( aLeft, aRight );
         }
 
         for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
@@ -2027,17 +2028,17 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
                     {
                         nX = ( aIter->aPosition.X - aOld.Right() );
                         if ( rNewRect.Left() > rNewRect.Right() )
-                            nX = pObj->aRect.Left() - nX;
+                            nX = aRect.Left() - nX;
                         else
-                            nX += pObj->aRect.Right();
+                            nX += aRect.Right();
                     }
                     else
                     {
                         nX = ( aIter->aPosition.X - aOld.Left() );
                         if ( rNewRect.Left() > rNewRect.Right() )
-                            nX = pObj->aRect.Right() - nX;
+                            nX = aRect.Right() - nX;
                         else
-                            nX += pObj->aRect.Left();
+                            nX += aRect.Left();
                     }
                     aIter->xInteraction->setControllerPosition( com::sun::star::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
                 }
@@ -2048,17 +2049,17 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
                     {
                         nY = ( aIter->aPosition.Y - aOld.Bottom() );
                         if ( rNewRect.Top() > rNewRect.Bottom() )
-                            nY = pObj->aRect.Top() - nY;
+                            nY = aRect.Top() - nY;
                         else
-                            nY += pObj->aRect.Bottom();
+                            nY += aRect.Bottom();
                     }
                     else
                     {
                         nY = ( aIter->aPosition.Y - aOld.Top() );
                         if ( rNewRect.Top() > rNewRect.Bottom() )
-                            nY = pObj->aRect.Bottom() - nY;
+                            nY = aRect.Bottom() - nY;
                         else
-                            nY += pObj->aRect.Top();
+                            nY += aRect.Top();
                     }
                     aIter->xInteraction->setControllerPosition( com::sun::star::awt::Point( aIter->xInteraction->getPosition().X, nY ) );
                 }
@@ -2071,9 +2072,9 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
 }
 
 void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination,
-        const sal_uInt16 nCustomShapeHdlNum, SdrObjCustomShape* pObj, bool bMoveCalloutRectangle ) const
+        const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle )
 {
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( pObj ) );
+    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
     if ( nCustomShapeHdlNum < aInteractionHandles.size() )
     {
         SdrCustomShapeInteraction aInteractionHandle( aInteractionHandles[ nCustomShapeHdlNum ] );
@@ -2087,11 +2088,11 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination,
                     sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
                     sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
 
-                    pObj->aRect.Move( nXDiff, nYDiff );
-                    pObj->aOutRect.Move( nXDiff, nYDiff );
-                    pObj->maSnapRect.Move( nXDiff, nYDiff );
-                    pObj->SetRectsDirty(true);
-                    pObj->InvalidateRenderGeometry();
+                    aRect.Move( nXDiff, nYDiff );
+                    aOutRect.Move( nXDiff, nYDiff );
+                    maSnapRect.Move( nXDiff, nYDiff );
+                    SetRectsDirty(true);
+                    InvalidateRenderGeometry();
 
                     for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
                       aIter != aEnd; ++aIter)
@@ -2122,7 +2123,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         case HDL_CUSTOMSHAPE1 :
         {
             rDrag.SetEndDragChangesGeoAndAttributes(true);
-            DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), this, !rDrag.GetDragMethod()->IsShiftPressed() );
+            DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), !rDrag.GetDragMethod()->IsShiftPressed() );
             SetRectsDirty();
             InvalidateRenderGeometry();
             SetChanged();
@@ -2138,7 +2139,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         case HDL_LOWER :
         case HDL_LWRGT :
         {
-            DragResizeCustomShape(ImpDragCalcRect(rDrag), this);
+            DragResizeCustomShape( ImpDragCalcRect(rDrag) );
             break;
         }
         case HDL_MOVE :
@@ -2159,7 +2160,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     Rectangle aRect1;
     rStat.TakeCreateRect( aRect1 );
 
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
     sal_uInt32 nDefaultObjectSizeWidth = 3000;      // default width from SDOptions ?
     sal_uInt32 nDefaultObjectSizeHeight= 3000;
@@ -2228,7 +2229,7 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
-    return GetLineGeometry( this, false );
+    return GetLineGeometry( false );
 }
 
 
@@ -2510,7 +2511,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     if ( bRet )
     {
         // taking care of handles that should not been changed
-        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
         aRect = aNewTextRect;
         SetRectsDirty();
@@ -2543,7 +2544,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
             aBoundRect0 = GetCurrentBoundRect();
 
         // taking care of handles that should not been changed
-        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( this ) );
+        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
         aRect = aNewTextRect;
         SetRectsDirty();
@@ -2867,7 +2868,7 @@ OUString SdrObjCustomShape::TakeObjNamePlural() const
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly() const
 {
-    return GetLineGeometry( (SdrObjCustomShape*)this, false );
+    return GetLineGeometry( false );
 }
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
@@ -2887,7 +2888,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
     if ( !mXRenderedCustomShape.is() )
     {
         // force CustomShape
-        ((SdrObjCustomShape*)this)->GetSdrObjectFromCustomShape();
+        GetSdrObjectFromCustomShape();
     }
 
     if ( mXRenderedCustomShape.is() )

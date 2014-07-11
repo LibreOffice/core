@@ -105,13 +105,13 @@ public:
 // #i47293#
 //  SVX_DLLPRIVATE std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
 
-    SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const;
+    SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const;
 
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
 
-    SVX_DLLPRIVATE void DragResizeCustomShape( const Rectangle& rNewRect, SdrObjCustomShape* pObj ) const;
+    SVX_DLLPRIVATE void DragResizeCustomShape( const Rectangle& rNewRect );
     SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point aDestination,
-            const sal_uInt16 nCustomShapeHdlNum, SdrObjCustomShape* pObj, bool bMoveCalloutRectangle ) const;
+            const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle );
 
     // #i37011# centralize throw-away of render geometry
     void InvalidateRenderGeometry();
@@ -128,7 +128,7 @@ public:
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
     bool GetTextBounds( Rectangle& rTextBound ) const;
     bool IsTextPath() const;
-    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed );
+    basegfx::B2DPolyPolygon GetLineGeometry( const bool bBezierAllowed ) const;
 
 protected:
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
