@@ -123,7 +123,7 @@ class Export
 private:
     union
     {
-        std::ofstream* mSimple;
+        FILE* mSimple;
         PoOfstream* mPo;
 
     } aOutput;
@@ -144,6 +144,8 @@ private:
     OString sLanguages;
 
     std::vector<OString> aLanguages;
+
+    ParserQueue* pParseQueue;
 
     bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
     bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
@@ -170,7 +172,7 @@ private:
 
     void CutComment( OString &rText );
 
-    void WriteUTF8ByteOrderMarkToOutput() { *aOutput.mSimple << '\xEF' << '\xBB' << '\xBF'; }
+    void WriteUTF8ByteOrderMarkToOutput() { std::fprintf( aOutput.mSimple, "\xEF\xBB\xBF" ); }
 
 public:
     Export( const OString &rOutput );
@@ -181,9 +183,9 @@ public:
     int Execute( int nToken, const char * pToken ); ///< called from lexer
     void SetError() { bError = true; }
     bool GetError() { return bError; }
-    ParserQueue* pParseQueue; // public!!
-};
 
+    ParserQueue* GetParseQueue() { return pParseQueue; }
+};
 
 
 // class MergeEntrys
