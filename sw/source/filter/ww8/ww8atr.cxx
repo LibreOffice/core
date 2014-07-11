@@ -424,7 +424,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     if (pAktPageDesc != pPageDesc)
     {
         if ( ( isCellOpen && ( pAktPageDesc->GetName() != pPageDesc->GetName() )) ||
-             ( isTextNodeEmpty || bPrevTextNodeIsEmpty ))
+             ( isTextNodeEmpty))
         {
             /* Do not output a section break in the following scenarios.
                 1) Table cell is open and page header types are different
@@ -554,7 +554,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         PrepareNewPageDesc( pSet, rNd, pPgDesc, pAktPageDesc );
     }
     bBreakBefore = false;
-    bPrevTextNodeIsEmpty = isTextNodeEmpty ;
 }
 
 // #i76300#

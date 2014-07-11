@@ -418,11 +418,14 @@ namespace sw
         {
             // Check top only if both object have a header or if
             // both object don't have a header
+            bool strictEqualHeader = false;
+            bool strictEqualFooter = false;
+
             if ( (  HasHeader() &&  rOther.HasHeader() ) ||
                  ( !HasHeader() && !rOther.HasHeader() ) )
             {
-                if (dyaTop != rOther.dyaTop)
-                    return false;
+                if (dyaTop == rOther.dyaTop)
+                    strictEqualHeader = true;
             }
 
             // Check bottom only if both object have a footer or if
@@ -430,11 +433,13 @@ namespace sw
             if ( (  HasFooter() &&  rOther.HasFooter() ) ||
                  ( !HasFooter() && !rOther.HasFooter() ) )
             {
-                if (dyaBottom != rOther.dyaBottom)
-                    return false;
+                if (dyaBottom == rOther.dyaBottom)
+                    strictEqualFooter = true;
             }
 
-            return true;
+            // If header & footer both are strictly not equal
+            // then it should return false
+            return (strictEqualHeader && strictEqualFooter);
         }
 
         ParaStyleMapper::ParaStyleMapper(SwDoc &rDoc)
