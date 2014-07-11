@@ -472,6 +472,9 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
                     const int nTilePosX, const int nTilePosY,
                     const int nTileWidth, const int nTileHeight)
 {
+    SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
+              "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
+              nCanvasWidth << "x" << nCanvasHeight << "]px" );
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
