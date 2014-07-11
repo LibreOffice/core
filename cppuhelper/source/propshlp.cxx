@@ -25,7 +25,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-
+#include <boost/scoped_array.hpp>
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -839,16 +839,11 @@ void OPropertySetHelper::setFastPropertyValues(
     OSL_ENSURE( !rBHelper.bInDispose, "do not getFastPropertyValue in the dispose call" );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
 
-    Any * pConvertedValues = NULL;
-    Any * pOldValues = NULL;
-
-    try
-    {
         // get the map table
         IPropertyArrayHelper & rPH = getInfoHelper();
 
-        pConvertedValues = new Any[ nHitCount ];
-        pOldValues = new Any[ nHitCount ];
+        boost::scoped_array<Any> pConvertedValues(new Any[ nHitCount ]);
+        boost::scoped_array<Any> pOldValues(new Any[ nHitCount ]);
         sal_Int32 n = 0;
         sal_Int32 i;
 
@@ -878,7 +873,7 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire vetoable events
-        fire( pHandles, pConvertedValues, pOldValues, n, sal_True );
+        fire( pHandles, pConvertedValues.get(), pOldValues.get(), n, sal_True );
 
         {
         // must lock the mutex outside the loop.
@@ -893,16 +888,7 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire change events
-        impl_fireAll( pHandles, pConvertedValues, pOldValues, n );
-    }
-    catch( ... )
-    {
-        delete [] pOldValues;
-        delete [] pConvertedValues;
-        throw;
-    }
-    delete [] pOldValues;
-    delete [] pConvertedValues;
+        impl_fireAll( pHandles, pConvertedValues.get(), pOldValues.get(), n );
 }
 
 // XMultiPropertySet
@@ -915,24 +901,14 @@ void OPropertySetHelper::setPropertyValues(
     const Sequence<Any>& rValues )
     throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    sal_Int32 * pHandles = NULL;
-    try
-    {
         sal_Int32   nSeqLen = rPropertyNames.getLength();
-        pHandles = new sal_Int32[ nSeqLen ];
+        boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nSeqLen ]);
         // get the map table
         IPropertyArrayHelper & rPH = getInfoHelper();
         // fill the handle array
-        sal_Int32 nHitCount = rPH.fillHandles( pHandles, rPropertyNames );
+        sal_Int32 nHitCount = rPH.fillHandles( pHandles.get(), rPropertyNames );
         if( nHitCount != 0 )
-            setFastPropertyValues( nSeqLen, pHandles, rValues.getConstArray(), nHitCount );
-    }
-    catch( ... )
-    {
-        delete [] pHandles;
-        throw;
-    }
-    delete [] pHandles;
+            setFastPropertyValues( nSeqLen, pHandles.get(), rValues.getConstArray(), nHitCount );
 }
 
 // XMultiPropertySet
@@ -940,13 +916,13 @@ Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& r
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32   nSeqLen = rPropertyNames.getLength();
-    sal_Int32 * pHandles = new sal_Int32[ nSeqLen ];
+    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nSeqLen ]);
     Sequence< Any > aValues( nSeqLen );
 
     // get the map table
     IPropertyArrayHelper & rPH = getInfoHelper();
     // fill the handle array
-    rPH.fillHandles( pHandles, rPropertyNames );
+    rPH.fillHandles( pHandles.get(), rPropertyNames );
 
     Any * pValues = aValues.getArray();
 
@@ -955,7 +931,6 @@ Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& r
     for( sal_Int32 i = 0; i < nSeqLen; i++ )
         getFastPropertyValue( pValues[i], pHandles[i] );
 
-    delete [] pHandles;
     return aValues;
 }
 
@@ -983,9 +958,9 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = rPropertyNames.getLength();
-    sal_Int32 * pHandles = new sal_Int32[nLen];
+    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[nLen]);
     IPropertyArrayHelper & rPH = getInfoHelper();
-    rPH.fillHandles( pHandles, rPropertyNames );
+    rPH.fillHandles( pHandles.get(), rPropertyNames );
     const OUString* pNames = rPropertyNames.getConstArray();
 
     // get the count of matching properties
@@ -1019,8 +994,6 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     }
     if( nFireLen )
         rListener->propertiesChange( aChanges );
-
-    delete [] pHandles;
 }
 
 void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )

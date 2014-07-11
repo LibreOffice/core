@@ -54,6 +54,8 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <boost/scoped_array.hpp>
+
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 #define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
@@ -844,7 +846,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     uno::Mapping curr2source(curr_env, source_env);
     uno::Mapping source2curr(source_env, curr_env);
 
-    ContextEntry_Init * mapped_entries = new ContextEntry_Init[nEntries];
+    boost::scoped_array<ContextEntry_Init> mapped_entries(new ContextEntry_Init[nEntries]);
     for (sal_Int32 nPos = 0; nPos < nEntries; ++ nPos)
     {
         mapped_entries[nPos].bLateInitService = pEntries[nPos].bLateInitService;
@@ -858,8 +860,8 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
 
     void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), ::getCppuType(&xDelegate));
     XComponentContext * pXComponentContext = NULL;
-    source_env.invoke(s_createComponentContext_v, mapped_entries, nEntries, mapped_delegate, &pXComponentContext, &source2curr);
-    delete[] mapped_entries;
+    source_env.invoke(s_createComponentContext_v, mapped_entries.get(), nEntries, mapped_delegate, &pXComponentContext, &source2curr);
+    mapped_entries.reset();
 
     return Reference<XComponentContext>(pXComponentContext, SAL_NO_ACQUIRE);
 }

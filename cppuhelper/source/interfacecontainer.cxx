@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
+#include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -455,7 +456,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper::removeInterface(
 void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
 {
     t_type2ptr::size_type nSize = 0;
-    OInterfaceContainerHelper ** ppListenerContainers = NULL;
+    boost::scoped_array<OInterfaceContainerHelper *> ppListenerContainers;
     {
         ::osl::MutexGuard aGuard( rMutex );
         t_type2ptr * pMap = (t_type2ptr *)m_pMap;
@@ -463,7 +464,7 @@ void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rE
         if( nSize )
         {
             typedef OInterfaceContainerHelper* ppp;
-            ppListenerContainers = new ppp[nSize];
+            ppListenerContainers.reset(new ppp[nSize]);
             //ppListenerContainers = new (ListenerContainer*)[nSize];
 
             t_type2ptr::iterator iter = pMap->begin();
@@ -485,8 +486,6 @@ void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rE
         if( ppListenerContainers[i] )
             ppListenerContainers[i]->disposeAndClear( rEvt );
     }
-
-    delete [] ppListenerContainers;
 }
 
 void OMultiTypeInterfaceContainerHelper::clear()
@@ -631,7 +630,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::removeInterface(
 void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject & rEvt )
 {
     t_long2ptr::size_type nSize = 0;
-    OInterfaceContainerHelper ** ppListenerContainers = NULL;
+    boost::scoped_array<OInterfaceContainerHelper *> ppListenerContainers;
     {
         ::osl::MutexGuard aGuard( rMutex );
         if (!m_pMap)
@@ -642,7 +641,7 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
         if( nSize )
         {
             typedef OInterfaceContainerHelper* ppp;
-            ppListenerContainers = new ppp[nSize];
+            ppListenerContainers.reset(new ppp[nSize]);
 
             t_long2ptr::iterator iter = pMap->begin();
             t_long2ptr::iterator end = pMap->end();
@@ -663,8 +662,6 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
         if( ppListenerContainers[i] )
             ppListenerContainers[i]->disposeAndClear( rEvt );
     }
-
-    delete [] ppListenerContainers;
 }
 
 void OMultiTypeInterfaceContainerHelperInt32::clear()
