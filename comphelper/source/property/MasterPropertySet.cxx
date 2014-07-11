@@ -292,7 +292,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
             if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
                 _getSingleValue( *((*aIter).second->mpInfo), *pAny );
