@@ -682,7 +682,8 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, ScProgress* pProgress )
                 {
                     assert(rCell.mpAttr);
                     size_t n = rCellStore.size();
-                    sc::CellStoreType::iterator itBlk = rCellStore.push_back(rCell.maCell.mpFormula->Clone(aCellPos));
+                    sc::CellStoreType::iterator itBlk = rCellStore.push_back( rCell.maCell.mpFormula->Clone(
+                                aCellPos, SC_CLONECELL_DEFAULT | SC_CLONECELL_ADJUST3DREL));
 
                     // Join the formula cells as we fill the container.
                     size_t nOffset = n - itBlk->position;
