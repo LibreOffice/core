@@ -84,6 +84,8 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLocalDateTime(double fTimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLocalDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -118,14 +120,14 @@ private:
     void setValue() throw(com::sun::star::uno::RuntimeException);
     /** Obtain combined field values for timezone offset (minutes+secondmillis)
         in milliseconds and whether fields were set. */
-    bool getZoneOffset( sal_Int32 & o_nOffset ) const;
+    bool getZoneOffset( sal_Int32 & o_nOffset, bool bAlwaysRead ) const;
     /** Obtain combined field values for DST offset (minutes+secondmillis) in
         milliseconds and whether fields were set. */
-    bool getDSTOffset( sal_Int32 & o_nOffset ) const;
+    bool getDSTOffset( sal_Int32 & o_nOffset, bool bAlwaysRead ) const;
     /** Used by getZoneOffset() and getDSTOffset(). Parent is
         CalendarFieldIndex for offset in minutes, child is CalendarFieldIndex
         for offset in milliseconds. */
-    bool getCombinedOffset( sal_Int32 & o_nOffset, sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const;
+    bool getCombinedOffset( sal_Int32 & o_nOffset, sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex, bool bAlwaysRead ) const;
 };
 
 
