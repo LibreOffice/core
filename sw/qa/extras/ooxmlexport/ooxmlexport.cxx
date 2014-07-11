@@ -3763,6 +3763,15 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateCharformat, "sdt-date-charformat.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:rPr/w:b", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO80839, "fdo80839.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    //We check titlePage is set for different first page footer.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:titlePg",1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
