@@ -511,6 +511,28 @@ namespace
 
     void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
     {
+        // FIXME(matteocam)
+
+        /*
+         * We want to break the text at the 10th character if we are at
+         * the end of the paragraph.
+         * XXX: How to send it back to editengine?
+         *          [AutoFit uses SetGlobalStretch... from Outliner]
+         * XXX: how to pass on to the rest of the text "This should be
+         *      drawn somewhere else"?
+        */
+
+        bool bTruncateText = rInfo.mbEndOfParagraph; // arbitrary property
+
+        if ( bTruncateText )
+        {
+            // truncate it at 4
+            int nTruncationPoint = 4;
+            rInfo.mnTextLen = std::min( rInfo.mnTextLen, nTruncationPoint );
+        }
+
+        // END FIXME
+
         impCreateTextPortionPrimitive(rInfo);
 
         if(rInfo.mbEndOfLine || rInfo.mbEndOfParagraph)
