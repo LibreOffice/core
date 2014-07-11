@@ -44,6 +44,7 @@ OGLPlayer::~OGLPlayer()
                 delete [] m_pHandle->files[i].buffer;
             }
         }
+        m_aContext.makeCurrent();
         gltf_renderer_release(m_pHandle);
     }
 }
