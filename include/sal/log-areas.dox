@@ -236,6 +236,11 @@ certain functionality.
 @li @c jfw.level1
 @li @c jfw.level2
 
+@section LibreOfficeKit
+
+@li @c lok
+@li @c lok.tiledrendering
+
 @section l10ntools
 
 @li @c l10ntools
