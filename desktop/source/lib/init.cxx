@@ -462,7 +462,11 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
         return;
     }
 
-    pDoc->setPart( nPart );
+    Application::AcquireSolarMutex(1);
+    {
+        pDoc->setPart( nPart );
+    }
+    Application::ReleaseSolarMutex();
 }
 
 void doc_paintTile (LibreOfficeKitDocument* pThis,
