@@ -144,8 +144,7 @@ typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedSt
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
-class ODatabaseModelImpl    :public ::rtl::IReference
-                            ,public ::sfx2::IMacroDocumentAccess
+class ODatabaseModelImpl    :public ::sfx2::IMacroDocumentAccess
                             ,public ::sfx2::IModifiableDocument
 {
 public:
@@ -374,13 +373,9 @@ public:
 
     inline const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
 
-    /** @see osl_incrementInterlockedCount.
-     */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    void SAL_CALL acquire();
 
-    /** @see osl_decrementInterlockedCount.
-     */
-    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
+    void SAL_CALL release();
 
     /// returns a all known data source settings, including their default values
     static const AsciiPropertyValue* getDefaultDataSourceSettings();

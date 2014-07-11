@@ -981,12 +981,12 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
     return xModel;
 }
 
-oslInterlockedCount SAL_CALL ODatabaseModelImpl::acquire()
+void SAL_CALL ODatabaseModelImpl::acquire()
 {
-    return osl_atomic_increment(&m_refCount);
+    osl_atomic_increment(&m_refCount);
 }
 
-oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
+void SAL_CALL ODatabaseModelImpl::release()
 {
     if ( osl_atomic_decrement(&m_refCount) == 0 )
     {
@@ -996,9 +996,7 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
         m_pDBContext->storeTransientProperties(*this);
         revokeDataSource();
         delete this;
-        return 0;
     }
-    return m_refCount;
 }
 
 void ODatabaseModelImpl::commitStorages()
