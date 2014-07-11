@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/werror-format-security.patch.0 \
 	external/coinmp/werror-undef.patch.0 \
 	external/coinmp/windows.build.patch.1 \
+	external/coinmp/macosx.build.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
