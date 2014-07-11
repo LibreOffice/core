@@ -2576,6 +2576,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
                 // but no pages created
                 if ( nId && nId <= getWindows().getLength() )
                     activateTab( nId );
+                break;
             }
             case BASEPROPERTY_GRAPHIC:
             {
