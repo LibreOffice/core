@@ -33,6 +33,7 @@
 #include "cellvalue.hxx"
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
+#include <chgtrack.hxx>
 
 #include <svx/svdoole2.hxx>
 #include "tabprotection.hxx"
@@ -92,7 +93,7 @@ public:
 
     void testCellBordersXLS();
     void testCellBordersXLSX();
-
+    void testTrackChangesSimpleXLS();
     void testSheetTabColorsXLSX();
 
     void testSharedFormulaExportXLS();
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
+    CPPUNIT_TEST(testTrackChangesSimpleXLS);
     CPPUNIT_TEST(testSheetTabColorsXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
@@ -1303,6 +1305,164 @@ void ScExportTest::testCellBordersXLS()
 void ScExportTest::testCellBordersXLSX()
 {
     testExcelCellBorders(XLSX);
+}
+
+OUString toString( const ScBigRange& rRange )
+{
+    OUStringBuffer aBuf;
+    aBuf.appendAscii("(columns:");
+    aBuf.append(rRange.aStart.Col());
+    aBuf.append('-');
+    aBuf.append(rRange.aEnd.Col());
+    aBuf.appendAscii(";rows:");
+    aBuf.append(rRange.aStart.Row());
+    aBuf.append('-');
+    aBuf.append(rRange.aEnd.Row());
+    aBuf.appendAscii(";sheets:");
+    aBuf.append(rRange.aStart.Tab());
+    aBuf.append('-');
+    aBuf.append(rRange.aEnd.Tab());
+    aBuf.append(')');
+
+    return aBuf.makeStringAndClear();
+}
+
+void ScExportTest::testTrackChangesSimpleXLS()
+{
+    struct CheckItem
+    {
+        sal_uLong mnActionId;
+        ScChangeActionType meType;
+
+        sal_Int32 mnStartCol;
+        sal_Int32 mnStartRow;
+        sal_Int32 mnStartTab;
+        sal_Int32 mnEndCol;
+        sal_Int32 mnEndRow;
+        sal_Int32 mnEndTab;
+
+        bool mbRowInsertedAtBottom;
+    };
+
+    struct
+    {
+        bool checkRange( ScChangeActionType eType, const ScBigRange& rExpected, const ScBigRange& rActual )
+        {
+            ScBigRange aExpected(rExpected), aActual(rActual);
+
+            switch (eType)
+            {
+                case SC_CAT_INSERT_ROWS:
+                {
+                    // Ignore columns.
+                    aExpected.aStart.SetCol(0);
+                    aExpected.aEnd.SetCol(0);
+                    aActual.aStart.SetCol(0);
+                    aActual.aEnd.SetCol(0);
+                }
+                break;
+                default:
+                    ;
+            }
+
+            return aExpected == aActual;
+        }
+
+        bool check( ScDocument& rDoc )
+        {
+            CheckItem aChecks[] =
+            {
+                {  1, SC_CAT_CONTENT     , 1, 1, 0, 1, 1, 0, false },
+                {  2, SC_CAT_INSERT_ROWS , 0, 2, 0, 0, 2, 0, true },
+                {  3, SC_CAT_CONTENT     , 1, 2, 0, 1, 2, 0, false },
+                {  4, SC_CAT_INSERT_ROWS , 0, 3, 0, 0, 3, 0, true  },
+                {  5, SC_CAT_CONTENT     , 1, 3, 0, 1, 3, 0, false },
+                {  6, SC_CAT_INSERT_ROWS , 0, 4, 0, 0, 4, 0, true  },
+                {  7, SC_CAT_CONTENT     , 1, 4, 0, 1, 4, 0, false },
+                {  8, SC_CAT_INSERT_ROWS , 0, 5, 0, 0, 5, 0, true  },
+                {  9, SC_CAT_CONTENT     , 1, 5, 0, 1, 5, 0, false },
+                { 10, SC_CAT_INSERT_ROWS , 0, 6, 0, 0, 6, 0, true  },
+                { 11, SC_CAT_CONTENT     , 1, 6, 0, 1, 6, 0, false },
+                { 12, SC_CAT_INSERT_ROWS , 0, 7, 0, 0, 7, 0, true  },
+                { 13, SC_CAT_CONTENT     , 1, 7, 0, 1, 7, 0, false },
+            };
+
+            ScChangeTrack* pCT = rDoc.GetChangeTrack();
+            if (!pCT)
+            {
+                cerr << "Change track instance doesn't exist." << endl;
+                return false;
+            }
+
+            sal_uLong nActionMax = pCT->GetActionMax();
+            if (nActionMax != 13)
+            {
+                cerr << "Unexpected highest action ID value." << endl;
+                return false;
+            }
+
+            for (size_t i = 0, n = SAL_N_ELEMENTS(aChecks); i < n; ++i)
+            {
+                sal_uInt16 nActId = aChecks[i].mnActionId;
+                const ScChangeAction* pAction = pCT->GetAction(nActId);
+                if (!pAction)
+                {
+                    cerr << "No action for action number " << nActId << " found." << endl;
+                    return false;
+                }
+
+                if (pAction->GetType() != aChecks[i].meType)
+                {
+                    cerr << "Unexpected action type for action number " << nActId << "." << endl;
+                    return false;
+                }
+
+                const ScBigRange& rRange = pAction->GetBigRange();
+                ScBigRange aCheck(aChecks[i].mnStartCol, aChecks[i].mnStartRow, aChecks[i].mnStartTab,
+                                  aChecks[i].mnEndCol, aChecks[i].mnEndRow, aChecks[i].mnEndTab);
+
+                if (!checkRange(pAction->GetType(), aCheck, rRange))
+                {
+                    cerr << "Unexpected range for action number " << nActId
+                        << ": expected=" << toString(aCheck) << " actual=" << toString(rRange) << endl;
+                    return false;
+                }
+
+                switch (pAction->GetType())
+                {
+                    case SC_CAT_INSERT_ROWS:
+                    {
+                        const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
+                        if (p->IsEndOfList() != aChecks[i].mbRowInsertedAtBottom)
+                        {
+                            cerr << "Unexpected end-of-list flag for action number " << nActId << "." << endl;
+                            return false;
+                        }
+                    }
+                    break;
+                    default:
+                        ;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("track-changes/simple-cell-changes.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = &xDocSh->GetDocument();
+    bool bGood = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bGood);
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLS);
+    xDocSh->DoClose();
+    pDoc = &xDocSh2->GetDocument();
+    bGood = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Check after reload failed.", bGood);
+
+    xDocSh2->DoClose();
 }
 
 void ScExportTest::testSheetTabColorsXLSX()
