@@ -3420,6 +3420,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80997, "fdo80997.docx")
     uno::Reference< text::XTextRange > xText = getRun( xParagraph, 1, " text");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo80902, "fdo80902.docx")
+{
+    // The problem was that the docGrid type was set as default so fix it for other grid type
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:docGrid", "type", "lines");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

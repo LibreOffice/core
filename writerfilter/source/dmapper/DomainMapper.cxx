@@ -896,7 +896,21 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         {
             if (pSectionContext != NULL)
             {
-                pSectionContext->SetGridType(nIntValue);
+                switch( nIntValue )
+                {
+                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_default:
+                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_snapToChars:
+                        pSectionContext->SetGridType( 0 );
+                        break;
+                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
+                        pSectionContext->SetGridType( 1 );
+                        break;
+                    case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_linesAndChars:
+                        pSectionContext->SetGridType( 2 );
+                        break;
+                    default :
+                        OSL_FAIL("unknown SwTextGrid value");
+                }
             }
         }
         break;

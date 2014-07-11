@@ -1049,6 +1049,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         operator[](PROP_GRID_LINES) =
                 uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/nGridLinePitch));
 
+        // PROP_GRID_MODE
+        operator[]( PROP_GRID_MODE) =
+                uno::makeAny( static_cast<sal_Int16> (m_nGridType) );
+
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
         const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(OUString::number(0, 16));
