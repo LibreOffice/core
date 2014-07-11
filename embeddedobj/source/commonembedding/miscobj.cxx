@@ -363,6 +363,11 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
         void * p = static_cast< embed::XEmbeddedObject * >( this );
         return uno::Any( &p, rType );
     }
+    else if (rType == cppu::UnoType<embed::XEmbedPersist2>::get())
+    {
+        void* p = static_cast<embed::XEmbedPersist2*>(this);
+        return uno::Any(&p, rType);
+    }
     else
         aReturn <<= ::cppu::queryInterface(
                     rType,
@@ -431,7 +436,8 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
                                             cppu::UnoType<embed::XInplaceObject>::get(),
                                             cppu::UnoType<embed::XCommonEmbedPersist>::get(),
                                             cppu::UnoType<container::XChild>::get(),
-                                            cppu::UnoType<embed::XEmbedPersist>::get());
+                                            cppu::UnoType<embed::XEmbedPersist>::get(),
+                                            cppu::UnoType<embed::XEmbedPersist2>::get());
 
                 pTypeCollection = &aTypeCollection ;
             }

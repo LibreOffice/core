@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
@@ -1929,6 +1930,14 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
 
 bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
+    uno::Reference<embed::XEmbedPersist2> xPersist(xObj, uno::UNO_QUERY);
+    if (xPersist.is())
+    {
+        if (!xPersist->isStored())
+            // It doesn't have persistent storage.  We can't unload this.
+            return false;
+    }
+
     bool bResult = false;
 
     sal_Int32 nState = xObj->getCurrentState();
@@ -2160,13 +2169,6 @@ bool SdrOle2Obj::IsCalc() const
     }
 
     return false;
-}
-
-bool SdrOle2Obj::IsUnloadable() const
-{
-    // Right now, chart OLE objects are the only ones exempt from automatic
-    // unloading.
-    return !IsChart();
 }
 
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const

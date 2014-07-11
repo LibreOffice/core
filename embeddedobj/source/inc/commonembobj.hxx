@@ -27,7 +27,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
@@ -72,7 +72,7 @@ namespace comphelper {
 class Interceptor;
 
 class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
-                            , public ::com::sun::star::embed::XEmbedPersist
+                            , public ::com::sun::star::embed::XEmbedPersist2
                             , public ::com::sun::star::embed::XLinkageSupport
                             , public ::com::sun::star::embed::XInplaceObject
                             , public ::com::sun::star::container::XChild
@@ -429,6 +429,10 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
+// XEmbedPersist2
+
+    virtual sal_Bool SAL_CALL isStored()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XInplaceObject
 

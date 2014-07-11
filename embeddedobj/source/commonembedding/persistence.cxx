@@ -1789,6 +1789,15 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     }
 }
 
+sal_Bool SAL_CALL OCommonEmbeddedObject::isStored() throw (css::uno::RuntimeException, std::exception)
+{
+    uno::Reference<container::XNameAccess> xNA(m_xObjectStorage, uno::UNO_QUERY);
+    if (!xNA.is())
+        return false;
+
+    return xNA->getElementNames().getLength() > 0;
+}
+
 
 void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
