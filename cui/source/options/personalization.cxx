@@ -159,7 +159,8 @@ IMPL_LINK( SelectPersonaDialog, ActionOK, PushButton*, /* pButton */ )
 
 IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
 {
-    m_rSearchThread->StopExecution();
+    if( m_rSearchThread.is() )
+        m_rSearchThread->StopExecution();
 
     EndDialog( RET_CANCEL );
     return 0;
