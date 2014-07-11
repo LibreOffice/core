@@ -3152,6 +3152,14 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo78304,"fdo78304.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:hdr/w:p/w:r[2]/w:r[1]/w:drawing[1]");
+}
+
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
 {

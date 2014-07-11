@@ -740,6 +740,9 @@ private:
     /// Flag indicating that the Run Text is being written
     bool m_bRunTextIsOn;
 
+    ///Flag indicating that <w:drawing> should be written inside a run when it comes after fieldchar.
+    bool m_bHasGraphicObject;
+
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
     bool m_bAnchorLinkedToNode;

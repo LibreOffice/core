@@ -1333,6 +1333,14 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
         }
         else
         {
+            //<w:drawing> tag should come in a differenrt run after fldchar of type "PAGE"
+            if(m_bHasGraphicObject && rInfos.eType == ww::ePAGE)
+            {
+                m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+                m_pSerializer->mergeTopMarks();
+                m_pSerializer->endElementNS( XML_w, XML_r );
+                m_bHasGraphicObject=false;
+            }
             // Write the field start
             m_pSerializer->startElementNS( XML_w, XML_fldChar,
                 FSNS( XML_w, XML_fldCharType ), "begin",
@@ -4617,6 +4625,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : 0;
                 if ( pGrfNode )
                 {
+                    m_bHasGraphicObject=true;
                     if( m_postponedGraphic == NULL )
                     {
                         m_bPostponedProcessingFly = false ;
@@ -7907,6 +7916,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_nRunSdtPrToken(0)
     , m_pRunSdtPrTokenChildren(NULL)
     , m_pRunSdtPrDataBindingAttrs(NULL)
+    , m_bHasGraphicObject(false)
 {
 }
 
