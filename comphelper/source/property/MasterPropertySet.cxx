@@ -227,7 +227,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
             if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
                 _setSingleValue( *((*aIter).second->mpInfo), *pAny );
