@@ -3413,6 +3413,13 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80897 , "fdo80897.docx")
 
 
 
+DECLARE_OOXMLEXPORT_TEST(testFdo80997, "fdo80997.docx")
+{
+    // The problem was that the DOCX exporter not able to export text behind textbox, if textbox has a wrap property.
+    uno::Reference< text::XTextRange > xParagraph = getParagraph( 1 );
+    uno::Reference< text::XTextRange > xText = getRun( xParagraph, 1, " text");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
