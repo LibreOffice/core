@@ -75,7 +75,7 @@ namespace connectivity
             void putParamData (sal_Int32 index)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
-                                                        SQLLEN length,sal_Int32 SQLtype) throw(::com::sun::star::sdbc::SQLException);
+                                                        SQLLEN length,sal_Int32 SQLtype) throw (css::sdbc::SQLException, css::uno::RuntimeException);
             SQLLEN* getLengthBuf (sal_Int32 index);
             void* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
             void initBoundParam () throw(::com::sun::star::sdbc::SQLException);

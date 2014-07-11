@@ -831,18 +831,14 @@ void OPreparedStatement::putParamData (sal_Int32 index)
     }
 }
 
-
-
 // setStream
 // Sets an input stream as a parameter, using the given SQL type
-
-
 void OPreparedStatement::setStream(
                                     sal_Int32 ParameterIndex,
                                     const Reference< XInputStream>& x,
                                     SQLLEN length,
                                     sal_Int32 _nType)
-                                    throw(SQLException)
+                                    throw (SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
