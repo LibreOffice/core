@@ -25,6 +25,7 @@
 
 #include <boost/weak_ptr.hpp>
 #include <ithreadlistenerowner.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 /** class for an observable thread
 
@@ -37,7 +38,7 @@
     to notify, that the thread has finished its work.
 */
 class ObservableThread : public osl::Thread,
-                         public rtl::IReference
+                         public salhelper::SimpleReferenceObject
 {
     public:
 
@@ -46,9 +47,11 @@ class ObservableThread : public osl::Thread,
         void SetListener( boost::weak_ptr< IFinishedThreadListener > pThreadListener,
                           const oslInterlockedCount nThreadID );
 
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
-        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
+        static inline void * operator new(std::size_t size)
+        { return SimpleReferenceObject::operator new(size); }
+
+        static inline void operator delete(void * pointer)
+        { SimpleReferenceObject::operator delete(pointer); }
 
     protected:
 
@@ -78,8 +81,6 @@ class ObservableThread : public osl::Thread,
         virtual void threadFinished();
 
     private:
-
-        oslInterlockedCount mnRefCount;
 
         oslInterlockedCount mnThreadID;
 

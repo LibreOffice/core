@@ -25,27 +25,13 @@
    #i73788#
 */
 ObservableThread::ObservableThread()
-    : mnRefCount( 0 ),
-      mnThreadID( 0 ),
+    : mnThreadID( 0 ),
       mpThreadListener()
 {
 }
 
 ObservableThread::~ObservableThread()
 {
-}
-
-oslInterlockedCount ObservableThread::acquire()
-{
-    return osl_atomic_increment( &mnRefCount );
-}
-
-oslInterlockedCount ObservableThread::release()
-{
-    oslInterlockedCount nCount( osl_atomic_decrement( &mnRefCount ) );
-    if ( nCount == 0 )
-        delete this;
-    return nCount;
 }
 
 void ObservableThread::SetListener( boost::weak_ptr< IFinishedThreadListener > pThreadListener,
