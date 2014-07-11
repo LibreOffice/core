@@ -26,12 +26,11 @@
 #include "srclex.hxx"
 
 #include "boost/scoped_ptr.hpp"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "common.hxx"
 #include "export.hxx"
 #include "tokens.h"
-#include <iostream>
 #include <rtl/strbuf.hxx>
 
 void yyerror( const char * );
@@ -104,44 +103,41 @@ FILE * init(int argc, char ** argv) {
     return pFile;
 }
 
-int Parse( int nTyp, const char *pTokenText ){
+int Parse( int nTyp, const char *pTokenText )
+{
     global::exporter->Execute( nTyp , pTokenText );
     return 1;
 }
-void Close(){
-    global::exporter->pParseQueue->Close();
+
+void Close()
+{
+    global::exporter->GetParseQueue()->Close();
     global::exporter.reset();
-        // avoid nontrivial Export dtor being executed during exit
 }
 
-int WorkOnTokenSet( int nTyp, char *pTokenText )
+bool WorkOnTokenSet( int nTyp, char *pTokenText )
 {
-
-    global::exporter->pParseQueue->Push( QueueEntry( nTyp , OString(pTokenText) ) );
-    return 1;
+    global::exporter->GetParseQueue()->Push( QueueEntry( nTyp , OString(pTokenText) ) );
+    return true;
 }
 
 } // extern
 
 extern "C" {
 
-int SetError()
+bool SetError()
 {
     // set error at global instance of class Export
     global::exporter->SetError();
-    return 1;
-}
+    return true;
 }
 
-extern "C" {
-
-int GetError()
+bool GetError()
 {
     // get error at global instance of class Export
-    if (global::exporter->GetError())
-        return 1;
-    return sal_False;
+    return (global::exporter->GetError());
 }
+
 }
 
 
@@ -212,9 +208,10 @@ Export::Export(const OString &rOutput)
                 pParseQueue( new ParserQueue( *this ) )
 {
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
-    if (!aOutput.mPo->isOpen()) {
-        fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
-        exit ( -1 );
+    if (!aOutput.mPo->isOpen())
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -236,8 +233,12 @@ Export::Export(
                 sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
 {
-    aOutput.mSimple = new std::ofstream();
-    aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+    aOutput.mSimple = std::fopen(rOutput.getStr(), "w");
+    if ( !aOutput.mSimple )
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
+    }
 
     if ( bUTF8BOM ) WriteUTF8ByteOrderMarkToOutput();
 }
@@ -257,14 +258,13 @@ void Export::Init()
 
 Export::~Export()
 {
-    if( pParseQueue )
-        delete pParseQueue;
-    if ( bMergeMode )
+    if( GetParseQueue() )
+        delete GetParseQueue();
+    if ( bMergeMode && aOutput.mSimple )
     {
-        aOutput.mSimple->close();
-        delete aOutput.mSimple;
+        std::fclose(aOutput.mSimple);
     }
-    else
+    else if( aOutput.mPo )
     {
         aOutput.mPo->close();
         delete aOutput.mPo;
@@ -652,8 +652,8 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case PRAGMA : {
-            fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
-            exit(-1);
+            std::fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
+            std::exit(EXIT_FAILURE);
         }
         break;
         }
@@ -956,30 +956,30 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
             break;
         }
     }
-    if (pParseQueue->bNextIsM && bSDFContent && sText.getLength() > 2) {
+    if (GetParseQueue()->bNextIsM && bSDFContent && sText.getLength() > 2) {
         for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
             if (sText[n] == '\n' && sText[n - 1] != '\\') {
                 sText = sText.replaceAt(n++, 0, "\\");
             }
         }
-    } else if (pParseQueue->bLastWasM && sText.getLength() > 2) {
+    } else if (GetParseQueue()->bLastWasM && sText.getLength() > 2) {
         for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
             if (sText[n] == '\n' && sText[n - 1] != '\\') {
                 sText = sText.replaceAt(n++, 0, "\\");
             }
             if (sText[n] == '\n') {
-                pParseQueue->bMflag = true;
+                GetParseQueue()->bMflag = true;
             }
         }
-    } else if (pParseQueue->bCurrentIsM && bSDFContent && sText.getLength() > 2)
+    } else if (GetParseQueue()->bCurrentIsM && bSDFContent && sText.getLength() > 2)
     {
         for (sal_Int32 n = 0; n < sText.getLength(); ++n) {
             if (sText[n] == '\n' && sText[n - 1] != '\\') {
                 sText = sText.replaceAt(n++, 0, "\\");
-                pParseQueue->bMflag = true;
+                GetParseQueue()->bMflag = true;
             }
         }
-    } else if (pParseQueue->bMflag) {
+    } else if (GetParseQueue()->bMflag) {
         for (sal_Int32 n = 1; n < sText.getLength(); ++n) {
             if (sText[n] == '\n' && sText[n - 1] != '\\') {
                 sText = sText.replaceAt(n++, 0, "\\");
@@ -987,10 +987,10 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
         }
     } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
         if (sText[i] == '\n') {
-            *aOutput.mSimple << '\n';
+            std::fprintf( aOutput.mSimple, "\n" );
         } else {
             char cChar = sText[i];
-            *aOutput.mSimple << cChar;
+            std::fprintf( aOutput.mSimple, "%c", cChar );
         }
     }
 }
@@ -1198,7 +1198,7 @@ void Export::MergeRest( ResData *pResData )
         pResData->sGId = sOldGId;
         pResData->sResTyp = sOldTyp;
     }
-    pParseQueue->bMflag = false;
+    GetParseQueue()->bMflag = false;
 }
 
 void Export::SetChildWithText()
