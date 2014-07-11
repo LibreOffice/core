@@ -47,32 +47,9 @@
 
 using namespace ::com::sun::star;
 
-namespace comphelper
-{
+namespace comphelper {
 
-struct hashObjectName_Impl
-{
-    size_t operator()(const OUString & Str) const
-    {
-        return (size_t)Str.hashCode();
-    }
-};
-
-struct eqObjectName_Impl
-{
-    bool operator()(const OUString & Str1, const OUString & Str2) const
-    {
-        return ( Str1 == Str2 );
-    }
-};
-
-typedef boost::unordered_map
-<
-    OUString,
-    ::com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >,
-    hashObjectName_Impl,
-    eqObjectName_Impl
->
+typedef boost::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>, OUStringHash>
 EmbeddedObjectContainerNameMap;
 
 struct EmbedImpl
