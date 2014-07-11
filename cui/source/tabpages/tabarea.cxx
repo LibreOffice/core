@@ -191,7 +191,7 @@ void SvxAreaTabDialog::SavePalettes()
         }
     }
 
-    if( mnColorListState & CT_MODIFIED )
+    if (mnColorListState & CT_MODIFIED && mpColorList.is())
     {
         mpColorList->SetPath( aPath );
         mpColorList->Save();

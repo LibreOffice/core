@@ -584,14 +584,12 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxColorTabPage::UpdateModified()
 {
-    bool bEnable = pColorList->Count();
+    bool bEnable = pColorList.is() && pColorList->Count();
     m_pBtnModify->Enable( bEnable );
     m_pBtnWorkOn->Enable( bEnable );
     m_pBtnDelete->Enable( bEnable );
     EnableSave( bEnable );
 }
-
-
 
 void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 {
