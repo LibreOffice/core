@@ -98,7 +98,6 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
-static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet, sal_uInt16 nVertPadding );
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
 // namespaces
@@ -1075,7 +1074,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     aPaletteComboBox.SetText( aPaletteList[ mrPaletteManager.GetPalette() ] );
 
     aButtonPicker.SetText("P");
-    aButtonPicker.SetSizePixel(Size(nButtonWidth, nButtonHeight));
     aButtonPicker.SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
     aButtonPicker.Show();
 
@@ -1089,26 +1087,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     AddStatusListener( OUString( ".uno:ColorTableState" ));
     AddStatusListener( maCommand );
 
-    UpdateGUI();
-}
-
-
-void SvxColorWindow_Impl::UpdateGUI()
-{
     mrPaletteManager.ReloadColorSet(aColorSet);
-
-    const Size aNewSize(aColorSet.layoutAllVisible(mrPaletteManager.GetColorCount()));
-    aColorSet.SetOutputSizePixel(aNewSize);
-    static sal_Int32 nAdd = 4;
-
-    //TODO: Move left/right buttons above the colors
-    SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd + nButtonHeight));
-
-    aPaletteComboBox.SetPosPixel(Point(0, aNewSize.Height() + nAdd + 1));
-
-    aButtonPicker.SetPosPixel(Point(aNewSize.Width() + nAdd - nButtonWidth, aNewSize.Height() + nAdd + 1));
-
-    aPaletteComboBox.SetSizePixel(Size(aNewSize.Width() - nButtonWidth, nButtonHeight));
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1167,7 +1146,8 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
     OUString sSrchTxt = aPaletteComboBox.GetText();
     sal_Int32 nPos = aPaletteComboBox.GetEntryPos( sSrchTxt );
     mrPaletteManager.SetPalette( nPos );
-    UpdateGUI();
+    mrPaletteManager.ReloadColorSet(aColorSet);
+    Resize();
     return 0;
 }
 
@@ -1179,7 +1159,16 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 
 void SvxColorWindow_Impl::Resize()
 {
-    lcl_ResizeValueSet( *this, aColorSet, nButtonHeight + 2);
+    const Size aSize(this->GetOutputSizePixel());
+    aColorSet.SetPosSizePixel( Point(2, nButtonHeight + 2), Size(aSize.Width()  - 4, aSize.Height() - 6 - nButtonHeight) );
+
+    const Size aNewSize(aColorSet.layoutAllVisible(mrPaletteManager.GetColorCount()));
+    aColorSet.SetOutputSizePixel(aNewSize);
+
+    SetOutputSizePixel(Size(aNewSize.Width() + 4, aNewSize.Height() + 4 + nButtonHeight));
+
+    aPaletteComboBox.SetPosSizePixel(Point(2, 0), Size(aNewSize.Width() - nButtonWidth, nButtonHeight));
+    aButtonPicker.SetPosSizePixel(Point(aNewSize.Width() + 4 - nButtonWidth, 0), Size(nButtonWidth, nButtonHeight));
 }
 
 void SvxColorWindow_Impl::StartSelection()
@@ -1198,7 +1187,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            UpdateGUI();
+            mrPaletteManager.ReloadColorSet(aColorSet);
         }
         else if ( SFX_ITEM_DEFAULT <= eState )
         {
@@ -1436,7 +1425,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 
 void SvxFrameWindow_Impl::Resize()
 {
-    lcl_ResizeValueSet( *this, aFrameSet, 0 );
+    const Size aSize(this->GetOutputSizePixel());
+    aFrameSet.SetPosSizePixel(Point(2,2), Size(aSize.Width() - 4, aSize.Height() - 4));
 }
 
 void SvxFrameWindow_Impl::StateChanged(
@@ -2531,14 +2521,6 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 }
 
 
-
-static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet, sal_uInt16 nVertPadding)
-{
-    Size aSize = rWin.GetOutputSizePixel();
-    aSize.Width()  -= 4;
-    aSize.Height() -= 4 + nVertPadding;
-    rValueSet.SetPosSizePixel( Point(2,2), aSize );
-}
 
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {

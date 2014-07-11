@@ -52,8 +52,6 @@ private:
     const sal_uInt16 nButtonHeight;
     PaletteManager& mrPaletteManager;
 
-    void UpdateGUI();
-
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( SelectPaletteHdl, void *);
     DECL_LINK( OpenPickerClickHdl, void * );
