@@ -63,7 +63,19 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                 else
                 {
                     // Use the ColorTable which is used at the DrawingLayer's SdrModel
-                    pSwDocShell->PutItem(SvxColorListItem(pSwDrawDocument->GetColorList(), SID_COLOR_TABLE));
+                    XColorListRef xColorList = pSwDrawDocument->GetColorList();
+                    if (xColorList.is())
+                    {
+                        pSwDocShell->PutItem(SvxColorListItem(xColorList, SID_COLOR_TABLE));
+                    }
+                    else
+                    {
+                        // there wasn't one, get the standard and set to the
+                        // docshell and then to the drawdocument
+                        xColorList = XColorList::GetStdColorList();
+                        pSwDocShell->PutItem(SvxColorListItem(xColorList, SID_COLOR_TABLE));
+                        pSwDrawDocument->SetPropertyList(xColorList.get());
+                    }
                 }
 
                 // add other tables in SfxItemSet of the DocShell

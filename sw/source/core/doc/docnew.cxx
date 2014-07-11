@@ -678,14 +678,6 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 
         mpLinkMgr->SetPersist( mpDocShell );
 
-        if( GetDocumentDrawModelManager().GetDrawModel() )
-        {
-            GetDocumentDrawModelManager().GetDrawModel()->SetObjectShell( mpDocShell );
-            GetDocumentDrawModelManager().GetDrawModel()->SetPersist( mpDocShell );
-            OSL_ENSURE( GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist(),
-                    "draw model's persist is out of sync" );
-        }
-
         // set DocShell pointer also on DrawModel
         InitDrawModelAndDocShell(mpDocShell, GetDocumentDrawModelManager().GetDrawModel());
         OSL_ENSURE(!GetDocumentDrawModelManager().GetDrawModel() ||
