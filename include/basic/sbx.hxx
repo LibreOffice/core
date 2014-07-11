@@ -32,6 +32,7 @@
 #include <basic/basicdllapi.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class SvStream;
 class SbxBase;
@@ -167,12 +168,14 @@ public:
 };
 
 // SbxDimArray is an array that can dimensioned using BASIC conventions.
-struct SbxDim;
+struct SbxDim {                 // an array-dimension:
+    sal_Int32 nLbound, nUbound; // Limitations
+    sal_Int32 nSize;            // Number of elements
+};
 
 class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 {
-    SbxDim* pFirst, *pLast;               // Links to Dimension table
-    short   nDim;                         // Number of dimensions
+    std::vector<SbxDim> m_vDimensions;     // Dimension table
     BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
     bool mbHasFixedSize;
 protected:
@@ -196,7 +199,7 @@ public:
     void Put( SbxVariable*, const short* );
     SbxVariable* Get( SbxArray* );
 
-    short  GetDims() const { return nDim;}
+    short  GetDims() const { return m_vDimensions.size();}
     void   AddDim( short, short );
     void   unoAddDim( short, short );
     bool   GetDim( short, short&, short& ) const;
