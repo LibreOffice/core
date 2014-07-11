@@ -21,9 +21,10 @@ $(eval $(call gb_CppunitTest_use_external,libreofficekit_tiledrendering,boost_he
 # our test specifically tests LOK only functionality which would otherwise not
 # require any normal LO api/libraries.
 $(eval $(call gb_CppunitTest_use_libraries,libreofficekit_tiledrendering, \
-	test \
 	cppu \
 	sal \
+	tl \
+	test \
 	vcl \
 	$(gb_UWINAPI) \
 ))
