@@ -985,7 +985,13 @@
 #define STR_SOUTH               (STR_START + 432)
 #define STR_SUM                 (STR_START + 433)
 #define SCSTR_UPDATE_EXTDOCS    (STR_START + 434)
-#define STR_END                 (SCSTR_UPDATE_EXTDOCS)
+#define STR_NOT_PROTECTED       (STR_START + 435)
+#define STR_NOT_PASS_PROTECTED  (STR_START + 436)
+#define STR_HASH_BAD            (STR_START + 437)
+#define STR_HASH_GOOD           (STR_START + 438)
+#define STR_HASH_REGENERATED    (STR_START + 439)
+#define STR_RETYPE              (STR_START + 440)
+#define STR_END                 (STR_RETYPE)
 
 #define BMP_START               (STR_END)
 

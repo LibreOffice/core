@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sc.hrc"
 #include "retypepassdlg.hxx"
-#include "retypepassdlg.hrc"
 #include "scresid.hxx"
 #include "document.hxx"
 #include "tabprotection.hxx"
