@@ -1,0 +1,315 @@
+--- coinmp/BuildTools/config.guess
++++ coinmp/BuildTools/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/Cbc/config.guess
++++ coinmp/Cbc/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/Cgl/config.guess
++++ coinmp/Cgl/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/Clp/config.guess
++++ coinmp/Clp/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/CoinMP/config.guess
++++ coinmp/CoinMP/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/CoinUtils/config.guess
++++ coinmp/CoinUtils/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/Data/Sample/config.guess
++++ coinmp/Data/Sample/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/Osi/config.guess
++++ coinmp/Osi/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+--- coinmp/config.guess
++++ coinmp/config.guess
+@@ -1232,9 +1232,31 @@
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
+ 	case $UNAME_PROCESSOR in
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
+ 	esac
++		fi
++	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
