@@ -354,7 +354,7 @@ SfxObjectShell::~SfxObjectShell()
 
     // Never call GetInPlaceObject(), the access to the derivative branch
     // SfxInternObject is not allowed because of a compiler bug
-    SfxObjectShell::Close();
+    SfxObjectShell::CloseInternal();
     pImp->pBaseModel.set( NULL );
 
     DELETEX(AutoReloadTimer_Impl, pImp->pReloadTimer );
@@ -438,6 +438,12 @@ void SfxObjectShell::ViewAssigned()
 bool SfxObjectShell::Close()
 {
     SfxObjectShellRef aRef(this);
+    return CloseInternal();
+}
+
+// variant that does not take a reference to itself, so we can call it during object destruction
+bool SfxObjectShell::CloseInternal()
+{
     if ( !pImp->bClosing )
     {
         // Do not close if a progress is still running

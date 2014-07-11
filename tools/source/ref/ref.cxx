@@ -25,7 +25,11 @@ SvRefBase::~SvRefBase()
 
 void SvRefBase::QueryDelete()
 {
-    nRefCount = SV_NO_DELETE_REFCOUNT / 2;
+    bNoDelete = 0;
+    // I'm not sure about the original purpose of this line, but right now
+    // it serves the purpose that anything that attempts to do an AddRef()
+    // after an object is deleted will trip an assert.
+    nRefCount = 1 << 30;
     delete this;
 }
 

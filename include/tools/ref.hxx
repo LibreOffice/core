@@ -146,46 +146,47 @@ public:
 /** Classes that want to be referenced-counted via SvRef<T>, should extend this base class */
 class TOOLS_DLLPUBLIC SvRefBase
 {
-    static const sal_uIntPtr SV_NO_DELETE_REFCOUNT = 0x80000000;
-    sal_uIntPtr nRefCount;
+    // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+    unsigned int bNoDelete : 1;
+    unsigned int nRefCount : 31;
 
 protected:
     virtual         ~SvRefBase();
     virtual void    QueryDelete();
 
 public:
-                    SvRefBase()
-                    { nRefCount = SV_NO_DELETE_REFCOUNT; }
+                    SvRefBase() : bNoDelete(1), nRefCount(0) {}
 
-                    SvRefBase( const SvRefBase & /* rObj */ )
-                    { nRefCount = SV_NO_DELETE_REFCOUNT; }
+                    SvRefBase( const SvRefBase & /* rObj */ )  : bNoDelete(1), nRefCount(0) {}
 
     SvRefBase &     operator = ( const SvRefBase & )
                     { return *this; }
 
     void            RestoreNoDelete()
+                    { bNoDelete = 1; }
+
+    void            AddNextRef()
                     {
-                        if( nRefCount < SV_NO_DELETE_REFCOUNT )
-                            nRefCount += SV_NO_DELETE_REFCOUNT;
+                        assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
+                        ++nRefCount;
                     }
 
-    sal_uIntPtr     AddNextRef()
-                    { return ++nRefCount; }
-
-    sal_uIntPtr     AddRef()
+    void            AddRef()
                     {
-                        if( nRefCount >= SV_NO_DELETE_REFCOUNT )
-                            nRefCount -= SV_NO_DELETE_REFCOUNT;
-                        return ++nRefCount;
+                        assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
+                        if( bNoDelete )
+                            bNoDelete = 0;
+                        ++nRefCount;
                     }
 
     void            ReleaseRef()
                     {
-                        if( !--nRefCount )
+                        assert( nRefCount >= 1);
+                        if( --nRefCount == 0 && !bNoDelete)
                             QueryDelete();
                     }
 
-    sal_uIntPtr     GetRefCount() const
+    unsigned int    GetRefCount() const
                     { return nRefCount; }
 };
 
