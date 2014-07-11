@@ -3311,6 +3311,21 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
                 "/word/embeddings/oleObject1.doc");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
+{
+    // Issue was Direct Foramatting for non-first Table cells was not getting preserved.
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // Ensure that for Third Table cell Direct Formatting is preserved.
+    // In file, Direct Formatting used for Third Table cell is Line Spacing="1.5 lines"
+    // For Line Spacing "1.5 lines" w:line equals 360
+    assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc[3]/w:p/w:pPr/w:spacing","line","360");
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
 {
     // Header was lost on export when the document had multiple columns.

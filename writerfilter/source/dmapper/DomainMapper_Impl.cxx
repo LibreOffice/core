@@ -195,7 +195,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSdt(false),
         m_bIsFirstRun(false),
         m_bIsOutsideAParagraph(true),
-        m_bIsTableHasDirectFormatting(false),
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
         m_aAnnotationPositions(),
@@ -442,12 +441,6 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     m_bSdt = bSdt;
-}
-
-
-void DomainMapper_Impl::SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting)
-{
-    m_bIsTableHasDirectFormatting = bIsTableHasDirectFormatting;
 }
 
 

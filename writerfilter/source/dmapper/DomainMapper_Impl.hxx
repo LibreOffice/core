@@ -399,7 +399,6 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
-    bool                            m_bIsTableHasDirectFormatting;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -487,10 +486,6 @@ public:
     void SetSdt(bool bSdt);
     /// Getter method for m_bSdt.
     bool GetSdt() { return m_bSdt;}
-    /// Getter method for m_bIsTableHasDirectFormatting
-    bool GetIsTableHasDirectFormatting() { return m_bIsTableHasDirectFormatting;}
-    /// Setter method for m_bIsTableHasDirectFormatting
-    void SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting);
     bool GetParaChanged() { return m_bParaChanged;}
 
     void deferBreak( BreakType deferredBreakType );

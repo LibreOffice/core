@@ -393,17 +393,20 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if( nName == NS_ooxml::LN_CT_Spacing_line )
             {
-                if( m_pImpl->getTableManager().isInCell() )
-                {
-                    // direct formatting is applied for table cell data
-                    m_pImpl->SetIsTableHasDirectFormatting(true);
-                }
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "line", OUString::number(nIntValue));
                 //now set the value depending on the Mode
                 if( aSpacing.Mode == style::LineSpacingMode::PROP )
                     aSpacing.Height = sal_Int16(sal_Int32(nIntValue) * 100 / SINGLE_LINE_SPACING );
                 else
                     aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nIntValue ));
+
+                if( m_pImpl->getTableManager().isInCell() )
+                {
+                    // direct formatting is applied for table cell data
+                    TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
+                    pTblCellWithDirectFormatting->insert(std::pair< PropertyIds, PropValue >(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing )));
+                    m_pImpl->getTableManager().cellProps(pTblCellWithDirectFormatting);
+                }
             }
             else //NS_ooxml::LN_CT_Spacing_lineRule:
             {
