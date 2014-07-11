@@ -98,7 +98,7 @@ public:
                             getStyleLoaderOptions() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             //XStyleLoader2
-    virtual void SAL_CALL   loadStylesFromDocument( const ::com::sun::star::uno::Reference <::com::sun::star::lang::XComponent> & aSourceComponent,
+    virtual void SAL_CALL   loadStylesFromDocument( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > & aSourceComponent,
                                 const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aOptions )
                                         throw(::com::sun::star::io::IOException,
