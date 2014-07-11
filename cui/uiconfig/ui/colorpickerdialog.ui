@@ -3,6 +3,21 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">255</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">360</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="ColorPicker">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
@@ -294,6 +309,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -307,6 +323,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -320,6 +337,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -465,6 +483,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -478,6 +497,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -491,6 +511,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -615,6 +636,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -628,6 +650,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -641,6 +664,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -654,6 +678,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
