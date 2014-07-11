@@ -837,9 +837,9 @@ ScFormulaCell* ScFormulaCell::Clone() const
     return new ScFormulaCell(*this, *pDocument, aPos);
 }
 
-ScFormulaCell* ScFormulaCell::Clone( const ScAddress& rPos ) const
+ScFormulaCell* ScFormulaCell::Clone( const ScAddress& rPos, int nCloneFlags ) const
 {
-    return new ScFormulaCell(*this, *pDocument, rPos);
+    return new ScFormulaCell(*this, *pDocument, rPos, nCloneFlags);
 }
 
 size_t ScFormulaCell::GetHash() const
