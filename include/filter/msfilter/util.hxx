@@ -17,6 +17,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <filter/msfilter/escherex.hxx>
 
 namespace msfilter {
 namespace util {
@@ -137,6 +138,13 @@ MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
 
 /// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
 MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(const OString& aType);
+
+/**
+ * The following function checks if a MSO shapetype is allowed to have textboxcontent.
+ *
+ * @param nShapeType shape to check
+ */
+MSFILTER_DLLPUBLIC bool HasTextBoxContent(sal_uInt32 nShapeType);
 
 }
 
