@@ -1470,7 +1470,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
             pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
         }
     //    else
-            // Todo: handle Interactive appropriately
+            // TODO handle Interactive appropriately
     }
 }
 
