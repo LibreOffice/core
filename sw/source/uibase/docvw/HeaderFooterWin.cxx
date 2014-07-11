@@ -181,11 +181,24 @@ const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
 void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
 {
     // Compute the text to show
+    const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
+    bool bIsFirst = !pDesc->IsFirstShared() && GetPageFrame()->OnFirstPage();
+    bool bIsLeft  = !pDesc->IsHeaderShared() && !GetPageFrame()->OnRightPage();
+    bool bIsRight = !pDesc->IsHeaderShared() && GetPageFrame()->OnRightPage();
     m_sLabel = SW_RESSTR( STR_HEADER_TITLE );
     if ( !m_bIsHeader )
-        m_sLabel = SW_RESSTR( STR_FOOTER_TITLE );
+        m_sLabel = bIsFirst ? SW_RESSTR( STR_FIRST_FOOTER_TITLE )
+            : bIsLeft  ? SW_RESSTR( STR_LEFT_FOOTER_TITLE )
+            : bIsRight ? SW_RESSTR( STR_RIGHT_FOOTER_TITLE )
+            : SW_RESSTR( STR_FOOTER_TITLE );
+    else
+        m_sLabel = bIsFirst ? SW_RESSTR( STR_FIRST_HEADER_TITLE )
+            : bIsLeft  ? SW_RESSTR( STR_LEFT_HEADER_TITLE )
+            : bIsRight ? SW_RESSTR( STR_RIGHT_HEADER_TITLE )
+            : SW_RESSTR( STR_HEADER_TITLE );
+
     sal_Int32 nPos = m_sLabel.lastIndexOf( "%1" );
-    m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
+    m_sLabel = m_sLabel.replaceAt( nPos, 2, pDesc->GetName() );
 
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;

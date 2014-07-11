@@ -279,9 +279,39 @@ String STR_HEADER_TITLE
     Text [ en-US ] = "Header (%1)" ;
 };
 
+String STR_FIRST_HEADER_TITLE
+{
+    Text [ en-US ] = "First Page Header (%1)" ;
+};
+
+String STR_LEFT_HEADER_TITLE
+{
+    Text [ en-US ] = "Left Page Header (%1)" ;
+};
+
+String STR_RIGHT_HEADER_TITLE
+{
+    Text [ en-US ] = "Right Page Header (%1)" ;
+};
+
 String STR_FOOTER_TITLE
 {
     Text [ en-US ] = "Footer (%1)" ;
+};
+
+String STR_FIRST_FOOTER_TITLE
+{
+    Text [ en-US ] = "First Page Footer (%1)" ;
+};
+
+String STR_LEFT_FOOTER_TITLE
+{
+    Text [ en-US ] = "Left Page Footer (%1)" ;
+};
+
+String STR_RIGHT_FOOTER_TITLE
+{
+    Text [ en-US ] = "Right Page Footer (%1)" ;
 };
 
 String STR_DELETE_HEADER
