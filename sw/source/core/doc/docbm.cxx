@@ -1173,6 +1173,13 @@ namespace
 
         void SetContent( sal_Int32 n )     { nContent = n; }
         sal_Int32 GetContent() const       { return nContent; }
+#if OSL_DEBUG_LEVEL > 0
+        void Dump()
+        {
+            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << GetType() << "\tContent: " << GetContent());
+        }
+#endif
+
     };
 
     // #i59534: If a paragraph will be splitted we have to restore some redline positions
@@ -1239,6 +1246,17 @@ namespace
             rSave.DecType();
         }
     }
+#if OSL_DEBUG_LEVEL > 0
+    static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
+    {
+        sal_uInt16 n = 0;
+        while( n < rSaveArr.size() )
+        {
+            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            aSave.Dump();
+        }
+    }
+#endif
 }
 
 // IDocumentMarkAccess for SwDoc
@@ -1697,10 +1715,13 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                     FOREACHPAM_START( *it )
                         if( aSave.GetCount() == nCnt )
                         {
+                            SAL_INFO("sw.core", "Found PaM " << PCURCRSR << " for Index " << aSave.GetCount());
                             pPos = &PCURCRSR->GetBound( 0x0400 ==
                                                     aSave.GetType() );
                             break;
                         }
+                        else
+                            SAL_INFO("sw.core", "Skipped PaM " << PCURCRSR << " for Index " << aSave.GetCount());
                         ++nCnt;
                     FOREACHPAM_END()
                     if( pPos )
@@ -1729,6 +1750,10 @@ void _RestoreCntntIdx(SwDoc* pDoc,
 
         if( pPos )
         {
+#if OSL_DEBUG_LEVEL > 0
+            aSave.Dump();
+#endif
+            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.GetCount() << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
             pPos->nNode = *pCNd;
             pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
         }
@@ -1880,6 +1905,12 @@ namespace
         long int m_nIdx;
         bool m_bOther;
         sal_Int32 m_nCntnt;
+#if OSL_DEBUG_LEVEL > 0
+        void Dump()
+        {
+            SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nCntnt);
+        }
+#endif
     };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
