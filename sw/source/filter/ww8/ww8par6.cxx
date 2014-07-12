@@ -4775,19 +4775,24 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 /*nId*/, const sal_uInt8* pData
         {
             SvxBoxItem aBoxItem(RES_CHRATR_BOX);
             aBoxItem = *pBox;
+
             WW8_BRC aBrc;
             _SetWW8_BRC(bVer67, aBrc, pData);
 
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
-            NewAttr( aBoxItem );
+            // WW8_BRC is empty -> no border, no shadow
+            if( !aBrc.IsEmpty(bVer67) )
+            {
+                Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
+                Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
+                Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
+                Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
+                NewAttr( aBoxItem );
 
-            short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
-            SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
-            if( SetShadow( aShadowItem, &aSizeArray[0], aBrc ) )
-                NewAttr( aShadowItem );
+                short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
+                SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
+                if( SetShadow( aShadowItem, &aSizeArray[0], aBrc ) )
+                    NewAttr( aShadowItem );
+            }
         }
     }
 
