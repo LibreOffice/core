@@ -959,8 +959,14 @@ DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-
 DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
 {
     // The Writer ignored the 'First Is Shared' flag
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xPropertySet, "FirstIsShared")));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the FIRST page header."),
+        parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("This is the header for the REST OF THE FILE."),
+        parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("This is the header for the REST OF THE FILE."),
+        parseDump("/root/page[3]/header/txt/text()"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGrabBag, "grabbag.docx")
