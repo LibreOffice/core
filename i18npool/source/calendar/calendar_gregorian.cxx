@@ -325,13 +325,20 @@ Calendar_gregorian::setLocalDateTime( double fTimeInDays ) throw(RuntimeExceptio
     // dates! (Which was the cause for #i76623# when the timezone of a
     // previously set date was used.) Timezone may also include
     // seconds, so use milliseconds field as well.
-    setDateTime( fTimeInDays );
+    UErrorCode status;
+    int32_t nZone0, nDST0;
+    body->getTimeZone().getOffset( fTimeInDays * U_MILLIS_PER_DAY, true, nZone0, nDST0, status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    double fLoc = fTimeInDays - (double)( nZone0 + nDST0 ) / U_MILLIS_PER_DAY;
+    setDateTime( fLoc );
+
     sal_Int32 nZone1 = 0;
     getZoneOffset( nZone1, true );
     sal_Int32 nDST1  = 0;
     getDSTOffset( nDST1, true );
-    double fLoc = fTimeInDays - (double)( nZone1 + nDST1 ) / U_MILLIS_PER_DAY;
+    fLoc = fTimeInDays - (double)( nZone1 + nDST1 ) / U_MILLIS_PER_DAY;
     setDateTime( fLoc );
+
     sal_Int32 nZone2 = 0;
     getZoneOffset( nZone2, true );
     sal_Int32 nDST2  = 0;
