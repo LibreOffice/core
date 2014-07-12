@@ -263,6 +263,52 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
+bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFmt,
+                             double &aNumber, sal_Int32 nColumnType, SwDBField *pField )
+{
+    bool bValidValue = false;
+
+    if( DBL_MAX != aNumber )
+    {
+        if( DataType::DATE == nColumnType || DataType::TIME == nColumnType ||
+            DataType::TIMESTAMP  == nColumnType )
+        {
+            Date aStandard( 1, 1, 1900 );
+            if( *pDocFormatter->GetNullDate() != aStandard )
+                aNumber += (aStandard - *pDocFormatter->GetNullDate());
+        }
+        bValidValue = true;
+        if( pField )
+            pField->SetValue( aNumber );
+    }
+    else
+    {
+        SwSbxValue aVal;
+        aVal.PutString( aString );
+
+        if (aVal.IsNumeric())
+        {
+            if( pField )
+                pField->SetValue(aVal.GetDouble());
+            else
+                aNumber = aVal.GetDouble();
+
+            if (nFmt && nFmt != SAL_MAX_UINT32 && !pDocFormatter->IsTextFormat(nFmt))
+                bValidValue = true; // because of bug #60339 not for all strings
+        }
+        else
+        {
+            // if string length > 0 then true, else false
+            if( pField )
+                pField->SetValue(aString.isEmpty() ? 0 : 1);
+            else
+                aNumber = aString.isEmpty() ? 0 : 1;
+        }
+    }
+
+    return bValidValue;
+}
+
 /// get current field value and cache it
 void SwDBField::Evaluate()
 {
@@ -287,40 +333,15 @@ void SwDBField::Evaluate()
         SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
                                         aColNm, pDocFormatter, GetLanguage() ));
 
+    sal_Int32 nColumnType;
     if( DBL_MAX != nValue )
-    {
-        sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
-        if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
-                 DataType::TIMESTAMP  == nColumnType)
+        nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
 
-        {
-            Date aStandard(1,1,1900);
-            if (*pDocFormatter->GetNullDate() != aStandard)
-                nValue += (aStandard - *pDocFormatter->GetNullDate());
-        }
-        bValidValue = true;
-        SetValue(nValue);
+    bValidValue = FormatValue( pDocFormatter, aContent, nFmt, nValue, nColumnType, this );
+
+    if( DBL_MAX != nValue )
         aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
-    }
-    else
-    {
-        SwSbxValue aVal;
-        aVal.PutString( aContent );
 
-        if (aVal.IsNumeric())
-        {
-            SetValue(aVal.GetDouble());
-
-            SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-            if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = true; // because of bug #60339 not for all strings
-        }
-        else
-        {
-            // if string length > 0 then true, else false
-            SetValue(aContent.isEmpty() ? 0 : 1);
-        }
-    }
     bInitialized = true;
 }
 
