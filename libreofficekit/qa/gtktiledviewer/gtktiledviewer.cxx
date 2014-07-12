@@ -117,6 +117,8 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
     }
 }
 
+// GtkComboBox requires gtk 2.24 or later
+#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 void populatePartSelector( GtkComboBoxText* pSelector, LOKDocView* pView )
 {
     char sText[10];
@@ -140,6 +142,7 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
         lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
     }
 }
+#endif
 
 int main( int argc, char* argv[] )
 {
@@ -188,11 +191,14 @@ int main( int argc, char* argv[] )
     GtkToolItem* pSeparator1 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator1, -1);
 
+// GtkComboBox requires gtk 2.24 or later
+#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     GtkToolItem* pPartSelectorToolItem = gtk_tool_item_new();
     GtkWidget* pComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
     g_signal_connect( G_OBJECT(pComboBox), "changed", G_CALLBACK(changePart), NULL );
+#endif
 
     GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
@@ -213,7 +219,10 @@ int main( int argc, char* argv[] )
 
     pFileName = argv[2];
     lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
+// GtkComboBox requires gtk 2.24 or later
+#if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
     populatePartSelector( GTK_COMBO_BOX_TEXT(pComboBox), LOK_DOCVIEW(pDocView) );
+#endif
 
     gtk_main();
 
