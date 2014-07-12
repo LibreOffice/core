@@ -400,8 +400,8 @@ public:
         const bool bIncludeInputFldAtStart = false ) const;
 
     OUString GetCurWord(sal_Int32) const;
-    sal_uInt16 Spell(SwSpellArgs*);
-    sal_uInt16 Convert( SwConversionArgs & );
+    bool Spell(SwSpellArgs*);
+    bool Convert( SwConversionArgs & );
 
     inline SwTxtFmtColl *GetTxtColl() const;
     virtual SwFmtColl *ChgFmtColl( SwFmtColl* ) SAL_OVERRIDE;

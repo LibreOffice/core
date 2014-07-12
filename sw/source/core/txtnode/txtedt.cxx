@@ -927,7 +927,7 @@ bool SwScanner::NextWord()
     return true;
 }
 
-sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
+bool SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
@@ -985,7 +985,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
                 {
                     m_Text = aOldTxt;
                 }
-                return 0;
+                return false;
             }
             if(nTemp > nBegin)
                 nBegin = nTemp;
@@ -1051,7 +1051,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
         m_Text = aOldTxt;
     }
 
-    return pArgs->xSpellAlt.is() ? 1 : 0;
+    return pArgs->xSpellAlt.is();
 }
 
 void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
@@ -1089,7 +1089,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
 
 }
 
-sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
+bool SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
     // get range of text within node to be converted
     // (either all the text or the text within the selection
@@ -1221,7 +1221,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         m_Text = aOldTxt;
     }
 
-    return rArgs.aConvText.isEmpty() ? 0 : 1;
+    return !rArgs.aConvText.isEmpty();
 }
 
 // Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
