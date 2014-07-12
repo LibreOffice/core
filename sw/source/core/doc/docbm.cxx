@@ -1134,8 +1134,6 @@ namespace
     //          0x2001 = frame anchored at character, which should be moved
     //          0x0800 = Crsr from the CrsrShell Mark
     //          0x0801 = Crsr from the CrsrShell Point
-    //          0x0400 = UnoCrsr Mark
-    //          0x0401 = UnoCrsr Point
 
     class _SwSaveTypeCountContent
     {
@@ -1246,7 +1244,7 @@ namespace
             rSave.DecType();
         }
     }
-#if OSL_DEBUG_LEVEL > 0
+#if 0
     static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
     {
         sal_uInt16 n = 0;
@@ -1591,29 +1589,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
             FOREACHSHELL_END( pShell )
         }
     }
-    // 6. UnoCrsr
-    {
-        aSave.SetTypeAndCount( 0x400, 0 );
-        const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-        for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
-                it != rTbl.end(); ++it)
-        {
-            FOREACHPAM_START( *it )
-                lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, false );
-                aSave.IncCount();
-            FOREACHPAM_END()
-
-            SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(*it);
-            if( pUnoTblCrsr )
-            {
-                FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, false );
-                    aSave.IncCount();
-                FOREACHPAM_END()
-            }
-        }
-    }
 }
 
 void _RestoreCntntIdx(SwDoc* pDoc,
@@ -1701,49 +1676,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
 
                         FOREACHSHELL_END( pShell )
                     }
-            }
-            break;
-
-        case 0x0400:
-        case 0x0401:
-            {
-                sal_uInt16 nCnt = 0;
-                const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
-                        it != rTbl.end(); ++it)
-                {
-                    FOREACHPAM_START( *it )
-                        if( aSave.GetCount() == nCnt )
-                        {
-                            SAL_INFO("sw.core", "Found PaM " << PCURCRSR << " for Index " << aSave.GetCount());
-                            pPos = &PCURCRSR->GetBound( 0x0400 ==
-                                                    aSave.GetType() );
-                            break;
-                        }
-                        else
-                            SAL_INFO("sw.core", "Skipped PaM " << PCURCRSR << " for Index " << aSave.GetCount());
-                        ++nCnt;
-                    FOREACHPAM_END()
-                    if( pPos )
-                        break;
-
-                    SwUnoTableCrsr* pUnoTblCrsr =
-                        dynamic_cast<SwUnoTableCrsr*>(*it);
-                    if ( pUnoTblCrsr )
-                    {
-                        FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                            if( aSave.GetCount() == nCnt )
-                            {
-                                pPos = &PCURCRSR->GetBound( 0x0400 ==
-                                                    aSave.GetType() );
-                                break;
-                            }
-                            ++nCnt;
-                        FOREACHPAM_END()
-                    }
-                    if ( pPos )
-                        break;
-                }
             }
             break;
         }
@@ -1842,46 +1774,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                                 break;
 
                         FOREACHSHELL_END( pShell )
-                    }
-                }
-                break;
-
-            case 0x0400:
-            case 0x0401:
-                {
-                    sal_uInt16 nCnt = 0;
-                    const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                    for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
-                            it != rTbl.end(); ++it)
-                    {
-                        FOREACHPAM_START( *it )
-                            if( aSave.GetCount() == nCnt )
-                            {
-                                pPos = &PCURCRSR->GetBound( 0x0400 ==
-                                                    aSave.GetType() );
-                                break;
-                            }
-                            ++nCnt;
-                        FOREACHPAM_END()
-                        if( pPos )
-                            break;
-
-                        SwUnoTableCrsr* pUnoTblCrsr =
-                            dynamic_cast<SwUnoTableCrsr*>(*it);
-                        if ( pUnoTblCrsr )
-                        {
-                            FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                                if( aSave.GetCount() == nCnt )
-                                {
-                                    pPos = &PCURCRSR->GetBound( 0x0400 ==
-                                                    aSave.GetType() );
-                                    break;
-                                }
-                                ++nCnt;
-                            FOREACHPAM_END()
-                        }
-                        if ( pPos )
-                            break;
                     }
                 }
                 break;
@@ -1995,7 +1887,7 @@ namespace
             rMarkEntries.push_back(aEntry);
         }
     }
-#if OSL_DEBUG_LEVEL > 0
+#if 0
     static void DumpEntries(std::vector<MarkEntry>* pEntries)
     {
         BOOST_FOREACH(MarkEntry& aEntry, *pEntries)
@@ -2194,19 +2086,8 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 
             if( pPos )
             {
                 SAL_INFO("sw.info", "Would be setting " << pPos << " on Node " << nNode << " for Index " << aEntry.m_nIdx);
-                //pPos->nNode = *pCNd;
-                //pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
-                assert(&pPos->nNode.GetNode() == pCNd);
-#if OSL_DEBUG_LEVEL > 0
-                if(pPos->nNode.GetIndex() != pCNd->GetIndex())
-                {
-                    DumpSaves(m_aSaveArr);
-                    DumpEntries(&m_aUnoCrsrEntries);
-                    SAL_INFO("sw.core", aEntry.m_nIdx << ": Node expected to set to " << pCNd->GetIndex() << " but actually should be " << pPos->nNode.GetIndex() );
-                }
-#endif
-                SAL_INFO_IF(pPos->nContent != aEntry.m_nCntnt + nOffset ,"sw.core", "On Node" << pCNd->GetIndex() << "Content expected to set to " << aEntry.m_nCntnt << "(" << nOffset << ")" << " but actually should be " << pPos->nContent.GetIndex() );
-                assert(pPos->nContent == aEntry.m_nCntnt + nOffset);
+                pPos->nNode = *pCNd;
+                pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
                 break;
             }
         }
@@ -2247,10 +2128,8 @@ void CntntIdxStoreImpl::RestoreUnoCrsrsLen (SwNode& rNd, sal_uLong nLen, sal_Int
                 }
                 if( pPos )
                 {
-                    //pPos->nNode = rNd;
-                    //pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
-                    assert(&pPos->nNode.GetNode() == pCNd);
-                    assert(pPos->nContent == std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
+                    pPos->nNode = rNd;
+                    pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
                     break;
                 }
             }
