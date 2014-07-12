@@ -29,6 +29,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <calc.hxx>
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -266,7 +268,6 @@ public:
                           const OUString& rColNm );
 
     inline bool     IsInMerge() const   { return bInMerge; }
-    void            EndMerge();
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
@@ -299,7 +300,9 @@ public:
     void            CloseAll(bool bIncludingMerge = true);
 
     bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
-                                OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+                                      OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+    bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
+                                          sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
     bool            ToNextMergeRecord();
     bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
 
