@@ -100,11 +100,9 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
 protected:
-                            SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-                                Window*, const ResId& );
-                            SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-                                Window*, const OString& rID, const OUString& rUIXMLDescription );
-                            virtual ~SfxModelessDialog();
+    SfxModelessDialog( SfxBindings*, SfxChildWindow*,
+        Window*, const OString& rID, const OUString& rUIXMLDescription );
+    virtual ~SfxModelessDialog();
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;
     virtual void            Move() SAL_OVERRIDE;

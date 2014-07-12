@@ -322,14 +322,6 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
     return 0;
 }
 
-SfxModelessDialog::SfxModelessDialog(SfxBindings *pBindinx,
-    SfxChildWindow *pCW, Window *pParent, const ResId& rResId)
-    : ModelessDialog(pParent, rResId)
-{
-    Init(pBindinx, pCW);
-    SetHelpId("");
-}
-
 SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
     SfxChildWindow *pCW, Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription)
@@ -351,16 +343,12 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
-
-
-bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
-
 /*  [Description]
 
     If a ModelessDialog is enabled its ViewFrame wil be activated.
     This is necessary by PluginInFrames.
 */
-
+bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
