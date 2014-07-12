@@ -31,6 +31,7 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
+#include <boost/scoped_array.hpp>
 
 ///////////////////////////// class StgFAT
 
@@ -1136,7 +1137,7 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
     SetSize( n );
     if( GetError() == SVSTREAM_OK )
     {
-        sal_uInt8* p = new sal_uInt8[ 4096 ];
+        boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
         rSrc.Seek( 0L );
         Seek( 0L );
         while( n )
@@ -1144,13 +1145,13 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
             sal_uLong nn = n;
             if( nn > 4096 )
                 nn = 4096;
-            if( rSrc.Read( p, nn ) != nn )
+            if( rSrc.Read( p.get(), nn ) != nn )
                 break;
-            if( Write( p, nn ) != nn )
+            if( Write( p.get(), nn ) != nn )
                 break;
             n -= nn;
         }
-        delete [] p;
+        p.reset();
         rSrc.Seek( nCur );
         Seek( nCur );
         return n == 0;
@@ -1197,18 +1198,17 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             sal_uLong i = nEndOfData;
             if( i )
             {
-                sal_uInt8* p = new sal_uInt8[ 4096 ];
+                boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
                 Seek( 0L );
                 while( i )
                 {
                     sal_uLong nb = ( i > 4096 ) ? 4096 : i;
-                    if( Read( p, nb ) == nb
-                     && s->Write( p, nb ) == nb )
+                    if( Read( p.get(), nb ) == nb
+                        && s->Write( p.get(), nb ) == nb )
                         i -= nb;
                     else
                         break;
                 }
-                delete [] p;
             }
             if( !i && n > nEndOfData )
             {

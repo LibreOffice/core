@@ -43,6 +43,7 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/digest.h>
 #include <tools/ref.hxx>
@@ -1402,7 +1403,7 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 
     if( pDestStm->SetSize( n ) && n )
     {
-        sal_uInt8* p = new sal_uInt8[ 4096 ];
+        boost::scoped_array<sal_uInt8> p(new sal_uInt8[ 4096 ]);
         Seek( 0L );
         pDestStm->Seek( 0L );
         while( n )
@@ -1410,14 +1411,12 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
             sal_uInt32 nn = n;
             if( nn > 4096 )
                 nn = 4096;
-            if( Read( p, nn ) != nn )
+            if( Read( p.get(), nn ) != nn )
                 break;
-            if( pDestStm->Write( p, nn ) != nn )
+            if( pDestStm->Write( p.get(), nn ) != nn )
                 break;
             n -= nn;
         }
-
-        delete[] p;
     }
 
     return true;
@@ -1644,13 +1643,13 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     m_aURL = aTemp;
 
     // copy data into the temporary file
-    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, true /* bFileExists */ );
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, true /* bFileExists */ ));
     if ( pStream )
     {
         rStream.Seek(0);
         rStream.ReadStream( *pStream );
         pStream->Flush();
-        DELETEZ( pStream );
+        pStream.reset();
     }
 
     // close stream and let content access the file
@@ -1694,7 +1693,7 @@ void UCBStorage_Impl::Init()
                     aObj.Append( OUString( "manifest.xml" ) );
 
                     // create input stream
-                    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
+                    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ ));
                     // no stream means no manifest.xml
                     if ( pStream )
                     {
@@ -1714,8 +1713,6 @@ void UCBStorage_Impl::Init()
                             xInputStream = NULL;
                             SetProps( aProps, OUString() );
                         }
-
-                        delete pStream;
                     }
                 }
             }
@@ -2273,7 +2270,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         {
                             // create a stream to write the manifest file - use a temp file
                             OUString aURL( aNewSubFolder.getURL() );
-                            ::utl::TempFile* pTempFile = new ::utl::TempFile( &aURL );
+                            boost::scoped_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aURL ));
 
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE );
@@ -2294,7 +2291,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                             xWriter = NULL;
                             xOutputStream = NULL;
-                            DELETEZ( pTempFile );
+                            pTempFile.reset();
                             aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, OUString("manifest.xml"), NameClash::OVERWRITE );
                         }
                     }
@@ -2309,11 +2306,11 @@ sal_Int16 UCBStorage_Impl::Commit()
                         m_pContent->executeCommand( OUString("flush"), aAny );
                         if ( m_pSource != 0 )
                         {
-                            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
+                            boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ ));
                             m_pSource->SetStreamSize(0);
                             // m_pSource->Seek(0);
                             pStream->ReadStream( *m_pSource );
-                            DELETEZ( pStream );
+                            pStream.reset();
                             m_pSource->Seek(0);
                         }
                     }
@@ -2534,7 +2531,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the streams data
         // the destination stream must not be open
-        BaseStorageStream* pOtherStream = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
+        boost::scoped_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ));
         BaseStorageStream* pStream = NULL;
         bool bDeleteStream = false;
 
@@ -2547,7 +2544,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
             bDeleteStream = true;
         }
 
-        pStream->CopyTo( pOtherStream );
+        pStream->CopyTo( pOtherStream.get() );
         SetError( pStream->GetError() );
         if( pOtherStream->GetError() )
             pDest->SetError( pOtherStream->GetError() );
@@ -2556,7 +2553,6 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 
         if ( bDeleteStream )
             delete pStream;
-        delete pOtherStream;
     }
     else
     {
@@ -2578,9 +2574,9 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
         UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
 
         bool bOpenUCBStorage = pUCBDest && pUCBCopy;
-        BaseStorage* pOtherStorage = bOpenUCBStorage ?
+        boost::scoped_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
                 pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
-                pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
+                pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ));
 
         // For UCB storages, the class id and the format id may differ,
         // do passing the class id is not sufficient.
@@ -2590,7 +2586,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
                                      pUCBCopy->pImp->m_aUserTypeName );
         else
             pOtherStorage->SetClassId( pStorage->GetClassId() );
-        pStorage->CopyTo( pOtherStorage );
+        pStorage->CopyTo( pOtherStorage.get() );
         SetError( pStorage->GetError() );
         if( pOtherStorage->GetError() )
             pDest->SetError( pOtherStorage->GetError() );
@@ -2599,7 +2595,6 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 
         if ( bDeleteStorage )
             delete pStorage;
-        delete pOtherStorage;
     }
 
     return Good() && pDest->Good();
@@ -3181,7 +3176,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
     OUString aName = aFolderObj.GetName();
     aFolderObj.removeSegment();
     OUString aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
-    ::utl::TempFile* pTempFile = new ::utl::TempFile( &aFolderURL );
+    boost::scoped_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aFolderURL ));
 
     // get the stream from the temp file
     SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
@@ -3236,13 +3231,12 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
 
         // move the stream to its desired location
         Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        DELETEZ( pTempFile );
+        pTempFile.reset();
         aFolder.transferContent( aSource, InsertOperation_MOVE, aName, NameClash::OVERWRITE );
         return aURL;
     }
 
     pTempFile->EnableKillingFile( true );
-    delete pTempFile;
     return OUString();
 }
 

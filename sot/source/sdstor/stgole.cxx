@@ -20,6 +20,7 @@
 #include "rtl/string.h"
 #include "stgole.hxx"
 #include "sot/storinfo.hxx"
+#include <boost/scoped_array.hpp>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4342)
@@ -117,9 +118,9 @@ bool StgCompObjStream::Load()
             // higher bits are ignored
             sal_uLong nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
 
-            sal_Char* p = new sal_Char[ nStrLen+1 ];
+            boost::scoped_array<sal_Char> p(new sal_Char[ nStrLen+1 ]);
             p[nStrLen] = 0;
-            if( Read( p, nStrLen ) == nStrLen )
+            if( Read( p.get(), nStrLen ) == nStrLen )
             {
                 //The encoding here is "ANSI", which is pretty useless seeing as
                 //the actual codepage used doesn't seem to be specified/stored
@@ -127,12 +128,11 @@ bool StgCompObjStream::Load()
                 //all platforms and envs
                 //https://issues.apache.org/ooo/attachment.cgi?id=68668
                 //for a good edge-case example
-                aUserName = nStrLen ? OUString( p, nStrLen, RTL_TEXTENCODING_MS_1252 ) : OUString();
+                aUserName = nStrLen ? OUString( p.get(), nStrLen, RTL_TEXTENCODING_MS_1252 ) : OUString();
                 nCbFormat = ReadClipboardFormat( *this );
             }
             else
                 SetError( SVSTREAM_GENERALERROR );
-            delete [] p;
         }
     }
     return GetError() == SVSTREAM_OK;

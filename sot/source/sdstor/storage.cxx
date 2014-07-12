@@ -36,6 +36,8 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -230,17 +232,17 @@ bool SotStorageStream::CopyTo( SotStorageStream * pDestStm )
         Seek( 0L );
         pDestStm->SetSize( 0 ); // Ziel-Stream leeren
 
-        void * pMem = new sal_uInt8[ 8192 ];
+        boost::scoped_array<sal_uInt8> pMem(new sal_uInt8[ 8192 ]);
         sal_uLong  nRead;
-        while( 0 != (nRead = Read( pMem, 8192 )) )
+        while( 0 != (nRead = Read( pMem.get(), 8192 )) )
         {
-            if( nRead != pDestStm->Write( pMem, nRead ) )
+            if( nRead != pDestStm->Write( pMem.get(), nRead ) )
             {
                 SetError( SVSTREAM_GENERALERROR );
                 break;
             }
         }
-        delete [] static_cast<sal_uInt8*>(pMem);
+        pMem.reset();
         // Position setzen
         pDestStm->Seek( nPos );
         Seek( nPos );
@@ -581,9 +583,8 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );
-    bool bRet = SotStorage::IsStorageFile( pStm );
-    delete pStm;
+    boost::scoped_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ ));
+    bool bRet = SotStorage::IsStorageFile( pStm.get() );
     return bRet;
 }
 

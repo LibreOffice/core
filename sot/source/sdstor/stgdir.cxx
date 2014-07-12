@@ -26,7 +26,7 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-
+#include <boost/scoped_array.hpp>
 
 //////////////////////////// class StgDirEntry
 
@@ -350,13 +350,12 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
                 // if so, we probably need to copy the old data
                 if( nOldSize )
                 {
-                    void* pBuf = new sal_uInt8[ nOldSize ];
+                    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nOldSize ]);
                     pOld->Pos2Page( 0L );
                     pStgStrm->Pos2Page( 0L );
-                    if( pOld->Read( pBuf, nOldSize )
-                     && pStgStrm->Write( pBuf, nOldSize ) )
+                    if( pOld->Read( pBuf.get(), nOldSize )
+                        && pStgStrm->Write( pBuf.get(), nOldSize ) )
                         bRes = true;
-                    delete[] static_cast<sal_uInt8*>(pBuf);
                 }
                 else
                     bRes = true;

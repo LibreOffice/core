@@ -21,7 +21,7 @@
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
-
+#include <boost/scoped_array.hpp>
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
@@ -35,14 +35,13 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     if( nLen > 0 )
     {
         // get a string name
-        sal_Char * p = new( ::std::nothrow ) sal_Char[ nLen ];
-        if( p && rStm.Read( p, nLen ) == (sal_uLong) nLen )
+        boost::scoped_array<sal_Char> p(new( ::std::nothrow ) sal_Char[ nLen ]);
+        if( p && rStm.Read( p.get(), nLen ) == (sal_uLong) nLen )
         {
-            nFormat = SotExchange::RegisterFormatName(OUString(p, nLen-1, RTL_TEXTENCODING_ASCII_US));
+            nFormat = SotExchange::RegisterFormatName(OUString(p.get(), nLen-1, RTL_TEXTENCODING_ASCII_US));
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );
-        delete [] p;
     }
     else if( nLen == -1L )
         // Windows clipboard format
