@@ -248,10 +248,10 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
                 // Don't let large objects dissappear to the top
                 aSz.Width() = aSz.Height() = 0;
-                if ( aObjBound.Bottom() < aDocRect.Top() )
-                    aSz.Width() = (aObjBound.Bottom() - aDocRect.Top()) - MINFLY;
                 if ( aObjBound.Right() < aDocRect.Left() )
-                    aSz.Height() = (aObjBound.Right() - aDocRect.Left()) - MINFLY;
+                    aSz.Width() = (aDocRect.Left() - aObjBound.Right()) + MINFLY;
+                if ( aObjBound.Bottom() < aDocRect.Top() )
+                    aSz.Height() = (aDocRect.Top() - aObjBound.Bottom()) + MINFLY;
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
             }
