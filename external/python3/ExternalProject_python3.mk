@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				OPT="$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS)")) \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
-			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit) \
+			$(if $(filter INTEL,$(CPUNAME)), --enable-universalsdk=$(MACOSX_SDK_PATH)) \
 			--enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
 		) \
