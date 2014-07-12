@@ -193,14 +193,14 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         GetPageView()->GetPage()->SetSize( rNewSz );
 
     // Limitation of the work area
-    const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
+    const Rectangle aDocRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
     bool bCheckDrawObjs = false;
-    if ( aRect != rOldWork )
+    if ( aDocRect != rOldWork )
     {
-        if ( rOldWork.Bottom() > aRect.Bottom() || rOldWork.Right() > aRect.Right())
+        if ( rOldWork.Bottom() > aDocRect.Bottom() || rOldWork.Right() > aDocRect.Right())
             bCheckDrawObjs = true;
-        GetDrawView()->SetWorkArea( aRect );
+        GetDrawView()->SetWorkArea( aDocRect );
     }
     if ( !bCheckDrawObjs )
         return;
@@ -235,23 +235,23 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            const Rectangle aBound( pObj->GetCurrentBoundRect() );
-            if ( !aRect.IsInside( aBound ) )
+            const Rectangle aObjBound( pObj->GetCurrentBoundRect() );
+            if ( !aDocRect.IsInside( aObjBound ) )
             {
                 Size aSz;
-                if ( aBound.Left() > aRect.Right() )
-                    aSz.Width() = (aRect.Right() - aBound.Left()) - MINFLY;
-                if ( aBound.Top() > aRect.Bottom() )
-                    aSz.Height() = (aRect.Bottom() - aBound.Top()) - MINFLY;
+                if ( aObjBound.Left() > aDocRect.Right() )
+                    aSz.Width() = (aDocRect.Right() - aObjBound.Left()) - MINFLY;
+                if ( aObjBound.Top() > aDocRect.Bottom() )
+                    aSz.Height() = (aDocRect.Bottom() - aObjBound.Top()) - MINFLY;
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
 
                 // Don't let large objects dissappear to the top
                 aSz.Width() = aSz.Height() = 0;
-                if ( aBound.Bottom() < aRect.Top() )
-                    aSz.Width() = (aBound.Bottom() - aRect.Top()) - MINFLY;
-                if ( aBound.Right() < aRect.Left() )
-                    aSz.Height() = (aBound.Right() - aRect.Left()) - MINFLY;
+                if ( aObjBound.Bottom() < aDocRect.Top() )
+                    aSz.Width() = (aObjBound.Bottom() - aDocRect.Top()) - MINFLY;
+                if ( aObjBound.Right() < aDocRect.Left() )
+                    aSz.Height() = (aObjBound.Right() - aDocRect.Left()) - MINFLY;
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
             }
