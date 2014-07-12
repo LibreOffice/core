@@ -1914,36 +1914,41 @@ namespace
     };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
-        std::vector<sal_uLong> m_aSaveArr;
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
+        std::vector<MarkEntry> m_aUnoCrsrEntries;
+        std::vector<sal_uLong> m_aSaveArr;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
             m_aRedlineEntries.clear();
+            m_aUnoCrsrEntries.clear();
             m_aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aSaveArr.empty();
+            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aUnoCrsrEntries.empty() && m_aSaveArr.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
             SaveRedlines(pDoc, nNode, nCntnt);
+            SaveUnoCrsrs(pDoc, nNode, nCntnt);
             return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aSaveArr, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
             RestoreBkmks(pDoc, nNode, nOffset);
             RestoreRedlines(pDoc, nNode, nOffset);
-            return _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
+            _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
+            RestoreUnoCrsrs(pDoc, nNode, nOffset);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
             RestoreBkmksLen(rNd, nLen, nCorrLen);
             RestoreRedlinesLen(rNd, nLen, nCorrLen);
-            return _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
+            _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
+            RestoreUnoCrsrsLen(rNd, nLen, nCorrLen);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
@@ -1953,11 +1958,50 @@ namespace
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
             inline void RestoreRedlinesLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
+            inline void RestoreUnoCrsrsLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
             inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
+    static void lcl_ChkPaM( std::vector<MarkEntry>& rMarkEntries, sal_uLong nNode, sal_Int32 nCntnt,
+                    const SwPaM& rPam, const long int nIdx,
+                    bool bChkSelDirection )
+    {
+        // Respect direction of selection
+        bool bBound1IsStart = !bChkSelDirection ||
+                            ( *rPam.GetPoint() < *rPam.GetMark()
+                                ? rPam.GetPoint() == &rPam.GetBound()
+                                : rPam.GetMark() == &rPam.GetBound());
+
+        const SwPosition* pPos = &rPam.GetBound( true );
+        if( pPos->nNode.GetIndex() == nNode &&
+            ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
+                                : pPos->nContent.GetIndex() <= nCntnt ))
+        {
+            const MarkEntry aEntry = { nIdx, false, pPos->nContent.GetIndex() };
+            rMarkEntries.push_back(aEntry);
+        }
+
+        pPos = &rPam.GetBound( false );
+        if( pPos->nNode.GetIndex() == nNode &&
+            ( (bBound1IsStart && bChkSelDirection)
+                        ? pPos->nContent.GetIndex() <= nCntnt
+                        : pPos->nContent.GetIndex() < nCntnt ))
+        {
+            const MarkEntry aEntry = { nIdx, true, pPos->nContent.GetIndex() };
+            rMarkEntries.push_back(aEntry);
+        }
+    }
+#if OSL_DEBUG_LEVEL > 0
+    static void DumpEntries(std::vector<MarkEntry>* pEntries)
+    {
+        BOOST_FOREACH(MarkEntry& aEntry, *pEntries)
+            aEntry.Dump();
+    }
+#endif
 }
 
 void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
@@ -2090,6 +2134,126 @@ void CntntIdxStoreImpl::RestoreRedlinesLen (SwNode& rNd, sal_uLong nLen, sal_Int
                 : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
             pPos->nNode = *pCNd;
             pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
+        }
+    }
+}
+void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+{
+    long int nIdx = 0;
+    BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
+    {
+        FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
+            lcl_ChkPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, nIdx++, false );
+        FOREACHPAM_END()
+        const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
+        if( pUnoTblCrsr )
+        {
+            FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
+                lcl_ChkPaM( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR, nIdx++, false );
+            FOREACHPAM_END()
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+{
+    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aUnoCrsrEntries)
+    {
+        sal_uInt16 nCnt = 0;
+        BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
+        {
+            SAL_INFO("sw.core", "::Looking for Index " << aEntry.m_nIdx << " now at PaM Index" << nCnt << ": " << pUnoCrsr);
+            SwPosition* pPos = NULL;
+            FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
+                if( aEntry.m_nIdx == nCnt )
+                {
+                    SAL_INFO("sw.core", "Found PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
+                    pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
+                    break;
+                }
+                else
+                    SAL_INFO("sw.core", "Skipping PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
+                ++nCnt;
+            FOREACHPAM_END()
+            const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
+            if( !pPos && pUnoTblCrsr )
+            {
+                FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
+                    if( aEntry.m_nIdx == nCnt )
+                    {
+                        SAL_INFO("sw.core", "Found Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
+                        pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
+                        break;
+                    }
+                    else
+                        SAL_INFO("sw.info", "Skipping Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
+                    ++nCnt;
+                FOREACHPAM_END()
+            }
+            if( pPos )
+            {
+                SAL_INFO("sw.info", "Would be setting " << pPos << " on Node " << nNode << " for Index " << aEntry.m_nIdx);
+                //pPos->nNode = *pCNd;
+                //pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
+                assert(&pPos->nNode.GetNode() == pCNd);
+#if OSL_DEBUG_LEVEL > 0
+                if(pPos->nNode.GetIndex() != pCNd->GetIndex())
+                {
+                    DumpSaves(m_aSaveArr);
+                    DumpEntries(&m_aUnoCrsrEntries);
+                    SAL_INFO("sw.core", aEntry.m_nIdx << ": Node expected to set to " << pCNd->GetIndex() << " but actually should be " << pPos->nNode.GetIndex() );
+                }
+#endif
+                SAL_INFO_IF(pPos->nContent != aEntry.m_nCntnt + nOffset ,"sw.core", "On Node" << pCNd->GetIndex() << "Content expected to set to " << aEntry.m_nCntnt << "(" << nOffset << ")" << " but actually should be " << pPos->nContent.GetIndex() );
+                assert(pPos->nContent == aEntry.m_nCntnt + nOffset);
+                break;
+            }
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreUnoCrsrsLen (SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
+{
+    const SwDoc* pDoc = rNd.GetDoc();
+    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aUnoCrsrEntries)
+    {
+        if( aEntry.m_nCntnt < nCorrLen )
+        {
+            sal_uInt16 nCnt = 0;
+            BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
+            {
+                SwPosition* pPos = NULL;
+                FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
+                    if( aEntry.m_nIdx == nCnt )
+                    {
+                        pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
+                        break;
+                    }
+                    ++nCnt;
+                FOREACHPAM_END()
+                const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
+                if( !pPos && pUnoTblCrsr )
+                {
+                    FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
+                        if( aEntry.m_nIdx == nCnt )
+                        {
+                            pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
+                            break;
+                        }
+                        ++nCnt;
+                    FOREACHPAM_END()
+                }
+                if( pPos )
+                {
+                    //pPos->nNode = rNd;
+                    //pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
+                    assert(&pPos->nNode.GetNode() == pCNd);
+                    assert(pPos->nContent == std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
+                    break;
+                }
+            }
         }
     }
 }
