@@ -58,6 +58,7 @@ public:
     void testSharedStringPoolPurge();
     void testFdo44286();
     void testFdo60915();
+    void testFdo63230();
     void testI116701();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testSharedStringPoolPurge);
     CPPUNIT_TEST(testFdo44286);
     CPPUNIT_TEST(testFdo60915);
+    CPPUNIT_TEST(testFdo63230);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
 
@@ -465,6 +467,32 @@ void Test::testFdo60915()
             0x0E54, 0x0E52
         };
         sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+}
+
+void Test::testFdo63230()
+{
+    LanguageType eLang = LANGUAGE_ENGLISH;
+    OUString sCode = "YYYY-MM-DD", sExpected;
+    double fPreviewNumber;
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("Africa/Accra"));
+        sExpected = "1900-01-01";
+        fPreviewNumber = 2;
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("Europe/Berlin"));
+        sExpected = "1893-04-01";
+        fPreviewNumber = -2464;
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("Pacific/Fiji"));
+        sExpected = "1915-10-26";
+        fPreviewNumber = 5778;
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
 }
