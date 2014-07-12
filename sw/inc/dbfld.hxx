@@ -109,6 +109,9 @@ public:
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
+
+    static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFmt,
+                             double &aNumber, sal_Int32 nColumnType, SwDBField *pField = NULL );
 };
 
 inline  void SwDBField::SetExpansion(const OUString& rStr)
