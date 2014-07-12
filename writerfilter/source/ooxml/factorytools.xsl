@@ -214,17 +214,6 @@ case NN_<namesapce/@name> | DEFINE_<rng:define/@name>:
 </xsl:template>
 
 <!--
-    Returns the identifier for a namespace.
-
-NS_<namespace/@alias>
-
--->
-<xsl:template name="namespaceid">
-  <xsl:text>NS_</xsl:text>
-  <xsl:value-of select="@alias"/>
-</xsl:template>
-
-<!--
     Returns the value of the @resource attribute of the <resource>
     node according to the current <define>.
 -->
@@ -279,15 +268,6 @@ NS_<namespace/@alias>
 <xsl:template name="factoryclassname">
     <xsl:text>OOXMLFactory_</xsl:text>
     <xsl:value-of select="translate(@name, '-', '_')"/>
-</xsl:template>
-
-<xsl:template name="factoryincludes">
-    <xsl:for-each select="/model/namespace">
-        <xsl:text>
-#include "OOXMLFactory_</xsl:text>
-        <xsl:value-of select="@name"/>
-        <xsl:text>.hxx"</xsl:text>
-    </xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>
