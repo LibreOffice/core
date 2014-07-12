@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -72,6 +73,7 @@ class SvNumberFormatter;
 class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
+class SwCalc;
 
 // -----------------------------------------------------------------------
 
@@ -275,7 +277,6 @@ public:
                           const String& rColNm );
 
     inline sal_Bool     IsInMerge() const   { return bInMerge; }
-    void            EndMerge();
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
@@ -310,6 +311,8 @@ public:
 
     sal_Bool            GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
                                 OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+    sal_Bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
+                                              sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
     sal_Bool            ToNextMergeRecord();
     sal_Bool            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
 

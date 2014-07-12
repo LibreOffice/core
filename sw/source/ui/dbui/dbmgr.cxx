@@ -126,6 +126,10 @@
 #include <unomid.h>
 #include <section.hxx>
 #include <rootfrm.hxx>
+#include <fmtpdsc.hxx>
+#include <ndtxt.hxx>
+#include <calc.hxx>
+#include <dbfld.hxx>
 
 using namespace ::osl;
 using namespace ::svx;
@@ -441,7 +445,15 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             break;
     }
 
-    EndMerge();
+    DELETEZ( pImpl->pMergeData );
+
+    // Recalculate original section visibility states, as field changes aren't
+    // tracked (not undo-able).  Has to be done, after pImpl->pMergeData is
+    //  gone, otherwise merge data is used for calculation!
+    rMergeDesc.rSh.ViewShell::UpdateFlds();
+
+    bInMerge = sal_False;
+
     return bRet;
 }
 
@@ -1071,7 +1083,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             pWorkDoc->SetNewDBMgr( this );
                             pWorkDoc->EmbedAllLinks();
 
-                            // #i69485# lock fields to prevent access to the result set while calculating layout
+                            // #i69458# lock fields to prevent access to the result set while calculating layout
                             rWorkShell.LockExpFlds();
                             rWorkShell.CalcLayout();
                             rWorkShell.UnlockExpFlds();
@@ -1739,15 +1751,6 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
     return sRet;
 }
 
-// releases the merge data source table or query after merge is completed
-void    SwNewDBMgr::EndMerge()
-{
-    OSL_ENSURE(bInMerge, "merge is not active");
-    bInMerge = sal_False;
-    delete pImpl->pMergeData;
-    pImpl->pMergeData = 0;
-}
-
 // checks if a desired data source table or query is open
 sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
             const String& rTableOrQuery, sal_Bool bMergeOnly)
@@ -1858,6 +1861,79 @@ sal_Bool SwNewDBMgr::ToNextMergeRecord()
 {
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
+}
+
+sal_Bool SwNewDBMgr::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
+                                            sal_uInt16 nLanguage, bool asString, SwCalc &rCalc )
+{
+    if (!(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is()))
+        return false;
+
+    uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
+    if(xColsSupp.is())
+    {
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
+        const Sequence<OUString> aColNames = xCols->getElementNames();
+        const OUString* pColNames = aColNames.getConstArray();
+        OUString aString;
+
+        const bool bExistsNextRecord = ExistsNextRecord();
+
+        for( int nCol = 0; nCol < aColNames.getLength(); nCol++ )
+        {
+            const OUString &rColName = pColNames[nCol];
+
+            // empty variables, if no more records;
+            if( !bExistsNextRecord )
+            {
+                rCalc.VarChange( rColName, 0 );
+                continue;
+            }
+
+            double aNumber = DBL_MAX;
+            if( lcl_GetColumnCnt(pImpl->pMergeData, rColName, nLanguage, aString, &aNumber) )
+            {
+                // get the column type
+                sal_Int32 nColumnType;
+                Any aCol = xCols->getByName( pColNames[nCol] );
+                uno::Reference<XPropertySet> xCol;
+                aCol >>= xCol;
+                Any aType = xCol->getPropertyValue( "Type" );
+                aType >>= nColumnType;
+
+                sal_uInt32 nFmt;
+                if( !GetMergeColumnCnt(pColNames[nCol], nLanguage, aString, &aNumber, &nFmt) )
+                    continue;
+
+                // aNumber is overwritten by SwDBField::FormatValue, so store initial status
+                bool colIsNumber = aNumber != DBL_MAX;
+                bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFmt,
+                                                           aNumber, nColumnType, NULL );
+                if( colIsNumber )
+                {
+                    if( bValidValue )
+                    {
+                        SwSbxValue aValue;
+                        if( !asString )
+                            aValue.PutDouble( aNumber );
+                        else
+                            aValue.PutString( aString );
+                        SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
+                        rCalc.VarChange( pColNames[nCol], aValue );
+                    }
+                }
+                else
+                {
+                    SwSbxValue aValue;
+                    aValue.PutString( aString );
+                    SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aString );
+                    rCalc.VarChange( pColNames[nCol], aValue );
+                }
+            }
+        }
+        return bExistsNextRecord;
+    }
+    return false;
 }
 
 sal_Bool SwNewDBMgr::ToNextRecord(
@@ -2851,7 +2927,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     }
                 }
 
-                // #i69485# lock fields to prevent access to the result set while calculating layout
+                // #i69458# lock fields to prevent access to the result set while calculating layout
                 rWorkShell.LockExpFlds();
                 // create a layout
                 rWorkShell.CalcLayout();
