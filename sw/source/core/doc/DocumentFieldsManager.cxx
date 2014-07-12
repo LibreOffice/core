@@ -895,7 +895,12 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
 
     // already set the current record number
     SwDBManager* pMgr = m_rSwdoc.GetDBManager();
-    pMgr->CloseAll(false);
+    pMgr->CloseAll( false );
+
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper* pLclData = aSysLocale.GetLocaleDataPtr();
+    const long nLang = pLclData->getLanguageTag().getLanguageType();
+    bool bCanFill = pMgr->FillCalcWithMergeData( m_rSwdoc.GetNumberFormatter(), nLang, true, aCalc );
 #endif
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
@@ -990,6 +995,8 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
 #if HAVE_FEATURE_DBCONNECTIVITY
         {
             UpdateDBNumFlds( *(SwDBNameInfField*)pFld, aCalc );
+            if( bCanFill )
+                bCanFill = pMgr->FillCalcWithMergeData( m_rSwdoc.GetNumberFormatter(), nLang, true, aCalc );
         }
 #endif
         break;
