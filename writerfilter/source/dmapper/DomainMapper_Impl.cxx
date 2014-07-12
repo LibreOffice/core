@@ -1449,6 +1449,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         try
         {
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
+            bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
             if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
             {
                 PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1460,7 +1461,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
                 // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
-                if (GetSettingsTable()->GetEvenAndOddHeaders())
+                if (!bFirst && GetSettingsTable()->GetEvenAndOddHeaders())
                     xPageStyle->setPropertyValue(rPropNameSupplier.GetName(ePropShared), uno::makeAny(false));
 
                 //set the interface
@@ -1891,6 +1892,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         rPropNameSupplier.GetName( PROP_OPAQUE ),
                         uno::makeAny( true ) );
         }
+        m_bParaChanged = true;
     }
     catch ( const uno::Exception& e )
     {

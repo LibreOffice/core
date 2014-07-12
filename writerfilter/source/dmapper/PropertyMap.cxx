@@ -422,6 +422,12 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                 m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
                         xTextFactory->createInstance("com.sun.star.style.PageStyle"),
                         uno::UNO_QUERY);
+                // Ensure that m_aFollowPageStyle has been created
+                GetPageStyle( xPageStyles, xTextFactory, false );
+                // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
+                m_aFirstPageStyle->setPropertyValue("FollowStyle",
+                    uno::makeAny(m_sFollowPageStyleName));
+
                 if (xPageStyles.is())
                     xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
             }
@@ -1123,11 +1129,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if( xColumns.is() )
                 xFirstPageStyle->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
-
-            // If the 'Different First Page' flag is turned on - do not ignore it
-            // If the 'Diffferent First Page' is non-checked, it must be checked - the flag should be imported (so it would look in LO like in Word)
-            xFirstPageStyle->setPropertyValue(rPropNameSupplier.GetName( PROP_FIRST_IS_SHARED ), uno::makeAny( false ));
-            xFollowPageStyle->setPropertyValue(rPropNameSupplier.GetName( PROP_FIRST_IS_SHARED ), uno::makeAny( false ));
         }
 
         ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
@@ -1139,41 +1140,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
             0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
-                if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
-                {
-                    if (xRangeProperties.is() && rDM_Impl.IsNewDoc())
-                        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                                uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
-                }
-                else
-                {
-                    // In this miserable situation (second or later section on a title page), make sure that the header / footer is not lost.
-                    uno::Reference< container::XNameAccess > xPageStyles(rDM_Impl.GetPageStyles(), uno::UNO_QUERY);
-                    if (xPageStyles->hasByName(m_sFollowPageStyleName))
-                    {
-                        uno::Reference<beans::XPropertySet> xCurrent(xPageStyles->getByName(rPropNameSupplier.GetName(PROP_STANDARD)), uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySet> xFollow(xPageStyles->getByName(m_sFollowPageStyleName), uno::UNO_QUERY);
+                if (xRangeProperties.is() && rDM_Impl.IsNewDoc())
+                    xRangeProperties->setPropertyValue(
+                        rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                        uno::makeAny( m_bTitlePage ?  m_sFirstPageStyleName
+                                      : m_sFollowPageStyleName ));
 
-                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON)).get<sal_Bool>())
-                        {
-                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON), uno::makeAny(sal_True));
-                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
-                            xCurrentRange->setString("");
-                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
-                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
-                            xCurrentTxt->copyText(xFollowTxt);
-                        }
-                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON)).get<sal_Bool>())
-                        {
-                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON), uno::makeAny(sal_True));
-                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
-                            xCurrentRange->setString("");
-                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
-                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
-                            xCurrentTxt->copyText(xFollowTxt);
-                        }
-                    }
-                }
                 // handle page breaks with odd/even page numbering
                 style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)
