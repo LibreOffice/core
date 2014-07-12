@@ -2055,7 +2055,7 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 
         sal_uInt16 nCnt = 0;
         BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
         {
-            SAL_INFO("sw.core", "::Looking for Index " << aEntry.m_nIdx << " now at PaM Index" << nCnt << ": " << pUnoCrsr);
+            SAL_INFO("sw.core", "Looking for Index " << aEntry.m_nIdx << " now at PaM Index" << nCnt << ": " << pUnoCrsr);
             SwPosition* pPos = NULL;
             FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
                 if( aEntry.m_nIdx == nCnt )
