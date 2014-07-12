@@ -794,14 +794,20 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         // --> #i71182#
         // only change position - do not lose other attributes
+
         SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
-        aHori.SetPos( nHoriPos );
-        GetFrmFmt().SetFmtAttr( aHori );
+        if (nHoriPos != aHori.GetPos()) {
+            aHori.SetPos( nHoriPos );
+            InvalidateObjRectWithSpaces();
+            GetFrmFmt().SetFmtAttr( aHori );
+        }
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
-
-        aVert.SetPos( nVertPos );
-        GetFrmFmt().SetFmtAttr( aVert );
+        if (nVertPos != aVert.GetPos()) {
+            aVert.SetPos( nVertPos );
+            InvalidateObjRectWithSpaces();
+            GetFrmFmt().SetFmtAttr( aVert );
+        }
 
         // --> #i36010# - set layout direction of the position
         GetFrmFmt().SetPositionLayoutDir(
