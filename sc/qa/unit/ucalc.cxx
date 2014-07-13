@@ -5442,6 +5442,93 @@ void Test::testSortRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortRefUpdate2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Sort");
+
+    // Set up the sheet.
+    const char* aData[][2] = {
+        { "F1", "F2" },
+        { "9", "=RC[-1]" },
+        { "2", "=RC[-1]" },
+        { "6", "=RC[-1]" },
+        { "4", "=RC[-1]" },
+        { 0, 0 } // terminator
+    };
+
+    for (SCROW i = 0; aData[i][0]; ++i)
+    {
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
+        m_pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
+    }
+
+    // Check the values in B2:B5.
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Define A1:B5 as sheet-local anonymous database range, else sort wouldn't run.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 4));
+
+    // Sort A1:B5 by column A (with a row header).
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 4;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sort result in column A.
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+
+    // and column B.
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    // Formulas in column B should still point to their respective left neighbor cell.
+    for (SCROW i = 1; i <= 4; ++i)
+    {
+        if (!checkFormula(*m_pDoc, ScAddress(1,i,0), "RC[-1]"))
+            CPPUNIT_FAIL("Wrong formula!");
+    }
+
+    // Undo and check the result in column B.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    // and redo.
+    pUndoMgr->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testShiftCells()
 {
     m_pDoc->InsertTab(0, "foo");

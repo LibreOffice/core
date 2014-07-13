@@ -347,6 +347,7 @@ public:
     void testSortInFormulaGroup();
     void testSortWithCellFormats();
     void testSortRefUpdate();
+    void testSortRefUpdate2();
     void testShiftCells();
 
     void testNoteBasic();
@@ -517,6 +518,7 @@ public:
     CPPUNIT_TEST(testSortInFormulaGroup);
     CPPUNIT_TEST(testSortWithCellFormats);
     CPPUNIT_TEST(testSortRefUpdate);
+    CPPUNIT_TEST(testSortRefUpdate2);
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testNoteDeleteRow);
