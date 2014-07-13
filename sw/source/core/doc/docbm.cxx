@@ -21,6 +21,7 @@
 #include <bookmrk.hxx>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/function.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
@@ -1804,12 +1805,41 @@ namespace
         }
 #endif
     };
+    struct OffsetUpdater
+    {
+        const SwCntntNode* m_pNewCntntNode;
+        const sal_Int32 m_nOffset;
+        OffsetUpdater(SwCntntNode* pNewCntntNode, sal_Int32 nOffset)
+            : m_pNewCntntNode(pNewCntntNode), m_nOffset(nOffset) {};
+        void operator()(SwPosition& rPos, sal_Int32 nCntnt) const
+        {
+            rPos.nNode = *m_pNewCntntNode;
+            rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), nCntnt + m_nOffset);
+        };
+    };
+    struct LimitUpdater
+    {
+        const SwCntntNode* m_pNewCntntNode;
+        const sal_uLong m_nLen;
+        const sal_Int32 m_nCorrLen;
+        LimitUpdater(SwCntntNode* pNewCntntNode, sal_uLong nLen, sal_Int32 nCorrLen)
+            : m_pNewCntntNode(pNewCntntNode), m_nLen(nLen), m_nCorrLen(nCorrLen) {};
+        void operator()(SwPosition& rPos, sal_Int32 nCntnt) const
+        {
+            if( nCntnt < m_nCorrLen )
+            {
+                rPos.nNode = *m_pNewCntntNode;
+                rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), std::min( nCntnt, static_cast<sal_Int32>(m_nLen) ) );
+            }
+        };
+    };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
         std::vector<MarkEntry> m_aUnoCrsrEntries;
         std::vector<sal_uLong> m_aSaveArr;
+        typedef boost::function<void (SwPosition& rPos, sal_Int32 nCntnt)> updater_t;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
@@ -1830,29 +1860,31 @@ namespace
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
-            RestoreBkmks(pDoc, nNode, nOffset);
-            RestoreRedlines(pDoc, nNode, nOffset);
+            SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+            updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
+            RestoreBkmks(pDoc, aUpdater);
+            RestoreRedlines(pDoc, aUpdater);
             _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
-            RestoreUnoCrsrs(pDoc, nNode, nOffset);
+            RestoreUnoCrsrs(pDoc, aUpdater);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
-            RestoreBkmksLen(rNd, nLen, nCorrLen);
-            RestoreRedlinesLen(rNd, nLen, nCorrLen);
+            SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+            SwDoc* pDoc = rNd.GetDoc();
+            updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
+            RestoreBkmks(pDoc, aUpdater);
+            RestoreRedlines(pDoc, aUpdater);
             _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
-            RestoreUnoCrsrsLen(rNd, nLen, nCorrLen);
+            RestoreUnoCrsrs(pDoc, aUpdater);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
-            inline void RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
-            inline void RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline void RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
-            inline void RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
-            inline void RestoreRedlinesLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
-            inline void RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
-            inline void RestoreUnoCrsrsLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
             inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
@@ -1933,38 +1965,16 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
     }
 }
 
-void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     BOOST_FOREACH(const MarkEntry& aEntry, m_aBkmkEntries)
     {
         if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
         {
             SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
-            aNewPos.nNode = *pCNd;
-            aNewPos.nContent.Assign(pCNd, aEntry.m_nCntnt + nOffset);
+            rUpdater(aNewPos, aEntry.m_nCntnt);
             SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
-        }
-    }
-}
-
-void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
-{
-    const SwDoc* pDoc = rNd.GetDoc();
-    IDocumentMarkAccess* const pMarkAccess = const_cast<IDocumentMarkAccess*>(pDoc->getIDocumentMarkAccess());
-    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aBkmkEntries)
-    {
-        if( aEntry.m_nCntnt < nCorrLen )
-        {
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
-            {
-                SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
-                aNewPos.nNode = *pCNd;
-                aNewPos.nContent.Assign(pCNd, ::std::min(aEntry.m_nCntnt, static_cast<sal_Int32>(nLen)));
-                SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
-            }
         }
     }
 }
@@ -1996,9 +2006,8 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
     }
 }
 
-void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 {
-    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     SwPosition* pPos = NULL;
     BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
@@ -2006,29 +2015,10 @@ void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 
         pPos = (SwPosition*)( aEntry.m_bOther
             ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
             : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
-        pPos->nNode = *pCNd;
-        pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
+        rUpdater(*pPos, aEntry.m_nCntnt);
     }
 }
 
-void CntntIdxStoreImpl::RestoreRedlinesLen (SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
-{
-    const SwDoc* pDoc = rNd.GetDoc();
-    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    SwPosition* pPos = NULL;
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
-    {
-        if( aEntry.m_nCntnt < nCorrLen )
-        {
-            pPos = (SwPosition*)( aEntry.m_bOther
-                ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
-                : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
-            pPos->nNode = *pCNd;
-            pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
-        }
-    }
-}
 void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
     long int nIdx = 0;
@@ -2047,9 +2037,8 @@ void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
     }
 }
 
-void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater)
 {
-    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     BOOST_FOREACH(const MarkEntry& aEntry, m_aUnoCrsrEntries)
     {
         sal_uInt16 nCnt = 0;
@@ -2085,53 +2074,9 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 
             }
             if( pPos )
             {
-                SAL_INFO("sw.core", "Would be setting " << pPos << " on Node " << nNode << " for Index " << aEntry.m_nIdx);
-                pPos->nNode = *pCNd;
-                pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
+                SAL_INFO("sw.core", "Would be setting " << pPos << " for Index " << aEntry.m_nIdx);
+                rUpdater(*pPos, aEntry.m_nCntnt);
                 break;
-            }
-        }
-    }
-}
-
-void CntntIdxStoreImpl::RestoreUnoCrsrsLen (SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
-{
-    const SwDoc* pDoc = rNd.GetDoc();
-    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aUnoCrsrEntries)
-    {
-        if( aEntry.m_nCntnt < nCorrLen )
-        {
-            sal_uInt16 nCnt = 0;
-            BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
-            {
-                SwPosition* pPos = NULL;
-                FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
-                    if( aEntry.m_nIdx == nCnt )
-                    {
-                        pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
-                        break;
-                    }
-                    ++nCnt;
-                FOREACHPAM_END()
-                const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
-                if( !pPos && pUnoTblCrsr )
-                {
-                    FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
-                        if( aEntry.m_nIdx == nCnt )
-                        {
-                            pPos = &PCURCRSR->GetBound( !aEntry.m_bOther );
-                            break;
-                        }
-                        ++nCnt;
-                    FOREACHPAM_END()
-                }
-                if( pPos )
-                {
-                    pPos->nNode = rNd;
-                    pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
-                    break;
-                }
             }
         }
     }
