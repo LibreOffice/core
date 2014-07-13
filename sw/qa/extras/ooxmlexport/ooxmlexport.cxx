@@ -3567,8 +3567,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "xpath","/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
 }
 
-#endif
-
 DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
 {
    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
@@ -3621,6 +3619,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
                 "PartName",
                 "/word/embeddings/oleObject1.doc");
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
