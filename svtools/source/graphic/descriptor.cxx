@@ -63,25 +63,17 @@ GraphicDescriptor::GraphicDescriptor() :
 {
 }
 
-
-
 GraphicDescriptor::~GraphicDescriptor()
     throw()
 {
 }
 
-
-
 void GraphicDescriptor::init( const ::Graphic& rGraphic )
-    throw()
 {
     mpGraphic = &rGraphic;
 }
 
-
-
 void GraphicDescriptor::init( const OUString& rURL )
-    throw()
 {
     boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ ));
 
@@ -89,18 +81,13 @@ void GraphicDescriptor::init( const OUString& rURL )
         implCreate( *pIStm, &rURL );
 }
 
-
-
 void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const OUString& rURL )
-    throw()
 {
     boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rxIStm ));
 
     if( pIStm )
         implCreate( *pIStm, &rURL );
 }
-
-
 
 void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 {

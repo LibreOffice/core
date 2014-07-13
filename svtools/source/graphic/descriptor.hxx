@@ -70,9 +70,9 @@ public:
     GraphicDescriptor();
     virtual ~GraphicDescriptor() throw();
 
-     void init( const ::Graphic& rGraphic ) throw();
-    void init( const OUString& rURL ) throw();
-    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm, const OUString& rURL ) throw();
+    void init( const ::Graphic& rGraphic );
+    void init( const OUString& rURL );
+    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm, const OUString& rURL );
 
     static OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
