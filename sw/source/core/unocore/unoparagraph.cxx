@@ -800,9 +800,6 @@ throw (uno::RuntimeException)
                             rTxtNode, &pAttrSet, *pEntry, bAttrSetFetched );
                 rResult.State  = eState;
 
-//                if (bDirectValuesOnly  &&  PropertyState_DIRECT_VALUE != eState)
-//                    rResult.Result = beans::TolerantPropertySetResultType::NO_DIRECT_VALUE;
-//                else
                 rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
                 if (!bDirectValuesOnly ||
                     (beans::PropertyState_DIRECT_VALUE == eState))
@@ -940,7 +937,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
-    // SwUnoCrsr& rUnoCrsr,
     const SwTxtNode& rTxtNode,
     const SwAttrSet** ppSet,
     const SfxItemPropertySimpleEntry& rEntry,
@@ -1182,7 +1178,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 
             pTemp->SetMark();
             *pTemp->GetPoint() = aEnd;
-            //pTemp->Exchange();
 
             SwUnoCursorHelper::SelectPam(*pTemp, true);
 

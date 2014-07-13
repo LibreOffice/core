@@ -1553,7 +1553,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                 {
@@ -2080,19 +2079,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
         // #i73249#
-        // Attribute AlternativeText was never published.
-        // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
-//        else if(eType != FLYCNTTYPE_FRM &&
-//                FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
-//        {
-//            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-//            if(pIdx)
-//            {
-//                SwNodeIndex aIdx(*pIdx, 1);
-//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                aAny <<= OUString(pNoTxt->GetAlternateText());
-//            }
-//        }
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
             SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
@@ -2116,8 +2102,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 // --> OD #i85105#
-//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                Size aActSize = ((SwGrfNode*)pNoTxt)->GetTwipSize();
                 Size aActSize;
                 {
                     SwGrfNode* pGrfNode = dynamic_cast<SwGrfNode*>(aIdx.GetNode().GetNoTxtNode());
@@ -2493,19 +2477,6 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 }
             }
             // #i73249#
-            // Attribute AlternativeText was never published.
-            // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
-//            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID )
-//            {
-//                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-//                if(pIdx)
-//                {
-//                    SwNodeIndex aIdx(*pIdx, 1);
-//                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                    pNoTxt->SetAlternateText(aEmptyOUStr);
-//                }
-//            }
-            // New attribute Title
             else if( FN_UNO_TITLE == pEntry->nWID )
             {
                 SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
@@ -2906,10 +2877,6 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 }
                 if ( xIPObj.is() )
                 {
-                    //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
-                    //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->getPrinter( false ) )
-                    //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
-
                     UnoActionContext aAction(pDoc);
                     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
                     if(!bSizeFound)
@@ -3271,11 +3238,6 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
         ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
                 GetDoc()->CreateUnoCrsr(aPos, false));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable(true) ||
-//          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
-//          throw  uno::RuntimeException() );
         aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;

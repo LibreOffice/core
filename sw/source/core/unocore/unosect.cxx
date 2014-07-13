@@ -1432,7 +1432,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                         }
                     }
-                    else //if(RES_BACKGROUND == pEntry->nWID)
+                    else
                     {
                         if (!m_pImpl->m_pProps->m_pBrushItem.get())
                         {

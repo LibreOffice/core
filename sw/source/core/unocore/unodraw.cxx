@@ -781,7 +781,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor(
                         pPage->GetDrawView()->GetMarkedObjectList(),
-                        FLY_AT_PARA/*int eAnchorId*/,
+                        FLY_AT_PARA,
                         true, false );
 
                     pPage->GetDrawView()->UnmarkAll();
@@ -815,7 +815,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
-                        FLY_AT_PARA/*int eAnchorId*/,
+                        FLY_AT_PARA,
                         true, false );
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             pPage->RemovePageView();

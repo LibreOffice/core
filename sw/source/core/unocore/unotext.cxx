@@ -1337,7 +1337,7 @@ SwXText::Impl::finishOrAppendParagraph(
             aEx.Message = sMessage;
             throw aEx;
         }
-        else // if(bRuntimeException)
+        else
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;
@@ -1384,8 +1384,6 @@ SwXText::insertTextPortion(
     OUString sMessage;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-//        SwPaM aPam(*pStartNode->EndOfSectionNode());
-    //aPam.Move( fnMoveBackward, fnGoNode );
     SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
     m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
 
@@ -1426,7 +1424,7 @@ SwXText::insertTextPortion(
             aEx.Message = sMessage;
             throw aEx;
         }
-        else //if(bRuntimeException)
+        else
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;
@@ -1771,7 +1769,7 @@ SwXText::convertToTextFrame(
             aEx.Message = sMessage;
             throw aEx;
         }
-        else //if(bRuntimeException)
+        else
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;

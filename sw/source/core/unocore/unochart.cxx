@@ -49,7 +49,6 @@
 
 using namespace ::com::sun::star;
 
-//static
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 {
     if (!pDoc)

@@ -620,9 +620,6 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
 {
     static const sal_uLong nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
-
-//  if ( GetCrsrCnt() > nMaxLookup )
-//      return 0;
     bool bError = false;
     SwPaM *pTmpCrsr = &rPaM;
     do
@@ -2725,7 +2722,6 @@ bool SwUnoCursorHelper::ConvertSortProperties(
     for (sal_Int32 n = 0; n < rDescriptor.getLength(); ++n)
     {
         uno::Any aValue( pProperties[n].Value );
-//      String sPropName = pProperties[n].Name;
         const OUString& rPropName = pProperties[n].Name;
 
         // old and new sortdescriptor

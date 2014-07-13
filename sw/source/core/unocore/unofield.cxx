@@ -1828,7 +1828,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             sal_uInt16 nSubType = DS_PAGE;
             switch (m_pImpl->m_nServiceId)
             {
-//                  case SW_SERVICE_FIELDTYPE_PAGE_COUNT            : break;
                 case SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT       : nSubType = DS_PARA; break;
                 case SW_SERVICE_FIELDTYPE_WORD_COUNT            : nSubType = DS_WORD; break;
                 case SW_SERVICE_FIELDTYPE_CHARACTER_COUNT       : nSubType = DS_CHAR; break;

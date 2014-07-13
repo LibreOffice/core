@@ -304,8 +304,6 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , const SwTxtNode* pNode  )
 {
     PropertyState eNewState = PropertyState_DIRECT_VALUE;
-//    PropertyState_DEFAULT_VALUE
-//    PropertyState_AMBIGUOUS_VALUE
     bool bDone = true;
     switch(rEntry.nWID)
     {
@@ -427,7 +425,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     {
                         *pAny <<= pTxtNd->GetListId();
                     }
-                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                    else
                     {
                         sal_Bool bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
@@ -450,7 +448,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     {
                         *pAny <<= OUString();
                     }
-                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                    else
                         *pAny <<= false;
                 }
             }
@@ -860,10 +858,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
             }
-            // #i103817#
-            // outline numbering
             else
             {
+                // #i103817#
                 // outline numbering
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->GetOutlineNumRule();
@@ -912,7 +909,6 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
-//          lcl_SetTxtFmtColl(aValue, pUnoCrsr);
         break;
         case FN_UNO_PAGE_STYLE :
         break;
@@ -937,7 +933,6 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         case FN_UNO_NUM_LEVEL  :
         break;
         case FN_UNO_NUM_RULES:
-//          lcl_setNumberingProperty(aValue, pUnoCrsr);
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {

@@ -27,8 +27,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-//namespace chart
-//{
 namespace XMLRangeHelper
 {
 
@@ -63,7 +61,6 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 OUString getXMLStringFromCellRange( const CellRange & rRange );
 
 } //  namespace XMLRangeHelper
-//} //  namespace chart
 
 // INCLUDED_SW_SOURCE_CORE_UNOCORE_XMLRANGEHELPER_HXX
 #endif

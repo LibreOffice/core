@@ -155,12 +155,6 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
     uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
     if (!xBookmark.is())
     {
-        // FIXME: These belong in XTextFieldsSupplier
-        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
-        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
-        //else
         OSL_ENSURE(
             dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark) || IDocumentMarkAccess::GetType(rBookmark) == IDocumentMarkAccess::ANNOTATIONMARK,
             "<SwXBookmark::GetObject(..)>"

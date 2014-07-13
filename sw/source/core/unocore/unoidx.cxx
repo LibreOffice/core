@@ -500,7 +500,6 @@ throw (uno::RuntimeException, std::exception)
     sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
     {
-//      case TOX_INDEX:             break;
         case TOX_USER:          nObjectType = SW_SERVICE_USER_INDEX;
         break;
         case TOX_CONTENT:       nObjectType = SW_SERVICE_CONTENT_INDEX;

@@ -593,7 +593,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 xProjProv = new SwVbaProjectNameProvider;
                             pDoc->SetVBATemplateToProjectCache( xProjProv );
                         }
-            //xRet =  (cppu::OWeakObject*)xProjProv;
             xRet = xProjProv;
         }
 #endif
@@ -709,11 +708,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet = (cppu::OWeakObject*)pNewStyle;
         }
         break;
-//      SW_SERVICE_DUMMY_5
-//      SW_SERVICE_DUMMY_6
-//      SW_SERVICE_DUMMY_7
-//      SW_SERVICE_DUMMY_8
-//      SW_SERVICE_DUMMY_9
         case SW_SERVICE_FIELDTYPE_DATETIME:
         case SW_SERVICE_FIELDTYPE_USER:
         case SW_SERVICE_FIELDTYPE_SET_EXP:
@@ -1084,7 +1078,6 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     if(pFmts->empty())
         return;
     // #i104937#
-//    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
     const size_t nSize = pFmts->size();
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
@@ -1093,7 +1086,6 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     std::set<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
     for( size_t i = 0; i < nSize; ++i )
-//    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     {
         // #i104937#
         pFmt = (*pFmts)[i];

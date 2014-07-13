@@ -278,8 +278,6 @@ bool lcl_getCellRangeAddressFromXMLString(
 
 } // anonymous namespace
 
-//namespace chart
-//{
 namespace XMLRangeHelper
 {
 
@@ -386,6 +384,5 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 }
 
 } //  namespace XMLRangeHelper
-//} //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
