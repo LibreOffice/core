@@ -341,6 +341,7 @@ public:
     void testFindAreaPosColRight();
     void testSort();
     void testSortHorizontal();
+    void testSortSingleRow();
     void testSortWithFormulaRefs();
     void testSortWithStrings();
     void testSortInFormulaGroup();
@@ -509,6 +510,7 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortHorizontal);
+    CPPUNIT_TEST(testSortSingleRow);
     CPPUNIT_TEST(testSortWithFormulaRefs);
     CPPUNIT_TEST(testSortWithStrings);
     CPPUNIT_TEST(testSortInFormulaGroup);

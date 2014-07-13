@@ -5025,6 +5025,42 @@ void Test::testSortHorizontal()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortSingleRow()
+{
+    // This test case is from fdo#80462.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Sort range consists of only one row.
+    m_pDoc->SetString(ScAddress(0,0,0), "X");
+    m_pDoc->SetString(ScAddress(1,0,0), "Y");
+
+    // Define A1:B1 as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 0));
+
+    // Sort A1:B1 horizontally, ascending by row 1.
+    ScDBDocFunc aFunc(getDocShell());
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 0;
+    aSortData.bHasHeader = true;
+    aSortData.bByRow = true;
+    aSortData.bIncludePattern = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    // Do the sorting.  This should not crash.
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortInFormulaGroup()
 {
     static struct {
