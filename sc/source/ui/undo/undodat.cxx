@@ -51,7 +51,6 @@ TYPEINIT1(ScUndoOutlineBlock,       ScSimpleUndo);
 TYPEINIT1(ScUndoRemoveAllOutlines,  ScSimpleUndo);
 TYPEINIT1(ScUndoAutoOutline,        ScSimpleUndo);
 TYPEINIT1(ScUndoSubTotals,          ScDBFuncUndo);
-TYPEINIT1(ScUndoSort,               ScDBFuncUndo);
 TYPEINIT1(ScUndoQuery,              ScDBFuncUndo);
 TYPEINIT1(ScUndoAutoFilter,         ScDBFuncUndo);
 TYPEINIT1(ScUndoDBData,             ScSimpleUndo);
@@ -735,108 +734,6 @@ void ScUndoSubTotals::Repeat(SfxRepeatTarget& /* rTarget */)
 bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;     // is not possible due to column numbers
-}
-
-ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
-                        SCTAB nNewTab, const ScSortParam& rParam,
-                        ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB ) :
-    ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
-                                         rParam.nCol2, rParam.nRow2, nNewTab ) ),
-    nTab( nNewTab ),
-    aSortParam( rParam ),
-    pUndoDoc( pNewUndoDoc ),
-    pUndoDB( pNewUndoDB )
-{
-}
-
-ScUndoSort::~ScUndoSort()
-{
-    delete pUndoDoc;
-    delete pUndoDB;
-}
-
-OUString ScUndoSort::GetComment() const
-{
-    return ScGlobal::GetRscString( STR_UNDO_SORT );
-}
-
-void ScUndoSort::Undo()
-{
-    BeginUndo();
-
-    ScDocument& rDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-
-    SCCOL nStartCol = aSortParam.nCol1;
-    SCROW nStartRow = aSortParam.nRow1;
-    SCCOL nEndCol    = aSortParam.nCol2;
-    SCROW nEndRow    = aSortParam.nRow2;
-    SCTAB nSortTab  = nTab;
-    if ( !aSortParam.bInplace )
-    {
-        nStartCol = aSortParam.nDestCol;
-        nStartRow = aSortParam.nDestRow;
-        nEndCol   = nStartCol + ( aSortParam.nCol2 - aSortParam.nCol1 );
-        nEndRow   = nStartRow + ( aSortParam.nRow2 - aSortParam.nRow1 );
-        nSortTab  = aSortParam.nDestTab;
-    }
-
-    ScUndoUtil::MarkSimpleBlock( pDocShell, nStartCol, nStartRow, nSortTab,
-                                 nEndCol, nEndRow, nSortTab );
-
-    // do not delete/copy note captions, they are handled in drawing undo (ScDBFuncUndo::mpDrawUndo)
-    rDoc.DeleteAreaTab( nStartCol,nStartRow, nEndCol,nEndRow, nSortTab, IDF_ALL|IDF_NOCAPTIONS );
-    pUndoDoc->CopyToDocument( nStartCol, nStartRow, nSortTab, nEndCol, nEndRow, nSortTab,
-                                IDF_ALL|IDF_NOCAPTIONS, false, &rDoc );
-
-    // Row heights always (due to automatic adjustment)
-    // TODO change to use ScBlockUndo
-    pUndoDoc->CopyToDocument( 0, nStartRow, nSortTab, MAXCOL, nEndRow, nSortTab,
-                              IDF_NONE, false, &rDoc );
-
-    if (pUndoDB)
-        rDoc.SetDBCollection( new ScDBCollection( *pUndoDB ), true );
-
-    SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
-    if ( nVisTab != nSortTab )
-        pViewShell->SetTabNo( nSortTab );
-
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
-    pDocShell->PostDataChanged();
-
-    EndUndo();
-}
-
-void ScUndoSort::Redo()
-{
-    BeginRedo();
-
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-
-    SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
-    if ( nVisTab != nTab )
-        pViewShell->SetTabNo( nTab );
-
-    pViewShell->MarkRange( ScRange( aSortParam.nCol1, aSortParam.nRow1, nTab,
-                                      aSortParam.nCol2, aSortParam.nRow2, nTab ) );
-
-    pViewShell->Sort( aSortParam, false );
-
-    // Paint source range due to selection
-    if ( !aSortParam.bInplace )
-        pDocShell->PostPaint( aSortParam.nCol1, aSortParam.nRow1, nTab,
-                              aSortParam.nCol2, aSortParam.nRow2, nTab, PAINT_GRID );
-
-    EndRedo();
-}
-
-void ScUndoSort::Repeat(SfxRepeatTarget& /* rTarget */)
-{
-}
-
-bool ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
-{
-    return false;    // does not work due to column numbers
 }
 
 ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQueryParam& rParam,

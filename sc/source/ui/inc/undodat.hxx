@@ -224,30 +224,6 @@ private:
     ScDBCollection* pUndoDB;
 };
 
-class ScUndoSort: public ScDBFuncUndo
-{
-public:
-                    TYPEINFO_OVERRIDE();
-                    ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
-                            const ScSortParam& rParam,
-                            ScDocument* pNewUndoDoc,
-                            ScDBCollection* pNewUndoDB );
-    virtual         ~ScUndoSort();
-
-    virtual void    Undo() SAL_OVERRIDE;
-    virtual void    Redo() SAL_OVERRIDE;
-    virtual void    Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
-    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
-
-    virtual OUString GetComment() const SAL_OVERRIDE;
-
-private:
-    SCTAB           nTab;
-    ScSortParam     aSortParam;
-    ScDocument*     pUndoDoc;
-    ScDBCollection* pUndoDB;                // due to source and target range
-};
-
 class ScUndoQuery: public ScDBFuncUndo
 {
 public:
