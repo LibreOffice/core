@@ -3071,7 +3071,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(m_sStyleName);
-        OSL_ENSURE(pBase, "where is the style, you fiend!?");
+        OSL_ENSURE(pBase, "Where is the style?");
 
         if(pBase)
         {

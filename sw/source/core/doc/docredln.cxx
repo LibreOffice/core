@@ -190,7 +190,7 @@ void SwDoc::SetRedlineMode( RedlineMode_t eMode )
         SetModified();
     }
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::IsRedlineOn() const
@@ -1295,7 +1295,7 @@ void SwDoc::CompressRedlines()
     }
     _CHECK_REDLINE( this )
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::SplitRedline( const SwPaM& rRange )
@@ -1359,7 +1359,7 @@ bool SwDoc::SplitRedline( const SwPaM& rRange )
     }
     return bChg;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
@@ -1476,7 +1476,7 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
 
     return bChg;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::DeleteRedline( const SwStartNode& rNode, bool bSaveInUndo,
@@ -1505,7 +1505,7 @@ sal_uInt16 SwDoc::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
     }
     return USHRT_MAX;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
@@ -1517,7 +1517,7 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
@@ -1591,7 +1591,7 @@ bool SwExtraRedlineTbl::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& r
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
@@ -1638,7 +1638,7 @@ bool SwExtraRedlineTbl::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& r
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
@@ -1743,7 +1743,7 @@ const SwRangeRedline* SwDoc::GetRedline( const SwPosition& rPos,
         *pFndPos = nU;
     return 0;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 typedef bool (*Fn_AcceptReject)( SwRedlineTbl& rArr, sal_uInt16& rPos,
@@ -2260,7 +2260,7 @@ bool SwDoc::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
     }
     return bRet;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
@@ -2306,7 +2306,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
     }
     return nRet != 0;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
@@ -2374,7 +2374,7 @@ bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
     }
     return bRet;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
@@ -2421,7 +2421,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
 
     return nRet != 0;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
@@ -2540,7 +2540,7 @@ const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
 
     return pFnd;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
@@ -2661,7 +2661,7 @@ const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
 
     return pFnd;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 // Set comment at the Redline
@@ -2691,7 +2691,7 @@ bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
 
     return bRet;
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 // Create a new author if necessary
@@ -2716,7 +2716,7 @@ void SwDoc::UpdateRedlineAttr()
             pRedl->InvalidateRange();
     }
 
-    // To-Do - add 'SwExtraRedlineTbl' also ?
+    // #TODO - add 'SwExtraRedlineTbl' also ?
 }
 
 /// Set comment text for the Redline, which is inserted later on via
@@ -4145,7 +4145,7 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
 {
     (void)bCallDelete;
 
-    // TO-DO - equivelant for 'SwTableRowRedline'
+    // #TODO - equivelant for 'SwTableRowRedline'
     bool bMerged = false;
     /*
     _CHECK_REDLINE( this )
@@ -4153,7 +4153,7 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
-        // TO-DO - equivelant for 'SwTableRowRedline'
+        // #TODO - equivelant for 'SwTableRowRedline'
         /*
         pNewRedl->InvalidateRange();
         */
@@ -4178,7 +4178,7 @@ bool SwDoc::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete
         delete pNewRedl, pNewRedl = 0;
         */
     }
-    // TO-DO - equivelant for 'SwTableRowRedline'
+    // #TODO - equivelant for 'SwTableRowRedline'
     /*
     _CHECK_REDLINE( this )
     */
@@ -4200,7 +4200,7 @@ bool SwDoc::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDele
 {
     (void)bCallDelete;
 
-    // TO-DO - equivelant for 'SwTableCellRedline'
+    // #TODO - equivelant for 'SwTableCellRedline'
     bool bMerged = false;
     /*
     _CHECK_REDLINE( this )
@@ -4208,7 +4208,7 @@ bool SwDoc::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDele
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
-        // TO-DO - equivelant for 'SwTableCellRedline'
+        // #TODO - equivelant for 'SwTableCellRedline'
         /*
         pNewRedl->InvalidateRange();
         */
@@ -4233,7 +4233,7 @@ bool SwDoc::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDele
         delete pNewRedl, pNewRedl = 0;
         */
     }
-    // TO-DO - equivelant for 'SwTableCellRedline'
+    // #TODO - equivelant for 'SwTableCellRedline'
     /*
     _CHECK_REDLINE( this )
     */

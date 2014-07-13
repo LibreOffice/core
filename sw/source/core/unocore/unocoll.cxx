@@ -99,7 +99,7 @@ public:
 
     OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
-        // not implemented...
+        // #FIXME not implemented...
         return OUString();
     }
 
@@ -167,7 +167,7 @@ public:
             {
             }
         }
-        // Probably should throw here ( if !bMatched )
+        // #TODO Probably should throw here ( if !bMatched )
         return sCodeName;
     }
 };

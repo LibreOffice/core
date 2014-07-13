@@ -2574,7 +2574,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             if (pMarkStartNode == rBox.GetSttNd() && !pTblCrsr->HasMark())
                 pTblCrsr->SetMark();
 
-            // set cursor to new position...
+            // set cursor to new position
             SwPosition *pPos = (pPointStartNode == rBox.GetSttNd()) ?
                         pTblCrsr->GetPoint() : pTblCrsr->GetMark();
             if (pPos)
