@@ -1774,6 +1774,16 @@ DECLARE_RTFIMPORT_TEST(testFdo73241, "fdo73241.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo80905, "fdo80905.rtf")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    xFields->nextElement();
+    // The problem was that there was only one field in the document, but there should be true.
+    CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(xFields->hasMoreElements()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
