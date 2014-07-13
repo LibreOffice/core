@@ -34,7 +34,12 @@ OGLWindow::~OGLWindow()
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
 {
     m_rContext.makeCurrent();
-    gltf_prepare_renderer(&m_rHandle);
+    int nRet = gltf_prepare_renderer(&m_rHandle);
+    if( nRet != 0 )
+    {
+        SAL_WARN("avmedia.opengl", "Error occured while preparing for rendering! Error code: " << nRet);
+        return;
+    }
     gltf_renderer(&m_rHandle);
     gltf_complete_renderer(&m_rHandle);
     m_rContext.swapBuffers();
