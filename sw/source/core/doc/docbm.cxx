@@ -2079,13 +2079,13 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 
                         break;
                     }
                     else
-                        SAL_INFO("sw.info", "Skipping Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
+                        SAL_INFO("sw.core", "Skipping Table PaM " << PCURCRSR << " for Index " << aEntry.m_nIdx);
                     ++nCnt;
                 FOREACHPAM_END()
             }
             if( pPos )
             {
-                SAL_INFO("sw.info", "Would be setting " << pPos << " on Node " << nNode << " for Index " << aEntry.m_nIdx);
+                SAL_INFO("sw.core", "Would be setting " << pPos << " on Node " << nNode << " for Index " << aEntry.m_nIdx);
                 pPos->nNode = *pCNd;
                 pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
                 break;
