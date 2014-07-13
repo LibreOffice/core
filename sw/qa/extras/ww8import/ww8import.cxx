@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -460,6 +461,14 @@ DECLARE_WW8IMPORT_TEST(testFdo77844, "fdo77844.doc")
     headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
     CPPUNIT_ASSERT(!headerIsOn);
 #endif
+}
+
+DECLARE_WW8IMPORT_TEST(testFdp80333, "fdo80333.doc")
+{
+    // Despite there is no character border, border shadow was imported
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
 #endif
