@@ -2568,9 +2568,9 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             if (!pCNd)
                 pCNd = GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
             // and then one can e.g. create a SwPosition:
-            SwPosition aNewPos( *pCNd );   // new position to beused with cursor
+            SwPosition aNewPos( *pCNd );   // new position to be used with cursor
 
-            // if the mark is to be changed make sure there is one...
+            // if the mark is to be changed, make sure there is one
             if (pMarkStartNode == rBox.GetSttNd() && !pTblCrsr->HasMark())
                 pTblCrsr->SetMark();
 

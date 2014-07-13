@@ -158,7 +158,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
                        const SwPosition *pPos = 0,
                        const bool bCalcFrm = false );
 
-// Should extra data (reline stroke, line numbers) be painted?
+// Should extra data (redline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcCntnt(..)>

@@ -2178,7 +2178,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
                         if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
                         {
-                            // ensure the
+                            // when exposing the EmbeddedObject, ensure it has a client site
                             OSL_ENSURE( pDoc->GetDocShell(), "no doc shell => no client site" );
                             if ( pDoc->GetDocShell() )
                                 pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
