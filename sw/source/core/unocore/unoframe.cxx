@@ -2708,7 +2708,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
             if( FLY_AT_FLY == eAnchorId &&
-                !aPam.GetNode()->FindFlyStartNode())
+                !aPam.GetNode().FindFlyStartNode())
             {
                 // framebound only where a frame exists
                 SwFmtAnchor aAnchor(FLY_AT_PARA);

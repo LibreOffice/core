@@ -1928,7 +1928,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         else
             pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-        SwTxtAttr* pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTxtAttr* pTxtAttr = aPam.GetNode().GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
         // What about updating the fields? (see fldmgr.cxx)
         if (pTxtAttr)
