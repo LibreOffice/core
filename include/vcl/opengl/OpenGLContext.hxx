@@ -151,6 +151,7 @@ public:
     bool init(SystemChildWindow* pChildWindow);
 
     void makeCurrent();
+    void resetCurrent();
     void swapBuffers();
     void sync();
     void show();

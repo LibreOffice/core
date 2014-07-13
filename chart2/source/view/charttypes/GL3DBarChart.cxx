@@ -407,6 +407,7 @@ void GL3DBarChart::update()
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
     mpRenderThread = rtl::Reference<RenderThread>(new RenderOneFrameThread(this));
+    mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 }
 
@@ -441,6 +442,7 @@ void GL3DBarChart::moveToDefault()
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
     mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, maDefaultCameraPosition, STEPS));
+    mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 
     /*
@@ -498,6 +500,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
     mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, maTargetPosition, STEPS));
+    mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 
     /*
@@ -579,6 +582,7 @@ void GL3DBarChart::moveToCorner()
     mrWindow.getContext().setWinSize(aSize);
     mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, getCornerPosition(mnCornerId),
                 maCameraPosition, STEPS));
+    mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
 
     // TODO: moggi: add to thread

@@ -800,6 +800,17 @@ void OpenGLContext::makeCurrent()
 #endif
 }
 
+void OpenGLContext::resetCurrent()
+{
+#if defined( WNT )
+    wglMakeCurrent( m_aGLWin.hDC, 0 );
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+    // nothing
+#elif defined( UNX )
+    glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+#endif
+}
+
 void OpenGLContext::swapBuffers()
 {
 #if defined( WNT )
