@@ -493,7 +493,9 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    SCROW nStartRow = aLocalParam.nRow1 + (aLocalParam.bHasHeader ? 1 : 0);
+    SCROW nStartRow = aLocalParam.nRow1;
+    if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
+        ++nStartRow;
 
     // Calculate the script types for all cells in the sort range beforehand.
     // This will speed up the row height adjustment that takes place after the
