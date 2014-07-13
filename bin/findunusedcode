@@ -11,23 +11,23 @@ mkdir -p ${SRCDIR}/callcatcher
 cd ${SRCDIR}/callcatcher
 
 echo "--without-doxygen
-      --enable-verbose
-      --enable-gio
-      --enable-packagekit
-      --disable-gnome-vfs
-      --enable-extension-integration
-      --enable-graphite
-      --enable-evolution2
-      --enable-lockdown
-      --enable-online-update
-      --enable-dbgutil
-      --enable-werror
-      --enable-gtk3
-      --enable-kde4
-      --enable-dbus
-      --enable-gstreamer
-      --disable-gstreamer-0-10"
-	 > autogen.input
+--enable-verbose
+--enable-gio
+--enable-packagekit
+--disable-gnome-vfs
+--enable-extension-integration
+--enable-graphite
+--enable-evolution2
+--enable-lockdown
+--enable-online-update
+--enable-dbgutil
+--enable-werror
+--enable-gtk3
+--enable-kde4
+--enable-dbus
+--enable-gstreamer
+--disable-gstreamer-0-10" \
+  > autogen.input
 
 export CC="callcatcher ${CC:-gcc}"
 export CXX="callcatcher ${CXX:-g++}"
@@ -91,5 +91,5 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^CPhysicalCamera:: \
 		  | grep -v ^RenderScene:: \
 		  | grep -v ^ShaderProgram:: \
-		  | grep -v ^Texture:::: \
+		  | grep -v ^Texture:: \
 		  > ../unusedcode.easy
