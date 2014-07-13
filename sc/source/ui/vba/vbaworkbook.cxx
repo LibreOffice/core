@@ -354,7 +354,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
 }
 
 css::uno::Any SAL_CALL
-ScVbaWorkbook::Styles( const uno::Any& Item ) throw (uno::RuntimeException, std::exception)
+ScVbaWorkbook::Styles( const uno::Any& Item ) throw (::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // quick look and Styles object doesn't seem to have a valid parent
     // or a least the object browser just shows an object that has no
