@@ -227,6 +227,17 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             {
                 continue;
             }
+            else
+            {
+                // Actually this should never happen but currently layouting
+                // is broken. So don't move anchors, if the page is invalid.
+                // This should be turned into an DBG_ASSERT, once layouting is fixed!
+                const SwPageFrm *pPageFrm = pAnchor->FindPageFrm();
+                if (!pPageFrm || pPageFrm->IsInvalid() ) {
+                    SAL_WARN( "sw.resizeview", "Trying to move anchor from invalid page - fix layouting!" );
+                    continue;
+                }
+            }
 
             // no move for drawing objects in header/footer
             if ( pAnchor->FindFooterOrHeader() )
