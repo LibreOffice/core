@@ -5058,6 +5058,38 @@ void Test::testSortSingleRow()
     bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
 
+    // Another test case - single row horizontal sort with header column.
+    clearSheet(m_pDoc, 0);
+
+    // A1:G1
+    m_pDoc->SetString(ScAddress(0,0,0), "Header");
+    m_pDoc->SetValue(ScAddress(1,0,0),  1.0);
+    m_pDoc->SetValue(ScAddress(2,0,0), 10.0);
+    m_pDoc->SetValue(ScAddress(3,0,0),  3.0);
+    m_pDoc->SetValue(ScAddress(4,0,0),  9.0);
+    m_pDoc->SetValue(ScAddress(5,0,0), 12.0);
+    m_pDoc->SetValue(ScAddress(6,0,0),  2.0);
+
+    // Define A1:G1 as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 6, 0, false, true));
+
+    // Update the sort data.
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 6;
+    aSortData.bByRow = false;
+    bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
