@@ -2587,12 +2587,33 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if (!m_pImpl)
-        return sal_False;
+        return false;
 
-    bool bRet = m_pImpl->IsEncrypted();
+    bool bRet = false;
 
-    if (!bRet && m_pImpl->m_bUseCommonEncryption && m_pImpl->m_pParent)
-        bRet = m_pImpl->m_pParent->m_bHasCommonEncryptionData;
+    try
+    {
+        bRet = m_pImpl->IsEncrypted();
+
+        if (!bRet && m_pImpl->m_bUseCommonEncryption && m_pImpl->m_pParent)
+            bRet = m_pImpl->m_pParent->m_bHasCommonEncryptionData;
+    }
+    catch( const uno::RuntimeException& rRuntimeException )
+    {
+        m_pImpl->AddLog( rRuntimeException.Message );
+        m_pImpl->AddLog( "Rethrow" );
+        throw;
+    }
+    catch( const uno::Exception& rException )
+    {
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( "Rethrow" );
+
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException( "Problems on hasEncryptionData!",
+                                  static_cast< ::cppu::OWeakObject* >( this ),
+                                  aCaught );
+    }
 
     return bRet;
 }
