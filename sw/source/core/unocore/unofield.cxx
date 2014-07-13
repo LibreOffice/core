@@ -2674,11 +2674,11 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
         if( sUIName != sFldTypName )
             rName = comphelper::string::setToken(rName, 1, '.', sUIName);
     }
-    else if (rTypeName == "DataBase")
+    else if (rTypeName.equalsIgnoreAsciiCase("DataBase"))
     {
         rName = rName.copy(RTL_CONSTASCII_LENGTH("DataBase."));
         sal_uInt16 nDotCount = comphelper::string::getTokenCount(rName, '.');
-        if( 2 <= nDotCount )
+        if( 1 <= nDotCount )
         {
             // #i51815#
             rName = "DataBase." + rName;
