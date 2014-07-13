@@ -5325,6 +5325,123 @@ void Test::testSortWithCellFormats()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortRefUpdate()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Sort");
+
+    // Set values to sort in column A.
+    m_pDoc->SetString(ScAddress(0,0,0), "Header");
+
+    double aValues[] = { 4.0, 36.0, 14.0, 29.0, 98.0, 78.0, 0.0, 99.0, 1.0 };
+    size_t nCount = SAL_N_ELEMENTS(aValues);
+    for (size_t i = 0; i < nCount; ++i)
+        m_pDoc->SetValue(ScAddress(0,i+1,0), aValues[i]);
+
+    // Set formulas to reference these values in column C.
+    m_pDoc->SetString(ScAddress(2,0,0), "Formula");
+    for (size_t i = 0; i < nCount; ++i)
+        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+
+    // Check the values in column C.
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aValues[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+    }
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Define A1:A10 as sheet-local anonymous database range, else sort wouldn't run.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 9));
+
+    // Sort A1:A10 (with a header row).
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 9;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    double aSorted[] = { 0.0, 1.0, 4.0, 14.0, 29.0, 36.0, 78.0, 98.0, 99.0 };
+
+    // Check the sort result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aSorted[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+    }
+
+    // Sorting should not alter the values in column C.
+    m_pDoc->CalcAll(); // just in case...
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aValues[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+    }
+
+    // C2 should now point to A4.
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]"))
+        CPPUNIT_FAIL("Wrong formula in C2!");
+
+    // Undo the sort.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    pUndoMgr->Undo();
+
+    // Check the undo result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aValues[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+    }
+
+    // Values in column C should still be unaltered.
+    m_pDoc->CalcAll(); // just in case...
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aValues[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+    }
+
+    // C2 should now point to A2.
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "RC[-2]"))
+        CPPUNIT_FAIL("Wrong formula in C2!");
+
+    // Redo.
+    pUndoMgr->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aSorted[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+    }
+
+    // Sorting should not alter the values in column C.
+    m_pDoc->CalcAll(); // just in case...
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aValues[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+    }
+
+    // C2 should now point to A4.
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]"))
+        CPPUNIT_FAIL("Wrong formula in C2!");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testShiftCells()
 {
     m_pDoc->InsertTab(0, "foo");
