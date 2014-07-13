@@ -75,11 +75,18 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
     pDocument->pClass->setPart(pDocument, aPart);
 }
 
-extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getNumberOfParts
+extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    return (jint) pDocument->pClass->getNumberOfParts(pDocument);
+    return (jint) pDocument->pClass->getPart(pDocument);
+}
+
+extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getParts
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    return (jint) pDocument->pClass->getParts(pDocument);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative

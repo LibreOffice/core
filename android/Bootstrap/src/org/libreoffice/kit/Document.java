@@ -16,7 +16,8 @@ public class Document {
     private final long handle;
 
     public native void setPart(int part);
-    public native int getNumberOfParts();
+    public native int getPart();
+    public native int getParts();
     public native long getDocumentHeight();
     public native long getDocumentWidth();
 
