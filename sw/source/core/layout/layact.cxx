@@ -1175,15 +1175,13 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                 }
                 // #121980# - no shortcut, if at previous page
                 // an anchored object is registered, whose anchor is <pCntnt>.
-                else if ( prPage->GetPrev() &&
-                          static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs() )
+                else if ( prPage->GetPrev() )
                 {
                     SwSortedObjs* pObjs =
                         static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs();
                     if ( pObjs )
                     {
-                        sal_uInt32 i = 0;
-                        for ( ; i < pObjs->Count(); ++i )
+                        for ( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pObjs)[i];
                             if ( pObj->GetAnchorFrmContainingAnchPos() == pCntnt )
