@@ -306,7 +306,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwUnoInternalPaM aPam(*pNewDoc);
-    //das muss jetzt sal_True liefern
+    // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
     UnoActionContext aCont(pNewDoc);

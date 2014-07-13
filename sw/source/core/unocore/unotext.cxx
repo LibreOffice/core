@@ -475,7 +475,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         SwCursor aCrsr(*aTmp.GetPoint(),0,false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
         aCrsr.Left(1, CRSR_SKIP_CHARS, false, false);
-        //hier muss der uebergebene PaM umgesetzt werden:
+        // here, the PaM needs to be moved:
         if (pRange)
         {
             pRange->SetPositions(aCrsr);

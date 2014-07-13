@@ -297,7 +297,7 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
 SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape )
     throw (uno::RuntimeException, std::exception)
 {
-    //TODO: stimmt das so - kann die Methode weg?
+    //FIXME: just a redirect call - can this method be deleted?
     return SvxFmDrawPage::_CreateSdrObject( xShape );
 }
 
@@ -604,11 +604,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
 
-    OSL_ENSURE(pSvxShape, "warum gibt es hier kein SvxShape?");
-    //diese Position ist auf jeden Fall in 1/100 mm
+    OSL_ENSURE(pSvxShape, "Why is here no SvxShape?");
+    // this position is definitely in 1/100 mm
     awt::Point aMM100Pos(pSvxShape->getPosition());
 
-    //jetzt noch die Properties aus dem SwShapeDescriptor_Impl auswerten
+    // now evaluate the properties of SwShapeDescriptor_Impl
     SwShapeDescriptor_Impl* pDesc = pShape->GetDescImpl();
 
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -619,7 +619,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         if(pDesc->GetSurround())
             aSet.Put( *pDesc->GetSurround());
-        //die Items sind schon in Twip gesetzt
+        // all items are already in Twip
         if(pDesc->GetLRSpace())
         {
             aSet.Put(*pDesc->GetLRSpace());
@@ -755,9 +755,9 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
     {
 
         SwFmDrawPage* pPage = GetSvxPage();
-        if(pPage)//kann das auch Null sein?
+        if(pPage) //TODO: can this be Null?
         {
-            //markieren und MarkList zurueckgeben
+            // mark and return MarkList
             const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
             if ( rMarkList.GetMarkCount() > 1 )
             {
@@ -807,7 +807,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
     if(xPageAgg.is())
     {
         SwFmDrawPage* pPage = GetSvxPage();
-        if(pPage)//kann das auch Null sein?
+        if(pPage) //TODO: can this be Null?
         {
             pPage->PreUnGroup(xShapeGroup);
             UnoActionContext aContext(pDoc);
@@ -1075,7 +1075,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
+            // with the layout it is possible to move the anchor without changing the position
             if(pFmt)
             {
                 SwAttrSet aSet(pFmt->GetAttrSet());

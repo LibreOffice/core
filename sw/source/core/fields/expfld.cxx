@@ -142,7 +142,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
                 0 == ( pTxtNode = pCNd->GetTxtNode() ) )
                         ;
-        OSL_ENSURE( pTxtNode, "Where is the 1.TextNode" );
+        OSL_ENSURE( pTxtNode, "Where is the 1. TextNode?" );
         rPos.nContent.Assign( pTxtNode, 0 );
     }
     else if ( !pCFrm->IsValid() )
@@ -169,9 +169,9 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
     {
         if( pLayout->IsFlyFrm() )
         {
-            // hole das FlyFormat
+            // get the FlyFormat
             SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
-            OSL_ENSURE( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
+            OSL_ENSURE( pFlyFmt, "Could not find FlyFormat, where is the field?" );
 
             const SwFmtAnchor &rAnchor = pFlyFmt->GetAnchor();
 
@@ -243,7 +243,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 Point aPt( pLayout->Frm().Pos() );
-                aPt.Y()++;      // aus dem Header raus
+                aPt.Y()++;      // get out of the header
                 pCntFrm = pPgFrm->GetCntntPos( aPt, false, true, false );
                 pTxtNode = GetFirstTxtNode( rDoc, rPos, pCntFrm, aPt );
             }

@@ -192,7 +192,7 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
         uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-// der Index kommt aus const unsigned short aStyleByIndex[] =
+// the index comes from const unsigned short aStyleByIndex[] = ...
     uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
@@ -845,7 +845,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
 #if OSL_DEBUG_LEVEL > 1
                 (void)rNewBase;
 #endif
-                //so, jetzt sollten noch die Properties des Descriptors angewandt werden
+                // after all, we still need to apply the properties of the descriptor
                 pNewStyle->ApplyDescriptorProperties();
             }
             else
@@ -864,7 +864,7 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(rName);
-        //Ersetzung geht nur fuer benutzerdefinierte Styles
+        // replacements only for userdefined styles
         if(!pBase)
             throw container::NoSuchElementException();
         if(!pBase->IsUserDefined())
@@ -1811,7 +1811,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             bDone = true;
             break;
         }
-        case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
+        case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
         {
             if(aValue.getValueType() == cppu::UnoType<container::XIndexReplace>::get())
             {
@@ -1869,7 +1869,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                                 aFmt.SetCharFmt( pCharFmt );
                             }
-                            //jetzt nochmal fuer Fonts
+                            // same for fonts:
                             if (!pBulletFontNames[i].isEmpty() &&
                                 !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
                                 (!pFmt->GetBulletFont() || pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) )
@@ -2358,10 +2358,10 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 bDone = true;
                 break;
             }
-            case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
+            case  FN_UNO_NUM_RULES: // special handling for a SvxNumRuleItem:
             {
                 const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
-                OSL_ENSURE(pRule, "Wo ist die NumRule?");
+                OSL_ENSURE(pRule, "Where is the NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
 
                 aRet.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());

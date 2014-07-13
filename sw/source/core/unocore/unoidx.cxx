@@ -1333,7 +1333,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
     const SwTOXBase* pOld = pDoc->GetCurTOX( *aPam.Start() );
@@ -1855,7 +1855,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //which must now return sal_True
+    // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
     if (!m_pImpl->m_sAltText.isEmpty())
@@ -1937,8 +1937,8 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         rPam.DeleteMark();
         bMark = false;
     }
-    // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
-    // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
+    // Marks without alternative text and without selected text cannot be inserted,
+    // thus use a space - is this really the ideal solution?
     if (!bMark && rMark.GetAlternativeText().isEmpty())
     {
         rMark.SetAlternativeText( OUString(' ') );

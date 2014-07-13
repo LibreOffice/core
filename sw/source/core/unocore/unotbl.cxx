@@ -1775,7 +1775,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     if(pUnoCrsr)
     {
         {
-            // hier muessen die Actions aufgehoben werden
+            // here, all actions need to be revoked
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
         SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
@@ -1893,7 +1893,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case RES_BOXATR_FORMAT:
-                    //GetAttr fuer Tabellenselektion am Doc fehlt noch
+                    // TODO: GetAttr for table selections in a Doc is missing
                     OSL_FAIL("not implemented");
                 break;
                 case FN_UNO_PARA_STYLE:
@@ -1912,7 +1912,6 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
-                    // erstmal die Attribute des Cursors
                     SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
                             aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
@@ -2344,7 +2343,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     if(pDoc && nRows && nColumns)
     {
         SwUnoInternalPaM aPam(*pDoc);
-        //das muss jetzt sal_True liefern
+        // this now needs to return TRUE
         ::sw::XTextRangeToSwPaM(aPam, xTextRange);
 
         {

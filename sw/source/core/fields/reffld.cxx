@@ -357,8 +357,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
             case REF_BOOKMARK:
                 nStart = nNumStart;
-                // Text steht ueber verschiedene Nodes verteilt.
-                // Gesamten Text oder nur bis zum Ende vom Node?
+                // text is spread across multiple nodes - get whole text or only until end of node?
                 nEnd = nNumEnd<0 ? nLen : nNumEnd;
                 break;
 
@@ -369,7 +368,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
-                // die Nummer oder den NumString besorgen
+                // get number or numString
                 for( unsigned i = 0; i < pDoc->GetFtnIdxs().size(); ++i )
                 {
                     SwTxtFtn* const pFtnIdx = pDoc->GetFtnIdxs()[i];

@@ -1547,7 +1547,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
     }
     else
     {
-        //Sonderbehandlung der dbg_ - Methoden
+        // special handling for dbg_ methods
         if( !rName.startsWith("dbg_"))
             throw uno::RuntimeException();
     }

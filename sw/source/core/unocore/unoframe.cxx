@@ -186,7 +186,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     }
 
     bool bRet = true;
-    //Anker kommt auf jeden Fall in den Set
+    // always add an anchor to the set
     SwFmtAnchor aAnchor ( static_cast < const SwFmtAnchor & > ( rFromSet.Get ( RES_ANCHOR ) ) );
     {
         const ::uno::Any* pAnchorPgNo;
@@ -2690,7 +2690,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     if(pDoc)
     {
         SwUnoInternalPaM aIntPam(*pDoc);
-        //das muss jetzt true liefern
+        // this now needs to return TRUE
         ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
@@ -2719,11 +2719,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
         aFrmSet.SetParent(&pDoc->GetDfltFrmFmt()->GetAttrSet());
 
-        //jetzt muessen die passenden Items in den Set
+        // no the related items need to be added to the set
         bool bSizeFound;
         if(!pProps->AnyToItemSet( pDoc, aFrmSet, aGrSet, bSizeFound))
             throw lang::IllegalArgumentException();
-        //der TextRange wird einzeln behandelt
+        // a TextRange is handled separately
         *aPam.GetPoint() = *aIntPam.GetPoint();
         if(aIntPam.HasMark())
         {
@@ -2737,9 +2737,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
             if( FLY_AT_FLY == eAnchorId &&
-                !aPam.GetNode().FindFlyStartNode())
+                !aPam.GetNode()->FindFlyStartNode())
             {
-                //rahmengebunden geht nur dort, wo ein Rahmen ist!
+                // framebound only where a frame exists
                 SwFmtAnchor aAnchor(FLY_AT_PARA);
                 aFrmSet.Put(aAnchor);
             }
@@ -2799,7 +2799,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
             }
-            //den SwXText wecken
+            // wake up the SwXTextFrame
             ((SwXTextFrame*)this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrmFmt()->GetDoc() );
         }
         else if( eType == FLYCNTTYPE_GRF)
@@ -3034,7 +3034,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     }
     else
         throw lang::IllegalArgumentException();
-    //setzt das Flag zurueck und loescht den Descriptor-Pointer
+    // reset the flag and delete Descriptor pointer
     ResetDescriptor();
 }
 

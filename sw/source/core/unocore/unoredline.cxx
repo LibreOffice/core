@@ -590,7 +590,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
         SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
-        //steht hier eine Tabelle?
+        // is here a table?
         SwTableNode* pTblNode = pUnoCrsr->GetNode().FindTableNode();
         SwCntntNode* pCont = 0;
         while( pTblNode )

@@ -586,7 +586,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
 
 OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
 {
-    OSL_ENSURE( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
+    OSL_ENSURE( nFmt < FF_END, "Expand: no valid Fmt!" );
 
     OUString aRet;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -604,7 +604,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
         {
             if( FF_UI_RANGE == nFmt )
             {
-                // fuers besorgen vom RegionNamen !!
+                // for getting region names!
                 SfxDocumentTemplates aFac;
                 aFac.Construct();
                 OUString sTmp;
@@ -747,7 +747,7 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
                 nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
-            OSL_FAIL( "SwDocStatFieldType::Expand: unbekannter SubType" );
+            OSL_FAIL( "SwDocStatFieldType::Expand: unknown SubType" );
     }
 
     if( nVal <= SHRT_MAX )
@@ -879,7 +879,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
     sal_uInt16 nExtSub = nSub & 0xff00;
-    nSub &= 0xff;   // ExtendedSubTypes nicht beachten
+    nSub &= 0xff;   // do not consider extended SubTypes
 
     OUString aStr;
     switch(nSub)
@@ -1346,7 +1346,7 @@ OUString SwHiddenTxtField::Expand() const
 /// get current field value and cache it
 void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 {
-    OSL_ENSURE(pDoc, "Wo ist das Dokument Seniore");
+    OSL_ENSURE(pDoc, "got no document");
 
     if( TYP_CONDTXTFLD == nSubType )
     {

@@ -222,7 +222,6 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
-                //jetzt einen SwDepend anlegen und in das Array einfuegen
                 SwDepend* pNewDepend = new SwDepend( &rClnt, (SwFrmFmt*)pFmt);
 
                 // OD 2004-05-07 #i28701# - determine insert position for

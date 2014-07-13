@@ -850,7 +850,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         else
         {
-            //TODO: Properties fuer die uebrigen Feldtypen einbauen
+            //TODO: add properties for the other field types
             const sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType );
             if (USHRT_MAX == nMId)
             {
@@ -979,7 +979,7 @@ throw (uno::RuntimeException, std::exception)
             nTypeIdx = i;
     }
 
-    // zuerst alle Felder loeschen
+    // first delete all fields
     SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
     SwFmtFld* pFld = aIter.First();
     while(pFld)
@@ -991,7 +991,7 @@ throw (uno::RuntimeException, std::exception)
         }
         pFld = aIter.Next();
     }
-    // dann den FieldType loeschen
+    // then delete FieldType
     m_pImpl->m_pDoc->RemoveFldType(nTypeIdx);
 }
 
@@ -1311,12 +1311,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
-    //wurde ein FieldMaster attached, dann ist das Dokument schon festgelegt!
+    // if a FieldMaster was attached, then the document is already fixed!
     if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))
         throw lang::IllegalArgumentException();
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwField* pFld = 0;
     switch (m_pImpl->m_nServiceId)
@@ -1768,7 +1768,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     m_pImpl->m_pProps->sPar1, nSubType,
                     m_pImpl->m_pProps->nFormat);
             pFld = pGEField;
-            //TODO: SubType auswerten!
+            //TODO: evaluate SubType!
             if (!m_pImpl->m_pProps->sPar4.isEmpty())
                 pGEField->ChgExpStr(m_pImpl->m_pProps->sPar4);
             // #i82544#
@@ -1929,9 +1929,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         else
             pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-        SwTxtAttr* pTxtAttr = aPam.GetNode().GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTxtAttr* pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
-        // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
+        // What about updating the fields? (see fldmgr.cxx)
         if (pTxtAttr)
         {
             const SwFmtFld& rFld = pTxtAttr->GetFmtFld();
@@ -2085,7 +2085,7 @@ SwXTextField::getPropertySetInfo()
 throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    //kein static
+    // no static
     uno::Reference< beans::XPropertySetInfo >  aRef;
     if (m_pImpl->m_nServiceId == USHRT_MAX)
     {
@@ -2342,11 +2342,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                                         nHiddenStart, nHiddenEnd );
                     }
 
-                    // !bFrame && !bHidden: aller Wahrscheinlichkeit handelt es
-                    // sich um ein Feld in einem unbenutzten Seitenstyle
+                    // !bFrame && !bHidden: most probably a field in an unused page style
 
-                    // bHidden: Feld ist versteckt
-                    // FME: Problem: Verstecktes Feld in unbenutzter Seitenvorlage =>
+                    // FME: Problem: hidden field in unused page template =>
                     // bIsFieldUsed = true
                     // bIsFieldDisplayed = false
                     bIsFieldUsed       = bFrame || bHidden;
@@ -2594,7 +2592,7 @@ void SwXTextField::Impl::Modify(
         break;
 
     case RES_FMT_CHG:
-        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        // Am I re-attached to a new one and will the old one be deleted?
         if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
             ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
             Invalidate();
@@ -2644,16 +2642,15 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 }
 
 /*
-    Iteration ueber nicht-Standard Feldtypen
+    Iteration over non-standard field types
     USER/SETEXP/DDE/DATABASE
-    Der Name ist demnach:
-    "com.sun.star.text.fieldmaster.User" + <Feltypname>
-    "com.sun.star.text.fieldmaster.DDE" + <Feltypname>
-    "com.sun.star.text.fieldmaster.SetExpression" + <Feltypname>
-    "com.sun.star.text.fieldmaster.DataBase" + <Feltypname>
+    Thus the names are:
+    "com.sun.star.text.fieldmaster.User" + <field type name>
+    "com.sun.star.text.fieldmaster.DDE" + <field type name>
+    "com.sun.star.text.fieldmaster.SetExpression" + <field type name>
+    "com.sun.star.text.fieldmaster.DataBase" + <field type name>
 
-    Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
-    auch optional weglassen
+    If too much, maybe one could leave out the "com.sun.star.text".
  */
 static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 {

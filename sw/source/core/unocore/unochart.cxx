@@ -2559,15 +2559,15 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
         if (pNewBox)    // set new position (cell range) to use
         {
-            // So erh lt man den ersten Inhaltsnode in einer gegebenen Zelle:
-            // Zun chst einen SwNodeIndex auf den Node hinter dem SwStartNode der Box...
+            // This is how you get the first content node of a row:
+            // First get a SwNodeIndex pointing to the node after SwStartNode of the box...
             SwNodeIndex aIdx( *pNewBox->GetSttNd(), +1 );
-            // Dies kann ein SwCntntNode sein, kann aber auch ein Tabellen oder Sectionnode sein,
-            // deshalb das GoNext;
+            // This can be a SwCntntNode, but might also be a table or section node,
+            // therefore call GoNext
             SwCntntNode *pCNd = aIdx.GetNode().GetCntntNode();
             if (!pCNd)
                 pCNd = GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
-            //und damit kann man z.B. eine SwPosition erzeugen:
+            // and then one can e.g. create a SwPosition:
             SwPosition aNewPos( *pCNd );   // new position to beused with cursor
 
             // if the mark is to be changed make sure there is one...

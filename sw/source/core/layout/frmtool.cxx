@@ -3073,12 +3073,12 @@ bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 }
 
 /// provides the area of a frame in that no Fly from another area can overlap
-const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp )
+const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalContextType )
 {
     const sal_uInt16 nTyp = FRM_ROOT | FRM_HEADER   | FRM_FOOTER | FRM_FTNCONT  |
                         FRM_FTN  | FRM_FLY      |
                         FRM_TAB  | FRM_ROW      | FRM_CELL |
-                        nAdditionalKontextTyp;
+                        nAdditionalContextType;
     do
     {   if ( pFrm->GetType() & nTyp )
             break;
