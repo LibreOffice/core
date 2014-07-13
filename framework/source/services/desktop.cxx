@@ -1316,7 +1316,7 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
 sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvertedValue ,
                                                            css::uno::Any&   aOldValue       ,
                                                            sal_Int32        nHandle         ,
-                                                     const css::uno::Any&   aValue          ) throw( css::lang::IllegalArgumentException )
+                                                     const css::uno::Any&   aValue          ) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.

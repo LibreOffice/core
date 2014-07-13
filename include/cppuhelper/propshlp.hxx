@@ -575,7 +575,8 @@ protected:
         ::com::sun::star::uno::Any & rOldValue,
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException) = 0;
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) = 0;
 
     /** The same as setFastProperyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
