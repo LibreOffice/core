@@ -151,22 +151,21 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         const sal_Unicode Char = bOK ? sTxt[nSttPos] : 0;
         if ( bOK && (Char==CH_TXTATR_BREAKWORD || Char==CH_TXTATR_INWORD) )
         {
-            SwIndex aIdx( pTxtNd, nSttPos );
-            SwTxtFld * const pTxtFld = static_cast<SwTxtFld*>(
-                pTxtNd->GetTxtAttrForCharAt(aIdx.GetIndex(), RES_TXTATR_FIELD));
-            if( !pTxtFld )
+            SwTxtFld * const pTxtFld =
+                static_cast<SwTxtFld*>( pTxtNd->GetTxtAttrForCharAt( nSttPos, RES_TXTATR_FIELD ) );
+            if ( pTxtFld == NULL )
                 break;
 
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
 
             const SwField* pFld = pTxtFld->GetFmtFld().GetField();
-            switch( pFld->GetTyp()->Which()  )
+            switch ( pFld->GetTyp()->Which() )
             {
             case RES_SETEXPFLD:
-                nRet = ((SwSetExpField*)pFld)->GetValue();
+                nRet = ( (SwSetExpField*) pFld )->GetValue();
                 break;
             case RES_USERFLD:
-                nRet = ((SwUserFieldType*)pFld)->GetValue();
+                nRet = ( (SwUserFieldType*) pFld )->GetValue();
                 break;
             case RES_TABLEFLD:
                 {
@@ -184,7 +183,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 break;
 
             case RES_DATETIMEFLD:
-                nRet = ((SwDateTimeField*)pFld)->GetValue();
+                nRet = ( (SwDateTimeField*) pFld )->GetValue();
                 break;
 
             case RES_JUMPEDITFLD:
@@ -195,6 +194,16 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
             default:
                 nRet = rCalcPara.rCalc.Calculate( pFld->ExpandField(true) ).GetDouble();
             }
+        }
+        else if ( nSttPos < sTxt.getLength()
+                  && Char == CH_TXT_ATR_INPUTFIELDSTART )
+        {
+            const SwTxtInputFld * pTxtInputFld =
+                dynamic_cast< const SwTxtInputFld* >(
+                    pTxtNd->GetTxtAttrAt( nSttPos, RES_TXTATR_INPUTFIELD, SwTxtNode::DEFAULT ) );
+            if ( pTxtInputFld == NULL )
+                break;
+            nRet = rCalcPara.rCalc.Calculate( pTxtInputFld->GetFieldContent() ).GetDouble();
         }
         else
         {
