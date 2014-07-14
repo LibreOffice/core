@@ -388,7 +388,6 @@ public:
 
     SCCOLROW    GetStart() const { return nStart; }
     SCCOLROW GetLast() const { return mnLastIndex; }
-    SCSIZE      GetCount() const { return nCount; }
 
     const std::vector<SCCOLROW>& GetOrderIndices() const { return maOrderIndices; }
 
