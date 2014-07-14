@@ -63,6 +63,21 @@ to run: ndk-gdb and it will attach the process.
 	In r8b the ndk-gdb seems to work a bit better, and I think it isn't
 necessary to use the mingw-and-ndk ndb-gdb any longer.
 
+* Getting the symbols
+
+In order to be able to debug, you also need the symbols.  Currently they are
+stripped using a $(STRIP) call in android/Bootstrap/Makefile.shared ; make
+sure you change it only to 'cp'.
+
+But then you need to limit the size of the resulting binary by other means,
+that is strip most of the symbols (but the interesting ones) already during
+the build.  For that, use something like
+
+--enable-dbgutil
+--enable-selective-debuginfo="sal/"
+
+in your autogen.input (but of course limit the --enable-selective-debuginfo
+only to directories / libraries that are interesting to you).
 
 * Common Errors / Gotchas
 
