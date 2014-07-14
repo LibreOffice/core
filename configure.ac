@@ -2955,16 +2955,16 @@ if test $_os = Darwin; then
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             ;;
         10.6)
-            # did someone copy her 10.6 sdk into xcode 4 (needed on Mountain Lion)?
-            if test "$(echo $MACOSX_SDK_PATH | cut -c1-23)" = "/Applications/Xcode.app"; then
-                CC="`xcrun -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-                CXX="`xcrun -find g++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            if test -n "`xcodebuild -version -sdk $MACOSX_SDK_PATH 2> /dev/null`"; then
+                CC="`xcrun -sdk $MACOSX_SDK_PATH -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CXX="`xcrun -sdk $MACOSX_SDK_PATH -find g++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                LIBTOOL="`xcrun -sdk $MACOSX_SDK_PATH -find libtool`"
             else
                 CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
                 CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                LIBTOOL=libtool
             fi
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
-            LIBTOOL=libtool
             ;;
         10.7|10.8|10.9|10.10)
             if test "$with_macosx_version_min_required" != 10.6; then
@@ -2974,14 +2974,14 @@ if test $_os = Darwin; then
             if test "$ENABLE_LTO" = TRUE; then
                 lto=-flto
             fi
-            CC="`xcrun -find clang` $bitness $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
-            AR=`xcrun -find ar`
-            NM=`xcrun -find nm`
-            STRIP=`xcrun -find strip`
-            LIBTOOL=`xcrun -find libtool`
-            RANLIB=`xcrun -find ranlib`
+            CC="`xcrun -sdk $MACOSX_SDK_PATH -find clang` $bitness $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -sdk $MACOSX_SDK_PATH -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            INSTALL_NAME_TOOL=`xcrun -sdk $MACOSX_SDK_PATH -find install_name_tool`
+            AR=`xcrun -sdk $MACOSX_SDK_PATH -find ar`
+            NM=`xcrun -sdk $MACOSX_SDK_PATH -find nm`
+            STRIP=`xcrun -sdk $MACOSX_SDK_PATH -find strip`
+            LIBTOOL=`xcrun -sdk $MACOSX_SDK_PATH -find libtool`
+            RANLIB=`xcrun -sdk $MACOSX_SDK_PATH -find ranlib`
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
