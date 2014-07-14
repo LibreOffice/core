@@ -3586,17 +3586,24 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     const sal_uInt8* pGraphicAry = 0;
     sal_uInt32 nSize = 0;
 
-    Graphic aGraphic(pGrfNode->GetGrf());
+    const Graphic& rGraphic(pGrfNode->GetGrf());
 
     // If there is no graphic there is not much point in parsing it
-    if (aGraphic.GetType()==GRAPHIC_NONE)
+    if (rGraphic.GetType()==GRAPHIC_NONE)
         return;
+
+    bool bSwapped = rGraphic.IsSwapOut();
+    if (bSwapped)
+    {
+        // always swapin via the Node
+        const_cast<SwGrfNode*>(pGrfNode)->SwapIn();
+    }
 
     GfxLink aGraphicLink;
     const sal_Char* pBLIPType = 0;
-    if (aGraphic.IsLink())
+    if (rGraphic.IsLink())
     {
-        aGraphicLink = aGraphic.GetLink();
+        aGraphicLink = rGraphic.GetLink();
         nSize = aGraphicLink.GetDataSize();
         pGraphicAry = aGraphicLink.GetData();
         switch (aGraphicLink.GetType())
@@ -3629,10 +3636,10 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         }
     }
 
-    GraphicType eGraphicType = aGraphic.GetType();
+    GraphicType eGraphicType = rGraphic.GetType();
     if (!pGraphicAry)
     {
-        if (ERRCODE_NONE == GraphicConverter::Export(aStream, aGraphic,
+        if (ERRCODE_NONE == GraphicConverter::Export(aStream, rGraphic,
                 (eGraphicType == GRAPHIC_BITMAP) ? CVT_PNG : CVT_WMF))
         {
             pBLIPType = (eGraphicType == GRAPHIC_BITMAP) ?
@@ -3643,7 +3650,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         }
     }
 
-    Size aMapped(eGraphicType == GRAPHIC_BITMAP ? aGraphic.GetSizePixel() : aGraphic.GetPrefSize());
+    Size aMapped(eGraphicType == GRAPHIC_BITMAP ? rGraphic.GetSizePixel() : rGraphic.GetPrefSize());
 
     const SwCropGrf& rCr = (const SwCropGrf&)pGrfNode->GetAttr(RES_GRFATR_CROPGRF);
 
@@ -3672,7 +3679,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     else
     {
         aStream.Seek(0);
-        GraphicConverter::Export(aStream, aGraphic, CVT_WMF);
+        GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
         pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
         aStream.Seek(STREAM_SEEK_TO_END);
         nSize = aStream.Tell();
@@ -3686,7 +3693,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         m_rExport.Strm().WriteCharPtr("}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
 
         aStream.Seek(0);
-        GraphicConverter::Export(aStream, aGraphic, CVT_WMF);
+        GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
         pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
         aStream.Seek(STREAM_SEEK_TO_END);
         nSize = aStream.Tell();
@@ -3696,6 +3703,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
 
         m_rExport.Strm().WriteChar('}');
     }
+
+    if (bSwapped)
+        const_cast<Graphic&>(rGraphic).SwapOut();
 
     m_rExport.Strm().WriteCharPtr(SAL_NEWLINE_STRING);
 }
