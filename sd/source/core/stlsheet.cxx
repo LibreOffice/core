@@ -921,7 +921,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
 
     if( !rParentName.isEmpty() )
     {
-        SfxStyleSheetIteratorPtr aSSSI = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily, SFX_STYLE_FAMILY_ALL);
+        boost::shared_ptr<SfxStyleSheetIterator> aSSSI = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily);
         for (SfxStyleSheetBase *pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
         {
             // we hope that we have only sd style sheets
