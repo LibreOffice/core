@@ -57,6 +57,8 @@ sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLon
 
 sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat )
 {
+    SAL_WARN_IF(rGraphic.IsSwapOut(), "vcl.filter", "exporting a swapped out graphic!");
+
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
     sal_uLong               nRet = ERRCODE_IO_GENERAL;
 
