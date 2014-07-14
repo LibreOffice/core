@@ -104,6 +104,7 @@ namespace
         void impFlushLinePrimitivesToParagraphPrimitives();
         void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
         void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
+        void impHandleTruncatedPortion(const DrawPortionInfo& rInfo);
 
     public:
         explicit impTextBreakupHandler(SdrOutliner& rOutliner)
@@ -526,7 +527,7 @@ namespace
 
 
         if ( bTruncateText ) // truncate text
-            impHandleTruncatedPortion(rInfo)
+            impHandleTruncatedPortion(rInfo);
         else // no chaining or truncating
             impCreateTextPortionPrimitive(rInfo);
 
@@ -554,9 +555,32 @@ namespace
         // make text portion primitive with the first part of the portion
         impCreateTextPortionPrimitive(rTruncatedPortionInfo);
 
-        // if text is left in original portion send it back to editeng
+        /* Some Experiments */
+
+        const SdrTextObj *pCurTextObj = mrOutliner.GetTextObj();
+        // page for list of objects
+        SdrPage *pPage = pCurTextObj->GetPage();
+
+        // we use (text) object 0 and 1 for these experiments
+        // we can try to set text of obj 0 to obj 1 or something
+
+        SdrTextObj *pNextTextObj;
+        if ( pPage->GetObjCount() > 1) {
+            pNextTextObj =  dynamic_cast< SdrTextObj * >(
+                                                pPage->GetObj(1) );
+        } else {
+            fprintf(stderr, "Make New Object please\n");
+            return;
+        }
+
+        pCurTextObj->impCopyTextInTextObj(pNextTextObj);
+
+        /* End Experiments */
+
+        // if text is left in original portion, send it back to editeng
         // FIXME(matteocam)
     }
+
 
     void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
     {
@@ -747,6 +771,35 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rOutliner.setVisualizedPage(0);
 
     rTarget = aConverter.getPrimitive2DSequence();
+}
+
+void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
+{
+    // Code from FitFrameToTextSize
+
+    // trying to copy text in obj 1
+    SdrText* pText = getActiveText();
+
+    if( pText!=NULL && pText->GetOutlinerParaObject() && pModel!=NULL)
+    {
+        Rectangle &aNextRect = pNextTextObj->aRect;
+        SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
+        rOutliner.SetPaperSize(Size(aNextRect.Right()-aNextRect.Left(),aNextRect.Bottom()-aNextRect.Top()));
+        rOutliner.SetUpdateMode(true);
+        rOutliner.SetText(*pText->GetOutlinerParaObject());
+        Size aNewSize(rOutliner.CalcTextSize());
+        rOutliner.Clear();
+        aNewSize.Width()++; // because of possible rounding errors
+        aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
+        aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+
+        Rectangle aNewRect(aNextRect);
+        aNewRect.SetSize(aNewSize);
+        pNextTextObj->ImpJustifyRect(aNewRect);
+        if (aNewRect!=aNextRect) {
+            pNextTextObj->SetLogicRect(aNewRect);
+        }
+    }
 }
 
 void SdrTextObj::impDecomposeAutoFitTextPrimitive(
