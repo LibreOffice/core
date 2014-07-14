@@ -131,6 +131,10 @@ static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
     }
 }
 
+// the scrollbar arrows disappeared in OSX>=10.7
+#define SCROLL_BUTTON_HEIGHT 0
+#define SCROLL_BUTTON_WIDTH 0
+
 static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     const Rectangle& rControlRect, Rectangle& rResultRect )
 {
@@ -141,38 +145,38 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     {
         case PART_BUTTON_UP:
             if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Top() = rControlRect.Bottom() - 2*BUTTON_HEIGHT;
-            rResultRect.Bottom() = rResultRect.Top() + BUTTON_HEIGHT;
+                rResultRect.Top() = rControlRect.Bottom() - 2*SCROLL_BUTTON_HEIGHT;
+            rResultRect.Bottom() = rResultRect.Top() + SCROLL_BUTTON_HEIGHT;
             break;
 
         case PART_BUTTON_DOWN:
-            rResultRect.Top() = rControlRect.Bottom() - BUTTON_HEIGHT;
+            rResultRect.Top() = rControlRect.Bottom() - SCROLL_BUTTON_HEIGHT;
             break;
 
         case PART_BUTTON_LEFT:
             if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Left() = rControlRect.Right() - 2*BUTTON_WIDTH;
-            rResultRect.Right() = rResultRect.Left() + BUTTON_WIDTH;
+                rResultRect.Left() = rControlRect.Right() - 2*SCROLL_BUTTON_WIDTH;
+            rResultRect.Right() = rResultRect.Left() + SCROLL_BUTTON_WIDTH;
             break;
 
         case PART_BUTTON_RIGHT:
-            rResultRect.Left() = rControlRect.Right() - BUTTON_WIDTH;
+            rResultRect.Left() = rControlRect.Right() - SCROLL_BUTTON_WIDTH;
             break;
 
         case PART_TRACK_HORZ_AREA:
-            rResultRect.Right() -= BUTTON_WIDTH + 1;
+            rResultRect.Right() -= SCROLL_BUTTON_WIDTH + 1;
             if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Right() -= BUTTON_WIDTH;
+                rResultRect.Right() -= SCROLL_BUTTON_WIDTH;
             else
-                rResultRect.Left() += BUTTON_WIDTH + 1;
+                rResultRect.Left() += SCROLL_BUTTON_WIDTH + 1;
             break;
 
         case PART_TRACK_VERT_AREA:
-            rResultRect.Bottom() -= BUTTON_HEIGHT + 1;
+            rResultRect.Bottom() -= SCROLL_BUTTON_HEIGHT + 1;
             if( GetSalData()->mbIsScrollbarDoubleMax )
-                rResultRect.Bottom() -= BUTTON_HEIGHT;
+                rResultRect.Bottom() -= SCROLL_BUTTON_HEIGHT;
             else
-                rResultRect.Top() += BUTTON_HEIGHT + 1;
+                rResultRect.Top() += SCROLL_BUTTON_HEIGHT + 1;
             break;
         case PART_THUMB_HORZ:
             if( GetSalData()->mbIsScrollbarDoubleMax )
