@@ -296,7 +296,15 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 //this approach, to be fixed at a better level than here
                 SvStream *pStrm = aMedium.GetInStream();
                 aTypeName = OUString();
+
+                sal_Size nStreamSize = 0;
                 if (pStrm && !pStrm->GetError())
+                {
+                    pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                    nStreamSize = pStrm->remainingSize();
+                }
+
+                if ( nStreamSize > 0 )
                 {
                     SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
