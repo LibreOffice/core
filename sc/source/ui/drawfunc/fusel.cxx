@@ -21,6 +21,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
@@ -142,7 +143,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( bDrag )
             {
                 aDragTimer.Start();
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                if (pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl))
+                    pView->GetDragMethod()->SetShiftPressed( rMEvt.IsShift() );
                 bReturn = true;
             }
         }

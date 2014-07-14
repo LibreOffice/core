@@ -19,6 +19,7 @@
 
 #include "fusel.hxx"
 #include <basic/sbstar.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/polysc3d.hxx>
@@ -223,7 +224,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                if (mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog))
+                    mpView->GetDragMethod()->SetShiftPressed( rMEvt.IsShift() );
             bReturn = true;
         }
         else
@@ -485,6 +487,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     mpView->MarkPoint(*pHdl);
                     if ( ! rMEvt.IsRight())
                         mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+
                 }
             }
             else
