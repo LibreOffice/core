@@ -178,6 +178,8 @@ namespace svgio
             SVGTokenText,
             SVGTokenBaselineShift,
 
+            SVGTokenFlowRoot,
+
             SVGTokenLast
         };
 
