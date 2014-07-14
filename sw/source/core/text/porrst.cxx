@@ -61,7 +61,12 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsParagraph() )
     {
+        #ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+        const OUString aTmp( CH_PAR );
+        rInf.DrawText( aTmp, *this );
+        #else
         rInf.DrawSpecial( *this, CH_PAR, Color(NON_PRINTING_CHARACTER_COLOR) );
+        #endif
     }
 }
 
