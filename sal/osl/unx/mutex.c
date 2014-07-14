@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#if defined LINUX
+// to define __USE_UNIX98, via _XOPEN_SOURCE, enabling pthread_mutexattr_settype
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+#endif
 #include "system.h"
 
 #include <osl/mutex.h>
@@ -25,16 +31,6 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-/* Bad hack. This function has two problems - on older systems it has a different name,
-   and on some older systems it is not defined in the header file.
-   Unfortunately there is no completely foolproof test, so we're just working around
-   the issue here. The __clang__ test prevents this hack from triggering the check
-   in the externandnotdefined clang plugin. */
-#if defined LINUX && ! defined __clang__
-int pthread_mutexattr_setkind_np(pthread_mutexattr_t *, int);
-#define pthread_mutexattr_settype pthread_mutexattr_setkind_np
-#define PTHREAD_MUTEX_RECURSIVE PTHREAD_MUTEX_RECURSIVE_NP
-#endif
 
 typedef struct _oslMutexImpl
 {
