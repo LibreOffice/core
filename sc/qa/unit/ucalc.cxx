@@ -5529,6 +5529,92 @@ void Test::testSortRefUpdate2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortRefUpdate3()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Sort");
+
+    const char* pData[] = {
+        "Header",
+        "1",
+        "=A2+10",
+        "2",
+        "=A4+10",
+        "=A2+A4",
+        0 // terminator
+    };
+
+    for (SCROW i = 0; pData[i]; ++i)
+        m_pDoc->SetString(ScAddress(0,i,0), OUString::createFromAscii(pData[i]));
+
+    // Check the initial values.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Sort A1:A6.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5));
+
+    // Sort A1:B5 by column A (with a row header).
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 5;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sorted values.
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Make sure the formula cells have been adjusted correctly.
+    if (!checkFormula(*m_pDoc, ScAddress(0,3,0), "A2+A3"))
+        CPPUNIT_FAIL("Wrong formula in A4.");
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "A2+10"))
+        CPPUNIT_FAIL("Wrong formula in A5.");
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "A3+10"))
+        CPPUNIT_FAIL("Wrong formula in A6.");
+
+    // Undo and check the result.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    pUndoMgr->Undo();
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Redo and check the result.
+    pUndoMgr->Redo();
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testShiftCells()
 {
     m_pDoc->InsertTab(0, "foo");
