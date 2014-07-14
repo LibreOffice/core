@@ -33,7 +33,6 @@
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "scdllapi.h"
-#include "refupdat.hxx"
 #include "cellvalue.hxx"
 
 class ScDocument;

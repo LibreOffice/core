@@ -33,6 +33,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
+#include <refupdat.hxx>
 
 #include <tools/shl.hxx>
 #include <tools/rtti.hxx>
