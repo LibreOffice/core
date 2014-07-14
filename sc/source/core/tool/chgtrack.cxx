@@ -2196,6 +2196,54 @@ void ScChangeTrack::Clear()
     Init();
 }
 
+bool ScChangeTrack::IsGenerated( sal_uLong nAction ) const
+{
+    return nAction >= nGeneratedMin;
+}
+
+ScChangeAction* ScChangeTrack::GetAction( sal_uLong nAction ) const
+{
+    ScChangeActionMap::const_iterator it = aMap.find( nAction );
+    if( it != aMap.end() )
+        return it->second;
+    else
+        return NULL;
+}
+
+ScChangeAction* ScChangeTrack::GetGenerated( sal_uLong nGenerated ) const
+{
+    ScChangeActionMap::const_iterator it = aGeneratedMap.find( nGenerated );
+    if( it != aGeneratedMap.end() )
+        return it->second;
+    else
+        return NULL;
+}
+
+ScChangeAction* ScChangeTrack::GetActionOrGenerated( sal_uLong nAction ) const
+{
+    return IsGenerated( nAction ) ?
+        GetGenerated( nAction ) :
+        GetAction( nAction );
+}
+sal_uLong ScChangeTrack::GetLastSavedActionNumber() const
+{
+    return nMarkLastSaved;
+}
+
+void ScChangeTrack::SetLastSavedActionNumber(sal_uLong nNew)
+{
+    nMarkLastSaved = nNew;
+}
+
+ScChangeAction* ScChangeTrack::GetLastSaved() const
+{
+    ScChangeActionMap::const_iterator it = aMap.find( nMarkLastSaved );
+    if( it != aMap.end() )
+        return it->second;
+    else
+        return NULL;
+}
+
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
@@ -2280,6 +2328,11 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
                 aModifiedLink.Call( this );
         }
     }
+}
+
+ScChangeTrackMsgQueue& ScChangeTrack::GetMsgQueue()
+{
+    return aMsgQueue;
 }
 
 void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,

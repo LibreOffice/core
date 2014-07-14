@@ -1029,42 +1029,13 @@ public:
     ScChangeAction*     GetFirst() const { return pFirst; }
     ScChangeAction*     GetLast() const { return pLast; }
     sal_uLong               GetActionMax() const { return nActionMax; }
-    bool IsGenerated( sal_uLong nAction ) const
-        { return nAction >= nGeneratedMin; }
-    ScChangeAction*     GetAction( sal_uLong nAction ) const
-    {
-        ScChangeActionMap::const_iterator it = aMap.find( nAction );
-        if( it != aMap.end() )
-            return it->second;
-        else
-            return NULL;
-    }
-    ScChangeAction*     GetGenerated( sal_uLong nGenerated ) const
-    {
-        ScChangeActionMap::const_iterator it = aGeneratedMap.find( nGenerated );
-        if( it != aGeneratedMap.end() )
-            return it->second;
-        else
-            return NULL;
-    }
-    ScChangeAction*     GetActionOrGenerated( sal_uLong nAction ) const
-                            {
-                                return IsGenerated( nAction ) ?
-                                    GetGenerated( nAction ) :
-                                    GetAction( nAction );
-                            }
-    sal_uLong               GetLastSavedActionNumber() const
-                            { return nMarkLastSaved; }
-    void                SetLastSavedActionNumber(sal_uLong nNew)
-                            { nMarkLastSaved = nNew; }
-    ScChangeAction*     GetLastSaved() const
-    {
-        ScChangeActionMap::const_iterator it = aMap.find( nMarkLastSaved );
-        if( it != aMap.end() )
-            return it->second;
-        else
-            return NULL;
-    }
+    bool IsGenerated( sal_uLong nAction ) const;
+    SC_DLLPUBLIC ScChangeAction* GetAction( sal_uLong nAction ) const;
+    ScChangeAction* GetGenerated( sal_uLong nGenerated ) const;
+    ScChangeAction* GetActionOrGenerated( sal_uLong nAction ) const;
+    sal_uLong GetLastSavedActionNumber() const;
+    void SetLastSavedActionNumber(sal_uLong nNew);
+    ScChangeAction* GetLastSaved() const;
     ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
 
     bool IsLoadSave() const { return bLoadSave; }
@@ -1220,7 +1191,7 @@ public:
     void                SetModifiedLink( const Link& r )
                             { aModifiedLink = r; ClearMsgQueue(); }
     const Link&         GetModifiedLink() const { return aModifiedLink; }
-    ScChangeTrackMsgQueue& GetMsgQueue() { return aMsgQueue; }
+    ScChangeTrackMsgQueue& GetMsgQueue();
 
     void                NotifyModified( ScChangeTrackMsgType eMsgType,
                             sal_uLong nStartAction, sal_uLong nEndAction );
