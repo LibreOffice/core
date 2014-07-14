@@ -800,7 +800,7 @@ void ScTable::SortReorderByRow(
                     pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
                     pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
 
-                    sc::CellStoreType::iterator itBlk = rCellStore.push_back(pNew);
+                    rCellStore.push_back(pNew);
                 }
                 break;
                 default:
