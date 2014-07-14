@@ -73,7 +73,7 @@ private:
     void                        DoAcceptRejectAction( ScChangeAction* pAction );
     void                        DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLast );
 
-    void                        DoInsertRange( const ScRange& rRange );
+    void DoInsertRange( const ScRange& rRange, bool bEndOfList );
     void                        DoDeleteRange( const ScRange& rRange );
 
     inline sal_uInt8            LookAtuInt8();
