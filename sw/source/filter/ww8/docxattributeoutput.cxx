@@ -2757,12 +2757,28 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         // inline, we also have to write the image itself
         const Graphic* pGraphic = 0;
         if (pGrfNode)
-            pGraphic = &const_cast< Graphic& >( pGrfNode->GetGrf() );
+            pGraphic = &pGrfNode->GetGrf();
         else
             pGraphic = pOLENode->GetGraphic();
 
         m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
+
+        bool bSwapped = pGraphic->IsSwapOut();
+        if (bSwapped)
+        {
+            if (pGrfNode)
+            {
+                // always swapin via the Node
+                const_cast<SwGrfNode*>(pGrfNode)->SwapIn();
+            }
+            else
+                const_cast<Graphic*>(pGraphic)->SwapIn();
+        }
+
         OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
+
+        if (bSwapped)
+            const_cast<Graphic*>(pGraphic)->SwapOut();
 
         aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
 
