@@ -49,7 +49,7 @@ namespace dbp
 
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxContext)
+        :OControlWizard(_pParent, _rxObjectModel, _rxContext)
         ,m_bVisitedDefault(false)
         ,m_bVisitedDB(false)
     {
@@ -59,6 +59,7 @@ namespace dbp
         m_pNextPage->SetHelpId(HID_GROUPWIZARD_NEXT);
         m_pCancel->SetHelpId(HID_GROUPWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_GROUPWIZARD_FINISH);
+        setTitleBase(ModuleRes(RID_STR_GROUPWIZARD_TITLE).toString());
     }
 
 

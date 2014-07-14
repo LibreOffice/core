@@ -19,37 +19,13 @@
 
 #include "dbpresid.hrc"
 
-ModalDialog RID_DLG_GROUPBOXWIZARD
+String RID_STR_GROUPWIZARD_TITLE
 {
-    HelpID = "extensions:ModalDialog:RID_DLG_GROUPBOXWIZARD";
     Text [ en-US ] = "Group Element Wizard";
-
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
 };
 
-ModalDialog RID_DLG_LISTCOMBOWIZARD
+String RID_STR_GRIDWIZARD_TITLE
 {
-    HelpID = "extensions:ModalDialog:RID_DLG_LISTCOMBOWIZARD";
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
-};
-
-ModalDialog RID_DLG_GRIDWIZARD
-{
-    HelpID = "extensions:ModalDialog:RID_DLG_GRIDWIZARD";
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
-
     Text [ en-US ] = "Table Element Wizard";
 };
 

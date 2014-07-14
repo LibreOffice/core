@@ -44,18 +44,14 @@
 #define RID_STR_TYPE_COMMAND            (RID_STRING_START + 10 )
 #define RID_STR_FIELDINFO_LISTBOX       (RID_STRING_START + 11 )
 #define RID_STR_FIELDINFO_COMBOBOX      (RID_STRING_START + 12 )
+#define RID_STR_GRIDWIZARD_TITLE        (RID_STRING_START + 13 )
+#define RID_STR_GROUPWIZARD_TITLE       (RID_STRING_START + 14 )
 
 // please adjust RID_STRING_END (below) when adding new strings
 #define RID_STRING_END                  RID_STR_TIMEPOSTFIX
 
-// dialogs
-
-#define RID_DLG_GROUPBOXWIZARD          ( RID_DIALOG_START +  1 )
-#define RID_DLG_LISTCOMBOWIZARD         ( RID_DIALOG_START +  2 )
-#define RID_DLG_GRIDWIZARD              ( RID_DIALOG_START +  3 )
-
 // please adjust RID_DIALOG_END (below) when adding new dialogs
-#define RID_DIALOG_END                  RID_DLG_GRIDWIZARD
+#define RID_DIALOG_END                  ( RID_DIALOG_START +  3 )
 
 // tab pages
 

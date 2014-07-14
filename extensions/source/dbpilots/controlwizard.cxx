@@ -275,9 +275,9 @@ namespace dbp
     //= OControlWizard
 
 
-    OControlWizard::OControlWizard( Window* _pParent, const ResId& _rId,
+    OControlWizard::OControlWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OWizardMachine(_pParent, _rId, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
+        :OWizardMachine(_pParent, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
         ,m_xContext(_rxContext)
     {
         m_aContext.xObjectModel = _rxObjectModel;
