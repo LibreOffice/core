@@ -2409,7 +2409,10 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     Point aOffset( nWidth/2, 8 );
     Size aOutSize( nWidth + 2*aOffset.X(), nHeight + 2*aOffset.Y() );
     if( !nWidth || !aVDev.SetOutputSizePixel( aOutSize ) )
+    {
+        pSalLayout->Release();
         return false;
+    }
 
     // draw text in black
     pSalLayout->DrawBase() = aOffset;
