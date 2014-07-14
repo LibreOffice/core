@@ -68,8 +68,16 @@ void TiledRenderingTest::testOverlay()
 
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       sLOPath.c_str() ) );
+    assert( pOffice.get() );
+
     scoped_ptr< Document> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
+
+    if ( !pDocument.get() )
+    {
+        fprintf( stderr, "documentLoad failed: %s\n", pOffice->getError() );
+        CPPUNIT_FAIL( "Document could not be loaded -- tiled rendering not possible." );
+    }
 
     // We render one large tile, then subdivide it into 4 and render those parts, and finally
     // iterate over each smaller tile and check whether their contents match the large
