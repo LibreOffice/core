@@ -216,8 +216,8 @@ public:
 protected:
 
     //FIXME(matteocam)
-    // whether the text object has a successor in a chain
-    bool mbChained;
+    // the successor in a chain
+    SdrTextObj *pNextInChain = NULL;
 
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
