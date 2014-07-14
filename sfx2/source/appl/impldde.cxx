@@ -198,9 +198,6 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-#if defined(WNT)
-    static sal_Bool bInWinExec = sal_False;
-#endif
     sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )           // Connection is already made
     {
@@ -227,69 +224,22 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
     {
-       // Is it possible to address the system-Topic?
-       // then the server is up, it just does not know the topic!
-        if( sTopic.equalsIgnoreAsciiCase( "SYSTEM" ) )
+        // check if the DDE server knows the "SYSTEM" topic
+        bool bSysTopic = false;
+        if (!sTopic.equalsIgnoreAsciiCase("SYSTEM"))
         {
-            bool bSysTopic;
-            {
-                DdeConnection aTmp(sServer, OUString("SYSTEM"));
-                bSysTopic = !aTmp.GetError();
-            }
-
-            if( bSysTopic )
-            {
-                nError = DDELINK_ERROR_DATA;
-                return false;
-            }
-            // otherwise in  Win/WinNT, start the Application directly
+            DdeConnection aTmp(sServer, OUString("SYSTEM"));
+            bSysTopic = !aTmp.GetError();
         }
 
-#if defined(WNT)
-        // check the suitability of starting the DDE server
-        const SvtSecurityOptions aSecOpts;
-        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() == eNEVER_EXECUTE);
-        bForbidden |= (comphelper::string::indexOfAny(sServer, L":./%\\") != -1);
-        static const char* aBadServers[] = { "cmd", "rundll32" };
-        for (size_t i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
-            bForbidden |= sServer.equalsAscii(aBadServers[i]);
-
-        // try to start the DDE server if it is not there already
-        bForbidden |= (bInWinExec != false);
-        if( !bForbidden )
+        if( bSysTopic )
         {
-            OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
-            aCmdLine.append(".exe ");
-            aCmdLine.append(OUStringToOString(sTopic, RTL_TEXTENCODING_ASCII_US));
-
-            if( WinExec( aCmdLine.getStr(), SW_SHOWMINIMIZED ) < 32 ) // TODO: use CreateProcess() instead
-                nError = DDELINK_ERROR_APP;
-            else
-            {
-                sal_uInt16 i;
-                for( i=0; i<5; i++ )
-                {
-                    bInWinExec = sal_True;
-                    Application::Reschedule();
-                    bInWinExec = sal_False;
-
-                    delete pConnection;
-                    pConnection = new DdeConnection( sServer, sTopic );
-                    if( !pConnection->GetError() )
-                        break;
-                }
-
-                if( i == 5 )
-                {
-                    nError = DDELINK_ERROR_APP;
-                }
-            }
+            // if the system topic works then the server is up but just doesn't know the original topic
+            nError = DDELINK_ERROR_DATA;
+            return false;
         }
-        else
-#endif  // WNT
-        {
-            nError = DDELINK_ERROR_APP;
-        }
+
+        nError = DDELINK_ERROR_APP;
     }
 
     if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
