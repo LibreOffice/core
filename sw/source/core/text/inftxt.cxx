@@ -891,6 +891,16 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
 }
 
+#ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
+                      SwRect& rRect, sal_Unicode cChar, sal_uInt8 nOptions )
+{
+    const SwFont* pOldFnt = rInf.GetFont();
+    Color aColor = pOldFnt->GetColor();
+    lcl_DrawSpecial(rInf, rPor, rRect, aColor, cChar, nOptions);
+}
+#endif
+
 void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
                                bool bRetouche ) const
 {
@@ -951,7 +961,11 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
         const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
 
-        lcl_DrawSpecial( *this, rPor, aRect, Color(0x6a, 0xbe, 0xd3), cChar, nOptions );
+        #ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+        lcl_DrawSpecial( *this, rPor, aRect, cChar, nOptions );
+        #else
+        lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
+        #endif
     }
 }
 
@@ -971,7 +985,11 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
             const sal_uInt8 nOptions = 0;
 
+            #ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+            lcl_DrawSpecial( *this, rPor, aRect, cChar, nOptions );
+            #else
             lcl_DrawSpecial( *this, rPor, aRect, Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
+            #endif
         }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
