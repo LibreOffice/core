@@ -868,6 +868,7 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     // Restore original top margin, so we don't end up with a smaller margin in case we have to produce two page styles from one Word section.
     m_nTopMargin = nTopMargin;
     m_nHeaderTop = nHeaderTop;
+    m_nBottomMargin = nBottomMargin;
     m_nHeaderBottom = nHeaderBottom;
 }
 
