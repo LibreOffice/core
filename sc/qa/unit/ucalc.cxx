@@ -5091,6 +5091,29 @@ void Test::testSortSingleRow()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5,0,0)));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6,0,0)));
 
+    // Undo and check.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
