@@ -809,7 +809,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             break;
         default: {
             GraphicType aType = rGraphic.GetType();
-            if ( aType == GRAPHIC_BITMAP && GRAPHIC_GDIMETAFILE) {
+            if ( aType == GRAPHIC_BITMAP || aType == GRAPHIC_GDIMETAFILE) {
                 bool bSwapped = rGraphic.IsSwapOut();
 
                 //Warn rather than just happily swap in because of the comments
