@@ -206,8 +206,8 @@ namespace svgio
             const SvgStyleAttributes* pParentStyle = getCssStyleParent();
 
             // no parent style set, check parent for its style attributes
-            if(pParentStyle == NULL && mrOwner.getParent() != NULL)
-               pParentStyle = mrOwner.getParent()->getSvgStyleAttributes();
+            if (pParentStyle == NULL && mrOwner.getParent() != NULL)
+                pParentStyle = mrOwner.getParent()->getSvgStyleAttributes();
 
             if (pParentStyle != this) // to prevent infinite loop
                 return pParentStyle;
