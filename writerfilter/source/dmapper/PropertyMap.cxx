@@ -791,32 +791,32 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     sal_Int32 nHeaderTop = m_nHeaderTop;
     if(HasHeader(bFirstPage))
     {
-        m_nTopMargin = m_nHeaderTop;
-        if( nTopMargin > 0 && nTopMargin > m_nHeaderTop )
-            m_nHeaderTop = nTopMargin - m_nHeaderTop;
+        nTopMargin = nHeaderTop;
+        if( m_nTopMargin > 0 && m_nTopMargin > nHeaderTop )
+            nHeaderTop = m_nTopMargin - nHeaderTop;
         else
-            m_nHeaderTop = 0;
+            nHeaderTop = 0;
 
         //minimum header height 1mm
-        if( m_nHeaderTop < MIN_HEAD_FOOT_HEIGHT )
-            m_nHeaderTop = MIN_HEAD_FOOT_HEIGHT;
+        if( nHeaderTop < MIN_HEAD_FOOT_HEIGHT )
+            nHeaderTop = MIN_HEAD_FOOT_HEIGHT;
     }
 
 
-    if( nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
+    if( m_nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
     {
         operator[](PROP_HEADER_IS_DYNAMIC_HEIGHT) = uno::makeAny( true );
         operator[](PROP_HEADER_DYNAMIC_SPACING) = uno::makeAny( true );
-        operator[](PROP_HEADER_BODY_DISTANCE) = uno::makeAny( m_nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
-        operator[](PROP_HEADER_HEIGHT) = uno::makeAny( m_nHeaderTop );
+        operator[](PROP_HEADER_BODY_DISTANCE) = uno::makeAny( nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
+        operator[](PROP_HEADER_HEIGHT) = uno::makeAny( nHeaderTop );
 
     }
     else
     {
         //todo: old filter fakes a frame into the header/footer to support overlapping
         //current setting is completely wrong!
-        operator[](PROP_HEADER_HEIGHT) = uno::makeAny( m_nHeaderTop );
-        operator[](PROP_HEADER_BODY_DISTANCE) = uno::makeAny( nTopMargin - m_nHeaderTop );
+        operator[](PROP_HEADER_HEIGHT) = uno::makeAny( nHeaderTop );
+        operator[](PROP_HEADER_BODY_DISTANCE) = uno::makeAny( m_nTopMargin - nHeaderTop );
         operator[](PROP_HEADER_IS_DYNAMIC_HEIGHT) = uno::makeAny( false );
         operator[](PROP_HEADER_DYNAMIC_SPACING) = uno::makeAny( false );
     }
@@ -825,21 +825,21 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     sal_Int32 nHeaderBottom = m_nHeaderBottom;
     if( HasFooter( bFirstPage ) )
     {
-        m_nBottomMargin = m_nHeaderBottom;
-        if( nBottomMargin > 0 && nBottomMargin > m_nHeaderBottom )
-            m_nHeaderBottom = nBottomMargin - m_nHeaderBottom;
+        nBottomMargin = nHeaderBottom;
+        if( m_nBottomMargin > 0 && m_nBottomMargin > nHeaderBottom )
+            nHeaderBottom = m_nBottomMargin - nHeaderBottom;
         else
-            m_nHeaderBottom = 0;
-        if( m_nHeaderBottom < MIN_HEAD_FOOT_HEIGHT )
-            m_nHeaderBottom = MIN_HEAD_FOOT_HEIGHT;
+            nHeaderBottom = 0;
+        if( nHeaderBottom < MIN_HEAD_FOOT_HEIGHT )
+            nHeaderBottom = MIN_HEAD_FOOT_HEIGHT;
     }
 
-    if( nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
+    if( m_nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
     {
         operator[](PROP_FOOTER_IS_DYNAMIC_HEIGHT) = uno::makeAny( true );
         operator[](PROP_FOOTER_DYNAMIC_SPACING) = uno::makeAny( true );
-        operator[](PROP_FOOTER_BODY_DISTANCE) = uno::makeAny( m_nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
-        operator[](PROP_FOOTER_HEIGHT) = uno::makeAny( m_nHeaderBottom );
+        operator[](PROP_FOOTER_BODY_DISTANCE) = uno::makeAny( nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
+        operator[](PROP_FOOTER_HEIGHT) = uno::makeAny( nHeaderBottom );
     }
     else
     {
@@ -847,19 +847,13 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
         //current setting is completely wrong!
         operator[](PROP_FOOTER_IS_DYNAMIC_HEIGHT) = uno::makeAny( false );
         operator[](PROP_FOOTER_DYNAMIC_SPACING) = uno::makeAny( false );
-        operator[](PROP_FOOTER_HEIGHT) = uno::makeAny( nBottomMargin - m_nHeaderBottom );
-        operator[](PROP_FOOTER_BODY_DISTANCE) = uno::makeAny( m_nHeaderBottom );
+        operator[](PROP_FOOTER_HEIGHT) = uno::makeAny( m_nBottomMargin - nHeaderBottom );
+        operator[](PROP_FOOTER_BODY_DISTANCE) = uno::makeAny( nHeaderBottom );
     }
 
     //now set the top/bottom margin for the follow page style
-    operator[](PROP_TOP_MARGIN) = uno::makeAny( m_nTopMargin );
-    operator[](PROP_BOTTOM_MARGIN) = uno::makeAny( m_nBottomMargin );
-
-    // Restore original top margin, so we don't end up with a smaller margin in case we have to produce two page styles from one Word section.
-    m_nTopMargin = nTopMargin;
-    m_nHeaderTop = nHeaderTop;
-    m_nBottomMargin = nBottomMargin;
-    m_nHeaderBottom = nHeaderBottom;
+    operator[](PROP_TOP_MARGIN) = uno::makeAny( nTopMargin );
+    operator[](PROP_BOTTOM_MARGIN) = uno::makeAny( nBottomMargin );
 }
 
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
