@@ -45,7 +45,19 @@ class SwScriptInfo;
 class SwViewOption;
 class SwWrongList;
 
+// LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+// Old handling of non printing character color - color is the same as current color
+// Because of problems drawing glyphs on correct position in OSX, this functionallity is
+// disabled on OSX. See fdo#79673 for details.
+#ifdef MACOSX
+#define LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+#else
+#undef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+#endif
+
+#ifndef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
 #define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA( 0x6A, 0xBE, 0xD3 )
+#endif
 
 /// Represents the visualization of a paragraph.
 class SwTxtFrm: public SwCntntFrm
