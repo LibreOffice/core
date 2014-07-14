@@ -1279,7 +1279,8 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( OUString( "file:///c:/" ) + aRecommendedName );
+                INetURLObject aObj( OUString( "file:///c:/" ) );
+                aObj.SetName( aRecommendedName );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;
                 if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
