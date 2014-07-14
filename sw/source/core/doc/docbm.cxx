@@ -1798,7 +1798,7 @@ namespace
         long int m_nIdx;
         bool m_bOther;
         sal_Int32 m_nCntnt;
-#if OSL_DEBUG_LEVEL > 0
+#if 0
         void Dump()
         {
             SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nCntnt);
