@@ -349,6 +349,7 @@ public:
     void testSortRefUpdate();
     void testSortRefUpdate2();
     void testSortRefUpdate3();
+    void testSortOutOfPlaceResult();
     void testShiftCells();
 
     void testNoteBasic();
@@ -521,6 +522,7 @@ public:
     CPPUNIT_TEST(testSortRefUpdate);
     CPPUNIT_TEST(testSortRefUpdate2);
     CPPUNIT_TEST(testSortRefUpdate3);
+    CPPUNIT_TEST(testSortOutOfPlaceResult);
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testNoteDeleteRow);

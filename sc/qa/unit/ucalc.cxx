@@ -5561,7 +5561,7 @@ void Test::testSortRefUpdate3()
     m_pDoc->SetAnonymousDBData(
         0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5));
 
-    // Sort A1:B5 by column A (with a row header).
+    // Sort A1:A6 by column A (with a row header).
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
     aSortData.nCol2 = 0;
@@ -5611,6 +5611,73 @@ void Test::testSortRefUpdate3()
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSortOutOfPlaceResult()
+{
+    m_pDoc->InsertTab(0, "Sort");
+
+    const char* pData[] = {
+        "Header",
+        "1",
+        "23",
+        "2",
+        "9",
+        "-2",
+        0 // terminator
+    };
+
+    // source data in A1:A6.
+    for (SCROW i = 0; pData[i]; ++i)
+        m_pDoc->SetString(ScAddress(0,i,0), OUString::createFromAscii(pData[i]));
+
+    // Check the initial values.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Sort A1:A6, and set the result to C2:C7
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5));
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 5;
+    aSortData.bHasHeader = true;
+    aSortData.bInplace = false;
+    aSortData.nDestTab = 0;
+    aSortData.nDestCol = 2;
+    aSortData.nDestRow = 1;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Source data still intact.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Sort result in C2:C7.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,4,0)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(2,5,0)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(2,6,0)));
 
     m_pDoc->DeleteTab(0);
 }
