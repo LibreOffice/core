@@ -54,7 +54,7 @@ namespace dbp
 
     OGridWizard::OGridWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxContext)
+        :OControlWizard(_pParent, _rxObjectModel, _rxContext)
         ,m_bHadDataSelection(true)
     {
         initControlSettings(&m_aSettings);
@@ -63,6 +63,7 @@ namespace dbp
         m_pNextPage->SetHelpId(HID_GRIDWIZARD_NEXT);
         m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
+        setTitleBase(ModuleRes(RID_STR_GRIDWIZARD_TITLE).toString());
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())

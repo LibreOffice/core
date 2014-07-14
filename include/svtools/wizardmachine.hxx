@@ -177,6 +177,7 @@ namespace svt
         */
         OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags );
         OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
+        OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags );
         virtual ~OWizardMachine();
 
         /// enable (or disable) buttons

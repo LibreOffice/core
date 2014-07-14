@@ -112,7 +112,6 @@ namespace dbp
     public:
         OControlWizard(
             Window* _pParent,
-            const ResId& _rId,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
