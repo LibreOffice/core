@@ -28,6 +28,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
+#include <docfld.hxx>
 #include <docufld.hxx>
 #include <doc.hxx>
 
@@ -573,6 +574,8 @@ void SwTxtInputFld::UpdateFieldContent()
         if ( pInputFld != NULL )
         {
             const_cast<SwInputField*>(pInputFld)->applyFieldContent( aNewFieldContent );
+            // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
+            GetTxtNode().GetDoc()->GetUpdtFlds().SetFieldsDirty( sal_True );
         }
     }
 }

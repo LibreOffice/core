@@ -156,27 +156,26 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         if ( nSttPos < rTxt.Len() &&
              ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char ) )
         {
-            SwIndex aIdx( pTxtNd, nSttPos );
-            SwTxtFld * const pTxtFld = static_cast<SwTxtFld*>(
-                pTxtNd->GetTxtAttrForCharAt(aIdx.GetIndex(), RES_TXTATR_FIELD));
-            if( !pTxtFld )
+            SwTxtFld * const pTxtFld =
+                static_cast<SwTxtFld*>( pTxtNd->GetTxtAttrForCharAt( nSttPos, RES_TXTATR_FIELD ) );
+            if ( pTxtFld == NULL )
                 break;
 
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // wieder zuruecksetzen
 
             const SwField* pFld = pTxtFld->GetFmtFld().GetField();
-            switch( pFld->GetTyp()->Which()  )
+            switch ( pFld->GetTyp()->Which() )
             {
             case RES_SETEXPFLD:
-                nRet = ((SwSetExpField*)pFld)->GetValue();
+                nRet = ( (SwSetExpField*) pFld )->GetValue();
                 break;
             case RES_USERFLD:
-                nRet = ((SwUserFieldType*)pFld)->GetValue();
+                nRet = ( (SwUserFieldType*) pFld )->GetValue();
                 break;
             case RES_TABLEFLD:
                 {
-                    SwTblField* pTblFld = (SwTblField*)pFld;
-                    if( !pTblFld->IsValid() )       // ist der Wert gueltig ??
+                    SwTblField* pTblFld = (SwTblField*) pFld;
+                    if ( !pTblFld->IsValid() )      // ist der Wert gueltig ??
                     {
                         // die richtige Tabelle mitgeben!
                         const SwTable* pTmp = rCalcPara.pTbl;
@@ -189,19 +188,28 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 break;
 
             case RES_DATETIMEFLD:
-                nRet = ((SwDateTimeField*)pFld)->GetValue();
+                nRet = ( (SwDateTimeField*) pFld )->GetValue();
                 break;
 
             case RES_JUMPEDITFLD:
-                //JP 14.09.98: Bug 56112 - der Platzhalter kann nie einen
-                //              gueltigen Inhalt haben!
+                // placeholder does not have valid content
                 nRet = 0;
                 break;
 
             default:
-                String const value(pFld->ExpandField(true));
-                nRet = rCalcPara.rCalc.Calculate(value).GetDouble();
+                String const value( pFld->ExpandField( true ) );
+                nRet = rCalcPara.rCalc.Calculate( value ).GetDouble();
             }
+        }
+        else if ( nSttPos < rTxt.Len()
+                  && Char == CH_TXT_ATR_INPUTFIELDSTART )
+        {
+            const SwTxtInputFld * pTxtInputFld =
+                dynamic_cast< const SwTxtInputFld* >(
+                    pTxtNd->GetTxtAttrAt( nSttPos, RES_TXTATR_INPUTFIELD, SwTxtNode::DEFAULT ) );
+            if ( pTxtInputFld == NULL )
+                break;
+            nRet = rCalcPara.rCalc.Calculate( pTxtInputFld->GetFieldContent() ).GetDouble();
         }
         else
         {
