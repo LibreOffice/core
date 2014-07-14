@@ -351,6 +351,12 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         pStm = aMedium.GetInStream();
                         if (!pStm)
                             pFilter = NULL;
+                        else
+                        {
+                            pStm->Seek( STREAM_SEEK_TO_BEGIN );
+                            if (pStm->remainingSize() == 0)
+                                pFilter = NULL;
+                        }
                     }
 
                     if (pFilter && pStm)
