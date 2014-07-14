@@ -156,7 +156,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 		$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
-		$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
 		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
@@ -236,6 +235,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
 	,$(call fetch_Download_item_unchecked,http://dev-www.libreoffice.org/mozilla,$(item)))
+	$(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
