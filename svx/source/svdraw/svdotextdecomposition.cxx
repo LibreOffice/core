@@ -555,6 +555,11 @@ namespace
         // make text portion primitive with the first part of the portion
         impCreateTextPortionPrimitive(rTruncatedPortionInfo);
 
+        // for debugging purposes (skip experiments)
+        bool b = true;
+        if (b)
+            return;
+
         /* Some Experiments */
 
         const SdrTextObj *pCurTextObj = mrOutliner.GetTextObj();
