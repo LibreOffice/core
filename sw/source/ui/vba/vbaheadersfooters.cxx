@@ -47,7 +47,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if( Index < 1 || Index > 3 )
-            throw container::NoSuchElementException();
+            throw lang::IndexOutOfBoundsException();
         return uno::makeAny( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
