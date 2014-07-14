@@ -1175,26 +1175,28 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         {
+            Color aSet;
             if(pItem)
+                aSet = ((const SvxColorItem*)pItem)->GetValue();
+            else
+                aSet = COL_TRANSPARENT;
+
+            SwEditWin& rEdtWin = GetView().GetEditWin();
+            rEdtWin.SetTextBackColor(aSet);
+            SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
+
+            if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
             {
-                Color aSet = ((const SvxColorItem*)pItem)->GetValue();
-                SwEditWin& rEdtWin = GetView().GetEditWin();
-                rEdtWin.SetTextBackColor(aSet);
-                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-
-                if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
-                {
-                    SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
-                    aBrushItem.SetColor(aSet);
-                    rWrtSh.SetAttrItem( aBrushItem );
-                }
-                else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-                {
-                    GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
-                }
-
-                rReq.Done();
+                SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
+                aBrushItem.SetColor(aSet);
+                rWrtSh.SetAttrItem( aBrushItem );
             }
+            else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
+            {
+                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
+            }
+
+            rReq.Done();
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
