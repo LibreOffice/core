@@ -37,7 +37,7 @@ public:
     virtual ~SwVbaHeadersFooters() {}
 
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& )throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) SAL_OVERRIDE;
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;

@@ -89,13 +89,13 @@ SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface
     return 3;
 }
 
-uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::Any& ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::Any& ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
     Index1 >>= nIndex;
     if( ( nIndex < 1 ) || ( nIndex > 3 ) )
     {
-        throw container::NoSuchElementException();
+        throw lang::IndexOutOfBoundsException();
     }
     return uno::makeAny( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
 }
