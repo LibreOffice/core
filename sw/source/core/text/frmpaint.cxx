@@ -562,9 +562,8 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetFrm( this );
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( false );
-                    #ifndef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
+
                     pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
-                    #endif
                     pFnt->_DrawText( aDrawInf );
                 }
                 delete pClip;

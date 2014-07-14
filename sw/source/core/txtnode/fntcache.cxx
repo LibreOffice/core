@@ -1353,11 +1353,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     {
         const OUString* pStr = &rInf.GetText();
         OUString aStr;
-
-        #ifndef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
         OUString aBulletOverlay;
-        #endif
-
         bool bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = false;
@@ -1483,26 +1479,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             aStr = rInf.GetText().copy( nCopyStart, nCopyLen );
             pStr = &aStr;
 
-            #ifdef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
-            for (sal_Int32 i = 0; i < aStr.getLength(); ++i)
-            {
-                if (CH_BLANK == aStr[i])
-                {
-                    /* fdo#72488 Hack: try to see if the space is zero width
-                     * and don't bother with inserting a bullet in this case.
-                     */
-                    if ((i + nCopyStart + 1 >= rInf.GetLen()) ||
-                        pKernArray[i + nCopyStart] != pKernArray[ i + nCopyStart + 1])
-                    {
-                        aStr = aStr.replaceAt(i, 1, OUString(CH_BULLET));
-                    }
-                }
-            }
-            #else
             aBulletOverlay = rInf.GetText().copy( nCopyStart, nCopyLen );
 
             for( sal_Int32 i = 0; i < aBulletOverlay.getLength(); ++i )
-            {
                 if( CH_BLANK == aBulletOverlay[ i ] )
                 {
                     /* fdo#72488 Hack: try to see if the space is zero width
@@ -1522,8 +1501,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
                 }
-            }
-            #endif
         }
 
         sal_Int32 nCnt = rInf.GetText().getLength();
@@ -1747,7 +1724,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                              nTmpIdx + nOffs , nLen - nOffs );
-                #ifndef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
                 if (bBullet)
                 {
                     rInf.GetOut().Push();
@@ -1771,7 +1747,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
                     rInf.GetOut().Pop();
                 }
-                #endif
             }
         }
         delete[] pScrArray;
