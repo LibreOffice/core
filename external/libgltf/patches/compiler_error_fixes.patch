@@ -1,0 +1,41 @@
+diff -ur libgltf.org/src/Camera.cpp libgltf/src/Camera.cpp
+--- libgltf.org/src/Camera.cpp	2014-06-26 15:49:57.807687346 +0200
++++ libgltf/src/Camera.cpp	2014-06-26 15:50:46.195685296 +0200
+@@ -161,7 +161,7 @@
+     }
+     else
+     {
+-        if (abs(x) > 0.0001 || abs(y) > 0.0001 || abs(z) > 0.0001)
++        if (std::abs(x) > 0.0001 || std::abs(y) > 0.0001 || std::abs(z) > 0.0001)
+         {
+              bMoveCmeraModel = true;
+         }
+@@ -240,7 +240,7 @@
+ {
+     if (!bAerialView)
+         return;
+-    if (abs(horizontal) > planar || abs(vertical) > 0.0001)
++    if (std::abs(horizontal) > planar || std::abs(vertical) > 0.0001)
+     {
+         bRotateCameraModel = true;
+         fRotateCameraXSpeed = 0;
+@@ -275,7 +275,7 @@
+ void CPhysicalCamera::RotateCamera(double horizontal, double vertical,
+                                    double planar)
+ {
+-    if (abs(horizontal) > planar || abs(vertical) > 0.0001)
++    if (std::abs(horizontal) > planar || std::abs(vertical) > 0.0001)
+     {
+         bRotateCameraModel = true;
+     }
+diff -ur libgltf.org/src/Font.cpp libgltf/src/Font.cpp
+--- libgltf.org/src/Font.cpp	2014-06-26 15:49:57.807687346 +0200
++++ libgltf/src/Font.cpp	2014-06-26 15:50:57.619684812 +0200
+@@ -8,6 +8,7 @@
+ #include "Font.h"
+ 
+ #include <glm/gtc/matrix_transform.hpp>
++#include <cstdio>
+ 
+ using namespace std;
+ 

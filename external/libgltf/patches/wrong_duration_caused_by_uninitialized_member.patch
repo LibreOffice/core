@@ -1,0 +1,13 @@
+diff -ur libgltf.org/src/Common.cpp libgltf/src/Common.cpp
+--- libgltf.org/src/Common.cpp	2014-06-23 20:16:17.746896264 +0200
++++ libgltf/src/Common.cpp	2014-06-23 20:17:50.610892265 +0200
+@@ -1037,7 +1037,8 @@
+ 
+ /* -- Scene -- */
+ Scene::Scene()
+-    : pRootNode(0)
++    : mDuration(0.0)
++    , pRootNode(0)
+     , pBuffer(0)
+     , pGltfHandle(0)
+     , bUseCameraInJson(false)

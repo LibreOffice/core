@@ -1,0 +1,27 @@
+changeset:   1068:ef62f9d46016
+branch:      improvement
+parent:      1065:ce62a560f347
+user:        LeiQu
+date:        Tue Jul 01 14:46:15 2014 +0800
+summary:     Fix the bug of memory leak
+
+diff -ur libgltf.org/src/LoadScene.cpp libgltf/src/LoadScene.cpp
+--- libgltf.org/src/LoadScene.cpp	2014-07-04 16:35:53.702409179 +0200
++++ libgltf/src/LoadScene.cpp	2014-07-04 16:35:59.926408911 +0200
+@@ -1052,10 +1052,14 @@
+     std::string nodeId;
+     for (; it != itEnd; ++it)
+     {
+-        Animation* pAnimation = new Animation();
+         boost::property_tree::ptree pAnimTree = it->second;
+         nodeId = parseChannel(pAnimTree);
+-        parsePara(pAnimTree, pAnimation, nodeId);
++        if (nodeId.empty())
++        {
++            continue;
++        }
++        Animation* pAnimation = new Animation();
++        parsePara(pAnimTree, pAnimation, nodeId); 
+         this->pScene->insertAnimMap(nodeId, pAnimation);
+     }
+     return true;

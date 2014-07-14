@@ -1,0 +1,76 @@
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-23 18:49:46.603119797 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-23 19:00:17.583092627 +0200
+@@ -1735,28 +1735,29 @@
+ 
+ void RenderScene::setBitZoom(unsigned char* Dstbuffer,
+                              unsigned char* Srcbuffer,
+-                             glTFViewport* pViewport)
++                             glTFViewport* pViewport,
++                             int bufferDepth )
+ {
+     const int width = pViewport->width;
+     const int height = pViewport->height;
+-    const int newLineByte = (width * 3 + 3) / 4 * 4;
+-    const int lineByte = (width * SSAA * 3 + 3) / 4 * 4;
++    const int newLineByte = width * bufferDepth;
++    const int lineByte = width * SSAA * bufferDepth;
+     for (int i = 0; i < height; i++)
+     {
+         for (int j = 0; j < width; j++)
+-            for (int k = 0; k < 3; k++)
++            for (int k = 0; k < bufferDepth; k++)
+             {
+                 long xData = (long)(i * SSAA + 0.5);
+                 long yData = (long)(j * SSAA + 0.5);
+                 if((yData >= 0) && (yData < width * SSAA) &&
+                    (xData >= 0) && (xData < height * SSAA))
+                 {
+-                    *(Dstbuffer + i * newLineByte + j * 3 + k) =
+-                        *(Srcbuffer + xData * lineByte + yData * 3 + k);
++                    *(Dstbuffer + i * newLineByte + j * bufferDepth + k) =
++                        *(Srcbuffer + xData * lineByte + yData * bufferDepth + k);
+                 }
+                 else
+                 {
+-                    *(Dstbuffer + i * newLineByte + j * 3 + k) = 255;
++                    *(Dstbuffer + i * newLineByte + j * bufferDepth + k) = 255;
+                 }
+             }
+     }
+@@ -1782,12 +1783,20 @@
+     {
+         return;
+     }
+-    int imageSize = ((width + ((4 - (width % 4)) % 4)) *
+-                     height * 3) + 2;
++
++    int bufferDepth;
++    if( format == GL_RGB || format == GL_BGR )
++        bufferDepth = 3;
++    else if( format == GL_RGBA || format == GL_BGRA )
++        bufferDepth = 4;
++    else
++        return;
++
++    int imageSize = width * height * bufferDepth;
+     unsigned char *pbuffer = new unsigned char[imageSize];
+     glReadPixels(0, 0, width, height, format,
+                  GL_UNSIGNED_BYTE, pbuffer);
+-    setBitZoom(buffer, pbuffer, pViewport);
++    setBitZoom(buffer, pbuffer, pViewport, bufferDepth);
+     if (pbuffer)
+     {
+         delete [] pbuffer;
+diff -ur libgltf.org/src/RenderScene.h libgltf/src/RenderScene.h
+--- libgltf.org/src/RenderScene.h	2014-06-23 18:49:46.587119798 +0200
++++ libgltf/src/RenderScene.h	2014-06-23 18:59:46.991093944 +0200
+@@ -234,7 +234,7 @@
+     void completeRenderBitmap(glTFViewport* pViewport,
+                               unsigned char* buffer, GLenum format);
+     void setBitZoom(unsigned char* Dstbuffer,
+-                    unsigned char* Srcbuffer, glTFViewport* pViewport);
++                    unsigned char* Srcbuffer, glTFViewport* pViewport, int bufferDepth );
+ 
+     // For animation
+     void startAnimation();
