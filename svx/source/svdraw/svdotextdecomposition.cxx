@@ -524,8 +524,8 @@ namespace
 
         bool bTruncateText = rInfo.mbEndOfParagraph; // arbitrary property
 
-        // truncate text
-        if ( bTruncateText )
+
+        if ( bTruncateText ) // truncate text
             impHandleTruncatedPortion(rInfo)
         else // no chaining or truncating
             impCreateTextPortionPrimitive(rInfo);
@@ -543,11 +543,19 @@ namespace
 
     void impTextBreakupHandler::impHandleTruncatedPortion(const DrawPortionInfo& rInfo)
     {
-        // truncate it at 4
+        // truncate portion at 4
         int nTruncationPoint = 4;
-        DrawPortionInfo rInfoNonConst = rInfo;
-        rInfoNonConst.mnTextLen = std::min( rInfo.mnTextLen, nTruncationPoint );
-        impCreateTextPortionPrimitive(rInfoNonConst);
+
+        // make truncated DrawPortionInfo
+        DrawPortionInfo rTruncatedPortionInfo = rInfo;
+        rTruncatedPortionInfo.mnTextLen =
+            std::min( rInfo.mnTextLen, nTruncationPoint );
+
+        // make text portion primitive with the first part of the portion
+        impCreateTextPortionPrimitive(rTruncatedPortionInfo);
+
+        // if text is left in original portion send it back to editeng
+        // FIXME(matteocam)
     }
 
     void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
