@@ -495,14 +495,32 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             break;
         default: {
             GraphicType aType = rGraphic.GetType();
-            if ( aType == GRAPHIC_BITMAP ) {
-                GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
-                sMediaType = "image/png";
-                pExtension = ".png";
-            } else if ( aType == GRAPHIC_GDIMETAFILE ) {
-                GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
-                sMediaType = "image/x-emf";
-                pExtension = ".emf";
+            if ( aType == GRAPHIC_BITMAP || aType == GRAPHIC_GDIMETAFILE) {
+                bool bSwapped = rGraphic.IsSwapOut();
+
+                //Warn rather than just happily swap in because of the comments
+                //in the sw export filters about needing to go through the
+                //hairy SwGrfNode::SwapIn which we would subvert by swapping in
+                //without it knowing about it, so while those ones are fixed we
+                //probably have to assume that we should ideally be presented
+                //here with already swapped in graphics.
+                SAL_WARN_IF(bSwapped, "oox", "attempted to output swapped out graphic");
+
+                if (bSwapped)
+                    const_cast<Graphic&>(rGraphic).SwapIn();
+
+                if ( aType == GRAPHIC_BITMAP ) {
+                    GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
+                    sMediaType = "image/png";
+                    pExtension = ".png";
+                } else {
+                    GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
+                    sMediaType = "image/x-emf";
+                    pExtension = ".emf";
+                }
+
+                if (bSwapped)
+                    const_cast<Graphic&>(rGraphic).SwapOut();
             } else {
                 OSL_TRACE( "unhandled graphic type" );
                 break;
