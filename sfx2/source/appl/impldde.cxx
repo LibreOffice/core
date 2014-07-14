@@ -209,9 +209,6 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-#if defined(WNT)
-    static sal_Bool bInWinExec = sal_False;
-#endif
     sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )       // Verbindung steht ja schon
     {
@@ -238,69 +235,22 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
     {
-        // kann man denn das System-Topic ansprechen ?
-        // dann ist der Server oben, kennt nur nicht das Topic!
-        if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )
+        // check if the DDE server knows the "SYSTEM" topic
+        bool bSysTopic = false;
+        if( !sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ))
         {
-            sal_Bool bSysTopic;
-            {
-                DdeConnection aTmp( sServer, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SYSTEM" ) ) );
-                bSysTopic = !aTmp.GetError();
-            }
-
-            if( bSysTopic )
-            {
-                nError = DDELINK_ERROR_DATA;
-                return sal_False;
-            }
-            // ansonsten unter Win/WinNT die Applikation direkt starten
+            DdeConnection aTmp( sServer, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SYSTEM" ) ) );
+            bSysTopic = !aTmp.GetError();
         }
 
-#if defined(WNT)
-        // check the suitability of starting the DDE server
-        const SvtSecurityOptions aSecOpts;
-        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() == eNEVER_EXECUTE);
-        bForbidden |= (sServer.SearchChar( L":./%\\") != STRING_NOTFOUND);
-        static const char* aBadServers[] = { "cmd", "rundll32" };
-        for( int i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
-            bForbidden |= (sServer.CompareIgnoreCaseToAscii( aBadServers[i]) == COMPARE_EQUAL);
-
-        // try to start the DDE server if it is not there already
-        bForbidden |= (bInWinExec != sal_False);
-        if( !bForbidden )
+        if( bSysTopic )
         {
-            ByteString aCmdLine( sServer, RTL_TEXTENCODING_ASCII_US );
-            aCmdLine.Append( ".exe " );
-            aCmdLine.Append( ByteString( sTopic, RTL_TEXTENCODING_ASCII_US ) );
-
-            if( WinExec( aCmdLine.GetBuffer(), SW_SHOWMINIMIZED ) < 32 ) // TODO: use CreateProcess() instead
-                nError = DDELINK_ERROR_APP;
-            else
-            {
-                sal_uInt16 i;
-                for( i=0; i<5; i++ )
-                {
-                    bInWinExec = sal_True;
-                    Application::Reschedule();
-                    bInWinExec = sal_False;
-
-                    delete pConnection;
-                    pConnection = new DdeConnection( sServer, sTopic );
-                    if( !pConnection->GetError() )
-                        break;
-                }
-
-                if( i == 5 )
-                {
-                    nError = DDELINK_ERROR_APP;
-                }
-            }
+            // if the system topic works then the server is up but just doesn't know the original topic
+            nError = DDELINK_ERROR_DATA;
+            return sal_False;
         }
-        else
-#endif  // WNT
-        {
-            nError = DDELINK_ERROR_APP;
-        }
+
+        nError = DDELINK_ERROR_APP;
     }
 
     if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
