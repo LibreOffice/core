@@ -639,7 +639,8 @@ SdrDragMethod::SdrDragMethod(SdrDragView& rNewView)
     maOverlayObjectList(),
     mrSdrDragView(rNewView),
     mbMoveOnly(false),
-    mbSolidDraggingActive(getSdrDragView().IsSolidDragging())
+    mbSolidDraggingActive(getSdrDragView().IsSolidDragging()),
+    mbShiftPressed(false)
 {
     if(mbSolidDraggingActive && Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
