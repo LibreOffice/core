@@ -179,6 +179,7 @@ certain functionality.
 @li @c oox.cscode - see oox/source/drawingml/customshapes/README
 @li @c oox.csdata - see oox/source/drawingml/customshapes/README
 @li @c oox.drawingml - DrawingML
+@li @c oox.drawingml.gradient
 @li @c oox.ppt - pptx filter
 @li @c oox.storage - ZipStorage class
 @li @c oox.xmlstream - XmlStream class
