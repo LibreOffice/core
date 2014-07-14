@@ -148,6 +148,19 @@ namespace svt
     }
 
 
+    OWizardMachine::OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags )
+        :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )
+        ,m_pFinish(NULL)
+        ,m_pCancel(NULL)
+        ,m_pNextPage(NULL)
+        ,m_pPrevPage(NULL)
+        ,m_pHelp(NULL)
+        ,m_pImpl( new WizardMachineImplData )
+    {
+        implConstruct( _nButtonFlags );
+    }
+
+
     void OWizardMachine::implConstruct( const sal_uInt32 _nButtonFlags )
     {
         m_pImpl->sTitleBase = GetText();

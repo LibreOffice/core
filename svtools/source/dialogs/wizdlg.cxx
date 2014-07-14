@@ -377,6 +377,14 @@ WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
 
 
 
+WizardDialog::WizardDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+    ModalDialog( pParent, rID, rUIXMLDescription )
+{
+    ImplInitData();
+}
+
+
+
 WizardDialog::~WizardDialog()
 {
     maWizardLayoutTimer.Stop();

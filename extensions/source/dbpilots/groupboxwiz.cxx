@@ -49,7 +49,7 @@ namespace dbp
 
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxContext)
+        :OControlWizard(_pParent, _rxObjectModel, _rxContext)
         ,m_bVisitedDefault(false)
         ,m_bVisitedDB(false)
     {
