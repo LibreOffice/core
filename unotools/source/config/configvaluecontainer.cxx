@@ -57,13 +57,10 @@ namespace utl
 
         void bind( void* _pLocation, const Type& _rType );
 
-        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
         const OUString&  getPath( ) const        { return sRelativePath; }
         LocationType            getLocType( ) const     { return eLocationType; }
         void*                   getLocation( ) const    { return pLocation; }
         const Type&             getDataType( ) const    { return aDataType; }
-
-        bool operator == ( const NodeValueAccessor& rhs ) const;
     };
 
     NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )
@@ -71,13 +68,6 @@ namespace utl
         ,eLocationType( ltUnbound )
         ,pLocation( NULL )
     {
-    }
-
-    bool NodeValueAccessor::operator == ( const NodeValueAccessor& rhs ) const
-    {
-        return  (   sRelativePath   ==  rhs.sRelativePath   )
-            &&  (   eLocationType   ==  rhs.eLocationType   )
-            &&  (   pLocation       ==  rhs.pLocation       );
     }
 
     void NodeValueAccessor::bind( void* _pLocation, const Type& _rType )
