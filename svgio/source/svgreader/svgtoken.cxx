@@ -160,6 +160,8 @@ namespace svgio
         static OUString aSVGStrText("text");
         static OUString aSVGStrBaselineShift("baseline-shift");
 
+        static OUString aSVGStrFlowRoot("flowRoot");
+
         SVGToken StrToSVGToken(const OUString& rStr)
         {
             typedef boost::unordered_map< OUString, SVGToken, OUStringHash,::std::equal_to< OUString >  > SVGTokenMapper;
@@ -302,6 +304,7 @@ namespace svgio
 
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrText, SVGTokenText));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrBaselineShift, SVGTokenBaselineShift));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFlowRoot, SVGTokenFlowRoot));
             }
 
             const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.startsWith("svg:") ? rStr.copy(4) : rStr));

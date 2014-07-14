@@ -137,7 +137,8 @@ namespace svgio
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
             mpTarget(0),
-            maCssContents()
+            maCssContents(),
+            bSkip(false)
         {
         }
 
@@ -167,8 +168,11 @@ namespace svgio
 
         void SvgDocHdl::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         {
+            if (bSkip)
+                return;
             if(!aName.isEmpty())
             {
+
                 const SVGToken aSVGToken(StrToSVGToken(aName));
 
                 switch(aSVGToken)
@@ -364,6 +368,13 @@ namespace svgio
                         break;
                     }
 
+                    // ignore FlowRoot and child nodes
+                    case SVGTokenFlowRoot:
+                    {
+                        bSkip = true;
+                        break;
+                    }
+
                     default:
                     {
                         /// invalid token, ignore
@@ -387,6 +398,13 @@ namespace svgio
                 SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
                 SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : 0);
                 SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : 0);
+
+                // if we are in skipping mode and we reach the flowRoot end tag: stop skipping mode
+                if(bSkip && aSVGToken == SVGTokenFlowRoot)
+                    bSkip = false;
+                // we are in skipping mode: do nothing until we found the flowRoot end tag
+                else if(bSkip)
+                    return;
 
                 switch(aSVGToken)
                 {
@@ -457,6 +475,13 @@ namespace svgio
                         }
                         break;
                     }
+
+                    case SVGTokenFlowRoot:
+                    {
+                        bSkip = false;
+                        break;
+                    }
+
                     default:
                     {
                         /// invalid token, ignore

@@ -41,6 +41,8 @@ namespace svgio
             // text collector string stack for css styles
             std::vector< OUString >    maCssContents;
 
+            bool                            bSkip;
+
         public:
             SvgDocHdl(const OUString& rAbsolutePath);
             virtual ~SvgDocHdl();
