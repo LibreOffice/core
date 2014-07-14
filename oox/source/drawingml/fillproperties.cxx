@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iterator>
+#include <boost/utility.hpp>
+
 #include "oox/drawingml/fillproperties.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -340,8 +343,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.StartIntensity = 100;
                     aGradient.EndIntensity = 100;
 
-                    size_t nColorCount = maGradientProps.maGradientStops.size();
-                    if( nColorCount > 1 )
+                    // Old code, values in aGradient overwritten in many cases by newer code below
+                    if( maGradientProps.maGradientStops.size() > 1 )
                     {
                         aGradient.StartColor = maGradientProps.maGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr );
                         aGradient.EndColor = maGradientProps.maGradientStops.rbegin()->second.getColor( rGraphicHelper, nPhClr );
@@ -377,33 +380,194 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
                     else
                     {
-                        /*  Try to detect a VML axial gradient. This type of
-                            gradient is simulated by a 3-point linear gradient.
-                            Even if it's a multi-color linear gradient, its probably better to assume
-                            axial gradient, when there are 3 or more points.
-                         */
-                        bool bAxial = (nColorCount >= 3);
-                        aGradient.Style = bAxial ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
+                        // A copy of the gradient stops for local modification
+                        GradientFillProperties::GradientStopMap aGradientStops(maGradientProps.maGradientStops);
+
+                        // Add a fake gradient stop at 0% and 100% if necessary, so that the gradient always starts
+                        // at 0% and ends at 100%, to make following logic clearer (?).
+                        if( aGradientStops.find(0.0) == aGradientStops.end() )
+                        {
+                            // temp variable required
+                            Color aFirstColor(aGradientStops.begin()->second);
+                            aGradientStops[0.0] = aFirstColor;
+                        }
+
+                        if( aGradientStops.find(1.0) == aGradientStops.end() )
+                        {
+                            // ditto
+                            Color aLastColor(aGradientStops.rbegin()->second);
+                            aGradientStops[1.0] = aLastColor;
+                        }
+
+                        // Check if the gradient is symmetric, which we will emulate with an "axial" gradient.
+                        bool bSymmetric(true);
+                        {
+                            GradientFillProperties::GradientStopMap::const_iterator aItA( aGradientStops.begin() );
+                            GradientFillProperties::GradientStopMap::const_iterator aItZ( boost::prior( aGradientStops.end() ) );
+                            while( bSymmetric && aItA->first < aItZ->first )
+                            {
+                                if( aItA->second.getColor( rGraphicHelper, nPhClr ) != aItZ->second.getColor( rGraphicHelper, nPhClr ) ||
+                                    aItA->second.getTransparency() != aItZ->second.getTransparency() )
+                                    bSymmetric = false;
+                                else
+                                {
+                                    aItA++;
+                                    aItZ = boost::prior(aItZ);
+                                }
+                            }
+                            // Don't be fooled if the middlemost stop isn't at 0.5.
+                            if( bSymmetric && aItA == aItZ && aItA->first != 0.5 )
+                                bSymmetric = false;
+
+                            // If symmetric, do the rest of the logic for just a half.
+                            if( bSymmetric )
+                            {
+                                // aItZ already points to the colour for the middle, but insert a fake stop at the
+                                // exact middle if necessary.
+                                if( aItA->first != aItZ->first )
+                                {
+                                    Color aMiddleColor = aItZ->second;
+                                    aGradientStops[0.5] = aMiddleColor;
+                                }
+                                // Drop the rest of the stops
+                                while( aGradientStops.rbegin()->first > 0.5 )
+                                    aGradientStops.erase( aGradientStops.rbegin()->first );
+                            }
+                        }
+
+                        SAL_INFO("oox.drawingml.gradient", "symmetric: " << (bSymmetric ? "YES" : "NO") <<
+                                 ", number of stops: " << aGradientStops.size());
+                        for (GradientFillProperties::GradientStopMap::iterator p(aGradientStops.begin());
+                             p != aGradientStops.end();
+                             p++)
+                            SAL_INFO("oox.drawingml.gradient", "  " << std::distance(aGradientStops.begin(), p) << ": " <<
+                                     p->first << ": " <<
+                                     std::hex << p->second.getColor( rGraphicHelper, nPhClr ) << std::dec <<
+                                     "@" << (100-p->second.getTransparency()) << "%");
+
+                        // Now estimate the simple LO style gradient (only two stops, at n% and 100%, where n ==
+                        // the "border") that best emulates the gradient between begin() and prior(end()).
+
+                        // First look for the largest segment in the gradient.
+                        GradientFillProperties::GradientStopMap::iterator aIt(aGradientStops.begin());
+                        double nWidestWidth = -1;
+                        GradientFillProperties::GradientStopMap::iterator aWidestSegmentStart;
+                        aIt++;
+                        while( aIt != aGradientStops.end() )
+                        {
+                            if( aIt->first - boost::prior(aIt)->first > nWidestWidth )
+                            {
+                                nWidestWidth = aIt->first - boost::prior(aIt)->first;
+                                aWidestSegmentStart = boost::prior(aIt);
+                            }
+                            aIt++;
+                        }
+                        assert( nWidestWidth > 0 );
+
+                        double nBorder = 0;
+                        bool bSwap(false);
+
+                        // Do we have just two segments, and either one is of uniform colour, or three or more
+                        // segments, and the widest one is the first or last one, and is it of uniform colour? If
+                        // so, deduce the border from it, and drop that segment.
+                        if( aGradientStops.size() == 3 &&
+                            aGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr ) == boost::next(aGradientStops.begin())->second.getColor( rGraphicHelper, nPhClr ) &&
+                            aGradientStops.begin()->second.getTransparency() == boost::next(aGradientStops.begin())->second.getTransparency( ) )
+                        {
+                            // Two segments, first is uniformly coloured
+                            SAL_INFO("oox.drawingml.gradient", "two segments, first is uniformly coloured");
+                            nBorder = boost::next(aGradientStops.begin())->first - aGradientStops.begin()->first;
+                            aGradientStops.erase(aGradientStops.begin());
+                            aWidestSegmentStart = aGradientStops.begin();
+                        }
+                        else if( !bSymmetric &&
+                                 aGradientStops.size() == 3 &&
+                                 boost::next(aGradientStops.begin())->second.getColor( rGraphicHelper, nPhClr ) == boost::prior(aGradientStops.end())->second.getColor( rGraphicHelper, nPhClr ) &&
+                                 boost::next(aGradientStops.begin())->second.getTransparency() == boost::prior(aGradientStops.end())->second.getTransparency( ) )
+                        {
+                            // Two segments, second is uniformly coloured
+                            SAL_INFO("oox.drawingml.gradient", "two segments, second is uniformly coloured");
+                            nBorder = boost::prior(aGradientStops.end())->first - boost::next(aGradientStops.begin())->first;
+                            aGradientStops.erase(boost::next(aGradientStops.begin()));
+                            aWidestSegmentStart = aGradientStops.begin();
+                            bSwap = true;
+                            nShapeRotation = 180*60000 - nShapeRotation;
+                        }
+                        else if( !bSymmetric &&
+                                 aGradientStops.size() >= 4 &&
+                                 aWidestSegmentStart->second.getColor( rGraphicHelper, nPhClr ) == boost::next(aWidestSegmentStart)->second.getColor( rGraphicHelper, nPhClr ) &&
+                                 aWidestSegmentStart->second.getTransparency() == boost::next(aWidestSegmentStart)->second.getTransparency() &&
+                                 ( aWidestSegmentStart == aGradientStops.begin() ||
+                                   boost::next(aWidestSegmentStart) == boost::prior( aGradientStops.end() ) ) )
+                        {
+                            // Not symmetric, three or more segments, the widest is first or last and is uniformly coloured
+                            SAL_INFO("oox.drawingml.gradient", "first or last segment is widest and is uniformly coloured");
+                            nBorder = boost::next(aWidestSegmentStart)->first - aWidestSegmentStart->first;
+
+                            // If it's the last segment that is uniformly coloured, rotate the gradient 180
+                            // degrees and swap start and end colours
+                            if( boost::next(aWidestSegmentStart) == boost::prior( aGradientStops.end() ) )
+                            {
+                                bSwap = true;
+                                nShapeRotation = 180*60000 - nShapeRotation;
+                            }
+
+                            aGradientStops.erase( aWidestSegmentStart );
+
+                            // Look for which is widest now
+                            aIt = boost::next(aGradientStops.begin());
+                            nWidestWidth = -1;
+                            while( aIt != aGradientStops.end() )
+                            {
+                                if( aIt->first - boost::prior(aIt)->first > nWidestWidth )
+                                {
+                                    nWidestWidth = aIt->first - boost::prior(aIt)->first;
+                                    aWidestSegmentStart = boost::prior(aIt);
+                                }
+                                aIt++;
+                            }
+                        }
+                        SAL_INFO("oox.drawingml.gradient", "widest segment start: " << aWidestSegmentStart->first << ", border: " << nBorder);
+                        assert( (!bSymmetric && !bSwap) || !(bSymmetric && bSwap) );
+
+                        // Now we have a potential border and a largest segment. Use those.
+
+                        aGradient.Style = bSymmetric ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
                         nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation;
                         // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
                         aGradient.Angle = static_cast< sal_Int16 >( (4500 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
-                        if( bAxial )
+                        Color aStartColor, aEndColor;
+                        if( bSymmetric )
                         {
-                            GradientFillProperties::GradientStopMap::const_iterator aIt = maGradientProps.maGradientStops.begin();
-                            // Try to find the axial median
-                            for(size_t i=0;i<nColorCount;i+=3)
-                                ++aIt;
-                            // API StartColor is inner color in axial gradient
-                            // aIt->second.hasColor() kind would be better than Color != API_RGB_WHITE
-                            if( aGradient.StartColor == aGradient.EndColor &&
-                                ( !aIt->second.hasTransparency() || aIt->second.getColor( rGraphicHelper, nPhClr ) != API_RGB_WHITE ) )
-                            {
-                                aGradient.StartColor = aIt->second.getColor( rGraphicHelper, nPhClr );
-                            }
-
-                            if( nStartTrans == nEndTrans && aIt->second.hasTransparency() )
-                                nStartTrans = aIt->second.getTransparency()*255/100;
+                            aStartColor = boost::next(aWidestSegmentStart)->second;
+                            aEndColor = aWidestSegmentStart->second;
+                            nBorder *= 2;
                         }
+                        else if( bSwap )
+                        {
+                            aStartColor = boost::next(aWidestSegmentStart)->second;
+                            aEndColor = aWidestSegmentStart->second;
+                        }
+                        else
+                        {
+                            aStartColor = aWidestSegmentStart->second;
+                            aEndColor = boost::next(aWidestSegmentStart)->second;
+                        }
+
+                        SAL_INFO("oox.drawingml.gradient", "start color: " << std::hex << aStartColor.getColor( rGraphicHelper, nPhClr ) << std::dec <<
+                                 "@" << (100-aStartColor.getTransparency()) << "%" <<
+                                 ", end color: " << std::hex << aEndColor.getColor( rGraphicHelper, nPhClr ) << std::dec <<
+                                 "@" << (100-aEndColor.getTransparency()) << "%");
+
+                        aGradient.StartColor = aStartColor.getColor( rGraphicHelper, nPhClr );
+                        aGradient.EndColor = aEndColor.getColor( rGraphicHelper, nPhClr );
+
+                        if( aStartColor.hasTransparency() )
+                            nStartTrans = aStartColor.getTransparency()*255/100;
+                        if( aEndColor.hasTransparency() )
+                            nEndTrans = aEndColor.getTransparency()*255/100;
+
+                        aGradient.Border = 100*nBorder;
                     }
 
                     // push gradient or named gradient to property map

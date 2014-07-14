@@ -59,16 +59,18 @@ $(eval $(call gb_Library_use_libraries,oox,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(TLS),OPENSSL)
 $(eval $(call gb_Library_use_externals,oox,\
 	boost_headers \
+))
+
+ifeq ($(TLS),OPENSSL)
+$(eval $(call gb_Library_use_externals,oox,\
 	openssl \
 	openssl_headers \
 ))
 else
 ifeq ($(TLS),NSS)
 $(eval $(call gb_Library_use_externals,oox,\
-       boost_headers \
        plc4 \
        nss3 \
 ))
