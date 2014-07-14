@@ -3250,7 +3250,13 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 */
                 WW8_CP nCpStart, nCpEnd;
                 void* pData=NULL;
-                pPieceIter->Get(nCpStart, nCpEnd, pData);
+                bool bOk = pPieceIter->Get(nCpStart, nCpEnd, pData);
+
+                if (!bOk)
+                {
+                    pPieceIter->SetIdx(nOldPos);
+                    return;
+                }
 
                 WW8_FC nLimitFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
                 WW8_FC nBeginLimitFC = nLimitFC;
