@@ -58,7 +58,11 @@ namespace svgio
 
         const SvgStyleAttributes* SvgSvgNode::getSvgStyleAttributes() const
         {
-            checkForCssStyle(OUString("svg"), maSvgStyleAttributes);
+            const SvgStyleAttributes* aCheckCssStyle = checkForCssStyle(OUString("svg"), maSvgStyleAttributes);
+
+            if (maSvgStyleAttributes.getCssStyleParent() == NULL)
+                return aCheckCssStyle;
+
             return maSvgStyleAttributes.getCssStyleParent();
         }
 
