@@ -4651,7 +4651,10 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-            throw io::IOException( THROW_WHERE );
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
+                                                aCaught );
         }
     }
 }
@@ -4689,7 +4692,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
                                                 static_cast< OWeakObject* >( this ),
                                                 aCaught );
         }
@@ -4710,7 +4713,10 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-            throw io::IOException( THROW_WHERE );
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
+                                                aCaught );
         }
     }
 
