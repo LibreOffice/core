@@ -97,7 +97,7 @@ void SAL_CALL SwVbaColumns::Select(  ) throw (uno::RuntimeException, std::except
     return ( mnEndColumnIndex - mnStartColumnIndex + 1 );
 }
 
-uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
     if( ( Index1 >>= nIndex ) )
