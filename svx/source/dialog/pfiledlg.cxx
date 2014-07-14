@@ -204,7 +204,7 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 /*************************************************************************
 |*
 |* Plugins available for the the MIME-Typ in nKind
-|* (whith nKind = SID_INSERT_SOUND for MIME-Type audio
+|* (with nKind = SID_INSERT_SOUND for MIME-Type audio
 |*                SID_INSERT_VIDEO for MIME-Type video
 |*
 \************************************************************************/

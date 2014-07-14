@@ -42,7 +42,7 @@
 
 #define URL_GRAPHIC_REPO        "private:graphicrepository"
 #define IMAGE_ROADMAP           URL_GRAPHIC_REPO "/minimizer/minimizepresi_80.png"
-#define IMAGE_ROADMAP_HC        URL_GRAPHIC_REPO "/minimizer/minimizepresi_80.png"
+#define IMAGE_ROADMAP_HC        URL_GRAPHIC_REPO "/minimizer/minimizepresi_80_h.png"
 
 // -------------------
 // - OPTIMIZERDIALOG -

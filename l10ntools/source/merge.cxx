@@ -361,7 +361,7 @@ void MergeDataFile::InsertEntry(
         pData->Insert( rPFO , pFEntrys );
     }
 
-    // finaly insert the cur string
+    // finally insert the cur string
     pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 }
 

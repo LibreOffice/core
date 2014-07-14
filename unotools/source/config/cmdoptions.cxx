@@ -118,7 +118,7 @@ class SvtCmdOptions
 
         //---------------------------------------------------------------------------------------------------------
         // convert internal list to external format
-        // for using it on right menus realy
+        // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!
@@ -272,7 +272,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     :   ConfigItem( ROOTNODE_CMDOPTIONS )
     // Init member then...
 {
-    // Get names and values of all accessable menu entries and fill internal structures.
+    // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further informations.
     Sequence< OUString >    lNames              = impl_GetPropertyNames ();
     Sequence< Any >         lValues             = GetProperties         ( lNames         );

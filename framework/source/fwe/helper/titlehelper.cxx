@@ -596,7 +596,7 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
         const ::rtl::OUString                 sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
 
         // An UIname property is an optional value !
-        // So please add it to the title in case it does realy exists only.
+        // So please add it to the title in case it does really exists only.
         if (sUIName.getLength() > 0)
         {
             sTitle.appendAscii (" "    );

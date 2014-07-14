@@ -2012,20 +2012,23 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( SeekToContent( DFF_Prop_pFormulas, rIn ) )
             rIn >> nNumElem >> nNumElemMem >> nElemSize;
 
-        sal_Int16 nP1, nP2, nP3;
-        sal_uInt16 nFlags;
-
-        uno::Sequence< rtl::OUString > aEquations( nNumElem );
-        for ( i = 0; i < nNumElem; i++ )
+        if ( nNumElem <= 128 )
         {
-            rIn >> nFlags >> nP1 >> nP2 >> nP3;
-            aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            sal_Int16 nP1, nP2, nP3;
+            sal_uInt16 nFlags;
+
+            uno::Sequence< rtl::OUString > aEquations( nNumElem );
+            for ( i = 0; i < nNumElem; i++ )
+            {
+                rIn >> nFlags >> nP1 >> nP2 >> nP3;
+                aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            }
+            // pushing the whole Equations element
+            const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
+            aProp.Name = sEquations;
+            aProp.Value <<= aEquations;
+            aPropVec.push_back( aProp );
         }
-        // pushing the whole Equations element
-        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
-        aProp.Name = sEquations;
-        aProp.Value <<= aEquations;
-        aPropVec.push_back( aProp );
     }
 
     ////////////////////////////////////////
@@ -2732,42 +2735,55 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     if ( bHasShadow )
     {
-        // #160376# sj: activating shadow only if fill and or linestyle is used
-        // this is required because of the latest drawing layer core changes.
-        // Issue i104085 is related to this.
-        sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
-        if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
-            nLineFlags &= ~0x08;
-        sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
-        if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
-            nFillFlags &= ~0x10;
-        if ( nFillFlags & 0x10 )
-        {
-            MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
-            switch( eMSO_FillType )
-            {
-                case mso_fillSolid :
-                case mso_fillPattern :
-                case mso_fillTexture :
-                case mso_fillPicture :
-                case mso_fillShade :
-                case mso_fillShadeCenter :
-                case mso_fillShadeShape :
-                case mso_fillShadeScale :
-                case mso_fillShadeTitle :
-                break;
-                // case mso_fillBackground :
-                default:
-                    nFillFlags &=~0x10;         // no fillstyle used
-                break;
-            }
-        }
-        if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) && ( rObjData.eShapeType != mso_sptPictureFrame ))    // if there is no fillstyle and linestyle
-            bHasShadow = sal_False;                                             // we are turning shadow off.
+        static bool bCheckShadow(false);
 
-        if ( bHasShadow )
-            rSet.Put( SdrOnOffItem(SDRATTR_SHADOW, bHasShadow ) );
+        // #124477# Found no reason not to set shadow, esp. since it is applied to evtl. existing text
+        // and will lead to an error of in PPT someone used text and added the object shadow to the
+        // object carryintg that text. I found no cases where this leads to problems (the old bugtracker
+        // task #160376# from sj is unfortunately no longer available). Keeping the code for now
+        // to allow easy fallback when this shows problems in the future
+        if(bCheckShadow)
+        {
+            // #160376# sj: activating shadow only if fill and or linestyle is used
+            // this is required because of the latest drawing layer core changes.
+            // Issue i104085 is related to this.
+            sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+            if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
+                nLineFlags &= ~0x08;
+            sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+            if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
+                nFillFlags &= ~0x10;
+            if ( nFillFlags & 0x10 )
+            {
+                MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+                switch( eMSO_FillType )
+                {
+                    case mso_fillSolid :
+                    case mso_fillPattern :
+                    case mso_fillTexture :
+                    case mso_fillPicture :
+                    case mso_fillShade :
+                    case mso_fillShadeCenter :
+                    case mso_fillShadeShape :
+                    case mso_fillShadeScale :
+                    case mso_fillShadeTitle :
+                    break;
+                    // case mso_fillBackground :
+                    default:
+                        nFillFlags &=~0x10;         // no fillstyle used
+                    break;
+                }
+            }
+            if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) && ( rObjData.eShapeType != mso_sptPictureFrame ))    // if there is no fillstyle and linestyle
+                bHasShadow = sal_False;                                             // we are turning shadow off.
+        }
+
+        if(bHasShadow)
+        {
+            rSet.Put(SdrOnOffItem(SDRATTR_SHADOW, bHasShadow));
+        }
     }
+
     ApplyLineAttributes( rSet, rObjData.eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, rObjData );
     if ( rObjData.eShapeType != mso_sptNil || IsProperty( DFF_Prop_pVertices ) )
@@ -3392,7 +3408,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     }
     while ( rSt.GetError() == 0 && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // restore orginal FilePos
+        rSt.Seek( nFPosMerk );  // restore original FilePos
     return bRet;
 }
 
@@ -3633,7 +3649,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x04 :     // substract grey level RGB(p,p,p)
+                case 0x04 :     // subtract grey level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)aColor.GetRed() - (sal_Int16)nParameter;
                     sal_Int16 nG = (sal_Int16)aColor.GetGreen() - (sal_Int16)nParameter;
@@ -3647,7 +3663,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x05 :     // substract from grey level RGB(p,p,p)
+                case 0x05 :     // subtract from grey level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)nParameter - (sal_Int16)aColor.GetRed();
                     sal_Int16 nG = (sal_Int16)nParameter - (sal_Int16)aColor.GetGreen();
@@ -6160,25 +6176,46 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
             nLenFBSE = nLength;
             // ist FBSE gross genug fuer unsere Daten
             sal_Bool bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
+            bool bBLIPIsDirectlyEmbedded(false);
 
-            if( bOk )
+            if(bOk)
             {
-                rSt.SeekRel( nSkipBLIPLen );
+                rSt.SeekRel(nSkipBLIPLen);
                 rSt >> nBLIPLen;
-                rSt.SeekRel( nSkipBLIPPos );
+
+                // #125187# do not simply skip these four bytes, but read them. This value
+                // is zero when the BLIP is embedded to the FBSE directly following in the
+                // stream, else 1. Use this as hint to be more reliable (see below)
+                rSt >> nBLIPPos;
+
+                if(0 == nBLIPPos)
+                {
+                    bBLIPIsDirectlyEmbedded = true;
+                }
+
                 rSt >> nBLIPPos;
                 bOk = rSt.GetError() == 0;
 
-                nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
+                nLength -= nSkipBLIPLen + 4 + nSkipBLIPPos + 4;
             }
 
             if( bOk )
             {
-                // Besonderheit:
-                // Falls nBLIPLen kleiner ist als nLenFBSE UND nBLIPPos Null ist,
-                // nehmen wir an, dass das Bild IM FBSE drin steht!
-                if( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )
+                // #125187# the original check to test if the BLIP is following embeded in the FBSE was
+                // was (!nBLIPPos && nBLIPLen < nLenFBSE), but there are ppt documents
+                // where this is not sufficient (what means that for BLIPs in the picture
+                // stream the same conditions can be true sometimes). I experimented with various
+                // ppt files and detected that the four bytes before reading the nBLIPPos
+                // contain a flag which describes that embedding more reliable, thus I will
+                // use it here now in the form of the bBLIPIsDirectlyEmbedded variable (see above).
+                // This modification works with all ppt files I found which use directly embedded
+                // BLIPs and with the file which showed the error. More work may be needed when
+                // exceptions to this more strict schema may show up, though.
+                if(0 == nBLIPPos && nBLIPLen < nLenFBSE && bBLIPIsDirectlyEmbedded)
+                {
+                    // get BLIP file position as directly following embedded
                     nBLIPPos = rSt.Tell() + 4;
+                }
 
                 // Das hat ja fein geklappt!
                 // Wir merken uns, dass wir einen FBSE mehr im Pointer Array haben.

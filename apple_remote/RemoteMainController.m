@@ -55,7 +55,7 @@
 
         if ( [container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] != 0 ) {
 #ifdef DEBUG
-            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] successfull");
+            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] successful");
         }
         else {
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] failed");
@@ -64,7 +64,7 @@
 
         if ( [container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] != 0 ) {
 #ifdef DEBUG
-            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] successfull");
+            NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] successful");
         }
         else {
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] failed");

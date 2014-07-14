@@ -92,7 +92,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                                           com.sun.star.task.XJobListener  xListener)
         throws com.sun.star.lang.IllegalArgumentException
     {
-        // For asynchronous jobs a valid listener reference is guranteed normaly ...
+        // For asynchronous jobs a valid listener reference is guaranteed normaly ...
         if (xListener == null)
             throw new com.sun.star.lang.IllegalArgumentException("invalid listener");
 
@@ -118,7 +118,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                 lDynamicData = (com.sun.star.beans.NamedValue[])com.sun.star.uno.AnyConverter.toArray(lArgs[i].Value);
         }
 
-        // Analyze the environment info. This sub list is the only guarenteed one!
+        // Analyze the environment info. This sub list is the only guaranteed one!
         if (lEnvironment == null)
             throw new com.sun.star.lang.IllegalArgumentException("no environment");
 
@@ -192,7 +192,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         aSaveRequest.Name  = "SaveArguments";
         aSaveRequest.Value = lJobConfig;
 
-        // Deactivation is usefull inside EXECUTOR environment only
+        // Deactivation is useful inside EXECUTOR environment only
         if (sEnvType.equals("EXECUTOR"))
         {
             ++c;
@@ -201,7 +201,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             aDeactivation.Value = java.lang.Boolean.TRUE;
         }
 
-        // Sending of result events is usefull inside DISPATCH environment only
+        // Sending of result events is useful inside DISPATCH environment only
         if (sEnvType.equals("DISPATCH"))
         {
             ++c;
@@ -286,8 +286,8 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         }
         catch(java.lang.Throwable exIgnore)
         {
-            // ignore any problem, which can occure here.
-            // It's not realy a bug for this example job, if
+            // ignore any problem, which can occur here.
+            // It's not really a bug for this example job, if
             // it's message could not be printed out!
         }
     }
@@ -297,7 +297,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     private void showInfoNonModal( java.lang.String sTitle   ,
                                    java.lang.String sMessage )
     {
-        // Couldnt be implemented realy using the toolkit ...
+        // Couldnt be implemented really using the toolkit ...
         // Because we need a parent anytime.
         // And showing e.g. a java dialog can make some trouble
         // inside office ... but we have no chance here.

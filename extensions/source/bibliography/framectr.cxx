@@ -408,7 +408,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         }
         catch(Exception&)
         {
-            DBG_ERROR("SaveModified: Exception occured!");
+            DBG_ERROR("SaveModified: Exception occurred!");
         }
 
         bInserted = bIsNew && bResult;

@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/fontenum.hxx>
@@ -44,30 +43,35 @@
 #include "XMLAnchorTypePropHdl.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "XMLClipPropertyHandler.hxx"
-#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
-#endif
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
-#endif
-// OD 2004-05-05 #i28701#
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
+//UUUU
+#include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include "XMLFillBitmapSizePropertyHandler.hxx"
+#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-//using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+
 //UUUU
 using namespace ::com::sun::star::drawing;
 
+//UUUU
+extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
+extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
+extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
 
 #define CONSTASCII_USTRINGPARAM_CMP(s) s, sizeof(s)-1
 
@@ -1271,18 +1275,6 @@ public:
     ~XMLTextPropertyHandlerFactory_Impl();
 };
 
-//UUUU
-#include <xmloff/EnumPropertyHdl.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include "XMLFillBitmapSizePropertyHandler.hxx"
-#include "XMLBitmapLogicalSizePropertyHandler.hxx"
-#include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
-extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
-extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
-extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
-
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     ( sal_Int32 nType ) const
 {
@@ -1456,27 +1448,33 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNumber8OneBasedHdl();
         break;
 
-    //UUUU
-    case XML_SW_TYPE_FILLSTYLE:
-        pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const FillStyle*)0) );
-        break;
-    case XML_SW_TYPE_FILLBITMAPSIZE:
-        pHdl = new XMLFillBitmapSizePropertyHandler();
-        break;
-    case XML_SW_TYPE_LOGICAL_SIZE:
-        pHdl = new XMLBitmapLogicalSizePropertyHandler();
-        break;
-    case XML_SW_TYPE_BITMAP_REFPOINT:
-        pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const RectanglePoint*)0) );
-        break;
-    case XML_SW_TYPE_BITMAP_MODE:
-        pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const BitmapMode*)0) );
-        break;
-    case XML_SW_TYPE_BITMAPREPOFFSETX:
-    case XML_SW_TYPE_BITMAPREPOFFSETY:
-        pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
-        break;
+        //UUUU
+        case XML_SW_TYPE_FILLSTYLE:
+            pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const FillStyle*)0) );
+            break;
+        case XML_SW_TYPE_FILLBITMAPSIZE:
+            pHdl = new XMLFillBitmapSizePropertyHandler();
+            break;
+        case XML_SW_TYPE_LOGICAL_SIZE:
+            pHdl = new XMLBitmapLogicalSizePropertyHandler();
+            break;
+        case XML_SW_TYPE_BITMAP_REFPOINT:
+            pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const RectanglePoint*)0) );
+            break;
+        case XML_SW_TYPE_BITMAP_MODE:
+            pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const BitmapMode*)0) );
+            break;
+        case XML_SW_TYPE_BITMAPREPOFFSETX:
+        case XML_SW_TYPE_BITMAPREPOFFSETY:
+            pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
+            break;
 
+        //UUUU
+        default:
+        {
+            OSL_ENSURE(false, "XMLPropertyHandler missing (!)");
+            break;
+        }
     }
 
     return pHdl;

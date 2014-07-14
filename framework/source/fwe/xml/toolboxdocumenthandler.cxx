@@ -251,7 +251,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bToolBarStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbar' cannot be embeded into 'toolbar:toolbar'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                         else
@@ -300,7 +300,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarStartFound )
                 {
                     ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbaritem' must be embeded into element 'toolbar:toolbar'!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -401,7 +401,7 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_STYLE:
                             {
-                                // read space seperated item style list
+                                // read space separated item style list
                                 ::rtl::OUString aTemp = xAttribs->getValueByIndex( n );
                                 sal_Int32 nIndex = 0;
 

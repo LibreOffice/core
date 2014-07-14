@@ -674,7 +674,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
-        // #89764# if export of position is supressed for group shape,
+        // #89764# if export of position is suppressed for group shape,
         // positions of contained objects should be written relative to
         // the upper left edge of the group.
         awt::Point aUpperLeft;
@@ -1065,37 +1065,38 @@ void XMLShapeExport::ImpExportPolygonShape(
 
 void XMLShapeExport::ImpExportGraphicObjectShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
+    XmlShapeType eShapeType,
+    sal_Int32 nFeatures,
+    awt::Point* pRefPoint )
 {
-    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    const uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    if ( xPropSet.is() )
     {
         sal_Bool bIsEmptyPresObj = sal_False;
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
         // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+        ImpExportNewTrans( xPropSet, nFeatures, pRefPoint );
 
         OUString sImageURL;
 
-        if(eShapeType == XmlShapeTypePresGraphicObjectShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
+        if ( eShapeType == XmlShapeTypePresGraphicObjectShape )
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken( XML_PRESENTATION_GRAPHIC ) );
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, sal_True );
+        sal_Bool bCreateNewline( ( nFeatures & SEF_EXPORT_NO_WS ) == 0 ); // #86116#/#92210#
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, sal_True );
 
         const bool bSaveBackwardsCompatible = ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
 
-        if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
+        if ( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
-            if( !bIsEmptyPresObj )
+            if ( !bIsEmptyPresObj )
             {
                 OUString aReplacementUrl;
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ReplacementGraphicURL"))) >>= aReplacementUrl;
 
                 // If there is no url, then then graphic is empty
-                if(aReplacementUrl.getLength())
+                if ( aReplacementUrl.getLength() )
                 {
                     const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
 
@@ -1115,15 +1116,13 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 }
 
                 OUString aStreamURL;
-                OUString aStr;
-
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aStreamURL;
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStreamURL" ) ) ) >>= aStreamURL;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) ) >>= sImageURL;
 
                 OUString aResolveURL( sImageURL );
-                const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
+                const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 
-                    // sj: trying to preserve the filename
+                // sj: trying to preserve the filename
                 if ( aStreamURL.match( sPackageURL, 0 ) )
                 {
                     rtl::OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
@@ -1135,50 +1134,54 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );
                     if ( sRequestedName.getLength() )
                     {
-                        aResolveURL = aResolveURL.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("?requestedName=")));
+                        aResolveURL = aResolveURL.concat( OUString( RTL_CONSTASCII_USTRINGPARAM( "?requestedName=" ) ) );
                         aResolveURL = aResolveURL.concat( sRequestedName );
                     }
                 }
 
-                aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+                const OUString aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
-                if( aStr.getLength() )
+                if ( !aStr.isEmpty() )
                 {
-                    if( aStr[ 0 ] == '#' )
+                    aStreamURL = sPackageURL;
+                    if ( aStr[0] == '#' )
                     {
-                        aStreamURL = sPackageURL;
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                    }
+                    else
+                    {
+                        aStreamURL = aStreamURL.concat( aStr );
                     }
 
                     // update stream URL for load on demand
                     uno::Any aAny;
                     aAny <<= aStreamURL;
-                    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
+                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStreamURL" ) ), aAny );
 
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
             }
             else
             {
                 OUString aStr;
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
 
             {
-                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
+                SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True );
 
-                if( sImageURL.getLength() )
+                if ( sImageURL.getLength() )
                 {
                     // optional office:binary-data
                     mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
                 }
-                if( !bIsEmptyPresObj )
+                if ( !bIsEmptyPresObj )
                     ImpExportText( xShape );
             }
         }
@@ -1578,7 +1581,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if ( bInternal )
                 {
-                    // OOo internal links have no storage persistance, URL is stored in the XML file
+                    // OOo internal links have no storage persistence, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
                     xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
                 }

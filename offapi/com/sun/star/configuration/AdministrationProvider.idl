@@ -123,7 +123,7 @@ published service AdministrationProvider
  accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
  This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
- all its decendants. The administrative entity is the default for the
+ all its descendants. The administrative entity is the default for the
  <type>AdministrationProvider</type>. Usually this is the largest entity
  encompassing all entities accessible from this instance. In other words this
  can be used to influence as global a scope as possible.
@@ -145,7 +145,7 @@ published service AdministrationProvider
  the locale set up for the user. But this service by default gets data for all
  locales for which data is present. Locale-dependent values in this case are
  replaced by a <type>SetAccess</type> using the language names as accessors.
- This also allows targetted setting of values for selected locales.
+ This also allows targeted setting of values for selected locales.
  This behavior can be requested explicitly by specifing a special argument
  value <code>locale = "*"</code>.
  </p>

@@ -108,7 +108,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         (<code>&lt;simple-authority&gt:</code>), or by arbitrary characters not
         including any of '/', '?', or '#', followed by a given string literal,
         followed by arbitrary characters that start with one of '/', '?', or
-        '#', if any. The comparision of string literals is done ignoring the
+        '#', if any. The comparison of string literals is done ignoring the
         case of ASCII letters.  The <code>&lt;translation&gt:</code> regexps
         match the same URLs as their <code>&lt;simple&gt:</code> counterparts,
         but they also describe how a (local) URL is mapped to another (remote)

@@ -89,7 +89,7 @@ published service StorageFactory
                       <type scope="com::sun::star::task">XInteractionHandler</type>
                       implementation, password for the storage and repair
                       package flag.<br>
-                      Additionaly the parameter might contain property with the name
+                      Additionally the parameter may contain property with the name
                       "StorageFormat" that can take values from
                       <type scope="com::sun::star::embed">StorageFormats</type>.
                       If the property is not provided a storage of package format

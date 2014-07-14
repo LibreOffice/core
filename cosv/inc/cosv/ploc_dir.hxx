@@ -86,7 +86,7 @@ class Directory : public Persistent
                             const char *        i_sFilter = "*.*",
                             E_Recursivity       i_eRecursivity = flat ) const;
   private:
-    // Interface Peristent:
+    // Interface Persistent:
     virtual const Path &
                         inq_MyPath() const;
 

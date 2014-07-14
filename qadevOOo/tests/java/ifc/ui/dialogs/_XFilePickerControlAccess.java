@@ -48,7 +48,7 @@ import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 *    <code>Short</code>) : control identifier in the extended
 *    FilePicker dialog. </li>
 *  <li> <code>'XFilePickerControlAccess.ControlValue'</code> (of type
-*    <code>Object</code>) <b>optional</b> (but mostly desireable
+*    <code>Object</code>) <b>optional</b> (but mostly desirable
 *    since the control has emtpy initial value):
 *    the value which can set for the control . </li>
 * <ul> <p>
@@ -79,7 +79,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
 
     /**
     * Gets the value of the control and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getValue() {
         boolean result = true ;
@@ -132,7 +132,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
 
     /**
     * Gets the label of the control and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getLabel() {
 
@@ -178,7 +178,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
     /**
     * Disables and then enables the control. Can be checked only
     * interactively. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _enableControl() {
         boolean result = true ;

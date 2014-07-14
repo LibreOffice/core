@@ -354,7 +354,7 @@ void ImplFreeSalGDI()
         pSalData->mhDitherPal = 0;
     }
 
-    // delete buffers for dithering DIB patterns, if neccessary
+    // delete buffers for dithering DIB patterns, if necessary
     if ( pSalData->mhDitherDIB )
     {
         GlobalUnlock( pSalData->mhDitherDIB );
@@ -1087,7 +1087,7 @@ void WinSalGraphics::SetLineColor()
     HPEN hNewPen = GetStockPen( NULL_PEN );
     HPEN hOldPen = SelectPen( getHDC(), hNewPen );
 
-    // destory or save old pen
+    // destroy or save old pen
     if ( mhPen )
     {
         if ( !mbStockPen )
@@ -1145,7 +1145,7 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
     // select new pen
     HPEN hOldPen = SelectPen( getHDC(), hNewPen );
 
-    // destory or save old pen
+    // destroy or save old pen
     if ( mhPen )
     {
         if ( !mbStockPen )
@@ -1169,7 +1169,7 @@ void WinSalGraphics::SetFillColor()
     HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
     HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
 
-    // destory or save old brush
+    // destroy or save old brush
     if ( mhBrush )
     {
         if ( !mbStockBrush )
@@ -1273,7 +1273,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     // select new brush
     HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
 
-    // destory or save old brush
+    // destroy or save old brush
     if ( mhBrush )
     {
         if ( !mbStockBrush )

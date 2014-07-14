@@ -192,7 +192,7 @@ RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "Modul
         m_xUserCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY );
 
         // Create wrapper object for module user interface configuration managers, so they are able to call commit/revert on
-        // root storage and nothing more (saftey)!
+        // root storage and nothing more (safety)!
         RootStorageWrapper* pUserRootStorageWrapper = new RootStorageWrapper( Reference< XTransactedObject >( m_xUserCfgRootStorage, UNO_QUERY ));
         m_xUserRootCommit = Reference< XTransactedObject>( static_cast< OWeakObject *>( pUserRootStorageWrapper ), UNO_QUERY );
     }

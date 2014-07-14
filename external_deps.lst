@@ -41,6 +41,11 @@ if ( true )
     URL1 = http://ucpp.googlecode.com/files/ucpp-1.3.2.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (ENABLE_UNIT_TESTS == YES)
+    MD5 = 2d6ec8ccdf5c46b05ba54a9fd1d130d7
+    name = gtest-1.7.0.zip
+    URL1 = http://googletest.googlecode.com/files/gtest-1.7.0.zip
+
 if ( true )
     MD5 = 067201ea8b126597670b5eff72e1f66c
     name = mythes-1.2.0.tar.gz
@@ -109,15 +114,14 @@ if (GUI!=UNX || SYSTEM_ZLIB!=YES)
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2c9b0f83ed5890af02c0df1c1776f39b
     name = commons-httpclient-3.1-src.tar.gz
-    URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/commons-httpclient-3.1-src.tar.gz
+    URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
-    MD5 = 2e482c7567908d334785ce7d69ddfff7
-    name = commons-codec-1.6-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/codec/source/commons-codec-1.6-src.tar.gz
-    URL2 = http://apache.spinellicreations.com//commons/codec/source/commons-codec-1.6-src.tar.gz
-    URL3 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = db87f7004cefc9d17f7ac841f86122bd
+    name = commons-codec-1.9-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/codec/source/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 2f6ecca935948f7db92d925d88d0d078
@@ -132,10 +136,9 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
-    MD5 = 3c219630e4302863a9a83d0efde889db
-    name = commons-logging-1.1.1-src.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://archive.apache.org/dist/commons/logging/source/commons-logging-1.1.1-src.tar.gz
+    MD5 = e8e197d628436490886d17cffa108fe3
+    name = commons-logging-1.1.3-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/logging/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_JPEG != YES)
@@ -145,9 +148,9 @@ if (SYSTEM_JPEG != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
-    MD5 = 625ff5f2f968dd908bca43c9469d6e6b
-    name = commons-lang-2.4-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/lang/source/commons-lang-2.4-src.tar.gz
+    MD5 = 4c8c505cc3cba4c467c479e3e0f09ba4
+    name = commons-lang3-3.3-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/lang/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
@@ -183,7 +186,7 @@ if (SYSTEM_LIBXSLT != YES)
 if (SOLAR_JAVA == TRUE)
     MD5 = 63574e3ada44f473892a61a2da433a59
     name = apache-tomcat-5.5.36-src.tar.gz
-    # URL1 = http://www.alliedquotes.com/mirrors/apache/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
+    URL1 = http://archive.apache.org/dist/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
@@ -199,9 +202,9 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 =  6334b666b7ff2038c761d7b27ba699c1
-    name = Python-2.7.5.tar.bz2
-    URL1 = http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
+    MD5 = 1d8728eb0dfcac72a0fd99c17ec7f386
+    name = Python-2.7.6.tgz
+    URL1 = http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST != YES)
@@ -242,9 +245,9 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (RAT_JAR_HOME==BUILD)
-    MD5 = e4244e69eb3644e71c254aea5952a918
-    name = apache-rat-incubating-0.8-bin.tar.bz2 
-    URL1 = http://archive.apache.org/dist/incubator/rat/binaries/$(name)
+    MD5 = 0f926196d42577addec7e1aa5b510605
+    name = apache-rat-0.10-bin.tar.bz2 
+    URL1 = http://archive.apache.org/dist/creadur/apache-rat-0.10/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 ###############################################################################
@@ -252,9 +255,10 @@ if (RAT_JAR_HOME==BUILD)
 #
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_COINMP!=YES)
-    MD5 = 2b5f1ca58d6ef30f18f1415b65bed81c
-    name = CoinMP-1.6.0.tgz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = 1cce53bf4b40ae29790d2c5c9f8b1129
+    name = CoinMP-1.7.6.tgz
+    # URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL1 = http://www.coin-or.org/download/source/CoinMP/$(name)
 
 if (WITH_CATB_FONTS == YES)
     MD5 = 35efabc239af896dfb79be7ebdd6e6b9

@@ -835,7 +835,7 @@ void SvxPositionSizeTabPage::Construct()
 
                 if(!maAnchor.equal(pCandidate->GetAnchorPos()))
                 {
-                    // diferent anchor positions
+                    // different anchor positions
                     maMtrPosX.SetText( String() );
                     maMtrPosY.SetText( String() );
                     mbPageDisabled = sal_True;

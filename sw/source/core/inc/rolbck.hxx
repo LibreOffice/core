@@ -373,9 +373,11 @@ public:
     bool TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool ToFirst = true );
 
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-    void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-              sal_uLong nNodeIdx );
-    // <--
+    void Add(
+        const SfxPoolItem* pOldValue,
+        const SfxPoolItem* pNewValue,
+        sal_uLong nNodeIdx);
+
     void Add( SwTxtAttr* pTxtHt, sal_uLong nNodeIdx, bool bNewAttr = true );
     void Add( SwFmtColl*, sal_uLong nNodeIdx, sal_uInt8 nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );

@@ -22,7 +22,7 @@
 
 MKFILENAME:=SETTINGS.MK
 
-# smaller/greater arithmetic's like ".IF 400<=200" are an OOo extention to
+# smaller/greater arithmetic's like ".IF 400<=200" are an OOo extension to
 # the initial dmake 4.1PL0 (unfortunately called 4.10) version and are
 # tested implicitly by the construction below.
 .IF $(MAKEVERSION:s/-cvs//:s/.//)<=410
@@ -602,7 +602,7 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 
 # disable for makefiles wrapping a gnumake module
 .IF "$(TARGET)"!="prj"
-# As this is not part of the initial startup makefile we define an infered
+# As this is not part of the initial startup makefile we define an inferred
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
 $(posix_PWD)/$(OUT)/inc/%world.mk :
@@ -1041,7 +1041,7 @@ MAXPROCESS!:=1
 .ENDIF			# "$(debug)"!=""
 
 # for multiprocess building in external modules
-# allow seperate handling
+# allow separate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
 IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
@@ -1066,7 +1066,7 @@ JAVA*:=$(JAVAINTERPRETER)
 .EXPORT : JAVA JAVAI
 
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
-# pathes. (See iz57443)
+# paths. (See iz57443)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip

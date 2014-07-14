@@ -25,22 +25,17 @@
 #include <sfx2/lnkbase.hxx>
 #include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
-// --> OD, MAV 2005-08-17 #i53025#
 #include <com/sun/star/embed/XStorage.hpp>
-// <--
-// --> OD 2007-03-28 #i73788#
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 class SwAsyncRetrieveInputStreamThreadConsumer;
-// <--
 
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
 class SvStorage;
-// --------------------
-// SwGrfNode
-// --------------------
+
+
 class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
@@ -49,28 +44,19 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     GraphicObject* mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
-//  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
-    String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
-                                // name or package url)
-    String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
-                                //      die normale (HighRes) geladen ist.
-    sal_Bool bTransparentFlagValid  :1;
-    sal_Bool bInSwapIn              :1;
+    sal_Bool bInSwapIn :1;
 
-    sal_Bool bGrafikArrived         :1;
-    sal_Bool bChgTwipSize           :1;
-    sal_Bool bChgTwipSizeFromPixel  :1;
-    sal_Bool bLoadLowResGrf         :1;
-    sal_Bool bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
-                                    //SwapIn zu verhindern.
-    sal_Bool bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
+    sal_Bool bGrafikArrived :1;
+    sal_Bool bChgTwipSize :1;
+    sal_Bool bChgTwipSizeFromPixel :1;
+    sal_Bool bLoadLowResGrf :1;
+    sal_Bool bFrameInPaint :1;  // Um Start-/EndActions im Paint (ueber SwapIn zu verhindern.
+    sal_Bool bScaleImageMap :1; // Image-Map in SetTwipSize skalieren
 
-    // --> OD 2007-01-19 #i73788#
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
     sal_Bool mbIsStreamReadOnly;
-    // <--
 
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
@@ -89,14 +75,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     void InsertLink( const String& rGrfName, const String& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
-    sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
-    // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
-    // indicate that its an private one.
-    // --> OD 2005-08-17 #i53025#
-    // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
-    // Thus, return value isn't needed any more.
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
-    // <--
     void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
 
@@ -142,6 +121,10 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > _GetDocSubstorageOrRoot(
                                                 const String& aStgName ) const;
 
+    /// allow reaction on change of content of GraphicObject, so always call
+    /// when GraphicObject content changes
+    void onGraphicChanged();
+
 public:
     virtual ~SwGrfNode();
     const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
@@ -156,10 +139,6 @@ public:
     void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
     void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
     void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
-
-    /// allow reaction on change of content of GraphicObject, so always call
-    /// when GraphicObject content changes
-    void onGraphicChanged();
 
     virtual Size GetTwipSize() const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
@@ -194,11 +173,16 @@ public:
                  sal_Bool bModify = sal_True );
     // Laden der Grafik unmittelbar vor der Anzeige
     short SwapIn( sal_Bool bWaitForData = sal_False );
-        // Entfernen der Grafik, um Speicher freizugeben
+    // Entfernen der Grafik, um Speicher freizugeben
     short SwapOut();
-        // Zugriff auf den Storage-Streamnamen
-    void SetStreamName( const String& r ) { maGrfObj.SetUserData( r ); }
-    void SetNewStreamName( const String& r ) { aNewStrmName = r; }
+
+    sal_Bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
+    // applying new stream name for embedded graphic - needed as saving the document might change this stream name
+    void ApplyNewEmbeddedStreamName( const String& r )
+    {
+        maGrfObj.SetUserData( r );
+    }
+
     // is this node selected by any shell?
     sal_Bool IsSelected() const;
 #endif
@@ -224,7 +208,6 @@ public:
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif
-    // --> OD 2007-01-18 #i73788#
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
     bool IsLinkedInputStreamReady() const;
     void TriggerAsyncRetrieveInputStream();
@@ -232,10 +215,7 @@ public:
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
         const sal_Bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
-    // <--
-    // --> OD 2008-07-21 #i90395#
     bool IsAsyncRetrieveInputStreamPossible() const;
-    // <--
 };
 
 

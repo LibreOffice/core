@@ -37,7 +37,7 @@ import java.awt.event.WindowEvent;
 // __________ Implementation __________
 
 /**
- * This implement a java frame wich contains
+ * This implement a java frame which contains
  * an office document, shows some status informations
  * about that, provides simple functionality on it
  * (e.g. toggle menubar, save document) and
@@ -71,7 +71,7 @@ public class DocumentView extends    JFrame
     /**
      * @member  mxFrame             office frame which contains the document of this view
      *
-     * @member  maStatusView        special panel wich show available status informations of currently loaded document
+     * @member  maStatusView        special panel which show available status informations of currently loaded document
      * @member  maDocumentView      use JNI mechanism to plug an office window into our own java UI container (used for inplace mode only!)
      * @member  maCustomizeView     special panel makes it possible to toggle menubar/toolbar or objectbar of loaded document
      * @member  maInterceptor       interceptor thread which intercept "new" menu of office frame to open new frames inside this java application
@@ -163,7 +163,7 @@ public class DocumentView extends    JFrame
         if(ViewContainer.mbInplace==true)
         {
             // create view to show opened documents
-            // This special view is neccessary for inplace mode only!
+            // This special view is necessary for inplace mode only!
             maDocumentView = new NativeView();
 
             JSplitPane paSplit = new JSplitPane();
@@ -321,7 +321,7 @@ public class DocumentView extends    JFrame
         mbDead=true;
 
         // force these sub view to release her remote
-        // refrences too!
+        // references too!
         maStatusView.shutdown();
         maCustomizeView.shutdown();
 
@@ -334,7 +334,7 @@ public class DocumentView extends    JFrame
 
         // close the frame and his document
         // Relaesing of our listener connections for disposing()
-        // will be forced automaticly then. Because the frame
+        // will be forced automatically then. Because the frame
         // will call us back ...
         if (mxFrame!=null)
             FunctionHelper.closeFrame(mxFrame);
@@ -352,8 +352,8 @@ public class DocumentView extends    JFrame
 
     /**
      * callback from our internal saved frame
-     * which wish to die. Its not neccessary to remove listener connections
-     * here. Because the broadcaster do it automaticly.
+     * which wish to die. Its not necessary to remove listener connections
+     * here. Because the broadcaster do it automatically.
      * We have to release all references to him only.
      *
      * @param aSource
@@ -411,7 +411,7 @@ public class DocumentView extends    JFrame
             if( sCommand.compareTo(COMMAND_EXIT) == 0 )
             {
                 // This will force deleting of this and
-                // all other currently opened views automaticly!
+                // all other currently opened views automatically!
                 System.exit(0);
             }
         }

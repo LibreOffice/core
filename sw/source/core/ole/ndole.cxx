@@ -907,7 +907,7 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else {
-                            DBG_ERROR("Modified object without persistance in cache!");
+                            DBG_ERROR("Modified object without persistence in cache!");
                         }
                     }
 

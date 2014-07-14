@@ -211,31 +211,33 @@ SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 }
 
 void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
-    const Reference < XPropertySet >& rPropSet,
-    OUString& rURL) const
-{
-    if( !rURL.getLength() )
+    const Reference< XPropertySet >& rPropSet,
+    OUString& rURL ) const
+    {
+    if ( !rURL.getLength() )
         return;
 
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
-    if( !pGrfNd->IsGrfLink() )
+    if ( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
-        aNewURL += String(rURL);
-        pGrfNd->SetNewStreamName( aNewURL );
+        // Apply new embedded stream name, only if graphic node already has one.
+        // - The saving of recovery information triggers this method, but for a newly created
+        //   document the new embedded stream name shall not be applied.
+        // - The saving of a newly created document to own format (ODF) triggers this method,
+        //   but the embedded stream name is not needed as its original inserted data is still in use.
+        if ( pGrfNd->HasEmbeddedStreamName() )
+        {
+            String aNewURL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.Package:" ) );
+            aNewURL += String( rURL );
+            pGrfNd->ApplyNewEmbeddedStreamName( aNewURL );
+        }
 
         // #i15411# save-as will swap all graphics in; we need to swap
         // them out again, to prevent excessive memory use
         pGrfNd->SwapOut();
     }
 }
-/*
-static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
-{
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
-}*/
+
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )

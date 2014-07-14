@@ -278,7 +278,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
         // #i29648#
         //
 #if 0
-        // Note: A hierachical UCB content implements interface XChild, which
+        // Note: A hierarchical UCB content implements interface XChild, which
         // has a method getParent(). Unfortunately this does not always help
         // here, because it is not guaranteed that a content object for a
         // non-existing resource can be created. Thus, it will happen that an
@@ -380,7 +380,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occured...
+        // Interaction Handler already handled the error that has occurred...
     }
 }
 
@@ -408,7 +408,7 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occured...
+        // Interaction Handler already handled the error that has occurred...
     }
 }
 
@@ -510,7 +510,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
             }
             catch ( ::com::sun::star::ucb::CommandFailedException const & )
             {
-                // Interaction Handler already handled the error that has occured...
+                // Interaction Handler already handled the error that has occurred...
                 continue;
             }
         }
@@ -579,7 +579,7 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occured...
+        // Interaction Handler already handled the error that has occurred...
     }
 
     if ( xResultSet.is() )
@@ -650,7 +650,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const rtl::OUString& FileUR
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occured...
+        // Interaction Handler already handled the error that has occurred...
     }
 
     return xRet;
@@ -789,7 +789,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
             catch ( CommandFailedException const & )
             {
                 // Interaction Handler already handled the
-                // error that has occured...
+                // error that has occurred...
                 continue;
             }
         }
@@ -814,7 +814,7 @@ void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
         }
         catch ( CommandFailedException const & )
         {
-            // Interaction Handler already handled the error that has occured...
+            // Interaction Handler already handled the error that has occurred...
         }
     }
     catch ( ContentCreationException const & e )

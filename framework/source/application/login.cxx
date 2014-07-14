@@ -63,8 +63,8 @@
 //_________________________________________________________________________________________________________________
 
 #define TEMPFILE_ENCODING           RTL_TEXTENCODING_UTF8           // encoding of written temp. ascii file
-#define LOGIN_RDB                   DECLARE_ASCII("login.rdb")      // name of our own registry file - neccessary to create own servicemanager
-#define SEPERATOR                   "\n"                            // used to seperate parts in temp. file
+#define LOGIN_RDB                   DECLARE_ASCII("login.rdb")      // name of our own registry file - necessary to create own servicemanager
+#define SEPERATOR                   "\n"                            // used to separate parts in temp. file
 
 #define MINARGUMENTCOUNT            1                               // count of min. required arguments
 #define ARGUMENTFOUND               0                               // OUString::compareTo returns 0 if searched string match given one
@@ -99,7 +99,7 @@ using namespace ::com::sun::star::beans     ;
     @descr      We need this temp. file to share informations between our dialog and different processes, which
                 can't use vcl directly. Caller of this executable give us the file name as an argument - we save
                 all informations in it - caller can read it and MUST delete temp. file.
-                This is neccessary for example; to hide the password!
+                This is necessary for example; to hide the password!
 
     @implements -
 
@@ -149,7 +149,7 @@ void LoginApplication::Main()
     impl_parseCommandline();
     LOG_ASSERT( !(m_sTempFile.getLength()<1), "LoginApplication::Main()\nWrong or missing argument for temp. file detected!\n" )
 
-    // Try to get neccessary dialog service.
+    // Try to get necessary dialog service.
     // By the way - cast it to interface XPropertySet too - we need it later.
     // (define SERVICENAME... comes from defines.hxx!)
     Reference< XDialog >        xLoginDialog( xServiceManager->createInstance( SERVICENAME_LOGINDIALOG ), UNO_QUERY );
@@ -200,7 +200,7 @@ void LoginApplication::Main()
         }
 
         // Build string for output.
-        // At this point it doesnt matter if information exist or not!
+        // At this point it doesn't matter if information exist or not!
         // Format of output: "<decision>    [0|1]       SEPERATOR
         //                    <username>    [string]    SEPERATOR
         //                    <password>    [string]    SEPERATOR
@@ -229,8 +229,8 @@ void LoginApplication::Main()
         sBuffer.appendAscii ( SEPERATOR         );
 
         // Write informations in temp. file.
-        // If given file name isnt valid ... caller will have a problem!!!
-        // If fil already exist (That's out of specification!!!) we overwrite it everytime.
+        // If given file name isn't valid ... caller will have a problem!!!
+        // If fil already exist (That's out of specification!!!) we overwrite it every time.
         FILE* pFile = fopen( m_sTempFile.getStr(), "w" );
         LOG_ASSERT( !(pFile==NULL), "LoginApplication::Main()\nCould not open file!\n" );
         if( pFile != NULL )
@@ -257,7 +257,7 @@ void LoginApplication::impl_parseCommandline()
     OUString    sArgument                                   ;
     OUString    sValue                                      ;
 
-    // Warn programmer if argument count isnt ok!
+    // Warn programmer if argument count isn't ok!
     LOG_ASSERT( !(nCount!=MINARGUMENTCOUNT), "LoginApplication::impl_parseCommandline()\nWrong argument count detected!\n" )
 
     // Reset all possible argument variables to defaults if someone is missing.

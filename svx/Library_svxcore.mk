@@ -188,6 +188,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/animation/scheduler \
     svx/source/sdr/animation/objectanimator \
     svx/source/sdr/animation/animationstate \
+    svx/source/sdr/attribute/sdrallfillattributeshelper \
     svx/source/sdr/attribute/sdrlinefillshadowtextattribute \
     svx/source/sdr/attribute/sdrfilltextattribute \
     svx/source/sdr/attribute/sdrshadowtextattribute \
@@ -394,6 +395,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/unodraw/gluepts \
     svx/source/unodraw/shapepropertynotifier \
     svx/source/unodraw/tableshape \
+    svx/source/unodraw/unobrushitemhelper \
     svx/source/unodraw/unobtabl \
     svx/source/unodraw/unodtabl \
     svx/source/unodraw/UnoGraphicExporter \

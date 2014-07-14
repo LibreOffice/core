@@ -312,9 +312,11 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
     XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
+
     XMLPropertyState* pAllParaMargin = 0;
     XMLPropertyState* pParaMargins[4] = { 0, 0, 0, 0 };
     ::std::auto_ptr<XMLPropertyState> pNewParaMargins[4];
+
     XMLPropertyState* pAllMargin = 0;
     XMLPropertyState* pMargins[4] = { 0, 0, 0, 0 };
     ::std::auto_ptr<XMLPropertyState> pNewMargins[4];
@@ -385,21 +387,42 @@ void XMLTextImportPropertyMapper::finished(
                                         bHasAnyWidth = sal_True; break;
         case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
         case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
+
         case CTF_PARAMARGINALL:
+            pAllParaMargin = property;
+            break;
         case CTF_PARAMARGINALL_REL:
-                pAllParaMargin = property; break;
+            {
+                sal_uInt32 nValue;
+                property->maValue >>= nValue;
+                // treat fo:margin="100%" as it is not exisiting as the
+                // corresponding core attribute classes - <SvxULSpaceItem> and
+                // <SvxLRSpaceItem> - are not able to treat such a value correctly.
+                // The result will be the same as the values will be inherited
+                // from parent, when the no margin attribute is given.
+                if ( nValue != 100 )
+                {
+                    pAllParaMargin = property;
+                }
+            }
+            break;
+
         case CTF_PARALEFTMARGIN:
         case CTF_PARALEFTMARGIN_REL:
                 pParaMargins[XML_LINE_LEFT] = property; break;
+
         case CTF_PARARIGHTMARGIN:
         case CTF_PARARIGHTMARGIN_REL:
                 pParaMargins[XML_LINE_RIGHT] = property; break;
+
         case CTF_PARATOPMARGIN:
         case CTF_PARATOPMARGIN_REL:
                 pParaMargins[XML_LINE_TOP] = property; break;
+
         case CTF_PARABOTTOMMARGIN:
         case CTF_PARABOTTOMMARGIN_REL:
                 pParaMargins[XML_LINE_BOTTOM] = property; break;
+
         case CTF_MARGINALL:
                 pAllMargin = property; break;
         case CTF_MARGINLEFT:
@@ -428,7 +451,8 @@ void XMLTextImportPropertyMapper::finished(
 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
-        if (pAllParaMargin && !pParaMargins[i])
+        if ( pAllParaMargin != NULL
+             && pParaMargins[i] == NULL )
         {
 #ifdef DBG_UTIL
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
@@ -437,9 +461,12 @@ void XMLTextImportPropertyMapper::finished(
                         nTmp <= CTF_PARABOTTOMMARGIN_REL,
                         "wrong property context id" );
 #endif
-            pNewParaMargins[i].reset(new XMLPropertyState(
-                pAllParaMargin->mnIndex + (2*i) + 2, pAllParaMargin->maValue));
+            // IMPORTANT NOTE: the index calculation depends on the right order in the property map
+            pNewParaMargins[i].reset(
+                new XMLPropertyState( pAllParaMargin->mnIndex + (2*i) + 2,
+                                      pAllParaMargin->maValue ) );
         }
+
         if (pAllMargin && !pMargins[i])
         {
 #ifdef DBG_UTIL
@@ -448,8 +475,10 @@ void XMLTextImportPropertyMapper::finished(
             OSL_ENSURE( nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM,
                         "wrong property context id" );
 #endif
-            pNewMargins[i].reset(new XMLPropertyState(
-                pAllMargin->mnIndex + i + 1, pAllMargin->maValue));
+            // IMPORTANT NOTE: the index calculation depends on the right order in the property map
+            pNewMargins[i].reset(
+                new XMLPropertyState( pAllMargin->mnIndex + i + 1,
+                                      pAllMargin->maValue ) );
         }
         if( pAllBorderDistance && !pBorderDistances[i] )
         {

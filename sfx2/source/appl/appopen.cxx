@@ -268,7 +268,7 @@ private:
     {
         // check the encryption data
         // if the data correct is the stream will be opened successfuly
-        // and immediatelly closed
+        // and immediately closed
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
         mxStorage->openStreamElement(
@@ -552,7 +552,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
     aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_default" ) ) );
 
-    // TODO/LATER: Should the other arguments be transfered as well?
+    // TODO/LATER: Should the other arguments be transferred as well?
     SFX_REQUEST_ARG( rReq, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH);
     if ( pDefaultPathItem )
         aReq.AppendItem( *pDefaultPathItem );
@@ -762,7 +762,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
 
             // This helper wraps an existing (or may new created InteractionHandler)
-            // intercept all incoming interactions and provide usefull informations
+            // intercept all incoming interactions and provide useful informations
             // later if the following transaction was finished.
 
             ::framework::PreventDuplicateInteraction*                 pHandler       = new ::framework::PreventDuplicateInteraction(::comphelper::getProcessServiceFactory());
@@ -1217,7 +1217,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     Reference < XController > xController;
 //    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
 //    {
-        // if a frame is given, it must be used for the starting point of the targetting mechanism
+        // if a frame is given, it must be used for the starting point of the targeting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
         if ( !xTargetFrame.is() )
         {
@@ -1252,7 +1252,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if( bHidden || pLinkItem || rReq.IsSynchronCall() )
         {
             // if loading must be done synchron, we must wait for completion to get a return value
-            // find frame by myself; I must konw the exact frame to get the controller for the return value from it
+            // find frame by myself; I must know the exact frame to get the controller for the return value from it
             //if( aTarget.getLength() )
             //    xTargetFrame = xTargetFrame->findFrame( aTarget, FrameSearchFlag::ALL );
             Reference < XComponent > xComp;

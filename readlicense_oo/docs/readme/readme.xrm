@@ -55,7 +55,7 @@
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
 					<li>
-						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.4 (Tiger) or higher</p>
+						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.7 (Lion) or higher</p>
 					</li>
 
 					<li>

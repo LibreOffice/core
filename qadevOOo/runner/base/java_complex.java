@@ -46,7 +46,7 @@ public class java_complex implements TestBase
      * This function executes the complex tests given as parameter "-o" or "TestJob". It querys for the correspond class
      * and crates the JobDescription.
      * @param param
-     * @return true of all tests run successfuly, esle false
+     * @return true of all tests run successfuly, else false
      */
     public boolean executeTest(TestParameters param)
     {
@@ -73,7 +73,7 @@ public class java_complex implements TestBase
      * This function run the given DescEntry[] as ComplexTest
      * @param param
      * @param entries
-     * @return true of all tests run successfuly, esle false
+     * @return true of all tests run successfuly, else false
      */
     public boolean executeTest(TestParameters param, DescEntry[] entries)
     {
@@ -90,7 +90,7 @@ public class java_complex implements TestBase
         boolean returnVal = true;
 
 //        the concept of the TimeOut depends on runner logs. If the runner log,
-//        for exmaple to start a test method, the timeout was restet. This is not
+//        for example to start a test method, the timeout was reset. This is not
 //        while the test itself log something like "open docuent...".
 //        An property of complex test could be that it have only one test method
 //        which works for serveral minutes. Ih this case the TimeOut get not trigger

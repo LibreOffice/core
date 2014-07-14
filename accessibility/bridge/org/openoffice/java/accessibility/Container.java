@@ -196,7 +196,7 @@ public class Container extends java.awt.Container implements javax.accessibility
     }
 
     /**
-    * Update the proxy objects appropriatly on property change events
+    * Update the proxy objects appropriately on property change events
     */
     protected class AccessibleContainerListener implements XAccessibleEventListener {
 

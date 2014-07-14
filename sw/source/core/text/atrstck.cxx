@@ -214,7 +214,7 @@ sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
  * depending on its 'visited' state. There are actually two cases, which
  * should override the colors from the character attribute:
  * 1. We never take the 'visited' color during printing/pdf export/preview
- * 2. The user has choosen to override these colors in the view options
+ * 2. The user has chosen to override these colors in the view options
  *************************************************************************/
 
 bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,

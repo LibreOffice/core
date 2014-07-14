@@ -2892,7 +2892,7 @@ void Content::transfer(
             = static_cast< Content * >(
                     xProvider->queryContent( xTargetId ).get() );
 
-        // Announce transfered content in its new folder.
+        // Announce transferred content in its new folder.
         xTarget->inserted();
     }
     catch ( ucb::IllegalIdentifierException const & )
@@ -3350,6 +3350,23 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     }
 
     return aException;
+}
+
+// #i124421# force the availability of type_info symbols for exceptions
+// that used to be passed around in uno::Any variables and thrown later
+void ucb_dummyThrower( int i) {
+    switch( i) {
+        case 10: throw ucb::InteractiveNetworkGeneralException();
+        case 11: throw ucb::InteractiveAugmentedIOException();
+        case 12: throw ucb::InteractiveNetworkGeneralException();
+        case 13: throw ucb::InteractiveNetworkWriteException();
+        case 14: throw ucb::InteractiveNetworkReadException();
+        case 15: throw ucb::InteractiveNetworkConnectException();
+        case 16: throw ucb::InteractiveLockingLockedException();
+        case 17: throw ucb::InteractiveLockingNotLockedException();
+        case 18: throw ucb::InteractiveNetworkGeneralException();
+        case 19: throw ucb::InteractiveLockingLockExpiredException();
+    }
 }
 
 //=========================================================================

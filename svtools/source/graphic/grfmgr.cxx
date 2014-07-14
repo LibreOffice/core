@@ -74,6 +74,21 @@ struct GrfSimpleCacheObj
 // - GraphicObject -
 // -----------------
 
+// unique increasing ID for being able to detect the GraphicObject with the
+// oldest last data changes
+static sal_uLong aIncrementingTimeOfLastDataChange = 1;
+
+void GraphicObject::ImplAfterDataChange()
+{
+    // set unique timestamp ID of last data change
+    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
+
+    // check memory footprint of all GraphicObjects managed and evtl. take action
+    GetGraphicManager().ImplCheckSizeOfSwappedInGraphics();
+}
+
+// -----------------------------------------------------------------------------
+
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
@@ -169,6 +184,9 @@ void GraphicObject::ImplConstruct()
     mbAutoSwapped = sal_False;
     mbIsInSwapIn = sal_False;
     mbIsInSwapOut = sal_False;
+
+    // Init with a unique, increasing ID
+    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
 }
 
 // -----------------------------------------------------------------------------
@@ -286,6 +304,9 @@ void GraphicObject::ImplAutoSwapIn()
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
+
+        // Handle evtl. needed AfterDataChanges
+        ImplAfterDataChange();
     }
 }
 
@@ -910,6 +931,9 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
+
+    // Handle evtl. needed AfterDataChanges
+    ImplAfterDataChange();
 }
 
 // -----------------------------------------------------------------------------
@@ -1251,7 +1275,9 @@ sal_Bool GraphicObject::SwapIn()
         bRet = sal_True;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
+    {
         bRet = sal_True;
+    }
     else
     {
         bRet = maGraphic.SwapIn();
@@ -1261,7 +1287,12 @@ sal_Bool GraphicObject::SwapIn()
     }
 
     if( bRet )
+    {
         ImplAssignGraphicData();
+
+        // Handle evtl. needed AfterDataChanges
+        ImplAfterDataChange();
+    }
 
     return bRet;
 }
@@ -1278,7 +1309,9 @@ sal_Bool GraphicObject::SwapIn( SvStream* pIStm )
         bRet = sal_True;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
+    {
         bRet = sal_True;
+    }
     else
     {
         bRet = maGraphic.SwapIn( pIStm );
@@ -1288,7 +1321,12 @@ sal_Bool GraphicObject::SwapIn( SvStream* pIStm )
     }
 
     if( bRet )
+    {
         ImplAssignGraphicData();
+
+        //
+        ImplAfterDataChange();
+    }
 
     return bRet;
 }
@@ -1447,6 +1485,17 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     }
 
     return basegfx::B2DVector(fFactorX,fFactorY);
+}
+
+// ------------------------------------------------------------------------
+// restart SwapOut timer
+
+void GraphicObject::restartSwapOutTimer() const
+{
+    if( mpSwapOutTimer && mpSwapOutTimer->IsActive() )
+    {
+        mpSwapOutTimer->Start();
+    }
 }
 
 // eof

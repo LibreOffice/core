@@ -26,7 +26,7 @@
 
 	<info>
         <author>AS</author>
-		<desc>Configuration of layered pathes replacing the old path configuration org.openoffice.Office.Common/Path.</desc>
+		<desc>Configuration of layered paths replacing the old path configuration org.openoffice.Office.Common/Path.</desc>
 	</info>
 
 	<templates>
@@ -48,7 +48,7 @@
                 </info>
             <prop oor:name="IsSinglePath" oor:type="xs:boolean">
 				<info>
-					<desc>Mark a NamedPath as SinglePath (false=MultiPath). Only the property WritePath is used for such single pathes then.</desc>
+					<desc>Mark a NamedPath as SinglePath (false=MultiPath). Only the property WritePath is used for such single paths then.</desc>
 				</info>
                 <value>false</value>
             </prop>

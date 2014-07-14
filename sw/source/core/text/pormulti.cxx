@@ -1063,7 +1063,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
             {
                 // If bOn is sal_False and the next attribute starts later than rPos
                 // the winner attribute is interrupted at rPos.
-                // If the start of the next atribute is behind the end of
+                // If the start of the next attribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
                 if( !bOn || aEnd.back() < *pTmp->GetStart() )

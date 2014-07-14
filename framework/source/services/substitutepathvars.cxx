@@ -98,7 +98,7 @@
 #define REPLACELENGTH_LANGID             9
 #define REPLACELENGTH_VLANG              8
 #define REPLACELENGTH_WORKDIRURL        13
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// --> PB 2004-10-27 #i32656# - new variable of hierarchy service
 #define REPLACELENGTH_BASEINSTURL       14
 #define REPLACELENGTH_USERDATAURL       14
 // <--
@@ -121,7 +121,7 @@
 #define VARIABLE_PROGURL                                "$(progurl)"
 #define VARIABLE_USERURL                                "$(userurl)"
 #define VARIABLE_WORKDIRURL                             "$(workdirurl)"
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// --> PB 2004-10-27 #i32656# - new variable of hierarchy service
 #define VARIABLE_BASEINSTURL                            "$(baseinsturl)"
 #define VARIABLE_USERDATAURL                            "$(userdataurl)"
 // <--
@@ -213,7 +213,7 @@ static FixedVariable aFixedVarTable[] =
     { VARIABLE_PROGURL,     PREDEFVAR_PROGURL,      REPLACELENGTH_PROGURL,  true                       },
     { VARIABLE_USERURL,     PREDEFVAR_USERURL,      REPLACELENGTH_USERURL,  true                       },
     { VARIABLE_WORKDIRURL,  PREDEFVAR_WORKDIRURL,   REPLACELENGTH_WORKDIRURL,true                      },  // Special variable (transient) and don't use for resubstitution!
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // --> PB 2004-10-27 #i32656# - new variable of hierarchy service
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL,true                     },
     { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL,true                     },
     // <--
@@ -957,12 +957,12 @@ throw ( NoSuchElementException, RuntimeException )
     // Fill return value with result
     if ( bSubstitutionCompleted )
     {
-        // Substitution successfull!
+        // Substitution successful!
         aResult = aWorkText;
     }
     else
     {
-        // Substitution not successfull!
+        // Substitution not successful!
         if ( nDepth == nMaxRecursiveDepth )
         {
             // recursion depth reached!
@@ -1182,14 +1182,14 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(inst), $(instpath), $(insturl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // --> PB 2004-10-27 #i32656# - new variable of hierarchy service
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     // <--
 
     // Set $(user), $(userpath), $(userurl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // --> PB 2004-11-11 #i32656# - new variable of hierachy service
+    // --> PB 2004-11-11 #i32656# - new variable of hierarchy service
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERDATAURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
     // <--
 

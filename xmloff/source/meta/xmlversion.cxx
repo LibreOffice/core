@@ -387,7 +387,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
             if ( !xVerStream.is() )
                 throw uno::RuntimeException();
 
-//REMOVE                // SetSize should not be neccessary because OpenStream( WRITE|TRUNC ) should already
+//REMOVE                // SetSize should not be necessary because OpenStream( WRITE|TRUNC ) should already
 //REMOVE                // have set the size to zero
 //REMOVE        //      xVerStream->SetSize ( 0L );
 //REMOVE                xVerStream->SetBufferSize( 16*1024 );

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -59,12 +57,10 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <ForbiddenCharactersEnum.hxx>
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-
 #include <pausethreadstarting.hxx>
+#include <drawdoc.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -321,6 +317,15 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             pProgress->SetValue( 0 );
         }
     }
+
+    // TTTT: Not needed for aw080, always updated
+    // if((getExportFlags() & (EXPORT_MASTERSTYLES | EXPORT_CONTENT)) != 0)
+    // {
+    //     //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
+    //     SwDrawModel* pModel = pDoc->GetDrawModel();
+    //     if(pModel)
+    //         pModel->GetPage(0)->RecalcObjOrdNums();
+    // }
 
     // adjust document class (eClass)
     if (pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT))

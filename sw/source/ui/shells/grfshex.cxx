@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <docary.hxx>
 #include <grfsh.hxx>
@@ -52,7 +49,6 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <poolfmt.hrc>
-
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
@@ -60,11 +56,9 @@
 #include <vcl/svapp.hxx>
 #include <doc.hxx>
 #include <svx/fmmodel.hxx>
-
-// -> #111827#
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
-// <- #111827#
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;

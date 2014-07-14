@@ -65,10 +65,10 @@ void SAL_CALL
 DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
     throw( RuntimeException )
 {
-    switch( aEvent.EventId )
-    {
-        case AccessibleEventId::STATE_CHANGED:
-            try
+    try {
+        switch( aEvent.EventId )
+        {
+            case AccessibleEventId::STATE_CHANGED:
             {
                 sal_Int16 nState = AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
@@ -76,34 +76,35 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
                 if( AccessibleStateType::FOCUSED == nState )
                     m_aFocusTracker.setFocusedObject( getAccessible(aEvent) );
             }
-            catch(IndexOutOfBoundsException e)
+            break;
+
+            case AccessibleEventId::CHILD:
             {
-                OSL_TRACE("Focused object has invalid index in parent");
+                Reference< XAccessible > xChild;
+                if( (aEvent.OldValue >>= xChild) && xChild.is() )
+                    detachRecursive(xChild);
+
+                if( (aEvent.NewValue >>= xChild) && xChild.is() )
+                    attachRecursive(xChild);
             }
             break;
 
-        case AccessibleEventId::CHILD:
-        {
-            Reference< XAccessible > xChild;
-            if( (aEvent.OldValue >>= xChild) && xChild.is() )
-                detachRecursive(xChild);
-
-            if( (aEvent.NewValue >>= xChild) && xChild.is() )
-                attachRecursive(xChild);
-        }
-            break;
-
-        case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-        {
-            Reference< XAccessible > xAccessible( getAccessible(aEvent) );
-            detachRecursive(xAccessible);
-            attachRecursive(xAccessible);
-        }
-
+            case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            {
+                Reference< XAccessible > xAccessible( getAccessible(aEvent) );
+                detachRecursive(xAccessible);
+                attachRecursive(xAccessible);
+            }
             OSL_TRACE( "Invalidate all children called\n" );
             break;
-        default:
-            break;
+
+            default:
+                break;
+        }
+    }
+    catch(IndexOutOfBoundsException e)
+    {
+        OSL_TRACE("Focused object has invalid index in parent");
     }
 }
 

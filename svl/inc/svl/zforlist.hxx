@@ -394,14 +394,14 @@ public:
                                             sal_uInt32& FIndex,
                                             LanguageType& rLnge);
 
-    /// Delete an entry including the format it is refering to
+    /// Delete an entry including the format it is referring to
     void DeleteEntry(sal_uInt32 nKey);
 
     /** Create new entry of a format code string for language/country.
         @return
             <TRUE/> if string new and ok and inserted.
              <FALSE/> if string already exists or an unresolvable parse error
-             occured, in which case nCheckPos is the error position within rString.
+             occurred, in which case nCheckPos is the error position within rString.
             If the error occurs at position 0 or rString is empty nCheckPos
             will be 1, so an error in the string is always indicated by
              nCheckPos not being zero.

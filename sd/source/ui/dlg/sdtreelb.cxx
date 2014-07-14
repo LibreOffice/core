@@ -1144,7 +1144,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if (pMed)
         {
-            // it looks that it is undefined if a Medium was set by Fill() allready
+            // it looks that it is undefined if a Medium was set by Fill() already
             DBG_ASSERT( !mpMedium, "SfxMedium confusion!" );
             delete mpMedium;
             mpMedium = NULL;
@@ -1167,7 +1167,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         else if ( mpMedium )
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
-            // successfull creation of a document makes this the owner of the medium
+            // successful creation of a document makes this the owner of the medium
             mpBookmarkDoc = ((SdDrawDocument*) mpDoc)->OpenBookmarkDoc(*mpMedium);
 
         if ( !mpBookmarkDoc )
@@ -1209,7 +1209,7 @@ void SdPageObjsTLB::CloseBookmarkDoc()
     }
     else
     {
-        // perhaps mpOwnMedium provided, but no successfull creation of BookmarkDoc
+        // perhaps mpOwnMedium provided, but no successful creation of BookmarkDoc
         delete mpOwnMedium;
         mpOwnMedium = NULL;
     }

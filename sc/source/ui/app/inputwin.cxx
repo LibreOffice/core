@@ -1764,7 +1764,7 @@ void ScPosWnd::DoEnter()
                 }
                 else
                 {
-                    // for all selection types, excecute the SID_CURRENTCELL slot
+                    // for all selection types, execute the SID_CURRENTCELL slot
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, sal_True );        // remove existing selection

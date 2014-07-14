@@ -76,12 +76,12 @@ StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFact
     // ... and add controls to basecontainercontrol!
     addControl( OUString::createFromAscii( CONTROLNAME_TEXT         ), xTextControl     );
     addControl( OUString::createFromAscii( CONTROLNAME_PROGRESSBAR  ), xProgressControl );
-    // FixedText make it automaticly visible by himself ... but not the progressbar !!!
+    // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     Reference< XWindow > xProgressWindow( m_xProgressBar, UNO_QUERY );
     xProgressWindow->setVisible( sal_True );
     // Reset to defaults !!!
-    // (progressbar take automaticly its own defaults)
+    // (progressbar take automatically its own defaults)
     m_xText->setText( OUString::createFromAscii( DEFAULT_TEXT ) );
 
     --m_refCount ;
@@ -404,7 +404,7 @@ void SAL_CALL StatusIndicator::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
         // calc new layout for controls
         impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) ) ;
         // clear background (!)
-        // [Childs was repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Childs was repainted in "recalcLayout" by setPosSize() automatically!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;

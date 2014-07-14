@@ -277,7 +277,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
     aPropInfos.push_back(FilterPropertyInfo_Impl(rApiName, nIndex));
     nCount++;
 
-    OSL_ENSURE( !pApiNames, "perfomance warning: API names already retrieved" );
+    OSL_ENSURE( !pApiNames, "performance warning: API names already retrieved" );
     if( pApiNames )
     {
         delete pApiNames;

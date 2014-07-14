@@ -210,7 +210,11 @@ using namespace ::rtl;
 
 +(id)rangeForPositionAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)point {
     NSValue * value = nil;
-    sal_Int32 index = [ wrapper accessibleText ] -> getIndexAtPoint ( [ AquaA11yUtil nsPointToVclPoint: point ] );
+    Point aPoint( [ AquaA11yUtil nsPointToVclPoint: point ]);
+    const Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
+    aPoint.X -= screenPos.X;
+    aPoint.Y -= screenPos.Y;
+    sal_Int32 index = [ wrapper accessibleText ] -> getIndexAtPoint( aPoint );
     if ( index > -1 ) {
         value = [ AquaA11yTextWrapper rangeForIndexAttributeForElement: wrapper forParameter: [ NSNumber numberWithLong: index ] ];
     }

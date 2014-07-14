@@ -309,7 +309,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         if ( !mpObj )
             throw embed::ObjectSaveVetoException();
 
-        // the common persistance is supported by objects and links
+        // the common persistence is supported by objects and links
         xPersist = uno::Reference< embed::XCommonEmbedPersist >( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
         xModifiable = uno::Reference< util::XModifiable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
     }
@@ -1311,7 +1311,7 @@ void SdrOle2Obj::Disconnect_Impl()
                 // TODO/LATER: here we must assume that the destruction of the model is enough to make clear that we will not
                 // remove the object from the container, even if the DrawingObject itself is not destroyed (unfortunately this
                 // There is no real need to do the following removing of the object from the container
-                // in case the model has correct persistance, but in case of problems such a removing
+                // in case the model has correct persistence, but in case of problems such a removing
                 // would make the behaviour of the office more stable
 
                 comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();

@@ -379,7 +379,7 @@ void Description_Print( struct Description* pThis, char* name )
   fprintf( f, "#define SAL_TYPES_SIZEOFLONGLONG\t%d\n", (int) sizeof( long long ) );
   fprintf( f, "#define SAL_TYPES_SIZEOFPOINTER\t%d\n", (int) sizeof( void* ) );
 
-/* Disabled for now, becuase OOo code assumes sizeof(double) == 8 and this is not
+/* Disabled for now, because OOo code assumes sizeof(double) == 8 and this is not
  * likely to change any time soon.  fa (2004-03-15)
  */
 /*  fprintf( f, "#define SAL_TYPES_SIZEOFDOUBLE\t%d\n", sizeof( double ) );*/

@@ -54,7 +54,7 @@ public:
 
     /** Register an action callback to be run when the specified resource is
         activated.  The action may be called synchronously when the resource
-        is already active or asynchronously when the resource is actived in
+        is already active or asynchronously when the resource is activated in
         the future.
         @param rxController
             The controller gives access to the drawing framework.

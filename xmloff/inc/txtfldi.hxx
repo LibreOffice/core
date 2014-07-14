@@ -604,7 +604,7 @@ public:
 };
 
 
-/** import docinfo fields with only fixed atribute */
+/** import docinfo fields with only fixed attribute */
 class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyFixed;
@@ -1201,7 +1201,7 @@ protected:
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const ::rtl::OUString& sAttrValue );
 
-    /// no atributes -> empty method
+    /// no attributes -> empty method
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
@@ -1232,7 +1232,7 @@ protected:
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const ::rtl::OUString& sAttrValue );
 
-    /// no atributes -> empty method
+    /// no attributes -> empty method
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);

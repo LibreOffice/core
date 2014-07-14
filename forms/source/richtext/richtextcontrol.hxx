@@ -109,7 +109,7 @@ namespace frm
     public:
         /** factory method
             @return
-                a new ORichTextPeer instance, which has been aquired once!
+                a new ORichTextPeer instance, which has been acquired once!
         */
         static ORichTextPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >&         _rxModel,

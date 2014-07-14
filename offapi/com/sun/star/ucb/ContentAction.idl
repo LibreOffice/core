@@ -48,7 +48,7 @@ module com { module sun { module star { module ucb {
                        </td></tr>
     <tr><td>D3</td><td>A folder content F has a set of children H(F) that is a
                        set of content identifiers. For example, an "open"
-                       command will usualy return a subset of the contents
+                       command will usually return a subset of the contents
                        denoted by H(F).</td></tr>
     </table>
 

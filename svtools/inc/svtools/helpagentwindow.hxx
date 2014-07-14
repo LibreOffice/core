@@ -61,7 +61,7 @@ namespace svt
         /// returns the preferred size of the window
         const Size& getPreferredSizePixel() const { return m_aPreferredSize; }
 
-        // callback handler maintainance
+        // callback handler maintenance
         void                setCallback(IHelpAgentCallback* _pCB) { m_pCallback = _pCB; }
         IHelpAgentCallback* getCallback() const { return m_pCallback; }
 

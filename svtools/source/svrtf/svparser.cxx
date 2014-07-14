@@ -288,7 +288,7 @@ sal_Unicode SvParser::GetNextChar()
                                 &nInfo, &nCvtBytes);
                     if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
                     {
-                        // The conversion wasn't successfull because we haven't
+                        // The conversion wasn't successful because we haven't
                         // read enough characters.
                         if( pImplData->hContext != (rtl_TextToUnicodeContext)1 )
                         {
@@ -377,7 +377,7 @@ sal_Unicode SvParser::GetNextChar()
                     }
                     else if( 1 == nChars && 0 == nInfo )
                     {
-                        // The conversion was successfull
+                        // The conversion was successful
                         DBG_ASSERT( nCvtBytes == 1,
                                     "no all bytes have been converted!" );
                         c = cUC;

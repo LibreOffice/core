@@ -426,7 +426,7 @@ public class AccessibilityTreeModel
 
 
     /**
-     * broadcast a tree event in a seperate Thread
+     * broadcast a tree event in a separate Thread
      * must override fire method
      */
     class EventRunner implements Runnable

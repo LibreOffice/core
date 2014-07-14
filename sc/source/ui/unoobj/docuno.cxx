@@ -1937,7 +1937,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             /*  #i111553# This property provides the name of the constant that
                 will be used to store this model in the global Basic manager.
-                That constant will be equivelant to 'ThisComponent' but for
+                That constant will be equivalent to 'ThisComponent' but for
                 each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
                 constant can co-exist, as required by VBA. */
             aRet <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisExcelDoc" ) );
@@ -2023,7 +2023,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
             ! ( nType == SC_SERVICE_CHDATAPROV &&
                 ( pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
-        // loaded, becuase this unlinks the data
+        // loaded, because this unlinks the data
         OSL_ASSERT( bCreate );
 
         if ( !xRet.is() && bCreate )

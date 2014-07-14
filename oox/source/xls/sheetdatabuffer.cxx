@@ -257,7 +257,7 @@ CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
         {
             /*  The colspan vector aIt points to is sorted by columns, as well
                 as the cell block map. In the folloing, this vector and the
-                list of cell blocks can be iterated simultanously. */
+                list of cell blocks can be iterated simultaneously. */
             CellBlockMap::iterator aMIt = maCellBlocks.begin();
             const ValueRangeVector& rColRanges = aIt->second;
             for( ValueRangeVector::const_iterator aVIt = rColRanges.begin(), aVEnd = rColRanges.end(); aVIt != aVEnd; ++aVIt, ++aMIt )

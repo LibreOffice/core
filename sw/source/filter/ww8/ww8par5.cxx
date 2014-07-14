@@ -406,7 +406,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     }
 
     //e.g. inserting bookmark around field result, so we need to put
-    //it around the entire writer field, as we don't have the seperation
+    //it around the entire writer field, as we don't have the separation
     //of field and field result of word, see #i16941#
     SwPosition aStart(*pPaM->GetPoint());
     if (!maFieldStack.empty())
@@ -706,41 +706,48 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             }
         }
         break;
-            // Doing corresponding status management for TOC field, index field, hyperlink field and page reference field
+            // Doing corresponding status management for TOX field, index field, hyperlink field and page reference field
             case 13://TOX
             case 8://index
-                if (mbLoadingTOCCache)
+                if ( mbLoadingTOXCache )
                 {
-                    maTOXEndCps.insert(nCP);
-                    mbLoadingTOCCache = false;
-                    if ( pPaM->End() &&
-                         pPaM->End()->nNode.GetNode().GetTxtNode() &&
-                         pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0 )
+                    if ( mnEmbeddedTOXLevel > 0 )
                     {
-                            JoinNode(*pPaM);
+                        --mnEmbeddedTOXLevel;
                     }
                     else
                     {
+                        maTOXEndCps.insert( nCP );
+                        mbLoadingTOXCache = false;
+                        if ( pPaM->End()
+                             && pPaM->End()->nNode.GetNode().GetTxtNode()
+                             && pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0 )
+                        {
+                            JoinNode( *pPaM );
+                        }
+                        else
+                        {
                             mbCareLastParaEndInToc = true;
-                    }
+                        }
 
-                    if (mpPosAfterTOC)
-                    {
-                        *pPaM = *mpPosAfterTOC;
-                        delete mpPosAfterTOC;
-                        mpPosAfterTOC = 0;
+                        if ( mpPosAfterTOC )
+                        {
+                            *pPaM = *mpPosAfterTOC;
+                            delete mpPosAfterTOC;
+                            mpPosAfterTOC = 0;
+                        }
                     }
                 }
                 break;
             case 37://REF
-                if (mbLoadingTOCCache && !mbLoadingTOCHyperlink)
+                if (mbLoadingTOXCache && !mbLoadingTOXHyperlink)
                 {
                     pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
                 }
                 break;
             case 88:
-                if (mbLoadingTOCHyperlink)
-                    mbLoadingTOCHyperlink = false;
+                if (mbLoadingTOXHyperlink)
+                    mbLoadingTOXHyperlink = false;
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
                 break;
             case 36:
@@ -1271,7 +1278,7 @@ bookmarks were set with SET or ASK. (See SwWW8FltRefStack)
 
 The other piece of the puzzle is that refs that point to the "location" of the
 bookmark will in word actually point to the last location where the bookmark
-was set with SET or ASK, not the actual bookmark. This is only noticable when
+was set with SET or ASK, not the actual bookmark. This is only noticeable when
 a document sets the bookmark more than once. This is because word places the
 true bookmark at the location of the last set, but the refs will display the
 position of the first set before the ref.
@@ -1298,7 +1305,7 @@ the field, which gives the same effect and meaning, to do so we must
 get any bookmarks in the field range, and begin them immediately before
 the set/ask field, and end them directly afterwards. MapBookmarkVariables
 returns an identifier of the bookmark attribute to close after inserting
-the appropiate set/ask field.
+the appropriate set/ask field.
 */
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     String &rOrigName, const String &rData)
@@ -2170,13 +2177,13 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
     const String sName(GetMappedBookmark(sOrigName));
 
-    // loading page reference field in TOC
-    if (mbLoadingTOCCache )
+    // loading page reference field in TOX
+    if (mbLoadingTOXCache )
     {
         // insert page ref representation as plain text --> return FLD_TEXT
         // if there is no hyperlink settings for current toc and referenced bookmark is available,
         // assign link to current ref area
-        if ( !mbLoadingTOCHyperlink && sName.Len() > 0 )
+        if ( !mbLoadingTOXHyperlink && sName.Len() > 0 )
         {
             // #120879# add cross reference bookmark name prefix, if it matches internal TOC bookmark naming convention
             String sBookmarkName;
@@ -2861,38 +2868,6 @@ void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
     }
 }
 
-//For all outline styles that are not in the outline numbering add them here as
-//custom extra styles
-bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
-{
-    bool bExtras = false;
-    //This is the case if the winword outline numbering is set while the
-    //writer one is not
-    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
-    {
-        SwWW8StyInf& rSI = pCollA[nI];
-        if (rSI.IsOutline())
-        {
-            const SwTxtFmtColl *pFmt = (const SwTxtFmtColl*)(rSI.pFmt);
-            sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
-            sal_uInt16 nMaxLevel = rBase.GetLevel();
-            if (
-                 //nStyleLevel != pFmt->GetOutlineLevel() &&        //#outline level,zhaojianwei
-                 nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
-                 nStyleLevel < nMaxLevel
-               )
-            {
-                String sStyles(rBase.GetStyleNames(rSI.nOutlineLevel));
-                if( sStyles.Len())
-                    sStyles += TOX_STYLE_DELIMITER;
-                sStyles += pFmt->GetName();
-                rBase.SetStyleNames(sStyles, rSI.nOutlineLevel);
-                bExtras = true;
-            }
-        }
-    }
-    return bExtras;
-}
 
 static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
 {
@@ -3024,7 +2999,16 @@ sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
-    mbLoadingTOCCache = true;
+    if ( !mbLoadingTOXCache )
+    {
+        mbLoadingTOXCache = true;
+    }
+    else
+    {
+        // Embedded TOX --> continue reading its content, but no further TOX field
+        ++mnEmbeddedTOXLevel;
+        return FLD_TEXT;
+    }
 
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
@@ -3369,18 +3353,14 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             {
                 case TOX_CONTENT:
                     {
-                        //If we would be created from outlines, either explictly or by default
+                        //If we would be created from outlines, either explicitly or by default
                         //then see if we need extra styles added to the outlines
                         sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
                         if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)
                         {
-                            if (AddExtraOutlinesAsExtraStyles(*pBase))
-                                eCreateFrom |= (nsSwTOXElement::TOX_TEMPLATE | nsSwTOXElement::TOX_OUTLINELEVEL);
-
-                            // --> FME 2004-12-16 #i19683# Insert a text token " " between the
-                            // number and entry token. In an ideal world we could handle the
-                            // tab stop between the number and the entry correctly, but I
-                            // currently have no clue how to obtain the tab stop position.
+                            // #i19683# Insert a text token " " between the number and entry token.
+                            // In an ideal world we could handle the tab stop between the number and
+                            // the entry correctly, but I currently have no clue how to obtain the tab stop position.
                             // It is _not_ set at the paragraph style.
                             SwForm* pForm = 0;
                             for (sal_uInt16 nI = 0; nI < nColls; ++nI)
@@ -3388,7 +3368,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                 const SwWW8StyInf& rSI = pCollA[nI];
                                 if (rSI.IsOutlineNumbered())
                                 {
-                                    sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
+                                    sal_uInt16 nStyleLevel = rSI.mnWW8OutlineLevel;
                                     const SwNumFmt& rFmt = rSI.GetOutlineNumrule()->Get( nStyleLevel );
                                     if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
                                     {
@@ -3446,16 +3426,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
-
-                            SwFormTokens::iterator new_end=remove_if(aPattern.begin(), aPattern.end(),
-                                      SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
-
-                            aPattern.erase (new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
-
-                            aForm.SetPattern(nLevel, aPattern);
-
-                            aForm.SetTemplate( nLevel,
-                                aOldForm.GetTemplate(nLevel));
+                            SwFormTokens::iterator new_end =
+                                remove_if(aPattern.begin(), aPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
+                            aPattern.erase(new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
+                            aForm.SetPattern( nLevel, aPattern );
+                            aForm.SetTemplate( nLevel, aOldForm.GetTemplate(nLevel) );
                         }
                         // <- #i21237#
 
@@ -3475,17 +3450,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         break;
     } // ToxBase fertig
 
-    // no Update of TOC anymore as its actual content is imported and kept.
-    //rDoc.SetUpdateTOX(true);
+    // #i21237# - propagate tab stops from paragraph styles used in TOX to patterns of the TOX
+    pBase->AdjustTabStops( rDoc );
 
-    // #i21237#
-    // propagate tab stops from paragraph styles used in TOX to
-    // patterns of the TOX
-    pBase->AdjustTabStops(rDoc, sal_True);
-
-    //#i10028# inserting a toc implicltly acts like a parabreak
-    //in word and writer
-
+    //#i10028# inserting a toc implicltly acts like a parabreak in word and writer
     if ( pPaM->End() &&
          pPaM->End()->nNode.GetNode().GetTxtNode() &&
          pPaM->End()->nNode.GetNode().GetTxtNode()->Len() != 0 )
@@ -3622,9 +3590,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
                             pReffedStck->aReferencedTOCBookmarks.insert( sMark );
                         }
 
-                        if (mbLoadingTOCCache)
+                        if (mbLoadingTOXCache)
                         {
-                            mbLoadingTOCHyperlink = true;//on loading a TOC field nested hyperlink field
+                            mbLoadingTOXHyperlink = true;//on loading a TOX field nested hyperlink field
                         }
                     }
                     break;
@@ -3651,8 +3619,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
         ( sURL += INET_MARK_TOKEN ) += sMark;
 
     SwFmtINetFmt aURL( sURL, sTarget );
-    // If on loading TOC field, change the default style into the "index link"
-    if (mbLoadingTOCCache)
+    // If on loading TOX field, change the default style into the "index link"
+    if (mbLoadingTOXCache)
     {
         String sLinkStyle = String::CreateFromAscii("Index Link");
         sal_uInt16 nPoolId =

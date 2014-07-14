@@ -458,7 +458,7 @@ public class OOoBean
         to be called after the container window is displayed.
 
         @throws SystemWindowException
-            if no system window can be aquired.
+            if no system window can be acquired.
 
         @throws NoConnectionException
             if the connection is not established.
@@ -483,14 +483,14 @@ public class OOoBean
     // @requirement FUNC.PAR.RWL/0.4
     // @estimation 16h
     /** This method must be called when the OOoBean before the
-        sytem window may be released by it's parent AWT/Swing component.
+        system window may be released by it's parent AWT/Swing component.
 
         This is the case when java.awt.Component.isDisplayable() returns
         true.  This is definitely the case when the OOoBean is removed
         from it's parent container.
 
         @throws SystemWindowException
-            if system window is not aquired.
+            if system window is not acquired.
 
         @throws NoConnectionException
             if the connection is not established.

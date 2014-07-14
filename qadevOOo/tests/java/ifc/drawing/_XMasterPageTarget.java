@@ -94,7 +94,7 @@ public class _XMasterPageTarget extends MultiMethodTest{
         // get the new MasterPage
         DrawPage = oObj.getMasterPage();
 
-        // test the diffrent MasterPages
+        // test the different MasterPages
         if (DrawPage.equals(oOldPage)) result = false;
 
         tRes.tested("setMasterPage()",result);

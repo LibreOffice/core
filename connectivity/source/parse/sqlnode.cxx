@@ -515,7 +515,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
                 }
 
                 // ok we found the field, if the following node is the
-                // comparision operator '=' we filter it as well
+                // comparison operator '=' we filter it as well
                 if (bFilter)
                 {
                     if (SQL_ISRULE(this, comparison_predicate))
@@ -696,7 +696,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
         }
         catch ( Exception& )
         {
-            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occured!" );
+            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occurred!" );
         }
         if ( !m_aChildren[0]->isLeaf() )
         {

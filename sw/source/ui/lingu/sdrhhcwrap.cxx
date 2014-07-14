@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdotext.hxx>
@@ -40,19 +39,16 @@
 #include <unotools/localedatawrapper.hxx>
 #include <sdrhhcwrap.hxx>
 #include <frmfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        //     "     "     "
-#endif
 #include <wrtsh.hxx>        //  MakeVisible
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dcontact.hxx>     // Spelling von DrawObj
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>
 #include <edtwin.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

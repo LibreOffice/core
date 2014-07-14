@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class SDFWriter  extends DataWriter {
     /**
-     * the seperator the seperate columns
+     * the seperator the separate columns
      */
     final String seperator=new String("\t");
     /**
@@ -109,7 +109,7 @@ public class SDFWriter  extends DataWriter {
             // put them together for output
             buffer.append(outData.get(sourceLineNames[i]));
             if(i!=sourceLineNames.length-1) {
-                // seperate the fields with tab
+                // separate the fields with tab
                 buffer.append(seperator);
             }else{
                 // this line is full
@@ -125,7 +125,7 @@ public class SDFWriter  extends DataWriter {
                 // put them together for output
                 buffer.append(outData.get(targetLineNames[i]));
                 if(i!=targetLineNames.length-1) {
-                    // seperate the fields with tab
+                    // separate the fields with tab
                     buffer.append(seperator);
                 }else{
                     // this line is full

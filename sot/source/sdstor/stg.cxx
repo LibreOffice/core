@@ -741,7 +741,7 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
     if( pElem )
     {
         /*
-        this lines are misterious !!! MM
+        this lines are mysterious !!! MM
         if( !pElem->IsContained( pDest->pEntry ) )
         {
             SetError( SVSTREAM_ACCESS_DENIED );

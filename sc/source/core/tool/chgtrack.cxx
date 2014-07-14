@@ -933,7 +933,7 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
 
 ScChangeActionDel::ScChangeActionDel(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
                                     const ScBigRange& aBigRangeP, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
+                                    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) // which of nDx and nDy is set is depend on the type
         :
         ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
         pTrack( pTrackP ),
@@ -1261,7 +1261,7 @@ void ScChangeActionDel::UndoCutOffInsert()
 
 ScChangeActionMove::ScChangeActionMove(const sal_uLong nActionNumber, const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
                                     const ScBigRange& aToBigRange, const String& aUserP, const DateTime& aDateTimeP, const String &sComment,
-                                    const ScBigRange& aFromBigRange, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
+                                    const ScBigRange& aFromBigRange, ScChangeTrack* pTrackP) // which of nDx and nDy is set is depend on the type
         :
         ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
         aFromRange(aFromBigRange),

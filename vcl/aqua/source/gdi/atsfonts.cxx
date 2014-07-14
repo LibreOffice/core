@@ -393,7 +393,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // heuristic to find the most common font name
-        // prefering default language names or even better the names matching to the UI language
+        // preferring default language names or even better the names matching to the UI language
         int nNameValue = (eFontNameLanguage==eUILangCode) ? 0 : ((eFontNameLanguage==0) ? -10 : -20);
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UNICODE;
         const int nPlatformEncoding = ((int)eFontNamePlatform << 8) + (int)eFontNameScript;

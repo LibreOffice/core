@@ -301,7 +301,12 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual void SetAttr(
+        const SwPosition& rPos,
+        sal_uInt16 nAttrId = 0,
+        sal_Bool bTstEnde = sal_True,
+        long nHand = LONG_MAX,
+        sal_Bool consumedByField = sal_False );
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -886,8 +891,8 @@ struct ApoTestResults
 
 struct ANLDRuleMap
 {
-    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, varient 1
-    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, varient 2
+    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, variant 1
+    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, variant 2
     SwNumRule* GetNumRule(sal_uInt8 nNumType);
     void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
     ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
@@ -1031,14 +1036,6 @@ private:
     */
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
     std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
-
-    /*
-     Winword numbering gets imported as SwNumRules, there is a problem that
-     winword can have multiple outline numberings, only one gets chosen as
-     the writer outline numbering rule. The one that gets chosen is set here
-     as mpChosenOutlineNumRule
-    */
-    SwNumRule *mpChosenOutlineNumRule;
 
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
@@ -1216,10 +1213,12 @@ private:
     boost::shared_ptr<SwPaM> mpTableEndPaM;
     WW8PLCFx_Cp_FKP* pFirstTablePap;
 
-    // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
-    bool mbLoadingTOCCache;
-    // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
-    bool mbLoadingTOCHyperlink;
+    // Indicate that currently on loading a TOX, managed by Read_F_TOX() and End_Field()
+    bool mbLoadingTOXCache;
+    int mnEmbeddedTOXLevel;
+
+    // Indicate that current on loading a hyperlink, which is inside a TOX; Managed by Read_F_Hyperlink() and End_Field()
+    bool mbLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* mpPosAfterTOC;
 
@@ -1289,12 +1288,10 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( sal_uInt16 nId );
-    // --> OD 2010-05-06 #i103711#
-    // --> OD 2010-05-11 #i105414#
+
     void NewAttr( const SfxPoolItem& rAttr,
                   const bool bFirstLineOfStSet = false,
                   const bool bLeftIndentSet = false );
-    // <--
 
     bool GetFontParams(sal_uInt16, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
@@ -1500,8 +1497,11 @@ private:
 
 // Ver8-Listen
 
-    void RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
-        bool bSetAttr = true);
+    void RegisterNumFmtOnTxtNode(
+        sal_uInt16 nActLFO,
+        sal_uInt8 nActLevel,
+        const bool bSetAttr = true );
+
     void RegisterNumFmtOnStyle(sal_uInt16 nStyle);
     void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         sal_uInt8 nActLevel);
@@ -1537,7 +1537,7 @@ private:
     SwTwips MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         bool bTableJoin = true);
 
-    void SetOutLineStyles();
+    void SetOutlineStyles();
 
     bool SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper);
     bool SetUpperSpacing(SwPaM &pMyPam, int nSpace);
@@ -1700,7 +1700,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, String& rStr );
 
     eF_ResT Read_F_Tox( WW8FieldDesc* pF, String& rStr );
-    bool AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase);
     eF_ResT Read_F_Symbol( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);

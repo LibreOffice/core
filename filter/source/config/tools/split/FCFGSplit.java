@@ -182,7 +182,7 @@ public class FCFGSplit
      *  Its meaned relativ to m_sOutDir. */
     private static java.lang.String m_sSubDirContentHandlers;
 
-    /** enable/disable generating of filter groups - seperated by
+    /** enable/disable generating of filter groups - separated by
      *  application modules. */
     private static boolean m_bSeperateFiltersByModule;
 
@@ -466,7 +466,7 @@ public class FCFGSplit
         sTimes.append(" ms\n"                            );
         m_aDebug.setDetailedInfo(sTimes.toString());
 
-        // everyting seems to be ok.
+        // everything seems to be ok.
         // Return "OK" to calli.
         m_aDebug.setGlobalInfo("Finish.");
         System.exit(0);

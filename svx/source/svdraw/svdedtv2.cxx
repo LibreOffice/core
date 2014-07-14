@@ -1243,7 +1243,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 nInsPos = pObj->GetNavigationPosition() + 1;
                 pInsOL = pObj->getParentOfSdrObject();
 
-                // #i76891# use single iter from SJ here whcih works on SdrObjects and takes
+                // #i76891# use single iter from SJ here which works on SdrObjects and takes
                 // groups into account by itself
                 SdrObjListIter aIter(*pObj, IM_DEEPWITHGROUPS);
 

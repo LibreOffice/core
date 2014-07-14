@@ -2105,7 +2105,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
-                                                        // happend already!!!
+                                                        // happened already!!!
 
     DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible( sal_False );

@@ -392,7 +392,7 @@ ContentProvider::getConfiguration() const
         }
         catch( const uno::Exception& )
         {
-            OSL_ENSURE( sProvider.is(), "cant instantiate configuration" );
+            OSL_ENSURE( sProvider.is(), "can't instantiate configuration" );
         }
     }
 
@@ -495,7 +495,7 @@ void ContentProvider::subst( rtl::OUString& instpath ) const
         catch( const uno::Exception&)
         {
             OSL_ENSURE( xCfgMgr.is(),
-                        "cant instantiate the special config manager " );
+                        "can't instantiate the special config manager " );
         }
     }
 

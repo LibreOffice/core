@@ -47,7 +47,7 @@ private:
 
 public:
     ResMgr * GetResMgr(const ::com::sun::star::lang::Locale aLocale);
-    ResMgr * GetResMgr(); // VCL dependant, only available in SVT, not in SVL!
+    ResMgr * GetResMgr(); // VCL dependent, only available in SVT, not in SVL!
 
     static ImpSvtData & GetSvtData();
 };
@@ -58,7 +58,7 @@ class SVT_DLLPUBLIC SvtResId: public ResId
 public:
     SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale);
     SvtResId(sal_uInt16 nId);
-     // VCL dependant, only available in SVT, not in SVL!
+     // VCL dependent, only available in SVT, not in SVL!
 };
 
 #endif //  _SVTOOLS_SVTDATA_HXX

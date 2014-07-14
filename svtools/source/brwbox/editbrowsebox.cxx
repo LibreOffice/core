@@ -943,7 +943,7 @@ namespace svt
         {
             Window& rWindow = GetDataWindow();
             // don't paint too much
-            // update the status immediatly if possible
+            // update the status immediately if possible
             if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
             {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, sal_False );

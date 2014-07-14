@@ -63,7 +63,7 @@ public:
     void    SetViewShell (ViewShell* pViewSh);
 
     /** Set the zoom factor to the specified value and center the display
-        area arround the zoom center.
+        area around the zoom center.
         @param nZoom
             The zoom factor is given as integral percent value.
     */
@@ -128,7 +128,7 @@ public:
     void SetViewSize(const basegfx::B2DVector& rSize);
     void SetCenterAllowed (bool bIsAllowed);
 
-    /** Calculate origin of the map mode accoring to the size of the view
+    /** Calculate origin of the map mode according to the size of the view
         and window (its size in model coordinates; that takes the zoom
         factor into account), and the bCenterAllowed flag.  When it is not
         set then nothing is changed.  When in any direction the window is

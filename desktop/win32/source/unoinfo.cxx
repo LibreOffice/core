@@ -66,7 +66,8 @@ void writePath(
     if (end == NULL) {
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout, "%S", path);
+    size_t nWideLen = wcslen(path);
+    fwrite( path, sizeof(wchar_t), nWideLen, stdout);
 }
 
 }
@@ -103,7 +104,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"classes\\unoil.jar"));
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\classes\\ridl.jar"));
+        writePath(path, pathEnd, MY_STRING(L"classes\\ridl.jar"));
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"classes\\jurt.jar"));
         writeNull();

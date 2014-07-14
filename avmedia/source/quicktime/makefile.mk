@@ -26,7 +26,7 @@ PRJNAME=avmedia
 TARGET=avmediaQuickTime
 
 # the QuickTime API has been deprecated since OSX 10.5 and has been removed in the OSX SDK 10.7
-.IF ("$(GUIBASE)" != "aqua") || ("${MACOSX_DEPLOYMENT_TARGET:s/.//}" >= "106")
+.IF "$(GUIBASE)" != "aqua"
 dummy:
     @echo " Nothing to build for GUIBASE=$(GUIBASE) and OSX$(MACOSX_DEPLOYMENT_TARGET)"
 .ELSE
@@ -44,15 +44,15 @@ CDEFS+= -DVERBOSE
 CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
-        $(SLO)$/quicktimeuno.obj  \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/manager.obj       \
-        $(SLO)$/window.obj        \
-        $(SLO)$/player.obj
+        $(SLO)$/qt_uno.obj  \
+        $(SLO)$/qt_framegrabber.obj        \
+        $(SLO)$/qt_manager.obj       \
+        $(SLO)$/qt_window.obj        \
+        $(SLO)$/qt_player.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/quicktimeuno.obj
+        $(SLO)$/qt_framegrabber.obj        \
+        $(SLO)$/qt_uno.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 

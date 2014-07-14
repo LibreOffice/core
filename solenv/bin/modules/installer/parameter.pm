@@ -202,7 +202,7 @@ sub control_fundamental_parameter
 
 ##########################################################
 # The path parameters can be relative or absolute.
-# This function creates absolute pathes.
+# This function creates absolute paths.
 ##########################################################
 
 sub make_path_absolute

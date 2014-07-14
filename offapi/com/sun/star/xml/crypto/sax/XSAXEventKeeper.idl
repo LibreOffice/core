@@ -122,7 +122,7 @@ interface XSAXEventKeeper : com::sun::star::uno::XInterface
     /**
      * Prints information about all bufferred elements.
      *
-     * @return   a tree-style string including all buffer informtion
+     * @return   a tree-style string including all buffer information
      */
     string printBufferNodeTree();
 

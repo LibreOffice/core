@@ -47,7 +47,7 @@ published service Info0
         <p> This property is escpecially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
-    /** If this flag is set to <FALSE/> the content updated everytime the document
+    /** If this flag is set to <FALSE/> the content updated every time the document
         information is changed.
      */
     [property]boolean IsFixed;

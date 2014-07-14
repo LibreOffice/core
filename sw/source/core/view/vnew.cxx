@@ -199,7 +199,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Notify> during contruction of <ViewShell> instance
+    // <SwDrawContact::Changed> during construction of <ViewShell> instance
     mbInConstructor = true;
 
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
@@ -278,7 +278,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Notify> during contruction of <ViewShell> instance
+    // <SwDrawContact::Changed> during construction of <ViewShell> instance
     mbInConstructor = true;
 
     bPaintWorks = bEnableSmooth = sal_True;

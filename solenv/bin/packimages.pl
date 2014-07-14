@@ -45,7 +45,7 @@ my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
 my $sort_file;               # path to file containing sorting data
 my @custom_path;             # path to custom images directory
-my @imagelist_path;          # pathes to directories containing the image lists
+my @imagelist_path;          # paths to directories containing the image lists
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
 my $do_rebuild = 0;          # is rebuilding zipfile required?

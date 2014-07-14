@@ -57,7 +57,7 @@ namespace framework{
 // definitions
 
 /**
-    @short  holds all neccessary informations about a job and
+    @short  holds all necessary informations about a job and
             handle it's configuration (if any exist!)
     @descr  It can be used rom different use cases as a container
             (or proxy) for all config data of a registered job.
@@ -145,8 +145,8 @@ class JobData : private ThreadHelpBase
         /** Some jobs can be registered to "logical events", which are generated on demand if another document event
             occures. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
             And normaly the original event is transported as parameter set to the executed job. But then such job
-            cant differ between e.g. "OnNew" and "onDocumentOpened".
-            That's why we must know, for which type of event the job was realy triggered .-)
+            can't differ between e.g. "OnNew" and "onDocumentOpened".
+            That's why we must know, for which type of event the job was really triggered .-)
 
             The information "sDocEvent" from this struct must be set on the member JobData::m_sEvent from outside
             user of such Jobdata structure.
@@ -198,7 +198,7 @@ class JobData : private ThreadHelpBase
         /**
             the alias name of this job.
             Is used as entry of configuration set for job registration, to find all
-            neccessary properties of it..
+            necessary properties of it..
          */
         ::rtl::OUString m_sAlias;
 
@@ -232,7 +232,7 @@ class JobData : private ThreadHelpBase
         css::uno::Sequence< css::beans::NamedValue > m_lArguments;
 
         /**
-            after a job was sucessfully executed (by any outside code using our
+            after a job was successfully executed (by any outside code using our
             informations) it can return a result. This member make it part of this
             container too. So it can be used for further things.
             We use it also to update our internal state and the configuration

@@ -992,7 +992,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 
     // if we're in the process of initializing the document (which effectively means it is an implicit
     // initialization triggered in storeAsURL), the we do not notify events, since to an observer, the SaveAs
-    // should not be noticable
+    // should not be noticeable
     bool bIsInitializationProcess = impl_isInitializing();
 
     if ( !bIsInitializationProcess )

@@ -612,7 +612,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             if ( nPrecision && nFieldLen < nPrecision + 2 )
                 nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
             // 538 MUST: Sdb internal representation adds 2 to the field length!
-            // To give the user what he wants we must substract it here.
+            // To give the user what he wants we must subtract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
              //! of 1 and no decimals!
             if ( nFieldLen == 1 && nPrecision == 0 )

@@ -55,7 +55,7 @@ published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterf
         @param xMapping
         can be used for optimization of remote access via the interface
         <type>XContentAccess</type> of the <type>CachedContentResultSet</type>.
-        This paramter can be <NULL/>.
+        This parameter can be <NULL/>.
 
         @returns
         an instance of service <type>CachedContentResultSet</type>.

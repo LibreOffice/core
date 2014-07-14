@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
@@ -36,7 +35,6 @@
 #include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svx/svdlegacy.hxx>
-
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
 #include <fmthdft.hxx>
@@ -83,6 +81,8 @@
 // <--
 #include <svx/fmmodel.hxx>
 #include <switerator.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <drawdoc.hxx>
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
@@ -229,9 +229,23 @@ SwFrmNotify::~SwFrmNotify()
             (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
     if ( bPrtWidth || bPrtHeight )
     {
-        const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
-        if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
-            pFrm->SetCompletePaint();
+        //UUUU
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
+
+        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        {
+            //UUUU use SetCompletePaint if needed
+            if(aFillAttributes->needCompleteRepaint())
+            {
+                pFrm->SetCompletePaint();
+            }
+        }
+        else
+        {
+            const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
+            if(GPOS_NONE != ePos && GPOS_TILED != ePos)
+                pFrm->SetCompletePaint();
+        }
     }
     else
     {
@@ -920,7 +934,7 @@ SwCntntNotify::~SwCntntNotify()
                         // The layout is calculated _before_ calling PrtOLENotify,
                         // and the OLE objects are not invalidated during import.
                         // Therefore I added the condition !IsUpdateExpFld,
-                        // have a look at the occurence of CalcLayout in
+                        // have a look at the occurrence of CalcLayout in
                         // uiview/view.cxx.
                         if ( !pNd->IsOLESizeInvalid() &&
                              !pSh->GetDoc()->IsUpdateExpFld() )

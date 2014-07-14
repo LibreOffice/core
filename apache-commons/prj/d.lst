@@ -1,5 +1,5 @@
-..\%__SRC%\class\commons-logging-1.1.1-SNAPSHOT.jar %_DEST%\bin%_EXT%\commons-logging-1.1.1.jar
-..\%__SRC%\class\commons-codec-1.6-SNAPSHOT.jar %_DEST%\bin%_EXT%\commons-codec-1.6.jar
+..\%__SRC%\class\commons-logging-1.1.3.jar %_DEST%\bin%_EXT%\commons-logging-1.1.3.jar
+..\%__SRC%\class\commons-codec-1.9.jar %_DEST%\bin%_EXT%\commons-codec-1.9.jar
 ..\%__SRC%\class\commons-httpclient.jar %_DEST%\bin%_EXT%\commons-httpclient-3.1.jar
-..\%__SRC%\class\commons-lang-2.4.jar %_DEST%\bin%_EXT%\commons-lang-2.4.jar
+..\%__SRC%\class\commons-lang3-3.3.jar %_DEST%\bin%_EXT%\commons-lang3-3.3.jar
 

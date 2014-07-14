@@ -71,7 +71,7 @@ published interface XFunction
     */
     [attribute,bound] string Formula;
 
-    /** defines the formular for the intial value
+    /** defines the formular for the initial value
     */
     [attribute,bound] com::sun::star::beans::Optional<string> InitialFormula;
 };

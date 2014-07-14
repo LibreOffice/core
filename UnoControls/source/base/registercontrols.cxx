@@ -51,7 +51,7 @@
 //______________________________________________________________________________________________________________
 
 // If you will debug macros of this file ... you must define follow constant!
-// Ths switch on another macro AS_DBG_OUT(...), which will print text to "stdout".
+// This switch on another macro AS_DBG_OUT(...), which will print text to "stdout".
 
 //#define AS_DBG_SWITCH
 

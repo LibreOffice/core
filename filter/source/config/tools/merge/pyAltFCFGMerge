@@ -311,7 +311,7 @@ def printHelp():
     print("parameters:")
     print("\tcfg=<file name>")
     print("\t\tmust point to a system file, which contains")
-    print("\t\tall neccessary configuration data for the merge process.")
+    print("\t\tall necessary configuration data for the merge process.")
     print("\tFurther cou can specify every parameter allowed in the")
     print("\tconfig file as command line parameter too, to overwrite")
     print("\tthe value from the file.")
@@ -502,7 +502,7 @@ class Merger:
                 self.m_aCfg.getValue(PROP_XMLPACKAGE ),\
                 self.m_aCfg.getValueWithDefault(PROP_LANGUAGEPACK, False))
 
-        # counts all transfered fragments
+        # counts all transferred fragments
         # Can be used later to decide, if a generated package file
         # contains "nothing"!
         nItemCount = 0

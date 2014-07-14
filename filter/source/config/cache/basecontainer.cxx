@@ -61,7 +61,7 @@ BaseContainer::BaseContainer()
     m_rCache->load(FilterCache::E_CONTAINS_STANDARD);
 
     // GLOBAL SAFE (!) -> -----------------------
-    // TODO use rtl pattern to create it realy threadsafe!
+    // TODO use rtl pattern to create it really threadsafe!
     ::osl::ResettableMutexGuard aGlobalLock(::osl::Mutex::getGlobalMutex());
     if (!m_pPerformanceOptimizer)
         m_pPerformanceOptimizer = new ::salhelper::SingletonRef< FilterCache >();
@@ -107,7 +107,7 @@ void BaseContainer::impl_loadOnDemand()
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // A generic container needs all items of a set of our cache!
-    // Of course it can block for a while, till the cache is realy filled.
+    // Of course it can block for a while, till the cache is really filled.
     // Note: dont load all sets supported by the cache here!
 
     FilterCache::EFillState eRequiredState = FilterCache::E_CONTAINS_NOTHING;
@@ -151,7 +151,7 @@ void BaseContainer::impl_initFlushMode()
         m_pFlushCache = m_rCache->clone();
     if (!m_pFlushCache)
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Cant create write copy of internal used cache on demand."),
+                ::rtl::OUString::createFromAscii("Can't create write copy of internal used cache on demand."),
                 dynamic_cast< css::container::XNameAccess* >(this));
     // <- SAFE
 }
@@ -274,7 +274,7 @@ void SAL_CALL BaseContainer::removeByName(const ::rtl::OUString& sItem)
     impl_initFlushMode();
 
     FilterCache* pCache = impl_getWorkingCache();
-    pCache->removeItem(m_eType, sItem); // throw exceptions automaticly
+    pCache->removeItem(m_eType, sItem); // throw exceptions automatically
 
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -333,7 +333,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
 {
     if (!sItem.getLength())
         throw css::container::NoSuchElementException(
-                ::rtl::OUString::createFromAscii("An empty item cant be part of this cache!"),
+                ::rtl::OUString::createFromAscii("An empty item can't be part of this cache!"),
                 css::uno::Reference< css::uno::XInterface >(static_cast< css::container::XNameAccess* >(this), css::uno::UNO_QUERY));
 
     css::uno::Any aValue;
@@ -431,7 +431,7 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const ::rtl::OUString& sItem)
 css::uno::Type SAL_CALL BaseContainer::getElementType()
     throw (css::uno::RuntimeException)
 {
-    // no lock neccessary - because the type of our items
+    // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...
     return ::getCppuType(static_cast< css::uno::Sequence< css::beans::PropertyValue >* >(NULL));
 }
@@ -471,7 +471,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
-    OSL_ENSURE(sal_False, "not pure virtual ... but not realy implemented .-)");
+    OSL_ENSURE(sal_False, "not pure virtual ... but not really implemented .-)");
 
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< ::rtl::OUString >());
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
@@ -505,7 +505,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     catch(const css::uno::Exception&)
     {
         // invalid cache, internal failure, wrong conversion ...!?
-        // doesnt matter
+        // doesn't matter
         lKeys.clear();
     }
 
@@ -538,7 +538,7 @@ void SAL_CALL BaseContainer::flush()
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
-                ::rtl::OUString::createFromAscii("Cant guarantee cache consistency. Special flush container does not exists!"),
+                ::rtl::OUString::createFromAscii("Can't guarantee cache consistency. Special flush container does not exists!"),
                 dynamic_cast< css::container::XNameAccess* >(this),
                 css::uno::Any());
 
@@ -612,7 +612,7 @@ void SAL_CALL BaseContainer::flush()
 void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.addInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
                              xListener                                                                           );
@@ -624,7 +624,7 @@ void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::ut
 void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.removeInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
                                 xListener                                                                           );

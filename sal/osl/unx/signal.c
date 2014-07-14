@@ -130,7 +130,7 @@ plan to have the new handler use this signal*/
     { SIGWINCH,  ACT_IGNORE, NULL },    /* window size change */
     { SIGURG,    ACT_EXIT,   NULL },    /* urgent socket condition */
 #ifdef SIGPOLL
-    { SIGPOLL,   ACT_EXIT,   NULL },    /* pollable event occured */
+    { SIGPOLL,   ACT_EXIT,   NULL },    /* pollable event occurred */
 #endif
     { SIGSTOP,   ACT_SYSTEM, NULL },    /* stop (cannot be caught or ignored) */
     { SIGTSTP,   ACT_SYSTEM, NULL },    /* user stop requested from tty */
@@ -252,7 +252,7 @@ static sal_Bool InitSignal()
     /* Initialize the rest of the signals */
     for (i = 0; i < NoSignals; i++)
     {
-        /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
+        /* hack: stomcatd is attaching JavaVM which dont work with an sigaction(SEGV) */
         if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
         && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
         && (bSetILLHandler   || Signals[i].Signal != SIGILL))

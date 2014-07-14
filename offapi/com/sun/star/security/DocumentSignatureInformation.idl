@@ -62,7 +62,7 @@ struct DocumentSignatureInformation
         applied to the files in the root of the document, except mimetype, the
         Pictures and ObjectReplacements/Objects folder. That is, macros
         were not part of the document signature.
-        OpenOffice 3.0 signed everthing, execept mimetype and the META-INF folder.
+        OpenOffice 3.0 signed everything, execept mimetype and the META-INF folder.
         <p>
         If PartialDocumentSignature is true, then the signature was created by OOo
         with a version less then 3.2. In this case, not all files are signed. The

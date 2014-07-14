@@ -426,7 +426,7 @@ public class OpenOfficePostscriptCreator implements IOffice
      *
      * @return true, if print has been done.
      *         Be careful, true means only print returns with no errors, to be sure print is really done
-     *         check existance of _sPrintFileURL
+     *         check existence of _sPrintFileURL
      */
 
 //    public boolean printToFileWithOOo(ParameterHelper _aGTA,
@@ -561,7 +561,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
                     // configure Office to allow to execute macos
 
-// TODO: We need a possiblity to set the printer name also for StarOffice/OpenOffice
+// TODO: We need a possibility to set the printer name also for StarOffice/OpenOffice
                     if (OSHelper.isWindows())
                     {
                         if (_aGTA.getPrinterName() != null)
@@ -1400,7 +1400,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             //     aSemaphore.V(aSemaphore.getSemaphoreFile());
             //     aSemaphore.sleep(2);
             //     // wait some time maybe an other process will take the semaphore
-            //     // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+            //     // I know, this is absolutely dirty, but the whole convwatch is dirty and need a big cleanup.
             // }
         }
     }

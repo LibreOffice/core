@@ -160,11 +160,11 @@ public:
         @param bIncludePrecious
             When this flag is <true/> entries with the precious flag set are
             included in the index.  When the flag is <false/> these entries
-            are ommited.
+            are omitted.
         @param bIncludeNoPreview
             When this flag is <true/> entries with that have no preview
             bitmaps are included in the index.  When the flag is <false/> these entries
-            are ommited.
+            are omitted.
     */
     ::std::auto_ptr<CacheIndex> GetCacheIndex (
         bool bIncludePrecious,

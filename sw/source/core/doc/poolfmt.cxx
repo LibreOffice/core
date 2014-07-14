@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svx/xdef.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -69,6 +70,8 @@
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 
+//UUUU
+#include <svx/xfillit0.hxx>
 
 using namespace ::com::sun::star;
 
@@ -402,6 +405,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aSet.Put(aScriptSpace);
             }
         }
+
         break;
 
     case RES_POOLCOLL_TEXT:                 // Textkoerper

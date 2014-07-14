@@ -44,7 +44,7 @@ EMXOMFOPT = -q
 #//YD SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
 
-# filter for supressing verbose messages from linker
+# filter for suppressing verbose messages from linker
 #not needed at the moment
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 

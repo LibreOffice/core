@@ -658,8 +658,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 GetMedium()->SetUpdatePickList( sal_True );
 
                 // TODO: in future it must be done in followind way
-                // if document is opened from GUI it is immediatelly appeares in the picklist
-                // if the document is a new one then it appeares in the picklist immediatelly
+                // if document is opened from GUI it is immediately appeares in the picklist
+                // if the document is a new one then it appeares in the picklist immediately
                 // after SaveAs operation triggered from GUI
             }
             catch( task::ErrorCodeIOException& aErrorEx )
@@ -1002,7 +1002,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             {
                 /*
 
-                 search for filter cant work correctly ...
+                 search for filter can't work correctly ...
                  Because it's not clear, which export filter for which office module
                  must be searched. On the other side it can be very expensive doing so.
                  The best solution would be: on installation time we should know if pdf feature

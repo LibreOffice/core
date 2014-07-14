@@ -240,7 +240,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 
-    if ( aName != aNewStr )                 // some error occured...
+    if ( aName != aNewStr )                 // some error occurred...
         throw uno::RuntimeException();      // no other exceptions specified
 }
 rtl::OUString SAL_CALL ScNamedRangeObj::getScopeName() throw(uno::RuntimeException)
@@ -260,7 +260,7 @@ void SAL_CALL ScNamedRangeObj::setScopeAndRangeName( const rtl::OUString& aNewSc
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( &aNewRangeStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1,  aNewScopeName.getLength() == 0 ? NULL : &aNewScopeStr);
 
-    if ( aScopeName != aNewScopeStr || aName != aNewRangeStr  )                 // some error occured...
+    if ( aScopeName != aNewScopeStr || aName != aNewRangeStr  )                 // some error occurred...
         throw uno::RuntimeException();      // no other exceptions specified
 }
 

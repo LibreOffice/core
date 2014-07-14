@@ -62,8 +62,8 @@ namespace
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
-        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getCommonMarksBegin();
-            ppMark != rMarkAccess.getCommonMarksEnd();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getAllMarksBegin();
+            ppMark != rMarkAccess.getAllMarksEnd();
             ppMark++)
         {
             if ( IDocumentMarkAccess::GetType( *(ppMark->get()) ) == IDocumentMarkAccess::DDE_BOOKMARK)
@@ -162,7 +162,7 @@ sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 bool SwDoc::GetData( const String& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    //search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -201,7 +201,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 bool SwDoc::SetData( const String& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    //search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -240,7 +240,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 {
     SwServerObject* pObj = NULL;
 
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    //search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -380,7 +380,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             return sal_False;
     }
 
-    //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    //search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {

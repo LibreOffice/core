@@ -1255,5 +1255,5 @@ const sal_Char* SAL_CALL exprTypeToString(ExprType t)
             return "none";
     }
 
-    return ("unkown");
+    return ("unknown");
 }

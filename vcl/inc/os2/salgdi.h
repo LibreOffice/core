@@ -230,7 +230,7 @@ protected:
     virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
 public:
-    // public SalGraphics methods, the interface to teh independent vcl part
+    // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
@@ -276,7 +276,7 @@ public:
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
-    // returns TRUE if creation of subset was successfull
+    // returns TRUE if creation of subset was successful
     // parameters: rToFile: contains a osl file URL to write the subset to
     //             pFont: describes from which font to create a subset
     //             pGlyphIDs: the glyph ids to be extracted

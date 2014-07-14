@@ -37,9 +37,9 @@
     has to be loaded into a specified frame
 
     <p>
-    For a normal dispatch calls all needed parameters are seperated.
+    For a normal dispatch calls all needed parameters are separated.
     For optimized remote functionality <member>XDispatch::queryDispatches()</member>
-    it's neccessary to pack these parameters in a flat structure wich can be used
+    it's necessary to pack these parameters in a flat structure which can be used
     in a simple manner.
     </p>
 
@@ -63,7 +63,7 @@ published struct DispatchDescriptor
     /** name of the target frame
 
         <p>
-        Special targets (e.g. "_blank", "_self") or realy existing target names can be used.
+        Special targets (e.g. "_blank", "_self") or really existing target names can be used.
         </p>
 
         @see XDispatchProvider::queryDispatch()

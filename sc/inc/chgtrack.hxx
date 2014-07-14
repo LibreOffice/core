@@ -593,7 +593,7 @@ public:
                                                 const ScChangeActionType eType,
                                                 const SCsCOLROW nD,
                                                 ScChangeTrack* pTrack); // only to use in the XML import
-                                                                        // wich of nDx and nDy is set is depend on the type
+                                                                        // which of nDx and nDy is set is depend on the type
 
                                 // ob dieses das unterste einer Reihe (oder
                                 // auch einzeln) ist

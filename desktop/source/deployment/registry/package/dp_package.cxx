@@ -105,7 +105,7 @@ class BackendImpl : public ImplBaseT
 
         Reference<deployment::XPackage> bindBundleItem(
             OUString const & url, OUString const & mediaType,
-            sal_Bool bRemoved, //that is, useing data base information
+            sal_Bool bRemoved, //that is, using data base information
             OUString const & identifier,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool notifyDetectionError = true );
@@ -1569,7 +1569,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
 {
     ::ucbhelper::Content ucbContent( url, xCmdEnv );
 
-    // check for platform pathes:
+    // check for platform paths:
     const OUString title( ucbContent.getPropertyValue(
                               StrTitle::get() ).get<OUString>() );
     if (title.endsWithIgnoreAsciiCaseAsciiL(

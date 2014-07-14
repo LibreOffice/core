@@ -51,7 +51,7 @@ published service ContentHandler
 
         <p>
         Base interface of <type>XNotifyingDispatch</type> is <type>XDispatch</type>
-        and can be called for requests if result isn't neccessary for dispatch operation.
+        and can be called for requests if result isn't necessary for dispatch operation.
         </p>
 
         @see XDispatch

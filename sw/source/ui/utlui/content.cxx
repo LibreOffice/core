@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -85,22 +83,16 @@
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
-//#include <ndgrf.hxx>
 #include <fmtcntnt.hxx>
 #include <PostItMgr.hxx>
-//#include <../../core/inc/flyfrm.hxx>
-//#include <../../core/inc/cntfrm.hxx>
-//#include <ndnotxt.hxx>
-//#include <postit.hxx>
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
-
 #include "swabstdlg.hxx"
 #include "globals.hrc"
 #include <unomid.h>
 #include <svx/fmmodel.hxx>
-
+#include <drawdoc.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -447,7 +439,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         {
             sTypeToken = aEmptyStr;
             nMemberCount = 0;
-            SdrModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
+            SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -816,7 +808,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 pMember->DeleteAndDestroy(0, pMember->Count());
 
             IDocumentDrawModelAccess* pIDDMA = pWrtShell->getIDocumentDrawModelAccess();
-            SdrModel* pModel = pIDDMA->GetDrawModel();
+            SwDrawModel* pModel = pIDDMA->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -956,7 +948,7 @@ String SwContentTree::GetEntryAltText( SvLBoxEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SwDrawModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     const sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -1034,7 +1026,7 @@ String SwContentTree::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SwDrawModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -1400,7 +1392,7 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
             SdrView* pDrawView = pActiveShell->GetDrawView();
             if (pDrawView)
             {
-                SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                SwDrawModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
                 SdrPage* pPage = pDrawModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
 
@@ -2681,7 +2673,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                         {
                             pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
 
-                            SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                            SwDrawModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
                             SdrPage* pPage = pDrawModel->GetPage(0);
                             sal_uInt32 nCount = pPage->GetObjCount();
                             sal_Bool hasObjectMarked = sal_False;
@@ -3381,7 +3373,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             {
                 pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
-                SdrModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
+                SwDrawModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
                 SdrPage* pPage = _pModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
                 for( sal_uInt32 i=0; i< nCount; i++ )

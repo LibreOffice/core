@@ -19,15 +19,11 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
-
 #include "hintids.hxx"
-
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -88,6 +84,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/svdview.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 #include <svx/obj3d.hxx>
 
 #define SCROLLVAL 75

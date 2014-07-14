@@ -49,7 +49,7 @@
 
     <p>
     It's an asynchronous loading. For synchronous processes use <type>XSynchronousFrameLoader</type>
-    instead of this one. The generic load algorithm of the office supports both ones - but prefered
+    instead of this one. The generic load algorithm of the office supports both - but preferes
     the synchronous interface.
     </p>
 

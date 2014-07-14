@@ -26,7 +26,7 @@
 
 //*************************************************************************************************************
 //  special macros for time measures
-//  1) LOGFILE_FILTERDBG                  used it to define log file for this operations (default will be set automaticly)
+//  1) LOGFILE_FILTERDBG                  used it to define log file for this operations (default will be set automatically)
 //  4) LOG_FILTERDBG                      write debug info to log file
 //*************************************************************************************************************
 

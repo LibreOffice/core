@@ -464,11 +464,11 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
         OSL_TRACE( "osl_executeProcess with DosExecPgm (args: %s)\n", args );
 
-        /* calculate needed space for environment: since enviroment var search
-           is a linear scan of the current enviroment, we place new variables
+        /* calculate needed space for environment: since environment var search
+           is a linear scan of the current environment, we place new variables
            before existing ones; so the child will find new definitions before
            olders; this doesn't require us to replace existing vars */
-        // existing enviroment size
+        // existing environment size
         n = 0;
         p = environ;
         while( *p)
@@ -848,7 +848,7 @@ oslProcessError SAL_CALL osl_getCommandArgs( sal_Char* pszBuffer, sal_uInt32 Max
         {
             /*
              *  C-Runtime expects char to be unsigned and so to be
-             *  preceeded with 00 instead of FF when converting to int
+             *  preceded with 00 instead of FF when converting to int
              */
             int n = *((unsigned char *) pszCmdLine);
             if (! (isspace(n) || (*pszCmdLine == '\0')) )

@@ -89,7 +89,7 @@ public:
     /** Create a children manager, which manages the children of the given
         parent.  The parent is used for creating accessible objects.  The
         list of shapes for which to create those objects is not derived from
-        the parent and has to be provided seperately by calling one of the
+        the parent and has to be provided separately by calling one of the
         update methods.
         @param rxParent
             The parent of the accessible objects which will be created
@@ -184,7 +184,7 @@ public:
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
-        process with respect seperate updates of a modified children list
+        process with respect separate updates of a modified children list
         and visible area.
         @param bCreateNewObjectsOnDemand
             If </true> then accessible objects associated with the visible
@@ -274,10 +274,10 @@ public:
         (or more) aspect of the view forwarder.
         @param aChangeType
             A change type of <const>VISIBLE_AREA</const> leads to a call to
-            the <member>Update</memeber> which creates accessible objects of
+            the <member>Update</member> which creates accessible objects of
             new shapes immediately.  Other change types are passed to the
             visible accessible children without calling
-            <member>Update</memeber>.
+            <member>Update</member>.
         @param pViewForwarder
             The modified view forwarder.  Use this one from now on.
     */
@@ -521,7 +521,7 @@ public:
 
     /** This flag is set during the visibility calculation and indicates
         that at one time in this process an event is sent that informs the
-        listners of the creation of a new accessible object.  This flags is
+        listeners of the creation of a new accessible object.  This flags is
         not reset afterwards.  Don't use it unless you know exactly what you
         are doing.
     */

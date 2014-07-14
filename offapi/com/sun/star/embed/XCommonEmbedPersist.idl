@@ -91,7 +91,7 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
     /** lets the object or the link reload itself.
 
         <p>
-        If the object has persistance it will be reloaded from it's persistant
+        If the object has persistence it will be reloaded from it's persistant
         entry.
         </p>
 

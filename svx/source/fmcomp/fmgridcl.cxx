@@ -502,7 +502,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occured!");
+            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
 
         sal_Int32 nPreferedType = -1;
@@ -1896,7 +1896,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
         // The next problem caused by the same behaviuor (SeekCursor causes a propertyChanged) : when adjusting rows we implicitly
         // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
-        // That's why we _first_ collect the indicies of the selected rows and _then_ their bookmarks.
+        // That's why we _first_ collect the indices of the selected rows and _then_ their bookmarks.
         long nIdx = FirstSelectedRow();
         while (nIdx >= 0)
         {
@@ -1904,7 +1904,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             pBookmarks[i++] <<= (sal_Int32)nIdx;
             nIdx = NextSelectedRow();
         }
-        DBG_ASSERT(i == nSelectedRows, "FmGridControl::DeleteSelectedRows : could not collect the row indicies !");
+        DBG_ASSERT(i == nSelectedRows, "FmGridControl::DeleteSelectedRows : could not collect the row indices !");
 
         for (i=0; i<nSelectedRows; ++i)
         {
@@ -2124,7 +2124,7 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(0,"exception occured while deleting a column");
+                            OSL_ENSURE(0,"exception occurred while deleting a column");
                         }
                     }
                 }

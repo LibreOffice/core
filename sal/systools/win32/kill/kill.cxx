@@ -67,7 +67,7 @@ static inline bool IsValidHandle( HANDLE handle )
 #define elementsof( a ) (sizeof(a) / sizeof( (a)[0] ))
 
 /////////////////////////////////////////////////////////////////////////////
-// Retrieves function adress in another process
+// Retrieves function address in another process
 /////////////////////////////////////////////////////////////////////////////
 
 #if 1

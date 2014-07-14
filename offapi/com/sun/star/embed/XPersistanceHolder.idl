@@ -45,7 +45,7 @@
 published interface XPersistanceHolder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** disconnects the object from the persistance.
+    /** disconnects the object from the persistence.
 
         @throws com::sun::star::io::IOException
             in case of io problems
@@ -58,10 +58,10 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /** connects the object to a persistance.
+    /** connects the object to a persistence.
 
         @param xStream
-            a stream that specify the persistance
+            a stream that specify the persistence
 
         @throws com::sun::star::io::IOException
             in case of io problems

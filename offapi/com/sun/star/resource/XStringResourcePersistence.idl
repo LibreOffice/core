@@ -124,7 +124,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
 
         Calling this method does not affect the association with a location
         (in case of a <type>StringResourceWithLocation</type> instance)
-        repectively with a storage (in case of a
+        respectively with a storage (in case of a
         <type>StringResourceWithStorage</type> instance).
         The modified state isn't affected either.
 
@@ -162,7 +162,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
 
         Calling this method does not affect the association with a location
         (in case of a <type>StringResourceWithLocation</type> instance)
-        repectively with a storage (in case of a
+        respectively with a storage (in case of a
         <type>StringResourceWithStorage</type> instance).
         The modified state isn't affected either.
 

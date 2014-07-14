@@ -102,7 +102,7 @@ TransactionManager::~TransactionManager()
     @short      set new working mode
     @descr      These implementation knows for states of working: E_INIT, E_WORK, E_CLOSING, E_CLOSE
                 You can step during this ones only from the left to the right side and start at left side again!
-                (This is neccessary e.g. for refcounted objects!)
+                (This is necessary e.g. for refcounted objects!)
                 This call will block till all current existing transactions was finished.
                 Follow results occure:
                     E_INIT        :  All requests on this implementation are refused.
@@ -146,7 +146,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     }
 
     // Wait for current existing transactions then!
-    // (Only neccessary for changing to E_BEFORECLOSE or E_CLOSE! ...
+    // (Only necessary for changing to E_BEFORECLOSE or E_CLOSE! ...
     // otherwise; if you wait at setting E_WORK another thrad could finish a acquire-call during our unlock() and wait() call
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.
@@ -213,7 +213,7 @@ EWorkingMode TransactionManager::getWorkingMode() const
 
     @seealso    method unregisterTransaction()
 
-    @param      "eMode"     ,used to enable/disable throwing exceptions automaticly for rejected calls
+    @param      "eMode"     ,used to enable/disable throwing exceptions automatically for rejected calls
     @param      "eReason"   ,reason for rejected calls if eMode=E_NOEXCEPTIONS
     @return     -
 
@@ -317,7 +317,7 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 
 /*-****************************************************************************************************//**
     @short      throw any exceptions for rejected calls
-    @descr      If user whish to use our automaticly exception mode we use this impl-method.
+    @descr      If user whish to use our automatically exception mode we use this impl-method.
                 We check all combinations of eReason and eExceptionMode and throw right exception with some
                 descriptions for recipient of it.
 

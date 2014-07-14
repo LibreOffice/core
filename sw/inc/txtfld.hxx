@@ -27,6 +27,8 @@
 #include <tools/string.hxx>
 #include <pam.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 class SwTxtNode;
 
 // ATT_FLD ***********************************
@@ -39,18 +41,14 @@ class SwTxtFld : public SwTxtAttr
 public:
     SwTxtFld(
         SwFmtFld & rAttr,
-        xub_StrLen const nStart );
+        xub_StrLen const nStart,
+        const bool bIsClipboardDoc );
 
     virtual ~SwTxtFld();
 
     void CopyTxtFld( SwTxtFld *pDest ) const;
 
-    void ExpandTxtFld() const;
-    inline void ExpandAlways()
-    {
-        m_aExpand += ' '; // changing current value to assure that <ExpandTxtFld()> changes the value.
-        ExpandTxtFld();
-    }
+    void ExpandTxtFld( const bool bForceNotify = false ) const;
 
     // get and set TxtNode pointer
     inline SwTxtNode* GetpTxtNode() const
@@ -72,6 +70,13 @@ public:
     // enable notification that field content has changed and needs reformatting
     virtual void NotifyContentChange( SwFmtFld& rFmtFld );
 
+    // deletes the given field via removing the corresponding text selection from the document's content
+    static void DeleteTxtFld( const SwTxtFld& rTxtFld );
+
+    // return text selection for the given field
+    static void GetPamForTxtFld( const SwTxtFld& rTxtFld,
+                                 boost::shared_ptr< SwPaM >& rPamForTxtFld );
+
 };
 
 class SwTxtInputFld : public SwTxtFld
@@ -80,7 +85,8 @@ public:
     SwTxtInputFld(
         SwFmtFld & rAttr,
         xub_StrLen const nStart,
-        xub_StrLen const nEnd );
+        xub_StrLen const nEnd,
+        const bool bIsClipboardDoc );
 
     virtual ~SwTxtInputFld();
 

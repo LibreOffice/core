@@ -426,78 +426,54 @@ bool operator == (const SwFormToken & rToken, FormTokenType eType)
 }
 
 //-----------------------------------------------------------------------------
-void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237#
+void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
 {
-    for(sal_uInt16 nLevel = 1; nLevel < GetFormMax(); nLevel++)
+    const sal_uInt16 nFormMaxLevel = GetFormMax();
+    for ( sal_uInt16 nLevel = 1; nLevel < nFormMaxLevel; ++nLevel )
     {
-        const String& sTemplateName = GetTemplate(nLevel);
-
-        SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( sTemplateName );
-        if( !pColl )
+        SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( GetTemplate(nLevel) );
+        if( pColl == NULL )
         {
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName
-                ( sTemplateName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ); // #i21237#
-            if( USHRT_MAX != nId )
-                pColl = rDoc.GetTxtCollFromPool( nId );
+            // Paragraph Style for this level has not been created.
+            // --> No need to propagate default values
+            continue;
         }
 
-        const SvxTabStopItem* pTabStops = 0;
-        sal_uInt16 nTabCount = 0;
-        if( pColl &&
-            0 != ( pTabStops = &pColl->GetTabStops(sal_False) ) &&
-            0 != ( nTabCount = pTabStops->Count() ) )
+        const SvxTabStopItem* pTabStops = pColl != NULL ? &pColl->GetTabStops(sal_False) : 0;
+        const sal_uInt16 nTabCount = pTabStops != NULL ? pTabStops->Count() : 0;
+        if( pTabStops != NULL
+            && nTabCount != 0 )
         {
-            // #i21237#
             SwFormTokens aCurrentPattern = GetPattern(nLevel);
             SwFormTokens::iterator aIt = aCurrentPattern.begin();
 
-            sal_Bool bChanged = sal_False;
-
+            bool bChanged = false;
             for(sal_uInt16 nTab = 0; nTab < nTabCount; ++nTab)
             {
                 const SvxTabStop& rTab = (*pTabStops)[nTab];
 
-                // --> FME 2004-12-16 #i29178#
-                // For Word import, we do not want to replace exising tokens,
-                // we insert new tabstop tokens without a tabstop character:
-                if ( bInsertNewTapStops )
-                {
-                    if ( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() )
-                    {
-                        bChanged = sal_True;
-                        SwFormToken aToken(TOKEN_TAB_STOP);
-                        aToken.bWithTab = sal_False;
-                        aToken.nTabStopPosition = rTab.GetTabPos();
-                        aToken.eTabAlign = rTab.GetAdjustment();
-                        aToken.cTabFillChar = rTab.GetFill();
-                        aCurrentPattern.push_back(aToken);
-                    }
-                }
-                // <--
-                else
-                {
-                    aIt = find_if(aIt, aCurrentPattern.end(),
-                                  SwFormTokenEqualToFormTokenType
-                                  (TOKEN_TAB_STOP));
-                    if ( aIt != aCurrentPattern.end() )
-                    {
-                        bChanged = sal_True;
-                        aIt->nTabStopPosition = rTab.GetTabPos();
-                        aIt->eTabAlign = nTab == nTabCount - 1 &&
-                                         SVX_TAB_ADJUST_RIGHT == rTab.GetAdjustment() ?
-                                         SVX_TAB_ADJUST_END :
-                                         rTab.GetAdjustment();
-                        aIt->cTabFillChar = rTab.GetFill();
-                        ++aIt;
-                    }
-                    else
-                        break; // no more tokens to replace
-                }
-            }
-            // <--
+                if ( rTab.GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+                    continue; // ignore the default tab stop
 
-            if(bChanged)
-                SetPattern(nLevel, aCurrentPattern); // #i21237#
+                aIt = find_if( aIt, aCurrentPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP) );
+                if ( aIt != aCurrentPattern.end() )
+                {
+                    bChanged = true;
+                    aIt->nTabStopPosition = rTab.GetTabPos();
+                    aIt->eTabAlign =
+                        ( nTab == nTabCount - 1
+                          && rTab.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
+                        ? SVX_TAB_ADJUST_END
+                        : rTab.GetAdjustment();
+                    aIt->cTabFillChar = rTab.GetFill();
+                    ++aIt;
+                }
+                else
+                    break; // no more tokens to replace
+            }
+
+            if ( bChanged )
+                SetPattern( nLevel, aCurrentPattern );
         }
     }
 }

@@ -153,8 +153,8 @@ struct LoadBinding
         css::uno::Reference< css::frame::XDispatch >        xHandler    ;   // if handler was used, this reference will be valid
         css::uno::Reference< css::frame::XFrameLoader >     xLoader     ;   // if loader was used, this reference will be valid
         css::uno::Reference< css::frame::XFrame >           xFrame      ;   // Target of loading
-        css::util::URL                                      aURL        ;   // dispatched URL - neccessary to find listener for status event!
-        css::uno::Sequence< css::beans::PropertyValue >     lDescriptor ;   // dispatched arguments - neccessary for "reactForLoadingState()"!
+        css::util::URL                                      aURL        ;   // dispatched URL - necessary to find listener for status event!
+        css::uno::Sequence< css::beans::PropertyValue >     lDescriptor ;   // dispatched arguments - necessary for "reactForLoadingState()"!
         css::uno::Any                                       aAsyncInfo  ;   // superclasses could use them to save her own user specific data for these asynchron call-info
         css::uno::Reference< css::frame::XDispatchResultListener > xListener;
 };
@@ -228,7 +228,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 
 /*-************************************************************************************************************//**
     @short          base class for dispatcher implementations
-    @descr          Most of our dispatch implementations do everytime the same. They try to handle or load
+    @descr          Most of our dispatch implementations do every time the same. They try to handle or load
                     somethinmg into a target ... normaly a frame/task/pluginframe!
                     They must do it synchron or sometimes asynchron. They must wait for callbacks and
                     notify registered listener with right status events.
@@ -255,7 +255,7 @@ class BaseDispatcher    :   // interfaces
                             public    css::frame::XNotifyingDispatch           ,
                             public    css::frame::XLoadEventListener           ,   // => XEventListener too!
                             // baseclasses
-                            // Order is neccessary for right initialization!
+                            // Order is necessary for right initialization!
                             protected ThreadHelpBase                           ,
                             protected TransactionBase                          ,
                             public    ::cppu::OWeakObject
@@ -311,7 +311,7 @@ class BaseDispatcher    :   // interfaces
                         task if operation failed ...!?
                         By overwriting these pure virtual methods it's possible to do such things.
                         We call you with all available informations ... you should react for it.
-                        BUT - don't send any status events to your listener! We will do it everytime.
+                        BUT - don't send any status events to your listener! We will do it every time.
                         (other listener could be informed as well!)
 
                         You will called back in: a) "reactForLoadingState()" , if URL was loaded into a frame

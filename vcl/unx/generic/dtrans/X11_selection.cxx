@@ -1024,7 +1024,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "conversion unsuccessfull\n" );
+        fprintf( stderr, "conversion unsuccessful\n" );
 #endif
     return bSuccess;
 }
@@ -3830,7 +3830,7 @@ void SelectionManager::shutdown() throw()
         osl_terminateThread( m_aThread );
         /*
          * Allow thread to finish before app exits to avoid pulling the carpet
-         * out from under it if pasting is occuring during shutdown
+         * out from under it if pasting is occurring during shutdown
          *
          * a) allow it to have the Mutex and
          * b) reschedule to allow it to complete callbacks to any

@@ -2002,7 +2002,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
         }
 
         if (bExpand)
-            pTxtFld->ExpandAlways();
+            pTxtFld->ExpandTxtFld( true );
     }
     SetModified();
 }

@@ -74,7 +74,7 @@ class DispatchRecorderSupplier  :   // interfaces
                                     public  css::lang::XServiceInfo                 ,
                                     public  css::frame::XDispatchRecorderSupplier   ,
                                     // baseclasses
-                                    // Order is neccessary for right initialization!
+                                    // Order is necessary for right initialization!
                                     private ThreadHelpBase                          ,
                                     public  ::cppu::OWeakObject
 {
@@ -86,7 +86,7 @@ class DispatchRecorderSupplier  :   // interfaces
         //_______________________________________
         /** provided dispatch recorder of this supplier instance
 
-            @life   Is controled from outside. Because this variable is setted
+            @life   Is controlled from outside. Because this variable is setted
                     from there and not created internaly. But we release our
                     reference to it if we die.
          */

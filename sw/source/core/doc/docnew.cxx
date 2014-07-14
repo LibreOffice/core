@@ -119,6 +119,8 @@
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 
+//UUUU
+#include <svx/xfillit0.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -302,6 +304,21 @@ SwDoc::SwDoc()
     meDocType( DOCTYPE_NATIVE )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
+
+    //UUUU The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool
+    // has a default for the XFillStyleItem of XFILL_SOLID and the color for it is the default
+    // fill color (blue7 or similar). This is a problem, in Writer we want the default fill
+    // style to be XFILL_NONE. This cannot simply be done by changing it in the 2nd pool at the
+    // pool defaults when the DrawingLayer ItemPool is used for Writer, that would lead to
+    // countless problems like DrawObjects initial fill and others.
+    // It is also hard to find all places where the initial ItemSets for Writer (including
+    // style hierarchies) are created and to always set (but only at the root) the FillStyle
+    // to NONE fixed; that will add that attribute to the file format. It will be hard to reset
+    // attribbute sets (which is done at import and using UI). Also not a good solution.
+    // Luckily Writer uses pDfltTxtFmtColl as default parent for all paragraphs and similar, thus
+    // it is possible to set this attribute here. It will be not reset when importing.
+    pDfltTxtFmtColl->SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    pDfltFrmFmt->SetFmtAttr(XFillStyleItem(XFILL_NONE));
 
     mbGlossDoc =
     mbModified =
@@ -752,27 +769,25 @@ SfxPrinter& SwDoc::CreatePrinter_() const
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
-    if( pDocShell != pDSh )
+    if(pDocShell != pDSh)
     {
         if (pDocShell)
         {
             pDocShell->SetUndoManager(0);
         }
+
         pDocShell = pDSh;
+
         if (pDocShell)
         {
             pDocShell->SetUndoManager(& GetUndoManager());
         }
 
-        pLinkMgr->SetPersist( pDocShell );
-        //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
-        if( pDrawModel )
-        {
-            ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
-            pDrawModel->SetPersist( pDocShell );
-            ASSERT( pDrawModel->GetPersist() == GetPersist(),
-                    "draw model's persist is out of sync" );
-        }
+        pLinkMgr->SetPersist(pDocShell);
+
+        // set DocShell pointer also on DrawModel
+        InitDrawModelAndDocShell(pDocShell, GetDrawModel());
+        OSL_ENSURE(!pDrawModel || pDrawModel->GetPersist() == GetPersist(), "draw model's persist is out of sync");
     }
 }
 

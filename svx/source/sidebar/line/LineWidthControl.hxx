@@ -58,8 +58,8 @@ private:
     XubString                           mstrPT; //
     long                                mnCustomWidth;
     bool                                mbCustom;
-    bool                                mbColseByEdit;
-    long                                mnTmpCusomWidth;
+    bool                                mbCloseByEdit;
+    long                                mnTmpCustomWidth;
     bool                                mbVSFocus;
 
     Image                               maIMGCus;

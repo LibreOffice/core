@@ -84,7 +84,7 @@ namespace dbtools
             /// the column object for this parameter, as returned by the query composer
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         xComposerColumn;
-            /// the indicies of inner parameters which need to be filled when this concrete parameter is set
+            /// the indices of inner parameters which need to be filled when this concrete parameter is set
             ::std::vector< sal_Int32 >  aInnerIndexes;
 
             /// default ctor
@@ -267,7 +267,7 @@ namespace dbtools
             @param _rxComponent
                 the database component to initialize from. Must not be <NULL/>
             @return
-                <TRUE/> if and only if the initialization was successfull
+                <TRUE/> if and only if the initialization was successful
 
             @postcond
                 if and only if <TRUE/> is returned, then <member>m_xInnerParamColumns</member> contains the collection of

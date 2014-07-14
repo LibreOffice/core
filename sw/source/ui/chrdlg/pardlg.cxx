@@ -150,13 +150,20 @@ SwParaDlg::SwParaDlg(Window *pParent,
         }
         if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
         {
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            //UUUU remove?
+            //DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU add Area and Transparence TabPages
+            AddTabPage(RID_SVXPAGE_AREA);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE);
         }
         else
         {
-            RemoveTabPage(TP_BACKGROUND);
+            //UUUU RemoveTabPage(TP_BACKGROUND);
+            RemoveTabPage(RID_SVXPAGE_AREA);
+            RemoveTabPage(RID_SVXPAGE_TRANSPARENCE);
         }
         if(!bHtmlMode || (nHtmlMode & HTMLMODE_PARA_BORDER))
         {
@@ -178,88 +185,123 @@ __EXPORT SwParaDlg::~SwParaDlg()
 }
 
 
-void __EXPORT SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void __EXPORT SwParaDlg::PageCreated(sal_uInt16 nId,SfxTabPage& rPage)
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    // Bei Tabellenumrandung kann im Writer kein Schatten eingestellt werden
-    if (nId == TP_BORDER)
+    switch(nId)
     {
-        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
-        rPage.PageCreated(aSet);
-    }
-    else if( nId == TP_PARA_STD )
-    {
-        aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
-                            static_cast< sal_uInt16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
-
-        if (!bDrawParaDlg)
+        case TP_BORDER:
         {
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000E));
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/10));
-
-        }
-        rPage.PageCreated(aSet);
-    }
-    else if( TP_PARA_ALIGN == nId)
-    {
-        if (!bDrawParaDlg)
-        {
-            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+            // Bei Tabellenumrandung kann im Writer kein Schatten eingestellt werden
+            aSet.Put(SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
             rPage.PageCreated(aSet);
+            break;
         }
-    }
-    else if( TP_PARA_EXT == nId )
-    {
-        // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
-        // einer Tabelle steht
-        const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
-        if( !(FRMTYPE_BODY & eType) ||
-            rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
+        case TP_PARA_STD:
         {
-            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
-            rPage.PageCreated(aSet);
-        }
-    }
-    else if( TP_DROPCAPS == nId )
-    {
-        ((SwDropCapsPage&)rPage).SetFormat(sal_False);
-    }
-    else if( TP_BACKGROUND == nId )
-    {
-      if(!( nHtmlMode & HTMLMODE_ON ) ||
-        nHtmlMode & HTMLMODE_SOME_STYLES)
-        {
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
-            rPage.PageCreated(aSet);
-        }
-    }
-    else if( TP_NUMPARA == nId)
-    {
-        //-->#outline level,added by zhaojianwei
-        SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
-        if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
-        {
-            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
-        }//<-end
+            aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
+                static_cast<sal_uInt16>(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width())));
 
-        ((SwParagraphNumTabPage&)rPage).EnableNewStart();
-        ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
-        SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
-        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
-        const SfxStyleSheetBase* pBase = pPool->First();
-        SvStringsSortDtor aNames;
-        while(pBase)
-        {
-            aNames.Insert(new String(pBase->GetName()));
-            pBase = pPool->Next();
-        }
-        for(sal_uInt16 i = 0; i < aNames.Count(); i++)
-            rBox.InsertEntry(*aNames.GetObject(i));
-    }
+            if(!bDrawParaDlg)
+            {
+                aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000E));
+                aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50 / 10));
 
+            }
+            rPage.PageCreated(aSet);
+            break;
+        }
+        case TP_PARA_ALIGN:
+        {
+            if(!bDrawParaDlg)
+            {
+                aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+                rPage.PageCreated(aSet);
+            }
+            break;
+        }
+        case TP_PARA_EXT:
+        {
+            // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
+            // einer Tabelle steht
+            const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
+            if(!(FRMTYPE_BODY & eType) ||
+                rSh.GetSelectionType() & nsSelectionType::SEL_TBL)
+            {
+                aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
+                rPage.PageCreated(aSet);
+            }
+            break;
+        }
+        case TP_DROPCAPS:
+        {
+            ((SwDropCapsPage&)rPage).SetFormat(sal_False);
+            break;
+        }
+        case TP_BACKGROUND:
+        {
+            if(!(nHtmlMode & HTMLMODE_ON) ||
+                nHtmlMode & HTMLMODE_SOME_STYLES)
+            {
+                aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,SVX_SHOW_SELECTOR));
+                rPage.PageCreated(aSet);
+            }
+            break;
+        }
+        case TP_NUMPARA:
+        {
+            //-->#outline level,added by zhaojianwei
+            SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
+            if(pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle())
+            {
+                ((SwParagraphNumTabPage&)rPage).DisableOutline();
+            }//<-end
+
+            ((SwParagraphNumTabPage&)rPage).EnableNewStart();
+            ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
+            SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
+            pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO,SFXSTYLEBIT_ALL);
+            const SfxStyleSheetBase* pBase = pPool->First();
+            SvStringsSortDtor aNames;
+            while(pBase)
+            {
+                aNames.Insert(new String(pBase->GetName()));
+                pBase = pPool->Next();
+            }
+            for(sal_uInt16 i = 0; i < aNames.Count(); i++)
+                rBox.InsertEntry(*aNames.GetObject(i));
+            break;
+        }
+
+        //UUUU inits for Area and Transparency TabPages
+        // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+        // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+        // these pages find the needed attributes for fill style suggestions.
+        // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+        // demand, but could also be directly added from the DrawModel.
+        case RID_SVXPAGE_AREA:
+        {
+            SfxItemSet aNew(*aSet.GetPool(),
+                SID_COLOR_TABLE, SID_BITMAP_LIST,
+                SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
+
+            aNew.Put(*GetInputSetImpl());
+
+            // add flag for direct graphic content selection
+            aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+            rPage.PageCreated(aNew);
+            break;
+        }
+
+        case RID_SVXPAGE_TRANSPARENCE:
+        {
+            rPage.PageCreated(*GetInputSetImpl());
+            break;
+        }
+    }
 }
 
-
-
+// eof

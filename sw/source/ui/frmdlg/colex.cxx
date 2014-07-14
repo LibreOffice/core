@@ -19,19 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
-
 
 #include "cmdid.h"
 #include "hintids.hxx"
 #include <algorithm>
-
-
 #include <svl/eitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -45,6 +38,9 @@
 #include <viewopt.hxx>
 #include "colex.hxx"
 #include "colmgr.hxx"
+
+//UUUU
+#include <svx/unobrushitemhelper.hxx>
 
 /*-----------------------------------------------------------------------
     Beschreibung: Uebernahme der aktualisierten Werte aus dem Set
@@ -128,12 +124,20 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHdLeft( rLR.GetLeft() );
             SetHdRight( rLR.GetRight() );
             SetHeader( sal_True );
-            if ( rHeaderSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
+
+            if(SFX_ITEM_SET == rHeaderSet.GetItemState(RES_BACKGROUND))
             {
-                const SvxBrushItem& rItem =
-                    (const SvxBrushItem&)rHeaderSet.Get( RES_BACKGROUND );
-                SetHdColor( rItem.GetColor() );
+                //UUUU create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
+                const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(RES_BACKGROUND));
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setHeaderFillAttributes(
+                    drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
+                        new drawinglayer::attribute::SdrAllFillAttributesHelper(
+                            aTempSet)));
             }
+
             if ( rHeaderSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
             {
                 const SvxBoxItem& rItem =
@@ -167,12 +171,20 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFtLeft( rLR.GetLeft() );
             SetFtRight( rLR.GetRight() );
             SetFooter( sal_True );
+
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
-                const SvxBrushItem& rItem =
-                    (const SvxBrushItem&)rFooterSet.Get( RES_BACKGROUND );
-                SetFtColor( rItem.GetColor() );
+                //UUUU create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
+                const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rFooterSet.Get(RES_BACKGROUND));
+                SfxItemSet aTempSet(*rFooterSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setFooterFillAttributes(
+                    drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
+                        new drawinglayer::attribute::SdrAllFillAttributesHelper(
+                            aTempSet)));
             }
+
             if( rFooterSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
             {
                 const SvxBoxItem& rItem =
@@ -183,19 +195,18 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         else
             SetFooter( sal_False );
     }
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND,
-            sal_False, &pItem ) )
-    {
-        SetColor( ( (const SvxBrushItem*)pItem )->GetColor() );
-        const Graphic* pGrf = ( (const SvxBrushItem*)pItem )->GetGraphic();
 
-        if ( pGrf )
-        {
-            Bitmap aBitmap = pGrf->GetBitmap();
-            SetBitmap( &aBitmap );
-        }
-        else
-            SetBitmap( NULL );
+    if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND, sal_False, &pItem))
+    {
+        //UUUU create FillAttributes from SvxBrushItem
+        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
+        SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+        setPageFillAttributes(
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
+                new drawinglayer::attribute::SdrAllFillAttributesHelper(
+                    aTempSet)));
     }
 
     Invalidate();
@@ -233,14 +244,23 @@ void SwColExample::DrawPage( const Point& rOrg,
                         - GetFtHeight() - GetFtDist();
         DrawRect(aRect);
 
-        if(GetColor() == Color(COL_TRANSPARENT))
+        //UUUU
+        const Rectangle aDefineRect(aRect);
+
+        //UUUU
+        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
+
+        if(!rFillAttributes.get() || !rFillAttributes->isUsed())
         {
+            //UUUU If there is no fill, use fallback color
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             const Color& rFieldColor = rStyleSettings.GetFieldColor();
-            SetFillColor( rFieldColor );
+
+            setPageFillAttributes(
+                drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
+                    new drawinglayer::attribute::SdrAllFillAttributesHelper(
+                        rFieldColor)));
         }
-        else
-            SetFillColor( GetColor() );
 
         // #97495# make sure that the automatic column widht's are always equal
         sal_Bool bAutoWidth = pColMgr->IsAutoWidth();
@@ -260,7 +280,10 @@ void SwColExample::DrawPage( const Point& rOrg,
             if(!bAutoWidth)
                 nAutoColWidth = pColMgr->GetColWidth( i );
             aRect.Right() = aRect.Left() + nAutoColWidth;
-            DrawRect(aRect);
+
+            //UUUU use primitive draw command
+            drawFillAttributes(getPageFillAttributes(), aRect, aDefineRect);
+
             if(i < nColumnCount - 1)
                 aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
         }

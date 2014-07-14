@@ -115,17 +115,21 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
     , aSelectionHelper( *this )
     , bIsSelected( sal_False )
+    , m_xTableReference( NULL )
+    , m_pAccTable( NULL )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    vos::OGuard aGuard( Application::GetSolarMutex() );
     OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
     SetName( sBoxName );
 
     bIsSelected = IsSelected();
 
-    //Need not assign the pointer of accessible table object to m_pAccTable,
-    //for it already done in SwAccessibleCell::GetTable(); Former codes:
-    //m_pAccTable= GetTable();
-    GetTable();
+    m_xTableReference = getAccessibleParent();
+#if OSL_DEBUG_LEVEL > 1
+    uno::Reference< XAccessibleContext > xContextTable( m_xTableReference, uno::UNO_QUERY );
+    OSL_ASSERT( xContextTable.is() && xContextTable->getAccessibleRole() == AccessibleRole::TABLE );
+#endif
+    m_pAccTable = static_cast< SwAccessibleTable * >( m_xTableReference.get() );
 }
 
 sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
@@ -140,7 +144,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     if( bNew )
     {
         // remember that object as the one that has the caret. This is
-        // neccessary to notify that object if the cursor leaves it.
+        // necessary to notify that object if the cursor leaves it.
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -557,20 +561,3 @@ void SwAccessibleCell::deselectAccessibleChild(
     aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }
 
-SwAccessibleTable *SwAccessibleCell::GetTable()
-{
-    if (!m_pAccTable)
-    {
-        if (!xTableReference.is())
-        {
-            xTableReference = getAccessibleParent();
-        #ifdef OSL_DEBUG_LEVEL
-            uno::Reference<XAccessibleContext> xContextTable(xTableReference, uno::UNO_QUERY);
-            OSL_ASSERT(xContextTable.is() && xContextTable->getAccessibleRole() == AccessibleRole::TABLE);
-        #endif
-            //SwAccessibleTable aTable = *(static_cast<SwAccessibleTable *>(xTable.get()));
-        }
-        m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
-    }
-    return m_pAccTable;
-}

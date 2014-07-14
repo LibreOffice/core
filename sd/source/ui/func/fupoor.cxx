@@ -232,7 +232,7 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
     Point aPnt(mpWindow->GetPointerPosPixel());
 
     // #95491# use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
     return 0;
@@ -1026,7 +1026,7 @@ IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
     Point aPnt(mpWindow->GetPointerPosPixel());
 
     // #95491# use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
     return 0;

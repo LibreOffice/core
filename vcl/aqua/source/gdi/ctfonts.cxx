@@ -140,6 +140,9 @@ CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
+    // allow delayed setting the font color, i.e. after the text layout
+    CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
+
     // handle emulation of bold styles if requested and the font that doesn't provide them
     if( (pReqFont->meWeight > WEIGHT_MEDIUM)
     &&  (mpFontData->meWeight <= WEIGHT_MEDIUM)
@@ -176,10 +179,13 @@ void CTTextStyle::GetFontMetric( float fDPIY, ImplFontMetricData& rMetric ) cons
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
     const double fPixelSize = (mfFontScale * fDPIY);
-    rMetric.mnAscent       = lrint( CTFontGetAscent( aCTFontRef ) * fPixelSize);
+    const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
+    const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
+    rMetric.mnAscent       = lrint( fAscent * fPixelSize);
     rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ) * fPixelSize);
-    rMetric.mnIntLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
-    rMetric.mnExtLeading   = 0;
+    rMetric.mnExtLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
+    rMetric.mnIntLeading   = lrint( (fAscent - fCapHeight) * fPixelSize);
+
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
@@ -277,21 +283,6 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon
     }
 
     return true;
-}
-
-// -----------------------------------------------------------------------
-
-void CTTextStyle::SetTextColor( const RGBAColor& rColor )
-{
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
-    CGColorRef pCGColor = CGColorCreateGenericRGB( rColor.GetRed(),
-        rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() );
-#else // for builds on OSX 10.4 SDK
-    const CGColorSpaceRef pCGColorSpace = GetSalData()->mxRGBSpace;
-    CGColorRef pCGColor = CGColorCreate( pCGColorSpace, rColor.AsArray() );
-#endif
-    CFDictionarySetValue( mpStyleDict, kCTForegroundColorAttributeName, pCGColor );
-    CFRelease( pCGColor);
 }
 
 // =======================================================================

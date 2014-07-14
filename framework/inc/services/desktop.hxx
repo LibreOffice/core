@@ -144,7 +144,7 @@ class Desktop   :   // interfaces
                     public  css::task::XInteractionHandler       ,
                     public  css::frame::XUntitledNumbers         ,
                     // base classes
-                    // Order is neccessary for right initialization!
+                    // Order is necessary for right initialization!
                     private ThreadHelpBase                       ,
                     private TransactionBase                      ,
                     public  ::cppu::OBroadcastHelper             ,
@@ -186,7 +186,7 @@ class Desktop   :   // interfaces
 
                         Btw: Desktop.terminate() was designed in the past to be used
                         within an UI based envrionment. So it's allowed e.g. to
-                        call XController.suspend() here. If UI isnt an option ... please
+                        call XController.suspend() here. If UI isn't an option ... please
                         use XCloseable.close() at these desktop implementation.
                         ... if it will be supported in the future .-))
 
@@ -411,9 +411,9 @@ class Desktop   :   // interfaces
          *
          *  Iterates over all child frames and try to close them.
          *  Given parameter bAllowUI enable/disable showing any UI
-         *  (which mostly occure on calling XController->suspend()).
+         *  (which mostly occur on calling XController->suspend()).
          *
-         *  These method doesnt stop if one frame could not be closed.
+         *  These method doesn't stop if one frame could not be closed.
          *  It will ignore such frames and try all other ones.
          *  But it returns false in such case - true otherwise.
          *
@@ -426,7 +426,7 @@ class Desktop   :   // interfaces
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
-    //  (should be private everytime!)
+    //  (should be private every time!)
     //-------------------------------------------------------------------------------------------------------------
     #ifdef ENABLE_ASSERTIONS
     private:
@@ -442,7 +442,7 @@ class Desktop   :   // interfaces
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
-    //  (should be private everytime!)
+    //  (should be private every time!)
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -476,7 +476,7 @@ class Desktop   :   // interfaces
 
         //---------------------------------------------------------------------
         /** special terminate listener which loads images asynchronous for current open documents.
-          * Because internaly it uses blocking system APIs ... it cant be guaranteed that
+          * Because internaly it uses blocking system APIs ... it can't be guaranteed that
           * running jobs can be cancelled successfully if the corressponding document will be closed ...
           * it will not hinder those documents on closing. Instead it let all jobs running ...
           * but at least on terminate we have to wait for all those blocked requests.
@@ -487,15 +487,15 @@ class Desktop   :   // interfaces
         //---------------------------------------------------------------------
         /** special terminate listener shuting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
-          * only ... it does not realy shutdown the whole application.
+          * only ... it does not really shutdown the whole application.
           *
           * Btw: That wouldnt be possible by design ... because Desktop.terminate()
-          * has to return a boolean value about success ... it cant realy shutdown the
+          * has to return a boolean value about success ... it can't really shutdown the
           * process .-)
           *
           * So we uses a trick: A special listener (exactly these one here) listen for notifyTermination()
           * and shutdown the process asynchronous. But desktop has to make this special
-          * notification as realy last one ... Otherwhise it can happen that asynchronous
+          * notification as really last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster then all other code around Desktop.terminate() .-))
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;

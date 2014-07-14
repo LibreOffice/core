@@ -34,7 +34,7 @@ module com { module sun { module star { module sdb {
 
     <p>Core components of OpenOffice.org will use those error conditions
     as error codes (<member scope="com::sun::star::sdbc">SQLException::ErrorCode</member>)
-    whereever possible.<br/>
+    wherever possible.<br/>
     That is, if an <code>SQLException</code> is raised by
     such a component, caused by an error condition which is included in the
     <type>ErrorCondition</type> group, then the respective <em>negative</em> value

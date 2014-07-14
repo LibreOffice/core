@@ -64,7 +64,7 @@ namespace cpp
 
 
 
-/** Acess to all declared C++ code entites (types, variables, operations)
+/** Access to all declared C++ code entites (types, variables, operations)
     in the repository.
 */
 class CePilot

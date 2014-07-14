@@ -29,6 +29,12 @@
 //------------------------------------------------------------------------
 #include <osl_Condition_Const.h>
 
+#ifdef WNT
+#include <Windows.h>
+#endif
+
+#include "gtest/gtest.h"
+
 using namespace osl;
 using namespace rtl;
 
@@ -41,8 +47,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("TRUE!\n" ): printf("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -51,9 +57,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** wait _nSec seconds.
@@ -61,7 +67,7 @@ inline void printUString( const ::rtl::OUString & str )
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    t_print("# wait %d seconds. ", _nSec );
+    printf("# wait %d seconds. ", _nSec );
     fflush( stdout );
 
 #ifdef WNT                               //Windows
@@ -70,7 +76,7 @@ void thread_sleep( sal_Int32 _nSec )
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     sleep( _nSec );
 #endif
-    t_print("# done\n" );
+    printf("# done\n" );
 }
 
 enum ConditionType
@@ -121,260 +127,175 @@ protected:
 
 namespace osl_Condition
 {
-
     /** testing the method:
         Condition()
     */
-    class ctors : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1;
+    TEST(Sal_Test_Condition, ctors_001) {
+        ::osl::Condition aCond;
+        sal_Bool bRes = aCond.check( );
 
-        void ctors_001( )
-        {
-            ::osl::Condition aCond;
-            bRes = aCond.check( );
+        // #test comment#: create a condition its initial check state should be sal_False.
+        ASSERT_TRUE( !bRes );
+    }
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition its initial check state should be sal_False.",
-                                    sal_False == bRes );
-        }
+    TEST(Sal_Test_Condition, ctors_002) {
+        ::osl::Condition aCond;
+        aCond.set( );
+        sal_Bool bRes = aCond.check( );
 
-        void ctors_002( )
-        {
-            ::osl::Condition aCond;
-            aCond.set( );
-            bRes = aCond.check( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and set it.",
-                                    sal_True == bRes );
-        }
-
-        CPPUNIT_TEST_SUITE( ctors );
-        CPPUNIT_TEST( ctors_001 );
-        CPPUNIT_TEST( ctors_002 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+        // #test comment#: create a condition and set it.
+        ASSERT_TRUE( bRes );
+    }
 
 
     /** testing the method:
         void set()
     */
-    class set : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1, bRes2;
+    TEST(Sal_Test_Condition, set_001) {
+        ::osl::Condition aCond;
+        aCond.set( );
+        sal_Bool bRes = aCond.check( );
 
-        void set_001( )
-        {
-            ::osl::Condition aCond;
-            aCond.set( );
-            bRes = aCond.check( );
+        // #test comment#: check state should be sal_True after set.
+        ASSERT_TRUE( bRes );
+    }
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check state should be sal_True after set.",
-                                    sal_True == bRes );
-        }
+    TEST(Sal_Test_Condition, set_002) {
+        ::osl::Condition aCond;
+        ConditionThread myThread1( aCond, thread_type_wait );
+        myThread1.create();
+        sal_Bool bRes = myThread1.isRunning( );
 
-        void set_002( )
-        {
-            ::osl::Condition aCond;
-            ConditionThread myThread1( aCond, thread_type_wait );
-            myThread1.create();
-            bRes = myThread1.isRunning( );
+        ConditionThread myThread2( aCond, thread_type_set );
+        myThread2.create();
+        thread_sleep(1);
+        sal_Bool bRes1 = myThread1.isRunning( );
+        sal_Bool bRes2 = aCond.check( );
 
-            ConditionThread myThread2( aCond, thread_type_set );
-            myThread2.create();
-            thread_sleep(1);
-            bRes1 = myThread1.isRunning( );
-            bRes2 = aCond.check( );
+        myThread1.join( );
+        myThread2.join( );
 
-            myThread1.join( );
-            myThread2.join( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
-                                    sal_True == bRes && sal_False == bRes1 && sal_True == bRes2 );
-        }
-
-
-        CPPUNIT_TEST_SUITE( set );
-        CPPUNIT_TEST( set_001 );
-        CPPUNIT_TEST( set_002 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class set
+        // #test comment#: use one thread to set the condition in order to release another thread."
+        ASSERT_TRUE( bRes && !bRes1 && bRes2 );
+    }
 
 
     /** testing the method:
         void reset()
     */
-    class reset : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1, bRes2;
+    TEST(Sal_Test_Condition, reset_001) {
+        ::osl::Condition aCond;
+        aCond.reset( );
 
-        void reset_001( )
-        {
-            ::osl::Condition aCond;
-            aCond.reset( );
+        ConditionThread myThread( aCond, thread_type_wait );
+        myThread.create();
+        sal_Bool bRes = myThread.isRunning( );
+        sal_Bool bRes2 = aCond.check( );
 
-            ConditionThread myThread( aCond, thread_type_wait );
-            myThread.create();
-            bRes = myThread.isRunning( );
-            bRes2 = aCond.check( );
+        aCond.set( );
+        myThread.join( );
+        sal_Bool bRes1 = myThread.isRunning( );
 
-            aCond.set( );
-            myThread.join( );
-            bRes1 = myThread.isRunning( );
+        // #test comment#: wait will cause a reset thread block, use set to release it.
+        ASSERT_TRUE( bRes && !bRes1 && !bRes2 );
+    }
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait will cause a reset thread block, use set to release it.",
-                                    sal_True == bRes && sal_False == bRes1 && sal_False == bRes2 );
-        }
+    TEST(Sal_Test_Condition, reset_002) {
+        ::osl::Condition aCond;
+        aCond.reset( );
+        sal_Bool bRes = aCond.check( );
+        aCond.set( );
+        sal_Bool bRes1 = aCond.check( );
 
-        void reset_002( )
-        {
-            ::osl::Condition aCond;
-            aCond.reset( );
-            bRes = aCond.check( );
-            aCond.set( );
-            bRes1 = aCond.check( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and reset/set it.",
-                                    ( sal_False == bRes && sal_True == bRes1 ) );
-        }
-
-        CPPUNIT_TEST_SUITE( reset );
-        CPPUNIT_TEST( reset_001 );
-        CPPUNIT_TEST( reset_002 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class reset
+        // #test comment#: create a condition and reset/set it.
+        ASSERT_TRUE( sal_False == bRes && sal_True == bRes1 );
+    }
 
 
     /** testing the method:
         Result wait(const TimeValue *pTimeout = 0)
     */
-    class wait : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1, bRes2;
-        TimeValue *tv1;
+    TEST(Sal_Test_Condition, wait_001) {
+        TimeValue tv1 = {1,0};
 
-        void setUp( )
-        {
-            tv1 = (TimeValue*)malloc(sizeof(TimeValue));
-            tv1->Seconds = 1;
+        ::osl::Condition cond1;
+        ::osl::Condition cond2;
+        ::osl::Condition cond3;
 
-        }
+        cond1.set();
+        cond2.set();
 
-        void tearDown( )
-        {
-            free( tv1 );
-        }
+        osl::Condition::Result r1=cond1.wait(&tv1);
+        osl::Condition::Result r2=cond2.wait();
+        osl::Condition::Result r3=cond3.wait(&tv1);
+        fprintf(stderr,"%d %d %d\n",r1,r2,r3);
 
+        // #test comment#: test three types of wait.
+        ASSERT_TRUE( cond1.wait(&tv1) == ::osl::Condition::result_ok );
+        ASSERT_TRUE( cond2.wait() == ::osl::Condition::result_ok );
+        ASSERT_TRUE( cond3.wait(&tv1) == ::osl::Condition::result_timeout );
+    }
 
-        void wait_001( )
-        {
-            ::osl::Condition cond1;
-            ::osl::Condition cond2;
-            ::osl::Condition cond3;
+    TEST(Sal_Test_Condition, wait_002) {
+        TimeValue tv1 = {1,0};
 
-            cond1.set();
-            cond2.set();
+        ::osl::Condition aCond;
+        ::osl::Condition::Result wRes, wRes1;
 
-osl::Condition::Result r1=cond1.wait(tv1);
-osl::Condition::Result r2=cond2.wait();
-osl::Condition::Result r3=cond3.wait(tv1);
-fprintf(stderr,"%d %d %d\n",r1,r2,r3);
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
-                                    (cond1.wait(tv1) == ::osl::Condition::result_ok) &&
-                                    (cond2.wait() == ::osl::Condition::result_ok) &&
-                                    (cond3.wait(tv1) == ::osl::Condition::result_timeout) );
+        aCond.reset( );
+        sal_Bool bRes = aCond.check( );
+        wRes = aCond.wait( &tv1 );
 
-        }
+        aCond.set( );
+        wRes1 = aCond.wait( &tv1 );
+        sal_Bool bRes1 = aCond.check( );
 
-        void wait_002( )
-        {
-            ::osl::Condition aCond;
-            ::osl::Condition::Result wRes, wRes1;
-
-            aCond.reset( );
-            bRes = aCond.check( );
-            wRes = aCond.wait( tv1 );
-
-            aCond.set( );
-            wRes1 = aCond.wait( tv1 );
-            bRes1 = aCond.check( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait a condition after set/reset.",
-                                    ( sal_False == bRes ) && ( sal_True == bRes1 ) &&
-                                    ( ::osl::Condition::result_timeout == wRes ) &&
-                                    ( ::osl::Condition::result_ok == wRes1 ) );
-        }
-
-        CPPUNIT_TEST_SUITE( wait );
-        CPPUNIT_TEST( wait_001 );
-        CPPUNIT_TEST( wait_002 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class wait
+        // #test comment#: wait a condition after set/reset.
+        ASSERT_TRUE( !bRes );
+        ASSERT_TRUE( bRes1 );
+        ASSERT_TRUE( ::osl::Condition::result_timeout == wRes );
+        ASSERT_TRUE( ::osl::Condition::result_ok == wRes1 );
+    }
 
 
     /** testing the method:
         sal_Bool check()
     */
-    class check : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1, bRes2;
+    TEST(Sal_Test_Condition, check_001) {
+        ::osl::Condition aCond;
+        aCond.reset( );
+        sal_Bool bRes = aCond.check( );
+        aCond.set( );
+        sal_Bool bRes1 = aCond.check( );
 
-        void check_001( )
-        {
-            ::osl::Condition aCond;
+        // #test comment#: check the condition states.
+        ASSERT_TRUE( !bRes && bRes1 );
+    }
 
-            aCond.reset( );
-            bRes = aCond.check( );
-            aCond.set( );
-            bRes1 = aCond.check( );
+    TEST(Sal_Test_Condition, check_002) {
+        ::osl::Condition aCond;
+        aCond.reset( );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check the condition states.",
-                                    ( sal_False == bRes && sal_True == bRes1 ) );
-        }
+        ConditionThread myThread( aCond, thread_type_set );
+        myThread.create( );
+        myThread.join( );
+        sal_Bool bRes = aCond.check( );
 
-        void check_002( )
-        {
-            ::osl::Condition aCond;
-            aCond.reset( );
+        ConditionThread myThread1( aCond, thread_type_reset );
+        myThread1.create( );
+        myThread1.join( );
+        sal_Bool bRes1 = aCond.check( );
 
-            ConditionThread myThread( aCond, thread_type_set );
-            myThread.create( );
-            myThread.join( );
-            bRes = aCond.check( );
-
-            ConditionThread myThread1( aCond, thread_type_reset );
-            myThread1.create( );
-            myThread1.join( );
-            bRes1 = aCond.check( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use threads to set/reset Condition and check it in main routine.",
-                                    ( sal_True == bRes && sal_False == bRes1 ) );
-        }
-
-        CPPUNIT_TEST_SUITE( check );
-        CPPUNIT_TEST( check_001 );
-        CPPUNIT_TEST( check_002 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class check
-
-
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::ctors, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::set, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::reset, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::wait, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::check, "osl_Condition");
-// -----------------------------------------------------------------------------
+        // #test comment#: use threads to set/reset Condition and check it in main routine.
+        ASSERT_TRUE( bRes );
+        ASSERT_TRUE( !bRes1 );
+    }
 
 } // namespace osl_Condition
 
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

@@ -530,7 +530,7 @@ public class Process implements WebWizardConst, ProcessErrors
             String fn = fileAccess.getPath(targetPath, key.substring(0, key.length() - 4));
             File f = new File(fn);
             FileOutputStream oStream = new FileOutputStream(f);
-            // Due to a problem occuring when using Xalan-Java 2.6.0 and
+            // Due to a problem occurring when using Xalan-Java 2.6.0 and
             // Java 1.5.0, wrap f in a FileOutputStream here (otherwise, the
             // StreamResult's getSystemId would return a "file:/..." URL while
             // the Xalan code expects a "file:///..." URL):
@@ -679,7 +679,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
             /*
              * here I calculate the destination filename.
-             * I take the original filename (docFilename), substract the extension, (docExt) -> (fn)
+             * I take the original filename (docFilename), subtract the extension, (docExt) -> (fn)
              * and find an available filename which starts with
              * this filename, but with the new extension. (destExt)
              */

@@ -186,7 +186,7 @@ void TestApplication::Main()
     m_xFactory = aManager.getGlobalUNOServiceManager();
     setProcessServiceFactory( m_xFactory );
 
-    // Control sucess of operation.
+    // Control success of operation.
     LOG_ASSERT( !(m_xFactory.is()           ==sal_False ), "TestApplication::Main()\nCan't create global service manager.\n\n"          )
     LOG_ASSERT( !(getProcessServiceFactory()!=m_xFactory), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n"    )
 
@@ -616,7 +616,7 @@ void TestApplication::impl_testDesktop( const Reference< XDesktop >& xDesktop )
     LOG_ASSERT( !(xDesktopFrame->getName()!=sName), "TestApplication::impl_testDesktop()\nSetting of name works not correct on desktop.\n\n" )
 
     //  Reset name do default!
-    //  Its neccessary for follow operations.
+    //  Its necessary for follow operations.
     sName = OUString( RTL_CONSTASCII_USTRINGPARAM("Desktop") );
     xDesktopFrame->setName( sName );
 
@@ -1304,7 +1304,7 @@ sal_Bool TestApplication::impl_testTreeSearch()
     }
 
     // Test inside/outside tasks search
-    // No frames outside current task should be found if TASKS flag isnt set.
+    // No frames outside current task should be found if TASKS flag isn't set.
     // Otherwise he must be found!
     if  (
             ( xF21211->findFrame( DECLARE_ASCII("F12"   ),  FrameSearchFlag::ALL                                )       == xF12     )   ||

@@ -199,9 +199,15 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                     SwParagraphNumTabPage::GetRanges);
             AddTabPage(TP_DROPCAPS,     SwDropCapsPage::Create,
                                         SwDropCapsPage::GetRanges );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            //UUUU remove?
+            //DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU add Area and Transparence TabPages
+            AddTabPage(RID_SVXPAGE_AREA);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE);
+
             DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
             DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
@@ -248,8 +254,10 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                         SwFrmAddPage::GetRanges );
             AddTabPage(TP_FRM_WRAP,     SwWrapTabPage::Create,
                                         SwWrapTabPage::GetRanges );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+
+            //UUUU remove?
+            //DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
 
             //UUUU remove?
             //AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
@@ -272,9 +280,15 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         // Seitenvorlagen
         case SFX_STYLE_FAMILY_PAGE:
         {
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            //UUUU remove?
+            //DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU add Area and Transparence TabPages
+            AddTabPage(RID_SVXPAGE_AREA);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE);
+
             AddTabPage(TP_HEADER_PAGE,      String(SW_RES(STR_PAGE_HEADER)),
                                             SvxHeaderPage::Create,
                                             SvxHeaderPage::GetRanges );
@@ -401,247 +415,296 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SwTemplateDlg::PageCreated(sal_uInt16 nId,SfxTabPage &rPage)
 {
     //Namen der Vorlagen und Metric setzen
-    String sNumCharFmt, sBulletCharFmt;
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
+    String sNumCharFmt,sBulletCharFmt;
+    SwStyleNameMapper::FillUIName(RES_POOLCHR_NUM_LEVEL,sNumCharFmt);
+    SwStyleNameMapper::FillUIName(RES_POOLCHR_BUL_LEVEL,sBulletCharFmt);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    switch( nId )
+    switch(nId)
     {
         case TP_CHAR_STD:
-            {
-                ASSERT(::GetActiveView(), "keine View aktiv");
+        {
+            ASSERT(::GetActiveView(),"keine View aktiv");
 
-                SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
-                    GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
+            SvxFontListItem aFontListItem(*((SvxFontListItem*)::GetActiveView()->
+                GetDocShell()->GetItem(SID_ATTR_CHAR_FONTLIST)));
 
-                aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-                sal_uInt32 nFlags = 0;
-                if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
-                    nFlags = SVX_RELATIVE_MODE;
-                if( SFX_STYLE_FAMILY_CHAR == nType )
-                    nFlags = nFlags|SVX_PREVIEW_CHARACTER;
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
-                rPage.PageCreated(aSet);
-            }
+            aSet.Put(SvxFontListItem(aFontListItem.GetFontList(),SID_ATTR_CHAR_FONTLIST));
+            sal_uInt32 nFlags = 0;
+            if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON))
+                nFlags = SVX_RELATIVE_MODE;
+            if(SFX_STYLE_FAMILY_CHAR == nType)
+                nFlags = nFlags | SVX_PREVIEW_CHARACTER;
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,nFlags));
+            rPage.PageCreated(aSet);
             break;
+        }
 
         case TP_CHAR_EXT:
-            {
+        {
             sal_uInt32 nFlags = SVX_ENABLE_FLASH;
-            if( SFX_STYLE_FAMILY_CHAR == nType )
-                nFlags = nFlags|SVX_PREVIEW_CHARACTER;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+            if(SFX_STYLE_FAMILY_CHAR == nType)
+                nFlags = nFlags | SVX_PREVIEW_CHARACTER;
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,nFlags));
             rPage.PageCreated(aSet);
-            }
             break;
+        }
 
         case TP_CHAR_POS:
-            if( SFX_STYLE_FAMILY_CHAR == nType )
+        {
+            if(SFX_STYLE_FAMILY_CHAR == nType)
             {
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
+                aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
                 rPage.PageCreated(aSet);
             }
-        break;
+            break;
+        }
 
         case TP_CHAR_TWOLN:
-            if( SFX_STYLE_FAMILY_CHAR == nType )
+        {
+            if(SFX_STYLE_FAMILY_CHAR == nType)
             {
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
+                aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
                 rPage.PageCreated(aSet);
             }
-        break;
+            break;
+        }
 
         case TP_PARA_STD:
+        {
+            if(rPage.GetItemSet().GetParent())
             {
-                if( rPage.GetItemSet().GetParent() )
-                {
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
-                    rPage.PageCreated(aSet);
-                }
-
-            }
-            break;
-        case TP_NUMPARA:
-            {
-                //-->#outlinelevel added by zhaojianwei
-                //  handle if the current paragraph style is assigned to a list level of outline style,
-                SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
-                if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
-                {
-                    ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
-                    ((SwParagraphNumTabPage&)rPage).DisableNumbering();
-                }//<-end
-                ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
-                SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-                pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
-                const SfxStyleSheetBase* pBase = pPool->First();
-                SvStringsSortDtor aNames;
-                while(pBase)
-                {
-                    aNames.Insert(new String(pBase->GetName()));
-                    pBase = pPool->Next();
-                }
-                for(sal_uInt16 i = 0; i < aNames.Count(); i++)
-                    rBox.InsertEntry(*aNames.GetObject(i));
-        }
-        break;
-        case TP_PARA_ALIGN:
-            {
-                aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+                aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50 / 10));
+                aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
                 rPage.PageCreated(aSet);
             }
+
             break;
+        }
+
+        case TP_NUMPARA:
+        {
+            //-->#outlinelevel added by zhaojianwei
+            //  handle if the current paragraph style is assigned to a list level of outline style,
+            SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName(GetStyleSheet().GetName());
+            if(pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle())
+            {
+                ((SwParagraphNumTabPage&)rPage).DisableOutline();
+                ((SwParagraphNumTabPage&)rPage).DisableNumbering();
+            }//<-end
+            ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
+            SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
+            pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO,SFXSTYLEBIT_ALL);
+            const SfxStyleSheetBase* pBase = pPool->First();
+            SvStringsSortDtor aNames;
+            while(pBase)
+            {
+                aNames.Insert(new String(pBase->GetName()));
+                pBase = pPool->Next();
+            }
+            for(sal_uInt16 i = 0; i < aNames.Count(); i++)
+                rBox.InsertEntry(*aNames.GetObject(i));
+            break;
+        }
+
+        case TP_PARA_ALIGN:
+        {
+            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+            rPage.PageCreated(aSet);
+            break;
+        }
 
         case TP_FRM_STD:
-            ((SwFrmPage&)rPage).SetNewFrame( sal_True );
-            ((SwFrmPage&)rPage).SetFormatUsed( sal_True );
+        {
+            ((SwFrmPage&)rPage).SetNewFrame(sal_True);
+            ((SwFrmPage&)rPage).SetFormatUsed(sal_True);
             break;
+        }
 
         case TP_FRM_ADD:
+        {
             ((SwFrmAddPage&)rPage).SetFormatUsed(sal_True);
             ((SwFrmAddPage&)rPage).SetNewFrame(sal_True);
             break;
+        }
 
         case TP_FRM_WRAP:
-            ((SwWrapTabPage&)rPage).SetFormatUsed( sal_True, sal_False );
+        {
+            ((SwWrapTabPage&)rPage).SetFormatUsed(sal_True,sal_False);
             break;
+        }
 
         case TP_COLUMN:
-            if( nType == SFX_STYLE_FAMILY_FRAME )
+        {
+            if(nType == SFX_STYLE_FAMILY_FRAME)
                 ((SwColumnPage&)rPage).SetFrmMode(sal_True);
-            ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
+            ((SwColumnPage&)rPage).SetFormatUsed(sal_True);
             break;
+        }
 
         //UUUU do not remove; many other style dialog combinations still use the SfxTabPage
         // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
         case TP_BACKGROUND:
         {
             sal_Int32 nFlagType = 0;
-            if( SFX_STYLE_FAMILY_PARA == nType )
+            if(SFX_STYLE_FAMILY_PARA == nType)
                 nFlagType |= SVX_SHOW_PARACTL;
-            if( SFX_STYLE_FAMILY_CHAR != nType )
+            if(SFX_STYLE_FAMILY_CHAR != nType)
                 nFlagType |= SVX_SHOW_SELECTOR;
-            if( SFX_STYLE_FAMILY_FRAME == nType )
+            if(SFX_STYLE_FAMILY_FRAME == nType)
                 nFlagType |= SVX_ENABLE_TRANSPARENCY;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,nFlagType));
             rPage.PageCreated(aSet);
-        }
-        break;
-        case TP_CONDCOLL:
-            ((SwCondCollPage&)rPage).SetCollection(
-                ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(), bNewStyle );
             break;
+        }
+
+        case TP_CONDCOLL:
+        {
+            ((SwCondCollPage&)rPage).SetCollection(
+                ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(),bNewStyle);
+            break;
+        }
 
         case TP_PAGE_STD:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
+        {
+            if(0 == (nHtmlMode & HTMLMODE_ON))
             {
                 List aList;
                 String* pNew = new String;
-                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, *pNew );
-                aList.Insert( pNew, (sal_uLong)0 );
-                if( pWrtShell )
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_TEXT,*pNew);
+                aList.Insert(pNew,(sal_uLong)0);
+
+                if(pWrtShell)
                 {
-                    SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
-                                GetView().GetDocShell()->GetStyleSheetPool();
+                    SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
                     pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
                     SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
+
                     while(pFirstStyle)
                     {
-                        aList.Insert( new String(pFirstStyle->GetName()),
-                                        aList.Count());
+                        aList.Insert(new String(pFirstStyle->GetName()), aList.Count());
                         pFirstStyle = pStyleSheetPool->Next();
                     }
                 }
-                aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
+
+                //UUUU set DrawingLayer FillStyles active
+                aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
+                aSet.Put(SfxStringListItem(SID_COLLECT_LIST, &aList));
                 rPage.PageCreated(aSet);
-                for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
+
+                for(sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i)
+                {
                     delete (String*)aList.Remove(i);
+                }
             }
+
             break;
+        }
 
         case TP_MACRO_ASSIGN:
         {
             SfxAllItemSet aNewSet(*aSet.GetPool());
-            aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
-            if ( pWrtShell )
-                rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
+            aNewSet.Put(SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM));
+            if(pWrtShell)
+                rPage.SetFrame(pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface());
             rPage.PageCreated(aNewSet);
             break;
         }
 
         case RID_SVXPAGE_PICK_NUM:
-            {
+        {
                 aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
                 aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
                 rPage.PageCreated(aSet);
-            }
-        break;
+            break;
+        }
+
         case RID_SVXPAGE_NUM_OPTIONS:
         {
-
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+            aSet.Put(SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+            aSet.Put(SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
             // Zeichenvorlagen sammeln
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
-            rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
+            rCharFmtLB.InsertEntry(ViewShell::GetShellRes()->aStrNone);
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
+            ::FillCharStyleListBox(rCharFmtLB,pDocShell);
             List aList;
             for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
             {
-
-                 aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
+                aList.Insert(new XubString(rCharFmtLB.GetEntry(j)),LIST_APPEND);
             }
-            aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
+            aSet.Put(SfxStringListItem(SID_CHAR_FMT_LIST_BOX,&aList));
             FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            aSet.Put(SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
             rPage.PageCreated(aSet);
-            for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (XubString*)aList.Remove(i);
+            for(sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i)
+                delete (XubString*)aList.Remove(i);
             aList.Clear();
+            break;
         }
-        break;
+
         case RID_SVXPAGE_NUM_POSITION:
         {
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
 
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            aSet.Put(SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
             rPage.PageCreated(aSet);
+            break;
         }
-        break;
-        case  RID_SVXPAGE_PICK_BULLET :
-            {
-                aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-                rPage.PageCreated(aSet);
-            }
-        break;
+
+        case  RID_SVXPAGE_PICK_BULLET:
+        {
+            aSet.Put(SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+            rPage.PageCreated(aSet);
+            break;
+        }
+
         case  TP_HEADER_PAGE:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
-                ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
-        break;
-        case  TP_FOOTER_PAGE:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
-                ((SvxFooterPage&)rPage).EnableDynamicSpacing();
-        break;
-        case TP_BORDER :
-            if( SFX_STYLE_FAMILY_PARA == nType )
+        {
+            if(0 == (nHtmlMode & HTMLMODE_ON))
             {
-                aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
+                static_cast< SvxHeaderPage& >(rPage).EnableDynamicSpacing();
             }
-            else if( SFX_STYLE_FAMILY_FRAME == nType )
-            {
-                aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
-            }
+
+            //UUUU set DrawingLayer FillStyles active
+            aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
             rPage.PageCreated(aSet);
 
-        break;
+            break;
+        }
+
+        case  TP_FOOTER_PAGE:
+        {
+            if(0 == (nHtmlMode & HTMLMODE_ON))
+            {
+                static_cast< SvxFooterPage& >(rPage).EnableDynamicSpacing();
+            }
+
+            //UUUU set DrawingLayer FillStyles active
+            aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
+            rPage.PageCreated(aSet);
+
+            break;
+        }
+
+        case TP_BORDER:
+        {
+            if(SFX_STYLE_FAMILY_PARA == nType)
+            {
+                aSet.Put(SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
+            }
+            else if(SFX_STYLE_FAMILY_FRAME == nType)
+            {
+                aSet.Put(SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
+            }
+            rPage.PageCreated(aSet);
+            break;
+        }
 
         //UUUU inits for Area and Transparency TabPages
         // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
@@ -651,24 +714,20 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         // demand, but could also be directly added from the DrawModel.
         case RID_SVXPAGE_AREA:
         {
-            SfxItemSet aNew(*aSet.GetPool(),
-                SID_COLOR_TABLE, SID_BITMAP_LIST,
-                SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
-
-            aNew.Put(GetStyleSheet().GetItemSet());
+            aSet.Put(GetStyleSheet().GetItemSet());
 
             // add flag for direct graphic content selection
-            aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+            aSet.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
 
-            rPage.PageCreated(aNew);
+            rPage.PageCreated(aSet);
+            break;
         }
-        break;
 
         case RID_SVXPAGE_TRANSPARENCE:
         {
             rPage.PageCreated(GetStyleSheet().GetItemSet());
+            break;
         }
-        break;
     }
 }
 

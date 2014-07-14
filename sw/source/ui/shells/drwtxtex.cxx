@@ -654,7 +654,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                     !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
                     rSet.DisableItem( SID_THES );
 
-                //! avoid puting the same item as SfxBoolItem at the end of this function
+                //! avoid putting the same item as SfxBoolItem at the end of this function
                 nSlotId = 0;
                 break;
             }

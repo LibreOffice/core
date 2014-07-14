@@ -167,7 +167,7 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
         empty list.
 
         @return
-           The returned value is either an empty referece or a reference to
+           The returned value is either an empty reference or a reference to
            a valid object that represents a copy of the objects list of
            relations.
     */

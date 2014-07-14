@@ -172,7 +172,7 @@ public:
     sal_Bool        GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     sal_Bool        GetLastVisibleAttr( SCROW& rLastRow ) const;
     /*
-    Get the last cell's row number , which have visual atribute or visual data in a column
+    Get the last cell's row number , which have visual attribute or visual data in a column
     */
     sal_Bool        GetLastAttr( SCROW& rLastRow ) const;
     sal_Bool        HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;

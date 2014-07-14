@@ -837,6 +837,7 @@
 #define SID_OPT_MIDDLE_MOUSE                (SID_OPTIONS_START + 97)
 #define SID_ATTR_PRETTYPRINTING             (SID_OPTIONS_START + 98)
 #define SID_HELP_STYLESHEET                 (SID_OPTIONS_START + 99)
+#define SID_ATTR_ODFENCRYPTION              (SID_OPTIONS_START + 100)
 
 // slot IDs from SVX (svxids.hrc) ---------------------------------------------
 

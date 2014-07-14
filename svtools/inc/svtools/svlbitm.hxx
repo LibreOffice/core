@@ -95,7 +95,7 @@ public:
     Image aBmps[24];  // Indizes siehe Konstanten BMP_ ....
 
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
-                                // set images acording to the color scheeme of the Control
+                                // set images according to the color scheeme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
     sal_Bool                    HasDefaultImages( void ) const;
 };

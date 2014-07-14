@@ -46,7 +46,7 @@ interface XXMLElementWrapper;
  * data structure, this interface provides a common method set which
  * each lauguage have to implement.
  * <p>
- * In another word, this interface wraps language dependant methods,
+ * In another word, this interface wraps language dependent methods,
  * then other component can manipulate DOM data through UNO methods.
  */
 interface XXMLDocumentWrapper : com::sun::star::uno::XInterface

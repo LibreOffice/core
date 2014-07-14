@@ -314,7 +314,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occured!");
+        OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
     }
     return false;
 }

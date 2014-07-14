@@ -226,7 +226,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
         {
             // create an intermediate window, which is to be the container window of the frame
             // Do *not* use |this| as container window for the frame, this would result in undefined
-            // responsiblity for this window (as soon as we initialize a frame with a window, the frame
+            // responsibility for this window (as soon as we initialize a frame with a window, the frame
             // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
             // #i34249# - 2004-09-27 - fs@openoffice.org
             Window* pContainerWindow = new Window( this );
@@ -241,7 +241,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
                         xSupp ( _pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
 //                if ( xSupp.is() )
 //                    xSupp->getFrames()->append( m_xMeAsFrame );
-                // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
+                // Don't append frame to frame hierarchy to prevent UI_DEACTIVATE messages
                 // #i31834# - 2004-07-27 - cd@openoffice.org
             }
         }
@@ -708,7 +708,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
+        DBG_ERROR("FmPropBrw::StateChanged: Exception occurred!");
     }
     m_bInStateChange = false;
 }

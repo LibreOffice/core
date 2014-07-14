@@ -5153,7 +5153,7 @@
                     <value>9</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Substract" oor:op="replace">
+            <node oor:name=".uno:Subtract" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Subtract</value>
                 </prop>

@@ -116,7 +116,7 @@ public:
     // #i33136#
     /** Decide if the object to be created should be created
         orthogonal. Default implementation uses nSlotID
-        to decide. May be overloaded to use other criterias
+        to decide. May be overloaded to use other criteria
         for this decision
 
         @returns true if the to be created object should be orthogonal.
@@ -144,7 +144,7 @@ protected:
         control at the lower left of the document window positive values
         move to the right and negative values move to the left.
 
-        <p>Switching the layer is independant of the view's layer mode.  The
+        <p>Switching the layer is independent of the view's layer mode.  The
         layers are switched even when the layer mode is turned off and the
         layer control is not visible.</p>
         @param nOffset

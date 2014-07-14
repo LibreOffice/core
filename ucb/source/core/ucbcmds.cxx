@@ -504,7 +504,7 @@ bool setTitle(
 
         if ( aErrors[ 0 ].hasValue() )
         {
-            // error occured.
+            // error occurred.
             OSL_ENSURE( sal_False, "error setting Title property!" );
             return false;
         }

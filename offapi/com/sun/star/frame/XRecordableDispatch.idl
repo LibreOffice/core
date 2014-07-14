@@ -55,7 +55,7 @@
     If a dispatch object is well known and recording was enabled
     on a <type>XDispatchRecorderSupplier</type> it's possible to use method
     <member>XDispatchRecorderSupplier::dispatchAndRecord()</member> of it
-    to make dispatch and recording automaticly. The interface XRecordableDispatch
+    to make dispatch and recording automatically. The interface XRecordableDispatch
     is used transparently there.
     </p>
 
@@ -87,7 +87,7 @@ published interface XRecordableDispatch: com::sun::star::uno::XInterface
     /** dispatch and record it
 
         @param URL
-            full parsed URL wich describe the feature which should be dispatched (executed)
+            full parsed URL which describe the feature which should be dispatched (executed)
 
         @param Arguments
             optional arguments for this request

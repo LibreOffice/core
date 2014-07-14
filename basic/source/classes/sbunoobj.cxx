@@ -187,12 +187,12 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
             xContext->getValueByName(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) )
                     >>= xCoreReflection;
-            OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+            OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
         }
         if( !xCoreReflection.is() )
         {
             throw DeploymentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
                 Reference< XInterface >() );
         }
     }
@@ -230,13 +230,13 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
             xContext->getValueByName(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) )
                     >>= xAccess;
-            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessable!?" );
+            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
         }
         if( !xAccess.is() )
         {
             throw DeploymentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM
-                    ("/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessable") ),
+                    ("/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible") ),
                 Reference< XInterface >() );
         }
     }
@@ -264,7 +264,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
         {
             throw DeploymentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM
-                    ("com.sun.star.script.Converter service not accessable") ),
+                    ("com.sun.star.script.Converter service not accessible") ),
                 Reference< XInterface >() );
         }
     }
@@ -2603,7 +2603,7 @@ void clearUnoMethodsForBasic( StarBASIC* pBasic )
             if ( pModBasic == pBasic )
             {
                 // for now the solution is to remove the method from the list and to clear it,
-                // but in case the element should be correctly transfered to another StarBASIC,
+                // but in case the element should be correctly transferred to another StarBASIC,
                 // we should either set module parent to NULL without clearing it, or even
                 // set the new StarBASIC as the parent of the module
                 // pObject->SetParent( NULL );
@@ -3743,7 +3743,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 continue;
                             com::sun::star::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
 
-                            // sbx paramter needs offset 1
+                            // sbx parameter needs offset 1
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
 
                             // Check for out parameter if not already done

@@ -64,7 +64,7 @@ class ModuleManager : public  css::lang::XTypeProvider
                     , public  css::frame::XModuleManager
                     , public  css::container::XNameReplace // => XNameAccess, XElementAccess
                     , public  css::container::XContainerQuery
-                    // attention! Must be the first base class to guarentee right initialize lock ...
+                    // attention! Must be the first base class to guarantee right initialize lock ...
                     , private ThreadHelpBase
                     , public  ::cppu::OWeakObject
 {
@@ -154,7 +154,7 @@ class ModuleManager : public  css::lang::XTypeProvider
 
                     Note: A writable configuration access
                     must be created explicitly. Otherwise
-                    we cant make sure that broken write requests
+                    we can't make sure that broken write requests
                     wont affect our read access !
 
             @return [com.sun.star.container.XNameAccess]

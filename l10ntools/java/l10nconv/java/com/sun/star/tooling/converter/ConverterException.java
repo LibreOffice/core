@@ -22,7 +22,7 @@
 
 /*
  * a simple exception
- * just to seperate
+ * just to separate
  * it from other
  * exceptions
  */

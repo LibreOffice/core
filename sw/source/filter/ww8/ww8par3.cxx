@@ -530,10 +530,14 @@ void lcl_CopyGreaterEight(String &rDest, String &rSrc,
     }
 }
 
-bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
-    sal_uInt16 nLevelStyle, bool bSetStartNo,
-    std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
-    ww::bytes &rParaSprms)
+bool WW8ListManager::ReadLVL(
+    SwNumFmt& rNumFmt,
+    SfxItemSet*& rpItemSet,
+    sal_uInt16 nLevelStyle,
+    bool bSetStartNo,
+    std::deque< bool > &rNotReallyThere,
+    sal_uInt16 nLevel,
+    ww::bytes &rParaSprms )
 {
     sal_uInt8       aBits1;
     sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
@@ -1219,7 +1223,7 @@ WW8ListManager::WW8ListManager(
 
             i.e. create a simple list in 2000 and open it in 97 and 97 will
             claim (correctly) that it is an outline list. We can set our
-            continous flag in these lists to store this information.
+            continuous flag in these lists to store this information.
             */
             SwNumRule* pMyNumRule = CreateNextRule(
                 aLST.bSimpleList || (aBits1 & 0x10));
@@ -1639,7 +1643,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     #i1869#
     If this list has had its bits set in word 2000 to pretend that it is a
     simple list from the point of view of the user, then it is almost
-    certainly a simple continous list, and we will try to keep it like that.
+    certainly a simple continuous list, and we will try to keep it like that.
     Otherwise when we save again it will be shown as the true outline list
     that it is, confusing the user that just wanted what they thought was a
     simple list. On the otherhand it is possible that some of the other levels
@@ -1738,46 +1742,28 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(
     bool bRes = true;
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
-        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt)
-            ? true : false;
+        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt) ? true : false;
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
-        ASSERT( pTxtNode, "No Text-Node at PaM-Position" );
-        // --> OD 2006-10-19 #134160# - make code robust
-        if ( !pTxtNode )
+        ASSERT( pTxtNode != NULL, "No Text-Node at PaM-Position" );
+        if ( pTxtNode == NULL )
         {
+            // make code robust
             return bRes;
         }
-        // <--
 
-        SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
+        const SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
 
-        if( !IsInvalidOrToBeMergedTabCell() &&
-            ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
+        if( !IsInvalidOrToBeMergedTabCell()
+            && ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
+        {
             pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
-
-        if( !rStyleInfo.pOutlineNumrule )
-        {
-            if (
-                 (USHRT_MAX > rStyleInfo.nLFOIndex) &&
-                 (WW8ListManager::nMaxLevel > rStyleInfo.nListLevel)
-               )
-            {
-                RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
-                    rStyleInfo.nListLevel, false);
-            }
         }
-        else
+
+        if ( USHRT_MAX > rStyleInfo.nLFOIndex
+             && WW8ListManager::nMaxLevel > rStyleInfo.nListLevel )
         {
-            // --> OD 2005-11-07 #127520#
-            // Use outline level set at the style info <rStyleInfo> instead of
-            // the outline level at the text format, because the WW8 document
-            // could contain more than one outline numbering rule and the one
-            // of the text format isn't the one, which a chosen as the Writer
-            // outline rule.
-//            pTxtNode->
-//                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
-            pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
-            // <--
+            const bool bApplyListStyle = false;
+            RegisterNumFmtOnTxtNode( rStyleInfo.nLFOIndex, rStyleInfo.nListLevel, bApplyListStyle );
         }
     }
     return bRes;
@@ -1865,25 +1851,27 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle( sal_uInt16 nStyle )
 
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
         SwNumRule* pNmRule = 0;
-        sal_uInt16 nLFO = rStyleInf.nLFOIndex;
-        sal_uInt8  nLevel = rStyleInf.nListLevel;
+        const sal_uInt16 nLFO = rStyleInf.nLFOIndex;
+        const sal_uInt8  nLevel = rStyleInf.nListLevel;
         if (
              (USHRT_MAX > nLFO) &&
              (WW8ListManager::nMaxLevel > nLevel)
            )
         {
             std::vector<sal_uInt8> aParaSprms;
-            pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel,
-                aParaSprms);
+            pNmRule =
+                pLstManager->GetNumRuleForActivation( nLFO, nLevel, aParaSprms );
 
-            if (pNmRule)
+            if ( pNmRule != NULL )
             {
-                if( MAXLEVEL > rStyleInf.nOutlineLevel )
+                if ( rStyleInf.IsWW8BuiltInHeadingStyle()
+                     && rStyleInf.HasWW8OutlineLevel() )
+                {
                     rStyleInf.pOutlineNumrule = pNmRule;
+                }
                 else
                 {
-                    rStyleInf.pFmt->SetFmtAttr(
-                        SwNumRuleItem( pNmRule->GetName() ) );
+                    rStyleInf.pFmt->SetFmtAttr( SwNumRuleItem( pNmRule->GetName() ) );
                     rStyleInf.bHasStyNumRule = true;
                 }
             }
@@ -1897,7 +1885,7 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle( sal_uInt16 nStyle )
 void SwWW8ImplReader::RegisterNumFmtOnTxtNode(
     sal_uInt16 nActLFO,
     sal_uInt8 nActLevel,
-    bool bSetAttr)
+    const bool bSetAttr)
 {
     // beachte: die Methode haengt die NumRule an den Text Node, falls
     // bSetAttr (dann muessen natuerlich vorher die Listen gelesen sein)
@@ -1910,44 +1898,18 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(
         SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
         ASSERT(pTxtNd, "Kein Text-Node an PaM-Position");
 
-        const SwNumRule* pRule = bSetAttr ?
-            pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
-                aParaSprms, pTxtNd) : 0;
+        const SwNumRule* pRule =
+            bSetAttr
+            ? pLstManager->GetNumRuleForActivation( nActLFO, nActLevel, aParaSprms, pTxtNd)
+            : 0;
 
-        if (pRule || !bSetAttr)
+        if ( pRule != NULL || !bSetAttr)
         {
-            //#i24136# old is the same as new, and its the outline numbering,
-            //then we don't set the numrule again, and we just take the num node
-            //(the actual outline numbering gets set in SetOutlineNum)
-            using namespace sw::util;
-            bool bUnchangedOutlineNumbering = false;
-            /*
-             If the node is outline numbered, and the new numbering to apply
-             is the one that was chosen to be the outline numbering then all
-             is unchanged
-            */
-            // --> OD 2005-11-04 #???# - correct condition according to the
-            // above given comment.
-            if ( pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule() &&
-                 pRule == mpChosenOutlineNumRule )
-            // <--
+            if ( bSetAttr
+                 && pTxtNd->GetNumRule() != pRule
+                 && pTxtNd->GetNumRule() != rDoc.GetOutlineNumRule() )
             {
-                bUnchangedOutlineNumbering = true;
-            }
-            if (!bUnchangedOutlineNumbering)
-            {
-                //If its normal numbering, see if its the same as it already
-                //was, if its not, and we have been asked to set it, then set
-                //it to the new one
-                if (bSetAttr)
-                {
-                    const SwNumRule *pNormal = pTxtNd->GetNumRule();
-                    if (pNormal != pRule)
-                    {
-                        pTxtNd->SetAttr
-                            (SwNumRuleItem(pRule->GetName()));
-                    }
-                }
+                pTxtNd->SetAttr( SwNumRuleItem( pRule->GetName() ) );
             }
 
             pTxtNd->SetAttrListLevel(nActLevel);
@@ -1960,16 +1922,16 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(
             // Direct application of the list level formatting no longer
             // needed for list levels of mode LABEL_ALIGNMENT
             bool bApplyListLevelIndentDirectlyAtPara( true );
-            if ( pTxtNd->GetNumRule() && nActLevel < MAXLEVEL )
             {
-                const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get( nActLevel );
-                if ( rFmt.GetPositionAndSpaceMode() ==
-                                            SvxNumberFormat::LABEL_ALIGNMENT )
+                if ( pTxtNd->GetNumRule() && nActLevel < MAXLEVEL )
                 {
-                    bApplyListLevelIndentDirectlyAtPara = false;
+                    const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get( nActLevel );
+                    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                    {
+                        bApplyListLevelIndentDirectlyAtPara = false;
+                    }
                 }
             }
-
             if ( bApplyListLevelIndentDirectlyAtPara )
             {
                 SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,

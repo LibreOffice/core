@@ -1406,7 +1406,7 @@ sub set_integration_milestone_in_eis
     if ( !defined($milestone) ) {
         $milestone = Eis::to_string('');
     }
-    # $buildid must be transfered as string
+    # $buildid must be transferred as string
     if ( !defined($buildid) ) {
         $buildid = Eis::to_string('');
     }

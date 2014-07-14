@@ -1928,7 +1928,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             aSymbolSize=aSize;
         }
         else if( nPreviousSymbolType == SVX_SYMBOLTYPE_BRUSHITEM )
-        {   //#i31097# Data Point Symbol size changes when a different symbol is choosen(maoyg)
+        {   //#i31097# Data Point Symbol size changes when a different symbol is chosen(maoyg)
             if( aSymbolSize.Width() != aSymbolSize.Height() )
             {
                 aSize.setWidth( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );

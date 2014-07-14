@@ -54,7 +54,7 @@ public:
     virtual void Deactivate();         // Function deaktivieren
 
   //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-  //and SHIFT+ENTER key to decide the postion and draw the new insert point
+  //and SHIFT+ENTER key to decide the position and draw the new insert point
     virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
 private:
     Point           maOldPoint;

@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <vos/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -31,7 +28,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 #include <tools/debug.hxx>
-
 #include <map>
 #include <list>
 #include <vector>
@@ -61,15 +57,9 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include <svx/SvxShapeTypes.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -85,6 +75,7 @@
 #include <prevwpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -679,7 +670,7 @@ class SwAccPreviewData
         rectangle; needed to determine the visible part of the logic page rectangle.
 
         @param _rPrevwWinSize
-        input paramter - constant reference to the preview window size in TWIP;
+        input parameter - constant reference to the preview window size in TWIP;
         needed to determine the visible part of the logic page rectangle
     */
     void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
@@ -1062,7 +1053,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
                 // DISPOSE events overwrite all others. They are not stored
-                // but executed immediatly to avoid broadcasting of
+                // but executed immediately to avoid broadcasting of
                 // defunctional objects. So what needs to be done here is to
                 // remove all events for the frame in question.
                 bAppendEvent = sal_False;
@@ -2018,7 +2009,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // focused state then. Sending the focus changes event
                         // after that seems to be strange. However, we cannot
                         // send a focus event fo the new context now, because
-                        // noone except us knows it. In any case, we remeber
+                        // no one except us knows it. In any case, we remember
                         // the new context as the one that has the focus
                         // currently.
 

@@ -174,7 +174,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
 
 //=============================================================================
 
-//We parse the string acording to RFC 3066
+//We parse the string according to RFC 3066
 //We only use the primary sub-tag and two subtags. That is lang-country-variant
 //We do some simple tests if the string is correct. Actually this should do a
 //validating parser

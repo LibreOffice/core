@@ -42,7 +42,7 @@ service TabularDataProviderArguments
 {
     /** the range address string spanning all data.
 
-        <p>The range adress string must be interpretable by the
+        <p>The range address string must be interpretable by the
         component that implements <type>XDataProvider</type> and gets
         this property as argument to
         <member>XDataProvider::detectArguments</member>.</p>

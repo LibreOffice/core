@@ -55,7 +55,7 @@
 
     <p>
     If an event <method scope="com::sun::star::lang">XEventListener::disposing</method>
-    occured, nobody called <method>XCloseable::close</method> on listened object before.
+    occurred, nobody called <method>XCloseable::close</method> on listened object before.
     Then it's not allowed to break this request - it must be accepted!
     </p>
 
@@ -109,16 +109,16 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
             raises( CloseVetoException );
 
     //-------------------------------------------------------------------------
-    /** is called when the listened object is closed realy
+    /** is called when the listened object is closed really
 
         <p>
-        Now the listened object is closed realy. Listener has to accept that;
+        Now the listened object is closed really. Listener has to accept that;
         should deregister himself and relaese all references to it.
         It's not allowed nor possible to disagree with that by throwing any exception.
         </p>
 
         <p>
-        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occured before
+        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occurred before
         it must be accepted too. There exist no chance for a disagreement any more.
         </p>
 

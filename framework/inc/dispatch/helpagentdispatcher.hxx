@@ -42,7 +42,7 @@ namespace framework
 
 // define css alias ... and undefine it at the end of this file !!!
 #ifdef css
-    #error "I tried to use css as namespace define inside non exported header ... but it was already defined by somwhere else. .-)"
+    #error "I tried to use css as namespace define inside non exported header ... but it was already defined by somewhere else. .-)"
 #else
     #define css ::com::sun::star
 #endif

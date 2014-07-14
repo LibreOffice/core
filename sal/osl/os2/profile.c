@@ -1923,7 +1923,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
             if ( pProfile->m_strFileName != 0  && pProfile->m_strFileName->buffer[0] != 0 )
                 FileURLToPath( pszFilename, PATH_MAX, pProfile->m_strFileName );
-            /* hack: usualy you have a specific HAB, but NULL works here... */
+            /* hack: usually you have a specific HAB, but NULL works here... */
             pProfile->m_hIni = PrfOpenProfile(NULL, (PCSZ)pszFilename);
             if (! pProfile->m_hIni)
                 return (NULL);
@@ -2124,7 +2124,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
         if (osl_getExecutableFile(Path, sizeof(Path)) != osl_Process_E_None)
             return (sal_False);
 
-        /* seperate path from filename */
+        /* separate path from filename */
         if ((pChr = strrchr(Path, '\\')) == NULL)
             if ((pChr = strrchr(Path, ':')) == NULL)
                 return (sal_False);

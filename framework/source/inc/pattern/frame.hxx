@@ -72,8 +72,8 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
 
     @descr  It try to close the given resource first.
             Delegating of the ownership can be influenced from
-            outside. If closing isnt possible (because the
-            needed interface isnt available) dispose() is tried instead.
+            outside. If closing isn't possible (because the
+            needed interface isn't available) dispose() is tried instead.
             Al possible exception are handled inside.
             So the user of this method has to look for the return value only.
 
@@ -111,10 +111,10 @@ inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xReso
     catch(const css::lang::DisposedException&)
         {} // disposed is closed is ...
     catch(const css::uno::RuntimeException&)
-        { throw; } // shouldnt be suppressed!
+        { throw; } // shouldn't be suppressed!
     catch(const css::uno::Exception&)
         { return sal_False;  } // ??? We defined to return a boolen value instead of throwing exceptions ...
-                               // (OK: RuntimeExceptions shouldnt be catched inside the core ..)
+                               // (OK: RuntimeExceptions shouldn't be catched inside the core ..)
 
     return sal_True;
 }

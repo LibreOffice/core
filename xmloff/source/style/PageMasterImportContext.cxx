@@ -19,33 +19,32 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
 
 #include "PageMasterImportContext.hxx"
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "PageMasterPropHdl.hxx"
 #include "PagePropertySetContext.hxx"
-#ifndef _XMLOFF_PAGEPHEADERFOOTERCONTEXT_HXX
 #include "PageHeaderFooterContext.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 #include "PageMasterImportPropMapper.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+//UUUU
+#include <xmlsdtypes.hxx>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <xmloff/xmlerror.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+//UUUU
+using namespace ::com::sun::star::beans;
 
 void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const rtl::OUString& rLocalName,
@@ -68,7 +67,8 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles,
         sal_Bool bDefaultStyle) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
-    sPageUsage()
+    sPageUsage(),
+    m_bIsFillStyleAlreadyConverted(false) //UUUU
 {
 }
 
@@ -165,10 +165,148 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
     return pContext;
 }
 
-void PageStyleContext::FillPropertySet(
-            const uno::Reference<beans::XPropertySet > & rPropSet )
+void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > & rPropSet)
 {
-    XMLPropStyleContext::FillPropertySet(rPropSet);
+    //UUUU need to filter out old fill definitions when the new ones are used. The new
+    // ones are used when a FillStyle is defined
+    if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
+    {
+        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+        static ::rtl::OUString s_HeaderFillStyle(RTL_CONSTASCII_USTRINGPARAM("HeaderFillStyle"));
+        static ::rtl::OUString s_FooterFillStyle(RTL_CONSTASCII_USTRINGPARAM("FooterFillStyle"));
+
+        if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
+        {
+            deactivateOldFillStyleDefinitions(getStandardSet());
+        }
+
+        if(doNewDrawingLayerFillStyleDefinitionsExist(s_HeaderFillStyle))
+        {
+            deactivateOldFillStyleDefinitions(getHeaderSet());
+        }
+
+        if(doNewDrawingLayerFillStyleDefinitionsExist(s_FooterFillStyle))
+        {
+            deactivateOldFillStyleDefinitions(getFooterSet());
+        }
+
+        m_bIsFillStyleAlreadyConverted = true;
+    }
+
+    //UUUU do not use XMLPropStyleContext::FillPropertySet, we need to handle this ourselves since
+    // we have properties which use the MID_FLAG_NO_PROPERTY_IMPORT flag since they need some special
+    // handling
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper(GetFamily());
+
+    if(xImpPrMap.is())
+    {
+        // properties that need special handling because they need the used name to be translated first
+        struct _ContextID_Index_Pair aContextIDs[] =
+        {
+            { CTF_PM_FILLGRADIENTNAME, -1 },
+            { CTF_PM_FILLTRANSNAME, -1 },
+            { CTF_PM_FILLHATCHNAME, -1 },
+            { CTF_PM_FILLBITMAPNAME, -1 },
+
+            // also need to special handling for header entries
+            { CTF_PM_HEADERFILLGRADIENTNAME, -1 },
+            { CTF_PM_HEADERFILLTRANSNAME, -1 },
+            { CTF_PM_HEADERFILLHATCHNAME, -1 },
+            { CTF_PM_HEADERFILLBITMAPNAME, -1 },
+
+            // also need to special handling for footer entries
+            { CTF_PM_FOOTERFILLGRADIENTNAME, -1 },
+            { CTF_PM_FOOTERFILLTRANSNAME, -1 },
+            { CTF_PM_FOOTERFILLHATCHNAME, -1 },
+            { CTF_PM_FOOTERFILLBITMAPNAME, -1 },
+
+            {-1, -1}
+        };
+
+        // the style families associated with the same index modulo 4
+        static sal_uInt16 aFamilies[] =
+        {
+            XML_STYLE_FAMILY_SD_GRADIENT_ID,
+            XML_STYLE_FAMILY_SD_GRADIENT_ID,
+            XML_STYLE_FAMILY_SD_HATCH_ID,
+            XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+        };
+
+        //UUUU Fill PropertySet, but let it handle special properties not itself
+        xImpPrMap->FillPropertySet(GetProperties(), rPropSet, aContextIDs);
+
+        // get property set mapper
+        const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+        Reference< XPropertySetInfo > xInfo;
+
+        //UUUU handle special attributes which have MID_FLAG_NO_PROPERTY_IMPORT set
+        for(sal_uInt16 i = 0; aContextIDs[i].nContextID != -1; i++)
+        {
+            sal_Int32 nIndex = aContextIDs[i].nIndex;
+
+            if(nIndex != -1)
+            {
+                switch(aContextIDs[i].nContextID)
+                {
+                    case CTF_PM_FILLGRADIENTNAME:
+                    case CTF_PM_FILLTRANSNAME:
+                    case CTF_PM_FILLHATCHNAME:
+                    case CTF_PM_FILLBITMAPNAME:
+
+                    case CTF_PM_HEADERFILLGRADIENTNAME:
+                    case CTF_PM_HEADERFILLTRANSNAME:
+                    case CTF_PM_HEADERFILLHATCHNAME:
+                    case CTF_PM_HEADERFILLBITMAPNAME:
+
+                    case CTF_PM_FOOTERFILLGRADIENTNAME:
+                    case CTF_PM_FOOTERFILLTRANSNAME:
+                    case CTF_PM_FOOTERFILLHATCHNAME:
+                    case CTF_PM_FOOTERFILLBITMAPNAME:
+                    {
+                        struct XMLPropertyState& rState = GetProperties()[nIndex];
+                        rtl::OUString sStyleName;
+                        rState.maValue >>= sStyleName;
+
+                        //UUUU translate the used name from ODF intern to the name used in the Model
+                        sStyleName = GetImport().GetStyleDisplayName(aFamilies[i%4], sStyleName);
+
+                        try
+                        {
+                            // set property
+                            const rtl::OUString& rPropertyName = rMapper->GetEntryAPIName(rState.mnIndex);
+
+                            if(!xInfo.is())
+                            {
+                                xInfo = rPropSet->getPropertySetInfo();
+                            }
+
+                            if(xInfo->hasPropertyByName(rPropertyName))
+                            {
+                                rPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
+                            }
+                        }
+                        catch(::com::sun::star::lang::IllegalArgumentException& e)
+                        {
+                            Sequence< rtl::OUString > aSeq(1);
+                            aSeq[0] = sStyleName;
+                            GetImport().SetError(
+                                XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
+                                aSeq,e.Message,NULL);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        OSL_ENSURE(xImpPrMap.is(), "Got no SvXMLImportPropertyMapper (!)");
+    }
+
+    //UUUU old code, replaced by above stuff
+    // XMLPropStyleContext::FillPropertySet(rPropSet);
+
     if (sPageUsage.getLength())
     {
         uno::Any aPageUsage;
@@ -193,3 +331,4 @@ void PageStyleContext::SetDefaults( )
     }
 }
 
+//eof

@@ -289,7 +289,7 @@ class DomainMapper_Impl
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
     typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
-    typedef std::map < ::rtl::OUString, BookmarkInsertPosition > BookmarkMap_t;
+    typedef std::map < sal_Int32, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
     SourceDocumentType                                                              m_eDocumentType;
@@ -554,7 +554,9 @@ public:
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
-    void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
+    void AddBookmark(
+        const ::rtl::OUString& rBookmarkName,
+        const sal_Int32 nId );
 
     void AddAnnotationPosition(
         const bool bStart,

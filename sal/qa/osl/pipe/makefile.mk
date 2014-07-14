@@ -20,15 +20,10 @@
 #**************************************************************
 
 
-
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=qa_osl_pipe
+TARGET=sal_ut_osl_pipe
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -39,28 +34,20 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Pipe by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/osl_Pipe.obj
+.ELSE
 
-SHL1TARGET= osl_Pipe
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTLIB)
+APP1OBJS = $(OBJ)/osl_Pipe.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = sal_ut_osl_pipe
+APP1TEST = enabled
+#APP1TEST = disabled
 
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+.INCLUDE: target.mk
 
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-SHL1RPATH = NONE
-# auto generated Target:Pipe
-# END ------------------------------------------------------------------
+.ENDIF
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
-.END

@@ -44,7 +44,7 @@ import java.util.Vector;
  * installation.
  * Note, that Java 1.3.1 and Java 1.4 don't support environment variables
  * (System.getenv() throws java.lang.Error) and therefore setting the UNO_PATH
- * enviroment variable won't work with those Java versions.
+ * environment variable won't work with those Java versions.
  * If no UNO installation is specified by the user, the default installation
  * on the system will be returned.</p>
  *
@@ -75,7 +75,7 @@ final class InstallationFinder {
      * Gets the path of a UNO installation.
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified or found, or if an error occured
+     *         was specified or found, or if an error occurred
      */
     public static String getPath() {
 
@@ -136,7 +136,7 @@ final class InstallationFinder {
      * java -D<property name>=<installation path> -jar application.jar.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified in the Java system property or if an error occured
+     *         was specified in the Java system property or if an error occurred
      */
     private static String getPathFromProperty( String prop ) {
 
@@ -160,7 +160,7 @@ final class InstallationFinder {
      * Java versions.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified in the environment variable or if an error occured
+     *         was specified in the environment variable or if an error occurred
      */
     private static String getPathFromEnvVar( String var ) {
 
@@ -184,7 +184,7 @@ final class InstallationFinder {
      * <p>This method is called on the Windows platform only.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromWindowsRegistry() {
 
@@ -238,7 +238,7 @@ final class InstallationFinder {
      * Java versions.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromPathEnvVar() {
 
@@ -297,7 +297,7 @@ final class InstallationFinder {
      * is in one of the directories listed in the PATH environment variable.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromWhich() {
 
@@ -323,7 +323,7 @@ final class InstallationFinder {
             return null;
         }
 
-        // empty standard error stream in a seperate thread
+        // empty standard error stream in a separate thread
         StreamGobbler gobbler = new StreamGobbler( proc.getErrorStream() );
         gobbler.start();
 
@@ -393,7 +393,7 @@ final class InstallationFinder {
      * OOo 2.0.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromSVersionFile() {
 

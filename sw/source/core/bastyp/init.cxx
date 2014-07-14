@@ -65,6 +65,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
+#include <svx/xdef.hxx>
 #include <editeng/swafopt.hxx>
 #include <editeng/svxacorr.hxx>
 #include <unotools/charclass.hxx>
@@ -181,6 +182,10 @@ sal_uInt16 __FAR_DATA aTxtNodeSetRange[] = {
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
     // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+
+    //UUUU FillAttribute support (paragraph FillStyle)
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
     0
 };
 
@@ -235,7 +240,7 @@ sal_uInt16 __FAR_DATA aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
-    //UUUU FillAttribute support
+    //UUUU FillAttribute support (TextFrame, OLE, Writer GraphicObject)
     XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
     0

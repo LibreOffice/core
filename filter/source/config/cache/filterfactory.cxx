@@ -135,7 +135,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
-            check if the given filter name realy exist ...
+            check if the given filter name really exists ...
             Because our old implementation worked with an internal
             type name instead of a filter name. For a small migration time
             we must simulate this old feature :-( */
@@ -208,9 +208,9 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
     throw(css::uno::RuntimeException)
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
-                  which can be created as UNO Services realy. Thats why we search for filters,
+                  which can be created as UNO Services really. Thats why we search for filters,
                   which dont have a valid value for the property "FilterService".
-                  Of course we cant check for corrupted service names here. We can check
+                  Of course we can't check for corrupted service names here. We can check
                   for empty strings only ...
     */
     CacheItem lIProps;
@@ -415,9 +415,9 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
                 CacheItem::const_iterator pProp   ;
 
-            // "matchByDocumentService="                    => any filter will be adressed here
-            // "matchByDocumentService=all"                 => any filter will be adressed here
-            // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
+            // "matchByDocumentService="                    => any filter will be addressed here
+            // "matchByDocumentService=all"                 => any filter will be addressed here
+            // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be addressed
             ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
             if (
                 ( sDocumentService.getLength()                 ) &&
@@ -430,8 +430,8 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
             // "iflags="        => not allowed
             // "iflags=-1"      => not allowed
-            // "iflags=0"       => not usefull
-            // "iflags=283648"  => only filter, which has set these flag field will be adressed
+            // "iflags=0"       => not useful
+            // "iflags=283648"  => only filter, which has set these flag field will be addressed
             sal_Int32 nCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, (sal_Int32)0);
             if (
                 (nIFlags > 0                       ) &&
@@ -443,8 +443,8 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
             // "eflags="        => not allowed
             // "eflags=-1"      => not allowed
-            // "eflags=0"       => not usefull
-            // "eflags=283648"  => only filter, which has not set these flag field will be adressed
+            // "eflags=0"       => not useful
+            // "eflags=283648"  => only filter, which has not set these flag field will be addressed
             if (
                 (nEFlags > 0                       ) &&
                 ((nCheckValue & nEFlags) == nEFlags)
@@ -674,7 +674,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
         xUISortConfig->getByName(sModule) >>= xModule;
         if (xModule.is()) // only to be on the safe side of life if the exception was not thrown .-)
         {
-            // Note: convertion of the returned Any to OUStringList throws
+            // Note: conversion of the returned Any to OUStringList throws
             // an IllegalArgumentException if the type does not match ...
             // but it resets the OUStringList to a length of 0 if the Any is empty!
             OUStringList lSortedFilters(xModule->getByName(PROPNAME_SORTEDFILTERLIST));

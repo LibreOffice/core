@@ -97,7 +97,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     ReadGuard aReadLock(m_aLock);
 
     // a) first search an interceptor, which match to this URL by it's URL pattern registration
-    //    Note: if it return NULL - it does not mean an empty interceptor list automaticly!
+    //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
     css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
     InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);
     if (pIt != m_lInterceptionRegs.end())
@@ -107,7 +107,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     //    Use first interceptor everytimes.
     //    Note: it doesn't matter, which direction this helper implementation use to ask interceptor objects.
     //    Using of member m_aInterceptorList will starts at the beginning everytimes.
-    //    It depends from the filling operation, in which direction it works realy!
+    //    It depends from the filling operation, in which direction it works really!
     if (!xInterceptor.is() && m_lInterceptionRegs.size()>0)
     {
         pIt          = m_lInterceptionRegs.begin();
@@ -300,7 +300,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
     // We need a full copy of all currently registered interceptor objects.
-    // Otherwhise we cant iterate over this vector without the risk, that our iterator will be invalid.
+    // Otherwise we can't iterate over this vector without the risk, that our iterator will be invalid.
     // Because this vetor will be influenced by every deregistered interceptor.
     InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
 

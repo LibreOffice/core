@@ -216,7 +216,7 @@ bool LanguageSelection::prepareLanguage()
         try
         {
             // prepare default config provider by localizing it to the selected locale
-            // this will ensure localized configuration settings to be selected accoring to the
+            // this will ensure localized configuration settings to be selected according to the
             // UI language.
             Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
             // flush any data already written to the configuration (which

@@ -312,7 +312,7 @@ namespace
                     bError = sal_True;
             }
         }
-        // check if error occured
+        // check if error occurred
         if ( bError )
             eErrorCode = eIllegalJoin;
 
@@ -2912,7 +2912,7 @@ sal_Bool OQueryDesignView::checkStatement()
 {
     sal_Bool bRet = sal_True;
     if ( m_pSelectionBox )
-        bRet = m_pSelectionBox->Save(); // a error occured so we return no
+        bRet = m_pSelectionBox->Save(); // a error occurred so we return no
     return bRet;
 }
 //-------------------------------------------------------------------------------
@@ -3201,7 +3201,7 @@ void OQueryDesignView::GetFocus()
     OQueryView::GetFocus();
     if ( m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus() )
     {
-        // first we have to deactivate the current cell to refill when nescessary
+        // first we have to deactivate the current cell to refill when necessary
         m_pSelectionBox->DeactivateCell();
         m_pSelectionBox->ActivateCell(m_pSelectionBox->GetCurRow(), m_pSelectionBox->GetCurColumnId());
         m_pSelectionBox->GrabFocus();
@@ -3278,7 +3278,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
                                         ,const ::rtl::OUString& sFunctionTerm
                                         ,OTableFieldDescRef& aInfo)
 {
-    // get the type out of the funtion name
+    // get the type out of the function name
     OQueryController& rController = static_cast<OQueryController&>(getController());
     sal_Int32 nDataType = DataType::DOUBLE;
     ::rtl::OUString sFieldName = sFunctionTerm;

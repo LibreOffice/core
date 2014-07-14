@@ -60,7 +60,7 @@ static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID, sal_Bool bHighContr
         case RID_FORMAT_CAT         : nRes = RID_IL_FORMAT; break;
         case RID_MISC_CAT           : nRes = RID_IL_MISC; break;
         default :
-            DBG_ERROR( "unkown category" );
+            DBG_ERROR( "unknown category" );
     }
     if (nRes != 0xFFFF && bHighContrast)
         ++nRes;     //! the resource ID for the high contrast image list is just +1 compared to the regular ones
@@ -116,7 +116,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
             if (nResId != RID_IL_CATALOG  &&  nResId != RID_ILH_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
-                DBG_ERROR( "unkown category" );
+                DBG_ERROR( "unknown category" );
 #endif
             }
     }
@@ -341,7 +341,7 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     pToolBoxCmd->Hide();
 
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-    DBG_ASSERT( nIdx >= 0, "unkown category" );
+    DBG_ASSERT( nIdx >= 0, "unknown category" );
     if (nIdx >= 0)
         pToolBoxCmd = vToolBoxCategories[nIdx];
 

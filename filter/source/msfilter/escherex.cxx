@@ -2598,7 +2598,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
         if ( pAny )
             *pAny >>= sEquationSource;
         sal_Int32 nEquationSourceCount = sEquationSource.getLength();
-        if ( nEquationSourceCount )
+        if ( nEquationSourceCount && (nEquationSourceCount <= 128) )
         {
             sal_Int32 i;
             for ( i = 0; i < nEquationSourceCount; i++ )
@@ -2644,7 +2644,18 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                     if ( aIter->nOperation & nMask )
                     {
                         aIter->nOperation ^= nMask;
-                        aIter->nPara[ i ] = rEquationOrder[ aIter->nPara[ i ] & 0x3ff ] | 0x400;
+                        const sal_Int32 nIndex(aIter->nPara[ i ] & 0x3ff);
+
+                        // #124661# check index access, there are cases where this is out of bound leading
+                        // to errors up to crashes when executed
+                        if(nIndex < rEquationOrder.size())
+                        {
+                            aIter->nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
+                        }
+                        else
+                        {
+                            OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
+                        }
                     }
                     nMask <<= 1;
                 }

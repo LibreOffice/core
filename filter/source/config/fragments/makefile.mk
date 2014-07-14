@@ -156,7 +156,7 @@ PACKLANG_PARAM := --stringparam
 PACKLANG_XSL :=
 
 # -----------------------------------------------------------------------------
-# build every module seperated
+# build every module separated
 # -----------------------------------------------------------------------------
 
 $(REALFILTERPACKAGES_TYPES_FLAG) : $$(TYPES_4$$(@:b))

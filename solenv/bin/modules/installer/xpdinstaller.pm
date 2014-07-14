@@ -441,8 +441,8 @@ sub get_forceintoupdate_value
 }
 
 ###################################################
-# Substituting all occurences of "<" by "&lt;"
-# and all occurences of ">" by "&gt;"
+# Substituting all occurrences of "<" by "&lt;"
+# and all occurrences of ">" by "&gt;"
 ###################################################
 
 sub replace_brackets_in_string
@@ -456,7 +456,7 @@ sub replace_brackets_in_string
 }
 
 ###################################################
-# Substituting all occurences of "\uUXYZ" by
+# Substituting all occurrences of "\uUXYZ" by
 # "&#xUXYZ;", because the use xml saxparser does
 # not know anything about this encoding. Therfore
 # the xml file can keep standard encoding "UTF-8"

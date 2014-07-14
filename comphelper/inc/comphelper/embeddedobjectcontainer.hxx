@@ -101,7 +101,7 @@ public:
                         CreateEmbeddedObject( const com::sun::star::uno::Sequence < sal_Int8 >&,
                         const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, ::rtl::OUString& );
 
-    // insert an embedded object into the container - objects persistant representation will be added to the storage
+    // insert an embedded object into the container - objects persistent representation will be added to the storage
     sal_Bool            InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
 
     // load an embedded object from a MediaDescriptor and insert it into the container
@@ -175,7 +175,7 @@ sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference
     *
     * \param _xStorage The storeage where to store the objects.
     * \param _bClearModifedFlag If <TRUE/> then the modifed flag will be set to <FALSE/> otherwise nothing happen.
-    * \return <FALSE/> if no error occured, otherwise <TRUE/>.
+    * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
     */
     sal_Bool             SetPersistentEntries(const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
 };

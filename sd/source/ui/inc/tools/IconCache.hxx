@@ -33,7 +33,7 @@ namespace sd {
     use the icons do not have to store them in every one of their
     instances.
 
-    Icons are adressed over their resource id and are loaded on demand.
+    Icons are addressed over their resource id and are loaded on demand.
 
     This cache acts like a singleton with a lifetime equal to that of the sd
     module.
@@ -50,7 +50,7 @@ public:
     /** Return the icon with the given resource id.
         @return
             The returned Image may be empty when there is no icon for the
-            given id or an error occured.  Should not happen under normal
+            given id or an error occurred.  Should not happen under normal
             circumstances.
     */
     Image GetIcon (sal_uInt16 nResourceId);

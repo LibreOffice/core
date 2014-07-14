@@ -840,8 +840,11 @@ void SvxAreaTabPage::Construct()
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16 _nPos = 0;
-    sal_uInt16 nCount;
+    //UUUU use evtl. previously selected entry to avoid changing values just by
+    // switching TabPages in dialogs using this TabPage
+    sal_uInt16 _nPos(nPos);
+    sal_uInt16 nCount(0);
+
     //add CHINA001 Begin
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE );
     SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS );
@@ -2755,6 +2758,7 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE );
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE );
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS );
+
 
     //UUUU
     SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT );

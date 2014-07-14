@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
@@ -74,9 +72,9 @@
 #include <svx/svdetc.hxx>
 #include <switerator.hxx>
 #include <algorithm>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
 {
@@ -1214,7 +1212,7 @@ void SwDrawContact::HandleChanged(
     SdrHintKind eHint)
 {
     // OD 2004-06-01 #i26791# - no event handling, if existing <ViewShell>
-    // is in contruction
+    // is in construction
     SwDoc* pDoc = GetFmt()->GetDoc();
     if ( pDoc->GetCurrentViewShell() &&
          pDoc->GetCurrentViewShell()->IsInConstructor() )

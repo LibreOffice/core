@@ -613,7 +613,7 @@ void SdrObjList::InsertObjectIntoContainer(SdrObject& rObject, const sal_uInt32 
     else
     {
         maList.insert(maList.begin()+nInsertPosition, &rObject);
-        EnsureValidNavigationPositions();
+        EnsureValidNavigationPositions(nInsertPosition);
     }
 }
 

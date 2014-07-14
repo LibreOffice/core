@@ -489,7 +489,7 @@ import java.util.Vector;public class LinuxHelper {
         // all packages, whose "real" package name is not defined in xpd files (for example
         // "openoffice-core01-2.0.3-159.rpm" hat the "real" name "openoffice-core01" that is
         // used for deinstallation) this can be read in this file. Otherwise it would be
-        // neccessary to determine the "real" name with a database question.
+        // necessary to determine the "real" name with a database question.
         // The version and release that are also stored in file "packageNames" must not be
         // used for deinstallation because they are probably not up to date.
 

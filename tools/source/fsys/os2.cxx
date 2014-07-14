@@ -109,7 +109,7 @@ int ApiRet2ToSolarError_Impl( int nApiRet )
         case ERROR_FILENAME_EXCED_RANGE:    return ERRCODE_IO_NAMETOOLONG;
     }
 
-    DBG_TRACE1( "FSys: unknown apiret error %d occured", nApiRet );
+    DBG_TRACE1( "FSys: unknown apiret error %d occurred", nApiRet );
     return FSYS_ERR_UNKNOWN;
 }
 
@@ -709,7 +709,7 @@ const char* TempDirImpl( char *pBuf )
 #if 0
 void CreateCaseMapImpl()
 {
-    // build a string starting with code 0 as first character upto 255
+    // build a string starting with code 0 as first character up to 255
     char sTemp[256];
     USHORT n;
 
@@ -722,7 +722,7 @@ void CreateCaseMapImpl()
     aCountry.codepage = NLS_CODEPAGE;     /* Code page */
     DosMapCase( 255, &aCountry, sTemp+1 );
 
-    // fill a global buffer starting with code 0 as first character upto 255
+    // fill a global buffer starting with code 0 as first character up to 255
     for ( n = 0; n < 256; ++n )
         sCaseMap[n] = (char) n;
 
@@ -730,7 +730,7 @@ void CreateCaseMapImpl()
     for ( n = 255; n > 0; --n )
         // was this character converted?
         if ( sTemp[n] != (char) n )
-            // we found a convertion from upper to lower
+            // we found a conversion from upper to lower
             sCaseMap[ (unsigned char) sTemp[n] ] = (char) n;
 
     bCaseMap = TRUE;

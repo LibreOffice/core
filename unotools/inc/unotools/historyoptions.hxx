@@ -41,7 +41,7 @@
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 
 #define HISTORY_PROPERTYNAME_URL            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"       ))
@@ -67,7 +67,7 @@ enum EHistoryType
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is neccessary. The class which use these mechanism
+                    You can create the container if it is necessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 
@@ -132,13 +132,13 @@ class UNOTOOLS_DLLPUBLIC SvtHistoryOptions: public utl::detail::Options
             @short      set/get max size of specified history
             @descr      Call this methods to get information about max. size of specified list.
                         These value lay down the max count of items in these history. If a new one
-                        is add to it the oldest one is deleted automaticly!
+                        is add to it the oldest one is deleted automatically!
 
             @seealso    -
 
             @param      "eHistory" select right history.
             @param      "nSize" is the new max size of specified list. If new size smaller then the old one
-                        some oldest entries will be destroyed automaticly!
+                        some oldest entries will be destroyed automatically!
             @return     Current max size of specified list.
 
             @onerror    -
@@ -179,7 +179,7 @@ class UNOTOOLS_DLLPUBLIC SvtHistoryOptions: public utl::detail::Options
         /*-****************************************************************************************************//**
             @short      append a new item to specified list
             @descr      You can append items to a list only - removing isn't allowed for a special item!
-                        The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
+                        The oldest entry is deleted automatically if max size arrived or you can call Clear() ...
                         It exist two different overload methods to do this.
                         One for user which have an complete history item and another one for uncompletly data sets!
 

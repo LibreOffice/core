@@ -553,6 +553,15 @@ End
 
 #endif
 
+#if !defined WNT && !defined OS2
+File gid_File_Lib_Mozbootstrap
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = SPECIAL_COMPONENT_LIB_NAME(mozbootstrap.uno);
+    End
+#endif
+
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Desktopbe
@@ -600,14 +609,20 @@ File gid_File_Lib_MacOSXSpell
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
-#if (MACOSX_DEPLOYMENT_TARGET_NUM < 106)
 File gid_File_Lib_avmediaQuickTime
 	TXT_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
-#endif // MACOSX_DEPLOYMENT_TARGET_NUM
+
+File gid_File_Lib_avmediaMacAVF
+	TXT_FILE_BODY;
+	Styles = (PACKED);
+	Name = LIBNAME(avmediaMacAVF);
+	Dir = SCP2_OOO_BIN_DIR;
+End
+
 #endif // MACOSX
 
 #ifdef OS2

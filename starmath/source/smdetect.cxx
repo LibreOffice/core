@@ -326,17 +326,69 @@ SmFilterDetect::~SmFilterDetect()
                     }
                     else
                     {
-                        const sal_uInt16 nSize = 5;
-                        sal_Char aBuffer[nSize+1];
-                        aBuffer[nSize] = 0;
+                        // #124636# detection should not only check for xml, but at least also for
+                        // the math start element and the MathML URL. Additionally take their order
+                        // into account. Also allow the case where the start element has a namespace
+                        // (e.g. <bla:math), but in that case ensure that it is in front of an evtl.
+                        // xmlns:math namespace declaration and thus not part of that
+                        const sal_uInt16 nReadSize(4095);
+                        sal_Char aBuffer[nReadSize+1];
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
-                        if (nBytesRead == nSize)
+                        const sal_uLong nBytesRead(pStrm->Read( aBuffer, nReadSize ));
+
+                        if(nBytesRead > (5 + 1 + 34 + 5)) // xml + '>' + URL + '(<|:)math'
                         {
-                            if (0 == strncmp( "<?xml",aBuffer,nSize))
+                            // end string with null
+                            aBuffer[nBytesRead + 1] = 0;
+
+                            // is it a xml file?
+                            const sal_Char* pXML = strstr(aBuffer, "<?xml");
+                            bool isMathFile(false);
+
+                            if(pXML)
+                            {
+                                // does it have the MathML URL?
+                                const sal_Char* pURL = strstr(aBuffer, "http://www.w3.org/1998/Math/MathML");
+
+                                // URL has to be after XML start
+                                if(pURL && pURL > pXML)
+                                {
+                                    // look if we have a direct math start element
+                                    sal_Char* pMathStart = strstr(aBuffer, "<math");
+
+                                    if(!pMathStart)
+                                    {
+                                        // if not, look if we have a math start element in another namespace
+                                        pMathStart = strstr(aBuffer, ":math");
+
+                                        if(pMathStart)
+                                        {
+                                            // if found, this has to be in front of the evtl. also existing namespace
+                                            // declaration also containing :math to be the start element
+                                            sal_Char* pNamespaceMath = strstr(aBuffer, "xmlns:math");
+
+                                            if(pNamespaceMath && pMathStart > pNamespaceMath)
+                                            {
+                                                // invalid :math found (probably part of the namespace declaration)
+                                                // -> this cannot be the math start element
+                                                pMathStart = 0;
+                                            }
+                                        }
+                                    }
+
+                                    // MathStart has to be before the URL
+                                    if(pMathStart && pMathStart < pURL)
+                                    {
+                                        isMathFile = true;
+                                    }
+                                }
+                            }
+
+                            if(isMathFile)
                             {
                                 static const sal_Char sFltrNm_2[] = MATHML_XML;
                                 static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
+
                                 aFilterName.AssignAscii( sFltrNm_2 );
                                 aTypeName.AssignAscii( sTypeNm_2 );
                             }

@@ -83,7 +83,7 @@ namespace connectivity
             */
             virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
 
-            /** fills a vector with the nescessary names which can be used in combination with the collections.
+            /** fills a vector with the necessary names which can be used in combination with the collections.
                 For each row buildName will be called.
                 @param  _xResult
                     The resultset which should be used to fill the names. Will be disposed after return and set to NULL.

@@ -318,7 +318,7 @@ public:
     */
     ::sd::WindowUpdater* GetWindowUpdater (void) const;
 
-    /** Return the border that is drawn arround the actual document view.
+    /** Return the border that is drawn around the actual document view.
         The border contains typically rulers and scroll bars.
         @param bOuterResize
             When this flag is <true/> then the border is used for an
@@ -420,7 +420,7 @@ public:
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
-        was successfull.
+        was successful.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 

@@ -1,6 +1,6 @@
---- misc/commons-logging-1.1.1-src/build.xml	2007-11-22 00:27:52.000000000 +0100
-+++ misc/build/commons-logging-1.1.1-src/build.xml	2008-06-24 14:23:56.316301736 +0200
-@@ -127,10 +127,10 @@
+--- misc/commons-logging-1.1.3-src/build.xml    2014-03-11 13:13:20.000000000 +0100
++++ misc/build/commons-logging-1.1.3-src/build.xml      2014-03-11 13:13:20.000000000 +0100
+@@ -130,10 +130,10 @@
  <!-- ========== Compiler Defaults ========================================= -->
  
    <!-- Version of java class files to generate. -->

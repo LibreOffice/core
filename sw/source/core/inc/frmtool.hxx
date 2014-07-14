@@ -70,7 +70,7 @@ void MA_FASTCALL DrawGraphic(
     const sal_uInt8 nGrfNum = GRFNUM_NO,
     const sal_Bool bConsiderBackgroundTransparency = sal_False );
 bool MA_FASTCALL DrawFillAttributes(
-    const boost::shared_ptr< FillAttributes >& rFillAttributes,
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRect& rPaintRect,
     OutputDevice& rOut);

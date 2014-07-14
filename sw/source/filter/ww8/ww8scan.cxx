@@ -5001,7 +5001,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 settings its end to the current start, then store the starting
                 position of the current range to clipstart. The pPcd sprms
                 will end as normal (albeit earlier than originally expected),
-                and the existance of a clipstart will force the pPcd iterater
+                and the existence of a clipstart will force the pPcd iterater
                 to reread the current set of sprms instead of advancing to its
                 next set. Then the clipstart will be set as the starting
                 position which will force them to be applied directly after
@@ -5033,7 +5033,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
 {
     /*
     For the case of a piece table we slave the piece table attribute iterator
-    to the piece table and access it through that only. They are two seperate
+    to the piece table and access it through that only. They are two separate
     structures, but act together as one logical one. The attributes only go
     to the next entry when the piece changes
     */
@@ -6457,7 +6457,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 break;
             nMax++;
             nLeft -= nNextSiz;
-            if( nLeft < 1 )     // can we read the given ammount of bytes ?
+            if( nLeft < 1 )     // can we read the given amount of bytes ?
                 break;
             // increase p by nNextSiz Bytes
             p = (WW8_FFN *)( ( (sal_uInt8*)p ) + nNextSiz );
@@ -6626,9 +6626,9 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       footnote *and endnote!!* seperator,continuation seperator, and
       continuation notice entry, the documentation does not mention the
       endnote seperators, the documentation also gets the index numbers
-      backwards when specifiying which bits to test. The bottom six bits
+      backwards when specifying which bits to test. The bottom six bits
       of this value must be tested and skipped over. Each section's
-      grpfIhdt is then tested for the existence of the appropiate headers
+      grpfIhdt is then tested for the existence of the appropriate headers
       and footers, at the end of each section the nIdxOffset must be updated
       to point to the beginning of the next section's group of headers and
       footers in this PLCF, UpdateIndex does that task.
@@ -7461,7 +7461,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                     nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
-                    ASSERT(!this, "Unknown sprm varient");
+                    ASSERT(!this, "Unknown sprm variant");
                     break;
             }
             break;

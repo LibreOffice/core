@@ -57,7 +57,7 @@ namespace framework{
 
 #define PACKAGENAME_PROTOCOLHANDLER                 DECLARE_ASCII("Office.ProtocolHandler"                          )   /// name of our configuration package
 
-#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration pathes
+#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration paths
 #define CFG_ENCODING_OPEN                           DECLARE_ASCII("[\'"                                             )   /// used to start encoding of set names
 #define CFG_ENCODING_CLOSE                          DECLARE_ASCII("\']"                                             )   /// used to finish encoding of set names
 
@@ -116,7 +116,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
                         - another one maps her registered pattern to her uno names to
                           perform search on such data
                     But this lists a static for all instances of this class. So it's possible to
-                    create new objects without opening configuration twice and free memory automaticly
+                    create new objects without opening configuration twice and free memory automatically
                     if last object will gone.
 
     @attention      We implement a singleton concept - so we doesn't need any mutex member here.
@@ -165,7 +165,7 @@ class FWI_DLLPUBLIC HandlerCache
                     We set a data container pointer for filling or reading ... this class use it temp.
                     After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
                     After successfuly calling of write() all values of given data container are flushed to our configuration -
-                    but current implementation doesn't support writeing realy.
+                    but current implementation doesn't support writeing really.
 
     @base           ::utl::ConfigItem
                     base mechanism for configuration access

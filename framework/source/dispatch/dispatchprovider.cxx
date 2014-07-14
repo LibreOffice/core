@@ -100,7 +100,7 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
 
 /**
     @short      standard ctor/dtor
-    @descr      These initialize a new instance of tihs class with needed informations for work.
+    @descr      These initialize a new instance of this class with needed informations for work.
                 We hold a weakreference to our owner frame which start dispatches at us.
                 We can't use a normal reference because he hold a reference of us too ...
                 nobody can die so ...!
@@ -388,7 +388,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             // Don''t use findFrame() here - because it's not possible to find
             // a top lebel frame without knowing his name. And a frame with name
-            // "" can't be realy searched! That's why forward query to any parent
+            // "" can't be really searched! That's why forward query to any parent
             // explicitly.
             css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFrame->getCreator(), css::uno::UNO_QUERY );
             if (xProvider.is())
@@ -428,7 +428,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
-            // SELF => we must adress the parent directly... and not his parent or any other parent!
+            // SELF => we must address the parent directly... and not his parent or any other parent!
             xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     }
 
@@ -509,7 +509,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
         // Not for controller - not for protocol handler
         // It should be a loadable content - may be a file. Check it ...
-        // This check is neccessary to found out, that
+        // This check is necessary to found out, that
         // support for some protocols isn't installed by user. May be
         // "ftp" isn't available. So we suppress creation of our self dispatcher.
         // The result will be clear. He can't handle it - but he would try it.
@@ -606,7 +606,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
         }
         catch(css::uno::Exception&) {}
 
-        // look if initialization is neccessary
+        // look if initialization is necessary
         css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
         if (xInit.is())
         {
@@ -646,7 +646,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 Thats why we implement this method. It return an already existing helper or create a new one otherwise.
 
     @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
-                Please use it only, if you can be shure, that the realy given by the outside calli!
+                Please use it only, if you can be sure, that the really given by the outside calli!
                 Mostly it depends from the parameter eHelper is they are required or not.
 
     @param      eHelper

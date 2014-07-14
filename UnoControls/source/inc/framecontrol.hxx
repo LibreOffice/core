@@ -97,7 +97,7 @@ namespace unocontrols{
 
 class FrameControl  : public UNO3_XCONTROLMODEL
                     , public UNO3_XCONNECTIONPOINTCONTAINER
-                    , public BaseControl                                // This order is neccessary for right initialization of m_aMutex!
+                    , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
                     , public UNO3_OBROADCASTHELPER
                     , public UNO3_OPROPERTYSETHELPER
 {

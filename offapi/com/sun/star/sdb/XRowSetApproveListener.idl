@@ -41,7 +41,7 @@ published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 
     /** is called before a rowset's cursor is moved.
         @param event
-            the event which happend
+            the event which happened
         @returns <TRUE/> when moving is allowed, otherwise <FALSE/>
      */
     boolean approveCursorMove([in]com::sun::star::lang::EventObject event);
@@ -49,7 +49,7 @@ published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 
     /** is called before a row is inserted, updated, or deleted.
         @param event
-            the event which happend
+            the event which happened
         @returns <TRUE/> when changing is allowed, otherwise <FALSE/>
      */
     boolean approveRowChange([in]RowChangeEvent event);
@@ -58,7 +58,7 @@ published interface XRowSetApproveListener: com::sun::star::lang::XEventListener
     /** is called before a rowset is changed, or in other words
         before a rowset is reexecuted.
         @param event
-            the event which happend
+            the event which happened
         @returns <TRUE/> when changing is allowed, otherwise <FALSE/>
     */
     boolean approveRowSetChange([in]com::sun::star::lang::EventObject event);

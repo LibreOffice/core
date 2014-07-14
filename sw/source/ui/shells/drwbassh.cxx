@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <tools/shl.hxx>
 #include <hintids.hxx>
@@ -57,7 +54,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-
 #include <shells.hrc>
 #define SwDrawBaseShell
 #include <sfx2/msg.hxx>
@@ -70,9 +66,9 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/fmmodel.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -647,7 +643,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     else
     {
         nRet = 1;
-        SdrModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
+        SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
         // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
         // consider also drawing objects inside group objects
 //        SdrPage* pPage = pModel->GetPage(0);

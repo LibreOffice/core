@@ -29,7 +29,7 @@
 #include <svx/svdobj.hxx>
 
 class SdrPageGridFrameList;
-class SwDrawDocument;
+class SwDrawModel;
 class SwDoc;
 
 class SwDPage : public FmFormPage
@@ -46,7 +46,7 @@ public:
     /// create a copy, evtl. with a different target model (if given)
     virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
 
-    SwDPage(SwDrawDocument& rNewModel, bool bMasterPage = false);
+    SwDPage(SwDrawModel& rNewModel, bool bMasterPage = false);
     ~SwDPage();
 
     virtual SdrObject* ReplaceObjectInSdrObjList( SdrObject& rNewObj, sal_uInt32 nObjNum );

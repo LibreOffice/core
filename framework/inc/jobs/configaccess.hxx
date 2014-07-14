@@ -80,7 +80,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
 
         /**
             reference to the uno service manager
-            It's neccessary to instanciate own needed services.
+            It's necessary to instanciate own needed services.
          */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 

@@ -194,7 +194,7 @@ namespace dbaui
             @param  eObjType
                 The type to ask for
             @param  _nPosition
-                The position of a tablecell (index position), header bar  colum/row cell
+                The position of a tablecell (index position), header bar  column/row cell
             @return
                 The name of the specified object.
         */
@@ -267,11 +267,11 @@ namespace dbaui
             @param  _sFieldName
                 The field name inserted by the user.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
-                <TRUE/> if an error occured otherwise <FALSE/>
+                <TRUE/> if an error occurred otherwise <FALSE/>
         */
         sal_Bool        saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction);
 
@@ -291,11 +291,11 @@ namespace dbaui
             @param  _xMetaData
                 Use to parse the node to a string.
             @param  _pEntry
-                The entry which will contain the nescessary entries.
+                The entry which will contain the necessary entries.
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
-                <TRUE/> if an error occured otherwise <FALSE/>
+                <TRUE/> if an error occurred otherwise <FALSE/>
         */
         sal_Bool        fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,

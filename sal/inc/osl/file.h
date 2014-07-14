@@ -57,7 +57,7 @@ contain only ASCII characters<p>
 case preserving or not. The operating system implementation itself should
 determine if it can map case-insensitive paths. The case correct notation of
 a filename or file path is part of the "File Info". This case correct name
-can be used as a unique key if neccessary.<p>
+can be used as a unique key if necessary.<p>
 
 4. Obtaining information about files or volumes is controlled by a
 bitmask which specifies which fields are of interest. Due to performance
@@ -336,7 +336,7 @@ typedef enum {
 #define osl_File_Attribute_OthRead              0x00001000
 #define osl_File_Attribute_OthExe               0x00002000
 
-/* Flags specifying which fields to retreive by osl_getFileStatus */
+/* Flags specifying which fields to retrieve by osl_getFileStatus */
 
 #define osl_FileStatus_Mask_Type                0x00000001
 #define osl_FileStatus_Mask_Attributes          0x00000002
@@ -557,7 +557,7 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 #define osl_Volume_Attribute_Case_Is_Preserved     0x00000040L
 #define osl_Volume_Attribute_Case_Sensitive        0x00000080L
 
-/* Flags specifying which fields to retreive by osl_getVolumeInfo */
+/* Flags specifying which fields to retrieve by osl_getVolumeInfo */
 
 #define osl_VolumeInfo_Mask_Attributes             0x00000001L
 #define osl_VolumeInfo_Mask_TotalSpace             0x00000002L
@@ -584,7 +584,7 @@ struct _oslVolumeInfo {
     sal_uInt32      uValidFields;
 /** Attributes of the volume (remote and/or removable) */
     sal_uInt32      uAttributes;
-/** Total availiable space on the volume for the current process/user */
+/** Total available space on the volume for the current process/user */
     sal_uInt64      uTotalSpace;
 /** Used space on the volume for the current process/user */
     sal_uInt64      uUsedSpace;

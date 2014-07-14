@@ -28,8 +28,9 @@
 #include <stdio.h> // C99 snprintf not necessarily in <cstdio>
 #include <string.h> // wntmsci10 does not know <cstring> std::strcmp
 
-#include "testshl/simpleheader.hxx"
 #include "sal/types.h"
+
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -39,20 +40,11 @@ template< typename T > void testPrintf(
     std::size_t const bufsize = 1000;
     char buf[bufsize];
     int n = snprintf(buf, bufsize, format, argument);
-    CPPUNIT_ASSERT(n >= 0 && sal::static_int_cast< unsigned int >(n) < bufsize);
-    CPPUNIT_ASSERT(strcmp(buf, result) == 0);
+    ASSERT_TRUE(n >= 0 && sal::static_int_cast< unsigned int >(n) < bufsize);
+    ASSERT_TRUE(strcmp(buf, result) == 0);
 }
 
-class Test: public CppUnit::TestFixture {
-public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-void Test::test() {
+TEST(Sal_Test, Types_Test) {
     testPrintf("-2147483648", "%" SAL_PRIdINT32, SAL_MIN_INT32);
     testPrintf("4294967295", "%" SAL_PRIuUINT32, SAL_MAX_UINT32);
     testPrintf("ffffffff", "%" SAL_PRIxUINT32, SAL_MAX_UINT32);
@@ -70,8 +62,10 @@ void Test::test() {
     testPrintf("ABC", "%" SAL_PRIXUINTPTR, static_cast< sal_uIntPtr >(0xabc));
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
-
 }
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

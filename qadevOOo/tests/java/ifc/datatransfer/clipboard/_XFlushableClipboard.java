@@ -42,7 +42,7 @@ public class _XFlushableClipboard extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
     */
     public void _flushClipboard() {
         oObj.flushClipboard();

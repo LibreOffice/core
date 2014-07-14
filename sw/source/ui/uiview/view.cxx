@@ -1682,10 +1682,11 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     //#i76332# if document is to be opened in alive-mode then this has to be regarded while switching from readonly-mode to edit-mode
                     if( !bReadonly )
                     {
-                        SwDrawDocument * pDrawDoc = 0;
-                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->GetDrawModel() ) ) )
+                        SwDrawModel* pDrawModel = 0;
+
+                        if ( 0 != ( pDrawModel = GetDocShell()->GetDoc()->GetDrawModel() ) )
                         {
-                            if( !pDrawDoc->GetOpenInDesignMode() )
+                            if( !pDrawModel->GetOpenInDesignMode() )
                                 break;// don't touch the design mode
                         }
                     }

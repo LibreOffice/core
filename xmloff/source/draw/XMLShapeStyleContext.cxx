@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -46,6 +47,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
@@ -61,7 +63,8 @@ XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    m_bIsNumRuleAlreadyConverted( sal_False )
+    m_bIsNumRuleAlreadyConverted( sal_False ),
+    m_bIsFillStyleAlreadyConverted(false) //UUUU
 {
 }
 
@@ -191,6 +194,20 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 property->mnIndex = -1;
             }
         }
+    }
+
+    //UUUU need to filter out old fill definitions when the new ones are used. The new
+    // ones are used when a FillStyle is defined
+    if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
+    {
+        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+
+        if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
+        {
+            deactivateOldFillStyleDefinitions(getStandardSet());
+        }
+
+        m_bIsFillStyleAlreadyConverted = true;
     }
 
     struct _ContextID_Index_Pair aContextIDs[] =

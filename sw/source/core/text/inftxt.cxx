@@ -464,7 +464,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     const SwScriptInfo& rSI =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    // in some cases, compression is not allowed or surpressed for
+    // in some cases, compression is not allowed or suppressed for
     // performance reasons
     sal_uInt16 nComp =( SW_CJK == GetFont()->GetActual() &&
                     rSI.CountCompChg() &&
@@ -610,7 +610,7 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         SwRect aOrigBackRect;
 
         //UUUU
-        FillAttributesPtr aFillAttributes;
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         /// OD 21.08.2002
         ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
@@ -690,7 +690,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( ! rPor.InFldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
 
-    // in some cases, kana compression is not allowed or surpressed for
+    // in some cases, kana compression is not allowed or suppressed for
     // performance reasons
     sal_uInt16 nComp = 0;
     if ( ! IsMulti() )
@@ -1177,7 +1177,7 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
  *************************************************************************/
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
-    ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
+    ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );

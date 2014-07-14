@@ -184,7 +184,7 @@ class ScriptImpl implements XScript
             throws ScriptFrameworkErrorException,
                 InvocationTargetException
         {
-            // Initialise the out paramters - not used at the moment
+            // Initialise the out parameters - not used at the moment
             aOutParamIndex[0] = new short[0];
             aOutParam[0] = new Object[0];
 

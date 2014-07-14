@@ -64,7 +64,7 @@ namespace framework{
     @short  implements a job executor, which can be triggered from any code
     @descr  It uses the given trigger event to locate any registered job service
             inside the configuration and execute it. Of course it controls the
-            liftime of such jobs too.
+            lifetime of such jobs too.
  */
 class JobExecutor : public  css::lang::XTypeProvider
                   , public  css::lang::XServiceInfo

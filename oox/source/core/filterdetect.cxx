@@ -627,7 +627,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     OUString aFilterName;
     MediaDescriptor aMediaDesc( rMediaDescSeq );
 
-    /*  Check that the user has not choosen to abort detection, e.g. by hitting
+    /*  Check that the user has not chosen to abort detection, e.g. by hitting
         'Cancel' in the password input dialog. This may happen because this
         filter detection is used by different filters. */
     bool bAborted = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false );

@@ -19,22 +19,16 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <UndoAttribute.hxx>
-
 #include <svl/itemiter.hxx>
-
 #include <editeng/tstpitem.hxx>
-
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-
 #include <hintids.hxx>
 #include <fmtflcnt.hxx>
 #include <txtftn.hxx>
@@ -65,6 +59,7 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 // -----------------------------------------------------
 
@@ -202,7 +197,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( !m_pOldSet.get() || !m_pFmt || !IsFmtInDoc( &rContext.GetDoc() ))
         return;
 
-    // --> OD 2004-10-26 #i35443# - If anchor attribute has been successfull
+    // --> OD 2004-10-26 #i35443# - If anchor attribute has been successful
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
@@ -211,7 +206,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         bAnchorAttrRestored = RestoreFlyAnchor(rContext);
         if ( bAnchorAttrRestored )
         {
-            // Anchor attribute successfull restored.
+            // Anchor attribute successful restored.
             // Thus, keep anchor position for redo
             SaveFlyAnchor();
         }

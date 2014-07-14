@@ -86,7 +86,7 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
     /** enables or disables modeless dialogs of the object.
 
         <p>
-        In case contaner whants to show a modal dialog it should disable
+        In case contaner wants to show a modal dialog it should disable
         modeless of embedded object dialogs with this call. Later the same
         call can be used to enable it.
         </p>
@@ -106,7 +106,7 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
     //------------------------------------------------------------------------
-    /** provides accelerator table the container whants to use during inplace
+    /** provides accelerator table the container wants to use during inplace
         editing.
 
         @return

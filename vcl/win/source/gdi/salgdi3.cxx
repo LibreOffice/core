@@ -406,7 +406,7 @@ static Unicode2LangType aLangFromCodeChart[]= {
 // get language matching to the missing char
 LanguageType MapCharToLanguage( sal_UCS4 uChar )
 {
-    // entries marked with default-CJK get replaced with the prefered CJK language
+    // entries marked with default-CJK get replaced with the preferred CJK language
     static bool bFirst = true;
     if( bFirst )
     {
@@ -450,7 +450,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
                 break;
         }
 
-        // change the marked entries to prefered language
+        // change the marked entries to preferred language
         static const int nCount = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart));
         for( int i = 0; i < nCount; ++i )
         {
@@ -547,7 +547,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
 }
 
 // find a fallback font for missing characters
-// TODO: should stylistic matches be searched and prefered?
+// TODO: should stylistic matches be searched and preferred?
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFontSelData, rtl::OUString& rMissingChars ) const
 {
     // guess a locale matching to the missing chars

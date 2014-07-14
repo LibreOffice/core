@@ -286,7 +286,7 @@ sal_uIntPtr GenericInformationList::InsertSorted( GenericInformation *pInfo,
     if ( Count() == 1 ) {
         ByteString sCandidate( *GetObject( 0 ));
         if ( sCandidate.ToUpperAscii() == sKey ) {
-            // key allready exists in list
+            // key already exists in list
             if ( bOverwrite )
                 Replace( pInfo, sal_uIntPtr(0));    // ### Laut NF scheint hier ein Memory Leak zu sein
             return 0;
@@ -306,7 +306,7 @@ sal_uIntPtr GenericInformationList::InsertSorted( GenericInformation *pInfo,
     ByteString sCandidate = ByteString( *GetObject( nActPos ));
 
     if ( sCandidate.ToUpperAscii() == sKey ) {
-        // key allready exists in list
+        // key already exists in list
         if ( bOverwrite )
             Replace( pInfo, nActPos );  // ### Laut NF scheint hier ein Memory Leak zu sein
         return nActPos;

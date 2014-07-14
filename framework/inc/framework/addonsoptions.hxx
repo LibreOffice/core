@@ -41,7 +41,7 @@
 
 /*-************************************************************************************************************//**
     @descr          The method GetAddonsMenu() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 #define ADDONSMENUITEM_STRING_URL                       "URL"
 #define ADDONSMENUITEM_STRING_TITLE                     "Title"
@@ -128,7 +128,7 @@ typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionCont
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is neccessary. The class which use these mechanism
+                    You can create the container if it is necessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 

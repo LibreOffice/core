@@ -1043,7 +1043,7 @@
                         <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
                         <label>DetectSpecialNumbers</label>
                     </info>
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="Language" oor:type="xs:int">
                     <info>

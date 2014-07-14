@@ -246,7 +246,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != NULL)
     {
-        /* ts: on Window 95 systems any user seems to be an adminstrator */
+        /* ts: on Window 95 systems any user seems to be an administrator */
         if (!isWNT())
         {
             return(sal_True);

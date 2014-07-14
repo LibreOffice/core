@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 /*-************************************************************************************************************//**
     @short          ctor
-    @descr          These initialize an instance of a SfxFilterListener class. Created object listen automaticly
+    @descr          These initialize an instance of a SfxFilterListener class. Created object listen automatically
                     on right FilterFactory-Service for all changes and synchronize right SfxFilterContainer with
                     corresponding framework-cache.
                     We use given "sFactory" value to decide which query must be used to fill "pContainer" with new values.

@@ -60,7 +60,7 @@ class Persistent
     virtual             ~Persistent() {}
 
     const Path &        MyPath() const;
-    /// @return all pathes without completing delimiter, even directories.
+    /// @return all paths without completing delimiter, even directories.
     const char *        StrPath() const;
     bool                Exists() const;
 

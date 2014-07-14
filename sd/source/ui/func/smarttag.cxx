@@ -253,7 +253,7 @@ bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
         return false;
     }
 
-    // if a smart tag handle is hit, foreward event to its smart tag
+    // if a smart tag handle is hit, foreword event to its smart tag
     SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
     if(pSmartHdl && pSmartHdl->getTag().is() )
     {
@@ -296,7 +296,7 @@ bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
 
     if( pHdl )
     {
-        // if a smart tag handle is hit, foreward event to its smart tag
+        // if a smart tag handle is hit, foreword event to its smart tag
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
         if(pSmartHdl && pSmartHdl->getTag().is() )
         {
@@ -321,7 +321,7 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
 
         if( pHdl )
         {
-            // if a smart tag handle is hit, foreward event to its smart tag
+            // if a smart tag handle is hit, foreword event to its smart tag
             SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( pHdl );
             if(pSmartHdl && pSmartHdl->getTag().is() )
             {

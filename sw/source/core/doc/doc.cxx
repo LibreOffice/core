@@ -19,15 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
-
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
@@ -57,7 +54,6 @@
 #include <editeng/pbinitem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
-
 #include <swatrset.hxx>
 #include <swmodule.hxx>
 #include <fmtpdsc.hxx>
@@ -115,25 +111,16 @@
 #include <shellres.hxx>
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
-
 #include <wdocsh.hxx>           // SwWebDocShell
 #include <prtopt.hxx>           // SwPrintOptions
-
 #include <vector>
 #include <map>
-
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
-
 #include "switerator.hxx"
-
-/* @@@MAINTAINABILITY-HORROR@@@
-   Probably unwanted dependency on SwDocShell
-*/
-// --> OD 2005-08-29 #125370#
 #include <layouter.hxx>
-// <--
+#include <drawdoc.hxx>
 #include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
@@ -966,38 +953,42 @@ SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
     return pFmt;
 }
 
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
-                            const String& rGrfName,
-                            const String& rFltName,
-                            const Graphic* pGraphic,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
+
+SwFlyFrmFmt* SwDoc::Insert(
+    const SwPaM &rRg,
+    const String& rGrfName,
+    const String& rFltName,
+    const Graphic* pGraphic,
+    const SfxItemSet* pFlyAttrSet,
+    const SfxItemSet* pGrfAttrSet,
+    SwFrmFmt* pFrmFmt )
 {
-    if( !pFrmFmt )
+    if ( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfName, rFltName, pGraphic,
-                            pDfltGrfFmtColl );
-    SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
+        SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+        rGrfName, rFltName, pGraphic,
+        pDfltGrfFmtColl );
+    SwFlyFrmFmt* pSwFlyFrmFmt =
+        _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode, pFlyAttrSet, pGrfAttrSet, pFrmFmt );
     return pSwFlyFrmFmt;
 }
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
+
+
+SwFlyFrmFmt* SwDoc::Insert(
+    const SwPaM &rRg,
+    const GraphicObject& rGrfObj,
+    const SfxItemSet* pFlyAttrSet,
+    const SfxItemSet* pGrfAttrSet,
+    SwFrmFmt* pFrmFmt )
 {
-    if( !pFrmFmt )
+    if ( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfObj, pDfltGrfFmtColl );
+        SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+        rGrfObj, pDfltGrfFmtColl );
     SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
+        pFlyAttrSet, pGrfAttrSet, pFrmFmt );
     return pSwFlyFrmFmt;
 }
 

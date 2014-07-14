@@ -550,7 +550,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             else
             {
                 // Hack, find next +ve width glyph and calculate current
-                // glyph width by substracting the two posituons
+                // glyph width by subtracting the two positions
                 const IcuPosition* pNextPos = pPos+1;
                 for ( int j = i + 1; j <= nRawRunGlyphCount; ++j, ++pNextPos )
                 {

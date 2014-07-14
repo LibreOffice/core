@@ -85,6 +85,8 @@ extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 
 // -----
 
+#if 0 // #i124421# disabled because its use in except.cxx is disabled
+
 // on OSX 64bit the class_type_info classes are specified
 // in http://refspecs.linuxbase.org/cxxabi-1.86.html#rtti but
 // these details are not generally available in a public header
@@ -105,6 +107,8 @@ public:
         : __class_type_info( pRttiName), mpBaseType( pBaseType)
         {}
 };
+
+#endif
 
 //==================================================================================================
 void raiseException(

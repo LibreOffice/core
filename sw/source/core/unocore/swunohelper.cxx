@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -31,9 +29,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HDL_
 #include <com/sun/star/ucb/NameClash.hdl>
-#endif
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,7 +46,12 @@
 #include <swunodef.hxx>
 #include <errhdl.hxx>
 
-namespace SWUnoHelper {
+//UUUU
+#include <svx/xfillit0.hxx>
+#include <svl/itemset.hxx>
+
+namespace SWUnoHelper
+{
 
 sal_Int32 GetEnumAsInt32( const UNO_NMSPC::Any& rVal )
 {
@@ -284,4 +285,34 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
     return bOk;
 }
 
+//UUUU
+bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet)
+{
+    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSet.GetItem(XATTR_FILLSTYLE, false)));
+
+    if(!pXFillStyleItem)
+    {
+        return false;
+    }
+
+    // here different FillStyles can be excluded for export; it will depend on the
+    // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
+    // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
+    // For now, take them all - except XFILL_NONE
+
+    if(XFILL_NONE != pXFillStyleItem->GetValue())
+    {
+        return true;
+    }
+
+    // if(XFILL_SOLID == pXFillStyleItem->GetValue() || XFILL_BITMAP == pXFillStyleItem->GetValue())
+    // {
+    //     return true;
+    // }
+
+    return false;
 }
+
+}
+
+// eof

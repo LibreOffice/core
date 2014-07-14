@@ -190,7 +190,7 @@ typedef enum {
  */
 typedef enum {
     osl_Socket_Ok,          /* successful completion */
-    osl_Socket_Error,       /* error occured, check osl_getLastSocketError() for details */
+    osl_Socket_Error,       /* error occurred, check osl_getLastSocketError() for details */
     osl_Socket_TimedOut,    /* blocking operation timed out */
     osl_Socket_Interrupted, /* blocking operation was interrupted */
     osl_Socket_InProgress,  /* nonblocking operation is in progress */
@@ -545,7 +545,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
     <li><code>osl_Socket_MsgMaxIOVLen</code>
     </ul>
 
-    @return the number of transfered bytes.
+    @return the number of transferred bytes.
 */
 sal_Int32 SAL_CALL osl_sendSocket(oslSocket Socket,
                        const void* pBuffer,
@@ -575,7 +575,7 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket Socket,
     <li><code>osl_Socket_MsgMaxIOVLen</code>
     </ul>
 
-    @return the number of transfered bytes.
+    @return the number of transferred bytes.
 */
 sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
                          oslSocketAddr ReceiverAddr,
@@ -589,7 +589,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
     how long the operation will block if the Socket is not ready.
 
     @return <code>sal_True</code> if read operations (recv, recvFrom, accept) on the Socket
-    will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    will NOT block; <code>sal_False</code> if it would block or if an error occurred.
 
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
@@ -600,7 +600,7 @@ sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket is not ready.
     @return <code>sal_True</code> if send operations (send, sendTo) on the Socket
-    will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    will NOT block; <code>sal_False</code> if it would block or if an error occurred.
 
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout. Otherwise
@@ -612,7 +612,7 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout);
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket has no pending OOB data.
     @return <code>sal_True</code> if OOB-request operations (recv with appropriate flags)
-    on the Socket will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    on the Socket will NOT block; <code>sal_False</code> if it would block or if an error occurred.
 
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
@@ -700,7 +700,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
 
     <li><code>osl_Socket_OptionTcpNoDelay</code><br>
     Disables the Nagle algorithm for send coalescing. (Do not
-    collect data until a packet is full, instead send immediatly.
+    collect data until a packet is full, instead send immediately.
     This increases network traffic but might improve latency-times.)
     1 = disables the algorithm, 0 = keeps it enabled.
     </ul>
@@ -712,7 +712,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
 
     @param BufferSize contains the length of the Buffer.
 
-    @return -1 if an error occured or else the size of the data copied into
+    @return -1 if an error occurred or else the size of the data copied into
     pBuffer.
     @see osl_setSocketOption()
 */
@@ -773,7 +773,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
     <li> osl_Socket_TypeRaw
     <li> osl_Socket_TypeRdm
     <li> osl_Socket_TypeSeqPacket
-    <li> osl_invalid_SocketType, if an error occured
+    <li> osl_invalid_SocketType, if an error occurred
     </ul>
 
 */
@@ -784,10 +784,10 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket);
 */
 void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **strError);
 
-/** returns a constant decribing the last error for the socket system.
-    @return <code>osl_Socket_E_NONE</code> if no error occured,
+/** returns a constant describing the last error for the socket system.
+    @return <code>osl_Socket_E_NONE</code> if no error occurred,
             <code>osl_invalid_SocketError</code> if an unknown (unmapped)
-            error occured, otherwise an enum describing the error.
+            error occurred, otherwise an enum describing the    error.
 */
 oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket);
 

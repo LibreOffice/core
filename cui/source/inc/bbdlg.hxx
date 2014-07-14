@@ -34,17 +34,20 @@
 class SvxBorderBackgroundDlg: public SfxTabDialog
 {
 public:
-    SvxBorderBackgroundDlg( Window *pParent,
-                            const SfxItemSet& rCoreSet,
-                            sal_Bool bEnableSelector = sal_False );
+    SvxBorderBackgroundDlg(Window *pParent,
+        const SfxItemSet& rCoreSet,
+        bool bEnableSelector = false,
+        bool bEnableDrawingLayerFillStyles = false);
 
     ~SvxBorderBackgroundDlg();
 
 protected:
-    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
+    virtual void    PageCreated(sal_uInt16 nPageId,SfxTabPage& rTabPage);
 
 private:
-    sal_Bool    bEnableBackgroundSelector; // fuer Border/Background-Dlg
+    /// bitfield
+    bool        mbEnableBackgroundSelector : 1;         // fuer Border/Background-Dlg
+    bool        mbEnableDrawingLayerFillStyles : 1;     // for full DrawingLayer FillStyles
 };
 
 

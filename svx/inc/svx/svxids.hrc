@@ -1347,9 +1347,10 @@
 
 //UUUU
 #define SID_OFFER_IMPORT                                ( SID_SVX_START + 1119)
+#define SID_DRAWINGLAYER_FILLSTYLES                     ( SID_SVX_START + 1120)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_OFFER_IMPORT + 1)
+#define SID_SVX_FIRSTFREE                               (SID_DRAWINGLAYER_FILLSTYLES + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

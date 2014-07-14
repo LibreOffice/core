@@ -19,12 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
@@ -32,31 +29,33 @@
 #include <sfx2/module.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/graph.hxx>
-
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include "hdft.hrc"
 #include <svl/intitem.hxx>
-
 #define _SVX_HDFT_CXX
-
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
-//CHINA001 #include "bbdlg.hxx"
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "svx/htmlmode.hxx"
-
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/boxitem.hxx>
-
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+//UUUU
+#include <svx/xdef.hxx>
+#include <svx/xenum.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/unobrushitemhelper.hxx>
+#include <sfx2/request.hxx>
+
 // static ----------------------------------------------------------------
 
 // --> OD 2004-06-18 #i19922#
@@ -70,6 +69,11 @@ static const long DEF_DIST_CALC = 250;      // 2,5mm (Calc)
 static sal_uInt16 pRanges[] =
 {
     SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
+
+    //UUUU Support DrawingLayer FillStyles (no real call to below GetRanges()
+    // detected, still do the complete transition)
+    XATTR_FILL_FIRST,        XATTR_FILL_LAST,
+
     SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
     SID_ATTR_BORDER_INNER,   SID_ATTR_BORDER_INNER,
     SID_ATTR_BORDER_SHADOW,  SID_ATTR_BORDER_SHADOW,
@@ -138,9 +142,8 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 // -----------------------------------------------------------------------
 
-SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAttr, sal_uInt16 nSetId ) :
-
-    SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
+SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAttr, sal_uInt16 nSetId )
+:   SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
 
     aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
@@ -158,11 +161,13 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
     aBspWin         ( this, SVX_RES( WN_BSP ) ),
     aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
 
-    nId                         ( nSetId ),
-    pBBSet                      ( NULL ),
-    bDisableQueryBox            ( sal_False ),
-    bEnableBackgroundSelector   ( sal_True )
+    nId             ( nSetId ),
+    pBBSet          ( NULL ),
 
+    // bitfield
+    mbDisableQueryBox(false),
+    mbEnableBackgroundSelector(true),
+    mbEnableDrawingLayerFillStyles(false)
 {
     InitHandler();
     aBspWin.EnableRTL( sal_False );
@@ -205,34 +210,49 @@ SvxHFPage::~SvxHFPage()
 
 sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 {
-    const sal_uInt16        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
-    const sal_uInt16        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
-    const sal_uInt16        nWULSpace   = GetWhich( SID_ATTR_ULSPACE );
-    const sal_uInt16        nWOn        = GetWhich( SID_ATTR_PAGE_ON );
-    const sal_uInt16        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
-    const sal_uInt16        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
-    const sal_uInt16        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
-    const sal_uInt16        nWBrush     = GetWhich( SID_ATTR_BRUSH );
-    const sal_uInt16        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
-    const sal_uInt16        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
-    const sal_uInt16        nWShadow    = GetWhich( SID_ATTR_BORDER_SHADOW );
-    const sal_uInt16        aWhichTab[] = { nWSize,     nWSize,
-                                        nWLRSpace,  nWLRSpace,
-                                        nWULSpace,  nWULSpace,
-                                        nWOn,       nWOn,
-                                        nWDynamic,  nWDynamic,
-                                        nWShared,   nWShared,
-                                        nWBrush,    nWBrush,
-                                        nWBoxInfo,  nWBoxInfo,
-                                        nWBox,      nWBox,
-                                        nWShadow,   nWShadow,
-                                        nWDynSpacing, nWDynSpacing,
-                                        0 };
-    const SfxItemSet&   rOldSet     = GetItemSet();
-    SfxItemPool*        pPool       = rOldSet.GetPool();
-    DBG_ASSERT( pPool, "no pool :-(" );
-    SfxMapUnit          eUnit       = pPool->GetMetric( nWSize );
-    SfxItemSet          aSet        ( *pPool, aWhichTab );
+    const sal_uInt16 nWSize = GetWhich(SID_ATTR_PAGE_SIZE);
+    const sal_uInt16 nWLRSpace = GetWhich(SID_ATTR_LRSPACE);
+    const sal_uInt16 nWULSpace = GetWhich(SID_ATTR_ULSPACE);
+    const sal_uInt16 nWOn = GetWhich(SID_ATTR_PAGE_ON);
+    const sal_uInt16 nWDynamic = GetWhich(SID_ATTR_PAGE_DYNAMIC);
+    const sal_uInt16 nWDynSpacing = GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING);
+    const sal_uInt16 nWShared = GetWhich(SID_ATTR_PAGE_SHARED);
+    const sal_uInt16 nWBrush = GetWhich(SID_ATTR_BRUSH);
+    const sal_uInt16 nWBox = GetWhich(SID_ATTR_BORDER_OUTER);
+    const sal_uInt16 nWBoxInfo = GetWhich(SID_ATTR_BORDER_INNER);
+    const sal_uInt16 nWShadow = GetWhich(SID_ATTR_BORDER_SHADOW);
+
+    const sal_uInt16 aWhichTab[] = {
+        nWSize, nWSize,
+        nWLRSpace, nWLRSpace,
+        nWULSpace, nWULSpace,
+        nWOn, nWOn,
+        nWDynamic, nWDynamic,
+        nWShared, nWShared,
+        nWBrush, nWBrush,
+        nWBoxInfo, nWBoxInfo,
+        nWBox, nWBox,
+        nWShadow, nWShadow,
+        nWDynSpacing, nWDynSpacing,
+
+        //UUUU take over DrawingLayer FillStyles
+        XATTR_FILL_FIRST, XATTR_FILL_LAST,                // [1014
+
+        0, 0};
+
+    const SfxItemSet& rOldSet = GetItemSet();
+    SfxItemPool* pPool = rOldSet.GetPool();
+    DBG_ASSERT(pPool,"no pool :-(");
+    SfxMapUnit eUnit = pPool->GetMetric(nWSize);
+    SfxItemSet aSet(*pPool,aWhichTab);
+
+    if(mbEnableDrawingLayerFillStyles)
+    {
+        //UUUU When using the XATTR_FILLSTYLE DrawingLayer FillStyle definition
+        // extra action has to be done here since the pool default is XFILL_SOLID
+        // instead of XFILL_NONE (to have the default blue fill color at start).
+        aSet.Put(XFillStyleItem(XFILL_NONE));
+    }
 
     //--------------------------------------------------------------------
 
@@ -274,26 +294,47 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aSet.Put( aUL );
 
     // Hintergrund und Umrandung?
-    if ( pBBSet )
-        aSet.Put( *pBBSet );
+    if(pBBSet)
+    {
+        aSet.Put(*pBBSet);
+    }
     else
     {
         const SfxItemSet* _pSet;
         const SfxPoolItem* pItem;
 
-        if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
+        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), sal_False, &pItem))
         {
-            _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
+            _pSet = &(static_cast< const SvxSetItem* >(pItem)->GetItemSet());
 
-            if ( _pSet->GetItemState( nWBrush ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBrushItem&)_pSet->Get( nWBrush ) );
-            if ( _pSet->GetItemState( nWBoxInfo ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBoxInfoItem&)_pSet->Get( nWBoxInfo ) );
-            if ( _pSet->GetItemState( nWBox ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxBoxItem&)_pSet->Get( nWBox ) );
-            if ( _pSet->GetItemState( nWShadow ) == SFX_ITEM_SET )
-                aSet.Put( (const SvxShadowItem&)_pSet->Get( nWShadow ) );
+            if(_pSet->GetItemState(nWBrush) == SFX_ITEM_SET)
+            {
+                aSet.Put(_pSet->Get(nWBrush));
+            }
+
+            if(_pSet->GetItemState(nWBoxInfo) == SFX_ITEM_SET)
+            {
+                aSet.Put(_pSet->Get(nWBoxInfo));
+            }
+
+            if(_pSet->GetItemState(nWBox) == SFX_ITEM_SET)
+            {
+                aSet.Put(_pSet->Get(nWBox));
+            }
+
+            if(_pSet->GetItemState(nWShadow) == SFX_ITEM_SET)
+            {
+                aSet.Put(_pSet->Get(nWShadow));
+            }
+
+            //UUUU take care of [XATTR_XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+            for(sal_uInt16 nFillStyleId(XATTR_FILL_FIRST); nFillStyleId <= XATTR_FILL_LAST; nFillStyleId++)
+            {
+                if(_pSet->GetItemState(nFillStyleId) == SFX_ITEM_SET)
+                {
+                    aSet.Put(_pSet->Get(nFillStyleId));
+                }
+            }
         }
     }
 
@@ -466,7 +507,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     {
         sal_Bool bDelete = sal_True;
 
-        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == sal_True )
+        if ( !mbDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == sal_True )
             bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
 
         if ( bDelete )
@@ -529,80 +570,169 @@ IMPL_LINK_INLINE_END( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 
 IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 {
-    if ( !pBBSet )
+    if(!pBBSet)
     {
         // nur die n"otigen Items f"uer Umrandung und Hintergrund benutzen
-        sal_uInt16 nBrush = GetWhich( SID_ATTR_BRUSH );
-        sal_uInt16 nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
-        sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
-        sal_uInt16 nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
+        const sal_uInt16 nOuter(GetWhich(SID_ATTR_BORDER_OUTER));
+        const sal_uInt16 nInner(GetWhich(SID_ATTR_BORDER_INNER, sal_False));
+        const sal_uInt16 nShadow(GetWhich(SID_ATTR_BORDER_SHADOW));
 
-        // einen leeren Set erzeugenc
-        pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
-                                 nOuter, nOuter, nInner, nInner,
-                                 nShadow, nShadow, 0 );
+        if(mbEnableDrawingLayerFillStyles)
+        {
+            pBBSet = new SfxItemSet(
+                *GetItemSet().GetPool(),
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,  // DrawingLayer FillStyle definitions
+                SID_COLOR_TABLE, SID_BITMAP_LIST,   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+                nOuter, nOuter,
+                nInner, nInner,
+                nShadow, nShadow,
+                0, 0);
+
+            //UUUU copy items for XPropertyList entries from the DrawModel so that
+            // the Area TabPage can access them
+            static const sal_uInt16 nCopyFlags[] = {
+                SID_COLOR_TABLE,
+                SID_GRADIENT_LIST,
+                SID_HATCH_LIST,
+                SID_BITMAP_LIST,
+                0
+            };
+
+            for(sal_uInt16 a(0); nCopyFlags[a]; a++)
+            {
+                const SfxPoolItem* pItem = GetItemSet().GetItem(nCopyFlags[a]);
+
+                if(pItem)
+                {
+                    pBBSet->Put(*pItem);
+                }
+                else
+                {
+                    OSL_ENSURE(false, "XPropertyList missing (!)");
+                }
+            }
+        }
+        else
+        {
+            const sal_uInt16 nBrush(GetWhich(SID_ATTR_BRUSH));
+
+            pBBSet = new SfxItemSet(
+                *GetItemSet().GetPool(),
+                nBrush, nBrush,
+                nOuter, nOuter,
+                nInner, nInner,
+                nShadow, nShadow,
+                0, 0);
+        }
+
         const SfxPoolItem* pItem;
 
-        if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
-            // wenn es schon einen gesetzen Set gibt, dann diesen benutzen
-            pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
+        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), sal_False, &pItem))
+        {
+            // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
+            // SID_ATTR_PAGE_FOOTERSET exists, use it's content
+            pBBSet->Put(((SvxSetItem*)pItem)->GetItemSet());
+        }
+        else
+        {
+            if(mbEnableDrawingLayerFillStyles)
+            {
+                //UUUU The style for header/footer is not yet created, need to reset
+                // XFillStyleItem to XFILL_NONE which is the same as in the style
+                // initialization. This needs to be done since the pool default for
+                // XFillStyleItem is XFILL_SOLID
+                pBBSet->Put(XFillStyleItem(XFILL_NONE));
+            }
+        }
 
-        if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( nInner, sal_False, &pItem ) )
+        if(SFX_ITEM_SET == GetItemSet().GetItemState(nInner, sal_False, &pItem))
+        {
             // das gesetze InfoItem wird immer ben"otigt
-            pBBSet->Put( *pItem );
+            pBBSet->Put(*pItem);
+        }
     }
 
-    //CHINA001 SvxBorderBackgroundDlg* pDlg =
-//CHINA001      new SvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
+        //UUUU
+        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg(
+            this,
+            *pBBSet,
+            mbEnableBackgroundSelector,
+            mbEnableDrawingLayerFillStyles);
+
+        DBG_ASSERT(pDlg,"Dialogdiet fail!");//CHINA001
+        if(RET_OK == pDlg->Execute() && pDlg->GetOutputItemSet())
         {
-            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
+            SfxItemIter aIter(*pDlg->GetOutputItemSet());
             const SfxPoolItem* pItem = aIter.FirstItem();
 
-            while ( pItem )
+            while(pItem)
             {
-                if ( !IsInvalidItem( pItem ) )
-                    pBBSet->Put( *pItem );
+                if(!IsInvalidItem(pItem))
+                {
+                    pBBSet->Put(*pItem);
+                }
+
                 pItem = aIter.NextItem();
             }
 
             //----------------------------------------------------------------
-
-            sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
-
-            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
             {
-                const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
-                if ( nId == SID_ATTR_PAGE_HEADERSET )
-                    aBspWin.SetHdColor( rItem.GetColor() );
+                drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+                if(mbEnableDrawingLayerFillStyles)
+                {
+                    //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
+                }
                 else
-                    aBspWin.SetFtColor( rItem.GetColor() );
+                {
+                    const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                    if(pBBSet->GetItemState(nWhich) == SFX_ITEM_SET)
+                    {
+                        //UUUU create FillAttributes from SvxBrushItem
+                        const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
+                        SfxItemSet aTempSet(*pBBSet->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                        setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                        aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                    }
+                }
+
+                if(SID_ATTR_PAGE_HEADERSET == nId)
+                {
+                    //aBspWin.SetHdColor(rItem.GetColor());
+                    aBspWin.setHeaderFillAttributes(aFillAttributes);
+                }
+                else
+                {
+                    //aBspWin.SetFtColor(rItem.GetColor());
+                    aBspWin.setFooterFillAttributes(aFillAttributes);
+                }
             }
 
             //----------------------------------------------------------------
-
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
             {
-                const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
+                const sal_uInt16 nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-                if ( nId == SID_ATTR_PAGE_HEADERSET )
-                    aBspWin.SetHdBorder( rItem );
-                else
-                    aBspWin.SetFtBorder( rItem );
+                if(pBBSet->GetItemState(nWhich) == SFX_ITEM_SET)
+                {
+                    const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get(nWhich);
+
+                    if(nId == SID_ATTR_PAGE_HEADERSET)
+                        aBspWin.SetHdBorder(rItem);
+                    else
+                        aBspWin.SetFtBorder(rItem);
+                }
             }
 
             UpdateExample();
         }
-    delete pDlg;
+        delete pDlg;
     }
     return 0;
 }
@@ -638,87 +768,122 @@ void SvxHFPage::UpdateExample()
 
 void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
+    sal_uInt16 nWhich(GetWhich(SID_ATTR_PAGE_HEADERSET));
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
     {
-        const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn =
-            (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
-        if ( rOn.GetValue() )
+        if(rOn.GetValue())
         {
-            nWhich = GetWhich( SID_ATTR_BRUSH );
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aHeaderFillAttributes;
 
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            if(mbEnableDrawingLayerFillStyles)
             {
-                const SvxBrushItem& rItem = (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdColor( rItem.GetColor() );
+                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
+            else
+            {
+                nWhich = GetWhich(SID_ATTR_BRUSH);
 
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                {
+                    //UUUU create FillAttributes from SvxBrushItem
+                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                }
+            }
+
+            aBspWin.setHeaderFillAttributes(aHeaderFillAttributes);
+            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
+
+            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
             {
                 const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdBorder( rItem );
+                    (const SvxBoxItem&)rTmpSet.Get(nWhich);
+                aBspWin.SetHdBorder(rItem);
             }
         }
     }
 
-    nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
+    nWhich = GetWhich(SID_ATTR_PAGE_FOOTERSET);
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
     {
-        const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn =
-            (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
-        if ( rOn.GetValue() )
+        if(rOn.GetValue())
         {
-            nWhich = GetWhich( SID_ATTR_BRUSH );
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFooterFillAttributes;
 
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            if(mbEnableDrawingLayerFillStyles)
             {
-                const SvxBrushItem& rItem = (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtColor( rItem.GetColor() );
+                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            else
             {
-                const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtBorder( rItem );
+                nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                {
+                    //UUUU create FillAttributes from SvxBrushItem
+                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                }
+            }
+
+            aBspWin.setFooterFillAttributes(aFooterFillAttributes);
+            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
+
+            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            {
+                const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
+                aBspWin.SetFtBorder(rItem);
             }
         }
     }
-    nWhich = GetWhich( SID_ATTR_BRUSH );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aPageFillAttributes;
+
+    if(mbEnableDrawingLayerFillStyles)
     {
-        const SvxBrushItem& rItem = (const SvxBrushItem&)rSet.Get( nWhich );
-        aBspWin.SetColor( rItem.GetColor() );
-        const Graphic* pGrf = rItem.GetGraphic();
-
-        if ( pGrf )
-        {
-            Bitmap aBitmap = pGrf->GetBitmap();
-            aBspWin.SetBitmap( &aBitmap );
-        }
-        else
-            aBspWin.SetBitmap( NULL );
+        //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+        aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rSet));
     }
-    nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    else
     {
-        const SvxBoxItem& rItem = (const SvxBoxItem&)rSet.Get( nWhich );
-        aBspWin.SetBorder( rItem );
+        nWhich = GetWhich(SID_ATTR_BRUSH);
+
+        if(rSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+        {
+            //UUUU create FillAttributes from SvxBrushItem
+            const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
+            SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+        }
+    }
+
+    aBspWin.setPageFillAttributes(aPageFillAttributes);
+    nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
+
+    if(rSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+    {
+        const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rSet.Get(nWhich));
+        aBspWin.SetBorder(rItem);
     }
 }
 
@@ -973,6 +1138,7 @@ void lcl_Move(Window& rWin, sal_Int32 nDiff)
     aPos.Y() -= nDiff;
     rWin.SetPosPixel(aPos);
 }
+
 void SvxHFPage::EnableDynamicSpacing()
 {
     aDynSpacingCB.Show();
@@ -991,3 +1157,17 @@ void SvxHFPage::EnableDynamicSpacing()
         lcl_Move(*aMoveWindows[nIdx++], nOffset);
 }
 
+void SvxHFPage::PageCreated(SfxAllItemSet aSet)
+{
+    //UUUU
+    SFX_ITEMSET_ARG (&aSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES);
+
+    if(pSupportDrawingLayerFillStyleItem)
+    {
+        const bool bNew(pSupportDrawingLayerFillStyleItem->GetValue());
+
+        EnableDrawingLayerFillStyles(bNew);
+    }
+}
+
+//eof

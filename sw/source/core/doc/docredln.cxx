@@ -3273,16 +3273,23 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
         nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (sal_uInt16)nTmp;
     }
 
-    SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
     SwNodes& rNds = GetDoc()->GetNodes();
-    SwNode* pNd;
-    for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
-        if( ND_TEXTNODE == ( pNd = rNds[ n ] )->GetNodeType() )
+
+    for(sal_uLong n(nSttNd); n <= nEndNd; ++n)
+    {
+        SwNode* pNode = rNds[n];
+
+        if(pNode && ND_TEXTNODE == pNode->GetNodeType())
         {
-            aHt.nStart = n == nSttNd ? nSttCnt : 0;
-            aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
-            ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
+            SwTxtNode* pNd = static_cast< SwTxtNode* >(pNode);
+            SwUpdateAttr aHt(
+                n == nSttNd ? nSttCnt : 0,
+                n == nEndNd ? nEndCnt : pNd->GetTxt().Len(),
+                RES_FMT_CHG);
+
+            pNd->ModifyNotification(&aHt, &aHt);
         }
+    }
 }
 
 /*************************************************************************

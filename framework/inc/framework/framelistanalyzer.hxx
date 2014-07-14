@@ -46,7 +46,7 @@ namespace framework{
 /** analyze and split the current available frame list of a given frames supplier
     into different parts.
 
-    These analyzed informations can be used e.g. to decide if it's neccessary
+    These analyzed informations can be used e.g. to decide if it's necessary
     to switch into the backing mode, close the current active frame only or
     exit the whole application explicitly or implicitly.
  */
@@ -93,13 +93,13 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lModelFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
-            Filling of it can't be supressed by m_eDetectMode.
+            Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are visible ones. */
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherVisibleFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
-            Filling of it can't be supressed by m_eDetectMode.
+            Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are hidden ones. */
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > > m_lOtherHiddenFrames;

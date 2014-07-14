@@ -343,7 +343,7 @@ protected:
     void SetStreamSocket( vos::OStreamSocket* pSocket );
 
     SvStream *pReceiveStream;
-    sal_Bool DoReceiveDataStream();             /// Recieve DataPacket from Socket
+    sal_Bool DoReceiveDataStream();             /// Receive DataPacket from Socket
     virtual sal_Bool SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
     void SetFinalRecieveTimeout();
     sal_Bool bIsRequestShutdownPending;

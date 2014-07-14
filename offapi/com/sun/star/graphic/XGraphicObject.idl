@@ -32,7 +32,7 @@ interface XGraphic;
 /** <code>XGraphicObject</code> objects represent in-memory image and graphic
     objects.
 
-    <p>Such objects are accessable using GraphicObject scheme urls like
+    <p>Such objects are accessible using GraphicObject scheme urls like
     <ul>
         <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li>
     </ul>

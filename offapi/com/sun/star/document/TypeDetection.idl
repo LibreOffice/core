@@ -47,9 +47,9 @@ module com { module sun { module star { module document {
 /** capsulate a type detection service and provide read/write access on it's configuration data.
 
     <p>
-    It's possible to make a "flat" detection wich may use internal configuration
+    It's possible to make a "flat" detection which may use internal configuration
     data only - or a "deep" detection which use special <type>ExtendedTypeDetection</type>
-    services to look into the document stream. Last mode can be supressed to perform the operation.
+    services to look into the document stream. Last mode can be suppressed to perform the operation.
     Of course the results can't be guaranteed then. (e.g. in case the extension was changed)
     </p>
  */
@@ -136,7 +136,7 @@ published service TypeDetection
                 <td>It contains a list of file extensions, which match this type.
                     They must be specified as pure extension, without any special signs.
                     E.g.: "doc", "html" ... but not ".doc".
-                    Using of wildcards is allowed but not very usefull. The may resulting
+                    Using of wildcards is allowed but not very useful. The may resulting
                     ambigities with other type registrations can't be resolved anytimes.</td>
             </tr>
             <tr>
@@ -149,7 +149,7 @@ published service TypeDetection
 
         <p>
         Note:<br>
-        All elements of this container will be adressed by his internal name,
+        All elements of this container will be addressed by his internal name,
         and it must be an unambigous value.
         </p>
      */
@@ -175,8 +175,8 @@ published service TypeDetection
 
         <p>
         Because the complexness of such configuration set can be very high,
-        it seams not very usefull to update the undelying configuration layer
-        on every container change request immediatly. Another strategy can be to
+        it does not seem very useful to update the underlying configuration layer
+        on every container change request immediately. Another strategy can be to
         make all changes (adding/changing/removing of items) and call flush at the end.
         That will validate the whole container and reject inconsistent data sets.
         Only in case all made changes was correct, they will be written back to the

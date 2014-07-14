@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include "hintids.hxx"
 #include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
@@ -86,9 +85,9 @@
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/fmmodel.hxx>
 #include "switerator.hxx"
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 /*************************************************************************
 |*
@@ -101,10 +100,7 @@ using namespace ::com::sun::star;
 
 SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFmt, pSib ),
-    // OD 2004-03-22 #i26791#
     SwAnchoredObject(),
-    // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
-//    aRelPos(),
     pPrevLink( 0 ),
     pNextLink( 0 ),
     bInCnt( sal_False ),
@@ -117,20 +113,15 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     nType = FRMC_FLY;
 
     bInvalid = bNotifyBack = sal_True;
-    bLocked  = bMinHeight =
-    bHeightClipped = bWidthClipped = bFormatHeightOnly = sal_False;
+    bLocked = bMinHeight = bHeightClipped = bWidthClipped = bFormatHeightOnly = sal_False;
 
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
-    sal_Bool bVert = sal_False;
-    sal_uInt16 nDir =
-        ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
+    sal_uInt16 nDir = ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
         bDerivedVert = 1;
         bDerivedR2L = 1;
-        if( pAnch && pAnch->IsVertical() )
-            bVert = sal_True;
     }
     else
     {
@@ -163,7 +154,6 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
             }
         }
 
-        bVert = bVertical;
         bInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
             bRightToLeft = 1;
@@ -180,25 +170,20 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     else if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         bFixSize = sal_True;
 
-    // OD 2004-02-12 #110582#-2 - insert columns, if necessary
+    // insert columns, if necessary
     InsertColumns();
 
-    //Erst das Init, dann den Inhalt, denn zum Inhalt koennen  widerum
-    //Objekte/Rahmen gehoeren die dann angemeldet werden.
+    // initialize before inserting content as the content might contain other objects which need to be registered
     InitDrawObj( sal_False );
 
-    // OD 2004-01-19 #110582#
     Chain( pAnch );
 
-    // OD 2004-01-19 #110582#
     InsertCnt();
 
-    //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
-    //unnoetig viel formatiert wird.
+    // apply dummy position which is far-away in order to avoid needless formattings
     Frm().Pos().X() = Frm().Pos().Y() = WEIT_WECH;
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrm::Chain( SwFrm* _pAnch )
 {
     // Connect to chain neighboors.
@@ -230,7 +215,6 @@ void SwFlyFrm::Chain( SwFrm* _pAnch )
     }
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrm::InsertCnt()
 {
     if ( !GetPrevLink() )
@@ -251,20 +235,17 @@ void SwFlyFrm::InsertCnt()
     }
 }
 
- // OD 2004-02-12 #110582#-2
- void SwFlyFrm::InsertColumns()
- {
-    // --> OD 2009-08-12 #i97379#
+void SwFlyFrm::InsertColumns()
+{
     // Check, if column are allowed.
     // Columns are not allowed for fly frames, which represent graphics or embedded objects.
     const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
     ASSERT( rCntnt.GetCntntIdx(), "<SwFlyFrm::InsertColumns()> - no content prepared." );
-    SwNodeIndex aFirstCntnt( *(rCntnt.GetCntntIdx()), 1 );
+    SwNodeIndex aFirstCntnt( *( rCntnt.GetCntntIdx() ), 1 );
     if ( aFirstCntnt.GetNode().IsNoTxtNode() )
     {
         return;
     }
-    // <--
 
     const SwFmtCol &rCol = GetFmt()->GetCol();
     if ( rCol.GetNumCols() > 1 )
@@ -278,7 +259,7 @@ void SwFlyFrm::InsertCnt()
                              //Old-Wert hereingereicht wird.
         ChgColumns( aOld, rCol );
     }
- }
+}
 
 /*************************************************************************
 |*
@@ -462,8 +443,7 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     if ( !pContact )
     {
         // --> OD 2005-08-08 #i52858# - method name changed
-        pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
-            *pIDDMA->GetOrCreateDrawModel() );
+        pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(), *pIDDMA->GetOrCreateDrawModel() );
         // <--
     }
     ASSERT( pContact, "InitDrawObj failed" );

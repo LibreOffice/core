@@ -1037,7 +1037,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                             bBrokenLine = sal_True;
                         }
                         // Compression in Fields????
-                        // I think this could be a little bit difficult and is not very usefull
+                        // I think this could be a little bit difficult and is not very useful
                         bCompressedChars = sal_False;
                     }
                     break;
@@ -1247,7 +1247,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             sal_Bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
-                // I need the manipulated DXArray for determining the break postion...
+                // I need the manipulated DXArray for determining the break position...
                 ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast<sal_Int32*>(( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) )), 10000, sal_True );
             }
             if( pPortion )
@@ -1285,7 +1285,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         for ( sal_uInt16 nP = pLine->GetStartPortion(); nP <= pLine->GetEndPortion(); nP++ )
         {
             TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nP );
-            // #95819# problem with hard font height attribute, when everthing but the line break has this attribute
+            // #95819# problem with hard font height attribute, when everything but the line break has this attribute
             if ( pTP->GetKind() != PORTIONKIND_LINEBREAK )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
@@ -2093,7 +2093,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
                 pLastPortion->GetSize().Width()++;
 
             // Correct positions in array
-            // Even for kashidas just change positions, VCL will then draw the kashida automaticly
+            // Even for kashidas just change positions, VCL will then draw the kashida automatically
             sal_uInt16 nPortionEnd = nPortionStart + pLastPortion->GetLen();
             for ( sal_uInt16 _n = nChar; _n < nPortionEnd; _n++ )
             {
@@ -3558,7 +3558,74 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     String aText;
                                     aText.Fill( (sal_uInt16)nChars, pTextPortion->GetExtraValue() );
-                                    pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
+
+                                    if(bStripOnly)
+                                    {
+                                        // #71056# when converting to primitives, visualized TAB spaces need to be
+                                        // visualized. Add tab#ed text here. Alternatively a primitive especially
+                                        // representing this space and the single fill character would be possible, too.
+                                        // For now, use what we have (the DrawingText callback)
+                                        const lang::Locale aLocale(GetLocale(EditPaM(pPortion->GetNode(),nIndex + 1)));
+
+                                        // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
+                                        // consequence, but also already set at pOutDev)
+                                        const Color aOverlineColor(pOutDev->GetOverlineColor());
+
+                                        // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
+                                        // consequence, but also already set at pOutDev)
+                                        const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                        // get AllWidth and together with nCharWidth create DXArray using per character
+                                        // difference
+                                        const sal_Int32 nAllWidth(pTextPortion->GetSize().Width());
+                                        const double fSingleCharDiff((double(nAllWidth) / double(nChars)) - double(nCharWidth));
+                                        sal_Int32* pTmpDXArray = 0;
+
+                                        if(fSingleCharDiff > 1.0)
+                                        {
+                                            // if more than one unit per character, create DXArray to create
+                                            // something adequate to StretchText
+                                            const double fAdvance(nCharWidth + fSingleCharDiff);
+                                            const sal_uInt32 nCount(static_cast< sal_uInt32 >(nChars));
+                                            pTmpDXArray = new sal_Int32[nCount];
+                                            double fPos(0.0);
+
+                                            for(sal_uInt32 a(0); a < nCount; a++)
+                                            {
+                                                fPos += fAdvance;
+                                                pTmpDXArray[a] = basegfx::fround(fPos);
+                                            }
+                                        }
+
+                                        // StripPortions() data callback
+                                        GetEditEnginePtr()->DrawingText(
+                                            aTmpPos,
+                                            aText,
+                                            0,
+                                            nChars,
+                                            pTmpDXArray,
+                                            aTmpFont,
+                                            n,
+                                            nIndex,
+                                            pTextPortion->GetRightToLeft(),
+                                            0,
+                                            0,
+                                            false,
+                                            false,
+                                            false, // support for EOL/EOP TEXT comments
+                                            &aLocale,
+                                            aOverlineColor,
+                                            aTextLineColor);
+
+                                        if(pTmpDXArray)
+                                        {
+                                            delete pTmpDXArray;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        pOutDev->DrawStretchText(aTmpPos,pTextPortion->GetSize().Width(),aText);
+                                    }
                                 }
                             }
                             break;
@@ -4447,17 +4514,17 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
 
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
 
-    // We always use the left postion for DrawText()
+    // We always use the left position for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
 
     if ( !bCTL && !bR2L)
     {
-        // No CTL/Bidi checking neccessary
+        // No CTL/Bidi checking necessary
         nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
     }
     else
     {
-        // CTL/Bidi checking neccessary
+        // CTL/Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
         nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
 

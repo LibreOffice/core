@@ -282,7 +282,6 @@ Graphic SwNoTxtNode::GetGraphic() const
     return aRet;
 }
 
-// --> OD 2009-07-14 #i73249#
 void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute

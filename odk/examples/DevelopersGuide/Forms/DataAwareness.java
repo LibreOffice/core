@@ -208,7 +208,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     public void resetted( EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
-        // check if this reset occured becase we're on a new record
+        // check if this reset occurred becase we're on a new record
         XPropertySet xFormProps = UNO.queryPropertySet(  aEvent.Source );
         try
         {
@@ -445,7 +445,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     }
 
     /* ------------------------------------------------------------------ */
-    /** creates the table witht the given name, using the given statement
+    /** creates the table with the given name, using the given statement
     */
     protected boolean implCreateTable( XConnection xConn, String sCreateStatement, String sTableName ) throws java.lang.Exception
     {
@@ -844,7 +844,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_aSalesLocker = new ControlLock( xSalesFormProps, "SALENR" );
         m_aSalesLocker.enableLock( m_bProtectKeyFields );
 
-        // initally, we want to generate keys when moving to a new record
+        // initially, we want to generate keys when moving to a new record
         xKeyGen.setPropertyValue( "DefaultState", new Short( (short)1 ) );
 
         // --------------------------------------------------------------

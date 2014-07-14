@@ -152,7 +152,7 @@ $(SIGN): $(SHL1TARGETN)
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
 .IF "$(CCNUMVER)" >= "001399999999"		
 #.NET 2 and higher	
-# If the x86 switch is ommitted then the system assumes the assembly to be MSIL.
+# If the x86 switch is omitted then the system assumes the assembly to be MSIL.
 # The policy file is still found when an application tries to load an older
 # cli_cppuhelper.dll but the system cannot locate it. It possibly assumes that the
 # assembly is also 'MSIL'  like its policy file.

@@ -19,15 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <hintids.hxx>
-
 #include <stack>
-
 #include <tools/errinf.hxx>
 #include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
@@ -82,14 +79,11 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <SwStyleNameMapper.hxx>
 #include <tblsel.hxx>           // SwSelBoxes
-
 #include <docsh.hxx>
 #include <fmtlsplt.hxx> // SwLayoutSplit
 #include <editeng/keepitem.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
-
-
 #include <fmtsrnd.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <svx/svdmodel.hxx>
@@ -101,20 +95,17 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
-
 #include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
-
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 // einige Hilfs-Funktionen
 // char
@@ -1034,7 +1025,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 aSectPaM.GetCntntNode(), 0);
 
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
-            //The last section if continous is always unbalanced
+            //The last section if continuous is always unbalanced
             if (aNext == aEnd && pRet)
                 pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
         }
@@ -1334,7 +1325,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
         pDoc->GetOrCreateDrawModel();
-        SdrModel* pDrawModel  = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObjectToSdrObjList(*pStroke);
         pDrawPg->SetNavigationPosition(pStroke->GetNavigationPosition(), _nZOrder);
@@ -3930,11 +3921,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
-            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+            if ( nOutlineLevel < MAXLEVEL )
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();
             return pColl;
         }
 

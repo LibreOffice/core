@@ -68,7 +68,7 @@ namespace connectivity
     typedef struct
     {
         TPooledConnections  aConnections;
-        sal_Int32           nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
+        sal_Int32           nALiveCount; // will be decremented every time a time says to, when will reach zero the pool will be deleted
     } TConnectionPool;
 
     struct TDigestHolder

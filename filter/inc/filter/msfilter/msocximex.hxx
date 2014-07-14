@@ -133,13 +133,13 @@ public:
         com::sun::star::drawing::XShape >* /*pShape*/,
         sal_Bool /*bFloatingCtrl*/ ) {return sal_False;}
 
-    /*begin: Backwards compatability with office 95 import, modify later*/
+    /*begin: Backwards compatibility with office 95 import, modify later*/
     const com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > & GetServiceFactory();
 
     sal_uInt16 GetEditNum() { return ++nEdit; }
     sal_uInt16 GetCheckboxNum() { return ++nCheckbox; }
-    /*end: Backwards compatability*/
+    /*end: Backwards compatibility*/
 protected:
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > &
         GetShapes();

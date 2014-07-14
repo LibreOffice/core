@@ -161,7 +161,7 @@ String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim = 
 String  GetWritableDictionaryURL( const String &rDicName );
 
 // looks for the specified file in the list of paths.
-// In case of multiple occurences only the first found is returned.
+// In case of multiple occurrences only the first found is returned.
 String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rPaths );
 
 

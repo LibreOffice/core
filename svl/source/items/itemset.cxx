@@ -2138,7 +2138,7 @@ inline void SfxItemSet::UpdateHashKey()
 {
     _aHashKey= myhash(_aItems,TotalCount()* sizeof(_aItems[0]));
 
-    //always treat '0' as invalidate hash key, not using addtional bool data field for saving space.
+    //always treat '0' as invalidate hash key, not using additional bool data field for saving space.
     if (!IsValidateHashKey() )
     {
         _aHashKey = 1;

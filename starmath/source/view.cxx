@@ -640,7 +640,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 //        aEdit.GrabFocus();
 
         // grab focus as above does not work...
-        // Thus we implement a timer based solution to get the inital
+        // Thus we implement a timer based solution to get the initial
         // focus in the Edit window.
         aInitialFocusTimer.Start();
     }

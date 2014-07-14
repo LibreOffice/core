@@ -70,8 +70,8 @@
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
 #include <editeng/frmdiritem.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <svx/xdef.hxx>
 
 
 using namespace ::com::sun::star;
@@ -2885,7 +2885,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             }
             else
             {
-                // variable size of body|section frame has shrinked. Thus,
+                // variable size of body|section frame has shrunk. Thus,
                 // invalidate all lowers not matching the new body|section size
                 // and the dedicated new last lower.
                 if( bVert )

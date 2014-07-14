@@ -147,7 +147,7 @@
       </prop>
       <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
         <info>
-          <desc>When true then the title bar can be ommitted when the panel is the only panel in a deck.</desc>
+          <desc>When true, the title bar can be omitted when the panel is the only panel in a deck.</desc>
         </info>
         <value>false</value>
       </prop>

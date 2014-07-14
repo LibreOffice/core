@@ -26,7 +26,7 @@
   This templates creates a source.xml file
   which is identicall to the source xml tree
   used for the transformation.
-  This is may be usefull for deveopement/debuging
+  This is may be useful for deveopement/debuging
   of layouts.
   
   ==================================== -->

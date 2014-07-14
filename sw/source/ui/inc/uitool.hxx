@@ -81,7 +81,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
 
 String GetAppLangDateTimeString( const DateTime& );
 
-// search for a command string withing the menu structure and execute it
+// search for a command string within the menu structure and execute it
 // at the dispatcher if there is one, if executed return true
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId );
 

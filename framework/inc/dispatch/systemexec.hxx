@@ -70,7 +70,7 @@ namespace framework{
 /**
     @short          protocol handler for "systemexec:*" URLs
     @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
-                    be automaticly used by the framework dispatch mechanism if such URL occured.
+                    be automatically used by the framework dispatch mechanism if such URL occurred.
                     It forwards all URL's to the underlying operating system.
                     So it would e.g. be possible to open HTML files outside the office within a web browser.
 
@@ -87,7 +87,7 @@ class SystemExec : // interfaces
                        public  css::frame::XDispatchProvider ,
                        public  css::frame::XNotifyingDispatch, // => XDispatch
                        // baseclasses
-                       // Order is neccessary for right initialization!
+                       // Order is necessary for right initialization!
                        private ThreadHelpBase                ,
                        public  cppu::OWeakObject
 {

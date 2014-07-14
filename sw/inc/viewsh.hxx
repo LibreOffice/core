@@ -109,9 +109,8 @@ class SW_DLLPUBLIC ViewShell : public Ring
     // OD 12.12.2002 #103492# - for setting visible area for page preview paint
     friend class SwPagePreviewLayout;
 
-    //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
-    //werden kann.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
+    // setting the SwVisArea is used to get a clean formatting before printing
+    friend void SetSwVisArea( ViewShell*, const SwRect& /*, sal_Bool bPDFExport = sal_False */ );
 
     // --> PB 2007-05-30 #146850#
     static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images

@@ -106,7 +106,7 @@ public class _XImageProducer extends MultiMethodTest {
 
     /**
     * Adds a new consumer to producer. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _addConsumer() {
 
@@ -118,7 +118,7 @@ public class _XImageProducer extends MultiMethodTest {
 
     /**
     * Removes the consumer added before. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be executed before :
     * <ul>
     *  <li> <code> startProduction </code>  </li>

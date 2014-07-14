@@ -67,7 +67,7 @@ namespace frm
         ,m_bHasEverBeenShown    ( false               )
     {
         OSL_ENSURE( m_pAntiImpl, "RichTextControlImpl::RichTextControlImpl: invalid window!" );
-        OSL_ENSURE( m_pEngine,   "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definately* crash!" );
+        OSL_ENSURE( m_pEngine,   "RichTextControlImpl::RichTextControlImpl: invalid edit engine! This will *definitely* crash!" );
 
         m_pViewport = new RichTextViewPort( m_pAntiImpl );
         m_pViewport->setAttributeInvalidationHandler( LINK( this, RichTextControlImpl, OnInvalidateAllAttributes ) );
@@ -124,7 +124,7 @@ namespace frm
             // type (Latin, Asian, Complex). However, if we have an observer who is interested
             // in the state of this attribute, we have to kind of *merge* the three attributes
             // to only one.
-            // This is usefull in case the observer is for instance a toolbox which contains only
+            // This is useful in case the observer is for instance a toolbox which contains only
             // an, e.g., "bold" slot, and thus not interested in the particular script type of the
             // current selection.
             SvxScriptSetItem aNormalizedSet( (WhichId)_pHandler->first, *m_pView->GetAttribs().GetPool() );
@@ -307,7 +307,7 @@ namespace frm
         // the AutoPaperSize bits set.
         // So in order to be properly notified, we would need the AutoPaperSize. But, with
         // AutoPaperSize, other things do not work anymore: Either, when we set a MaxAutoPaperSize,
-        // then the view does automatic soft line breaks at the paper end - which we definately do
+        // then the view does automatic soft line breaks at the paper end - which we definitely do
         // want. Or, if we did not set a MaxAutoPaperSize, then the view does not automatically scroll
         // anymore in horizontal direction.
         // So this is some kind of lose-lose situation ... :(

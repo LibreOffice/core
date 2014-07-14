@@ -595,7 +595,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nInd
     DBG_ASSERT( pData,
         "SvxRectCtlAccessibleContext::selectAccessibleChild(): this is an impossible state! Or at least should be..." );
 
-    // this does all wich is needed, including the change of the child's state!
+    // this does all which is needed, including the change of the child's state!
     mpRepr->SetActualRP( pData->ePoint );
 }
 
@@ -1286,7 +1286,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen( void ) throw
 
 Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
-    // no guard neccessary, because no one changes mpBoundingBox after creating it
+    // no guard necessary, because no one changes mpBoundingBox after creating it
     ThrowExceptionIfNotAlive();
 
     return *mpBoundingBox;

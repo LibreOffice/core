@@ -313,7 +313,7 @@ sal_Bool SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 const String &sBasicModule = aVBA.GetStreamName( i);
 #endif
                 /* #117718# expose information regarding type of Module
-                * Class, Form or plain 'ould VBA module with a REM statment
+                * Class, Form or plain 'ould VBA module with a REM statement
                 * at the top of the module. Mapping of Module Name
                 * to type is performed in  VBA_Impl::Open() method,
                 * ( msvbasic.cxx ) by examining the PROJECT stream.

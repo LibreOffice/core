@@ -106,7 +106,7 @@ namespace drawinglayer
                         getViewInformation2D().getExtendedInformationSequence());
                     updateViewInformation(aViewInformation2D);
 
-                    // proccess content
+                    // process content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations

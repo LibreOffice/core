@@ -117,7 +117,7 @@ struct DispatchParams
 
             @descr  If our dispatch() method was forced to start the
                     internal operation asynchronous ... we send an event
-                    to start and return immediatly. But we must be shure that
+                    to start and return immediately. But we must be sure that
                     our instance live if the event callback reach us.
                     So we hold an uno reference to ourself.
          */
@@ -136,7 +136,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     , public  css::document::XEventListener         // => css.lang.XEventListener
                     , public  css::util::XChangesListener           // => css.lang.XEventListener
                     , public  css::util::XModifyListener            // => css.lang.XEventListener
-                    // attention! Must be the first base class to guarentee right initialize lock ...
+                    // attention! Must be the first base class to guarantee right initialize lock ...
                     , private ThreadHelpBase
                     , public  ::cppu::OBroadcastHelper
                     , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
@@ -174,9 +174,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             /* FINAL STATES */
 
-            /// the Auto/Emergency saved document isnt useable any longer
+            /// the Auto/Emergency saved document isn't useable any longer
             E_DAMAGED = 64,
-            /// the Auto/Emergency saved document isnt realy up-to-date (some changes can be missing)
+            /// the Auto/Emergency saved document isn't really up-to-date (some changes can be missing)
             E_INCOMPLETE = 128,
             /// the Auto/Emergency saved document was processed successfully
             E_SUCCEDED = 512
@@ -198,7 +198,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         // TODO document me
         enum ETimerType
         {
-            /** the timer shouldnt be used next time */
+            /** the timer shouldn't be used next time */
             E_DONT_START_TIMER,
             /** timer (was/must be) started with normal AutoSaveTimeIntervall */
             E_NORMAL_AUTOSAVE_INTERVALL,
@@ -208,7 +208,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             /** timer mst be started with a very(!) short time intervall,
                 to poll for the end of an user action, which does not allow saving documents in general */
             E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
-            /** dont start the timer - but calls the same action then before immediatly again! */
+            /** dont start the timer - but calls the same action then before immediately again! */
             E_CALL_ME_BACK
         };
 
@@ -250,7 +250,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                 css::uno::Reference< css::frame::XModel > Document;
 
                 //-------------------------------
-                /** @short  knows, if the document is realy modified since the last autosave,
+                /** @short  knows, if the document is really modified since the last autosave,
                             or  was postponed, because it was an active one etcpp...
 
                     @descr  Because we have no CHANGE TRACKING mechanism, based on office document,
@@ -264,7 +264,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
                 //-------------------------------
                 /** Because our applications not ready for concurrent save requests at the same time,
-                    we have supress our own AutoSave for the moment, a document will be already saved
+                    we have suppress our own AutoSave for the moment, a document will be already saved
                     by others.
                  */
                 sal_Bool UsedForSaving;
@@ -298,7 +298,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                 ::rtl::OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
                 ::rtl::OUString FactoryService; // the service to create a document of the module
                 ::rtl::OUString RealFilter;     // real filter, which was used at loading time
-                ::rtl::OUString DefaultFilter;  // supports saving of the default format without loosing data
+                ::rtl::OUString DefaultFilter;  // supports saving of the default format without losing data
                 ::rtl::OUString Extension;      // file extension of the default filter
                 ::rtl::OUString Title;          // can be used as "DisplayName" on every recovery UI!
                 ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -398,9 +398,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         ListenerHash m_lListener;
 
         /** @descr  This member is used to prevent us against re-entrance problems.
-                    A mutex cant help to prevent us from concurrent using of members
+                    A mutex can't help to prevent us from concurrent using of members
                     inside the same thread. But e.g. our internaly used stl structures
-                    are not threadsafe ... and furthermore they cant be used at the same time
+                    are not threadsafe ... and furthermore they can't be used at the same time
                     for iteration and add/remove requests!
                     So we have to detect such states and ... show a warning.
                     May be there will be a better solution next time ... (copying the cache temp.
@@ -561,7 +561,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @descr  ... but only keys related to the AutoSave mechanism.
                     Means: State and Timer intervall.
-                    E.g. the recovery list isnt adressed here.
+                    E.g. the recovery list isn't addressed here.
 
             @throw  [com.sun.star.uno.RuntimeException]
                     if config could not be opened or readed successfully!
@@ -705,7 +705,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** @short  save all current opened documents to a specific
                     backup directory.
 
-            @descr  Only realy changed documents will be saved here.
+            @descr  Only really changed documents will be saved here.
 
                     Further this method returns a suggestion, if and how it should
                     be called again. May be some documents was not saved yet
@@ -905,7 +905,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             E.g. our svtools::ConfigItems() has to be flushed explicitly .-(
 
-            Note: This method cant fail. Flushing of config entries is an
+            Note: This method can't fail. Flushing of config entries is an
                   optional feature. Errors can be ignored.
          */
         void impl_flushALLConfigChanges();
@@ -961,14 +961,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     a) An external progress is provided by our CrashSave or Recovery dialog.
                     b) We must create our own progress e.g. for an AutoSave
                     c) Sometimes our application filters dont use the progress
-                       provided by the MediaDescriptor. They uses the Frame everytime to create
+                       provided by the MediaDescriptor. They uses the Frame every time to create
                        it's own progress. So we implemented a HACK for these and now we set
                        an InterceptedProgress there for the time WE use this frame for loading/storing documents .-)
 
             @param  xNewFrame
                     must be set only in case WE create a new frame (e.g. for loading documents
                     on session restore or recovery). Then search for a frame using rInfo.Document must
-                    be supressed and xFrame must be preferred instead .-)
+                    be suppressed and xFrame must be preferred instead .-)
 
             @param  rInfo
                     used e.g. to find the frame corresponding to a document.
@@ -989,14 +989,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** try to remove the specified file from disc.
 
             Every URL supported by our UCB component can be used here.
-            Further it doesnt matter if the file realy exists or not.
+            Further it doesn't matter if the file really exists or not.
             Because removing a non exsistent file will have the same
             result at the end ... a non existing file .-)
 
             On the other side removing of files from disc is an optional
             feature. If we are not able doing so ... its not a real problem.
             Ok - users disc place will be samller then ... but we should produce
-            a crash during crash save because we cant delete a temporary file only !
+            a crash during crash save because we can't delete a temporary file only !
 
             @param  sURL
                     the url of the file, which should be removed.
@@ -1005,10 +1005,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         /** try to remove ".lock" file from disc if office will be terminated
-            not using the offical way .-)
+            not using the official way .-)
 
             This method has to be handled "optional". So every error inside
-            has to be ignored ! This method CANT FAIL ... it can forget something only .-)
+            has to be ignored ! This method CAN'T FAIL ... it can forget something only .-)
          */
         static void st_impl_removeLockFile();
 };

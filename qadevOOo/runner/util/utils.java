@@ -265,7 +265,7 @@ public class utils {
     public static String getOfficeUserPath(XMultiServiceFactory msf) {
         String userPath = null;
 
-        // get a folder wich is located in the user dir
+        // get a folder which is located in the user dir
         try {
             userPath = (String) getOfficeSettingsValue(msf, "UserConfig");
         } catch (Exception e) {
@@ -374,7 +374,7 @@ public class utils {
 
     /**
      * Gets StarOffice temp directory without 'file:///' prefix.
-     * For example is usefull for Registry URL specifying.
+     * For example is useful for Registry URL specifying.
      * @msf Office factory for accessing its settings.
      * @return SOffice temporary directory in form for example
      * 'd:/Office60/user/temp/'.
@@ -463,9 +463,9 @@ public class utils {
     }
 
     /**
-     *  This method check via Office the existance of the given file URL
+     *  This method check via Office the existence of the given file URL
      * @param msf the multiservice factory
-     * @param fileURL the file which existance should be checked
+     * @param fileURL the file which existence should be checked
      * @return true if the file exists, else false
      */
     public static boolean fileExists(XMultiServiceFactory msf, String fileURL) {
@@ -488,7 +488,7 @@ public class utils {
     }
 
     /**
-     * This method deletes via office the given file URL. It checks the existance
+     * This method deletes via office the given file URL. It checks the existence
      * of <CODE>fileURL</CODE>. If exists it will be deletet.
      * @param xMsf the multiservice factory
      * @param fileURL the file to delete
@@ -566,7 +566,7 @@ public class utils {
      * file already exists, the file is deleted.
      *
      * @returns <code>true</code> if the file was successfully copied,
-     * <code>false</code> if some errors occured (e.g. file is locked, used
+     * <code>false</code> if some errors occurred (e.g. file is locked, used
      * by another process).
      */
     public static boolean tryOverwriteFile(

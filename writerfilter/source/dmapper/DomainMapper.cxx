@@ -1413,18 +1413,21 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_endnote:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
+
         case NS_rtf::LN_BOOKMARKNAME:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             // sStringValue contains the bookmark name
             sLocalBookmarkName = sStringValue;
         break;
+
         case NS_rtf::LN_IBKL:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0.5 */
             //contains the bookmark identifier - has to be added to the bookmark name imported before
             //if it is already available then the bookmark should be inserted
-            m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
+            m_pImpl->AddBookmark( sLocalBookmarkName, nIntValue );
             sLocalBookmarkName = ::rtl::OUString();
         break;
+
         case NS_rtf::LN_LISTLEVEL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
@@ -1528,7 +1531,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     vertical text flow (0x01), or
                     two lines in one layout (0x02).
                 For 0x01, if the higher byte of YYYY is zero, the text is not scaled to fit the line height,
-                    in oposite case, it is to be scaled.
+                    in opposite case, it is to be scaled.
                 For 0x02, the higher byte of YYYY is determinig the prefix and suffix of the run:
                     no brackets (0x00) ,
                     () round brackets (0x01),
@@ -2617,7 +2620,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if( pProperties.get())
         {
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
-            pCellColorHandler->setParagraph();
+            pCellColorHandler->setType(CellColorHandler::P);
             pProperties->resolve(*pCellColorHandler);
             rContext->insert( pCellColorHandler->getProperties(), true );
         }
@@ -3186,6 +3189,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmCBrc
     case NS_sprm::LN_CShd:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                pCellColorHandler->setType(CellColorHandler::C);
+                pProperties->resolve(*pCellColorHandler);
+                rContext->insert( pCellColorHandler->getProperties(), true );
+            }
+        }
         break;  // sprmCShd
     case NS_sprm::LN_CIdslRMarkDel:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */

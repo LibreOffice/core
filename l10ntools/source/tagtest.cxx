@@ -1246,7 +1246,7 @@ void TokenParser::TagRef()
                         match( aTag, TAG_ENDGRAPHIC );
                     else
                         match( aTag, TAG_VERSIONEND );
-                    // don't reset since alowed only once per paragraph
+                    // don't reset since allowed only once per paragraph
                     // RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                 }
                 else

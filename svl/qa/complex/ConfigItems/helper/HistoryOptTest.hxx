@@ -53,7 +53,7 @@ class HistoryOptTest
         //---------------------------------------------------------------------
         /** test every well known history list in the same way.
          *  Only the count of created and tested items can be defined from outside
-         *  e.g. usefull for stress tests.
+         *  e.g. useful for stress tests.
          *
          *  @param  eHistory
          *          specify the history list for testing.
@@ -94,7 +94,7 @@ class HistoryOptTest
         void impl_appendItem(::sal_Int32 nItem);
 
         //---------------------------------------------------------------------
-        /** check if an entry for given item id realy exists (in memory and xcu file).
+        /** check if an entry for given item id really exists (in memory and xcu file).
          *
          *  @param  nItem
          *          id of the item
@@ -104,7 +104,7 @@ class HistoryOptTest
         ::sal_Bool impl_existsItem(::sal_Int32 nItem);
 
         //---------------------------------------------------------------------
-        /** check if an entry for given item id realy exists (in memory and xcu file).
+        /** check if an entry for given item id really exists (in memory and xcu file).
          *  Further it checks if the requested item is placed at the also specified
          *  position inside history list.
          *

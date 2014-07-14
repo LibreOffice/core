@@ -110,7 +110,7 @@ BSTR IA2_STATES_NAME[] =
     _T("Horizontal"),
     _T("Iconified"),
     _T("Invalid Entry"),
-    _T("Manages Decendents"),
+    _T("Manages Descendants"),
     _T("Modal"),
     _T("Multi Line"),
     _T("Opaque"),
@@ -1502,7 +1502,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
 
 /**
 * Return first child for parent container, process differently according
-* to whether it is decendant manage
+* to whether it is descendant manage
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
@@ -1539,7 +1539,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
 /**
 * Return last child for parent container, process differently according
-* to whether it is decendant manage
+* to whether it is descendant manage
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
@@ -1574,7 +1574,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 }
 
 /**
-* The method GetNextSibling is general, whatever it is decendant manage or not
+* The method GetNextSibling is general, whatever it is descendant manage or not
 * Get the next sibling object.
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
@@ -1609,7 +1609,7 @@ HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 }
 
 /**
-*the method GetPreSibling is general, whatever it is decendant manage or not
+*the method GetPreSibling is general, whatever it is descendant manage or not
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.

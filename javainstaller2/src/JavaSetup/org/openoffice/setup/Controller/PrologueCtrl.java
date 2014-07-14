@@ -82,7 +82,7 @@ public class PrologueCtrl extends PanelController {
                         // System.err.println("Number of preselected language packages: " + count);
 
                         if ( installData.getPreselectedLanguages() == 0 ) {
-                            // Something misterious happened. Setting all languages again.
+                            // Something mysterious happened. Setting all languages again.
                             ModuleCtrl.setLanguagesPackages(packageData);
                         }
 

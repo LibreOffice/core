@@ -49,6 +49,8 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
+#include <unotools/securityoptions.hxx>
+
 #define DDELINK_COLD        0
 #define DDELINK_HOT         1
 
@@ -255,15 +257,23 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         }
 
 #if defined(WNT)
+        // check the suitability of starting the DDE server
+        const SvtSecurityOptions aSecOpts;
+        bool bForbidden = (aSecOpts.GetMacroSecurityLevel() == eNEVER_EXECUTE);
+        bForbidden |= (sServer.SearchChar( L":./%\\") != STRING_NOTFOUND);
+        static const char* aBadServers[] = { "cmd", "rundll32" };
+        for( int i = 0; i < sizeof(aBadServers)/sizeof(*aBadServers); ++i)
+            bForbidden |= (sServer.CompareIgnoreCaseToAscii( aBadServers[i]) == COMPARE_EQUAL);
 
-        // Server nicht da, starten und nochmal versuchen
-        if( !bInWinExec )
+        // try to start the DDE server if it is not there already
+        bForbidden |= (bInWinExec != sal_False);
+        if( !bForbidden )
         {
             ByteString aCmdLine( sServer, RTL_TEXTENCODING_ASCII_US );
             aCmdLine.Append( ".exe " );
             aCmdLine.Append( ByteString( sTopic, RTL_TEXTENCODING_ASCII_US ) );
 
-            if( WinExec( aCmdLine.GetBuffer(), SW_SHOWMINIMIZED ) < 32 )
+            if( WinExec( aCmdLine.GetBuffer(), SW_SHOWMINIMIZED ) < 32 ) // TODO: use CreateProcess() instead
                 nError = DDELINK_ERROR_APP;
             else
             {

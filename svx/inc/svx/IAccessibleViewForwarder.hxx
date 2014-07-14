@@ -45,13 +45,13 @@ namespace accessibility {
     transformation methods do not require explicit mapmodes.  These have to
     be provided implicitely by the classes that implement this
     interface.  A third, less important, difference are the additional
-    transfomation methods for sizes.  The reasons for their existince are
+    transfomation methods for sizes.  The reasons for their existence are
     convenience and improved performance.</p>
 
     @attention
         Note, that modifications of the underlying view that lead to
         different transformations between internal and screen coordinates or
-        change the validity of the forwarder have to be signaled seperately.
+        change the validity of the forwarder have to be signaled separately.
 */
 class IAccessibleViewForwarder
 {

@@ -87,7 +87,7 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
     return  result;
 }
 
-// The provided GUID must be without surounding '{}'
+// The provided GUID must be without surrounding '{}'
 static std::_tstring GetGuidPart(const std::_tstring& guid, int index)
 {
     assert((guid.length() == 36) && "No GUID or wrong format!");

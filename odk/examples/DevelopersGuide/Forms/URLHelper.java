@@ -28,7 +28,7 @@ public class URLHelper
 {
     /**
      * Because the office need URLs for loading/saving documents
-     * we must convert used system pathes.
+     * we must convert used system paths.
      * And java use another notation for file URLs ... correct it.
      *
      * @param aSystemPath

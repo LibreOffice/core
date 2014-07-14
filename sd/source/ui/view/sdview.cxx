@@ -859,7 +859,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
 // --------------------------------------------------------------------
 
 /** restores the default text if the given text object is currently in edit mode and
-    no text has been entered already. Is only usefull just before text edit ends. */
+    no text has been entered already. Is only useful just before text edit ends. */
 bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 {
     bool bRestored = false;

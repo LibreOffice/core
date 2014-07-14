@@ -297,6 +297,9 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 // OD 18.09.2003 #i18732# - add property
 // OD 2004-05-05 #i28701# - add property 'WrapInfluenceOnObjPos'
 // OD 2009-07-13 #i73249# - add properties 'Title' and 'Description'
+//UUUU all users of COMMON_FRAME_PROPERTIES add the new XATTR_FILL_FIRST, XATTR_FILL_LAST FillStyle,
+// thus it may be possible to remove the RES_BACKGROUND entries from SvxBrushItem completely (this includes
+// all using UNO_NAME_BACK_* slots) in the future
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
@@ -582,6 +585,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},\
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},\
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for paragraph itself
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;
@@ -609,6 +620,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_PARA_AUTO_STYLE_NAME), RES_AUTO_STYLE,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph AutoStyles
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aAutoParaStyleMap;
@@ -724,6 +743,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry aParaStyleMap [] =
                 {
                     COMMON_PARA_STYLE_PROPERTIES
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph Styles
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aParaStyleMap;
@@ -735,6 +762,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     COMMON_PARA_STYLE_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_PARA_STYLE_CONDITIONS), FN_UNO_PARA_STYLE_CONDITIONS, CPPU_E2T(CPPUTYPE_SEQNAMEDVALUE), PropertyAttribute::MAYBEVOID, 0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph Styles
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aParaStyleMap;
@@ -818,9 +853,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
 
-                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
                     // but need own defines in Writer due to later association of strings
-                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
                     FILL_PROPERTIES_SW
 
                     {0,0,0,0,0,0}
@@ -851,56 +887,59 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
 
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BACK_COLOR), FN_UNO_HEADER_BACKGROUND,   CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
-                //  { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC), FN_UNO_HEADER_BACKGROUND,  &,                              PROPERTY_NONE, MID_GRAPHIC
-                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_URL), FN_UNO_HEADER_BACKGROUND,          CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_FILTER), FN_UNO_HEADER_BACKGROUND,           CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_LOCATION), FN_UNO_HEADER_BACKGROUND,     CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_MARGIN), FN_UNO_HEADER_LR_SPACE,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_MARGIN), FN_UNO_HEADER_LR_SPACE,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BACK_TRANSPARENT), FN_UNO_HEADER_BACKGROUND,     CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_BORDER), FN_UNO_HEADER_BOX,             CPPU_E2T(CPPUTYPE_BORDERLINE),  0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_BORDER), FN_UNO_HEADER_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),  0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_TOP_BORDER), FN_UNO_HEADER_BOX,              CPPU_E2T(CPPUTYPE_BORDERLINE),  0, TOP_BORDER   |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BOTTOM_BORDER), FN_UNO_HEADER_BOX,               CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BORDER_DISTANCE), FN_UNO_HEADER_BOX,    CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_BORDER_DISTANCE), FN_UNO_HEADER_BOX,                CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE), FN_UNO_HEADER_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_TOP_BORDER_DISTANCE), FN_UNO_HEADER_BOX,             CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE), FN_UNO_HEADER_BOX,              CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_SHADOW_FORMAT), FN_UNO_HEADER_SHADOW,        CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_HEADER_BODY_DISTANCE), FN_UNO_HEADER_BODY_DISTANCE,CPPU_E2T(CPPUTYPE_INT32),            PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT), FN_UNO_HEADER_IS_DYNAMIC_DISTANCE,CPPU_E2T(CPPUTYPE_BOOLEAN),            PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_SHARED), FN_UNO_HEADER_SHARE_CONTENT,CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_HEIGHT), FN_UNO_HEADER_HEIGHT,       CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_ON), FN_UNO_HEADER_ON,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_HEADER_DYNAMIC_SPACING), FN_UNO_HEADER_EAT_SPACING,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PropertyAttribute::MAYBEVOID ,0         },
+                    //UUU use real WhichIDs for Header, no longer use extra-defined WhichIDs which make handling harder as needed.
+                    // The implementation will decide if these are part of Header/Footer or PageStyle depending on the SlotName,
+                    // more precisely on the first characters. Thus it is necessary that these are 'Header' for the Header slots
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BACK_COLOR),             RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                //  { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC),                RES_BACKGROUND,     &,                              PROPERTY_NONE, MID_GRAPHIC
+                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_URL),            RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_FILTER),         RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_GRAPHIC_LOCATION),       RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_MARGIN),            RES_LR_SPACE,                   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_MARGIN),           RES_LR_SPACE,                   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BACK_TRANSPARENT),       RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_BORDER),            RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, LEFT_BORDER  |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_BORDER),           RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, RIGHT_BORDER |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_TOP_BORDER),             RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, TOP_BORDER   |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BOTTOM_BORDER),          RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BORDER_DISTANCE),        RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_LEFT_BORDER_DISTANCE),   RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE),  RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_TOP_BORDER_DISTANCE),    RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE), RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_SHADOW_FORMAT),          RES_SHADOW,                     CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_BODY_DISTANCE),          RES_UL_SPACE,                   CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT),      SID_ATTR_PAGE_DYNAMIC,          CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_SHARED),              SID_ATTR_PAGE_SHARED,           CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_HEIGHT),                 SID_ATTR_PAGE_SIZE,             CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_IS_ON),                  SID_ATTR_PAGE_ON,               CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_DYNAMIC_SPACING),        RES_HEADER_FOOTER_EAT_SPACING,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PropertyAttribute::MAYBEVOID ,0         },
 
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BACK_COLOR), FN_UNO_FOOTER_BACKGROUND,   CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
-                //  { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC), FN_UNO_FOOTER_BACKGROUND,      &,                              PROPERTY_NONE, MID_GRAPHIC
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_URL), FN_UNO_FOOTER_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_FILTER), FN_UNO_FOOTER_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_LOCATION), FN_UNO_FOOTER_BACKGROUND,     CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_MARGIN), FN_UNO_FOOTER_LR_SPACE,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_MARGIN), FN_UNO_FOOTER_LR_SPACE,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BACK_TRANSPARENT), FN_UNO_FOOTER_BACKGROUND,     CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_BORDER), FN_UNO_FOOTER_BOX,             CPPU_E2T(CPPUTYPE_BORDERLINE),  0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_BORDER), FN_UNO_FOOTER_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),  0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_TOP_BORDER), FN_UNO_FOOTER_BOX,              CPPU_E2T(CPPUTYPE_BORDERLINE),  0, TOP_BORDER   |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BOTTOM_BORDER), FN_UNO_FOOTER_BOX,               CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,    CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,                CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_TOP_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,             CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,              CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_SHADOW_FORMAT), FN_UNO_FOOTER_SHADOW,        CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_BODY_DISTANCE), FN_UNO_FOOTER_BODY_DISTANCE,CPPU_E2T(CPPUTYPE_INT32),            PROPERTY_NONE ,MID_UP_MARGIN|CONVERT_TWIPS       },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT), FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE,CPPU_E2T(CPPUTYPE_BOOLEAN),            PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_SHARED), FN_UNO_FOOTER_SHARE_CONTENT,CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_HEIGHT), FN_UNO_FOOTER_HEIGHT,       CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_ON), FN_UNO_FOOTER_ON,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
-                    { SW_PROP_NMID(UNO_NAME_FOOTER_DYNAMIC_SPACING), FN_UNO_FOOTER_EAT_SPACING,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PropertyAttribute::MAYBEVOID ,0         },
-
+                    //UUU use real WhichIDs for Footer, see Header (above) for more infos
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BACK_COLOR),             RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                //  { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC),                RES_BACKGROUND,     &,                              PROPERTY_NONE, MID_GRAPHIC
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_URL),            RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_URL    },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_FILTER),         RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_GRAPHIC_LOCATION),       RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_GRAPHICLOC), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_MARGIN),            RES_LR_SPACE,                   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_MARGIN),           RES_LR_SPACE,                   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BACK_TRANSPARENT),       RES_BACKGROUND,                 CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_BORDER),            RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, LEFT_BORDER  |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_BORDER),           RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, RIGHT_BORDER |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_TOP_BORDER),             RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, TOP_BORDER   |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BOTTOM_BORDER),          RES_BOX,                        CPPU_E2T(CPPUTYPE_BORDERLINE),  0, BOTTOM_BORDER|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BORDER_DISTANCE),        RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE),   RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE),  RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_TOP_BORDER_DISTANCE),    RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE), RES_BOX,                        CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_SHADOW_FORMAT),          RES_SHADOW,                     CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_BODY_DISTANCE),          RES_UL_SPACE,                   CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_UP_MARGIN|CONVERT_TWIPS       },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT),      SID_ATTR_PAGE_DYNAMIC,          CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_SHARED),              SID_ATTR_PAGE_SHARED,           CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_HEIGHT),                 SID_ATTR_PAGE_SIZE,             CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_IS_ON),                  SID_ATTR_PAGE_ON,               CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,0         },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_DYNAMIC_SPACING),        RES_HEADER_FOOTER_EAT_SPACING,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PropertyAttribute::MAYBEVOID ,0         },
 
                     { SW_PROP_NMID(UNO_NAME_IS_LANDSCAPE), SID_ATTR_PAGE,           CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
                     { SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE), SID_ATTR_PAGE,             CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE , MID_PAGE_NUMTYPE       },
@@ -932,7 +971,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE), FN_PARAM_FTN_INFO,        CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE ,     MID_LINE_TEXT_DIST   |CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_FOOTNOTE_LINE_DISTANCE), FN_PARAM_FTN_INFO,         CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE ,     MID_LINE_FOOTNOTE_DIST|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
-                        // writing grid
+
+                    // writing grid
                     { SW_PROP_NMID(UNO_NAME_GRID_COLOR), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_GRID_COLOR},
                     { SW_PROP_NMID(UNO_NAME_GRID_LINES), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, MID_GRID_LINES},
                     { SW_PROP_NMID(UNO_NAME_GRID_BASE_HEIGHT), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_GRID_BASEHEIGHT|CONVERT_TWIPS},
@@ -944,6 +984,72 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRID_BASE_WIDTH), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_GRID_BASEWIDTH|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_GRID_SNAP_TO_CHARS), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_SNAPTOCHARS},
                     { SW_PROP_NMID(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    FILL_PROPERTIES_SW
+
+                    //UUUU Added DrawingLayer FillStyle Properties for Header. These need an own unique name,
+                    // but reuse the same WhichIDs as the regular fill. The implementation will decide to which
+                    // group of fill properties it belongs based on the start of the name (was already done in
+                    // the implementation partially), thus all SlotNames *have* to start with 'Header'
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_LOGICAL_SIZE),           XATTR_FILLBMP_SIZELOG,          CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_OFFSET_X),               XATTR_FILLBMP_TILEOFFSETX,      CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_OFFSET_Y),               XATTR_FILLBMP_TILEOFFSETY,      CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_POSITION_OFFSET_X),      XATTR_FILLBMP_POSOFFSETX,       CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_POSITION_OFFSET_Y),      XATTR_FILLBMP_POSOFFSETY,       CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_RECTANGLE_POINT),        XATTR_FILLBMP_POS,              CPPU_E2T(CPPUTYPE_RECTANGLEPOINT) , 0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_SIZE_X),                 XATTR_FILLBMP_SIZEX,            CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_SIZE_Y),                 XATTR_FILLBMP_SIZEY,            CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_STRETCH),                XATTR_FILLBMP_STRETCH,          CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_TILE),                   XATTR_FILLBMP_TILE,             CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBMP_MODE),                   OWN_ATTR_FILLBMP_MODE,          CPPU_E2T(CPPUTYPE_BITMAPMODE),      0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLCOLOR),                      XATTR_FILLCOLOR,                CPPU_E2T(CPPUTYPE_INT32),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           CPPU_E2T(CPPUTYPE_BOOLEAN),         0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBITMAP),                     XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_REFBITMAP),       0,  MID_BITMAP},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLBITMAPURL),                  XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_GRAFURL },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        CPPU_E2T(CPPUTYPE_INT16),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLGRADIENT),                   XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_GRADIENT),        0,  MID_FILLGRADIENT},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLHATCH),                      XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_HATCH),           0,  MID_FILLHATCH},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLHATCHNAME),                  XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLSTYLE),                      XATTR_FILLSTYLE,                CPPU_E2T(CPPUTYPE_FILLSTYLE),       0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         CPPU_E2T(CPPUTYPE_INT16),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_GRADIENT),        0,  MID_FILLGRADIENT},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_HEADER_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       CPPU_E2T(CPPUTYPE_INT32),           0,  0},
+
+                    //UUUU Added DrawingLayer FillStyle Properties for Footer, similar as for Header (see there)
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_LOGICAL_SIZE),           XATTR_FILLBMP_SIZELOG,          CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_OFFSET_X),               XATTR_FILLBMP_TILEOFFSETX,      CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_OFFSET_Y),               XATTR_FILLBMP_TILEOFFSETY,      CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_POSITION_OFFSET_X),      XATTR_FILLBMP_POSOFFSETX,       CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_POSITION_OFFSET_Y),      XATTR_FILLBMP_POSOFFSETY,       CPPU_E2T(CPPUTYPE_INT32) ,          0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_RECTANGLE_POINT),        XATTR_FILLBMP_POS,              CPPU_E2T(CPPUTYPE_RECTANGLEPOINT) , 0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_SIZE_X),                 XATTR_FILLBMP_SIZEX,            CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_SIZE_Y),                 XATTR_FILLBMP_SIZEY,            CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_STRETCH),                XATTR_FILLBMP_STRETCH,          CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_TILE),                   XATTR_FILLBMP_TILE,             CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBMP_MODE),                   OWN_ATTR_FILLBMP_MODE,          CPPU_E2T(CPPUTYPE_BITMAPMODE),      0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLCOLOR),                      XATTR_FILLCOLOR,                CPPU_E2T(CPPUTYPE_INT32),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           CPPU_E2T(CPPUTYPE_BOOLEAN),         0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBITMAP),                     XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_REFBITMAP),       0,  MID_BITMAP},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLBITMAPURL),                  XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_GRAFURL },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        CPPU_E2T(CPPUTYPE_INT16),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLGRADIENT),                   XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_GRADIENT),        0,  MID_FILLGRADIENT},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLHATCH),                      XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_HATCH),           0,  MID_FILLHATCH},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLHATCHNAME),                  XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLSTYLE),                      XATTR_FILLSTYLE,                CPPU_E2T(CPPUTYPE_FILLSTYLE),       0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         CPPU_E2T(CPPUTYPE_INT16),           0,  0},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_GRADIENT),        0,  MID_FILLGRADIENT},
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_OUSTRING),        0,  MID_NAME },
+                    { SW_PROP_NMID(UNO_NAME_FOOTER_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       CPPU_E2T(CPPUTYPE_INT32),           0,  0},
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aPageStyleMap;
@@ -1174,9 +1280,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
 
-                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
                     // but need own defines in Writer due to later association of strings
-                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to FlyFrame import/export
                     FILL_PROPERTIES_SW
 
                     {0,0,0,0,0,0}
@@ -1187,7 +1294,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_TEXT_GRAPHIC:
             {
                 static SfxItemPropertyMapEntry aGraphicPropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND,            CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_SURROUND_CONTOUR         },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND,             CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
@@ -1214,6 +1324,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_IS_INVERTED), RES_GRFATR_INVERT,         CPPU_E2T(CPPUTYPE_BOOLEAN),    0,   0},
                     { SW_PROP_NMID(UNO_NAME_TRANSPARENCY), RES_GRFATR_TRANSPARENCY, CPPU_E2T(CPPUTYPE_INT16),   0,   0},
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_COLOR_MODE), RES_GRFATR_DRAWMODE,    CPPU_E2T(CPPUTYPE_COLORMODE),      0,   0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to Writer GraphicObject import/export
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aGraphicPropertyMap_Impl;
@@ -1222,7 +1339,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_EMBEDDED_OBJECT:
             {
                 static SfxItemPropertyMapEntry aEmbeddedPropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUR },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE},
@@ -1237,6 +1357,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, CPPU_E2T(CPPUTPYE_REFEMBEDDEDOBJECT), PropertyAttribute::READONLY, 0},
 //                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to OLE/EmbeddedObject import/export
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;

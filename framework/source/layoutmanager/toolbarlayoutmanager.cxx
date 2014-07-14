@@ -332,6 +332,12 @@ Rectangle ToolbarLayoutManager::implts_calcDockingArea()
         // Note: For each docking area row resp. column only the size of largest UIElement is collected.
         for ( UIElementVector::const_iterator pConstIter = m_aUIElements.begin(); pConstIter != m_aUIElements.end(); ++pConstIter )
         {
+            if ( !pConstIter->m_bVisible
+                 || pConstIter->m_bMasterHide )
+            {
+                continue;
+            }
+
             uno::Reference< ui::XUIElement > xUIElement( pConstIter->m_xUIElement, uno::UNO_QUERY );
             if ( xUIElement.is() )
             {
@@ -340,7 +346,8 @@ Rectangle ToolbarLayoutManager::implts_calcDockingArea()
                 if ( xWindow.is() && xDockWindow.is() )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow && !xDockWindow->isFloating() && pConstIter->m_bVisible )
+                    if ( pWindow != NULL
+                         && !xDockWindow->isFloating() )
                     {
                         const awt::Rectangle aPosSize = xWindow->getPosSize();
                         insertDockingAreaSize(
@@ -572,9 +579,6 @@ bool ToolbarLayoutManager::implts_setToolbarVisibility(
         {
             implts_setLayoutDirty();
         }
-        aUIElement.m_bVisible = bVisible;
-        implts_writeWindowStateData( aUIElement );
-        implts_setToolbar( aUIElement );
 
         bRet = true;
     }
@@ -586,6 +590,9 @@ bool ToolbarLayoutManager::showToolbar( const ::rtl::OUString& rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
     const bool bRet = implts_setToolbarVisibility( true, aUIElement );
+    aUIElement.m_bVisible = true;
+    implts_writeWindowStateData( aUIElement );
+    implts_setToolbar( aUIElement );
     implts_sortUIElements();
     return bRet;
 }
@@ -594,6 +601,9 @@ bool ToolbarLayoutManager::hideToolbar( const ::rtl::OUString& rResourceURL )
 {
     UIElement aUIElement = implts_findToolbar( rResourceURL );
     const bool bRet = implts_setToolbarVisibility( false, aUIElement );
+    aUIElement.m_bVisible = false;
+    implts_writeWindowStateData( aUIElement );
+    implts_setToolbar( aUIElement );
     implts_sortUIElements();
     return bRet;
 }
@@ -662,8 +672,9 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
     UIElementVector::iterator pIter;
     for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
     {
-        pIter->m_bMasterHide = !bVisible;
         implts_setToolbarVisibility( bVisible, *pIter );
+        pIter->m_bMasterHide = !bVisible;
+        implts_setToolbar( *pIter );
     }
 
     implts_sortUIElements();
@@ -758,16 +769,18 @@ bool ToolbarLayoutManager::dockAllToolbars()
 {
     std::vector< ::rtl::OUString > aToolBarNameVector;
 
-    ::rtl::OUString aElementType;
-    ::rtl::OUString aElementName;
-
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        if ( pIter->m_aType.equalsAscii( "toolbar" ) && pIter->m_xUIElement.is() &&
-             pIter->m_bFloating && pIter->m_bVisible )
+        if ( pIter->m_aType.equalsAscii( "toolbar" )
+             && pIter->m_xUIElement.is()
+             && pIter->m_bFloating
+             && pIter->m_bVisible
+             && !pIter->m_bMasterHide )
+        {
             aToolBarNameVector.push_back( pIter->m_aName );
+        }
     }
     aReadLock.unlock();
 
@@ -1212,7 +1225,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 uno::Reference< awt::XWindow > xWindow;
                 try
                 {
-                    // We have to retreive the window reference with try/catch as it is
+                    // We have to retrieve the window reference with try/catch as it is
                     // possible that all elements have been disposed!
                     xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
                 }
@@ -1222,7 +1235,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    // Reparent our child windows acording to their current state.
+                    // Reparent our child windows according to their current state.
                     if ( pIter->m_bFloating )
                         pWindow->SetParent( pContainerWindow );
                     else
@@ -1371,7 +1384,7 @@ uno::Reference< ui::XUIElement > ToolbarLayoutManager::implts_createElement( con
 void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno::Reference< awt::XDockableWindow >& rDockWindow )
 {
     ReadGuard aReadLock( m_aLock );
-    bool bShowElement( rElement.m_bVisible && !rElement.m_bMasterHide && implts_isParentWindowVisible() );
+    const bool bShowElement( rElement.m_bVisible && !rElement.m_bMasterHide && implts_isParentWindowVisible() );
     aReadLock.unlock();
 
     uno::Reference< awt::XDockableWindow > xDockWindow( rDockWindow );
@@ -2012,7 +2025,10 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
     UIElementVector::iterator   pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea && pIter->m_bVisible && !pIter->m_bFloating )
+        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea
+             && pIter->m_bVisible
+             && !pIter->m_bMasterHide
+             && !pIter->m_bFloating )
         {
             uno::Reference< ui::XUIElement > xUIElement( pIter->m_xUIElement );
             if ( xUIElement.is() )
@@ -2196,7 +2212,10 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
     UIElementVector::iterator   pEnd = m_aUIElements.end();
     for ( pIter = m_aUIElements.begin(); pIter != pEnd; pIter++ )
     {
-        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
+        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea
+             && pIter->m_bVisible
+             && !pIter->m_bMasterHide
+             && !pIter->m_bFloating )
         {
             bool bSameRowCol = bHorzDockArea ? ( pIter->m_aDockedData.m_aPos.Y() == nRowCol ) : ( pIter->m_aDockedData.m_aPos.X() == nRowCol );
             uno::Reference< ui::XUIElement > xUIElement( pIter->m_xUIElement );
@@ -2209,8 +2228,11 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
                     vos::OGuard aGuard( Application::GetSolarMutex() );
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
-                    if ( pWindow && pIter->m_bVisible && xDockWindow.is() && !pIter->m_bFloating )
+                    if ( pWindow != NULL
+                         && xDockWindow.is() )
+                    {
                         aWindowVector.push_back( *pIter ); // docked windows
+                    }
                 }
             }
         }

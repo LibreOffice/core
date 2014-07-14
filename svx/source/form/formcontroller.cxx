@@ -1057,7 +1057,7 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     FmFilterRows::iterator pos = m_aFilterRows.begin() + _Term;
     m_aFilterRows.erase( pos );
 
-    // adjust m_nCurrentFilterPosition if the removed row preceeded it
+    // adjust m_nCurrentFilterPosition if the removed row preceded it
     if ( _Term < m_nCurrentFilterPosition )
         --m_nCurrentFilterPosition;
 
@@ -3133,7 +3133,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Sequence < PropertyValue> aLevel;
         Sequence< Sequence < PropertyValue > > aFilterRows = m_xComposer->getStructuredFilter();
 
-        // ok, we recieve the list of filters as sequence of fieldnames, value
+        // ok, we receive the list of filters as sequence of fieldnames, value
         // now we have to transform the fieldname into UI names, that could be a label of the field or
         // a aliasname or the fieldname itself
 

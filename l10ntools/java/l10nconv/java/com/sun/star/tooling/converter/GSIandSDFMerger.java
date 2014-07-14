@@ -137,7 +137,7 @@ public class GSIandSDFMerger extends SDFReader {
                     }else{
 //                        skip=true;
 //
-//                    // we cant match this gsi block to the current sdf block
+//                    // we can't match this gsi block to the current sdf block
                       // try matching the next sdf block with this gsi line
                        dontLoadGSI=true;
                     }

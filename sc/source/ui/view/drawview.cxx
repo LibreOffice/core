@@ -1013,7 +1013,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
         return &rHitObject;
     }
 
-    return false;
+    return NULL;
 }
 
 // eof

@@ -76,7 +76,7 @@ namespace dbaui
                                 m_xConnection;  /// valid as long as the page is active
         sal_Bool                m_bErrorShown; // true when we shown already the error
 
-        // check if the given table is accessable by the connected user
+        // check if the given table is accessible by the connected user
         sal_Bool checkSystemTable(const ::rtl::OUString& _rsSystemTable, ::rtl::OUString& _rsSchemaName );
         void showError();
 

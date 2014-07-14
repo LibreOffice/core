@@ -81,7 +81,7 @@ SbxVariable* SbiRuntime::FindElement
         {
             // emulate pcode here
             StepARGC();
-            // psuedo StepLOADSC
+            // pseudo StepLOADSC
             String sArg = aName.Copy( 1, aName.Len() - 2 );
             SbxVariable* p = new SbxVariable;
             p->PutString( sArg );

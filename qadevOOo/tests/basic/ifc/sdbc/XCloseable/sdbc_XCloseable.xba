@@ -67,7 +67,7 @@ ErrHndl:
     resume next
     
 ExpectErr:
-    Out.Log("Proper exception occured")
+    Out.Log("Proper exception occurred")
     bEx = true
     resume next
 End Sub

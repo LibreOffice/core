@@ -1049,12 +1049,14 @@ SwTxtAttr* MakeTxtAttr(
         break;
 
     case RES_TXTATR_FIELD:
-        pNew = new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt );
+        pNew =
+            new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt, rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_ANNOTATION:
         {
-            pNew = new SwTxtAnnotationFld( static_cast<SwFmtFld &>(rNew), nStt );
+            pNew =
+                new SwTxtAnnotationFld( static_cast<SwFmtFld &>(rNew), nStt, rDoc.IsClipBoard() );
             if ( bIsCopy == COPY )
             {
                 // On copy of the annotation field do not keep the annotated text range by removing
@@ -1067,7 +1069,8 @@ SwTxtAttr* MakeTxtAttr(
         break;
 
     case RES_TXTATR_INPUTFIELD:
-        pNew = new SwTxtInputFld( static_cast<SwFmtFld &>(rNew), nStt, nEnd );
+        pNew =
+            new SwTxtInputFld( static_cast<SwFmtFld &>(rNew), nStt, nEnd, rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_FLYCNT:
@@ -1253,7 +1256,7 @@ SwTxtAttr* SwTxtNode::InsertItem(
     {
         const bool bSuccess( InsertHint( pNew, nMode ) );
         // N.B.: also check that the hint is actually in the hints array,
-        // because hints of certain types may be merged after succesful
+        // because hints of certain types may be merged after successful
         // insertion, and thus destroyed!
         if (!bSuccess || ( USHRT_MAX == m_pSwpHints->GetPos( pNew ) ))
         {
@@ -1677,7 +1680,10 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
     {
         // create MsgHint before start/end become invalid
         SwUpdateAttr aHint(
-                *pAttr->GetStart(), *pAttr->GetEnd(), pAttr->Which() );
+            *pAttr->GetStart(),
+            *pAttr->GetEnd(),
+            pAttr->Which());
+
         m_pSwpHints->Delete( pAttr );
         SwTxtAttr::Destroy( pAttr, GetDoc()->GetAttrPool() );
         NotifyClients( 0, &aHint );
@@ -1752,7 +1758,11 @@ void SwTxtNode::DeleteAttributes(
                 // Start und End weg.
                 // Das CalcVisibleFlag bei HiddenParaFields entfaellt,
                 // da dies das Feld im Dtor selbst erledigt.
-                SwUpdateAttr aHint( nStart, *pEndIdx, nWhich );
+                SwUpdateAttr aHint(
+                    nStart,
+                    *pEndIdx,
+                    nWhich);
+
                 m_pSwpHints->DeleteAtPos( nPos );    // gefunden, loeschen,
                 SwTxtAttr::Destroy( pTxtHt, GetDoc()->GetAttrPool() );
                 NotifyClients( 0, &aHint );
@@ -1780,10 +1790,10 @@ void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
 }
 
 //Modify here for #119405, by easyfan, 2012-05-24
-//In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
+//In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, escapement, etc, so we ignore them
 bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE);
+    return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
 //In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:
@@ -1792,7 +1802,7 @@ bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 //Font Bold of Wertern, CJK and CTL;
 bool lcl_IsIgnoredCharFmtForBullets(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich ==  RES_CHRATR_POSTURE || nWhich ==  RES_CHRATR_WEIGHT
+    return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_POSTURE || nWhich == RES_CHRATR_WEIGHT
         || nWhich == RES_CHRATR_CJK_POSTURE || nWhich == RES_CHRATR_CJK_WEIGHT
         || nWhich == RES_CHRATR_CTL_POSTURE || nWhich == RES_CHRATR_CTL_WEIGHT);
 }
@@ -2195,7 +2205,7 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     {
                         const sal_uInt16 nHintWhich = pItem->Which();
                         ASSERT(!isUNKNOWNATR(nHintWhich),
-                                "SwTxtNode::GetAttr(): unkonwn attribute?");
+                                "SwTxtNode::GetAttr(): unknown attribute?");
 
                         if ( !pAttrArr.get() )
                         {
@@ -3043,11 +3053,16 @@ bool SwpHints::TryInsertHint(
             CHECK;
 #endif
         // ... und die Abhaengigen benachrichtigen
-        if ( rNode.GetDepends() )
+        if(rNode.GetDepends())
         {
-            SwUpdateAttr aHint( nHtStart, nHtStart, nWhich );
-            rNode.ModifyNotification( 0, &aHint );
+            SwUpdateAttr aHint(
+                nHtStart,
+                nHtStart,
+                nWhich);
+
+            rNode.ModifyNotification(0,&aHint);
         }
+
         return true;
     }
 
@@ -3127,7 +3142,12 @@ bool SwpHints::TryInsertHint(
     // ... und die Abhaengigen benachrichtigen
     if ( rNode.GetDepends() )
     {
-        SwUpdateAttr aHint( nHtStart, nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd, nWhich );
+        SwUpdateAttr aHint(
+            // rNode.GetDoc()->GetAttrPool(),
+            nHtStart,
+            nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd,
+            nWhich);
+
         rNode.ModifyNotification( 0, &aHint );
     }
 

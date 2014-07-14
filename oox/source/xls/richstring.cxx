@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #include "oox/xls/richstring.hxx"
 
 #include <com/sun/star/text/XText.hpp>
@@ -59,7 +57,8 @@ inline bool lclNeedsRichTextFormat( const Font* pFont )
 
 RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mnFontId( -1 )
+    mnFontId( -1 ),
+    mbConverted( false )
 {
 }
 
@@ -89,6 +88,9 @@ void RichStringPortion::finalizeImport()
 
 void RichStringPortion::convert( const Reference< XText >& rxText, const Font* pFont, bool bReplace )
 {
+    if ( mbConverted )
+        return;
+
     Reference< XTextRange > xRange;
     if( bReplace )
         xRange.set( rxText, UNO_QUERY );
@@ -113,6 +115,8 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
             pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
+
+    mbConverted = true;
 }
 
 // ----------------------------------------------------------------------------

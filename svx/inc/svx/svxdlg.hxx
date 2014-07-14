@@ -385,9 +385,14 @@ public:
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger ) = 0;
-    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg( Window* pParent, //add for SvxBorderBackgroundDlg
-                                            const SfxItemSet& rCoreSet,
-                                            sal_Bool bEnableSelector = sal_False) = 0;
+
+    //UUUU add for SvxBorderBackgroundDlg
+    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg(
+        Window* pParent,
+        const SfxItemSet& rCoreSet,
+        bool bEnableSelector = false,
+        bool bEnableDrawingLayerFillStyles = false) = 0;
+
     virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent, //add for SvxTransformTabDialog
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,

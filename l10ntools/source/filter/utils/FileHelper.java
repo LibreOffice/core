@@ -34,7 +34,7 @@ import java.util.*;
 
 /**
  * It collects some static helper functons to handle file system specific problems.
- * Sometimes it's neccessary to convert URL from/to system pathes;
+ * Sometimes it's necessary to convert URL from/to system paths;
  * or from string notation to structural versions (e.g. com.sun.star.util.URL).
  * And sometimes java had another notation then the office it has.
  * Further it provides functionality to work easiear with the java.io.File class of java.
@@ -47,7 +47,7 @@ public class FileHelper
 
     /**
      * Because the office need URLs for loading/saving documents
-     * we must convert used system pathes.
+     * we must convert used system paths.
      * And java use another notation for file URLs ... correct it.
      *
      * @param aSystemPath
@@ -92,7 +92,7 @@ public class FileHelper
 
     /**
      * The same as getFileURLFromSystemPath() before but uses string parameter instead
-     * of a java.io.File type. It exist to supress converting of neccessary parameters in the
+     * of a java.io.File type. It exist to suppress converting of necessary parameters in the
      * outside code. But of course getFileURLFromSystemPath(File) will be a little bit faster
      * then this method ...
      *
@@ -160,7 +160,7 @@ public class FileHelper
 
     /**
      * The same as getURLWithProtocolFromSystemPath() before but uses string parameter instead
-     * of a java.io.File types. It exist to supress converting of neccessary parameters in the
+     * of a java.io.File types. It exist to suppress converting of necessary parameters in the
      * outside code. But of course getURLWithProtocolFromSystemPath(File,File,String) will be
      * a little bit faster then this method ...
      *

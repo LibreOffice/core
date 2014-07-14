@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -83,21 +81,18 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
-// <--
-// --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-// <--
-
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
 #include <vcl/svapp.hxx>
-
-//UUUU
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <ndtxt.hxx>
+#include <drawdoc.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
@@ -310,8 +305,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 //Zum Sichern der statics, damit das Paint (quasi) reentrant wird.
 class SwSavePaintStatics
 {
-    sal_Bool            bSFlyMetafile,
-                        bSPageOnly;
+    sal_Bool            bSFlyMetafile; // not used: bSPageOnly;
     ViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
@@ -1424,7 +1418,7 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //        if ( pFly->IsBackgroundTransparent() )
 //        {
 //            // Background <pFly> is transparent drawn. Thus normally, its region
-//            // have not to be substracted from given region.
+//            // have not to be subtracted from given region.
 //            // But, if method is called for a fly frame and
 //            // <pFly> is a direct lower of this fly frame and
 //            // <pFly> inherites its transparent background brush from its parent,
@@ -1641,7 +1635,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 } // end of method <lcl_DrawGraphic>
 
 bool MA_FASTCALL DrawFillAttributes(
-    const FillAttributesPtr& rFillAttributes,
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRect& rPaintRect,
     OutputDevice& rOut)
@@ -1651,7 +1645,7 @@ bool MA_FASTCALL DrawFillAttributes(
 
     if(bUseNew && rFillAttributes.get() && rFillAttributes->isUsed())
     {
-        const basegfx::B2DRange aPaintRange(
+        basegfx::B2DRange aPaintRange(
             rPaintRect.Left(),
             rPaintRect.Top(),
             rPaintRect.Right(),
@@ -1661,6 +1655,14 @@ bool MA_FASTCALL DrawFillAttributes(
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
+            //UUUU need to expand for correct AAed and non-AAed visualization as primitive; move
+            // bounds to half-(logical)pixel bounds and add a width/height of one pixel that is missing
+            // from SwRect/Rectangle integer handling
+            const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(0.5, 0.5));
+
+            aPaintRange.expand(aPaintRange.getMinimum() - (aSingleUnit * 0.5));
+            aPaintRange.expand(aPaintRange.getMaximum() + (aSingleUnit * 1.5));
+
             const basegfx::B2DRange aDefineRange(
                 rOriginalLayoutRect.Left(),
                 rOriginalLayoutRect.Top(),
@@ -1984,7 +1986,7 @@ void MA_FASTCALL DrawGraphic(
             {
                 if ( !bGrfIsTransparent )
                 {
-                    /// substract area of background graphic from draw area
+                    /// subtract area of background graphic from draw area
                     /// OD 08.10.2002 #103898# - consider only that part of the
                     ///     graphic area that is overlapping with draw area.
                     SwRect aTmpGrf = aGrf;
@@ -3005,7 +3007,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 /// OD 29.08.2002 #102450#
                 /// determine background color of page for <PaintLayer> method
                 /// calls, paint <hell> or <heaven>
-                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
 
                 pPage->PaintBaBo( aPaintRect, pPage, sal_True );
 
@@ -3421,7 +3423,7 @@ sal_Bool SwFlyFrm::IsBackgroundTransparent() const
         SwRect aDummyRect;
 
         //UUUU
-        FillAttributesPtr aFillAttributes;
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false) )
         {
@@ -3671,14 +3673,15 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         {
             const SwFrmFmt* pSwFrmFmt = dynamic_cast< const SwFrmFmt* >(GetFmt());
 
-            if(pSwFrmFmt && RES_FLYFRMFMT == pSwFrmFmt->Which())
+            if(pSwFrmFmt && (RES_FLYFRMFMT == pSwFrmFmt->Which() || RES_FRMFMT == pSwFrmFmt->Which()))
             {
                 //UUUU check for transparency
-                const FillAttributesPtr aFillAttributes(pSwFrmFmt->getFillAttributes());
+                const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pSwFrmFmt->getSdrAllFillAttributesHelper());
 
-                if(aFillAttributes.get())
+                // check if the new fill attributes are used
+                if(aFillAttributes.get() && aFillAttributes->isUsed())
                 {
-                    bPaintCompleteBack = aFillAttributes->isTransparent();
+                    bPaintCompleteBack = true;
                 }
             }
             else
@@ -4105,7 +4108,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // OD 30.09.2002 #103636# - no SwAlign of shadow rectangle
         // no alignment necessary, because (1) <rRect> is already aligned
         // and because (2) paint of border and background will occur later.
-        // Thus, (1) assures that no conflicts with neighbour object will occure
+        // Thus, (1) assures that no conflicts with neighbour object will occur
         // and (2) assures that border and background is not affected by the
         // shadow paint.
         /*
@@ -4130,7 +4133,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
-                             const SwPageFrm *pPage,
+                             const SwPageFrm* /*pPage*/,
                              const Color *pColor ) const
 {
     if ( !rOutRect.IsOver( rRect ) )
@@ -4188,20 +4191,20 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
          ( !bCnt || _rAttrs.GetTopLine( _rFrm ) )
        )
     {
-        // substract distance between outer and inner line.
+        // subtract distance between outer and inner line.
         SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetTop()->GetDistance() );
         // OD 19.05.2003 #109667# - non-overlapping border rectangles:
         // adjust x-/y-position, if inner top line is a hair line (width = 1)
         sal_Bool bIsInnerTopLineHairline = sal_False;
         if ( !_bPrtOutputDev )
         {
-            // additionally substract width of top outer line
+            // additionally subtract width of top outer line
             // --> left/right inner/outer line doesn't overlap top outer line.
             nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetOutWidth() );
         }
         else
         {
-            // OD 29.04.2003 #107169# - additionally substract width of top inner line
+            // OD 29.04.2003 #107169# - additionally subtract width of top inner line
             // --> left/right inner/outer line doesn't overlap top inner line.
             nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetInWidth() );
             bIsInnerTopLineHairline = _rBox.GetTop()->GetInWidth() == 1;
@@ -4238,20 +4241,20 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
          ( !bCnt || _rAttrs.GetBottomLine( _rFrm ) )
        )
     {
-        // substract distance between outer and inner line.
+        // subtract distance between outer and inner line.
         SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetBottom()->GetDistance() );
         // OD 19.05.2003 #109667# - non-overlapping border rectangles:
         // adjust x-/y-position, if inner bottom line is a hair line (width = 1)
         sal_Bool bIsInnerBottomLineHairline = sal_False;
         if ( !_bPrtOutputDev )
         {
-            // additionally substract width of bottom outer line
+            // additionally subtract width of bottom outer line
             // --> left/right inner/outer line doesn't overlap bottom outer line.
             nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetOutWidth() );
         }
         else
         {
-            // OD 29.04.2003 #107169# - additionally substract width of bottom inner line
+            // OD 29.04.2003 #107169# - additionally subtract width of bottom inner line
             // --> left/right inner/outer line doesn't overlap bottom inner line.
             nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetInWidth() );
             bIsInnerBottomLineHairline = _rBox.GetBottom()->GetInWidth() == 1;
@@ -4357,7 +4360,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     // OD 06.05.2003 #107169# - adjustments for printer output device
     if ( bPrtOutputDev )
     {
-        // substract width of outer top line.
+        // subtract width of outer top line.
         if ( rBox.GetTop() && (!bCnt || _rAttrs.GetTopLine( _rFrm )) )
         {
             long nDist = ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
@@ -4388,7 +4391,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
                 }
             }
         }
-        // substract width of outer bottom line.
+        // subtract width of outer bottom line.
         if ( rBox.GetBottom() && (!bCnt || _rAttrs.GetBottomLine( _rFrm )) )
         {
             long nDist = ::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
@@ -5391,48 +5394,26 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  ViewShell* _pViewShell ) const
 {
-    if (  _pViewShell->GetWin() &&
-         !_pViewShell->GetViewOptions()->getBrowseMode() )
+    if (  _pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode() )
     {
-        SwRect aPgPrtRect( Prt() );
-        aPgPrtRect.Pos() += Frm().Pos();
-        if ( !aPgPrtRect.IsInside( _rOutputRect ) )
+        //UUUU Simplified paint with DrawingLayer FillStyle
+        SwRect aPgRect = Frm();
+        aPgRect._Intersection( _rOutputRect );
+
+        if(!aPgRect.IsEmpty())
         {
-            SwRect aPgRect = Frm();
-            aPgRect._Intersection( _rOutputRect );
-            SwRegionRects aPgRegion( aPgRect );
-            aPgRegion -= aPgPrtRect;
-            const SwPageFrm* pPage = static_cast<const SwPageFrm*>(this);
-            //if ( pPage->GetSortedObjs() )
-            //    ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
-            if ( aPgRegion.Count() )
+            OutputDevice *pOut = _pViewShell->GetOut();
+
+            if(pOut->GetFillColor() != aGlobalRetoucheColor)
             {
-                OutputDevice *pOut = _pViewShell->GetOut();
-                if ( pOut->GetFillColor() != aGlobalRetoucheColor )
-                    pOut->SetFillColor( aGlobalRetoucheColor );
-                for ( sal_uInt16 i = 0; i < aPgRegion.Count(); ++i )
-                {
-                    if ( 1 < aPgRegion.Count() )
-                    {
-                        ::SwAlignRect( aPgRegion[i], pGlobalShell );
-                        if( !aPgRegion[i].HasArea() )
-                            continue;
-                    }
-                    pOut->DrawRect(aPgRegion[i].SVRect());
-                }
+                pOut->SetFillColor(aGlobalRetoucheColor);
             }
+
+            pOut->DrawRect(aPgRect.SVRect());
         }
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// const SwPageFrm::mnBorderPxWidth, const SwPageFrm::mnShadowPxWidth
-// SwPageFrm::GetBorderRect (..), SwPageFrm::GetRightShadowRect(..),
-// SwPageFrm::GetBottomShadowRect(..),
-// SwPageFrm::PaintBorderAndShadow(..),
-// SwPageFrm::GetBorderAndShadowBoundRect(..)
-//
 // OD 12.02.2003 for #i9719# and #105645#
 // ----------------------------------------------------------------------
 
@@ -5835,7 +5816,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     sal_Bool bLowMode = sal_True;
 
     //UUUU
-    FillAttributesPtr aFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     sal_Bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode );
 
@@ -5868,14 +5849,14 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 pTmpBackBrush = new SvxBrushItem( Color( COL_WHITE ), RES_BACKGROUND );
 
                 //UUU
-                aFillAttributes.reset(new FillAttributes(Color( COL_WHITE )));
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(Color( COL_WHITE )));
             }
             else
             {
                 pTmpBackBrush = new SvxBrushItem( aGlobalRetoucheColor, RES_BACKGROUND);
 
                 //UUU
-                aFillAttributes.reset(new FillAttributes(aGlobalRetoucheColor));
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aGlobalRetoucheColor));
             }
 
             pItem = pTmpBackBrush;
@@ -5926,7 +5907,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     pItem = pNewItem;
 
                     //UUUU
-                    aFillAttributes.reset(new FillAttributes(*pCol));
+                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
                 }
 
                 //if ( pPage->GetSortedObjs() )
@@ -5942,9 +5923,29 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
                     bool bDone(false);
 
-                    if(pOut && aFillAttributes.get() && aFillAttributes->isUsed())
+                    // #i125189# We are also done when the new DrawingLayer FillAttributes are used
+                    // or the FillStyle is set (different from XFILL_NONE)
+                    if(pOut && aFillAttributes.get())
                     {
-                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRect, *pOut);
+                        if(aFillAttributes->isUsed())
+                        {
+                            // check if really something is painted
+                            bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRect, *pOut);
+                        }
+
+                        if(!bDone)
+                        {
+                            // if not, still a FillStyle could be set but the transparency is at 100%,
+                            // thus need to check the model data itself for FillStyle (do not rely on
+                            // SdrAllFillAttributesHelper since it already contains optimized information,
+                            // e.g. transparency leads to no fill)
+                            const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+
+                            if(XFILL_NONE != eFillStyle)
+                            {
+                                bDone = true;
+                            }
+                        }
                     }
 
                     if(!bDone)
@@ -6510,31 +6511,39 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
 
     @return Color
 */
-const Color& SwPageFrm::GetDrawBackgrdColor() const
+const Color SwPageFrm::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
     const Color* pDummyColor;
     SwRect aDummyRect;
 
     //UUUU
-    FillAttributesPtr aFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true) )
     {
-        const Graphic* pGraphic = pBrushItem->GetGraphic();
-
-        if(pGraphic)
+        if(aFillAttributes.get() && aFillAttributes->isUsed()) //UUUU
         {
-            // #29105# when a graphic is set, it may be possible to calculate a single
-            // color which looks good in all places of the graphic. Since it is
-            // planned to have text edit on the overlay one day and the fallback
-            // to aGlobalRetoucheColor returns something useful, just use that
-            // for now.
+            // let SdrAllFillAttributesHelper do the average color calculation
+            return Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
         }
-        else
+        else if(pBrushItem)
         {
-            // not a graphic, use (hopefully) initialized color
-            return pBrushItem->GetColor();
+            const Graphic* pGraphic = pBrushItem->GetGraphic();
+
+            if(pGraphic)
+            {
+                // #29105# when a graphic is set, it may be possible to calculate a single
+                // color which looks good in all places of the graphic. Since it is
+                // planned to have text edit on the overlay one day and the fallback
+                // to aGlobalRetoucheColor returns something useful, just use that
+                // for now.
+            }
+            else
+            {
+                // not a graphic, use (hopefully) initialized color
+                return pBrushItem->GetColor();
+            }
         }
     }
 
@@ -6618,7 +6627,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
             {
-                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
                 const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                 // --> OD #i76669#
                 SwViewObjectContactRedirector aSwRedirector( *pSh );
@@ -6690,7 +6699,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     @return true, if a background brush for the frame is found
 */
 sal_Bool SwFrm::GetBackgroundBrush(
-    FillAttributesPtr& rFillAttributes,
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SvxBrushItem* & rpBrush,
     const Color*& rpCol,
     SwRect &rOrigRect,
@@ -6706,18 +6715,7 @@ sal_Bool SwFrm::GetBackgroundBrush(
             return sal_False;
 
         //UUUU
-        const SwLayoutFrm* pSwLayoutFrm = dynamic_cast< const SwLayoutFrm* >(pFrm);
-
-        if(pSwLayoutFrm)
-        {
-            const SwFrmFmt* pSwFrmFmt = dynamic_cast< const SwFrmFmt* >(pSwLayoutFrm->GetFmt());
-
-            if(pSwFrmFmt  && RES_FLYFRMFMT == pSwFrmFmt->Which())
-            {
-                rFillAttributes = pSwFrmFmt->getFillAttributes();
-            }
-        }
-
+        rFillAttributes = pFrm->getSdrAllFillAttributesHelper();
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
 
         if( pFrm->IsSctFrm() )
@@ -6756,13 +6754,41 @@ sal_Bool SwFrm::GetBackgroundBrush(
         ///                     considered for fly frames
         const sal_Bool bConsiderBackgroundTransparency = pFrm->IsFlyFrm();
 
+        // #i125189# Do not base the decision for using the parent's fill style for this
+        // frame when the new DrawingLayer FillAttributes are used on the SdrAllFillAttributesHelper
+        // information. There the data is already optimized to no fill in the case that the
+        // transparence is at 100% while no fill is the criteria for derivation
+        bool bNewDrawingLayerFillStyleIsUsedAndNotNoFill(false);
+
+        if(rFillAttributes.get())
+        {
+            // the new DrawingLayer FillStyle is used
+            if(rFillAttributes->isUsed())
+            {
+                // it's not XFILL_NONE
+                bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
+            }
+            else
+            {
+                // maybe optimized already when 100% transparency is used somewhere, need to test
+                // XFillStyleItem directly from the model data
+                const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pFrm->GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+
+                if(XFILL_NONE != eFillStyle)
+                {
+                    bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
+                }
+            }
+        }
+
         /// OD 20.08.2002 #99657#
         ///     add condition:
         ///     If <bConsiderBackgroundTransparency> is set - see above -,
         ///     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
         if (
-            // done when FillAttributesare set
-            (rFillAttributes.get() && rFillAttributes->isUsed()) ||
+            // #i125189# Done when the new DrawingLayer FillAttributes are used and
+            // not XFILL_NONE (see above)
+            bNewDrawingLayerFillStyleIsUsedAndNotNoFill ||
 
             // done when SvxBrushItem is used
             !rBack.GetColor().GetTransparency() || rBack.GetGraphicPos() != GPOS_NONE ||
@@ -6905,7 +6931,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
-        const Color aPageBackgrdColor = pFlyPage->GetDrawBackgrdColor();
+        const Color aPageBackgrdColor(pFlyPage->GetDrawBackgrdColor());
         const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );
@@ -6951,7 +6977,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
 {
     Graphic aRet;
-    SdrModel *pMod = getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMod = getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();
@@ -6964,4 +6990,4 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
     return aRet;
 }
 
-
+//eof

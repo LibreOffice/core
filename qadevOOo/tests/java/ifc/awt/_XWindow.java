@@ -202,13 +202,13 @@ public class _XWindow extends MultiMethodTest {
     /**
     * Test calls the method. Then we check if listener's methods were called
     * when we move, resize, hide and show the window. The resizing is
-    * performed depending on 'XWindow.ControlShape' existance. If this
+    * performed depending on 'XWindow.ControlShape' existence. If this
     * relation exists then the size and position of container control
     * shape is changed, else the position and size of window itself is
     * chaged<p>
     *
     * Has <b> OK </b> status if methods of wListener were called when
-    * corresponding events occured. <p>
+    * corresponding events occurred. <p>
     *
     * The following method tests are to be executed before :
     * <ul>
@@ -352,7 +352,7 @@ public class _XWindow extends MultiMethodTest {
     * Test calls the method. Then we change focus and check that listener's
     * methods were called. <p>
     * Has <b> OK </b> status if methods of fListener were called when
-    * corresponding events occured. <p>
+    * corresponding events occurred. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setFocus() </code>: sets the focus to the window </li>

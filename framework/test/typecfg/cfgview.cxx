@@ -183,7 +183,7 @@ CFGView gApplication;
 void CFGView::Main()
 {
     // Init global servicemanager and set it.
-    // It's neccessary for other services ... e.g. configuration.
+    // It's necessary for other services ... e.g. configuration.
     ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
 
@@ -240,7 +240,7 @@ void CFGView::impl_printSyntax()
     @seealso    -
 
     @param      "rMember", reference to struct of global application member to fill arguments in it
-    @return     right filled member struct or unchanged struct if an error occure!
+    @return     right filled member struct or unchanged struct if an error occur!
 
     @onerror    We do nothing - or warn programmer!
 *//*-*************************************************************************************************************/

@@ -79,7 +79,7 @@ published interface XJob : com::sun::star::uno::XInterface
 
         @throws com::sun::star::uno::Exception
             to notify the excutor about faild operation; otherwise the return value
-            indicates a successfull finishing.
+            indicates a successful finishing.
     */
     any execute(
         [in] sequence< com::sun::star::beans::NamedValue > Arguments )

@@ -1659,7 +1659,7 @@ void Window::ImplCallInitShow()
 
 // -----------------------------------------------------------------------
 
-void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
+void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
@@ -1672,7 +1672,7 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
 
 // -----------------------------------------------------------------------
 
-void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
+void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
     if ( mpWindowImpl->mpFirstDel == pDel )
@@ -5120,7 +5120,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         }
     }
 
-    // #82968# notify event listeners for mouse and key events seperately and
+    // #82968# notify event listeners for mouse and key events separately and
     // not in PreNotify ( as for focus listeners )
     // this allows for procesing those events internally first and pass it to
     // the toolkit later
@@ -7388,7 +7388,7 @@ void Window::SetPosSizePixel( long nX, long nY,
 
         // Resize should be called directly. If we havn't
         // set the correct size, we get a second resize from
-        // the system with the correct size. This can be happend
+        // the system with the correct size. This can happen
         // if the size is to small or to large.
         ImplHandleResize( pWindow, nWidth, nHeight );
     }

@@ -73,7 +73,7 @@ void Bridge::handle_java_exc(
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occured, but no java exception available!?") +
+            OUSTR("java exception occurred, but no java exception available!?") +
             jni.get_stack_trace() );
     }
 
@@ -121,7 +121,7 @@ void Bridge::handle_java_exc(
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
     trace_buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
+        RTL_CONSTASCII_STRINGPARAM("exception occurred uno->java: [") );
     trace_buf.append( exc_name );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
     trace_buf.append(
@@ -408,7 +408,7 @@ void Bridge::call_java(
             }
         } // else: already set integral uno return value
 
-        // no exception occured
+        // no exception occurred
         *uno_exc = 0;
     }
 #ifdef BROKEN_ALLOCA
@@ -779,7 +779,7 @@ void SAL_CALL UNO_proxy_dispatch(
                                 reinterpret_cast< uno_Any * >( uno_ret ),
                                 0, 0, 0 );
                         }
-                        // no exception occured
+                        // no exception occurred
                         *uno_exc = 0;
                     }
                 }

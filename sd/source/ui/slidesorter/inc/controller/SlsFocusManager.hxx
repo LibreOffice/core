@@ -66,11 +66,11 @@ public:
     /** Move the focus from the currently focused page to one that is
         displayed adjacent to it, either vertically or horizontally.
         @param eDirection
-            Direction in which to move the focus.  Wrap arround is done
+            Direction in which to move the focus.  Wrap around is done
             differently when moving vertically or horizontally.  Vertical
-            wrap arround takes place in the same column, i.e. when you are
+            wrap around takes place in the same column, i.e. when you are
             in the top row and move up you come out in the bottom row in the
-            same column.  Horizontal wrap arround moves to the next
+            same column.  Horizontal wrap around moves to the next
             (FMD_RIGHT) or previous (FMD_LEFT) page.  Moving to the right
             from the last page goes to the first page and vice versa.
             When FMD_NONE is given, the current page index is checked for
@@ -218,7 +218,7 @@ private:
         const bool bScrollToFocus);
 
     /** Call all currently registered listeners that a focus change has
-        happended.  The focus may be hidden or shown or moved from one page
+        happened.  The focus may be hidden or shown or moved from one page
         object to another.
     */
     void NotifyFocusChangeListeners (void) const;

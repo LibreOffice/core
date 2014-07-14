@@ -2057,7 +2057,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         {
                             aDescriptor[daSelection]            <<= aSelection;
                             aDescriptor[daBookmarkSelection]    <<= sal_False;
-                                // these are selection indicies
+                                // these are selection indices
                                 // before we change this, all clients have to be adjusted
                                 // so that they recognize the new BookmarkSelection property!
                         }
@@ -2303,7 +2303,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 if(e.TargetException >>= aSql)
                     aInfo = aSql;
                 else
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
+                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: something strange happened!");
             }
             catch( const Exception& )
             {
@@ -2314,7 +2314,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         }
         else
             return 0L;
-                // 0 indicates that an error occured
+                // 0 indicates that an error occurred
     }
     else
     {   // we have to expand the queries or bookmarks
@@ -2776,7 +2776,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happended!");
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happened!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
@@ -3115,7 +3115,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: something strange happened!");
     }
     catch(Exception&)
     {

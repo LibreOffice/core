@@ -58,7 +58,7 @@ published service ContentHandlerFactory
 
         <p>
         Returned objects must support the service specification of a <type>ContentHandler</type>.
-        They can be created by using of his internal name, which must be unambigous everytime, only.
+        They can be created by using of his internal name, which must be unambigous every time, only.
         To get this name use further specified interfaces of this factory for access on
         the flat configuration.
         </p>

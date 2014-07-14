@@ -49,7 +49,7 @@ protected:
     SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
 
     // Set states for getAccessibleStateSet.
-    // This drived class additionaly sets
+    // This drived class additionally sets
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 

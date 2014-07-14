@@ -41,7 +41,7 @@
 // namespaces
 
 // no panic .. this define will be reseted at the end of this file.
-// BUT doing so it's neccessary to add all includes BEFORE this css-value
+// BUT doing so it's necessary to add all includes BEFORE this css-value
 // will be defined :_)
 #ifdef css
 #error "Who use css? I need it as namespace alias."
@@ -98,7 +98,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *
      *  @param  eMode
      *          specify the open mode for the returned configuration access.
-     *          It's interpreted as a flag field and can be any usefull combination
+     *          It's interpreted as a flag field and can be any useful combination
      *          of values of EConfigurationModes.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
@@ -191,7 +191,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          or which should be created with default values.
      *
      *  @return A reference to the found (or new created) set node.
-     *          Cant be NULL .. in such case an exception occure !
+     *          Can't be NULL .. in such case an exception occurred !
      *
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::uno::Exception if the provided configuration
@@ -208,7 +208,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *  The cached configuration access must be provided here.
      *
      *  @param  xCFG
-     *          the configuration root, where changes should be commited.
+     *          the configuration root, where changes should be committed.
      *
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::uno::Exception if the provided configuration
@@ -223,7 +223,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * Because it opens the specified configuration package, reads the key and
      * closes the configuration again.
      *
-     * So its not very usefull to use this method for reading multiple keys at the same time.
+     * So its not very useful to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static css::uno::Any readDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
@@ -239,7 +239,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * Because it opens the specified configuration package, writes the key, flush
      * all changes and closes the configuration again.
      *
-     * So its not very usefull to use this method for writing multiple keys at the same time.
+     * So its not very useful to use this method for writing multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static void writeDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,

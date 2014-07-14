@@ -182,7 +182,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VCLEVENT_COMBOBOX_SELECT:
         {
                  VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-                 if (pList != NULL)
+                 if (pList != NULL && m_xText.is())
                  {
                         Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                         if ( xText.is() )
@@ -416,7 +416,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount (void)
 
     // There is one action for drop down boxes (toggle popup) and none for
     // the other boxes.
-    return m_bIsDropDownBox ? 0 : 1;
+    return m_bIsDropDownBox ? 1 : 0;
 }
 
 sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
@@ -463,11 +463,8 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     if (nIndex<0 || nIndex>=getAccessibleActionCount())
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    //Solution:When combo_box,it should not has action information.
-    //return TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
-    if (m_aBoxType == LISTBOX)
-        return ::rtl::OUString();
-    return m_bIsDropDownBox?::rtl::OUString():TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
+
+    return m_bIsDropDownBox ? TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP) : ::rtl::OUString();
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBinding( sal_Int32 nIndex )

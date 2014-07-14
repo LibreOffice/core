@@ -50,7 +50,7 @@ On Error Goto ErrHndl
     oCursor = oObj.createTextCursor()
     if (isNULL(oCursor)) then Out.Log("Can't create text cursor!")
 
-    Out.Log("First, mark all existant entries with 0")
+    Out.Log("First, mark all existent entries with 0")
 
     oEnum = oObj.createEnumeration()
     while (oEnum.hasMoreElements())

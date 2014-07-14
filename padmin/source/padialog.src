@@ -353,7 +353,7 @@ String RID_ERR_NOPRINTER
 
 String RID_PA_TXT_TESTPAGE_PRINTED
 {
-    Text [ en-US ] = "The test page was printed succesfully. Please check the result.";
+    Text [ en-US ] = "The test page was printed successfully. Please check the result.";
 };
 
 String RID_ERR_NOWRITE

@@ -65,7 +65,7 @@ public class _XSheetOperation extends MultiMethodTest {
         } catch (com.sun.star.uno.Exception e) {
             result &= false ;
             log.println(
-                    "Exception occured while checking results of method");
+                    "Exception occurred while checking results of method");
             e.printStackTrace(log);
         }
 
@@ -89,7 +89,7 @@ public class _XSheetOperation extends MultiMethodTest {
             result = resultVal >= 0;
         } catch (com.sun.star.uno.Exception e) {
             result = false;
-            log.println("Exception occured in method computeFunction.");
+            log.println("Exception occurred in method computeFunction.");
             e.printStackTrace(log);
         }
 

@@ -45,7 +45,7 @@ exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
     boolean PreviousValue;
     /**
        the <type>XPackage</type> that was already bound to the provided
-       <code>url</code> paramter during
+       <code>url</code> parameter during
        <member>XPackageRegistry::bindPackage</member>.
 
        <p>Must not be <NULL/>.</p>

@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
@@ -41,10 +38,7 @@
 #include <swmodule.hxx>
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
-
-// OD 12.12.2002 #103492#
 #include <pagepreviewlayout.hxx>
-
 #include <comcore.hrc>
 #include <svx/svdundo.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -52,6 +46,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svx/fmmodel.hxx>
+#include <drawdoc.hxx>
 
 /*************************************************************************
 |*

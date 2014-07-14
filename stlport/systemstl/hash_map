@@ -55,40 +55,38 @@ template<
 	typename __K,
 	typename __T,
 	typename __H = hash<__K>,
-	typename __E = equal_to<__K>,
-	typename __A = allocator<pair<__K,__T> > >
+	typename __E = equal_to<__K> >
 class hash_map
-:	public unordered_map<__K,__T,__H,__E,__A>
+:	public unordered_map<__K,__T,__H,__E>
 {
 public:
-	typedef unordered_map<__K,__T,__H,__E,__A> _super;
+	typedef unordered_map<__K,__T,__H,__E> _super;
 
 	hash_map( void) {}
 	hash_map( size_t n) : _super( n) {}
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!
-	hash_map( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
+	hash_map( size_t, const __H&, const __E& rE=__E()); // not implemented
 };
 
 template<
 	typename __K,
 	typename __T,
 	typename __H = hash<__K>,
-	typename __E = equal_to<__K>,
-	typename __A = allocator<pair<__K,__T> > >
+	typename __E = equal_to<__K> >
 class hash_multimap
-:	public unordered_multimap<__K,__T,__H,__E,__A>
+:	public unordered_multimap<__K,__T,__H,__E>
 {
 public:
-	typedef unordered_multimap<__K,__T,__H,__E,__A> _super;
+	typedef unordered_multimap<__K,__T,__H,__E> _super;
 
 	hash_multimap( void) {}
 	hash_multimap( size_t n) : _super( n) {}
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!
-	hash_multimap( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
+	hash_multimap( size_t, const __H&, const __E& rE=__E()); // not implemented
 };
 
 } // namespace std

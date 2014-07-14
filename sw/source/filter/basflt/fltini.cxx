@@ -575,7 +575,7 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
                         nParaLeft -= nLeft;
                 else
                         //#83154#, Don't think any of the older #80856# bugfix code is
-                        //relevent anymore.
+                        //relevant anymore.
                         nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
                 aLR.SetTxtLeft( nParaLeft );
         }

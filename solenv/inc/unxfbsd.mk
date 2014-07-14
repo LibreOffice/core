@@ -37,8 +37,14 @@ JAVAFLAGSDEBUG=-g
 .IF "$(CPUNAME)" == "X86_64"
 .INCLUDE : unxfbsdx.mk
 .ENDIF
+.IF "$(CPUNAME)" == "POWERPC"
+.INCLUDE : unxfbsdppc.mk
+.ENDIF
+.IF "$(CPUNAME)" == "POWERPC64"
+.INCLUDE : unxfbsdppc64.mk
+.ENDIF
 
-# filter for supressing verbose messages from linker
+# filter for suppressing verbose messages from linker
 #not needed at the moment
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 

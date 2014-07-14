@@ -800,7 +800,7 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
     sal_Bool bUndo (pDoc->IsUndoEnabled());
     sal_Bool bXMLLoading(pDoc->IsImportingXML());
 
-    // #i925#; it is not neccessary to test whether the cell is editable on loading a XML document
+    // #i925#; it is not necessary to test whether the cell is editable on loading a XML document
     if (!bXMLLoading)
     {
         ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
@@ -839,7 +839,7 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
 
     aModificator.SetDocumentModified();
 
-    // #i925#; it is not neccessary to notify on loading a XML document
+    // #i925#; it is not necessary to notify on loading a XML document
     // #103934#; notify editline and cell in edit mode
     if (bApi && !bXMLLoading)
         NotifyInputHandler( rPos );
@@ -1229,7 +1229,7 @@ sal_Bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAtt
                     pUndoDoc, bMulti, &rPattern ) );
     }
 
-    // While loading XML it is not neccessary to ask HasAttrib. It needs too much time.
+    // While loading XML it is not necessary to ask HasAttrib. It needs too much time.
     sal_uInt16 nExtFlags = 0;
     if ( !bImportingXML )
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change

@@ -167,7 +167,7 @@ void PresenterSlideShowView::LateInit (void)
     {
         Reference<presentation::XSlideShowView> xView (this);
         mxSlideShow->addView(xView);
-        // Prevent embeded sounds being played twice at the same time by
+        // Prevent embedded sounds being played twice at the same time by
         // disabling sound for the new slide show view.
         beans::PropertyValue aProperty;
         aProperty.Name = A2S("IsSoundEnabled");

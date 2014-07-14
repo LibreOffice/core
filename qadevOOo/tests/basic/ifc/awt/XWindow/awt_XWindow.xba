@@ -256,7 +256,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("addKeyListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.addKeyListener(oListener5)
     oObj.addKeyListener(oListener6)
     bOK = bOK AND true
@@ -264,7 +264,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("removeKeyListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.removeKeyListener(oListener5)
     bOK = bOK AND true
     oObj.removeKeyListener(oListener6)
@@ -272,7 +272,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("addMouseListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.addMouseListener(oListener7)
     oObj.addMouseListener(oListener8)
     bOK = bOK AND true
@@ -280,7 +280,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("removeMouseListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.removeMouseListener(oListener7)
     bOK = bOK AND true
     oObj.removeMouseListener(oListener8)
@@ -288,7 +288,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("addMouseMotionListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.addMouseMotionListener(oListener9)
     oObj.addMouseMotionListener(oListener10)
     bOK = bOK AND true
@@ -296,7 +296,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("removeMouseMotionListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.removeMouseMotionListener(oListener9)
     bOK = bOK AND true
     oObj.removeMouseMotionListener(oListener10)
@@ -304,7 +304,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("addPaintListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.addPaintListener(oListener11)
     oObj.addPaintListener(oListener12)
     bOK = bOK AND true
@@ -312,7 +312,7 @@ On Error Goto ErrHndl
 
     Test.StartMethod("removePaintListener()")
     bOK = true
-    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    Out.Log("Not really tested! Please see comments in Basic-Source.")
     oObj.removePaintListener(oListener11)
     bOK = bOK AND true
     oObj.removePaintListener(oListener12)

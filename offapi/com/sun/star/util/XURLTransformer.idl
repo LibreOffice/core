@@ -99,7 +99,7 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         stores it into <member>URL::Complete</member>
 
         @param aURL
-                the URL which contains alls neccessary information in a structured form. The
+                the URL which contains alls necessary information in a structured form. The
                 member <member>URL::Complete</member> contains the URL in string notation after
                 the operation finished successfully. Otherwise the content of <member>URL::complete</member>
                 is not defined.
@@ -113,7 +113,7 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
     /** returns a representation of the URL for UI purposes only
 
         <p>
-        Sometimes it can be usefull to show an URL on an user interface
+        Sometimes it can be useful to show an URL on an user interface
         in a more "human readable" form. Such URL can't be used on any API
         call, but make it easier for the user to understand it.
         </p>

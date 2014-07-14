@@ -211,7 +211,7 @@ typedef ::boost::shared_ptr< XBitmapList > XBitmapListSharedPtr;
 
 //////////////////////////////////////////////////////////////////////////////
 // XPropertyListFactory to limit XListSharedPtr creation and thus XPropertyList creation
-// to this factory, so noone can instantiate a non-shared instace of XPropertyList
+// to this factory, so no one can instantiate a non-shared instace of XPropertyList
 // or it's derivates
 
 class SVX_DLLPUBLIC XPropertyListFactory

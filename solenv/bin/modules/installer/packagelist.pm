@@ -735,7 +735,7 @@ sub log_packages_content
 }
 
 #####################################################################
-# Creating assignments from modules to destination pathes.
+# Creating assignments from modules to destination paths.
 # This is required for logging in fileinfo file. Otherwise
 # the complete destination file would not be known in file list.
 # Saved in %installer::globals::moduledestination
@@ -761,7 +761,7 @@ sub create_module_destination_hash
 }
 
 #####################################################################
-# Adding the default pathes into the files collector for Unixes.
+# Adding the default paths into the files collector for Unixes.
 # This is necessary to know the complete destination path in
 # fileinfo log file.
 #####################################################################

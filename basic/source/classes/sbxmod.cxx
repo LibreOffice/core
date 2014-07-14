@@ -1297,7 +1297,7 @@ void SbModule::RunInit()
 
 void SbModule::AddVarName( const String& aName )
 {
-    // see if the name is added allready
+    // see if the name is added already
     std::vector< String >::iterator it_end = mModuleVariableNames.end();
     for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
     {

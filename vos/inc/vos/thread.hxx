@@ -87,7 +87,7 @@ public:
     /// Constructor
     OThread();
 
-    /// Destructor kills thread if neccessary
+    /// Destructor kills thread if necessary
     virtual ~OThread();
 
     /** Create running instance of a thread.
@@ -211,7 +211,7 @@ public:
     virtual ~OThreadData();
 
     /** Set the data associated with the data key.
-        @returns True if operation was successfull
+        @returns True if operation was successful
     */
     sal_Bool SAL_CALL setData(void *pData);
 

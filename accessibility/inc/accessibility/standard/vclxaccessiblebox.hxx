@@ -112,7 +112,7 @@ public:
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
-    /** The returned string is assoicated with resource
+    /** The returned string is associated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
@@ -175,7 +175,7 @@ protected:
     /** This flag specifies whether an object has a list as child regardless
         of whether that child being currently instantiated or not.  This
         flag is always true in the current implementation because the list
-        child is just another wrapper arround this object and thus has the
+        child is just another wrapper around this object and thus has the
         same life time.
     */
     bool m_bHasListChild;

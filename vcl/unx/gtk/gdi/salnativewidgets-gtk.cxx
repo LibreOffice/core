@@ -449,7 +449,7 @@ void GtkData::deInitNWF( void )
     {
         // free up global widgets
         // gtk_widget_destroy will in turn destroy the child hierarchy
-        // so only destroy disjunct hierachies
+        // so only destroy disjunct hierarchies
         if( gWidgetData[i].gCacheWindow )
             gtk_widget_destroy( gWidgetData[i].gCacheWindow );
         if( gWidgetData[i].gMenuWidget )
@@ -982,7 +982,10 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
-        returnVal = sal_True;
+        if (rNativeBoundingRegion.GetWidth()>0 && rNativeBoundingRegion.GetHeight()>0)
+            returnVal = sal_True;
+        else
+            returnVal = sal_False;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
@@ -3615,7 +3618,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     bNeedButtonStyleAsEditBackgroundWorkaround = false;
 
     // setup some workarounds for "blueprint" theme
-    if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
+    if( pThemeName
+        && (   strncasecmp( pThemeName, "blueprint", 9 ) == 0
+            || strncasecmp( pThemeName, "Adwaita", 7 ) == 0 ))
     {
         bNeedButtonStyleAsEditBackgroundWorkaround = true;
         if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )

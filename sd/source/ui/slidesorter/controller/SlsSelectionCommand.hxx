@@ -52,7 +52,7 @@ class SelectionCommand
     : public Command
 {
 public:
-    /** Create a new command object that will on its exection use the given
+    /** Create a new command object that will on its execution use the given
         PageSelector to select a set of pages.
     */
     SelectionCommand (

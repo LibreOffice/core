@@ -92,7 +92,7 @@ void
 PageDisplay::Create_AllDefsFile()
 {
     // This method is a provisorium, because later this will
-    //   be spreaded over the files.
+    //   be spread over the files.
 
     Env().MoveDir_2Root();
     Env().SetFile_AllDefs();

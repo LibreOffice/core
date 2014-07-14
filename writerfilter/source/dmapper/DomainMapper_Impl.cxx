@@ -3541,10 +3541,12 @@ void DomainMapper_Impl::PopFieldContext()
 /*-- 11.06.2007 16:19:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId )
+void DomainMapper_Impl::AddBookmark(
+    const ::rtl::OUString& rBookmarkName,
+    const sal_Int32 nId )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( rId );
+    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( nId );
     //is the bookmark name already registered?
     try
     {
@@ -3575,7 +3577,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
             uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
             bool bIsStart = !xCursor->goLeft(1, false);
             uno::Reference< text::XTextRange > xCurrent = xCursor->getStart();
-            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));
+            m_aBookmarkMap.insert(BookmarkMap_t::value_type( nId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));
         }
     }
     catch( const uno::Exception& )
@@ -3880,7 +3882,7 @@ void DomainMapper_Impl::ApplySettingsTable()
 SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 {
     SectionPropertyMap* pSectionContext = 0;
-    //the section context is not availabe before the first call of startSectionGroup()
+    //the section context is not available before the first call of startSectionGroup()
     if( !IsAnyTableImport() )
     {
         PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_SECTION);

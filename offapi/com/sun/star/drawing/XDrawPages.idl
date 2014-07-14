@@ -43,7 +43,7 @@
     <p>The pages are stored in an index container. The order is determined by
     the index.
 
-    You usualy get this interface if you use the
+    You usually get this interface if you use the
     <type>XDrawPagesSupplier</type> or the <type>XMasterPagesSupplier</type>
     at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
 */

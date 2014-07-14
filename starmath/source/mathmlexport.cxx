@@ -443,7 +443,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
-    // EXPORT_OASIS is required here allthough there is no differrence between
+    // EXPORT_OASIS is required here although there is no differrence between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_ALL );
@@ -869,7 +869,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
     if (cTmp != 0)
         nArse[0] = cTmp;
-    DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+    DBG_ASSERT(nArse[0] != 0xffff,"Non existent symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -1073,11 +1073,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        DBG_ASSERT(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        DBG_ASSERT(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
         pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
             sal_True,sal_True);

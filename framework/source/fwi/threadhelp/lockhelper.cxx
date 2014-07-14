@@ -163,7 +163,7 @@ LockHelper::~LockHelper()
                 we must simulate it as a write access!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method acquireWriteAccess()
 
@@ -200,7 +200,7 @@ void LockHelper::acquire()
                 we must simulate it as a write access!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method releaseWriteAccess()
 
@@ -237,7 +237,7 @@ void LockHelper::release()
                 We use m_eLockType to differ between all possible "lock-member"!!!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method releaseReadAccess()
 
@@ -273,7 +273,7 @@ void LockHelper::acquireReadAccess()
                 We use m_eLockType to differ between all possible "lock-member"!!!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method acquireReadAccess()
 
@@ -311,7 +311,7 @@ void LockHelper::releaseReadAccess()
                 We use m_eLockType to differ between all possible "lock-member"!!!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method releaseWriteAccess()
 
@@ -347,7 +347,7 @@ void LockHelper::acquireWriteAccess()
                 We use m_eLockType to differ between all possible "lock-member"!!!
 
     @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's neccessary for some cppu-helper classes ...
+                It's necessary for some cppu-helper classes ...
 
     @seealso    method acquireWriteAccess()
 
@@ -388,10 +388,10 @@ void LockHelper::releaseWriteAccess()
 
     @attention  a) Don't call this method if you are not a writer!
                     Results are not defined then ...
-                    An upgrade can't be implemented realy ... because acquiring new access
+                    An upgrade can't be implemented really ... because acquiring new access
                     will be the same - there no differences!
                 b) Without function if m_eLockTyp is different from E_FAIRRWLOCK(!) ...
-                    because, a mutex don't support it realy.
+                    because, a mutex don't support it really.
 
     @seealso    -
 

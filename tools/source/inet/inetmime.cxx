@@ -3082,7 +3082,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     // And there appear to exist some broken mailers that only encode single
     // letters within words, like "Appel
     // =?iso-8859-1?Q?=E0?=t=?iso-8859-1?Q?=E9?=moin", so it seems best to
-    // detect encoded words even when not propperly surrounded by white space.
+    // detect encoded words even when not properly surrounded by white space.
     //
     // Non US-ASCII characters in rBody are treated as ISO-8859-1.
     //

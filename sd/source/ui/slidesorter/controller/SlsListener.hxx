@@ -82,7 +82,7 @@ public:
     /** Connect to the current controller of the view shell as listener.
         This method is called once during initialization and every time a
         FrameActionEvent signals the current controller being exchanged.
-        When the connection is successfull then the flag
+        When the connection is successful then the flag
         mbListeningToController is set to <true/>.
     */
     void ConnectToController (void);
@@ -154,7 +154,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame> mxFrameWeak;
 
     /** This object is used to lock the model between some
-        events.  It is refernce counted in order to cope with events that
+        events.  It is references counted in order to cope with events that
         are expected but never sent.
     */
     ::boost::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;

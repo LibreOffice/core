@@ -1697,7 +1697,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     {
         // we need to do a second pass for text grouping options
         // since changing them can cause effects to be removed
-        // or replaced, we do this after we aplied all other options
+        // or replaced, we do this after we applied all other options
         // above
 
         sal_Int32 nTextGrouping = 0;
@@ -1788,7 +1788,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
             if( bHasAnimateForm )
             {
-                if( pTextGroup->getAnimateForm() != bAnimateForm )
+                if( pTextGroup.get() && pTextGroup->getAnimateForm() != bAnimateForm )
                 {
                     if( (pTextGroup->getTextGrouping() >= 0) && (nTextGrouping == -1 ) )
                     {
@@ -1806,22 +1806,25 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
             if( bHasTextGrouping )
             {
-                if( (pTextGroup->getTextGrouping() != nTextGrouping) )
+                if( pTextGroup.get() && pTextGroup->getTextGrouping() != nTextGrouping )
                 {
                     pEffectSequence->setTextGrouping( pTextGroup, nTextGrouping );
                     bChanged = true;
                 }
             }
 
-            if (!bDoSetAnimateFormFirst&&bNeedDoSetAnimateForm)
+            if (!bDoSetAnimateFormFirst && bNeedDoSetAnimateForm)
             {
-                pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
-                bChanged = true;
+                if( pTextGroup.get() )
+                {
+                    pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
+                    bChanged = true;
+                }
             }
 
             if( bHasTextGroupingAuto )
             {
-                if( pTextGroup->getTextGroupingAuto() != fTextGroupingAuto )
+                if( pTextGroup.get() && pTextGroup->getTextGroupingAuto() != fTextGroupingAuto )
                 {
                     pEffectSequence->setTextGroupingAuto( pTextGroup, fTextGroupingAuto );
                     bChanged = true;
@@ -1830,7 +1833,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
             if( bHasTextReverse )
             {
-                if( pTextGroup->getTextReverse() != bTextReverse )
+                if( pTextGroup.get() && pTextGroup->getTextReverse() != bTextReverse )
                 {
                     pEffectSequence->setTextReverse( pTextGroup, bTextReverse );
                     bChanged = true;

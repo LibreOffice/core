@@ -1,5 +1,5 @@
---- misc/build/commons-codec-1.6-src/build.xml-old	2012-05-05 22:12:32.000000000 -0500
-+++ misc/build/commons-codec-1.6-src/build.xml	2012-05-05 22:16:00.000000000 -0500
+--- misc/build/commons-codec-1.9-src/build.xml-old	2012-05-05 22:12:32.000000000 -0500
++++ misc/build/commons-codec-1.9-src/build.xml	2012-05-05 22:16:00.000000000 -0500
 @@ -96,7 +96,6 @@
      </target>
      <target name="dist" depends="compile, javadoc" description="Create binary distribution">

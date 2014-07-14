@@ -83,7 +83,7 @@ published constants ElementModes
     const long READWRITE = 7;
 
     //------------------------------------------------------------------------
-    /** lets the document be truncated immediatelly after opening.
+    /** lets the document be truncated immediately after opening.
 
         <p>
         This flag makes sence only in combination with

@@ -64,7 +64,7 @@ namespace framework{
 class StartModuleDispatcher : public css::lang::XTypeProvider
                             , public css::frame::XNotifyingDispatch             // => XDispatch
                             , public css::frame::XDispatchInformationProvider
-                            // baseclasses ... order is neccessary for right initialization!
+                            // baseclasses ... order is necessary for right initialization!
                             , private ThreadHelpBase
                             , public  ::cppu::OWeakObject
 {
@@ -180,7 +180,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
                     directly used as css::frame::DispatchResultState value.
 
             @param  aResult
-                    not used yet realy ...
+                    not used yet really ...
          */
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,

@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module io {
 /** is a stream which allows writing the data of persistent objects.
 
     <p>Implementations of this service must fulfill the specifications of the
-    <type>DataOutputStream</type> service; futhermore, the stream needs to be chained to a
+    <type>DataOutputStream</type> service; furthermore, the stream needs to be chained to a
     <type>XMarkableStream</type>. Therefore, it also provides the <type>XMarkableStream</type>
     interface, but it delegates the calls to the chained object.
     The written objects are held until this instance is destroyed.
@@ -60,7 +60,7 @@ module com {  module sun {  module star {  module io {
     Object  ObjectData      // the data of the object
     </pre>
 
-    @garantees
+    @guarantees
     <ul>
         <li>-thread safe </li>
         <li>-allow buffer size is 2 ^ 31 -1 </li>

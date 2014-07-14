@@ -48,7 +48,7 @@ public class _XDefaultNumberingProvider extends MultiMethodTest {
     /**
     * Just gets numberings for "en" locale. <p>
     * Has <b>OK</b> status if not <code>null</code> value returned
-    * and no runtime exceptions occured.
+    * and no runtime exceptions occurred.
     */
     public void _getDefaultOutlineNumberings() {
         XIndexAccess xIA[] = oObj.getDefaultOutlineNumberings(loc) ;
@@ -59,7 +59,7 @@ public class _XDefaultNumberingProvider extends MultiMethodTest {
     /**
     * Just gets numberings for "en" locale. <p>
     * Has <b>OK</b> status if not <code>null</code> value returned
-    * and no runtime exceptions occured.
+    * and no runtime exceptions occurred.
     */
     public void _getDefaultContinuousNumberingLevels() {
         PropertyValue[][] lev = oObj.getDefaultContinuousNumberingLevels(loc) ;

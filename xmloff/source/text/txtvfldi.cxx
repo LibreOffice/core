@@ -917,7 +917,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 break;
             }
             default:
-                DBG_ERROR("unkown varfield type");
+                DBG_ERROR("unknown varfield type");
             } // switch
         } // else: no field master found/constructed
     } // else: no sequence-decl
@@ -977,7 +977,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
         {
             OUString sNew;
 
-            // FIXME! cant find if name is taken already!!!!
+            // FIXME! can't find if name is taken already!!!!
 
             nCollisionCount++;
             OUStringBuffer aBuf;
@@ -1002,7 +1002,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             // find new name that is not taken
             OUString sNew;
 
-            // FIXME! cant find if name is taken already!!!!
+            // FIXME! can't find if name is taken already!!!!
 
             nCollisionCount++;
             OUStringBuffer aBuf;

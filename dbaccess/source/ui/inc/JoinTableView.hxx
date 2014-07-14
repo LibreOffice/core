@@ -209,7 +209,7 @@ namespace dbaui
         OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false,const OTableConnection* _rpFirstAfter = NULL) const;
 
         // clears the window map and connection vector without destroying it
-        // that means teh data of the windows and connection will be untouched
+        // that means the data of the windows and connection will be untouched
         void clearLayoutInformation();
 
         // set the focus to that tab win which most recently had it (or to the first available one)
@@ -247,7 +247,7 @@ namespace dbaui
 
         void modified();
 
-        /** returns if teh given window is visible.
+        /** returns if the given window is visible.
             @param  _rPoint
                 The Point to check
             @param  _rSize

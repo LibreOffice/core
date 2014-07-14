@@ -112,7 +112,7 @@ namespace basegfx
 
         /** check edge for being a bezier segment
 
-            This test the existance of control vectors, but do not apply
+            This test the existence of control vectors, but do not apply
             testAndSolveTrivialBezier() to the bezier segment, so it is still useful
             to do so.
             Since it can use internal data representations, it is faster

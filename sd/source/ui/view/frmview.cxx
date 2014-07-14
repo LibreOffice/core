@@ -561,7 +561,7 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
 //  pValue++;nIndex++;
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
-/* #107128# Product managment decided to not make this persistent
+/* #107128# Product management decided to not make this persistent
     aUserData.addValue( sUNO_View_DrawMode, makeAny( (sal_Int32)GetDrawMode() ) );
     aUserData.addValue( sUNO_View_PreviewDrawMode, makeAny( (sal_Int32)GetPreviewDrawMode() ) );
 */
@@ -803,7 +803,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetSlidesPerRow( (sal_uInt16)nInt16 );
                 }
             }
-/* #107128# Product managment decided to not make this persistent
+/* #107128# Product management decided to not make this persistent
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_DrawMode ) ) )
             {
                 if( pValue->Value >>= nInt32 )

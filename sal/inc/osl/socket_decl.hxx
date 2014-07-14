@@ -272,7 +272,7 @@ namespace osl
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket is not ready.
             @return <code>sal_True</code> if read operations (recv, recvFrom, accept) on the Socket
-            will NOT block; <code>sal_False</code> if it would block or if an error occured.
+            will NOT block; <code>sal_False</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
@@ -284,7 +284,7 @@ namespace osl
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket is not ready.
             @return <code>sal_True</code> if send operations (send, sendTo) on the Socket
-            will NOT block; <code>sal_False</code> if it would block or if an error occured.
+            will NOT block; <code>sal_False</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
@@ -299,7 +299,7 @@ namespace osl
 
             @return <code>sal_True</code> if OOB-request operations (recv with appropriate flags)
             on the Socket will NOT block; <code>sal_False</code> if it would block or if
-            an error occured.
+            an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
@@ -315,7 +315,7 @@ namespace osl
             <li> <code>osl_Socket_TypeRaw</code>
             <li> <code>osl_Socket_TypeRdm</code>
             <li> <code>osl_Socket_TypeSeqPacket</code>
-            <li> <code>osl_invalid_SocketType</code>, if an error occured
+            <li> <code>osl_invalid_SocketType</code>, if an error occurred
             </ul>
         */
         inline oslSocketType    SAL_CALL getType() const;
@@ -380,7 +380,7 @@ namespace osl
 
             <li><code>osl_Socket_OptionTcpNoDelay</code><br>
               Disables the Nagle algorithm for send coalescing. (Do not
-              collect data until a packet is full, instead send immediatly.
+              collect data until a packet is full, instead send immediately.
               This increases network traffic but might improve latency-times.)
               1 = disables the algorithm, 0 = keeps it enabled.
             </ul>
@@ -399,7 +399,7 @@ namespace osl
             <li><code>osl_Socket_LevelTcp</code>    : Level of Transmission Control Protocol
             </ul>
             @return The size of the attribute copied into pBuffer or -1 if an error
-            occured.
+            occurred.
         */
         inline sal_Int32 SAL_CALL getOption(
             oslSocketOption Option,
@@ -481,10 +481,10 @@ namespace osl
         */
         inline void SAL_CALL clearError() const;
 
-        /** returns a constant decribing the last error for the socket system.
+        /** returns a constant describing the last error for the socket system.
 
-            @return osl_Socket_E_NONE if no error occured, invalid_SocketError if
-            an unknown (unmapped) error occured, otherwise an enum describing the
+            @return osl_Socket_E_NONE if no error occurred, invalid_SocketError if
+            an unknown (unmapped) error occurred, otherwise an enum describing the
             error.
             @see osl_getLastSocketError()
         */
@@ -574,7 +574,7 @@ namespace osl
             <li><code>osl_Socket_MsgMaxIOVLen</code>
             </ul>
 
-            @return the number of transfered bytes. It may be less than BytesToSend.
+            @return the number of transferred bytes. It may be less than BytesToSend.
         */
         sal_Int32 SAL_CALL send(const void* pBuffer,
                                 sal_uInt32 BytesToSend,
@@ -705,7 +705,7 @@ namespace osl
             <li><code>osl_Socket_MsgMaxIOVLen</code>
             </ul>
 
-            @return the number of transfered bytes.
+            @return the number of transferred bytes.
         */
         inline sal_Int32    SAL_CALL sendTo( const SocketAddr& ReceiverAddr,
                                              const void* pBuffer,

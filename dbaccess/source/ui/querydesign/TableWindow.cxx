@@ -220,7 +220,7 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured!");
+        OSL_ENSURE(0,"Exception occurred!");
     }
     try
     {
@@ -249,7 +249,7 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured!");
+        OSL_ENSURE(0,"Exception occurred!");
     }
 
     return sal_True;

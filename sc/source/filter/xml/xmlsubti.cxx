@@ -787,7 +787,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         {
             if (nCurrentSheet > aItr->aRange.Sheet)
             {
-                DBG_ERROR("should never hapen, because the list should be cleared in DeleteTable");
+                DBG_ERROR("should never happen, because the list should be cleared in DeleteTable");
                 aItr = aMatrixRangeList.erase(aItr);
             }
             else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))

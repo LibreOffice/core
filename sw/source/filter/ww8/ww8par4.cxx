@@ -19,11 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -54,10 +52,10 @@
 #include <svtools/filter.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
-
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
 #include "ww8par2.hxx"          // WWFlyPara::BoxUpWidth()
+#include <drawdoc.hxx>
 
 struct OLE_MFP
 {
@@ -516,7 +514,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
          #101578#
          It is possible to have a number of date stamps for the created time
          of the change, (possibly a word bug) so we must use the "get a full
-         list" varient of HasCharSprm and take the last one as the true one.
+         list" variant of HasCharSprm and take the last one as the true one.
         */
         std::vector<const sal_uInt8 *> aResult;
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);

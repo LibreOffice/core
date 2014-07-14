@@ -69,7 +69,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
 
         /** shows the progress.
 
-            @attention  This member isnt synchronized using our own mutex!
+            @attention  This member isn't synchronized using our own mutex!
                         Its guarded by the solarmutex only. Otherwhise
                         we have to lock two of them, which can force a deadlock ...
             */

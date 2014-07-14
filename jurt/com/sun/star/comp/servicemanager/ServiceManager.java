@@ -119,7 +119,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @return     the factory for the <code>ServiceManager</code>.
      * @param      implName     the implementation name of the of the service.
      *                          Must be equal to <code>com.sun.star.comp.servicemanager.ServicManager</code>
-     * @param      multiFactory refernce of the <code>MultiServiceFactory</code>. This parameter will be ignored.
+     * @param      multiFactory references of the <code>MultiServiceFactory</code>. This parameter will be ignored.
      * @param      regKey       the root key of the registry. This parameter will be ignored.
      */
       public static XSingleServiceFactory getServiceFactory( String implName,
@@ -158,7 +158,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * Registers a list of components given by their class names.
      * <p>
      * @param   newImpls    list of the components that should be registered, given by their class names.
-     *                      If any exception occured during the registration, the process will be canceled.
+     *                      If any exception occurred during the registration, the process will be canceled.
      * @see     com.sun.star.container.XSet
      */
     private void xaddFactories( String[] newImpls )

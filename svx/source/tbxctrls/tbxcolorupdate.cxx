@@ -109,7 +109,19 @@ namespace svx
                 else
                     pBmpAcc->SetLineColor( Color( COL_BLACK ) );
 
-                pBmpAcc->SetFillColor( maCurColor = aColor );
+                // use not only COL_TRANSPARENT for detection of transparence,
+                // but the method/way which is designed to do that
+                const bool bIsTransparent(0xff == aColor.GetTransparency());
+                maCurColor = aColor;
+
+                if(bIsTransparent)
+                {
+                    pBmpAcc->SetFillColor();
+                }
+                else
+                {
+                    pBmpAcc->SetFillColor(maCurColor);
+                }
 
                 if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode || TBX_UPDATER_MODE_NONE == mnDrawMode )
                 {
@@ -146,7 +158,7 @@ namespace svx
 
                     if( pMskAcc )
                     {
-                        if( COL_TRANSPARENT == aColor.GetColor() )
+                        if( bIsTransparent )
                         {
                             pMskAcc->SetLineColor( COL_BLACK );
                             pMskAcc->SetFillColor( COL_WHITE );

@@ -281,7 +281,7 @@ public class LinuxInstaller extends Installer {
                 if ( returnValue == 0 ) {
                     log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
                     LogManager.addCommandsLogfileComment(log);
-                } else {    // an error occured during installation
+                } else {    // an error occurred during installation
                     if ( packageData.installCanFail() ) {
                         log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
                         LogManager.addCommandsLogfileComment(log);
@@ -412,7 +412,7 @@ public class LinuxInstaller extends Installer {
             if ( returnValue == 0 ) {
                 log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
                 LogManager.addCommandsLogfileComment(log);
-            } else {    // an error occured during installation
+            } else {    // an error occurred during installation
                 if ( packageData.uninstallCanFail() ) {
                     log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
                     LogManager.addCommandsLogfileComment(log);

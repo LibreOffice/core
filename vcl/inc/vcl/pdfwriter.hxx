@@ -204,7 +204,7 @@ public:
         // PDF/A does not allow transparency
         Warning_Transparency_Omitted_PDFA,
 
-        // transparent object occured but is only supported since
+        // transparent object occurred but is only supported since
         // PDF 1.4
         Warning_Transparency_Omitted_PDF13,
 
@@ -590,7 +590,7 @@ The following structure describes the permissions used in PDF security
         bool                            DisplayPDFDocumentTitle;
         PDFPageLayout                   PageLayout;
         bool                            FirstPageLeft;
-        // intially visible page in viewer (starting with 0 for first page)
+        // initially visible page in viewer (starting with 0 for first page)
         sal_Int32                       InitialPage;
         sal_Int32                       OpenBookmarkLevels; // -1 means all levels
 
@@ -687,9 +687,9 @@ The following structure describes the permissions used in PDF security
     bool Emit();
 
     /*
-     * Get a list of errors that occured during processing
+     * Get a list of errors that occurred during processing
      * this should enable the producer to give feedback about
-     * any anomalies that might have occured
+     * any anomalies that might have occurred
      */
     std::set< ErrorCode > GetErrors();
 
@@ -1129,7 +1129,7 @@ The following structure describes the permissions used in PDF security
     </p>
 
     <p>
-    Note: there is always one structural element in existance without having
+    Note: there is always one structural element in existence without having
     called <code>BeginStructureElement</code>; this is the root of the structure
     tree (called StructTreeRoot). The StructTreeRoot has always the id 0.
     </p>

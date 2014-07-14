@@ -277,8 +277,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         sal_uInt32 nCharWidth=240;
         for (sal_uInt16 nI = 0; nI < pStyles->GetCount(); ++nI)
         {
-            if (pCollA[nI].bValid && pCollA[nI].pFmt &&
-                pCollA[nI].GetWWStyleId() == 0)
+            if (pCollA[nI].bValid
+                && pCollA[nI].pFmt != NULL
+                && pCollA[nI].IsWW8BuiltInDefaultStyle())
             {
                 nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
                     RES_CHRATR_CJK_FONTSIZE).GetHeight();
@@ -921,7 +922,14 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     // sprmSFBiDi
     aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, 0x3228, 0) : 0;
 
+    // Reading section property sprmSCcolumns - one less than the number of columns in the section.
+    // It must be less than MAX_NO_OF_SEP_COLUMNS according the WW8 specification.
     aNewSection.maSep.ccolM1 = ReadSprm(pSep, pIds[3], 0 );
+    if ( aNewSection.maSep.ccolM1 >= MAX_NO_OF_SEP_COLUMNS )
+    {
+        // fallback to one column
+        aNewSection.maSep.ccolM1 = 0;
+    }
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
     aNewSection.maSep.dxaColumns = ReadUSprm( pSep, pIds[4], 708 );
@@ -932,34 +940,36 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     if (eVer >= ww::eWW6)
     {
         // sprmSFEvenlySpaced
-        aNewSection.maSep.fEvenlySpaced =
-            ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false;
+        aNewSection.maSep.fEvenlySpaced = ReadBSprm( pSep, ( eVer <= ww::eWW7 ? 138 : 0x3005 ), 1 ) ? true : false;
 
-        if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
+        if ( aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced )
         {
-            aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
-            int nCols = aNewSection.maSep.ccolM1 + 1;
-            int nIdx = 0;
-            for (int i = 0; i < nCols; ++i)
+            int nColumnDataIdx = 0;
+            aNewSection.maSep.rgdxaColumnWidthSpacing[nColumnDataIdx] = 0;
+
+            const sal_uInt16 nColumnWidthSprmId = ( eVer <= ww::eWW7 ? 136 : 0xF203 );
+            const sal_uInt16 nColumnSpacingSprmId = ( eVer <= ww::eWW7 ? 137 : 0xF204 );
+            const sal_uInt8 nColumnCount = static_cast< sal_uInt8 >(aNewSection.maSep.ccolM1 + 1);
+            for ( sal_uInt8 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
                 //sprmSDxaColWidth
-                const sal_uInt8* pSW = pSep->HasSprm( (eVer <= ww::eWW7 ? 136 : 0xF203), sal_uInt8( i ) );
+                const sal_uInt8* pSW = pSep->HasSprm( nColumnWidthSprmId, nColumn );
 
-                ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
-                sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
+                ASSERT( pSW != NULL, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
+                sal_uInt16 nWidth = pSW != NULL ? SVBT16ToShort( pSW + 1 ) : 1440;
 
-                aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
 
-                if (i < nCols-1)
+                if ( nColumn < nColumnCount - 1 )
                 {
                     //sprmSDxaColSpacing
-                    const sal_uInt8* pSD = pSep->HasSprm( (eVer <= ww::eWW7 ? 137 : 0xF204), sal_uInt8( i ) );
+                    const sal_uInt8* pSD = pSep->HasSprm( nColumnSpacingSprmId, nColumn );
 
                     ASSERT( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
-                    if( pSD )
+                    if ( pSD )
                     {
-                        nWidth = SVBT16ToShort(pSD + 1);
-                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                        nWidth = SVBT16ToShort( pSD + 1 );
+                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
                     }
                 }
             }
@@ -1569,7 +1579,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
             nSetBorders has a bit set for each location that a sprm set a
             border, so with a sprm set, but no border, then disable the
-            appropiate border
+            appropriate border
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
@@ -1946,7 +1956,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     /*
      #95905#, #83307# seems to have gone away now, so reenable parallel
      wrapping support for frames in headers/footers. I don't know if we truly
-     have an explictly specified behaviour for these circumstances.
+     have an explicitly specified behaviour for these circumstances.
     */
 
     nHeight = rWW.nSp45;
@@ -2600,12 +2610,12 @@ void SwWW8ImplReader::StopApo()
         stack of attributes normally only places them into the document when
         the current insertion point has passed them by. Otherwise the end
         point of the attribute gets pushed along with the insertion point. The
-        insertion point is moved and the properties commited during
+        insertion point is moved and the properties committed during
         MoveOutsideFly. We also may want to remove the final paragraph in the
         frame, but we need to wait until the properties for that frame text
-        have been commited otherwise they will be lost. So we first get a
+        have been committed otherwise they will be lost. So we first get a
         handle to the last the filter inserted. After the attributes are
-        commited, if that paragraph exists we join it with the para after it
+        committed, if that paragraph exists we join it with the para after it
         that comes with the frame by default so that as normal we don't end up
         with one more paragraph than we wanted.
         */
@@ -2854,19 +2864,33 @@ void SwWW8ImplReader::Read_PicLoc(sal_uInt16 , const sal_uInt8* pData, short nLe
     }
 }
 
+
 void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (pAktColl && (0 < nLen))
+    if ( nLen < 0 )
     {
-        if (SwWW8StyInf* pSI = GetStyle(nAktColl))
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_OUTLINELEVEL );
+        return;
+    }
+
+    if ( pAktColl != NULL )
+    {
+        SwWW8StyInf* pSI = GetStyle( nAktColl );
+        if ( pSI != NULL )
         {
-            pSI->nOutlineLevel = static_cast< sal_uInt8 >(
-                ( (1 <= pSI->GetWWStyleId()) && (9 >= pSI->GetWWStyleId()) )
-            ? pSI->GetWWStyleId()-1
-            : (pData ? *pData : 0) );
+            pSI->mnWW8OutlineLevel =
+                    static_cast< sal_uInt8 >( ( pData ? *pData : 0 ) );
+            NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, SwWW8StyInf::WW8OutlineLevelToOutlinelevel( pSI->mnWW8OutlineLevel ) ) );
         }
     }
+    else if ( pPaM != NULL )
+    {
+        const sal_uInt8 nOutlineLevel =
+                SwWW8StyInf::WW8OutlineLevelToOutlinelevel( static_cast< sal_uInt8 >( ( pData ? *pData : 0 ) ) );
+        NewAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL, nOutlineLevel ) );
+    }
 }
+
 
 void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen )
 {
@@ -2940,7 +2964,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         nI = nContigiousWestern;               // The out of sequence western id
     else
     {
-        // The contigious western ids
+        // The contiguous western ids
         if (eVersion <= ww::eWW2)
             nI = static_cast< sal_uInt8 >(nId - 60);
         else if (eVersion < ww::eWW8)
@@ -3431,7 +3455,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 
 void SwWW8ImplReader::Read_TxtColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0x6870))
         return;
 
@@ -3900,11 +3924,11 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
         || pCollA[nId].bColl )              // oder Para-Style ?
         return;                             // dann ignorieren
 
-    // if current on loading a TOC field, and current trying to apply a hyperlink character style,
-    // just ignore. For the hyperlinks inside TOC in MS Word is not same with a common hyperlink
+    // if current on loading a TOX field, and current trying to apply a hyperlink character style,
+    // just ignore. For the hyperlinks inside TOX in MS Word is not same with a common hyperlink
     // Character styles: without underline and blue font color. And such type style will be applied in others
     // processes.
-    if (mbLoadingTOCCache && pCollA[nId].GetWWStyleId() == ww::stiHyperlink)
+    if (mbLoadingTOXCache && pCollA[nId].GetWWStyleId() == ww::stiHyperlink)
     {
         return;
     }
@@ -3937,7 +3961,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* , short nLen )
 
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA71))
         return;
 

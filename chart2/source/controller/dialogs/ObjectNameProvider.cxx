@@ -567,7 +567,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     else if( OBJECTTYPE_DIAGRAM == eObjectType )
     {
         //todo different names for different diagram types ???
-        //or different names for series of diferent charttypes
+        //or different names for series of different charttypes
     }
     */
     else if( OBJECTTYPE_DATA_CURVE == eObjectType )

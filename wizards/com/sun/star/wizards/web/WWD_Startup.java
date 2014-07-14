@@ -75,7 +75,7 @@ import com.sun.star.wizards.web.data.CGStyle;
  * </P>
  * <p>
  * A Value is either a JavaBean property with
- * a Getter and a Setter or a public class Memeber.
+ * a Getter and a Setter or a public class Member.
  * </P>
  * When the UI Control changes, the Value changes correspondingly.
  * This depends on settings a Listener which calls the updateData()
@@ -89,7 +89,7 @@ import com.sun.star.wizards.web.data.CGStyle;
  * the updateUI() method whenever I change the Value.
  * </P>
  * To contain the Data, I use the Configuration Data Objects
- * which read themselfs out of the Configuration. they are all located under
+ * which read themselves out of the Configuration. they are all located under
  * the data package.
  * <p/>
  * Different groups of DataAware objects are grouped into vectors.
@@ -195,7 +195,7 @@ public abstract class WWD_Startup extends WWD_General
     boolean __ftp;
     /**
      * When the wizard starts, a new document opens.
-     * The backgroundDoc memeber contains the TextDocument
+     * The backgroundDoc member contains the TextDocument
      * instance used for that purpose.
      */
     protected XFrame myFrame;
@@ -472,7 +472,7 @@ public abstract class WWD_Startup extends WWD_General
 
             ConfigSet set = settings.cp_DefaultSession.cp_Publishing;
 
-            // now if path variables are used in publisher pathes, they
+            // now if path variables are used in publisher paths, they
             // are getting replaced here...
             for (int i = 0; i < set.getSize(); i++)
             {

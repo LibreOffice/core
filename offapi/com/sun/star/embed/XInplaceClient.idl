@@ -189,7 +189,7 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException );
 
     //------------------------------------------------------------------------
-    /** provides accelerator table the object whants to use while it is
+    /** provides accelerator table the object wants to use while it is
         inplace active.
 
         @param aKeys

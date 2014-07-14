@@ -349,7 +349,12 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
     }
     else
+    {
+        aNameED.SetText(aEmptyStr);
+        aShortNameEdit.SetText(aEmptyStr);
+        aInsertBtn.Enable(sal_False);
         ShowAutoText(aEmptyStr, aEmptyStr);
+    }
     //Controls aktualisieren
     NameModify(&aShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )

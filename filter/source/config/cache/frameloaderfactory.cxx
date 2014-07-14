@@ -89,7 +89,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
-            check if the given loader name realy exist ...
+            check if the given loader name really exists ...
             Because our old implementation worked with an internal
             type name instead of a loader name. For a small migration time
             we must simulate this old feature :-( */

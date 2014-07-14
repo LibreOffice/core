@@ -122,7 +122,7 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not reccomended to
+        storage stream to another without decryption. It is not recommended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format. If the
         method is used outside of storage implementation the user code is
@@ -183,7 +183,7 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not reccomended to
+        storage stream to another without decryption. It is not recommended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format.
         </p>

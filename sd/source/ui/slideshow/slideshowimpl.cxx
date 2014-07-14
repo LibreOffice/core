@@ -1033,7 +1033,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                     getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
             }
 
-            // these Slots are forbiden in other views for this document
+            // these Slots are forbidden in other views for this document
             if( mpDocSh )
             {
                 mpDocSh->SetSlotFilter( true, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
@@ -1893,7 +1893,7 @@ void SlideshowImpl::startUpdateTimer()
 /** this timer is called 20ms after a new slide was displayed.
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
-    transition preperation */
+    transition preparation */
 IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
 {
     mbInputFreeze = false;
@@ -2818,7 +2818,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
 
                 if( pDispatcher )
                 {
-                    // filter all forbiden slots
+                    // filter all forbidden slots
                     pDispatcher->SetSlotFilter( true, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 

@@ -126,7 +126,7 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
         /** @short  provide informations abou the parsing state.
 
             @descr  We use it to find out the line and column, where
-                    an error occure.
+                    an error occur.
           */
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
 

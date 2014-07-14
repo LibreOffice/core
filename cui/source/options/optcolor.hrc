@@ -187,16 +187,16 @@
 
 
 #define _FT_WIDTH               120
-#define _LINE_HEIGHT            15
+#define _LINE_HEIGHT            16
 #define _FT_HEIGHT              10
 #define _CB_WIDTH               130
 #define _FT_XPOS                14
 #define _CB_XPOS                6
-#define _LB_XPOS                139
-#define _LB_WIDTH               50
+#define _LB_XPOS                119
+#define _LB_WIDTH               70
 #define _LB_HEIGHT              50
 #define _WN_WIDTH               30
-#define _WN_HEIGHT              12
+#define _WN_HEIGHT              14
 #define _WN_XPOS                195
 
 #define FT_SMARTTAGS                    168

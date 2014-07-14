@@ -4209,7 +4209,7 @@ void ToolbarSaveInData::Reset()
         }
         catch ( uno::Exception& )
         {
-            // error occured removing the settings
+            // error occurred removing the settings
             // TODO - add error dialog in future?
         }
     }
@@ -4402,7 +4402,7 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( uno::Exception& )
     {
-        // error occured removing the settings
+        // error occurred removing the settings
     }
 }
 

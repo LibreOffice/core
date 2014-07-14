@@ -187,7 +187,7 @@ namespace framework
         void cancel( const Reference< XInterface >& i_context )
         {
             m_caughtException <<= RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Concurrency error: an ealier operation on the stack failed." ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Concurrency error: an earlier operation on the stack failed." ) ),
                 i_context
             );
             m_finishCondition.set();

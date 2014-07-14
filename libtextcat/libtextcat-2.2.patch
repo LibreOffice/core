@@ -726,7 +726,7 @@
 +	while(1) {
  
 -		const char *q = p;
-+     const char *q = &p[pointer];   /*[modified] previously p++ above (for(;;p++)) now, it's pointer wich is increased so we have to get the new pointer on the buffer*/
++     const char *q = &p[pointer];   /*[modified] previously p++ above (for(;;p++)) now, it's pointer which is increased so we have to get the new pointer on the buffer*/
  		char *m = n;
  
  		/*** First char may be an underscore ***/
@@ -759,7 +759,7 @@
  			}
  		}
 +
-+  pointer = nextcharstart(p,pointer);   /*[modified] p[pointer] must point on the next start of symbol, but whith utf next start is not surely next char*/
++  pointer = nextcharstart(p,pointer);   /*[modified] p[pointer] must point on the next start of symbol, but with utf next start is not surely next char*/
  	}
  	return;
  }
@@ -1088,8 +1088,8 @@
 +}
 +
 +/**
-+ * Originaly this function had only one parameter (conffile) it has been modified since OOo use
-+ * Basicaly prefix is the directory path where fingerprints are stored
++ * Originally this function had only one parameter (conffile) it has been modified since OOo use
++ * Basically prefix is the directory path where fingerprints are stored
 + */
 +extern void *special_textcat_Init( const char *conffile, const char *prefix )
  {
@@ -1208,8 +1208,8 @@
  extern void *textcat_Init( const char *conffile );
  
  /**
-+ * Originaly this function had only one parameter (conffile) it has been modified since OOo must be able to load alternativ DB
-+ * Basicaly prefix is the directory path where fingerprints are stored
++ * Originally this function had only one parameter (conffile) it has been modified since OOo must be able to load alternativ DB
++ * Basically prefix is the directory path where fingerprints are stored
 + */
 +extern void *special_textcat_Init( const char *conffile, const char *prefix );
 +
@@ -1284,7 +1284,7 @@
 +        ++pointer;
 +    }
 +    }
-+    if(str[pointer]){   /*finaly, if we are not on the \0 character, we jump to the next character*/
++    if(str[pointer]){   /*finally, if we are not on the \0 character, we jump to the next character*/
 +        ++pointer;
 +    }
 +    return pointer;
@@ -1419,14 +1419,14 @@
 +
 +/*
 + * Is used to jump to the next start of char
-+ * of course it's only usefull when encoding is utf-8
++ * of course it's only useful when encoding is utf-8
 + * This function have been added by Jocelyn Merand to use libtextcat in OOo
 + */
 +int nextcharstart(const char *str, int position);
 +
 +
 +/*Copy the char in str to dest
-+ * of course it's only usefull when encoding is utf8 and the symbol is encoded with more than 1 char
++ * of course it's only useful when encoding is utf8 and the symbol is encoded with more than 1 char
 + * return the number of char jumped
 + * This function have been added by Jocelyn Merand to use libtextcat in OOo
 + */
@@ -1434,14 +1434,14 @@
 +
 +
 +/* checks if n-gram lex is a prefix of key and of length len
-+* if _UTF8_ is defined, it uses escap characters and len is not realy the length of lex
++* if _UTF8_ is defined, it uses escap characters and len is not really the length of lex
 +* in this case, len is the number of utf-8 char strlen("€") == 3 but len == 1
 +*/
 +int issame( char *lex, char *key, int len );
 +
 +
 +/* Counts the number of characters
-+* if _UTF8_ is defined, it uses escap characters and the result is not realy the length of str
++* if _UTF8_ is defined, it uses escap characters and the result is not really the length of str
 +* in this case, the result is the number of utf-8 char strlen("€") == 3 but utfstrlen("€") == 1
 +*/
 +#ifdef __cplusplus

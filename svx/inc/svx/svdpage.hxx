@@ -181,6 +181,18 @@ public:
     */
     void ClearUserNavigationOrder(void);
 
+    /** Set the navigation position of all SdrObjects to their position in
+        the mpNavigationOrder list.  This method returns immediately when no
+        update is necessary.
+        @return
+            This method returns <TRUE/> when the navigation positions stored
+            in SdrObjects are up to date.
+            It returns <FALSE/> when the navigation positions are not valid,
+            for example because no explicit navigation order has been
+            defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
+    */
+    bool RecalcNavigationPositions (void);
+
     /** Set the navigation order to the one defined by the given list of
         XShape objects.
         @param rxOrder

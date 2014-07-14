@@ -93,7 +93,7 @@ namespace svt
     void SmartContent::enableDefaultInteractionHandler()
     {
         // Don't free the memory here! It will be done by the next
-        // call automaticly - releasing of the uno reference ...
+        // call automatically - releasing of the uno reference ...
         m_pOwnInteraction = NULL;
         m_xOwnInteraction = Reference< XInteractionHandler >();
 
@@ -127,7 +127,7 @@ namespace svt
     void SmartContent::disableInteractionHandler()
     {
         // Don't free the memory here! It will be done by the next
-        // call automaticly - releasing of the uno reference ...
+        // call automatically - releasing of the uno reference ...
         m_pOwnInteraction = NULL;
         m_xOwnInteraction.clear();
 
@@ -201,12 +201,12 @@ namespace svt
             else
                 bIs = m_pContent->isDocument();
 
-            // from here on, we definately know that the content is valid
+            // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
         catch( Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bIs;
@@ -224,12 +224,12 @@ namespace svt
             m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= sTitle;
             _rTitle =  sTitle;
 
-            // from here on, we definately know that the content is valid
+            // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
         catch( ::com::sun::star::uno::Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
     }
@@ -252,14 +252,14 @@ namespace svt
                     String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
                     bRet = ( aParentURL.Len() > 0 && aParentURL != (String)(m_pContent->getURL()) );
 
-                    // now we're definately valid
+                    // now we're definitely valid
                     m_eState = VALID;
                 }
             }
         }
         catch( const Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bRet;
@@ -287,12 +287,12 @@ namespace svt
                 }
             }
 
-            // now we're definately valid
+            // now we're definitely valid
             m_eState = VALID;
         }
         catch( Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bRet;

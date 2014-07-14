@@ -229,7 +229,7 @@ public class Worksheet {
       * Adds a cell to this worksheet. Current valdid celltypes are
      * <code>FloatNumber</code>, <code>LabelCell</code> or <code>Formula</code>
      *
-      * @param  f the font recrod to add
+      * @param  f the font record to add
       */
     public void addCell(BIFFRecord br) {
         cells.add(br);

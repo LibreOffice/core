@@ -211,6 +211,10 @@ my_components += component/vcl/vcl.unx
 my_components += updchk.uno
 .END
 
+.IF "$(OS)" != "WNT" && "$(OS)" != "OS2"
+my_components += mozbootstrap
+.END
+
 .IF "$(ENABLE_OOOIMPROVEMENT)" != ""
 my_components += oooimprovement
 .END
@@ -310,13 +314,12 @@ my_components += \
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
+    avmediaQuickTime \
+    avmediaMacAVF \
     fps_aqua \
     macab1 \
     macbe1 \
     MacOSXSpell
-.IF "${MACOSX_DEPLOYMENT_TARGET}" == ""
-    my_components += avmediaQuickTime
-.END
 .END
 
 .IF "$(OS)" == "WNT"

@@ -63,7 +63,7 @@ namespace accessibility
     //........................................................................
     // class ALBSolarGuard ---------------------------------------------------------
 
-    /** Aquire the solar mutex. */
+    /** Acquire the solar mutex. */
     class ALBSolarGuard : public ::vos::OGuard
     {
     public:

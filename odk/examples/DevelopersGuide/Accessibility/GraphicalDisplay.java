@@ -69,7 +69,7 @@ public class GraphicalDisplay
             (int)(mnVOffset+0.5),
             (int)(mnScale*aScreenSize.getWidth()),
             (int)(mnScale*aScreenSize.getHeight()));
-        // Draw a frame arround the screen rectangle to increase its visibility.
+        // Draw a frame around the screen rectangle to increase its visibility.
         g.setColor (Color.BLACK);
         g.drawRect (
             (int)(mnHOffset+0.5),

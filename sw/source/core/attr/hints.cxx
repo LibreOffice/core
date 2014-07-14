@@ -64,12 +64,16 @@ SwDelTxt::SwDelTxt( xub_StrLen nS, xub_StrLen nL )
 
 
 
-SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW )
-    : SwMsgPoolItem( RES_UPDATE_ATTR ),
-    nStart( nS ),
-    nEnd( nE ),
-    nWhichAttr( nW )
-{}
+SwUpdateAttr::SwUpdateAttr(
+    xub_StrLen nS,
+    xub_StrLen nE,
+    sal_uInt16 nW)
+:   SwMsgPoolItem(RES_UPDATE_ATTR),
+    nStart(nS),
+    nEnd(nE),
+    nWhichAttr(nW)
+{
+}
 
 
 // SwRefMarkFldUpdate wird verschickt, wenn sich die ReferenzMarkierungen

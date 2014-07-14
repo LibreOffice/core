@@ -39,7 +39,7 @@ typedef void* oslSemaphore;
 
     @param InitialCount denotes the starting value the semaphore. If you set it to
     zero, the first acquire() blocks. Otherwise InitialCount acquire()s  are
-    immedeatly  successfull.
+    immedeatly  successful.
     @return 0 if the semaphore could not be created, otherwise a handle to the sem.
 */
 oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);

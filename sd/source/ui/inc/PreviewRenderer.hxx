@@ -45,7 +45,7 @@ class PreviewRenderer
     : public SfxListener
 {
 public:
-    /** Create a new preview renderer that takes some of its inital values
+    /** Create a new preview renderer that takes some of its initial values
         from the given output device.
         @param pTemplate
             May be NULL.
@@ -139,7 +139,7 @@ private:
     const Color maFrameColor;
     const bool mbHasFrame;
     static const int snSubstitutionTextSize;
-    // Width of the frame that is painted arround the preview.
+    // Width of the frame that is painted around the preview.
     static const int snFrameWidth;
 
     bool Initialize (

@@ -57,11 +57,11 @@ namespace std
 using STLP4_SLIST_EMUBASE;
 
 // lame emulation of the pre-C++11 slist using the std::forward_list (or std::list)
-template< typename T, class A=allocator<T> >
-class slist : public STLP4_SLIST_EMUBASE<T,A>
+template< typename T >
+class slist : public STLP4_SLIST_EMUBASE<T>
 {
 public:
-	typedef typename STLP4_SLIST_EMUBASE<T,A> _super;
+	typedef typename STLP4_SLIST_EMUBASE<T> _super;
 	typedef typename _super::iterator slist_mit;
 	typedef typename _super::const_iterator slist_cit;
 

@@ -77,19 +77,32 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
     switch( aElementToken )
     {
+    case PPT_TOKEN( sld ):              // CT_Slide
+    {
+        OptValue< bool > aShowMasterSp = aAttribs.getBool( XML_showMasterSp );
+        if( aShowMasterSp.has() && !aShowMasterSp.get() )
+        {
+            PropertyMap aPropMap;
+            aPropMap[ PROP_IsBackgroundObjectsVisible ] = Any( false );
+
+            Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
+            PropertySet aSlideProp( xSlide );
+            aSlideProp.setProperties( aPropMap );
+        }
+    }
     case PPT_TOKEN( sldMaster ):        // CT_SlideMaster
     case PPT_TOKEN( handoutMaster ):    // CT_HandoutMaster
-    case PPT_TOKEN( sld ):              // CT_CommonSlideData
     {
-        AttributeList attribs( xAttribs );
+        OptValue< bool > aShow = aAttribs.getBool( XML_show );
+        if( aShow.has() && !aShow.get() )
+        {
+            PropertyMap aPropMap;
+            aPropMap[ PROP_Visible ] = Any( false );
 
-        Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
-        PropertyMap aPropMap;
-        PropertySet aSlideProp( xSlide );
-
-        aPropMap[ PROP_Visible ] = Any( attribs.getBool( XML_show, sal_True ) );
-        aSlideProp.setProperties( aPropMap );
-
+            Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
+            PropertySet aSlideProp( xSlide );
+            aSlideProp.setProperties( aPropMap );
+        }
         break;
     }
     case PPT_TOKEN( notes ):            // CT_NotesSlide

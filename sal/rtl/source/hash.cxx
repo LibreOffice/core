@@ -23,11 +23,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-#include "rtl/allocator.hxx"
 
 #include "hash.h"
 #include "strimp.h"
-
 
 #include <hash_set>
 
@@ -53,8 +51,7 @@ struct UStringEqual
     }
 };
 
-typedef std::hash_set< rtl_uString *, UStringHash, UStringEqual,
-                       rtl::Allocator<rtl_uString *> > StringHashTable;
+typedef std::hash_set< rtl_uString *, UStringHash, UStringEqual > StringHashTable;
 
 StringHashTable *
 getHashTable ()

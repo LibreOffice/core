@@ -35,7 +35,7 @@ namespace csv
     deleted in its D'tor.
 
     Dyn's main purpose is for class members on the heap:
-    You can't forget to delete them in the D'tor. Constness will be transfered
+    You can't forget to delete them in the D'tor. Constness will be transferred
     to the hold object.
 
     Dyn forbids the CopyC'tor and operator=(). So you can't incidentally

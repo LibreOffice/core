@@ -2169,7 +2169,7 @@ void XMLTextParagraphExport::exportParagraph(
     {
         // For the auto styles, the multi property set helper is only used
         // if hard attributes are existing. Therfor, it seems to be a better
-        // strategy to have the TextSection property seperate, because otherwise
+        // strategy to have the TextSection property separate, because otherwise
         // we always retrieve the style names even if they are not required.
         if( bAutoStyles )
         {
@@ -3381,7 +3381,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         }
 
         // If there are spaces left that have not been exported and the
-        // current chracter is not a space , the pending spaces have to be
+        // current character is not a space , the pending spaces have to be
         // exported now.
         if( nSpaceChars > 0 && !bCurrCharIsSpace )
         {

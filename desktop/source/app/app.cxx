@@ -338,7 +338,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
         if ( pResMgr )
             aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, *pResMgr ))) );
         else
-            aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
+            aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
     }
 
@@ -348,7 +348,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 //=============================================================================
 // shows a simple error box with the given message ... but exits from these process !
 //
-// Fatal errors cant be solved by the process ... nor any recovery can help.
+// Fatal errors can't be solved by the process ... nor any recovery can help.
 // Mostly the installation was damaged and must be repaired manually .. or by calling
 // setup again.
 //
@@ -1550,7 +1550,7 @@ sal_Bool Desktop::isCrashReporterEnabled()
     @param  bCrashed [boolean ... out!]
             the office crashed last times.
             But may be there are no recovery data.
-            Usefull to trigger the error report tool without
+            Useful to trigger the error report tool without
             showing the recovery UI.
 
     @param  bRecoveryDataExists [boolean ... out!]
@@ -1755,7 +1755,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
                                                     ( !pArgs->IsNoRestore()                    ) && // some use cases of office must work without recovery
                                                     ( !pArgs->IsHeadless()                     ) &&
                                                     ( !pArgs->IsServer()                       ) &&
-                                                    (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery cant work without UI ... but UI layer seams to be the reason for this crash
+                                                    (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery can't work without UI ... but UI layer seams to be the reason for this crash
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
     if ( bAllowRecoveryAndSessionManagement )
@@ -1917,7 +1917,7 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            sal_Bool bQuitApp;
+            sal_Bool bQuitApp (sal_False);
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
@@ -1986,7 +1986,7 @@ void Desktop::Main()
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
-        /* ensure existance of a default window that messages can be dispatched to
+        /* ensure existence of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
            and else can deadlock while creating this window from another tread while
            the main thread is not yet in the event loop.
@@ -2198,7 +2198,7 @@ void Desktop::Main()
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
-        // minimize the risk that this message overtakes type detection contruction!!
+        // minimize the risk that this message overtakes type detection construction!!
         Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
         // Post event to enable acceptors
@@ -3081,8 +3081,8 @@ void Desktop::OpenClients()
                     sal_False          , // false => force recovery instead of emergency save
                     bCrashed           ,
                     bExistsRecoveryData);
-                /* TODO we cant be shure, that at least one document could be recovered here successfully
-                    So we set bLoaded=sal_True to supress opening of the default document.
+                /* TODO we can't be sure, that at least one document could be recovered here successfully
+                    So we set bLoaded=sal_True to suppress opening of the default document.
                     But we should make it more safe. Otherwhise we have an office without an UI ...
                     ...
                     May be we can check the desktop if some documents are existing there.
@@ -3303,7 +3303,7 @@ String GetURL_Impl(
     }
 
     // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
-    // Attention: "setFianlSlash()" is neccessary for calling "smartRel2Abs()"!!!
+    // Attention: "setFianlSlash()" is necessary for calling "smartRel2Abs()"!!!
     // Otherwhise last part will be ignored and wrong result will be returned!!!
     // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
     // But if we add a seperator - he doesn't do it anymore.

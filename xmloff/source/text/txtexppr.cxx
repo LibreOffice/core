@@ -19,13 +19,10 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
 #include "txtexppr.hxx"
-
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -34,12 +31,13 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
-
 #include <tools/debug.hxx>
-
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
+
+//UUUU
+#include <xmlsdtypes.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -464,7 +462,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
+    // filter fo:margin
     XMLPropertyState* pAllParaMargin = NULL;
+    XMLPropertyState* pAllParaMarginRel = NULL;
     XMLPropertyState* pAllMargin = NULL;
 
     //UUUU
@@ -588,23 +588,24 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_TEXT_CLIP11:           pClip11State = propertie; break;
         case CTF_TEXT_CLIP:             pClipState = propertie; break;
         case CTF_PARAMARGINALL:         pAllParaMargin = propertie; break;
+        case CTF_PARAMARGINALL_REL:     pAllParaMarginRel = propertie; break;
         case CTF_MARGINALL:             pAllMargin = propertie; break;
 
         //UUUU
-        case CTF_SW_REPEAT_OFFSET_X:
+        case CTF_REPEAT_OFFSET_X:
             pRepeatOffsetX = propertie;
             break;
 
         //UUUU
-        case CTF_SW_REPEAT_OFFSET_Y:
+        case CTF_REPEAT_OFFSET_Y:
             pRepeatOffsetY = propertie;
             break;
 
         //UUUU
-        case CTF_SW_FILLGRADIENTNAME:
-        case CTF_SW_FILLHATCHNAME:
-        case CTF_SW_FILLBITMAPNAME:
-        case CTF_SW_FILLTRANSNAME:
+        case CTF_FILLGRADIENTNAME:
+        case CTF_FILLHATCHNAME:
+        case CTF_FILLBITMAPNAME:
+        case CTF_FILLTRANSNAME:
             {
                 OUString aStr;
                 if( (propertie->maValue >>= aStr) && 0 == aStr.getLength() )
@@ -676,6 +677,11 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     {
         pAllParaMargin->mnIndex = -1; // just export individual attributes...
         pAllParaMargin->maValue.clear();
+    }
+    if (pAllParaMarginRel)
+    {
+        pAllParaMarginRel->mnIndex = -1; // just export individual attributes...
+        pAllParaMarginRel->maValue.clear();
     }
     if (pAllMargin)
     {

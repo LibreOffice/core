@@ -481,7 +481,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
     return flags;
 }
 
-// This function checks if the specified types for paramters and return
+// This function checks if the specified types for parameters and return
 // types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
 // service description
 bool checkAddinType(TypeManager const & manager,
@@ -552,7 +552,7 @@ void checkAddInTypes(TypeManager const & manager,
             msg.append(sType);
             msg.append(":");
             msg.append(sMethod);
-            msg.append("' is invalid. Please check your IDL defintion.");
+            msg.append("' is invalid. Please check your IDL definition.");
             throw CannotDumpException(msg.makeStringAndClear());
         }
 

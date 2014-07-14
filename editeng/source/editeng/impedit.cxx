@@ -253,7 +253,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
             if ( aBottomRight.Y() < GetVisDocTop() )
                 continue;
 
-            // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' postion
+            // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if ( !bPartOfLine )
             {
                 Range aLineXPosStartEnd = pEditEngine->pImpEditEngine->GetLineXPosStartEnd( pTmpPortion, pLine );

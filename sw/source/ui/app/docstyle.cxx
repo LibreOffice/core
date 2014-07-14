@@ -19,23 +19,19 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
-
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
+#include <svx/xdef.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/numitem.hxx>
-// --> OD 2008-02-13 #newlistlevelattrs#
 #include <editeng/lrspitem.hxx>
-// <--
 #include <fmtcol.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -65,6 +61,11 @@
 #include <svx/svxids.hrc>
 #include <SwRewriter.hxx>
 #include <svx/fmmodel.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
+#include <drawdoc.hxx>
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -663,6 +664,11 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         sal_Bool bHasCJKFontPrefix = sal_False;
         SvtCJKOptions aCJKOptions;
 
+        //UUUU Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
+        // to decide if gradient transparence is used
+        const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pSet->Get(XATTR_FILLSTYLE)).GetValue());
+        const bool bUseFloatTransparence(static_cast< const XFillFloatTransparenceItem& >(pSet->Get(XATTR_FILLFLOATTRANSPARENCE)).IsEnabled());
+
         while ( pItem )
         {
             if(!IsInvalidItem(pItem))
@@ -689,6 +695,44 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                             sal_Bool bIsDefault = sal_False;
                             switch ( pItem->Which() )
                             {
+                                //UUUU
+                                case XATTR_FILLCOLOR:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_SOLID == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLGRADIENT:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_GRADIENT == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLHATCH:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_HATCH == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLBITMAP:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_BITMAP == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLTRANSPARENCE:
+                                {
+                                    // only active when not FloatTransparence
+                                    bIsDefault = !bUseFloatTransparence;
+                                    break;
+                                }
+                                case XATTR_FILLFLOATTRANSPARENCE:
+                                {
+                                    // only active when FloatTransparence
+                                    bIsDefault = bUseFloatTransparence;
+                                    break;
+                                }
+
                                 case SID_ATTR_PARA_PAGENUM:
                                     sPageNum = aItemPresentation;
                                     break;
@@ -1023,10 +1067,6 @@ sal_Bool   SwDocStyleSheet::SetFollow( const String& rStr)
     Beschreibung:   ueber Name und Family, Mask den ItemSet rausholen
  --------------------------------------------------------------------*/
 
-//UUUU
-#include <svx/svdmodel.hxx>
-#include <svx/drawitem.hxx>
-
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
 {
     if(!bPhysical)
@@ -1072,7 +1112,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                     //UUUU create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
-                    const SdrModel* pDrawModel = rDoc.GetDrawModel();
+                    const SwDrawModel* pDrawModel = rDoc.GetDrawModel();
 
                     aCoreSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
                     aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));
@@ -1084,6 +1124,12 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
         case SFX_STYLE_FAMILY_PAGE :
             {
+                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                if(!aCoreSet.GetParent())
+                {
+                    aCoreSet.SetParent(&rDoc.GetDfltFrmFmt()->GetAttrSet());
+                }
+
                 ASSERT(pDesc, "Kein PageDescriptor");
                 ::PageDescToItemSet(*((SwPageDesc*)pDesc), aCoreSet);
             }
@@ -1222,11 +1268,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 if( pColl != &pColl->GetNextTxtFmtColl() )
                     pCColl->SetNextTxtFmtColl( pColl->GetNextTxtFmtColl() );
 
-                //pCColl->SetOutlineLevel( pColl->GetOutlineLevel() );//#outline level,zhaojianwei
                 if( pColl->IsAssignedToListLevelOfOutlineStyle())
                     pCColl->AssignToListLevelOfOutlineStyle(pColl->GetAssignedOutlineStyleLevel());
                 else
-                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();//<--end,zhaojianwei
+                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();
 
 
 

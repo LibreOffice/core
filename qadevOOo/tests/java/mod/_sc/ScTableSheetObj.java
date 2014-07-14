@@ -241,7 +241,7 @@ public class ScTableSheetObj extends TestCase {
         // do not execute com::sun::star::sheets::XCellSeries::fillAuto()
         tEnv.addObjRelation("XCELLSERIES_FILLAUTO", new Boolean(false));
 
-        // set the adress ranges of the cells (see values set above): for e.g. XSheetOutline test
+        // set the address ranges of the cells (see values set above): for e.g. XSheetOutline test
         tEnv.addObjRelation("CellRangeAddress",
             new CellRangeAddress((short)0, 6, 6, 8, 8));
         tEnv.addObjRelation("CellRangeSubAddress",

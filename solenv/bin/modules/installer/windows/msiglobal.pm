@@ -109,7 +109,7 @@ sub check_ddf_file
 
 ##########################################################################
 # Lines in ddf files must not be longer than 256 characters.
-# Therefore it can be useful to use relative pathes. Then it is
+# Therefore it can be useful to use relative paths. Then it is
 # necessary to change into temp directory before calling
 # makecab.exe.
 ##########################################################################
@@ -183,7 +183,7 @@ sub generate_cab_file_list ($$$$)
             $sourcepath = $onefile->{'cyg_sourcepath'};
         }
 
-        # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+        # to avoid lines with more than 256 characters, it can be useful to use relative paths
         if ($allvariables->{'RELATIVE_PATHES_IN_DDF'})
         {
             $sourcepath = make_relative_ddf_path($sourcepath);
@@ -581,9 +581,9 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         $installer::logger::Lang->print($infoline);
 
-        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occurred.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
-        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
+        # exists and if it is larger than 0 bytes. If this is true, then no error occurred.
         # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
         # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
@@ -628,13 +628,13 @@ sub create_transforms
                     }
                     else
                     {
-                        $infoline = "Filesize indicates that an error occured.\n";
+                        $infoline = "Filesize indicates that an error occurred.\n";
                         $installer::logger::Lang->print($infoline);
                     }
                 }
                 else
                 {
-                    $infoline = "File $transformfile does not exist -> An error occured.\n";
+                    $infoline = "File $transformfile does not exist -> An error occurred.\n";
                     $installer::logger::Lang->print($infoline);
                 }
             }
@@ -1289,7 +1289,7 @@ sub prepare_64bit_database
             }
         }
 
-        # 2. Replacing all occurences of "VersionNT" by "VersionNT64"
+        # 2. Replacing all occurrences of "VersionNT" by "VersionNT64"
 
         my @versionnt_files = ("Componen.idt", "InstallE.idt", "InstallU.idt", "LaunchCo.idt");
 
@@ -1413,7 +1413,7 @@ sub execute_packaging
     $infoline = "chdir: $to \n";
     $installer::logger::Lang->print($infoline);
 
-    # if the ddf file contains relative pathes, it is necessary to change into the temp directory
+    # if the ddf file contains relative paths, it is necessary to change into the temp directory
     if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} )
     {
         $to = $installer::globals::temppath;
@@ -1567,10 +1567,12 @@ sub get_source_codes ($)
 
     Determine values for the product code and upgrade code of the target version.
 
-    As perparation for building a Windows patch, certain conditions have to be fullfilled.
-     - The upgrade code changes from old to new version
+    As preparation for building a Windows patch, certain conditions have to be fulfilled.
+     - The upgrade code remains the same
      - The product code remains the same
-     In order to inforce that we have to access information about the source version.
+       [this is still to be determined.  For patches to work we need the same product codes but
+        the install sets install only when the product codes differ.]
+    In order to enforce that we have to access information about the source version.
 
     The resulting values are stored as global variables
         $installer::globals::productcode
@@ -1630,6 +1632,28 @@ sub set_global_code_variables ($$)
         $target_upgrade_code = "{" . create_guid() . "}";
         $installer::logger::Lang->printf("there is no source version => created new guids\n");
     }
+
+    # Keep the upgrade code constant between versions.  Read it from the codes.txt file.
+    # Note that this handles regular installation sets and language packs.
+    my $onelanguage = ${$languagesref}[0];
+    $installer::logger::Lang->printf("reading upgrade code for language %s from %s\n",
+        $onelanguage,
+        $installer::globals::codefilename);
+    if (defined $installer::globals::codefilename)
+    {
+        my $code_filename = $installer::globals::codefilename;
+        installer::files::check_file($code_filename);
+        my $codefile = installer::files::read_file($code_filename);
+        my $searchstring = "UPGRADECODE";
+        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file(
+            $searchstring,
+            $codefile);
+        $target_upgrade_code = installer::windows::idtglobal::get_language_string_from_language_block(
+            $codeblock,
+            $onelanguage,
+            "");
+    }
+    # else use the previously generated upgrade code.
 
     $installer::globals::productcode = $target_product_code;
     $installer::globals::upgradecode = $target_upgrade_code;

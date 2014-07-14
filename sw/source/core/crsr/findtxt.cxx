@@ -283,7 +283,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             nStart = rCntntIdx.GetIndex();
 
             /* #i80135# */
-            // if there are SwPostItFields inside our current node text, we split the text into seperate pieces
+            // if there are SwPostItFields inside our current node text, we split the text into separate pieces
             // and search for text inside the pieces as well as inside the fields
             const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
 

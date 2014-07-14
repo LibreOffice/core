@@ -68,8 +68,8 @@
 #define MID_FLAG_MERGE_PROPERTY         0x01000000
 
 // Export only: If an xml attribute with the same name has been exported
-// already, supply its value to teh exportXML call and delete the existing
-// atribute afterwards.
+// already, supply its value to the exportXML call and delete the existing
+// attribute afterwards.
 #define MID_FLAG_MERGE_ATTRIBUTE        0x00800000
 
 // Import and Export: The property in question must exist. No call to

@@ -157,7 +157,7 @@ extern "C" {
 #elif defined _BIG_ENDIAN
 #   define OSL_BIGENDIAN
 #else
-#   error undetermined endianess
+#   error undetermined endianness
 #endif
 
 

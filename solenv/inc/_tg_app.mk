@@ -279,6 +279,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .ENDIF			# "$(APP1TARGETN)"!=""
 
+# New rule for automatic run targets of unit test targets
+.IF "$(APP1TEST)" == "enabled" &&  "$(APP1TARGET)" != ""
+
+$(APP1TARGET)_run: $(APP1TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
+
+.ENDIF
 
 # Instruction for linking
 # unroll begin

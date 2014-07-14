@@ -221,7 +221,7 @@ void Migration::doMigration()
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
-    OSL_ENSURE(bResult, "Migration has not been successfull");
+    OSL_ENSURE(bResult, "Migration has not been successful");
     // shut down migration framework
     releaseImpl();
 }

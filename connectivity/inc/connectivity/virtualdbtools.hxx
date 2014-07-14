@@ -91,7 +91,7 @@ namespace comphelper {
     instance, which is acquired <em>once</em>.</p>
     @return
         a pointer to an object implementing the IDataAccessToolsFactory interface,
-        aquired exactly <em>once</em>.
+        acquired exactly <em>once</em>.
 */
 extern "C" OOO_DLLPUBLIC_DBTOOLS void* SAL_CALL createDataAccessToolsFactory();
 

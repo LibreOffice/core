@@ -30,6 +30,28 @@
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 
+#include "rtl/ustring.hxx"
+#include "osl/file.hxx"
+
+#ifdef WNT
+#   include <windows.h>
+#endif
+
+/*
+#ifndef WIN32_LEAN_AND_MEAN
+#   define WIN32_LEAN_AND_MEAN
+# ifdef _MSC_VER
+#   pragma warning(push,1)
+# endif
+#   include <windows.h>
+# ifdef _MSC_VER
+#   pragma warning(pop)
+# endif
+#   include <tchar.h>
+#   undef WIN32_LEAN_AND_MEAN
+#endif
+*/
+
 #include <stdio.h>
 #include <string.h>
 
@@ -182,6 +204,28 @@ bool Options::setOption(char const * option, std::string const & rArg)
     return (result);
 }
 
+#ifdef WNT
+/* Helper functiopn to convert windows paths including spaces, brackets etc. into
+   a windows short Url. The ucpp preprocessor has problems with such paths and returns
+   with error.
+*/
+OString convertIncPathtoShortWindowsPath(const OString& incPath) {
+    rtl::OUString path = OStringToOUString(incPath, RTL_TEXTENCODING_UTF8);
+
+    std::vector<sal_Unicode> vec(path.getLength() + 1);
+    //GetShortPathNameW only works if the file can be found!
+    const DWORD len = GetShortPathNameW(
+        reinterpret_cast<LPCWSTR>(path.getStr()), reinterpret_cast<LPWSTR>(&vec[0]), path.getLength() + 1);
+
+    rtl::OUString ret = rtl::OUString(&vec[0], len);
+
+    if (len > 0)
+        return OUStringToOString(ret, RTL_TEXTENCODING_UTF8);
+
+    return incPath;
+}
+#endif
+
 bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgument)
 {
     std::vector< std::string >::const_iterator first = rArgs.begin(), last = rArgs.end();
@@ -225,7 +269,15 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
                 sal_Int32 k = 0;
                 do
                 {
-                    OStringBuffer token; token.append("-I"); token.append(param.getToken(0, ';', k));
+                    OStringBuffer token;
+                    token.append("-I");
+#ifdef WNT
+                    rtl::OString incpath = convertIncPathtoShortWindowsPath(param.getToken(0, ';', k));
+#else
+                    rtl::OString incpath = param.getToken(0, ';', k);
+#endif
+                    token.append(incpath);
+                    //token.append(param.getToken(0, ';', k));
                     if (buffer.getLength() > 0)
                         buffer.append(' ');
                     buffer.append(token);

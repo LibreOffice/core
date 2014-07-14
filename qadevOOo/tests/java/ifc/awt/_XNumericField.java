@@ -82,7 +82,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getValue() {
         val = oObj.getValue() ;
@@ -108,7 +108,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getMin() {
 
@@ -138,7 +138,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getMax() {
 
@@ -169,7 +169,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getFirst() {
 
@@ -201,7 +201,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getLast() {
 
@@ -231,7 +231,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getSpinSize() {
 
@@ -263,7 +263,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getDecimalDigits() {
 
@@ -293,7 +293,7 @@ public class _XNumericField extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _isStrictFormat() {
 

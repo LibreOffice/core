@@ -97,7 +97,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 {
                     if (mbIsVerticalWrapActive)
                     {
-                        // Wrap arround to the bottom row or the one above
+                        // Wrap around to the bottom row or the one above
                         // and go to the correct column.
                         const sal_Int32 nLastIndex (nPageCount-1);
                         const sal_Int32 nLastColumn (nLastIndex % nColumnCount);
@@ -131,7 +131,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 {
                     if (mbIsVerticalWrapActive)
                     {
-                        // Wrap arround to the correct column.
+                        // Wrap around to the correct column.
                         mnPageIndex = mnPageIndex % nColumnCount;
                     }
                     else

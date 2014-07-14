@@ -74,7 +74,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
 
     ByteString sWindowState;
     Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
-    // check for system window is neccessary to guarantee correct pointer cast!
+    // check for system window is necessary to guarantee correct pointer cast!
     if (pWindow!=NULL && pWindow->IsSystemWindow())
     {
         sal_uLong nMask  = WINDOWSTATE_MASK_ALL;
@@ -102,7 +102,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
     ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-    // check for system window is neccessary to guarantee correct pointer cast!
+    // check for system window is necessary to guarantee correct pointer cast!
     if (
         (pWindow                  ) &&
         (pWindow->IsSystemWindow()) &&
@@ -128,8 +128,8 @@ static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xW
     if (xTopWindowCheck.is())
     {
         // Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-        // Be sure that these window is realy a "top system window".
-        // Attention ! Checking Window->GetParent() isnt the right approach here.
+        // Be sure that these window is really a "top system window".
+        // Attention ! Checking Window->GetParent() isn't the right approach here.
         // Because sometimes VCL create "implicit border windows" as parents even we created
         // a simple XWindow using the toolkit only .-(
         ::vos::OGuard aSolarLock(&Application::GetSolarMutex());

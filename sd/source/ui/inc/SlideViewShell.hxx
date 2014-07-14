@@ -117,7 +117,7 @@ public:
 
     virtual bool    HasSelection( bool bText = true ) const;
 
-    /** Draw the rectangle arround the specified slide that indicates whether
+    /** Draw the rectangle around the specified slide that indicates whether
         the slide is selected or not.  When not selected the rectangle is
         painted in the background color (WindowColor from the style settings)
         and is therefore not visible.  A selected slide is painted with the

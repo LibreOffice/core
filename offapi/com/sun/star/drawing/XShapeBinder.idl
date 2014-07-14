@@ -51,7 +51,7 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
     /** binds <type>Shape</type>s together.
 
         @param xShapes
-            a container with <type>Shape</type>s that will be bind toghether.
+            a container with <type>Shape</type>s that will be bind together.
             All <type>Shapes</type> will be converted to a <type>PolyPolygonBezierShape</type>
             and the lines will be connected. The <type>Shape</types>s in xShape will be
             removed from the <type>GenericDrawPage</type> and disposed.

@@ -61,7 +61,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
             the current state of the modifier keys.
 
         <p>
-        This function is usally called by a toolbar implementation when a user clicked on a toolbar button
+        This function is usually called by a toolbar implementation when a user clicked on a toolbar button
         or pressed enter on the keyboard when the item has the input focus.
         </p>
     */

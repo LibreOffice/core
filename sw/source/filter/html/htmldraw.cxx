@@ -59,6 +59,7 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/sdrobjectfactory.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -396,7 +397,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Ein DrawTxtobj anlegen
     // --> OD 2005-08-08 #i52858# - method name changed
-    SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+    SwDrawModel* pModel = pDoc->GetOrCreateDrawModel();
     // <--
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( *pModel, SdrObjectCreationInfo(OBJ_TEXT, SdrInventor));

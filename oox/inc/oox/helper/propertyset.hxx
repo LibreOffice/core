@@ -95,7 +95,7 @@ public:
                             { return getAnyProperty( nPropId ) >>= orValue; }
 
     /** Gets the specified boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     inline bool         getBoolProperty( sal_Int32 nPropId ) const
                             { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
 

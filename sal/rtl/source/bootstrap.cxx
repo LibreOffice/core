@@ -41,7 +41,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
-#include "rtl/allocator.hxx"
 
 #include "macro.hxx"
 
@@ -134,10 +133,7 @@ struct rtl_bootstrap_NameValue
         {}
 };
 
-typedef std::list<
-    rtl_bootstrap_NameValue,
-    rtl::Allocator< rtl_bootstrap_NameValue >
-> NameValueList;
+typedef std::list<rtl_bootstrap_NameValue> NameValueList;
 
 bool find(
     NameValueList const & list, rtl::OUString const & key,
@@ -605,10 +601,7 @@ void Bootstrap_Impl::expandValue(
 namespace {
 
 struct bootstrap_map {
-    typedef std::hash_map<
-        rtl::OUString, Bootstrap_Impl *,
-        rtl::OUStringHash, std::equal_to< rtl::OUString >,
-        rtl::Allocator< OUString > > t;
+    typedef std::hash_map< const rtl::OUString, Bootstrap_Impl*, rtl::OUStringHash > t;
 
     // get and release must only be called properly synchronized via some mutex
     // (e.g., osl::Mutex::getGlobalMutex()):

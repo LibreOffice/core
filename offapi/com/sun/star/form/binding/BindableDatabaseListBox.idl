@@ -48,13 +48,13 @@ module com {  module sun {  module star {  module form {  module binding {
     <ol><li><em>sequences of integers</em>: When used, the integers in the sequence will represent
             the indexes of the selected entries of the list box.</li>
         <li><em>integer values</em>: When used, the value will represent the index of the selected entry.
-            If no entry is selected, -1 will be transfered. If more than one entry is selected, <NULL/>
-            will be transfered.</li>
+            If no entry is selected, -1 will be transferred. If more than one entry is selected, <NULL/>
+            will be transferred.</li>
         <li><em>sequences of strings</em>: When used, the strings in the sequence present the texts
             of the selected entries of the list box.</li>
         <li><em>string values</em>: When used. the value will represent the text of the selected entry.
-            If no entry is selected, an empty string will be transfered. If more than one entry is selected,
-            <NULL/> will be transfered.</li>
+            If no entry is selected, an empty string will be transferred. If more than one entry is selected,
+            <NULL/> will be transferred.</li>
     </ol></p>
 
     @see com::sun::star::form::binding::XValueBinding::supportsType

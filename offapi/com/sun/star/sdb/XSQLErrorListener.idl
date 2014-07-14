@@ -44,7 +44,7 @@ published interface XSQLErrorListener: com::sun::star::lang::XEventListener
         <type scope="com::sun::star::sdbc">SQLException</type>
         is thrown to the application.
         @param aEvent
-            the event which occured
+            the event which occurred
      */
     void errorOccured([in]com::sun::star::sdb::SQLErrorEvent aEvent);
 };

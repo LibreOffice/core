@@ -32,12 +32,12 @@ class SwDocShell;
 
 //==================================================================
 
-class SwDrawDocument : public FmFormModel
+class SwDrawModel : public FmFormModel
 {
     SwDoc* pDoc;
 public:
-    SwDrawDocument( SwDoc* pDoc );
-    ~SwDrawDocument();
+    SwDrawModel( SwDoc* pDoc );
+    ~SwDrawModel();
 
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }

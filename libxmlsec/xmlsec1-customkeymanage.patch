@@ -796,7 +796,7 @@
 +
 +/**
 + * xmlSecNssAppliedKeysMngrCreate:
-+ * @slot:			array of pointers to NSS PKCS#11 slot infomation.
++ * @slot:			array of pointers to NSS PKCS#11 slot information.
 + * @cSlots:			number of slots in the array
 + * @handler:		the pointer to NSS certificate database.
 + *
@@ -4386,7 +4386,7 @@
 + * every eligibl slot in the list.
 + *
 + * When try to find a slot for a particular mechanism, the slot bound with
-+ * avaliable mechanism will be looked up firstly.
++ * available mechanism will be looked up firstly.
 + */
 +#include "globals.h"
 +#include <string.h>

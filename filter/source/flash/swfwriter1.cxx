@@ -607,7 +607,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         // write text element
 
-/* test code to create a bound rect, not realy working for rotated text
+/* test code to create a bound rect, not really working for rotated text
             Size        aTextSize( map( Size( mpVDev->GetTextWidth( rText ), mpVDev->GetTextHeight() ) ) );
             Point       aMetricPoint( map( Point( aMetric.GetLeading(), aMetric.GetAscent() )  ) );
 
@@ -710,7 +710,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         maShapeIds.push_back( nTextId );
 
-        // AS: Write strikeout and underline, if neccessary.  This code was originally taken from the SVG
+        // AS: Write strikeout and underline, if necessary.  This code was originally taken from the SVG
         //  export facility, although the positioning had to be tweaked a little.  I can't explain the
         //  numbers, but the flash lines up very well with the original OOo document.  All of this should
         //  probably be converted to polygons as part of the meta file, though, as we don't handle any
@@ -757,9 +757,9 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 }
 
 // -----------------------------------------------------------------------------
-// AS: Because JPEGs require the alpha channel provided seperately (JPEG does not
-//  natively support alpha channel, but SWF lets you provide it seperately), we
-//  extract the alpha channel into a seperate array here.
+// AS: Because JPEGs require the alpha channel provided separately (JPEG does not
+//  natively support alpha channel, but SWF lets you provide it separately), we
+//  extract the alpha channel into a separate array here.
 void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tgaAlphadata, sal_uInt32& nWidth, sal_uInt32& nHeight )
 {
     if( !aBmpEx.IsEmpty() )
@@ -860,7 +860,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #endif
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
-    //  to ZLIB compress the alpha channel seperately.
+    //  to ZLIB compress the alpha channel separately.
     uLong alpha_compressed_size = 0;
     sal_uInt8 *pAlphaCompressed = NULL;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
@@ -1043,7 +1043,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
 void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
-    // AS: Go through the actuall JPEG bits, seperating out the
+    // AS: Go through the actuall JPEG bits, separating out the
     //  header fields from the actual image fields.  Fields are
     //  identifed by 0xFFXX where XX is the field type.  Both
     //  the header and the image need start and stop (D8 and D9),
@@ -1092,7 +1092,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
             nLength = 2 + (pJpgSearch[2]<<8) + pJpgSearch[3];
         }
 
-        // AS: I'm refering to libjpeg for a list of what these
+        // AS: I'm referring to libjpeg for a list of what these
         //  markers are.  See jdmarker.c for a list.
         // AS: I'm ignoring application specific markers 0xE1...0xEF
         //  and comments 0xFE.  I don't know what

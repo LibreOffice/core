@@ -65,7 +65,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          listen for modify events on model and tag frame container window so it can react accordingly
-    @descr          Used e.g. by our MAC port where such state is shown seperately on some controls of the
+    @descr          Used e.g. by our MAC port where such state is shown separately on some controls of the
                     title bar.
 
     @base           ThreadHelpBase
@@ -83,7 +83,7 @@ class TagWindowAsModified :   // interfaces
                               public css::lang::XInitialization,
                               public css::frame::XFrameActionListener, // => XEventListener
                               public css::util::XModifyListener,       // => XEventListener
-                              // baseclasses (order neccessary for right initialization!)
+                              // baseclasses (order necessary for right initialization!)
                               private ThreadHelpBase,
                               public  ::cppu::OWeakObject
 {

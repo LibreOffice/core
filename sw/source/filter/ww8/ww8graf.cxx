@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <svl/urihelper.hxx>
 #include <hintids.hxx>
@@ -89,7 +88,6 @@
 #include <fmtinfmt.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-// OD 30.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
@@ -98,13 +96,12 @@
 #include <editeng/editobj.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
-
 #include <math.h>
-
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
 #include "ww8par2.hxx"
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::types;
@@ -637,7 +634,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
      Save and create new plcxman for this drawing object, of the type that
      will include the para end mark inside a paragraph property range, as
      drawing boxes have real paragraph marks as part of their text, while
-     normal writer has seperate nodes for each paragraph and so has no actual
+     normal writer has separate nodes for each paragraph and so has no actual
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
@@ -1914,7 +1911,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     bool bBrushItemOk = false;
     sal_uInt8 nTrans = 0;
 
-    //Seperate transparency
+    //Separate transparency
     eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
     if (eState == SFX_ITEM_SET)
     {
@@ -2104,7 +2101,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
 
              So given that the size of the values remains pretty much the
              same despite the size of the graphic, we can tell that the
-             polygon is measured in units that are independant of the
+             polygon is measured in units that are independent of the
              graphic. But why does the left corner move a different value
              to the left each time, and why does the bottom move upwards
              each time, when the right and top remain at the same value ?
@@ -2146,7 +2143,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
             aPoly.Scale(aMapPolyX, aMapPolyY);
 
             // --> OD 2005-05-19 #i47277# - contour is already in unit of the
-            // graphic prefered unit. Thus, call method <SetContour(..)>
+            // graphic preferred unit. Thus, call method <SetContour(..)>
             pNd->SetContour(&aPoly);
             // <--
         }

@@ -81,7 +81,7 @@ using namespace ::framework ;
                     3)  decrease size of xml file
                         - don't write full localized values
                         - use own formated string for all non localized values
-                        - seperate "Installed" flag for filters
+                        - separate "Installed" flag for filters
                     4)  set right values for "Order" property of filters
                     5)  support for ContentHandler
               draft 6)  reactivate old filter names
@@ -95,7 +95,7 @@ using namespace ::framework ;
 #define ARGUMENT_VERSION_INPUT          DECLARE_ASCII("-vin=")          // argument for file version to read                [1|2|3]
 #define ARGUMENT_VERSION_OUTPUT         DECLARE_ASCII("-vou=")          // argument for file version to write               [1|2|3]
 
-#define ARGUMENTLENGTH                  5                               // All arguments should have the same lenght ... it's better to detect it!
+#define ARGUMENTLENGTH                  5                               // All arguments should have the same length ... it's better to detect it!
 #define ARGUMENTFOUND                   0                               // OUString::compareTo returns 0 if searched string match given one
 
 #define WRITEABLE_ON                    DECLARE_ASCII("true" )
@@ -205,7 +205,7 @@ class XCDGenerator : public Application
         static ::rtl::OUString  impl_encodeSpecialSigns                 (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
         static sal_Unicode      impl_defineSeperator                    (   const   ::framework::StringList&                lList                               ); // search seperator for lists
         static void             impl_initFilterHashNew2Old              (           StringHash&                             aHash                               ); // initialize converter table to restaurate old filter names
-        static void             impl_orderAlphabetical                  (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files everytime in the same way
+        static void             impl_orderAlphabetical                  (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files every time in the same way
         static sal_Bool         impl_isUsAsciiAlphaDigit                (           sal_Unicode                             c                                   ,
                                                                                     sal_Bool                                bDigitAllowed = sal_True            );
         static ::rtl::OUString  impl_encodeSetName                      (   const   ::rtl::OUString&                        rSource                             );
@@ -229,7 +229,7 @@ void XCDGenerator::Main()
 //    impl_printCopyright();
 
     // Init global servicemanager and set it.
-    // It's neccessary for other services ... e.g. configuration.
+    // It's necessary for other services ... e.g. configuration.
     ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
     ::utl::setProcessServiceFactory      ( aManager.getGlobalUNOServiceManager() );
@@ -251,7 +251,7 @@ void XCDGenerator::Main()
 
     // Get some statistic informations of current filled filter cache ... (e.g. count of current activae filters)
     // because we need it to check if all filters are converted and written to disk.
-    // May be it's possible to lose some of them during convertion!!!
+    // May be it's possible to lose some of them during conversion!!!
     m_aData.nOriginalTypes     = m_aData.pFilterCache->getAllTypeNames().getLength()     ;
     m_aData.nOriginalFilters   = m_aData.pFilterCache->getAllFilterNames().getLength()   ;
     m_aData.nOriginalDetectors = m_aData.pFilterCache->getAllDetectorNames().getLength() ;
@@ -324,7 +324,7 @@ void XCDGenerator::impl_printSyntax()
     @seealso    -
 
     @param      "rMember", reference to struct of global application member to fill arguments in it
-    @return     right filled member struct or unchanged struct if an error occure!
+    @return     right filled member struct or unchanged struct if an error occur!
 
     @onerror    We do nothing - or warn programmer!
 *//*-*************************************************************************************************************/
@@ -638,7 +638,7 @@ void XCDGenerator::impl_generateTypeTemplate()
         m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                               );
         m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
         m_aData.sBufferStandard.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
-        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Containes all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Contains all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
         m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
@@ -1525,7 +1525,7 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
             ++pUIName;
         }
 
-        // Generate full localized set, if some values are realy loclaized.
+        // Generate full localized set, if some values are really loclaized.
         if( bDifferent == sal_True )
         {
             for( ConstStringHashIterator pUIName=lUINames.begin(); pUIName!=lUINames.end(); ++pUIName )
@@ -1603,7 +1603,7 @@ sal_Unicode XCDGenerator::impl_defineSeperator( const ::framework::StringList& l
     // Start with first seperator.
     // Step over all list items.
     // If one item contains this seperator - try next one!
-    // If no new one avaliable (5 tests failed!) - show an error message for user.
+    // If no new one available (5 tests failed!) - show an error message for user.
     // => File will be wrong then!
     // If seperator was changed start search during list again ... because
     // new seperator could exist at already compared elements!

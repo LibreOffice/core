@@ -326,7 +326,7 @@ handler.
         if len(self.tokenBuf) == 0:
             pass
         elif scope == 0:
-            # We are not supposed to have any statment in global scope.
+            # We are not supposed to have any statement in global scope.
             # Just ignore this statement.
             pass
         else:

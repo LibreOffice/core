@@ -268,9 +268,7 @@ public:
     // next page border
     const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
 
-    void CalcFrmRects(
-        SwShellCrsr&,
-        const sal_Bool bIsTblSel );
+    void CalcFrmRects( SwShellCrsr& );
 
     // Calculates the cells included from the current selection
     // false: There was no result because of an invalid layout

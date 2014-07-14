@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module util {
 
 /** makes it possible to sort the contents of this object.
 
-    <p>The available properties describing the sort criterias are
+    <p>The available properties describing the sort criteria are
     defined in the sort descriptor implemented by the object that
     implements this interface.</p>
 

@@ -75,7 +75,7 @@ namespace svt
             ,public ::comphelper::OPropertyContainer
     {
     private:
-        ::osl::Mutex                    m_aExecutionMutex;  /// acess safety for execute/cancel
+        ::osl::Mutex                    m_aExecutionMutex;  /// access safety for execute/cancel
 
     protected:
         Dialog*                     m_pDialog;                  /// the dialog to execute

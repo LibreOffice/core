@@ -19,12 +19,12 @@
  *
  *************************************************************/
 
-
 #ifndef _HINTIDS_HXX
 #define _HINTIDS_HXX
 
 #include <tools/solar.h>        // fuer __FAR_DATA
 #include <sal/types.h>          // for sal_Unicode
+#include <svx/xdef.hxx>
 #include "swdllapi.h"
 
 // fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
@@ -405,10 +405,15 @@ inline bool isPARATR(const sal_uInt16 nWhich)
 }
 inline bool isPARATR_LIST(const sal_uInt16 nWhich)
 {
-    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
+    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich);
+}
 inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
+}
+inline bool isDrawingLayerAttribute(const sal_uInt16 nWhich) //UUUU
+{
+    return (XATTR_FILL_FIRST <= nWhich) && (XATTR_FILL_LAST >= nWhich);
 }
 inline bool isGRFATR(const sal_uInt16 nWhich)
 {

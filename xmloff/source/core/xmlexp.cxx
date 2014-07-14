@@ -946,7 +946,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                   aSeq, e.Message, NULL );
     }
 
-    // return true only if no error occured
+    // return true only if no error occurred
     return (GetErrorFlags() & (ERROR_DO_NOTHING|ERROR_ERROR_OCCURED)) == 0;
 }
 

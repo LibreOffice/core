@@ -255,7 +255,7 @@ namespace dbtools
             If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
             by this function here is a temporary object. It is kept alive by another object, which is to be
             created temporarily, too. To ensure that the fields you get are valid as long as you need them,
-            the owner which controls their life time is transfered to this parameter upon return.<br/>
+            the owner which controls their life time is transferred to this parameter upon return.<br/>
 
             Your fields live as long as this component lives.<br/>
 
@@ -330,7 +330,7 @@ namespace dbtools
         const StandardSQLState _eSQLState = SQL_ERROR_UNSPECIFIED,
         const sal_Int32 _nErrorCode = 0);
 
-    /** search the parent hierachy for a data source.
+    /** search the parent hierarchy for a data source.
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> findDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 
@@ -363,7 +363,7 @@ namespace dbtools
         @param _pAsciiSettingsName
             the ASCII name of the setting to obtain
         @param _rSettingsValue
-            the value of the setting, upon successfull return
+            the value of the setting, upon successful return
 
         @return
             <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>
@@ -610,7 +610,7 @@ namespace dbtools
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
                             const ::std::bit_vector& _aParametersSet = ::std::bit_vector());
 
-    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+    /** call the appropriate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value
         @param  parameterIndex  the index of the parameter, 1 based
         @param  x               the value to set
@@ -624,7 +624,7 @@ namespace dbtools
                             sal_Int32 sqlType,
                             sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
+    /** call the appropriate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value
         @param  parameterIndex  the index of the parameter, 1 based
         @param  x               the value to set

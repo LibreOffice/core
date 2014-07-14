@@ -500,7 +500,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // #119950# Try to connect pipe first. If connected, means another instance already launched.
         if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity ))
         {
-            // #119950# Test if launched in a new terminal session for same user. On Windows platform, normally a user is resticted
+            // #119950# Test if launched in a new terminal session for same user. On Windows platform, normally a user is restricted
             // to have only one terminal session. But if mutiple terminal session for one user is allowed, crash will happen if launched
             // OpenOffice from more than one terminal session. So need to detect and prevent this happen.
 
@@ -516,7 +516,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
 
         }
-        else if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity )) // Connection not successfull, now we try to create
+        else if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity )) // Connection not successful, now we try to create
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
@@ -567,7 +567,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
-        // finaly, write the string onto the pipe
+        // finally, write the string onto the pipe
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         pThread->maStreamPipe.write( "\0", 1 );
 

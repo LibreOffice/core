@@ -36,7 +36,7 @@ import java.util.LinkedList;
        objects.
     2. Top window events inform the listener about new or removed windows.
 
-    This class exists because events had to be handled in a seperate thread
+    This class exists because events had to be handled in a separate thread
     to avoid dead locks: The thread that receives an event must no call back
     to the Office directly.
 
@@ -206,7 +206,7 @@ class EventListenerProxy
 
     /** The queue of event objects, LinkedList<Runnable>.
         The queue object will also serve as lock for the consumer/producer type
-        syncronization.
+        synchronization.
     */
     private LinkedList maEventQueue;
 

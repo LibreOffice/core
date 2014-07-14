@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-
 #ifndef _FORMAT_HXX
 #define _FORMAT_HXX
 
@@ -29,8 +28,7 @@
 #include <swatrset.hxx>     // fuer SfxItemPool/-Set, Attr forward decl.
 #include <calbck.hxx>       // fuer SwModify
 #include <hintids.hxx>
-//UUUU
-#include <fillattributes.hxx>
+#include <boost/shared_ptr.hpp>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -39,6 +37,11 @@ class IDocumentTimerAccess;
 class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
+
+namespace drawinglayer { namespace attribute {
+    class SdrAllFillAttributesHelper;
+    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+}}
 
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
@@ -241,7 +244,7 @@ public:
     inline const SvxBoxItem               &GetBox( sal_Bool = sal_True ) const;
     inline const SvxFmtKeepItem         &GetKeep( sal_Bool = sal_True ) const;
 
-    //UUUU
+    //UUUU Get SvxBrushItem for Background fill (partially for backwards compatibility)
     const SvxBrushItem& GetBackground( sal_Bool = sal_True ) const;
 
     inline const SvxShadowItem            &GetShadow( sal_Bool = sal_True ) const;
@@ -328,17 +331,11 @@ public:
     */
     virtual sal_Bool IsShadowTransparent() const;
 
-    //UUUU
-    virtual FillAttributesPtr getFillAttributes() const;
+    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 };
 
 // --------------- inline Implementierungen ------------------------
-
-//UUUUinline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
-//UUUU                                             sal_Bool bInParents ) const
-//UUUU{
-//UUUU  return aSet.Get( nWhich, bInParents );
-//UUUU}
 
 inline void SwFmt::SetName( const sal_Char* pNewName,
                              sal_Bool bBroadcast )
@@ -346,12 +343,6 @@ inline void SwFmt::SetName( const sal_Char* pNewName,
     String aTmp( String::CreateFromAscii( pNewName ) );
     SetName( aTmp, bBroadcast );
 }
-
-//UUUUinline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
-//UUUU                                      const SfxPoolItem **ppItem ) const
-//UUUU{
-//UUUU  return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
-//UUUU}
 
 #undef inline
 

@@ -4898,14 +4898,14 @@
 				<info>
 					<desc>Contains settings for the media type used for the label.</desc>
 				</info>
-				<prop oor:name="Continous" oor:type="xs:boolean">
+				<prop oor:name="Continuous" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
 						<author>OS</author>
 						<desc>Specifies if continuous paper or individual sheets are used.</desc>
-						<label>Continous / Sheet</label>
+						<label>Continuous / Sheet</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5085,14 +5085,14 @@
 				<info>
 					<desc>Contains settings for the media type used.</desc>
 				</info>
-				<prop oor:name="Continous" oor:type="xs:boolean">
+				<prop oor:name="Continuous" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
 					<info>
 						<author>OS</author>
 						<desc>Specifies if continuous paper or individual sheets are used.</desc>
-						<label>Continous / Sheet</label>
+						<label>Continuous / Sheet</label>
 					</info>
 					<value>false</value>
 				</prop>

@@ -178,7 +178,10 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
             case META_PUSH_ACTION           : DoAction((MetaPushAction           &)*pAct); break;
             case META_POP_ACTION            : DoAction((MetaPopAction            &)*pAct); break;
             case META_HATCH_ACTION          : DoAction((MetaHatchAction          &)*pAct); break;
-            case META_COMMENT_ACTION        : DoAction((MetaCommentAction        &)*pAct, &rMtf); break;
+
+            // #i125211# MetaCommentAction may change index, thus hand it over
+            case META_COMMENT_ACTION        : DoAction((MetaCommentAction&)*pAct, rMtf, a);
+                break;
 
             // missing actions added
             case META_TEXTRECT_ACTION       : DoAction((MetaTextRectAction&)*pAct); break;
@@ -1280,9 +1283,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
             SdrPathObj* pPath = new SdrPathObj(
                 mrModel,
                 aSource);
-            SfxItemSet aHatchAttr(pPath->GetObjectItemPool(),
-                XATTR_FILLSTYLE, XATTR_FILLSTYLE,
-                XATTR_FILLHATCH, XATTR_FILLHATCH, 0, 0 );
+            // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
+            SfxItemSet aHatchAttr(pPath->GetObjectItemPool(), pPath->GetMergedItemSet().GetRanges());
             XHatchStyle eStyle;
 
             switch(rHatch.GetStyle())
@@ -1332,13 +1334,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pMtf )
+void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rMtf, sal_uLong& a) // GDIMetaFile* pMtf )
 {
     ByteString aSkipComment;
 
-    if( rAct.GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
+    if( a < rMtf.GetActionCount() && rAct.GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
     {
-        MetaGradientExAction* pAct = (MetaGradientExAction*) pMtf->NextAction();
+        // #i125211# Check if next action is a MetaGradientExAction
+        MetaGradientExAction* pAct = dynamic_cast< MetaGradientExAction* >(rMtf.GetAction(a + 1));
 
         if( pAct && pAct->GetType() == META_GRADIENTEX_ACTION )
         {
@@ -1354,9 +1357,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     SdrPathObj* pPath = new SdrPathObj(
                         mrModel,
                         aSource);
-                    SfxItemSet aGradAttr(pPath->GetObjectItemPool(),
-                       XATTR_FILLSTYLE, XATTR_FILLSTYLE,
-                       XATTR_FILLGRADIENT, XATTR_FILLGRADIENT, 0, 0 );
+                    // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
+                    SfxItemSet aGradAttr(pPath->GetObjectItemPool(), pPath->GetMergedItemSet().GetRanges());
                     XGradient aXGradient;
 
                     aXGradient.SetGradientStyle((XGradientStyle)rGrad.GetStyle());
@@ -1394,13 +1396,14 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
     if(aSkipComment.Len())
     {
-        MetaAction* pSkipAct = pMtf->NextAction();
+        // #i125211# forward until closing MetaCommentAction
+        MetaAction* pSkipAct = rMtf.GetAction(++a);
 
         while( pSkipAct
             && ((pSkipAct->GetType() != META_COMMENT_ACTION )
                 || (((MetaCommentAction*)pSkipAct)->GetComment().CompareIgnoreCaseToAscii(aSkipComment.GetBuffer()) != COMPARE_EQUAL)))
         {
-            pSkipAct = pMtf->NextAction();
+            pSkipAct = rMtf.GetAction(++a);
         }
     }
 }
@@ -1574,7 +1577,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
             mrModel,
             maCurrent * aObjectTransform);
 
-        SfxItemSet aGradientAttr(mrModel.GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE, XATTR_FILLGRADIENT, XATTR_FILLGRADIENT, 0, 0);
+        // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
+        SfxItemSet aGradientAttr(mrModel.GetItemPool(), pRect->GetMergedItemSet().GetRanges());
         const Gradient& rGradient = rAct.GetGradient();
         const XGradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
         const XFillGradientItem aXFillGradientItem(
@@ -1592,7 +1596,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
                 rGradient.GetSteps()));
 
         SetAttributes(pRect);
-        aGradientAttr.Put(XFillStyleItem(XFILL_HATCH));
+        aGradientAttr.Put(XFillStyleItem(XFILL_GRADIENT)); // #i125211#
         aGradientAttr.Put(aXFillGradientItem);
         pRect->SetMergedItemSet(aGradientAttr);
 
@@ -1654,10 +1658,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
 
         if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
         {
+            // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
             SdrPathObj* pPath = new SdrPathObj(
                 mrModel,
                 aSource);
-            SfxItemSet aGradientAttr(mrModel.GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE, XATTR_FILLGRADIENT, XATTR_FILLGRADIENT, 0, 0);
+            SfxItemSet aGradientAttr(mrModel.GetItemPool(), pPath->GetMergedItemSet().GetRanges());
             const Gradient& rGradient = rAct.GetGradient();
             const XGradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
             const XFillGradientItem aXFillGradientItem(
@@ -1675,7 +1680,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
                     rGradient.GetSteps()));
 
             SetAttributes(pPath);
-            aGradientAttr.Put(XFillStyleItem(XFILL_HATCH));
+            aGradientAttr.Put(XFillStyleItem(XFILL_GRADIENT)); // #i125211#
             aGradientAttr.Put(aXFillGradientItem);
             pPath->SetMergedItemSet(aGradientAttr);
 

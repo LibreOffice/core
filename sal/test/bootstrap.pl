@@ -217,7 +217,7 @@ if (!$rc) {
     $state = 0;
 }
 
-# test no infinit recursion
+# test no infinite recursion
 if ($ENV{GUI} eq "WNT") {
     $rc = system "./testbootstrap",
     '"***RECURSION DETECTED***"',
@@ -229,7 +229,7 @@ else {
     '-env:MYBOOTSTRAPTESTVALUE=$MYBOOTSTRAPTESTVALUE';
 }
 if (!$rc) {
-    $comment = $comment . "no infinit recursion test not passed\n";
+    $comment = $comment . "no infinite recursion test not passed\n";
     $state = 0;
 }
 

@@ -157,6 +157,22 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if (GetLinkManager())
             pDrawLayer->SetLinkManager( pLinkManager );
 
+        //UUUU set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
+        // secondary pool to support DrawingLayer FillStyle ranges (and similar)
+        // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
+        // the PageStyle using SvxBrushItem is visualized and will be potentially
+        // used more intense in the future
+        if(xPoolHelper.isValid())
+        {
+            ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
+
+            if(pLocalPool)
+            {
+                OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
+                pLocalPool->SetSecondaryPool(&pDrawLayer->GetItemPool());
+            }
+        }
+
         //  Drawing pages are accessed by table number, so they must also be present
         //  for preceding table numbers, even if the tables aren't allocated
         //  (important for clipboard documents).
@@ -251,7 +267,20 @@ IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex
 
 void ScDocument::DeleteDrawLayer()
 {
+    //UUUU remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
+    // it is registered as secondary pool
+    if(xPoolHelper.isValid())
+    {
+        ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
+
+        if(pLocalPool && pLocalPool->GetSecondaryPool())
+        {
+            pLocalPool->SetSecondaryPool(0);
+        }
+    }
+
     delete pDrawLayer;
+    pDrawLayer = 0;
 }
 
 sal_Bool ScDocument::DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const

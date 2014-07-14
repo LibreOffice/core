@@ -1909,7 +1909,7 @@ void SwTabFrm::MakeAll()
     LockJoin(); //Ich lass mich nicht unterwegs vernichten.
     SwLayNotify aNotify( this );    //uebernimmt im DTor die Benachrichtigung
     // If pos is invalid, we have to call a SetInvaKeep at aNotify.
-    // Otherwise the keep atribute would not work in front of a table.
+    // Otherwise the keep attribute would not work in front of a table.
     const sal_Bool bOldValidPos = GetValidPosFlag();
 
     //Wenn mein direkter Nachbar gleichzeitig mein Follow ist
@@ -2528,7 +2528,7 @@ void SwTabFrm::MakeAll()
                     }
 
                     // --> FME 2004-06-09 #i29771# Two tries to split the table:
-                    // If an error occured during splitting. We start a second
+                    // If an error occurred during splitting. We start a second
                     // try, this time without splitting of table rows.
                     if ( bSplitError )
                     {
@@ -2537,7 +2537,7 @@ void SwTabFrm::MakeAll()
                     }
 
                     // --> FME 2005-02-10 #119477#
-                    // If splitting the table was successfull or not,
+                    // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.
                     if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
                         Join();

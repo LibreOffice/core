@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <hash_map>
-#include "rtl/allocator.hxx"
 
 #include <functional>
 #include <list>
@@ -153,11 +152,10 @@ struct hashModule
 };
 
 typedef std::hash_map<
-    oslModule,
+    const oslModule,
     std::pair<sal_uInt32, component_canUnloadFunc>,
     hashModule,
-    std::equal_to<oslModule>,
-    rtl::Allocator<oslModule>
+    std::equal_to<oslModule>
 > ModuleMap;
 
 typedef ModuleMap::iterator Mod_IT;
@@ -243,7 +241,7 @@ extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
 {
     MutexGuard guard( getUnloadingMutex());
 
-    typedef std::list< oslModule, rtl::Allocator<oslModule> > list_type;
+    typedef std::list< oslModule > list_type;
     list_type unloadedModulesList;
 
     ModuleMap& moduleMap= getModuleMap();
@@ -302,11 +300,10 @@ struct hashListener
 };
 
 typedef std::hash_map<
-    sal_Int32,
+    const sal_Int32,
     std::pair<rtl_unloadingListenerFunc, void*>,
     hashListener,
-    std::equal_to<sal_Int32>,
-    rtl::Allocator<sal_Int32>
+    std::equal_to<sal_Int32>
 > ListenerMap;
 
 typedef ListenerMap::iterator Lis_IT;
@@ -330,13 +327,10 @@ static ListenerMap& getListenerMap()
 // This queue contains cookies which have been passed out by rtl_addUnloadingListener and
 // which have been regainded by rtl_removeUnloadingListener. When rtl_addUnloadingListener
 // is called then a cookie has to be returned. First we look into the set if there is one
-// availabe. Otherwise a new cookie will be provided.
+// available. Otherwise a new cookie will be provided.
 // not a new value is returned.
 
-typedef std::deque<
-    sal_Int32,
-    rtl::Allocator<sal_Int32>
-> queue_type;
+typedef std::deque< sal_Int32 > queue_type;
 
 static queue_type& getCookieQueue()
 {

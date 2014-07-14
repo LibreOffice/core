@@ -89,7 +89,7 @@ namespace drawinglayer
 
                 // as can be seen from the TextSimplePortionPrimitive2D and the
                 // TextDecoratedPortionPrimitive2D, inside of the mnInText marks
-                // the following primitives can occurr containing geometry data
+                // the following primitives can occur containing geometry data
                 // from text decomposition:
                 //
                 // - PolyPolygonColorPrimitive2D
@@ -195,7 +195,7 @@ namespace drawinglayer
                         getViewInformation2D().getExtendedInformationSequence());
                     updateViewInformation(aViewInformation2D);
 
-                    // proccess content
+                    // process content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations

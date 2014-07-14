@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -45,7 +43,6 @@
 #include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdlegacy.hxx>
-
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -97,15 +94,10 @@
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR-ResId's
-
-// #i11176#
 #include <unoframe.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-
-// --> OD 2004-07-26 #i32089#
 #include <vector>
-// <--
+#include <drawdoc.hxx>
 #include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;

@@ -173,7 +173,7 @@ namespace connectivity
                 the ErrorCondition which hit you
 
             @param  _rxContext
-                the context in which the error occured. This will be filled in as
+                the context in which the error occurred. This will be filled in as
                 <member scope="com::sun::star::uno">Exception::Context</member> member.
 
             @param _rParamValue1
@@ -210,7 +210,7 @@ namespace connectivity
 
             Note: You should prefer the version of <type>raiseException</type> which takes
             an additional <type>Context</type> parameter, since this allows clients of your
-            exception to examine where the error occured.
+            exception to examine where the error occurred.
 
             @param  _eCondition
                 the ErrorCondition which hit you
@@ -248,7 +248,7 @@ namespace connectivity
                 the ErrorCondition which hit you
 
             @param  _rxContext
-                the context in which the error occured. This will be filled in as
+                the context in which the error occurred. This will be filled in as
                 <member scope="com::sun::star::uno">Exception::Context</member> member.
 
             @param _rExceptionType
@@ -294,7 +294,7 @@ namespace connectivity
                 the ErrorCondition which hit you
 
             @param  _rxContext
-                the context in which the error occured. This will be filled in as
+                the context in which the error occurred. This will be filled in as
                 <member scope="com::sun::star::uno">Exception::Context</member> member.
 
             @param _rParamValue1

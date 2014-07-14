@@ -39,7 +39,7 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::Hatch
-/** This struct defines the appearence of a hatch.
+/** This struct defines the appearance of a hatch.
 
     <p>A hatch is a texture made of straight lines.</p>
  */

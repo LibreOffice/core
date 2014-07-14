@@ -322,7 +322,7 @@ void SdrObjEditView::LazyReactOnObjectChanges()
             // which makes the Handles visible. Changes at TakeTextRange()
             // seem to have resulted in a case where no refresh is executed.
             // Before that, a refresh must have been always executed
-            // (else this error would have happend earlier), thus i
+            // (else this error would have happened earlier), thus i
             // even think here a refresh should be done always.
             // Since follow-up problems cannot even be guessed I only
             // add this one more case to the if below.

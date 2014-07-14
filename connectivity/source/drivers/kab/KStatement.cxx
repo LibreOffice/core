@@ -522,7 +522,7 @@ sal_Bool KabCommonStatement::convertFastPropertyValue(
 // -------------------------------------------------------------------------
 void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&) throw (Exception)
 {
-    // set the value to whatever is nescessary
+    // set the value to whatever is necessary
     switch (nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:

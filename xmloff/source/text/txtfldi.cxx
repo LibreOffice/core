@@ -711,7 +711,7 @@ void XMLSenderFieldImportContext::ProcessAttribute(
         sal_Bool bRet = GetImport().GetMM100UnitConverter().
             convertBool(bVal, sAttrValue);
 
-        // set bFixed if successfull
+        // set bFixed if successful
         if (bRet) {
             bFixed = bVal;
         }
@@ -1372,7 +1372,7 @@ SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
             }
         }
 
-        // we call ProcessAttribute in order to set bValid appropriatly
+        // we call ProcessAttribute in order to set bValid appropriately
         ProcessAttribute( XML_TOKEN_INVALID, OUString() );
     }
 
@@ -2272,7 +2272,7 @@ void XMLFileNameImportContext::ProcessAttribute(
             break;
         }
         default:
-            ; // unkown attribute: ignore
+            ; // unknown attribute: ignore
             break;
     }
 }
@@ -3075,7 +3075,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                                                  UNO_QUERY);
         if( xFactory.is() )
         {
-            /* #i6432# There might be multiple occurances of one DDE
+            /* #i6432# There might be multiple occurrences of one DDE
                declaration if it is used in more than one of
                header/footer/body. createInstance will throw an exception if we
                try to create the second, third, etc. instance of such a
@@ -3690,13 +3690,17 @@ void XMLAnnotationImportContext::EndElement()
                 uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
                 while (xFields->hasMoreElements())
                 {
-                    uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-                    OUString aFieldName;
-                    xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
-                    if ( aFieldName == aName )
+                    uno::Reference< beans::XPropertySet > xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                    uno::Reference< beans::XPropertySetInfo > xCurrFieldPropInfo = xCurrField->getPropertySetInfo();
+                    if ( xCurrFieldPropInfo->hasPropertyByName( sPropertyName ) )
                     {
-                        xPrevField.set( xCurrField, uno::UNO_QUERY );
-                        break;
+                        OUString aFieldName;
+                        xCurrField->getPropertyValue( sPropertyName ) >>= aFieldName;
+                        if ( aFieldName == aName )
+                        {
+                            xPrevField.set( xCurrField, uno::UNO_QUERY );
+                            break;
+                        }
                     }
                 }
             }

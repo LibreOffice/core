@@ -67,7 +67,7 @@ public class Cache
     public static final int FORMAT_60 = 0;
 
     /** identify the configuration format of an office 6.y.
-     *  Properties are realy xml tags again. */
+     *  Properties are really xml tags again. */
     public static final int FORMAT_6Y = 1;
 
     /** identify the configuration format which is used inside
@@ -336,7 +336,7 @@ public class Cache
      *
      *  @param  aXML
      *          must be a system file of a suitable XML file, which
-     *          include all neccessary type/filter items.
+     *          include all necessary type/filter items.
      *
      *  @param  nFormat
      *          identifies the format of the specified xml file,
@@ -605,7 +605,7 @@ public class Cache
      *          specify the file encoding for the generated xml file.
      *
      *  @throws [java.lang.Exception]
-     *          if something fail during convertion.
+     *          if something fail during conversion.
      */
     public synchronized void toXML(java.io.File     aXML     ,
                                    int              nFormat  ,
@@ -700,7 +700,7 @@ public class Cache
      *          contains the properties in the requested format.
      *
      *  @throws [java.lang.Exception
-     *          if something fail during convertion.
+     *          if something fail during conversion.
      */
     private static java.util.HashMap convertTypePropsToExternal(java.util.HashMap aMap   ,
                                                                 int               nFormat)
@@ -800,7 +800,7 @@ public class Cache
      *          contains the properties in the requested format.
      *
      *  @throws [java.lang.Exception
-     *          if something fail during convertion.
+     *          if something fail during conversion.
      */
     private static java.util.HashMap convertFilterPropsToExternal(java.util.HashMap aMap   ,
                                                                   int               nFormat)
@@ -855,10 +855,10 @@ public class Cache
             //-----------------------------------
             case FORMAT_6Y :
             {
-                // supress "Order" property.
+                // suppress "Order" property.
                 // Will be moved to type entries in 6.y version!
 
-                // supress "UIName" property.
+                // suppress "UIName" property.
                 // Only type entries will be localized in 6.y version!
                 /* TODO make it configurable :-) */
                 aResultMap.put(PROPNAME_UINAME           , aMap.get(PROPNAME_UINAME           ));
@@ -903,7 +903,7 @@ public class Cache
      *          contains the properties in the requested format.
      *
      *  @throws [java.lang.Exception
-     *          if something fail during convertion.
+     *          if something fail during conversion.
      */
     private static java.util.HashMap convertDetectServicePropsToExternal(java.util.HashMap aMap   ,
                                                                          int               nFormat)
@@ -1009,7 +1009,7 @@ public class Cache
     /** converts a type property set (using an external format) to
      *  our internal cache format.
      *
-     *  Especialy the data format string will be expanded
+     *  Especially the data format string will be expanded
      *  to its real properties.
      *
      *  Schema:
@@ -1051,7 +1051,7 @@ public class Cache
 
                 // generate new property "DetectService"
                 // Every type know its detector diretcly from now. No search
-                // will be neccessary any longer.
+                // will be necessary any longer.
                 aResultMap.put(PROPNAME_DETECTSERVICE, new java.lang.String());
 
                 // analyze the Data property of the original map
@@ -1132,7 +1132,7 @@ public class Cache
     /** converts a filter property set (using an external format) to
      *  our internal cache format.
      *
-     *  Especialy the data format string will be expanded
+     *  Especially the data format string will be expanded
      *  to its real properties.
      *
      *  Schema:
@@ -1783,7 +1783,7 @@ public class Cache
                 {
                     // last token was not a delimiter - new one is such delim
                     // => ignore this delimiter - but save the information, that
-                    //    it occured
+                    //    it occurred
                     bLastWasDelim = true;
                 }
             }
@@ -1939,7 +1939,7 @@ public class Cache
             java.lang.String  sType = (java.lang.String)aIt1.next();
             java.util.HashMap aType = (java.util.HashMap)m_lTypes.get(sType);
             if (aType == null)
-                throw new java.lang.Exception("type ["+sType+"] dos not exist realy?!");
+                throw new java.lang.Exception("type ["+sType+"] dos not exist really?!");
 
             if (
                 (!aType.containsKey(PROPNAME_MEDIATYPE      )) ||
@@ -1951,7 +1951,7 @@ public class Cache
                 (!aType.containsKey(PROPNAME_UINAME         ))
                )
             {
-                throw new java.lang.Exception("Type \""+sType+"\" does not contain all neccessary properties for a 6.0/6.Y format.");
+                throw new java.lang.Exception("Type \""+sType+"\" does not contain all necessary properties for a 6.0/6.Y format.");
             }
 
             if (
@@ -1973,7 +1973,7 @@ public class Cache
                     (!aType.containsKey(PROPNAME_DETECTSERVICE  ))
                    )
                 {
-                    throw new java.lang.Exception("Type \""+sType+"\" does not contain all neccessary properties for a 6.Y format.");
+                    throw new java.lang.Exception("Type \""+sType+"\" does not contain all necessary properties for a 6.Y format.");
                 }
 
                 if (((java.lang.Integer)aType.get(PROPNAME_UIORDER)).intValue() < 0)
@@ -2023,7 +2023,7 @@ public class Cache
             java.lang.String  sFilter = (java.lang.String)aIt1.next();
             java.util.HashMap aFilter = (java.util.HashMap)m_lFilters.get(sFilter);
             if (aFilter == null)
-                throw new java.lang.Exception("filter ["+sFilter+"] dos not exist realy?!");
+                throw new java.lang.Exception("filter ["+sFilter+"] dos not exist really?!");
 
             if (
                 (!aFilter.containsKey(PROPNAME_DOCUMENTSERVICE  )) ||
@@ -2036,7 +2036,7 @@ public class Cache
                 (!aFilter.containsKey(PROPNAME_USERDATA         ))
                )
             {
-                throw new java.lang.Exception("Filter \""+sFilter+"\" does not contain all neccessary properties for a 6.0/6.Y format.");
+                throw new java.lang.Exception("Filter \""+sFilter+"\" does not contain all necessary properties for a 6.0/6.Y format.");
             }
 
             if (((java.lang.Integer)aFilter.get(PROPNAME_FLAGS)).intValue() < 1)
@@ -2052,7 +2052,7 @@ public class Cache
                     (!aFilter.containsKey(PROPNAME_UINAME))
                    )
                 {
-                    throw new java.lang.Exception("Filter \""+sFilter+"\" does not contain all neccessary properties for a 6.0 format.");
+                    throw new java.lang.Exception("Filter \""+sFilter+"\" does not contain all necessary properties for a 6.0 format.");
                 }
 
                 if (((java.lang.Integer)aFilter.get(PROPNAME_ORDER)).intValue() < 0)
@@ -2112,7 +2112,7 @@ public class Cache
             java.util.HashMap aFilter  = (java.util.HashMap)m_lFilters.get(sFilter);
 
             // remove the "graphic helper filters" used by draw and impress
-            // They dont have any valid document service name set and cant be handled
+            // They dont have any valid document service name set and can't be handled
             // by our generic FrameLoader!
             // They must be moved to her own configuration ...
 

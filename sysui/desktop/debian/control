@@ -1,5 +1,6 @@
 Description: %productname desktop integration
-Maintainer: Apache Software Foundation
+ This package provides desktop icons and menus for %productname
+Maintainer: Apache Software Foundation <packagers@openoffice.apache.org>
 Architecture: all
 Provides: openoffice-desktop-integration, openoffice.org-unbundled
 Conflicts: openoffice-desktop-integration, openofficeorg-desktop-integration, openoffice.org-debian-menus

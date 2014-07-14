@@ -74,7 +74,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
     if (hInstance == NULL && Module->length > 260)
     {
-        std::vector<WCHAR, rtl::Allocator<WCHAR> > vec(Module->length + 1);
+        std::vector<WCHAR> vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
                                       &vec[0], Module->length + 1);
         if (len )
@@ -310,7 +310,7 @@ typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
     PIMAGEHLP_MODULE  ModuleInfo
     );
 
-/* Seems that IMAGEHLP.DLL is always availiable on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
+/* Seems that IMAGEHLP.DLL is always available on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
     it's O.K on NT 4 ???!!!
     BTW: We are using ANSI function because not all version of IMAGEHLP.DLL contain Unicode support
 */
@@ -421,7 +421,7 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
 
 #define bufsizeof(buffer) (sizeof(buffer) / sizeof((buffer)[0]))
 
-/* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Libary 6.0a say so */
+/* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Library 6.0a say so */
 
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pustrURL )
 {

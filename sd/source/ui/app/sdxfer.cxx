@@ -250,19 +250,28 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                     if( pSdrTextObj )
                     {
-                        const OutlinerParaObject* pPara;
+                        const OutlinerParaObject* pPara = pSdrTextObj->GetOutlinerParaObject();
 
-                        if( (pPara = pSdrTextObj->GetOutlinerParaObject()) != 0 )
+                        if(pPara)
                         {
-                            const SvxFieldItem* pField;
+                            const SvxFieldItem* pField = pPara->GetTextObject().GetField();
 
-                            if( (pField = pPara->GetTextObject().GetField()) != 0 )
+                            if(pField)
                             {
                                 const SvxURLField* pURL = dynamic_cast< const SvxURLField* >(pField->GetField());
 
-                                if( pURL )
+                                if(pURL)
                                 {
-                                    mpBookmark = new INetBookmark( pURL->GetURL(), pURL->GetRepresentation() );
+                                    // #63399# This special code identifies TextFrames which have just an URL
+                                    // as content and directly add this to the clipboard, probably to avoid adding
+                                    // an unnecessary DrawObject to the target where paste may take place. This is
+                                    // wanted only for SdrObjects with no fill and no line, else it is necessary to
+                                    // use the whole SdrObect. Test here for Line/FillStyle and take shortcut only
+                                    // when both are unused
+                                    if(!pObj->HasFillStyle() && !pObj->HasLineStyle())
+                                    {
+                                        mpBookmark = new INetBookmark( pURL->GetURL(), pURL->GetRepresentation() );
+                                    }
                                 }
                             }
                         }
@@ -341,7 +350,7 @@ void SdTransferable::CreateData()
         pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
 
-    // set VisArea and adjust objects if neccessary
+    // set VisArea and adjust objects if necessary
     if( maVisArea.IsEmpty() &&
         mpSdDrawDocumentIntern && mpSdViewIntern &&
         mpSdDrawDocumentIntern->GetPageCount() )

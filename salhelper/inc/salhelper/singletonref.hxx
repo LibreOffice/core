@@ -55,10 +55,10 @@ namespace salhelper{
 
     @attention  To prevent the code against race conditions, its not
                 allowed to start operations inside the ctor
-                of the internal wrapped object - especialy operations
+                of the internal wrapped object - especially operations
                 which needs a reference to the same singleton too.
 
-                The only chance to supress such strange constellations
+                The only chance to suppress such strange constellations
                 is a lazy-init mechanism.
 
                 <ul>
@@ -70,7 +70,7 @@ namespace salhelper{
 
                 Note further that this singleton pattern can work only, if
                 all user of such singleton are located inside the same library!
-                Because static values cant be exported - e.g. from windows libraries.
+                Because static values can't be exported - e.g. from windows libraries.
  */
 template< class SingletonClass >
 class SingletonRef

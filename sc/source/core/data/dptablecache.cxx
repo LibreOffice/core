@@ -623,7 +623,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
 sal_uLong ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
+    DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimension out of bound " );
     if ( mpTableDataValues[nDim].size()==0 )
         return NUMBERFORMAT_UNDEFINED;
     else

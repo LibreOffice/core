@@ -799,7 +799,7 @@ void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
 void SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
 {
     // The call to ProcessEvent may switch to another mode handler.
-    // Prevent the untimely destruction of the called handler  by aquiring a
+    // Prevent the untimely destruction of the called handler  by acquiring a
     // temporary reference here.
     ::boost::shared_ptr<ModeHandler> pModeHandler (mpModeHandler);
     pModeHandler->ProcessEvent(rDescriptor);
@@ -1882,7 +1882,7 @@ bool DragAndDropModeHandler::ProcessButtonUpEvent (
 {
     if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON))
     {
-        // The following Process() call may lead to the desctruction
+        // The following Process() call may lead to the destruction
         // of rDescriptor.mpHitDescriptor so release our reference to it.
         rDescriptor.mpHitDescriptor.reset();
         mrSelectionFunction.SwitchToNormalMode();

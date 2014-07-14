@@ -126,7 +126,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
     /**
     * Tries to insert document from URL specified by relation or
     * from default URL. If no relation was passed, text range is
-    * checked for existance of loaded document content. In case
+    * checked for existence of loaded document content. In case
     * if relation was found, then its <code>isInserted</code>
     * method is used to check insertion.<p>
     * A Second test uses an invalid URL and checks for correct exceptions.
@@ -155,12 +155,12 @@ public class _XDocumentInsertable extends MultiMethodTest {
             }
 
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while testing "+
+            log.println("Exception occurred while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;
         } catch (com.sun.star.io.IOException ex) {
-            log.println("Exception occured while testing "+
+            log.println("Exception occurred while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;

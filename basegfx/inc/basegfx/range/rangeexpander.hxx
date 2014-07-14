@@ -43,7 +43,7 @@ namespace basegfx
         in at the function operator.
 
         @tpl RangeType
-        Range type to operate with. Preferrably, one of B1*Range,
+        Range type to operate with. Preferably, one of B1*Range,
         B2*Range, or B3*Range.
     */
     template< typename RangeType > class RangeExpander

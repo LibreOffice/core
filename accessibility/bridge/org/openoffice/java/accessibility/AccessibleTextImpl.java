@@ -637,7 +637,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         }
     }
 
-    /** Returns the number of characters (valid indicies) */
+    /** Returns the number of characters (valid indices) */
     public int getCharCount() {
         try {
             return unoObject.getCharacterCount();

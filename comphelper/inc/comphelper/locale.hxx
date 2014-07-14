@@ -53,13 +53,13 @@ class COMPHELPER_DLLPUBLIC Locale
 
     public:
 
-        /** @short seperates LANGUAGE and COUNTRY part of an ISO formated Locale. */
+        /** @short separates LANGUAGE and COUNTRY part of an ISO formated Locale. */
         static const sal_Unicode SEPERATOR_LC;
 
-        /** @short seperates COUNTRY and VARIANT part of an ISO formated Locale. */
+        /** @short separates COUNTRY and VARIANT part of an ISO formated Locale. */
         static const sal_Unicode SEPERATOR_CV;
 
-        /** @short seperates COUNTRY and VARIANT part of an ISO formated Locale.
+        /** @short separates COUNTRY and VARIANT part of an ISO formated Locale.
             @descr Its true for some linux derivates only :-( */
         static const sal_Unicode SEPERATOR_CV_LINUX;
 
@@ -105,7 +105,7 @@ class COMPHELPER_DLLPUBLIC Locale
 
     public:
 
-        /** @short will be throw during convertion, if a Locale cant be interpreted. */
+        /** @short will be throw during conversion, if a Locale can't be interpreted. */
         struct MalFormedLocaleException
         {
             public:
@@ -343,8 +343,8 @@ class COMPHELPER_DLLPUBLIC Locale
 
                         If no "same" nor any "similar" locale could be found,
                         we try "x-default" and "x-notranslate" explicitly.
-                        Sometimes localized variables are optimized and doesnt use
-                        localzation realy. E.g. in case the localized value is a fix
+                        Sometimes localized variables are optimized and doesn't use
+                        localzation really. E.g. in case the localized value is a fix
                         product name.
 
                         If no locale match till now, we use any other existing
@@ -429,7 +429,7 @@ class COMPHELPER_DLLPUBLIC Locale
 
             @return [boolean]
                     TRUE if at least one part of such Locale
-                    isnt the same.
+                    isn't the same.
          */
         sal_Bool operator!=(const Locale& aComparable) const;
 };

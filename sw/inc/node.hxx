@@ -81,6 +81,12 @@ class IDocumentContentOperations;
 class IDocumentListItems;
 class SwOLENodes;
 
+//UUUU
+namespace drawinglayer { namespace attribute {
+    class SdrAllFillAttributesHelper;
+    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+}}
+
 // --------------------
 // class SwNode
 // --------------------
@@ -505,6 +511,9 @@ public:
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
     static SwOLENodes* CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize );
+
+    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
 private:
     // privater Constructor, weil nie kopiert werden darf !!

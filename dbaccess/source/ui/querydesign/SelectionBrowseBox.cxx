@@ -685,7 +685,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
         if ( pTabWinList )
         {
             sal_uInt16 nTabCount = 0;
-            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occured: column not in table window
+            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
             {
                 String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
                 sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);
@@ -1605,7 +1605,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
 
     DeactivateCell();
 
-    // remember the column id of the current positon
+    // remember the column id of the current position
     sal_uInt16 nColumnId = GetColumnId(_nColumnPostion);
     // Wenn zu klein oder zu gross, auf Ende der Liste setzen
     if ((_nColumnPostion == BROWSER_INVALIDID) || (_nColumnPostion >= getFields().size()))   // Anhaengen des Feldes

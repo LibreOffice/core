@@ -103,7 +103,7 @@ published service AccessibleTableView
                     >AccessibleStateType::DEFUNC</const> is always false if the
                     table is not deleted, the document is open. Also it is
                     false if the table was showed in a page preview and the
-                    page preview is allready opend, otherwise it is true.</li>
+                    page preview is already opend, otherwise it is true.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::EDITABLE</const> is false if the
                     table is showed in a page preview or the table is

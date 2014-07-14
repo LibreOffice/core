@@ -57,7 +57,7 @@ published service NumberingRules
     //-------------------------------------------------------------------------
 
     /** determins if the margins are absolute or relative
-        to the preceeding numbering level.
+        to the preceding numbering level.
      */
     [optional, property] boolean  IsAbsoluteMargins;
     //-------------------------------------------------------------------------

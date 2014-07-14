@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    21000528c50707539220e05df554172f http://sourceforge.net/projects/aoo-extensions/files/17102/3/dict-en.oxt/download "dict-en.oxt"
+    6e6d2112a43b744fa5dc12c4b150d52a http://sourceforge.net/projects/aoo-extensions/files/17102/5/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
@@ -47,7 +47,7 @@
 
 # German dictionary.
 [ language=de || language=de_DE || language=nl || language=ru ]
-    1051096689e5e3838b9340cde8c3ce37 http://sourceforge.net/projects/aoo-extensions/files/1075/12/dict-de_DE-frami_2012-06-17.oxt/download "dict-de_DE-frami_2012-06-17.oxt"
+    a9328ce36b272a034b4706721345076d http://sourceforge.net/projects/aoo-extensions/files/1075/13/dict-de_de-frami_2013-12-06.oxt/download "dict-de_DE-frami_2012-06-17.oxt"
 
 # Dutch dictionary.
 [ language=nl ]
@@ -92,11 +92,11 @@
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-  149fd9465b7cac8aca393f2c57e9d562 http://sourceforge.net/projects/aoo-extensions/files/1697/9/dict-de_AT-frami_2012-06-17.oxt/download "dict-de_AT-frami_2012-06-17.oxt"
+  47b868a8949faba36b8f0ff351940967 http://sourceforge.net/projects/aoo-extensions/files/1697/10/dict-de_at-frami_2013-12-06.oxt/download "dict-de_AT-frami_2012-06-17.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
-    e9ddd3ae2a3213a7bd8b5e49198b6b6b http://sourceforge.net/projects/aoo-extensions/files/1699/9/dict-de_CH-frami_2012-06-17.oxt/download "dict-de_CH-frami_2012-06-17.oxt"
+    f4ab5c31fa394f05dab58ab773ab5012 http://sourceforge.net/projects/aoo-extensions/files/1699/10/dict-de_ch-frami_2013-12-06.oxt/download "dict-de_CH-frami_2012-06-17.oxt"
 
 # Khmer dictionary.
 [ language=km ]
@@ -104,7 +104,7 @@
 
 # Scottish Gaelic.
 [ language=gd ]
-    88d92378c2bcf22f87f49bf594130238 http://sourceforge.net/projects/aoo-extensions/files/4587/9/hunspell-gd-2.7.oxt/download "hunspell-gd-2.7.oxt"
+    3a26a49794077643e802cf2cb738ec18 http://sourceforge.net/projects/aoo-extensions/files/4587/10/hunspell-gd-2.8.oxt/download "hunspell-gd-2.8.oxt"
 
 # Basque.
 [ language=eu ]
@@ -134,5 +134,9 @@
 # Polish.
 [ language=pl ]
     a69f9221864b1360e38ff3f0b0cc9222 http://sourceforge.net/projects/aoo-extensions/files/806/4/pl-dict.oxt/download "pl-dict.oxt"
+
+# Portuguese (European).
+[ language=pt || language=pt_PT ]
+    ad882aa5fcd1b48ebc2421b0d25ee178 http://sourceforge.net/projects/aoo-extensions/files/1196/27/oo3x-pt-pt-14.1.1.1.oxt/download "dict-pt.oxt"
 
 

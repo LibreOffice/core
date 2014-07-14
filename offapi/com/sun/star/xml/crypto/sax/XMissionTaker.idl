@@ -36,7 +36,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
 /**
  * Interface of Mission Taker.
  * <p>
- * This interface is used to controll a mission.
+ * This interface is used to control a mission.
  */
 interface XMissionTaker : com::sun::star::uno::XInterface
 {

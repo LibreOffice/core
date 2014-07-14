@@ -100,13 +100,13 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     addControl ( OUString::createFromAscii( CONTROLNAME_BUTTON      ) , xRef_Button         ) ;
     addControl ( OUString::createFromAscii( CONTROLNAME_PROGRESSBAR ) , xRef_ProgressBar    ) ;
 
-    // FixedText make it automaticly visible by himself ... but not the progressbar !!!
+    // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     Reference< XWindow > xWindowRef_ProgressBar( m_xProgressBar, UNO_QUERY );
     xWindowRef_ProgressBar->setVisible( sal_True );
 
     // Reset to defaults !!!
-    // (progressbar take automaticly its own defaults)
+    // (progressbar take automatically its own defaults)
     m_xButton->setLabel         ( OUString::createFromAscii( DEFAULT_BUTTONLABEL    ) ) ;
     m_xTopic_Top->setText       ( OUString::createFromAscii( DEFAULT_TOPIC          ) ) ;
     m_xText_Top->setText        ( OUString::createFromAscii( DEFAULT_TEXT           ) ) ;
@@ -641,7 +641,7 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
         // calc new layout for controls
         impl_recalcLayout () ;
         // clear background (!)
-        // [Childs was repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Childs was repainted in "recalcLayout" by setPosSize() automatically!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;

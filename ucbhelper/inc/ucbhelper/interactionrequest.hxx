@@ -50,7 +50,7 @@ struct InteractionRequest_Impl;
   * request contains an exception describing the error and a number of
   * interaction continuations describing the possible "answers" for the request.
   * After the request was passed to XInteractionHandler::handle(...) the method
-  * getSelection() returns the continuation choosen by the interaction handler.
+  * getSelection() returns the continuation chosen by the interaction handler.
   *
   * The typical usage of this class would be:
   *
@@ -125,9 +125,9 @@ public:
 
     /**
       * After passing this request to XInteractionHandler::handle, this method
-      * returns the continuation that was choosen by the interaction handler.
+      * returns the continuation that was chosen by the interaction handler.
       *
-      * @return the continuation choosen by an interaction handler or an empty
+      * @return the continuation chosen by an interaction handler or an empty
       *         reference, if the request was not (yet) handled.
       */
     rtl::Reference< InteractionContinuation > getSelection() const;
@@ -181,7 +181,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionAbort. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to abort
+  * along with an interaction request to indicate the possibility to abort
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionAbort : public InteractionContinuation,
@@ -218,7 +218,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionRetry. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to retry
+  * along with an interaction request to indicate the possibility to retry
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionRetry : public InteractionContinuation,
@@ -255,7 +255,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionApprove. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to approve
+  * along with an interaction request to indicate the possibility to approve
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionApprove : public InteractionContinuation,
@@ -292,7 +292,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionDisapprove. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to disapprove
+  * along with an interaction request to indicate the possibility to disapprove
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionDisapprove : public InteractionContinuation,
@@ -631,7 +631,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyName. Instances of this class can be passed
-  * along with an interaction request to indicate the possiblity to
+  * along with an interaction request to indicate the possibility to
   * supply a new name.
   */
 class InteractionSupplyName : public InteractionContinuation,
@@ -684,7 +684,7 @@ public:
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionReplaceExistingData. Instances of this class can be
-  * passed along with an interaction request to indicate the possiblity to
+  * passed along with an interaction request to indicate the possibility to
   * replace existing data.
   */
 class InteractionReplaceExistingData :

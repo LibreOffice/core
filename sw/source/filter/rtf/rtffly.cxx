@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <hintids.hxx>
 #include <tools/list.hxx>
@@ -61,17 +60,13 @@
 #include <deque>
 #include <map>
 #include <utility>
-// --> OD 2004-06-30 #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
-// <--
 #include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
-// --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
-// <--
+#include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
-
 
 using namespace ::com::sun::star;
 
@@ -322,7 +317,7 @@ void SwRTFParser::SetFlysInDoc()
             {
                 // Take care for table nodes
                 pNd = pNd->GetNodes()[ pNd->GetIndex() - 2 ]->GetTableNode();
-                if( pNd ) // if the table starts imediately before aRg -> expand aRg
+                if( pNd ) // if the table starts immediately before aRg -> expand aRg
                     aRg.aStart = *pNd;
 
                 if( bMakeEmptySection )
@@ -407,7 +402,7 @@ void SwRTFParser::SetFlysInDoc()
 
                 // THIS >>>>>
         // if the section only contains one Node and this has a
-        // border or backgorund, then put it to the frame
+        // border or background, then put it to the frame
         // Not in our own RTF-Format!
                 // <<<<< DOES NOT MAKE SENSE TO ME (flr)
         // #102781#. Added support for transparent frames.
@@ -541,7 +536,7 @@ void SwRTFParser::SetFlysInDoc()
     aFlyArr.Remove(0, aFlyArr.Count());
 }
 
-// clips the text box to the min or max position if it is outside our min or max boundry
+// clips the text box to the min or max position if it is outside our min or max boundary
 long SwRTFParser::GetSafePos(long nPos)
 {
     if(nPos > SHRT_MAX)
@@ -1281,8 +1276,6 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
                 if( pFlySave->nEndNd == rIdx )
                     pFlySave->nEndNd = rIdx.GetIndex() - 1;
             }
-
-            pGrfNd->onGraphicChanged();
         }
     }
     else

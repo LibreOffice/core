@@ -1678,7 +1678,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
                 SetCurrX( new SwPosition( *pCrsr->GetMark() ));
 
                 //if an error has been found go back to the text
-                //preceeding the error
+                //preceding the error
                 if(xSpellRet.is())
                 {
                     *pCrsr->GetPoint() = aSaveStartPos;

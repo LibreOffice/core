@@ -56,7 +56,7 @@ def bootstrap():
         random.seed()
         sPipeName = "uno" + str(random.random())[2:]
 
-        # Start the office proces, don't check for exit status since an exception is caught anyway if the office terminates unexpectedly.
+        # Start the office process, don't check for exit status since an exception is caught anyway if the office terminates unexpectedly.
         cmdArray = (sOffice, "-nologo", "-nodefault", "".join(["-accept=pipe,name=", sPipeName, ";urp;"]))
         os.spawnv(os.P_NOWAIT, sOffice, cmdArray)
 

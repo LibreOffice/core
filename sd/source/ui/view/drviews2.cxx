@@ -686,6 +686,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->DeleteMarkedObj();
                 }
 
+                // #124816# copy layer from lowest object which gets replaced
+                pGraphicObj->SetLayer(pReplacementCandidate->GetLayer());
+
                 // now replace lowest object with new one
                 mpDrawView->ReplaceObjectAtView(*pReplacementCandidate, *pGraphicObj);
 

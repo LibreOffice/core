@@ -108,7 +108,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
             tRes.tested("createInstance()",
                 (negative && Inst == null) || (!negative && bOK));
         } catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occured during createInstance()");
+            log.println("Exception occurred during createInstance()");
             if (negative) {
                 ex.printStackTrace(log);
             }
@@ -153,7 +153,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
             tRes.tested("createInstanceWithArguments()", bOK);
         }
         catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occured during createInstanceWithArguments()");
+            log.println("Exception occurred during createInstanceWithArguments()");
             ex.printStackTrace(log);
             tRes.tested("createInstanceWithArguments()",false);
         }

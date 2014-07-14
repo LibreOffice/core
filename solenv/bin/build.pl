@@ -1049,7 +1049,7 @@ sub add_prerequisite_job {
 };
 
 #
-# procedure adds a job wich is dependent from all already registered jobs
+# procedure adds a job which is dependent from all already registered jobs
 #
 sub add_dependent_job {
     # $post_job is dependent from all jobs
@@ -1777,7 +1777,7 @@ sub handle_dead_children {
 
 sub give_second_chance {
     my $pid = shift;
-    # A malicious hack for misterious windows problems - try 2 times
+    # A malicious hack for mysterious windows problems - try 2 times
     # to run dmake in the same directory if errors occurs
     my $child_nick = $processes_hash{$pid};
     $running_children{$folders_hashes{$child_nick}}--;
@@ -3386,7 +3386,7 @@ sub run_server {
             };
         } else {
             if ($client_hash{result} eq "0") {
-#                print "$clients_jobs{$pid} succedded on $pid\n";
+#                print "$clients_jobs{$pid} succeeded on $pid\n";
             } else {
                 print "Error $client_hash{result}\n";
                 if (store_error($pid, $client_hash{result})) {

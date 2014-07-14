@@ -41,7 +41,7 @@ private:
     ScVbaPalette m_aPalette;
     sal_Int16 nLength;
     sal_Int16 nStart;
-    // Add becuase of MSO has diferent behavior.
+    // Add because of MSO has different behavior.
     sal_Bool bReplace;
 public:
     ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool bReplace = sal_False  ) throw ( css::lang::IllegalArgumentException );

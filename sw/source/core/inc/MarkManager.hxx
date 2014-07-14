@@ -84,11 +84,6 @@ namespace sw { namespace mark
             virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const;
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const;
 
-            // Marks exclusive annotation marks
-            virtual const_iterator_t getCommonMarksBegin() const;
-            virtual const_iterator_t getCommonMarksEnd() const;
-            virtual sal_Int32 getCommonMarksCount() const;
-
             // Annotation Marks
             virtual const_iterator_t getAnnotationMarksBegin() const;
             virtual const_iterator_t getAnnotationMarksEnd() const;

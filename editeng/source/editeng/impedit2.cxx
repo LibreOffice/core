@@ -1776,7 +1776,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
 
             if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
             {
-                // Expand last ScriptTypePosInfo, don't create weak or unecessary portions
+                // Expand last ScriptTypePosInfo, don't create weak or unnecessary portions
                 rTypes.back().nEndPos = (sal_uInt16)nEndPos;
             }
             else
@@ -2045,7 +2045,7 @@ sal_Bool ImpEditEngine::IsRightToLeft( sal_uInt16 nPara ) const
             // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
             if ( GetDefaultHorizontalTextDirection() != EE_HTEXTDIR_DEFAULT )
             {
-                pFrameDirItem = NULL; // bR2L allready set to default horizontal text direction
+                pFrameDirItem = NULL; // bR2L already set to default horizontal text direction
             }
             else
             {

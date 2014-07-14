@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -61,15 +59,13 @@
 #include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <unotxdoc.hxx>    // for initXForms()
-
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
 #include <svx/fmmodel.hxx>
+#include <drawdoc.hxx>
 
 using ::rtl::OUString;
 
@@ -744,7 +740,7 @@ void SwXMLImport::startDocument( void )
     // <--
 
     // SJ: #i49801# locking the modell to disable repaints
-    SdrModel* pDrawModel = pDoc->GetDrawModel();
+    SwDrawModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock( sal_True );
 
@@ -950,7 +946,7 @@ void SwXMLImport::endDocument( void )
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
     {
-        SdrModel* pDrawModel = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock( sal_False );
     }
@@ -1407,7 +1403,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // SO8. Unfortunately, only part of it and by using the same compatibility option
     // like in SO8. Therefore documents generated with SO7pp4, containing
     // numbered paragraphs with first line indent differ between SO7pp4 and
-    // SO8. In order to fix this for SO8pp1, I introduce a new compatiblity
+    // SO8. In order to fix this for SO8pp1, I introduce a new compatibility
     // flag 'bIgnoreFirstLineIndentInNumbering'. This flag has to be set for all
     // documents < SO8, but not for SO8. So if the property is not present, the
     // flag will be set to 'true'. SO8 documents surely have the

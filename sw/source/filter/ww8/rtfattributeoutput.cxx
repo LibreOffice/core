@@ -19,7 +19,8 @@
  *
  *************************************************************/
 
-
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sw.hxx"
 
 #include "rtfattributeoutput.hxx"
 #include "rtfexport.hxx"
@@ -34,14 +35,10 @@
 #include "fmtruby.hxx"
 #include "charfmt.hxx"
 #include "breakit.hxx"
-
 #include <i18npool/mslangid.hxx>
-
 #include <hintids.hxx>
-
 #include <svl/poolitem.hxx>
 #include <svtools/rtfkeywd.hxx>
-
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjitem.hxx>
@@ -86,7 +83,6 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-
 #include <docufld.hxx>
 #include <flddropdown.hxx>
 #include <format.hxx>
@@ -116,23 +112,19 @@
 #include <ndole.hxx>
 #include <lineinfo.hxx>
 #include <rtf.hxx>
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-
 #include <tools/color.hxx>
-
 #include <vcl/cvtgrf.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-
 #include <osl/diagnose.h>
+#include <drawdoc.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -418,7 +410,7 @@ void RtfAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
     OSL_TRACE("%s", OSL_THIS_FUNC);
     /*
        You would have thought that
-       m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficent here ,
+       m_rExport.Strm() << (bIsRTL ? OOO_STRING_SVTOOLS_RTF_RTLCH : OOO_STRING_SVTOOLS_RTF_LTRCH); would be sufficient here ,
        but looks like word needs to see the other directional token to be
        satisified that all is kosher, otherwise it seems in ver 2003 to go and
        semi-randomlyly stick strike through about the place. Perhaps
@@ -1730,14 +1722,14 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 if ( pSdrObj )
                 {
                     //bool bSwapInPage = false;
-                    //if ( !pSdrObj->getSdrPageFromSdrObject() )
+                    //if ( !pSdrObj->GetPage() )
                     //{
-                    //    if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
+                    //    if ( SwDrawModel* pModel = m_rExport.pDoc->GetDrawModel() )
                     //    {
                     //        if ( SdrPage *pPage = pModel->GetPage( 0 ) )
                     //        {
                     //            bSwapInPage = true;
-                    //            //const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
+                    //            const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
                     //        }
                     //    }
                     //}

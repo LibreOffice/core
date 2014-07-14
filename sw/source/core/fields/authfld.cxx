@@ -352,7 +352,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
                     SwTOXSortTabBase* pOld = aSortArr[i];
                     if(*pOld == *pNew)
                     {
-                        //only the first occurence in the document
+                        //only the first occurrence in the document
                         //has to be in the array
                         if(*pOld < *pNew)
                             DELETEZ(pNew);

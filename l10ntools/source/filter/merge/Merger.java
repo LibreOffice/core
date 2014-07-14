@@ -199,7 +199,7 @@ public class Merger
                 m_aCfg.getString (PROP_XMLPACKAGE         ),
                 m_aCfg.getBoolean(PROP_LANGUAGEPACK, false)));
 
-        // counts all transfered fragments
+        // counts all transferred fragments
         // Can be used later to decide, if a generated package file
         // contains "nothing"!
         int nItemCount = 0;
@@ -307,7 +307,7 @@ public class Merger
 
         // special mode for generating language packs.
         // In such case we must live with some missing fragment files.
-        // Reason behind; Not all filters are realy localized.
+        // Reason behind; Not all filters are really localized.
         // But we dont use a different fragment list. We try to locate
         // any fragment file in its language-pack version ...
         boolean bHandleLanguagePacks = m_aCfg.getBoolean(PROP_LANGUAGEPACK, false);
@@ -340,7 +340,7 @@ public class Merger
             }
 
             // copy file content of original fragment
-            // Note: A FileNotFoundException will be thrown automaticly by the
+            // Note: A FileNotFoundException will be thrown automatically by the
             // used reader objects. Let it break this method too. Our calli is interested
             // on such errors :-)
             m_aLog.setDetailedInfo("merge fragment \""+aFragment.getPath()+"\" ...");

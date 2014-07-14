@@ -1506,7 +1506,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             sal_Int32 nWidth = 0;
             if (evt.NewValue.getValueType().getTypeClass() == TypeClass_VOID)
                 nWidth = pGrid->GetDefaultColumnWidth(pGrid->GetColumnTitle(nId));
-                // GetDefaultColumnWidth already considerd the zoom factor
+                // GetDefaultColumnWidth already considered the zoom factor
             else
             {
                 sal_Int32 nTest = 0;
@@ -2551,7 +2551,7 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
     {
         m_bInterceptingDispatch = sal_True;
             // safety against recursion : as we are master of the first chain element and slave of the last one we would
-            // have an infinite loop without this if no dispatcher can fullfill the rewuest)
+            // have an infinite loop without this if no dispatcher can fulfill the rewuest)
         xResult = m_xFirstDispatchInterceptor->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
         m_bInterceptingDispatch = sal_False;
     }

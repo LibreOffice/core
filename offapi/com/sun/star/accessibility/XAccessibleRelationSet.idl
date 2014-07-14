@@ -39,7 +39,7 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give access to an object's set of relations.
 
-    <p>Such relation are modeled with the <type>AccessibleRelation</type>
+    <p>Such relations are modelled with the <type>AccessibleRelation</type>
     structure.  This interface is used for representing sets of relations
     between <type>Accessible</type> objects.  Most of the convenience
     methods of the corresponding AccessibleRelationSet interface of the Java

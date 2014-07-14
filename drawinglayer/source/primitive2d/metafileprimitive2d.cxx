@@ -952,7 +952,7 @@ namespace
 
     /** helper to take needed action on ClipRegion change. This method needs to be called
         on any Region change, e.g. at the obvious actions doing this, but also at pop-calls
-        whcih change the Region of the current context. It takes care of creating the
+        which change the Region of the current context. It takes care of creating the
         current embeddec context, set the new Region at the context and eventually prepare
         a new target for embracing new geometry to the current region
      */
@@ -972,7 +972,7 @@ namespace
         // This ClipPolyPolygon is identical to the current one, so there is no need to
         // create a MaskPrimitive2D containing the up-to-now created primitives, but
         // this was done before. While this does not lead to wrong primitive
-        // representations of the metafile data, it creates unneccesarily expensive
+        // representations of the metafile data, it creates unnecessarily expensive
         // representations. Just detecting when no really 'new' ClipPolyPolygon gets set
         // solves the problem.
 
@@ -1143,7 +1143,7 @@ namespace
 
     /** helper to create needed data to emulate the VCL Wallpaper Metafile action.
         It is a quite mighty action. This helper decides if color and/or gradient
-        background is needed for the wnated bitmap fill and then creates the needed
+        background is needed for the wanted bitmap fill and then creates the needed
         WallpaperBitmapPrimitive2D. This primitive was created for this purpose and
         takes over all needed logic of orientations and tiling.
      */
@@ -2127,8 +2127,13 @@ namespace
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
                             {
                                 rTargetHolders.Push();
-                                // #i# for sub-Mteafile contents, do start with new, default render state
+
+                                // for sub-Mteafile contents, do start with new, default render state
+                                // #124686# ...but copy font, this is already set accordingly
+                                const Font& rTargetFont = rPropertyHolders.Current().getFont();
                                 rPropertyHolders.PushDefault();
+                                rPropertyHolders.Current().setFont(rTargetFont);
+
                                 interpretMetafile(aGDIMetaFile, rTargetHolders, rPropertyHolders, rViewInformation);
                                 xSubContent = rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current());
                                 rPropertyHolders.Pop();

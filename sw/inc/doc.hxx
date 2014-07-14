@@ -103,7 +103,7 @@ class Outliner;
 class OutputDevice;
 class Point;
 class SbxArray;
-class SdrModel;
+class SwDrawModel;
 class SdrObject;
 class SdrUndoAction;
 class VirtualDevice;
@@ -327,7 +327,7 @@ class SW_DLLPUBLIC SwDoc :
 
     ViewShell       *pCurrentView;  // SwDoc should get a new member pCurrentView//swmod 071225
     boost::shared_ptr<SwRootFrm> pLayoutPtr;
-    FmFormModel*    pDrawModel;     // StarView Drawing
+    SwDrawModel*     pDrawModel;        // StarView Drawing
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
     SwFldTypes      *pFldTypes;         // Feldtypen
@@ -957,8 +957,8 @@ public:
 
     /** IDocumentDrawModelAccess
     */
-    virtual const FmFormModel* GetDrawModel() const;
-    virtual FmFormModel* GetDrawModel();
+    virtual const SwDrawModel* GetDrawModel() const;
+    virtual SwDrawModel* GetDrawModel();
     virtual SdrLayerID GetHeavenId() const;
     virtual SdrLayerID GetHellId() const;
     virtual SdrLayerID GetControlsId() const;
@@ -969,8 +969,8 @@ public:
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const;
     virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId );
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId );
-    virtual FmFormModel* _MakeDrawModel();
-    virtual FmFormModel* GetOrCreateDrawModel();
+    virtual SwDrawModel* _MakeDrawModel();
+    virtual SwDrawModel* GetOrCreateDrawModel();
 
     /** IDocumentLayoutAccess
     */
@@ -1310,7 +1310,7 @@ public:
                                                sal_Bool bBroadcast = sal_False);
     void DelTxtFmtColl(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
     void DelTxtFmtColl( SwTxtFmtColl* pColl, sal_Bool bBroadcast = sal_False );
-    // --> OD 2007-11-06 #i62675#
+
     // Add 4th optional parameter <bResetListAttrs>.
     // 'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
     // attributes of the affected text nodes are cleared, except the break
@@ -1318,10 +1318,12 @@ public:
     // The new parameter <bResetListAttrs> indicates, if the list attributes
     // (list style, restart at and restart with) are cleared as well in case
     // that <bReset = true> and the paragraph style has a list style attribute set.
-    sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
-                            bool bReset = true,
-                            bool bResetListAttrs = false );
-    // <--
+    sal_Bool SetTxtFmtColl(
+        const SwPaM &rRg,
+        SwTxtFmtColl *pFmt,
+        const bool bReset = true,
+        const bool bResetListAttrs = false );
+
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
 

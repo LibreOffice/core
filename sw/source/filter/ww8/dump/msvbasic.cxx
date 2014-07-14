@@ -204,7 +204,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     //most begin with */G , and sometimes with
     //*/C. Those with G always have a trailer of 12 bytes, those
     //with C come in pairs, the first with no trailer, and the
-    //second with one of 12 bytes. The following code attemts
+    //second with one of 12 bytes. The following code attempts
     //to read these strings and ends when it reaches a sequence of
     //bytes which fails a test to be a valid string. So this
     //while loop here is the particular piece of code which is

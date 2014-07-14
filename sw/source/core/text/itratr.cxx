@@ -817,7 +817,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
  *                      SwTxtNode::GetScalingOfSelectedText()
  *
  * Calculates the width of the text part specified by nStt and nEnd,
- * the height of the line containing nStt is devided by this width,
+ * the height of the line containing nStt is divided by this width,
  * indicating the scaling factor, if the text part is rotated.
  * Having CH_BREAKs in the text part, this method returns the scaling
  * factor for the longest of the text parts separated by the CH_BREAKs.

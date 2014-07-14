@@ -674,7 +674,7 @@ Sub Analyze_MailMergeField(myField As Field)
         (myField.Type = wdFieldAutoNumLegal)
     
     If bProblemMailMergeField Then
-    'Some of the following are numbering fields and need to be broken out into a seperate function. See migration guide.
+    'Some of the following are numbering fields and need to be broken out into a separate function. See migration guide.
        
         Select Case myField.Type
         Case wdFieldFillIn
@@ -1052,7 +1052,7 @@ FinalExit:
     Exit Sub
     
 HandleErrors:
-    'Log first occurence for this doc
+    'Log first occurrence for this doc
     If Not mbFormFieldErrorLogged Then
         WriteDebug currentFunctionName & " : " & mAnalysis.name & ": " & Err.Number & " " & Err.Description & " " & Err.Source
         mbFormFieldErrorLogged = True

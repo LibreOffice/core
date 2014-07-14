@@ -2171,7 +2171,7 @@ void handleInterfaceType(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-        //TODO: exploit the fact that attribute getter/setter methods preceed
+        //TODO: exploit the fact that attribute getter/setter methods precede
         // real methods
         rtl::OUString attrNameUtf16(reader.getFieldName(i));
         sal_uInt16 getter = SAL_MAX_UINT16;

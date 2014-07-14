@@ -61,7 +61,7 @@ public:
         /** Container elements will be converted to VBA items on demand.
 
             The initial container contains intermediate objects (e.g. UNO
-            objects) which will be converted to VBA items everytime the item is
+            objects) which will be converted to VBA items every time the item is
             accessed (e.g. item access method, enumeration). Changes in the
             initial container are reflected by the collection.
          */

@@ -38,7 +38,7 @@
  *    bv9 = 1   use sparcv9/sparcv8plus "cas" (no spinlock)
  *
  * 32 bit mode without v8 support (implies v8plus) or 64 bit mode:
- * No need (nor the possibilty) to call osl_InterlockedCountSetV9(), 
+ * No need (nor the possibility) to call osl_InterlockedCountSetV9(), 
  * sparcv9 mode is implied. Assemble with -xarch=v8plus (32 bit) or
  * -xarch=v9 (64 bit).
  * 

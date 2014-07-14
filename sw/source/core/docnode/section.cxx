@@ -1260,7 +1260,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 // Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
 //  0 - Fehler, konnte DocShell nicht finden
 //  1 - DocShell ist ein existieren Document
-//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
+//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionally )
 
 int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
                         SfxObjectShellLock& xLockRef,

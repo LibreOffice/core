@@ -1627,6 +1627,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SID_SAVEREL_INET, SID_SAVEREL_FSYS,
             SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
             SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
+            SID_ATTR_ODFENCRYPTION, SID_ATTR_ODFENCRYPTION,
             0 );
             SFX_APP()->GetOptions(*pRet);
             break;
@@ -2679,6 +2680,22 @@ ExtensionsTabPage::~ExtensionsTabPage()
 {
     Hide();
     DeactivatePage();
+
+    if ( m_xPage.is() )
+    {
+        Reference< XComponent > xComponent( m_xPage, UNO_QUERY );
+        if ( xComponent.is() )
+        {
+            try
+            {
+                xComponent->dispose();
+            }
+            catch ( const Exception & )
+            {
+            }
+        }
+        m_xPage.clear();
+    }
 }
 
 // -----------------------------------------------------------------------

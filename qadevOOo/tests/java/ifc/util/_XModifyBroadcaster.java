@@ -60,7 +60,7 @@ public class _XModifyBroadcaster extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _addModifyListener() {
         log.println("'Modified' events are called only in case"+
@@ -71,7 +71,7 @@ public class _XModifyBroadcaster extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _removeModifyListener() {
         requiredMethod("addModifyListener()");

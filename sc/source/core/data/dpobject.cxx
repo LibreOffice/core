@@ -1724,7 +1724,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
     bool bDataFound = false;
     rFields.clear();
 
-    //! merge multiple occurences (data field with different functions)
+    //! merge multiple occurrences (data field with different functions)
     //! force data field in one dimension
 
     std::vector< long > aPos;

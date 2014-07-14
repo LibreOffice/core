@@ -33,7 +33,8 @@ class SwTxtAnnotationFld : public SwTxtFld
 public:
     SwTxtAnnotationFld(
         SwFmtFld & rAttr,
-        xub_StrLen const nStart );
+        xub_StrLen const nStart,
+        const bool bIsClipboardDoc );
 
     virtual ~SwTxtAnnotationFld();
 

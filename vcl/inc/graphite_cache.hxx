@@ -183,7 +183,7 @@ public:
     else
     {
       // the pointers aren't the same, but we might still have the same text in a segment
-      // this is expecially needed when editing a large paragraph
+      // this is especially needed when editing a large paragraph
       // each edit changes the pointers, but if we don't reuse any segments it gets very
       // slow.
       rtl::OUString * rope = new rtl::OUString(layoutArgs.mpStr + layoutArgs.mnMinCharPos,

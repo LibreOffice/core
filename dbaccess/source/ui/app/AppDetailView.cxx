@@ -482,7 +482,7 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
     {
         String sText = ModuleRes(_nId);
 
-        // calulate the size of the text field
+        // calculate the size of the text field
         // Size aHelpTextSize = m_aHelpText.GetSizePixel();
         // Size aHelpTextPixelSize = LogicToPixel( aHelpTextSize, MAP_APPFONT );
         // Rectangle aPrimaryRect( Point(0,0), aHelpTextSize );

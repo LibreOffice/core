@@ -40,16 +40,20 @@ TAR!:=$(GNUTAR)
 .IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=commons-lang-2.4-src
-TARFILE_MD5=625ff5f2f968dd908bca43c9469d6e6b
+TARFILE_NAME=commons-lang3-3.3-src
+TARFILE_MD5=4c8c505cc3cba4c467c479e3e0f09ba4
+#TARFILE_NAME=commons-lang-2.4-src
+#TARFILE_MD5=625ff5f2f968dd908bca43c9469d6e6b
 
-TARFILE_ROOTDIR=commons-lang-2.4-src
+#TARFILE_ROOTDIR=commons-lang-2.4-src
+TARFILE_ROOTDIR=commons-lang3-3.3-src
 
 #PATCH_FILES=$(PRJ)$/patches$/logging.patch
 
 #CONVERTFILES=build.xml
-                
-OUT2CLASS=dist$/commons-lang-2.4.jar
+
+OUT2CLASS=target$/commons-lang3-3.3.jar
+#OUT2CLASS=dist$/commons-lang-2.4.jar
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

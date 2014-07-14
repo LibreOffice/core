@@ -494,7 +494,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 {
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
 
-    // seach for a SfxDocument of the specified type
+    // search for a SfxDocument of the specified type
     for ( sal_uInt16 nPos = 0; nPos < rDocs.Count(); ++nPos )
     {
         SfxObjectShell* pSh = rDocs.GetObject( nPos );

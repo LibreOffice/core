@@ -831,7 +831,7 @@ TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr
         }
         catch( const com::sun::star::uno::Exception& )
         {
-            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+            OSL_ENSURE( sProvider.is(),"can't instantiate configuration" );
         }
     }
 
@@ -932,7 +932,7 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
         }
         catch( const com::sun::star::uno::Exception& )
         {
-            OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
+            OSL_ENSURE( xCfgMgr.is()," can't instantiate the special config manager " );
         }
     }
 

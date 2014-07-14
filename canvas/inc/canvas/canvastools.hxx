@@ -454,7 +454,7 @@ namespace canvas
         /// Convert standard 8888 RGBA color to vcl color
         ::com::sun::star::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
-        // Modeled closely after boost::numeric_cast, only that we
+        // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
 
         /** Cast numeric value into another (numeric) data type
@@ -470,7 +470,7 @@ namespace canvas
             typedef ::std::numeric_limits< Source > SourceLimits;
             typedef ::std::numeric_limits< Target > TargetLimits;
 
-            if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
+            if( ( arg<0 && !TargetLimits::is_signed) ||                     // losing the sign here
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
             {

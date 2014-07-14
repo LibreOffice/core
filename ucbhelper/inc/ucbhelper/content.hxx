@@ -246,7 +246,7 @@ public:
 
     /**
       * This method provides access to the "native" UCB content interface(s).
-      * This is usefull in case the convenience methods provided by this
+      * This is useful in case the convenience methods provided by this
       * class are insufficient for your needs. You may obtain all interfaces
       * supported by the underlying UCB content by calling this method and
       * after that doing a queryInterface call.
@@ -842,11 +842,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the names must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property names.
       * @param rNewContent will be filled by the implementation of this method
@@ -875,11 +875,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the handles must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property handles.
       * @param rNewContent will be filled by the implementation of this method
@@ -909,11 +909,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param rPropertyNames is a sequence of names of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the names must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property names.
       * @param rStream is a stream containing the content data for the new
@@ -947,11 +947,11 @@ public:
       *        objects (See queryCreatableContentsInfo()).
       * @param nPropertyHandes is a sequence of handles of properties for that
       *        values are to set at the new content before it will be inserted
-      *        ( commited ).
+      *        ( committed ).
       *        The order of the handles must correspond to the order of the
       *        property values.
       * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
+      *        set at the new content before it will be inserted ( committed ).
       *        The order of the values must correspond to the order of the
       *        property handles.
       * @param rStream is a stream containing the content data for the new

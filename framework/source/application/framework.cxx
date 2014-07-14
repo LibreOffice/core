@@ -175,7 +175,7 @@ void FrameWork::impl_analyzeCommandArguments()
     sal_uInt32      nCount      = aInfo.getCommandArgCount();
     for ( sal_uInt32 nArgument=0; nArgument<nCount; ++nArgument )
     {
-        // If extraction of current argument successfull ...
+        // If extraction of current argument successful ...
         if ( aInfo.getCommandArg( nArgument, sArgument ) == osl_Process_E_None )
         {
             // ... search for matching with supported values.

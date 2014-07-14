@@ -37,7 +37,7 @@ option explicit
 
 '     - Global aInitArgs() As Variant
 '       Global aNoInit() As Variant [optional]
-'       if the variable defined as Array the method initialize() isnt called.
+'       if the variable defined as Array the method initialize() isn't called.
 
 '*************************************************************************
 

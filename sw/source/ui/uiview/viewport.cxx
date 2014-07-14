@@ -714,7 +714,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
     {
         //Hier wieder auskommentieren wenn das mitscrollen nicht gewuenscht ist.
         // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
-        //              so we dont must do it agin.
+        //              so we dont must do it again.
         EndScrollHdl(pScrollbar);
 
         if ( Help::IsQuickHelpEnabled() &&
@@ -730,7 +730,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
             if(pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
             {
                 // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
-                //                 so we dont must do it agin.
+                //                 so we dont must do it again.
     //          if(!GetViewFrame()->GetFrame().IsInPlace())
     //                S F X_BINDINGS().Update(FN_STAT_PAGE);
 

@@ -578,7 +578,7 @@ public:
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
 
-// this struct contains all neccessary information on an element inside a UCBStorage
+// this struct contains all necessary information on an element inside a UCBStorage
 struct UCBStorageElement_Impl
 {
     String                      m_aName;        // the actual URL relative to the root "folder"
@@ -775,7 +775,7 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
                 if( aResult.is() )
                 {
                     // temporary stream can not be used here any more
-                    // and can not be opened untill wrapper is closed
+                    // and can not be opened until wrapper is closed
                     // stream is deleted by wrapper after use
                     m_pStream = NULL;
                     m_nRepresentMode = xinputstream;
@@ -842,7 +842,7 @@ sal_Bool UCBStorageStream_Impl::Init()
 
     if( m_bSourceRead && !m_rSource.is() )
     {
-        // source file contain usefull information and is not opened
+        // source file contain useful information and is not opened
         // open it from the point of noncopied data
 
         try
@@ -1278,7 +1278,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 
 sal_Bool UCBStorageStream_Impl::Revert()
 {
-    // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
+    // if an OLEStorage is created on this stream, no "revert" is necessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
         DBG_ERROR("Revert while commit is in progress!" );
@@ -2575,7 +2575,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 return nRet;
             }
 
-            // after successfull root commit all elements names and types are adjusted and all removed elements
+            // after successful root commit all elements names and types are adjusted and all removed elements
             // are also removed from the lists
             UCBStorageElement_Impl* pInnerElement = m_aChildrenList.First();
             sal_Bool bRet = sal_True;
@@ -2876,7 +2876,7 @@ sal_Bool UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const 
     }
     else
     {
-        // for copying no optimization is usefull, because in every case the stream data must be copied
+        // for copying no optimization is useful, because in every case the stream data must be copied
             UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
         if ( pElement )
             return CopyStorageElement_Impl( *pElement, pDest, rNew );
@@ -2893,7 +2893,7 @@ sal_Bool UCBStorage::Commit()
     // mark this storage for sending it on root commit
     pImp->m_bCommited = sal_True;
     if ( pImp->m_bIsRoot )
-        // the root storage coordinates commiting by sending a Commit command to its content
+        // the root storage coordinates committing by sending a Commit command to its content
         return ( pImp->Commit() != COMMIT_RESULT_FAILURE );
     else
         return sal_True;

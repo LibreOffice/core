@@ -457,7 +457,7 @@ protected:
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
 
     // --> OD 2008-11-26 #158694#
-    // boolean indicating, that a node of a not counted parent node is continueing
+    // boolean indicating, that a node of a not counted parent node is continuing
     // the numbering of parent's previous node sub tree.
     // Example:
     //   1. kshdkjfs
@@ -508,7 +508,7 @@ protected:
     /**
        Invalidates a child.
 
-       Calls SetLastValid for the preceeding sibling of the child and
+       Calls SetLastValid for the preceding sibling of the child and
        notifies all invalid children.
 
        @param pChild      the child to invalidate
@@ -544,7 +544,7 @@ protected:
        @param aItLastValid    iterator pointing to the new last valid child
        @param bValidating     - true    always set the last valid node to
                                         aItLastValid
-                              - false   only set if aItLastValid is preceeding
+                              - false   only set if aItLastValid is preceding
                                         the current last valid node
      */
     void SetLastValid(tSwNumberTreeChildren::const_iterator aItLastValid,

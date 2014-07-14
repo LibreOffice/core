@@ -249,7 +249,7 @@ namespace comphelper
     void SAL_CALL AsyncEventNotifier::onTerminated()
     {
         AsyncEventNotifier_TBASE::onTerminated();
-        // when we were started (->run), we aquired ourself. Release this now
+        // when we were started (->run), we acquired ourself. Release this now
         // that we were finally terminated
         release();
     }

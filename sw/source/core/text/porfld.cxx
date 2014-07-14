@@ -437,7 +437,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
 
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion pollution?" );
     if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
@@ -1144,7 +1144,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
 
 void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion pollution?" );
     if( Width() )
     {
         rInf.DrawBackBrush( *this );

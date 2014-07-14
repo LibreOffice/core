@@ -43,10 +43,14 @@
 
 // class  SvxHFPage ------------------------------------------------------
 
-class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage
+class SVX_DLLPUBLIC SvxHFPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+private:
+    //UUUU
+    void EnableDrawingLayerFillStyles(bool bNew) { mbEnableDrawingLayerFillStyles = bNew; }
 
 public:
 
@@ -55,8 +59,12 @@ public:
 
     virtual         ~SvxHFPage();
 
-    void            DisableDeleteQueryBox() { bDisableQueryBox = sal_True; }
-    void            EnableBackgroundSelector( sal_Bool bNew ) { bEnableBackgroundSelector = bNew; }
+    void DisableDeleteQueryBox() { mbDisableQueryBox = true; }
+    void EnableBackgroundSelector(bool bNew) { mbEnableBackgroundSelector = bNew; }
+
+    //UUUU
+    virtual void PageCreated(SfxAllItemSet aSet);
+
     void            EnableDynamicSpacing();
 
 protected:
@@ -84,9 +92,11 @@ protected:
 
     sal_uInt16          nId;
     SfxItemSet*     pBBSet;
-    sal_Bool            bDisableQueryBox;
-    sal_Bool            bEnableBackgroundSelector;
-    bool        bInReset;
+
+    /// bitfield
+    bool            mbDisableQueryBox : 1;
+    bool            mbEnableBackgroundSelector : 1;
+    bool            mbEnableDrawingLayerFillStyles : 1;
 
     void            InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);

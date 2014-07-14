@@ -1026,7 +1026,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 }
 
 // Creates an SAFEARRAY of the specified element and if necessary
-// creates a SAFEARRAY whith multiple dimensions.
+// creates a SAFEARRAY with multiple dimensions.
 // Used by sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
 template<class T>
 SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq, VARTYPE elemtype)
@@ -1255,7 +1255,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 // param rSeq - an Any that has to contain a Sequence
 // param dim - the dimension for which the number of elements is being determined,
 //              must be one.
-// param seqElementCounts - countains the maximum number of elements for each
+// param seqElementCounts - contains the maximum number of elements for each
 //                          dimension. Index 0 contains the number of dimension one.
 //                          After return the Sequence contains the maximum number of
 //                          elements for each dimension.
@@ -1403,7 +1403,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
             }
         }
         // Is the object a COM wrapper ( either XInvocation, or Adapter object)
-        // or does it suppy an IDispatch by its own ?
+        // or does it supply an IDispatch by its own ?
         else
         {
             Reference<XInterface> xIntComWrapper = xInt;

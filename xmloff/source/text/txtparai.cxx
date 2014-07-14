@@ -1034,9 +1034,9 @@ protected:
                            Reference<beans::XPropertySet>& rPropSet);
 
     /**
-     * All marks can be created immediatly. Since we don't care about
+     * All marks can be created immediately. Since we don't care about
      * the element content, ProcessAttribute should set the properties
-     * immediatly.
+     * immediately.
      *
      * This method tolerates an empty PropertySet; subclasses however
      * are not expected to.
@@ -2029,7 +2029,7 @@ XMLParaContext::~XMLParaContext()
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
-    // --> OD 2007-07-25 #i73509# - add paramter <mbOutlineLevelAttrFound>
+    // --> OD 2007-07-25 #i73509# - add parameter <mbOutlineLevelAttrFound>
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                                sStyleName,
                                                sal_True,

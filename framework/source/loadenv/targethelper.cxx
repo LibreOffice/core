@@ -88,8 +88,8 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
 -----------------------------------------------*/
 sal_Bool TargetHelper::isValidNameForFrame(const ::rtl::OUString& sName)
 {
-    // some special targets are realy special ones :-)
-    // E.g. the are realy used to locate one frame inside the frame tree.
+    // some special targets are really special ones :-)
+    // E.g. the are really used to locate one frame inside the frame tree.
     if (
         (!sName.getLength()                                 ) ||
         (TargetHelper::matchSpecialTarget(sName, E_HELPTASK)) ||

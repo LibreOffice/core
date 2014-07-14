@@ -1582,7 +1582,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             aRect.bottom = pt.y+2;
 
             // dualmonitor support:
-            // Get screensize of the monitor whith the mouse pointer
+            // Get screensize of the monitor with the mouse pointer
             ImplSalGetWorkArea( mhWnd, &aRect, &aRect );
 
             nX = ((aRect.right-aRect.left)-nWidth)/2 + aRect.left;
@@ -4177,7 +4177,7 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
     // calculate and set frame geometry of a maximized window - useful if the window is still hidden
 
     // dualmonitor support:
-    // Get screensize of the monitor whith the mouse pointer
+    // Get screensize of the monitor with the mouse pointer
 
     RECT aRectMouse;
     if( ! pParentRect )
@@ -4841,7 +4841,7 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
     if( nFound == 1 )
         nRet = MAKELRESULT( idxFound, MNC_EXECUTE );
     else
-        // duplicate mnemonics, just select the next occurence
+        // duplicate mnemonics, just select the next occurrence
         nRet = MAKELRESULT( idxFound, MNC_SELECT );
 
     return nRet;
@@ -5111,7 +5111,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     long nRet = 0;
     if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
-        // we never activated a menu (ie, no WM_INITMENUPOPUP has occured yet)
+        // we never activated a menu (ie, no WM_INITMENUPOPUP has occurred yet)
         // which means this must be the menubar -> send activation/deactivation
         SalMenuEvent aMenuEvt;
         WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, bByPosition );
@@ -6208,10 +6208,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                     if (Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
                     {
-                        // Make sure to launch Accessibiliity only the following criterias are satisfied to avoid RFT interrupts regular acc processing
+                        // Make sure to launch Accessibiliity only the following criteria are satisfied to avoid RFT interrupts regular acc processing
                         if (g_acc_manager1 == NULL)
                         {
-                            sal_Bool bCancelled;
+                            sal_Bool bCancelled(sal_False);
                             InitAccessBridge(sal_False,bCancelled);
                             if( bCancelled )
                                 break;

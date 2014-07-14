@@ -19,14 +19,11 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <swtypes.hxx>
 #include <cmdid.h>
-
 #include <unomid.h>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
@@ -87,6 +84,7 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -874,7 +872,7 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
     {
         vos::OGuard  aGuard(Application::GetSolarMutex());
         // --> OD 2005-08-08 #i52858# - method name changed
-        SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+        SwDrawModel* pModel = pDoc->GetOrCreateDrawModel();
         // <--
         SdrPage* pPage = pModel->GetPage( 0 );
 

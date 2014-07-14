@@ -19,29 +19,21 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #if OSL_DEBUG_LEVEL > 0
 #   include <cstdio>
 #endif
-
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemiter.hxx>
 #include "svl/urihelper.hxx"
-
 #include <svtools/embedhlp.hxx>
-
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -51,7 +43,6 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
-
 #include <unotools/ucbstreamhelper.hxx>
 #include <fmtanchr.hxx>
 #include <ndgrf.hxx>
@@ -61,10 +52,8 @@
 #include <ndtxt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
-
 #include <writerfilter/doctok/sprmids.hxx>
 #include <svx/fmmodel.hxx>
-
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
@@ -72,14 +61,12 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 #include "escher.hxx"
-//Added for i120568
 #include "ww8attributeoutput.hxx"
 #include "fmturl.hxx"
-//End
 #include "docsh.hxx"
 #include <cstdio>
-
 #include <stdio.h>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
@@ -125,7 +112,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         switch (pItem->Which())
         {
             /*
-            For an inline object these properties are irrelevent because they
+            For an inline object these properties are irrelevant because they
             will be the same as the defaults that msword applies in their
             absence, so if that is all that there is for these inline objects
             then if there turns out to be enough information in the object

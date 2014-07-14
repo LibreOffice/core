@@ -221,6 +221,7 @@ InputMessage
 InputTitle
 IsActive
 IsAdjustHeightEnabled
+IsBackgroundObjectsVisible
 IsCaseSensitive
 IsCellBackgroundTransparent
 IsChangeReadOnlyEnabled

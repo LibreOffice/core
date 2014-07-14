@@ -72,14 +72,13 @@ namespace svt { namespace uno
     //= WizardShell
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    WizardShell::WizardShell( Window* i_pParent, const Reference< XWizard >& i_rWizard, const Reference< XWizardController >& i_rController,
+    WizardShell::WizardShell( Window* i_pParent, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         :WizardShell_Base( i_pParent, WB_MOVEABLE | WB_CLOSEABLE )
-        ,m_xWizard( i_rWizard )
         ,m_xController( i_rController )
         ,m_nFirstPageID( lcl_determineFirstPageID( i_rPaths ) )
     {
-        ENSURE_OR_THROW( m_xWizard.is() && m_xController.is(), "invalid wizard/controller" );
+        ENSURE_OR_THROW( m_xController.is(), "invalid controller" );
 
         // declare the paths
         for ( sal_Int32 i=0; i<i_rPaths.getLength(); ++i )

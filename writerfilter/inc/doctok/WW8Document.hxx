@@ -290,7 +290,7 @@ public:
     virtual WW8DocumentIterator & operator++() = 0;
 
     /**
-       Recedes iterator to previous character postion of the document.
+       Recedes iterator to previous character position of the document.
      */
     virtual WW8DocumentIterator & operator--() = 0;
 

@@ -52,8 +52,8 @@ LineWidthControl::LineWidthControl (
       mstrPT(SVX_RES(STR_PT)),
       mnCustomWidth(0),
       mbCustom(false),
-      mbColseByEdit(false),
-      mnTmpCusomWidth(0),
+      mbCloseByEdit(false),
+      mnTmpCustomWidth(0),
       mbVSFocus(true),
       maIMGCus(SVX_RES(IMG_WIDTH_CUSTOM)),
       maIMGCusGray(SVX_RES(IMG_WIDTH_CUSTOM_GRAY))
@@ -208,7 +208,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
 {
     mbVSFocus = true;
     maVSWidth.SetSelItem(0);
-    mbColseByEdit = false;
+    mbCloseByEdit = false;
     meMapUnit = eMapUnit;
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
     if ( aWinOpt.Exists() )
@@ -287,8 +287,8 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
             mrLinePropertyPanel.SetWidthIcon(iPos);
             mrLinePropertyPanel.SetWidth(nVal);
-            mbColseByEdit = false;
-            mnTmpCusomWidth = 0;
+            mbCloseByEdit = false;
+            mnTmpCustomWidth = 0;
         }
         else if(iPos == 9)
         {//last custom
@@ -300,8 +300,8 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 XLineWidthItem aWidthItem( nVal );
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
                 mrLinePropertyPanel.SetWidth(nVal);
-                mbColseByEdit = false;
-                mnTmpCusomWidth = 0;
+                mbCloseByEdit = false;
+                mnTmpCustomWidth = 0;
             }
             else
             {
@@ -338,13 +338,13 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         XLineWidthItem aWidthItem(nNewWidth);
         mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
 
-        mbColseByEdit = true;
-        mnTmpCusomWidth = nTmp;
+        mbCloseByEdit = true;
+        mnTmpCustomWidth = nTmp;
         /*for(sal_uInt16 i = 0; i < 8; i++)
         {
             if(nTmp == (sal_Int32)maVSWidth.GetItemData(i))
             {
-                mbColseByEdit = false;
+                mbCloseByEdit = false;
                 break;
             }
         }*/
@@ -358,7 +358,7 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 
 bool LineWidthControl::IsCloseByEdit()
 {
-    return mbColseByEdit;
+    return mbCloseByEdit;
 }
 
 
@@ -366,7 +366,7 @@ bool LineWidthControl::IsCloseByEdit()
 
 long LineWidthControl::GetTmpCustomWidth()
 {
-    return mnTmpCusomWidth;
+    return mnTmpCustomWidth;
 }
 
 

@@ -372,7 +372,7 @@ class cIMPL_Dialog  :   public ModalDialog
             @descr      This dialog need his own ressource. We can't use the global ressource manager!
                         We must use our own.
                         You must give us the ressource language. If no right ressource could be found -
-                        any  existing one is used automaticly!
+                        any  existing one is used automatically!
 
             @seealso    method setValues()
 
@@ -445,7 +445,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
                         public XSERVICEINFO                 ,
                         public XDIALOG                      ,
                         public XFLUSHABLE                   ,
-                        private ThreadHelpBase              ,   // Order of baseclasses is neccessary for right initialization!
+                        private ThreadHelpBase              ,   // Order of baseclasses is necessary for right initialization!
                         public OBROADCASTHELPER             ,
                         public OPROPERTYSETHELPER           ,
                         public OWEAKOBJECT
@@ -502,7 +502,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
 
         /*-****************************************************************************************************//**
             @short      write changed values to configuration
-            @descr      Normaly the dialog returns with an OK or ERROR value. If OK occure - we flush data
+            @descr      Normaly the dialog returns with an OK or ERROR value. If OK occur - we flush data
                         auomaticly. But otherwise we do nothing. If user of this service wish to use property set
                         only without any UI(!) - he must call "flush()" explicitly to write data!
 
@@ -597,7 +597,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
                         Don't use this directly!
                         You must try to convert the value of given propertyhandle and
                         return results of this operation. This will be use to ask vetoable
-                        listener. If no listener have a veto, we will change value realy!
+                        listener. If no listener have a veto, we will change value really!
                         ( in method setFastPropertyValue_NoBroadcast(...) )
 
             @seealso    class OPropertySetHelper
@@ -623,7 +623,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @descr      This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
                         Handle and value are valid everyway! You must set the new value only.
-                        After this, baseclass send messages to all listener automaticly.
+                        After this, baseclass send messages to all listener automatically.
 
             @seealso    OPropertySetHelper
 
@@ -708,7 +708,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
 
         /*-****************************************************************************************************//**
             @short      helper method to check if a property will change his value
-            @descr      Is neccessary for vetoable listener mechanism of OPropertySethelper.
+            @descr      Is necessary for vetoable listener mechanism of OPropertySethelper.
 
             @seealso    -
 
@@ -803,9 +803,9 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
 
         /*-****************************************************************************************************//**
             @short      helper methods to read/write  properties from/to ini file
-            @descr      Using of Config-Class isn't easy everytime :-(
-                        Thats the reason for these helper. State of operation isn't realy important ..
-                        but we assert impossible cases or occured errors!
+            @descr      Using of Config-Class isn't easy every time :-(
+                        Thats the reason for these helper. State of operation isn't really important ..
+                        but we assert impossible cases or occurred errors!
 
             @seealso    -
 

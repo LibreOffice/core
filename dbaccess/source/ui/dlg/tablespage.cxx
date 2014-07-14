@@ -258,7 +258,7 @@ DBG_NAME(OTableSubscriptionPage)
             // the catalog entry
             SvLBoxEntry* pCatalog = m_aTablesList.GetEntryPosByName(sCatalog, pRootEntry);
             if (!pCatalog && sCatalog.getLength())
-                // the table (resp. its catalog) refered in this filter entry does not exist anymore
+                // the table (resp. its catalog) referred in this filter entry does not exist anymore
                 continue;
 
             if (bAllSchemas && pCatalog)
@@ -270,7 +270,7 @@ DBG_NAME(OTableSubscriptionPage)
             // the schema entry
             SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!pSchema && sSchema.getLength())
-                // the table (resp. its schema) refered in this filter entry does not exist anymore
+                // the table (resp. its schema) referred in this filter entry does not exist anymore
                 continue;
 
             if (bAllTables && pSchema)

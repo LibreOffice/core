@@ -61,7 +61,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             nDelOffset = 1;
             break;
         case IResultSetHelper::LAST:
-            eDelPosition = IResultSetHelper::PRIOR; // lsat row is invalid so position before
+            eDelPosition = IResultSetHelper::PRIOR; // last row is invalid so position before
             nDelOffset = 1;
             break;
         case IResultSetHelper::RELATIVE:

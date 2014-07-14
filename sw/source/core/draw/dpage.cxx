@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <basic/basmgr.hxx>
@@ -32,9 +30,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
@@ -46,21 +42,20 @@
 #include <dpage.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <usrfld.hxx>
 #include <flyfrm.hxx>
 #include <ndnotxt.hxx>
 #include <grfatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <dview.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, bool bMasterPage) :
+SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -95,10 +90,10 @@ void SwDPage::copyDataFromSdrPage(const SdrPage& rSource)
 
 SdrPage* SwDPage::CloneSdrPage(SdrModel* pTargetModel) const
 {
-    SwDrawDocument* pSwDrawDocument = static_cast< SwDrawDocument* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
-    OSL_ENSURE(dynamic_cast< SwDrawDocument* >(pSwDrawDocument), "Wrong SdrModel type in SwDPage clone (!)");
+    SwDrawModel* pSwDrawModel = static_cast< SwDrawModel* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< SwDrawModel* >(pSwDrawModel), "Wrong SdrModel type in SwDPage clone (!)");
     SwDPage* pClone = new SwDPage(
-        *pSwDrawDocument,
+        *pSwDrawModel,
         IsMasterPage());
     OSL_ENSURE(pClone, "CloneSdrPage error (!)");
     pClone->copyDataFromSdrPage(*this);
@@ -153,7 +148,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     const SdrView& rSdrView, const Rectangle *pRect ) const
 {
-    ViewShell *pSh = ((SwDrawDocument&)getSdrModelFromSdrPage()).GetDoc().GetCurrentViewShell();    //swmod 071108//swmod 071225
+    ViewShell *pSh = static_cast< SwDrawModel& >(getSdrModelFromSdrPage()).GetDoc().GetCurrentViewShell();  //swmod 071108//swmod 071225
     if ( pSh )
     {
         while ( pSh->Imp()->GetDrawView() != &rSdrView )

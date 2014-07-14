@@ -123,7 +123,7 @@ published service Style
         <p>Assigning an empty string to the style name will disable
         the conditional style for that context.</p>
 
-        <p>The alowed strings (contexts) for the name part of an entry
+        <p>The allowed strings (contexts) for the name part of an entry
         of the sequence are:</p>
 
         <ul>

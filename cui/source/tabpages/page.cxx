@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
@@ -61,12 +59,15 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc> // for RID_SVXSTR_PAPERBIN...,
 #include <svx/svxids.hrc>
-
-// #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx> //CHINA001
 #include <svl/aeitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
+
+//UUUU
+#include <svx/xdef.hxx>
+#include <svx/unobrushitemhelper.hxx>
+
 // configuration helper =======================================================
 
 /** Helper to get a configuration setting.
@@ -208,19 +209,20 @@ sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 #define MARGIN_TOP      ( (MarginPosition)0x0004 )
 #define MARGIN_BOTTOM   ( (MarginPosition)0x0008 )
 
-struct SvxPage_Impl
-{
-    MarginPosition  m_nPos;
-    Printer*        mpDefPrinter;
-    bool            mbDelPrinter;
-
-    SvxPage_Impl() :
-        m_nPos( 0 ),
-        mpDefPrinter( 0 ),
-        mbDelPrinter( false ) {}
-
-    ~SvxPage_Impl() { if ( mbDelPrinter ) delete mpDefPrinter; }
-};
+//UUUU
+//struct SvxPage_Impl
+//{
+//  MarginPosition  m_nPos;
+//    Printer*        mpDefPrinter;
+//    bool            mbDelPrinter;
+//
+//    SvxPage_Impl() :
+//        m_nPos( 0 ),
+//        mpDefPrinter( 0 ),
+//        mbDelPrinter( false ) {}
+//
+//    ~SvxPage_Impl() { if ( mbDelPrinter ) delete mpDefPrinter; }
+//};
 
 // class SvxPageDescPage --------------------------------------------------
 
@@ -240,10 +242,8 @@ SfxTabPage* SvxPageDescPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
-
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PAGE ), rAttr ),
-
+SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr )
+:   SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PAGE ), rAttr ),
     aPaperSizeFl        ( this, CUI_RES( FL_PAPER_SIZE ) ),
     aPaperFormatText    ( this, CUI_RES( FT_PAPER_FORMAT ) ),
     aPaperSizeBox       ( this, CUI_RES( LB_PAPER_SIZE ) ),
@@ -290,8 +290,17 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     eMode               ( SVX_PAGE_MODE_STANDARD ),
     ePaperStart         ( PAPER_A3 ),
     ePaperEnd           ( PAPER_ENV_DL ),
-    pImpl               ( new SvxPage_Impl )
 
+    //UUUU
+    // pImpl                ( new SvxPage_Impl ),
+
+    //UUUU
+    m_nPos( 0 ),
+    mpDefPrinter( 0 ),
+    mbDelPrinter( false ),
+
+    //UUUU
+    mbEnableDrawingLayerFillStyles(false)
 {
     bBorderModified = false;
     FreeResource();
@@ -351,27 +360,28 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     SetFieldUnit( aPaperHeightEdit, eFUnit );
 
     if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
-        pImpl->mpDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
+    {
+        mpDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
+    }
     else
     {
-        pImpl->mpDefPrinter = new Printer;
-        pImpl->mbDelPrinter = true;
+        mpDefPrinter = new Printer;
+        mbDelPrinter = true;
     }
 
-    MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
-    pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
+    MapMode aOldMode = mpDefPrinter->GetMapMode();
+    mpDefPrinter->SetMapMode( MAP_TWIP );
 
     // First- und Last-Werte f"ur die R"ander setzen
-    Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
-    Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
+    Size aPaperSize = mpDefPrinter->GetPaperSize();
+    Size aPrintSize = mpDefPrinter->GetOutputSize();
     /*
      * einen Punkt ( 0,0 ) in logische Koordinaten zu konvertieren,
      * sieht aus wie Unsinn; ist aber sinnvoll, wenn der Ursprung des
      * Koordinatensystems verschoben ist.
      */
-    Point aPrintOffset = pImpl->mpDefPrinter->GetPageOffset() -
-                         pImpl->mpDefPrinter->PixelToLogic( Point() );
-    pImpl->mpDefPrinter->SetMapMode( aOldMode );
+    Point aPrintOffset = mpDefPrinter->GetPageOffset() - mpDefPrinter->PixelToLogic( Point() );
+    mpDefPrinter->SetMapMode( aOldMode );
 
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     aLeftMarginEdit.SetFirst( aLeftMarginEdit.Normalize( aPrintOffset.X() ), FUNIT_TWIP );
@@ -425,7 +435,10 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 SvxPageDescPage::~SvxPageDescPage()
 {
-    delete pImpl;
+    if(mbDelPrinter)
+    {
+        delete mpDefPrinter;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -509,7 +522,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     // allgemeine Seitendaten
     SvxNumType eNumType = SVX_ARABIC;
-    bLandscape = ( pImpl->mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+    bLandscape = ( mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
     sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
@@ -538,7 +551,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     {
         nPaperBin = ( (const SvxPaperBinItem*)pItem )->GetValue();
 
-        if ( nPaperBin >= pImpl->mpDefPrinter->GetPaperBinCount() )
+        if ( nPaperBin >= mpDefPrinter->GetPaperBinCount() )
             nPaperBin = PAPERBIN_PRINTER_SETTINGS;
     }
 
@@ -547,21 +560,21 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
-        aBinName = pImpl->mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
+        aBinName = mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
 
     sal_uInt16 nEntryPos = aPaperTrayBox.InsertEntry( aBinName );
     aPaperTrayBox.SetEntryData( nEntryPos, (void*)(sal_uLong)nPaperBin );
     aPaperTrayBox.SelectEntry( aBinName );
 
     // Size rausholen
-    Size aPaperSize = SvxPaperInfo::GetPaperSize( pImpl->mpDefPrinter );
+    Size aPaperSize = SvxPaperInfo::GetPaperSize( mpDefPrinter );
     pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
     bool bOrientationSupport =
-        pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
+        mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
     // unter OS/2 wird bei HasSupport() immer sal_True returned
     // aber nur als Dummy, deshalb FALSE
@@ -1005,11 +1018,11 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
     aPaperTrayBox.SetEntryData( nEntryPos,
         (void*)(sal_uLong)PAPERBIN_PRINTER_SETTINGS );
     String aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
-    sal_uInt16 nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
+    sal_uInt16 nBinCount = mpDefPrinter->GetPaperBinCount();
 
     for ( sal_uInt16 i = 0; i < nBinCount; ++i )
     {
-        String aName = pImpl->mpDefPrinter->GetPaperBinName(i);
+        String aName = mpDefPrinter->GetPaperBinName(i);
 
         if ( !aName.Len() )
         {
@@ -1158,27 +1171,26 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
-    MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
+    MapMode aOldMode = mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;
 
     if ( bLandscape )
         eOri = ORIENTATION_LANDSCAPE;
-    Orientation eOldOri = pImpl->mpDefPrinter->GetOrientation();
-    pImpl->mpDefPrinter->SetOrientation( eOri );
-    pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
+    Orientation eOldOri = mpDefPrinter->GetOrientation();
+    mpDefPrinter->SetOrientation( eOri );
+    mpDefPrinter->SetMapMode( MAP_TWIP );
 
     // First- und Last-Werte f"ur die R"ander setzen
-    Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
-    Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
+    Size aPaperSize = mpDefPrinter->GetPaperSize();
+    Size aPrintSize = mpDefPrinter->GetOutputSize();
     /*
      * einen Punkt ( 0,0 ) in logische Koordinaten zu konvertieren,
      * sieht aus wie Unsinn; ist aber sinnvoll, wenn der Ursprung des
      * Koordinatensystems verschoben ist.
      */
-    Point aPrintOffset = pImpl->mpDefPrinter->GetPageOffset() -
-                         pImpl->mpDefPrinter->PixelToLogic( Point() );
-    pImpl->mpDefPrinter->SetMapMode( aOldMode );
-    pImpl->mpDefPrinter->SetOrientation( eOldOri );
+    Point aPrintOffset = mpDefPrinter->GetPageOffset() - mpDefPrinter->PixelToLogic( Point() );
+    mpDefPrinter->SetMapMode( aOldMode );
+    mpDefPrinter->SetOrientation( eOldOri );
 
     sal_Int64 nSetL = aLeftMarginEdit.Denormalize(
                     aLeftMarginEdit.GetValue( FUNIT_TWIP ) );
@@ -1260,90 +1272,124 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
+void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 {
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
+    sal_uInt16 nWhich(GetWhich(SID_ATTR_PAGE_HEADERSET));
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
     {
-        const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, sal_False));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn =
-            (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
-        if ( rOn.GetValue() )
+        if(rOn.GetValue())
         {
-            nWhich = GetWhich( SID_ATTR_BRUSH );
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aHeaderFillAttributes;
 
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            if(mbEnableDrawingLayerFillStyles)
             {
-                const SvxBrushItem& rItem =
-                    (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdColor( rItem.GetColor() );
+                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            else
             {
-                const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdBorder( rItem );
+                nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                {
+                    //UUUU create FillAttributes from SvxBrushItem
+                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                }
+            }
+
+            aBspWin.setHeaderFillAttributes(aHeaderFillAttributes);
+            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
+
+            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            {
+                const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
+                aBspWin.SetHdBorder(rItem);
             }
         }
     }
 
-    nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
+    nWhich = GetWhich(SID_ATTR_PAGE_FOOTERSET);
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
     {
-        const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+        const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich,sal_False));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn =
-            (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
-        if ( rOn.GetValue() )
+        if(rOn.GetValue())
         {
-            nWhich = GetWhich( SID_ATTR_BRUSH );
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFooterFillAttributes;
 
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            if(mbEnableDrawingLayerFillStyles)
             {
-                const SvxBrushItem& rItem =
-                    (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtColor( rItem.GetColor() );
+                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-            if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            else
             {
-                const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtBorder( rItem );
+                nWhich = GetWhich(SID_ATTR_BRUSH);
+
+                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                {
+                    //UUUU create FillAttributes from SvxBrushItem
+                    const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                }
+            }
+
+            aBspWin.setFooterFillAttributes(aFooterFillAttributes);
+            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
+
+            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            {
+                const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
+                aBspWin.SetFtBorder(rItem);
             }
         }
     }
 
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_BRUSH );
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aPageFillAttributes;
+    const SfxPoolItem* pItem = 0;
 
-    if ( pItem )
+    if(mbEnableDrawingLayerFillStyles)
     {
-        aBspWin.SetColor( ( (const SvxBrushItem*)pItem )->GetColor() );
-        const Graphic* pGrf = ( (const SvxBrushItem*)pItem )->GetGraphic();
+        //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+        aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rSet));
+    }
+    else
+    {
+        pItem = GetItem(rSet, SID_ATTR_BRUSH);
 
-        if ( pGrf )
+        if(pItem)
         {
-            Bitmap aBitmap = pGrf->GetBitmap();
-            aBspWin.SetBitmap( &aBitmap );
+            //UUUU create FillAttributes from SvxBrushItem
+            const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
+            SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
         }
-        else
-            aBspWin.SetBitmap( NULL );
     }
 
-    pItem = GetItem( rSet, SID_ATTR_BORDER_OUTER );
+    aBspWin.setPageFillAttributes(aPageFillAttributes);
+    pItem = GetItem(rSet, SID_ATTR_BORDER_OUTER);
 
-    if ( pItem )
-        aBspWin.SetBorder( (SvxBoxItem&)*pItem );
+    if(pItem)
+    {
+        aBspWin.SetBorder(static_cast< const SvxBoxItem& >(*pItem));
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1387,15 +1433,30 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             aBspWin.SetHeader( sal_False );
 
         // im Beispiel Hintergrund und Umrandung anzeigen
-        sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aHeaderFillAttributes;
 
-        if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+        if(mbEnableDrawingLayerFillStyles)
         {
-            const SvxBrushItem& rItem =
-                (const SvxBrushItem&)rHeaderSet.Get( nWhich );
-            aBspWin.SetHdColor( rItem.GetColor() );
+            //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+            aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rHeaderSet));
         }
-        nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
+        else
+        {
+            const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
+
+            if(rHeaderSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+            {
+                //UUUU aBspWin.SetHdColor(rItem.GetColor());
+                const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+            }
+        }
+
+        aBspWin.setHeaderFillAttributes(aHeaderFillAttributes);
+        const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
         if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
         {
@@ -1434,15 +1495,30 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             aBspWin.SetFooter( sal_False );
 
         // im Beispiel Hintergrund und Umrandung anzeigen
-        sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFooterFillAttributes;
 
-        if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+        if(mbEnableDrawingLayerFillStyles)
         {
-            const SvxBrushItem& rItem =
-                (const SvxBrushItem&)rFooterSet.Get( nWhich );
-            aBspWin.SetFtColor( rItem.GetColor() );
+            //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+            aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rFooterSet));
         }
-        nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
+        else
+        {
+            const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
+
+            if(rFooterSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+            {
+                //UUUU aBspWin.SetFtColor(rItem.GetColor());
+                const SvxBrushItem& rItem = (const SvxBrushItem&)rFooterSet.Get(nWhich);
+                SfxItemSet aTempSet(*rFooterSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+            }
+        }
+
+        aBspWin.setFooterFillAttributes(aFooterFillAttributes);
+        const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
         if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
         {
@@ -1458,6 +1534,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 {
     InitHeadFoot_Impl( rSet );
+    UpdateExample_Impl();
     ResetBackground_Impl( rSet );
     RangeHdl_Impl( 0 );
 }
@@ -1702,7 +1779,7 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
     MetricField& rField, long nFirstMargin, long nLastMargin, MarginPosition nPos )
 {
     bool bRet = false;
-    bool bCheck = ( ( pImpl->m_nPos & nPos ) == 0 );
+    bool bCheck = ( ( m_nPos & nPos ) == 0 );
     long nValue = static_cast<long>(rField.GetValue());
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
@@ -1721,53 +1798,74 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
 void SvxPageDescPage::CheckMarginEdits( bool _bClear )
 {
     if ( _bClear )
-        pImpl->m_nPos = 0;
+        m_nPos = 0;
 
     sal_Int64 nValue = aLeftMarginEdit.GetValue();
     if (  nValue < nFirstLeftMargin || nValue > nLastLeftMargin )
-        pImpl->m_nPos |= MARGIN_LEFT;
+        m_nPos |= MARGIN_LEFT;
     nValue = aRightMarginEdit.GetValue();
     if (  nValue < nFirstRightMargin || nValue > nLastRightMargin )
-        pImpl->m_nPos |= MARGIN_RIGHT;
+        m_nPos |= MARGIN_RIGHT;
     nValue = aTopMarginEdit.GetValue();
     if (  nValue < nFirstTopMargin || nValue > nLastTopMargin )
-        pImpl->m_nPos |= MARGIN_TOP;
+        m_nPos |= MARGIN_TOP;
     nValue = aBottomMarginEdit.GetValue();
     if (  nValue < nFirstBottomMargin || nValue > nLastBottomMargin )
-        pImpl->m_nPos |= MARGIN_BOTTOM;
+        m_nPos |= MARGIN_BOTTOM;
 }
 
 bool SvxPageDescPage::IsMarginOutOfRange()
 {
-    bool bRet = ( ( ( !( pImpl->m_nPos & MARGIN_LEFT ) &&
+    bool bRet = ( ( ( !( m_nPos & MARGIN_LEFT ) &&
                       ( aLeftMarginEdit.GetText() != aLeftMarginEdit.GetSavedValue() ) ) &&
                     ( aLeftMarginEdit.GetValue() < nFirstLeftMargin ||
                       aLeftMarginEdit.GetValue() > nLastLeftMargin ) ) ||
-                  ( ( !( pImpl->m_nPos & MARGIN_RIGHT ) &&
+                  ( ( !( m_nPos & MARGIN_RIGHT ) &&
                       ( aRightMarginEdit.GetText() != aRightMarginEdit.GetSavedValue() ) ) &&
                     ( aRightMarginEdit.GetValue() < nFirstRightMargin ||
                       aRightMarginEdit.GetValue() > nLastRightMargin ) ) ||
-                  ( ( !( pImpl->m_nPos & MARGIN_TOP ) &&
+                  ( ( !( m_nPos & MARGIN_TOP ) &&
                       ( aTopMarginEdit.GetText() != aTopMarginEdit.GetSavedValue() ) ) &&
                     ( aTopMarginEdit.GetValue() < nFirstTopMargin ||
                       aTopMarginEdit.GetValue() > nLastTopMargin ) ) ||
-                  ( ( !( pImpl->m_nPos & MARGIN_BOTTOM ) &&
+                  ( ( !( m_nPos & MARGIN_BOTTOM ) &&
                       ( aBottomMarginEdit.GetText() != aBottomMarginEdit.GetSavedValue() ) ) &&
                     ( aBottomMarginEdit.GetValue() < nFirstBottomMargin ||
                       aBottomMarginEdit.GetValue() > nLastBottomMargin ) ) );
     return bRet;
 }
 
-void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxPageDescPage::PageCreated(SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE );
-    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START );
-    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END );
-    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST );
-    if (pModeItem)
+    SFX_ITEMSET_ARG(&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE);
+    SFX_ITEMSET_ARG(&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START);
+    SFX_ITEMSET_ARG(&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END);
+    SFX_ITEMSET_ARG(&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST);
+
+    //UUUU
+    SFX_ITEMSET_ARG (&aSet, pSupportDrawingLayerFillStyleItem, SfxBoolItem, SID_DRAWINGLAYER_FILLSTYLES);
+
+    if(pModeItem)
+    {
         SetMode((SvxModeType)pModeItem->GetEnumValue());
-    if (pPaperStartItem && pPaperEndItem)
-        SetPaperFormatRanges( (Paper)pPaperStartItem->GetEnumValue(), (Paper)pPaperEndItem->GetEnumValue() );
-    if (pCollectListItem)
+    }
+
+    if(pPaperStartItem && pPaperEndItem)
+    {
+        SetPaperFormatRanges((Paper)pPaperStartItem->GetEnumValue(),(Paper)pPaperEndItem->GetEnumValue());
+    }
+
+    if(pCollectListItem)
+    {
         SetCollectionList(pCollectListItem->GetList());
+    }
+
+    if(pSupportDrawingLayerFillStyleItem)
+    {
+        const bool bNew(pSupportDrawingLayerFillStyleItem->GetValue());
+
+        EnableDrawingLayerFillStyles(bNew);
+    }
 }
+
+//eof

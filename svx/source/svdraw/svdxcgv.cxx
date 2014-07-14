@@ -635,7 +635,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 
                     if(pSdrGrafObj)
                     {
-                        // #122753# To ensure existance of graphic content, force swap in
+                        // #122753# To ensure existence of graphic content, force swap in
                         pSdrGrafObj->ForceSwapIn();
                     }
 
@@ -717,7 +717,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
             aMtf.SetPrefMapMode( aMap );
 
             // removed PrefSize extension. It is principially wrong to set a reduced size at
-            // the created MetaFile. The mentioned errors occurr at output time since the integer
+            // the created MetaFile. The mentioned errors occur at output time since the integer
             // MapModes from VCL lead to errors. It is now corrected in the VCLRenderer for
             // primitives (and may later be done in breaking up a MetaFile to primitives)
             aMtf.SetPrefSize(aBoundSize);

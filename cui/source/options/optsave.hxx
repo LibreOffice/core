@@ -66,6 +66,7 @@ private:
     FixedLine               aDefaultFormatFL;
     FixedText               aODFVersionFT;
     ListBox                 aODFVersionLB;
+    CheckBox                aODFEncryptionCB;
     CheckBox                aSizeOptimizationCB;
     CheckBox                aWarnAlienFormatCB;
     FixedText               aDocTypeFT;

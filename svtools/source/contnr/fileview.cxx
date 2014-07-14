@@ -1430,7 +1430,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
     }
     catch( Exception const & )
     {
-        // perhaps an unkown url protocol (e.g. "private:newdoc")
+        // perhaps an unknown url protocol (e.g. "private:newdoc")
     }
 
     return bRet;

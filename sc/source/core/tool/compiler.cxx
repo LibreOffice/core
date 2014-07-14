@@ -1235,7 +1235,7 @@ struct ConventionXL
 
             if( bStartHasDoc )
             {
-                // A ref across multipled workbooks ?
+                // A ref across multiplied workbooks ?
                 if( !bEndHasDoc )
                     return;
 

@@ -44,7 +44,7 @@ LoggedProperties(dmapper_logger, "CellColorHandler"),
 m_nShadowType( 0 ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),
-m_bParagraph( false )
+m_eType( Others )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -225,8 +225,22 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
 
-    pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
-                            uno::makeAny( nApplyColor ));
+    sal_Int32 objType = PROP_CHAR_BACK_COLOR;
+
+    switch(m_eType)
+    {
+    case P:
+        pPropertyMap->Insert( PROP_PARA_BACK_COLOR, false, uno::makeAny( nApplyColor ));
+        break;
+    case C:
+        pPropertyMap->Insert( PROP_CHAR_BACK_COLOR, false, uno::makeAny( nApplyColor ));
+        break;
+    case Others:
+    default:
+        pPropertyMap->Insert( PROP_BACK_COLOR, false, uno::makeAny( nApplyColor ));
+        break;
+    }
+
     return pPropertyMap;
 }
 } //namespace dmapper

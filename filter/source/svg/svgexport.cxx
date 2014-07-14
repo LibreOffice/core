@@ -31,6 +31,8 @@
 #include "svgfilter.hxx"
 #include "impsvgdialog.hxx"
 
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
+
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
@@ -41,6 +43,8 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/svdetc.hxx>
 
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::geometry;
 using ::rtl::OUString;
 
 // -------------
@@ -214,6 +218,11 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
         {
             pValue[ i ].Value >>= maFilterData;
+        }
+        else if( pValue[ i ].Name.equalsAscii( "ShapeSelection" ) )
+        {
+            // #124608# read selection if given
+            pValue[ i ].Value >>= maShapeSelection;
         }
     }
 
@@ -395,6 +404,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
                 "SVGFilter::implExportDocument: invalid parameter" );
 
     OUString        aAttr;
+    sal_Int32       nDocX = 0, nDocY = 0; // #124608#
     sal_Int32       nDocWidth = 0, nDocHeight = 0;
     sal_Int32       nVisible = -1, nVisibleMaster = -1;
     sal_Bool        bRet = sal_False;
@@ -405,10 +415,61 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
-    if( xDefaultPagePropertySet.is() )
+    // #124608#
+    mbExportSelection = maShapeSelection.is() && maShapeSelection->getCount();
+
+    if(xDefaultPagePropertySet.is())
     {
-        xDefaultPagePropertySet->getPropertyValue( B2UCONST( "Width" ) ) >>= nDocWidth;
-        xDefaultPagePropertySet->getPropertyValue( B2UCONST( "Height" ) ) >>= nDocHeight;
+        xDefaultPagePropertySet->getPropertyValue(B2UCONST("Width")) >>= nDocWidth;
+        xDefaultPagePropertySet->getPropertyValue(B2UCONST("Height")) >>= nDocHeight;
+    }
+
+    if(mbExportSelection)
+    {
+        // #124608# create BoundRange and set nDocX, nDocY, nDocWidth and nDocHeight
+        basegfx::B2DRange aShapeRange;
+
+        Reference< XPrimitiveFactory2D > xPrimitiveFactory(
+            mxMSF->createInstance(
+                String(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.graphic.PrimitiveFactory2D"))),
+                UNO_QUERY);
+
+        // use XPrimitiveFactory2D and go the way over getting the primitives; this
+        // will give better precision (doubles) and be based on the true object
+        // geometry. If needed aViewInformation may be expanded to carry a view
+        // resolution for which to prepare the geometry.
+        if(xPrimitiveFactory.is())
+        {
+            Reference< XShape > xShapeCandidate;
+            const Sequence< PropertyValue > aViewInformation;
+            const Sequence< PropertyValue > aParams;
+
+            for(sal_Int32 a(0); a < maShapeSelection->getCount(); a++)
+            {
+                if((maShapeSelection->getByIndex(a) >>= xShapeCandidate) && xShapeCandidate.is())
+                {
+                    const Sequence< Reference< XPrimitive2D > > aPrimitiveSequence(
+                        xPrimitiveFactory->createPrimitivesFromXShape( xShapeCandidate, aParams ));
+                    const sal_Int32 nCount(aPrimitiveSequence.getLength());
+
+                    for(sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+                    {
+                        const RealRectangle2D aRect(aPrimitiveSequence[nIndex]->getRange(aViewInformation));
+
+                        aShapeRange.expand(basegfx::B2DTuple(aRect.X1, aRect.Y1));
+                        aShapeRange.expand(basegfx::B2DTuple(aRect.X2, aRect.Y2));
+                    }
+                }
+            }
+        }
+
+        if(!aShapeRange.isEmpty())
+        {
+            nDocX = basegfx::fround(aShapeRange.getMinX());
+            nDocY = basegfx::fround(aShapeRange.getMinY());
+            nDocWidth  = basegfx::fround(aShapeRange.getWidth());
+            nDocHeight = basegfx::fround(aShapeRange.getHeight());
+        }
     }
 
     if( xExtDocHandler.is() && !mpSVGExport->IsUseTinyProfile() )
@@ -431,11 +492,23 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 #endif
 
-    aAttr = B2UCONST( "0 0 " );
+    // #124608# set viewBox explicitely to the exported content
+    if(mbExportSelection)
+    {
+        aAttr = OUString::valueOf( nDocX );
+        aAttr += B2UCONST( " " );
+        aAttr += OUString::valueOf( nDocY );
+        aAttr += B2UCONST( " " );
+    }
+    else
+    {
+        aAttr = B2UCONST( "0 0 " );
+    }
+
     aAttr += OUString::valueOf( nDocWidth );
     aAttr += B2UCONST( " " );
     aAttr += OUString::valueOf( nDocHeight );
-    mpSVGExport->SetViewBox( Rectangle( Point(), Size( nDocWidth, nDocHeight ) ) );
+    mpSVGExport->SetViewBox( Rectangle( Point(nDocX, nDocY), Size( nDocWidth, nDocHeight ) ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", B2UCONST( "xMidYMid" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", B2UCONST( "evenodd" ) );
@@ -509,8 +582,17 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
 
     if( -1 != nVisible )
     {
-        if( bSinglePage )
-            implExportPages( rxMasterPages, nVisibleMaster, nVisibleMaster, nVisibleMaster, sal_True );
+        if(bSinglePage)
+        {
+            if(mbExportSelection)
+            {
+                // #124608# export a given object selection, so no MasterPage export at all
+            }
+            else
+            {
+                implExportPages(rxMasterPages,nVisibleMaster,nVisibleMaster,nVisibleMaster,sal_True);
+            }
+        }
         else
         {
             implGenerateMetaData( rxMasterPages, rxDrawPages );
@@ -625,7 +707,17 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
 
         if( xDrawPage.is() )
         {
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
+            Reference< XShapes > xShapes;
+
+            if(mbExportSelection)
+            {
+                // #124608# export a given object selection
+                xShapes = maShapeSelection;
+            }
+            else
+            {
+                xShapes = Reference< XShapes >( xDrawPage, UNO_QUERY );
+            }
 
             if( xShapes.is() )
             {
@@ -862,6 +954,7 @@ sal_Bool SVGFilter::implCreateObjects( const Reference< XDrawPages >& rxMasterPa
 {
     if( SVG_EXPORT_ALLPAGES == nPageToExport )
     {
+        // export the whole document
         sal_Int32 i, nCount;
 
         for( i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
@@ -901,34 +994,43 @@ sal_Bool SVGFilter::implCreateObjects( const Reference< XDrawPages >& rxMasterPa
         DBG_ASSERT( nPageToExport >= 0 && nPageToExport < rxDrawPages->getCount(),
                     "SVGFilter::implCreateObjects: invalid page number to export" );
 
-        Reference< XDrawPage > xDrawPage;
+        if(mbExportSelection)
+        {
+            // #124608# export a given object selection
+            implCreateObjectsFromShapes(maShapeSelection);
+        }
+        else
+        {
+            // export a given xDrawPage
+            Reference< XDrawPage > xDrawPage;
 
-          rxDrawPages->getByIndex( nPageToExport ) >>= xDrawPage;
+            rxDrawPages->getByIndex(nPageToExport) >>= xDrawPage;
 
-          if( xDrawPage.is() )
-          {
-            Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
-
-            if( xMasterTarget.is() )
+            if(xDrawPage.is())
             {
-                Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
+                Reference< XMasterPageTarget > xMasterTarget(xDrawPage,UNO_QUERY);
 
-                if( xMasterPage.is() )
+                if(xMasterTarget.is())
                 {
-                    Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
+                    Reference< XDrawPage > xMasterPage(xMasterTarget->getMasterPage());
 
-                    implCreateObjectsFromBackground( xMasterPage );
+                    if(xMasterPage.is())
+                    {
+                        Reference< XShapes > xShapes(xMasterPage,UNO_QUERY);
 
-                    if( xShapes.is() )
-                        implCreateObjectsFromShapes( xShapes );
+                        implCreateObjectsFromBackground(xMasterPage);
+
+                        if(xShapes.is())
+                            implCreateObjectsFromShapes(xShapes);
+                    }
                 }
+
+                Reference< XShapes > xShapes(xDrawPage,UNO_QUERY);
+
+                if(xShapes.is())
+                    implCreateObjectsFromShapes(xShapes);
             }
-
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
-
-              if( xShapes.is() )
-                  implCreateObjectsFromShapes( xShapes );
-          }
+        }
     }
 
     return sal_True;

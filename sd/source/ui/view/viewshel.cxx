@@ -1094,7 +1094,7 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 
 
 /** Tell the FmFormShell that the view shell is closing.  Give it the
-    oportunity to prevent that.
+    opportunity to prevent that.
 */
 sal_uInt16 ViewShell::PrepareClose (bool bUI, bool bForBrowsing)
 {
@@ -1114,7 +1114,7 @@ void ViewShell::UpdatePreview (SdPage*, bool )
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something
-    // usefull is still done.
+    // useful is still done.
 }
 
 ::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const

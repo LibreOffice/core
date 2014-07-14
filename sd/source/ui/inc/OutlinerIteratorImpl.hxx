@@ -98,7 +98,7 @@ public:
             When both iterators ar equal <true/> is returned, <false/> otherwise.
     */
     virtual bool operator== (const IteratorImplBase& rIterator) const;
-    /** This method is used by the equality operator.  Additionaly to the
+    /** This method is used by the equality operator.  Additionally to the
         iterator it takes a type information which is taken into account on
         comparison.  It is part of a "multimethod" pattern.
         @param rIterator
@@ -220,7 +220,7 @@ protected:
     void SetPage (sal_Int32 nPageIndex);
 
 private:
-    /// Indicates whether a page changed occured on switching to current page.
+    /// Indicates whether a page changed occurred on switching to current page.
     bool mbPageChangeOccured;
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;

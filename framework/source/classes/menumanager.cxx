@@ -192,7 +192,7 @@ MenuManager::MenuManager(
                     AddonMenuManager::HasAddonMenuElements() )
                 {
                     sal_uInt16      nCount   = 0;
-                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
+                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame, xServiceFactory );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
@@ -907,7 +907,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         ::rtl::OUString aCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
         {
-            // Remove protocol part from command so we can use an easier comparision method
+            // Remove protocol part from command so we can use an easier comparison method
             aCommand = aCommand.copy( UNO_COMMAND.getLength() );
         }
 

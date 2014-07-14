@@ -436,7 +436,7 @@ public:
 
 private:
     /** Determine whether RTL (right to left writing) is active.  For this
-        method to return <true/> two conditions have to be fullfilled:
+        method to return <true/> two conditions have to be fulfilled:
         <ol><li>RTL is active for the whole application.</li>
         <li>RTL is enabled for the control.</li></ol>
         @return

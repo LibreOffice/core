@@ -359,7 +359,7 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 {
     if (m_bPositioning)
         return;
-    // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition, so protect agains this
+    // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition, so protect against this
     // recursion
     // 68167 - 13.08.99 - FS
     m_bPositioning = sal_True;
@@ -1304,7 +1304,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     }
     else
         nNewMode &= ~BROWSER_HIDECURSOR;
-        // should not be neccessary if EnablePermanentCursor is used to change the cursor behaviour, but to be sure ...
+        // should not be necessary if EnablePermanentCursor is used to change the cursor behaviour, but to be sure ...
 
     if (nNewMode != m_nMode)
     {
@@ -1630,7 +1630,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     // there are rows so go to the selected current column
     if (nRecordCount)
         GoToRowColumnId(0, GetColumnId(nCurPos));
-    // else stop the editing if neccessary
+    // else stop the editing if necessary
     else if (IsEditing())
         DeactivateCell();
 
@@ -1796,7 +1796,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     //
     // Now, all is consistent again.
-    // (except of the hidden column : The cycling of the cols occured on the model, not on the view. maybe
+    // (except of the hidden column : The cycling of the cols occurred on the model, not on the view. maybe
     // the user expected the latter but there really is no good argument against our method ;) ...)
     //
     // And no, this large explanation isn't just because I wanted to play a board game or something like
@@ -2275,7 +2275,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     if (bFull)
         m_xCurrentRow = NULL;
     // if we are on the same row only repaint
-    // but this is only possible for rows which are not inserted, in that case the comparision result
+    // but this is only possible for rows which are not inserted, in that case the comparison result
     // may not be correct
     else
         if  (   m_xCurrentRow.Is()
@@ -3363,7 +3363,7 @@ sal_Bool DbGridControl::SaveRow()
             // if we are appending we still sit on the insert row
             // we don't move just clear the flags not to move on the current row
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
-            TRACE_RANGE_MESSAGE1("explicit SetState after a successfull update, new state : %s", ROWSTATUS(m_xCurrentRow));
+            TRACE_RANGE_MESSAGE1("explicit SetState after a successful update, new state : %s", ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetNew(sal_False);
 
             // adjust the seekcursor if it is on the same position as the datacursor

@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <svx/fmmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -34,15 +31,10 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <svx/svdlegacy.hxx>
-
-/// OD 29.08.2002 #102450#
-/// include <svx/svdoutl.hxx>
 #include <svx/svdoutl.hxx>
-
 #ifdef DBG_UTIL
 #include <svx/fmglob.hxx>
 #endif
-
 #include "fesh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -54,9 +46,8 @@
 #include "dview.hxx"
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
-
 #include <IDocumentDrawModelAccess.hxx>
-
+#include <drawdoc.hxx>
 
 /*************************************************************************
 |*
@@ -148,7 +139,7 @@ void SwViewImp::UnlockPaint()
 |*
 |*************************************************************************/
 // OD 29.08.2002 #102450#
-// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
+// add 3rd parameter <const Color* pPageBackgrdColor> for setting this
 // color as the background color at the outliner of the draw view.
 // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text direction
 // of the page in order to set the default horizontal text direction at the

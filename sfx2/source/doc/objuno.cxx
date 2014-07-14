@@ -692,7 +692,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
         ::rtl::OUStringBuffer sMsg(256);
         sMsg.appendAscii("The property \""                                                    );
         sMsg.append     (sName                                                                );
-        sMsg.appendAscii("\" cant be removed. Its a fix property of the DocumentInfo service.");
+        sMsg.appendAscii("\" can't be removed. Its a fix property of the DocumentInfo service.");
 
         throw ::com::sun::star::beans::NotRemoveableException(
                 sMsg.makeStringAndClear(),
@@ -721,7 +721,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         lang::WrappedTargetException)
 {
     // Attention: Only fix properties should be provided by this method.
-    // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
+    // Dynamic properties has no handle in real ... because it can't be used inside multithreaded environments :-)
 
     ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
 
@@ -937,7 +937,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         lang::WrappedTargetException)
 {
     // Attention: Only fix properties should be provided by this method.
-    // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
+    // Dynamic properties has no handle in real ... because it can't be used inside multithreaded environments :-)
 
     ::osl::MutexGuard aGuard( _pImp->_aMutex );
     ::com::sun::star::uno::Any aValue;

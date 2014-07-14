@@ -446,7 +446,7 @@ bool SplashScreen::loadBitmap(
         GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
         pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
 
-        // Default case, we load the intro bitmap from a seperate file
+        // Default case, we load the intro bitmap from a separate file
         // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
         _aIntroBmp = aGraphic.GetBitmapEx();
         return true;

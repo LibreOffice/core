@@ -52,7 +52,7 @@ Sub Main
 	xIndicator2.setValue( 50 )
 
 	rem Work with indicator 3.
-	rem If working finished automaticly indicator 2 is reactivated.
+	rem If working finished automatically indicator 2 is reactivated.
 	i = 0
 	while i<300
 		xIndicator3.setText( "Indicator 3: Range=300 Value=" + i )
@@ -62,13 +62,13 @@ Sub Main
 	wend
 
 	rem Delete indicator 2 before you deactivate number 3!
-	rem The next automaticly activated indicator will be the number 1.
+	rem The next automatically activated indicator will be the number 1.
 	xIndicator2.end
-	msgbox "Indicator 3 will be destroyed. Indicator 2 was deleted ... number 1 must reactivated automaticly!"
+	msgbox "Indicator 3 will be destroyed. Indicator 2 was deleted ... number 1 must reactivated automatically!"
 	xIndicator3.end
 
 	rem Work with indicator 1.
-	rem If working finished automaticly the window will be destroyed.
+	rem If working finished automatically the window will be destroyed.
 	i = 25
 	while i<100
 		xIndicator1.setText( "Indicator 1: Range=100 Value=" + i )
@@ -82,7 +82,7 @@ Sub Main
 	xIndicator1.setText( "Indicator 1: ... set 50 % for progress" )
 	wait( 1000 )
 	xIndicator1.setValue( 50 )
-	msgbox "Indicator 1 will be destroyed. Indicator window must destroyed automaticly!"
+	msgbox "Indicator 1 will be destroyed. Indicator window must destroyed automatically!"
 	xIndicator1.end
 
 	msgbox "Test for status indicator finished successful!"

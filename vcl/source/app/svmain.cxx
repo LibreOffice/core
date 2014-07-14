@@ -632,7 +632,7 @@ void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
         0,          // stacksize 0 means default
         _threadmain,    // thread worker function
         new WorkerThreadData( pWorker, pThreadData ),       // arguments for worker function
-        0,          // 0 means: create immediatly otherwise use CREATE_SUSPENDED
+        0,          // 0 means: create immediately otherwise use CREATE_SUSPENDED
         &uThreadID );   // thread id to fill
 #else
     hThreadID = osl_createThread( MainWorkerFunction, new WorkerThreadData( pWorker, pThreadData ) );

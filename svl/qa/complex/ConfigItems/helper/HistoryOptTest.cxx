@@ -93,7 +93,7 @@ void HistoryOptTest::impl_testHistory(EHistoryType eHistory ,
         impl_clearList( );
         impl_setSize  (c);
 
-        // a) fill list completely and check if all items could be realy created.
+        // a) fill list completely and check if all items could be really created.
         //    But dont check its order here! Because every new item will change that order.
         for (i=0; i<c; ++i)
         {
@@ -150,7 +150,7 @@ void HistoryOptTest::impl_testHistory(EHistoryType eHistory ,
         //    Note: impl_setSize() will make sure that 3 items exists only.
         //    Otherwhise it throws an exception. If we further check
         //    positions of three items no further items must be checked.
-        //    They cant exists :-)
+        //    They can't exists :-)
         ::sal_Int32 nNewSize = 3;
         impl_setSize(nNewSize);
         if (
@@ -160,7 +160,7 @@ void HistoryOptTest::impl_testHistory(EHistoryType eHistory ,
            )
             throw css::uno::Exception(MESSAGE_WRONG_ORDER, 0);
 
-        // finaly we should try to clean up all used structures so the same office can be used
+        // finally we should try to clean up all used structures so the same office can be used
         // without problems :-)
         impl_clearList();
     }

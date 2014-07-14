@@ -658,6 +658,19 @@ const SwAttrSet* SwFrm::GetAttrSet() const
         return &((const SwLayoutFrm*)this)->GetFmt()->GetAttrSet();
 }
 
+//UUUU
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrm::getSdrAllFillAttributesHelper() const
+{
+    if(IsCntntFrm())
+    {
+        return static_cast< const SwCntntFrm* >(this)->GetNode()->getSdrAllFillAttributesHelper();
+    }
+    else
+    {
+        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->getSdrAllFillAttributesHelper();
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()

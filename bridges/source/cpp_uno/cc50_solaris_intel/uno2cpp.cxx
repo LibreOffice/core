@@ -208,7 +208,7 @@ static inline void cpp_call(
             nStackLongs
             );
 
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params

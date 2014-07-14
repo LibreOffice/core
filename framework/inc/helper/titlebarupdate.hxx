@@ -121,7 +121,7 @@ class TitleBarUpdate : // interfaces
                      , public css::lang::XInitialization
                      , public css::frame::XTitleChangeListener // => XEventListener
                      , public css::frame::XFrameActionListener // => XEventListener
-                       // baseclasses (order neccessary for right initialization!)
+                       // baseclasses (order necessary for right initialization!)
                      , private ThreadHelpBase
                      , public  ::cppu::OWeakObject
 {
@@ -213,7 +213,7 @@ class TitleBarUpdate : // interfaces
         //____________________________
         /** @short  set a new icon and title on the title bar of our connected frame window.
 
-            @descr  It does not check if an update is realy needed. That has to be done outside.
+            @descr  It does not check if an update is really needed. That has to be done outside.
                     It retrieves all needed informations and update the title bar - nothing less -
                     nothing more.
          */

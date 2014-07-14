@@ -492,9 +492,9 @@ public class XLIFFWriter extends DataWriter {
         return "<header></header>\n";
     }
     /**
-     * Create the begining of the line holding the body tag of this XIFFFile
+     * Create the beginning of the line holding the body tag of this XIFFFile
      *
-     * @return a string  with the begining of the body tag of this XIFFFile
+     * @return a string  with the beginning of the body tag of this XIFFFile
      */
     private String openBodyTag() {
         return "\t\t<body>\n";

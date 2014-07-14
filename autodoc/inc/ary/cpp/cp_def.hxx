@@ -50,7 +50,7 @@ namespace cpp
 
 
 
-/** Acess to C++ defines and macros in the repository.
+/** Access to C++ defines and macros in the repository.
 */
 class DefPilot
 {

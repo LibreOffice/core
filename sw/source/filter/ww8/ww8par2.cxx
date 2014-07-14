@@ -402,7 +402,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bFtnEdn = bOld;
 
         ASSERT(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
-         "footnote autonumbering must be 0x02, and everthing else must not be");
+         "footnote autonumbering must be 0x02, and everything else must not be");
 
         // If no automatic numbering use the following char from the main text
         // as the footnote number
@@ -540,7 +540,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     /*
     #i1140#
     If I have a table and apply a style to one of its frames that should cause
-    a paragraph that its applied to it to only exist as a seperate floating
+    a paragraph that its applied to it to only exist as a separate floating
     frame, then the behavour depends on which cell that it has been applied
     to. If its the first cell of a row then the whole table row jumps into the
     new frame, if its not then then the paragraph attributes are applied
@@ -636,28 +636,35 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 //   Hilfroutinen fuer Kapitelnummerierung und Aufzaehlung / Gliederung
 //---------------------------------------------------------------------
 
-static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
+static void SetBaseAnlv(
+    SwNumFmt &rNum,
+    WW8_ANLV &rAV,
+    sal_uInt8 nSwLevel )
 {
-    static SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-        SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC };
+    static SvxExtNumType eNumA[8] =
+    { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+      SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
+      SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC };
 
-    static SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
-        SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
-//          eigentlich folgende 2, aber Writer-UI bietet es nicht an
-//      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
+    static SvxAdjust eAdjA[4] =
+    { SVX_ADJUST_LEFT, SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
 
-    rNum.SetNumberingType( static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 ) ?
-                    eNumA[SVBT8ToByte( rAV.nfc ) ] : SVX_NUM_NUMBER_NONE) );
+    rNum.SetNumberingType(
+        static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 )
+            ? eNumA[SVBT8ToByte( rAV.nfc ) ]
+            : SVX_NUM_NUMBER_NONE) );
+
     if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
+    {
         rNum.SetIncludeUpperLevels(nSwLevel + 1);
+    }
     rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
-//  rNum.eNumAdjust = eAdjA[rAV.jc];
+
     rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
-    sal_Int16 nIndent = Abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
-    if( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
+    sal_Int16 nIndent = Abs( (sal_Int16) SVBT16ToShort( rAV.dxaIndent ) );
+    if ( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
         rNum.SetLSpace( nIndent );
@@ -833,8 +840,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
-                    ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
+                    ( (SwTxtFmtColl*) pAktColl )->AssignToListLevelOfOutlineStyle( nSwNumLevel );
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
                     // werden: NO_NUM : Nummerierungs-Pause,
@@ -878,11 +884,9 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
-        // <--
         aNR = *rDoc.GetOutlineNumRule();
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
@@ -2088,7 +2092,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         ApoTestResults aApo = pIo->TestApo(pIo->nInTable + 1, false, pTabPos);
 
         /*
-        ##513##, #79474# If this is not sufficent, then we should look at
+        ##513##, #79474# If this is not sufficient, then we should look at
         sprmPD{y|x}aAbs as our indicator that the following set of rows is not
         part of this table, but instead is an absolutely positioned table
         outside of this one
@@ -2266,7 +2270,7 @@ void WW8TabDesc::CalcDefaults()
             }
         }
         /*
-        Similiar to graphics and other elements word does not totally
+        Similar to graphics and other elements word does not totally
         factor the width of the border into its calculations of size, we
         do so we must adjust out widths and other dimensions to fit.  It
         appears that what occurs is that the last cell's right margin if
@@ -2336,7 +2340,7 @@ void WW8TabDesc::CalcDefaults()
         #96345#
         If the last cell was "false" then there is no valid cell following it,
         so the default mapping forward wont't work. So map it (and
-        contigious invalid cells backwards to the last valid cell instead.
+        contiguous invalid cells backwards to the last valid cell instead.
         */
         if (i && pR->bExist[i-1] == false)
         {
@@ -4036,7 +4040,10 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             rSI.n81Flags = pj->n81Flags;
             rSI.n81BiDiFlags = pj->n81BiDiFlags;
-            rSI.nOutlineLevel = pj->nOutlineLevel;
+            if ( !rSI.IsWW8BuiltInHeadingStyle() )
+            {
+                rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
+            }
             rSI.bParaAutoBefore = pj->bParaAutoBefore;
             rSI.bParaAutoAfter = pj->bParaAutoAfter;
 

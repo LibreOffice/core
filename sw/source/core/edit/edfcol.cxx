@@ -66,7 +66,7 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
 
 // --> OD 2007-11-06 #i62675#
 void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
-                                 bool bResetListAttrs )
+                                 const bool bResetListAttrs )
 {
     SwTxtFmtColl *pLocal = pFmt? pFmt: (*GetDoc()->GetTxtFmtColls())[0];
     StartAllAction();

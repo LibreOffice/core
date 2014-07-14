@@ -188,7 +188,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         {
             nOffset += nIndex;
 
-            /* break url down in '/' devided tokens tokens */
+            /* break url down in '/' divided tokens tokens */
             nIndex = rtl_ustr_indexOfChar_WithLength( ustrFileURL->buffer + nOffset, ustrFileURL->length - nOffset, (sal_Unicode) '/' );
 
             /* copy token to new string */
@@ -368,7 +368,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* adapt index to pTmp */
         nIndex += pTmp->length - ustrSystemPath->length;
 
-        /* remove all occurances of '//' */
+        /* remove all occurrences of '//' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
             if( ((sal_Unicode) '/' == pTmp->buffer[nSrcIndex]) && ((sal_Unicode) '/' == pTmp->buffer[nIndex]) )

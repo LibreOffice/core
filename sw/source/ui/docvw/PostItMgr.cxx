@@ -127,7 +127,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     SW_MOD()->GetRedlineAuthor();
 
     // collect all PostIts and redline comments that exist after loading the document
-    // don't check for existance for any of them, don't focus them
+    // don't check for existence for any of them, don't focus them
     AddPostIts(false,false);
     /*  this code can be used once we want redline comments in the Sidebar
     AddRedlineComments(false,false);
@@ -620,9 +620,9 @@ void SwPostItMgr::LayoutPostIts()
         mbLayouting = true;
 
             //loop over all pages and do the layout
-            // - create SwPostIt if neccessary
+            // - create SwPostIt if necessary
             // - place SwPostIts on their initial position
-            // - calculate neccessary height for all PostIts together
+            // - calculate necessary height for all PostIts together
             bool bUpdate = false;
             for (unsigned long n=0;n<mPages.size();n++)
             {
@@ -866,7 +866,7 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
     DBG_ASSERT((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
-    // do not scroll more than neccessary up or down
+    // do not scroll more than necessary up or down
     if ( ((mPages[aPage-1]->lOffset == 0) && (lScroll>0)) || ( BorderOverPageBorder(aPage) && (lScroll<0)) )
         return;
 
@@ -1013,7 +1013,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     bool            bDone           = false;
     bool            bScrollbars     = false;
 
-    // do all neccessary resizings
+    // do all necessary resizings
     if (lVisibleHeight < lNeededHeight)
     {
         // ok, now we have to really resize and adding scrollbars
@@ -1223,7 +1223,7 @@ void SwPostItMgr::RemoveSidebarWin()
 }
 
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
-// RemoveItem will clean up the core field and visible postit if neccessary
+// RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
 void SwPostItMgr::Delete(String aAuthor)
 {

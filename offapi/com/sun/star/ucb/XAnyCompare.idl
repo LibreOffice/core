@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
 published interface XAnyCompare: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** allows comparision of two <atom>any</atom>s.
+    /** allows comparison of two <atom>any</atom>s.
 
         @param Any1
         is the first compare value

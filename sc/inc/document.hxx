@@ -722,7 +722,7 @@ public:
 
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
-        @return  true = DDE link found; false = Unpredictable error occured, no DDE link created. */
+        @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
     SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, ScMatrix* pResults = NULL );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
@@ -980,7 +980,7 @@ public:
     void            InvalidateTableArea();
 
     /*
-    Get the last cell's row number , which have visual atribute or visual data in specific table
+    Get the last cell's row number , which have visual attribute or visual data in specific table
     */
     SC_DLLPUBLIC void           GetLastAttrCell( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
 
@@ -1435,7 +1435,7 @@ public:
     SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize = true) const;
 
     // returns whether to export a Default style for this col/row or not
-    // nDefault is setted to one possition in the current row/col where the Default style is
+    // nDefault is setted to one position in the current row/col where the Default style is
     sal_Bool            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
     sal_Bool            GetRowDefault( SCTAB nTab, SCROW nRow, SCCOL nLastCol, SCCOL& nDefault);
 
