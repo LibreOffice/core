@@ -1423,17 +1423,6 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
 
-#if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
-        if ( ( rKEvent.GetKeyCode().GetCode() == KEY_W ) && rKEvent.GetKeyCode().IsMod1() && rKEvent.GetKeyCode().IsMod2() )
-        {
-            SetRightToLeft( !IsRightToLeft() );
-        }
-    }
-#endif
-
     if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
