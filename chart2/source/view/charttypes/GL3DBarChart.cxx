@@ -170,7 +170,6 @@ namespace {
 
 const float TEXT_HEIGHT = 10.0f;
 float DEFAULT_CAMERA_HEIGHT = 500.0f;
-const sal_uLong TIMEOUT = 5;
 const sal_uInt32 ID_STEP = 10;
 
 #if 0
