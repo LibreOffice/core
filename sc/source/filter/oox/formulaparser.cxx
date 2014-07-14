@@ -472,7 +472,6 @@ protected:
     size_t              appendWhiteSpaceTokens( const WhiteSpaceVec* pSpaces );
     size_t              insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, size_t nIndexFromEnd );
 
-    size_t              getOperandSize( size_t nOpCountFromEnd, size_t nOpIndex ) const;
     void                pushOperandSize( size_t nSize );
     size_t              popOperandSize();
 
@@ -723,13 +722,6 @@ size_t FormulaParserImpl::insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, 
         for( WhiteSpaceVec::const_iterator aIt = pSpaces->begin(), aEnd = pSpaces->end(); aIt != aEnd; ++aIt )
             insertRawToken( OPCODE_SPACES, nIndexFromEnd ) <<= aIt->first;
     return pSpaces ? pSpaces->size() : 0;
-}
-
-size_t FormulaParserImpl::getOperandSize( size_t nOpCountFromEnd, size_t nOpIndex ) const
-{
-    OSL_ENSURE( (nOpIndex < nOpCountFromEnd) && (nOpCountFromEnd <= maOperandSizeStack.size()),
-        "FormulaParserImpl::getOperandSize - invalid parameters" );
-    return maOperandSizeStack[ maOperandSizeStack.size() - nOpCountFromEnd + nOpIndex ];
 }
 
 void FormulaParserImpl::pushOperandSize( size_t nSize )
