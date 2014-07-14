@@ -402,7 +402,9 @@ class ScChangeActionIns : public ScChangeAction
 {
     friend class ScChangeTrack;
 
-                                ScChangeActionIns( const ScRange& rRange );
+    bool mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
+
+    ScChangeActionIns( const ScRange& rRange, bool bEndOfList = false );
     virtual                     ~ScChangeActionIns();
 
     virtual void                AddContent( ScChangeActionContent* ) {}
@@ -413,17 +415,21 @@ class ScChangeActionIns : public ScChangeAction
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
 public:
-    ScChangeActionIns(const sal_uLong nActionNumber,
-            const ScChangeActionState eState,
-            const sal_uLong nRejectingNumber,
-            const ScBigRange& aBigRange,
-            const OUString& aUser,
-            const DateTime& aDateTime,
-            const OUString &sComment,
-            const ScChangeActionType eType); // only to use in the XML import
+    ScChangeActionIns(
+        const sal_uLong nActionNumber,
+        const ScChangeActionState eState,
+        const sal_uLong nRejectingNumber,
+        const ScBigRange& aBigRange,
+        const OUString& aUser,
+        const DateTime& aDateTime,
+        const OUString &sComment,
+        const ScChangeActionType eType,
+        bool bEndOfList = false );
 
     virtual void GetDescription(
         OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
+
+    SC_DLLPUBLIC bool IsEndOfList() const;
 };
 
 //  ScChangeActionDel
@@ -1123,7 +1129,7 @@ public:
     // Only use the following two if there is no different solution! (Assign
     // string for NewValue or creation of a formula respectively)
 
-    SC_DLLPUBLIC void AppendInsert( const ScRange& );
+    SC_DLLPUBLIC void AppendInsert( const ScRange& rRange, bool bEndOfList = false );
 
                                 // pRefDoc may be NULL => no lookup of contents
                                 // => no generation of deleted contents

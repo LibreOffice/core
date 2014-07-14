@@ -95,10 +95,10 @@ void XclImpChangeTrack::DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLas
         DoAcceptRejectAction( pChangeTrack->GetAction( nIndex ) );
 }
 
-void XclImpChangeTrack::DoInsertRange( const ScRange& rRange )
+void XclImpChangeTrack::DoInsertRange( const ScRange& rRange, bool bEndOfList )
 {
     sal_uInt32 nFirst = pChangeTrack->GetActionMax() + 1;
-    pChangeTrack->AppendInsert( rRange );
+    pChangeTrack->AppendInsert(rRange, bEndOfList);
     sal_uInt32 nLast = pChangeTrack->GetActionMax();
     DoAcceptRejectAction( nFirst, nLast );
 }
@@ -299,7 +299,8 @@ void XclImpChangeTrack::ReadChTrInsert()
         ScRange aRange;
         aRange.aStart.SetTab( ReadTabNum() );
         aRange.aEnd.SetTab( aRange.aStart.Tab() );
-        pStrm->Ignore( 2 );
+        sal_uInt16 nFlags = pStrm->ReaduInt16();
+        bool bEndOfList = (nFlags & 0x0001); // row auto-inserted at the bottom.
         Read2DRange( aRange );
 
         if( aRecHeader.nOpCode & EXC_CHTR_OP_COLFLAG )
@@ -316,7 +317,7 @@ void XclImpChangeTrack::ReadChTrInsert()
             if( aRecHeader.nOpCode & EXC_CHTR_OP_DELFLAG )
                 DoDeleteRange( aRange );
             else
-                DoInsertRange( aRange );
+                DoInsertRange(aRange, bEndOfList);
         }
     }
 }
@@ -428,7 +429,7 @@ void XclImpChangeTrack::ReadChTrInsertTab()
         if( pStrm->IsValid() )
         {
             nTabIdCount++;
-            DoInsertRange( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab ) );
+            DoInsertRange(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), false);
         }
     }
 }

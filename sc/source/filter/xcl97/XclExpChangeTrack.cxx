@@ -1118,7 +1118,10 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rcc );
 }
 
-//___________________________________________________________________
+XclExpChTrInsert::XclExpChTrInsert( const XclExpChTrInsert& rCopy ) :
+    XclExpChTrAction(rCopy),
+    mbEndOfList(rCopy.mbEndOfList),
+    aRange(rCopy.aRange) {}
 
 XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
@@ -1126,13 +1129,20 @@ XclExpChTrInsert::XclExpChTrInsert(
         const XclExpChTrTabIdBuffer& rTabIdBuffer,
         ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer ),
+    mbEndOfList(false),
     aRange( rAction.GetBigRange().MakeRange() )
 {
     nLength = 0x00000030;
     switch( rAction.GetType() )
     {
         case SC_CAT_INSERT_COLS:    nOpCode = EXC_CHTR_OP_INSCOL;   break;
-        case SC_CAT_INSERT_ROWS:    nOpCode = EXC_CHTR_OP_INSROW;   break;
+        case SC_CAT_INSERT_ROWS:
+        {
+            const ScChangeActionIns& rIns = static_cast<const ScChangeActionIns&>(rAction);
+            mbEndOfList = rIns.IsEndOfList();
+            nOpCode = EXC_CHTR_OP_INSROW;
+        }
+        break;
         case SC_CAT_DELETE_COLS:    nOpCode = EXC_CHTR_OP_DELCOL;   break;
         case SC_CAT_DELETE_ROWS:    nOpCode = EXC_CHTR_OP_DELROW;   break;
         default:
@@ -1164,7 +1174,8 @@ XclExpChTrInsert::~XclExpChTrInsert()
 void XclExpChTrInsert::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
-    rStrm   << (sal_uInt16) 0x0000;
+    sal_uInt16 nFlagVal = mbEndOfList ? 0x0001 : 0x0000;
+    rStrm << nFlagVal;
     Write2DRange( rStrm, aRange );
     rStrm   << (sal_uInt32) 0x00000000;
 }

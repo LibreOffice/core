@@ -660,8 +660,9 @@ void ScChangeAction::AddDependent( sal_uLong nActionNumber,
 }
 
 //  ScChangeActionIns
-ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
-        : ScChangeAction( SC_CAT_NONE, rRange )
+ScChangeActionIns::ScChangeActionIns( const ScRange& rRange, bool bEndOfList ) :
+    ScChangeAction(SC_CAT_NONE, rRange),
+    mbEndOfList(bEndOfList)
 {
     if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
     {
@@ -692,8 +693,10 @@ ScChangeActionIns::ScChangeActionIns(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
     const OUString& aUserP, const DateTime& aDateTimeP,
-    const OUString& sComment, const ScChangeActionType eTypeP) :
-    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
+    const OUString& sComment, const ScChangeActionType eTypeP,
+    bool bEndOfList ) :
+    ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
+    mbEndOfList(bEndOfList)
 {
 }
 
@@ -734,6 +737,11 @@ void ScChangeActionIns::GetDescription(
         aBuf.append(rStr).append(aRsc);
         rStr = aBuf.makeStringAndClear();
     }
+}
+
+bool ScChangeActionIns::IsEndOfList() const
+{
+    return mbEndOfList;
 }
 
 bool ScChangeActionIns::Reject( ScDocument* pDoc )
@@ -2826,9 +2834,9 @@ ScChangeActionContent* ScChangeTrack::AppendContentOnTheFly(
     return pAct;
 }
 
-void ScChangeTrack::AppendInsert( const ScRange& rRange )
+void ScChangeTrack::AppendInsert( const ScRange& rRange, bool bEndOfList )
 {
-    ScChangeActionIns* pAct = new ScChangeActionIns( rRange );
+    ScChangeActionIns* pAct = new ScChangeActionIns(rRange, bEndOfList);
     Append( pAct );
 }
 
@@ -4458,18 +4466,20 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             case SC_CAT_INSERT_COLS:
             case SC_CAT_INSERT_ROWS:
             case SC_CAT_INSERT_TABS:
-                {
-                    pClonedAction = new ScChangeActionIns(
-                        pAction->GetActionNumber(),
-                        pAction->GetState(),
-                        pAction->GetRejectAction(),
-                        pAction->GetBigRange(),
-                        pAction->GetUser(),
-                        pAction->GetDateTimeUTC(),
-                        pAction->GetComment(),
-                        pAction->GetType() );
-                }
-                break;
+            {
+                bool bEndOfList = static_cast<const ScChangeActionIns*>(pAction)->IsEndOfList();
+                pClonedAction = new ScChangeActionIns(
+                    pAction->GetActionNumber(),
+                    pAction->GetState(),
+                    pAction->GetRejectAction(),
+                    pAction->GetBigRange(),
+                    pAction->GetUser(),
+                    pAction->GetDateTimeUTC(),
+                    pAction->GetComment(),
+                    pAction->GetType(),
+                    bEndOfList );
+            }
+            break;
             case SC_CAT_DELETE_COLS:
             case SC_CAT_DELETE_ROWS:
             case SC_CAT_DELETE_TABS:

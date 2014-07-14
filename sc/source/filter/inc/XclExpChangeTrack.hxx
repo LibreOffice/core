@@ -516,11 +516,12 @@ public:
 
 class XclExpChTrInsert : public XclExpChTrAction
 {
+    bool mbEndOfList;
+
 protected:
     ScRange                     aRange;
 
-                                XclExpChTrInsert( const XclExpChTrInsert& rCopy ) :
-                                    XclExpChTrAction( rCopy ), aRange( rCopy.aRange ) {}
+    XclExpChTrInsert( const XclExpChTrInsert& rCopy );
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const;
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
