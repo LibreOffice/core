@@ -1146,7 +1146,7 @@ String STR_TASKPANEL_LAYOUT_MENU_TITLE
 };
 String STR_GRAPHICS_STYLE_FAMILY
 {
-    Text [ en-US ] = "Image Styles";
+    Text [ en-US ] = "Drawing Object Styles";
 };
 String STR_CELL_STYLE_FAMILY
 {
