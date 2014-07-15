@@ -1928,6 +1928,8 @@ void ScXMLExport::_ExportContent()
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
         OSL_FAIL("no shared data setted");
+        if (!pSharedData)
+            return;
     }
     ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
     if (!GetModel().is())
