@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#if defined(WNT)
+#include <windows.h>
+#endif
+
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -40,6 +44,15 @@
 
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
+
+#if defined(WNT)
+OString Win_AddLongPathPrefix( const OString &rPathName )
+{
+#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
+  if (!rPathName.match(WIN32_LONG_PATH_PREFIX)) return WIN32_LONG_PATH_PREFIX + rPathName;
+  return rPathName;
+}
+#endif //defined(WNT)
 
 // build list of old style diuctionaries (not as extensions) to use.
 // User installed dictionaries (the ones residing in the user paths)
