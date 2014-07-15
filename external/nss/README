@@ -75,3 +75,19 @@ sqlite. Therefore we deliver it into lib/sqlite on unix systems.
 
 See also issue:
 [https://issues.apache.org/ooo/show_bug.cgi?id=106132]
+
+== system NSS on Linux ==
+
+Note that different Linux distributions use different SONAMEs for the
+NSS libraries, so it is not possible to use --with-system-nss and build
+a portable generic LO installation set, despite NSS upstream apparently
+maintaining ABI compatibility.
+
+Debian Squeeze:
+0x000000000000000e (SONAME)             Library soname: [libnss3.so.1d]
+Fedora 20:
+0x000000000000000e (SONAME)             Library soname: [libnss3.so]
+
+For the record, the LSB specified SONAME is libnss3.so
+http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/libnss3.html
+
