@@ -2190,7 +2190,7 @@ DECLARE_OOXMLIMPORT_TEST(testBnc875718, "bnc875718.docx")
     // Also check that the footer contents are not in the body text.
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> text(textDocument->getText(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "Text\n" ), text->getString());
+    CPPUNIT_ASSERT_EQUAL( OUString( "Text" ), text->getString());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testCaption, "caption.docx")

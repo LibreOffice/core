@@ -208,7 +208,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextTab(false),
         m_bFrameBtLr(false),
         m_bIsSplitPara(false),
-        m_vTextFramesForChaining()
+        m_vTextFramesForChaining(),
+        m_bParaHadField(false)
 
 {
     appendTableManager( );
@@ -1112,7 +1113,27 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                         rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
                 }
                 else
+                {
+                    uno::Reference<text::XTextCursor> xCursor;
+                    if (m_bParaHadField)
+                    {
+                        // Workaround to make sure char props of the field are not lost.
+                        OUString sMarker("X");
+                        xCursor = xTextAppend->getText()->createTextCursor();
+                        if (xCursor.is())
+                            xCursor->gotoEnd(false);
+                        PropertyMapPtr pEmpty(new PropertyMap());
+                        appendTextPortion("X", pEmpty);
+                    }
+
                     xTextRange = xTextAppend->finishParagraph( aProperties );
+
+                    if (xCursor.is())
+                    {
+                        xCursor->goLeft(1, true);
+                        xCursor->setString(OUString());
+                    }
+                }
                 getTableManager( ).handle(xTextRange);
 
                 // Get the end of paragraph character inserted
@@ -1153,6 +1174,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     }
 
     SetIsOutsideAParagraph(true);
+    m_bParaHadField = false;
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
@@ -2426,6 +2448,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
+    m_bParaHadField = true;
     if(m_bDiscardHeaderFooter)
         return;
 #ifdef DEBUG_DOMAINMAPPER
@@ -3134,6 +3157,7 @@ void DomainMapper_Impl::handleToc
         }
     }
     pContext->SetTOC( xTOC );
+    m_bParaHadField = false;
 
     OUString sMarker("Y");
     //insert index
@@ -3171,6 +3195,7 @@ void DomainMapper_Impl::handleBibliography
         xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
 
     pContext->SetTOC( xTOC );
+    m_bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
@@ -3215,6 +3240,7 @@ void DomainMapper_Impl::handleIndex
         }
     }
     pContext->SetTOC( xTOC );
+    m_bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );

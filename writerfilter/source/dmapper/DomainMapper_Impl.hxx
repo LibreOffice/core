@@ -812,6 +812,8 @@ public:
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
+    /// Current paragraph had at least one field in it.
+    bool m_bParaHadField;
 };
 
 // export just for test
