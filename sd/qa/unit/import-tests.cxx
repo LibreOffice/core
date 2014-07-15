@@ -29,6 +29,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 
@@ -69,6 +70,7 @@ public:
     void testN862510_2();
     void testN862510_4();
     void testBnc870237();
+    void testBnc887225();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -87,6 +89,7 @@ public:
     CPPUNIT_TEST(testN862510_2);
     CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testBnc870237);
+    CPPUNIT_TEST(testBnc887225);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -546,6 +549,54 @@ void SdFiltersTest::testBnc870237()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextRightDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLeftDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc887225()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx") );
+    // In the document, lastRow and lastCol table properties are used.
+    // Make sure styles are set properly for individual cells.
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(2));
+    CPPUNIT_ASSERT( pTableObj );
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    sal_Int32 nColor;
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+
+    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+
+    xCell.set(xTable->getCellByPosition(1, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13754095), nColor);
+
+    xCell.set(xTable->getCellByPosition(1, 2), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15331319), nColor);
+
+    xCell.set(xTable->getCellByPosition(1, 4), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+
+    xCell.set(xTable->getCellByPosition(3, 2), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
+
+    xCell.set(xTable->getCellByPosition(3, 4), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6003669), nColor);
 
     xDocShRef->DoClose();
 }
