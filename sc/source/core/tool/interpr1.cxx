@@ -2608,10 +2608,10 @@ void ScInterpreter::ScIsNV()
         case svSingleRef :
         {
             ScAddress aAdr;
-            PopDoubleRefOrSingleRef( aAdr );
+            bool bOk = PopDoubleRefOrSingleRef( aAdr );
             if ( nGlobalError == NOTAVAILABLE )
                 nRes = true;
-            else
+            else if (bOk)
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
