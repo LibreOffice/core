@@ -258,35 +258,6 @@ static void printSettings( const boost::unordered_map<string,string>& rSettings 
 }
 #endif
 
-bool save_crash_report( const string& rFileName, const boost::unordered_map< string, string >& /*rSettings*/ )
-{
-    bool bSuccess = false;
-    FILE    *fpout = fopen( rFileName.c_str(), "w" );
-
-    if ( fpout )
-    {
-        FILE *fpin = fopen( g_szStackFile, "r" );
-
-        if ( fpin )
-        {
-            char    buf[1024];
-
-            while (fgets(buf, sizeof(buf), fpin) != NULL)
-            {
-                fputs(buf, fpout);
-            }
-
-            bSuccess = true;
-
-            fclose ( fpin );
-        }
-
-        fclose( fpout );
-    }
-
-    return bSuccess;
-}
-
 bool SendHTTPRequest(
                 FILE *fp,
                 const char *pszServer,
@@ -513,45 +484,6 @@ bool send_crash_report( const boost::unordered_map< string, string >& rSettings 
     unlink( g_szReportFile );
 
     return bSuccess;
-}
-
-
-static bool append_file( const char *filename, string& rString )
-{
-    FILE *fp = fopen( filename, "r" );
-    if ( fp )
-    {
-        char buf[1024];
-        while (fgets(buf, sizeof(buf), fp) != NULL)
-        {
-            rString.append( buf );
-        }
-        fclose( fp );
-        return true;
-    }
-
-    return false;
-}
-
-string crash_get_details( const boost::unordered_map< string, string >& rSettings )
-{
-    string aRet;
-
-    write_description( rSettings );
-    write_report( rSettings );
-
-    aRet.append( rSettings.find( "TITLE" )->second.c_str() );
-    aRet.append( "\n\n" );
-    append_file( g_szDescriptionFile, aRet );
-    aRet.append( "\n\n-------\n\n" );
-    append_file( g_szReportFile, aRet );
-    aRet.append( "\n\n-------\n\n" );
-    append_file( g_szStackFile, aRet );
-
-    unlink( g_szDescriptionFile );
-    unlink( g_szReportFile );
-
-    return aRet;
 }
 
 
