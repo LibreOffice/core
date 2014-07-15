@@ -60,6 +60,7 @@
 #include <hints.hxx>
 #include <crsrsh.hxx>
 #include <fmtflcnt.hxx>
+#include <docedt.hxx>
 #include <unotools/charclass.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <svl/stritem.hxx>
@@ -71,9 +72,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-extern void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev );
-extern void sw_JoinText( SwPaM& rPam, bool bJoinPrev );
-//local functions originally from sw/source/core/docnode/ndcopy.cxx
 namespace
 {
     // Copy method from SwDoc
