@@ -23,6 +23,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.mingw.patch.3) \
 ))
 
+# nss-pem is only needed for internal curl to read the NSS CA database
+ifeq ($(SYSTEM_CURL),)
+$(eval $(call gb_UnpackedTarball_add_patches,nss,\
+	external/nss/nss-pem.patch \
+))
+endif
+
 ifeq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=address,$(CC)),TRUE-fsanitize=address)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/asan.patch.1 \

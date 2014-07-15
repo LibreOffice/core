@@ -58,4 +58,20 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 ))
 endif
 
+ifeq ($(SYSTEM_CURL),)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/libnsspem.dylib \
+))
+else ifeq ($(OS),WNT)
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/nsspem.dll \
+))
+else # OS!=WNT/MACOSX
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/libnsspem.so \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
