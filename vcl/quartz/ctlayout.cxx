@@ -380,6 +380,60 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // draw the text
     CTLineDraw( ctline, rAquaGraphics.mrContext );
 
+    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+    {
+        CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
+        CFIndex runCount = CFArrayGetCount(runArray);
+
+        CFIndex runIndex = 0;
+        CTLineRef ctlinebullet = 0;
+        OUString sBullet((sal_Unicode)0xb7); // centered bullet
+
+        for (; runIndex < runCount; runIndex++)
+        {
+
+            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
+            CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+
+            CGPoint position;
+            CFIndex runGlyphIndex = 0;
+            CFIndex stringIndice = 0;
+
+            for (; runGlyphIndex < runGlyphCount; runGlyphIndex++)
+            {
+                CFRange glyphRange = CFRangeMake(runGlyphIndex, 1);
+
+                CTRunGetStringIndices( run, glyphRange, &stringIndice );
+                UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
+                if(curChar == ' ')
+                {
+                    CTRunGetPositions(run, glyphRange, &position);
+                    // print a dot
+                    if(!ctlinebullet)
+                    {
+                        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+                                                                                  sBullet.getStr(),
+                                                                                  1,
+                                                                                  kCFAllocatorNull );
+                        // CFAttributedStringCreate copies the attribues parameter
+                        CFAttributedStringRef bulletAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
+                        ctlinebullet = CTLineCreateWithAttributedString( bulletAttrString );
+                        CFRelease( aCFText);
+                        CFRelease( bulletAttrString);
+                        RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                        CGContextSetFillColor( rAquaGraphics.mrContext, bulletColor.AsArray() );
+                    }
+                    CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x + position.x, position.y + aTextPos.y );
+                    CTLineDraw(ctlinebullet, rAquaGraphics.mrContext);
+                }
+            }
+        }
+        if(ctlinebullet)
+        {
+            CFRelease(ctlinebullet);
+        }
+    }
+
     // restore the original graphic context transformations
     SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << rAquaGraphics.mrContext << ")" );
     CGContextRestoreGState( rAquaGraphics.mrContext );
