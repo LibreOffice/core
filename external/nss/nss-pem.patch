@@ -1506,10 +1506,10 @@ index 0000000..30b1174
 +}
 diff --git a/a/nss/lib/ckfw/pem/pinst.c b/b/nss/lib/ckfw/pem/pinst.c
 new file mode 100644
-index 0000000..813810c
+index 0000000..9c98e89
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/pinst.c
-@@ -0,0 +1,766 @@
+@@ -0,0 +1,768 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -1549,6 +1549,7 @@ index 0000000..813810c
 +#include <stdlib.h>
 +#include "ckpem.h"
 +#include "blapi.h"
++#include "prprf.h"
 +
 +/*
 + * pinstance.c
@@ -1901,6 +1902,7 @@ index 0000000..813810c
 +                  int objid, CK_SLOT_ID slotID, PRBool *pAdded)
 +{
 +    int i;
++    pemInternalObject *io;
 +
 +    /* FIXME: copy-pasted from CreateObject */
 +    const char *nickname = strrchr(filename, '/');
@@ -1939,7 +1941,7 @@ index 0000000..813810c
 +    }
 +
 +    /* object not found, we need to create it */
-+    pemInternalObject *io = CreateObject(objClass, type, certDER, keyDER,
++    io = CreateObject(objClass, type, certDER, keyDER,
 +                                         filename, objid, slotID);
 +    if (io == NULL)
 +        return NULL;
@@ -1996,7 +1998,7 @@ index 0000000..813810c
 +            char nickname[1024];
 +            objid = pem_nobjs + 1;
 +
-+            snprintf(nickname, 1024, "%s - %d", certfile, i);
++            PR_snprintf(nickname, 1024, "%s - %d", certfile, i);
 +
 +            o = AddObjectIfNeeded(CKO_CERTIFICATE, pemCert, objs[i], NULL,
 +                                   nickname, 0, slotID, NULL);
@@ -2278,10 +2280,10 @@ index 0000000..813810c
 +};
 diff --git a/a/nss/lib/ckfw/pem/pobject.c b/b/nss/lib/ckfw/pem/pobject.c
 new file mode 100644
-index 0000000..48f72d0
+index 0000000..a13e531
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/pobject.c
-@@ -0,0 +1,1239 @@
+@@ -0,0 +1,1240 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -2322,6 +2324,7 @@ index 0000000..48f72d0
 +#include "ckpem.h"
 +#include "secasn1.h"
 +#include "certt.h"
++#include "prprf.h"
 +#include "pk11pub.h"
 +
 +/*
@@ -3412,7 +3415,7 @@ index 0000000..48f72d0
 +                char nickname[1024];
 +                objid = pem_nobjs + 1;
 +
-+                snprintf(nickname, 1024, "%s - %d", filename, c);
++                PR_snprintf(nickname, 1024, "%s - %d", filename, c);
 +
 +                if (c)
 +                    APPEND_LIST_ITEM(listItem);
@@ -4622,10 +4625,10 @@ index 0000000..70c5407
 +}
 diff --git a/a/nss/lib/ckfw/pem/pslot.c b/b/nss/lib/ckfw/pem/pslot.c
 new file mode 100644
-index 0000000..1a7d062
+index 0000000..2f9901b
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/pslot.c
-@@ -0,0 +1,182 @@
+@@ -0,0 +1,183 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -4664,6 +4667,7 @@ index 0000000..1a7d062
 + * ***** END LICENSE BLOCK ***** */
 +
 +#include "ckpem.h"
++#include "prprf.h"
 +
 +/*
 + * pslot.c
@@ -4690,7 +4694,7 @@ index 0000000..1a7d062
 +    slotID = nssCKFWSlot_GetSlotID(fwSlot);
 +
 +    slotid = (char *) nss_ZAlloc(arena, 256);
-+    snprintf(slotid, 256, "PEM Slot #%ld", slotID);
++    PR_snprintf(slotid, 256, "PEM Slot #%ld", slotID);
 +
 +    return (NSSUTF8 *) slotid;
 +}
@@ -4810,10 +4814,10 @@ index 0000000..1a7d062
 +};
 diff --git a/a/nss/lib/ckfw/pem/ptoken.c b/b/nss/lib/ckfw/pem/ptoken.c
 new file mode 100644
-index 0000000..67b5f10
+index 0000000..6c35b21
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/ptoken.c
-@@ -0,0 +1,333 @@
+@@ -0,0 +1,334 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -4852,6 +4856,7 @@ index 0000000..67b5f10
 + * ***** END LICENSE BLOCK ***** */
 +
 +#include "ckpem.h"
++#include "prprf.h"
 +
 +/*
 + * ptoken.c
@@ -4882,7 +4887,7 @@ index 0000000..67b5f10
 +    slotID = nssCKFWSlot_GetSlotID(fwSlot);
 +
 +    tokenid = (char *) nss_ZAlloc(arena, 256);
-+    snprintf(tokenid, 256, "PEM Token #%ld", slotID);
++    PR_snprintf(tokenid, 256, "PEM Token #%ld", slotID);
 +
 +    return (NSSUTF8 *) tokenid;
 +}
