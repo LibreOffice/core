@@ -860,6 +860,7 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     if( pAutoFormatEntry )
     {
         mxAutoFill.reset( new FillProperties );
+        mxAutoFill->moFillType = XML_noFill;
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
                 *mxAutoFill = *pFillProps;
