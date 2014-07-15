@@ -108,7 +108,6 @@
 #define RID_SVXPAGE_COLOR                   (RID_SVX_START +  60)
 #define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
 #define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
-#define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
 #define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)//?
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
 
@@ -441,6 +440,7 @@
 #define RID_SVXSTR_LOADACCELCONFIG                          (RID_SVX_START + 1262)
 #define RID_SVXSTR_SAVEACCELCONFIG                          (RID_SVX_START + 1263)
 #define RID_SVXSTR_FILTERNAME_CFG                           (RID_SVX_START + 1264)
+#define RID_SVXSTR_LOAD_ERROR                               (RID_SVX_START + 1265)
 
 #endif
 
