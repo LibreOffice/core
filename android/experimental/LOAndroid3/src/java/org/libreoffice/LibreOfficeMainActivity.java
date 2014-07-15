@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -16,6 +17,7 @@ import org.mozilla.gecko.gfx.LayerController;
 public class LibreOfficeMainActivity extends Activity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
+    private static final String DEFAULT_DOC_PATH = "/assets/test1.odt";
 
     private LinearLayout mMainLayout;
     private RelativeLayout mGeckoLayout;
@@ -61,6 +63,14 @@ public class LibreOfficeMainActivity extends Activity {
 
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - onCreate");
 
+        String inputFile = new String();
+        if (getIntent().getData() != null) {
+            inputFile = getIntent().getData().getEncodedPath();
+        }
+        else {
+            inputFile = DEFAULT_DOC_PATH;
+        }
+
         setContentView(R.layout.activity_main);
 
         // setup gecko layout
@@ -78,7 +88,7 @@ public class LibreOfficeMainActivity extends Activity {
             mGeckoLayout.addView(mLayerController.getView(), 0);
         }
 
-        sLOKitThread = new LOKitThread();
+        sLOKitThread = new LOKitThread(inputFile);
         sLOKitThread.start();
 
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - UI almost up");

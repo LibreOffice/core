@@ -19,8 +19,10 @@ public class LOKitThread extends Thread {
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
+    private String mInputFile;
 
-    LOKitThread() {
+    LOKitThread(String inputFile) {
+        mInputFile = inputFile;
     }
 
     private boolean draw() throws InterruptedException {
@@ -86,7 +88,7 @@ public class LOKitThread extends Thread {
 
     private void initialize() {
         mApplication = LibreOfficeMainActivity.mAppContext;
-        mTileProvider = new LOKitTileProvider(mApplication.getLayerController());
+        mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), mInputFile);
     }
 
     public void run() {

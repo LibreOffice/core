@@ -33,14 +33,13 @@ public class LOKitTileProvider implements TileProvider {
         return (input / dpi) * 1440.0;
     }
 
-    public LOKitTileProvider(LayerController layerController) {
+    public LOKitTileProvider(LayerController layerController, String input) {
         mLayerController = layerController;
         mDPI = (double) LOKitShell.getDpi();
         LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
         LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
-        String input = "/assets/test1.odt";
         mDocument = mOffice.documentLoad(input);
 
         mTileWidth  = pixelToTwip(TILE_SIZE, mDPI);
