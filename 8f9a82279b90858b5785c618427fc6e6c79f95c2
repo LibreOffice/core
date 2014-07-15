@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_3faa8f1a",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T09:40:01Z",
+      "side": 1,
+      "message": "Here you\u0027re explaining your change, but that comment only makes sense if you can read both the removed lines and the added ones. Please put such comments in the commit message -- if you just read the new version of the file, the reader will have no idea what your comment means.",
+      "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_1fa7cb50",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3496,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T09:40:01Z",
+      "side": 1,
+      "message": "Makes sense.",
+      "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_ff62d715",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T09:40:01Z",
+      "side": 1,
+      "message": "The original testcase ensures that we have a shape, and inside the shape, the paragraph in the A1 cell has 0 \"after\" spacing.\n\nIf you change the exporter so that floating tables are exported as such and not via shape + table, that\u0027s fine. But why your change affects the contents of a cell? Sounds like this part of the test should not be adjusted, but if \"after\" spacing of the paragraph is lost, then that should be fixed as the failing testcase helpfully makes you notice this problem.",
+      "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
