@@ -3526,10 +3526,10 @@ index 0000000..a13e531
 +}
 diff --git a/a/nss/lib/ckfw/pem/prsa.c b/b/nss/lib/ckfw/pem/prsa.c
 new file mode 100644
-index 0000000..f0e069c
+index 0000000..d42e9f7
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/prsa.c
-@@ -0,0 +1,699 @@
+@@ -0,0 +1,702 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -3573,6 +3573,9 @@ index 0000000..f0e069c
 +#include "nssckmdt.h"
 +
 +#define SSL3_SHAMD5_HASH_SIZE  36       /* LEN_MD5 (16) + LEN_SHA1 (20) */
++
++SEC_ASN1_MKSUB(SEC_AnyTemplate)
++SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
 +
 +/*
 + * prsa.c
