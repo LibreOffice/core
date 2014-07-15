@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_df995321",
+        "filename": "sal/osl/unx/mutex.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-07-15T07:47:13Z",
+      "side": 0,
+      "message": "Was \"! defined __clang__\" check removed intentionally? Mention it in commit message?",
+      "range": {
+        "startLine": 33,
+        "startChar": 21,
+        "endLine": 33,
+        "endChar": 40
+      },
+      "revId": "f3d7734af45f30a87d6de76aa3de7593d541bdc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
