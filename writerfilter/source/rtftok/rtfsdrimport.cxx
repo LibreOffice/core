@@ -269,6 +269,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
             nType = i->second.toInt32();
             switch (nType)
             {
+            case ESCHER_ShpInst_PictureFrame:
+                createShape("com.sun.star.drawing.GraphicObjectShape", xShape, xPropertySet);
+                break;
             case ESCHER_ShpInst_Line:
                 createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
                 break;
@@ -653,15 +656,23 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
             xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
     }
 
+    if (m_aParents.size() && m_aParents.top().is() && !m_bTextFrame)
+        m_aParents.top()->add(xShape);
+
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
     {
+        assert(!m_bTextFrame);
         if (bPib)
-            m_rImport.resolvePict(false);
+        {
+            m_rImport.resolvePict(false, xShape);
+        }
+        else // ??? not sure if the early return should be removed on else?
+        {
+            m_xShape = xShape; // store it for later resolvePict call
+        }
         return;
     }
 
-    if (m_aParents.size() && m_aParents.top().is() && !m_bTextFrame)
-        m_aParents.top()->add(xShape);
     if (bCustom && xShape.is())
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
