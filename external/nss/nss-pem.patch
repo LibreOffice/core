@@ -893,6 +893,76 @@ index 0000000..1547bf4
 +#define NSS_CKPEM_FIRMWARE_VERSION_MINOR 0
 +
 +#endif /* NSSCKBI_H */
+diff --git a/a/nss/lib/ckfw/pem/nsspem.rc b/b/nss/lib/ckfw/pem/nsspem.rc
+new file mode 100644
+index 0000000..eb208d6
+--- /dev/null
++++ b/b/nss/lib/ckfw/pem/nsspem.rc
+@@ -0,0 +1,64 @@
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#include "nsspem.h"
++#include <winver.h>
++
++#define MY_LIBNAME "nsspem"
++#define MY_FILEDESCRIPTION "NSS PEM support"
++
++#ifdef _DEBUG
++#define MY_DEBUG_STR " (debug)"
++#define MY_FILEFLAGS_1 VS_FF_DEBUG
++#else
++#define MY_DEBUG_STR ""
++#define MY_FILEFLAGS_1 0x0L
++#endif
++#if NSS_BETA
++#define MY_FILEFLAGS_2 MY_FILEFLAGS_1|VS_FF_PRERELEASE
++#else
++#define MY_FILEFLAGS_2 MY_FILEFLAGS_1
++#endif
++
++#ifdef WINNT
++#define MY_FILEOS VOS_NT_WINDOWS32
++#else
++#define MY_FILEOS VOS__WINDOWS32
++#endif
++
++#define MY_INTERNAL_NAME MY_LIBNAME
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// Version-information resource
++//
++
++VS_VERSION_INFO VERSIONINFO
++ FILEVERSION NSS_CKPEM_LIBRARY_VERSION_MAJOR,NSS_CKPEM_LIBRARY_VERSION_MINOR,0,0
++ PRODUCTVERSION NSS_CKPEM_LIBRARY_VERSION_MAJOR,NSS_CKPEM_LIBRARY_VERSION_MINOR,0,0
++ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
++ FILEFLAGS MY_FILEFLAGS_2
++ FILEOS MY_FILEOS
++ FILETYPE VFT_DLL
++ FILESUBTYPE 0x0L // not used
++
++BEGIN
++    BLOCK "StringFileInfo"
++    BEGIN
++        BLOCK "040904B0" // Lang=US English, CharSet=Unicode
++        BEGIN
++            VALUE "CompanyName", "Mozilla Foundation\0"
++            VALUE "FileDescription", MY_FILEDESCRIPTION MY_DEBUG_STR "\0"
++            VALUE "FileVersion", NSS_CKPEM_LIBRARY_VERSION "\0"
++            VALUE "InternalName", MY_INTERNAL_NAME "\0"
++            VALUE "OriginalFilename", MY_INTERNAL_NAME ".dll\0"
++            VALUE "ProductName", "Network Security Services\0"
++            VALUE "ProductVersion", NSS_CKPEM_LIBRARY_VERSION "\0"
++        END
++    END
++    BLOCK "VarFileInfo"
++    BEGIN
++        VALUE "Translation", 0x409, 1200
++    END
++END
 diff --git a/a/nss/lib/ckfw/pem/pargs.c b/b/nss/lib/ckfw/pem/pargs.c
 new file mode 100644
 index 0000000..21291a8
@@ -3526,10 +3596,10 @@ index 0000000..a13e531
 +}
 diff --git a/a/nss/lib/ckfw/pem/prsa.c b/b/nss/lib/ckfw/pem/prsa.c
 new file mode 100644
-index 0000000..f0e069c
+index 0000000..d42e9f7
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/prsa.c
-@@ -0,0 +1,699 @@
+@@ -0,0 +1,702 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -3573,6 +3643,9 @@ index 0000000..f0e069c
 +#include "nssckmdt.h"
 +
 +#define SSL3_SHAMD5_HASH_SIZE  36       /* LEN_MD5 (16) + LEN_SHA1 (20) */
++
++SEC_ASN1_MKSUB(SEC_AnyTemplate)
++SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
 +
 +/*
 + * prsa.c
@@ -5968,10 +6041,10 @@ index 0000000..1179f2a
 +#endif
 diff --git a/a/nss/lib/ckfw/pem/util.c b/b/nss/lib/ckfw/pem/util.c
 new file mode 100644
-index 0000000..6a7495f
+index 0000000..e5fb4da
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/util.c
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,314 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -6018,6 +6091,7 @@ index 0000000..6a7495f
 +#include "prlog.h"
 +#include "prprf.h"
 +#include "plgetopt.h"
++#include "plstr.h"
 +#include "prenv.h"
 +#include "prnetdb.h"
 +#include "base.h"
@@ -6141,6 +6215,7 @@ index 0000000..6a7495f
 +	if (strstr(asc, "-----BEGIN") != NULL) {
 +            int key = 0;
 +	    while ((asc) && ((body = strstr(asc, "-----BEGIN")) != NULL)) {
++		char *trailer;
 +                key = 0;
 +		if ((strncmp(body, "-----BEGIN RSA PRIVATE KEY", 25) == 0) ||
 +		    (strncmp(body, "-----BEGIN PRIVATE KEY", 21) == 0)) {
@@ -6162,9 +6237,9 @@ index 0000000..6a7495f
 +			    if (body == NULL)
 +				goto loser;
 +			    *body = '\0';
-+			    if (!strcasecmp(c, "DES-EDE3-CBC"))
++			    if (!PL_strcasecmp(c, "DES-EDE3-CBC"))
 +				*cipher = NSS_DES_EDE3_CBC;
-+			    else if (!strcasecmp(c, "DES-CBC"))
++			    else if (!PL_strcasecmp(c, "DES-CBC"))
 +				*cipher = NSS_DES_CBC;
 +			    else {
 +				*cipher = -1;
@@ -6188,7 +6263,7 @@ index 0000000..6a7495f
 +                if (der == NULL)
 +                    goto loser;
 +
-+		char *trailer = NULL;
++		trailer = NULL;
 +		asc = body;
 +		body = strchr(body, '\n');
 +		if (!body)
