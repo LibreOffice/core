@@ -3526,10 +3526,10 @@ index 0000000..a13e531
 +}
 diff --git a/a/nss/lib/ckfw/pem/prsa.c b/b/nss/lib/ckfw/pem/prsa.c
 new file mode 100644
-index 0000000..f0e069c
+index 0000000..d42e9f7
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/prsa.c
-@@ -0,0 +1,699 @@
+@@ -0,0 +1,702 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -3573,6 +3573,9 @@ index 0000000..f0e069c
 +#include "nssckmdt.h"
 +
 +#define SSL3_SHAMD5_HASH_SIZE  36       /* LEN_MD5 (16) + LEN_SHA1 (20) */
++
++SEC_ASN1_MKSUB(SEC_AnyTemplate)
++SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
 +
 +/*
 + * prsa.c
@@ -5968,10 +5971,10 @@ index 0000000..1179f2a
 +#endif
 diff --git a/a/nss/lib/ckfw/pem/util.c b/b/nss/lib/ckfw/pem/util.c
 new file mode 100644
-index 0000000..6a7495f
+index 0000000..ebcd0ab
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/util.c
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,313 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -6018,6 +6021,7 @@ index 0000000..6a7495f
 +#include "prlog.h"
 +#include "prprf.h"
 +#include "plgetopt.h"
++#include "plstr.h"
 +#include "prenv.h"
 +#include "prnetdb.h"
 +#include "base.h"
@@ -6162,9 +6166,9 @@ index 0000000..6a7495f
 +			    if (body == NULL)
 +				goto loser;
 +			    *body = '\0';
-+			    if (!strcasecmp(c, "DES-EDE3-CBC"))
++			    if (!PL_strcasecmp(c, "DES-EDE3-CBC"))
 +				*cipher = NSS_DES_EDE3_CBC;
-+			    else if (!strcasecmp(c, "DES-CBC"))
++			    else if (!PL_strcasecmp(c, "DES-CBC"))
 +				*cipher = NSS_DES_CBC;
 +			    else {
 +				*cipher = -1;
