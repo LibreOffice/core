@@ -895,10 +895,10 @@ index 0000000..1547bf4
 +#endif /* NSSCKBI_H */
 diff --git a/a/nss/lib/ckfw/pem/pargs.c b/b/nss/lib/ckfw/pem/pargs.c
 new file mode 100644
-index 0000000..cff6e87
+index 0000000..21291a8
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/pargs.c
-@@ -0,0 +1,163 @@
+@@ -0,0 +1,164 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -947,6 +947,7 @@ index 0000000..cff6e87
 +char *pem_StrNdup(const char *instr, PRInt32 inlen)
 +{
 +    size_t len = inlen;
++    char *buffer;
 +    if (!instr) {
 +        return NULL;
 +    }
@@ -954,7 +955,7 @@ index 0000000..cff6e87
 +    if (!len) {
 +        return NULL;
 +    }
-+    char *buffer = (char *) pem_Malloc(len + 1);
++    buffer = (char *) pem_Malloc(len + 1);
 +    if (!buffer) {
 +        return NULL;
 +    }
