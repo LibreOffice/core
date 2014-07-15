@@ -15,9 +15,11 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
     StaticLibrary_libreofficekit \
 ))
 
+ifeq ($(MERGELIBS),)
 $(eval $(call gb_Module_add_check_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
+endif
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
