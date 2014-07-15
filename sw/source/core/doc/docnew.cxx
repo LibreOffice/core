@@ -857,7 +857,7 @@ void SwDoc::ClearDoc()
 
     // remove the dummy pagedesc from the array and delete all the old ones
     sal_uInt16 nDummyPgDsc = 0;
-    if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
+    if (FindPageDescByName(pDummyPgDsc->GetName(), &nDummyPgDsc))
         maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
 
     // remove the dummy pagedec from the array and delete all the old ones

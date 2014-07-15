@@ -1358,8 +1358,8 @@ public:
     sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *maPageDescs[i]; }
     SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *maPageDescs[i]; }
-    SwPageDesc* FindPageDesc( const OUString& rName, sal_uInt16* pPos = 0 ) const;
-    SwPageDesc* FindPageDesc( const OUString& rName, sal_uInt16* pPos = 0 );
+    SwPageDesc* FindPageDescByName( const OUString& rName, sal_uInt16* pPos = 0 ) const;
+    SwPageDesc* FindPageDescByName( const OUString& rName, sal_uInt16* pPos = 0 );
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */

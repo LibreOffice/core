@@ -564,7 +564,7 @@ void RtfExport::ExportDocument_Impl()
                 pSttPgDsc = (SwFmtPageDesc*)&pSet->Get( RES_PAGEDESC );
                 if( !pSttPgDsc->GetPageDesc() )
                     pSttPgDsc = 0;
-                else if( pDoc->FindPageDesc( pSttPgDsc->
+                else if( pDoc->FindPageDescByName( pSttPgDsc->
                                     GetPageDesc()->GetName(), &nPosInDoc ))
                 {
                     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCNO;
