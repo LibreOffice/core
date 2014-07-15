@@ -2225,8 +2225,6 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         Region(
             Rectangle( Point( nTilePosX, nTilePosY ),
                        Size( nTileWidth, nTileHeight ) ) ) );
-
-    // TODO: Set page kind in frameview?
 }
 
 void SdXImpressDocument::setPart( int nPart )
@@ -2234,6 +2232,13 @@ void SdXImpressDocument::setPart( int nPart )
     DrawViewShell* pViewSh = dynamic_cast< DrawViewShell* >( mpDoc->GetDocSh()->GetViewShell() );
     if (pViewSh)
     {
+        // TODO: have an API to allow selecting between PK_STANDARD (just slide)
+        // and PK_NOTES (which shows the combined slide above notes). There is alo
+        // a PK_HANDOUT -- that however just shows multiple empty pages (it's also
+        // only possible to select page 0 in this mode, I have no idea how you
+        // then actually select what is on the handout page, which defaults to
+        // a 4x4 grid of empty pages).
+        pViewSh->SetPageKind( PK_STANDARD );
         pViewSh->SwitchPage( nPart );
     }
 }
