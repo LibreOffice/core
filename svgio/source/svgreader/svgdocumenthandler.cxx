@@ -475,13 +475,6 @@ namespace svgio
                         }
                         break;
                     }
-
-                    case SVGTokenFlowRoot:
-                    {
-                        bSkip = false;
-                        break;
-                    }
-
                     default:
                     {
                         /// invalid token, ignore
