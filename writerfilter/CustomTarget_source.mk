@@ -125,9 +125,9 @@ $(writerfilter_WORK)/ooxml/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factory
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) --stringparam file $@ $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) --stringparam file $@ $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
+$(writerfilter_WORK)/ooxml/OOXMLFactory%.hxx : $(writerfilter_SRC)/ooxml/factory_ns.py $(writerfilter_GEN_ooxml_Model_processed)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed) $@) > $@
 
 
 $(call gb_CustomTarget_get_target,writerfilter/source) : $(writerfilter_ALL)

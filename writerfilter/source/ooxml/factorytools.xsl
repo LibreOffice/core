@@ -71,17 +71,6 @@
 
 <xsl:key name="same-token-name" match="rng:element|rng:attribute" use="@localname"/>
 
-<!-- license header -->
-<xsl:template name="licenseheader">
-  <xsl:text>
-/*      
-
-    THIS FILE IS GENERATED AUTOMATICALLY! DO NOT EDIT!
-    
-*/
-&#xa;</xsl:text>
-</xsl:template>
-
 <!--
 IDENTIFIERs
 -->
