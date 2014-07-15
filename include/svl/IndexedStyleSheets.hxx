@@ -124,12 +124,14 @@ public:
     std::vector<unsigned>
     FindPositionsByName(const rtl::OUString& name) const;
 
+    enum SearchBehavior { RETURN_ALL, RETURN_FIRST };
     /** Obtain the positions of all styles which have a certain name and fulfill a certain condition.
      *
      * This method is fast because it can use the name-based index
      */
     std::vector<unsigned>
-    FindPositionsByNameAndPredicate(const rtl::OUString& name, StyleSheetPredicate& predicate) const;
+    FindPositionsByNameAndPredicate(const rtl::OUString& name, StyleSheetPredicate& predicate,
+            SearchBehavior behavior = RETURN_ALL) const;
 
     /** Obtain the positions of all styles which fulfill a certain condition.
      *
