@@ -140,6 +140,24 @@
       "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_62106c4f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000572
+      },
+      "writtenOn": "2014-07-15T10:32:57Z",
+      "side": 1,
+      "message": "Hi, \n\n- I agree that the spacing and framePr attributes are different.I have tried to convey the same during our IRC discussions :)\n\n- Currently \u003cw:framePr\u003e is getting exported in place of \u003cw:spacing\u003e, so I can\u0027t check for \u003cw:spacing after\u003e in the UT\n\n- Thus I was seeking your opinion if we can take this as a separate issue and re-solve it.\n\n- It would be great if you let me know that we need to resolve the above issue now or we can take it separately.\n\n- Thanks for your opinion :)",
+      "parentUuid": "dac4157f_3f060f21",
+      "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
