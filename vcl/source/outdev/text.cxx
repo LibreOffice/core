@@ -280,6 +280,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 }
 
 bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, bool bTextLines, sal_uInt32 flags )
+                                       bool bTextLines,
+                                       sal_uInt32 flags )
 {
     if( mpFontEntry->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
@@ -938,7 +940,7 @@ float OutputDevice::approximate_char_width() const
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const sal_Int32* pDXAry,
-                                  sal_Int32 nIndex, sal_Int32 nLen )
+                                  sal_Int32 nIndex, sal_Int32 nLen, int flags )
 {
     if(nLen == 0x0FFFF)
     {
@@ -961,7 +963,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -969,7 +971,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
+        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
 }
 
 long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
@@ -1089,7 +1091,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     const OUString& rStr,
-                                    sal_Int32 nIndex, sal_Int32 nLen )
+                                    sal_Int32 nIndex, sal_Int32 nLen)
 {
     if(nIndex < 0 || nIndex == 0x0FFFF || nLen == 0x0FFFF)
     {
@@ -1119,8 +1121,9 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
 }
 
 ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
-                                       const sal_Int32 nMinIndex, const sal_Int32 nLen,
-                                       long nPixelWidth, const sal_Int32* pDXArray ) const
+                                                    const sal_Int32 nMinIndex, const sal_Int32 nLen,
+                                                    long nPixelWidth, const sal_Int32* pDXArray,
+                                                    int nLayoutFlags ) const
 {
     assert(nMinIndex >= 0);
     assert(nLen >= 0);
@@ -1134,7 +1137,6 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( nEndIndex < nMinIndex )
         nEndIndex = nMinIndex;
 
-    int nLayoutFlags = 0;
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
@@ -1232,9 +1234,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 }
 
 SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
-    sal_Int32 nMinIndex, sal_Int32 nLen,
-    const Point& rLogicalPos, long nLogicalWidth,
-    const sal_Int32* pDXArray) const
+                                    sal_Int32 nMinIndex, sal_Int32 nLen,
+                                    const Point& rLogicalPos, long nLogicalWidth,
+                                    const sal_Int32* pDXArray, int flags) const
 {
     // we need a graphics
     if( !mpGraphics )
@@ -1280,7 +1282,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
         pDXArray = pTempDXAry;
     }
 
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray );
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray, flags);
 
     // get matching layout object for base font
     SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
