@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/nss_macosx.patch \
 	external/nss/nss-linux-x86.patch.0 \
 	external/nss/nss-win32-make.patch.1 \
+	external/nss/nss-pem.patch \
 	$(if $(filter WNTMSC,$(OS)$(COM)),external/nss/nss.windows.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/nss/nspr-4.9-build.patch.3 \
 		external/nss/nss-3.13.3-build.patch.3 \
