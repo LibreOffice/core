@@ -1123,7 +1123,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                         if (xCursor.is())
                             xCursor->gotoEnd(false);
                         PropertyMapPtr pEmpty(new PropertyMap());
-                        appendTextPortion("X", pEmpty);
+                        appendTextPortion(sMarker, pEmpty);
                     }
 
                     xTextRange = xTextAppend->finishParagraph( aProperties );
