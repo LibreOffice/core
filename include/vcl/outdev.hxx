@@ -97,6 +97,21 @@ class VirtualDevice;
 class Window;
 struct SalTwoRect;
 
+// Layout options
+#define SAL_LAYOUT_BIDI_RTL                 (1<<0)
+#define SAL_LAYOUT_BIDI_STRONG              (1<<1)
+#define SAL_LAYOUT_RIGHT_ALIGN              (1<<2)
+#define SAL_LAYOUT_KERNING_PAIRS            (1<<4)
+#define SAL_LAYOUT_KERNING_ASIAN            (1<<5)
+#define SAL_LAYOUT_VERTICAL                 (1<<6)
+#define SAL_LAYOUT_COMPLEX_DISABLED         (1<<8)
+#define SAL_LAYOUT_ENABLE_LIGATURES         (1<<9)
+#define SAL_LAYOUT_SUBSTITUTE_DIGITS        (1<<10)
+#define SAL_LAYOUT_KASHIDA_JUSTIFICATON     (1<<11)
+#define SAL_LAYOUT_DISABLE_GLYPH_PROCESSING (1<<12)
+#define SAL_LAYOUT_FOR_FALLBACK             (1<<13)
+#define SAL_LAYOUT_DRAW_BULLET              (1<<14)
+
 namespace com {
 namespace sun {
 namespace star {
@@ -1020,7 +1035,8 @@ public:
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                const sal_Int32* pDXAry = NULL,
                                                sal_Int32 nIndex = 0,
-                                               sal_Int32 nLen = -1 );
+                                               sal_Int32 nLen = -1,
+                                               int flags = 0);
     long                        GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
 
@@ -1030,7 +1046,7 @@ public:
                                               bool bCellBreaking = true ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
-                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
+                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               long nCharExtra = 0 ) const;
@@ -1179,9 +1195,9 @@ public:
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const sal_Int32* pLogicDXArray=NULL ) const;
+                                            const sal_Int32* pLogicDXArray=NULL, int flags=0 ) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                            long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
+                                                         long nPixelWidth, const sal_Int32* pPixelDXArray, int flags = 0 ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
