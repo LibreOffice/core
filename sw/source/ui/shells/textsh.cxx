@@ -680,6 +680,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         break;
     }
+
     case FN_INSERT_HRULER:
     {
         String sPath;
@@ -688,22 +689,22 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         Window* pParent = GetView().GetWindow();
         if ( pItem )
         {
-            sPath = ((SfxStringItem*)pItem)->GetValue();
-            SFX_REQUEST_ARG( rReq, pSimple, SfxBoolItem, FN_PARAM_1 , sal_False );
+            sPath = ( (SfxStringItem*) pItem )->GetValue();
+            SFX_REQUEST_ARG( rReq, pSimple, SfxBoolItem, FN_PARAM_1, sal_False );
             if ( pSimple )
                 bSimpleLine = pSimple->GetValue();
         }
         else
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            DBG_ASSERT( pFact, "Dialogdiet fail!" );
             AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
-                                                        pParent );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                pParent );
+            DBG_ASSERT( pDlg, "Dialogdiet fail!" );
             // MessageBox fuer fehlende Grafiken
-            if(!pDlg->HasImages())
-                InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
-            if(RET_OK == pDlg->Execute())
+            if ( !pDlg->HasImages() )
+                InfoBox( pParent, SW_RES( MSG_NO_RULER ) ).Execute();
+            if ( RET_OK == pDlg->Execute() )
             {
                 sPath = pDlg->GetGraphicName();
                 bSimpleLine = pDlg->IsSimpleLine();
@@ -715,39 +716,43 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
 
         rSh.StartAllAction();
-        rSh.StartUndo(UNDO_UI_INSERT_RULER);
-        if(bSimpleLine)
+        rSh.StartUndo( UNDO_UI_INSERT_RULER );
+        if ( bSimpleLine )
         {
-            if(!(rSh.IsSttOfPara() && rSh.IsEndOfPara())) // kein leerer Absatz?
+            if ( !( rSh.IsSttOfPara() && rSh.IsEndOfPara() ) ) // kein leerer Absatz?
                 rSh.SplitNode( sal_False, sal_False ); // dann Platz schaffen
             rSh.SplitNode( sal_False, sal_False );
-            rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-            rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_HTML_HR ));
-            rSh.Right(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_HTML_HR ) );
+            rSh.Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
             bRet = sal_True;
         }
-        else if(sPath.Len())
+        else if ( sPath.Len() )
         {
             SwFlyFrmAttrMgr aFrmMgr( sal_True, &rSh, FRMMGR_TYPE_GRF );
             // am FrmMgr muessen die richtigen Parameter eingestellt werden
 
-            aFrmMgr.SetAnchor(FLY_AS_CHAR);
+            aFrmMgr.SetAnchor( FLY_AS_CHAR );
 
             rSh.SplitNode( sal_False, sal_False );
             rSh.SplitNode( sal_False, sal_False );
-            rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-            rSh.SetAttrItem(SvxAdjustItem(SVX_ADJUST_CENTER,RES_PARATR_ADJUST ));
-            if(GRFILTER_OK == GetView().InsertGraphic(sPath, aEmptyStr, sal_True, 0, 0 ))
+            rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.SetAttrItem( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+            if ( GRFILTER_OK == GetView().InsertGraphic( sPath, aEmptyStr, sal_True, 0, 0 ) )
+            {
+                rSh.GetCurrFrm(); // just to trigger formatting in case the inserted graphic is not formatted.
                 bRet = sal_True;
+            }
             rSh.EnterStdMode();
-            rSh.Right(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
         }
         rSh.EndAllAction();
-        rSh.EndUndo(UNDO_UI_INSERT_RULER);
-        rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+        rSh.EndUndo( UNDO_UI_INSERT_RULER );
+        rReq.SetReturnValue( SfxBoolItem( nSlot, bRet ) );
         rReq.Done();
     }
     break;
+
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

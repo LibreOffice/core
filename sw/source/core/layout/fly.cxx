@@ -2223,40 +2223,10 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
     pDrawObjs->Insert( *pNew );
     pNew->ChgAnchorFrm( this );
 
-    //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
-    //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
-    SwPageFrm *pPage = FindPageFrm();
-    if ( pPage )
+    SwPageFrm* pPage = FindPageFrm();
+    if ( pPage != NULL )
     {
-        if ( pNew->IsFlyAtCntFrm() && pNew->Frm().Top() == WEIT_WECH )
-        {
-            //Versuch die Seitenformatierung von neuen Dokumenten etwas
-            //guenstiger zu gestalten.
-            //Wir haengen die Flys erstenmal nach hinten damit sie bei heftigem
-            //Fluss der Anker nicht unoetig oft formatiert werden.
-            //Damit man noch brauchbar an das Ende des Dokumentes springen
-            //kann werden die Flys nicht ganz an das Ende gehaengt.
-            SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
-            if( !SwLayHelper::CheckPageFlyCache( pPage, pNew ) )
-            {
-                SwPageFrm *pTmp = pRoot->GetLastPage();
-                if ( pTmp->GetPhyPageNum() > 30 )
-                {
-                    for ( sal_uInt16 i = 0; i < 10; ++i )
-                    {
-                        pTmp = (SwPageFrm*)pTmp->GetPrev();
-                        if( pTmp->GetPhyPageNum() <= pPage->GetPhyPageNum() )
-                            break; // damit wir nicht vor unserem Anker landen
-                    }
-                    if ( pTmp->IsEmptyPage() )
-                        pTmp = (SwPageFrm*)pTmp->GetPrev();
-                    pPage = pTmp;
-                }
-            }
-            pPage->AppendFlyToPage( pNew );
-        }
-        else
-            pPage->AppendFlyToPage( pNew );
+        pPage->AppendFlyToPage( pNew );
     }
 }
 
