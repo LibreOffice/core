@@ -82,6 +82,9 @@ void Test::testStyles()
     Primitive2DSequence maSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithParentStyle.getLength());
 
+    Primitive2DSequence maSequenceRectWithStylesByGroup = parseSvg("/svgio/qa/cppunit/data/RectWithStylesByGroup.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStylesByGroup.getLength());
+
     // TODO: Test if the 3 sequences are equal..
     //const Primitive2DReference xReference(maSequenceRect[0]);
 }
