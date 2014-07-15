@@ -46,6 +46,7 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
