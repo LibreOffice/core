@@ -47,7 +47,7 @@ public:
     SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
     void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
 
-    ~DocumentOutlineNodesManager();
+    virtual ~DocumentOutlineNodesManager();
 
 private:
 
