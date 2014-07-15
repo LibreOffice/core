@@ -556,21 +556,28 @@ namespace
         impCreateTextPortionPrimitive(rTruncatedPortionInfo);
 
         // for debugging purposes (skip experiments)
-        bool b = true;
+        /* bool b = true;
         if (b)
-            return;
+            return; */
 
         /* Some Experiments */
 
         const SdrTextObj *pCurTextObj = mrOutliner.GetTextObj();
+        SdrPage *pPage = NULL;
+
         // page for list of objects
-        SdrPage *pPage = pCurTextObj->GetPage();
+        if ( pCurTextObj ) {
+            pPage = pCurTextObj->GetPage();
+        } else {
+            fprintf(stderr, "Some errors\n" );
+            return;
+        }
 
         // we use (text) object 0 and 1 for these experiments
         // we can try to set text of obj 0 to obj 1 or something
 
         SdrTextObj *pNextTextObj;
-        if ( pPage->GetObjCount() > 1) {
+        if ( pPage && pPage->GetObjCount() > 1) {
             pNextTextObj =  dynamic_cast< SdrTextObj * >(
                                                 pPage->GetObj(1) );
         } else {
@@ -778,9 +785,18 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
+void SdrTextObj::embedText() const
+{
+
+}
+
 void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
 {
     // Code from FitFrameToTextSize
+
+    // avoid copying text in same box
+    if ( this ==  pNextTextObj )
+        return;
 
     // trying to copy text in obj 1
     SdrText* pText = getActiveText();
