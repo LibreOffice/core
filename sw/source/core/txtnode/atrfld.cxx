@@ -547,7 +547,7 @@ void SwTxtInputFld::UpdateFieldContent()
         {
             const_cast<SwInputField*>(pInputFld)->applyFieldContent( aNewFieldContent );
             // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
-            GetTxtNode().GetDoc()->GetUpdtFlds().SetFieldsDirty( sal_True );
+            GetTxtNode().GetDoc()->GetUpdtFlds().SetFieldsDirty(true);
         }
     }
 }
