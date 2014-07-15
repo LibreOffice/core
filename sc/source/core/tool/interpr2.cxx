@@ -1134,7 +1134,7 @@ void ScInterpreter::ScMIRR()
             {
                 double fResult = -fNPV_reinvest / fNPV_invest;
                 fResult *= pow( fRate1_reinvest, (double) nCount - 1 );
-                fResult = pow( fResult, 1.0 / (nCount - 1) );
+                fResult = pow( fResult, div( 1.0, (nCount - 1)) );
                 PushDouble( fResult - 1.0 );
             }
         }
