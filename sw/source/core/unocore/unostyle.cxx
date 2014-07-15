@@ -4165,11 +4165,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
             {
                 pPropSet->setPropertyValue( pSeq[i].Name, pSeq[i].Value, aSet );
             }
-            catch (beans::UnknownPropertyException &)
+            catch (const beans::UnknownPropertyException &)
             {
                 OSL_FAIL( "Unknown property" );
             }
-            catch (lang::IllegalArgumentException &)
+            catch (const lang::IllegalArgumentException &)
             {
                 OSL_FAIL( "Illegal argument" );
             }
@@ -4314,7 +4314,18 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
             if(!bDone)
             {
-                pPropSet->setPropertyValue( rPropName, aValue, aSet );
+                try
+                {
+                    pPropSet->setPropertyValue( rPropName, aValue, aSet );
+                }
+                catch (const beans::UnknownPropertyException &)
+                {
+                    OSL_FAIL( "Unknown property" );
+                }
+                catch (const lang::IllegalArgumentException &)
+                {
+                    OSL_FAIL( "Illegal argument" );
+                }
             }
          }
 
