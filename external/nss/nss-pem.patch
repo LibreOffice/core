@@ -182,10 +182,10 @@ index 0000000..621f919
 +#include "nssck.api"
 diff --git a/a/nss/lib/ckfw/pem/ckpem.h b/b/nss/lib/ckfw/pem/ckpem.h
 new file mode 100644
-index 0000000..2a47c75
+index 0000000..9712ccd
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/ckpem.h
-@@ -0,0 +1,265 @@
+@@ -0,0 +1,263 @@
 +#ifndef CKPEM_H
 +#define CKPEM_H
 +
@@ -344,8 +344,6 @@ index 0000000..2a47c75
 +/* our raw object data array */
 +NSS_EXTERN_DATA pemInternalObject nss_pem_data[];
 +NSS_EXTERN_DATA const PRUint32               nss_pem_nObjects;
-+
-+  PRBool          logged_in;
 +
 +/* our raw object data array */
 +NSS_EXTERN_DATA pemInternalObject nss_pem_data[];
@@ -897,10 +895,10 @@ index 0000000..1547bf4
 +#endif /* NSSCKBI_H */
 diff --git a/a/nss/lib/ckfw/pem/pargs.c b/b/nss/lib/ckfw/pem/pargs.c
 new file mode 100644
-index 0000000..f292a8b
+index 0000000..cff6e87
 --- /dev/null
 +++ b/b/nss/lib/ckfw/pem/pargs.c
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,163 @@
 +/* ***** BEGIN LICENSE BLOCK *****
 + * Version: MPL 1.1/GPL 2.0/LGPL 2.1
 + *
@@ -948,11 +946,11 @@ index 0000000..f292a8b
 +
 +char *pem_StrNdup(const char *instr, PRInt32 inlen)
 +{
++    size_t len = inlen;
 +    if (!instr) {
 +        return NULL;
 +    }
 +
-+    size_t len = inlen;
 +    if (!len) {
 +        return NULL;
 +    }
@@ -967,11 +965,12 @@ index 0000000..f292a8b
 +
 +char *pem_Strdup(const char *instr)
 +{
++    size_t len;
 +    if (!instr) {
 +        return NULL;
 +    }
 +
-+    size_t len = strlen(instr);
++    len = strlen(instr);
 +    return pem_StrNdup(instr, len);
 +}
 +
@@ -1011,14 +1010,14 @@ index 0000000..f292a8b
 +pem_ParseString(const char *inputstring, const char delimiter,
 +                PRInt32 * numStrings, char ***returnedstrings)
 +{
++    char nextchar;
++    char *instring = (char *) inputstring;
 +    if (!inputstring || !delimiter || !numStrings || !returnedstrings) {
 +        /* we need a string and a non-zero delimiter, as well as
 +         * a valid place to return the strings and count
 +         */
 +        return PR_FALSE;
 +    }
-+    char nextchar;
-+    char *instring = (char *) inputstring;
 +    *numStrings = 0;
 +    *returnedstrings = NULL;
 +
@@ -1050,10 +1049,10 @@ index 0000000..f292a8b
 +
 +PRBool pem_FreeParsedStrings(PRInt32 numStrings, char **instrings)
 +{
++    PRInt32 counter;
 +    if (!numStrings || !instrings) {
 +        return PR_FALSE;
 +    }
-+    PRInt32 counter;
 +    for (counter = 0; counter < numStrings; counter++) {
 +        char *astring = instrings[counter];
 +        if (astring) {
