@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchflags,libgltf,--binary))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
+	external/libgltf/pathces/fix_rendering_of_resized_model.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
