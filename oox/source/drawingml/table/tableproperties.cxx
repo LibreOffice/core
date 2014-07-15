@@ -288,7 +288,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
 
                 Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
                 rTableCell.pushToXCell( rFilterBase, pMasterTextListStyle, xCellRange->getCellByPosition( nColumn, nRow ), *this, rTableStyle,
-                    nColumn, aTableRowIter->getTableCells().size(), nRow, mvTableRows.size() );
+                    nColumn, aTableRowIter->getTableCells().size()-1, nRow, mvTableRows.size()-1 );
             }
         }
     }
