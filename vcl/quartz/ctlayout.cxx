@@ -401,7 +401,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                         ctlinebullet = CTLineCreateWithAttributedString( bulletAttrString );
                         CFRelease( aCFText);
                         CFRelease( bulletAttrString);
-                        RGBAColor bulletColor(MAKE_SALCOLOR(0x6A, 0xBE, 0xD3 )); // NON_PRINTING_CHARACTER_COLOR
+                        RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2)); // NON_PRINTING_CHARACTER_COLOR
                         CGContextSetFillColor( rAquaGraphics.mrContext, bulletColor.AsArray() );
                     }
                     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x + position.x, position.y + aTextPos.y );
