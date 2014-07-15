@@ -133,10 +133,7 @@ namespace cmis
         uno::Reference< com::sun::star::xml::crypto::XNSSInitializer >
             xNSSInitializer = com::sun::star::xml::crypto::NSSInitializer::create( m_xContext );
 
-        uno::Reference< com::sun::star::xml::crypto::XNSSInitializer > 
-            xNSSInitializer = com::sun::star::xml::crypto::NSSInitializer::create( xComponentContext );
-
-        uno::Reference< com::sun::star::xml::crypto::XDigestContext > xDigestContext( 
+        uno::Reference< com::sun::star::xml::crypto::XDigestContext > xDigestContext(
                 xNSSInitializer->getDigestContext( com::sun::star::xml::crypto::DigestID::SHA256,
                                                           uno::Sequence< beans::NamedValue >() ),
                                                           uno::UNO_SET_THROW );

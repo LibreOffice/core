@@ -32,15 +32,12 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-<<<<<<< HEAD
-=======
 #ifndef SYSTEM_CURL
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #endif
->>>>>>> 89361fa... fdo#72277: don't build and use nsspem when building against system curl
 
 #include <comphelper/processfactory.hxx>
 #include <config_oauth2.h>
@@ -281,8 +278,6 @@ namespace cmis
 
         if ( NULL == m_pSession )
         {
-<<<<<<< HEAD
-=======
 #ifndef SYSTEM_CURL
             // Initialize NSS library to make sure libcmis (and curl) can access CACERTs using NSS
             // when using internal libcurl.
@@ -295,7 +290,6 @@ namespace cmis
                                                               uno::UNO_SET_THROW );
 #endif
 
->>>>>>> 89361fa... fdo#72277: don't build and use nsspem when building against system curl
             // Set the SSL Validation handler
             libcmis::CertValidationHandlerPtr certHandler(
                     new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
