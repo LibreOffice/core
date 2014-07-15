@@ -228,7 +228,9 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     if ( rProperties.isBandRow() )
     {
         if ( ( !rProperties.isFirstRow() || ( nRow != 0 ) ) &&
-            ( !rProperties.isLastRow() || ( nRow != nMaxRow ) ) )
+            ( !rProperties.isLastRow() || ( nRow != nMaxRow ) ) &&
+            ( !rProperties.isFirstCol() || ( nColumn != 0 ) ) &&
+            ( !rProperties.isLastCol() || ( nColumn != nMaxColumn ) ) )
         {
             sal_Int32 nBand = nRow;
             if ( rProperties.isFirstRow() )
@@ -303,7 +305,9 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( rProperties.isBandCol() )
     {
-        if ( ( !rProperties.isFirstCol() || ( nColumn != 0 ) ) &&
+        if ( ( !rProperties.isFirstRow() || ( nRow != 0 ) ) &&
+            ( !rProperties.isLastRow() || ( nRow != nMaxRow ) ) &&
+            ( !rProperties.isFirstCol() || ( nColumn != 0 ) ) &&
             ( !rProperties.isLastCol() || ( nColumn != nMaxColumn ) ) )
         {
             sal_Int32 nBand = nColumn;
