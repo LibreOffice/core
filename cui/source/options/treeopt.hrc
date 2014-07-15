@@ -20,15 +20,7 @@
 #include <sfx2/tabpage.hrc>
 #include <svtools/controldims.hrc>
 
-#define PB_OK                   1
-#define PB_CANCEL               2
-#define PB_HELP                 3
-#define PB_BACK                 4
-#define TLB_PAGES               5
-
-#define FL_SEPARATOR            19
-
-#define ST_LOAD_ERROR           24
+#define ST_LOAD_ERROR           256
 
 // metrics
 

@@ -144,18 +144,13 @@ class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
     SvTreeListEntry*    pCurrentPageEntry;
-    Timer           maTreeLayoutTimer;
-    DECL_DLLPRIVATE_LINK( ImplHandleTreeLayoutTimerHdl, void* );
     bool hasTreePendingLayout() const;
 
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    PushButton      aBackPB;
+    OKButton*       pOkPB;
+    PushButton*     pBackPB;
 
-    FixedLine       aSeparatorFL;
-
-    SvTreeListBox   aTreeLB;
+    SvTreeListBox*  pTreeLB;
+    VclBox*         pTabBox;
 
     OUString        sTitle;
     OUString        sNotLoadedError;
@@ -180,7 +175,7 @@ private:
     void            ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
-    void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
+    void            InitWidgets();
 
     void            LoadExtensionOptions( const OUString& rExtensionId );
     OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
@@ -188,9 +183,6 @@ private:
     Module*         LoadModule( const OUString& rModuleIdentifier );
     VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
-
-    virtual void queue_resize() SAL_OVERRIDE;
-    void SetPaneSize(Window *pPane);
 
 protected:
     DECL_LINK(ExpandedHdl_Impl, SvTreeListBox* );

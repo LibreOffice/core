@@ -492,12 +492,6 @@ struct OptionsGroupInfo
 
 #define INI_LIST() \
     pCurrentPageEntry   ( NULL ),\
-    aOkPB               ( this, CUI_RES( PB_OK ) ),\
-    aCancelPB           ( this, CUI_RES( PB_CANCEL ) ),\
-    aHelpPB             ( this, CUI_RES( PB_HELP ) ),\
-    aBackPB             ( this, CUI_RES( PB_BACK ) ),\
-    aSeparatorFL        ( this, CUI_RES( FL_SEPARATOR ) ),\
-    aTreeLB             ( this, CUI_RES( TLB_PAGES ) ),\
     sTitle              ( GetText() ),\
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
     pColorPageItemSet   ( NULL ),\
@@ -506,6 +500,15 @@ struct OptionsGroupInfo
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
 
+void OfaTreeOptionsDialog::InitWidgets()
+{
+    get(pOkPB, "ok");
+    get(pBackPB, "revert");
+    get(pTreeLB, "pages");
+    get(pTabBox, "box");
+    pTreeLB->set_width_request(200);
+}
+
 // Ctor() with Frame -----------------------------------------------------
 using namespace ::com::sun::star;
 OfaTreeOptionsDialog::OfaTreeOptionsDialog(
@@ -513,47 +516,44 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     const Reference< XFrame >& _xFrame,
     bool bActivateLastSelection ) :
 
-    SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
+    SfxModalDialog( pParent, "OptionsDialog", "cui/ui/optionsdialog.ui" ),
     INI_LIST()
 {
-    FreeResource();
+    InitWidgets();
 
     InitTreeAndHandler();
     Initialize( _xFrame );
     LoadExtensionOptions( OUString() );
-    ResizeTreeLB();
     if (bActivateLastSelection)
         ActivateLastSelection();
 
-    aTreeLB.SetAccessibleName(GetDisplayText());
+    pTreeLB->SetAccessibleName(GetDisplayText());
 }
 
 // Ctor() with ExtensionId -----------------------------------------------
 
 OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId ) :
 
-    SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
+    SfxModalDialog( pParent, "OptionsDialog", "cui/ui/optionsdialog.ui" ),
     INI_LIST()
 {
-    FreeResource();
+    InitWidgets();
 
     bIsFromExtensionManager = ( !rExtensionId.isEmpty() );
     InitTreeAndHandler();
     LoadExtensionOptions( rExtensionId );
-    ResizeTreeLB();
     ActivateLastSelection();
 }
 
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
-    maTreeLayoutTimer.Stop();
     pCurrentPageEntry = NULL;
-    SvTreeListEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = pTreeLB->First();
     // first children
     while(pEntry)
     {
         // if Child (has parent), then OptionsPageInfo
-        if(aTreeLB.GetParent(pEntry))
+        if(pTreeLB->GetParent(pEntry))
         {
             OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
             if(pPageInfo->m_pPage)
@@ -583,21 +583,21 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 
             delete pPageInfo;
         }
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->Next(pEntry);
     }
 
     // and parents
-    pEntry = aTreeLB.First();
+    pEntry = pTreeLB->First();
     while(pEntry)
     {
-        if(!aTreeLB.GetParent(pEntry))
+        if(!pTreeLB->GetParent(pEntry))
         {
             OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pEntry->GetUserData();
             if ( pGroupInfo && pGroupInfo->m_pExtPage )
                 delete pGroupInfo->m_pExtPage;
             delete pGroupInfo;
         }
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->Next(pEntry);
     }
     delete pColorPageItemSet;
     deleteGroupNames();
@@ -607,9 +607,9 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup )
 {
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-    SvTreeListEntry* pParent = aTreeLB.GetEntry( 0, nGroup );
+    SvTreeListEntry* pParent = pTreeLB->GetEntry( 0, nGroup );
     DBG_ASSERT( pParent, "OfaTreeOptionsDialog::AddTabPage(): no group found" );
-    SvTreeListEntry* pEntry = aTreeLB.InsertEntry( rPageName, pParent );
+    SvTreeListEntry* pEntry = pTreeLB->InsertEntry( rPageName, pParent );
     pEntry->SetUserData( pPageInfo );
     return pPageInfo;
 }
@@ -620,17 +620,17 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
                                         SfxModule* pCreateModule,
                                         sal_uInt16 nDialogId )
 {
-    SvTreeListEntry* pEntry = aTreeLB.InsertEntry(rGroupName);
+    SvTreeListEntry* pEntry = pTreeLB->InsertEntry(rGroupName);
     OptionsGroupInfo* pInfo =
         new OptionsGroupInfo( pCreateShell, pCreateModule, nDialogId );
     pEntry->SetUserData(pInfo);
     sal_uInt16 nRet = 0;
-    pEntry = aTreeLB.First();
+    pEntry = pTreeLB->First();
     while(pEntry)
     {
-        if(!aTreeLB.GetParent(pEntry))
+        if(!pTreeLB->GetParent(pEntry))
             nRet++;
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->Next(pEntry);
     }
     return nRet - 1;
 }
@@ -643,13 +643,13 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
 {
-    if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
+    if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
     {
         OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pCurrentPageEntry->GetUserData();
         if ( pPageInfo->m_pPage )
         {
             OptionsGroupInfo* pGroupInfo =
-                (OptionsGroupInfo*)aTreeLB.GetParent( pCurrentPageEntry )->GetUserData();
+                (OptionsGroupInfo*)pTreeLB->GetParent( pCurrentPageEntry )->GetUserData();
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
                 pPageInfo->m_pPage->Reset( pColorPageItemSet );
             else
@@ -663,14 +663,14 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
 {
-    aTreeLB.EndSelection();
-    if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
+    pTreeLB->EndSelection();
+    if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
     {
         OptionsPageInfo* pPageInfo = (OptionsPageInfo *)pCurrentPageEntry->GetUserData();
         if ( pPageInfo->m_pPage )
         {
             OptionsGroupInfo* pGroupInfo =
-                (OptionsGroupInfo *)aTreeLB.GetParent(pCurrentPageEntry)->GetUserData();
+                (OptionsGroupInfo *)pTreeLB->GetParent(pCurrentPageEntry)->GetUserData();
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_pPage->HasExchangeSupport() )
             {
@@ -678,7 +678,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
                 if ( nLeave == SfxTabPage::KEEP_PAGE )
                 {
                     // the page mustn't be left
-                    aTreeLB.Select(pCurrentPageEntry);
+                    pTreeLB->Select(pCurrentPageEntry);
                     return 0;
                 }
             }
@@ -686,16 +686,16 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
         }
     }
 
-    SvTreeListEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = pTreeLB->First();
     while ( pEntry )
     {
-        if ( aTreeLB.GetParent( pEntry ) )
+        if ( pTreeLB->GetParent( pEntry ) )
         {
             OptionsPageInfo* pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
             if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
             {
                 OptionsGroupInfo* pGroupInfo =
-                    (OptionsGroupInfo*)aTreeLB.GetParent(pEntry)->GetUserData();
+                    (OptionsGroupInfo*)pTreeLB->GetParent(pEntry)->GetUserData();
                 pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet);
             }
 
@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
                 pPageInfo->m_pExtPage->SavePage();
             }
         }
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->Next(pEntry);
     }
     EndDialog(RET_OK);
     return 0;
@@ -748,10 +748,10 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 
 void OfaTreeOptionsDialog::ApplyItemSets()
 {
-    SvTreeListEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = pTreeLB->First();
     while(pEntry)
     {
-        if(!aTreeLB.GetParent(pEntry))
+        if(!pTreeLB->GetParent(pEntry))
         {
             OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)pEntry->GetUserData();
             if(pGroupInfo->m_pOutItemSet)
@@ -762,28 +762,25 @@ void OfaTreeOptionsDialog::ApplyItemSets()
                     ApplyItemSet( pGroupInfo->m_nDialogId, *pGroupInfo->m_pOutItemSet);
             }
         }
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->Next(pEntry);
     }
 }
 
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
-    maTreeLayoutTimer.SetTimeout(50);
-    maTreeLayoutTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl ) );
+    pTreeLB->SetNodeDefaultImages();
 
-    aTreeLB.SetNodeDefaultImages();
-
-    aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
-    aTreeLB.SetStyle( aTreeLB.GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+    pTreeLB->SetHelpId( HID_OFADLG_TREELISTBOX );
+    pTreeLB->SetStyle( pTreeLB->GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
                            WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
-    aTreeLB.SetSpaceBetweenEntries( 0 );
-    aTreeLB.SetSelectionMode( SINGLE_SELECTION );
-    aTreeLB.SetSublistOpenWithLeftRight( true );
-    aTreeLB.SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
-    aTreeLB.SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
-    aBackPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
-    aOkPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
+    pTreeLB->SetSpaceBetweenEntries( 0 );
+    pTreeLB->SetSelectionMode( SINGLE_SELECTION );
+    pTreeLB->SetSublistOpenWithLeftRight( true );
+    pTreeLB->SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
+    pTreeLB->SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
+    pBackPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
+    pOkPB->SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
 }
 
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
@@ -841,11 +838,11 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             xMacroExpander = theMacroExpander::get(xContext);
         }
 
-        SvTreeListEntry* pTemp = aTreeLB.First();
+        SvTreeListEntry* pTemp = pTreeLB->First();
         while( !pEntry && pTemp )
         {
             // restore only selection of a leaf
-            if ( aTreeLB.GetParent( pTemp ) && pTemp->GetUserData() )
+            if ( pTreeLB->GetParent( pTemp ) && pTemp->GetUserData() )
             {
                 OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
                 OUString sPageURL = pPageInfo->m_sPageURL;
@@ -867,25 +864,25 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                             || ( !pPageInfo->m_nPageId && sLastURL == sPageURL ) )
                     pEntry = pTemp;
             }
-            pTemp = aTreeLB.Next(pTemp);
+            pTemp = pTreeLB->Next(pTemp);
         }
     }
 
     if ( !pEntry )
     {
-        pEntry = aTreeLB.First();
-        pEntry = aTreeLB.Next(pEntry);
+        pEntry = pTreeLB->First();
+        pEntry = pTreeLB->Next(pEntry);
     }
 
     if ( !pEntry )
         return;
 
-    SvTreeListEntry* pParent = aTreeLB.GetParent(pEntry);
-    aTreeLB.Expand(pParent);
-    aTreeLB.MakeVisible(pParent);
-    aTreeLB.MakeVisible(pEntry);
-    aTreeLB.Select(pEntry);
-    aTreeLB.GrabFocus();
+    SvTreeListEntry* pParent = pTreeLB->GetParent(pEntry);
+    pTreeLB->Expand(pParent);
+    pTreeLB->MakeVisible(pParent);
+    pTreeLB->MakeVisible(pEntry);
+    pTreeLB->Select(pEntry);
+    pTreeLB->GrabFocus();
 }
 
 bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
@@ -898,79 +895,40 @@ bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
         if( aKeyCode.GetCode() == KEY_PAGEUP ||
                 aKeyCode.GetCode() == KEY_PAGEDOWN)
         {
-            SvTreeListEntry* pCurEntry = aTreeLB.FirstSelected();
+            SvTreeListEntry* pCurEntry = pTreeLB->FirstSelected();
             SvTreeListEntry*  pTemp = 0;
             if(aKeyCode.GetCode() == KEY_PAGEDOWN)
             {
-                pTemp =  aTreeLB.Next( pCurEntry ) ;
-                if(pTemp && !aTreeLB.GetParent(pTemp))
+                pTemp =  pTreeLB->Next( pCurEntry ) ;
+                if(pTemp && !pTreeLB->GetParent(pTemp))
                 {
-                    pTemp =  aTreeLB.Next( pTemp ) ;
-                    aTreeLB.Select(pTemp);
+                    pTemp =  pTreeLB->Next( pTemp ) ;
+                    pTreeLB->Select(pTemp);
                 }
             }
             else
             {
-                pTemp =  aTreeLB.Prev( pCurEntry ) ;
-                if(pTemp && !aTreeLB.GetParent(pTemp))
+                pTemp =  pTreeLB->Prev( pCurEntry ) ;
+                if(pTemp && !pTreeLB->GetParent(pTemp))
                 {
-                    pTemp =  aTreeLB.Prev( pTemp ) ;
+                    pTemp =  pTreeLB->Prev( pTemp ) ;
                 }
             }
             if(pTemp)
             {
-                if(!aTreeLB.IsExpanded(aTreeLB.GetParent(pTemp)))
-                    aTreeLB.Expand(aTreeLB.GetParent(pTemp));
-                aTreeLB.MakeVisible(pTemp);
-                aTreeLB.Select(pTemp);
+                if(!pTreeLB->IsExpanded(pTreeLB->GetParent(pTemp)))
+                    pTreeLB->Expand(pTreeLB->GetParent(pTemp));
+                pTreeLB->MakeVisible(pTemp);
+                pTreeLB->Select(pTemp);
             }
         }
     }
     return SfxModalDialog::Notify(rNEvt);
 }
 
-bool OfaTreeOptionsDialog::hasTreePendingLayout() const
-{
-    return maTreeLayoutTimer.IsActive();
-}
-
-void OfaTreeOptionsDialog::queue_resize()
-{
-    if (hasTreePendingLayout())
-        return;
-    if (IsInClose())
-        return;
-    maTreeLayoutTimer.Start();
-}
-
-IMPL_LINK( OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl, void*, EMPTYARG )
-{
-    if (pCurrentPageEntry && aTreeLB.GetParent(pCurrentPageEntry))
-    {
-        OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pCurrentPageEntry->GetUserData();
-        if (pPageInfo->m_pPage && ::isLayoutEnabled(pPageInfo->m_pPage))
-            SetPaneSize(pPageInfo->m_pPage);
-    }
-    return 0;
-}
-
-
-void OfaTreeOptionsDialog::SetPaneSize(Window *pPane)
-{
-    //The OfaTreeOptionsDialog is not fully widget layout enabled
-    //yet so it's a classic fixed dimension dialog, but to make
-    //it possible to incrementally convert it over each pane
-    //can be converted to .ui layout format and the fixed area
-    //size reserved for panes is allocated to them here
-    Point aPos(aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
-    Size aSize(aSeparatorFL.GetSizePixel().Width(),
-               aSeparatorFL.GetPosPixel().Y() - aTreeLB.GetPosPixel().Y());
-    pPane->SetPosSizePixel( aPos, aSize );
-}
-
 void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
-    SvTreeListBox* pBox = &aTreeLB;
+    SvTreeListBox* pBox = pTreeLB;
 
     if(pCurrentPageEntry == pBox->GetCurEntry())
     {
@@ -993,13 +951,13 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     TabPage* pOldPage = NULL;
     TabPage* pNewPage = NULL;
-    OptionsPageInfo* pOptPageInfo = ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
+    OptionsPageInfo* pOptPageInfo = ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
         ? (OptionsPageInfo*)pCurrentPageEntry->GetUserData() : NULL;
 
     if ( pOptPageInfo && pOptPageInfo->m_pPage && pOptPageInfo->m_pPage->IsVisible() )
     {
         pOldPage = pOptPageInfo->m_pPage;
-        OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)aTreeLB.GetParent(pCurrentPageEntry)->GetUserData();
+        OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pTreeLB->GetParent(pCurrentPageEntry)->GetUserData();
         int nLeave = SfxTabPage::LEAVE_PAGE;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
            nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet );
@@ -1018,7 +976,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         pOptPageInfo->m_pExtPage->Hide();
         pOptPageInfo->m_pExtPage->DeactivatePage();
     }
-    else if ( pCurrentPageEntry && !aTreeLB.GetParent( pCurrentPageEntry ) )
+    else if ( pCurrentPageEntry && !pTreeLB->GetParent( pCurrentPageEntry ) )
     {
         OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pCurrentPageEntry->GetUserData();
         if ( pGroupInfo && pGroupInfo->m_pExtPage )
@@ -1064,10 +1022,10 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 if(bIdentical)
                     pGroupInfo->m_pShell = pGroupInfo->m_pModule;
                 // now test whether there was the same module in other groups, too (e. g. Text+HTML)
-                SvTreeListEntry* pTemp = aTreeLB.First();
+                SvTreeListEntry* pTemp = pTreeLB->First();
                 while(pTemp)
                 {
-                    if(!aTreeLB.GetParent(pTemp) && pTemp != pEntry)
+                    if(!pTreeLB->GetParent(pTemp) && pTemp != pEntry)
                     {
                         OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pTemp->GetUserData();
                         if(pTGInfo->m_pModule == pOldModule)
@@ -1077,7 +1035,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                                 pTGInfo->m_pShell = pGroupInfo->m_pModule;
                         }
                     }
-                    pTemp = aTreeLB.Next(pTemp);
+                    pTemp = pTreeLB->Next(pTemp);
                 }
             }
 
@@ -1094,16 +1052,16 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         if(pPageInfo->m_nPageId == RID_SVXPAGE_COLOR)
         {
             pPageInfo->m_pPage = ::CreateGeneralTabPage(
-                pPageInfo->m_nPageId, this, *pColorPageItemSet );
+                pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet );
             mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
             mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
         }
         else
         {
-            pPageInfo->m_pPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
+            pPageInfo->m_pPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet );
 
             if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-                pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet);
+                pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet);
 
         }
 
@@ -1113,8 +1071,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
 
-            Point aPagePos( aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
-            pPageInfo->m_pPage->SetPosPixel( aPagePos );
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
             {
                 pPageInfo->m_pPage->Reset( pColorPageItemSet );
@@ -1124,8 +1080,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             {
                 pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
             }
-            if (::isLayoutEnabled(pPageInfo->m_pPage))
-                SetPaneSize(pPageInfo->m_pPage);
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
@@ -1136,9 +1090,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         }
 
         pPageInfo->m_pExtPage = new ExtensionsTabPage(
-            this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
-
-        SetPaneSize(pPageInfo->m_pExtPage);
+            pTabBox, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
     }
 
     if ( pPageInfo->m_pPage )
@@ -1159,9 +1111,9 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         OUStringBuffer sTitleBuf(sTitle);
         sTitleBuf.append(" - ");
-        sTitleBuf.append(aTreeLB.GetEntryText(pParent));
+        sTitleBuf.append(pTreeLB->GetEntryText(pParent));
         sTitleBuf.append(" - ");
-        sTitleBuf.append(aTreeLB.GetEntryText(pEntry));
+        sTitleBuf.append(pTreeLB->GetEntryText(pEntry));
         SetText(sTitleBuf.makeStringAndClear());
     }
 
@@ -1848,67 +1800,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
 /*!!!
-    ResizeTreeLB();
     ActivateLastSelection();
  */
-}
-
-namespace
-{
-    void MoveControl( Control& _rCtrl, long _nDeltaPixel )
-    {
-        Point   aPt( _rCtrl.GetPosPixel() );
-        aPt.X() += _nDeltaPixel;
-        _rCtrl.SetPosPixel( aPt );
-    }
-}
-
-void OfaTreeOptionsDialog::ResizeTreeLB( void )
-{
-    const long  nMax = aSeparatorFL.GetSizePixel().Width() * 42 / 100;
-                                            // don't ask where 42 comes from... but it looks / feels ok ;-)
-    long        nDelta = 50;                // min.
-    sal_uInt16      nDepth = 0;
-    const long  nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
-    const long  nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
-
-    SvTreeList* pTreeList = aTreeLB.GetModel();
-    DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
-
-    SvTreeListEntry* pEntry = pTreeList->First();
-    while( pEntry )
-    {
-        long n = aTreeLB.GetTextWidth(aTreeLB.GetEntryText(pEntry));
-        n += ((nDepth == 0) ? nIndent0 : nIndent1);
-
-        if( n > nDelta )
-            nDelta = n;
-
-        pEntry = pTreeList->Next( pEntry, &nDepth );
-    }
-
-    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();         // + extra space [logic]
-    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();  // + scroll bar, in case it's needed
-
-    if( nDelta > nMax )
-        nDelta = nMax;
-
-    // starting resizing with this
-    Size            aSize( GetSizePixel() );
-    aSize.Width() += nDelta;
-    SetSizePixel( aSize );
-
-    // resize treelistbox
-    aSize = aTreeLB.GetSizePixel();
-    aSize.Width() += nDelta;
-    aTreeLB.SetSizePixel( aSize );
-
-    // ... and move depending controls
-    MoveControl( aOkPB, nDelta );
-    MoveControl( aCancelPB, nDelta );
-    MoveControl( aHelpPB, nDelta );
-    MoveControl( aBackPB, nDelta );
-    MoveControl( aSeparatorFL, nDelta );
 }
 
 bool isNodeActive( OptionsNode* pNode, Module* pModule )
@@ -2252,14 +2145,14 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
                 for ( sal_uInt32 k = 0; k < pNode->m_aGroupedLeaves[j].size(); ++k )
                 {
                     OptionsLeaf* pLeaf = pNode->m_aGroupedLeaves[j][k];
-                    lcl_insertLeaf( this, pNode, pLeaf, aTreeLB );
+                    lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
                 }
             }
 
             for ( j = 0; j < pNode->m_aLeaves.size(); ++j )
             {
                 OptionsLeaf* pLeaf = pNode->m_aLeaves[j];
-                lcl_insertLeaf( this, pNode, pLeaf, aTreeLB );
+                lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
             }
         }
     }

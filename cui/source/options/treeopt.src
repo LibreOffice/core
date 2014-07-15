@@ -22,62 +22,9 @@
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
 
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
-
-ModalDialog RID_OFADLG_OPTIONS_TREE
+String ST_LOAD_ERROR
 {
-    HelpID = HID_OFADLG_OPTIONS_TREE;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-
-    Size = MAP_APPFONT ( COL_12 , ROW_6 ) ;
-    Text [ en-US ] = "Options";
-
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( COL_4, ROW_4 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( COL_6, ROW_4 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( COL_8, ROW_4 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    PushButton PB_BACK
-    {
-        HelpID = "cui:PushButton:RID_OFADLG_OPTIONS_TREE:PB_BACK";
-        Pos = MAP_APPFONT ( COL_10, ROW_4 ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Revert" ;
-    };
-    //TreeListBox
-    Control TLB_PAGES
-    {
-        Pos = MAP_APPFONT ( COL_1, ROW_1 ) ;
-        Size = MAP_APPFONT ( (COL_2-COL_1), (ROW_5-ROW_1) );
-        TabStop = TRUE ;
-        Border = TRUE;
-    };
-    FixedLine FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( COL_3, ROW_3 ) ;
-        Size = MAP_APPFONT ( WIDTH_PAGEFRAME, ROW_4-ROW_3 ) ;
-    };
-    String ST_LOAD_ERROR
-    {
-        Text [ en-US ] = "The selected module could not be loaded.";
-    };
+    Text [ en-US ] = "The selected module could not be loaded.";
 };
 
 Resource RID_OFADLG_OPTIONS_TREE_PAGES
