@@ -7,5 +7,7 @@ public interface TileProvider {
     int getPageWidth();
     int getPageHeight();
 
+    boolean isReady();
+
     SubTile createTile(int x, int y);
 }

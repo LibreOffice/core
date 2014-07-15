@@ -86,22 +86,24 @@ public class LOKitThread extends Thread {
         return true;
     }
 
-    private void initialize() {
+    private boolean initialize() {
         mApplication = LibreOfficeMainActivity.mAppContext;
         mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), mInputFile);
+        return mTileProvider.isReady();
     }
 
     public void run() {
-        initialize();
-        try {
-            boolean drawn = false;
-            while (true) {
-                if (!mEvents.isEmpty()) {
-                    processEvent(mEvents.poll());
+        if (initialize()) {
+            try {
+                boolean drawn = false;
+                while (true) {
+                    if (!mEvents.isEmpty()) {
+                        processEvent(mEvents.poll());
+                    }
+                    Thread.sleep(100L);
                 }
-                Thread.sleep(100L);
+            } catch (InterruptedException ex) {
             }
-        } catch (InterruptedException ex) {
         }
     }
 

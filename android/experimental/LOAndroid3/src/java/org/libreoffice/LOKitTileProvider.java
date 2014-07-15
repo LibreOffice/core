@@ -56,6 +56,11 @@ public class LOKitTileProvider implements TileProvider {
         return (int) twipToPixel(mDocument.getDocumentHeight(), mDPI);
     }
 
+    @Override
+    public boolean isReady() {
+        return mDocument != null;
+    }
+
     public SubTile createTile(int x, int y) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);

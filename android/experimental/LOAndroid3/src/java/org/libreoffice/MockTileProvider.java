@@ -26,6 +26,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
     public SubTile createTile(int x, int y) {
         int tiles = (getPageWidth() / TILE_SIZE) + 1;
         int tileNumber = (y / TILE_SIZE) * tiles + (x / TILE_SIZE);
