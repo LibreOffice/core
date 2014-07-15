@@ -3746,8 +3746,7 @@ const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 void ScInterpreter::MergeCalcConfig()
 {
     maCalcConfig = maGlobalConfig;
-    if (pDok)
-        maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
+    maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
 }
 
 void ScInterpreter::GlobalExit()
