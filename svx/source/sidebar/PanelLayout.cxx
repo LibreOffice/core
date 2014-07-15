@@ -43,7 +43,7 @@ bool PanelLayout::hasPanelPendingLayout() const
     return m_aPanelLayoutTimer.IsActive();
 }
 
-void PanelLayout::queue_resize()
+void PanelLayout::queue_resize(StateChangedType /*eReason*/)
 {
     if (m_bInClose)
         return;

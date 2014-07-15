@@ -119,7 +119,7 @@ bool WizardDialog::hasWizardPendingLayout() const
     return maWizardLayoutTimer.IsActive();
 }
 
-void WizardDialog::queue_resize()
+void WizardDialog::queue_resize(StateChangedType /*eReason*/)
 {
     if (hasWizardPendingLayout())
         return;

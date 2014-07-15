@@ -189,7 +189,7 @@ private:
     VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
-    virtual void queue_resize() SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
     void SetPaneSize(Window *pPane);
 
 protected:

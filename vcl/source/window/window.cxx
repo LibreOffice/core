@@ -1984,7 +1984,7 @@ void Window::Tracking( const TrackingEvent& rTEvt )
         pWrapper->Tracking( rTEvt );
 }
 
-void Window::StateChanged( StateChangedType eType )
+void Window::StateChanged(StateChangedType eType)
 {
     switch (eType)
     {
@@ -2002,7 +2002,7 @@ void Window::StateChanged( StateChangedType eType )
             break;
         //stuff that does invalidate the layout
         default:
-            queue_resize();
+            queue_resize(eType);
             break;
     }
 }

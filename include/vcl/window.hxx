@@ -247,6 +247,7 @@ typedef sal_uInt16 StateChangedType;
 #define STATE_CHANGE_READONLY           ((StateChangedType)16)
 #define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)17)
 #define STATE_CHANGE_MIRRORING          ((StateChangedType)18)
+#define STATE_CHANGE_LAYOUT             ((StateChangedType)19)
 #define STATE_CHANGE_CONTROL_FOCUS      ((StateChangedType)20)
 #define STATE_CHANGE_USER               ((StateChangedType)10000)
 
@@ -1201,7 +1202,7 @@ public:
      *
      * akin to gtk_widget_queue_resize
      */
-    virtual void queue_resize();
+    virtual void queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT);
 
     /*
      * Sets the "width-request" property

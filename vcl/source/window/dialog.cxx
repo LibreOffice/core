@@ -1230,7 +1230,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
     return 0;
 }
 
-void Dialog::queue_resize()
+void Dialog::queue_resize(StateChangedType /*eReason*/)
 {
     if (hasPendingLayout() || isCalculatingInitialLayoutSize())
         return;

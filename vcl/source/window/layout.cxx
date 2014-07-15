@@ -157,10 +157,10 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
     }
 }
 
-void VclContainer::queue_resize()
+void VclContainer::queue_resize(StateChangedType eReason)
 {
     markLayoutDirty();
-    Window::queue_resize();
+    Window::queue_resize(eReason);
 }
 
 void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const

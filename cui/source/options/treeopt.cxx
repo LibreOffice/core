@@ -934,7 +934,7 @@ bool OfaTreeOptionsDialog::hasTreePendingLayout() const
     return maTreeLayoutTimer.IsActive();
 }
 
-void OfaTreeOptionsDialog::queue_resize()
+void OfaTreeOptionsDialog::queue_resize(StateChangedType /*eReason*/)
 {
     if (hasTreePendingLayout())
         return;

@@ -1423,13 +1423,16 @@ namespace
     }
 }
 
-void Window::queue_resize()
+void Window::queue_resize(StateChangedType eReason)
 {
     bool bSomeoneCares = queue_ungrouped_resize(this);
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-    pWindowImpl->mnOptimalWidthCache = -1;
-    pWindowImpl->mnOptimalHeightCache = -1;
+    if (eReason != STATE_CHANGE_VISIBLE)
+    {
+        pWindowImpl->mnOptimalWidthCache = -1;
+        pWindowImpl->mnOptimalHeightCache = -1;
+    }
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
         std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
