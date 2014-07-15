@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_8213805c",
+        "filename": "sw/source/filter/ww8/writerwordglue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-07-15T10:40:29Z",
+      "side": 1,
+      "message": "This change breaks the case where the title page has a header but the second page does not.",
+      "range": {
+        "startLine": 442,
+        "startChar": 20,
+        "endLine": 442,
+        "endChar": 37
+      },
+      "revId": "1c1b955ae7bee09cbec790a897660e83c8ba7d90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_7f8927ca",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-07-15T10:40:29Z",
+      "side": 1,
+      "message": "Inverting this logic is not correct:\n\nIf these two page styles look like they correspond to the first page and following page style for a single word section (i.e. IsPlausableSingleWordSection returns true), then we *should* combine them.",
+      "revId": "1c1b955ae7bee09cbec790a897660e83c8ba7d90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
