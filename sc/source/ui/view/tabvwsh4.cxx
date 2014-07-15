@@ -534,6 +534,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
 
 void ScTabViewShell::AddOpenGLChartWindows()
 {
+#if 0
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScGridWindow* pParentWindow = GetActiveWin();
 
@@ -554,6 +555,7 @@ void ScTabViewShell::AddOpenGLChartWindows()
         sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pOpenGLWindow);
         x3DWindowProvider->setWindow(nWindowPtr);
     }
+#endif
 }
 
 // DoReadUserData is also called from ctor when switching from print preview

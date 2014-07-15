@@ -549,7 +549,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     ScDocShell* pScDocSh = pData->GetDocShell();
     ScDocument* pScDoc   = pScDocSh->GetDocument();
     bool bUndo (pScDoc->IsUndoEnabled());
-
+#if 0
     Window* pParentWindow = pData->GetActiveWin();
     OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
     Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
@@ -565,6 +565,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     }
     else
         SAL_WARN("sc", "not a grid window. You are in serious trouble");
+#endif
 
     if( pReqArgs )
     {
@@ -640,7 +641,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // get chart position (from window size and data range)
         aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     }
-    pChildWindow->SetPosPixel(pChildWindow->LogicToPixel(aStart, MapMode(MAP_100TH_MM)));
 
     Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
@@ -735,7 +735,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     sal_Int16 nDialogRet = xDialog->execute();
                     if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                     {
-                        pGridWindow->DeleteChildWindow(pChildWindow);
                         // leave OLE inplace mode and unmark
                         OSL_ASSERT( pViewShell );
                         OSL_ASSERT( pView );
