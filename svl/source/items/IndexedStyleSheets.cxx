@@ -130,7 +130,7 @@ IndexedStyleSheets::FindPositionsByName(const rtl::OUString& name) const
 
 std::vector<unsigned>
 IndexedStyleSheets::FindPositionsByNameAndPredicate(const rtl::OUString& name,
-        StyleSheetPredicate& predicate) const
+        StyleSheetPredicate& predicate, SearchBehavior behavior) const
 {
     std::vector<unsigned> r;
     MapType::const_iterator it = mPositionsByName.find(name);
@@ -139,6 +139,9 @@ IndexedStyleSheets::FindPositionsByNameAndPredicate(const rtl::OUString& name,
         SfxStyleSheetBase *ssheet = mStyleSheets.at(pos).get();
         if (predicate.Check(*ssheet)) {
             r.push_back(pos);
+            if (behavior == RETURN_FIRST) {
+                break;
+            }
         }
     }
     return r;

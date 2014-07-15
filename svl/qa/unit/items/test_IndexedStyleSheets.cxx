@@ -27,6 +27,13 @@ class MockedStyleSheet : public SfxStyleSheetBase
 
 };
 
+struct DummyPredicate : public StyleSheetPredicate {
+    bool Check(const SfxStyleSheetBase& styleSheet) SAL_OVERRIDE {
+        (void)styleSheet; // fix compiler warning
+        return true;
+    }
+};
+
 class IndexedStyleSheetsTest : public CppUnit::TestFixture
 {
     void InstantiationWorks();
@@ -37,6 +44,7 @@ class IndexedStyleSheetsTest : public CppUnit::TestFixture
     void StyleSheetsCanBeRetrievedByTheirName();
     void KnowsThatItStoresAStyleSheet();
     void PositionCanBeQueriedByFamily();
+    void OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(IndexedStyleSheetsTest);
@@ -49,6 +57,7 @@ class IndexedStyleSheetsTest : public CppUnit::TestFixture
     CPPUNIT_TEST(StyleSheetsCanBeRetrievedByTheirName);
     CPPUNIT_TEST(KnowsThatItStoresAStyleSheet);
     CPPUNIT_TEST(PositionCanBeQueriedByFamily);
+    CPPUNIT_TEST(OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -174,7 +183,29 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
 
     const std::vector<unsigned>& w = iss.GetStyleSheetPositionsByFamily(SFX_STYLE_FAMILY_ALL);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
+}
 
+void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
+{
+    rtl::OUString name("name1");
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name, SFX_STYLE_FAMILY_CHAR));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name, SFX_STYLE_FAMILY_PARA));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name, SFX_STYLE_FAMILY_CHAR));
+
+    IndexedStyleSheets iss;
+    iss.AddStyleSheet(sheet1);
+    iss.AddStyleSheet(sheet2);
+    iss.AddStyleSheet(sheet3);
+
+    DummyPredicate predicate; // returns always true, i.e., all style sheets match the predicate.
+
+    std::vector<unsigned> v = iss.FindPositionsByNameAndPredicate(name, predicate,
+            IndexedStyleSheets::RETURN_FIRST);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Only one style sheet is returned.", static_cast<size_t>(1), v.size());
+
+    std::vector<unsigned> w = iss.FindPositionsByNameAndPredicate(name, predicate,
+                IndexedStyleSheets::RETURN_ALL);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("All style sheets are returned.", static_cast<size_t>(1), v.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexedStyleSheetsTest);
