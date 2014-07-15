@@ -1275,7 +1275,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     // If it is a single underlined space, output 2 spaces:
                     if( 1 == rInf.GetLen() )
                     {
-                        pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
+                           pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
 
                         rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
                                                      pKernArray, rInf.GetIdx(), 1 );
@@ -1463,8 +1463,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         nScrPos = pScrArray[ 0 ];
 
-#if defined(MACOSX) || defined(IOS)
-#else
         if( bBullet )
         {
             // !!! HACK !!!
@@ -1504,7 +1502,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
                 }
         }
-#endif
+
         sal_Int32 nCnt = rInf.GetText().getLength();
         if ( nCnt < rInf.GetIdx() )
             nCnt = 0;
@@ -1528,16 +1526,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-#if defined(MACOSX) || defined(IOS)
-            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
-                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
-#else
             rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
-#endif
         }
         else
         {
@@ -1729,10 +1722,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( bSwitchH2V )
                     rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-#if defined(MACOSX) || defined(IOS)
-                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
-                                             nTmpIdx + nOffs , nLen - nOffs, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
-#else
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                              nTmpIdx + nOffs , nLen - nOffs );
                 if (bBullet)
@@ -1758,7 +1747,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
                     rInf.GetOut().Pop();
                 }
-#endif
             }
         }
         delete[] pScrArray;
