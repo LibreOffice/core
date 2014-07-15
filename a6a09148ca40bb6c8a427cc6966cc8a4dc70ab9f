@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_22e4b439",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T13:33:29Z",
+      "side": 1,
+      "message": "You probably mean FirstIsShared?",
+      "revId": "a6a09148ca40bb6c8a427cc6966cc8a4dc70ab9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_02d09052",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T13:33:29Z",
+      "side": 0,
+      "message": "If it\u0027s not too hard, would it make sense to check the original bugreport, see what was the end-user problem and rewrite the testcase to assert that instead? That may be better than just removing the indeed stupid testcase.",
+      "revId": "85d1bd151cca1572e39019288cb2b7b35fc0bbda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
