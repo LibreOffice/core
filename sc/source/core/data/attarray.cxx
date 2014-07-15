@@ -1114,9 +1114,8 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
         {
             if ( pBoxInfoItem->IsValid(VALID_LEFT) )
                 aNewFrame.SetLine( pBoxItem->GetLeft(), BOX_LINE_RIGHT );
-            if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
-                aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
-                    BOX_LINE_LEFT );
+            if ( pBoxInfoItem->IsValid(VALID_RIGHT) )
+                aNewFrame.SetLine( pBoxItem->GetRight(), BOX_LINE_LEFT );
         }
         else
         {
