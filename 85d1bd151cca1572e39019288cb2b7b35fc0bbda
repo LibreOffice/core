@@ -16,6 +16,24 @@
       "revId": "85d1bd151cca1572e39019288cb2b7b35fc0bbda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_42be8800",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-07-15T14:21:12Z",
+      "side": 0,
+      "message": "It looks like fdo#66145 is a UI bug unrelated to ooxml - I\u0027m not quite sure how best to test that.\n\nThe commit which introduced this test case (2d5978b22b402dea9dee5b468d2044ccc1208a15) looks problematic:\n\n- Michael Stahl reverted that part of it which was relevant to fdo#66145 in bf206549228685a68e1504db05119d8fa1d354b3\n\n- The change to the docx import filter I am wanting to revert in this present patch\n\n- The change to the docx export looks wrong too",
+      "parentUuid": "dac4157f_02d09052",
+      "revId": "85d1bd151cca1572e39019288cb2b7b35fc0bbda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
