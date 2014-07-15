@@ -3347,6 +3347,12 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", "Icon");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSdtAlias, "sdt-alias.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();

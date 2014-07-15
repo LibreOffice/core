@@ -4396,7 +4396,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     // get interoperability information about embedded objects
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList;
+    uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( pName ) >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
         if ( aGrabBag[i].Name == "EmbeddedObjects" )
@@ -4411,13 +4411,26 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
 
     // set some attributes according to the type of the embedded object
-    OUString sProgID, sMediaType, sRelationType, sFileExtension;
+    OUString sProgID, sMediaType, sRelationType, sFileExtension, sDrawAspect="Content";
     for( sal_Int32 i=0; i < aObjectsInteropList.getLength(); ++i )
         if ( aObjectsInteropList[i].Name == sObjectName )
         {
-            aObjectsInteropList[i].Value >>= sProgID;
+            aObjectsInteropList[i].Value >>= aObjectInteropAttributes;
             break;
         }
+
+    for( sal_Int32 i=0; i < aObjectInteropAttributes.getLength(); ++i )
+    {
+            if ( aObjectInteropAttributes[i].Name == "ProgID" )
+            {
+                aObjectInteropAttributes[i].Value >>= sProgID;
+            }
+            else if ( aObjectInteropAttributes[i].Name == "DrawAspect" )
+            {
+                aObjectInteropAttributes[i].Value >>= sDrawAspect;
+            }
+    }
+
     if( sProgID == "Excel.Sheet.12" )
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -4541,7 +4554,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                     XML_Type, "Embed",
                                     XML_ProgID, OUStringToOString( sProgID, RTL_TEXTENCODING_UTF8 ).getStr(),
                                     XML_ShapeID, sShapeId.getStr(),
-                                    XML_DrawAspect, "Content",
+                                    XML_DrawAspect, OUStringToOString( sDrawAspect, RTL_TEXTENCODING_UTF8 ).getStr(),
                                     XML_ObjectID, "_" + OString::number( rand() ),
                                     FSNS( XML_r, XML_id ), sId.getStr(),
                                     FSEND );

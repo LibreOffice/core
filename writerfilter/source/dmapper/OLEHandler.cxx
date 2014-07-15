@@ -198,11 +198,17 @@ void OLEHandler::saveInteropProperties( uno::Reference< text::XTextDocument > xT
             break;
         }
 
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(2);
+    aGrabBagAttribute[0].Name = "ProgID";
+    aGrabBagAttribute[0].Value = uno::Any( m_sProgId );
+    aGrabBagAttribute[1].Name = "DrawAspect";
+    aGrabBagAttribute[1].Value = uno::Any( m_sDrawAspect );
+
     // save ProgID of current object
     sal_Int32 length = objectsList.getLength();
     objectsList.realloc( length + 1 );
     objectsList[length].Name = sObjectName;
-    objectsList[length].Value = uno::Any( m_sProgId );
+    objectsList[length].Value = uno::Any( aGrabBagAttribute );
 
     // put objects list back into the grab bag
     if( i == nBagLength )
