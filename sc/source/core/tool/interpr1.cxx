@@ -2656,8 +2656,8 @@ void ScInterpreter::ScIsErr()
         case svSingleRef :
         {
             ScAddress aAdr;
-            PopDoubleRefOrSingleRef( aAdr );
-            if ( nGlobalError && nGlobalError != NOTAVAILABLE )
+            bool bOk = PopDoubleRefOrSingleRef( aAdr );
+            if ( !bOk || (nGlobalError && nGlobalError != NOTAVAILABLE) )
                 nRes = true;
             else
             {
