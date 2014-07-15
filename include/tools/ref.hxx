@@ -157,6 +157,9 @@ public:
                     SvRefBase()
                     { nRefCount = SV_NO_DELETE_REFCOUNT; }
 
+                    SvRefBase( const SvRefBase & /* rObj */ )
+                    { nRefCount = SV_NO_DELETE_REFCOUNT; }
+
     SvRefBase &     operator = ( const SvRefBase & )
                     { return *this; }
 
