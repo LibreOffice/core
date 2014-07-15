@@ -43,7 +43,13 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle(OUString("g"), maSvgStyleAttributes);
+            const SvgStyleAttributes* aCheckCssStyle = checkForCssStyle(OUString("g"), maSvgStyleAttributes);
+            const SvgStyleAttributes* aGetCssStyleParent = maSvgStyleAttributes.getCssStyleParent();
+
+            if (aGetCssStyleParent == NULL)
+                return aCheckCssStyle;
+
+            return aGetCssStyleParent;
         }
 
         void SvgGNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
