@@ -48,6 +48,14 @@ inline bool operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com
             rL1.Variant  ==  rL2.Variant;
 }
 
+#if defined(WNT)
+
+// to be use to get a path name with long path prefix
+// under Windows for Hunspell, Hyphen and MyThes libraries
+OString Win_AddLongPathPrefix( const OString &rPathName );
+#endif
+
+
 // temporary function, to be removed when new style dictionaries
 // using configuration entries are fully implemented and provided
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicType );
