@@ -695,7 +695,8 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     }
 }
 
-int RTFDocumentImpl::resolvePict(bool bInline)
+int RTFDocumentImpl::resolvePict(bool const bInline,
+        uno::Reference<drawing::XShape> const& i_xShape)
 {
     SvMemoryStream aStream;
     SvStream* pStream = 0;
@@ -768,16 +769,13 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     }
 
     // Wrap it in an XShape.
-    uno::Reference<drawing::XShape> xShape;
-    xShape = m_pSdrImport->getCurrentShape();
+    uno::Reference<drawing::XShape> xShape(i_xShape);
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
-        if (!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
-            xShape.clear();
+        assert(xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"));
     }
-
-    if (!xShape.is())
+    else
     {
         if (m_xModelFactory.is())
             xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
@@ -4905,7 +4903,7 @@ int RTFDocumentImpl::popState()
         Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().aDestinationText.makeStringAndClear()]));
         break;
     case DESTINATION_PICT:
-        resolvePict(true);
+        resolvePict(true, m_pSdrImport->getCurrentShape());
         break;
     case DESTINATION_FORMFIELDNAME:
     {
