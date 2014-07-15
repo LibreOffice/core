@@ -2007,37 +2007,10 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
 
     // Register at the page
     // If there's none present, register via SwPageFrm::PreparePage
-    SwPageFrm *pPage = FindPageFrm();
-    if ( pPage )
+    SwPageFrm* pPage = FindPageFrm();
+    if ( pPage != NULL )
     {
-        if ( pNew->IsFlyAtCntFrm() && pNew->Frm().Top() == FAR_AWAY )
-        {
-            // Try to make the page formatting of new documents a bit handier:
-            // In the beginning we add the Flys to the back, so that the Anchors
-            // do not have to be reformatted unnecessarily often.
-            // However, we do not add them all the way at the end, so that we
-            // can still jump to the document's end in a meaningful way.
-            SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
-            if( !SwLayHelper::CheckPageFlyCache( pPage, pNew ) )
-            {
-                SwPageFrm *pTmp = pRoot->GetLastPage();
-                if ( pTmp->GetPhyPageNum() > 30 )
-                {
-                    for ( sal_uInt16 i = 0; i < 10; ++i )
-                    {
-                        pTmp = (SwPageFrm*)pTmp->GetPrev();
-                        if( pTmp->GetPhyPageNum() <= pPage->GetPhyPageNum() )
-                            break; // So that we don't end up before the Anchor
-                    }
-                    if ( pTmp->IsEmptyPage() )
-                        pTmp = (SwPageFrm*)pTmp->GetPrev();
-                    pPage = pTmp;
-                }
-            }
-            pPage->AppendFlyToPage( pNew );
-        }
-        else
-            pPage->AppendFlyToPage( pNew );
+        pPage->AppendFlyToPage( pNew );
     }
 }
 

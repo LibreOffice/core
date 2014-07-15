@@ -2253,9 +2253,10 @@ const SwFrmFmt*  SwFEShell::GetFlyNum(sal_uInt16 nIdx, FlyCntType eType, bool bI
 // show the current selected object
 void SwFEShell::MakeSelVisible()
 {
-    if( Imp()->HasDrawView() &&
-        Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+    if ( Imp()->HasDrawView() &&
+         Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
+        GetCurrFrm(); // just to trigger formatting in case the selected object is not formatted.
         MakeVisible( Imp()->GetDrawView()->GetAllMarkedRect() );
     }
     else
