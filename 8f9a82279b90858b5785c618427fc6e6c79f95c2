@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dac4157f_9f3f5bd6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-15T10:08:11Z",
+      "side": 1,
+      "message": "Then just remove it from here, a few years later someone will have a hard time trying to figure out what the comment means, as she/he will lack context. :-)",
+      "parentUuid": "dac4157f_1f558b1c",
+      "revId": "8f9a82279b90858b5785c618427fc6e6c79f95c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dac4157f_1fa7cb50",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
         "patchSetId": 2
