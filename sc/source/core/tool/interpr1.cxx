@@ -4357,9 +4357,7 @@ void ScInterpreter::ScMatch()
             }
             if (rItem.meType == ScQueryEntry::ByString)
             {
-                bool bIsVBAMode = false;
-                if ( pDok )
-                    bIsVBAMode = pDok->IsInVBAMode();
+                bool bIsVBAMode = pDok->IsInVBAMode();
 
                 // #TODO handle MSO wildcards
                 if ( bIsVBAMode )
