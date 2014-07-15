@@ -56,7 +56,7 @@ class SwWrongList;
 #endif
 
 #ifndef LEGACY_NON_PRINTING_CHARACTER_COLOR_FUNCTIONALITY
-#define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA( 0x6A, 0xBE, 0xD3 )
+#define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA(0x26, 0x8b, 0xd2)
 #endif
 
 /// Represents the visualization of a paragraph.
