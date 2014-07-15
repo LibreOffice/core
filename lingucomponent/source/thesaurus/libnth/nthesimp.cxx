@@ -331,8 +331,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
 
 #if defined(WNT)
                 // MyThes waits UTF-8 encoded paths with \\?\ long path prefix.
-                OString aTmpidx = OUStringToOString(nidx, RTL_TEXTENCODING_UTF8);
-                OString aTmpdat = OUStringToOString(ndat, RTL_TEXTENCODING_UTF8);
+                OString aTmpidx = Win_AddLongPathPrefix(OUStringToOString(nidx, RTL_TEXTENCODING_UTF8));
+                OString aTmpdat = Win_AddLongPathPrefix(OUStringToOString(ndat, RTL_TEXTENCODING_UTF8));
 #else
                 OString aTmpidx(OU2ENC(nidx,osl_getThreadTextEncoding()));
                 OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
