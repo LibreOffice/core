@@ -3596,7 +3596,7 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
         if ( fVal == rArray[ i ] )
         {
             if ( bInclusive )
-                fRes = ( double )nOldCount / ( double )( nSize - 1 );
+                fRes = div( nOldCount, nSize - 1 );
             else
                 fRes = ( double )( i + 1 ) / ( double )( nSize + 1 );
         }
@@ -3615,7 +3615,7 @@ double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVa
                 double fFract = ( fVal - rArray[ nOldCount - 1 ] ) /
                     ( rArray[ nOldCount ] - rArray[ nOldCount - 1 ] );
                 if ( bInclusive )
-                    fRes = ( ( double )( nOldCount - 1 ) + fFract ) / ( double )( nSize - 1 );
+                    fRes = div( ( double )( nOldCount - 1 ) + fFract, nSize - 1 );
                 else
                     fRes = ( ( double )nOldCount + fFract ) / ( double )( nSize + 1 );
             }
