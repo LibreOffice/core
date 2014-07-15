@@ -121,7 +121,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLParserState \
     writerfilter/source/ooxml/OOXMLPropertySetImpl \
     writerfilter/source/ooxml/OOXMLStreamImpl \
-    writerfilter/source/resourcemodel/Fraction \
     writerfilter/source/resourcemodel/LoggedResources \
     writerfilter/source/resourcemodel/ResourceModelHelper \
     writerfilter/source/resourcemodel/TagLogger \

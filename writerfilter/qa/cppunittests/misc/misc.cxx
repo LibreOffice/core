@@ -22,10 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <dmapper/ConversionHelper.hxx>
 #include <dmapper/DomainMapper_Impl.hxx>
-#define private public
-#include <../../../source/resourcemodel/Fraction.cxx>
-#undef private
-
 
 using namespace std;
 
@@ -39,12 +35,10 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     void testTwipConversions();
-    void testFraction();
     void testFieldParameters();
 
     CPPUNIT_TEST_SUITE(WriterfilterMiscTest);
     CPPUNIT_TEST(testTwipConversions);
-    CPPUNIT_TEST(testFraction);
     CPPUNIT_TEST(testFieldParameters);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -75,17 +69,6 @@ void WriterfilterMiscTest::testTwipConversions()
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), convertTwipToMM100Unsigned(1));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(17639), convertTwipToMM100Unsigned(10000));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), convertTwipToMM100Unsigned(40000));
-}
-
-void WriterfilterMiscTest::testFraction()
-{
-    using writerfilter::resourcemodel::Fraction;
-    Fraction f1(-928800, 2717);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-928800), f1.mnNumerator); // became positive
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2717), f1.mnDenominator);
-    Fraction f2(-220869, 1350);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-24541), f2.mnNumerator); // became positive
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), f2.mnDenominator);
 }
 
 void WriterfilterMiscTest::testFieldParameters()
