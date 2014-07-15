@@ -824,7 +824,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-static SwPageDesc* lcl_FindPageDesc( SwPageDescs *maPageDescs, const OUString & rName, sal_uInt16* pPos )
+static SwPageDesc* lcl_FindPageDescByName( SwPageDescs *maPageDescs, const OUString & rName, sal_uInt16* pPos )
 {
     SwPageDescs::const_iterator it = maPageDescs->find( rName );
     SwPageDesc* res = NULL;
@@ -838,21 +838,21 @@ static SwPageDesc* lcl_FindPageDesc( SwPageDescs *maPageDescs, const OUString & 
     return res;
 }
 
-SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos )
+SwPageDesc* SwDoc::FindPageDescByName( const OUString & rName, sal_uInt16* pPos )
 {
-    return lcl_FindPageDesc( &maPageDescs, rName, pPos );
+    return lcl_FindPageDescByName( &maPageDescs, rName, pPos );
 }
 
-SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos ) const
+SwPageDesc* SwDoc::FindPageDescByName( const OUString & rName, sal_uInt16* pPos ) const
 {
-    return lcl_FindPageDesc( const_cast <SwPageDescs *>( &maPageDescs ), rName, pPos );
+    return lcl_FindPageDescByName( const_cast <SwPageDescs *>( &maPageDescs ), rName, pPos );
 }
 
 void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
 {
     sal_uInt16 nI;
 
-    if (FindPageDesc(rName, &nI))
+    if (FindPageDescByName(rName, &nI))
         DelPageDesc(nI, bBroadcast);
 }
 
@@ -860,7 +860,7 @@ void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)
 {
     sal_uInt16 nI;
 
-    if (FindPageDesc(rName, &nI))
+    if (FindPageDescByName(rName, &nI))
         ChgPageDesc(nI, rDesc);
 }
 

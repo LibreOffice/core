@@ -307,7 +307,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             {
                 SfxItemSet aTmpSet( *this );
 
-                SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
+                SwPageDesc* pDstPgDesc = pDstDoc->FindPageDescByName(pPgDesc->GetName());
                 if( !pDstPgDesc )
                 {
                     pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
