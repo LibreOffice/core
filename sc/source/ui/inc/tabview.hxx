@@ -204,12 +204,6 @@ private:
 
     void            PaintRangeFinderEntry (ScRangeFindData* pData, SCTAB nTab);
 
-    /**
-     * Check the visible grid area to see if the visible range has changed. If
-     * so, update the stored visible range, and re-paint the grid area.
-     */
-    void UpdateGrid();
-
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
                                         const SCROW* pPosY = NULL );
