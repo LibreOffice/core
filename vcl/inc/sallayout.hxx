@@ -40,19 +40,6 @@ typedef unsigned short LanguageType;
 class SalGraphics;
 class PhysicalFontFace;
 
-// Layout options
-#define SAL_LAYOUT_BIDI_RTL                 0x0001
-#define SAL_LAYOUT_BIDI_STRONG              0x0002
-#define SAL_LAYOUT_RIGHT_ALIGN              0x0004
-#define SAL_LAYOUT_KERNING_PAIRS            0x0010
-#define SAL_LAYOUT_KERNING_ASIAN            0x0020
-#define SAL_LAYOUT_VERTICAL                 0x0040
-#define SAL_LAYOUT_COMPLEX_DISABLED         0x0100
-#define SAL_LAYOUT_ENABLE_LIGATURES         0x0200
-#define SAL_LAYOUT_SUBSTITUTE_DIGITS        0x0400
-#define SAL_LAYOUT_KASHIDA_JUSTIFICATON     0x0800
-#define SAL_LAYOUT_DISABLE_GLYPH_PROCESSING 0x1000
-#define SAL_LAYOUT_FOR_FALLBACK             0x2000
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_PLUGIN_PUBLIC ImplLayoutRuns
@@ -99,7 +86,8 @@ public:
 
 public:
                 ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
-                    int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag );
+                                int nMinCharPos, int nEndCharPos, int nFlags,
+                                const LanguageTag& rLanguageTag );
 
     void        SetLayoutWidth( long nWidth )       { mnLayoutWidth = nWidth; }
     void        SetDXArray( const sal_Int32* pDXArray )  { mpDXArray = pDXArray; }
