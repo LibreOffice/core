@@ -525,7 +525,6 @@ namespace
 
         bool bTruncateText = rInfo.mbEndOfParagraph; // arbitrary property
 
-
         if ( bTruncateText ) // truncate text
             impHandleTruncatedPortion(rInfo);
         else // no chaining or truncating
