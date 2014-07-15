@@ -555,10 +555,11 @@ namespace
         // make text portion primitive with the first part of the portion
         impCreateTextPortionPrimitive(rTruncatedPortionInfo);
 
-        // for debugging purposes (skip experiments)
-        /* bool b = true;
+        // for debugging purposes:
+        // carry out experiments only when setting b=false from gdb
+        bool b = true;
         if (b)
-            return; */
+            return;
 
         /* Some Experiments */
 
@@ -580,6 +581,8 @@ namespace
         if ( pPage && pPage->GetObjCount() > 1) {
             pNextTextObj =  dynamic_cast< SdrTextObj * >(
                                                 pPage->GetObj(1) );
+            if ( pNextTextObj == NULL)
+                return;
         } else {
             fprintf(stderr, "Make New Object please\n");
             return;
@@ -590,7 +593,7 @@ namespace
         /* End Experiments */
 
         // if text is left in original portion, send it back to editeng
-        // FIXME(matteocam)
+        // TODO(matteocam)
     }
 
 
@@ -792,7 +795,7 @@ void SdrTextObj::embedText() const
 
 void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
 {
-    // Code from FitFrameToTextSize
+    // Code inspired from SdrTextObj::FitFrameToTextSize
 
     // avoid copying text in same box
     if ( this ==  pNextTextObj )
@@ -804,8 +807,13 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
     if( pText!=NULL && pText->GetOutlinerParaObject() && pModel!=NULL)
     {
         Rectangle &aNextRect = pNextTextObj->aRect;
-        SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner();
-        rOutliner.SetPaperSize(Size(aNextRect.Right()-aNextRect.Left(),aNextRect.Bottom()-aNextRect.Top()));
+        SdrOutliner& rOutliner = pNextTextObj->ImpGetDrawOutliner(); // XXX: shit seems to happen in here
+        rOutliner.SetPaperSize(
+            Size(
+                aNextRect.Right()-aNextRect.Left(),
+                aNextRect.Bottom()-aNextRect.Top()
+                )
+         );
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(*pText->GetOutlinerParaObject());
         Size aNewSize(rOutliner.CalcTextSize());
