@@ -12,6 +12,7 @@
 
 #if !defined(WNT)
 
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -19,6 +20,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -2243,6 +2245,35 @@ DECLARE_OOXMLIMPORT_TEST(testFdo80555, "fdo80555.docx")
     // Shape was wrongly placed at X=0, Y=0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3318), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(245), xShape->getPosition().Y);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
+{
+    // The ContourPolyPolygon was wrong
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+
+    drawing::PointSequenceSequence rContour = getProperty<drawing::PointSequenceSequence>(xPropertySet, "ContourPolyPolygon");
+    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
+
+    // We've got exactly one polygon inside
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aPolyPolygon.count());
+
+    // Now check it deeply
+    basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
+
+    CPPUNIT_ASSERT_EQUAL(double(-163), aPolygon.getB2DPoint(0).getX());
+    CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(0).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(-163), aPolygon.getB2DPoint(1).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3661), aPolygon.getB2DPoint(1).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(16988), aPolygon.getB2DPoint(2).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3661), aPolygon.getB2DPoint(2).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(16988), aPolygon.getB2DPoint(3).getX());
+    CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(3).getY());
 }
 
 #endif
