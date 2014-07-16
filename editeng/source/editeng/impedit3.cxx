@@ -355,9 +355,9 @@ bool IsPageOverflow(const sal_uInt32 aStatus, bool isVertical,
     const bool bTextGrowX=(aStatus & EE_STAT_TEXTWIDTHCHANGED) !=0;
     const bool bTextGrowY=(aStatus & EE_STAT_TEXTHEIGHTCHANGED) !=0;
 
-    const bPageExpansionX = ( aPrevPaperSize.Width() != 0 ) && // XXX
+    const bool bPageExpansionX = ( aPrevPaperSize.Width() != 0 ) && // XXX
                             ( aPaperSize.Width() > aPrevPaperSize.Width() );
-    const bPageExpansionY = ( aPrevPaperSize.Height() != 0 ) && // XXX
+    const bool bPageExpansionY = ( aPrevPaperSize.Height() != 0 ) && // XXX
                             ( aPaperSize.Height() > aPrevPaperSize.Height() );
 
     return ( bTextGrowY && !isVertical && bPageExpansionY ) ||
