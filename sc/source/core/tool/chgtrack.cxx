@@ -1793,10 +1793,9 @@ void ScChangeActionContent::GetValueString(
         case CELLTYPE_FORMULA :
             GetFormulaString(rStr, rCell.mpFormula);
         break;
+        case CELLTYPE_NONE:
         default:
-        {
-            // added to avoid warnings
-        }
+            rStr = OUString();
     }
 }
 
