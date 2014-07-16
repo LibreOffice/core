@@ -32,10 +32,12 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
+#ifndef SYSTEM_CURL
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
+#endif
 
 #include <comphelper/processfactory.hxx>
 #include <config_oauth2.h>
@@ -276,6 +278,7 @@ namespace cmis
 
         if ( NULL == m_pSession )
         {
+#ifndef SYSTEM_CURL
             // Initialize NSS library to make sure libcmis (and curl) can access CACERTs using NSS
             // when using internal libcurl.
             uno::Reference< com::sun::star::xml::crypto::XNSSInitializer >
@@ -285,6 +288,7 @@ namespace cmis
                     xNSSInitializer->getDigestContext( com::sun::star::xml::crypto::DigestID::SHA256,
                                                               uno::Sequence< beans::NamedValue >() ),
                                                               uno::UNO_SET_THROW );
+#endif
 
             // Set the SSL Validation handler
             libcmis::CertValidationHandlerPtr certHandler(

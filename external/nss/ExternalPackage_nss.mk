@@ -18,7 +18,6 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libnss3.dylib \
 		dist/out/lib/libnssckbi.dylib \
 		dist/out/lib/libnssdbm3.dylib \
-		dist/out/lib/libnsspem.dylib \
 		dist/out/lib/libnssutil3.dylib \
 		dist/out/lib/libplc4.dylib \
 		dist/out/lib/libplds4.dylib \
@@ -34,7 +33,6 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/nss3.dll \
 		dist/out/lib/nssckbi.dll \
 		dist/out/lib/nssdbm3.dll \
-		dist/out/lib/nsspem.dll \
 		dist/out/lib/nssutil3.dll \
 		dist/out/lib/plc4.dll \
 		dist/out/lib/plds4.dll \
@@ -50,7 +48,6 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libnss3.so \
 		dist/out/lib/libnssckbi.so \
 		dist/out/lib/libnssdbm3.so \
-		dist/out/lib/libnsspem.so \
 		dist/out/lib/libnssutil3.so \
 		dist/out/lib/libplc4.so \
 		dist/out/lib/libplds4.so \
@@ -59,6 +56,22 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libssl3.so \
 		dist/out/lib/libsqlite3.so \
 ))
+endif
+
+ifeq ($(SYSTEM_CURL),)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/libnsspem.dylib \
+))
+else ifeq ($(OS),WNT)
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/nsspem.dll \
+))
+else # OS!=WNT/MACOSX
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/libnsspem.so \
+))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
