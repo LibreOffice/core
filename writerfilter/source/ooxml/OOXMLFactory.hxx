@@ -148,16 +148,8 @@ public:
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
     virtual ~OOXMLFactory();
-    inline void IncRef() const{osl_atomic_increment(&mnRefCnt);}
-    inline void DecRef() const
-    {
-        if (!osl_atomic_decrement(&mnRefCnt))
-            const_cast<OOXMLFactory*>(this)->Delete();
-    }
-   inline void Delete() {delete this;}
-   inline oslInterlockedCount GetRef() const { return mnRefCnt; }
-protected:
-  mutable oslInterlockedCount mnRefCnt;        // reference count
+public:
+    sal_uInt32 mnRefCnt;
 private:
     static Pointer_t m_Instance;
 
@@ -170,13 +162,14 @@ private:
                                       Token_t Element);
 };
 
-  inline void intrusive_ptr_add_ref(const OOXMLFactory* p)
+  inline void intrusive_ptr_add_ref(OOXMLFactory* p)
   {
-    p->IncRef();
+      p->mnRefCnt++;
   }
-  inline void intrusive_ptr_release(const OOXMLFactory* p)
+  inline void intrusive_ptr_release(OOXMLFactory* p)
   {
-    p->DecRef();
+      if (!(--p->mnRefCnt))
+          delete p;
   }
 }
 }

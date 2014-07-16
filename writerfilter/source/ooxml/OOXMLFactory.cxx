@@ -102,8 +102,8 @@ OOXMLFactory::Pointer_t OOXMLFactory::m_Instance;
 OOXMLFactory::OOXMLFactory()
 {
     // multi-thread-safe mutex for all platforms
-
     osl::MutexGuard aGuard(OOXMLFactory_Mutex::get());
+    mnRefCnt = 0;
 }
 
 OOXMLFactory::~OOXMLFactory()
