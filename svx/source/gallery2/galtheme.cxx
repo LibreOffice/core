@@ -652,10 +652,18 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
         sal_uIntPtr nStorErr = 0;
 
+        try
         {
             SvStorageRef aTempStorageRef( new SvStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef );
             nStorErr = aSvDrawStorageRef->GetError();
+        }
+        catch (const css::ucb::ContentCreationException& e)
+        {
+            SAL_WARN("svx", "failed to open: "
+                      << aTmpURL.GetMainURL(INetURLObject::NO_DECODE)
+                      << "due to : " << e.Message);
+            nStorErr = ERRCODE_IO_GENERAL;
         }
 
         if( !nStorErr )
