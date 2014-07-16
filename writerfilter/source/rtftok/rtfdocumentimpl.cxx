@@ -695,8 +695,7 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     }
 }
 
-int RTFDocumentImpl::resolvePict(bool const bInline,
-        uno::Reference<drawing::XShape> const& i_xShape)
+int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
 {
     SvMemoryStream aStream;
     SvStream* pStream = 0;
