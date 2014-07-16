@@ -4904,9 +4904,6 @@ int RTFDocumentImpl::popState()
     case DESTINATION_BOOKMARKEND:
         Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().aDestinationText.makeStringAndClear()]));
         break;
-    case DESTINATION_PICT:
-        resolvePict(true, m_pSdrImport->getCurrentShape());
-        break;
     case DESTINATION_FORMFIELDNAME:
     {
         RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
@@ -5192,6 +5189,13 @@ int RTFDocumentImpl::popState()
                 Mapper().startShape(xShape);
             }
             Mapper().endShape();
+        }
+        break;
+    case DESTINATION_PICT:
+        // fdo#79319 ignore picture data if it's really a shape
+        if (!m_pSdrImport->isFakePict())
+        {
+            resolvePict(true, m_pSdrImport->getCurrentShape());
         }
         break;
     case DESTINATION_SHAPE:
