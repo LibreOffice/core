@@ -439,9 +439,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         // the "border") that best emulates the gradient between begin() and prior(end()).
 
                         // First look for the largest segment in the gradient.
-                        GradientFillProperties::GradientStopMap::const_iterator aIt(aGradientStops.begin());
+                        GradientFillProperties::GradientStopMap::iterator aIt(aGradientStops.begin());
                         double nWidestWidth = -1;
-                        GradientFillProperties::GradientStopMap::const_iterator aWidestSegmentStart;
+                        GradientFillProperties::GradientStopMap::iterator aWidestSegmentStart;
                         aIt++;
                         while( aIt != aGradientStops.end() )
                         {
