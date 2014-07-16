@@ -247,29 +247,29 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
         {
             return OUString();
         }
+    }
 
-        libetonyek::EtonyekDocument::Type type = libetonyek::EtonyekDocument::TYPE_UNKNOWN;
-        const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported( input.get(), &type );
-        if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence) || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
-            return OUString();
+    libetonyek::EtonyekDocument::Type type = libetonyek::EtonyekDocument::TYPE_UNKNOWN;
+    const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported( input.get(), &type );
+    if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence) || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
+        return OUString();
 
-        if ( confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART )
+    if ( confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART )
+    {
+       assert( !bIsPackage );
+
+        const Reference < container::XChild > xChild( xContent, UNO_QUERY );
+        if ( xChild.is() )
         {
-            assert( !bIsPackage );
-
-            const Reference < container::XChild > xChild( xContent, UNO_QUERY );
-            if ( xChild.is() )
+            const Reference < ucb::XContent > xPackageContent( xChild->getParent(), UNO_QUERY );
+            if ( xPackageContent.is() )
             {
-                const Reference < ucb::XContent > xPackageContent( xChild->getParent(), UNO_QUERY );
-                if ( xPackageContent.is() )
+                input.reset( new writerperfect::DirectoryStream( xPackageContent ) );
+                if ( libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported( input.get() ) )
                 {
-                    input.reset( new writerperfect::DirectoryStream( xPackageContent ) );
-                    if ( libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported( input.get() ) )
-                    {
-                        xContent = xPackageContent;
-                        bUCBContentChanged = true;
-                        bIsPackage = true;
-                    }
+                    xContent = xPackageContent;
+                    bUCBContentChanged = true;
+                    bIsPackage = true;
                 }
             }
         }
