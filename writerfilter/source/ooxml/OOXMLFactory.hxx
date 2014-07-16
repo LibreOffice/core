@@ -28,6 +28,7 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 
 #include "OOXMLFastContextHandler.hxx"
+#include <boost/intrusive_ptr.hpp>
 
 namespace writerfilter {
 namespace ooxml {
@@ -127,7 +128,7 @@ protected:
 class OOXMLFactory
 {
 public:
-    typedef boost::shared_ptr<OOXMLFactory> Pointer_t;
+    typedef boost::intrusive_ptr<OOXMLFactory>Pointer_t;
 
     static Pointer_t getInstance();
 
@@ -147,7 +148,16 @@ public:
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
     virtual ~OOXMLFactory();
-
+    inline void IncRef() const{osl_atomic_increment(&mnRefCnt);}
+    inline void DecRef() const
+    {
+        if (!osl_atomic_decrement(&mnRefCnt))
+            const_cast<OOXMLFactory*>(this)->Delete();
+    }
+   inline void Delete() {delete this;}
+   inline oslInterlockedCount GetRef() const { return mnRefCnt; }
+protected:
+  mutable oslInterlockedCount mnRefCnt;        // reference count
 private:
     static Pointer_t m_Instance;
 
@@ -160,6 +170,14 @@ private:
                                       Token_t Element);
 };
 
+  inline void intrusive_ptr_add_ref(const OOXMLFactory* p)
+  {
+    p->IncRef();
+  }
+  inline void intrusive_ptr_release(const OOXMLFactory* p)
+  {
+    p->DecRef();
+  }
 }
 }
 
