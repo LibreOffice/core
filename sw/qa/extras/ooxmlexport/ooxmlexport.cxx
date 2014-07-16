@@ -3561,13 +3561,13 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79915, "fdo79915.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[8]/w:t", "How much buoyancy does the water provide?");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
+DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID","{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "xpath","/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
+    }
 }
 
 
