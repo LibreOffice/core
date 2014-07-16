@@ -3810,6 +3810,14 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
+{
+    // sw::util::IsPlausableSingleWordSection() did not merge two page styles due to borders.
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // Page break was exported as section break, this was 0
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

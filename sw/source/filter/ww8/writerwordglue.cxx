@@ -334,6 +334,23 @@ namespace myImplHelpers
     };
 }
 
+/// Count what Word calls left/right margin from a format's LRSpace + Box.
+static SvxLRSpaceItem lcl_getWordLRSpace(const SwFrmFmt& rFmt)
+{
+    SvxLRSpaceItem aLR(rFmt.GetLRSpace());
+    const SvxBoxItem& rBox = rFmt.GetBox();
+
+    aLR.SetLeft(aLR.GetLeft() + rBox.GetDistance(BOX_LINE_LEFT));
+    if (const editeng::SvxBorderLine* pLeft = rBox.GetLeft())
+        aLR.SetLeft(aLR.GetLeft() + pLeft->GetWidth());
+
+    aLR.SetRight(aLR.GetRight() + rBox.GetDistance(BOX_LINE_RIGHT));
+    if (const editeng::SvxBorderLine* pRight = rBox.GetRight())
+        aLR.SetRight(aLR.GetRight() + pRight->GetWidth());
+
+    return aLR;
+}
+
 namespace sw
 {
     namespace util
@@ -347,8 +364,8 @@ namespace sw
             const SwFmtCol& rFollowCols = rFollowFmt.GetCol();
             const SwColumns& rFirstColumns = rFirstCols.GetColumns();
             const SwColumns& rFollowColumns = rFollowCols.GetColumns();
-            const SvxLRSpaceItem &rOneLR = rTitleFmt.GetLRSpace();
-            const SvxLRSpaceItem &rTwoLR= rFollowFmt.GetLRSpace();
+            SvxLRSpaceItem aOneLR = lcl_getWordLRSpace(rTitleFmt);
+            SvxLRSpaceItem aTwoLR = lcl_getWordLRSpace(rFollowFmt);
             const SwFmtFrmSize& rFirstFrmSize = rTitleFmt.GetFrmSize();
             const SwFmtFrmSize& rFollowFrmSize = rFollowFmt.GetFrmSize();
 
@@ -357,7 +374,7 @@ namespace sw
                 //e.g. #i4320#
                 bPlausableSingleWordSection = false;
             }
-            else if (rOneLR != rTwoLR)
+            else if (aOneLR != aTwoLR)
                 bPlausableSingleWordSection = false;
             else if (rFirstFrmSize != rFollowFrmSize)
                 bPlausableSingleWordSection = false;
