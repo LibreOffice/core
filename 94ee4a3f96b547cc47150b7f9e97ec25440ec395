@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_62ff4c35",
+        "filename": "writerfilter/source/ooxml/OOXMLFactory.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-07-16T14:28:52Z",
+      "side": 1,
+      "message": "Please delete this commented code :-)",
+      "revId": "94ee4a3f96b547cc47150b7f9e97ec25440ec395",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
