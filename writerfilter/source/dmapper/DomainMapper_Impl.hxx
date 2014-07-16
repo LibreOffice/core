@@ -132,6 +132,8 @@ class FieldContext
     OUString                                                                 m_sHyperlinkURL;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
+    /// (Character) properties of the field itself.
+    PropertyMapPtr m_pProperties;
 
 public:
     FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xStart);
@@ -169,6 +171,7 @@ public:
 
     void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
     FormControlHelper::Pointer_t getFormControlHelper() const { return m_pFormControlHelper; }
+    PropertyMapPtr getProperties() { return m_pProperties; }
 
     ::std::vector<OUString> GetCommandParts() const;
 };

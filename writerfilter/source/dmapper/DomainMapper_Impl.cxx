@@ -2486,6 +2486,7 @@ FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
     m_bFieldCommandCompleted( false )
     ,m_xStartRange( xStart )
 {
+    m_pProperties.reset(new PropertyMap());
 }
 
 
@@ -3838,17 +3839,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                                             uno::makeAny(aValues));
                         }
                         uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
-                        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-                        if (xTextAppend.is())
-                        {
-                            uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-                            uno::Reference< text::XText > xText = xTextAppend->getText();
-                            if(xCrsr.is() && xText.is())
-                            {
-                                xCrsr->gotoEnd(false);
-                                xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, sal_False);
-                            }
-                        }
+
+                        uno::Sequence<beans::PropertyValue> aValues = m_aFieldStack.top()->getProperties()->GetPropertyValues();
+                        appendTextContent(xToInsert, aValues);
                         m_bSetCitation = true;
                     }
                     break;

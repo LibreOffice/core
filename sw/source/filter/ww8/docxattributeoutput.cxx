@@ -7828,6 +7828,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id" && m_nRunSdtPrToken == 0)
                     // only write id token as a marker if no other exist
                     m_nRunSdtPrToken = FSNS( XML_w, XML_id );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
+                    m_nRunSdtPrToken = FSNS( XML_w, XML_citation );
             }
         }
         else

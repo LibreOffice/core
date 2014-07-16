@@ -2903,7 +2903,7 @@ DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
     // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:r[2]/w:instrText[1]",1);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[5]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText[1]",1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p/w:sdt/w:sdtContent/w:r[2]/w:instrText[1]",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
@@ -3002,8 +3002,8 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText", " CITATION Kra06 \\l 1033 ");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "(Kramer & Chen, 2006)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:instrText", " CITATION Kra06 \\l 1033 ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[4]/w:t", "(Kramer & Chen, 2006)");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")
@@ -3101,11 +3101,11 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
     if (!pXmlDoc)
        return;
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:text", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:id", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtPr/w:text", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:sdt/w:sdtPr/w:id", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:group", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:citation", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:citation", 1);
 
 }
 
@@ -3797,6 +3797,17 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(148), xBitmap->getSize().Height );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
+{
+    // The problem was that the SDT was around the whole paragraph, not only around the citation field.
+    if (xmlDocPtr pXmlDoc = parseExport())
+    {
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:t", "Before sdt.");
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:instrText", " CITATION BBC11 \\l 1033 ");
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:t", "After sdt.");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
