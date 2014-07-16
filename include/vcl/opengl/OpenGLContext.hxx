@@ -30,6 +30,7 @@
 #include <GL/glext.h>
 #include <GL/wglext.h>
 #elif defined( MACOSX )
+#include <OpenGL/OpenGL.h>
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
@@ -90,6 +91,7 @@ struct GLWindow
     HDC                     hDC;
     HGLRC                   hRC;
 #elif defined( MACOSX )
+    CGLContextObj context;
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )

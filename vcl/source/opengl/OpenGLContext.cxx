@@ -42,7 +42,10 @@ OpenGLContext::~OpenGLContext()
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX )
+    CGLSetCurrentContext(NULL);
+    CGLDestroyContext(m_aGLWin.context);
+#elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
     if(m_aGLWin.ctx)
@@ -392,9 +395,6 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
 #elif defined( MACOSX )
 
-    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for OS X");
-    return false;
-
 #elif defined( IOS )
 
     SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for iOS");
@@ -473,6 +473,24 @@ bool OpenGLContext::ImplInit()
     }
 
 #elif defined( MACOSX )
+
+    CGLPixelFormatAttribute pixelFormatAttributes[] = {
+        kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
+        kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
+        kCGLPFADoubleBuffer,
+        kCGLPFASampleBuffers, (CGLPixelFormatAttribute) 1,
+        kCGLPFASampleBuffers, (CGLPixelFormatAttribute) 4,
+        (CGLPixelFormatAttribute) 0
+        };
+
+    CGLPixelFormatObj pixelFormat;
+    GLint numberOfPixels;
+    CGLChoosePixelFormat(pixelFormatAttributes, &pixelFormat, &numberOfPixels);
+
+    CGLCreateContext(pixelFormat, 0, &m_aGLWin.context);
+    CGLDestroyPixelFormat(pixelFormat);
+
+    CGLSetCurrentContext(m_aGLWin.context);
 
 #elif defined( IOS )
 
@@ -617,7 +635,32 @@ bool OpenGLContext::initWindow()
     return true;
 }
 
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX )
+
+bool OpenGLContext::initWindow()
+{
+    if( !m_pChildWindow )
+    {
+        SystemWindowData winData = generateWinData(mpWindow);
+        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
+        m_pChildWindowGC.reset(m_pChildWindow);
+    }
+
+    if( m_pChildWindow )
+    {
+        m_pChildWindow->SetMouseTransparent( true );
+        m_pChildWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
+        m_pChildWindow->EnableEraseBackground( false );
+        m_pChildWindow->SetControlForeground();
+        m_pChildWindow->SetControlBackground();
+        //m_pChildWindow->EnablePaint(false);
+
+    }
+
+    return true;
+}
+
+#elif defined( IOS ) || defined( ANDROID )
 
 bool OpenGLContext::initWindow()
 {
@@ -793,7 +836,9 @@ void OpenGLContext::makeCurrent()
     {
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
     }
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX )
+    CGLSetCurrentContext(m_aGLWin.context);
+#elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
     glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx );
@@ -804,7 +849,9 @@ void OpenGLContext::resetCurrent()
 {
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX )
+    CGLSetCurrentContext(NULL);
+#elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
     glXMakeCurrent(m_aGLWin.dpy, None, NULL);
@@ -815,7 +862,9 @@ void OpenGLContext::swapBuffers()
 {
 #if defined( WNT )
     SwapBuffers(m_aGLWin.hDC);
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX )
+    CGLFlushDrawable(m_aGLWin.context);
+#elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
