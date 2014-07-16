@@ -15,7 +15,8 @@ $(eval $(call gb_Library_set_include,vclplug_tde,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/solenv/inc \
-    -I$(SRCDIR)/vcl/inc/unx/tde \
+    -I$(SRCDIR)/vcl/inc/unx/kde \
+    -I$(SRCDIR)/include/shell \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_tde,\
