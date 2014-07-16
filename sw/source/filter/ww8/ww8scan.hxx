@@ -1497,7 +1497,7 @@ namespace nsHdFtFlags
 }
 
 /// Document Properties
-class WW8Dop
+struct WW8Dop
 {
 public:
     /* Error Status */
@@ -1506,9 +1506,6 @@ public:
     Corresponds only roughly to the actual structure of the Winword DOP,
     the winword FIB version matters to what exists.
     */
-    // Initialisier-Dummy:
-    sal_uInt8    nDataStart;
-
     bool        fFacingPages : 1;   // 1 when facing pages should be printed
 
     bool        fWidowControl : 1;  //a: orig 97 docs say
@@ -1729,9 +1726,6 @@ public:
     bool       fAcetateShowInsDel : 1;
     bool       fAcetateShowProps : 1;
 
-    // 2. Initialisier-Dummy:
-    sal_uInt8 nDataEnd;
-
     bool bUseThaiLineBreakingRules;
 
     /* Constructor for importing, needs to know the version of word used */
@@ -1741,7 +1735,6 @@ public:
     WW8Dop();
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
 
-public:
     sal_uInt32 GetCompatabilityOptions() const;
     void SetCompatabilityOptions(sal_uInt32 a32Bit);
     // i#78591#

@@ -6519,9 +6519,9 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
             nIdxOffset++;
 }
 
-WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
+WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
 {
-    memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
+    memset(this, 0, sizeof(WW8Dop));
     fDontUseHTMLAutoSpacing = true; //default
     fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
@@ -6743,10 +6743,10 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
     delete[] pDataPtr;
 }
 
-WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
+WW8Dop::WW8Dop()
 {
     // first set everything to a default of 0
-    memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
+    memset(this, 0, sizeof(WW8Dop));
 
     fWidowControl = true;
     fpc = 1;
