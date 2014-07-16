@@ -128,6 +128,25 @@ uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DE
 CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 ----
 
+== CppUnit tips
+
+=== sal_Bool
+
+In case an UNO method returns sal_Bool, and the assert fails, CppUnit won't be
+able to print a usable error message, as it will think that the value is a
+printable character. Best to use `bool` for the expected value and cast the
+actual value to `bool` as well before comparing.
+
+=== Running only a single test
+
+If you want to run only a single test to allow quick development iteration,
+then you need to do two things:
+
+- change the `#if 1` in `inc/swmodeltestbase.hxx` to `#if 0` to define the test
+  macro with the `_ONLY` suffix
+- change the used macro for the test you want to run, i.e.
+  `DECLARE_OOXMLEXPORT_TEST` -> `DECLARE_OOXMLEXPORT_TEST_ONLY`
+
 == UNO, in more details, various tips:
 
 === writing code based xray inspection:
