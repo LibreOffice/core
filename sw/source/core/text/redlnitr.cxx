@@ -28,6 +28,7 @@
 #include <itratr.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/keycodes.hxx>
@@ -223,16 +224,16 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
         nStart = COMPLETE_STRING;
         nEnd = COMPLETE_STRING;
 
-        for( ; nAct < (sal_Int32)rDoc.GetRedlineTbl().size() ; ++nAct )
+        for( ; nAct < (sal_Int32)rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size() ; ++nAct )
         {
-            rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+            rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
 
             if( nNew < nEnd )
             {
                 if( nNew >= nStart ) // der einzig moegliche Kandidat
                 {
                     bOn = true;
-                    const SwRangeRedline *pRed = rDoc.GetRedlineTbl()[ nAct ];
+                    const SwRangeRedline *pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ];
 
                     if (pSet)
                         pSet->ClearItem();
@@ -344,7 +345,7 @@ sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
     if( COMPLETE_STRING == nAct )
     {
         nAct = nFirst;
-        rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+        rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
     }
     if( bOn || !nStart )
     {
@@ -382,9 +383,9 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
     sal_Int32 nOldAct = nAct;
     bool bRet = false;
 
-    for( nAct = nFirst; nAct < (sal_Int32)rDoc.GetRedlineTbl().size() ; ++nAct )
+    for( nAct = nFirst; nAct < (sal_Int32)rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size() ; ++nAct )
     {
-        rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+        rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
         if( nChkEnd < nStart )
             break;
         if( nChkStart <= nEnd && ( nChkEnd > nStart || COMPLETE_STRING == nEnd ) )

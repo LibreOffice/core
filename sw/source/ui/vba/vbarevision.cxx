@@ -23,6 +23,7 @@
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -62,7 +63,7 @@ SwVbaRevision::Accept() throw ( css::uno::RuntimeException, std::exception )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
-        pDoc->AcceptRedline( GetPosition(), true );
+        pDoc->getIDocumentRedlineAccess().AcceptRedline( GetPosition(), true );
 }
 
 void SAL_CALL
@@ -70,7 +71,7 @@ SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException, std::exception )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
-        pDoc->RejectRedline( GetPosition(), true );
+        pDoc->getIDocumentRedlineAccess().RejectRedline( GetPosition(), true );
 }
 
 OUString

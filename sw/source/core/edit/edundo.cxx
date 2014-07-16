@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <swundo.hxx>
@@ -122,7 +123,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
-        const RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        const RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -142,8 +143,8 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         }
         Pop( !bRestoreCrsr );
 
-        GetDoc()->SetRedlineMode( eOld );
-        GetDoc()->CompressRedlines();
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( eOld );
+        GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"
         SaveTblBoxCntnt();
@@ -179,7 +180,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
-        RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -195,8 +196,8 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
 
         Pop( !bRestoreCrsr );
 
-        GetDoc()->SetRedlineMode( eOld );
-        GetDoc()->CompressRedlines();
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( eOld );
+        GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"
         SaveTblBoxCntnt();

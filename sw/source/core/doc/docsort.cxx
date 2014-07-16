@@ -326,14 +326,14 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwUndoSort* pUndoSort = 0;
 
     // To-Do - add 'SwExtraRedlineTbl' also ?
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
+    if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTbl().empty() ))
     {
         pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, -1, 1 );
         SwCntntNode* pCNd = pRedlPam->GetCntntNode( false );
         if( pCNd )
             pRedlPam->GetMark()->nContent = pCNd->Len();
 
-        if( IsRedlineOn() && !IsShowOriginal( GetRedlineMode() ) )
+        if( getIDocumentRedlineAccess().IsRedlineOn() && !IDocumentRedlineAccess::IsShowOriginal( getIDocumentRedlineAccess().GetRedlineMode() ) )
         {
             if( bUndo )
             {
@@ -346,7 +346,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             GetNodes()._Copy( aRg, aEndIdx );
 
             // range is new from pEnd->nNode+1 to aEndIdx
-            DeleteRedline( *pRedlPam, true, USHRT_MAX );
+            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
             pCNd = pRedlPam->GetCntntNode( false );
@@ -368,7 +368,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         }
         else
         {
-            DeleteRedline( *pRedlPam, true, USHRT_MAX );
+            getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
             delete pRedlPam, pRedlPam = 0;
         }
     }
@@ -442,10 +442,10 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         SwCntntNode* pCNd = aSttIdx.GetNode().GetCntntNode();
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
-        AppendRedline(pDeleteRedline, true);
+        getIDocumentRedlineAccess().AppendRedline(pDeleteRedline, true);
 
         // the sorted range is inserted
-        AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
+        getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
 
         if( pRedlUndo )
         {
@@ -492,8 +492,8 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     if(aFndBox.GetLines().empty())
         return false;
 
-    if( !IsIgnoreRedline() && !GetRedlineTbl().empty() )
-        DeleteRedline( *pTblNd, true, USHRT_MAX );
+    if( !getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+        getIDocumentRedlineAccess().DeleteRedline( *pTblNd, true, USHRT_MAX );
 
     sal_uInt16 nStart = 0;
     if( pTblNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )

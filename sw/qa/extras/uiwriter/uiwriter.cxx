@@ -330,7 +330,7 @@ void SwUiWriterTest::testCp1000071()
     SwDoc* pDoc = createDoc("cp1000071.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
+    const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTbl.size());
     sal_uLong redlineStart0NodeIndex = rTbl[ 0 ]->Start()->nNode.GetIndex();
     sal_Int32 redlineStart0Index = rTbl[ 0 ]->Start()->nContent.GetIndex();

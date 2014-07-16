@@ -35,6 +35,7 @@
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
@@ -2040,10 +2041,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                 pTNd->DontExpandFmt( aResetIdx, false, false );
             }
 
-            if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
+            if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
-                pDoc->DeleteRedline(aTemp, true, USHRT_MAX);
+                pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
             }
 
             pTNd->EraseText( aIdx, n,
@@ -2051,10 +2052,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
             pTNd->InsertText( rTxt, aIdx,
                     IDocumentContentOperations::INS_EMPTYEXPAND );
 
-            if( pDoc->IsRedlineOn() )
+            if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rTxt.getLength());
-                pDoc->AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
+                pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
             }
         }
 

@@ -757,7 +757,7 @@ namespace sw
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )
             {
-                mrDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT |
+                mrDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT |
                                          nsRedlineMode_t::REDLINE_SHOW_DELETE));
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr);
@@ -768,7 +768,7 @@ namespace sw
                         pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, OUString(),
                         0);
 
-                    mrDoc.AppendRedline(new SwRangeRedline(aData, aRegion), true);
+                    mrDoc.getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
 
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
@@ -779,8 +779,8 @@ namespace sw
                 // the PaM somewhere safe
                 aRegion.DeleteMark();
                 *aRegion.GetPoint() = SwPosition(SwNodeIndex(mrDoc.GetNodes()));
-                mrDoc.AppendRedline(pNewRedline, true);
-                mrDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_NONE | nsRedlineMode_t::REDLINE_SHOW_INSERT |
+                mrDoc.getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
+                mrDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_NONE | nsRedlineMode_t::REDLINE_SHOW_INSERT |
                      nsRedlineMode_t::REDLINE_SHOW_DELETE ));
             }
             delete pEntry;

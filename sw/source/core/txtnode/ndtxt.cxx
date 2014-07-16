@@ -53,6 +53,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentListsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <fldbas.hxx>
@@ -1024,7 +1025,7 @@ void SwTxtNode::Update(
     SwIndexReg aTmpIdxReg;
     if ( !bNegative && !bDelete )
     {
-        const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
+        const SwRedlineTbl& rTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
         for ( size_t i = 0; i < rTbl.size(); ++i )
         {
             SwRangeRedline *const pRedl = rTbl[ i ];
@@ -3345,14 +3346,14 @@ OUString SwTxtNode::GetRedlineTxt( sal_Int32 nIdx, sal_Int32 nLen,
 {
     std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();
-    sal_uInt16 nRedlPos = pDoc->GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
+    sal_uInt16 nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
     {
         // es existiert fuer den Node irgendein Redline-Delete-Object
         const sal_uLong nNdIdx = GetIndex();
-        for( ; nRedlPos < pDoc->GetRedlineTbl().size() ; ++nRedlPos )
+        for( ; nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size() ; ++nRedlPos )
         {
-            const SwRangeRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
+            const SwRangeRedline* pTmp = pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlPos ];
             if( nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();

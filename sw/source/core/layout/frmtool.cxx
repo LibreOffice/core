@@ -63,6 +63,7 @@
 #include <switerator.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentTimerAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -3322,7 +3323,7 @@ bool IsExtraData( const SwDoc *pDoc )
     return rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
            ((sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE &&
-            !pDoc->GetRedlineTbl().empty());
+            !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty());
 }
 
 // OD 22.09.2003 #110978#

@@ -35,6 +35,7 @@
 #include <unobaseclass.hxx>
 #include <limits>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
 

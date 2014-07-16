@@ -685,9 +685,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // set redline mode (without doing the associated book-keeping)
-        pDoc->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
-        pDoc->AppendRedline(pRedline, false);
-        pDoc->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+        pDoc->getIDocumentRedlineAccess().AppendRedline(pRedline, false);
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
     }
 }
 
@@ -698,7 +698,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     // convert info:
     // 1) Author String -> Author ID (default to zero)
     sal_uInt16 nAuthorId = (NULL == pDoc) ? 0 :
-        pDoc->InsertRedlineAuthor( pRedlineInfo->sAuthor );
+        pDoc->getIDocumentRedlineAccess().InsertRedlineAuthor( pRedlineInfo->sAuthor );
 
     // 2) util::DateTime -> DateTime
     DateTime aDT( DateTime::EMPTY );

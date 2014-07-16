@@ -306,7 +306,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 else if (pCursor->HasMark())
                 { // If the selection does not contain redlines, disable accepting/rejecting changes.
                     sal_uInt16 index = 0;
-                    const SwRedlineTbl& table = pDoc->GetRedlineTbl();
+                    const SwRedlineTbl& table = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
                     if( redline != NULL && *redline->Start() == *pCursor->End())
                         redline = NULL;
@@ -331,7 +331,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     // If the cursor position isn't on a redline, disable
                     // accepting/rejecting changes.
-                    if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
+                    if (0 == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), 0))
                         rSet.DisableItem(nWhich);
                 }
             }

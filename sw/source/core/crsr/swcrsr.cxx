@@ -30,6 +30,7 @@
 #include <unocrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
@@ -1410,13 +1411,13 @@ static OUString lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
         //mask deleted redlines
         OUString sNodeText(pTxtNd->GetTxt());
         const SwDoc& rDoc = *pTxtNd->GetDoc();
-        const bool nShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
+        const bool nShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
         if ( nShowChg )
         {
-            sal_uInt16 nAct = rDoc.GetRedlinePos( *pTxtNd, USHRT_MAX );
-            for ( ; nAct < rDoc.GetRedlineTbl().size(); nAct++ )
+            sal_uInt16 nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( *pTxtNd, USHRT_MAX );
+            for ( ; nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size(); nAct++ )
             {
-                const SwRangeRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+                const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ];
                 if ( pRed->Start()->nNode > pTxtNd->GetIndex() )
                     break;
 

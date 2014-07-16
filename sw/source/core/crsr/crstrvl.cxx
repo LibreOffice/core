@@ -27,6 +27,7 @@
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
@@ -1412,7 +1413,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                 if( !bRet && SwContentAtPos::SW_REDLINE & rCntntAtPos.eCntntAtPos )
                 {
-                    const SwRangeRedline* pRedl = GetDoc()->GetRedline(aPos, NULL);
+                    const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, NULL);
                     if( pRedl )
                     {
                         rCntntAtPos.aFnd.pRedl = pRedl;
@@ -1941,7 +1942,7 @@ const SwRangeRedline* SwCrsrShell::SelNextRedline()
         SwCallLink aLk( *this ); // watch Crsr-Moves
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-        pFnd = GetDoc()->SelNextRedline( *m_pCurCrsr );
+        pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurCrsr );
         if( pFnd && !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
             UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
         else
@@ -1959,7 +1960,7 @@ const SwRangeRedline* SwCrsrShell::SelPrevRedline()
         SwCallLink aLk( *this ); // watch Crsr-Moves
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-        pFnd = GetDoc()->SelPrevRedline( *m_pCurCrsr );
+        pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurCrsr );
         if( pFnd && !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
             UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
         else
@@ -1974,7 +1975,7 @@ const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelec
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-    pFnd = GetDoc()->GetRedlineTbl()[ nArrPos ];
+    pFnd = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl()[ nArrPos ];
     if( pFnd )
     {
         *m_pCurCrsr->GetPoint() = *pFnd->Start();
@@ -2043,7 +2044,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
     {
         SET_CURR_SHELL( this );
 
-        const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
+        const SwRedlineTbl& rTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
         const SwRangeRedline* pTmp = rTbl[ nArrPos ];
         sal_uInt16 nSeqNo = pTmp->GetSeqNo();
         if( nSeqNo && bSelect )

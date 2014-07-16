@@ -682,7 +682,7 @@ void SwView::Execute(SfxRequest &rReq)
                 // point at the *end* of the redline and the mark at the start (so GetRedline
                 // would return NULL if called on the point)
                 sal_uInt16 nRedline = 0;
-                const SwRangeRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
+                const SwRangeRedline *pRedline = pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline);
                 assert(pRedline != 0);
                 if (pRedline)
                 {

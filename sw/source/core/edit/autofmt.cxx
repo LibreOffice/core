@@ -40,6 +40,7 @@
 #include <fmtanchr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
@@ -221,7 +222,7 @@ class SwAutoFormat
     bool SetRedlineTxt( sal_uInt16 nId )
         { if( m_aFlags.bWithRedlining )   _SetRedlineTxt( nId );  return true; }
     bool ClearRedlineTxt()
-        { if( m_aFlags.bWithRedlining )   m_pDoc->SetAutoFmtRedlineComment(0);  return true; }
+        { if( m_aFlags.bWithRedlining )   m_pDoc->GetDocumentRedlineManager().SetAutoFmtRedlineComment(0);  return true; }
 
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
@@ -284,7 +285,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
         sTxt = "Action text is missing";
 #endif
 
-    m_pDoc->SetAutoFmtRedlineComment( &sTxt, nSeqNo );
+    m_pDoc->GetDocumentRedlineManager().SetAutoFmtRedlineComment( &sTxt, nSeqNo );
 }
 
 OUString SwAutoFormat::GoNextPara()
@@ -1749,7 +1750,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         OUString sTxt(SwViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
         sTxt = sTxt.replaceAll( "$(ARG1)", OUString::number( nLvl + 1 ) );
-        m_pDoc->SetAutoFmtRedlineComment( &sTxt );
+        m_pDoc->GetDocumentRedlineManager().SetAutoFmtRedlineComment( &sTxt );
     }
 
     SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + nLvl ), true );
@@ -1947,7 +1948,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                 aFInfo.SetFrm( 0 );
                             }
                             //#125102# in case of the mode REDLINE_SHOW_DELETE the ** are still contained in pTxt
-                            if(0 == (m_pDoc->GetRedlineMode() & nsRedlineMode_t::REDLINE_SHOW_DELETE))
+                            if(0 == (m_pDoc->getIDocumentRedlineAccess().GetRedlineMode() & nsRedlineMode_t::REDLINE_SHOW_DELETE))
                                 nPos = m_aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // Was a character deleted before starting?
                             if (cBlank && cBlank != (*pTxt)[nSttPos - 1])
@@ -2120,7 +2121,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                          m_nEndNdIdx = m_aEndNdIdx.GetIndex(),
                          m_pDoc->GetDocShell() );
 
-    RedlineMode_t eRedlMode = m_pDoc->GetRedlineMode(), eOldMode = eRedlMode;
+    RedlineMode_t eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineMode(), eOldMode = eRedlMode;
     if( m_aFlags.bWithRedlining )
     {
         m_pDoc->SetAutoFmtRedline( true );
@@ -2128,7 +2129,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     }
     else
       eRedlMode = (RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_IGNORE);
-    m_pDoc->SetRedlineMode( eRedlMode );
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
     bool const bUndoState = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
@@ -2505,7 +2506,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
     if( m_aFlags.bWithRedlining )
         m_pDoc->SetAutoFmtRedline( false );
-    m_pDoc->SetRedlineMode( eOldMode );
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode( eOldMode );
 
     // restore undo (in case it has been changed)
     m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoState);

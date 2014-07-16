@@ -24,6 +24,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <UndoManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -196,7 +197,7 @@ class UndoRedoRedlineGuard
 {
 public:
     UndoRedoRedlineGuard(::sw::UndoRedoContext & rContext, SwUndo & rUndo)
-        : m_rRedlineAccess(rContext.GetDoc())
+        : m_rRedlineAccess(rContext.GetDoc().getIDocumentRedlineAccess())
         , m_eMode(m_rRedlineAccess.GetRedlineMode())
     {
         RedlineMode_t const eTmpMode =
@@ -958,7 +959,7 @@ SwRedlineSaveData::SwRedlineSaveData(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().size();
+    nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().size();
 #endif
 }
 
@@ -983,18 +984,18 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // First, delete the "old" so that in an Append no unexpected things will
     // happen, e.g. a delete in an insert. In the latter case the just restored
     // content will be deleted and not the one you originally wanted.
-    rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
+    rDoc.getIDocumentRedlineAccess().DeleteRedline( *pRedl, false, USHRT_MAX );
 
-    RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
+    RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
     if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
 
-    bool const bSuccess = rDoc.AppendRedline( pRedl, true );
+    bool const bSuccess = rDoc.getIDocumentRedlineAccess().AppendRedline( pRedl, true );
     assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed
     (void) bSuccess; // unused in non-debug
-    rDoc.SetRedlineMode_intern( eOld );
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 }
 
 bool SwUndo::FillSaveData(
@@ -1008,9 +1009,9 @@ bool SwUndo::FillSaveData(
     SwRedlineSaveData* pNewData;
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
-    const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rTbl = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
     sal_uInt16 n = 0;
-    rRange.GetDoc()->GetRedline( *pStt, &n );
+    rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTbl.size(); ++n )
     {
         SwRangeRedline* pRedl = rTbl[n];
@@ -1028,7 +1029,7 @@ bool SwUndo::FillSaveData(
     }
     if( !rSData.empty() && bDelRange )
     {
-        rRange.GetDoc()->DeleteRedline( rRange, false, USHRT_MAX );
+        rRange.GetDoc()->getIDocumentRedlineAccess().DeleteRedline( rRange, false, USHRT_MAX );
     }
     return !rSData.empty();
 }
@@ -1041,9 +1042,9 @@ bool SwUndo::FillSaveDataForFmt(
 
     SwRedlineSaveData* pNewData;
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
-    const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rTbl = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
     sal_uInt16 n = 0;
-    rRange.GetDoc()->GetRedline( *pStt, &n );
+    rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTbl.size(); ++n )
     {
         SwRangeRedline* pRedl = rTbl[n];
@@ -1067,8 +1068,8 @@ bool SwUndo::FillSaveDataForFmt(
 
 void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 {
-    RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+    RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( size_t n = rSData.size(); n; )
@@ -1077,11 +1078,11 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
     assert(rSData.empty() ||
-           (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().size()));
+           (rSData[0]->nRedlineCount == rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size()));
             // "redline count not restored properly"
 #endif
 
-    rDoc.SetRedlineMode_intern( eOld );
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 }
 
 bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )

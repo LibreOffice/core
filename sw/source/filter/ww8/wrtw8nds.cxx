@@ -216,10 +216,10 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
 
     maFlyIter = maFlyFrms.begin();
 
-    if ( !m_rExport.pDoc->GetRedlineTbl().empty() )
+    if ( !m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         SwPosition aPosition( rNd, SwIndex( (SwTxtNode*)&rNd ) );
-        pCurRedline = m_rExport.pDoc->GetRedline( aPosition, &nCurRedlinePos );
+        pCurRedline = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedline( aPosition, &nCurRedlinePos );
     }
 
     nAktSwPos = SearchNext(1);
@@ -264,16 +264,16 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         }
     }
 
-    if ( nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size() )
+    if ( nCurRedlinePos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size() )
     {
         // nCurRedlinePos point to the next redline
         sal_uInt16 nRedLinePos = nCurRedlinePos;
         if( pCurRedline )
             ++nRedLinePos;
 
-        for ( ; nRedLinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedLinePos )
+        for ( ; nRedLinePos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nRedLinePos )
         {
-            const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedLinePos ];
+            const SwRangeRedline* pRedl = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nRedLinePos ];
 
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
@@ -1256,9 +1256,9 @@ bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
 {
     // search next Redline
     for( sal_uInt16 nPos = nCurRedlinePos;
-        nPos < m_rExport.pDoc->GetRedlineTbl().size(); ++nPos )
+        nPos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nPos )
     {
-        const SwPosition* pEnd = m_rExport.pDoc->GetRedlineTbl()[ nPos ]->End();
+        const SwPosition* pEnd = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nPos ]->End();
         if( pEnd->nNode != rNd )
         {
             break;
@@ -1277,9 +1277,9 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
     pCurRedline = NULL;
 
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedlinePos )
+    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nRedlinePos )
     {
-        const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedlinePos ];
+        const SwRangeRedline* pRedl = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlinePos ];
 
         const SwPosition* pCheckedStt = pRedl->Start();
 
@@ -1331,10 +1331,10 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     if( !pCurRedline )
     {
         // search next Redline
-        for( ; nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size();
+        for( ; nCurRedlinePos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size();
                 ++nCurRedlinePos )
         {
-            const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nCurRedlinePos ];
+            const SwRangeRedline* pRedl = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nCurRedlinePos ];
 
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
@@ -1591,10 +1591,10 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
 static SwTxtFmtColl& lcl_getFormatCollection( MSWordExportBase& rExport, const SwTxtNode* pTxtNode )
 {
     sal_uInt16 nPos = 0;
-    sal_uInt16 nMax = rExport.pDoc->GetRedlineTbl().size();
+    sal_uInt16 nMax = rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size();
     while( nPos < nMax )
     {
-        const SwRangeRedline* pRedl = rExport.pDoc->GetRedlineTbl()[ nPos++ ];
+        const SwRangeRedline* pRedl = rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nPos++ ];
         const SwPosition* pStt = pRedl->Start();
         const SwPosition* pEnd = pStt == pRedl->GetPoint()
                                     ? pRedl->GetMark()

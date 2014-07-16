@@ -73,6 +73,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -904,7 +905,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
     if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
     {
-        if ( !GetDoc()->GetRedlineTbl().empty() )
+        if ( !GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
             nState |= HIDDENINFORMATION_RECORDEDCHANGES;
     }
     if ( nStates & HIDDENINFORMATION_NOTES )

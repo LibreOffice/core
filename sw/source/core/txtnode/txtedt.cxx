@@ -36,6 +36,7 @@
 #include <viewopt.hxx>
 #include <acmplwrd.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -105,9 +106,9 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 
     const SwDoc& rDoc = *rNode.GetDoc();
 
-    for ( size_t nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.GetRedlineTbl().size(); ++nAct )
+    for ( size_t nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nAct )
     {
-        const SwRangeRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+        const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ];
 
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;
@@ -150,7 +151,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
     sal_Int32 nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
+    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
 
     // If called from word count or from spell checking, deleted redlines
     // should be masked:

@@ -22,6 +22,7 @@
 #include <txtftn.hxx>
 #include <acorrect.hxx>
 #include <UndoManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>
@@ -228,15 +229,15 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
-    if( !pDest->GetRedlineTbl().empty() )
+    if( !pDest->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         sal_uInt16 nFndPos;
         const SwPosition* pEnd;
         SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), nCnt ));
-        pDest->GetRedline( aSrcPos, &nFndPos );
+        pDest->getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
         const SwRangeRedline* pRedl;
         while( nFndPos--
-              && *( pEnd = ( pRedl = pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos
+              && *( pEnd = ( pRedl = pDest->getIDocumentRedlineAccess().GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos
               && *pRedl->Start() < aSrcPos )
         {
             if( !pSavArr )
@@ -796,28 +797,6 @@ void SwDoc::DeleteAutoCorrExceptWord()
 {
     delete mpACEWord;
     mpACEWord = 0;
-}
-
-#define MAX_REDLINE_COUNT   250
-
-void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
-{
-    const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
-    SwEditShell* pEditShell = GetEditShell();
-    Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
-    if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
-        && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
-    {
-        MessageDialog aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
-        sal_uInt16 nResult = aQuery.Execute();
-        mbReadlineChecked = true;
-        if ( nResult == RET_YES )
-        {
-            sal_Int32 nMode = (sal_Int32)_rReadlineMode;
-            nMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE;
-            _rReadlineMode = (RedlineMode_t)nMode;
-        }
-    }
 }
 
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const

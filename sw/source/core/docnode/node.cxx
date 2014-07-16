@@ -62,6 +62,7 @@
 #include <IDocumentListItems.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <switerator.hxx>
 #include "ndole.hxx"
 
@@ -1910,7 +1911,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwCntntNode::getSdrAllFil
  */
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc()->GetDocumentSettingManager(); }
 const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &GetDoc()->getIDocumentDeviceAccess(); }
-const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
+const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return &GetDoc()->getIDocumentRedlineAccess(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }
 const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
@@ -1932,7 +1933,7 @@ bool SwNode::IsInRedlines() const
     bool bResult = false;
 
     if (pDoc != NULL)
-        bResult = pDoc->IsInRedlines(*this);
+        bResult = pDoc->getIDocumentRedlineAccess().IsInRedlines(*this);
 
     return bResult;
 }

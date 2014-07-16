@@ -51,6 +51,7 @@
 #include <unocrsr.hxx>
 #include <unoport.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <crsskip.hxx>
 #include <txtatr.hxx>
 #include <acchyperlink.hxx>
@@ -719,7 +720,7 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
             const SwDoc* pDoc = pNode->GetDoc();
             if ( pDoc )
             {
-                pRedline = pDoc->GetRedline( *pStart, NULL );
+                pRedline = pDoc->getIDocumentRedlineAccess().GetRedline( *pStart, NULL );
             }
         }
     }

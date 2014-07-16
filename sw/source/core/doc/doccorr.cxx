@@ -188,7 +188,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     // fix redlines
     {
-        SwRedlineTbl& rTbl = *mpRedlineTbl;
+        SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
         for (sal_uInt16 n = 0; n < rTbl.size(); )
         {
             // is on position ??
@@ -306,7 +306,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
     { // fix the Redlines
-        SwRedlineTbl& rTbl = *mpRedlineTbl;
+        SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
         SwPosition aNewPos(rNewPos);
         for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
         {

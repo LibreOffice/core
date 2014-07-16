@@ -127,6 +127,7 @@ public:
     virtual bool IsIgnoreRedline() const = 0;
 
     virtual const SwRedlineTbl& GetRedlineTbl() const = 0;
+    virtual SwRedlineTbl& GetRedlineTbl() = 0;
     virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const = 0;
     virtual SwExtraRedlineTbl& GetExtraRedlineTbl() = 0;
     virtual bool HasExtraRedlineTbl() const = 0;

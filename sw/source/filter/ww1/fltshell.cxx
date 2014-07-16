@@ -45,6 +45,7 @@
 #include <redline.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <fldbas.hxx>
@@ -637,7 +638,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         {
             if (rEntry.MakeRegion(pDoc, aRegion, true))
             {
-              pDoc->SetRedlineMode((RedlineMode_t)(   nsRedlineMode_t::REDLINE_ON
+              pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(   nsRedlineMode_t::REDLINE_ON
                                               | nsRedlineMode_t::REDLINE_SHOW_INSERT
                                               | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
                 SwFltRedline& rFltRedline = *((SwFltRedline*)rEntry.pAttr);
@@ -650,7 +651,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                         OUString(),
                                         0
                                         );
-                    pDoc->AppendRedline(new SwRangeRedline(aData, aRegion), true);
+                    pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
                 SwRedlineData aData(rFltRedline.eType,
                                     rFltRedline.nAutorNo,
@@ -658,8 +659,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                     OUString(),
                                     0
                                     );
-                pDoc->AppendRedline( new SwRangeRedline(aData, aRegion), true );
-                pDoc->SetRedlineMode((RedlineMode_t)( nsRedlineMode_t::REDLINE_NONE
+                pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(aData, aRegion), true );
+                pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( nsRedlineMode_t::REDLINE_NONE
                                                 | nsRedlineMode_t::REDLINE_SHOW_INSERT
                                                 | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
             }

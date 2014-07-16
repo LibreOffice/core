@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -529,7 +530,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxBefore( *pDstBox, bDelCntnt );
 
-    bool bUndoRedline = pUndo && pDoc->IsRedlineOn();
+    bool bUndoRedline = pUndo && pDoc->getIDocumentRedlineAccess().IsRedlineOn();
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodeIndex aSavePos( aInsIdx, -1 );

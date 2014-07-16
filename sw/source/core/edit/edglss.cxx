@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
@@ -64,9 +65,9 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
         rBlks.ClearDoc();
         if( rBlks.BeginPutDoc( rShortName, rName ) )
         {
-            rBlks.GetDoc()->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
+            rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
             _CopySelToDoc( pGDoc );
-            rBlks.GetDoc()->SetRedlineMode_intern( (RedlineMode_t)0 );
+            rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)0 );
             nRet = rBlks.PutDoc();
         }
         else

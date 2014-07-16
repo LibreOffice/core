@@ -5578,9 +5578,9 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
 const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTxtNode& rNode, RedlineType_t aRedlineType)
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < GetExport().pDoc->GetRedlineTbl().size(); ++nRedlinePos )
+    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < GetExport().pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nRedlinePos )
     {
-        const SwRangeRedline* pRedl = GetExport().pDoc->GetRedlineTbl()[ nRedlinePos ];
+        const SwRangeRedline* pRedl = GetExport().pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlinePos ];
 
         // Only check redlines that are of type 'Delete'
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )

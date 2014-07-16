@@ -22,7 +22,6 @@
 // SwDoc interfaces
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
@@ -193,6 +192,7 @@ class IDocumentListItems;
 class IDocumentListsAccess;
 class IDocumentOutlineNodes;
 class IDocumentContentOperations;
+class IDocumentRedlineAccess;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -212,6 +212,7 @@ namespace sw {
     class DocumentListsManager;
     class DocumentOutlineNodesManager;
     class DocumentContentOperationsManager;
+    class DocumentRedlineManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -249,7 +250,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
-    public IDocumentRedlineAccess,
     public IDocumentFieldsAccess,
     public IDocumentStylePoolAccess,
     public IDocumentLineNumberAccess,
@@ -274,7 +274,6 @@ class SW_DLLPUBLIC SwDoc :
     Timer       maOLEModifiedTimer;      //< Timer for update modified OLE-Objecs
     Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
     SwDBData    maDBData;                //< database descriptor
-    ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
@@ -284,6 +283,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
+    const ::boost::scoped_ptr< ::sw::DocumentRedlineManager > m_pDocumentRedlineManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
     const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
@@ -343,10 +343,6 @@ class SW_DLLPUBLIC SwDoc :
     // Hash map to find numrules by name
     mutable boost::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
 
-    SwRedlineTbl        *mpRedlineTbl;           //< List of all Ranged Redlines.
-    SwExtraRedlineTbl   *mpExtraRedlineTbl;      //< List of all Extra Redlines.
-    OUString            *mpAutoFmtRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
-
     SwUnoCrsrTbl    *mpUnoCrsrTbl;
 
     SwPagePreviewPrtData *mpPgPViewPrtData;  //< Indenting / spacing for printing of page view.
@@ -373,11 +369,6 @@ private:
 
     sal_uInt16  mnUndoCnt;           //< Count of Undo Actions.
     sal_uInt16  mnUndoSttEnd;        //< != 0 -> within parentheses.
-
-    sal_uInt16 mnAutoFmtRedlnCommentNo;  /**< SeqNo for conjoining of AutoFmt-Redlines.
-                                         by the UI. Managed by SwAutoFmt! */
-
-    RedlineMode_t meRedlineMode;     //< Current Redline Mode.
 
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
@@ -410,7 +401,6 @@ private:
     bool mbIsRedlineMove         : 1;    //< True: Redlines are moved into to / out of the section.
     bool mbInsOnlyTxtGlssry      : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
-    bool mbReadlineChecked       : 1;    //< sal_True: if the query was already shown
     bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard
     bool mbColumnSelection       : 1;    /**< TRUE: this content has bee created by a column selection
                                                 (clipboard docs only) */
@@ -427,8 +417,6 @@ private:
     static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
 
     // private methods
-    void checkRedlining(RedlineMode_t& _rReadlineMode);
-
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
@@ -539,39 +527,11 @@ public:
     const IDocumentMarkAccess* getIDocumentMarkAccess() const;
 
     // IDocumentRedlineAccess
-    virtual RedlineMode_t GetRedlineMode() const SAL_OVERRIDE;
-    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
-    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
-    virtual bool IsRedlineOn() const SAL_OVERRIDE;
-    virtual bool IsIgnoreRedline() const SAL_OVERRIDE;
-    virtual bool IsInRedlines(const SwNode& rNode) const SAL_OVERRIDE;
-    virtual const SwRedlineTbl& GetRedlineTbl() const SAL_OVERRIDE;
-    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const SAL_OVERRIDE;
-    virtual SwExtraRedlineTbl& GetExtraRedlineTbl() SAL_OVERRIDE;
-    virtual bool HasExtraRedlineTbl() const SAL_OVERRIDE;
-    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool SplitRedline(const SwPaM& rPam) SAL_OVERRIDE;
-    virtual bool DeleteRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
-    virtual bool DeleteRedline(/*[in]*/const SwStartNode& rSection, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
-    virtual sal_uInt16 GetRedlinePos(/*[in]*/const SwNode& rNode, /*[in]*/sal_uInt16 nType) const SAL_OVERRIDE;
-    virtual void CompressRedlines() SAL_OVERRIDE;
-    virtual const SwRangeRedline* GetRedline(/*[in]*/const SwPosition& rPos, /*[in]*/sal_uInt16* pFndPos) const SAL_OVERRIDE;
-    virtual bool IsRedlineMove() const SAL_OVERRIDE;
-    virtual void SetRedlineMove(/*[in]*/bool bFlag) SAL_OVERRIDE;
-    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
-    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
-    virtual void UpdateRedlineAttr() SAL_OVERRIDE;
-    virtual sal_uInt16 GetRedlineAuthor() SAL_OVERRIDE;
-    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) SAL_OVERRIDE;
-    virtual bool SetRedlineComment(/*[in]*/const SwPaM& rPam, /*[in]*/const OUString& rComment) SAL_OVERRIDE;
-    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const SAL_OVERRIDE;
-    virtual void SetRedlinePassword(/*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) SAL_OVERRIDE;
+    IDocumentRedlineAccess const& getIDocumentRedlineAccess() const;
+    IDocumentRedlineAccess& getIDocumentRedlineAccess();
+
+    ::sw::DocumentRedlineManager const& GetDocumentRedlineManager() const;
+    ::sw::DocumentRedlineManager& GetDocumentRedlineManager();
 
     // IDocumentUndoRedo
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
@@ -1572,11 +1532,6 @@ public:
 
     // Merge two documents.
     long MergeDoc( const SwDoc& rDoc );
-
-    /** Set comment-text for Redline. It then comes in via AppendRedLine.
-     Used by AutoFormat. 0-pointer resets mode.
-     Sequence number is for conjoining of Redlines by the UI. */
-    void SetAutoFmtRedlineComment( const OUString* pTxt, sal_uInt16 nSeqNo = 0 );
 
     bool IsAutoFmtRedline() const           { return mbIsAutoFmtRedline; }
     void SetAutoFmtRedline( bool bFlag )    { mbIsAutoFmtRedline = bFlag; }

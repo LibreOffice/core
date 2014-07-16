@@ -27,6 +27,7 @@
 #include <annotationmark.hxx>
 #include <dcontact.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
@@ -1267,7 +1268,7 @@ void _DelBookmarks(
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.
     // Assignement happens after moving.
-    SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
+    SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     for(sal_uInt16 nCnt = 0; nCnt < rTbl.size(); ++nCnt )
     {
         // Is at position?

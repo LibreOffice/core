@@ -113,6 +113,7 @@
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -3392,7 +3393,7 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableLine * pTabLine = pTabBox->GetUpper();
 
     // search next Redline
-    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->GetExtraRedlineTbl();
+    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->getIDocumentRedlineAccess().GetExtraRedlineTbl();
     for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTbl.GetSize(); ++nCurRedlinePos )
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);
@@ -3438,7 +3439,7 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
 
     // search next Redline
-    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->GetExtraRedlineTbl();
+    const SwExtraRedlineTbl& aExtraRedlineTbl = m_rExport.pDoc->getIDocumentRedlineAccess().GetExtraRedlineTbl();
     for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTbl.GetSize(); ++nCurRedlinePos )
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTbl.GetRedline(nCurRedlinePos);

@@ -62,6 +62,7 @@
 #include <ndole.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
@@ -826,10 +827,10 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
-                bool const bOldRedlineMove(IsRedlineMove());
+                bool const bOldRedlineMove(getIDocumentRedlineAccess().IsRedlineMove());
                 mbCopyIsMove = true;
                 GetIDocumentUndoRedo().DoUndo(false);
-                SetRedlineMove(true);
+                getIDocumentRedlineAccess().SetRedlineMove(true);
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -838,7 +839,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     }
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
-                SetRedlineMove(bOldRedlineMove);
+                getIDocumentRedlineAccess().SetRedlineMove(bOldRedlineMove);
                 mbCopyIsMove = bOldFlag;
                 GetIDocumentUndoRedo().DoUndo(bOldUndo);
 

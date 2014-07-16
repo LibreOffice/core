@@ -3046,10 +3046,10 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     // #i81405# - Collect anchored objects before changing the redline mode.
     maFrames = GetFrames( *pDoc, bWriteAll? NULL : pOrigPam );
 
-    mnRedlineMode = pDoc->GetRedlineMode();
-    if ( !pDoc->GetRedlineTbl().empty() )
+    mnRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+    if ( !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
-        pDoc->SetRedlineMode( (RedlineMode_t)(mnRedlineMode | nsRedlineMode_t::REDLINE_SHOW_DELETE |
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(mnRedlineMode | nsRedlineMode_t::REDLINE_SHOW_DELETE |
                                      nsRedlineMode_t::REDLINE_SHOW_INSERT) );
     }
 
@@ -3064,8 +3064,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     ExportDocument_Impl();
 
-    if ( mnRedlineMode != pDoc->GetRedlineMode() )
-        pDoc->SetRedlineMode( (RedlineMode_t)(mnRedlineMode) );
+    if ( mnRedlineMode != pDoc->getIDocumentRedlineAccess().GetRedlineMode() )
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(mnRedlineMode) );
 }
 
 bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )

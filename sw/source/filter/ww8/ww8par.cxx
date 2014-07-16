@@ -5341,7 +5341,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (mbNewDoc)
-      rDoc.SetRedlineMode((RedlineMode_t)( eMode ));
+      rDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
 
     UpdatePageDescs(rDoc, nPageDescOffset);
 

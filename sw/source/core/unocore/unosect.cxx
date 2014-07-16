@@ -1134,7 +1134,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     pSectNode = pSectNode->EndOfSectionNode();
                 }
                 const SwRedlineTbl& rRedTbl =
-                    pFmt->GetDoc()->GetRedlineTbl();
+                    pFmt->GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
                 for (size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
                 {
                     const SwRangeRedline* pRedline = rRedTbl[nRed];

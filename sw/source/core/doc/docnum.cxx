@@ -26,6 +26,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentListsAccess.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
@@ -1784,9 +1785,9 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     }
 
     // Test for Redlining - Can the Selection be moved at all, actually?
-    if( !IsIgnoreRedline() )
+    if( !getIDocumentRedlineAccess().IsIgnoreRedline() )
     {
-        sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
+        sal_uInt16 nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
         if( USHRT_MAX != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
@@ -1796,9 +1797,9 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             bool bCheckDel = true;
 
             // There is a some Redline Delete Object for the range
-            for( ; nRedlPos < GetRedlineTbl().size(); ++nRedlPos )
+            for( ; nRedlPos < getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nRedlPos )
             {
-                const SwRangeRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
+                const SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlPos ];
                 if( !bCheckDel || nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
                 {
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
@@ -1806,7 +1807,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     {
                     case POS_COLLIDE_START:
                     case POS_BEHIND:            // Pos1 comes after Pos2
-                        nRedlPos = GetRedlineTbl().size();
+                        nRedlPos = getIDocumentRedlineAccess().GetRedlineTbl().size();
                         break;
 
                     case POS_COLLIDE_END:
@@ -1840,13 +1841,13 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     SwNodeRange aMvRg( pStt->nNode, 0, pEnd->nNode, +1 );
 
     SwRangeRedline* pOwnRedl = 0;
-    if( IsRedlineOn() )
+    if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
-        sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
+        sal_uInt16 nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
-            SwRangeRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
+            SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlPos ];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
             SwRangeRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
             const SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
@@ -1860,9 +1861,9 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                          : !pREnd->nContent.GetIndex() )) )
             {
                 pOwnRedl = pTmp;
-                if( nRedlPos + 1 < (sal_uInt16)GetRedlineTbl().size() )
+                if( nRedlPos + 1 < (sal_uInt16)getIDocumentRedlineAccess().GetRedlineTbl().size() )
                 {
-                    pTmp = GetRedlineTbl()[ nRedlPos+1 ];
+                    pTmp = getIDocumentRedlineAccess().GetRedlineTbl()[ nRedlPos+1 ];
                     if( *pTmp->Start() == *pREnd )
                         // then don't!
                         pOwnRedl = 0;
@@ -1929,9 +1930,9 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node
                 SwPosition* pPos;
-                for( sal_uInt16 n = 0; n < GetRedlineTbl().size(); ++n )
+                for( sal_uInt16 n = 0; n < getIDocumentRedlineAccess().GetRedlineTbl().size(); ++n )
                 {
-                    SwRangeRedline* pTmp = GetRedlineTbl()[ n ];
+                    SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTbl()[ n ];
                     if( ( pPos = &pTmp->GetBound(true))->nNode == aIdx )
                     {
                         pPos->nNode++;
@@ -1952,12 +1953,12 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             rOrigPam.GetPoint()->nNode++;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetCntntNode(), 0 );
 
-            RedlineMode_t eOld = GetRedlineMode();
-            checkRedlining(eOld);
+            RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+            GetDocumentRedlineManager().checkRedlining(eOld);
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 // Still NEEDS to be optimized (even after 14 years)
-                SetRedlineMode(
+                getIDocumentRedlineAccess().SetRedlineMode(
                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
                 SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -1971,10 +1972,10 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             aPam.GetBound(true).nContent.Assign( NULL, 0 );
             aPam.GetBound(false).nContent.Assign( NULL, 0 );
 
-            AppendRedline( pNewRedline, true );
+            getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
 
             // Still NEEDS to be optimized!
-            SetRedlineMode( eOld );
+            getIDocumentRedlineAccess().SetRedlineMode( eOld );
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
@@ -1982,10 +1983,10 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         }
     }
 
-    if( !pOwnRedl && !IsIgnoreRedline() && !GetRedlineTbl().empty() )
+    if( !pOwnRedl && !getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         SwPaM aTemp(aIdx);
-        SplitRedline(aTemp);
+        getIDocumentRedlineAccess().SplitRedline(aTemp);
     }
 
     sal_uLong nRedlSttNd(0), nRedlEndNd(0);

@@ -99,6 +99,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -1848,7 +1849,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_CHANGES_SHOW:
         {
             bool bSet = *(sal_Bool*)aValue.getValue();
-            sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
+            sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
                 eMode &= ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE);
@@ -1860,7 +1861,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             {
                 eMode = bSet ? eMode|nsRedlineMode_t::REDLINE_ON : eMode&~nsRedlineMode_t::REDLINE_ON;
             }
-            pDocShell->GetDoc()->SetRedlineMode( (RedlineMode_t)(eMode ));
+            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(eMode ));
         }
         break;
         case  WID_DOC_CHANGES_PASSWORD:
@@ -1869,12 +1870,12 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             if(aValue >>= aNew)
             {
                 SwDoc* pDoc = pDocShell->GetDoc();
-                pDoc->SetRedlinePassword(aNew);
+                pDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
                 if(aNew.getLength())
                 {
-                    sal_uInt16 eMode = pDoc->GetRedlineMode();
+                    sal_uInt16 eMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
                     eMode = eMode|nsRedlineMode_t::REDLINE_ON;
-                    pDoc->SetRedlineMode( (RedlineMode_t)(eMode ));
+                    pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(eMode ));
                 }
             }
         }
@@ -1891,7 +1892,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
-            sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
+            sal_Int16 eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             eRedMode = eRedMode & (~nsRedlineMode_t::REDLINE_SHOW_MASK);
             sal_Int16 nSet = 0;
             aValue >>= nSet;
@@ -1905,7 +1906,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 break;
                 default: throw IllegalArgumentException();
             }
-            pDocShell->GetDoc()->SetRedlineMode(eRedMode);
+            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(eRedMode);
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
@@ -2032,7 +2033,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
         {
-            const sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
+            const sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             bool bSet = false;
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
@@ -2050,7 +2051,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case  WID_DOC_CHANGES_PASSWORD:
         {
             SwDoc* pDoc = pDocShell->GetDoc();
-            aAny <<= pDoc->GetRedlinePassword();
+            aAny <<= pDoc->getIDocumentRedlineAccess().GetRedlinePassword();
         }
         break;
         case WID_DOC_AUTO_MARK_URL :
@@ -2064,7 +2065,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
-            sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
+            sal_Int16 eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             eRedMode = eRedMode & nsRedlineMode_t::REDLINE_SHOW_MASK;
             sal_Int16 nRet = RedlineDisplayType::NONE;
             if(nsRedlineMode_t::REDLINE_SHOW_INSERT == eRedMode)

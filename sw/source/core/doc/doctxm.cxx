@@ -37,6 +37,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -841,7 +842,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // remove old content an insert one empty textnode (to hold the layout!)
     SwTxtNode* pFirstEmptyNd;
     {
-        pDoc->DeleteRedline( *pSectNd, true, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, USHRT_MAX );
 
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );

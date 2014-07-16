@@ -22,6 +22,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
@@ -68,10 +69,10 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         }
     }
     // consider Redline
-    if( pDoc->IsRedlineOn() )
+    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
-        SetRedlineMode( pDoc->GetRedlineMode() );
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
+        SetRedlineMode( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
     }
 }
 
@@ -149,7 +150,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPaM *const pPam = & AddUndoRedoPaM(rContext);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
-        pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pPam, true, USHRT_MAX );
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
     bool bJoinNext = nSttNode != nEndNode &&
@@ -292,14 +293,14 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
-        RedlineMode_t eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern((RedlineMode_t)( eOld & ~nsRedlineMode_t::REDLINE_IGNORE ));
-        pDoc->AppendRedline( new SwRangeRedline( *pRedlData, *pPam ), true);
-        pDoc->SetRedlineMode_intern( eOld );
+        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( eOld & ~nsRedlineMode_t::REDLINE_IGNORE ));
+        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData, *pPam ), true);
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-            !pDoc->GetRedlineTbl().empty() )
-        pDoc->SplitRedline( *pPam );
+            !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+        pDoc->getIDocumentRedlineAccess().SplitRedline( *pPam );
 }
 
 void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)

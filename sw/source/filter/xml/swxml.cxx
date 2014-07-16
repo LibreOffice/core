@@ -52,6 +52,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
@@ -786,17 +787,17 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     const OUString sShowChanges("ShowChanges");
     const OUString sRecordChanges("RecordChanges");
     const OUString sRedlineProtectionKey("RedlineProtectionKey");
-    bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
+    bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
-    bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.GetRedlineMode());
+    bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineMode());
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sRecordChanges, aAny );
-    aAny <<= rDoc.GetRedlinePassword();
+    aAny <<= rDoc.getIDocumentRedlineAccess().GetRedlinePassword();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
 
     // force redline mode to "none"
-    rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
     const bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // #i28749# - set property <ShapePositionInHoriL2R>
@@ -911,7 +912,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );
     Sequence<sal_Int8> aKey;
     aAny >>= aKey;
-    rDoc.SetRedlinePassword( aKey );
+    rDoc.getIDocumentRedlineAccess().SetRedlinePassword( aKey );
 
     // restore redline mode from import info property set
     sal_Int16 nRedlineMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
@@ -925,10 +926,10 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         nRedlineMode |= nsRedlineMode_t::REDLINE_NONE;
 
     // ... restore redline mode
-    // (First set bogus mode to make sure the mode in SetRedlineMode()
+    // (First set bogus mode to make sure the mode in getIDocumentRedlineAccess().SetRedlineMode()
     //  is different from it's previous mode.)
-    rDoc.SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
-    rDoc.SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
+    rDoc.getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 
     lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 

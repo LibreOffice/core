@@ -40,6 +40,7 @@
 #include <unocrsr.hxx>
 #include <IMark.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -409,9 +410,9 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             pGlosGroup->ClearDoc();
             if( pGlosGroup->BeginPutDoc( sShortName, sLongName ) )
             {
-                pGDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
+                pGDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
                 lcl_CopySelToDoc( pGDoc, pxCursor, pxRange );
-                pGDoc->SetRedlineMode_intern((RedlineMode_t)( 0 ));
+                pGDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( 0 ));
                 nRet = pGlosGroup->PutDoc();
             }
         }

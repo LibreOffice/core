@@ -312,7 +312,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             SwNode* pTblNode = pTable->GetTableNode();
             if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 pTblNode = pTblNode->EndOfSectionNode();
-            const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
+            const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
             for(size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
             {
                 const SwRangeRedline* pRedline = rRedTbl[nRed];

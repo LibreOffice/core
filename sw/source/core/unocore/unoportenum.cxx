@@ -22,6 +22,7 @@
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <txatbase.hxx>
 #include <txtatr.hxx>
 #include <ndhints.hxx>
@@ -1031,7 +1032,7 @@ static void lcl_FillRedlineArray(
     SwUnoCrsr const & rUnoCrsr,
     SwXRedlinePortion_ImplList& rRedArr )
 {
-    const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
+    const SwRedlineTbl& rRedTbl = rDoc.getIDocumentRedlineAccess().GetRedlineTbl();
     const size_t nRedTblCount = rRedTbl.size();
 
     if ( nRedTblCount > 0 )

@@ -32,6 +32,7 @@
 
 #include "breakit.hxx"
 #include "doc.hxx"
+#include <IDocumentRedlineAccess.hxx>
 #include "docsh.hxx"
 #include "docstat.hxx"
 #include "docufld.hxx"
@@ -252,9 +253,9 @@ void SwDocTest::testModelToViewHelper()
         aPaM.DeleteMark();
 
         //turn on red-lining and show changes
-        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
-        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
         //set start of selection to last A
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
@@ -623,9 +624,9 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
 
         //turn on red-lining and show changes
-        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
-        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
         //delete everything except the first word
         aPaM.SetMark(); //set start of selection to current pos
@@ -642,9 +643,9 @@ void SwDocTest::testSwScanner()
         pTxtNode->SetWordCountDirty(true);
 
         //keep red-lining on but hide changes
-        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
-        CPPUNIT_ASSERT_MESSAGE("redlining should be still on", m_pDoc->IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be still on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
@@ -653,7 +654,7 @@ void SwDocTest::testSwScanner()
         OUString sLorem = pTxtNode->GetTxt();
         CPPUNIT_ASSERT(sLorem == "Lorem");
 
-        const SwRedlineTbl& rTbl = m_pDoc->GetRedlineTbl();
+        const SwRedlineTbl& rTbl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
 
         SwNodes& rNds = m_pDoc->GetNodes();
         CPPUNIT_ASSERT(rTbl.size() == 1);
@@ -876,7 +877,7 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 
 void SwDocTest::randomTest()
 {
-    CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     RedlineMode_t modes[] = {
         nsRedlineMode_t::REDLINE_ON,
         nsRedlineMode_t::REDLINE_SHOW_MASK,
@@ -896,7 +897,7 @@ void SwDocTest::randomTest()
         m_pDoc->ClearDoc();
 
         // setup redlining
-        m_pDoc->SetRedlineMode(modes[rlm]);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(modes[rlm]);
         SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[0]));
 
         for( int i = 0; i < 2000; i++ )

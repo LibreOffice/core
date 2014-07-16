@@ -61,6 +61,7 @@
 #include <osl/mutex.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <pausethreadstarting.hxx>
 #include <drawdoc.hxx>
@@ -287,12 +288,12 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
     sal_uInt16 nRedlineMode = 0;
-    bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->GetRedlineMode() );
+    bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
     if( bSaveRedline )
     {
         // now save and switch redline mode
-        nRedlineMode = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode(
+        nRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+        pDoc->getIDocumentRedlineAccess().SetRedlineMode(
                  (RedlineMode_t)(( nRedlineMode & nsRedlineMode_t::REDLINE_SHOW_MASK ) | nsRedlineType_t::REDLINE_INSERT ));
     }
 
@@ -301,7 +302,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )
     {
-      pDoc->SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
+      pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
     }
 
     if( pGraphicResolver )

@@ -28,6 +28,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
 #include <fldupde.hxx>
 #include <linkenum.hxx>
@@ -594,12 +595,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             Sequence <sal_Int8> aNew;
             if(rValue >>= aNew)
             {
-                mpDoc->SetRedlinePassword(aNew);
+                mpDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
                 if(aNew.getLength())
                 {
-                    sal_uInt16 eMode = mpDoc->GetRedlineMode();
+                    sal_uInt16 eMode = mpDoc->getIDocumentRedlineAccess().GetRedlineMode();
                     eMode = eMode|nsRedlineMode_t::REDLINE_ON;
-                    mpDoc->SetRedlineMode((RedlineMode_t)( eMode ));
+                    mpDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
                 }
             }
         }
@@ -1041,7 +1042,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CHANGES_PASSWORD:
         {
-            rValue <<= mpDoc->GetRedlinePassword();
+            rValue <<= mpDoc->getIDocumentRedlineAccess().GetRedlinePassword();
         }
         break;
         case HANDLE_CONSIDER_WRAP_ON_OBJPOS:

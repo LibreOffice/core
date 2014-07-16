@@ -268,7 +268,7 @@ void RtfExport::WriteNumbering()
 
 void RtfExport::WriteRevTab()
 {
-    int nRevAuthors = pDoc->GetRedlineTbl().size();
+    int nRevAuthors = pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size();
 
     if (nRevAuthors < 1)
         return;
@@ -276,9 +276,9 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline(OUString("Unknown"));
 
-    for (sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().size(); ++i)
+    for (sal_uInt16 i = 0; i < pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++i)
     {
-        const SwRangeRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
+        const SwRangeRedline* pRedl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ i ];
 
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }

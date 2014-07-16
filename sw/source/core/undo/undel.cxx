@@ -26,6 +26,7 @@
 #include <fmtanchr.hxx>
 #include <doc.hxx>
 #include <UndoManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -124,7 +125,7 @@ SwUndoDelete::SwUndoDelete(
 
     SwDoc * pDoc = rPam.GetDoc();
 
-    if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
+    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( rPam, *pRedlSaveData ))
@@ -489,7 +490,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( !bOk )
             return false;
 
-        pDoc->DeleteRedline( rDelPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( rDelPam, false, USHRT_MAX );
     }
 
     // Both 'deletes' can be consolidated, so 'move' the related character

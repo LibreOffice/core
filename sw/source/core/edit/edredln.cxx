@@ -28,33 +28,33 @@
 
 sal_uInt16 SwEditShell::GetRedlineMode() const
 {
-    return GetDoc()->GetRedlineMode();
+    return GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
 }
 
 void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
 {
-    if( eMode != GetDoc()->GetRedlineMode() )
+    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetRedlineMode( (RedlineMode_t)eMode );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)eMode );
         EndAllAction();
     }
 }
 
 bool SwEditShell::IsRedlineOn() const
 {
-    return GetDoc()->IsRedlineOn();
+    return GetDoc()->getIDocumentRedlineAccess().IsRedlineOn();
 }
 
 sal_uInt16 SwEditShell::GetRedlineCount() const
 {
-    return GetDoc()->GetRedlineTbl().size();
+    return GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().size();
 }
 
 const SwRangeRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
 {
-    return *GetDoc()->GetRedlineTbl()[ nPos ];
+    return *GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl()[ nPos ];
 }
 
 static void lcl_InvalidateAll( SwViewShell* pSh )
@@ -73,7 +73,7 @@ bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->AcceptRedline( nPos, true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -84,7 +84,7 @@ bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->RejectRedline( nPos, true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -95,7 +95,7 @@ bool SwEditShell::AcceptRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->AcceptRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCrsr(), true );
     EndAllAction();
     return bRet;
 }
@@ -104,7 +104,7 @@ bool SwEditShell::RejectRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->RejectRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCrsr(), true );
     EndAllAction();
     return bRet;
 }
@@ -114,7 +114,7 @@ bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
     bool bRet = false;
     FOREACHPAM_START(GetCrsr())
-        bRet = bRet || GetDoc()->SetRedlineComment( *PCURCRSR, rS );
+        bRet = bRet || GetDoc()->getIDocumentRedlineAccess().SetRedlineComment( *PCURCRSR, rS );
     FOREACHPAM_END()
 
     return bRet;
@@ -122,18 +122,18 @@ bool SwEditShell::SetRedlineComment( const OUString& rS )
 
 const SwRangeRedline* SwEditShell::GetCurrRedline() const
 {
-    return GetDoc()->GetRedline( *GetCrsr()->GetPoint(), 0 );
+    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCrsr()->GetPoint(), 0 );
 }
 
 void SwEditShell::UpdateRedlineAttr()
 {
     if( ( nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ) ==
-        ( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() ))
+        ( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() ))
     {
         SET_CURR_SHELL( this );
         StartAllAction();
 
-        GetDoc()->UpdateRedlineAttr();
+        GetDoc()->getIDocumentRedlineAccess().UpdateRedlineAttr();
 
         EndAllAction();
     }
@@ -145,7 +145,7 @@ void SwEditShell::UpdateRedlineAttr()
  */
 sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
-    const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
 
     for( sal_uInt16 i = 0, nCnt = rTbl.size(); i < nCnt; ++i )
         if( &rTbl[ i ]->GetRedlineData() == &rData )

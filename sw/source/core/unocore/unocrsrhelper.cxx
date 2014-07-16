@@ -1159,7 +1159,7 @@ void makeRedline( SwPaM& rPaM,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    IDocumentRedlineAccess* pRedlineAccess = rPaM.GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &rPaM.GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType_t eType;
     if      ( rRedlineType == "Insert" )
@@ -1282,7 +1282,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    IDocumentRedlineAccess* pRedlineAccess = rTableLine.GetFrmFmt()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType_t eType;
     if ( rRedlineType == "TableRowInsert" )
@@ -1339,7 +1339,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    IDocumentRedlineAccess* pRedlineAccess = rTableBox.GetFrmFmt()->GetDoc();
+    IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType_t eType;
     if ( rRedlineType == "TableCellInsert" )

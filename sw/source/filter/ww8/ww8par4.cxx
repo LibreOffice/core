@@ -456,7 +456,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     for( sal_uInt16 nAuthor = 0; nAuthor < nCount; ++nAuthor )
     {
         // Store author in doc
-        sal_uInt16 nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
+        sal_uInt16 nSWId = rDocOut.getIDocumentRedlineAccess().InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
         m_aAuthorInfos[nAuthor] = nSWId;
     }

@@ -38,6 +38,7 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
@@ -1255,18 +1256,18 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 {
     SpellContentPositions aRedlines;
     SwDoc* pDoc = pSh->GetDoc();
-    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( pDoc->GetRedlineMode() );
+    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
     if ( bShowChg )
     {
         SwPaM *pCrsr = pSh->GetCrsr();
         const SwPosition* pStartPos = pCrsr->Start();
         const SwTxtNode* pTxtNode = pCrsr->GetNode().GetTxtNode();
 
-        sal_uInt16 nAct = pDoc->GetRedlinePos( *pTxtNode, USHRT_MAX );
+        sal_uInt16 nAct = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *pTxtNode, USHRT_MAX );
         const sal_Int32 nStartIndex = pStartPos->nContent.GetIndex();
-        for ( ; nAct < pDoc->GetRedlineTbl().size(); nAct++ )
+        for ( ; nAct < pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); nAct++ )
         {
-            const SwRangeRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+            const SwRangeRedline* pRed = pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ];
 
             if ( pRed->Start()->nNode > pTxtNode->GetIndex() )
                 break;

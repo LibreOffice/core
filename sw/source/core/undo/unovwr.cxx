@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -44,7 +45,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(UNDO_OVERWRITE),
       pRedlSaveData( 0 ), bGroup( false )
 {
-    if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
+    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
@@ -135,7 +136,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if( !bOk )
             return false;
 
-        pDoc->DeleteRedline( aPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( aPam, false, USHRT_MAX );
     }
 
     // both 'overwrites' can be combined so 'move' the corresponding character
@@ -268,7 +269,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
         rIdx.Assign( pTxtNd, nSttCntnt );
         pAktPam->SetMark();
         pAktPam->GetMark()->nContent += aInsStr.getLength();
-        pDoc->DeleteRedline( *pAktPam, false, USHRT_MAX );
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pAktPam, false, USHRT_MAX );
         pAktPam->DeleteMark();
     }
     rIdx.Assign( pTxtNd, !aDelStr.isEmpty() ? nSttCntnt+1 : nSttCntnt );

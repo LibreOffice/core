@@ -10,6 +10,7 @@
 #include "doc.hxx"
 #include "drawdoc.hxx"
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
@@ -190,8 +191,8 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpSpzFrmFmtTbl->dumpAsXml( writer, "spzFrmFmtTbl" );
     mpSectionFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
-    mpRedlineTbl->dumpAsXml( writer );
-    mpExtraRedlineTbl->dumpAsXml( writer );
+    getIDocumentRedlineAccess().GetRedlineTbl().dumpAsXml( writer );
+    getIDocumentRedlineAccess().GetExtraRedlineTbl().dumpAsXml( writer );
     lcl_dumpSdrModel( writer, getIDocumentDrawModelAccess().GetDrawModel() );
 
     writer.startElement("mbModified");

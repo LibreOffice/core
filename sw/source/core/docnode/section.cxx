@@ -35,6 +35,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -1263,8 +1264,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( nRet )
                 {
                     SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
-                    eOldRedlineMode = pSrcDoc->GetRedlineMode();
-                    pSrcDoc->SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
+                    eOldRedlineMode = pSrcDoc->getIDocumentRedlineAccess().GetRedlineMode();
+                    pSrcDoc->getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
                 }
             }
 
@@ -1374,7 +1375,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( 2 == nRet )
                     xDocSh->DoClose();
                 else if( ((SwDocShell*)&xDocSh)->GetDoc() )
-                    ((SwDocShell*)&xDocSh)->GetDoc()->SetRedlineMode(
+                    ((SwDocShell*)&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(
                                 eOldRedlineMode );
             }
         }

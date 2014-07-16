@@ -32,6 +32,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
@@ -758,8 +759,8 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
             pShareFmts->RemoveFormat( *rTblBoxes[ nDelPos ]->GetFrmFmt() );
 
         // Before deleting the 'Table Box' from memory - delete any redlines attached to it
-        if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
-            rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableCellRedline( rTbl.GetFrmFmt()->GetDoc(), *(rTblBoxes[nDelPos]), true, USHRT_MAX );
+        if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
+            rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableCellRedline( rTbl.GetFrmFmt()->GetDoc(), *(rTblBoxes[nDelPos]), true, USHRT_MAX );
         delete rTblBoxes[nDelPos];
         rTblBoxes.erase( rTblBoxes.begin() + nDelPos );
 
@@ -811,8 +812,8 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
 
             SwTableLine* pTabLineToDelete = rTbl.GetTabLines()[ nDelPos ];
             // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-            if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
-                rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+            if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
+                rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
             delete pTabLineToDelete;
             rTbl.GetTabLines().erase( rTbl.GetTabLines().begin() + nDelPos );
             break;      // we cannot delete more
@@ -826,8 +827,8 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
 
         SwTableLine* pTabLineToDelete = pBox->GetTabLines()[ nDelPos ];
         // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-        if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
-            rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+        if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
+            rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
         delete pTabLineToDelete;
         pBox->GetTabLines().erase( pBox->GetTabLines().begin() + nDelPos );
     } while( pBox->GetTabLines().empty() );

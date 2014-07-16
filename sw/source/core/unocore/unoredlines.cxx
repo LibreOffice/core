@@ -49,7 +49,7 @@ sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rRedTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
     return rRedTbl.size();
 }
 
@@ -59,7 +59,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rRedTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
     uno::Any aRet;
     if ((rRedTbl.size() > static_cast<size_t>(nIndex)) && (nIndex >= 0))
     {
@@ -90,7 +90,7 @@ sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException, std::exceptio
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+    const SwRedlineTbl& rRedTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
     return rRedTbl.size() > 0;
 }
 
@@ -143,7 +143,7 @@ sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeExcepti
 {
     if(!pDoc)
         throw uno::RuntimeException();
-    return pDoc->GetRedlineTbl().size() > nCurrentIndex;
+    return pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size() > nCurrentIndex;
 }
 
 uno::Any SwXRedlineEnumeration::nextElement(void)
@@ -151,7 +151,7 @@ uno::Any SwXRedlineEnumeration::nextElement(void)
 {
     if(!pDoc)
         throw uno::RuntimeException();
-    const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
+    const SwRedlineTbl& rRedTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     if( rRedTbl.size() <= nCurrentIndex )
         throw container::NoSuchElementException();
     uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl[nCurrentIndex++], *pDoc );

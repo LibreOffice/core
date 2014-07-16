@@ -19,6 +19,7 @@
 
 #include <UndoSplitMove.hxx>
 #include "doc.hxx"
+#include <IDocumentRedlineAccess.hxx>
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "ndtxt.hxx"
@@ -51,10 +52,10 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
             DELETEZ( pHistory );
     }
     // consider Redline
-    if( pDoc->IsRedlineOn() )
+    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
-        SetRedlineMode( pDoc->GetRedlineMode() );
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
+        SetRedlineMode( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
     }
 
     nParRsid = pTxtNd->GetParRsid();
@@ -118,7 +119,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.GetMark()->nNode++;
                 rPam.GetMark()->nContent.Assign( rPam.GetMark()->
                                     nNode.GetNode().GetCntntNode(), 0 );
-                pDoc->DeleteRedline( rPam, true, USHRT_MAX );
+                pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, USHRT_MAX );
                 rPam.DeleteMark();
             }
 
@@ -163,20 +164,20 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( ( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
             ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                !pDoc->GetRedlineTbl().empty() ))
+                !pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() ))
         {
             rPam.SetMark();
             if( rPam.Move( fnMoveBackward ))
             {
                 if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                 {
-                    RedlineMode_t eOld = pDoc->GetRedlineMode();
-                    pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-                    pDoc->AppendRedline( new SwRangeRedline( *pRedlData, rPam ), true);
-                    pDoc->SetRedlineMode_intern( eOld );
+                    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+                    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
+                    pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData, rPam ), true);
+                    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
                 }
                 else
-                    pDoc->SplitRedline( rPam );
+                    pDoc->getIDocumentRedlineAccess().SplitRedline( rPam );
                 rPam.Exchange();
             }
             rPam.DeleteMark();

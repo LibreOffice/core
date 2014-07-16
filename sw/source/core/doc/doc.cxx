@@ -28,6 +28,7 @@
 #include <DocumentListsManager.hxx>
 #include <DocumentOutlineNodesManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -359,6 +360,27 @@ IDocumentContentOperations & SwDoc::getIDocumentContentOperations()
 ::sw::DocumentContentOperationsManager & SwDoc::GetDocumentContentOperationsManager()
 {
     return *m_pDocumentContentOperationsManager;
+}
+
+//IDocumentRedlineAccess
+IDocumentRedlineAccess const & SwDoc::getIDocumentRedlineAccess() const
+{
+    return *m_pDocumentRedlineManager;
+}
+
+IDocumentRedlineAccess& SwDoc::getIDocumentRedlineAccess()
+{
+    return *m_pDocumentRedlineManager;
+}
+
+::sw::DocumentRedlineManager const & SwDoc::GetDocumentRedlineManager() const
+{
+    return *m_pDocumentRedlineManager;
+}
+
+::sw::DocumentRedlineManager& SwDoc::GetDocumentRedlineManager()
+{
+    return *m_pDocumentRedlineManager;
 }
 
 /* Implementations the next Interface here */

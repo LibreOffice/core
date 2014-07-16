@@ -80,6 +80,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -521,7 +522,7 @@ SvParserState SwHTMLParser::CallParser()
         aInsertionRangePam.SetMark();
         *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
         aInsertionRangePam.Move( fnMoveBackward );
-        pDoc->SplitRedline( aInsertionRangePam );
+        pDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
 
         pDoc->SetTxtFmtColl( *pPam,
                 pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));

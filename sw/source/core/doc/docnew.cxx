@@ -97,6 +97,7 @@
 #include <DocumentListsManager.hxx>
 #include <DocumentOutlineNodesManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <DocumentRedlineManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -198,8 +199,9 @@ SwDoc::SwDoc()
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pDocumentDrawModelManager( new ::sw::DocumentDrawModelManager( *this ) ),
+    m_pDocumentRedlineManager( new ::sw::DocumentRedlineManager( *this ) ),
     m_pUndoManager(new ::sw::UndoManager(
-            boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *this, *this)),
+            boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *this)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
@@ -239,9 +241,6 @@ SwDoc::SwDoc()
     mpURLStateChgd( 0 ),
     mpNumberFormatter( 0 ),
     mpNumRuleTbl( new SwNumRuleTbl ),
-    mpRedlineTbl( new SwRedlineTbl ),
-    mpExtraRedlineTbl ( new SwExtraRedlineTbl ),
-    mpAutoFmtRedlnComment( 0 ),
     mpUnoCrsrTbl( new SwUnoCrsrTbl() ),
     mpPgPViewPrtData( 0 ),
     mpExtInputRing( 0 ),
@@ -251,8 +250,6 @@ SwDoc::SwDoc()
     mpUnoCallBack(new SwModify(0)),
     mpGrammarContact(createGrammarContact()),
     m_pXmlIdRegistry(),
-    mnAutoFmtRedlnCommentNo( 0 ),
-    meRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
     mReferenceCount(0),
     mnLockExpFld( 0 ),
     mbGlossDoc(false),
@@ -272,10 +269,8 @@ SwDoc::SwDoc()
     mbIsAutoFmtRedline(false),
     mbOLEPrtNotifyPending(false),
     mbAllOLENotify(false),
-    mbIsRedlineMove(false),
     mbInsOnlyTxtGlssry(false),
     mbContains_MSVBasic(false),
-    mbReadlineChecked(false),
     mbClipBoard( false ),
     mbColumnSelection( false ),
     mbIsPrepareSelAll(false),
@@ -473,10 +468,11 @@ SwDoc::~SwDoc()
 
     mbDtor = true;
 
-    delete mpRedlineTbl;
-    delete mpExtraRedlineTbl, mpExtraRedlineTbl = 0;
+    //Clear the redline table before the nodes array is destroyed
+    getIDocumentRedlineAccess().GetRedlineTbl().DeleteAndDestroyAll();
+    getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteAndDestroyAll();
+
     delete mpUnoCrsrTbl;
-    delete mpAutoFmtRedlnComment;
     delete mpUpdtFlds;
     delete mpACEWord;
 
@@ -696,8 +692,8 @@ void SwDoc::ClearDoc()
     OSL_ENSURE( !GetDocumentDrawModelManager().GetDrawModel() || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
-    mpRedlineTbl->DeleteAndDestroyAll();
-    mpExtraRedlineTbl->DeleteAndDestroyAll();
+    getIDocumentRedlineAccess().GetRedlineTbl().DeleteAndDestroyAll();
+    getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteAndDestroyAll();
 
     delete mpACEWord;
 

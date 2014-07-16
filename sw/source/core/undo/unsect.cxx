@@ -23,6 +23,7 @@
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -78,11 +79,11 @@ SwUndoInsSection::SwUndoInsSection(
     , m_bUpdateFtn(false)
 {
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
-    if( rDoc.IsRedlineOn() )
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlData.reset(new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
-                                        rDoc.GetRedlineAuthor() ));
-        SetRedlineMode( rDoc.GetRedlineMode() );
+                                        rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ));
+        SetRedlineMode( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
     }
         m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
@@ -121,7 +122,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
-        rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pNd, true, USHRT_MAX );
 
     // no selection?
     SwNodeIndex aIdx( *pNd );
@@ -187,18 +188,18 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     if (m_pRedlData.get() &&
         IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode()))
     {
-        RedlineMode_t eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
+        RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
-        rDoc.AppendRedline( new SwRangeRedline( *m_pRedlData, aPam ), true);
-        rDoc.SetRedlineMode_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlData, aPam ), true);
+        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-            !rDoc.GetRedlineTbl().empty() )
+            !rDoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
-        rDoc.SplitRedline( aPam );
+        rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
     }
 
     if( pUpdateTOX )

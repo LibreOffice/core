@@ -1154,7 +1154,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 //            break;
         case FN_UNO_REDLINE_NODE_END:
         {
-            const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+            const SwRedlineTbl& rRedTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
             const size_t nRedTblCount = rRedTbl.size();
             if (nRedTblCount > 0)
             {

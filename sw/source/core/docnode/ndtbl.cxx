@@ -42,6 +42,7 @@
 #include <UndoManager.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -537,13 +538,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     pTblNd->MakeFrms( &aNdIdx );
 
     // To-Do - add 'SwExtraRedlineTbl' also ?
-    if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
+    if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTbl().empty() ))
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
-        if( IsRedlineOn() )
-            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+        if( getIDocumentRedlineAccess().IsRedlineOn() )
+            getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
-            SplitRedline( aPam );
+            getIDocumentRedlineAccess().SplitRedline( aPam );
     }
 
     SetModified();
@@ -2216,8 +2217,8 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
     // #i33394#
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_MERGE, NULL );
 
-    RedlineMode_t eOld = GetRedlineMode();
-    SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+    RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+    getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
     SwUndoTblMerge *const pUndo( (GetIDocumentUndoRedo().DoesUndo())
         ?   new SwUndoTblMerge( rPam )
@@ -2230,7 +2231,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
 
     if( !rTable.PrepareMerge( rPam, aBoxes, aMerged, &pMergeBox, pUndo ) )
     {   // No cells found to merge
-        SetRedlineMode_intern( eOld );
+        getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
         if( pUndo )
         {
             delete pUndo;
@@ -2294,7 +2295,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
         rPam.Move();
 
         ::ClearFEShellTabCols();
-        SetRedlineMode_intern( eOld );
+        getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
     GetIDocumentUndoRedo().EndUndo( UNDO_TABLE_MERGE, NULL );
     return nRet;
@@ -2449,8 +2450,8 @@ void SwTableNode::RemoveRedlines()
     if (pDoc)
     {
         SwTable& rTbl = GetTable();
-        if ( pDoc->HasExtraRedlineTbl() )
-            pDoc->GetExtraRedlineTbl().DeleteAllTableRedlines( pDoc, rTbl, true, USHRT_MAX );
+        if ( pDoc->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
+            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteAllTableRedlines( pDoc, rTbl, true, USHRT_MAX );
     }
 }
 
@@ -4260,9 +4261,9 @@ bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     }
     else
     {
-        RedlineMode_t eOld = GetRedlineMode();
-        if( IsRedlineOn() )
-      SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
+        RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+        if( getIDocumentRedlineAccess().IsRedlineOn() )
+      getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
                                   nsRedlineMode_t::REDLINE_SHOW_INSERT |
                                   nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
@@ -4358,7 +4359,7 @@ bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             rInsPos.nNode = *pSttNd;
             rInsPos.nContent.Assign( GetNodes().GoNext( &rInsPos.nNode ), 0 );
         }
-        SetRedlineMode( eOld );
+        getIDocumentRedlineAccess().SetRedlineMode( eOld );
     }
 
     if( bRet )
