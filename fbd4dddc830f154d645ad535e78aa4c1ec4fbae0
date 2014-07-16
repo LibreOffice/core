@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_0279b0fc",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-07-16T08:36:58Z",
+      "side": 1,
+      "message": "Can\u0027t the loop above be replaced with:\n\n  m_vDimensions \u003d rArray.m_vDimensions;",
+      "revId": "fbd4dddc830f154d645ad535e78aa4c1ec4fbae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_e27d9ce8",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-07-16T08:36:58Z",
+      "side": 1,
+      "message": "On line 576 you have formatted the same loop differently: without leading and trailing blank and wrapped the long line. Can we be consistent here and below?",
+      "revId": "fbd4dddc830f154d645ad535e78aa4c1ec4fbae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
