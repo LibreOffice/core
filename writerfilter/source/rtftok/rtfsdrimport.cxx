@@ -49,8 +49,9 @@ namespace rtftok
 
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
                            uno::Reference<lang::XComponent> const& xDstDoc)
-    : m_rImport(rDocument),
-      m_bTextFrame(false)
+    : m_rImport(rDocument)
+    , m_bTextFrame(false)
+    , m_bFakePict(false)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
     if (xDrawings.is())
@@ -215,21 +216,92 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const O
     }
 }
 
-void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
-        ShapeOrPict const shapeOrPict)
+int RTFSdrImport::initShape(
+    uno::Reference<drawing::XShape> & o_xShape,
+    uno::Reference<beans::XPropertySet> & o_xPropSet,
+    bool & o_rIsCustomShape,
+    RTFShape const& rShape, bool const bClose, ShapeOrPict const shapeOrPict)
 {
+    assert(!o_xShape.is());
+    assert(!o_xPropSet.is());
+    o_rIsCustomShape = false;
+    m_bFakePict = false;
+
+    // first, find the shape type
     int nType = -1;
+    std::vector< std::pair<OUString, OUString> >::const_iterator const iter(
+        std::find_if(rShape.aProperties.begin(),
+                     rShape.aProperties.end(),
+                     boost::bind(&OUString::equals,
+                         boost::bind(&std::pair<OUString, OUString>::first, _1),
+                         OUString("shapeType"))));
+
+    if (iter == rShape.aProperties.end())
+    {
+        if (SHAPE == shapeOrPict)
+        {
+            // The spec doesn't state what is the default for shapeType,
+            // Word seems to implement it as a rectangle.
+            nType = ESCHER_ShpInst_Rectangle;
+        }
+        else
+        {   // pict is picture by default but can be a rectangle too fdo#79319
+            nType = ESCHER_ShpInst_PictureFrame;
+        }
+    }
+    else
+    {
+        nType = iter->second.toInt32();
+        if (PICT == shapeOrPict && ESCHER_ShpInst_PictureFrame != nType)
+        {
+            m_bFakePict = true;
+        }
+    }
+
+    switch (nType)
+    {
+    case ESCHER_ShpInst_PictureFrame:
+        createShape("com.sun.star.drawing.GraphicObjectShape", o_xShape, o_xPropSet);
+        break;
+    case ESCHER_ShpInst_Line:
+        createShape("com.sun.star.drawing.LineShape", o_xShape, o_xPropSet);
+        break;
+    case ESCHER_ShpInst_Rectangle:
+    case ESCHER_ShpInst_TextBox:
+        // If we're inside a groupshape, can't use text frames.
+        if (!bClose && m_aParents.size() == 1)
+        {
+            createShape("com.sun.star.text.TextFrame", o_xShape, o_xPropSet);
+            m_bTextFrame = true;
+            std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
+            for (size_t j = 0; j < aDefaults.size(); ++j)
+                o_xPropSet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
+            break;
+        }
+        // fall-through intended
+    default:
+        createShape("com.sun.star.drawing.CustomShape", o_xShape, o_xPropSet);
+        o_rIsCustomShape = true;
+        break;
+    }
+
+    // Defaults
+    if (o_xPropSet.is() && !m_bTextFrame)
+    {
+        o_xPropSet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32(
+                        0xffffff))); // White in Word, kind of blue in Writer.
+    }
+
+    return nType;
+}
+
+void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shapeOrPict)
+{
     bool bPib = false;
-    bool bCustom = false;
     m_bTextFrame = false;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
-    // Create this early, as custom shapes may have properties before the type arrives.
-    if (PICT == shapeOrPict)
-        createShape("com.sun.star.drawing.GraphicObjectShape", xShape, xPropertySet);
-    else
-        createShape("com.sun.star.drawing.CustomShape", xShape, xPropertySet);
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
@@ -253,51 +325,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
 
-    // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
-    if (SHAPE == shapeOrPict &&
-        std::find_if(rShape.aProperties.begin(),
-                     rShape.aProperties.end(),
-                     boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
-            == rShape.aProperties.end())
-        rShape.aProperties.insert(rShape.aProperties.begin(), std::pair<OUString, OUString>("shapeType", OUString::number(ESCHER_ShpInst_Rectangle)));
+    bool bCustom(false);
+    int const nType =
+        initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
     {
         if (i->first == "shapeType")
         {
-            nType = i->second.toInt32();
-            switch (nType)
-            {
-            case ESCHER_ShpInst_PictureFrame:
-                createShape("com.sun.star.drawing.GraphicObjectShape", xShape, xPropertySet);
-                break;
-            case ESCHER_ShpInst_Line:
-                createShape("com.sun.star.drawing.LineShape", xShape, xPropertySet);
-                break;
-            case ESCHER_ShpInst_Rectangle:
-            case ESCHER_ShpInst_TextBox:
-                // If we're inside a groupshape, can't use text frames.
-                if (!bClose && m_aParents.size() == 1)
-                {
-                    createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
-                    m_bTextFrame = true;
-                    std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
-                    for (size_t j = 0; j < aDefaults.size(); ++j)
-                        xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
-                }
-                else
-                    bCustom = true;
-                break;
-            default:
-                bCustom = true;
-                break;
-            }
-
-            // Defaults
-            aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-            if (xPropertySet.is() && !m_bTextFrame)
-                xPropertySet->setPropertyValue("FillColor", aAny);
+            continue; // ignore: already handled by initShape
         }
         else if (i->first == "wzName")
         {
