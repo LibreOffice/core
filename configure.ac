@@ -10077,6 +10077,18 @@ if ! "$TOUCH" -h warn 2>/dev/null > /dev/null; then
 fi
 
 dnl ===================================================================
+dnl Set vcl option: coordinate device in double or sal_Int32
+dnl ===================================================================
+
+AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
+if test "$_os" = "Darwin" -o  $_os = iOS ; then
+    AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
+    AC_MSG_RESULT([double])
+else
+    AC_MSG_RESULT([sal_Int32])
+fi
+
+dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
@@ -13053,6 +13065,7 @@ AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
+AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_CONFIG_HEADERS([config_host/config_oauth2.h])

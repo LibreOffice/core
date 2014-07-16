@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
+#include <config_vcl.h>
+
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/rc.hxx>
