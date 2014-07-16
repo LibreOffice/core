@@ -81,6 +81,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
+		$(if $(HEADLESS),,VCL_HIDE_WINDOWS=1) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) \
