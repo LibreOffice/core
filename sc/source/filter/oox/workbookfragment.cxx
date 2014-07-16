@@ -36,6 +36,7 @@
 #include "pivotcachebuffer.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "sharedstringsfragment.hxx"
+#include "revisionfragment.hxx"
 #include "stylesfragment.hxx"
 #include "tablebuffer.hxx"
 #include "themebuffer.hxx"
@@ -293,7 +294,7 @@ public:
     }
 };
 
-static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
+void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
     sal_Int32 nThreads = std::min( rSheets.size(), (size_t) 4 /* FIXME: ncpus/2 */ );
 
@@ -491,6 +492,14 @@ void WorkbookFragment::finalizeImport()
 
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
+
+    OUString aRevHeadersPath = getFragmentPathFromFirstType(CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
+    if (!aRevHeadersPath.isEmpty())
+    {
+        boost::scoped_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
+        rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionHeadersFragment(*this, aRevHeadersPath));
+        importOoxFragment(xFragment, *xParser);
+    }
 }
 
 // private --------------------------------------------------------------------
