@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 #define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <deque>

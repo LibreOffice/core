@@ -46,7 +46,7 @@ namespace svl
 class TextLine;
 class TETextPortion;
 #include <rtl/ustring.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>

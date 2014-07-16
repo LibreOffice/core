@@ -21,7 +21,7 @@
 #include <tools/debug.hxx>
 
 #include <svl/hint.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <svl/lstner.hxx>
 #include <algorithm>

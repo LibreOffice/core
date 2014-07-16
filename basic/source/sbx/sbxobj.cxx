@@ -23,8 +23,8 @@
 
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include "sbxres.hxx"
-#include <svl/brdcst.hxx>
 
 TYPEINIT1(SbxMethod,SbxVariable)
 TYPEINIT1(SbxProperty,SbxVariable)

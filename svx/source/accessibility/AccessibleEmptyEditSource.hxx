@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLEEMPTYEDITSOURCE_HXX
 #define INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLEEMPTYEDITSOURCE_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 
 #include <memory>

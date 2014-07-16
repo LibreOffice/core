@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxuno.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <tools/debug.hxx>
 #include <tools/rtti.hxx>
 

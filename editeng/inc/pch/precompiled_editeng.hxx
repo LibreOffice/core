@@ -224,7 +224,7 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/cntwall.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>

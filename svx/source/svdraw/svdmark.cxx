@@ -35,7 +35,7 @@
 
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svx/svdoedge.hxx>
 
 
