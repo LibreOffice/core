@@ -199,6 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/pivottablefragment \
 	sc/source/filter/oox/querytablebuffer \
 	sc/source/filter/oox/querytablefragment \
+	sc/source/filter/oox/revisionfragment \
 	sc/source/filter/oox/richstringcontext \
 	sc/source/filter/oox/richstring \
 	sc/source/filter/oox/scenariobuffer \
