@@ -1462,6 +1462,15 @@ void ScExportTest::testTrackChangesSimpleXLS()
     bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed.", bGood);
 
+    // fdo#81445 : Check the blank value string to make sure it's "<empty>".
+    ScChangeTrack* pCT = pDoc->GetChangeTrack();
+    CPPUNIT_ASSERT(pCT);
+    ScChangeAction* pAction = pCT->GetAction(1);
+    CPPUNIT_ASSERT(pAction);
+    OUString aDesc;
+    pAction->GetDescription(aDesc, pDoc);
+    CPPUNIT_ASSERT_EQUAL(OUString("Cell B2 changed from '<empty>' to '1'"), aDesc);
+
     xDocSh2->DoClose();
 }
 
