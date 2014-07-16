@@ -20,7 +20,7 @@ OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEve
     , m_rEventHandler( rEventHandlerParent )
     , m_bVisible ( false )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
-    , m_aLastMousePos(Point())
+    , m_aLastMousePos(Point(0,0))
     , m_bIsOrbitMode( false )
     , m_fCameraDistance(0.0)
 {
@@ -356,7 +356,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             m_rEventHandler.GrabFocus();
         }
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
-        if(pMouseEvt && pMouseEvt->IsLeft())
+        if(pMouseEvt && pMouseEvt->IsLeft() && m_aLastMousePos != Point(0,0))
         {
             const Point& aCurPos = pMouseEvt->GetPosPixel();
             float fSensitivity = std::min(m_rHandle.viewport.width, m_rHandle.viewport.height);
@@ -388,6 +388,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
+            m_aLastMousePos = Point(0,0);
             gltf_renderer_stop_rotate_model(&m_rHandle);
         }
     }
