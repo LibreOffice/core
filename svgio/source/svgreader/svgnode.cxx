@@ -29,6 +29,12 @@ namespace svgio
 {
     namespace svgreader
     {
+        /// #i125258#
+        bool SvgNode::supportsParentStyle() const
+        {
+            return true;
+        }
+
         const SvgStyleAttributes* SvgNode::getSvgStyleAttributes() const
         {
             return 0;

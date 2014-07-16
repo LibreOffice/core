@@ -127,6 +127,9 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
+            /// #i125258# tell if this node is allowed to have a parent style (e.g. defs do not)
+            virtual bool supportsParentStyle() const;
+
             /// basic data read access
             SVGToken getType() const { return maType; }
             const SvgDocument& getDocument() const { return mrDocument; }
