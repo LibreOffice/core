@@ -554,43 +554,6 @@ namespace
         // make text portion primitive with the first part of the portion
         impCreateTextPortionPrimitive(rTruncatedPortionInfo);
 
-        // for debugging purposes:
-        // carry out experiments only when setting b=false from gdb
-        bool b = true;
-        if (b)
-            return;
-
-        /* Some Experiments */
-
-        const SdrTextObj *pCurTextObj = mrOutliner.GetTextObj();
-        SdrPage *pPage = NULL;
-
-        // page for list of objects
-        if ( pCurTextObj ) {
-            pPage = pCurTextObj->GetPage();
-        } else {
-            fprintf(stderr, "Some errors\n" );
-            return;
-        }
-
-        // we use (text) object 0 and 1 for these experiments
-        // we can try to set text of obj 0 to obj 1 or something
-
-        SdrTextObj *pNextTextObj;
-        if ( pPage && pPage->GetObjCount() > 1) {
-            pNextTextObj =  dynamic_cast< SdrTextObj * >(
-                                                pPage->GetObj(1) );
-            if ( pNextTextObj == NULL)
-                return;
-        } else {
-            fprintf(stderr, "Make New Object please\n");
-            return;
-        }
-
-        pCurTextObj->impCopyTextInTextObj(pNextTextObj);
-
-        /* End Experiments */
-
         // if text is left in original portion, send it back to editeng
         // TODO(matteocam)
     }
@@ -835,6 +798,33 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
+    /* BEGIN Experiments */
+    // FIXME(matteocam)
+
+     // for debugging purposes:
+    // carry out experiments only when setting b=false from gdb
+    bool b = true;
+    if (b)
+        return;
+
+    // we use (text) object 0 and 1 for these experiments:
+    // copying text from one to the other.
+
+    SdrTextObj *pNextTextObj;
+    if ( pPage && pPage->GetObjCount() > 1) {
+        pNextTextObj =  dynamic_cast< SdrTextObj * >(
+                                            pPage->GetObj(1) );
+        if ( pNextTextObj == NULL)
+            return;
+    } else {
+        fprintf(stderr, "Make New Object please\n");
+        return;
+    }
+
+    impCopyTextInTextObj(pNextTextObj);
+
+    /* END Experiments */
+
     // decompose matrix to have position and size of text
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
