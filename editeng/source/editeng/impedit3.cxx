@@ -352,11 +352,16 @@ void ImpEditEngine::FormatFullDoc()
 bool IsPageOverflow(const sal_uInt32 aStatus, bool isVertical,
                     const Size aPrevPaperSize, const Size aPaperSize)
 {
-    const bool bGrowX=(aStatus & EE_STAT_TEXTWIDTHCHANGED) !=0;
-    const bool bGrowY=(aStatus & EE_STAT_TEXTHEIGHTCHANGED) !=0;
+    const bool bTextGrowX=(aStatus & EE_STAT_TEXTWIDTHCHANGED) !=0;
+    const bool bTextGrowY=(aStatus & EE_STAT_TEXTHEIGHTCHANGED) !=0;
 
-    return ( bGrowY && !isVertical && aPaperSize.Height() > aPrevPaperSize.Height() ) ||
-           ( bGrowX && isVertical && aPaperSize.Width() > aPrevPaperSize.Width() );
+    const bPageExpansionX = ( aPrevPaperSize.Width() != 0 ) && // XXX
+                            ( aPaperSize.Width() > aPrevPaperSize.Width() );
+    const bPageExpansionY = ( aPrevPaperSize.Height() != 0 ) && // XXX
+                            ( aPaperSize.Height() > aPrevPaperSize.Height() );
+
+    return ( bTextGrowY && !isVertical && bPageExpansionY ) ||
+           ( bTextGrowX && isVertical &&  bPageExpansionX );
 
 }
 
