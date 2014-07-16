@@ -256,7 +256,8 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
 
     if ( confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART )
     {
-       assert( !bIsPackage );
+       if ( bIsPackage ) // we passed a directory stream, but the filter claims it's APXL file?
+           return OUString();
 
         const Reference < container::XChild > xChild( xContent, UNO_QUERY );
         if ( xChild.is() )
@@ -270,6 +271,12 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
                     xContent = xPackageContent;
                     bUCBContentChanged = true;
                     bIsPackage = true;
+                }
+                else
+                {
+                    // The passed stream has been detected as APXL file, but its parent dir is not a valid Keynote
+                    // package? Something is wrong here...
+                    return OUString();
                 }
             }
         }
