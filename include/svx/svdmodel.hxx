@@ -28,7 +28,7 @@
 #include <tools/link.hxx>
 #include <tools/weakbase.hxx>
 #include <vcl/mapmod.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <tools/datetime.hxx>
 #include <svl/hint.hxx>
 

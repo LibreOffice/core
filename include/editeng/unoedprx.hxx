@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_UNOEDPRX_HXX
 
 #include <memory>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <editeng/unoedsrc.hxx>
 
 #include <editeng/editdata.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVDPNTV_HXX
 #define INCLUDED_SVX_SVDPNTV_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/undo.hxx>

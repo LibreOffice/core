@@ -26,7 +26,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <svl/itemprop.hxx>
-#include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sot/storage.hxx>
 #include <rtl/ustrbuf.hxx>

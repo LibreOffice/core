@@ -31,7 +31,7 @@
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <svl/hint.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
 #include <boost/shared_ptr.hpp>

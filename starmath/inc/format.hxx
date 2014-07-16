@@ -21,7 +21,7 @@
 
 
 #include <svl/smplhint.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include "utility.hxx"
 #include <types.hxx>
 

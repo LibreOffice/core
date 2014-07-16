@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_GALLERY1_HXX
 
 #include <rtl/ustring.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 

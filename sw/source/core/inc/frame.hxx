@@ -27,7 +27,7 @@
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include "calbck.hxx"
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
 #include <com/sun/star/style/TabStop.hpp>

@@ -23,7 +23,7 @@
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/runtime/XFilterController.hpp>
 #include <svl/lstner.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <vcl/window.hxx>
 #include <sfx2/childwin.hxx>

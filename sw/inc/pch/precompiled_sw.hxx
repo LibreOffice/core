@@ -732,7 +732,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/asiancfg.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
