@@ -2426,6 +2426,9 @@ endif # !SYSTEM_LIBPNG
 ifneq ($(SYSTEM_CURL),)
 
 define gb_LinkTarget__use_curl
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_CURL \
+)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(CURL_CFLAGS) \
