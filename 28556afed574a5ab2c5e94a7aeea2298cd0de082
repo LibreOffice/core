@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_02609034",
+        "filename": "writerfilter/source/rtftok/rtfsdrimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-07-16T09:51:38Z",
+      "side": 1,
+      "message": "You have added two if statements with one statement. On line 659 you don\u0027t use brackets, while on lines  665 you do. Why not to be consistent?",
+      "revId": "28556afed574a5ab2c5e94a7aeea2298cd0de082",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
