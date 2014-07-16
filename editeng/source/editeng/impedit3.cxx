@@ -349,6 +349,17 @@ void ImpEditEngine::FormatFullDoc()
     FormatDoc();
 }
 
+bool IsPageOverflow(const sal_uInt32 aStatus, bool isVertical,
+                    const Size aPrevPaperSize, const Size aPaperSize)
+{
+    const bool bGrowX=(aStatus & EE_STAT_TEXTWIDTHCHANGED) !=0;
+    const bool bGrowY=(aStatus & EE_STAT_TEXTHEIGHTCHANGED) !=0;
+
+    return ( bGrowY && isVertical && aPaperSize.Height() > aPrevPaperSize.Height() ) ||
+           ( bGrowX && !isVertical && aPaperSize.Width() > aPrevPaperSize.Width() );
+
+}
+
 void ImpEditEngine::FormatDoc()
 {
     if (!GetUpdateMode() || IsFormatting())
