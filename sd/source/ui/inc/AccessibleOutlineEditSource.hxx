@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEOUTLINEEDITSOURCE_HXX
 
 #include <vcl/svapp.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/editdata.hxx>

@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <svl/lstner.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svx/svdmark.hxx>
 #include "bastypes.hxx"
 

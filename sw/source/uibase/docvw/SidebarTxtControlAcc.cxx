@@ -21,7 +21,7 @@
 
 #include <SidebarTxtControl.hxx>
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unoforou.hxx>

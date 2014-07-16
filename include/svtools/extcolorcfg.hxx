@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 
 

@@ -18,7 +18,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <basic/sbx.hxx>
 #include "runtime.hxx"

@@ -55,7 +55,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_BASIC_BASMGR_HXX
 #define INCLUDED_BASIC_BASMGR_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>

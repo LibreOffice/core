@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_INETHIST_HXX
 #define INCLUDED_SVL_INETHIST_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/urlobj.hxx>

@@ -668,7 +668,7 @@
 #include <string.h>
 #include <string>
 #include <svl/aeitem.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/flagitem.hxx>
