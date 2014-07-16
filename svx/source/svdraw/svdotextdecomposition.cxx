@@ -801,12 +801,6 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     /* BEGIN Experiments */
     // FIXME(matteocam)
 
-     // for debugging purposes:
-    // carry out experiments only when setting b=false from gdb
-    bool b = true;
-    if (b)
-        return;
-
     // we use (text) object 0 and 1 for these experiments:
     // copying text from one to the other.
 
@@ -821,7 +815,13 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
         return;
     }
 
-    impCopyTextInTextObj(pNextTextObj);
+    // for debugging purposes:
+    // carry out experiments only when setting b=false from gdb
+    //bool b = true;
+    //if (!b) {
+    impCopyTextInTextObj(pNextTextObj); // just do it
+    //    return;
+    //}
 
     /* END Experiments */
 
