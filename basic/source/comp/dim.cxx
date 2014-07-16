@@ -588,7 +588,7 @@ void SbiParser::DefType( bool bPrivate )
 
     SbxObject *pType = new SbxObject(aSym);
 
-    SbiSymDef* pElem;
+    boost::scoped_ptr<SbiSymDef> pElem;
     SbiDimList* pDim = NULL;
     bool bDone = false;
 
@@ -597,19 +597,17 @@ void SbiParser::DefType( bool bPrivate )
         switch( Peek() )
         {
             case ENDTYPE :
-                pElem = NULL;
                 bDone = true;
                 Next();
             break;
 
             case EOLN :
             case REM :
-                pElem = NULL;
                 Next();
             break;
 
             default:
-                pElem = VarDecl(&pDim, false, false);
+                pElem.reset(VarDecl(&pDim, false, false));
                 if( !pElem )
                     bDone = true;   // Error occurred
         }
@@ -678,7 +676,7 @@ void SbiParser::DefType( bool bPrivate )
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
             delete pDim, pDim = NULL;
-            delete pElem;
+            pElem.reset();
         }
     }
 

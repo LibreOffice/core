@@ -25,6 +25,8 @@
 #include <string.h>
 #include "image.hxx"
 #include <codegen.hxx>
+#include <boost/scoped_array.hpp>
+
 SbiImage::SbiImage()
 {
     pStringOff = NULL;
@@ -206,15 +208,14 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     pStrings = new sal_Unicode[ nLen ];
                     nStringSize = (sal_uInt16) nLen;
 
-                    char* pByteStrings = new char[ nLen ];
-                    r.Read( pByteStrings, nStringSize );
+                    boost::scoped_array<char> pByteStrings(new char[ nLen ]);
+                    r.Read( pByteStrings.get(), nStringSize );
                     for( short j = 0; j < nStrings; j++ )
                     {
                         sal_uInt16 nOff2 = (sal_uInt16) pStringOff[ j ];
-                        OUString aStr( pByteStrings + nOff2, strlen(pByteStrings + nOff2), eCharSet );
+                        OUString aStr( pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet );
                         memcpy( pStrings + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
                     }
-                    delete[] pByteStrings;
                 }
                 break;
             case B_MODEND:
@@ -324,17 +325,17 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             r.WriteUInt32( (sal_uInt32) pStringOff[ i ] );
         }
         // Then the String-Block
-        char* pByteStrings = new char[ nStringSize ];
+        boost::scoped_array<char> pByteStrings(new char[ nStringSize ]);
         for( i = 0; i < nStrings; i++ )
         {
             sal_uInt16 nOff = (sal_uInt16) pStringOff[ i ];
             OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
-            memcpy( pByteStrings + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
+            memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
         r.WriteUInt32( (sal_uInt32) nStringSize );
-        r.Write( pByteStrings, nStringSize );
+        r.Write( pByteStrings.get(), nStringSize );
 
-        delete[] pByteStrings;
+        pByteStrings.reset();
         SbiCloseRecord( r, nPos );
     }
     // Set overall length
