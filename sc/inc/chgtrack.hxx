@@ -1101,7 +1101,7 @@ public:
                         sal_uLong nOldFormat, ScDocument* pRefDoc = NULL );
                         // after new value was set in the document,
                         // old value from pOldCell, format from Doc
-    void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell );
+    SC_DLLPUBLIC void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell );
                         // after new values were set in the document,
                         // old values from RefDoc/UndoDoc.
                         // All contents with a cell in RefDoc
