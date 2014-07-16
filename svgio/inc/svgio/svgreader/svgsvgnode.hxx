@@ -46,6 +46,13 @@ namespace svgio
             SvgNumber               maHeight;
             SvgNumber               maVersion;
 
+            /// #125258# bitfield
+            bool                    mbStyleAttributesInitialized : 1;
+
+            // #125258# on-demand init hard attributes when this is the outmost svg element
+            // and more (see implementation)
+            void initializeStyleAttributes();
+
         public:
             SvgSvgNode(
                 SvgDocument& rDocument,

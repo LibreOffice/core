@@ -49,6 +49,19 @@ namespace svgio
             }
         }
 
+        // #125258# no parent when we are a CssStyle holder to break potential loops because
+        // when using CssStyles we jump uncontrolled inside the node tree hierarchy
+        bool SvgStyleNode::supportsParentStyle() const
+        {
+            if(isTextCss())
+            {
+                return false;
+            }
+
+            // call parent
+            return SvgNode::supportsParentStyle();
+        }
+
         void SvgStyleNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             // call parent

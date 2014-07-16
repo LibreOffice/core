@@ -49,12 +49,50 @@ namespace svgio
             maY(),
             maWidth(),
             maHeight(),
-            maVersion()
+            maVersion(),
+            mbStyleAttributesInitialized(false) // #125258#
         {
-            if(!getParent())
+        }
+
+        // #125258#
+        void SvgSvgNode::initializeStyleAttributes()
+        {
+            if(!mbStyleAttributesInitialized)
             {
-                // initial fill is black
-                maSvgStyleAttributes.setFill(SvgPaint(basegfx::BColor(0.0, 0.0, 0.0), true, true));
+                // #125258# determine if initial values need to be initialized with hard values
+                // for the case that this is the outmost SVG statement and it has no parent
+                // stale (CssStyle for svg may be defined)
+                bool bSetInitialValues(true);
+
+                if(getParent())
+                {
+                    // #125258# no initial values when it's a SVG element embedded in SVG
+                    bSetInitialValues = false;
+                }
+
+                if(bSetInitialValues)
+                {
+                    const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
+
+                    if(pStyles && pStyles->getParentStyle())
+                    {
+                        // #125258# no initial values when SVG has a parent style (probably CssStyle)
+                        bSetInitialValues = false;
+                    }
+                }
+
+                if(bSetInitialValues)
+                {
+                    // #125258# only set if not yet initialized (SvgSvgNode::parseAttribute is already done,
+                    // just setting may revert an already set valid value)
+                    if(!maSvgStyleAttributes.isFillSet())
+                    {
+                        // #125258# initial fill is black (see SVG1.1 spec)
+                        maSvgStyleAttributes.setFill(SvgPaint(basegfx::BColor(0.0, 0.0, 0.0), true, true));
+                    }
+                }
+
+                mbStyleAttributesInitialized = true;
             }
         }
 
@@ -65,7 +103,10 @@ namespace svgio
 
         const SvgStyleAttributes* SvgSvgNode::getSvgStyleAttributes() const
         {
-            return &maSvgStyleAttributes;
+            // #125258# svg node can vahe CssStyles, too, so check for it here
+            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("svg"));
+
+            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
 
         void SvgSvgNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
@@ -250,6 +291,11 @@ namespace svgio
         void SvgSvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
         {
             drawinglayer::primitive2d::Primitive2DSequence aSequence;
+
+            // #125258# check now if we need to init some style settings locally. Do not do this
+            // in the constructor, there is not yet informatikon e.g. about existing CssStyles.
+            // Here all nodes are read and interpreted
+            const_cast< SvgSvgNode* >(this)->initializeStyleAttributes();
 
             // decompose childs
             SvgNode::decomposeSvgNode(aSequence, bReferenced);

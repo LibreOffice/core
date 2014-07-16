@@ -50,9 +50,18 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("g"));
+            if(SVGTokenDefs == getType())
+            {
+                // #125258# call parent for SVGTokenDefs
+                return SvgNode::getSvgStyleAttributes();
+            }
+            else
+            {
+                // #125258# for SVGTokenG take CssStyles into account
+                static rtl::OUString aClassStr(rtl::OUString::createFromAscii("g"));
 
-            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
+                return checkForCssStyle(aClassStr, maSvgStyleAttributes);
+            }
         }
 
         void SvgGNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
@@ -90,22 +99,31 @@ namespace svgio
 
         void SvgGNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
         {
-            const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
-
-            if(pStyle)
+            if(SVGTokenDefs == getType())
             {
-                const double fOpacity(pStyle->getOpacity().getNumber());
+                // #125258# no decompose needed for defs element, call parent for SVGTokenDefs
+                SvgNode::decomposeSvgNode(rTarget, bReferenced);
+            }
+            else
+            {
+                // #125258# for SVGTokenG decompose childs
+                const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
-                if(fOpacity > 0.0 && Display_none != getDisplay())
+                if(pStyle)
                 {
-                    drawinglayer::primitive2d::Primitive2DSequence aContent;
+                    const double fOpacity(pStyle->getOpacity().getNumber());
 
-                    // decompose childs
-                    SvgNode::decomposeSvgNode(aContent, bReferenced);
-
-                    if(aContent.hasElements())
+                    if(fOpacity > 0.0 && Display_none != getDisplay())
                     {
-                        pStyle->add_postProcess(rTarget, aContent, getTransform());
+                        drawinglayer::primitive2d::Primitive2DSequence aContent;
+
+                        // decompose childs
+                        SvgNode::decomposeSvgNode(aContent, bReferenced);
+
+                        if(aContent.hasElements())
+                        {
+                            pStyle->add_postProcess(rTarget, aContent, getTransform());
+                        }
                     }
                 }
             }

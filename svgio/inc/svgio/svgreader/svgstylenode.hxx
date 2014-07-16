@@ -47,6 +47,9 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgStyleNode();
 
+            /// #125258# tell if this node is allowed to have a parent style (e.g. defs do not)
+            virtual bool supportsParentStyle() const;
+
             virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
             void addCssStyleSheet(const rtl::OUString& aContent);
 

@@ -286,6 +286,7 @@ namespace svgio
             ~SvgStyleAttributes();
 
             /// fill content
+            bool isFillSet() const; // #125258# ask if fill is a direct hard attribute (no hierarchy)
             const basegfx::BColor* getFill() const;
             void setFill(const SvgPaint& rFill) { maFill = rFill; }
 
