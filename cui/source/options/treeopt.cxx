@@ -577,8 +577,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
                 }
             }
 
-            if( pPageInfo->m_pExtPage )
-                delete pPageInfo->m_pExtPage;
+            delete pPageInfo->m_pExtPage;
 
             delete pPageInfo;
         }
