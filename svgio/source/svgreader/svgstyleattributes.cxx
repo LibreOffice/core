@@ -203,14 +203,16 @@ namespace svgio
 
         const SvgStyleAttributes* SvgStyleAttributes::getParentStyle() const
         {
-            const SvgStyleAttributes* pParentStyle = getCssStyleParent();
+            if(getCssStyleParent())
+            {
+                return getCssStyleParent();
+            }
 
-            // no parent style set, check parent for its style attributes
-            if(pParentStyle == NULL && mrOwner.getParent() != NULL)
-               pParentStyle = mrOwner.getParent()->getSvgStyleAttributes();
+            if(mrOwner.supportsParentStyle() && mrOwner.getParent())
+            {
+                return mrOwner.getParent()->getSvgStyleAttributes();
+            }
 
-            if (pParentStyle != this) // to prevent infinite loop
-                return pParentStyle;
             return NULL;
         }
 
@@ -1804,6 +1806,21 @@ namespace svgio
                     break;
                 }
             }
+        }
+
+        // #i125258# ask if fill is a direct hard attribute (no hierarchy)
+        bool SvgStyleAttributes::isFillSet() const
+        {
+            if(mbIsClipPathContent)
+            {
+                return false;
+            }
+            else if(maFill.isSet())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         const basegfx::BColor* SvgStyleAttributes::getFill() const
