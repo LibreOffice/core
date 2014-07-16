@@ -2179,7 +2179,6 @@ short OfaTreeOptionsDialog::Execute()
 }
 
 // class ExtensionsTabPage -----------------------------------------------
-
 ExtensionsTabPage::ExtensionsTabPage(
     Window* pParent, WinBits nStyle, const OUString& rPageURL,
     const OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
@@ -2193,8 +2192,6 @@ ExtensionsTabPage::ExtensionsTabPage(
 
 {
 }
-
-
 
 ExtensionsTabPage::~ExtensionsTabPage()
 {
@@ -2282,8 +2279,6 @@ bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
     return bRet;
 }
 
-
-
 void ExtensionsTabPage::ActivatePage()
 {
     TabPage::ActivatePage();
@@ -2295,7 +2290,7 @@ void ExtensionsTabPage::ActivatePage()
         if ( m_xPage.is() )
         {
             Point aPos = Point();
-            Size aSize = GetSizePixel();
+            Size aSize = GetParent()->get_preferred_size();
             m_xPage->setPosSize( aPos.X() + 1, aPos.Y() + 1,
                                  aSize.Width() - 2, aSize.Height() - 2, awt::PosSize::POSSIZE );
             if ( !m_sEventHdl.isEmpty() )
@@ -2309,8 +2304,6 @@ void ExtensionsTabPage::ActivatePage()
         m_bIsWindowHidden = false;
     }
 }
-
-
 
 void ExtensionsTabPage::DeactivatePage()
 {
