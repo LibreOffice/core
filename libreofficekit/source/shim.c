@@ -22,7 +22,7 @@
 #endif
 
 #define TARGET_LIB        "lib" "sofficeapp" ".so"
-#define TARGET_MERGED_LIB "lib" "libmergedlo" ".so"
+#define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
 
 typedef LibreOfficeKit *(HookFunction)( const char *install_path);
 

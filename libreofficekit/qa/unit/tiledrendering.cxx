@@ -63,7 +63,8 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
 void TiledRenderingTest::testOverlay()
 {
     const string sSrcRoot = getenv( "SRC_ROOT" );
-    const string sLOPath = sSrcRoot + "/instdir/program";
+    const string sInstDir = getenv( "INSTDIR" );
+    const string sLOPath = sInstDir + "/program";
     const string sDocPath = sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
 
     scoped_ptr< Office > pOffice( lok_cpp_init(
