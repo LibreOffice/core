@@ -7999,6 +7999,15 @@ if test "$with_system_libxml" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=
+    LIBXML_CFLAGS="-I${WORKDIR}/UnpackedTarball/xml2/include"
+    if test "$COM" = "MSC"; then
+        LIBXML_CFLAGS="${LIBXML_CFLAGS} -I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
+    fi
+    if test "$COM" = "MSC"; then
+        LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/xml2/win32/bin.msvc -llibxml2"
+    else
+        LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/xml2/.libs -lxml2"
+    fi
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
 AC_SUBST(SYSTEM_LIBXML)

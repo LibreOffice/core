@@ -25,10 +25,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
-		$(if $(SYSTEM_LIBXML),\
-			$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)"), \
-			LIBXML2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" \
-			LIBXML2_LIBS=$(if $(filter WNTMSC,$(OS)$(COM)),"-L$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc -llibxml2","-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2")) \
+		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)" \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
