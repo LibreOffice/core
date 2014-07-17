@@ -82,7 +82,7 @@ public:
 void SdFiltersTest::testN821567()
 {
     OUString bgImage;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx"), PPTX );
 
     xDocShRef = saveAndReload( xDocShRef, ODP );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
@@ -147,7 +147,7 @@ void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
 
 void SdFiltersTest::testBnc870233_1()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_1.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_1.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
@@ -176,7 +176,7 @@ void SdFiltersTest::testBnc870233_1()
 
 void SdFiltersTest::testBnc870233_2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_2.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_2.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
@@ -213,7 +213,7 @@ void SdFiltersTest::testBnc870233_2()
 void SdFiltersTest::testN828390_4()
 {
     bool bPassed = false;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_4.odp") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_4.odp"), ODP );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
@@ -251,7 +251,7 @@ void SdFiltersTest::testN828390_4()
 
 void SdFiltersTest::testN828390_5()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_5.odp") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_5.odp"), ODP );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
@@ -274,7 +274,7 @@ void SdFiltersTest::testN828390_5()
 
 void SdFiltersTest::testMediaEmbedding()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
 #if HAVE_FEATURE_GLTF
     xDocShRef = saveAndReload( xDocShRef, ODP );
@@ -309,7 +309,7 @@ void SdFiltersTest::testMediaEmbedding()
 
 void SdFiltersTest::testFdo71961()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"), ODP);
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
@@ -341,7 +341,7 @@ void SdFiltersTest::testFdo71961()
 void SdFiltersTest::testN828390()
 {
     bool bPassed = false;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx"), PPTX );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
@@ -377,7 +377,7 @@ void SdFiltersTest::testN828390()
 
 void SdFiltersTest::testBnc880763()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc880763.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc880763.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
@@ -401,7 +401,7 @@ void SdFiltersTest::testBnc880763()
 
 void SdFiltersTest::testBnc862510_5()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_5.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_5.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();

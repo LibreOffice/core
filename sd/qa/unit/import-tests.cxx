@@ -126,25 +126,25 @@ the test, and re-running; it should break.
 */
 void SdFiltersTest::testDocumentLayout()
 {
-    struct { const char *pInput, *pDump; sal_Int32 nExportType; } aFilesToCompare[] =
+    struct { const char *pInput, *pDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
     {
-        { "odp/shapes-test.odp", "xml/shapes-test_page", -1 },
-        { "fdo47434.pptx", "xml/fdo47434_", -1 },
-        { "n758621.ppt", "xml/n758621_", -1 },
-        { "fdo64586.ppt", "xml/fdo64586_", -1 },
-        { "n819614.pptx", "xml/n819614_", -1 },
-        { "n820786.pptx", "xml/n820786_", -1 },
-        { "n762695.pptx", "xml/n762695_", -1 },
-        { "n593612.pptx", "xml/n593612_", -1 },
-        { "fdo71434.pptx", "xml/fdo71434_", -1 },
-        // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX }, // Example
+        { "odp/shapes-test.odp", "xml/shapes-test_page", ODP, -1 },
+        { "fdo47434.pptx", "xml/fdo47434_", PPTX, -1 },
+        { "n758621.ppt", "xml/n758621_", PPT, -1 },
+        { "fdo64586.ppt", "xml/fdo64586_", PPT, -1 },
+        { "n819614.pptx", "xml/n819614_", PPTX, -1 },
+        { "n820786.pptx", "xml/n820786_", PPTX, -1 },
+        { "n762695.pptx", "xml/n762695_", PPTX, -1 },
+        { "n593612.pptx", "xml/n593612_", PPTX, -1 },
+        { "fdo71434.pptx", "xml/fdo71434_", PPTX, -1 },
+        // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX, PPTX }, // Example
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
     {
         int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
-        ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
+        ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
         if( aFilesToCompare[i].nExportType >= 0 )
             xDocShRef = saveAndReload( xDocShRef, aFilesToCompare[i].nExportType );
         compareWithShapesDump( xDocShRef,
@@ -155,7 +155,7 @@ void SdFiltersTest::testDocumentLayout()
 
 void SdFiltersTest::testSmoketest()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -183,7 +183,7 @@ void SdFiltersTest::testSmoketest()
 
 void SdFiltersTest::testN759180()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -221,7 +221,7 @@ void SdFiltersTest::testN759180()
 
 void SdFiltersTest::testN862510_1()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -246,7 +246,7 @@ void SdFiltersTest::testN862510_1()
 
 void SdFiltersTest::testN862510_2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -265,7 +265,7 @@ void SdFiltersTest::testN862510_2()
 
 void SdFiltersTest::testN862510_4()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -290,7 +290,7 @@ void SdFiltersTest::testN862510_4()
 
 void SdFiltersTest::testN828390_2()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -310,7 +310,7 @@ void SdFiltersTest::testN828390_2()
 void SdFiltersTest::testN828390_3()
 {
     bool bPassed = true;
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -342,7 +342,7 @@ void SdFiltersTest::testN828390_3()
 
 void SdFiltersTest::testN778859()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -361,7 +361,7 @@ void SdFiltersTest::testN778859()
 
 void SdFiltersTest::testFdo68594()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"), PPT);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -380,7 +380,7 @@ void SdFiltersTest::testFdo68594()
 
 void SdFiltersTest::testFdo72998()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -410,7 +410,7 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 
 void SdFiltersTest::testFdo77027()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -434,7 +434,7 @@ void SdFiltersTest::testFdo77027()
 
 void SdFiltersTest::testFdo64512()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"), ODP);
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -479,7 +479,7 @@ void SdFiltersTest::testFdo71075()
 {
     double values[] = { 12.0, 13.0, 14.0 };
     ::com::sun::star::uno::Any aAny;
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -521,7 +521,7 @@ void SdFiltersTest::testFdo71075()
 
 void SdFiltersTest::testStrictOOXML()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -535,7 +535,7 @@ void SdFiltersTest::testStrictOOXML()
 
 void SdFiltersTest::testBnc870237()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );

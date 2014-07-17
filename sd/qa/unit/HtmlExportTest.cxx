@@ -32,7 +32,7 @@ public:
 
     void testHTMLExport()
     {
-        sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/HtmlExportTestDocument.odp"));
+        sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/HtmlExportTestDocument.odp"), ODP);
         htmlDocPtr htmlDoc = exportAndParseHtml(xDocShRef);
 
         assertXPath(htmlDoc, "/html", 1);

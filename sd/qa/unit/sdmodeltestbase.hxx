@@ -88,24 +88,17 @@ public:
 
 protected:
     /// Load the document.
-    sd::DrawDocShellRef loadURL( const OUString &rURL )
+    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat )
     {
-        FileFormat *pFmt(0);
-
-        for (size_t i = 0; i < SAL_N_ELEMENTS (aFileFormats); i++)
-        {
-            pFmt = aFileFormats + i;
-            if (pFmt->pName &&  rURL.endsWithIgnoreAsciiCaseAsciiL (pFmt->pName, strlen (pFmt->pName)))
-                break;
-        }
+        FileFormat *pFmt = getFormat(nFormat);
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
 
-        sal_uInt32 nFormat = 0;
+        sal_uInt32 nOptions = 0;
         if (pFmt->nFormatType)
-            nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+            nOptions = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
         SfxFilter* aFilter = new SfxFilter(
             OUString::createFromAscii( pFmt->pFilterName ),
-            OUString(), pFmt->nFormatType, nFormat,
+            OUString(), pFmt->nFormatType, nOptions,
             OUString::createFromAscii( pFmt->pTypeName ),
             0, OUString(),
             OUString::createFromAscii( pFmt->pUserData ),
@@ -176,7 +169,7 @@ protected:
     {
         FileFormat* pFormat = getFormat(nExportType);
         OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
-        utl::TempFile aTempFile(OUString(), true, &aExt);
+        utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
         save(pShell, pFormat, aTempFile);
         if(nExportType == ODP)
@@ -187,7 +180,7 @@ protected:
         {
             BootstrapFixture::validate(aTempFile.GetFileName(), test::OOXML);
         }
-        return loadURL(aTempFile.GetURL());
+        return loadURL(aTempFile.GetURL(), nExportType);
     }
 
     /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
