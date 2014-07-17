@@ -1801,7 +1801,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
             xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
-            bool checkZOredrStatus = false;
+            bool checkZOrderStatus = false;
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
                 SetIsTextFrameInserted(true);
@@ -1826,9 +1826,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         aGrabBag[i].Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
-                        checkZOredrStatus = true;
+                        checkZOrderStatus = true;
                     }
-                    if(checkBtLrStatus && checkZOredrStatus)
+                    if(checkBtLrStatus && checkZOrderStatus)
                         break;
 
                     if ( aGrabBag[i].Name == "TxbxHasLink" )
@@ -1873,7 +1873,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ), uno::makeAny( false ) );
-                        checkZOredrStatus = true;
+                        checkZOrderStatus = true;
                     }
                     else if ( aGrabBag[i].Name == "TxbxHasLink" )
                     {
@@ -1885,7 +1885,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     }
                 }
             }
-            if (!m_bInHeaderFooterImport && !checkZOredrStatus)
+            if (!m_bInHeaderFooterImport && !checkZOrderStatus)
                 xProps->setPropertyValue(
                         rPropNameSupplier.GetName( PROP_OPAQUE ),
                         uno::makeAny( true ) );
