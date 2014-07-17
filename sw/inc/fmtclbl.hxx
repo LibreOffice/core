@@ -24,6 +24,7 @@
 #include <format.hxx>
 #include "swdllapi.h"
 
+/// If text in multi-column sections should be evenly distributed.
 class SW_DLLPUBLIC SwFmtNoBalancedColumns : public SfxBoolItem
 {
 public:
