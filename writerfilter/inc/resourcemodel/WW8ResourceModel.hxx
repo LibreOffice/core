@@ -197,6 +197,9 @@ public:
     */
     virtual void endSectionGroup() = 0;
 
+    /// The current section is the last one in this body text.
+    virtual void markLastSectionGroup( ) { };
+
     /**
        Receives start mark for group with the same paragraph properties.
      */

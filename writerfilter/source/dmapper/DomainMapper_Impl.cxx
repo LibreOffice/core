@@ -188,6 +188,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsLastParaInSection( false ),
+        m_bIsLastSectionGroup( false ),
         m_bIsInComments( false ),
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
@@ -401,6 +402,11 @@ void DomainMapper_Impl::SetSymbolData( sal_Int32 nSymbolData )
     m_nSymboldata = nSymbolData;
 }
 
+
+void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
+{
+    m_bIsLastSectionGroup = bIsLast;
+}
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {

@@ -2276,6 +2276,14 @@ DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
     CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(3).getY());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was false, last section was balanced, but it's unbalanced in Word.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

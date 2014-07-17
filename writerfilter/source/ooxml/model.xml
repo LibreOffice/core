@@ -25868,6 +25868,7 @@
       -->
       <action name="end" action="endCharacterGroup"/>
       <action name="end" action="endParagraphGroup"/>
+      <action name="end" action="setLastSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
     <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_ShapeDefaults" resource="Properties">
