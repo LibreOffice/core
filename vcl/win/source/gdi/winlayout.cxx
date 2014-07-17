@@ -145,7 +145,7 @@ public:
                         sal_Int32* pGlyphAdvances, int* pCharIndexes,
                         const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
-    virtual long    FillDXArray( long* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
@@ -626,7 +626,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
-long SimpleWinLayout::FillDXArray( long* pDXArray ) const
+DeviceCoordinate SimpleWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
     if( !mnWidth )
     {
@@ -966,7 +966,7 @@ public:
                         sal_Int32* pGlyphAdvances, int* pCharPosAry,
                         const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
-    virtual long    FillDXArray( long* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const;
@@ -2086,7 +2086,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         DeleteFont( SelectFont( mhDC, hOrigFont ) );
 }
 
-long UniscribeLayout::FillDXArray( long* pDXArray ) const
+DeviceCoordinate UniscribeLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
     // calculate width of the complete layout
     long nWidth = mnBaseAdv;
@@ -2641,7 +2641,7 @@ public:
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
-    virtual long  FillDXArray( long* pDXArray ) const;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
 
     virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
@@ -2783,7 +2783,7 @@ sal_Int32 GraphiteWinLayout::GetTextBreak(
     return nBreak;
 }
 
-long  GraphiteWinLayout::FillDXArray( long* pDXArray ) const
+DeviceCoordinate GraphiteWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
     return maImpl.FillDXArray(pDXArray);
 }

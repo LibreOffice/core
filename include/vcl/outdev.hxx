@@ -20,14 +20,13 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
-#include <config_vcl.h>
-
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/rc.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
 
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
@@ -1250,7 +1249,7 @@ public:
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const sal_Int32* pLogicDXArray=NULL, int flags=0 ) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                                         long nPixelWidth, const sal_Int32* pPixelDXArray, int flags = 0 ) const;
+                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray, int flags = 0 ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,

@@ -68,11 +68,22 @@ public:
             maImpl.DrawOffset() = maDrawOffset;
             maImpl.AdjustLayout(rArgs);
         };
-        virtual long    GetTextWidth() const SAL_OVERRIDE                           { return maImpl.GetTextWidth(); }
-        virtual long    FillDXArray( sal_Int32* dxa ) const SAL_OVERRIDE                 { return maImpl.FillDXArray(dxa); }
+        virtual long GetTextWidth() const SAL_OVERRIDE
+        {
+            return maImpl.GetTextWidth();
+        }
+        virtual DeviceCoordinate FillDXArray( DeviceCoordinate* dxa ) const SAL_OVERRIDE
+        {
+            return maImpl.FillDXArray(dxa);
+        }
         virtual sal_Int32 GetTextBreak(long mw, long ce, int f) const SAL_OVERRIDE
-            { return maImpl.GetTextBreak(mw, ce, f); }
-        virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const SAL_OVERRIDE   { maImpl.GetCaretPositions(as, cxa); }
+        {
+            return maImpl.GetTextBreak(mw, ce, f);
+        }
+        virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const SAL_OVERRIDE
+        {
+            maImpl.GetCaretPositions(as, cxa);
+        }
 
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
