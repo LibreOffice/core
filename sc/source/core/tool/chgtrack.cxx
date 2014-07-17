@@ -3163,65 +3163,64 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
             // Deletes are in right order
             ScChangeAction* pAct = IsLastAction(j) ? pLast : GetAction(j);
 
-            if ( pAct )
-            {
-                if ( pAct->IsDeleteType() )
-                {
-                    if ( j == nEndAction || (pAct != pLast &&
-                            ((ScChangeActionDel*)pAct)->IsTopDelete()) )
-                    {
-                        SetInDeleteTop( true );
-                        SetInDeleteRange( ((ScChangeActionDel*)pAct)->
-                            GetOverAllRange().MakeRange() );
-                    }
-                }
-                UpdateReference( pAct, true );
-                SetInDeleteTop( false );
-                Remove( pAct );
-                if ( IsInPasteCut() )
-                    aPasteCutMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
-                else
-                {
-                    if ( j == nStartAction && pAct->GetType() == SC_CAT_MOVE )
-                    {
-                        ScChangeActionMove* pMove = (ScChangeActionMove*) pAct;
-                        sal_uLong nStart = pMove->GetStartLastCut();
-                        sal_uLong nEnd = pMove->GetEndLastCut();
-                        if ( nStart && nStart <= nEnd )
-                        {   // Recover LastCut
-                            //! Break Links before Cut Append
-                            pMove->RemoveAllLinks();
-                            StartBlockModify( SC_CTM_APPEND, nStart );
-                            for ( sal_uLong nCut = nStart; nCut <= nEnd; nCut++ )
-                            {
-                                ScChangeActionMap::iterator itCut = aPasteCutMap.find( nCut );
+            if (!pAct)
+                continue;
 
-                                if ( itCut != aPasteCutMap.end() )
-                                {
-                                    OSL_ENSURE( aMap.find( nCut ) == aMap.end(), "ScChangeTrack::Undo: nCut dup" );
-                                    Append( itCut->second, nCut );
-                                    aPasteCutMap.erase( itCut );
-                                }
-                                else
-                                {
-                                    OSL_FAIL( "ScChangeTrack::Undo: nCut not found" );
-                                }
-                            }
-                            EndBlockModify( nEnd );
-                            ResetLastCut();
-                            nStartLastCut = nStart;
-                            nEndLastCut = nEnd;
-                            pLastCutMove = pMove;
-                            SetLastCutMoveRange(
-                                pMove->GetFromRange().MakeRange(), pDoc );
-                        }
-                        else
-                            delete pMove;
-                    }
-                    else
-                        delete pAct;
+            if ( pAct->IsDeleteType() )
+            {
+                if (j == nEndAction || (pAct != pLast && ((ScChangeActionDel*)pAct)->IsTopDelete()))
+                {
+                    SetInDeleteTop( true );
+                    SetInDeleteRange( ((ScChangeActionDel*)pAct)->GetOverAllRange().MakeRange() );
                 }
             }
+            UpdateReference( pAct, true );
+            SetInDeleteTop( false );
+            Remove( pAct );
+            if ( IsInPasteCut() )
+            {
+                aPasteCutMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
+                continue;
+            }
+
+            if ( j == nStartAction && pAct->GetType() == SC_CAT_MOVE )
+            {
+                ScChangeActionMove* pMove = (ScChangeActionMove*) pAct;
+                sal_uLong nStart = pMove->GetStartLastCut();
+                sal_uLong nEnd = pMove->GetEndLastCut();
+                if ( nStart && nStart <= nEnd )
+                {   // Recover LastCut
+                    //! Break Links before Cut Append
+                    pMove->RemoveAllLinks();
+                    StartBlockModify( SC_CTM_APPEND, nStart );
+                    for ( sal_uLong nCut = nStart; nCut <= nEnd; nCut++ )
+                    {
+                        ScChangeActionMap::iterator itCut = aPasteCutMap.find( nCut );
+
+                        if ( itCut != aPasteCutMap.end() )
+                        {
+                            OSL_ENSURE( aMap.find( nCut ) == aMap.end(), "ScChangeTrack::Undo: nCut dup" );
+                            Append( itCut->second, nCut );
+                            aPasteCutMap.erase( itCut );
+                        }
+                        else
+                        {
+                            OSL_FAIL( "ScChangeTrack::Undo: nCut not found" );
+                        }
+                    }
+                    EndBlockModify( nEnd );
+                    ResetLastCut();
+                    nStartLastCut = nStart;
+                    nEndLastCut = nEnd;
+                    pLastCutMove = pMove;
+                    SetLastCutMoveRange(
+                        pMove->GetFromRange().MakeRange(), pDoc );
+                }
+                else
+                    delete pMove;
+            }
+            else
+                delete pAct;
         }
         EndBlockModify( nEndAction );
     }
