@@ -268,15 +268,18 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     vMup = glm::normalize(vMup);
                     vMup *= 25.0f;
 
-                    if(nCode == KEY_W)vMoveBy += vMove*(0.0005f*fModelSize);
-                    if(nCode == KEY_S)vMoveBy -= vMove*(0.0005f*fModelSize);
                     if( !m_bIsOrbitMode )
                     {
+                        if(nCode == KEY_W)vMoveBy += vMove*(0.0005f*fModelSize);
+                        if(nCode == KEY_S)vMoveBy -= vMove*(0.0005f*fModelSize);
                         if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
                         if(nCode == KEY_D)vMoveBy += vStrafe*(0.0005f*fModelSize);
                     }
                     else
                     {
+                        if(nCode == KEY_E)vMoveBy += vMove*(0.0005f*fModelSize);
+                        if(nCode == KEY_Q)vMoveBy -= vMove*(0.0005f*fModelSize);
+
                         // Limit zooming in orbit mode
                         m_fCameraDistance += vMoveBy.z;
                         if ((m_fCameraDistance < 0.5 * fModelSize && vMoveBy.z < 0.0 ) ||
@@ -288,6 +291,30 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     }
                 }
                 gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
+
+                if( m_bIsOrbitMode )
+                {
+                    long nDeltaX = 0;
+                    long nDeltaY = 0;
+                    if (nCode == KEY_W)
+                    {
+                        nDeltaY -= 1;
+                    }
+                    if (nCode == KEY_S)
+                    {
+                        nDeltaY += 1;
+                    }
+                    if (nCode == KEY_A)
+                    {
+                        nDeltaX -= 1;
+                    }
+                    if (nCode == KEY_D)
+                    {
+                        nDeltaX += 1;
+                    }
+                    float fSensitivity = 50.0;
+                    gltf_renderer_rotate_model(&m_rHandle, nDeltaX*fSensitivity, nDeltaY*fSensitivity, 0.0);
+                }
             }
             else if(nCode == KEY_M)
             {
