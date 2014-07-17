@@ -29,6 +29,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
+#include <vcl/devicecoordinate.hxx>
 
 #ifndef _TOOLS_LANG_HXX
 typedef unsigned short LanguageType;
@@ -76,8 +77,8 @@ public:
     const sal_Unicode*  mpStr;
 
     // positioning related inputs
-    const sal_Int32*    mpDXArray;          // in pixel units
-    long                mnLayoutWidth;      // in pixel units
+    const DeviceCoordinate* mpDXArray;     // in pixel units
+    DeviceCoordinate   mnLayoutWidth;      // in pixel units
     int                 mnOrientation;      // in 0-3600 system
 
     // data for bidi and glyph+script fallback
@@ -89,8 +90,8 @@ public:
                                 int nMinCharPos, int nEndCharPos, int nFlags,
                                 const LanguageTag& rLanguageTag );
 
-    void        SetLayoutWidth( long nWidth )       { mnLayoutWidth = nWidth; }
-    void        SetDXArray( const sal_Int32* pDXArray )  { mpDXArray = pDXArray; }
+    void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
+    void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
     void        SetOrientation( int nOrientation )  { mnOrientation = nOrientation; }
 
     void        ResetPos()
@@ -171,7 +172,7 @@ public:
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const = 0;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const = 0;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual long    GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
@@ -229,7 +230,7 @@ class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 public:
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                                    int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
@@ -329,7 +330,7 @@ public:
 
     // used by upper layers
     virtual long    GetTextWidth() const SAL_OVERRIDE;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
+    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
 
@@ -347,7 +348,7 @@ protected:
     virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
     virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
-    bool            GetCharWidths( sal_Int32* pCharWidths ) const;
+    bool            GetCharWidths( DeviceCoordinate* pCharWidths ) const;
 
     GlyphVector     m_GlyphItems;
 
