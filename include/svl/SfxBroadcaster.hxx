@@ -31,6 +31,8 @@ class SVL_DLLPUBLIC SfxBroadcaster
 {
     typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 
+    /** This queue contains the positions of removed listeners from smallest to largest. */
+    std::vector<size_t> m_RemovedPositions;
     SfxListenerArr_Impl     m_Listeners;
 
 private:
@@ -51,10 +53,8 @@ public:
 
     void                    Broadcast( const SfxHint &rHint );
     bool                    HasListeners() const;
-    size_t                  GetListenerCount() const
-    {
-        return m_Listeners.size();
-    }
+    size_t                  GetListenerCount() const;
+
     SfxListener*            GetListener( size_t nNo ) const
     {
         return m_Listeners[nNo];

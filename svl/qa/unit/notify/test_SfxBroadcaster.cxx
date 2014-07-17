@@ -26,7 +26,7 @@ class SfxBroadcasterTest : public CppUnit::TestFixture
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(SfxBroadcasterTest);
     CPPUNIT_TEST(AddingListenersIncreasesCount);
-    //CPPUNIT_TEST(RemovingListenersDecreasesCount);
+    CPPUNIT_TEST(RemovingListenersDecreasesCount);
     CPPUNIT_TEST(HintsAreNotForwardedToRemovedListeners);
 
     CPPUNIT_TEST_SUITE_END();
