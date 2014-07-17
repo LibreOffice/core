@@ -83,8 +83,6 @@ public:
     }
 };
 
-#define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-
 DECLARE_OOXMLIMPORT_TEST(testN751054, "n751054.docx")
 {
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
