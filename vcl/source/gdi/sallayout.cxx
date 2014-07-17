@@ -836,7 +836,7 @@ void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
     m_GlyphItems.push_back(rGlyphItem);
 }
 
-bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
+bool GenericSalLayout::GetCharWidths( DeviceCoordinate* pCharWidths ) const
 {
     // initialize character extents buffer
     int nCharCount = mnEndCharPos - mnMinCharPos;
@@ -910,7 +910,7 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
     return true;
 }
 
-long GenericSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
+DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
 {
     if( pCharWidths )
         if( !GetCharWidths( pCharWidths ) )
@@ -1281,7 +1281,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
 sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    sal_Int32* pCharWidths = (sal_Int32*)alloca( nCharCapacity * sizeof(sal_Int32) );
+    DeviceCoordinate* pCharWidths = (DeviceCoordinate*)alloca( nCharCapacity * sizeof(DeviceCoordinate) );
     if( !GetCharWidths( pCharWidths ) )
         return -1;
 
@@ -1528,7 +1528,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     {
         // for stretched text in a MultiSalLayout the target width needs to be
         // distributed by individually adjusting its virtual character widths
-        long nTargetWidth = aMultiArgs.mnLayoutWidth;
+        DeviceCoordinate nTargetWidth = aMultiArgs.mnLayoutWidth;
         nTargetWidth *= mnUnitsPerPixel; // convert target width to base font units
         aMultiArgs.mnLayoutWidth = 0;
 
@@ -1537,12 +1537,12 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
         // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        sal_Int32* pJustificationArray = (sal_Int32*)alloca( nCharCount * sizeof(sal_Int32) );
+        DeviceCoordinate* pJustificationArray = (DeviceCoordinate*)alloca( nCharCount * sizeof(sal_Int32) );
         FillDXArray( pJustificationArray );
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
         // stretchable virtual char widths
-        long nOrigWidth = 0;
+        DeviceCoordinate nOrigWidth = 0;
         int nStretchable = 0;
         for( int i = 0; i < nCharCount; ++i )
         {
@@ -1555,14 +1555,14 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // now we are able to distribute the extra width over the virtual char widths
         if( nOrigWidth && (nTargetWidth != nOrigWidth) )
         {
-            int nDiffWidth = nTargetWidth - nOrigWidth;
-            int nWidthSum = 0;
+            DeviceCoordinate nDiffWidth = nTargetWidth - nOrigWidth;
+            DeviceCoordinate nWidthSum = 0;
             for( int i = 0; i < nCharCount; ++i )
             {
-                int nJustWidth = pJustificationArray[i];
+                DeviceCoordinate nJustWidth = pJustificationArray[i];
                 if( (nJustWidth > 0) && (nStretchable > 0) )
                 {
-                    int nDeltaWidth = nDiffWidth / nStretchable;
+                    DeviceCoordinate nDeltaWidth = nDiffWidth / nStretchable;
                     nJustWidth += nDeltaWidth;
                     nDiffWidth -= nDeltaWidth;
                     --nStretchable;
@@ -1579,7 +1579,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             {
                 for( int i = 0; i < nCharCount; ++i )
                 {
-                    sal_Int32 nVal = pJustificationArray[ i ];
+                    DeviceCoordinate nVal = pJustificationArray[ i ];
                     nVal += (mnUnitsPerPixel + 1) / 2;
                     pJustificationArray[ i ] = nVal / mnUnitsPerPixel;
                 }
@@ -1915,7 +1915,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFa
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    sal_Int32* pCharWidths = (sal_Int32*)alloca( 2*nCharCount * sizeof(sal_Int32) );
+    DeviceCoordinate* pCharWidths = (DeviceCoordinate*)alloca( 2*nCharCount * sizeof(DeviceCoordinate) );
     mpLayouts[0]->FillDXArray( pCharWidths );
 
     for( int n = 1; n < mnLevel; ++n )
@@ -1926,13 +1926,13 @@ sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFa
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
         {
-            long w = pCharWidths[ i + nCharCount ];
-            w = static_cast<long>(w*fUnitMul + 0.5);
+            DeviceCoordinate w = pCharWidths[ i + nCharCount ];
+            w = (DeviceCoordinate)(w * fUnitMul + 0.5);
             pCharWidths[ i ] += w;
         }
     }
 
-    long nWidth = 0;
+    DeviceCoordinate nWidth = 0;
     for( int i = 0; i < nCharCount; ++i )
     {
         nWidth += pCharWidths[ i ] * nFactor;
@@ -1944,30 +1944,30 @@ sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFa
     return -1;
 }
 
-long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
+DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
 {
-    long nMaxWidth = 0;
+    DeviceCoordinate nMaxWidth = 0;
 
     // prepare merging of fallback levels
-    sal_Int32* pTempWidths = NULL;
+    DeviceCoordinate* pTempWidths = NULL;
     const int nCharCount = mnEndCharPos - mnMinCharPos;
     if( pCharWidths )
     {
         for( int i = 0; i < nCharCount; ++i )
             pCharWidths[i] = 0;
-        pTempWidths = (sal_Int32*)alloca( nCharCount * sizeof(sal_Int32) );
+        pTempWidths = (DeviceCoordinate*)alloca( nCharCount * sizeof(DeviceCoordinate) );
     }
 
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        long nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths );
+        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths );
         if( !nTextWidth )
             continue;
         // merge results from current level
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-        nTextWidth = static_cast<long>(nTextWidth * fUnitMul + 0.5);
+        nTextWidth = (DeviceCoordinate)(nTextWidth * fUnitMul + 0.5);
         if( nMaxWidth < nTextWidth )
             nMaxWidth = nTextWidth;
         if( !pCharWidths )
@@ -1979,10 +1979,10 @@ long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
             // one char cannot be resolved from different fallbacks
             if( pCharWidths[i] != 0 )
                 continue;
-            long nCharWidth = pTempWidths[i];
+            DeviceCoordinate nCharWidth = pTempWidths[i];
             if( !nCharWidth )
                 continue;
-            nCharWidth = static_cast<long>(nCharWidth * fUnitMul + 0.5);
+            nCharWidth = (DeviceCoordinate)(nCharWidth * fUnitMul + 0.5);
             pCharWidths[i] = nCharWidth;
         }
     }

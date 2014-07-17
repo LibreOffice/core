@@ -1004,6 +1004,56 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     if( !pSalLayout )
         return 0;
+#if VCL_FLOAT_DEVICE_PIXEL
+    DeviceCoordinate* pDXPixelArray = NULL;
+    if(pDXAry)
+    {
+        pDXPixelArray = (DeviceCoordinate*)alloca(nLen * sizeof(DeviceCoordinate));
+    }
+    DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray );
+    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+    pSalLayout->Release();
+
+    // convert virtual char widths to virtual absolute positions
+    if( pDXPixelArray )
+    {
+        for( int i = 1; i < nLen; ++i )
+        {
+            pDXPixelArray[ i ] += pDXPixelArray[ i-1 ];
+        }
+    }
+    if( mbMap )
+    {
+        if( pDXPixelArray )
+        {
+            for( int i = 0; i < nLen; ++i )
+            {
+                pDXPixelArray[i] = ImplDevicePixelToLogicWidth( pDXPixelArray[i] );
+            }
+        }
+        nWidth = ImplDevicePixelToLogicWidth( nWidth );
+    }
+    if( nWidthFactor > 1 )
+    {
+        if( pDXPixelArray )
+        {
+            for( int i = 0; i < nLen; ++i )
+            {
+                pDXPixelArray[i] /= nWidthFactor;
+            }
+        }
+        nWidth /= nWidthFactor;
+    }
+    if(pDXAry)
+    {
+        for( int i = 0; i < nLen; ++i )
+        {
+            pDXAry[i] = basegfx::fround(pDXPixelArray[i]);
+        }
+    }
+    return basegfx::fround(nWidth);
+
+#else /* ! VCL_FLOAT_DEVICE_PIXEL */
 
     long nWidth = pSalLayout->FillDXArray( pDXAry );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
@@ -1030,8 +1080,8 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
                 pDXAry[i] /= nWidthFactor;
         nWidth /= nWidthFactor;
     }
-
     return nWidth;
+#endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 
 bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
@@ -1132,7 +1182,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
 
 ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
-                                                    long nPixelWidth, const sal_Int32* pDXArray,
+                                                    DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
                                                     int nLayoutFlags ) const
 {
     assert(nMinIndex >= 0);
@@ -1276,23 +1326,39 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( mpFontEntry->mpConversion ) {
         mpFontEntry->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
     }
-
-    long nPixelWidth = nLogicalWidth;
+    DeviceCoordinate nPixelWidth = (DeviceCoordinate)nLogicalWidth;
+    DeviceCoordinate* pDXPixelArray = NULL;
     if( nLogicalWidth && mbMap )
-        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
-    if( pDXArray && mbMap )
     {
-        // convert from logical units to font units using a temporary array
-        sal_Int32* pTempDXAry = (sal_Int32*)alloca( nLen * sizeof(sal_Int32) );
-        // using base position for better rounding a.k.a. "dancing characters"
-        int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
-        for( int i = 0; i < nLen; ++i )
-            pTempDXAry[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
-
-        pDXArray = pTempDXAry;
+        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
     }
 
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray, flags);
+    if( pDXArray)
+    {
+        if(mbMap)
+        {
+            // convert from logical units to font units using a temporary array
+            pDXPixelArray = (DeviceCoordinate*)alloca( nLen * sizeof(DeviceCoordinate) );
+            // using base position for better rounding a.k.a. "dancing characters"
+            DeviceCoordinate nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
+            for( int i = 0; i < nLen; ++i )
+                pDXPixelArray[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+        }
+        else
+        {
+#if VCL_FLOAT_DEVICE_PIXEL
+            pDXPixelArray = (DeviceCoordinate*)alloca( nLen * sizeof(DeviceCoordinate) );
+            for( int i = 0; i < nLen; ++i )
+            {
+                pDXPixelArray[i] = pDXArray[i];
+            }
+#else /* !VCL_FLOAT_DEVICE_PIXEL */
+            pDXPixelArray = (DeviceCoordinate*)pDXArray;
+#endif /* !VCL_FLOAT_DEVICE_PIXEL */
+        }
+    }
+
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXPixelArray, flags);
 
     // get matching layout object for base font
     SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
@@ -1318,9 +1384,9 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     // adjust to right alignment if necessary
     if( aLayoutArgs.mnFlags & SAL_LAYOUT_RIGHT_ALIGN )
     {
-        long nRTLOffset;
-        if( pDXArray )
-            nRTLOffset = pDXArray[ nLen - 1 ];
+        DeviceCoordinate nRTLOffset;
+        if( pDXPixelArray )
+            nRTLOffset = pDXPixelArray[ nLen - 1 ];
         else if( nPixelWidth )
             nRTLOffset = nPixelWidth;
         else

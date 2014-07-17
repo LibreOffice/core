@@ -732,7 +732,7 @@ sal_Int32 GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int fac
     return nBreak;
 }
 
-long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
+DeviceCoordinate GraphiteLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 {
     if (mnEndCharPos == mnMinCharPos)
         // Then we must be zero width!
@@ -766,7 +766,7 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
         //fprintf(grLog(),"FillDX %ld,%d\n", mnWidth, std::accumulate(pDXArray, pDXArray + mvCharDxs.size(), 0));
     }
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(),"FillDXArray %d-%d=%ld\n", mnMinCharPos, mnEndCharPos, mnWidth);
+    fprintf(grLog(),"FillDXArray %d-%d=%g\n", mnMinCharPos, mnEndCharPos, (double)mnWidth);
 #endif
     return mnWidth;
 }
