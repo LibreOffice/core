@@ -593,8 +593,7 @@ XclExpChTrAction::XclExpChTrAction(
 
 XclExpChTrAction::~XclExpChTrAction()
 {
-    if( pAddAction )
-        delete pAddAction;
+    delete pAddAction;
 }
 
 void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
@@ -749,10 +748,8 @@ XclExpChTrCellContent::XclExpChTrCellContent(
 
 XclExpChTrCellContent::~XclExpChTrCellContent()
 {
-    if( pOldData )
-        delete pOldData;
-    if( pNewData )
-        delete pNewData;
+    delete pOldData;
+    delete pNewData;
 }
 
 void XclExpChTrCellContent::MakeEmptyChTrData( XclExpChTrData*& rpData )
@@ -1476,8 +1473,7 @@ XclExpChangeTrack::~XclExpChangeTrack()
         aActionStack.pop();
     }
 
-    if( pTempDoc )
-        delete pTempDoc;
+    delete pTempDoc;
 }
 
 ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
