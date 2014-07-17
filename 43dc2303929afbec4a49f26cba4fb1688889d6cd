@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_6274ecce",
+        "filename": "basic/source/inc/symtbl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-07-17T07:18:23Z",
+      "side": 1,
+      "message": "Looks like we can even go two steps further and make SbiSymbols a typedef to boost::ptr_vector\u003cSbiSymDef\u003e.",
+      "revId": "43dc2303929afbec4a49f26cba4fb1688889d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
