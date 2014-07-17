@@ -35,8 +35,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			--disable-debug \
 			--disable-werror \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side)) \
-			$(if $(SYSTEM_LIBXML),,-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
+			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
