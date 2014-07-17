@@ -1,0 +1,19 @@
+diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
+--- win32/Makefile.msvc.dt	2014-07-18 19:00:23.372103963 +0200
++++ win32/Makefile.msvc	2014-07-18 19:01:39.347982929 +0200
+@@ -45,6 +45,7 @@ CPPFLAGS = $(CPPFLAGS) /D "_REENTRANT"
+ CC = cl.exe
+ CFLAGS = /nologo /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "HAVE_CONFIG_H" /D "NOLIBTOOL" /W1 $(CRUNTIME)
+ CFLAGS = $(CFLAGS) /I$(XML_SRCDIR) /I$(XML_SRCDIR)\include /I$(INCPREFIX)
++CFLAGS = $(CFLAGS) /I$(WORKDIR)\UnpackedTarball\icu\source\i18n /I$(WORKDIR)\UnpackedTarball\icu\source\common
+ !if "$(WITH_THREADS)" != "no"
+ CFLAGS = $(CFLAGS) /D "_REENTRANT"
+ !endif
+@@ -67,6 +68,7 @@ CFLAGS = $(CFLAGS) $(SOLARINC)
+ # The linker and its options.
+ LD = link.exe
+ LDFLAGS = /nologo /VERSION:$(LIBXML_MAJOR_VERSION).$(LIBXML_MINOR_VERSION)
++LDFLAGS = $(LDFLAGS) /LIBPATH:$(WORKDIR)\UnpackedTarball\xml2\source\lib
+ LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
+ LIBS =
+ !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
