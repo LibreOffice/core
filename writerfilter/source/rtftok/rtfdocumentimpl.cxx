@@ -601,6 +601,12 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
         new RTFReferenceProperties(aAttributes, aSprms)
     );
+
+    if (bFinal && !m_pSuperstream)
+        // This is the end of the document, not just the end of e.g. a header.
+        // This makes sure that dmapper can set DontBalanceTextColumns=true for this section if necessary.
+        Mapper().markLastSectionGroup();
+
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
     Mapper().endParagraphGroup();

@@ -186,6 +186,7 @@ public:
 
     void startSectionGroup();
     void setLastParagraphInSection();
+    void setLastSectionGroup();
     void endSectionGroup();
     void startParagraphGroup();
     void endParagraphGroup();
