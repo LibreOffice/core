@@ -71,6 +71,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetDoNotUseHTMLParagraphAutoSpacing() const;
     bool GetSplitPgBreakAndParaMark() const;
     bool GetMirrorMarginSettings() const;
+    bool GetNoColumnBalance() const;
 
     css::uno::Sequence<css::beans::PropertyValue> GetThemeFontLangProperties() const;
 

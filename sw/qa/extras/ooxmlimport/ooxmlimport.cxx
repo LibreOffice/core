@@ -2282,6 +2282,14 @@ DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.docx")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was false, we ignored the relevant compat setting to make this non-last section unbalanced.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

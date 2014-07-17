@@ -74,6 +74,7 @@ struct SettingsTable_Impl
     bool                embedTrueTypeFonts;
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
+    bool                m_bNoColumnBalance;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
@@ -104,6 +105,7 @@ struct SettingsTable_Impl
     , embedTrueTypeFonts(false)
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
+    , m_bNoColumnBalance(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
@@ -276,6 +278,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         }
     }
     break;
+    case NS_ooxml::LN_CT_Compat_noColumnBalance:
+        m_pImpl->m_bNoColumnBalance = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DOMAINMAPPER
@@ -336,6 +341,11 @@ bool SettingsTable::GetEmbedSystemFonts() const
 bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 {
     return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
+}
+
+bool SettingsTable::GetNoColumnBalance() const
+{
+    return m_pImpl->m_bNoColumnBalance;
 }
 
 bool SettingsTable::GetSplitPgBreakAndParaMark() const
