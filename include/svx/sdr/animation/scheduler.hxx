@@ -36,7 +36,7 @@ namespace sdr
             // time of event in ms
             sal_uInt32                                      mnTime;
 
-            // pointer for simply linked list
+            // pointer for linked list sorted by mnTime
             Event*                                          mpNext;
 
         public:
