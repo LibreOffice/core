@@ -384,7 +384,6 @@ sal_Int32 Outliner::GetBulletsNumberingStatus() const
 
 OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
-
     if ( static_cast<sal_uLong>(nStartPara) + nCount >
             static_cast<sal_uLong>(pParaList->GetParagraphCount()) )
         nCount = pParaList->GetParagraphCount() - nStartPara;
@@ -394,7 +393,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
     if ( ( nStartPara + nCount ) > pEditEngine->GetParagraphCount() )
         nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
-    if( !nCount )
+    if (nCount <= 0)
         return NULL;
 
     EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );

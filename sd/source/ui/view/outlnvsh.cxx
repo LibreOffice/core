@@ -1658,7 +1658,6 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
-    OutlinerParaObject* pOPO = NULL;
 
     OUString aTest = rOutliner.GetText(pPara);
     bool    bText = !aTest.isEmpty();
@@ -1675,9 +1674,9 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         }
 
         // if we have a title object and a text, set the text
-        if( pTO )
+        OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : NULL;
+        if (pOPO)
         {
-            pOPO = rOutliner.CreateParaObject( rOutliner.GetAbsPos( pPara ), 1 );
             pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
             pOPO->SetVertical( pTO->IsVerticalWriting() );
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
