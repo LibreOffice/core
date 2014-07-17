@@ -38,6 +38,7 @@ namespace calc
 
 #define PROP_HANDLE_BOUND_CELL  1
 
+    namespace lang = ::com::sun::star::lang;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;
@@ -385,7 +386,7 @@ namespace calc
             Reference<XNumberFormatTypes> xTypes( xFormats, UNO_QUERY );
             if ( xTypes.is() )
             {
-                Locale aLocale;
+                lang::Locale aLocale;
                 bool bWasBoolean = false;
 
                 sal_Int32 nOldIndex = ::comphelper::getINT32( xCellProp->getPropertyValue( sPropName ) );
