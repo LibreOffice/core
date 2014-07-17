@@ -31,7 +31,8 @@ else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript configure.js \
-			iconv=no sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
+			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
+			lib=$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 		&& unset MAKEFLAGS \
 		&& LIB="$(ILIB)" nmake \
 	,win32)
