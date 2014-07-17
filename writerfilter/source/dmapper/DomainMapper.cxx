@@ -2576,6 +2576,11 @@ void DomainMapper::markLastParagraphInSection( )
     m_pImpl->SetIsLastParagraphInSection( true );
 }
 
+void DomainMapper::markLastSectionGroup( )
+{
+    m_pImpl->SetIsLastSectionGroup( true );
+}
+
 void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
     if (m_pImpl->GetTopContext())

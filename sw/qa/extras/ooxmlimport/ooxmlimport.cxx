@@ -2395,6 +2395,14 @@ DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
     CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(10), 3), "IsStart"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was false, last section was balanced, but it's unbalanced in Word.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

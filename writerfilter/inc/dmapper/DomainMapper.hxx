@@ -87,6 +87,7 @@ public:
 
     // Stream
     virtual void markLastParagraphInSection() SAL_OVERRIDE;
+    virtual void markLastSectionGroup() SAL_OVERRIDE;
 
     // BinaryObj
     virtual void data(const sal_uInt8* buf, size_t len,

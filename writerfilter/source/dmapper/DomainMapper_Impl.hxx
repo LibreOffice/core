@@ -374,6 +374,7 @@ private:
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsLastParaInSection;
+    bool                            m_bIsLastSectionGroup;
     bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
@@ -452,6 +453,8 @@ public:
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection();
+    void SetIsLastSectionGroup( bool bIsLast );
+    bool GetIsLastSectionGroup() { return m_bIsLastSectionGroup;}
     void SetIsFirstParagraphInSection( bool bIsFirst );
     bool GetIsFirstParagraphInSection();
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
