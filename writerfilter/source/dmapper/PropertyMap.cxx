@@ -549,7 +549,8 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
             sal_uInt32 nLineWidth = 0;
             if (m_pBorderLines[nBorder])
                 nLineWidth = m_pBorderLines[nBorder]->LineWidth;
-            SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
+            if(xFirst.is())
+                SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
                   m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
             if(xSecond.is())
                 SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
