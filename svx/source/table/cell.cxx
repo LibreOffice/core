@@ -525,6 +525,26 @@ void Cell::setMerged()
 
 
 
+void Cell::copyFormatFrom( const CellRef& xSourceCell )
+{
+    if( xSourceCell.is() && mpProperties )
+    {
+        mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
+
+        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
+
+        if(rSourceTableObj.GetModel() != rTableObj.GetModel())
+        {
+            SetStyleSheet( 0, true );
+        }
+
+        notifyModified();
+    }
+}
+
+
+
 void Cell::notifyModified()
 {
     if( mxTable.is() )
