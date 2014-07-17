@@ -394,7 +394,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
     if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
         // fill the local static SvxBrushItem from the current ItemSet so that
@@ -414,7 +414,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
     if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
@@ -458,7 +458,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     if(RES_BACKGROUND == rAttr.Which() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         SfxItemSet aTempSet(*aSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
         const SvxBrushItem& rSource = static_cast< const SvxBrushItem& >(rAttr);
 
@@ -564,7 +564,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
         if(SFX_ITEM_SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
         {
             //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-            OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+            SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
 
             // copy all items to be set anyways to a local ItemSet with is also prepared for the new
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
@@ -794,7 +794,7 @@ const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
     if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
         // fill the local static SvxBrushItem from the current ItemSet so that
