@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_22039411",
+        "filename": "include/svl/SfxBroadcaster.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-17T09:31:58Z",
+      "side": 1,
+      "message": "Why does this need to be a priority queue?\nWhy is a normal std::vector not sufficient?",
+      "revId": "579d3b8ff167eaf3ce69dbbe45df2a3e0a99956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_62098c31",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-17T09:31:58Z",
+      "side": 1,
+      "message": "Might as well be inlined",
+      "revId": "579d3b8ff167eaf3ce69dbbe45df2a3e0a99956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_42068821",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-17T09:31:58Z",
+      "side": 1,
+      "message": "Might as well be inlined.",
+      "range": {
+        "startLine": 149,
+        "startChar": 3,
+        "endLine": 149,
+        "endChar": 4
+      },
+      "revId": "579d3b8ff167eaf3ce69dbbe45df2a3e0a99956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
