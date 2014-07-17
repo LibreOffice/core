@@ -659,6 +659,54 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 }
             }
         }
+        else if (i->first == "fHorizRule") // TODO: what does "fStandardHR" do?
+        {   // horizontal rule: relative width defaults to 100% of paragraph
+            // TODO: does it have a default height?
+            if (!oRelativeWidth)
+            {
+                oRelativeWidth = 100;
+            }
+            nRelativeWidthRelation = text::RelOrientation::FRAME;
+            sal_Int16 const nVertOrient = text::VertOrientation::CENTER;
+            if (xPropertySet.is())
+            {
+                xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
+            }
+        }
+        else if (i->first == "pctHR")
+        {   // horizontal rule relative width in permille
+            oRelativeWidth = i->second.toInt32() / 10;
+        }
+        else if (i->first == "dxHeightHR")
+        {   // horizontal rule height
+            sal_uInt32 const nHeight(convertTwipToMm100(i->second.toInt32()));
+            rShape.nBottom = rShape.nTop + nHeight;
+        }
+        else if (i->first == "dxWidthHR")
+        {   // horizontal rule width
+            sal_uInt32 const nWidth(convertTwipToMm100(i->second.toInt32()));
+            rShape.nRight = rShape.nLeft + nWidth;
+        }
+        else if (i->first == "alignHR")
+        {   // horizontal orientation *for horizontal rule*
+            sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
+            switch (i->second.toInt32())
+            {
+                case 0:
+                    nHoriOrient = text::HoriOrientation::LEFT;
+                    break;
+                case 1:
+                    nHoriOrient = text::HoriOrientation::CENTER;
+                    break;
+                case 2:
+                    nHoriOrient = text::HoriOrientation::RIGHT;
+                    break;
+            }
+            if (xPropertySet.is() && text::HoriOrientation::NONE != nHoriOrient)
+            {
+                xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
+            }
+        }
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
