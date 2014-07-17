@@ -1013,6 +1013,8 @@ class ScChangeTrack : public utl::ConfigurationListener
                                 // bRecursion == called from reject with table
     bool Reject( ScChangeAction*, ScChangeActionMap*, bool bRecursion );
 
+    bool IsLastAction( sal_uLong nNum ) const;
+
             void                ClearMsgQueue();
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 

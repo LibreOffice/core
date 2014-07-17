@@ -3161,8 +3161,8 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
         for ( sal_uLong j = nEndAction; j >= nStartAction; --j )
         {   // Traverse backwards to recycle nActionMax and for faster access via pLast
             // Deletes are in right order
-            ScChangeAction* pAct = ( (j == nActionMax && pLast &&
-                pLast->GetActionNumber() == j) ? pLast : GetAction( j ) );
+            ScChangeAction* pAct = IsLastAction(j) ? pLast : GetAction(j);
+
             if ( pAct )
             {
                 if ( pAct->IsDeleteType() )
@@ -4407,6 +4407,11 @@ bool ScChangeTrack::Reject(
     }
 
     return bRejected;
+}
+
+bool ScChangeTrack::IsLastAction( sal_uLong nNum ) const
+{
+    return nNum == nActionMax && pLast && pLast->GetActionNumber() == nNum;
 }
 
 sal_uLong ScChangeTrack::AddLoadedGenerated(
