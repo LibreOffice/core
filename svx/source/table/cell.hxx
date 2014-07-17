@@ -102,6 +102,8 @@ public:
 
     SVX_DLLPRIVATE void setMerged();
 
+    SVX_DLLPRIVATE void copyFormatFrom( const CellRef& xSourceCell );
+
     // XInterface
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& Type ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
