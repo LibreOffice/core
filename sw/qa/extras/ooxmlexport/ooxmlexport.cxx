@@ -377,18 +377,6 @@ DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
-{
-    /*
-     * Problem: we created imbalance </w:hyperlink> which shouldn't be there,
-     * resulting in loading error: missing last character of hyperlink text
-     * and content after it wasn't loaded.
-     */
-    getParagraph(1, "This is a hyperlink with anchor. Also, this sentence should be seen.");
-    getRun(getParagraph(1), 2, "hyperlink with anchor");
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 2), "HyperLinkURL"));
-}
-
 struct SingleLineBorders {
     sal_Int16 top, bottom, left, right;
     SingleLineBorders(int t=0, int b=0, int l=0, int r=0)
@@ -464,24 +452,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
-}
-
-DECLARE_OOXMLEXPORT_TEST(testN789482, "n789482.docx")
-{
-    // The problem was that w:del was exported before w:hyperlink, resulting in an invalid XML.
-    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
-    getRun(xParagraph, 1, "Before. ");
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(getRun(xParagraph, 2), "IsStart"));
-
-    getRun(xParagraph, 3, "www.test.com");
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.test.com/"), getProperty<OUString>(getRun(xParagraph, 3), "HyperLinkURL"));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"), getProperty<OUString>(getRun(xParagraph, 4), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(getRun(xParagraph, 4), "IsStart"));
-
-    getRun(xParagraph, 5, " After.");
 }
 
 /*
@@ -1115,17 +1085,6 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testBnc834035, "bnc834035.odt")
-{
-    // Illustration index had wrong hyperlinks: anchor was using Writer's
-    // <seqname>!<index>|sequence syntax, not a bookmark name.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-    // This was Figure!1|sequence.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:hyperlink", "anchor", "_Toc363553908");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
 {
     // The problem was that text with empty author was not inserted as a redline
@@ -1689,13 +1648,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCp1000015, "cp1000015.odt")
-{
-    // Redline and hyperlink end got exported in an incorrect order.
-    getParagraph(1, "Hello.");
-    getParagraph(2, "http://www.google.com/");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
 {
     // Import just crashed.
@@ -1744,18 +1696,6 @@ DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 #endif
-}
-
-DECLARE_OOXMLEXPORT_TEST(testHyperlineIsEnd, "hyperlink.docx")
-{
-    // Check  that the document.xml contents all the tag properly closed.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
-    CPPUNIT_ASSERT(pXmlDoc) ;
-    // Check hyperlink is properly open.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
@@ -2189,16 +2129,6 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesInsertedTableCell, "testTrackChangesIns
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellIns");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
-{
-    // The DOCX containing the Table of Contents was not exported with correct page nos
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t", "15");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -2220,83 +2150,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO71834, "fdo71834.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
-{
-   // This test case is to verify \o flag should come once.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
-    // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\u \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTOCFlag_f, "toc_doc.docx")
-{
-    // Export logic for all TOC field flags was enclosed inside
-    // if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() ) in ww8atr.cxx which gets true for \f,
-    // this was the reason if there is \f flag present in original doc then only other flags like
-    // \o \h \n used to come after RoundTrip.
-    // This test case is to verify even if there is no \f flag in original doc, \h flag is getting
-    // preserved after RT.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
-    // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\o \"1-3\" \\u \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
-{
-    // This test case is to verify \b flag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
-    // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\b \"bookmark111\" \\o \"1-9\" \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFDO77715,"FDO77715.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText[1]", " TOC \\c ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
@@ -2348,18 +2201,6 @@ DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
 {
     // This was 9: 9.8 was imported as 9 instead of being rounded to 10.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(10), getProperty<sal_Int16>(getShape(1), "RelativeHeight"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
-{
-    // DOCX contaning TOC should preserve code field '\u'.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
-    // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
@@ -2451,26 +2292,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo73596_RunInStyle,"fdo73596_RunInStyle.docx")
-{
-    // INDEX should be preserved.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]", " INDEX \\e \"");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testfdo73596_AlphaSeparator,"fdo73596_AlphaSeparator.docx")
-{
-    // INDEX flag \h "A" should be preserved.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]", " INDEX \\h \"A\" \\e \"");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
@@ -2507,51 +2328,6 @@ DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end", "");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testCaption1, "EquationAsScientificNumbering.docx")
-{
-    // fdo#74431 : This test case is to verify the Captions are coming properly
-    // earlier it was coming as "SEQ "scientific"\*ROMAN now it is SEQ scientific\* ROMAN"
-
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " SEQ scientific \\* ROMAN ");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
-{
-    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
-    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[3]/w:instrText", " SEQ Equation \\* ARABIC ");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testCaption3, "FigureAsLabelPicture.docx")
-{
-    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
-    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:instrText", " SEQ picture \\* ARABIC ");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testCaption4, "TableWithAboveCaptions.docx")
-{
-    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
-    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " SEQ Table \\* ARABIC ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
@@ -2667,19 +2443,6 @@ DECLARE_OOXMLEXPORT_TEST(testNumberedLists_StartingWithZero, "FDO74105.docx")
     assertXPath(pXmlDoc, "w:numbering/w:abstractNum[1]/w:lvl[1]/w:start", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFooterContainHyperlink,"footer-contain-hyperlink.docx")
-{
-    // Problem is that footer1.xml.rels contains the empty
-    // Target due to which the file get corrupted
-    // in MS Office 2007.
-    // Check for footer1.xml.rels file.
-    xmlDocPtr pXmlRels = parseExport("word/_rels/footer1.xml.rels");
-    if (!pXmlRels)
-        return;
-    // Check the value of Target which is http://www.google.com/.
-    assertXPath(pXmlRels,"/rels:Relationships/rels:Relationship","Target","http://www.google.com/");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testPageBreak,"fdo74566.docx")
 {
     /*  Break to next page was written into wrong paragraph as <w:pageBreakBefore />.
@@ -2697,80 +2460,6 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreak,"fdo74566.docx")
     getRun(xParagraph2, 1, "First Page Second Line");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:br","type","page");
     getRun(xParagraph4, 1, "Second Page First line after Page Break");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_MultipleColumns,"alphabeticalIndex_MultipleColumns.docx")
-{
-    // Bug :: fdo#73596
-    /*
-     * Index with multiple columns was not imported correctly and
-     * hence not exported correctly...
-     * The column count is given by the \c switch.
-     * If the column count is explicitly specified,
-     * MS Office adds section breaks before and after the Index.
-     */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText", " INDEX \\c \"4\"\\e \"");
-
-    // check for section breaks after and before the Index Section
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:type","val","continuous");
-    // check for "w:space" attribute for the columns in Section Properties
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
-{
-    // fdo#72563 : There was a problem that in case of TOC,PAGEREF field tag was not preserved during Roundtrip
-    // This test case is to verify that PAGEREF tag is coming with proper values inside <hyperlink> tag.
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_AutoColumn.docx")
-{
-    // Bug :: fdo#73596
-    /*
-     * When the columns in Index are 0; i.e not specified by the
-     * "\c" switch, don't write back '\c "0"' or the section breaks
-     * before and after the Index Context
-     */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " INDEX \\e \"");
-
-    // check for section break doestn't appear for any paragraph
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testIndexFieldFlagF,"IndexFieldFlagF.docx")
-{
-    // This test case is to verify the Index field flag '\f' with some
-    // Specific Entry Type (ex. "Syn" in our case).
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // We check the Index field flag '\f'.
-    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[4]/w:r[2]/w:instrText[1]", " INDEX \\c \"2\"\\f \"Syn\" \" \\e \"");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Bibliographies");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
@@ -2843,21 +2532,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
-{
-    // fdo#75158 : This test case is to verify the unsupported textfields are exported properly.
-
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
-    xmlXPathFreeObject(pXmlObj);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
 {
     // check XML
@@ -2893,17 +2567,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76312, "FDO76312.docx")
         return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
-}
-
-DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[5]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p/w:sdt/w:sdtContent/w:r[2]/w:instrText[1]",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
@@ -2997,15 +2660,6 @@ DECLARE_OOXMLEXPORT_TEST(testSdtContent, "SdtContent.docx")
     assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt[1]/w:sdtContent[1]/w:del[1]");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:instrText", " CITATION Kra06 \\l 1033 ");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtContent/w:r[4]/w:t", "(Kramer & Chen, 2006)");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")
 {
     // check XML
@@ -3081,19 +2735,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78292, "FDO78292.docx")
    assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testHyperLinkTagEnded, "fdo76316.docx")
-{
-    /* XML tag <w:hyperlink> was not getting closed when its inside another
-     * <w:hyperlink> tag.
-     */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc) return;
-
-    CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[2]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[7]/w:tc[1]/w:tbl[1]/w:tr[2]/w:tc[6]/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:hyperlink[1]",1);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -3116,15 +2757,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76248, "FDO76248.docx")
        return;
     // In two cases the a:graphicData elements had no children, which is invalid.
     assertXPath(pXmlDoc, "//a:graphicData[not(*)]", 0);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFDO76163 , "fdo76163.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    //docx file after RT is getting corrupted.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[11]/w:fldChar", "fldCharType", "end" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
@@ -3368,41 +3000,12 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
                         "image/png");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78659, "fdo78659.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[3]/w:fldChar[1]", 0);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFDO78654 , "fdo78654.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    // In case of two "Hyperlink" tags in one paragraph and one of them
-    // contains "PAGEREF" field then field end tag was missing from hyperlink.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink[3]/w:r[5]/w:fldChar", "fldCharType", "end" );
-}
-
-
-DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
-{
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    //docx file after RT is getting corrupted.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", "end" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
@@ -3413,15 +3016,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
     // make sure dataBinding & text tags not presernt in sdtcontent
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:text[1]",0);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testfdo78886, "fdo78886.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[2]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[2]/w:fldChar[1]", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
@@ -3457,18 +3051,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
 
     // Ensure that no dummy paragarph gets created inside second paragraph for Section Break
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:p[1]/w:pPr[1]/w:sectPr[1]",0);
-}
-
-DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
-
-    // This is to ensure that the fld starts and ends inside a hyperlink...
-    assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[1]/w:fldChar", "fldCharType", "begin" );
-    assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
@@ -3570,18 +3152,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
     }
 }
 
-
-DECLARE_OOXMLEXPORT_TEST(testFDO78590, "FDO78590.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
-
-    // This is to ensure that the fld starts and ends inside a hyperlink...
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", "9851" );
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
-}
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
 {
@@ -3797,17 +3367,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(148), xBitmap->getSize().Height );
-}
-
-DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
-{
-    // The problem was that the SDT was around the whole paragraph, not only around the citation field.
-    if (xmlDocPtr pXmlDoc = parseExport())
-    {
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:t", "Before sdt.");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:instrText", " CITATION BBC11 \\l 1033 ");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:t", "After sdt.");
-    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
