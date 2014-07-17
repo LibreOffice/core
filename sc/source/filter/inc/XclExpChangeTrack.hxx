@@ -29,6 +29,8 @@
 #include "ftools.hxx"
 #include "excrecds.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 // XclExpUserBView - one UserBView record for each user
 
 class XclExpUserBView : public ExcRecord
@@ -567,8 +569,8 @@ public:
 
 class XclExpChangeTrack : protected XclExpRoot
 {
-private:
-    std::vector<ExcRecord*>       aRecList;           // list of "Revision Log" stream records
+    typedef boost::ptr_vector<ExcRecord> RecListType;
+    RecListType maRecList;           // list of "Revision Log" stream records
     std::stack<XclExpChTrAction*> aActionStack;
     XclExpChTrTabIdBuffer*        pTabIdBuffer;
     std::vector<XclExpChTrTabIdBuffer*> maBuffers;

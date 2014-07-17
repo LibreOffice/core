@@ -1408,10 +1408,10 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
 
     // build record list
     pHeader = new XclExpChTrHeader;
-    aRecList.push_back( new StartXmlElement( XML_headers, StartXmlElement::WRITE_NAMESPACES ) );
-    aRecList.push_back( pHeader );
-    aRecList.push_back( new XclExpChTr0x0195 );
-    aRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
+    maRecList.push_back( new StartXmlElement( XML_headers, StartXmlElement::WRITE_NAMESPACES ) );
+    maRecList.push_back( pHeader );
+    maRecList.push_back( new XclExpChTr0x0195 );
+    maRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
 
     OUString sLastUsername;
     DateTime aLastDateTime( DateTime::EMPTY );
@@ -1428,41 +1428,37 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         {
             if( nIndex != 1 )
             {
-                aRecList.push_back( new EndXmlElement( XML_revisions ) );
-                aRecList.push_back( new EndHeaderElement() );
+                maRecList.push_back( new EndXmlElement( XML_revisions ) );
+                maRecList.push_back( new EndHeaderElement() );
             }
 
             lcl_GenerateGUID( aGUID, bValidGUID );
             sLastUsername = pAction->GetUsername();
             aLastDateTime = pAction->GetDateTime();
 
-            aRecList.push_back( new StartXmlElement( XML_header, 0 ) );
-            aRecList.push_back( new XclExpChTrInfo( sLastUsername, aLastDateTime, aGUID, nLogNumber++ ) );
-            aRecList.push_back( new XclExpChTrTabId( pAction->GetTabIdBuffer(), true ) );
-            aRecList.push_back( new StartXmlElement( XML_revisions, StartXmlElement::WRITE_NAMESPACES | StartXmlElement::CLOSE_ELEMENT ) );
+            maRecList.push_back( new StartXmlElement( XML_header, 0 ) );
+            maRecList.push_back( new XclExpChTrInfo( sLastUsername, aLastDateTime, aGUID, nLogNumber++ ) );
+            maRecList.push_back( new XclExpChTrTabId( pAction->GetTabIdBuffer(), true ) );
+            maRecList.push_back( new StartXmlElement( XML_revisions, StartXmlElement::WRITE_NAMESPACES | StartXmlElement::CLOSE_ELEMENT ) );
             pHeader->SetGUID( aGUID );
         }
         pAction->SetIndex( nIndex );
-        aRecList.push_back( pAction );
+        maRecList.push_back( pAction );
     }
 
     pHeader->SetGUID( aGUID );
     pHeader->SetCount( nIndex - 1 );
     if( nLogNumber > 1 )
     {
-        aRecList.push_back( new EndXmlElement( XML_revisions ) );
-        aRecList.push_back( new EndHeaderElement() );
+        maRecList.push_back( new EndXmlElement( XML_revisions ) );
+        maRecList.push_back( new EndHeaderElement() );
     }
-    aRecList.push_back( new EndXmlElement( XML_headers ) );
-    aRecList.push_back( new ExcEof );
+    maRecList.push_back( new EndXmlElement( XML_headers ) );
+    maRecList.push_back( new ExcEof );
 }
 
 XclExpChangeTrack::~XclExpChangeTrack()
 {
-    std::vector<ExcRecord*>::iterator prIter;
-    for ( prIter = aRecList.begin(); prIter != aRecList.end(); ++prIter )
-        delete *prIter;
-
     std::vector<XclExpChTrTabIdBuffer*>::iterator pIter;
     for ( pIter = maBuffers.begin(); pIter != maBuffers.end(); ++pIter )
         delete *pIter;
@@ -1561,7 +1557,7 @@ bool XclExpChangeTrack::WriteUserNamesStream()
 
 void XclExpChangeTrack::Write()
 {
-    if( aRecList.empty() )
+    if (maRecList.empty())
         return;
 
     if( WriteUserNamesStream() )
@@ -1572,9 +1568,9 @@ void XclExpChangeTrack::Write()
         {
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 
-            std::vector<ExcRecord*>::iterator pIter;
-            for ( pIter = aRecList.begin(); pIter != aRecList.end(); ++pIter )
-                (*pIter)->Save(aXclStrm);
+            RecListType::iterator pIter;
+            for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
+                pIter->Save(aXclStrm);
 
             xSvStrm->Commit();
         }
@@ -1602,7 +1598,7 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
 
 void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
 {
-    if( aRecList.empty() )
+    if (maRecList.empty())
         return;
 
     lcl_WriteUserNamesXml( rWorkbookStrm );
@@ -1618,9 +1614,9 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
     //          contents of XclExpChangeTrack::WriteUserNamesStream()).
     rWorkbookStrm.PushStream( pRevisionHeaders );
 
-    std::vector<ExcRecord*>::iterator pIter;
-    for ( pIter = aRecList.begin(); pIter != aRecList.end(); ++pIter )
-        (*pIter)->SaveXml(rWorkbookStrm);
+    RecListType::iterator pIter;
+    for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
+        pIter->SaveXml(rWorkbookStrm);
 
     rWorkbookStrm.PopStream();
 }
