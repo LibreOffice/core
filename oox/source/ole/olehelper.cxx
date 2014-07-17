@@ -397,8 +397,7 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
             else if ( nClassId == FormComponentType::COMMANDBUTTON )
             {
                 bool bToggle = false;
-                aPropSet.getProperty( bToggle, PROP_Toggle );
-                if ( bToggle )
+                if ( aPropSet.getProperty( bToggle, PROP_Toggle ) && bToggle )
                     nClassId = TOGGLEBUTTON;
             }
             else if ( nClassId == FormComponentType::CONTROL )
