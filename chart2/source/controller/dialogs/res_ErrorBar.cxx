@@ -93,6 +93,8 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_eErrorBarType( eType ),
         m_nConstDecimalDigits( 1 ),
         m_nConstSpinSize( 1 ),
+        m_fPlusValue(0.0),
+        m_fMinusValue(0.0),
         m_pParentDialog( pParentDialog ),
         m_pCurrentRangeChoosingField( 0 ),
         m_bHasInternalDataProvider( true ),
@@ -271,6 +273,13 @@ void ErrorBarResources::UpdateControlStates()
         m_pMfNegative->SetDecimalDigits( m_nConstDecimalDigits );
         m_pMfNegative->SetSpinSize( m_nConstSpinSize );
     }
+
+    sal_Int32 nPlusValue = static_cast< sal_Int32 >( m_fPlusValue * pow(10.0,m_pMfPositive->GetDecimalDigits()) );
+    sal_Int32 nMinusValue = static_cast< sal_Int32 >( m_fMinusValue * pow(10.0,m_pMfNegative->GetDecimalDigits()) );
+
+    m_pMfPositive->SetValue( nPlusValue );
+    m_pMfNegative->SetValue( nMinusValue );
+
     m_pMfPositive->SetCustomUnitText( aCustomUnit );
     m_pMfNegative->SetCustomUnitText( aCustomUnit );
 
@@ -530,24 +539,19 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     // parameters
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, true, &pPoolItem );
     m_bPlusUnique = ( aState != SFX_ITEM_DONTCARE );
-    double fPlusValue = 0.0;
     if( aState == SFX_ITEM_SET )
     {
-        fPlusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
-        sal_Int32 nPlusValue = static_cast< sal_Int32 >( fPlusValue * pow(10.0,m_pMfPositive->GetDecimalDigits()) );
-        m_pMfPositive->SetValue( nPlusValue );
+        m_fPlusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
     }
 
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, true, &pPoolItem );
     m_bMinusUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
-        double fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
-        sal_Int32 nMinusValue = static_cast< sal_Int32 >( fMinusValue * pow(10.0,m_pMfNegative->GetDecimalDigits()) );
-        m_pMfNegative->SetValue( nMinusValue );
+        m_fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
 
         if( m_eErrorKind != CHERROR_RANGE &&
-            fPlusValue == fMinusValue )
+            m_fPlusValue == m_fMinusValue )
             m_pCbSyncPosNeg->Check();
     }
 
