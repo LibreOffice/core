@@ -59,7 +59,6 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(SYSTEM_NSS),,$(if $(filter MACOSX,$(OS)),--disable-pkgconfig)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(SYSTEM_LIBXML),,LIBXML_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" LIBXML_LIBS="-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2")\
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
 			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib)) \
 		&& $(MAKE) \

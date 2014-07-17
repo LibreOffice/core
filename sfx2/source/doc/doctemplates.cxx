@@ -191,7 +191,7 @@ class SfxDocTplService_Impl
     Sequence< OUString >        maInternalTemplateDirs;
     OUString                    maRootURL;
     NameList_Impl               maNames;
-    Locale                      maLocale;
+    lang::Locale                      maLocale;
     Content                     maRootContent;
     Updater_Impl*               mpUpdater;
     bool                    mbIsInitialized : 1;
@@ -288,8 +288,8 @@ public:
     bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
     Content                     getContent() const { return maRootContent; }
 
-    void                        setLocale( const Locale & rLocale );
-    Locale                      getLocale();
+    void                        setLocale( const lang::Locale & rLocale );
+    lang::Locale                      getLocale();
 
     bool                    storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
@@ -1134,7 +1134,7 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 }
 
 
-Locale SfxDocTplService_Impl::getLocale()
+lang::Locale SfxDocTplService_Impl::getLocale()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1145,7 +1145,7 @@ Locale SfxDocTplService_Impl::getLocale()
 }
 
 
-void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
+void SfxDocTplService_Impl::setLocale( const lang::Locale &rLocale )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2285,7 +2285,7 @@ SfxDocTplService::~SfxDocTplService()
 //--- XLocalizable ---
 
 
-Locale SAL_CALL SfxDocTplService::getLocale()
+lang::Locale SAL_CALL SfxDocTplService::getLocale()
     throw( uno::RuntimeException, std::exception )
 {
     return pImp->getLocale();
@@ -2293,7 +2293,7 @@ Locale SAL_CALL SfxDocTplService::getLocale()
 
 
 
-void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
+void SAL_CALL SfxDocTplService::setLocale( const lang::Locale & rLocale )
     throw( uno::RuntimeException, std::exception )
 {
     pImp->setLocale( rLocale );
