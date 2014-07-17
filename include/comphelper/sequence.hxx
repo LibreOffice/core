@@ -96,9 +96,9 @@ namespace comphelper
     {
         sal_uInt32 nLength = _rSeq.getLength();
 
-        OSL_ENSURE(0 <= _nPos && (sal_uInt32)_nPos < nLength, "invalid index");
+        OSL_ENSURE(0 <= _nPos && static_cast<sal_uInt32>(_nPos) < nLength, "invalid index");
 
-        for (sal_uInt32 i = (sal_uInt32)_nPos + 1; i < nLength; ++i)
+        for (sal_uInt32 i = static_cast<sal_uInt32>(_nPos) + 1; i < nLength; ++i)
         {
             _rSeq[i-1] = _rSeq[i];
         }

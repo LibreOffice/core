@@ -40,8 +40,8 @@ class Gradient;
 // - GDIMetaFile-Types -
 
 
-#define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
+const size_t GDI_METAFILE_END = 0xFFFFFFFF;
+const size_t GDI_METAFILE_LABEL_NOTFOUND = 0xFFFFFFFF;
 
 #ifndef METAFILE_END
 #define METAFILE_END                    GDI_METAFILE_END

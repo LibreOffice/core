@@ -119,7 +119,7 @@ public:
     bool            operator!=( const Link& rLink ) const
                     { return !(Link::operator==( rLink )); }
     bool            operator<( const Link& rLink ) const
-                    { return ((sal_uIntPtr)rLink.pFunc < (sal_uIntPtr)pFunc); }
+                    { return rLink.pFunc < pFunc; }
 };
 
 inline Link::Link()

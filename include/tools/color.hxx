@@ -28,13 +28,48 @@ class ResId;
 
 // Color types
 typedef sal_uInt32 ColorData;
-#define RGB_COLORDATA( r,g,b )      ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
-#define TRGB_COLORDATA( t,r,g,b )   ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16)|(((sal_uInt32)((sal_uInt8)(t)))<<24))
-#define COLORDATA_RED( n )          ((sal_uInt8)((n)>>16))
-#define COLORDATA_GREEN( n )        ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
-#define COLORDATA_BLUE( n )         ((sal_uInt8)(n))
-#define COLORDATA_TRANSPARENCY( n ) ((sal_uInt8)((n)>>24))
-#define COLORDATA_RGB( n )          ((ColorData)((n) & 0x00FFFFFF))
+
+inline ColorData RGB_COLORDATA( sal_uInt8 r, sal_uInt8 g, sal_uInt8 b )
+{
+    return static_cast<ColorData>(
+         static_cast<sal_uInt32>(b) |
+         (static_cast<sal_uInt32>(g) << 8) |
+         (static_cast<sal_uInt32>(r) << 16) );
+}
+
+inline ColorData TRGB_COLORDATA( sal_uInt8 t, sal_uInt8 r, sal_uInt8 g, sal_uInt8 b )
+{
+    return static_cast<ColorData>(
+         static_cast<sal_uInt32>(b) |
+         (static_cast<sal_uInt32>(g) << 8) |
+         (static_cast<sal_uInt32>(r) << 16) |
+         (static_cast<sal_uInt32>(t) << 24) );
+}
+
+inline sal_uInt8 COLORDATA_RED( ColorData n )
+{
+    return static_cast<sal_uInt8>( n >> 16 );
+}
+
+inline sal_uInt8 COLORDATA_GREEN( ColorData n )
+{
+    return static_cast<sal_uInt8>( n >> 8 );
+}
+
+inline sal_uInt8 COLORDATA_BLUE( ColorData n )
+{
+    return static_cast<sal_uInt8>( n );
+}
+
+inline sal_uInt8 COLORDATA_TRANSPARENCY( ColorData n )
+{
+    return static_cast<sal_uInt8>( n >> 24 );
+}
+
+inline ColorData COLORDATA_RGB( ColorData n )
+{
+    return static_cast<ColorData>(n & 0x00FFFFFF);
+}
 
 #define COL_BLACK                   RGB_COLORDATA( 0x00, 0x00, 0x00 )
 #define COL_BLUE                    RGB_COLORDATA( 0x00, 0x00, 0x80 )
@@ -83,8 +118,10 @@ typedef sal_uInt32 ColorData;
 #define COL_AUTHOR9_NORMAL          RGB_COLORDATA(255, 226, 185)
 #define COL_AUTHOR9_LIGHT           RGB_COLORDATA(255, 231, 199)
 
-#define COLOR_CHANNEL_MERGE( _def_cDst, _def_cSrc, _def_cSrcTrans ) \
-    ((sal_uInt8)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
+inline sal_uInt8 COLOR_CHANNEL_MERGE( ColorData _def_cDst, ColorData _def_cSrc, ColorData _def_cSrcTrans )
+{
+    return static_cast<sal_uInt8>( ((static_cast<long>(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst))) >> 8L );
+}
 
 // Color
 
@@ -173,13 +210,13 @@ public:
 inline void Color::SetRed( sal_uInt8 nRed )
 {
     mnColor &= 0xFF00FFFF;
-    mnColor |= ((sal_uInt32)nRed)<<16;
+    mnColor |= static_cast<sal_uInt32>(nRed) << 16;
 }
 
 inline void Color::SetGreen( sal_uInt8 nGreen )
 {
     mnColor &= 0xFFFF00FF;
-    mnColor |= ((sal_uInt16)nGreen)<<8;
+    mnColor |= static_cast<sal_uInt16>(nGreen) << 8;
 }
 
 inline void Color::SetBlue( sal_uInt8 nBlue )
@@ -191,7 +228,7 @@ inline void Color::SetBlue( sal_uInt8 nBlue )
 inline void Color::SetTransparency( sal_uInt8 nTransparency )
 {
     mnColor &= 0x00FFFFFF;
-    mnColor |= ((sal_uInt32)nTransparency)<<24;
+    mnColor |= static_cast<sal_uInt32>(nTransparency) << 24;
 }
 
 inline bool Color::IsRGBEqual( const Color& rColor ) const
@@ -201,9 +238,9 @@ inline bool Color::IsRGBEqual( const Color& rColor ) const
 
 inline sal_uInt8 Color::GetLuminance() const
 {
-    return( (sal_uInt8) ( ( COLORDATA_BLUE( mnColor ) * 29UL +
-                        COLORDATA_GREEN( mnColor ) * 151UL +
-                        COLORDATA_RED( mnColor ) * 76UL ) >> 8UL ) );
+    return static_cast<sal_uInt8> ( ( COLORDATA_BLUE( mnColor ) * 29UL +
+                                      COLORDATA_GREEN( mnColor ) * 151UL +
+                                      COLORDATA_RED( mnColor ) * 76UL     ) >> 8UL );
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )

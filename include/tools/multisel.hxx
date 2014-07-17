@@ -80,9 +80,7 @@ public:
     long            NextSelected();
 
     size_t          GetRangeCount() const { return aSels.size(); }
-    const Range&    GetRange( size_t nRange ) const {
-                        return *(const Range*)aSels[nRange];
-                    }
+    const Range&    GetRange( size_t nRange ) const { return *aSels[nRange]; }
 };
 
 class TOOLS_DLLPUBLIC StringRangeEnumerator

@@ -51,7 +51,7 @@ public:
     AlphaMask&  operator=( const Bitmap& rBitmap );
     AlphaMask&  operator=( const AlphaMask& rAlphaMask )
     {
-        return (AlphaMask&) Bitmap::operator=( rAlphaMask );
+        return static_cast<AlphaMask&>( Bitmap::operator=( rAlphaMask ) );
     }
 
     bool operator!() const
