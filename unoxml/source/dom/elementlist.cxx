@@ -28,6 +28,34 @@ using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 
+namespace
+{
+    class WeakEventListener : public ::cppu::WeakImplHelper1<css::xml::dom::events::XEventListener>
+    {
+    private:
+        css::uno::WeakReference<css::xml::dom::events::XEventListener> mxOwner;
+
+    public:
+        WeakEventListener(const css::uno::Reference<css::xml::dom::events::XEventListener>& rOwner)
+            : mxOwner(rOwner)
+        {
+        }
+
+        virtual ~WeakEventListener()
+        {
+        }
+
+        virtual void SAL_CALL handleEvent(const css::uno::Reference<css::xml::dom::events::XEvent>& rEvent)
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            css::uno::Reference<css::xml::dom::events::XEventListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->handleEvent(rEvent);
+        }
+    };
+}
+
 namespace DOM
 {
 
@@ -43,25 +71,46 @@ namespace DOM
     CElementList::CElementList(::rtl::Reference<CElement> const& pElement,
             ::osl::Mutex & rMutex,
             OUString const& rName, OUString const*const pURI)
+        : m_xImpl(new CElementListImpl(pElement, rMutex, rName, pURI))
+    {
+        if (pElement.is()) {
+            m_xImpl->registerListener(*pElement);
+        }
+    }
+
+    CElementListImpl::CElementListImpl(::rtl::Reference<CElement> const& pElement,
+            ::osl::Mutex & rMutex,
+            OUString const& rName, OUString const*const pURI)
         : m_pElement(pElement)
         , m_rMutex(rMutex)
         , m_pName(lcl_initXmlString(rName))
         , m_pURI((pURI) ? lcl_initXmlString(*pURI) : 0)
         , m_bRebuild(true)
     {
-        if (m_pElement.is()) {
-            registerListener(*m_pElement);
+    }
+
+    CElementListImpl::~CElementListImpl()
+    {
+        if (m_xEventListener.is() && m_pElement.is())
+        {
+            Reference< XEventTarget > xTarget(static_cast<XElement*>(m_pElement.get()), UNO_QUERY);
+            assert(xTarget.is());
+            if (!xTarget.is())
+                return;
+            bool capture = false;
+            xTarget->removeEventListener("DOMSubtreeModified", m_xEventListener, capture);
         }
     }
 
-    void CElementList::registerListener(CElement & rElement)
+    void CElementListImpl::registerListener(CElement & rElement)
     {
         try {
             Reference< XEventTarget > const xTarget(
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
             bool capture = false;
+            m_xEventListener = new WeakEventListener(this);
             xTarget->addEventListener("DOMSubtreeModified",
-                    Reference< XEventListener >(this), capture);
+                    m_xEventListener, capture);
         } catch (const Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
@@ -69,7 +118,7 @@ namespace DOM
         }
     }
 
-    void CElementList::buildlist(xmlNodePtr pNode, bool start)
+    void CElementListImpl::buildlist(xmlNodePtr pNode, bool start)
     {
         // bail out if no rebuild is needed
         if (start) {
@@ -107,7 +156,7 @@ namespace DOM
     /**
     The number of nodes in the list.
     */
-    sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL CElementListImpl::getLength() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -120,7 +169,7 @@ namespace DOM
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index)
+    Reference< XNode > SAL_CALL CElementListImpl::item(sal_Int32 index)
         throw (RuntimeException, std::exception)
     {
         if (index < 0) throw RuntimeException();
@@ -139,7 +188,7 @@ namespace DOM
     }
 
     // tree mutations can change the list
-    void SAL_CALL CElementList::handleEvent(Reference< XEvent > const&)
+    void SAL_CALL CElementListImpl::handleEvent(Reference< XEvent > const&)
         throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);

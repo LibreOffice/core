@@ -36,6 +36,7 @@
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 namespace DOM
@@ -44,11 +45,16 @@ namespace DOM
 
     typedef std::vector< xmlNodePtr > nodevector_t;
 
-    class CElementList
+    class CElementListImpl
         : public cppu::WeakImplHelper2< css::xml::dom::XNodeList,
                 css::xml::dom::events::XEventListener >
     {
     private:
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::xml::dom::events::XEventListener > m_xEventListener;
+
         ::rtl::Reference<CElement> const m_pElement;
         ::osl::Mutex & m_rMutex;
         ::boost::scoped_array<xmlChar> const m_pName;
@@ -57,12 +63,15 @@ namespace DOM
         nodevector_t m_nodevector;
 
         void buildlist(xmlNodePtr pNode, bool start=true);
-        void registerListener(CElement & rElement);
 
     public:
-        CElementList(::rtl::Reference<CElement> const& pElement,
+        CElementListImpl(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
                 OUString const& rName, OUString const*const pURI = 0);
+
+        void registerListener(CElement & rElement);
+
+        ~CElementListImpl();
 
         /**
         The number of nodes in the list.
@@ -77,6 +86,41 @@ namespace DOM
         // XEventListener
         virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    };
+
+    class CElementList
+        : public cppu::WeakImplHelper2< css::xml::dom::XNodeList,
+                css::xml::dom::events::XEventListener >
+    {
+    private:
+        rtl::Reference<CElementListImpl> m_xImpl;
+    public:
+        CElementList(::rtl::Reference<CElement> const& pElement,
+                ::osl::Mutex & rMutex,
+                OUString const& rName, OUString const*const pURI = 0);
+
+        /**
+        The number of nodes in the list.
+        */
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            return m_xImpl->getLength();
+        }
+        /**
+        Returns the indexth item in the collection.
+        */
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            return m_xImpl->item(index);
+        }
+
+        // XEventListener
+        virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        {
+            m_xImpl->handleEvent(evt);
+        }
     };
 }
 
