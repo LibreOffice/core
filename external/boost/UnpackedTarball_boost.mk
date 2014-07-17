@@ -73,6 +73,7 @@ boost_patches += boost.spirit.Wshadow.warnings.patch
 boost_patches += boost.spirit.Wunused-local-typedefs.warnings.patch
 # to-do: submit upstream
 boost_patches += boost.spirit.Wunused-parameter.warnings.patch
+boost_patches += boost.date_time.Wshadow.warnings.patch.1
 # fixed upstream
 boost_patches += boost.unordered.Wshadow.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9902
