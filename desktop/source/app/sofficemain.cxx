@@ -61,13 +61,13 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
     const desktop::CommandLineArgs& rCmdLineArgs = desktop::Desktop::GetCommandLineArgs();
-    OUString aUnknown( rCmdLineArgs.GetUnknown() );
-    if ( !aUnknown.isEmpty() )
-    {
-        desktop::Desktop::InitApplicationServiceManager();
-        desktop::displayCmdlineHelp( aUnknown );
-        return EXIT_FAILURE;
-    }
+    // OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    // if ( !aUnknown.isEmpty() )
+    // {
+    //     desktop::Desktop::InitApplicationServiceManager();
+    //     desktop::displayCmdlineHelp( aUnknown );
+    //     return EXIT_FAILURE;
+    // }
     if ( rCmdLineArgs.IsHelp() )
     {
         desktop::Desktop::InitApplicationServiceManager();

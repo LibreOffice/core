@@ -1365,12 +1365,12 @@ int Desktop::Main()
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
 #if HAVE_FEATURE_DESKTOP
-    OUString aUnknown( rCmdLineArgs.GetUnknown() );
-    if ( !aUnknown.isEmpty() )
-    {
-        displayCmdlineHelp( aUnknown );
-        return EXIT_FAILURE;
-    }
+    // OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    // if ( !aUnknown.isEmpty() )
+    // {
+    //     displayCmdlineHelp( aUnknown );
+    //     return EXIT_FAILURE;
+    // }
     if ( rCmdLineArgs.IsHelp() )
     {
         displayCmdlineHelp( OUString() );

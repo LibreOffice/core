@@ -58,6 +58,9 @@
 #include <basebmp/bitmapdevice.hxx>
 #endif
 
+// We also need to hackily be able to start the main libreoffice thread
+#include "../app/sofficemain.h"
+
 using namespace css;
 using namespace utl;
 
@@ -587,6 +590,12 @@ static void initialize_uno(const OUString &aAppProgramURL)
     // configmgr setup ?
 }
 
+static void* lo_startmain(void*)
+{
+    soffice_main();
+    return 0;
+}
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 {
     (void) pThis;
@@ -627,8 +636,27 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         force_c_locale();
 
         // Force headless
+        // the "svp" headless vcl backend isn't able to do tiled rendering for
+        // us -- we need to use a full featured backend, i.e. "gen" or "gtk",
+        // gtk seems to be somewhat better.
         rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
-        InitVCL();
+//         InitVCL();
+        // InitVCL() happens in soffice_main for us -- and we can't call InitVCL twice
+        // unfortunately -- which is annoying since (see below)
+
+        pthread_t thread;
+        pthread_create(&thread, 0, lo_startmain, NULL);
+        sleep(10);
+        // We'll segfault trying to access Application if we're too fast...
+        // Specifically pImplSVData doesn't exist until InitVCL has been called,
+        // and that won't be immediate, but we can't call InitVCL ourselves
+        // as soffice_main already does so, but InitVCL would then fail
+        // within soffice_main if we have already called it earlier.
+        //
+        // And there's also a chance of deadlock if we try to open documents
+        // too early -- when running in a debugger we therefore need quite
+        // a large delay here (for now).
+
         Application::EnableHeadlessMode(true);
 
         ErrorHandler::RegisterDisplay(aBasicErrorFunc);
