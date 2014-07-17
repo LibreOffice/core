@@ -922,6 +922,7 @@ ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc/libxml2.lib \
 )
+$(call gb_LinkTarget_use_external,$(1),icu_headers)
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2 \
