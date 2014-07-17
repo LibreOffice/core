@@ -1603,15 +1603,18 @@ void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 
 void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
+    // Store the old tab number in sc::UpdatedRangeNames for
+    // ScTokenArray::AdjustReferenceOnInsertedTab() to check with
+    // isNameModified()
+    if (mpRangeName)
+        mpRangeName->UpdateInsertTab(rCxt, nTab);
+
     if (nTab >= rCxt.mnInsertPos)
     {
         nTab += rCxt.mnSheets;
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab - 1 ,nTab);
     }
-
-    if (mpRangeName)
-        mpRangeName->UpdateInsertTab(rCxt, nTab);
 
     if (mpCondFormatList)
         mpCondFormatList->UpdateInsertTab(rCxt);
@@ -1624,15 +1627,18 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 
 void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
+    // Store the old tab number in sc::UpdatedRangeNames for
+    // ScTokenArray::AdjustReferenceOnDeletedTab() to check with
+    // isNameModified()
+    if (mpRangeName)
+        mpRangeName->UpdateDeleteTab(rCxt, nTab);
+
     if (nTab > rCxt.mnDeletePos)
     {
         nTab -= rCxt.mnSheets;
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab + 1,nTab);
     }
-
-    if (mpRangeName)
-        mpRangeName->UpdateDeleteTab(rCxt, nTab);
 
     if (mpCondFormatList)
         mpCondFormatList->UpdateDeleteTab(rCxt);
