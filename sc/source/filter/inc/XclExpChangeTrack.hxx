@@ -570,10 +570,11 @@ public:
 class XclExpChangeTrack : protected XclExpRoot
 {
     typedef boost::ptr_vector<ExcRecord> RecListType;
+    typedef boost::ptr_vector<XclExpChTrTabIdBuffer> TabIdBufferType;
     RecListType maRecList;           // list of "Revision Log" stream records
     std::stack<XclExpChTrAction*> aActionStack;
     XclExpChTrTabIdBuffer*        pTabIdBuffer;
-    std::vector<XclExpChTrTabIdBuffer*> maBuffers;
+    TabIdBufferType maBuffers;
 
     ScDocument*                 pTempDoc;           // empty document
 

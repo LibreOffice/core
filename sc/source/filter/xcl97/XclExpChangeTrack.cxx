@@ -1459,10 +1459,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
 
 XclExpChangeTrack::~XclExpChangeTrack()
 {
-    std::vector<XclExpChTrTabIdBuffer*>::iterator pIter;
-    for ( pIter = maBuffers.begin(); pIter != maBuffers.end(); ++pIter )
-        delete *pIter;
-
     while( !aActionStack.empty() )
     {
         delete aActionStack.top();
