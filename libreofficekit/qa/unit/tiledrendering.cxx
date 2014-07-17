@@ -14,6 +14,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cstdlib>
 #include <string>
+#include <stdio.h>
 
 #include <sal/types.h>
 #include <tools/stream.hxx>
@@ -66,6 +67,13 @@ void TiledRenderingTest::testOverlay()
     const string sInstDir = getenv( "INSTDIR" );
     const string sLOPath = sInstDir + "/program";
     const string sDocPath = sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
+    const string sLockFile = sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
+
+    // FIXME: this is a temporary hack: LOK will fail when trying to open a
+    // locked file, and since we're reusing the file for a different unit
+    // test it's entirely possible that an unwanted lock file will remain.
+    // Hence forcefully remove it here.
+    remove( sLockFile.c_str() );
 
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       sLOPath.c_str() ) );
