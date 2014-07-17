@@ -25,7 +25,6 @@
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-using ::com::sun::star::lang::Locale;
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
 using ::boost::unordered_map;
@@ -41,7 +40,7 @@ enum LocaleMatch
     LOCALE_MATCH_ALL
 };
 
-static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const LanguageTag& rLanguageTag2)
+static LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const LanguageTag& rLanguageTag2)
 {
     LocaleMatch eMatchLevel = LOCALE_MATCH_NONE;
     LanguageTag aLanguageTag1( rLocale1);
@@ -67,7 +66,7 @@ static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const LanguageTag& r
     return eMatchLevel;
 }
 
-ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const Locale& rLocale) :
+ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const lang::Locale& rLocale) :
     mpName(pName),
     meOpCode(eOpCode),
     mrLocale(rLocale)
@@ -77,7 +76,7 @@ ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const Locale
 ::std::auto_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance(NULL);
 
 static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
-                            OpCode eOpCode = ocNone, const Locale* pLocale = NULL)
+                            OpCode eOpCode = ocNone, const lang::Locale* pLocale = NULL)
 {
     ScCellKeywordHashMap::const_iterator itrEnd = aMap.end();
     ScCellKeywordHashMap::const_iterator itr = aMap.find(rName);
@@ -94,7 +93,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
         return;
     }
 
-    LanguageTag aLanguageTag( pLocale ? *pLocale : Locale("","",""));
+    LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale("","",""));
     const sal_Char* aBestMatchName = itr->second.front().mpName;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
@@ -158,7 +157,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     rName = OUString::createFromAscii(aBestMatchName);
 }
 
-void ScCellKeywordTranslator::transKeyword(OUString& rName, const Locale* pLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* pLocale, OpCode eOpCode)
 {
     if ( !spInstance.get() )
         spInstance.reset( new ScCellKeywordTranslator );
@@ -204,7 +203,7 @@ void ScCellKeywordTranslator::init()
     #include "cellkeywords.inl"
 }
 
-void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pName, const Locale& rLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pName, const lang::Locale& rLocale, OpCode eOpCode)
 {
     ScCellKeyword aKeyItem( pName, eOpCode, rLocale );
 
@@ -222,7 +221,7 @@ void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pNa
         itr->second.push_back(aKeyItem);
 }
 
-void ScCellKeywordTranslator::addToMap(const TransItem* pItems, const Locale& rLocale)
+void ScCellKeywordTranslator::addToMap(const TransItem* pItems, const lang::Locale& rLocale)
 {
     for (sal_uInt16 i = 0; pItems[i].from != NULL; ++i)
         addToMap(OUString(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);

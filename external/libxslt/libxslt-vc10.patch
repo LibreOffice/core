@@ -4,7 +4,7 @@
  CFLAGS = /nologo /D "WIN32" /D "_WINDOWS" /D "_MBCS" /W3 $(CRUNTIME) /D "_REENTRANT"
  CFLAGS = $(CFLAGS) /I$(BASEDIR) /I$(XSLT_SRCDIR) /I$(INCPREFIX)
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
-+CFLAGS = $(CFLAGS) $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include
++CFLAGS = $(CFLAGS) $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
  
  # The linker and its options.
  LD = link.exe

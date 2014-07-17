@@ -19,7 +19,7 @@
 
 using namespace utl;
 using namespace com::sun::star::uno;
-using ::com::sun::star::lang::Locale;
+namespace lang = ::com::sun::star::lang;
 using ::com::sun::star::i18n::LocaleDataItem;
 
 TYPEINIT1(ScTpFormulaItem, SfxPoolItem);
@@ -71,7 +71,7 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     rSepArrayCol = ";";
     rSepArrayRow = "|";
 
-    const Locale& rLocale = *ScGlobal::GetLocale();
+    const lang::Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
     if (rLang == "ru")
         // Don't do automatic guess for these languages, and fall back to
