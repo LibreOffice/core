@@ -77,12 +77,10 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
 
 namespace
 {
-    typedef Reference< XInterface > FormComponent;
-
     class FormComponentInfo
     {
     public:
-        size_t childCount( const FormComponent& _component ) const
+        size_t childCount( const Reference< XInterface >& _component ) const
         {
             Reference< XIndexAccess > xContainer( _component, UNO_QUERY );
             if ( xContainer.is() )
@@ -90,14 +88,14 @@ namespace
             return 0;
         }
 
-        FormComponent getChild( const FormComponent& _component, size_t _index ) const
+        Reference< XInterface > getChild( const Reference< XInterface >& _component, size_t _index ) const
         {
             Reference< XIndexAccess > xContainer( _component, UNO_QUERY_THROW );
-            return FormComponent( xContainer->getByIndex( _index ), UNO_QUERY );
+            return Reference< XInterface >( xContainer->getByIndex( _index ), UNO_QUERY );
         }
     };
 
-    typedef ::std::pair< FormComponent, FormComponent > FormComponentPair;
+    typedef ::std::pair< Reference< XInterface >, Reference< XInterface > > FormComponentPair;
 
     class FormHierarchyComparator
     {
