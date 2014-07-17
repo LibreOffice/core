@@ -98,6 +98,10 @@ SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s ) : rStrings( r )
 SbiSymPool::~SbiSymPool()
 {}
 
+sal_uInt16 SbiSymPool::GetSize() const
+{
+    return aData.size();
+}
 
 SbiSymDef* SbiSymPool::First()
 {
@@ -121,7 +125,7 @@ SbiSymDef* SbiSymPool::AddSym( const OUString& rName )
     p->nId     = rStrings.Add( rName );
     p->nProcId = nProcId;
     p->pIn     = this;
-    aData.insert( aData.begin() + p->nPos, p );
+    aData.Insert( p->nPos, p );
     return p;
 }
 
@@ -133,7 +137,7 @@ SbiProcDef* SbiSymPool::AddProc( const OUString& rName )
     // procs are always local
     p->nProcId = 0;
     p->pIn     = this;
-    aData.insert( aData.begin() + p->nPos, p );
+    aData.Insert( p->nPos, p );
     return p;
 }
 
@@ -172,7 +176,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             pDef->nProcId = nProcId;
         }
         pDef->pIn = this;
-        aData.insert( aData.begin() + pDef->nPos, pDef );
+        aData.Insert( pDef->nPos, pDef );
     }
 }
 
@@ -538,11 +542,28 @@ SbiConstDef* SbiConstDef::GetConstDef()
 
 SbiSymbols::~SbiSymbols()
 {
-    for( const_iterator it = begin(); it != end(); ++it )
+    for( std::vector<SbiSymDef*>::const_iterator it = mSymDefs.begin(); it != mSymDefs.end(); ++it )
     {
         delete *it;
     }
 };
 
+size_t SbiSymbols::size() const
+{
+    return mSymDefs.size();
+}
+
+SbiSymDef *&SbiSymbols::operator[](size_t i) {
+    return mSymDefs[i];
+}
+
+SbiSymDef *SbiSymbols::operator[](size_t i) const {
+    return mSymDefs[i];
+}
+
+void SbiSymbols::Insert(size_t i, SbiSymDef *p)
+{
+    mSymDefs.insert(mSymDefs.begin() + i, p);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

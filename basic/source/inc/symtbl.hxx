@@ -50,10 +50,18 @@ public:
 };
 
 
-class SbiSymbols : public std::vector<SbiSymDef*>
+class SbiSymbols
 {
+private:
+    std::vector<SbiSymDef*> mSymDefs;
+
 public:
     ~SbiSymbols();
+
+    size_t size() const;
+    SbiSymDef *operator[](size_t i) const;
+    SbiSymDef *&operator[](size_t i);
+    void Insert(size_t i, SbiSymDef *p);
 };
 
 class SbiSymPool {
@@ -73,7 +81,7 @@ public:
 
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
     void   SetProcId( short n )         { nProcId = n;      }
-    sal_uInt16 GetSize() const              { return aData.size(); }
+    sal_uInt16 GetSize() const;
     SbiSymScope GetScope() const        { return eScope;    }
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
