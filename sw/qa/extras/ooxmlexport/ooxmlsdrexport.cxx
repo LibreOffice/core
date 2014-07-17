@@ -1729,6 +1729,17 @@ DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo80894, "TextFrameRotation.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // Rotation value was not roundtripped for textframe.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+    "rot","16200000");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
