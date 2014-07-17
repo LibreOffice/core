@@ -113,6 +113,8 @@ private:
     tErrorBarType        m_eErrorBarType;
     sal_uInt16           m_nConstDecimalDigits;
     sal_Int64            m_nConstSpinSize;
+    double               m_fPlusValue;
+    double               m_fMinusValue;
 
     Dialog *             m_pParentDialog;
     boost::scoped_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
