@@ -28,8 +28,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 \
-			$(if $(SYSTEM_LIBXML),$(LIBXML_LIBS),-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2)" \
+		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 $(LIBXML_LIBS)" \
 		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
 		RASQAL_LIBS="-L$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs -lrasqal" \
 		./configure --disable-static --disable-gtk-doc \
@@ -51,8 +50,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2  \
-			$(if $(SYSTEM_LIBXML),$(LIBXML_LIBS),-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2)" \
+		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 $(LIBXML_LIBS)" \
 		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
 		RASQAL_LIBS="-L$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs -lrasqal" \
 		./configure --disable-gtk-doc \
