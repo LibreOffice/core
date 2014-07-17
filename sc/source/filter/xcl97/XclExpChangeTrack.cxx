@@ -403,7 +403,7 @@ void XclExpChTrInfo::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
             XclXmlUtils::GetStreamName( NULL, "revisionLog", mnLogNumber ),
             rRevisionHeadersStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionLog+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog",
+            CREATE_OFFICEDOC_RELATION_TYPE("revisionLog"),
             &sRelationshipId );
 
     rRevisionHeadersStrm.WriteAttributes(
@@ -1579,7 +1579,7 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
             OUString( "revisions/userNames.xml" ),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames" );
+            CREATE_OFFICEDOC_RELATION_TYPE("usernames"));
     pUserNames->startElement( XML_users,
             XML_xmlns,                  "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
@@ -1603,7 +1603,7 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
             OUString( "revisions/revisionHeaders.xml" ),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionHeaders+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders" );
+            CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
     // OOXTODO: XML_userinfo elements for each user editing the file
     //          Doesn't seem to be supported by .xls output either (based on
     //          contents of XclExpChangeTrack::WriteUserNamesStream()).
