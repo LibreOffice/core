@@ -1267,7 +1267,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
         return sal_False;
 #ifdef DBG_UTIL
     Data_Impl* pDataObject = Find( pImpl->aData, pTabCtrl->GetCurPageId() );
-    DBG_ASSERT( pDataObject, "no Data structur for current page" );
+    DBG_ASSERT( pDataObject, "no Data structure for current page" );
     if ( pPage->HasExchangeSupport() && pDataObject->bOnDemand )
     {
         DBG_WARNING( "Data exchange in ItemsOnDemand is not desired!" );

@@ -433,7 +433,7 @@ struct OBroadcastHelperVar
     sal_Bool                            bInDispose;
 
     /**
-      Initialize the structur. bDispose and bInDispose are set to false.
+      Initialize the structure. bDispose and bInDispose are set to false.
       @param rMutex_ the mutex reference.
      */
     OBroadcastHelperVar( ::osl::Mutex & rMutex_ )

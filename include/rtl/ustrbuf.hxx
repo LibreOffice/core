@@ -1386,7 +1386,7 @@ private:
     }
 
     /**
-        A pointer to the data structur which contains the data.
+        A pointer to the data structure which contains the data.
      */
     rtl_uString * pData;
 

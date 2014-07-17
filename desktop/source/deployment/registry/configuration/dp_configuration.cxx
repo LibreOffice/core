@@ -754,7 +754,7 @@ void BackendImpl::PackageImpl::processPackage_(
             {
                 //If the xcu file was installed before the configmgr was chaned
                 //to use the configmgr.ini, one needed to rebuild to whole directory
-                //structur containing the xcu, xcs files from all extensions. Now,
+                //structure containing the xcu, xcs files from all extensions. Now,
                 //we just add all other xcu/xcs files to the configmgr.ini instead of
                 //rebuilding the directory structure.
                 OUString url2(

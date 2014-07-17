@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 /**
-    The implementation structur of a locale. Do not create this structure
+    The implementation structure of a locale. Do not create this structure
     direct. Only use the functions rtl_locale_register and
     rtl_locale_setDefault. The strings Language, Country and Variant
     are constants, so it is not necessary to acquire and release them.

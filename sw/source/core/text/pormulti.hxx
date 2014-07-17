@@ -31,10 +31,10 @@ class SwTxtAttr;
 class SfxPoolItem;
 class SwFont;
 
-// SwMultiCreator is a small structur to create a multiportion.
+// SwMultiCreator is a small structure to create a multiportion.
 // It contains the kind of multiportion and a textattribute
 // or a poolitem.
-// The GetMultiCreator-function fills this structur and
+// The GetMultiCreator-function fills this structure and
 // the Ctor of the SwMultiPortion uses it.
 #define SW_MC_DOUBLE    0
 #define SW_MC_RUBY      1
@@ -50,7 +50,7 @@ struct SwMultiCreator
 };
 
 // A two-line-portion (SwMultiPortion) could have surrounding brackets,
-// in this case the structur SwBracket will be used.
+// in this case the structure SwBracket will be used.
 struct SwBracket
 {
     sal_Int32 nStart;      // Start of text attribute determins the font

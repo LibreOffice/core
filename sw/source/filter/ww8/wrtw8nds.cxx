@@ -950,7 +950,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
     m_rWW8Export.OutputField( 0, ww::eHYPERLINK, sURL, WRITEFIELD_CMD_END );
 
-    // now write the picture structur
+    // now write the picture structure
     sURL = aURL.GetURLNoMark();
 
     // Compare the URL written by AnalyzeURL with the original one to see if

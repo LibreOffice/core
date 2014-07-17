@@ -354,7 +354,7 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
         rInf.X( rInf.X() + PreWidth() );
 }
 
-// creates the bracket-structur
+// creates the bracket-structure
 // and fills it, if not both characters are 0x00.
 void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 {

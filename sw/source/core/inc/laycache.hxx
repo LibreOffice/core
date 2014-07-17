@@ -32,7 +32,7 @@ class SvStream;
  * Call Write(..) with a stream and the document to save and the page break
  * information of the document will be written.
  * Call Read(..) with a stream and the member pLayCacheImpl will
- * read the information from the stream and store it in an internal structur.
+ * read the information from the stream and store it in an internal structure.
  * There's a simple locking mechanism at these classes,
  * if somebody reads the information, he increments the lock count by 1,
  * during the Read(..) function the lock count will set to $8000.

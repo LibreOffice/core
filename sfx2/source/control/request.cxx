@@ -49,7 +49,7 @@ struct SfxRequest_Impl: public SfxListener
 
 /*  [Description]
 
-    Implementation structur of the <SfxRequest> class.
+    Implementation structure of the <SfxRequest> class.
 */
 
 {
