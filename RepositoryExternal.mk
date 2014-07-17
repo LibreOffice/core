@@ -915,22 +915,24 @@ define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_use_package,$(1),xml2)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,xml2)/include \
+	$(LIBXML_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(LIBXML_LIBS) \
 )
 
 ifeq ($(COM),MSC)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc/libxml2.lib \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2 \
-)
+$(call gb_LinkTarget_use_external,$(1),icu_headers)
 endif
 
 endef
 define gb_ExternalProject__use_libxml2
 $(call gb_ExternalProject_use_package,$(1),xml2)
+
+ifeq ($(COM),MSC)
+$(call gb_ExternalProject_use_external_project,$(1),icu)
+endif
 
 endef
 
