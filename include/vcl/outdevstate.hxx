@@ -48,7 +48,7 @@
 #define PUSH_OVERLINECOLOR              ((sal_uInt16)0x2000)
 #define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
 #define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
-#define PUSH_ALL                        ((sal_uInt16)0xFFFF)
+const sal_uInt16 PUSH_ALL =             0xFFFF;
 
 class OutDevState
 {

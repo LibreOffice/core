@@ -89,7 +89,7 @@ private:
 
     TOOLS_DLLPRIVATE const ImpRCStack * StackTop( sal_uInt32 nOff = 0 ) const
     {
-        return (((int)nOff >= nCurStack) ? NULL : &aStack[nCurStack-nOff]);
+        return (static_cast<int>(nOff) >= nCurStack) ? NULL : &aStack[nCurStack-nOff];
     }
     TOOLS_DLLPRIVATE void  Init( const OUString& rFileName );
 
@@ -200,22 +200,22 @@ public:
 
 inline sal_uInt32 RSHEADER_TYPE::GetId()
 {
-    return (sal_uInt32)ResMgr::GetLong( &nId );
+    return static_cast<sal_uInt32>(ResMgr::GetLong( &nId ));
 }
 
 inline RESOURCE_TYPE RSHEADER_TYPE::GetRT()
 {
-    return (RESOURCE_TYPE)ResMgr::GetLong( &nRT );
+    return static_cast<RESOURCE_TYPE>(ResMgr::GetLong( &nRT ));
 }
 
 inline sal_uInt32 RSHEADER_TYPE::GetGlobOff()
 {
-    return (sal_uInt32)ResMgr::GetLong( &nGlobOff );
+    return static_cast<sal_uInt32>(ResMgr::GetLong( &nGlobOff ));
 }
 
 inline sal_uInt32 RSHEADER_TYPE::GetLocalOff()
 {
-    return (sal_uInt32)ResMgr::GetLong( &nLocalOff );
+    return static_cast<sal_uInt32>(ResMgr::GetLong( &nLocalOff ));
 }
 
 #endif

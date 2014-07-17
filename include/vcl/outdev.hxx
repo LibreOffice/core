@@ -144,21 +144,21 @@ namespace vcl
 // OutputDevice-Types
 
 // Flags for DrawText()
-#define TEXT_DRAW_DISABLE               ((sal_uInt16)0x0001)
-#define TEXT_DRAW_MNEMONIC              ((sal_uInt16)0x0002)
-#define TEXT_DRAW_MONO                  ((sal_uInt16)0x0004)
-#define TEXT_DRAW_CLIP                  ((sal_uInt16)0x0008)
-#define TEXT_DRAW_LEFT                  ((sal_uInt16)0x0010)
-#define TEXT_DRAW_CENTER                ((sal_uInt16)0x0020)
-#define TEXT_DRAW_RIGHT                 ((sal_uInt16)0x0040)
-#define TEXT_DRAW_TOP                   ((sal_uInt16)0x0080)
-#define TEXT_DRAW_VCENTER               ((sal_uInt16)0x0100)
-#define TEXT_DRAW_BOTTOM                ((sal_uInt16)0x0200)
-#define TEXT_DRAW_ENDELLIPSIS           ((sal_uInt16)0x0400)
-#define TEXT_DRAW_PATHELLIPSIS          ((sal_uInt16)0x0800)
-#define TEXT_DRAW_MULTILINE             ((sal_uInt16)0x1000)
-#define TEXT_DRAW_WORDBREAK             ((sal_uInt16)0x2000)
-#define TEXT_DRAW_NEWSELLIPSIS          ((sal_uInt16)0x4000)
+const sal_uInt16 TEXT_DRAW_DISABLE      = 0x0001,
+                 TEXT_DRAW_MNEMONIC     = 0x0002,
+                 TEXT_DRAW_MONO         = 0x0004,
+                 TEXT_DRAW_CLIP         = 0x0008,
+                 TEXT_DRAW_LEFT         = 0x0010,
+                 TEXT_DRAW_CENTER       = 0x0020,
+                 TEXT_DRAW_RIGHT        = 0x0040,
+                 TEXT_DRAW_TOP          = 0x0080,
+                 TEXT_DRAW_VCENTER      = 0x0100,
+                 TEXT_DRAW_BOTTOM       = 0x0200,
+                 TEXT_DRAW_ENDELLIPSIS  = 0x0400,
+                 TEXT_DRAW_PATHELLIPSIS = 0x0800,
+                 TEXT_DRAW_MULTILINE    = 0x1000,
+                 TEXT_DRAW_WORDBREAK    = 0x2000,
+                 TEXT_DRAW_NEWSELLIPSIS = 0x4000;
 // in the long run we should make text style flags longer
 // but at the moment we can get away with this 2 bit field for ellipsis style
 #define TEXT_DRAW_CENTERELLIPSIS        (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS)

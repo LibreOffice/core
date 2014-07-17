@@ -871,13 +871,13 @@ inline void Bitmap::SetPrefSize( const Size& rSize )
 
 inline sal_uLong Bitmap::GetColorCount() const
 {
-    return( 1UL << (sal_uLong) GetBitCount() );
+    return 1UL << static_cast<sal_uLong>( GetBitCount() );
 }
 
 inline sal_uLong Bitmap::GetSizeBytes() const
 {
     const Size aSizePix( GetSizePixel() );
-    return( ( (sal_uLong) aSizePix.Width() * aSizePix.Height() * GetBitCount() ) >> 3UL );
+    return ( static_cast<sal_uLong>( aSizePix.Width() ) * aSizePix.Height() * GetBitCount() ) >> 3UL;
 }
 
 #endif // INCLUDED_VCL_BITMAP_HXX
