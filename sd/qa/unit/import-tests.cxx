@@ -555,7 +555,7 @@ void SdFiltersTest::testBnc870237()
 
 void SdFiltersTest::testBnc887225()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx") );
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx"), PPTX );
     // In the document, lastRow and lastCol table properties are used.
     // Make sure styles are set properly for individual cells.
 

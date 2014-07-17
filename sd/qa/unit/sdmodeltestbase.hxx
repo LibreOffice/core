@@ -168,7 +168,6 @@ protected:
     sd::DrawDocShellRef saveAndReload(sd::DrawDocShell *pShell, sal_Int32 nExportType)
     {
         FileFormat* pFormat = getFormat(nExportType);
-        OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
         save(pShell, pFormat, aTempFile);
