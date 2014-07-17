@@ -738,6 +738,11 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
     mpStream->markLastParagraphInSection( );
 }
 
+void OOXMLFastContextHandler::setLastSectionGroup()
+{
+    mpStream->markLastSectionGroup( );
+}
+
 void OOXMLFastContextHandler::newProperty
 (const Id & /*nId*/, OOXMLValue::Pointer_t /*pVal*/)
 {

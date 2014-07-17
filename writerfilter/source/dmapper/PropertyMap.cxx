@@ -619,7 +619,7 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
 
 
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
-                            uno::Reference< beans::XPropertySet > xColumnContainer )
+                            uno::Reference< beans::XPropertySet > xColumnContainer, bool bLast )
 {
     uno::Reference< text::XTextColumns > xColumns;
     try
@@ -671,6 +671,8 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
                 rPropNameSupplier.GetName( PROP_SEPARATOR_LINE_IS_ON ),
                 uno::makeAny( m_bSeparatorLineIsOn ));
         xColumnContainer->setPropertyValue( sTextColumns, uno::makeAny( xColumns ) );
+        if (bLast)
+            xColumnContainer->setPropertyValue("DontBalanceTextColumns", uno::makeAny(true));
     }
     catch( const uno::Exception& )
     {
@@ -980,7 +982,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         uno::Reference< beans::XPropertySet > xSection =
                                     rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if( m_nColumnCount > 0 && xSection.is())
-            ApplyColumnProperties( xSection );
+            ApplyColumnProperties( xSection, rDM_Impl.GetIsLastSectionGroup() );
         uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
         if (xRangeProperties.is())
         {
@@ -1036,7 +1038,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         uno::Reference< text::XTextColumns > xColumns;
         if( m_nColumnCount > 0 )
-            xColumns = ApplyColumnProperties( xFollowPageStyle );
+            xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl.GetIsLastSectionGroup() );
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
@@ -1197,6 +1199,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
         }
     }
+    rDM_Impl.SetIsLastSectionGroup(false);
     rDM_Impl.SetIsFirstParagraphInSection(true);
 }
 
