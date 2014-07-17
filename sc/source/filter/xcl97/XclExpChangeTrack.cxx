@@ -1454,7 +1454,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     {
         PushActionRecord( *pScAction );
         const ScChangeAction* pPrevAction = pScAction->GetPrev();
-        pTempChangeTrack->Undo( pScAction->GetActionNumber(), pScAction->GetActionNumber() );
         pScAction = pPrevAction;
     }
 
