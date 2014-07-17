@@ -21,6 +21,7 @@
 #define INCLUDED_BASIC_SOURCE_INC_SYMTBL_HXX
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SbiConstDef;
 class SbiParser;
@@ -50,11 +51,7 @@ public:
 };
 
 
-class SbiSymbols : public std::vector<SbiSymDef*>
-{
-public:
-    ~SbiSymbols();
-};
+typedef boost::ptr_vector<SbiSymDef> SbiSymbols;
 
 class SbiSymPool {
     friend class SbiSymDef;
@@ -81,9 +78,9 @@ public:
     SbiSymDef* AddSym( const OUString& );
     SbiProcDef* AddProc( const OUString& );
     void Add( SbiSymDef* );
-    SbiSymDef* Find( const OUString& ) const; // variable name
-    SbiSymDef* FindId( sal_uInt16 ) const;
-    SbiSymDef* Get( sal_uInt16 ) const;     // find variable per position
+    SbiSymDef* Find( const OUString& ); // variable name
+    const SbiSymDef* FindId( sal_uInt16 ) const;
+    SbiSymDef* Get( sal_uInt16 );     // find variable per position
     SbiSymDef* First(), *Next();            // iterators
 
     sal_uInt32 Define( const OUString& );

@@ -110,7 +110,7 @@ SbiSymDef* SbiSymPool::Next()
     if( ++nCur >= aData.size() )
         return NULL;
     else
-        return aData[ nCur ];
+        return &aData[ nCur ];
 }
 
 
@@ -177,16 +177,16 @@ void SbiSymPool::Add( SbiSymDef* pDef )
 }
 
 
-SbiSymDef* SbiSymPool::Find( const OUString& rName ) const
+SbiSymDef* SbiSymPool::Find( const OUString& rName )
 {
     sal_uInt16 nCount = aData.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        SbiSymDef* p = aData[ nCount - i - 1 ];
-        if( ( !p->nProcId || ( p->nProcId == nProcId)) &&
-            ( p->aName.equalsIgnoreAsciiCase(rName)))
+        SbiSymDef &r = aData[ nCount - i - 1 ];
+        if( ( !r.nProcId || ( r.nProcId == nProcId)) &&
+            ( r.aName.equalsIgnoreAsciiCase(rName)))
         {
-            return p;
+            return &r;
         }
     }
     if( pParent )
@@ -200,14 +200,14 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName ) const
 }
 
 
-SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
+const SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 {
     for( sal_uInt16 i = 0; i < aData.size(); i++ )
     {
-        SbiSymDef* p = aData[ i ];
-        if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
+        const SbiSymDef &r = aData[ i ];
+        if( r.nId == n && ( !r.nProcId || ( r.nProcId == nProcId ) ) )
         {
-            return p;
+            return &r;
         }
     }
     if( pParent )
@@ -222,7 +222,7 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 
 // find via position (from 0)
 
-SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
+SbiSymDef* SbiSymPool::Get( sal_uInt16 n )
 {
     if( n >= aData.size() )
     {
@@ -230,7 +230,7 @@ SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
     }
     else
     {
-        return aData[ n ];
+        return &aData[ n ];
     }
 }
 
@@ -268,10 +268,10 @@ void SbiSymPool::CheckRefs()
 {
     for( sal_uInt16 i = 0; i < aData.size(); i++ )
     {
-        SbiSymDef* p = aData[ i ];
-        if( !p->IsDefined() )
+        SbiSymDef &r = aData[ i ];
+        if( !r.IsDefined() )
         {
-            pParser->Error( SbERR_UNDEF_LABEL, p->GetName() );
+            pParser->Error( SbERR_UNDEF_LABEL, r.GetName() );
         }
     }
 }
@@ -479,10 +479,10 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     if( !pIn && pOld->pIn )
     {
         // Replace old entry with the new one
-        pOld->pIn->aData[ pOld->nPos ] = this;
         nPos = pOld->nPos;
         nId  = pOld->nId;
         pIn  = pOld->pIn;
+        pIn->aData.replace( nPos, this ).release();
     }
     delete pOld;
 }
@@ -535,14 +535,5 @@ SbiConstDef* SbiConstDef::GetConstDef()
 {
     return this;
 }
-
-SbiSymbols::~SbiSymbols()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-    {
-        delete *it;
-    }
-};
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
