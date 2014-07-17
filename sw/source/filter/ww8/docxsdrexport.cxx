@@ -164,6 +164,8 @@ struct DocxSdrExport::Impl
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     std::set<SwFrmFmt*> m_aTextBoxes;
+    /// Preserved rotation for TextFrames.
+    sal_Int32 m_nDMLandVMLTextFrameRotation;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -186,7 +188,8 @@ struct DocxSdrExport::Impl
           m_nId(0),
           m_nSeq(0),
           m_bDMLAndVMLDrawingOpen(false),
-          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc))
+          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc)),
+          m_nDMLandVMLTextFrameRotation(0)
     {
     }
 
@@ -203,8 +206,7 @@ struct DocxSdrExport::Impl
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
-    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML)),
-      DMLandVMLTextFrameRotation(0)
+    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML))
 {
 }
 
@@ -1273,7 +1275,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                              FSEND);
 
         uno::Any aRotation ;
-        DMLandVMLTextFrameRotation = 0;
+        m_pImpl->m_nDMLandVMLTextFrameRotation = 0;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
         {
             uno::Sequence< beans::PropertyValue > propList;
@@ -1288,11 +1290,11 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                 }
             }
         }
-        aRotation >>= DMLandVMLTextFrameRotation ;
-        OString sRotation(OString::number((OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(DMLandVMLTextFrameRotation))));
+        aRotation >>= m_pImpl->m_nDMLandVMLTextFrameRotation ;
+        OString sRotation(OString::number((OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(m_pImpl->m_nDMLandVMLTextFrameRotation))));
         // Shape properties
         pFS->startElementNS(XML_wps, XML_spPr, FSEND);
-        if (DMLandVMLTextFrameRotation)
+        if (m_pImpl->m_nDMLandVMLTextFrameRotation)
         {
             pFS->startElementNS(XML_a, XML_xfrm,
                                 XML_rot, sRotation.getStr(),
@@ -1466,9 +1468,9 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyAttrList = pFS->createAttrList();
     m_pImpl->m_pTextboxAttrList = pFS->createAttrList();
     m_pImpl->m_aTextFrameStyle = "position:absolute";
-    if(!bTextBoxOnly)
+    if (!bTextBoxOnly)
     {
-        OString sRotation(OString::number(DMLandVMLTextFrameRotation / -100));
+        OString sRotation(OString::number(m_pImpl->m_nDMLandVMLTextFrameRotation / -100));
         m_pImpl->m_rExport.SdrExporter().getTextFrameStyle().append(";rotation:").append(sRotation);
     }
     m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
