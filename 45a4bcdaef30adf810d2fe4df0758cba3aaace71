@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_825ee043",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3735,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-17T07:44:48Z",
+      "side": 1,
+      "message": "This is a drawing-related test, please add it to ooxmlsdrexport.",
+      "revId": "45a4bcdaef30adf810d2fe4df0758cba3aaace71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_a248c488",
+        "filename": "sw/source/filter/ww8/docxsdrexport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-17T07:44:48Z",
+      "side": 1,
+      "message": "This class has an impl class in the .cxx file, please add members there.",
+      "revId": "45a4bcdaef30adf810d2fe4df0758cba3aaace71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
