@@ -4193,9 +4193,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
             uno::Any aValue(pSeq[i].Value);
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
 
-            if(!pEntry)
+            if (!pEntry)
             {
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException(OUString("Unknown property: ") + rPropName,
+                    static_cast<cppu::OWeakObject*>(this));
             }
 
             const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
