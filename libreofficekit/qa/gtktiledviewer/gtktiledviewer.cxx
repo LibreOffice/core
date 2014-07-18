@@ -35,7 +35,7 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     const char *sName = gtk_tool_button_get_stock_id( GTK_TOOL_BUTTON(pButton) );
 
     float fZoom = 0;
-    float fCurrentZoom;
+    float fCurrentZoom = 0;
 
     if ( pDocView )
     {
