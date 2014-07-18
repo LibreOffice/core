@@ -634,7 +634,7 @@ bool SwWW8AttrIter::IsDropCap( int nSwPos )
     bool bWholeWord = mrSwFmtDrop.GetWholeWord();
     if (bWholeWord)
     {
-        short nWordLen = rNd.GetDropLen(0);
+        const sal_Int32 nWordLen = rNd.GetDropLen(0);
         if(nSwPos == nWordLen && nSwPos != 0)
             return true;
     }

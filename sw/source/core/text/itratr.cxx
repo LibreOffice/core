@@ -980,9 +980,9 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTxtSize( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
-sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
+SwTwips SwTxtNode::GetWidthOfLeadingTabs() const
 {
-    sal_uInt16 nRet = 0;
+    SwTwips nRet = 0;
 
     sal_Int32 nIdx = 0;
 
@@ -1011,10 +1011,9 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
                 SWRECTFN( pFrm )
                 SwRect aRect;
                 pFrm->GetCharRect( aRect, aPos );
-                nRet = (sal_uInt16)
-                       ( pFrm->IsRightToLeft() ?
+                nRet = pFrm->IsRightToLeft() ?
                             (pFrm->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
-                            (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
+                            (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)();
                 break;
             }
         }

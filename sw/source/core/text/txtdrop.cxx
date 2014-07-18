@@ -120,7 +120,7 @@ SwDropPortion::~SwDropPortion()
 }
 
 // nWishLen = 0 indicates that we want a whole word
-MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
+sal_Int32 SwTxtNode::GetDropLen( sal_Int32 nWishLen ) const
 {
     sal_Int32 nEnd = GetTxt().getLength();
     if( nWishLen && nWishLen < nEnd )

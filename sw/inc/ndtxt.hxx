@@ -608,7 +608,7 @@ public:
 
        @return     the width of the leading whitespace
      */
-    sal_uInt16 GetWidthOfLeadingTabs() const;
+    SwTwips GetWidthOfLeadingTabs() const;
 
     /**
        Returns if the paragraph has a visible numbering or bullet.
@@ -695,7 +695,7 @@ public:
 
     /** @return actual count of initial chars for initial-function.
        If nWishLen == 0 that of first word. */
-    sal_uInt16 GetDropLen( sal_uInt16 nWishLen) const;
+    sal_Int32 GetDropLen(sal_Int32 nWishLen) const;
 
     /// Passes back info needed on the dropcap dimensions
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
