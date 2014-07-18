@@ -3693,6 +3693,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     , nCurFmtType(0)
     , nRetFmtType(0)
     , mnStringNoValueError(errNoValue)
+    , mnSubTotalFlags(0)
     , cPar(0)
     , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
     , meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
