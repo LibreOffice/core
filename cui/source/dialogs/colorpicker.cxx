@@ -641,12 +641,15 @@ void ColorFieldControl::Paint( const Rectangle& rRect )
     if( !mpBitmap )
         UpdateBitmap();
 
-    Bitmap aOutputBitmap( *mpBitmap );
+    if (mpBitmap)
+    {
+        Bitmap aOutputBitmap( *mpBitmap );
 
-    if( GetBitCount() <= 8 )
-        aOutputBitmap.Dither();
+        if( GetBitCount() <= 8 )
+            aOutputBitmap.Dither();
 
-    DrawBitmap( rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), aOutputBitmap );
+        DrawBitmap( rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), aOutputBitmap );
+    }
 
     // draw circle around current color
     if( maColor.IsDark() )
