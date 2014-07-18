@@ -1044,7 +1044,7 @@ DECLARE_RTFIMPORT_TEST(testFdo58646line, "fdo58646line.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo78502, "fdo78502.rtf")
 {
     // ";" separators were inserted as text
-    getParagraph(1, "");
+    getParagraph(1, "foo");
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo58646, "fdo58646.rtf")
