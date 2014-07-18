@@ -473,7 +473,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
         }
         else if (mxLockedCanvasContext.is())
         {
-            ShapePtr pShape = dynamic_cast<LockedCanvasContext*>(mxLockedCanvasContext.get())->getShape();
+            ShapePtr pShape = dynamic_cast<LockedCanvasContext&>(*mxLockedCanvasContext.get()).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
@@ -514,7 +514,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
         }
         else if (mxWpgContext.is())
         {
-            ShapePtr pShape = dynamic_cast<WpgContext*>(mxWpgContext.get())->getShape();
+            ShapePtr pShape = dynamic_cast<WpgContext&>(*mxWpgContext.get()).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
