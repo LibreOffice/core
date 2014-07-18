@@ -78,6 +78,7 @@ BEGIN
         "kok",
         "mni",
         "ca-XV",
+        "ca-XR",
         "sat",
         "ug",
         "om",

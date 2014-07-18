@@ -455,9 +455,10 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
             nLang = LANGUAGE_SPANISH_MODERN;
             break;
 
-         // Do not use ca-XV for document content.
+         // Do not use ca-XV, ca-XR for document content.
          /* TODO: remove in case we implement BCP47 language tags. */
         case LANGUAGE_USER_CATALAN_VALENCIAN:
+        case LANGUAGE_USER_CATALAN_VALENCIAN_RACV:
             nLang = LANGUAGE_CATALAN;
             break;
     }

@@ -37,6 +37,7 @@ bn-IN \
 bs \
 by \
 ca \
+ca-XR \
 ca-XV \
 cs \
 cy \

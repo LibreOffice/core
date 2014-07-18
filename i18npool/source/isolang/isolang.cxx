@@ -283,7 +283,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BELARUSIAN,                  "be", "BY" },
     { LANGUAGE_CATALAN,                     "ca", "ES" },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD" },   // Andorra
-    { LANGUAGE_USER_CATALAN_VALENCIAN,                     "ca", "XV" },   // XV: ISO 3166 user-assigned; workaround for UI localization only, do not use in document content!
+    { LANGUAGE_USER_CATALAN_VALENCIAN_RACV, "ca", "XR" },   // XR: ISO ???? user-assigned; workaround for UI localization only, do not use in document content!
+    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "XV" },   // XV: ISO 3166 user-assigned; workaround for UI localization only, do not use in document content!
     { LANGUAGE_CATALAN,                    "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; UI localization quirk only, do not use in document content!
 //    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "ES" },   // In case MS format files escaped into the wild, map them back.
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },

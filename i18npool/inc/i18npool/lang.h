@@ -459,6 +459,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_GASCON                0x0636  /* Gascon France */
 #define LANGUAGE_USER_GERMAN_BELGIUM        0x8007  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_GERMAN)) */
 #define LANGUAGE_USER_CATALAN_VALENCIAN     0x8003  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
+#define LANGUAGE_USER_CATALAN_VALENCIAN_RACV     0x8004  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
 #define LANGUAGE_USER_HAUSA_GHANA           0x8068  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HAUSA_NIGERIA)) */
 #define LANGUAGE_USER_EWE_GHANA             0x0637
 #define LANGUAGE_USER_ENGLISH_GHANA         0x8409  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
