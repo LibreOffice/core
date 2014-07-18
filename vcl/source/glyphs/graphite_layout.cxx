@@ -1212,8 +1212,8 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) con
 // The logic in this method must match that expected in MultiSalLayout which
 // is used when glyph fallback is in operation.
 int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
-        ::Point & aPosOut, int &glyph_slot, sal_Int32 * glyph_adv, int *char_index,
-        const PhysicalFontFace** /*pFallbackFonts*/ ) const
+                                   ::Point & aPosOut, int &glyph_slot, DeviceCoordinate* glyph_adv, int *char_index,
+                                   const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
   // Sanity check on the slot index.
   if (glyph_slot >= signed(mvGlyphs.size()))
@@ -1277,7 +1277,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"GetNextGlyphs g%d gid%d c%d x%ld,%ld adv%ld, pos %ld,%ld\n",
             glyph_slot - 1, glyph_itr->maGlyphId,
-            mvGlyph2Char[glyph_slot-1], glyph_itr->maLinearPos.X(), glyph_itr->maLinearPos.Y(), nGlyphAdvance,
+            mvGlyph2Char[glyph_slot-1], glyph_itr->maLinearPos.X(), glyph_itr->maLinearPos.Y(), (long)nGlyphAdvance,
             aPosOut.X(), aPosOut.Y());
 #endif
 

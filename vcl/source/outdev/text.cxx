@@ -1330,7 +1330,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     DeviceCoordinate* pDXPixelArray = NULL;
     if( nLogicalWidth && mbMap )
     {
-        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
+        nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
     }
 
     if( pDXArray)
@@ -1340,9 +1340,11 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
             // convert from logical units to font units using a temporary array
             pDXPixelArray = (DeviceCoordinate*)alloca( nLen * sizeof(DeviceCoordinate) );
             // using base position for better rounding a.k.a. "dancing characters"
-            DeviceCoordinate nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
+            DeviceCoordinate nPixelXOfs = LogicWidthToDeviceCoordinate( rLogicalPos.X() );
             for( int i = 0; i < nLen; ++i )
-                pDXPixelArray[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+            {
+                pDXPixelArray[i] = LogicWidthToDeviceCoordinate( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+            }
         }
         else
         {
@@ -1422,12 +1424,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         long nWidthFactor = pSalLayout->GetUnitsPerPixel();
         long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nExtraPixelWidth = 0;
+        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
+            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
@@ -1456,12 +1458,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
 
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nExtraPixelWidth = 0;
+        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
+            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
 
         // calculate un-hyphenated break position
@@ -1646,14 +1648,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     {
                         long        nMnemonicX;
                         long        nMnemonicY;
-                        long        nMnemonicWidth;
+                        DeviceCoordinate nMnemonicWidth;
 
                         long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLineLen );
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray,
                                                 nIndex, nLineLen );
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         long lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-                        nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
+                        nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( ::abs((long)(lc_x1 - lc_x2)) );
 
                         Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
                         nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
@@ -1714,14 +1716,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
         long nMnemonicX = 0;
         long nMnemonicY = 0;
-        long nMnemonicWidth = 0;
+        DeviceCoordinate nMnemonicWidth = 0;
         if ( nMnemonicPos != -1 )
         {
             long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * aStr.getLength() );
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
-            nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
+            nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( ::abs((long)(lc_x1 - lc_x2)) );
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );
             nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );

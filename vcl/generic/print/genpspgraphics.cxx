@@ -709,7 +709,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
 {
     const int nMaxGlyphs = 200;
     sal_GlyphId aGlyphAry[ nMaxGlyphs ];
-    sal_Int32   aWidthAry[ nMaxGlyphs ];
+    DeviceCoordinate aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
     int         aCharPosAry [ nMaxGlyphs ];
@@ -743,7 +743,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
         if( !nGlyphCount )
             break;
 
-        sal_Int32 nXOffset = 0;
+        DeviceOffset nXOffset = 0;
         for( int i = 0; i < nGlyphCount; ++i )
         {
             nXOffset += aWidthAry[ i ];

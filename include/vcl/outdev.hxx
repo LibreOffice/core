@@ -941,9 +941,12 @@ public:
                                               FontUnderline eOverline,
                                               bool bUnderlineAbove = false );
 
-    void                        ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
+    void                        ImplDrawTextLine( long nBaseX, long nX, long nY, DeviceCoordinate nWidth,
+                                                  FontStrikeout eStrikeout, FontUnderline eUnderline,
+                                                  FontUnderline eOverline, bool bUnderlineAbove );
 
-    void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
+    void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline,
+                                                   FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
 
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
 
