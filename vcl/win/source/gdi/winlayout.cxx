@@ -142,8 +142,8 @@ public:
     virtual void    DrawText( SalGraphics& ) const;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvances, int* pCharIndexes,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
@@ -514,8 +514,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 }
 
 int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPos, int& nStart,
-    long* pGlyphAdvances, int* pCharIndexes,
-    const PhysicalFontFace** /*pFallbackFonts*/ ) const
+                                    DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
+                                    const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     // return zero if no more glyph found
     if( nStart >= mnGlyphCount )
@@ -963,8 +963,8 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvances, int* pCharPosAry,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                   DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
@@ -1579,8 +1579,8 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 }
 
 int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-    int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry,
-    const PhysicalFontFace** /*pFallbackFonts*/ ) const
+                                    int& nStartx8, DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
+                                    const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     // HACK to allow fake-glyph insertion (e.g. for kashidas)
     // TODO: use iterator idiom instead of GetNextGlyphs(...)
@@ -2647,8 +2647,8 @@ public:
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-                      long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                      const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                                DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                                const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     // used by glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -2794,8 +2794,8 @@ void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) 
 }
 
 int GraphiteWinLayout::GetNextGlyphs( int length, sal_GlyphId* glyph_out,
-        ::Point & pos_out, int &glyph_slot, long * glyph_adv, int *char_index,
-        const PhysicalFontFace** pFallbackFonts ) const
+                                      ::Point& pos_out, int& glyph_slot, DeviceCoordinate* glyph_adv, int* char_index,
+                                      const PhysicalFontFace** pFallbackFonts ) const
 {
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;

@@ -7416,7 +7416,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aUnicodes.reserve( nMaxGlyphs );
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
-    long nAdvanceWidths[nMaxGlyphs];
+    DeviceCoordinate nAdvanceWidths[nMaxGlyphs];
     const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { NULL };
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
@@ -7655,7 +7655,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             Point aPos, aStartPt;
             sal_Int32 nWidth = 0;
-            long nAdvance = 0;
+            DeviceCoordinate nAdvance = 0;
             for( int nStart = 0;;)
             {
                 sal_GlyphId aGlyphId;
@@ -7758,7 +7758,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             Point aPos;
             sal_GlyphId aGlyphId;
-            long nAdvance;
+            DeviceCoordinate nAdvance;
             if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                 break;
 
