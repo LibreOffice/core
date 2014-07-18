@@ -286,7 +286,17 @@ public:
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
     static OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress, const ScTokenArray* pTokenArray );
     static OUString ToOUString( const XclExpString& s );
+
+    /**
+     * @return const char* literal "true" for true value, or literal "false"
+     *         for false value.
+     */
     static const char* ToPsz( bool b );
+
+    /**
+     * @return literal "1" for true value, or literal "0" for false value.
+     */
+    static const char* ToPsz10( bool b );
 
     static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue );
     static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue );

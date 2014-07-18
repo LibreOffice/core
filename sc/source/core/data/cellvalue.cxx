@@ -248,6 +248,13 @@ void ScCellValue::set( const EditTextObject& rEditText )
     mpEditText = rEditText.Clone();
 }
 
+void ScCellValue::set( EditTextObject* pEditText )
+{
+    clear();
+    meType = CELLTYPE_EDIT;
+    mpEditText = pEditText;
+}
+
 void ScCellValue::set( const ScFormulaCell& rFormula )
 {
     clear();
