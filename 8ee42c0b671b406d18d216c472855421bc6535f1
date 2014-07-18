@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_ed30eda0",
+        "filename": "include/svl/SfxBroadcaster.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-18T07:02:02Z",
+      "side": 1,
+      "message": "alignment",
+      "revId": "8ee42c0b671b406d18d216c472855421bc6535f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_8d20514b",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-18T07:02:02Z",
+      "side": 1,
+      "message": "Because of my comment below, this will have to change to something like:\n    return m_Listeners.size() - m_RemovedPositions.size() \u003e 0",
+      "revId": "8ee42c0b671b406d18d216c472855421bc6535f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_ad2af52a",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-18T07:02:02Z",
+      "side": 1,
+      "message": "this is used in loops over the listeners, which means that it has to return m_Listeners.size().\nDo a \"git grep -w GetListener\" to see what I mean.\nProbably best if you add a comment to that effect to this method for the next developer :-)",
+      "revId": "8ee42c0b671b406d18d216c472855421bc6535f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
