@@ -230,6 +230,7 @@ $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(cal
 $(call gb_Zip_Zip_internal,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR)/$(1))
 $(call gb_Zip_add_commandoptions,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(2)),--suffixes .ui)
 $(call gb_Zip_get_target,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(2))) : $(SRCDIR)/solenv/gbuild/UIConfig.mk
+$(call gb_Zip_set_install_name,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(2)),$(INSTROOT)/$(gb_UIConfig_INSTDIR)/$(1)/ui/res/$(2).zip)
 
 endef
 
@@ -262,7 +263,6 @@ endef
 define gb_UIConfig__add_uifile_for_lang
 $(call gb_Zip_add_file,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(3)),$(notdir $(2))/$(3).ui)
 $(call gb_Zip_add_dependency,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(3)),$(call gb_UILocalizeTarget_get_target,$(1)/$(notdir $(2))))
-$(call gb_Zip_set_install_name,$(call gb_UIConfig_get_zipname_for_lang,$(1),$(3)),$(INSTROOT)/$(gb_UIConfig_INSTDIR)/$(1)/ui/res/$(3).zip)
 
 endef
 
