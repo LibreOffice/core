@@ -661,6 +661,15 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         pthread_create(&thread, 0, lo_startmain, NULL);
         OfficeIPCThread::WaitForReady();
 
+        // If the Thread has been disabled again that indicates that a
+        // restart is required (or in any case we don't have a useable
+        // process around).
+        if (!OfficeIPCThread::IsEnabled())
+        {
+            fprintf(stderr, "LOK init failed -- restart required\n");
+            return false;
+        }
+
         Application::EnableHeadlessMode(true);
 
         ErrorHandler::RegisterDisplay(aBasicErrorFunc);
