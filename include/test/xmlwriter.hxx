@@ -37,6 +37,7 @@ public:
     void attribute(const OString& sTagName, const OUString& aValue);
     void attribute(const OString& sTagName, sal_Int32 aNumber);
 
+    void content(const OString& aValue);
     void content(const OUString& aValue);
 };
 
