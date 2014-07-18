@@ -60,8 +60,10 @@
 
 // We also need to hackily be able to start the main libreoffice thread
 #include "../app/sofficemain.h"
+#include "../app/officeipcthread.hxx"
 
 using namespace css;
+using namespace desktop;
 using namespace utl;
 
 using namespace boost;
@@ -637,22 +639,27 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
         // Force headless -- this is only for bitmap rendering.
         rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
-//         InitVCL();
-        // InitVCL() happens in soffice_main for us -- and we can't call InitVCL twice
-        // unfortunately -- which is annoying since (see below)
 
+        // We could use InitVCL() here -- and used to before using soffice_main,
+        // however that now deals with the initialisation for us (and it's not
+        // possible to try to set up VCL twice.
+
+        // Instead VCL init is done for us by soffice_main in a separate thread,
+        // however we specifically can't proceed until this setup is complete
+        // (or you get segfaults trying to use VCL and/or deadlocks due to other
+        //  setup within soffice_main). Specifically the various Application::
+        // functions depend on VCL being ready -- the deadlocks would happen
+        // if you try to use loadDocument too early.
+
+        // The OfficeIPCThread is specifically set to be read when all the other
+        // init in Desktop::Main (run from soffice_main) is done. We can "enable"
+        // the Thread from wherever (it's done again in Desktop::Main), and can
+        // then use it to wait until we're definitely ready to continue.
+
+        OfficeIPCThread::EnableOfficeIPCThread();
         pthread_t thread;
         pthread_create(&thread, 0, lo_startmain, NULL);
-        sleep(10);
-        // We'll segfault trying to access Application if we're too fast...
-        // Specifically pImplSVData doesn't exist until InitVCL has been called,
-        // and that won't be immediate, but we can't call InitVCL ourselves
-        // as soffice_main already does so, but InitVCL would then fail
-        // within soffice_main if we have already called it earlier.
-        //
-        // And there's also a chance of deadlock if we try to open documents
-        // too early -- when running in a debugger we therefore need quite
-        // a large delay here (for now).
+        OfficeIPCThread::WaitForReady();
 
         Application::EnableHeadlessMode(true);
 
