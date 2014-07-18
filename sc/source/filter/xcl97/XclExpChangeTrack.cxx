@@ -40,7 +40,7 @@ static OString lcl_GuidToOString( sal_uInt8 aGuid[ 16 ] )
 {
     char sBuf[ 40 ];
     snprintf( sBuf, sizeof( sBuf ),
-            "{%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+            "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
             aGuid[ 0 ], aGuid[ 1 ], aGuid[ 2 ], aGuid[ 3 ], aGuid[ 4 ], aGuid[ 5 ], aGuid[ 6 ], aGuid[ 7 ],
             aGuid[ 8 ], aGuid[ 9 ], aGuid[ 10 ], aGuid[ 11 ], aGuid[ 12 ], aGuid[ 13 ], aGuid[ 14 ], aGuid[ 15 ] );
     return OString( sBuf );
@@ -394,7 +394,149 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
     pHeaders->write( ">" );
 }
 
-//___________________________________________________________________
+void XclExpXmlChTrHeaders::SetGUID( const sal_uInt8* pGUID )
+{
+    memcpy(maGUID, pGUID, 16);
+}
+
+void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr pHeaders = rStrm.GetCurrentStream();
+
+    pHeaders->write("<")->writeId(XML_headers);
+
+    rStrm.WriteAttributes(
+        XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        XML_guid,               lcl_GuidToOString(maGUID).getStr(),
+        XML_lastGuid,           NULL,   // OOXTODO
+        XML_shared,             NULL,   // OOXTODO
+        XML_diskRevisions,      NULL,   // OOXTODO
+        XML_history,            NULL,   // OOXTODO
+        XML_trackRevisions,     NULL,   // OOXTODO
+        XML_exclusive,          NULL,   // OOXTODO
+        XML_revisionId,         NULL,   // OOXTODO
+        XML_version,            NULL,   // OOXTODO
+        XML_keepChangeHistory,  NULL,   // OOXTODO
+        XML_protected,          NULL,   // OOXTODO
+        XML_preserveHistory,    NULL,   // OOXTODO
+        FSEND);
+
+    pHeaders->write(">");
+}
+
+XclExpXmlChTrHeader::XclExpXmlChTrHeader(
+    const OUString& rUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
+    sal_Int32 nLogNumber, const XclExpChTrTabIdBuffer& rBuf ) :
+    maUserName(rUserName), maDateTime(rDateTime), mnLogNumber(nLogNumber),
+    mnMinAction(0), mnMaxAction(0)
+{
+    memcpy(maGUID, pGUID, 16);
+    if (rBuf.GetBufferCount())
+    {
+        maTabBuffer.resize(rBuf.GetBufferCount());
+        rBuf.GetBufferCopy(&maTabBuffer[0]);
+    }
+}
+
+void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr pHeader = rStrm.GetCurrentStream();
+
+    pHeader->write("<")->writeId(XML_header);
+
+    OUString aRelId;
+    sax_fastparser::FSHelperPtr pRevLogStrm = rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName("xl/revisions/", "revisionLog", mnLogNumber),
+            XclXmlUtils::GetStreamName(NULL, "revisionLog", mnLogNumber),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionLog+xml",
+            CREATE_OFFICEDOC_RELATION_TYPE("revisionLog"),
+            &aRelId);
+
+    rStrm.WriteAttributes(
+        XML_guid, lcl_GuidToOString(maGUID).getStr(),
+        XML_dateTime, lcl_DateTimeToOString(maDateTime).getStr(),
+        XML_userName, XclXmlUtils::ToOString(maUserName).getStr(),
+        FSNS(XML_r, XML_id),  XclXmlUtils::ToOString(aRelId).getStr(),
+        FSEND);
+
+    if (mnMinAction)
+        rStrm.WriteAttributes(XML_minRId, OString::number(mnMinAction).getStr(), FSEND);
+
+    if (mnMaxAction)
+        rStrm.WriteAttributes(XML_maxRId, OString::number(mnMaxAction).getStr(), FSEND);
+
+    if (!maTabBuffer.empty())
+        // next available sheet index.
+        rStrm.WriteAttributes(XML_maxSheetId, OString::number(maTabBuffer.back()+1).getStr(), FSEND);
+
+    pHeader->write(">");
+
+    if (!maTabBuffer.empty())
+    {
+        // Write sheet index map.
+        size_t n = maTabBuffer.size();
+        pHeader->startElement(
+            XML_sheetIdMap,
+            XML_count, OString::number(n).getStr(),
+            FSEND);
+
+        for (size_t i = 0; i < n; ++i)
+        {
+            pHeader->singleElement(
+                XML_sheetId,
+                XML_val, OString::number(maTabBuffer[i]).getStr(),
+                FSEND);
+        }
+        pHeader->endElement(XML_sheetIdMap);
+    }
+
+    // Write all revision logs in a separate stream.
+
+    rStrm.PushStream(pRevLogStrm);
+
+    pRevLogStrm->write("<")->writeId(XML_revisions);
+
+    rStrm.WriteAttributes(
+        XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        FSEND);
+
+    pRevLogStrm->write(">");
+
+    std::vector<XclExpChTrAction*>::iterator it = maActions.begin(), itEnd = maActions.end();
+    for (; it != itEnd; ++it)
+    {
+        XclExpChTrAction* p = *it;
+        p->SaveXml(rStrm);
+    }
+
+    pRevLogStrm->write("</")->writeId(XML_revisions)->write(">");
+
+    rStrm.PopStream();
+
+    pHeader->write("</")->writeId(XML_header)->write(">");
+}
+
+void XclExpXmlChTrHeader::AppendAction( XclExpChTrAction* pAction )
+{
+    sal_uInt32 nActionNum = pAction->GetActionNumber();
+    if (!mnMinAction || mnMinAction > nActionNum)
+        mnMinAction = nActionNum;
+
+    if (!mnMaxAction || mnMaxAction < nActionNum)
+        mnMaxAction = nActionNum;
+
+    maActions.push_back(pAction);
+}
+
+XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID ) :
+    sUsername( rUsername ),
+    aDateTime( rDateTime )
+{
+    memcpy( aGUID, pGUID, 16 );
+}
 
 XclExpChTrInfo::~XclExpChTrInfo()
 {
@@ -423,35 +565,6 @@ sal_Size XclExpChTrInfo::GetLen() const
 {
     return 158;
 }
-
-void XclExpChTrInfo::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
-{
-    sax_fastparser::FSHelperPtr pHeader = rRevisionHeadersStrm.GetCurrentStream();
-
-    OUString sRelationshipId;
-    sax_fastparser::FSHelperPtr pRevisionLog = rRevisionHeadersStrm.CreateOutputStream(
-            XclXmlUtils::GetStreamName( "xl/revisions/", "revisionLog", mnLogNumber ),
-            XclXmlUtils::GetStreamName( NULL, "revisionLog", mnLogNumber ),
-            rRevisionHeadersStrm.GetCurrentStream()->getOutputStream(),
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionLog+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog",
-            &sRelationshipId );
-
-    rRevisionHeadersStrm.WriteAttributes(
-            XML_guid,               lcl_GuidToOString( aGUID ).getStr(),
-            XML_dateTime,           lcl_DateTimeToOString( aDateTime ).getStr(),
-            XML_maxSheetId,         NULL,   // OOXTODO
-            XML_userName,           XclXmlUtils::ToOString( sUsername ).getStr(),
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sRelationshipId ).getStr(),
-            XML_minRId,             NULL,   // OOXTODO
-            XML_maxRId,             NULL,   // OOXTODO
-            FSEND );
-    pHeader->write( ">" );
-
-    rRevisionHeadersStrm.PushStream( pRevisionLog );
-}
-
-//___________________________________________________________________
 
 XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( sal_uInt16 nCount ) :
     nBufSize( nCount ),
@@ -523,11 +636,8 @@ void XclExpChTrTabIdBuffer::Remove()
     nLastId--;
 }
 
-//___________________________________________________________________
-
-XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders )
+XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer )
     : nTabCount( rBuffer.GetBufferCount() )
-    , mbInRevisionHeaders( bInRevisionHeaders )
 {
     pBuffer = new sal_uInt16[ nTabCount ];
     rBuffer.GetBufferCopy( pBuffer );
@@ -566,31 +676,6 @@ sal_Size XclExpChTrTabId::GetLen() const
 {
     return nTabCount << 1;
 }
-
-void XclExpChTrTabId::SaveXml( XclExpXmlStream& rRevisionLogStrm )
-{
-    if( !mbInRevisionHeaders )
-        return;
-
-    sax_fastparser::FSHelperPtr pRevisionLog = rRevisionLogStrm.GetCurrentStream();
-    rRevisionLogStrm.PopStream();
-
-    sax_fastparser::FSHelperPtr pHeader = rRevisionLogStrm.GetCurrentStream();
-    pHeader->startElement( XML_sheetIdMap,
-            XML_count,  OString::number( nTabCount ).getStr(),
-            FSEND );
-    for( int i = 0; i < nTabCount; ++i )
-    {
-        pHeader->singleElement( XML_sheetId,
-                XML_val,    OString::number( pBuffer[ i ] ).getStr(),
-                FSEND );
-    }
-    pHeader->endElement( XML_sheetIdMap );
-
-    rRevisionLogStrm.PushStream( pRevisionLog );
-}
-
-//___________________________________________________________________
 
 // ! does not copy additional actions
 XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
@@ -1126,11 +1211,12 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
             XML_ua,     XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,     NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
             XML_sId,    OString::number(  GetTabId( aRange.aStart.Tab() ) ).getStr(),
-            XML_eol,    NULL,       // OOXTODO: not supported?
+            XML_eol,    XclXmlUtils::ToPsz10(mbEndOfList),
             XML_ref,    XclXmlUtils::ToOString( aRange ).getStr(),
             XML_action, lcl_GetAction( nOpCode ),
             XML_edge,   NULL,       // OOXTODO: ???
             FSEND );
+
     // OOXTODO: does this handle XML_rfmt, XML_undo?
     XclExpChTrAction* pAction = GetAddAction();
     while( pAction != NULL )
@@ -1318,17 +1404,6 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
     pStream->endElement( XML_rfmt );
 }
 
-//___________________________________________________________________
-
-class ExcXmlRecord : public ExcRecord
-{
-public:
-    virtual sal_Size    GetLen() const;
-    virtual sal_uInt16  GetNum() const;
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) = 0;
-};
-
 sal_Size ExcXmlRecord::GetLen() const
 {
     return 0;
@@ -1447,66 +1522,83 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     }
 
     // build record list
-    pHeader = new XclExpChTrHeader;
-    aRecList.push_back( new StartXmlElement( XML_headers, StartXmlElement::WRITE_NAMESPACES ) );
-    aRecList.push_back( pHeader );
-    aRecList.push_back( new XclExpChTr0x0195 );
-    aRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
-
-    OUString sLastUsername;
-    DateTime aLastDateTime( DateTime::EMPTY );
-    sal_uInt32 nIndex = 1;
-    sal_Int32 nLogNumber = 1;
-    while( !aActionStack.empty() )
+    if (GetOutput() == EXC_OUTPUT_BINARY)
     {
-        XclExpChTrAction* pAction = aActionStack.top();
-        aActionStack.pop();
+        pHeader = new XclExpChTrHeader;
+        maRecList.push_back( pHeader );
+        maRecList.push_back( new XclExpChTr0x0195 );
+        maRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
 
-        if( (nIndex == 1) || pAction->ForceInfoRecord() ||
-            (pAction->GetUsername() != sLastUsername) ||
-            (pAction->GetDateTime() != aLastDateTime) )
+        OUString sLastUsername;
+        DateTime aLastDateTime( DateTime::EMPTY );
+        sal_uInt32 nIndex = 1;
+        sal_Int32 nLogNumber = 1;
+        while( !aActionStack.empty() )
         {
-            if( nIndex != 1 )
+            XclExpChTrAction* pAction = aActionStack.top();
+            aActionStack.pop();
+
+            if( (nIndex == 1) || pAction->ForceInfoRecord() ||
+                (pAction->GetUsername() != sLastUsername) ||
+                (pAction->GetDateTime() != aLastDateTime) )
             {
-                aRecList.push_back( new EndXmlElement( XML_revisions ) );
-                aRecList.push_back( new EndHeaderElement() );
+                lcl_GenerateGUID( aGUID, bValidGUID );
+                sLastUsername = pAction->GetUsername();
+                aLastDateTime = pAction->GetDateTime();
+
+                nLogNumber++;
+                maRecList.push_back( new XclExpChTrInfo(sLastUsername, aLastDateTime, aGUID) );
+                maRecList.push_back( new XclExpChTrTabId(pAction->GetTabIdBuffer()) );
+                pHeader->SetGUID( aGUID );
             }
-
-            lcl_GenerateGUID( aGUID, bValidGUID );
-            sLastUsername = pAction->GetUsername();
-            aLastDateTime = pAction->GetDateTime();
-
-            aRecList.push_back( new StartXmlElement( XML_header, 0 ) );
-            aRecList.push_back( new XclExpChTrInfo( sLastUsername, aLastDateTime, aGUID, nLogNumber++ ) );
-            aRecList.push_back( new XclExpChTrTabId( pAction->GetTabIdBuffer(), true ) );
-            aRecList.push_back( new StartXmlElement( XML_revisions, StartXmlElement::WRITE_NAMESPACES | StartXmlElement::CLOSE_ELEMENT ) );
-            pHeader->SetGUID( aGUID );
+            pAction->SetIndex( nIndex );
+            maRecList.push_back( pAction );
         }
-        pAction->SetIndex( nIndex );
-        aRecList.push_back( pAction );
-    }
 
-    pHeader->SetGUID( aGUID );
-    pHeader->SetCount( nIndex - 1 );
-    if( nLogNumber > 1 )
-    {
-        aRecList.push_back( new EndXmlElement( XML_revisions ) );
-        aRecList.push_back( new EndHeaderElement() );
+        pHeader->SetGUID( aGUID );
+        pHeader->SetCount( nIndex - 1 );
+        maRecList.push_back( new ExcEof );
     }
-    aRecList.push_back( new EndXmlElement( XML_headers ) );
-    aRecList.push_back( new ExcEof );
+    else
+    {
+        XclExpXmlChTrHeaders* pHeaders = new XclExpXmlChTrHeaders;
+        maRecList.push_back(pHeaders);
+
+        OUString sLastUsername;
+        DateTime aLastDateTime(DateTime::EMPTY);
+        sal_uInt32 nIndex = 1;
+        sal_Int32 nLogNumber = 1;
+        XclExpXmlChTrHeader* pCurHeader = NULL;
+
+        while (!aActionStack.empty())
+        {
+            XclExpChTrAction* pAction = aActionStack.top();
+            aActionStack.pop();
+
+            if( (nIndex == 1) || pAction->ForceInfoRecord() ||
+                (pAction->GetUsername() != sLastUsername) ||
+                (pAction->GetDateTime() != aLastDateTime) )
+            {
+                lcl_GenerateGUID( aGUID, bValidGUID );
+                sLastUsername = pAction->GetUsername();
+                aLastDateTime = pAction->GetDateTime();
+
+                pCurHeader = new XclExpXmlChTrHeader(sLastUsername, aLastDateTime, aGUID, nLogNumber, pAction->GetTabIdBuffer());
+                maRecList.push_back(pCurHeader);
+                nLogNumber++;
+                pHeaders->SetGUID(aGUID);
+            }
+            pAction->SetIndex(nIndex);
+            pCurHeader->AppendAction(pAction);
+        }
+
+        pHeaders->SetGUID(aGUID);
+        maRecList.push_back(new EndXmlElement(XML_headers));
+    }
 }
 
 XclExpChangeTrack::~XclExpChangeTrack()
 {
-    std::vector<ExcRecord*>::iterator prIter;
-    for ( prIter = aRecList.begin(); prIter != aRecList.end(); ++prIter )
-        delete *prIter;
-
-    std::vector<XclExpChTrTabIdBuffer*>::iterator pIter;
-    for ( pIter = maBuffers.begin(); pIter != maBuffers.end(); ++pIter )
-        delete *pIter;
-
     while( !aActionStack.empty() )
     {
         delete aActionStack.top();
@@ -1602,7 +1694,7 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 
 void XclExpChangeTrack::Write()
 {
-    if( aRecList.empty() )
+    if (maRecList.empty())
         return;
 
     if( WriteUserNamesStream() )
@@ -1613,9 +1705,9 @@ void XclExpChangeTrack::Write()
         {
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 
-            std::vector<ExcRecord*>::iterator pIter;
-            for ( pIter = aRecList.begin(); pIter != aRecList.end(); ++pIter )
-                (*pIter)->Save(aXclStrm);
+            RecListType::iterator pIter;
+            for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
+                pIter->Save(aXclStrm);
 
             xSvStrm->Commit();
         }
@@ -1643,7 +1735,7 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
 
 void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
 {
-    if( aRecList.empty() )
+    if (maRecList.empty())
         return;
 
     lcl_WriteUserNamesXml( rWorkbookStrm );
@@ -1659,9 +1751,9 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
     //          contents of XclExpChangeTrack::WriteUserNamesStream()).
     rWorkbookStrm.PushStream( pRevisionHeaders );
 
-    std::vector<ExcRecord*>::iterator pIter;
-    for ( pIter = aRecList.begin(); pIter != aRecList.end(); ++pIter )
-        (*pIter)->SaveXml(rWorkbookStrm);
+    RecListType::iterator pIter;
+    for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
+        pIter->SaveXml(rWorkbookStrm);
 
     rWorkbookStrm.PopStream();
 }
