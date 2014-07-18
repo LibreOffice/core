@@ -1056,10 +1056,11 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
 
     uno::Reference< drawing::XShape > xShape( xRet, uno::UNO_QUERY );
-    if( xShape.is() )
+    SvxShape* pShape = xShape.is() ? SvxShape::getImplementation(xShape) : NULL;
+    if (pShape)
     {
         xRet.clear();
-        new SdXShape( SvxShape::getImplementation( xShape ), (SdXImpressDocument*)this );
+        new SdXShape( pShape, (SdXImpressDocument*)this );
         xRet = xShape;
         xShape.clear();
     }
