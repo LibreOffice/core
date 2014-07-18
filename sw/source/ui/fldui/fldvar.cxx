@@ -114,7 +114,8 @@ void SwFldVarPage::Reset(const SfxItemSet* )
     }
     else
     {
-        SwField* pCurField = GetCurField();
+        const SwField* pCurField = GetCurField();
+        assert(pCurField && "<SwFldVarPage::Reset(..)> - <SwField> instance missing!");
         nTypeId = pCurField->GetTypeId();
         if (nTypeId == TYP_SETINPFLD)
             nTypeId = TYP_INPUTFLD;
@@ -326,7 +327,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     }
                 }
             }
-            if (IsFldEdit())
+            if (GetCurField() != NULL && IsFldEdit())
             {
                 // GetFormula leads to problems with date formats because
                 // only the numeric value without formatting is returned.
@@ -419,7 +420,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                             m_pNumFormatLB->SelectEntryPos(0);
                         }
                     }
-                    if (IsFldEdit() && (!pBox || bInit) )
+                    if (GetCurField() && IsFldEdit() && (!pBox || bInit) )
                         m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
@@ -461,7 +462,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 bName = bValue = bShowChapterFrame = true;
 
                 SwFieldType* pFldTyp;
-                if( IsFldEdit() )
+                if( GetCurField() && IsFldEdit() )
                     pFldTyp = GetCurField()->GetTyp();
                 else
                 {
@@ -473,7 +474,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         pFldTyp = 0;
                 }
 
-                if( IsFldEdit() )
+                if( GetCurField() && IsFldEdit() )
                     m_pValueED->SetText( ((SwSetExpField*)GetCurField())->
                                         GetFormula() );
 
@@ -505,7 +506,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
                     bValue = true;      // SubType OFF - knows no Offset
-                    if (IsFldEdit())
+                    if (GetCurField() && IsFldEdit())
                         m_pValueED->SetText(OUString::number(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
             }
@@ -569,28 +570,27 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 // renew types in SelectionBox
 void SwFldVarPage::UpdateSubType()
 {
-    OUString sOldSel;
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     SetSelectionSel(m_pSelectionLB->GetSelectEntryPos());
-    if(GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
+
+    OUString sOldSel;
+    if (GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pSelectionLB->GetEntry(GetSelectionSel());
 
     // fill Selection-Listbox
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     std::vector<OUString> aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
-    size_t nCount = aList.size();
-    size_t nPos;
-
-    for(size_t i = 0; i < nCount; ++i)
+    const size_t nCount = aList.size();
+    for (size_t i = 0; i < nCount; ++i)
     {
         if (nTypeId != TYP_INPUTFLD || i)
         {
             if (!IsFldEdit())
             {
-                nPos = m_pSelectionLB->InsertEntry(aList[i]);
+                const size_t nPos = m_pSelectionLB->InsertEntry(aList[i]);
                 m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
             }
             else
@@ -600,7 +600,7 @@ void SwFldVarPage::UpdateSubType()
                 switch (nTypeId)
                 {
                     case TYP_INPUTFLD:
-                        if (aList[i] == GetCurField()->GetPar1())
+                        if (GetCurField() && aList[i] == GetCurField()->GetPar1())
                             bInsert = true;
                         break;
 
@@ -609,13 +609,13 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (aList[i].equals(((const SwFormulaField*)GetCurField())->GetFormula()))
+                        if (GetCurField() && aList[i] == ((const SwFormulaField*)GetCurField())->GetFormula())
                             bInsert = true;
                         break;
 
                     case TYP_SETFLD:
                     case TYP_USERFLD:
-                        if (aList[i] == GetCurField()->GetTyp()->GetName())
+                        if (GetCurField() && aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = true;
                             if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
@@ -624,23 +624,30 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_SETREFPAGEFLD:
-                        if ((((SwRefPageSetField*)GetCurField())->IsOn() && i) ||
-                            (!((SwRefPageSetField*)GetCurField())->IsOn() && !i))
+                    {
+                        if (GetCurField() != NULL
+                            && ((((SwRefPageSetField*)GetCurField())->IsOn()
+                                 && i) || (!((SwRefPageSetField*)GetCurField())
+                                                ->IsOn() && !i)))
+                        {
                             sOldSel = aList[i];
+                        }
 
                         // allow all entries for selection:
-                        nPos = m_pSelectionLB->InsertEntry(aList[i]);
+                        const size_t nPos = m_pSelectionLB->InsertEntry(aList[i]);
                         m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
-                        break;
 
+                        break;
+                    }
                     default:
-                        if (aList[i] == GetCurField()->GetPar1())
+                        if (GetCurField() && aList[i] == GetCurField()->GetPar1())
                             bInsert = true;
                         break;
                 }
+
                 if (bInsert)
                 {
-                    nPos = m_pSelectionLB->InsertEntry(aList[i]);
+                    const size_t nPos = m_pSelectionLB->InsertEntry(aList[i]);
                     m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
                     if (nTypeId != TYP_FORMELFLD)
                         break;
@@ -649,7 +656,7 @@ void SwFldVarPage::UpdateSubType()
         }
     }
 
-    bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
+    const bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
     ListBox *pLB = 0;
 
     if (bEnable)
@@ -670,13 +677,13 @@ void SwFldVarPage::UpdateSubType()
 
 sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 {
-    OUString sOldSel, sOldNumSel;
-    sal_uLong nOldNumFormat = 0;
-
-    sal_Int32 nFormatSel = m_pFormatLB->GetSelectEntryPos();
+    OUString sOldSel;
+    const sal_Int32 nFormatSel = m_pFormatLB->GetSelectEntryPos();
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pFormatLB->GetEntry(nFormatSel);
 
+    OUString sOldNumSel;
+    sal_uLong nOldNumFormat = 0;
     sal_Int32 nNumFormatSel = m_pNumFormatLB->GetSelectEntryPos();
     if (nNumFormatSel != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -691,7 +698,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
     if( TYP_GETREFPAGEFLD != nTypeId )
     {
-        if (IsFldEdit())
+        if (GetCurField() != NULL && IsFldEdit())
         {
             bSpecialFmt = GetCurField()->GetFormat() == SAL_MAX_UINT32;
 
@@ -700,9 +707,10 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
                 m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
                 sOldNumSel = OUString();
             }
-            else
-                if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)
-                    m_pNumFormatLB->SetFormatType(NUMBERFORMAT_NUMBER);
+            else if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)
+            {
+                m_pNumFormatLB->SetFormatType(NUMBERFORMAT_NUMBER);
+            }
         }
         else
         {
@@ -771,10 +779,10 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
     for (sal_uInt16 i = 0; i < nSize; i++)
     {
-        sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+        const sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
         const sal_uInt16 nFldId = GetFldMgr().GetFormatId( nTypeId, i );
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(nFldId) );
-        if (IsFldEdit() && nFldId == GetCurField()->GetFormat())
+        if (IsFldEdit() && GetCurField() && nFldId == GetCurField()->GetFormat())
             m_pFormatLB->SelectEntryPos( nPos );
     }
 
