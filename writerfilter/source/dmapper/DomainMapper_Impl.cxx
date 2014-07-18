@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <SdtHelper.hxx>
@@ -2824,13 +2828,18 @@ void DomainMapper_Impl::handleAuthor
             //Lines, Manager, NameofApplication, ODMADocId, Pages,
             //Security,
         };
+        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xTextDocument, uno::UNO_QUERY);
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+        const uno::Reference< beans::XPropertyContainer > xUserProps = xDocumentProperties->getUserDefinedProperties();
+        uno::Reference<beans::XPropertySet>  xUserDefinedProps(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
         //search for a field mapping
         OUString sFieldServiceName;
         sal_uInt16 nMap = 0;
         for( ; nMap < sizeof(aDocProperties) / sizeof(DocPropertyMap);
             ++nMap )
         {
-            if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
+            if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
             {
                 sFieldServiceName =
                 OUString::createFromAscii
