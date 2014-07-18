@@ -669,6 +669,18 @@ void OfficeIPCThread::SetReady(
     }
 }
 
+void OfficeIPCThread::WaitForReady(
+    rtl::Reference< OfficeIPCThread > const & pThread)
+
+{
+    rtl::Reference< OfficeIPCThread > const & t(
+        pThread.is() ? pThread : pGlobalOfficeIPCThread);
+    if (t.is())
+    {
+        t->cReady.wait();
+    }
+}
+
 void OfficeIPCThread::execute()
 {
 #if HAVE_FEATURE_DESKTOP
