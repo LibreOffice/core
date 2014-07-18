@@ -325,7 +325,7 @@ bool SdStyleSheet::IsUsed() const
 {
     bool bResult = false;
 
-    const size_t nListenerCount = GetListenerCount();
+    const size_t nListenerCount = GetSizeOfVector();
     for (size_t n = 0; n < nListenerCount; ++n)
     {
         SfxListener* pListener = GetListener(n);

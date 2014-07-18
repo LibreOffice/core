@@ -987,7 +987,7 @@ void SwXStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 SwXStyle*   SwXStyleFamily::_FindStyle(const OUString& rStyleName)const
 {
-    const size_t nLCount = pBasePool->GetListenerCount();
+    const size_t nLCount = pBasePool->GetSizeOfVector();
     for( size_t i = 0; i < nLCount; ++i)
     {
         SfxListener* pListener = pBasePool->GetListener( i );
