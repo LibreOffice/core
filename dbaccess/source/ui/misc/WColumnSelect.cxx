@@ -197,7 +197,9 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         pRight = m_pOrgColumnNames;
         bAll   = true;
     }
-    // else ????
+
+    if (!pLeft || !pRight)
+        return 0;
 
     Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
