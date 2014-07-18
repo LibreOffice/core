@@ -1192,9 +1192,11 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         ScAddress aPos(nCol, nRow, nTab);
         if (rDoc.GetCellType(aPos) == CELLTYPE_EDIT)
         {
-            pOldEditData = rDoc.GetEditText(aPos)->Clone();
+            const EditTextObject* pEditObj = rDoc.GetEditText(aPos);
+            pOldEditData = pEditObj ? pEditObj->Clone() : NULL;
             rDoc.RemoveEditTextCharAttribs(aPos, rAttr);
-            pNewEditData = rDoc.GetEditText(aPos)->Clone();
+            pEditObj = rDoc.GetEditText(aPos);
+            pNewEditData = pEditObj ? pEditObj->Clone() : NULL;
         }
 
         aChangeRanges.Append(aPos);
