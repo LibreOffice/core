@@ -3810,9 +3810,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         // static_cast() will do the right thing.
         if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_UINT16))
         {
-            m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
-            if (m_aStates.top().nDestinationState != DESTINATION_LEVELTEXT)
-                m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
+            if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
+            {
+                if (nParam != ';')
+                    m_aStates.top().aLevelNumbers.push_back(sal_Int32(nParam));
+            }
+            else
+                m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
+            m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
         }
         break;
     case RTF_LEVELFOLLOW:
