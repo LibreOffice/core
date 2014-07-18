@@ -475,6 +475,7 @@ bool OpenGLContext::ImplInit()
 #elif defined( MACOSX )
 
     CGLPixelFormatAttribute pixelFormatAttributes[] = {
+        kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
         kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
         kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
         kCGLPFADoubleBuffer,

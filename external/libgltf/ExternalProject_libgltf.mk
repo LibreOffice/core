@@ -58,6 +58,8 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& ./configure \
+			--disable-shared \
+			--enable-static \
 			--with-pic \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-werror \

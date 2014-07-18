@@ -10600,7 +10600,7 @@ dnl Check whether to enable glTF support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable glTF support])
 ENABLE_GLTF=
-if test "x$enable_gltf" != "xno" -a $_os != Darwin -a $_os != iOS -a $_os != Android; then
+if test "x$enable_gltf" != "xno" -a $_os != iOS -a $_os != Android; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_GLTF,1)
