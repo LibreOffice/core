@@ -87,7 +87,7 @@ void ExcelFilter::unregisterWorkbookGlobals()
     mpBookGlob = 0;
 }
 
-bool ExcelFilter::importDocument() throw()
+bool ExcelFilter::importDocument()
 {
     /*  To activate the XLSX/XLSB dumper, insert the full path to the file
         file:///<path-to-oox-module>/source/dump/xlsbdumper.ini
