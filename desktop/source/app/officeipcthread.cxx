@@ -682,6 +682,11 @@ void OfficeIPCThread::WaitForReady(
     }
 }
 
+bool OfficeIPCThread::IsEnabled()
+{
+    return pGlobalOfficeIPCThread.is();
+}
+
 void OfficeIPCThread::execute()
 {
 #if HAVE_FEATURE_DESKTOP
