@@ -29,7 +29,7 @@ bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) 
     return lhs->GetIndex() < rhs->GetIndex();
 }
 
-bool SwOutlineNodes::Seek_Entry(SwNode* const &rP, sal_uInt16* pnPos) const
+bool SwOutlineNodes::Seek_Entry(SwNode* rP, sal_uInt16* pnPos) const
 {
     const_iterator it = lower_bound(rP);
     *pnPos = it - begin();

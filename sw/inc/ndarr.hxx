@@ -80,7 +80,7 @@ struct CompareSwOutlineNodes
 class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes>
 {
 public:
-    bool Seek_Entry(SwNode* const &rP, sal_uInt16* pnPos) const;
+    bool Seek_Entry(SwNode* rP, sal_uInt16* pnPos) const;
 };
 
 class SW_DLLPUBLIC SwNodes

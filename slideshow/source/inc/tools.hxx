@@ -70,7 +70,7 @@ namespace slideshow
         typedef ::boost::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
         template <typename T>
-        inline ::std::size_t hash_value( T * const& p )
+        inline ::std::size_t hash_value( T const * p )
         {
             ::std::size_t d = static_cast< ::std::size_t >(
                 reinterpret_cast< ::std::ptrdiff_t >(p) );
