@@ -3430,6 +3430,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80902, "fdo80902.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:docGrid", "type", "lines");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]/w:instrText", "ADDIN EN.CITE.DATA");
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
