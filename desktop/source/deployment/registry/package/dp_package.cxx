@@ -1188,20 +1188,34 @@ void BackendImpl::PackageImpl::exportTo(
     }
     else
     {
-        // overwrite manifest.xml:
-        ::ucbhelper::Content manifestContent;
-        if ( ! create_ucb_content(
-            &manifestContent,
-            makeURL( m_url_expanded, "META-INF/manifest.xml" ),
-            xCmdEnv, false ) )
+        bool bSuccess = false;
+        try
         {
-            OSL_FAIL( "### missing META-INF/manifest.xml file!" );
-            return;
+            // overwrite manifest.xml:
+            ::ucbhelper::Content manifestContent;
+            if ( ! create_ucb_content(
+                &manifestContent,
+                makeURL( m_url_expanded, "META-INF/manifest.xml" ),
+                xCmdEnv, false ) )
+            {
+                OSL_FAIL( "### missing META-INF/manifest.xml file!" );
+                return;
+            }
+
+            if (metainfFolderContent.transferContent(
+                  manifestContent, ::ucbhelper::InsertOperation_COPY,
+                  OUString(), ucb::NameClash::OVERWRITE ))
+            {
+                bSuccess = true;
+            }
+        }
+        catch (const css::ucb::ContentCreationException &e)
+        {
+            SAL_WARN(
+                "desktop.deployment", "exception on overwriting manifest: " << e.Message);
         }
 
-        if (! metainfFolderContent.transferContent(
-                manifestContent, ::ucbhelper::InsertOperation_COPY,
-                OUString(), ucb::NameClash::OVERWRITE ))
+        if (!bSuccess)
             throw RuntimeException( "UCB transferContent() failed!",
                                     static_cast<OWeakObject *>(this) );
     }
