@@ -94,10 +94,19 @@ GalleryTheme::~GalleryTheme()
 
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
-    aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
-    // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
-    if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-        aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    try
+    {
+        aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+        if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
+            aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    }
+    catch (const css::ucb::ContentCreationException& e)
+    {
+        SAL_WARN("svx", "failed to open: "
+                  << GetSdvURL().GetMainURL(INetURLObject::NO_DECODE)
+                  << "due to : " << e.Message);
+    }
 }
 
 bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
