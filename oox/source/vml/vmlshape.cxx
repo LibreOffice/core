@@ -58,6 +58,9 @@
 #include "oox/vml/vmltextbox.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <svx/unoapi.hxx>
+#include <svx/svdoashp.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -534,6 +537,19 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
+    SdrObject* pShape = GetSdrObjectFromXShape( xShape );
+    if( pShape && getShapeType() >= 0 )
+    {
+        OUString aShapeType;
+        aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >(getShapeType()) );
+        //The resize autoshape to fit text attr of FontWork/Word-Art should always be false
+        //for the fallback geometry.
+        if(aShapeType.startsWith("fontwork"))
+        {
+            pShape->SetMergedItem(SdrTextAutoGrowHeightItem(false));
+            pShape->SetMergedItem(SdrTextAutoGrowWidthItem(false));
+        }
+    }
     convertShapeProperties( xShape );
 
     // Handle left/right/top/bottom wrap distance.
