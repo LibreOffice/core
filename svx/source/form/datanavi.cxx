@@ -123,12 +123,16 @@ namespace svxform
             m_xPropSet( _rxSet ) {}
     };
 
-
     // class DataTreeListBox
-
-    DataTreeListBox::DataTreeListBox( Window* pParent, WinBits nBits ) :
-
-        SvTreeListBox( pParent, nBits )
+    DataTreeListBox::DataTreeListBox(Window* pParent, WinBits nBits)
+        : SvTreeListBox(pParent, nBits)
+        , m_pXFormsPage(NULL)
+        , m_eGroup(DGTUnknown)
+        , m_nAddId(0)
+        , m_nAddElementId(0)
+        , m_nAddAttributeId(0)
+        , m_nEditId(0)
+        , m_nRemoveId(0)
     {
         EnableContextMenuHandling();
 
