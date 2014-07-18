@@ -200,26 +200,6 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName )
 }
 
 
-const SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
-{
-    for( sal_uInt16 i = 0; i < aData.size(); i++ )
-    {
-        const SbiSymDef &r = aData[ i ];
-        if( r.nId == n && ( !r.nProcId || ( r.nProcId == nProcId ) ) )
-        {
-            return &r;
-        }
-    }
-    if( pParent )
-    {
-        return pParent->FindId( n );
-    }
-    else
-    {
-        return NULL;
-    }
-}
-
 // find via position (from 0)
 
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n )

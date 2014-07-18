@@ -79,7 +79,6 @@ public:
     SbiProcDef* AddProc( const OUString& );
     void Add( SbiSymDef* );
     SbiSymDef* Find( const OUString& ); // variable name
-    const SbiSymDef* FindId( sal_uInt16 ) const;
     SbiSymDef* Get( sal_uInt16 );     // find variable per position
     SbiSymDef* First(), *Next();            // iterators
 
