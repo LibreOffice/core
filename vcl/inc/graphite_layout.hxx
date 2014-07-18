@@ -127,11 +127,11 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 
-    virtual void  GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-            sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+            long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
             const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
     // used by glyph+font+script fallback

@@ -779,7 +779,7 @@ namespace oglcanvas
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    ::boost::scoped_array<sal_Int32> pDXArray( new sal_Int32[nLen] );
+                    ::boost::scoped_array<long> pDXArray( new long[nLen] );
                     for( sal_Int32 i=0; i<nLen; ++i )
                         pDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 

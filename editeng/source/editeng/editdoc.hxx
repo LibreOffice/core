@@ -351,14 +351,14 @@ struct ExtraPortionInfo
     bool    bFirstCharIsRightPunktuation;
     bool    bCompressed;
 
-    sal_Int32*    pOrgDXArray;
+    long*    pOrgDXArray;
     ::std::vector< sal_Int32 > lineBreaksList;
 
 
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen );
+    void    SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen );
 };
 
 
@@ -465,7 +465,7 @@ class ParaPortion;
 class EditLine
 {
 public:
-    typedef std::vector<sal_Int32> CharPosArrayType;
+    typedef std::vector<long> CharPosArrayType;
 
 private:
     CharPosArrayType aPositions;

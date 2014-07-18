@@ -353,7 +353,7 @@ namespace cairocanvas
         setupLayoutMode( rOutDev, mnTextDirection );
 
         // TODO(P2): cache that
-        ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+        ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
 
         if( maLogicalAdvancements.getLength() )
         {
@@ -615,7 +615,7 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
+    void TextLayout::setupTextOffsets( long*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const

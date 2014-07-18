@@ -147,15 +147,15 @@ OUString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
 }
 
 void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen,
-    const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
-    const EEngineData::WrongSpellVector* pWrongSpellVector,
-    const SvxFieldData* pFieldData,
-    bool bEndOfLine,
-    bool bEndOfParagraph,
-    bool bEndOfBullet,
-    const ::com::sun::star::lang::Locale* pLocale,
-    const Color& rOverlineColor,
-    const Color& rTextLineColor)
+                                   const long* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                                   const EEngineData::WrongSpellVector* pWrongSpellVector,
+                                   const SvxFieldData* pFieldData,
+                                   bool bEndOfLine,
+                                   bool bEndOfParagraph,
+                                   bool bEndOfBullet,
+                                   const ::com::sun::star::lang::Locale* pLocale,
+                                   const Color& rOverlineColor,
+                                   const Color& rTextLineColor)
 {
     pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft,
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);

@@ -44,11 +44,11 @@ public:
     virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) SAL_OVERRIDE;
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph ) SAL_OVERRIDE;
 
-    virtual void DrawingText(
-        const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
-        sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
-        const EEngineData::WrongSpellVector* pWrongSpellVector,
-        const SvxFieldData* pFieldData,
+    virtual void DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
+                              sal_Int32 nTextLen, const long* pDXArray, const SvxFont& rFont,
+                              sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                              const EEngineData::WrongSpellVector* pWrongSpellVector,
+                              const SvxFieldData* pFieldData,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet,

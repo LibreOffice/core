@@ -87,7 +87,7 @@ namespace cairocanvas
                    const ::com::sun::star::rendering::ViewState&   viewState,
                    const ::com::sun::star::rendering::RenderState& renderState ) const;
 
-        void setupTextOffsets( sal_Int32*                                       outputOffsets,
+        void setupTextOffsets( long*                                       outputOffsets,
                                const ::com::sun::star::uno::Sequence< double >& inputOffsets,
                                const ::com::sun::star::rendering::ViewState&    viewState,
                                const ::com::sun::star::rendering::RenderState&  renderState     ) const;

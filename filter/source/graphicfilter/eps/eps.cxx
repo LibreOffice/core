@@ -209,10 +209,10 @@ private:
 
     void                ImplSetClipRegion( Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, bool bStretch = false );
+    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = NULL, bool bStretch = false );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
@@ -2100,7 +2100,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
 
 
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const long* pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( nLen )
@@ -2132,7 +2132,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, co
 
 
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
     if ( rUniString.isEmpty() )
         return;

@@ -169,7 +169,7 @@ private:
     Rectangle       maPrevRect;
     Rectangle       maNextRect;
     OUString        maDayOfWeekText;
-    sal_Int32       mnDayOfWeekAry[7];
+    long            mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
     Date            maFirstDate;
