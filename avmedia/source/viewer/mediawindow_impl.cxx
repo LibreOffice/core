@@ -216,6 +216,10 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
 {
 
     uno::Reference< media::XPlayer > xPlayer;
+
+    if( rURL.isEmpty() )
+        return xPlayer;
+
     if (SvtSecurityOptions().isUntrustedReferer(rReferer)) {
         return xPlayer;
     }
