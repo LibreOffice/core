@@ -2,7 +2,7 @@ LibreOfficeKit
 **************
 
 LibreOfficeKit can be used for accessing LibreOffice functionality
-outwith LibreOffice, through C/C++, without any need to use UNO.
+without LibreOffice, through C/C++, without any need to use UNO.
 
 For now it only offers document conversion (in addition to an experimental
 tiled rendering API).
@@ -15,7 +15,7 @@ in order to be able to use LOK. You will then be able to access LOK via
 the functions in LibreOfficeKit.h[xx].
 
 (LibreOfficeKit.hxx is a simple and fully inlined C++ wrapper for the same
- functionality as in LibreOfficeKit.h.)
+functionality as in LibreOfficeKit.h.)
 
 An example program can be seen on:
 https://github.com/ojwb/lloconv	
@@ -23,7 +23,7 @@ https://github.com/ojwb/lloconv
 Tiled Rendering
 ---------------
 
-To use LOK Tiled Rendering you will need the follwing before the LOK includes:
+To use LOK Tiled Rendering you will need the following before the LOK includes:
 #define LOK_USE_UNSTABLE_API
 
 Currently only bitmap-buffer rendering is supported, with a 32-bit RGBA
@@ -34,8 +34,8 @@ to bottom-up).
 LibreOfficeKitGtk
 *****************
 
-Currently consists of only a very basic gtk+ document viewer widget.
+Currently consists of only a very basic GTK+ document viewer widget.
 
 Currently this simply renders the entire document as one large tile (for
-writer) and/or entire sheet for calc, which can be somewhat slow with
+Writer) and/or entire sheet for Calc, which can be somewhat slow with
 larger documents.
