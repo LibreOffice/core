@@ -1012,11 +1012,10 @@ ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xS
 
 double ShapeHelper::getHeight() const
 {
-        return  Millimeter::getInPoints(xShape->getSize().Height);
-    }
+   return  Millimeter::getInPoints(xShape->getSize().Height);
+}
 
-
-    void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
+void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
 {
     try
     {
@@ -1027,12 +1026,13 @@ double ShapeHelper::getHeight() const
     catch (const css::uno::Exception&)
     {
         throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
-        }
+    }
 }
+
 double ShapeHelper::getWidth() const
 {
     return Millimeter::getInPoints(xShape->getSize().Width);
-    }
+}
 
 void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
 {
@@ -1048,12 +1048,10 @@ void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorExcept
     }
 }
 
-
 double ShapeHelper::getLeft() const
 {
     return Millimeter::getInPoints(xShape->getPosition().X);
 }
-
 
 void ShapeHelper::setLeft(double _fLeft)
 {
@@ -1062,12 +1060,10 @@ void ShapeHelper::setLeft(double _fLeft)
     xShape->setPosition(aPoint);
 }
 
-
 double ShapeHelper::getTop() const
 {
-        return Millimeter::getInPoints(xShape->getPosition().Y);
+    return Millimeter::getInPoints(xShape->getPosition().Y);
 }
-
 
 void ShapeHelper::setTop(double _fTop)
 {
