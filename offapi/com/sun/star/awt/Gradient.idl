@@ -28,7 +28,9 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** describes a color dispersion within an area.
+/** Describes a gradient between two colors. Many aspects of the
+ *  gradient are undefined, like the algorithm and color space to use
+ *  to interpolate between the colors and what "intensity" means.
  */
 published struct Gradient
 {
@@ -58,17 +60,20 @@ published struct Gradient
     short Border;
 
 
-    /** specifies the X-coordinate, where the gradient begins.
+    /** Specifies the X-coordinate, where the gradient begins,
+     *  whatever that means. Possibly means the *center* of the
+     *  ELLIPTICAL, SQUARE and RECT style gradients?
      */
     short XOffset;
 
 
-    /** specifies the Y-coordinate, where the gradient begins.
+    /** Specifies the Y-coordinate, where the gradient begins. See
+        previous field.
      */
     short YOffset;
 
 
-    /** specifies the intensity at the start point of the gradient.
+    /** Specifies the intensity at the start point of the gradient. What that means is undefined.
      */
     short StartIntensity;
 
@@ -78,7 +83,8 @@ published struct Gradient
     short EndIntensity;
 
 
-    /** specifies the number of steps of change color.
+    /** Specifies the number of steps of change color. What that means
+     *  is undefined.
      */
     short StepCount;
 
