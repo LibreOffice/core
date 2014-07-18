@@ -389,13 +389,22 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         return Point();
 };
 
-Size WinMtfOutput::ImplMap( const Size& rSz )
+Size WinMtfOutput::ImplMap(const Size& rSz, bool bDoWorldTransform)
 {
     if ( mnWinExtX && mnWinExtY )
     {
         // #i121382# apply the whole WorldTransform, else a rotation will be misinterpreted
-        double fWidth = rSz.Width() * maXForm.eM11 + rSz.Height() * maXForm.eM21;
-        double fHeight = rSz.Width() * maXForm.eM12 + rSz.Height() * maXForm.eM22;
+        double fWidth, fHeight;
+        if (bDoWorldTransform)
+        {
+            fWidth = rSz.Width() * maXForm.eM11 + rSz.Height() * maXForm.eM21;
+            fHeight = rSz.Width() * maXForm.eM12 + rSz.Height() * maXForm.eM22;
+        }
+        else
+        {
+            fWidth = rSz.Width();
+            fHeight = rSz.Height();
+        }
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
@@ -457,7 +466,7 @@ void WinMtfOutput::ImplMap( Font& rFont )
 {
     // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
     // must later be made portable in SV (KA 1996-02-08)
-    Size  aFontSize = ImplMap (rFont.GetSize());
+    Size  aFontSize = ImplMap (rFont.GetSize(), false);
 
     if( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
