@@ -25,6 +25,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/pdfimport"
+
 Module gid_Module_Pdfimport
     Name = "PDF Import";
     Description = "PDF Import";
@@ -32,10 +34,9 @@ Module gid_Module_Pdfimport
     ParentID = gid_Module_Root_Brand;
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Xpdfimport);
-    Files = (
+    Files = (auto_pdfimport_ALL,
         gid_File_Dat_XpdfimportErrPdf,
         gid_File_Exe_Xpdfimport,
-        gid_File_Lib_PdfimportUno,
         gid_File_Xcd_Pdfimport);
 End
 
@@ -58,9 +59,7 @@ File gid_File_Exe_Xpdfimport
     Styles = (PACKED);
 End
 
-STD_LIB_FILE( gid_File_Lib_PdfimportUno, pdfimport )
-
-File gid_File_Xcd_Pdfimport
+rile gid_File_Xcd_Pdfimport
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "pdfimport.xcd";

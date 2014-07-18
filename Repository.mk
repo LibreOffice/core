@@ -457,6 +457,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	unowinreg \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
+	pdfimport \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
 	$(if $(filter MSC,$(COM)),cli_uno) \
@@ -629,7 +633,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	OGLTrans \
-	pdfimport \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
