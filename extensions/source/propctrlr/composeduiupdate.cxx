@@ -82,7 +82,6 @@ namespace pcr
     {
     private:
         ::osl::Mutex            m_aMutex;
-        oslInterlockedCount     m_refCount;
         bool                    m_bDisposed;
         ComposedPropertyUIUpdate&
                                 m_rMaster;
@@ -187,8 +186,7 @@ namespace pcr
 
 
     CachedInspectorUI::CachedInspectorUI( ComposedPropertyUIUpdate& _rMaster, FNotifySingleUIChange _pUIChangeNotification )
-        :m_refCount( 0 )
-        ,m_bDisposed( false )
+        :m_bDisposed( false )
         ,m_rMaster( _rMaster )
         ,m_pUIChangeNotification( _pUIChangeNotification )
     {
