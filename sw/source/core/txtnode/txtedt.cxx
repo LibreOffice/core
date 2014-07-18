@@ -142,7 +142,7 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 /**
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
-static sal_uInt16
+static bool
 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
                                       sal_Int32 nStt, sal_Int32 nEnd,
                                       const sal_Unicode cChar = CH_TXTATR_INWORD,
@@ -171,7 +171,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
             SwScriptInfo::MaskHiddenRanges( rNode, rText, nStt, nEnd, cChar );
     }
 
-    return nRedlinesMasked + nHiddenCharsMasked;
+    return (nRedlinesMasked + nHiddenCharsMasked) > 0;
 }
 
 /**
@@ -936,7 +936,7 @@ bool SwTxtNode::Spell(SwSpellArgs* pArgs)
     const OUString aOldTxt( m_Text );
     OUStringBuffer buf(m_Text);
     const bool bRestoreString =
-        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength()) > 0;
+        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength());
     if (bRestoreString)
     {   // ??? UGLY: is it really necessary to modify m_Text here?
         m_Text = buf.makeStringAndClear();
@@ -1108,7 +1108,7 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
     const OUString aOldTxt( m_Text );
     OUStringBuffer buf(m_Text);
     const bool bRestoreString =
-        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength()) > 0;
+        lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength());
     if (bRestoreString)
     {   // ??? UGLY: is it really necessary to modify m_Text here?
         m_Text = buf.makeStringAndClear();
@@ -1245,8 +1245,8 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     // modify string according to redline information and hidden text
     const OUString aOldTxt( pNode->GetTxt() );
     OUStringBuffer buf(pNode->m_Text);
-    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *pNode, buf,
-                0, pNode->GetTxt().getLength()) > 0;
+    const bool bRestoreString =
+        lcl_MaskRedlinesAndHiddenText(*pNode, buf, 0, pNode->GetTxt().getLength());
     if (bRestoreString)
     {   // ??? UGLY: is it really necessary to modify m_Text here?
         pNode->m_Text = buf.makeStringAndClear();
