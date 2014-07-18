@@ -1408,7 +1408,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
                     sal_uInt32  nCurPos, nOffString, nOptions, offDx;
                     sal_Int32   nLen;
-                    sal_Int32*  pDX = NULL;
+                    long* pDX = NULL;
 
                     nCurPos = pWMF->Tell() - 8;
 
@@ -1432,10 +1432,14 @@ bool EnhWMFReader::ReadEnhWMF()
                             pWMF->Seek( nCurPos + offDx );
                             if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
-                                pDX = new sal_Int32[ nLen ];
+                                pDX = new long[ nLen ];
                                 sal_Int32 i;
+                                sal_Int32 val;
                                 for ( i = 0; i < nLen; i++ )
-                                    pWMF->ReadInt32( pDX[ i ] );
+                                {
+                                    pWMF->ReadInt32( val );
+                                    pDX[ i ] = val;
+                                }
                             }
                         }
                         pWMF->Seek( nCurPos + nOffString );
@@ -1452,8 +1456,8 @@ bool EnhWMFReader::ReadEnhWMF()
                                 if ( aText.getLength() != nLen )
                                 {
                                     sal_uInt16 i, j;
-                                    sal_Int32* pOldDx = pDX;
-                                    pDX = new sal_Int32[ aText.getLength() ];
+                                    long* pOldDx = pDX;
+                                    pDX = new long[ aText.getLength() ];
                                     for ( i = 0, j = 0; i < aText.getLength(); i++ )
                                     {
                                         sal_Unicode cUniChar = aText[i];

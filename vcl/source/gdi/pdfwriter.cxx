@@ -81,7 +81,7 @@ void PDFWriter::DrawTextLine(
 void PDFWriter::DrawTextArray(
                               const Point& rStartPt,
                               const OUString& rStr,
-                              const sal_Int32* pDXAry,
+                              const long* pDXAry,
                               sal_Int32 nIndex,
                               sal_Int32 nLen )
 {

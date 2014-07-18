@@ -949,7 +949,7 @@ float OutputDevice::approximate_char_width() const
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                  const sal_Int32* pDXAry,
+                                  const long* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, int flags )
 {
     if(nLen == 0x0FFFF)
@@ -984,7 +984,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
 }
 
-long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
+long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     if(nLen == 0x0FFFF)
@@ -1084,10 +1084,10 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 
-bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
-    sal_Int32 nIndex, sal_Int32 nLen,
-    sal_Int32* pDXAry, long nLayoutWidth,
-    bool bCellBreaking ) const
+bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
+                                      sal_Int32 nIndex, sal_Int32 nLen,
+                                      long* pDXAry, long nLayoutWidth,
+                                      bool bCellBreaking ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1097,7 +1097,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
 
     // layout complex text
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen,
-        Point(0,0), nLayoutWidth, pDXAry );
+                                        Point(0,0), nLayoutWidth, pDXAry );
     if( !pSalLayout )
         return false;
 
@@ -1296,7 +1296,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, long nLogicalWidth,
-                                    const sal_Int32* pDXArray, int flags) const
+                                    const long* pDXArray, int flags) const
 {
     // we need a graphics
     if( !mpGraphics )
@@ -1648,7 +1648,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                         long        nMnemonicY;
                         long        nMnemonicWidth;
 
-                        sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * nLineLen );
+                        long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLineLen );
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray,
                                                 nIndex, nLineLen );
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
@@ -1717,7 +1717,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         long nMnemonicWidth = 0;
         if ( nMnemonicPos != -1 )
         {
-            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.getLength() );
+            long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * aStr.getLength() );
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
@@ -2164,7 +2164,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                 nMnemonicPos = nLen-1;
             }
 
-            sal_Int32* pCaretXArray = (sal_Int32*)alloca( 2 * sizeof(sal_Int32) * nLen );
+            long* pCaretXArray = (long*)alloca( 2 * sizeof(long) * nLen );
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
@@ -2324,7 +2324,7 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
  * @return SystemTextLayoutData
  **/
 SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-                                                        const sal_Int32* pDXAry) const
+                                                        const long* pDXAry) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2383,7 +2383,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
+                                         sal_uLong nLayoutWidth, const long* pDXAry ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2566,7 +2566,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        bool bOptimize, sal_uLong nLayoutWidth, const sal_Int32* pDXArray ) const
+                                        bool bOptimize, sal_uLong nLayoutWidth, const long* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2800,7 +2800,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen, bool bOptimize,
-                                        sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                        sal_uLong nTWidth, const long* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2827,7 +2827,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 
 bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
                                        sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
-                                       bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                       bool bOptimize, sal_uLong nTWidth, const long* pDXArray ) const
 {
     if(nLen == 0x0FFFF)
     {

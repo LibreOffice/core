@@ -1997,7 +1997,7 @@ namespace
                     {
                         // preapare DXArray (if used)
                         std::vector< double > aDXArray;
-                        sal_Int32* pDXArray = pA->GetDXArray();
+                        long* pDXArray = pA->GetDXArray();
 
                         if(pDXArray)
                         {

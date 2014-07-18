@@ -1957,7 +1957,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
-                boost::scoped_array<sal_Int32> pDXAry(new sal_Int32[aStr.getLength()]);
+                boost::scoped_array<long> pDXAry(new long[aStr.getLength()]);
                 nNormSize = aVDev.GetTextArray( aStr, pDXAry.get() );
 
                 for ( i = 0; i < aStr.getLength(); i++ )

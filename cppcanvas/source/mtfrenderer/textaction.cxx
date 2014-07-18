@@ -168,7 +168,7 @@ namespace cppcanvas
                     rTextLineInfo );
             }
 
-            uno::Sequence< double > setupDXArray( const sal_Int32*   pCharWidths,
+            uno::Sequence< double > setupDXArray( const long*   pCharWidths,
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
@@ -197,7 +197,7 @@ namespace cppcanvas
             {
                 // no external DX array given, create one from given
                 // string
-                ::boost::scoped_array< sal_Int32 > pCharWidths( new sal_Int32[nLen] );
+                ::boost::scoped_array< long > pCharWidths( new long[nLen] );
 
                 rVDev.GetTextArray( rText, pCharWidths.get(),
                                     nStartPos, nLen );
@@ -1939,7 +1939,7 @@ namespace cppcanvas
                                            const OUString&                  rText,
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
-                                           const sal_Int32*                 pDXArray,
+                                           const long*                      pDXArray,
                                            VirtualDevice&                   rVDev,
                                            const CanvasSharedPtr&           rCanvas,
                                            const OutDevState&               rState,
@@ -2089,7 +2089,7 @@ namespace cppcanvas
                                                              const OUString&                rText,
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
-                                                             const sal_Int32*               pDXArray,
+                                                             const long*                    pDXArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,

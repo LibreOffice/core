@@ -745,7 +745,8 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
 
         // calculate distance of each word from the base point
         Point aPos;
-        sal_Int32 nDist = 0, nWidth = 0, nAdvance=0;
+        sal_Int32 nDist = 0, nWidth = 0;
+        long nAdvance = 0;
         for( int nStart = 0;;)
         {
             // iterate through the layouted glyphs

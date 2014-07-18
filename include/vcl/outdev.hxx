@@ -1005,24 +1005,24 @@ public:
     */
     bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
 
     Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
     bool                        GetTextOutline( PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                 sal_Int32 nLen = -1, bool bOptimize = true,
-                                                sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                                                sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
 
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
-                                                 sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
 
     bool                        GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
-                                                 sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
@@ -1085,16 +1085,16 @@ public:
     float                       approximate_char_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               const sal_Int32* pDXAry = NULL,
+                                               const long* pDXAry = NULL,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                int flags = 0);
-    long                        GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
+    long                        GetTextArray( const OUString& rStr, long* pDXAry = NULL,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
 
-    bool                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
+    bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              sal_Int32* pDXAry = NULL, long nWidth = 0,
+                                              long* pDXAry = NULL, long nWidth = 0,
                                               bool bCellBreaking = true ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
@@ -1237,7 +1237,7 @@ public:
 
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
                                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                      const sal_Int32* pDXAry = NULL ) const;
+                                                      const long* pDXAry = NULL ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
@@ -1247,7 +1247,7 @@ public:
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const sal_Int32* pLogicDXArray=NULL, int flags=0 ) const;
+                                            const long* pLogicDXArray=NULL, int flags=0 ) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray, int flags = 0 ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;

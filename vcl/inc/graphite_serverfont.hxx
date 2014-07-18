@@ -80,14 +80,14 @@ public:
         {
             return maImpl.GetTextBreak(mw, ce, f);
         }
-        virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const SAL_OVERRIDE
+        virtual void    GetCaretPositions( int as, long* cxa ) const SAL_OVERRIDE
         {
             maImpl.GetCaretPositions(as, cxa);
         }
 
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
-                        sal_Int32* gaa = NULL, int* cpa = NULL,
+                        long* gaa = NULL, int* cpa = NULL,
                         const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE
         {
             maImpl.DrawBase() = maDrawBase;

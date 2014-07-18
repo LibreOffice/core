@@ -93,17 +93,17 @@ public:
                       const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-               const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const sal_Int32* pDXArray = NULL ) const;
+                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const long* pDXArray = NULL ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, sal_Int32* pDXArray = NULL ) const;
+                         const sal_Int32 nIdx, const sal_Int32 nLen, long* pDXArray = NULL ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,
                    const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-        const Size& rSize, const Color& rCol, bool bLeft );
+                           const Size& rSize, const Color& rCol, bool bLeft );
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );
 };

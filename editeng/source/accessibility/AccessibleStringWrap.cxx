@@ -56,7 +56,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
     }
     else
     {
-        sal_Int32 aXArray[2];
+        long aXArray[2];
         mrDev.GetCaretPositions( maText, aXArray, static_cast< sal_uInt16 >(nIndex), 1 );
         rRect.Left() = 0;
         rRect.Top() = 0;

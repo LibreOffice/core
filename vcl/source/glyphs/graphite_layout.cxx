@@ -1090,7 +1090,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
 
 }
 
-void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const
+void GraphiteLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
 {
     // For each character except the last discover the caret positions
     // immediately before and after that character.

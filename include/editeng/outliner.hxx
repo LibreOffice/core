@@ -373,7 +373,7 @@ public:
     sal_Int32           mnPara;
     sal_Int32           mnIndex;
     const SvxFont&      mrFont;
-    const sal_Int32*    mpDXArray;
+    const long*         mpDXArray;
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
@@ -402,7 +402,7 @@ public:
         const SvxFont& rFnt,
         sal_Int32 nPar,
         sal_Int32 nIdx,
-        const sal_Int32* pDXArr,
+        const long* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         const ::com::sun::star::lang::Locale* pLocale,
@@ -836,25 +836,25 @@ public:
 
     void            StripPortions();
 
-    virtual void DrawingText(
-        const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen,
-        const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
-        const EEngineData::WrongSpellVector* pWrongSpellVector,
-        const SvxFieldData* pFieldData,
-        bool bEndOfLine,
-        bool bEndOfParagraph,
-        bool bEndOfBullet,
-        const ::com::sun::star::lang::Locale* pLocale,
-        const Color& rOverlineColor,
-        const Color& rTextLineColor);
+    virtual void DrawingText( const Point& rStartPos, const OUString& rText,
+                              sal_Int32 nTextStart, sal_Int32 nTextLen,
+                              const long* pDXArray, const SvxFont& rFont,
+                              sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                              const EEngineData::WrongSpellVector* pWrongSpellVector,
+                              const SvxFieldData* pFieldData,
+                              bool bEndOfLine,
+                              bool bEndOfParagraph,
+                              bool bEndOfBullet,
+                              const ::com::sun::star::lang::Locale* pLocale,
+                              const Color& rOverlineColor,
+                              const Color& rTextLineColor);
 
-    virtual void DrawingTab(
-        const Point& rStartPos, long nWidth, const OUString& rChar,
-        const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
-        bool bEndOfLine,
-        bool bEndOfParagraph,
-        const Color& rOverlineColor,
-        const Color& rTextLineColor);
+    virtual void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
+                             const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                             bool bEndOfLine,
+                             bool bEndOfParagraph,
+                             const Color& rOverlineColor,
+                             const Color& rTextLineColor);
 
     Size            CalcTextSize();
     Size            CalcTextSizeNTP();

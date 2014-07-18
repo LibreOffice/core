@@ -269,7 +269,7 @@ static float GetSwapFloat( SvStream& rSt )
                                    const OUString&                rString,
                                    int                            nIndex,
                                    int                            nLength,
-                                   const sal_Int32*               pCharWidths,
+                                   const long*                    pCharWidths,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
