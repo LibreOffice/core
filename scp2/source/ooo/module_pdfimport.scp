@@ -25,7 +25,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/pdfimport"
+#include "AutoInstall/xpdfimport"
 
 Module gid_Module_Pdfimport
     Name = "PDF Import";
@@ -59,7 +59,7 @@ File gid_File_Exe_Xpdfimport
     Styles = (PACKED);
 End
 
-rile gid_File_Xcd_Pdfimport
+File gid_File_Xcd_Pdfimport
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "pdfimport.xcd";
