@@ -4216,7 +4216,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                 // gather component properties
 
                 Date aOriginalDate(Date::EMPTY);
-                OUString sOriginalContent, sDateFormat;
+                OUString sOriginalContent, sDateFormat, sAlias;
                 OUString sLocale("en-US");
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
@@ -4241,6 +4241,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                         }
                         else if (aGrabBag[i].Name == "CharFormat")
                             aGrabBag[i].Value >>= aCharFormat;
+                        else if (aGrabBag[i].Name == "ooxml:CT_SdtPr_alias")
+                            aGrabBag[i].Value >>= sAlias;
                     }
                 }
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
@@ -4273,6 +4275,11 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
                 m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
+
+                if (!sAlias.isEmpty())
+                    m_pSerializer->singleElementNS(XML_w, XML_alias,
+                                                   FSNS(XML_w, XML_val), OUStringToOString(sAlias, RTL_TEXTENCODING_UTF8),
+                                                   FSEND);
 
                 if (bHasDate)
                     m_pSerializer->startElementNS(XML_w, XML_date,
