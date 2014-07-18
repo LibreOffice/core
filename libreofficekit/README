@@ -2,7 +2,7 @@ LibreOfficeKit
 **************
 
 LibreOfficeKit can be used for accessing LibreOffice functionality
-without LibreOffice, through C/C++, without any need to use UNO.
+through C/C++, without any need to use UNO.
 
 For now it only offers document conversion (in addition to an experimental
 tiled rendering API).
