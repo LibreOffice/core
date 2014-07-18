@@ -632,7 +632,7 @@ class WinMtfOutput
 
     Point               ImplMap( const Point& rPt );
     Point               ImplScale( const Point& rPt );
-    Size                ImplMap( const Size& rSz );
+    Size                ImplMap( const Size& rSize, bool bDoWorldTransform = true);
     Rectangle           ImplMap( const Rectangle& rRectangle );
     void                ImplMap( Font& rFont );
     Polygon&            ImplMap( Polygon& rPolygon );
