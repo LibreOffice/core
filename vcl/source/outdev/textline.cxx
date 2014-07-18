@@ -668,7 +668,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 }
 
 void OutputDevice::ImplDrawTextLine( long nX, long nY,
-                                     long nDistX, long nWidth,
+                                     long nDistX, DeviceCoordinate nWidth,
                                      FontStrikeout eStrikeout,
                                      FontUnderline eUnderline,
                                      FontUnderline eOverline,
@@ -745,8 +745,9 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
 
         // calculate distance of each word from the base point
         Point aPos;
-        sal_Int32 nDist = 0, nWidth = 0;
-        long nAdvance = 0;
+        DeviceCoordinate nDist = 0;
+        DeviceCoordinate nWidth = 0;
+        DeviceCoordinate nAdvance = 0;
         for( int nStart = 0;;)
         {
             // iterate through the layouted glyphs
@@ -964,9 +965,10 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         InitFont();
 
     Point aPos = ImplLogicToDevicePixel( rPos );
-    nWidth = ImplLogicWidthToDevicePixel( nWidth );
+    DeviceCoordinate fWidth;
+    fWidth = LogicWidthToDeviceCoordinate( nWidth );
     aPos += Point( mnTextOffX, mnTextOffY );
-    ImplDrawTextLine( aPos.X(), aPos.X(), 0, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+    ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
