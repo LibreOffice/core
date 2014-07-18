@@ -540,11 +540,17 @@ void XPlugin_Impl::loadPlugin()
                                            sv[0],
                                            sv[1]
                                            );
+
+            SAL_WARN_IF( !pComm, "extensions.plugin", "no PluginComm");
+            if (!pComm)
+                return;
+
 #elif defined WNT
             PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                      m_aDescription.PluginName,
                                                      (HWND)pEnvData->hWnd );
 #endif
+
             setPluginComm( pComm );
         }
         else
