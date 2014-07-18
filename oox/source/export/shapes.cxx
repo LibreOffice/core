@@ -328,6 +328,10 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                         bPredefinedHandlesUsed = false;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
                 }
+                else if ( rProp.Name == "PresetTextWarp" )
+                {
+                    rProp.Value >>= m_presetWarp;
+                }
             }
         }
     }
@@ -822,7 +826,7 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
             if (xPropertySetInfo->hasPropertyByName("TextBox") && xPropertySet->getPropertyValue("TextBox").get<bool>())
             {
                 GetTextExport()->WriteTextBox(uno::Reference<drawing::XShape>(xIface, uno::UNO_QUERY_THROW));
-                WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
+                WriteText( xIface, m_presetWarp, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
                 return *this;
             }
         }
@@ -833,10 +837,10 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
         FSHelperPtr pFS = GetFS();
 
         pFS->startElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx), FSEND );
-        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true );
+        WriteText( xIface, m_presetWarp, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true );
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX)
-            WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
+            WriteText( xIface, m_presetWarp, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
     else if (GetDocumentType() == DOCUMENT_DOCX)
         mpFS->singleElementNS(nXmlNamespace, XML_bodyPr, FSEND);

@@ -1690,7 +1690,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
+void DrawingML::WriteText( Reference< XInterface > rXIface, OUString presetWarp, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
 {
     Reference< XText > xXText( rXIface, UNO_QUERY );
     Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
@@ -1792,6 +1792,11 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
                                XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                                XML_vert, sWritingMode,
                                FSEND );
+        if( presetWarp != NULL  && !presetWarp.isEmpty())
+        {
+            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst,OUStringToOString(presetWarp, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+        }
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
             sal_Bool bTextAutoGrowHeight = sal_False;
