@@ -31,6 +31,14 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+class ExcXmlRecord : public ExcRecord
+{
+public:
+    virtual sal_Size    GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16  GetNum() const SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+};
+
 // XclExpUserBView - one UserBView record for each user
 
 class XclExpUserBView : public ExcRecord
@@ -228,39 +236,60 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
+class XclExpXmlChTrHeaders : public ExcXmlRecord
+{
+    sal_uInt8 maGUID[16];
+public:
+    void SetGUID( const sal_uInt8* pGUID );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+};
+
+class XclExpChTrTabIdBuffer;
+class XclExpChTrAction;
+
+class XclExpXmlChTrHeader : public ExcXmlRecord
+{
+    OUString maUserName;
+    DateTime maDateTime;
+    sal_uInt8 maGUID[16];
+    sal_Int32 mnLogNumber;
+    sal_uInt32 mnMinAction;
+    sal_uInt32 mnMaxAction;
+
+    std::vector<sal_uInt16> maTabBuffer;
+    std::vector<XclExpChTrAction*> maActions;
+
+public:
+    XclExpXmlChTrHeader(
+        const OUString& rUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
+        sal_Int32 nLogNumber, const XclExpChTrTabIdBuffer& rBuf );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
+    void AppendAction( XclExpChTrAction* pAction );
+};
+
 // XclExpChTrInfo - header of action group of a user
 
 class XclExpChTrInfo : public ExcRecord
 {
 private:
     XclExpString                sUsername;
-    sal_Int32                   mnLogNumber;
     DateTime                    aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
     virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 public:
-    inline                      XclExpChTrInfo(
-                                    const OUString& rUsername,
-                                    const DateTime& rDateTime,
-                                    const sal_uInt8* pGUID,
-                                    sal_Int32 nLogNumber );
+    XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime,
+                    const sal_uInt8* pGUID );
+
     virtual                     ~XclExpChTrInfo();
 
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
-
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
-inline XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID, sal_Int32 nLogNumber ) :
-    sUsername( rUsername ),
-    mnLogNumber( nLogNumber ),
-    aDateTime( rDateTime )
-{
-    memcpy( aGUID, pGUID, 16 );
-}
 
 // XclExpChTrTabIdBuffer - buffer for tab id's
 
@@ -296,7 +325,6 @@ class XclExpChTrTabId : public ExcRecord
 private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
-    bool                        mbInRevisionHeaders;
 
     inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = NULL; }
 
@@ -304,16 +332,14 @@ private:
 
 public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
-                                    pBuffer( NULL ), nTabCount( nCount ), mbInRevisionHeaders( false ) {}
-                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders = false );
+                                    pBuffer( NULL ), nTabCount( nCount ) {}
+                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
     virtual                     ~XclExpChTrTabId();
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
-
-    virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // XclExpChTrAction - base class for action records
@@ -361,7 +387,6 @@ protected:
                                 // do something after writing the record
     virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
-    inline sal_uInt32           GetActionNumber() const { return nIndex; }
     inline bool                 GetAccepted() const { return bAccepted; }
 
 public:
@@ -385,6 +410,7 @@ public:
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 
     inline XclExpChTrAction*    GetAddAction() { return pAddAction; }
+    inline sal_uInt32           GetActionNumber() const { return nIndex; }
 };
 
 inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const
