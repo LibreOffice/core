@@ -4278,7 +4278,7 @@ int RTFDocumentImpl::popState()
                 // The first character is the length of the string (the rest should be ignored).
                 sal_Int32 nLength(aStr.toChar());
                 OUString aValue;
-                if (nLength <= aStr.getLength())
+        if (nLength < aStr.getLength())
                     aValue = aStr.copy(1, nLength);
                 else
                     aValue = aStr;
