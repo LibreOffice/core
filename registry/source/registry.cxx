@@ -118,6 +118,7 @@ static RegError REGISTRY_CALLTYPE createRegistry(rtl_uString* registryName,
     ORegistry* pReg = new ORegistry();
     if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
     {
+        delete pReg;
         *phRegistry = NULL;
         return ret;
     }
