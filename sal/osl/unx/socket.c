@@ -655,7 +655,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
         pszDottedAddr = rtl_string_getStr(strDottedAddr);
     }
 
-    Addr = osl_psz_createInetSocketAddr(pszDottedAddr, Port);
+    Addr = pszDottedAddr ? osl_psz_createInetSocketAddr(pszDottedAddr, Port) : 0;
 
     if ( strDottedAddr != 0 )
     {
