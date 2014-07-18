@@ -836,6 +836,13 @@ const char* XclXmlUtils::ToPsz( bool b )
     return b ? "true" : "false";
 }
 
+const char* XclXmlUtils::ToPsz10( bool b )
+{
+    // xlsx seems to use "1" or "0" for boolean values.  I wonder it ever uses
+    // the "true" "false" variant.
+    return b ? "1" : "0";
+}
+
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
 {
     pStream->startElement( nElement, FSEND );
