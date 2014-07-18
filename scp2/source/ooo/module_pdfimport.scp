@@ -25,7 +25,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/xpdfimport"
+#include "AutoInstall/pdfimport"
 
 Module gid_Module_Pdfimport
     Name = "PDF Import";
