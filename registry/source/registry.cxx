@@ -514,6 +514,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registr
     ORegistry* pReg = new ORegistry();
     if ((ret = pReg->initRegistry(registryName, REG_CREATE)))
     {
+        delete pReg;
         *phRegistry = NULL;
         return ret;
     }
@@ -563,6 +564,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryN
     ORegistry* pReg = new ORegistry();
     if ((_ret = pReg->initRegistry(registryName, accessMode)))
     {
+        delete pReg;
         *phRegistry = NULL;
         return _ret;
     }
