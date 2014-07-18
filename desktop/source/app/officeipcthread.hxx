@@ -125,6 +125,9 @@ class OfficeIPCThread : public salhelper::Thread
     static void                 SetReady(
         rtl::Reference< OfficeIPCThread > const & pThread =
             rtl::Reference< OfficeIPCThread >());
+    static void                 WaitForReady(
+        rtl::Reference< OfficeIPCThread > const & pThread =
+            rtl::Reference< OfficeIPCThread >());
 
     bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }
 };
