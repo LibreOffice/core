@@ -517,6 +517,9 @@ CreateElementMapPointer </xsl:text>
         <xsl:when test="@action='text'">
     pHandler-&gt;text(sText);
         </xsl:when>
+        <xsl:when test="@action='fldData'">
+    pHandler-&gt;fldData(sText);
+        </xsl:when>
         <xsl:when test="@action='positionOffset'">
     pHandler-&gt;positionOffset(sText);
         </xsl:when>

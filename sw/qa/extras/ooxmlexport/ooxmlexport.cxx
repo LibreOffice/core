@@ -3392,6 +3392,13 @@ DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]/w:instrText", "ADDIN EN.CITE.DATA");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
