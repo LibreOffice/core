@@ -73,7 +73,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
          *  #93895# since floats are system windows, coordinates have
          *  to be converted to float relative for the hittest
          */
-        sal_uInt16          nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
+        HitTest         nHitTest = HITTEST_OUTSIDE;
         FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, nHitTest );
         FloatingWindow* pLastLevelFloat;
         sal_uLong           nPopupFlags;
@@ -82,7 +82,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
             if ( bMouseLeave )
                 return true;
 
-            if ( !pFloat || (nHitTest & IMPL_FLOATWIN_HITTEST_RECT) )
+            if ( !pFloat || (nHitTest == HITTEST_RECT) )
             {
                 if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
                     ImplDestroyHelpWindow( true );
@@ -107,7 +107,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
 //                        else
                             return true;
                     }
-                    else if ( nHitTest & IMPL_FLOATWIN_HITTEST_RECT )
+                    else if ( nHitTest == HITTEST_RECT )
                     {
                         if ( !(pFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE) )
                             pFloat->ImplSetMouseDown();
@@ -118,7 +118,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                 {
                     if ( pFloat )
                     {
-                        if ( nHitTest & IMPL_FLOATWIN_HITTEST_RECT )
+                        if ( nHitTest == HITTEST_RECT )
                         {
                             if ( pFloat->ImplIsMouseDown() )
                                 pFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
@@ -1420,7 +1420,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
          !pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( pWindow ) )
     {
-        sal_uInt16 nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
+        HitTest nHitTest = HITTEST_OUTSIDE;
         pMouseWindow = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pWindow, aMousePos, nHitTest );
     }
     // then try the window directly beneath the mouse

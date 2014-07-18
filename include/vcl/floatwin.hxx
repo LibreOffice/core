@@ -61,8 +61,14 @@ class ToolBox;
 #define FLOATWIN_TITLE_NONE                     ((sal_uInt16)0x0008)
 
 
-// - FloatingWindow -
+enum HitTest
+{
+    HITTEST_OUTSIDE,
+    HITTEST_WINDOW,
+    HITTEST_RECT
+};
 
+// - FloatingWindow -
 
 class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {
@@ -100,10 +106,7 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-#define IMPL_FLOATWIN_HITTEST_OUTSIDE       ((sal_uInt16)0x0001)
-#define IMPL_FLOATWIN_HITTEST_WINDOW        ((sal_uInt16)0x0002)
-#define IMPL_FLOATWIN_HITTEST_RECT          ((sal_uInt16)0x0004)
-    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( Window* pReference, const Point& rPos, sal_uInt16& rHitTest );
+    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( Window* pReference, const Point& rPos, HitTest& rHitTest );
     SAL_DLLPRIVATE FloatingWindow*  ImplFindLastLevelFloat();
     SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const Window* pWindow );
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
