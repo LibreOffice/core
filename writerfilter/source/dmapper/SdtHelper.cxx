@@ -128,6 +128,8 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     aGrabBag["DateFormat"] <<= sDateFormat;
     aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
     aGrabBag["CharFormat"] <<= aCharFormat.Value;
+    // merge in properties like ooxml:CT_SdtPr_alias and friends.
+    aGrabBag.update(comphelper::SequenceAsHashMap(m_aGrabBag));
 
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
