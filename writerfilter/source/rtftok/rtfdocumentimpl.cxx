@@ -1097,6 +1097,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case DESTINATION_FONTENTRY:
     case DESTINATION_STYLESHEET:
     case DESTINATION_STYLEENTRY:
+    case DESTINATION_LISTNAME:
     case DESTINATION_REVISIONTABLE:
     case DESTINATION_REVISIONENTRY:
     {
@@ -1155,6 +1156,10 @@ void RTFDocumentImpl::text(OUString& rString)
                 }
                 else
                     SAL_INFO("writerfilter", "no RTF style type defined, ignoring");
+                break;
+            case DESTINATION_LISTNAME:
+                // TODO: what can be done with a list name?
+                m_aStates.top().aDestinationText.makeStringAndClear();
                 break;
             case DESTINATION_REVISIONTABLE:
             case DESTINATION_REVISIONENTRY:
@@ -1493,6 +1498,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         break;
     case RTF_LIST:
         m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
+        break;
+    case RTF_LISTNAME:
+        m_aStates.top().nDestinationState = DESTINATION_LISTNAME;
         break;
     case RTF_LFOLEVEL:
         m_aStates.top().nDestinationState = DESTINATION_LFOLEVEL;
@@ -5562,6 +5570,8 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
         m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelText_val, pValue);
     }
+    break;
+    case DESTINATION_LISTNAME:
     break;
     case DESTINATION_LISTLEVEL:
     {
