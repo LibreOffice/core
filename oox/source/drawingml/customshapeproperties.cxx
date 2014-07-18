@@ -151,15 +151,34 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
+        const OUString sCustomShapeGeometry("CustomShapeGeometry");
+        uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
+        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+
+        sal_Int32 i, nCount = 0;
+        if (aGeoPropSet >>= aGeoPropSeq)
+        {
+            nCount = aGeoPropSeq.getLength();
+            for ( i = 0; i < nCount; i++ )
+            {
+                const OUString sAdjustmentValues("AdjustmentValues");
+                if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
+                {
+                    OUString presetTextWarp;
+                    if ( aGeoPropSeq[ i ].Value >>= presetTextWarp )
+                    {
+                        aPropertyMap.setProperty( PROP_PresetTextWarp, Any( presetTextWarp ) );
+                    }
+                }
+            }
+        }
+
         if ( maAdjustmentGuideList.size() )
         {
             const OUString sType = "Type";
-            const OUString sCustomShapeGeometry("CustomShapeGeometry");
-            uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
-            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
-                sal_Int32 i, nCount = aGeoPropSeq.getLength();
+                nCount = aGeoPropSeq.getLength();
                 for ( i = 0; i < nCount; i++ )
                 {
                     const OUString sAdjustmentValues("AdjustmentValues");
