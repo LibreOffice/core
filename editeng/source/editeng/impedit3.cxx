@@ -151,18 +151,17 @@ sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar )
     }
 }
 
-static void lcl_DrawRedLines(
-    OutputDevice* pOutDev,
-    long nFontHeight,
-    const Point& rPnt,
-    size_t nIndex,
-    size_t nMaxEnd,
-    const sal_Int32* pDXArray,
-    WrongList* pWrongs,
-    short nOrientation,
-    const Point& rOrigin,
-    bool bVertical,
-    bool bIsRightToLeft )
+static void lcl_DrawRedLines( OutputDevice* pOutDev,
+                              long nFontHeight,
+                              const Point& rPnt,
+                              size_t nIndex,
+                              size_t nMaxEnd,
+                              const long* pDXArray,
+                              WrongList* pWrongs,
+                              short nOrientation,
+                              const Point& rOrigin,
+                              bool bVertical,
+                              bool bIsRightToLeft )
 {
     // But only if font is not too small ...
     long nHght = pOutDev->LogicToPixel( Size( 0, nFontHeight ) ).Height();
@@ -733,7 +732,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
     bool bCalcCharPositions = true;
-    boost::scoped_array<sal_Int32> pBuf(new sal_Int32[ pNode->Len() ]);
+    boost::scoped_array<long> pBuf(new long[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1079,7 +1078,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( pPortion->GetLen() && GetAsianCompressionMode() )
                 {
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    sal_Int32* pDXArray = &rArray[0] + nTmpPos - pLine->GetStart();
+                    long* pDXArray = &rArray[0] + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
                 }
@@ -1255,9 +1254,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                sal_Int32* pDXArray = NULL;
+                long* pDXArray = NULL;
                 if (!pLine->GetCharPosArray().empty())
+                {
                     pDXArray = &pLine->GetCharPosArray()[0] + (nPortionStart - pLine->GetStart());
+                }
                 ImplCalcAsianCompression(
                     pNode, pPortion, nPortionStart, pDXArray, 10000, true);
             }
@@ -3038,8 +3039,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                const sal_Int32* pDXArray = 0;
-                                boost::scoped_array<sal_Int32> pTmpDXArray;
+                                const long* pDXArray = 0;
+                                boost::scoped_array<long> pTmpDXArray;
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
                                 {
@@ -3183,7 +3184,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                     }
 
-                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -3213,7 +3214,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -4390,8 +4391,9 @@ Color ImpEditEngine::GetAutoColor() const
 
 
 bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
-        TextPortion* pTextPortion, sal_Int32 nStartPos, sal_Int32* pDXArray,
-        sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray)
+                                             TextPortion* pTextPortion, sal_Int32 nStartPos,
+                                             long* pDXArray, sal_uInt16 n100thPercentFromMax,
+                                             bool bManipulateDXArray)
 {
     DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
     DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
@@ -4557,7 +4559,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
                 sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                sal_Int32* pDXArray = NULL;
+                long* pDXArray = NULL;
                 if (!pLine->GetCharPosArray().empty())
                 {
                     pDXArray = &pLine->GetCharPosArray()[0]+( nTxtPortionStart-pLine->GetStart() );

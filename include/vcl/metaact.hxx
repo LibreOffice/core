@@ -473,7 +473,7 @@ private:
 
     Point       maStartPt;
     OUString    maStr;
-    sal_Int32*  mpDXAry;
+    long*       mpDXAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
@@ -486,7 +486,7 @@ public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
     MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
-                         const sal_Int32* pDXAry, sal_Int32 nIndex,
+                         const long* pDXAry, sal_Int32 nIndex,
                          sal_Int32 nLen );
 
     virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
@@ -503,7 +503,7 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    sal_Int32*      GetDXArray() const { return mpDXAry; }
+    long*           GetDXArray() const { return mpDXAry; }
 };
 
 class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction

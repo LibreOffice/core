@@ -176,8 +176,13 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, ::com::sun::star::
     {
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
+        long* pDXA = (long*)alloca(str.getLength() * sizeof(long));
+        nRet = pOutDev->GetTextArray( str, pDXA );
         rDXArray = ::com::sun::star::uno::Sequence<sal_Int32>( str.getLength() );
-        nRet = pOutDev->GetTextArray( str, rDXArray.getArray() );
+        for(int i = 0; i < str.getLength(); i++)
+        {
+            rDXArray[i] = pDXA[i];
+        }
         pOutDev->SetFont( aOldFont );
     }
     return nRet;

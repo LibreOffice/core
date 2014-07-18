@@ -135,20 +135,20 @@ private:
         // nSizeWords was unknown upon calling WriteRecordHeader(..)
         // if needed it inserts a BYTE 0 to make number of bytes even
 
-    void WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
-    void WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
+    void WMFRecord_Arc(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
+    void WMFRecord_Chord(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
     void WMFRecord_CreateBrushIndirect(const Color& rColor);
-    void WMFRecord_CreateFontIndirect(const Font & rFont);
+    void WMFRecord_CreateFontIndirect(const Font& rFont);
     void WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo );
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
-    void WMFRecord_Ellipse(const Rectangle & rRect);
+    void WMFRecord_Ellipse(const Rectangle& rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const sal_Int32 * pDXAry );
-    void WMFRecord_ExtTextOut(const Point & rPoint, const OUString & rString, const sal_Int32 * pDXAry);
+    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const long* pDXAry );
+    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, const long* pDXAry);
 
-    void TrueExtTextOut(const Point & rPoint, const OUString & rString,
-        const OString& rByteString, const sal_Int32 * pDXAry);
-    void TrueTextOut(const Point & rPoint, const OString& rString);
+    void TrueExtTextOut(const Point& rPoint, const OUString& rString,
+                        const OString& rByteString, const long* pDXAry);
+    void TrueTextOut(const Point& rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);

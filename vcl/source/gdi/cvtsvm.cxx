@@ -864,12 +864,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                        boost::scoped_array<sal_Int32> pDXAry;
+                        boost::scoped_array<long> pDXAry;
                         if (nAryLen > 0)
                         {
                             sal_Int32 nStrLen( aStr.getLength() );
 
-                            pDXAry.reset(new sal_Int32[ std::max( nAryLen, nStrLen ) ]);
+                            pDXAry.reset(new long[ std::max( nAryLen, nStrLen ) ]);
 
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
                                 rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
@@ -879,7 +879,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if( nAryLen+1 == nStrLen )
                                 {
-                                    boost::scoped_array<sal_Int32> pTmpAry(new sal_Int32[nStrLen]);
+                                    boost::scoped_array<long> pTmpAry(new long[nStrLen]);
 
                                     aFontVDev.GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 
@@ -1721,14 +1721,15 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTARRAY_ACTION ):
             {
-                MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
-                OString aText(OUStringToOString(pAct->GetText(),
-                    rActualCharSet));
-                OUString                aUniText = pAct->GetText().copy( pAct->GetIndex(), std::min<sal_Int32>(pAct->GetText().getLength() - pAct->GetIndex(), pAct->GetLen()) );
-                sal_Int32               nAryLen;
-                sal_Int32               nLen = pAct->GetLen();
-                const sal_Int32         nTextLen = aText.getLength();
-                sal_Int32*              pDXArray = pAct->GetDXArray();
+                MetaTextArrayAction* pAct = (MetaTextArrayAction*)pAction;
+                OString aText(OUStringToOString(pAct->GetText(), rActualCharSet));
+                OUString aUniText = pAct->GetText().copy(
+                        pAct->GetIndex(),
+                        std::min<sal_Int32>(pAct->GetText().getLength() - pAct->GetIndex(), pAct->GetLen()) );
+                sal_Int32 nAryLen;
+                sal_Int32 nLen = pAct->GetLen();
+                const sal_Int32 nTextLen = aText.getLength();
+                long* pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
