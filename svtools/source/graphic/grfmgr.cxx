@@ -69,7 +69,8 @@ void GraphicObject::ImplAfterDataChange()
     mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
 
     // check memory footprint of all GraphicObjects managed and evtl. take action
-    GetGraphicManager().ImplCheckSizeOfSwappedInGraphics();
+    if (mpMgr)
+        mpMgr->ImplCheckSizeOfSwappedInGraphics();
 }
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
