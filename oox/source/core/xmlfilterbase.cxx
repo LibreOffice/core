@@ -667,33 +667,23 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_DocSecurity,           "doc security" );
 #endif  /* def OOXTODO */
 
-    uno::Sequence<beans::NamedValue> aStats = xProperties->getDocumentStatistics();
-    for (sal_Int32 i = 0; i < aStats.getLength(); ++i)
+    comphelper::SequenceAsHashMap aStats = xProperties->getDocumentStatistics();
+    comphelper::SequenceAsHashMap::iterator it = aStats.find("ParagraphCount");
+    if (it != aStats.end())
     {
-        if (aStats[i].Name == "ParagraphCount")
-        {
             sal_Int32 nValue = 0;
-            if (aStats[i].Value >>= nValue)
-            {
+            if (it->second >>= nValue)
                 writeElement(pAppProps, XML_Paragraphs, OUString::number(nValue));
-                break;
-            }
-        }
     }
 
     uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
-    const uno::Sequence<beans::PropertyValue> aUserDefinedProperties = xUserDefinedProperties->getPropertyValues();
-    for (sal_Int32 i = 0; i < aUserDefinedProperties.getLength(); ++i)
+    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
+    it = aUserDefinedProperties.find("Company");
+    if (it != aStats.end())
     {
-        if (aUserDefinedProperties[i].Name == "Company")
-        {
-            OUString aValue;
-            if (aUserDefinedProperties[i].Value >>= aValue)
-            {
-                writeElement(pAppProps, XML_Company, aValue);
-                break;
-            }
-        }
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement(pAppProps, XML_Company, aValue);
     }
 
     pAppProps->endElement( XML_Properties );
