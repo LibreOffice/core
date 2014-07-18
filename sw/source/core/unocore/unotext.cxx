@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -1489,9 +1490,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (const uno::Exception& e)
         {
-            throw uno::RuntimeException();
+            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+            lang::WrappedTargetRuntimeException wrapped;
+            wrapped.TargetException <<= e;
+            throw wrapped;
         }
     }
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
