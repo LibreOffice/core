@@ -144,8 +144,7 @@ sal_Int32 TextRun::insertAt(
 
                 xTextFieldCursor->gotoEnd( sal_True );
 
-                if ( !maTextCharacterProperties.maCharColor.isUsed() )
-                    aTextCharacterProps.maCharColor.setSchemeClr( XML_hlink );
+                aTextCharacterProps.maCharColor.setSchemeClr( XML_hlink );
                 if ( !maTextCharacterProperties.moUnderline.has() )
                     aTextCharacterProps.moUnderline.set( XML_sng );
 
