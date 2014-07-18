@@ -37,6 +37,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/token/tokens.hxx"
+#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -567,7 +568,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         if( aEndColor.hasTransparency() )
                             nEndTrans = aEndColor.getTransparency()*255/100;
 
-                        aGradient.Border = 100*nBorder;
+                        aGradient.Border = rtl::math::round(100*nBorder);
                     }
 
                     // push gradient or named gradient to property map
