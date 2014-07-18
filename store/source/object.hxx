@@ -65,7 +65,7 @@ class OStoreObject : public store::IStoreHandle
 public:
     /** Construction.
      */
-    OStoreObject() {}
+    OStoreObject() : m_nRefCount(0) {}
 
     /** IStoreHandle.
      */
