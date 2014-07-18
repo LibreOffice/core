@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;
@@ -63,21 +64,19 @@ namespace connectivity
     typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;
 
     // class ORefVector allows reference counting on a std::vector
-    template< class VectorVal > class ORefVector
+    template< class VectorVal > class ORefVector : public salhelper::SimpleReferenceObject
     {
         std::vector< VectorVal > m_vector;
-        oslInterlockedCount         m_refCount;
 
     protected:
         virtual ~ORefVector(){}
     public:
         typedef std::vector< VectorVal > Vector;
 
-        ORefVector() : m_refCount(0) {}
-        ORefVector(size_t _st) : m_vector(_st) , m_refCount(0) {}
-        ORefVector(const ORefVector& _rRH) : m_vector(_rRH.m_vector),m_refCount(0)
-        {
-        }
+        ORefVector() {}
+        ORefVector(size_t _st) : m_vector(_st) {}
+        ORefVector(const ORefVector& _rRH) : m_vector(_rRH.m_vector) {}
+
         ORefVector& operator=(const ORefVector& _rRH)
         {
             if ( &_rRH != this )
@@ -89,25 +88,6 @@ namespace connectivity
 
         std::vector< VectorVal > & get() { return m_vector; }
         std::vector< VectorVal > const & get() const { return m_vector; }
-
-        inline static void * SAL_CALL operator new( size_t nSize )
-            { return ::rtl_allocateMemory( nSize ); }
-        inline static void SAL_CALL operator delete( void * pMem )
-            { ::rtl_freeMemory( pMem ); }
-        inline static void * SAL_CALL operator new( size_t, void * pMem )
-            { return pMem; }
-        inline static void SAL_CALL operator delete( void *, void * )
-            {}
-
-        void acquire()
-        {
-            osl_atomic_increment( &m_refCount );
-        }
-        void release()
-        {
-            if (! osl_atomic_decrement( &m_refCount ))
-                delete this;
-        }
 
     };
 
