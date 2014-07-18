@@ -1784,6 +1784,14 @@ DECLARE_RTFIMPORT_TEST(testFdo80905, "fdo80905.rtf")
     CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(xFields->hasMoreElements()));
 }
 
+DECLARE_RTFIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.rtf")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was false, we ignored the relevant compat setting to make this non-last section unbalanced.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
