@@ -1469,8 +1469,12 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
                 pShape->SetShapeType( aShapeType );
         }
 
-        // SdXShape aggregates SvxShape
-        new SdXShape( SvxShape::getImplementation( xShape ), GetModel() );
+        SvxShape *pSdShape = SvxShape::getImplementation(xShape);
+        if (pSdShape)
+        {
+            // SdXShape aggregates SvxShape
+            new SdXShape(pSdShape, GetModel());
+        }
         return xShape;
     }
     else
