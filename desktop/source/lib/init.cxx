@@ -635,10 +635,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         initialize_uno(aAppURL);
         force_c_locale();
 
-        // Force headless
-        // the "svp" headless vcl backend isn't able to do tiled rendering for
-        // us -- we need to use a full featured backend, i.e. "gen" or "gtk",
-        // gtk seems to be somewhat better.
+        // Force headless -- this is only for bitmap rendering.
         rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
 //         InitVCL();
         // InitVCL() happens in soffice_main for us -- and we can't call InitVCL twice
