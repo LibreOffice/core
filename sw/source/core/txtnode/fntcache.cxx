@@ -174,12 +174,12 @@ struct CalcLinePosData
     const bool bSwitchH2V;
     const bool bSwitchL2R;
     long nHalfSpace;
-    sal_Int32* pKernArray;
+    long* pKernArray;
     const bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, Font& _rFont,
                       sal_Int32 _nCnt, const bool _bSwitchH2V, const bool _bSwitchL2R,
-                      long _nHalfSpace, sal_Int32* _pKernArray, const bool _bBidiPor) :
+                      long _nHalfSpace, long* _pKernArray, const bool _bBidiPor) :
         rInf( _rInf ),
         rFont( _rFont ),
         nCnt( _nCnt ),
@@ -905,7 +905,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             //const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
-            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
+            long* pKernArray = new long[rInf.GetLen()];
 
             if ( pPrinter )
                 pPrinter->GetTextArray( rInf.GetText(), pKernArray,
@@ -1001,7 +1001,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             else
                 nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
 
-            sal_Int32*  pKernArray = new sal_Int32[rInf.GetLen()];
+            long* pKernArray = new long[rInf.GetLen()];
 
             if ( pPrinter )
                 pPrinter->GetTextArray( rInf.GetText(), pKernArray,
@@ -1112,7 +1112,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             else
             {
                 //long nKernAdd = rInf.GetKern();
-        long nKernAdd = 0;
+                long nKernAdd = 0;
                 long nGridAddSum = nGridWidthAdd + nKernAdd;
                 for(sal_Int32 i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd + nKernAdd )
                 {
@@ -1147,7 +1147,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Simple kerning is handled by DrawStretchText
         if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
-            sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
+            long *pKernArray = new long[ rInf.GetLen() ];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                        rInf.GetIdx(), rInf.GetLen() );
 
@@ -1360,12 +1360,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         bool bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = false;
-        sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
+        long* pKernArray = new long[ rInf.GetLen() ];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         long nScrPos;
 
         // get screen array
-        sal_Int32* pScrArray = new sal_Int32[ rInf.GetLen() ];
+        long* pScrArray = new long[ rInf.GetLen() ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                     rInf.GetIdx(), rInf.GetLen() );
 
@@ -1877,7 +1877,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         aTxtSize.Width() = pPrinter->GetTextWidth( rInf.GetText(),
                                                    rInf.GetIdx(), nLn );
         aTxtSize.Height() = pPrinter->GetTextHeight();
-        sal_Int32 *pKernArray = new sal_Int32[nLn];
+        long* pKernArray = new long[nLn];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *pScrFont );
@@ -1895,7 +1895,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             nScrPos = pKernArray[ nLn - 1 ];
         else
         {
-            sal_Int32* pScrArray = new sal_Int32[ rInf.GetLen() ];
+            long* pScrArray = new long[ rInf.GetLen() ];
             rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                         rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
@@ -1947,7 +1947,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *pPrtFont );
         if( bCompress )
         {
-            sal_Int32 *pKernArray = new sal_Int32[nLn];
+            long* pKernArray = new long[nLn];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
@@ -1985,7 +1985,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     if( 0 != nSperren )
         nKern -= nSperren;
 
-    sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
+    long* pKernArray = new long[ rInf.GetLen() ];
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )
@@ -2321,7 +2321,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
-            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
+            long* pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
 
@@ -2361,7 +2361,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             else
                 nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
 
-            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
+            long* pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                             rInf.GetIdx(), rInf.GetLen() );
             long nCurrPos = pKernArray[nTxtBreak] + nGridWidthAdd;
@@ -2460,7 +2460,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             nLn = 1;
         else if( nLn > 2 * nTxtBreak2 )
             nLn = 2 * nTxtBreak2;
-        sal_Int32 *pKernArray = new sal_Int32[ nLn ];
+        long* pKernArray = new long[ nLn ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,

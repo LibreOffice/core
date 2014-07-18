@@ -1202,7 +1202,7 @@ public:
 
     /* actual drawing functions */
     void drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
-    void drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
+    void drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
                           sal_Int32 nIndex, sal_Int32 nLen,
                           bool bTextLines = true  );

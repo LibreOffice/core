@@ -121,7 +121,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+        ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         uno::Sequence< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
@@ -174,7 +174,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+        ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         MetricVector aMetricVector;
@@ -386,7 +386,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.getLength() )
         {
             // TODO(P2): cache that
-            ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
+            ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX
@@ -441,7 +441,7 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
+    void TextLayout::setupTextOffsets( long*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const

@@ -459,7 +459,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_Int32   nRecordPos, nRecordSize = 0, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
             Rectangle   aRect;
-            boost::scoped_array<sal_Int32> pDXAry;
+            boost::scoped_array<long> pDXAry;
 
             pWMF->SeekRel(-6);
             nRecordPos = pWMF->Tell();
@@ -502,7 +502,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     {
                         sal_Int16 nDx = 0, nDxTmp = 0;
                         sal_uInt16 i; //needed just outside the for
-                        pDXAry.reset(new sal_Int32[ nNewTextLen ]);
+                        pDXAry.reset(new long[ nNewTextLen ]);
                         for (i = 0; i < nNewTextLen; i++ )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
@@ -978,7 +978,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 Point  aPt;
                                                 OUString aString;
                                                 sal_uInt32  nStringLen, nDXCount;
-                                                boost::scoped_array<sal_Int32> pDXAry;
+                                                boost::scoped_array<long> pDXAry;
                                                 SvMemoryStream aMemoryStream( nEscLen );
                                                 aMemoryStream.Write( pData.get(), nEscLen );
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -998,9 +998,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                     if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                         nDXCount = 0;
                                                     if ( nDXCount )
-                                                        pDXAry.reset(new sal_Int32[ nDXCount ]);
+                                                        pDXAry.reset(new long[ nDXCount ]);
                                                     for  (sal_uInt32 i = 0; i < nDXCount; i++ )
-                                                        aMemoryStream.ReadInt32( pDXAry[ i ] );
+                                                    {
+                                                        sal_Int32 val;
+                                                        aMemoryStream.ReadInt32( val);
+                                                        pDXAry[ i ] = val;
+                                                    }
                                                     aMemoryStream.ReadUInt32( nSkipActions );
                                                     pOut->DrawText( aPt, aString, pDXAry.get() );
                                                 }

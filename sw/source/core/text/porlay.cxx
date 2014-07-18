@@ -1512,7 +1512,7 @@ sal_uInt16 SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
     return USHRT_MAX;
 }
 
-long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
+long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              Point* pPoint ) const
 {
@@ -1626,11 +1626,11 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the aKashidaInvalid array.
 
-sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
-                                    sal_Int32* pScrArray,
-                                    sal_Int32 nStt,
-                                    sal_Int32 nLen,
-                                    long nSpaceAdd ) const
+sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
+                                        long* pScrArray,
+                                        sal_Int32 nStt,
+                                        sal_Int32 nLen,
+                                        long nSpaceAdd ) const
 {
     SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
 
@@ -1895,10 +1895,10 @@ bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositi
     return true;
 }
 
-sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray,
-                                  sal_Int32* pScrArray, sal_Int32 nStt,
-                                  sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
-                                  long nSpaceAdd )
+sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, long* pKernArray,
+                                     long* pScrArray, sal_Int32 nStt,
+                                     sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
+                                     long nSpaceAdd )
 {
     SAL_WARN_IF( nStt + nLen > rTxt.getLength(), "sw.core", "String in ThaiJustify too small" );
 

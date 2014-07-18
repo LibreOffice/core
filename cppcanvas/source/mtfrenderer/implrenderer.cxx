@@ -863,7 +863,7 @@ namespace cppcanvas
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             const sal_Int32*               pCharWidths,
+                                             const long*                    pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -996,7 +996,7 @@ namespace cppcanvas
                 {
                     long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    sal_Int32* pStrikeoutCharWidths = new sal_Int32[nLen];
+                    long* pStrikeoutCharWidths = new long[nLen];
 
                     for ( int i = 0;i<nLen; i++)
                     {
@@ -2602,7 +2602,7 @@ namespace cppcanvas
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        ::boost::scoped_array< sal_Int32 > pDXArray( new sal_Int32[nLen] );
+                        ::boost::scoped_array< long > pDXArray( new long[nLen] );
 
                         rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
                                             pAct->GetIndex(), pAct->GetLen() );
@@ -2610,8 +2610,8 @@ namespace cppcanvas
                         const sal_Int32 nWidthDifference( pAct->GetWidth() - pDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        sal_Int32* p=pDXArray.get();
-                        for (sal_Int32 i=1; i<=nLen; ++i)
+                        long* p = pDXArray.get();
+                        for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
                             // distribute rounding errors 'evenly'
@@ -2619,7 +2619,7 @@ namespace cppcanvas
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += (sal_Int32)i*nWidthDifference/nLen;
+                            *p++ += (long)i*nWidthDifference/nLen;
                         }
 
                         createTextAction(

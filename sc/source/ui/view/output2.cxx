@@ -1466,7 +1466,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     // before processing the cell value.
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
 
-    std::vector<sal_Int32> aDX;
+    std::vector<long> aDX;
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {

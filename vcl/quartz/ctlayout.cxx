@@ -39,13 +39,13 @@ public:
     virtual bool    DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
-                                   sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                                   long* pGlyphAdvances, int* pCharIndexes,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
 
     virtual long    GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
 
     virtual void    InitFont( void) const SAL_OVERRIDE;
@@ -473,7 +473,7 @@ bool CTLayout::CacheGlyphLayout(void) const // eew!
 }
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
-                             sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                             long* pGlyphAdvances, int* pCharIndexes,
                              const PhysicalFontFace** pFallbackFonts ) const
 {
     if( !mpCTLine )
@@ -679,7 +679,7 @@ sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
     return nIndex;
 }
 
-void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
+void CTLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
     DBG_ASSERT( ((nMaxIndex>0)&&!(nMaxIndex&1)),
         "CTLayout::GetCaretPositions() : invalid number of caret pairs requested");

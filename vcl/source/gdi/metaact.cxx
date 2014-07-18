@@ -1176,8 +1176,8 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     {
         const sal_Int32 nAryLen = mnLen;
 
-        mpDXAry = new sal_Int32[ nAryLen ];
-        memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( sal_Int32 ) );
+        mpDXAry = new long[ nAryLen ];
+        memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( long ) );
     }
     else
         mpDXAry = NULL;
@@ -1185,7 +1185,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          const sal_Int32* pDXAry,
+                                          const long* pDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1198,7 +1198,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
     if( nAryLen )
     {
-        mpDXAry = new sal_Int32[ nAryLen ];
+        mpDXAry = new long[ nAryLen ];
         memcpy( mpDXAry, pDXAry, nAryLen * sizeof( sal_Int32 ) );
     }
     else
@@ -1293,13 +1293,16 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
         if ( mnLen >= nAryLen )
         {
-            mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
+            mpDXAry = new (std::nothrow)long[ mnLen ];
             if ( mpDXAry )
             {
                 sal_Int32 i;
+                sal_Int32 val;
                 for( i = 0; i < nAryLen; i++ )
-                    rIStm.ReadInt32( mpDXAry[ i ] );
-
+                {
+                    rIStm.ReadInt32( val);
+                    mpDXAry[ i ] = val;
+                }
                 // #106172# setup remainder
                 for( ; i < mnLen; i++ )
                     mpDXAry[ i ] = 0;

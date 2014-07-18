@@ -363,8 +363,8 @@ private:
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, bool bApplyMapping = true );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, bool bApplyMapping = true );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           bool bApplyMapping = true );
 

@@ -137,11 +137,6 @@ void setupMethodStubs( functor_vector_type& res )
     aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),true) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
-    /* void DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                       const sal_Int32* pDXAry = NULL,
-                                       sal_uInt16 nIndex = 0,
-                                       sal_Int32 nLen = STRING_LEN );
-    */
     add(res,
         "DrawTextArray",
         boost::bind(

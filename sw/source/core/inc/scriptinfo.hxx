@@ -251,7 +251,7 @@ public:
     sal_uInt16 HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
 
     // modifies the kerning array according to a given compress value
-    long Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
+    long Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    Point* pPoint = NULL ) const;
 
@@ -271,8 +271,8 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
-        sal_Int32 nStt, sal_Int32 nLen, long nSpaceAdd = 0) const;
+    sal_Int32 KashidaJustify( long* pKernArray, long* pScrArray,
+                              sal_Int32 nStt, sal_Int32 nLen, long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
  */
@@ -344,10 +344,10 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static sal_Int32 ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray,
-                               sal_Int32* pScrArray, sal_Int32 nIdx,
-                               sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
-                               long nSpaceAdd = 0 );
+    static sal_Int32 ThaiJustify( const OUString& rTxt, long* pKernArray,
+                                  long* pScrArray, sal_Int32 nIdx,
+                                  sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
+                                  long nSpaceAdd = 0 );
 
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
                                         bool bAllowInvalid = false );

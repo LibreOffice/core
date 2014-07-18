@@ -794,7 +794,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         if( j >= 0 )
         {
             nOldWidth += mpGlyphAdvances[ j ];
-            int nDiff = nOldWidth - pDXArray[ i ];
+            long nDiff = nOldWidth - pDXArray[ i ];
 
             // disabled because of #104768#
             // works great for static text, but problems when typing

@@ -1327,7 +1327,7 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, bool bTo, bool bRecordPath
     }
 }
 
-void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
+void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
     rPosition = ImplMap( rPosition );
@@ -1479,14 +1479,14 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
     {
         /* because text without dx array is badly scaled, we
            will create such an array if necessary */
-        sal_Int32* pDX = pDXArry;
+        long* pDX = pDXArry;
         if (!pDXArry)
         {
             // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
             SolarMutexGuard aGuard;
             VirtualDevice aVDev;
 
-            pDX = new sal_Int32[ rText.getLength() ];
+            pDX = new long[ rText.getLength() ];
             aVDev.SetMapMode( MAP_100TH_MM );
             aVDev.SetFont( maLatestFont );
             aVDev.GetTextArray( rText, pDX, 0, rText.getLength());

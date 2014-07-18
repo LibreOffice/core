@@ -34,7 +34,7 @@ namespace vcl
         virtual long        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 MetricVector* _pVector, OUString* _pDisplayText ) = 0;
-        virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual bool        GetCaretPositions( const OUString& _rText, long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual sal_Int32   GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
@@ -49,37 +49,33 @@ namespace vcl
     {
     public:
         DefaultTextLayout( OutputDevice& _rTargetDevice )
-            :m_rTargetDevice( _rTargetDevice )
+            : m_rTargetDevice( _rTargetDevice )
         {
         }
         virtual ~DefaultTextLayout();
 
         // ITextLayout overridables
-        virtual long        GetTextWidth(
-                                const OUString& _rText,
-                                sal_Int32 _nStartIndex,
-                                sal_Int32 _nLength
-                            ) const SAL_OVERRIDE;
-        virtual void        DrawText(
-                                const Point& _rStartPoint,
-                                const OUString& _rText,
-                                sal_Int32 _nStartIndex,
-                                sal_Int32 _nLength,
-                                MetricVector* _pVector,
-                                OUString* _pDisplayText
-                            ) SAL_OVERRIDE;
-        virtual bool        GetCaretPositions(
-                                const OUString& _rText,
-                                sal_Int32* _pCaretXArray,
-                                sal_Int32 _nStartIndex,
-                                sal_Int32 _nLength
-                            ) const SAL_OVERRIDE;
-        virtual sal_Int32   GetTextBreak(
-                                const OUString& _rText,
-                                long _nMaxTextWidth,
-                                sal_Int32 _nStartIndex,
-                                sal_Int32 _nLength
-                            ) const SAL_OVERRIDE;
+        virtual long        GetTextWidth( const OUString& _rText,
+                                          sal_Int32 _nStartIndex,
+                                          sal_Int32 _nLength ) const SAL_OVERRIDE;
+
+        virtual void        DrawText( const Point& _rStartPoint,
+                                      const OUString& _rText,
+                                      sal_Int32 _nStartIndex,
+                                      sal_Int32 _nLength,
+                                      MetricVector* _pVector,
+                                      OUString* _pDisplayText ) SAL_OVERRIDE;
+
+        virtual bool        GetCaretPositions( const OUString& _rText,
+                                               long* _pCaretXArray,
+                                               sal_Int32 _nStartIndex,
+                                               sal_Int32 _nLength ) const SAL_OVERRIDE;
+
+        virtual sal_Int32   GetTextBreak( const OUString& _rText,
+                                          long _nMaxTextWidth,
+                                          sal_Int32 _nStartIndex,
+                                          sal_Int32 _nLength ) const SAL_OVERRIDE;
+
         virtual bool        DecomposeTextRectAction() const SAL_OVERRIDE;
 
     private:
