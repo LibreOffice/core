@@ -93,7 +93,7 @@ public:
 
     void testCellBordersXLS();
     void testCellBordersXLSX();
-    void testTrackChangesSimpleXLS();
+    void testTrackChangesSimpleXLSX();
     void testSheetTabColorsXLSX();
 
     void testSharedFormulaExportXLS();
@@ -132,7 +132,7 @@ public:
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
-    CPPUNIT_TEST(testTrackChangesSimpleXLS);
+    CPPUNIT_TEST(testTrackChangesSimpleXLSX);
     CPPUNIT_TEST(testSheetTabColorsXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
@@ -1327,7 +1327,7 @@ OUString toString( const ScBigRange& rRange )
     return aBuf.makeStringAndClear();
 }
 
-void ScExportTest::testTrackChangesSimpleXLS()
+void ScExportTest::testTrackChangesSimpleXLSX()
 {
     struct CheckItem
     {
@@ -1450,17 +1450,19 @@ void ScExportTest::testTrackChangesSimpleXLS()
 
     } aTest;
 
+    // First, test the xls variant.
+
     ScDocShellRef xDocSh = loadDoc("track-changes/simple-cell-changes.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pDoc = &xDocSh->GetDocument();
     bool bGood = aTest.check(*pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bGood);
+    CPPUNIT_ASSERT_MESSAGE("Initial check failed (xls).", bGood);
 
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLS);
     xDocSh->DoClose();
     pDoc = &xDocSh2->GetDocument();
     bGood = aTest.check(*pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Check after reload failed.", bGood);
+    CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xls).", bGood);
 
     // fdo#81445 : Check the blank value string to make sure it's "<empty>".
     ScChangeTrack* pCT = pDoc->GetChangeTrack();
@@ -1470,6 +1472,22 @@ void ScExportTest::testTrackChangesSimpleXLS()
     OUString aDesc;
     pAction->GetDescription(aDesc, pDoc);
     CPPUNIT_ASSERT_EQUAL(OUString("Cell B2 changed from '<empty>' to '1'"), aDesc);
+
+    xDocSh2->DoClose();
+
+    // Now, test the xlsx variant the same way.
+
+    xDocSh = loadDoc("track-changes/simple-cell-changes.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    pDoc = &xDocSh->GetDocument();
+    aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Initial check failed (xlsx).", bGood);
+
+    xDocSh2 = saveAndReload(xDocSh, XLSX);
+    xDocSh->DoClose();
+    pDoc = &xDocSh2->GetDocument();
+    bGood = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xlsx).", bGood);
 
     xDocSh2->DoClose();
 }
