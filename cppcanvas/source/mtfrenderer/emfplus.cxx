@@ -49,6 +49,9 @@
 #include <textaction.hxx>
 #include <stdio.h>
 
+namespace
+{
+
 #define EmfPlusRecordTypeHeader 16385
 #define EmfPlusRecordTypeEndOfFile 16386
 #define EmfPlusRecordTypeGetDC 16388
@@ -122,6 +125,49 @@ enum EmfPlusCombineMode
     EmfPlusCombineModeExclude = 0x00000004,
     EmfPlusCombineModeComplement = 0x00000005
 };
+
+const char* emfTypeToName(sal_uInt16 type)
+{
+    switch(type)
+    {
+        case EmfPlusRecordTypeHeader: return "EmfPlusRecordTypeHeader";
+        case EmfPlusRecordTypeEndOfFile: return "EmfPlusRecordTypeEndOfFile";
+        case EmfPlusRecordTypeGetDC: return "EmfPlusRecordTypeGetDC";
+        case EmfPlusRecordTypeObject: return "EmfPlusRecordTypeObject";
+        case EmfPlusRecordTypeFillRects: return "EmfPlusRecordTypeFillRects";
+        case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
+        case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
+        case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
+        case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
+        case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
+        case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
+        case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
+        case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
+        case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
+        case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
+        case EmfPlusRecordTypeSetRenderingOrigin: return "EmfPlusRecordTypeSetRenderingOrigin";
+        case EmfPlusRecordTypeSetAntiAliasMode: return "EmfPlusRecordTypeSetAntiAliasMode";
+        case EmfPlusRecordTypeSetTextRenderingHint: return "EmfPlusRecordTypeSetTextRenderingHint";
+        case EmfPlusRecordTypeSetInterpolationMode: return "EmfPlusRecordTypeSetInterpolationMode";
+        case EmfPlusRecordTypeSetPixelOffsetMode: return "EmfPlusRecordTypeSetPixelOffsetMode";
+        case EmfPlusRecordTypeSetCompositingQuality: return "EmfPlusRecordTypeSetCompositingQuality";
+        case EmfPlusRecordTypeSave: return "EmfPlusRecordTypeSave";
+        case EmfPlusRecordTypeRestore: return "EmfPlusRecordTypeRestore";
+        case EmfPlusRecordTypeBeginContainerNoParams: return "EmfPlusRecordTypeBeginContainerNoParams";
+        case EmfPlusRecordTypeEndContainer: return "EmfPlusRecordTypeEndContainer";
+        case EmfPlusRecordTypeSetWorldTransform: return "EmfPlusRecordTypeSetWorldTransform";
+        case EmfPlusRecordTypeResetWorldTransform: return "EmfPlusRecordTypeResetWorldTransform";
+        case EmfPlusRecordTypeMultiplyWorldTransform: return "EmfPlusRecordTypeMultiplyWorldTransform";
+        case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
+        case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
+        case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
+        case EmfPlusRecordTypeSetClipRegion: return "EmfPlusRecordTypeSetClipRegion";
+        case EmfPlusRecordTypeDrawDriverString: return "EmfPlusRecordTypeDrawDriverString";
+    }
+    return "";
+}
+
+} // anonymous namespace
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;
@@ -1648,7 +1694,7 @@ namespace cppcanvas
                     SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
                 }
 
-                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
+                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
 
                 if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
