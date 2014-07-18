@@ -1728,6 +1728,9 @@ public:
      */
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
 
+    SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
+    SAL_DLLPRIVATE DeviceCoordinate LogicHeightToDeviceCoordinate( long nHeight ) const;
+
 private:
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.
