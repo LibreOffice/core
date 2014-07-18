@@ -892,8 +892,8 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
         // AS: Christian, my scaling factors are different than yours, and work better for me.
         //  However, I can't explain why exactly.  I got some of this by trial and error.
-        double XScale = static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth();
-        double YScale = static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight();
+        double XScale = destRect.GetWidth() ? static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth() : 1.0;;
+        double YScale = destRect.GetHeight() ? static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight() : 1.0;;
 
         // AS: If rClipRect has a value set, then we need to crop the bmp appropriately.
         //  If a map event already occurred in the metafile, then we do not need to map
