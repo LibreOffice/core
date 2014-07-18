@@ -140,7 +140,7 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }
-    catch ( com::sun::star::uno::Exception& )
+    catch (const com::sun::star::uno::Exception& )
     {
     }
 
@@ -254,9 +254,15 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
         }
         else
         {
-            SvStream* pStream = pMedium->GetInStream();
-            if ( pStream && SotStorage::IsStorageFile(pStream) )
-                xStg = new SotStorage( pStream, false );
+            try
+            {
+                SvStream* pStream = pMedium->GetInStream();
+                if ( pStream && SotStorage::IsStorageFile(pStream) )
+                    xStg = new SotStorage( pStream, false );
+            }
+            catch (const css::ucb::ContentCreationException &)
+            {
+            }
 
             if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
             {
