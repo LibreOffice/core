@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/unoprnms.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -121,19 +122,15 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
         xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
 
     // append date format to grab bag
-    uno::Sequence<beans::PropertyValue> aGrabBag(5);
-    aGrabBag[0].Name = "OriginalDate";
-    aGrabBag[0].Value = uno::makeAny(aDate);
-    aGrabBag[1].Name = "OriginalContent";
-    aGrabBag[1].Value = uno::makeAny(rContentText);
-    aGrabBag[2].Name = "DateFormat";
-    aGrabBag[2].Value = uno::makeAny(sDateFormat);
-    aGrabBag[3].Name = "Locale";
-    aGrabBag[3].Value = uno::makeAny(m_sLocale.makeStringAndClear());
-    aGrabBag[4] = aCharFormat;
+    comphelper::SequenceAsHashMap aGrabBag;
+    aGrabBag["OriginalDate"] <<= aDate;
+    aGrabBag["OriginalContent"] <<= rContentText;
+    aGrabBag["DateFormat"] <<= sDateFormat;
+    aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
+    aGrabBag["CharFormat"] <<= aCharFormat.Value;
 
     std::vector<OUString> aItems;
-    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag);
+    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
 }
 
 void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel)
