@@ -17243,7 +17243,7 @@
         <group>
           <optional>
             <element name="fldData">
-              <ref name="CT_Text"/>
+              <ref name="CT_FLDData"/>
             </element>
           </optional>
           <zeroOrMore>
@@ -17340,7 +17340,7 @@
         <choice>
           <optional>
             <element name="fldData">
-              <ref name="CT_Text"/>
+              <ref name="CT_FLDData"/>
             </element>
           </optional>
           <optional>
@@ -17404,6 +17404,9 @@
         <attribute name="r:id">
           <ref name="ST_String"/>
         </attribute>
+      </define>
+      <define name="CT_FLDData">
+        <ref name="ST_String"/>
       </define>
       <define name="CT_FFData">
         <oneOrMore>
@@ -24443,6 +24446,9 @@
       <action name="start" action="handleHyperlink"/>
       <action name="start" action="fieldsep"/>
       <action name="end" action="fieldend"/>
+    </resource>
+    <resource name="CT_FLDData" resource="Stream">
+      <action name="characters" action="fldData"/>
     </resource>
     <resource name="CT_FFData" resource="Properties">
       <element name="name" tokenid="ooxml:CT_FFData_name"/>

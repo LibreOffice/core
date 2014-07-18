@@ -559,6 +559,12 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[5]/w:instrText", "ADDIN EN.CITE.DATA");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
