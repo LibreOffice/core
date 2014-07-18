@@ -1298,7 +1298,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int n
 }
 
 int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-                                     int& nStart, long* pGlyphAdvAry, int* pCharPosAry,
+                                     int& nStart, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
                                      const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     GlyphVector::const_iterator pG = m_GlyphItems.begin();
@@ -1607,7 +1607,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
     int nCharPos[ MAX_FALLBACK ];
-    long nGlyphAdv[ MAX_FALLBACK ];
+    DeviceCoordinate nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ] = {0};
 
     sal_GlyphId nDummy;
@@ -1640,7 +1640,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nValid[ nLevel ] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
 #ifdef MULTI_SL_DEBUG
-        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), nGlyphAdv[nLevel], nCharPos[nLevel],
+        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), (long)nGlyphAdv[nLevel], nCharPos[nLevel],
             rArgs.mpStr[nCharPos[nLevel]]);
 #endif
         if( (n > 0) && !nValid[ nLevel ] )
@@ -1710,7 +1710,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
                     nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
 #ifdef MULTI_SL_DEBUG
-                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), nGlyphAdv[0], nCharPos[0], rArgs.mpStr[nCharPos[0]]);
+                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mpStr[nCharPos[0]]);
 #endif
                 if( !nValid[0] )
                    break;
@@ -1718,7 +1718,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
 
         // skip to end of layout run and calculate its advance width
-        int nRunAdvance = 0;
+        DeviceCoordinate nRunAdvance = 0;
         bool bKeepNotDef = (nFBLevel >= nLevel);
         for(;;)
         {
@@ -1728,9 +1728,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nStartOld[n] = nStartNew[n];
             int nOrigCharPos = nCharPos[n];
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
-                nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
+                                                     nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
 #ifdef MULTI_SL_DEBUG
-            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], nGlyphAdv[n], nCharPos[n], rArgs.mpStr[nCharPos[n]]);
+            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mpStr[nCharPos[n]]);
 #endif
             // break after last glyph of active layout
             if( !nValid[n] )
@@ -2015,7 +2015,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
 }
 
 int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int& nStart, long* pGlyphAdvAry, int* pCharPosAry,
+                                   int& nStart, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts ) const
 {
     // for multi-level fallback only single glyphs should be used
@@ -2041,8 +2041,8 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& r
             {
                 if( pGlyphAdvAry )
                 {
-                    long w = pGlyphAdvAry[i];
-                    w = static_cast<long>(w * fUnitMul + 0.5);
+                    DeviceCoordinate w = pGlyphAdvAry[i];
+                    w = static_cast<DeviceCoordinate>(w * fUnitMul + 0.5);
                     pGlyphAdvAry[i] = w;
                 }
                 pGlyphIdxAry[ i ] |= nFontTag;
@@ -2063,7 +2063,7 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& r
 }
 
 bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
-    ::basegfx::B2DPolyPolygonVector& rPPV ) const
+                                 ::basegfx::B2DPolyPolygonVector& rPPV ) const
 {
     bool bRet = false;
 

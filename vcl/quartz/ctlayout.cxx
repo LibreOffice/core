@@ -39,7 +39,7 @@ public:
     virtual bool    DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
-                                   long* pGlyphAdvances, int* pCharIndexes,
+                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
 
     virtual long    GetTextWidth() const SAL_OVERRIDE;
@@ -473,7 +473,7 @@ bool CTLayout::CacheGlyphLayout(void) const // eew!
 }
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
-                             long* pGlyphAdvances, int* pCharIndexes,
+                             DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
                              const PhysicalFontFace** pFallbackFonts ) const
 {
     if( !mpCTLine )

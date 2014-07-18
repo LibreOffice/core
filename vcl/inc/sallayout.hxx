@@ -179,8 +179,8 @@ public:
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
-                        long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
+                                   DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
@@ -233,7 +233,7 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int&, long* pGlyphAdvAry, int* pCharPosAry,
+                                   int&, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const SAL_OVERRIDE;
 
@@ -336,8 +336,8 @@ public:
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
-                        long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
+                                   DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                                   const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
 protected:
                     GenericSalLayout();
