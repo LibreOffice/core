@@ -40,16 +40,22 @@ $(dir $(call gb_Zip_get_target,%))%/.dir :
 
 # rule to create zip package in workdir
 # --filesync makes sure that all files in the zip package will be removed that no longer are in $(FILES)
+# if there are no files, zip fails; copy empty zip file to target in that case
 $(call gb_Zip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ZIP,3)
-	$(if $(FILES),$(call gb_Helper_abbreviate_dirs,\
-		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+	$(call gb_Helper_abbreviate_dirs,\
+		$(if $(FILES),\
+			RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
                         $(FILES)) && \
-	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match $(call gb_Zip_get_target,$*) && \
-	rm -f $${RESPONSEFILE} && \
-	touch $@ \
-	$(if $(INSTALL_NAME),&& cp $(call gb_Zip_get_target,$*) $(INSTALL_NAME)) \
-	))
+			cd $(LOCATION) && \
+			cat $${RESPONSEFILE} | tr "[:space:]" "\n" | \
+				$(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match \
+					$(call gb_Zip_get_target,$*) && \
+			rm -f $${RESPONSEFILE} && \
+			touch $@\
+		,	cp $(SRCDIR)/solenv/gbuild/empty.zip $@)\
+		$(if $(INSTALL_NAME),&& cp $(call gb_Zip_get_target,$*) $(INSTALL_NAME)) \
+	)
 
 # the preparation target is here to ensure proper ordering of actions in cases
 # when we want to, e.g., create a zip from files created by a custom target
