@@ -101,7 +101,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "tools/color.hxx"
+#include <tools/color.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
@@ -114,6 +115,9 @@
 #include <svx/svdpage.hxx>
 #include <svtools/miscopt.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -3079,7 +3083,17 @@ void writeContent(
             {
                 // <text:a xlink:href="url" xlink:type="simple">value</text:a>
 
+                Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                bool bUseRelative = officecfg::Office::Common::Save::URL::FileSystem::get( xContext );
                 OUString aURL = static_cast<const SvxURLField*>(pField)->GetURL();
+                if(bUseRelative)
+                {
+                    OUString aBase = rExport.GetOrigFileName();
+                    INetURLObject aURLObject(aBase);
+                    aURLObject.removeSegment();
+                    aURLObject.removeSegment();
+                    aURL = INetURLObject::GetRelURL(aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI), aURL);
+                }
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aURL);
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
 
