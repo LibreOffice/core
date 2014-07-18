@@ -140,7 +140,7 @@ SdrView* SdrViewIter::ImpFindView()
 {
     if(mpModel)
     {
-        const size_t nLsAnz(mpModel->GetListenerCount());
+        const size_t nLsAnz(mpModel->GetSizeOfVector());
 
         while(mnListenerNum < nLsAnz)
         {

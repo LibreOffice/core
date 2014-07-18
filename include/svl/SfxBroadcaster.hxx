@@ -31,6 +31,8 @@ class SVL_DLLPUBLIC SfxBroadcaster
 {
     typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 
+    /** Contains the positions of removed listeners. */
+    std::vector<size_t>     m_RemovedPositions;
     SfxListenerArr_Impl     m_Listeners;
 
 private:
@@ -51,12 +53,21 @@ public:
 
     void                    Broadcast( const SfxHint &rHint );
     bool                    HasListeners() const;
-    size_t                  GetListenerCount() const
-    {
+
+    /** Get the number of listeners which are registered at this broadcaster */
+    size_t                  GetListenerCount() const;
+
+    /** Get the size of the internally stored vector.
+     * Use it to iterate over all listeners.
+     */
+    size_t                  GetSizeOfVector() const {
         return m_Listeners.size();
     }
-    SfxListener*            GetListener( size_t nNo ) const
-    {
+
+    /** Get a listener by its position in the internally stored vector.
+     * Note that this method may return NULL
+     */
+    SfxListener*            GetListener( size_t nNo ) const {
         return m_Listeners[nNo];
     }
 
