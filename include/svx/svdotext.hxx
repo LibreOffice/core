@@ -269,6 +269,7 @@ private:
                                        Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
+    void ImpChainText() const;
     static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();

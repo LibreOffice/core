@@ -351,8 +351,8 @@ void ImpEditEngine::FormatFullDoc()
 
 bool ImpEditEngine::IsPageOverflow( const Size aCurPaperSize, const Size aPrevPaperSize ) const
 {
-    const bool bTextGrowX=(aStatus & EE_STAT_TEXTWIDTHCHANGED) !=0;
-    const bool bTextGrowY=(aStatus & EE_STAT_TEXTHEIGHTCHANGED) !=0;
+    const bool bTextGrowX=(aStatus.GetControlWord() & EE_STAT_TEXTWIDTHCHANGED) !=0;
+    const bool bTextGrowY=(aStatus.GetControlWord() & EE_STAT_TEXTHEIGHTCHANGED) !=0;
 
     const bool bPageExpansionX = ( aPrevPaperSize.Width() != 0 ) && // XXX
                             ( aCurPaperSize.Width() > aPrevPaperSize.Width() );

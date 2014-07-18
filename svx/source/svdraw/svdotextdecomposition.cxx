@@ -798,32 +798,6 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
-    /* BEGIN Experiments */
-    // FIXME(matteocam)
-
-    // we use (text) object 0 and 1 for these experiments:
-    // copying text from one to the other.
-
-    SdrTextObj *pNextTextObj;
-    if ( pPage && pPage->GetObjCount() > 1) {
-        pNextTextObj =  dynamic_cast< SdrTextObj * >(
-                                            pPage->GetObj(1) );
-        if ( pNextTextObj == NULL)
-            return;
-    } else {
-        fprintf(stderr, "Make New Object please\n");
-        return;
-    }
-
-    // for debugging purposes:
-    // carry out experiments only when setting b=false from gdb
-    //bool b = true;
-    //if (!b) {
-    impCopyTextInTextObj(pNextTextObj); // just do it
-    //    return;
-    //}
-
-    /* END Experiments */
 
     // decompose matrix to have position and size of text
     basegfx::B2DVector aScale, aTranslate;
@@ -1508,6 +1482,5 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
