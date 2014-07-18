@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_OUTDEVMAP_HXX
 #define INCLUDED_VCL_OUTDEVMAP_HXX
 
-
 struct ImplMapRes
 {
     long                mnMapOfsX;          // Offset in X direction
@@ -29,6 +28,10 @@ struct ImplMapRes
     long                mnMapScNumY;        // Scaling factor - numerator in Y direction
     long                mnMapScDenomX;      // Scaling factor - denominator in X direction
     long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
+    double              mfOffsetX;
+    double              mfOffsetY;
+    double              mfScaleX;
+    double              mfScaleY;
 };
 
 struct ImplThresholdRes

@@ -149,6 +149,8 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
 static void ImplCalcMapResolution( const MapMode& rMapMode,
                                    long nDPIX, long nDPIY, ImplMapRes& rMapRes )
 {
+    rMapRes.mfScaleX = 1.0;
+    rMapRes.mfScaleY = 1.0;
     switch ( rMapMode.GetMapUnit() )
     {
         case MAP_RELATIVE:
@@ -254,9 +256,18 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     {
         rMapRes.mnMapOfsX = aOrigin.X();
         rMapRes.mnMapOfsY = aOrigin.Y();
+        rMapRes.mfOffsetX = aOrigin.X();
+        rMapRes.mfOffsetY = aOrigin.Y();
     }
     else
     {
+        rMapRes.mfOffsetX *= aScaleX.GetDenominator();
+        rMapRes.mfOffsetX /= aScaleX.GetNumerator();
+        rMapRes.mfOffsetX += aOrigin.X();
+        rMapRes.mfOffsetY *= aScaleY.GetDenominator();
+        rMapRes.mfOffsetY /= aScaleY.GetNumerator();
+        rMapRes.mfOffsetY += aOrigin.Y();
+
         BigInt aX( rMapRes.mnMapOfsX );
         aX *= BigInt( aScaleX.GetDenominator() );
         if ( rMapRes.mnMapOfsX >= 0 )
@@ -294,6 +305,11 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
         aY /= BigInt( aScaleY.GetNumerator() );
         rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
     }
+
+    rMapRes.mfScaleX *= (double)rMapRes.mnMapScNumX * (double)aScaleX.GetNumerator() /
+        ((double)rMapRes.mnMapScDenomX * (double)aScaleX.GetDenominator());
+    rMapRes.mfScaleY *= (double)rMapRes.mnMapScNumY * (double)aScaleY.GetNumerator() /
+        ((double)rMapRes.mnMapScDenomY * (double)aScaleY.GetDenominator());
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
@@ -350,7 +366,6 @@ void OutputDevice::ImplInvalidateViewTransform()
         }
     }
 }
-
 
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
@@ -719,6 +734,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             Point aOrigin = rNewMapMode.GetOrigin();
             maMapRes.mnMapOfsX = aOrigin.X();
             maMapRes.mnMapOfsY = aOrigin.Y();
+            maMapRes.mfOffsetX = aOrigin.X();
+            maMapRes.mfOffsetY = aOrigin.Y();
             maMapMode = rNewMapMode;
 
             // #i75163#
@@ -734,6 +751,10 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             maMapRes.mnMapScDenomY  = mnDPIY;
             maMapRes.mnMapOfsX      = 0;
             maMapRes.mnMapOfsY      = 0;
+            maMapRes.mfOffsetX = 0.0;
+            maMapRes.mfOffsetY = 0.0;
+            maMapRes.mfScaleX = (double)1/(double)mnDPIX;
+            maMapRes.mfScaleY = (double)1/(double)mnDPIY;
         }
 
         // calculate new MapMode-resolution
@@ -2110,6 +2131,35 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
     }
 
     return nY;
+}
+
+
+DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
+{
+#if VCL_FLOAT_DEVICE_PIXEL
+    return (double)nWidth * maMapRes.mfScaleX * mnDPIX;
+#else
+    if ( !mbMap )
+        return nWidth;
+
+    return ImplLogicToPixel( nWidth, mnDPIX,
+                             maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                             maThresRes.mnThresLogToPixX );
+#endif
+}
+
+DeviceCoordinate OutputDevice::LogicHeightToDeviceCoordinate( long nHeight ) const
+{
+#if VCL_FLOAT_DEVICE_PIXEL
+    return (double)nHeight * maMapRes.mfScaleY * mnDPIY;
+#else
+    if ( !mbMap )
+        return nHeight;
+
+    return ImplLogicToPixel( nHeight, mnDPIY,
+                             maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                             maThresRes.mnThresLogToPixY );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
