@@ -262,7 +262,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
     {
         //VCLXAccessibleDropDownComboBox
         //when in list is dropped down, xText = NULL
-        if (m_pListBoxHelper->IsInDropDown())
+        if (m_pListBoxHelper && m_pListBoxHelper->IsInDropDown())
         {
             if ( aNewValue.hasValue() || aOldValue.hasValue() )
             {
