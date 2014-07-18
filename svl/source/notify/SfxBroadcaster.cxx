@@ -88,15 +88,15 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
-    for (size_t i = 0; i < m_Listeners.size(); ++i)
-    {
-        if (!m_Listeners[i]) // removed by RemoveListener?
-        {
-            m_Listeners[i] = &rListener;
-            return;
-        }
+    if (m_RemovedPositions.empty()) {
+        m_Listeners.push_back(&rListener);
     }
-    m_Listeners.push_back(&rListener);
+    else {
+        size_t targetPosition = m_RemovedPositions.back();
+        m_RemovedPositions.pop_back();
+        assert(m_Listeners[targetPosition] == NULL);
+        m_Listeners[targetPosition] = &rListener;
+    }
 }
 
 
@@ -131,6 +131,8 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
     // DO NOT erase the listener, set the pointer to 0
     // because the current continuation may contain this->Broadcast
     *aIter = 0;
+    size_t positionOfRemovedElement = std::distance(m_Listeners.begin(), aIter);
+    m_RemovedPositions.push_back(positionOfRemovedElement);
 
     if ( !HasListeners() )
         ListenersGone();
@@ -138,13 +140,14 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 
 bool SfxBroadcaster::HasListeners() const
 {
-    for (size_t i = 0; i < m_Listeners.size(); ++i)
-    {
-        if (m_Listeners[i]) {
-            return true;
-        }
-    }
-    return false;
+    return (GetListenerCount() != 0);
 }
+
+size_t SfxBroadcaster::GetListenerCount() const
+{
+    assert(m_Listeners.size() >= m_RemovedPositions.size());
+    return m_Listeners.size() - m_RemovedPositions.size();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

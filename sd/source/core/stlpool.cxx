@@ -1440,7 +1440,7 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
 {
     SdStyleSheetVector aResult;
 
-    const size_t nListenerCount = pSheet->GetListenerCount();
+    const size_t nListenerCount = pSheet->GetSizeOfVector();
     for (size_t n = 0; n < nListenerCount; ++n)
     {
         SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );

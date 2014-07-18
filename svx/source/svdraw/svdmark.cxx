@@ -873,7 +873,7 @@ namespace sdr
 
                         if(pBC)
                         {
-                            const size_t nLstAnz(pBC->GetListenerCount());
+                            const size_t nLstAnz(pBC->GetSizeOfVector());
 
                             for(size_t nl=0; nl < nLstAnz; ++nl)
                             {
