@@ -15,6 +15,8 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace
 {
 
@@ -28,7 +30,7 @@ int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
 int lclCloseCallback(void* pContext)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
-    pStream->WriteChar(0);
+    pStream->WriteChar('\0');
     return 0;
 }
 
@@ -136,6 +138,68 @@ OUString convertLineStyleToString(LineStyle eAlign)
     return OUString();
 }
 
+OString convertLineStyleToString(const sal_uInt16 nActionType)
+{
+    switch (nActionType)
+    {
+        case META_NULL_ACTION:                  return "null";
+        case META_PIXEL_ACTION:                 return "pixel";
+        case META_POINT_ACTION:                 return "point";
+        case META_LINE_ACTION:                  return "line";
+        case META_RECT_ACTION:                  return "rect";
+        case META_ROUNDRECT_ACTION:             return "roundrect";
+        case META_ELLIPSE_ACTION:               return "ellipse";
+        case META_ARC_ACTION:                   return "arc";
+        case META_PIE_ACTION:                   return "pie";
+        case META_CHORD_ACTION:                 return "chord";
+        case META_POLYLINE_ACTION:              return "polyline";
+        case META_POLYGON_ACTION:               return "polygon";
+        case META_POLYPOLYGON_ACTION:           return "polypolygon";
+        case META_TEXT_ACTION:                  return "text";
+        case META_TEXTARRAY_ACTION:             return "textarray";
+        case META_STRETCHTEXT_ACTION:           return "strechtext";
+        case META_TEXTRECT_ACTION:              return "textrect";
+        case META_TEXTLINE_ACTION:              return "textline";
+        case META_BMP_ACTION:                   return "bmp";
+        case META_BMPSCALE_ACTION:              return "bmpscale";
+        case META_BMPSCALEPART_ACTION:          return "bmpscalepart";
+        case META_BMPEX_ACTION:                 return "bmpex";
+        case META_BMPEXSCALE_ACTION:            return "bmpexscale";
+        case META_BMPEXSCALEPART_ACTION:        return "bmpexscalepart";
+        case META_MASK_ACTION:                  return "mask";
+        case META_MASKSCALE_ACTION:             return "maskscale";
+        case META_MASKSCALEPART_ACTION:         return "maskscalepart";
+        case META_GRADIENT_ACTION:              return "gradient";
+        case META_GRADIENTEX_ACTION:            return "gradientex";
+        case META_HATCH_ACTION:                 return "hatch";
+        case META_WALLPAPER_ACTION:             return "wallpaper";
+        case META_CLIPREGION_ACTION:            return "clipregion";
+        case META_ISECTRECTCLIPREGION_ACTION:   return "sectrectclipregion";
+        case META_ISECTREGIONCLIPREGION_ACTION: return "sectregionclipregion";
+        case META_MOVECLIPREGION_ACTION:        return "moveclipregion";
+        case META_LINECOLOR_ACTION:             return "linecolor";
+        case META_FILLCOLOR_ACTION:             return "fillcolor";
+        case META_TEXTCOLOR_ACTION:             return "textcolor";
+        case META_TEXTFILLCOLOR_ACTION:         return "textfillcolor";
+        case META_TEXTLINECOLOR_ACTION:         return "textlinecolor";
+        case META_OVERLINECOLOR_ACTION:         return "overlinecolor";
+        case META_TEXTALIGN_ACTION:             return "textalign";
+        case META_MAPMODE_ACTION:               return "mapmode";
+        case META_FONT_ACTION:                  return "font";
+        case META_PUSH_ACTION:                  return "push";
+        case META_POP_ACTION:                   return "pop";
+        case META_RASTEROP_ACTION:              return "rasterop";
+        case META_TRANSPARENT_ACTION:           return "transparent";
+        case META_FLOATTRANSPARENT_ACTION:      return "floattransparent";
+        case META_EPS_ACTION:                   return "eps";
+        case META_REFPOINT_ACTION:              return "refpoint";
+        case META_COMMENT_ACTION:               return "comment";
+        case META_LAYOUTMODE_ACTION:            return "layoutmode";
+        case META_TEXTLANGUAGE_ACTION:          return "textlanguage";
+    }
+    return "";
+}
+
 } // anonymous namespace
 
 MetafileXmlDump::MetafileXmlDump() :
@@ -162,14 +226,14 @@ void MetafileXmlDump::filterNoneActionTypes()
 
 xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
 {
-    SvStream *pStream = NULL;
+    boost::scoped_ptr<SvStream> pStream;
 
     if (rTempStreamName.isEmpty())
-        pStream = new SvMemoryStream();
+        pStream.reset(new SvMemoryStream());
     else
-        pStream = new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC);
+        pStream.reset(new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC));
 
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream, NULL);
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream.get(), NULL);
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
@@ -183,13 +247,15 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
         if (maFilter[nActionType])
             continue;
 
+        OString sCurrentElementTag = convertLineStyleToString(nActionType);
+
         switch (nActionType)
         {
             case META_LINE_ACTION:
             {
                 MetaLineAction* pMetaLineAction = static_cast<MetaLineAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("line");
                 aWriter.attribute("startx", pMetaLineAction->GetStartPoint().X());
                 aWriter.attribute("starty", pMetaLineAction->GetStartPoint().Y());
                 aWriter.attribute("endx", pMetaLineAction->GetEndPoint().X());
@@ -209,8 +275,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_PUSH_ACTION:
             {
                 MetaPushAction* pMetaPushAction = static_cast<MetaPushAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("push");
                 aWriter.attribute("flags", collectPushFlags(pMetaPushAction->GetFlags()));
             }
             break;
@@ -224,8 +290,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_RASTEROP_ACTION:
             {
                 MetaRasterOpAction* pMetaRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("rop");
                 if (pMetaRasterOpAction->GetRasterOp() != ROP_OVERPAINT)
                 {
                     aWriter.attribute("operation", convertRopToString(pMetaRasterOpAction->GetRasterOp()));
@@ -237,8 +303,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_TEXTFILLCOLOR_ACTION:
             {
                 MetaTextFillColorAction* pMetaTextFillColorAction = static_cast<MetaTextFillColorAction*>(pAction);
-
-                aWriter.startElement("textfillcolor");
+                aWriter.startElement(sCurrentElementTag);
 
                 aWriter.attribute("color", convertColorToString(pMetaTextFillColorAction->GetColor()));
 
@@ -252,7 +317,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_FONT_ACTION:
             {
                 MetaFontAction* pMetaFontAction = static_cast<MetaFontAction*>(pAction);
-                aWriter.startElement("font");
+                aWriter.startElement(sCurrentElementTag);
 
                 Font aFont = pMetaFontAction->GetFont();
 
@@ -270,7 +335,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_TEXTALIGN_ACTION:
             {
                 MetaTextAlignAction* pMetaTextAlignAction = static_cast<MetaTextAlignAction*>(pAction);
-                aWriter.startElement("textalign");
+                aWriter.startElement(sCurrentElementTag);
                 OUString sAlign = convertTextAlignToString(pMetaTextAlignAction->GetTextAlign());
                 if (!sAlign.isEmpty())
                     aWriter.attribute("align", sAlign);
@@ -281,8 +346,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_TEXTCOLOR_ACTION:
             {
                 MetaTextColorAction* pMetaTextColorAction = static_cast<MetaTextColorAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("textcolor");
                 aWriter.attribute("color", convertColorToString(pMetaTextColorAction->GetColor()));
                 aWriter.endElement();
             }
@@ -291,8 +356,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_TEXTARRAY_ACTION:
             {
                 MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("textarray");
                 sal_Int32 aIndex = pMetaTextArrayAction->GetIndex();
                 sal_Int32 aLength = pMetaTextArrayAction->GetLen();
 
@@ -322,16 +387,9 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_LINECOLOR_ACTION:
             {
                 MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("linecolor");
                 aWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
-                aWriter.endElement();
-            }
-            break;
-
-            case META_MAPMODE_ACTION:
-            {
-                aWriter.startElement("mapmode");
                 aWriter.endElement();
             }
             break;
@@ -339,8 +397,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_CLIPREGION_ACTION:
             {
                 const MetaClipRegionAction* pA = static_cast< const MetaClipRegionAction* >(pAction);
-
-                aWriter.startElement("clipregion");
+                aWriter.startElement(sCurrentElementTag);
 
                 // FIXME for now we dump only the bounding box; this is
                 // enough for the tests we have, but may need extending to
@@ -358,8 +415,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
                 MetaISectRectClipRegionAction* pMetaISectRectClipRegionAction = static_cast<MetaISectRectClipRegionAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
 
-                aWriter.startElement("sectrectclipregion");
                 Rectangle aRectangle = pMetaISectRectClipRegionAction->GetRect();
                 aWriter.attribute("top",    aRectangle.Top());
                 aWriter.attribute("left",   aRectangle.Left());
@@ -373,7 +430,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_POLYLINE_ACTION:
             {
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
-                aWriter.startElement("polyline");
+                aWriter.startElement(sCurrentElementTag);
 
                 Polygon aPolygon = pMetaPolyLineAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
@@ -398,7 +455,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_POLYGON_ACTION:
             {
                 MetaPolygonAction* pMetaPolygonAction = static_cast<MetaPolygonAction*>(pAction);
-                aWriter.startElement("polygon");
+                aWriter.startElement(sCurrentElementTag);
 
                 Polygon aPolygon = pMetaPolygonAction->GetPolygon();
                 for (sal_uInt16 i = 0; i < aPolygon.GetSize(); i++)
@@ -413,7 +470,33 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             }
             break;
 
+            case META_COMMENT_ACTION:
+            {
+                MetaCommentAction* pMetaCommentAction = static_cast<MetaCommentAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
+
+                if (pMetaCommentAction->GetDataSize() > 0)
+                {
+                    aWriter.attribute("datasize", pMetaCommentAction->GetDataSize());
+                }
+                if (!pMetaCommentAction->GetComment().isEmpty())
+                {
+                    aWriter.startElement("comment");
+                    aWriter.content(pMetaCommentAction->GetComment());
+                    aWriter.endElement();
+                }
+
+                aWriter.endElement();
+            }
+            break;
+
+            default:
+            {
+                aWriter.element(sCurrentElementTag);
+            }
+            break;
         }
+
     }
 
     aWriter.endElement();
@@ -421,9 +504,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
 
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream);
-
-    delete pStream;
+    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream.get());
 
     return pDoc;
 }

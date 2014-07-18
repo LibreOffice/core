@@ -73,7 +73,12 @@ void XmlWriter::attribute(const OString& name, const sal_Int32 aNumber)
 
 void XmlWriter::content(const OUString& aValue)
 {
-    xmlChar* xmlValue = xmlCharStrdup(OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr());
+    content(OUStringToOString(aValue, RTL_TEXTENCODING_UTF8));
+}
+
+void XmlWriter::content(const OString& aValue)
+{
+    xmlChar* xmlValue = xmlCharStrdup(aValue.getStr());
     xmlTextWriterWriteString(mpWriter, xmlValue);
     xmlFree(xmlValue);
 }
