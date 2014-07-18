@@ -503,7 +503,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 nShapeRotation = 180*60000 - nShapeRotation;
                             }
 
-                            aGradientStops.erase( aWidestSegmentStart );
+                            aGradientStops.erase( aWidestSegmentStart++ );
 
                             // Look for which is widest now
                             aIt = boost::next(aGradientStops.begin());
