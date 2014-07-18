@@ -5234,8 +5234,10 @@ int RTFDocumentImpl::popState()
         {
             resolvePict(true, m_pSdrImport->getCurrentShape());
         }
+        m_bNeedFinalPar = true;
         break;
     case DESTINATION_SHAPE:
+        m_bNeedFinalPar = true;
         m_bNeedCr = m_bNeedCrOrig;
         if (aState.aFrame.inFrame())
         {
