@@ -982,6 +982,21 @@ DECLARE_OOXMLIMPORT_TEST(testN792778, "n792778.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testWordArtResizing, "WordArt.docx")
+{
+    /* The Word-Arts and watermarks were getting resized automatically, It was as if they were
+       getting glued to the fallback geometry(the sdrObj) and were getting bound to the font size.
+       The test-case esures the original height and width of the word-art is not changed while importing*/
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10105), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4755), xShape->getSize().Height);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
 {
     /*
