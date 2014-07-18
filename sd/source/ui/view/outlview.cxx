@@ -1535,6 +1535,8 @@ void OutlineView::EndModelChange()
 /** updates all changes in the outliner model to the draw model */
 void OutlineView::UpdateDocument()
 {
+    OutlineViewPageChangesGuard aGuard(this);
+
     const sal_uInt32 nPageCount = mrDoc.GetSdPageCount(PK_STANDARD);
     Paragraph* pPara = mrOutliner.GetParagraph( 0 );
     sal_uInt32 nPage;
