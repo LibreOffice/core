@@ -208,7 +208,7 @@ ShapeContextHandler::getDrawingShapeContext()
     else
     {
         // Reset the handler if fragment path has changed
-        OUString sHandlerFragmentPath = dynamic_cast<ContextHandler *>(mxDrawingFragmentHandler.get())->getFragmentPath();
+        OUString sHandlerFragmentPath = dynamic_cast<ContextHandler&>(*mxDrawingFragmentHandler.get()).getFragmentPath();
         if ( !msRelationFragmentPath.equals(sHandlerFragmentPath) )
         {
             mxDrawingFragmentHandler.clear();
