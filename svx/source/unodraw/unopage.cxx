@@ -49,6 +49,8 @@
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <svx/svdoashp.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -582,6 +584,49 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
 
                 // #107245# pObj->SetLatheCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(true));
+            }
+            else if(pNewObj->ISA(SdrObjCustomShape))
+            {
+                sal_Int32 nValue = -1; //-1 to indicate invalid shape <ref MSO_SPT>.
+                OUString aShapeType;
+                if(xShape.is())
+                {
+                    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+                    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+
+                    if(xPropertySet.is())
+                        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+                    if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+                    {
+                        uno::Sequence< beans::PropertyValue > aGrabBag;
+                        xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                        for(int i = 0 ; i != aGrabBag.getLength() ; i++)
+                        {
+                            if( aGrabBag[i].Name == "Shape-Type")
+                            {
+                                aGrabBag[i].Value >>= nValue ;
+                                break;
+                            }
+                        }
+                    }
+                    //proceed only if we have a valid shape type.
+                    if(-1 != nValue)
+                    {
+                        aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >( nValue ) );
+                        /*Do not resize the fallback geometry for Word-Arts(VML), since the overlay
+                          geometry is constructed using the same properties of that of fallback
+                          geometry.
+                          */
+                        //The resize autoshape to fit text attr of FontWork/Word-Art should always be false
+                        //for the sdr obj.
+                        if(aShapeType.startsWith("fontwork"))
+                        {
+                            pNewObj->SetMergedItem(SdrTextAutoGrowHeightItem(false));
+                            pNewObj->SetMergedItem(SdrTextAutoGrowWidthItem(false));
+                        }
+                    }
+                }
             }
         }
     }

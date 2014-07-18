@@ -533,6 +533,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
     }
 
+    // FontWorks need to be handled differently, pass the shape information ahead.
+    // Since the xShape is not inserted yet, we cannot handle the properties here.
+    mrDrawing.setShapeType(getShapeType());
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
     convertShapeProperties( xShape );
 

@@ -90,7 +90,8 @@ Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPa
     mrFilter( rFilter ),
     mxDrawPage( rxDrawPage ),
     mxShapes( new ShapeContainer( *this ) ),
-    meType( eType )
+    meType( eType ),
+    mnShapeType(-1)
 {
     OSL_ENSURE( mxDrawPage.is(), "Drawing::Drawing - missing UNO draw page" );
 }
@@ -208,6 +209,31 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );
         if ( !rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
         {
+            if( xShape.is() )
+            {
+                /* Do not resize the fallback geometry for Word-Arts(VML), since the overlay
+                  geometry is constructed using the same properties as that of the fallback
+                  geometry(sdrObj).
+                  Can't handle it here as the sdr Object is not yet instantiated.
+                  pass it to svx. It'll be handled in SvxDrawPage::_CreateSdrObject.
+                */
+                uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+                uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+
+                if( xPropertySet.is() )
+                    xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+                if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag") )
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc( length + 1 );
+                    aGrabBag[length].Name = "Shape-Type";
+                    aGrabBag[length].Value = uno::makeAny(getShapeType());
+                    xPropertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
+                }
+            }
             // insert shape into passed shape collection (maybe drawpage or group shape)
             rxShapes->add( xShape );
             xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );

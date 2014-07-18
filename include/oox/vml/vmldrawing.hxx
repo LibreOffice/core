@@ -129,6 +129,11 @@ public:
         function notifyXShapeInserted() will be called for each new shape. */
     void                convertAndInsert() const;
 
+    /** Stores the information of ShapeTypeModel::moShapeType
+        Builtin shape type identifier.*/
+    void setShapeType( sal_Int32 shapeType){ mnShapeType = shapeType; };
+    sal_Int32 getShapeType()const{ return mnShapeType; };
+
     /** Returns the local shape index from the passed global shape identifier. */
     sal_Int32           getLocalShapeIndex( const OUString& rShapeId ) const;
     /** Returns the registered info structure for an OLE object, if extant. */
@@ -201,6 +206,7 @@ private:
     OleObjectInfoMap    maOleObjects;       ///< Info about all embedded OLE objects, mapped by shape id.
     ControlInfoMap      maControls;         ///< Info about all embedded form controls, mapped by control name.
     const DrawingType   meType;             ///< Application type containing the drawing.
+    sal_Int32           mnShapeType;
 };
 
 
