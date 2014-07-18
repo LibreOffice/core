@@ -2424,19 +2424,19 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 // ======================    Virtual Methods    ========================
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-    const sal_Int32*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
-    const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
-    const ::com::sun::star::lang::Locale*, const Color&, const Color&)
+                              const long*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
+                              const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
+                              const ::com::sun::star::lang::Locale*, const Color&, const Color&)
 
 {
 }
 
 void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
-                                      const OUString& /*rChar*/, const SvxFont& /*rFont*/,
-                                      sal_Int32 /*nPara*/, sal_Int32 /*nIndex*/,
-                                      sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
-                                      bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
-                                      const Color& /*rTextLineColor*/)
+                             const OUString& /*rChar*/, const SvxFont& /*rFont*/,
+                             sal_Int32 /*nPara*/, sal_Int32 /*nIndex*/,
+                             sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
+                             bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
+                             const Color& /*rTextLineColor*/)
 {
 }
 

@@ -20,7 +20,7 @@ typedef ::basegfx::B2DPoint DevicePoint;
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
 #include <basegfx/point/b2ipoint.hxx>
-typedef sal_Int32 DeviceCoordinate;
+typedef long DeviceCoordinate;
 typedef ::basegfx::B2IPoint DevicePoint;
 
 #endif /* ! Carpet Cushion */

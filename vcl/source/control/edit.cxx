@@ -483,15 +483,15 @@ void Edit::ImplRepaint(bool bLayout)
     OUString aText = ImplGetText();
     sal_Int32 nLen = aText.getLength();
 
-    sal_Int32   nDXBuffer[256];
-    boost::scoped_array<sal_Int32> pDXBuffer;
-    sal_Int32*  pDX = nDXBuffer;
+    long   nDXBuffer[256];
+    boost::scoped_array<long> pDXBuffer;
+    long*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1081,15 +1081,15 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     long nTextPos = 0;
 
-    sal_Int32   nDXBuffer[256];
-    boost::scoped_array<sal_Int32> pDXBuffer;
-    sal_Int32*  pDX = nDXBuffer;
+    long   nDXBuffer[256];
+    boost::scoped_array<long> pDXBuffer;
+    long*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1197,12 +1197,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    sal_Int32   nDXBuffer[256];
-    boost::scoped_array<sal_Int32> pDXBuffer;
-    sal_Int32*  pDX = nDXBuffer;
+    long   nDXBuffer[256];
+    boost::scoped_array<long> pDXBuffer;
+    long*  pDX = nDXBuffer;
     if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
-        pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+        pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
     }
 
@@ -2162,15 +2162,15 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            sal_Int32   nDXBuffer[256];
-            boost::scoped_array<sal_Int32> pDXBuffer;
-            sal_Int32*  pDX = nDXBuffer;
+            long   nDXBuffer[256];
+            boost::scoped_array<long> pDXBuffer;
+            long*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
             {
                 if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
-                    pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+                    pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();
                 }
 

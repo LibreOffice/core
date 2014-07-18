@@ -404,7 +404,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, sal_Int32* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, long* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -454,7 +454,7 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
-    const sal_Int32 nIdx, const sal_Int32 nLen, const sal_Int32* pDXArray ) const
+    const sal_Int32 nIdx, const sal_Int32 nLen, const long* pDXArray ) const
 {
 
     // Font has to be selected in OutputDevice...

@@ -7416,7 +7416,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aUnicodes.reserve( nMaxGlyphs );
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
-    sal_Int32 nAdvanceWidths[nMaxGlyphs];
+    long nAdvanceWidths[nMaxGlyphs];
     const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { NULL };
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
@@ -7654,7 +7654,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aPos, aStartPt;
-            sal_Int32 nWidth = 0, nAdvance=0;
+            sal_Int32 nWidth = 0;
+            long nAdvance = 0;
             for( int nStart = 0;;)
             {
                 sal_GlyphId aGlyphId;
@@ -7757,7 +7758,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             Point aPos;
             sal_GlyphId aGlyphId;
-            sal_Int32 nAdvance;
+            long nAdvance;
             if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                 break;
 
@@ -7838,7 +7839,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines )
 {
     MARK( "drawText with array" );
 

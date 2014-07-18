@@ -241,7 +241,7 @@ namespace drawinglayer
             if(nDXArrayCount)
             {
                 OSL_ENSURE(nDXArrayCount == nTextLength, "DXArray size does not correspond to text portion size (!)");
-                std::vector< sal_Int32 > aIntegerDXArray(nDXArrayCount);
+                std::vector< long > aIntegerDXArray(nDXArrayCount);
 
                 for(sal_uInt32 a(0); a < nDXArrayCount; a++)
                 {
@@ -347,7 +347,7 @@ namespace drawinglayer
             if(nTextLength)
             {
                 aRetval.reserve(nTextLength);
-                ::std::vector<sal_Int32> aArray(nTextLength);
+                ::std::vector<long> aArray(nTextLength);
                 mrDevice.GetTextArray(rText, &aArray[0], nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }

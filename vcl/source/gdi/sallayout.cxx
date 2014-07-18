@@ -1018,7 +1018,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 
     // calculate adjusted cluster widths
-    sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca( m_GlyphItems.size() * sizeof(sal_Int32) );
+    long* pNewGlyphWidths = (long*)alloca( m_GlyphItems.size() * sizeof(long) );
     for( i = 0; i < m_GlyphItems.size(); ++i )
         pNewGlyphWidths[ i ] = 0;
 
@@ -1248,7 +1248,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
     // initialize result array
     long nXPos = -1;
@@ -1298,8 +1298,8 @@ sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int n
 }
 
 int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
-    const PhysicalFontFace** /*pFallbackFonts*/ ) const
+                                     int& nStart, long* pGlyphAdvAry, int* pCharPosAry,
+                                     const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     GlyphVector::const_iterator pG = m_GlyphItems.begin();
     GlyphVector::const_iterator pGEnd = m_GlyphItems.end();
@@ -1607,7 +1607,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
     int nCharPos[ MAX_FALLBACK ];
-    sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
+    long nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ] = {0};
 
     sal_GlyphId nDummy;
@@ -1990,14 +1990,14 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
     if( mnLevel > 1 )
     {
-        sal_Int32* pTempPos = (sal_Int32*)alloca( nMaxIndex * sizeof(sal_Int32) );
+        long* pTempPos = (long*)alloca( nMaxIndex * sizeof(long) );
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
@@ -2015,8 +2015,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 }
 
 int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
-    const PhysicalFontFace** pFallbackFonts ) const
+                                   int& nStart, long* pGlyphAdvAry, int* pCharPosAry,
+                                   const PhysicalFontFace** pFallbackFonts ) const
 {
     // for multi-level fallback only single glyphs should be used
     if( mnLevel > 1 && nLen > 1 )

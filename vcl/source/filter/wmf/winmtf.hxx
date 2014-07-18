@@ -735,13 +735,12 @@ public:
                             bool bDrawTo = false,
                             bool bRecordPath = false
                         );
-    void                DrawText(
-                            Point& rPosition,
-                            OUString& rString,
-                            sal_Int32* pDXArry = NULL,
-                            bool bRecordPath = false,
-                            sal_Int32 nGraphicsMode = GM_COMPATIBLE
-                        );
+    void                DrawText( Point& rPosition,
+                                  OUString& rString,
+                                  long* pDXArry = NULL,
+                                  bool bRecordPath = false,
+                                  sal_Int32 nGraphicsMode = GM_COMPATIBLE);
+
     void                ResolveBitmapActions( BSaveStructList_impl& rSaveList );
 
     void                IntersectClipRect( const Rectangle& rRect );

@@ -1006,7 +1006,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 if(bStrippingPortions)
                 {
                     const Font aSvxFont(pOutDev->GetFont());
-                    boost::scoped_array<sal_Int32> pBuf(new sal_Int32[ pPara->GetText().getLength() ]);
+                    boost::scoped_array<long> pBuf(new long[ pPara->GetText().getLength() ]);
                     pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
 
                     if(bSymbol)
@@ -1739,16 +1739,17 @@ void Outliner::StripPortions()
     bStrippingPortions = false;
 }
 
-void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
-    sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
-    const EEngineData::WrongSpellVector* pWrongSpellVector,
-    const SvxFieldData* pFieldData,
-    bool bEndOfLine,
-    bool bEndOfParagraph,
-    bool bEndOfBullet,
-    const ::com::sun::star::lang::Locale* pLocale,
-    const Color& rOverlineColor,
-    const Color& rTextLineColor)
+void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
+                            sal_Int32 nTextLen, const long* pDXArray,const SvxFont& rFont,
+                            sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                            const EEngineData::WrongSpellVector* pWrongSpellVector,
+                            const SvxFieldData* pFieldData,
+                            bool bEndOfLine,
+                            bool bEndOfParagraph,
+                            bool bEndOfBullet,
+                            const ::com::sun::star::lang::Locale* pLocale,
+                            const Color& rOverlineColor,
+                            const Color& rTextLineColor)
 {
 
     if(aDrawPortionHdl.IsSet())

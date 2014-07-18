@@ -174,12 +174,12 @@ public:
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual long    GetTextWidth() const { return FillDXArray( NULL ); }
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                        long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                         const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
@@ -231,9 +231,9 @@ public:
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
+                                   int&, long* pGlyphAdvAry, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const SAL_OVERRIDE;
 
@@ -332,11 +332,11 @@ public:
     virtual long    GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                        long* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                         const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
 protected:

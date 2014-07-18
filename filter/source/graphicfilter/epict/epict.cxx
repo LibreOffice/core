@@ -158,7 +158,7 @@ private:
     void SetAttrForFrame();
     void SetAttrForText();
 
-    void WriteTextArray(Point & rPoint, const OUString& rString, const sal_Int32 * pDXAry);
+    void WriteTextArray(Point & rPoint, const OUString& rString, const long* pDXAry);
 
     void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteOpcodes(const GDIMetaFile & rMTF);
@@ -1306,7 +1306,7 @@ void PictWriter::SetAttrForText()
 }
 
 
-void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const sal_Int32 * pDXAry)
+void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const long* pDXAry)
 {
     bool bDelta;
     Point aPt;
@@ -1743,7 +1743,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 Point                           aPt( pA->GetPoint() );
                 OUString                        aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 VirtualDevice                   aVirDev;
-                boost::scoped_array<sal_Int32>  pDXAry(new sal_Int32[ aStr.getLength() ]);
+                boost::scoped_array<long>       pDXAry(new long[ aStr.getLength() ]);
                 sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry.get() ) );
                 sal_uInt16                          i;
 

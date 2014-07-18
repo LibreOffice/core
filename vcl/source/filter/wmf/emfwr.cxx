@@ -870,25 +870,25 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
     }
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 
     if( nLen )
     {
         sal_uInt32  nNormWidth;
-        boost::scoped_array<sal_Int32> pOwnArray;
-        sal_Int32*  pDX;
+        boost::scoped_array<long> pOwnArray;
+        long*  pDX;
 
         // get text sizes
         if( pDXArray )
         {
             nNormWidth = maVDev.GetTextWidth( rText );
-            pDX = (sal_Int32*) pDXArray;
+            pDX = (long*) pDXArray;
         }
         else
         {
-            pOwnArray.reset(new sal_Int32[ nLen ]);
+            pOwnArray.reset(new long[ nLen ]);
             nNormWidth = maVDev.GetTextArray( rText, pOwnArray.get() );
             pDX = pOwnArray.get();
         }

@@ -438,7 +438,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const sal_Int32* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const long* pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -536,8 +536,9 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
     return bEscapeUsed;
 }
 
-void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
-    const OUString & rString, const sal_Int32 * pDXAry )
+void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
+                                      const OUString& rString,
+                                      const long* pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
@@ -548,11 +549,11 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
     }
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
     OString aByteString(OUStringToOString(rString, eChrSet));
-    TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
+    TrueExtTextOut(rPoint, rString, aByteString, pDXAry);
 }
 
-void WMFWriter::TrueExtTextOut( const Point & rPoint, const OUString & rString,
-    const OString& rByteString, const sal_Int32 * pDXAry )
+void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
+                                const OString& rByteString, const long* pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -1198,7 +1199,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     nLen = aTemp.getLength();
-                    boost::scoped_array<sal_Int32> pDXAry(nLen ? new sal_Int32[ nLen ] : NULL);
+                    boost::scoped_array<long> pDXAry(nLen ? new long[ nLen ] : NULL);
                     nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     for ( i = 0; i < ( nLen - 1 ); i++ )
                         pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
