@@ -263,6 +263,11 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
     }
 }
 
+OOXMLFactory_ns::OOXMLFactory_ns()
+{
+  mnRefCnt = 0;
+}
+
 void OOXMLFactory_ns::startAction(OOXMLFastContextHandler *)
 {
 }

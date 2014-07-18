@@ -95,7 +95,7 @@ typedef boost::unordered_map<Id, TokenToIdMapPointer> TokenToIdsMap;
 
 class OOXMLFactory_ns {
 public:
-    typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
+    typedef boost::intrusive_ptr<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
@@ -110,9 +110,12 @@ public:
     ListValueMapPointer getListValueMap(Id nId);
     CreateElementMapPointer getCreateElementMap(Id nId);
     TokenToIdMapPointer getTokenToIdMap(Id nId);
+    sal_uInt32 mnRefCnt;
+    OOXMLFactory_ns();
+    virtual ~OOXMLFactory_ns();
 
 protected:
-    virtual ~OOXMLFactory_ns();
+
 
     AttributesMap m_AttributesMap;
     ListValuesMap m_ListValuesMap;
@@ -148,8 +151,8 @@ public:
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
     virtual ~OOXMLFactory();
-public:
-    sal_uInt32 mnRefCnt;
+     sal_uInt32 mnRefCnt;
+
 private:
     static Pointer_t m_Instance;
 
@@ -162,15 +165,20 @@ private:
                                       Token_t Element);
 };
 
-  inline void intrusive_ptr_add_ref(OOXMLFactory* p)
+
+template <class T>
+  inline void intrusive_ptr_add_ref(T* p)
   {
-      p->mnRefCnt++;
+    p->mnRefCnt++;
   }
-  inline void intrusive_ptr_release(OOXMLFactory* p)
+  template <class T>
+  inline void intrusive_ptr_release(T* p)
   {
-      if (!(--p->mnRefCnt))
-          delete p;
+    if (!(--p->mnRefCnt))
+      delete p;
   }
+
+
 }
 }
 
