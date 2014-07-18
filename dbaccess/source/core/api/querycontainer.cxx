@@ -167,7 +167,13 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
     {
         notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ApproveListeners );
     }
-    catch( const Exception& )
+    catch (const WrappedTargetException& e)
+    {
+        disposeComponent( xNewObject );
+        disposeComponent( xCommandDefinitionPart );
+        throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
+    }
+    catch (const Exception&)
     {
         disposeComponent( xNewObject );
         disposeComponent( xCommandDefinitionPart );
