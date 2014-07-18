@@ -809,7 +809,18 @@ namespace cppcanvas
 
             // TODO(Q3): This code smells of programming by
             // coincidence (the next two if statements)
-            const ::Size rFontSizeLog( rFont.GetSize() );
+
+            ::Size rFontSizeLog( rFont.GetSize() );
+
+            if (rFontSizeLog.Height() == 0)
+            {
+                // guess 16 pixel (as in VCL)
+                rFontSizeLog = ::Size(0, 16);
+
+                // convert to target MapUnit if not pixels
+                rFontSizeLog = OutputDevice::LogicToLogic(rFontSizeLog, MAP_PIXEL, rParms.mrVDev.GetMapMode());
+            }
+
             const sal_Int32 nFontWidthLog = rFontSizeLog.Width();
             if( nFontWidthLog != 0 )
             {
