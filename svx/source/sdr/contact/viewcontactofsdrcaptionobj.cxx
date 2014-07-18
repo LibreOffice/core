@@ -36,7 +36,7 @@
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
-
+using namespace com::sun::star;
 
 namespace sdr
 {
@@ -111,14 +111,14 @@ namespace sdr
                 const SdrShadowColorItem& rShadColItem = (SdrShadowColorItem&)(rItemSet.Get(SDRATTR_SHADOWCOLOR));
                 const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
                 const Color aShadowColor(rShadColItem.GetColorValue());
-                const XFillStyle eShadowStyle = ((XFillStyleItem&)(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                const drawing::FillStyle eShadowStyle = ((XFillStyleItem&)(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();
 
                 // Create own ItemSet and modify as needed
                 // Always hide lines for special calc shadow
                 SfxItemSet aSet(rItemSet);
                 aSet.Put(XLineStyleItem(XLINE_NONE));
 
-                if(XFILL_HATCH == eShadowStyle)
+                if(drawing::FillStyle_HATCH == eShadowStyle)
                 {
                     // #41666# Hatch color is set hard to shadow color
                     XHatch aHatch = ((XFillHatchItem&)(rItemSet.Get(XATTR_FILLHATCH))).GetHatchValue();
@@ -127,10 +127,10 @@ namespace sdr
                 }
                 else
                 {
-                    if(XFILL_SOLID != eShadowStyle)
+                    if(drawing::FillStyle_SOLID != eShadowStyle)
                     {
                         // force fill to solid (for Gradient, Bitmap and *no* fill (#119750# not filled comments *have* shadow))
-                        aSet.Put(XFillStyleItem(XFILL_SOLID));
+                        aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                     }
 
                     aSet.Put(XFillColorItem(OUString(),aShadowColor));

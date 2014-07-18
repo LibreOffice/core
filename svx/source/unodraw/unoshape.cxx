@@ -3117,7 +3117,7 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException, std::ex
     if(mpObj->ISA(SdrGrafObj))
     {
         // defaults for graphic objects have changed:
-        mpObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+        mpObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
         mpObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
     }
 

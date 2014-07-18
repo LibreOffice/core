@@ -50,7 +50,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpool.hxx>
 
-
+using namespace com::sun::star;
 
 Point GetWinkPnt(const Rectangle& rR, long nWink)
 {
@@ -194,8 +194,8 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // XPoly is necessary if Fill !=None and !=Solid
     if(!bNeed && meCircleKind != OBJ_CARC)
     {
-        XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-        bNeed = eFill != XFILL_NONE && eFill != XFILL_SOLID;
+        drawing::FillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+        bNeed = eFill != drawing::FillStyle_NONE && eFill != drawing::FillStyle_SOLID;
     }
 
     if(!bNeed && meCircleKind != OBJ_CIRC && nStartWink == nEndWink)

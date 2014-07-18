@@ -178,7 +178,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                     SfxItemSet aSet(pSdrView->GetModel()->GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
 
-                    aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                    aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
                     aSet.Put(XFillBitmapItem(OUString(), aGraphic));
                     rObject.SetMergedItemSetAndBroadcast(aSet);
                 }

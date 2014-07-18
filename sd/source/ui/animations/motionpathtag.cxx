@@ -57,6 +57,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 
 using ::sdr::PolyPolygonEditor;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -360,7 +361,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
     mpPathObj->SetMergedItem( XLineStyleItem( XLINE_DASH ) );
     mpPathObj->SetMergedItem( XLineColorItem(aEmpty, ::Color(COL_GRAY)) );
-    mpPathObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+    mpPathObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     ::basegfx::B2DPolygon aStartArrow;
     aStartArrow.append(::basegfx::B2DPoint(20.0, 0.0));

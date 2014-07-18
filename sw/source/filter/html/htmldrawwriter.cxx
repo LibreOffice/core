@@ -267,9 +267,9 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     }
 
     // BGCOLOR
-    XFillStyle eFillStyle =
+    drawing::FillStyle eFillStyle =
         ((const XFillStyleItem&)rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
-    if( XFILL_SOLID==eFillStyle )
+    if( drawing::FillStyle_SOLID==eFillStyle )
     {
         const Color& rFillColor =
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();

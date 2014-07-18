@@ -50,6 +50,7 @@
 #include "xlroot.hxx"
 #include "xlstyle.hxx"
 
+using namespace com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -1021,7 +1022,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         {
             switch( pStyleItem->GetValue() )
             {
-                case XFILL_SOLID:
+                case drawing::FillStyle_SOLID:
                     // #i84812# Excel 2007 writes Escher properties for solid fill
                     if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, false ) ) )
                     {
@@ -1035,7 +1036,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                         rAreaHlp.WriteToPropertySet( rPropSet );
                     }
                 break;
-                case XFILL_GRADIENT:
+                case drawing::FillStyle_GRADIENT:
                     if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, false ) ) )
                     {
                         Any aGradientAny;
@@ -1053,7 +1054,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                         }
                     }
                 break;
-                case XFILL_BITMAP:
+                case drawing::FillStyle_BITMAP:
                     if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, false ) ) )
                     {
                         Any aBitmapAny;

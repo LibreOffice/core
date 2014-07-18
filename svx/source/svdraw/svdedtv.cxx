@@ -36,6 +36,8 @@
 #include <svx/svdview.hxx>
 #include <clonelist.hxx>
 
+using namespace com::sun::star;
+
 void SdrEditView::ImpResetPossibilityFlags()
 {
     bReadOnly               =false;
@@ -522,9 +524,9 @@ void SdrEditView::CheckPossibilities()
                 if(SFX_ITEM_DONTCARE != eState)
                 {
                     // If state is not DONTCARE, test the item
-                    XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+                    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
-                    if(eFillStyle != XFILL_GRADIENT)
+                    if(eFillStyle != drawing::FillStyle_GRADIENT)
                     {
                         bGradientAllowed = false;
                     }

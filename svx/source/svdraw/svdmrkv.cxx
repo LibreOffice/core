@@ -52,6 +52,7 @@
 
 #include <editeng/editdata.hxx>
 
+using namespace com::sun::star;
 
 // Migrate Marking of Objects, Points and GluePoints
 
@@ -991,9 +992,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+                drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
-                if(eFillStyle == XFILL_GRADIENT)
+                if(eFillStyle == drawing::FillStyle_GRADIENT)
                 {
                     // set values and transform to vector set
                     GradTransformer aGradTransformer;

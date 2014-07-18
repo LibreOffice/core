@@ -44,6 +44,8 @@
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
+using namespace com::sun::star;
+
 SvxHatchTabPage::SvxHatchTabPage
 (
     Window* pParent,
@@ -62,7 +64,7 @@ SvxHatchTabPage::SvxHatchTabPage
     pbAreaTP            ( 0 ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    aXFStyleItem        ( XFILL_HATCH ),
+    aXFStyleItem        ( drawing::FillStyle_HATCH ),
     aXHatchItem         ( OUString(), XHatch() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
@@ -303,7 +305,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
                                  static_cast<long>(m_pMtrAngle->GetValue() * 10) );
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
-            rSet->Put( XFillStyleItem( XFILL_HATCH ) );
+            rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );
 
             delete pXHatch;
@@ -393,7 +395,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
         const SfxPoolItem* pPoolItem = NULL;
         if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
-            if( ( XFILL_HATCH == (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
+            if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
                 ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true, &pPoolItem ) ) )
             {
                 pHatch = new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() );

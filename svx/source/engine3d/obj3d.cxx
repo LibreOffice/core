@@ -271,8 +271,8 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
     // gradient depends on fillstyle
     // BM *** check if SetItem is NULL ***
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetMergedItem(XATTR_FILLSTYLE))).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
+    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetMergedItem(XATTR_FILLSTYLE))).GetValue();
+    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
 
     // Convert 3D objects in a group of polygons:
     // At first not only possible, because the creation of a group of

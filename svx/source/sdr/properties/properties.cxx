@@ -24,7 +24,7 @@
 #include <svx/svditer.hxx>
 #include <svx/xfillit0.hxx>
 
-
+using namespace com::sun::star;
 
 namespace sdr
 {
@@ -170,17 +170,17 @@ namespace sdr
                 const XFillStyleItem* pFillStyleItem = dynamic_cast< const XFillStyleItem* >( rItemSet.GetItem(XATTR_FILLSTYLE) );
                 if( pFillStyleItem )
                 {
-                    if( bFillBitmap && (pFillStyleItem->GetValue() != XFILL_BITMAP) )
+                    if( bFillBitmap && (pFillStyleItem->GetValue() != drawing::FillStyle_BITMAP) )
                     {
                         rItemSet.ClearItem( XATTR_FILLBITMAP );
                     }
 
-                    if( bFillGradient && (pFillStyleItem->GetValue() != XFILL_GRADIENT) )
+                    if( bFillGradient && (pFillStyleItem->GetValue() != drawing::FillStyle_GRADIENT) )
                     {
                         rItemSet.ClearItem( XATTR_FILLGRADIENT );
                     }
 
-                    if( bFillHatch && (pFillStyleItem->GetValue() != XFILL_HATCH) )
+                    if( bFillHatch && (pFillStyleItem->GetValue() != drawing::FillStyle_HATCH) )
                     {
                         rItemSet.ClearItem( XATTR_FILLHATCH );
                     }

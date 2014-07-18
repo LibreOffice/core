@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <unotools/pathoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
@@ -130,16 +131,16 @@ static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 }
 
 /// Returns the fill style of the currently selected entry.
-static XFillStyle lcl_getFillStyle(ListBox* pLbSelect)
+static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
 {
-    return (XFillStyle)(sal_uLong)pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos());
+    return (drawing::FillStyle)(sal_uLong)pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos());
 }
 
 // Selects the entry matching the specified fill style.
-static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
+static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
 {
     for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
-        if ((XFillStyle)(sal_uLong)pLbSelect->GetEntryData(i) == eStyle)
+        if ((drawing::FillStyle)(sal_uLong)pLbSelect->GetEntryData(i) == eStyle)
         {
             pLbSelect->SelectEntryPos(i);
             return;
@@ -555,7 +556,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     {
         m_pSelectTxt->Hide();
         m_pLbSelect->Hide();
-        lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
+        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
         ShowColorUI_Impl();
 
         const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_BRUSH );
@@ -681,7 +682,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     }
     else
     {
-        lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
+        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
         ShowColorUI_Impl();
 
         const SfxPoolItem* pOld = GetOldItem( rSet, SID_VIEW_FLD_PIC );
@@ -773,7 +774,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-        const bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
+        const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
         if( bColTransparency &&
@@ -981,7 +982,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
 
     SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
     SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-    const bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
+    const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
     bool                bModified = false;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
@@ -1329,7 +1330,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
-    if ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) )
+    if ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowColorUI_Impl();
         m_pParaLBox->Enable(); // drawing background can't be a bitmap
@@ -1571,7 +1572,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             xItemHolder.reset(new SvxBrushItem(nWhich));
             pActItem = xItemHolder.get();
         }
-        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
+        if(drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
             *pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
@@ -1651,7 +1652,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             return 0;
         }
         pParaBck_Impl->nActPos = nSelPos;
-        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
+        if(drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
             sal_uInt16 nWhich = pActItem->Which();
             *pActItem = SvxBrushItem( aBgdColor, nWhich );
@@ -1714,7 +1715,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
     if ( GPOS_NONE == ePos || !m_pLbSelect->IsVisible() )
     {
-        lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
+        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
         ShowColorUI_Impl();
         Color aTrColor( COL_TRANSPARENT );
         aBgdColor = rColor;
@@ -1751,7 +1752,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         const OUString  aStrLink   = rBgdAttr.GetGraphicLink();
         const OUString  aStrFilter = rBgdAttr.GetGraphicFilter();
 
-        lcl_setFillStyle(m_pLbSelect, XFILL_BITMAP);
+        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_BITMAP);
         ShowBitmapUI_Impl();
 
         if ( !aStrLink.isEmpty() )

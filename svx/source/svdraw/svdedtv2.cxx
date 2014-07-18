@@ -45,6 +45,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 using ::std::vector;
+using namespace com::sun::star;
 
 SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* /*pObj*/) const
 {
@@ -1313,12 +1314,12 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
         // If LineStyle of pAttrObj is XLINE_NONE force to XLINE_SOLID to make visible.
         const XLineStyle eLineStyle = ((const XLineStyleItem&)pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
-        const XFillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
         bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && ((SdrPathObj*)pAttrObj)->IsClosed());
 
-        if(XLINE_NONE == eLineStyle && (XFILL_NONE == eFillStyle || !bIsClosedPathObj))
+        if(XLINE_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
         {
             pPath->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         }
@@ -1572,7 +1573,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                     // clear fill and line style
                     aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
-                    aTargetItemSet.Put(XFillStyleItem(XFILL_NONE));
+                    aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     // get the text bounds and set at text object
                     Rectangle aTextBounds = pCustomShape->GetSnapRect();

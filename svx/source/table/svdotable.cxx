@@ -74,6 +74,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::util::XModifyBroadcaster;
 using sdr::properties::TextProperties;
 using sdr::properties::BaseProperties;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
@@ -1364,8 +1365,8 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
+    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
+    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
     rInfo.bShearAllowed     =false;
     rInfo.bEdgeRadiusAllowed=false;
     rInfo.bCanConvToPath    =false;

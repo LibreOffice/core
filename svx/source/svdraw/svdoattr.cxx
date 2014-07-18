@@ -72,7 +72,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "svx/xlinjoit.hxx"
 
-
+using namespace com::sun::star;
 
 sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 {
@@ -154,7 +154,7 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 
 bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=XFILL_NONE;
+    return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=drawing::FillStyle_NONE;
 }
 
 bool SdrAttrObj::HasLine() const

@@ -1364,7 +1364,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
         pClone->SetMergedItem(XLineColorItem(OUString(), aColor.nColor));
 
         // bitmap fill
-        pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+        pClone->SetMergedItem(XFillStyleItem(drawing::FillStyle_BITMAP));
         pClone->SetMergedItem(XFillBitmapItem(OUString(), GetEmptyOLEReplacementGraphic()));
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
@@ -1493,7 +1493,7 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
         }
         else
         {
-            SetMergedItem(XFillStyleItem(XFILL_NONE));
+            SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
             SetMergedItem(XLineStyleItem(XLINE_NONE));
         }
     }

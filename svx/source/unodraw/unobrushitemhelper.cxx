@@ -37,6 +37,8 @@
 #include <svx/xfltrit.hxx>
 #include <svx/unoshape.hxx>
 
+using namespace com::sun::star;
+
 //UUUU
 void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet)
 {
@@ -54,7 +56,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         // we have a color fill
         const Color aColor(rBrush.GetColor().GetRGBColor());
 
-        rToSet.Put(XFillStyleItem(XFILL_SOLID));
+        rToSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         rToSet.Put(XFillColorItem(OUString(), aColor));
 
         // #125189# nTransparency is in range [0..254], convert to [0..100] which is used in
@@ -64,7 +66,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
     else if(GPOS_NONE != rBrush.GetGraphicPos())
     {
         // we have a graphic fill, set fill style
-        rToSet.Put(XFillStyleItem(XFILL_BITMAP));
+        rToSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
 
         // set graphic (if available)
         const Graphic* pGraphic = rBrush.GetGraphic();
@@ -140,10 +142,10 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         // Also need to set the FillStyle to NONE to express the 0xff transparency flag; this
         // is needed when e.g. first transparency is set to 0xff and then a Graphic gets set.
         // When not changing the FillStyle, the next getSvxBrushItemFromSourceSet *will* return
-        // to XFILL_SOLID with the rescued color.
+        // to drawing::FillStyle_SOLID with the rescued color.
         const Color aColor(rBrush.GetColor().GetRGBColor());
 
-        rToSet.Put(XFillStyleItem(XFILL_NONE));
+        rToSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         rToSet.Put(XFillColorItem(OUString(), aColor));
     }
 }
@@ -194,9 +196,9 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 {
     const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSourceSet.GetItem(XATTR_FILLSTYLE, bSearchInParents)));
 
-    if(!pXFillStyleItem || XFILL_NONE == pXFillStyleItem->GetValue())
+    if(!pXFillStyleItem || drawing::FillStyle_NONE == pXFillStyleItem->GetValue())
     {
-        // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have XFILL_NONE)
+        // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have drawing::FillStyle_NONE)
         Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
 
         // when fill style is none, then don't allow anything other than 0 or auto.
@@ -212,18 +214,19 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
     switch(pXFillStyleItem->GetValue())
     {
-        case XFILL_NONE:
+        default:
+        case drawing::FillStyle_NONE:
         {
             // already handled above, can not happen again
             break;
         }
-        case XFILL_SOLID:
+        case drawing::FillStyle_SOLID:
         {
             // create SvxBrushItem with fill color
             aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             break;
         }
-        case XFILL_GRADIENT:
+        case drawing::FillStyle_GRADIENT:
         {
             // cannot be directly supported, but do the best possible
             const XGradient aXGradient(static_cast< const XFillGradientItem& >(rSourceSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
@@ -249,7 +252,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
             aRetval = SvxBrushItem(aMixedColor, nBackgroundID);
             break;
         }
-        case XFILL_HATCH:
+        case drawing::FillStyle_HATCH:
         {
             // cannot be directly supported, but do the best possible
             const XHatch& rHatch(static_cast< const XFillHatchItem& >(rSourceSet.Get(XATTR_FILLHATCH)).GetHatchValue());
@@ -257,7 +260,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
             if(bFillBackground)
             {
-                // hatch is background-filled, use FillColor as if XFILL_SOLID
+                // hatch is background-filled, use FillColor as if drawing::FillStyle_SOLID
                 aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             }
             else
@@ -283,7 +286,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
             break;
         }
-        case XFILL_BITMAP:
+        case drawing::FillStyle_BITMAP:
         {
             // create SvxBrushItem with bitmap info and flags
             const XFillBitmapItem& rBmpItm = static_cast< const XFillBitmapItem& >(rSourceSet.Get(XATTR_FILLBITMAP, bSearchInParents));

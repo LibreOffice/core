@@ -793,7 +793,7 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 
         //UUUU Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
         // to decide if gradient transparence is used
-        const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pSet->Get(XATTR_FILLSTYLE)).GetValue());
+        const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(pSet->Get(XATTR_FILLSTYLE)).GetValue());
         const bool bUseFloatTransparence(static_cast< const XFillFloatTransparenceItem& >(pSet->Get(XATTR_FILLFLOATTRANSPARENCE)).IsEnabled());
 
         for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
@@ -827,25 +827,25 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                 case XATTR_FILLCOLOR:
                                 {
                                     // only use active FillStyle information
-                                    bIsDefault = (XFILL_SOLID == eFillStyle);
+                                    bIsDefault = (drawing::FillStyle_SOLID == eFillStyle);
                                     break;
                                 }
                                 case XATTR_FILLGRADIENT:
                                 {
                                     // only use active FillStyle information
-                                    bIsDefault = (XFILL_GRADIENT == eFillStyle);
+                                    bIsDefault = (drawing::FillStyle_GRADIENT == eFillStyle);
                                     break;
                                 }
                                 case XATTR_FILLHATCH:
                                 {
                                     // only use active FillStyle information
-                                    bIsDefault = (XFILL_HATCH == eFillStyle);
+                                    bIsDefault = (drawing::FillStyle_HATCH == eFillStyle);
                                     break;
                                 }
                                 case XATTR_FILLBITMAP:
                                 {
                                     // only use active FillStyle information
-                                    bIsDefault = (XFILL_BITMAP == eFillStyle);
+                                    bIsDefault = (drawing::FillStyle_BITMAP == eFillStyle);
                                     break;
                                 }
                                 case XATTR_FILLTRANSPARENCE:
@@ -1230,7 +1230,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
         case SFX_STYLE_FAMILY_PAGE :
             {
-                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                //UUUU set correct parent to get the drawing::FillStyle_NONE FillStyle as needed
                 if(!aCoreSet.GetParent())
                 {
                     aCoreSet.SetParent(&rDoc.GetDfltFrmFmt()->GetAttrSet());

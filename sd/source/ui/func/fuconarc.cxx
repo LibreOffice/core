@@ -41,6 +41,8 @@
 
 #include <svx/sxciaitm.hxx>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 TYPEINIT1( FuConstructArc, FuConstruct );
@@ -251,7 +253,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 SID_DRAW_ELLIPSECUT_NOFILL == nID ||
                 SID_DRAW_CIRCLECUT_NOFILL == nID)
             {
-                aAttr.Put(XFillStyleItem(XFILL_NONE));
+                aAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
 
             pObj->SetMergedItemSet(aAttr);

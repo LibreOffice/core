@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/FillStyle.hpp>
+
 #include <tools/shl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -43,6 +45,7 @@
 #include "svx/linectrl.hxx"
 #include <svtools/colorcfg.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -429,7 +432,7 @@ SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
-    SelectEntryPos( XFILL_SOLID );
+    SelectEntryPos( drawing::FillStyle_SOLID );
     Show();
 }
 

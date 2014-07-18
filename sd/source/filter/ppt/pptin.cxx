@@ -2564,10 +2564,10 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                         {
                                             const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-                                            XFillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                                            drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
                                             XLineStyle eLineStyle = ((XLineStyleItem&)(rObjItemSet.Get(XATTR_LINESTYLE))).GetValue();
 
-                                            if ( ( eFillStyle == XFILL_NONE ) && ( eLineStyle == XLINE_NONE ) )
+                                            if ( ( eFillStyle == drawing::FillStyle_NONE ) && ( eLineStyle == XLINE_NONE ) )
                                                 bDontAnimateInvisibleShape = true;
                                         }
                                     }

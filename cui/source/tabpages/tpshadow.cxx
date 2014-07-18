@@ -35,6 +35,8 @@
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>
 
+using namespace com::sun::star;
+
 static const sal_uInt16 pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
@@ -90,16 +92,14 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
 
     // setting the output device
-    XFillStyle eXFS = XFILL_SOLID;
+    drawing::FillStyle eXFS = drawing::FillStyle_SOLID;
     if( rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE )
     {
-        eXFS = (XFillStyle) ( ( ( const XFillStyleItem& ) rOutAttrs.
+        eXFS = (drawing::FillStyle) ( ( ( const XFillStyleItem& ) rOutAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
         switch( eXFS )
         {
-            //case XFILL_NONE: --> NOTHING
-
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
                 if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
                 {
                     XFillColorItem aColorItem( ( const XFillColorItem& )
@@ -108,7 +108,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                 }
             break;
 
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
                 if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
                 {
                     XFillGradientItem aGradientItem( ( ( const XFillGradientItem& )
@@ -117,7 +117,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                 }
             break;
 
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
                 if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
                     XFillHatchItem aHatchItem( ( ( const XFillHatchItem& )
@@ -126,7 +126,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                 }
             break;
 
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
                 {
@@ -136,7 +136,8 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
                 }
             }
             break;
-            case XFILL_NONE : break;
+            case drawing::FillStyle_NONE : break;
+            default: break;
         }
     }
     else
@@ -144,13 +145,13 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
         rXFSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
     }
 
-    if(XFILL_NONE == eXFS)
+    if(drawing::FillStyle_NONE == eXFS)
     {
         // #i96350#
         // fallback to solid fillmode when no fill mode is provided to have
         // a reasonable shadow preview. The used color will be a set one or
         // the default (currently blue8)
-        eXFS = XFILL_SOLID;
+        eXFS = drawing::FillStyle_SOLID;
     }
 
     rXFSet.Put( XFillStyleItem( eXFS ) );
@@ -493,9 +494,9 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
-        rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
+        rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     else
-        rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
+        rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )

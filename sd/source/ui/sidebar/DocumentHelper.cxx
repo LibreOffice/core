@@ -418,7 +418,7 @@ void DocumentHelper::AssignMasterPageToPage (
             new SdBackgroundObjUndoAction(
                 *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
             true);
-        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+        pPage->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
 
         pDocument->SetMasterPage (
             (pPage->GetPageNum()-1)/2,

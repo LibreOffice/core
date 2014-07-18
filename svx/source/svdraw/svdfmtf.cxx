@@ -71,7 +71,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 
-
+using namespace com::sun::star;
 
 ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrModel& rModel,
@@ -395,12 +395,12 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
     {
         if(maVD.IsFillColor())
         {
-            mpFillAttr->Put(XFillStyleItem(XFILL_SOLID));
+            mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_SOLID));
             mpFillAttr->Put(XFillColorItem(OUString(), maVD.GetFillColor()));
         }
         else
         {
-            mpFillAttr->Put(XFillStyleItem(XFILL_NONE));
+            mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_NONE));
         }
     }
     else
@@ -600,7 +600,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                             aClipTopLeft,
                             aClipSize);
 
-                        pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+                        pObj->SetMergedItem(XFillStyleItem(drawing::FillStyle_BITMAP));
                         pObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aClippedBitmap)));
                         pObj->SetMergedItem(XFillBmpTileItem(false));
                         pObj->SetMergedItem(XFillBmpStretchItem(true));
@@ -1046,7 +1046,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     if (!aFnt.IsTransparent())
     {
         SfxItemSet aAttr(*mpFillAttr->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
-        aAttr.Put(XFillStyleItem(XFILL_SOLID));
+        aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
@@ -1091,7 +1091,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1103,7 +1103,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1115,7 +1115,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1127,7 +1127,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1173,7 +1173,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
             }
 
             SetAttributes(pPath);
-            aHatchAttr.Put(XFillStyleItem(XFILL_HATCH));
+            aHatchAttr.Put(XFillStyleItem(drawing::FillStyle_HATCH));
             aHatchAttr.Put(XFillHatchItem(&mpModel->GetItemPool(), XHatch(rHatch.GetColor(), eStyle, rHatch.GetDistance(), rHatch.GetAngle())));
             pPath->SetMergedItemSet(aHatchAttr);
 
@@ -1263,7 +1263,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
                     aGradAttr.Put(XLineStyleItem(XLINE_NONE));
 
                     // add detected gradient fillstyle
-                    aGradAttr.Put(XFillStyleItem(XFILL_GRADIENT));
+                    aGradAttr.Put(XFillStyleItem(drawing::FillStyle_GRADIENT));
                     aGradAttr.Put(XFillGradientItem(aXGradient));
 
                     pPath->SetMergedItemSet(aGradAttr);
@@ -1310,7 +1310,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1326,7 +1326,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1340,7 +1340,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1354,7 +1354,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1369,7 +1369,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction& rAct)
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
 }
 
@@ -1431,7 +1431,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
                 rGradient.GetSteps()));
 
         SetAttributes(pRect);
-        aGradientAttr.Put(XFillStyleItem(XFILL_GRADIENT)); // #i125211#
+        aGradientAttr.Put(XFillStyleItem(drawing::FillStyle_GRADIENT)); // #i125211#
         aGradientAttr.Put(aXFillGradientItem);
         pRect->SetMergedItemSet(aGradientAttr);
 
@@ -1501,7 +1501,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
                     rGradient.GetSteps()));
 
             SetAttributes(pPath);
-            aGradientAttr.Put(XFillStyleItem(XFILL_GRADIENT)); // #i125211#
+            aGradientAttr.Put(XFillStyleItem(drawing::FillStyle_GRADIENT)); // #i125211#
             aGradientAttr.Put(aXFillGradientItem);
             pPath->SetMergedItemSet(aGradientAttr);
 
@@ -1690,7 +1690,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
             // since these metafile content is not used to draw line/fill
             // dependent of these setting at the device content
             pGraf->SetMergedItem(XLineStyleItem(XLINE_NONE));
-            pGraf->SetMergedItem(XFillStyleItem(XFILL_NONE));
+            pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
             InsertObj(pGraf);
         }
     }

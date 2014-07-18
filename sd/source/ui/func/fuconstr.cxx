@@ -40,6 +40,8 @@
 #include "stlpool.hxx"
 #include <svx/globl3d.hxx>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 TYPEINIT1( FuConstruct, FuDraw );
@@ -348,13 +350,13 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             const XFillStyleItem& rFillStyle = (const XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE);
             if ( bForceFillStyle )
             {
-                if (rFillStyle.GetValue() == XFILL_NONE)
-                    rAttr.Put(XFillStyleItem(XFILL_SOLID));
+                if (rFillStyle.GetValue() == drawing::FillStyle_NONE)
+                    rAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
             }
             else if ( bForceNoFillStyle )
             {
-                if (rFillStyle.GetValue() != XFILL_NONE)
-                    rAttr.Put(XFillStyleItem(XFILL_NONE));
+                if (rFillStyle.GetValue() != drawing::FillStyle_NONE)
+                    rAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
         }
     }
@@ -380,7 +382,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             else
             {
                 SfxItemSet aAttr(*mpView->GetDefaultAttr().Clone());
-                rAttr.Put(XFillStyleItem(XFILL_NONE));
+                rAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 pObj->SetMergedItemSet(aAttr);
             }
         }

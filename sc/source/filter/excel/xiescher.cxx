@@ -110,6 +110,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sfx2/docfile.hxx>
 
+using namespace com::sun::star;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
@@ -702,7 +703,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
     }
     else if( rFillData.mnPattern == EXC_PATT_NONE )
     {
-        rSdrObj.SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+        rSdrObj.SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     else
     {
@@ -710,7 +711,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
         Color aBackColor = GetPalette().GetColor( rFillData.mnBackColorIdx );
         if( (rFillData.mnPattern == EXC_PATT_SOLID) || (aPattColor == aBackColor) )
         {
-            rSdrObj.SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
+            rSdrObj.SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
             rSdrObj.SetMergedItem( XFillColorItem( EMPTY_OUSTRING, aPattColor ) );
         }
         else
@@ -757,7 +758,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             aXOBitmap.Array2Bitmap();
             aBitmap = aXOBitmap.GetBitmap();
 
-            rSdrObj.SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+            rSdrObj.SetMergedItem(XFillStyleItem(drawing::FillStyle_BITMAP));
             rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_OUSTRING, Graphic(aBitmap)));
         }
     }

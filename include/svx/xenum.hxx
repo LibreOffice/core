@@ -23,8 +23,6 @@
 enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
 enum XDashStyle         { XDASH_RECT, XDASH_ROUND, XDASH_RECTRELATIVE,
                           XDASH_ROUNDRELATIVE };
-enum XFillStyle         { XFILL_NONE, XFILL_SOLID, XFILL_GRADIENT, XFILL_HATCH,
-                          XFILL_BITMAP };
 enum XGradientStyle     { XGRAD_LINEAR, XGRAD_AXIAL, XGRAD_RADIAL,
                           XGRAD_ELLIPTICAL, XGRAD_SQUARE, XGRAD_RECT };
 enum XHatchStyle        { XHATCH_SINGLE, XHATCH_DOUBLE, XHATCH_TRIPLE };

@@ -6530,7 +6530,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 bool bDone(false);
 
                 // #i125189# We are also done when the new DrawingLayer FillAttributes are used
-                // or the FillStyle is set (different from XFILL_NONE)
+                // or the FillStyle is set (different from drawing::FillStyle_NONE)
                 if(pOut && aFillAttributes.get())
                 {
                     if(aFillAttributes->isUsed())
@@ -6545,9 +6545,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                         // thus need to check the model data itself for FillStyle (do not rely on
                         // SdrAllFillAttributesHelper since it already contains optimized information,
                         // e.g. transparency leads to no fill)
-                        const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+                        const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
 
-                        if(XFILL_NONE != eFillStyle)
+                        if(drawing::FillStyle_NONE != eFillStyle)
                         {
                             bDone = true;
                         }
@@ -7456,16 +7456,16 @@ bool SwFrm::GetBackgroundBrush(
             // the new DrawingLayer FillStyle is used
             if(rFillAttributes->isUsed())
             {
-                // it's not XFILL_NONE
+                // it's not drawing::FillStyle_NONE
                 bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
             }
             else
             {
                 // maybe optimized already when 100% transparency is used somewhere, need to test
                 // XFillStyleItem directly from the model data
-                const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pFrm->GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+                const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(pFrm->GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
 
-                if(XFILL_NONE != eFillStyle)
+                if(drawing::FillStyle_NONE != eFillStyle)
                 {
                     bNewDrawingLayerFillStyleIsUsedAndNotNoFill = true;
                 }
@@ -7478,7 +7478,7 @@ bool SwFrm::GetBackgroundBrush(
         //     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
         if (
             // #i125189# Done when the new DrawingLayer FillAttributes are used and
-            // not XFILL_NONE (see above)
+            // not drawing::FillStyle_NONE (see above)
             bNewDrawingLayerFillStyleIsUsedAndNotNoFill ||
 
             // done when SvxBrushItem is used

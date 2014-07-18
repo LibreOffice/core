@@ -50,6 +50,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+using namespace com::sun::star;
 
 // helpers
 
@@ -895,14 +896,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
     const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();
 
-    if (XFILL_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
     {
         SdrPage *pOwnerPage = GetPage();
         if (pOwnerPage)
         {
             pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
 
-            if (XFILL_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+            if (drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
             {
                 if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
                 {
@@ -912,7 +913,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
     }
 
-    if (XFILL_NONE != ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE != ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
     {
         Color aColor(rOutliner.GetBackgroundColor());
         GetDraftFillColor(*pBackgroundFillSet, aColor);

@@ -1180,7 +1180,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
     basegfx::B2DPolyPolygon aRetval;
 
     // create cloned object without text, but with XLINE_SOLID,
-    // COL_BLACK as line color and XFILL_NONE
+    // COL_BLACK as line color and drawing::FillStyle_NONE
     SdrObject* pClone = Clone();
 
     if(pClone)
@@ -1224,7 +1224,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         // solid black lines and no fill
         aNewSet.Put(XLineStyleItem(XLINE_SOLID));
         aNewSet.Put(XLineColorItem(OUString(), Color(COL_BLACK)));
-        aNewSet.Put(XFillStyleItem(XFILL_NONE));
+        aNewSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         pClone->SetMergedItemSet(aNewSet);
 
         // get sequence from clone
@@ -2546,7 +2546,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
         if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
             SfxItemSet aSet(pRet->GetMergedItemSet());
-            XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+            drawing::FillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
             SdrPathObj* aLinePolygonPart = NULL;
             SdrPathObj* aLineHairlinePart = NULL;
             bool bBuildGroup(false);
@@ -2563,7 +2563,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
                 sal_uInt16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
                 aSet.Put(XFillColorItem(OUString(), aColorLine));
-                aSet.Put(XFillStyleItem(XFILL_SOLID));
+                aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                 aSet.Put(XFillTransparenceItem(nTransLine));
 
                 aLinePolygonPart->SetMergedItemSet(aSet);
@@ -2579,7 +2579,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 aLineHairlinePart->SetModel(pRet->GetModel());
 
                 aSet.Put(XLineWidthItem(0L));
-                aSet.Put(XFillStyleItem(XFILL_NONE));
+                aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 aSet.Put(XLineStyleItem(XLINE_SOLID));
 
                 // it is also necessary to switch off line start and ends here
@@ -2600,7 +2600,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
             if(pPath && pPath->IsClosed())
             {
-                if(eOldFillStyle != XFILL_NONE)
+                if(eOldFillStyle != drawing::FillStyle_NONE)
                 {
                     bAddOriginalGeometry = true;
                 }
@@ -3215,10 +3215,10 @@ bool SdrObject::IsInDestruction() const
     return false;
 }
 
-// return if fill is != XFILL_NONE
+// return if fill is != drawing::FillStyle_NONE
 bool SdrObject::HasFillStyle() const
 {
-    return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != XFILL_NONE);
+    return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE);
 }
 
 bool SdrObject::HasLineStyle() const

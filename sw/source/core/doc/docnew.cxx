@@ -290,7 +290,7 @@ SwDoc::SwDoc()
     //UUUU The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool
     // has a default for the XFillStyleItem of XFILL_SOLID and the color for it is the default
     // fill color (blue7 or similar). This is a problem, in Writer we want the default fill
-    // style to be XFILL_NONE. This cannot simply be done by changing it in the 2nd pool at the
+    // style to be drawing::FillStyle_NONE. This cannot simply be done by changing it in the 2nd pool at the
     // pool defaults when the DrawingLayer ItemPool is used for Writer, that would lead to
     // countless problems like DrawObjects initial fill and others.
     // It is also hard to find all places where the initial ItemSets for Writer (including
@@ -299,8 +299,8 @@ SwDoc::SwDoc()
     // attribbute sets (which is done at import and using UI). Also not a good solution.
     // Luckily Writer uses pDfltTxtFmtColl as default parent for all paragraphs and similar, thus
     // it is possible to set this attribute here. It will be not reset when importing.
-    mpDfltTxtFmtColl->SetFmtAttr(XFillStyleItem(XFILL_NONE));
-    mpDfltFrmFmt->SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    mpDfltTxtFmtColl->SetFmtAttr(XFillStyleItem(drawing::FillStyle_NONE));
+    mpDfltFrmFmt->SetFmtAttr(XFillStyleItem(drawing::FillStyle_NONE));
 
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)

@@ -40,6 +40,8 @@
 #include <svx/xfillit0.hxx>
 #include <svl/itemset.hxx>
 
+using namespace com::sun::star;
+
 namespace SWUnoHelper
 {
 
@@ -277,9 +279,9 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet)
     // here different FillStyles can be excluded for export; it will depend on the
     // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
     // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
-    // For now, take them all - except XFILL_NONE
+    // For now, take them all - except drawing::FillStyle_NONE
 
-    if(XFILL_NONE != pXFillStyleItem->GetValue())
+    if(drawing::FillStyle_NONE != pXFillStyleItem->GetValue())
     {
         return true;
     }

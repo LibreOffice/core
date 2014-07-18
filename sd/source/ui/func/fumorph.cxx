@@ -45,6 +45,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <boost/scoped_ptr.hpp>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
@@ -354,8 +356,8 @@ void FuMorph::ImpInsertPolygons(
 
     const XLineStyle eLineStyle1 = ITEMVALUE( aSet1, XATTR_LINESTYLE, XLineStyleItem );
     const XLineStyle eLineStyle2 = ITEMVALUE( aSet2, XATTR_LINESTYLE, XLineStyleItem );
-    const XFillStyle eFillStyle1 = ITEMVALUE( aSet1, XATTR_FILLSTYLE, XFillStyleItem );
-    const XFillStyle eFillStyle2 = ITEMVALUE( aSet2, XATTR_FILLSTYLE, XFillStyleItem );
+    const drawing::FillStyle eFillStyle1 = ITEMVALUE( aSet1, XATTR_FILLSTYLE, XFillStyleItem );
+    const drawing::FillStyle eFillStyle2 = ITEMVALUE( aSet2, XATTR_FILLSTYLE, XFillStyleItem );
 
     if ( bAttributeFade )
     {
@@ -374,7 +376,7 @@ void FuMorph::ImpInsertPolygons(
         else if ( ( eLineStyle1 == XLINE_NONE ) && ( eLineStyle2 == XLINE_NONE ) )
             bIgnoreLine = true;
 
-        if ( ( eFillStyle1 == XFILL_SOLID ) && ( eFillStyle2 == XFILL_SOLID ) )
+        if ( ( eFillStyle1 == drawing::FillStyle_SOLID ) && ( eFillStyle2 == drawing::FillStyle_SOLID ) )
         {
             bFillColor = true;
             aStartFillCol = static_cast< XFillColorItem const & >(
@@ -382,7 +384,7 @@ void FuMorph::ImpInsertPolygons(
             aEndFillCol = static_cast< XFillColorItem const & >(
                 aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
         }
-        else if ( ( eFillStyle1 == XFILL_NONE ) && ( eFillStyle2 == XFILL_NONE ) )
+        else if ( ( eFillStyle1 == drawing::FillStyle_NONE ) && ( eFillStyle2 == drawing::FillStyle_NONE ) )
             bIgnoreFill = true;
     }
 
@@ -397,7 +399,7 @@ void FuMorph::ImpInsertPolygons(
         double          fFactor = fStep;
 
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-        aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+        aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
 
         for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
         {
@@ -420,7 +422,7 @@ void FuMorph::ImpInsertPolygons(
                 aSet.Put( XFillColorItem( aEmptyStr, Color(aFillColor)));
             }
             else if ( bIgnoreFill )
-                aSet.Put( XFillStyleItem( XFILL_NONE ) );
+                aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
             // line width
             if ( bLineWidth )

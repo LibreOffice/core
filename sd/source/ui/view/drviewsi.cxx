@@ -144,9 +144,9 @@ void DrawViewShell::AssignFrom3DWindow()
 
                     // Determine if a FILL attribute is set.
                     // If not, hard set a fill attribute
-                    XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
-                    if(eFillStyle == XFILL_NONE)
-                        aSet.Put(XFillStyleItem (XFILL_SOLID));
+                    drawing::FillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
+                    if(eFillStyle == drawing::FillStyle_NONE)
+                        aSet.Put(XFillStyleItem (drawing::FillStyle_SOLID));
 
                     // remove some 3DSCENE attributes since these were
                     // created by convert to 3D and may not be changed

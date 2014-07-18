@@ -38,6 +38,7 @@
 #include "helpid.hrc"
 #include <boost/scoped_ptr.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -64,7 +65,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpFillControl(0)
     , mpFillTypeLB(0)
     , mpFillAttrLB(0)
-    , meLastXFS(XFILL_NONE)
+    , meLastXFS(drawing::FillStyle_NONE)
     , mbUpdate(false)
 {
     addStatusListener( OUString( ".uno:FillColor" ));
@@ -120,14 +121,14 @@ void SvxFillToolBoxControl::StateChanged(
         }
         else if(mpStyleItem)
         {
-            const XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
+            const drawing::FillStyle eXFS(static_cast< drawing::FillStyle >(mpStyleItem->GetValue()));
 
             if(nSID == SID_ATTR_FILL_COLOR)
             {
                 delete mpColorItem;
                 mpColorItem = static_cast< XFillColorItem* >(pState->Clone());
 
-                if(eXFS == XFILL_SOLID)
+                if(eXFS == drawing::FillStyle_SOLID)
                 {
                     bEnableControls = true;
                 }
@@ -137,7 +138,7 @@ void SvxFillToolBoxControl::StateChanged(
                 delete mpGradientItem;
                 mpGradientItem = static_cast< XFillGradientItem* >(pState->Clone());
 
-                if(eXFS == XFILL_GRADIENT)
+                if(eXFS == drawing::FillStyle_GRADIENT)
                 {
                     bEnableControls = true;
                 }
@@ -147,7 +148,7 @@ void SvxFillToolBoxControl::StateChanged(
                 delete mpHatchItem;
                 mpHatchItem = static_cast< XFillHatchItem* >(pState->Clone());
 
-                if(eXFS == XFILL_HATCH)
+                if(eXFS == drawing::FillStyle_HATCH)
                 {
                     bEnableControls = true;
                 }
@@ -157,7 +158,7 @@ void SvxFillToolBoxControl::StateChanged(
                 delete mpBitmapItem;
                 mpBitmapItem = static_cast< XFillBitmapItem* >(pState->Clone());
 
-                if(eXFS == XFILL_BITMAP)
+                if(eXFS == drawing::FillStyle_BITMAP)
                 {
                     bEnableControls = true;
                 }
@@ -167,12 +168,12 @@ void SvxFillToolBoxControl::StateChanged(
         if(mpStyleItem)
         {
             // ensure that the correct entry is selected in mpFillTypeLB
-            XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
+            drawing::FillStyle eXFS(static_cast< drawing::FillStyle >(mpStyleItem->GetValue()));
             const bool bFillTypeChangedByUser(mpFillControl->mbFillTypeChanged);
 
             if(bFillTypeChangedByUser)
             {
-                meLastXFS = static_cast< XFillStyle >(mpFillControl->mnLastFillTypeControlSelectEntryPos);
+                meLastXFS = static_cast< drawing::FillStyle >(mpFillControl->mnLastFillTypeControlSelectEntryPos);
                 mpFillControl->mbFillTypeChanged = false;
             }
 
@@ -207,18 +208,18 @@ void SvxFillToolBoxControl::StateChanged(
         }
         else
         {
-            XFillStyle eXFS(XFILL_NONE);
+            drawing::FillStyle eXFS(drawing::FillStyle_NONE);
 
             if(mpStyleItem)
             {
-                eXFS = static_cast< XFillStyle >(mpStyleItem->GetValue());
+                eXFS = static_cast< drawing::FillStyle >(mpStyleItem->GetValue());
             }
 
             if(!mpStyleItem ||
-                (nSID == SID_ATTR_FILL_COLOR && eXFS == XFILL_SOLID) ||
-                (nSID == SID_ATTR_FILL_GRADIENT && eXFS == XFILL_GRADIENT) ||
-                (nSID == SID_ATTR_FILL_HATCH && eXFS == XFILL_HATCH) ||
-                (nSID == SID_ATTR_FILL_BITMAP && eXFS == XFILL_BITMAP))
+                (nSID == SID_ATTR_FILL_COLOR && eXFS == drawing::FillStyle_SOLID) ||
+                (nSID == SID_ATTR_FILL_GRADIENT && eXFS == drawing::FillStyle_GRADIENT) ||
+                (nSID == SID_ATTR_FILL_HATCH && eXFS == drawing::FillStyle_HATCH) ||
+                (nSID == SID_ATTR_FILL_BITMAP && eXFS == drawing::FillStyle_BITMAP))
             {
                 mpFillAttrLB->SetNoSelection();
             }
@@ -233,7 +234,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
     if(mpStyleItem && pState && mbUpdate)
     {
         mbUpdate = false;
-        const XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
+        const drawing::FillStyle eXFS(static_cast< drawing::FillStyle >(mpStyleItem->GetValue()));
 
         // Check if the fill style was already active
         if(meLastXFS != eXFS)
@@ -246,12 +247,12 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
 
         switch(eXFS)
         {
-            case XFILL_NONE:
+            case drawing::FillStyle_NONE:
             {
                 break;
             }
 
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 if(mpColorItem)
                 {
@@ -295,7 +296,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 break;
             }
 
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 if(mpGradientItem)
                 {
@@ -340,7 +341,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 break;
             }
 
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 if(mpHatchItem)
                 {
@@ -385,7 +386,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 break;
             }
 
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 if(mpBitmapItem)
                 {
@@ -440,12 +441,12 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
 
     if(pState && mpStyleItem)
     {
-        XFillStyle eXFS = static_cast< XFillStyle >(mpStyleItem->GetValue());
+        drawing::FillStyle eXFS = static_cast< drawing::FillStyle >(mpStyleItem->GetValue());
 
         // Does the lists have changed?
         switch(eXFS)
         {
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 const SvxColorListItem* pItem = dynamic_cast< const SvxColorListItem* >(pState);
 
@@ -458,7 +459,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 }
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 const SvxGradientListItem* pItem = dynamic_cast< const SvxGradientListItem* >(pState);
 
@@ -471,7 +472,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 }
                 break;
             }
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 const SvxHatchListItem* pItem = dynamic_cast< const SvxHatchListItem* >(pState);
 
@@ -484,7 +485,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 }
                 break;
             }
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 const SvxBitmapListItem* pItem = dynamic_cast< const SvxBitmapListItem* >(pState);
 
@@ -497,7 +498,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
                 }
                 break;
             }
-            default: // XFILL_NONE
+            default: // drawing::FillStyle_NONE
             {
                 break;
             }
@@ -527,8 +528,8 @@ Window* SvxFillToolBoxControl::CreateItemWindow(Window *pParent)
             // and selecting a DrawObject, thhus a useful initialization is
             // needed to get the FillType and the FillStyle List inited
             // correctly. This in combination with meLastXFS inited to
-            // XFILL_NONE do the trick
-            mpStyleItem = new XFillStyleItem(XFILL_SOLID);
+            // drawing::FillStyle_NONE do the trick
+            mpStyleItem = new XFillStyleItem(drawing::FillStyle_SOLID);
         }
 
         return mpFillControl;
@@ -575,7 +576,7 @@ FillControl::~FillControl()
     delete mpLbFillAttr;
 }
 
-void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillStyle)
+void FillControl::InitializeFillStyleAccordingToGivenFillType(drawing::FillStyle aFillStyle)
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
     bool bDone(false);
@@ -587,7 +588,7 @@ void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillSt
 
         switch (aFillStyle)
         {
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 if(pSh->GetItem(SID_COLOR_TABLE))
                 {
@@ -599,7 +600,7 @@ void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillSt
                 break;
             }
 
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 if(pSh->GetItem(SID_GRADIENT_LIST))
                 {
@@ -611,7 +612,7 @@ void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillSt
                 break;
             }
 
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 if(pSh->GetItem(SID_HATCH_LIST))
                 {
@@ -623,7 +624,7 @@ void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillSt
                 break;
             }
 
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 if(pSh->GetItem(SID_BITMAP_LIST))
                 {
@@ -634,9 +635,9 @@ void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillSt
                 }
                 break;
             }
-            default: // XFILL_NONE
+            default: // drawing::FillStyle_NONE
             {
-                // accept disable (no styles for XFILL_NONE)
+                // accept disable (no styles for drawing::FillStyle_NONE)
                 break;
             }
         }
@@ -666,9 +667,9 @@ IMPL_LINK(FillControl,SelectFillTypeHdl,ListBox *,pBox)
         && mpLbFillType->GetSelectEntryPos() != mnLastFillTypeControlSelectEntryPos);
 
     updateLastFillTypeControlSelectEntryPos();
-    XFillStyle eXFS = static_cast< XFillStyle >(mpLbFillType->GetSelectEntryPos());
+    drawing::FillStyle eXFS = static_cast< drawing::FillStyle >(mpLbFillType->GetSelectEntryPos());
 
-    if(bAction && XFILL_NONE != eXFS)
+    if(bAction && drawing::FillStyle_NONE != eXFS)
     {
         mbFillTypeChanged = true;
     }
@@ -676,12 +677,12 @@ IMPL_LINK(FillControl,SelectFillTypeHdl,ListBox *,pBox)
     // update list of FillStyles in any case
     InitializeFillStyleAccordingToGivenFillType(eXFS);
 
-    // for XFILL_NONE do no longer call SelectFillAttrHdl (as done before),
+    // for drawing::FillStyle_NONE do no longer call SelectFillAttrHdl (as done before),
     // trigger needed actions directly. This is the only action this handler
     // can trigger directly as the user action is finished in this case
-    if(XFILL_NONE == eXFS && bAction)
+    if(drawing::FillStyle_NONE == eXFS && bAction)
     {
-        // for XFILL_NONE do no longer call SelectFillAttrHdl,
+        // for drawing::FillStyle_NONE do no longer call SelectFillAttrHdl,
         // trigger needed actions directly
         Any a;
         Sequence< PropertyValue > aArgsFillStyle(1);
@@ -741,17 +742,18 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
         Any a;
         Sequence< PropertyValue > aArgsFillAttr(1);
         OUString aFillAttrCommand;
-        XFillStyle eXFS(static_cast< XFillStyle >(mpLbFillType->GetSelectEntryPos()));
+        drawing::FillStyle eXFS(static_cast< drawing::FillStyle >(mpLbFillType->GetSelectEntryPos()));
 
         switch(eXFS)
         {
-            case XFILL_NONE:
+            default:
+            case drawing::FillStyle_NONE:
             {
                 // handled in SelectFillTypeHdl, nothing to do here
                 break;
             }
 
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 // Entry gets tested against temporary color
                 OUString aTmpStr = mpLbFillAttr->GetSelectEntry();
@@ -767,7 +769,7 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
                 aFillAttrCommand = ".uno:FillColor";
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
                 if (nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_GRADIENT_LIST))
@@ -787,7 +789,7 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
                 break;
             }
 
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
                 if (nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_HATCH_LIST))
@@ -808,7 +810,7 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
                 break;
             }
 
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
                 if (nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_BITMAP_LIST))

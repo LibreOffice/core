@@ -55,6 +55,8 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xtextit0.hxx>
 
+using namespace com::sun::star;
+
 #define ITEMBROWSER_WHICHCOL_ID 1
 #define ITEMBROWSER_STATECOL_ID 2
 #define ITEMBROWSER_TYPECOL_ID  3
@@ -639,12 +641,12 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         {
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
-                XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle==XFILL_NONE) return true;
+                drawing::FillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
+                if (eFillStyle==drawing::FillStyle_NONE) return true;
                 // transparency currently only for SolidFill
-                if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return true;
-                if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return true;
-                if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return true;
+                if (eFillStyle!=drawing::FillStyle_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return true;
+                if (eFillStyle!=drawing::FillStyle_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return true;
+                if (eFillStyle!=drawing::FillStyle_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return true;
             }
         } break;
         case XATTR_FILLBITMAP          :
@@ -660,8 +662,8 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case XATTR_FILLBMP_POSOFFSETY  : { /* only if TILE=sal_True*/
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
-                XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle!=XFILL_BITMAP) return true;
+                drawing::FillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
+                if (eFillStyle!=drawing::FillStyle_BITMAP) return true;
             }
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
                 return false; // always selectable

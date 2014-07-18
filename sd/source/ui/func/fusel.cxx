@@ -1198,7 +1198,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         aSet.Put(pObj->GetMergedItemSet());
 
         const XFillStyleItem& rFillStyle = (const XFillStyleItem&) aSet.Get(XATTR_FILLSTYLE);
-        bFilled = rFillStyle.GetValue() != XFILL_NONE;
+        bFilled = rFillStyle.GetValue() != drawing::FillStyle_NONE;
     }
 
     const SetOfByte* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();

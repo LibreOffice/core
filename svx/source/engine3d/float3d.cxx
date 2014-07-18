@@ -54,6 +54,8 @@
 #include <svx/float3d.hxx>
 #include "float3d.hrc"
 
+using namespace com::sun::star;
+
 SFX_IMPL_DOCKINGWINDOW_WITHID( Svx3DChildWindow, SID_3D_WIN )
 
 struct Svx3DWinImpl
@@ -604,8 +606,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLSTYLE);
     if(eState != SFX_ITEM_DONTCARE)
     {
-        XFillStyle eXFS = (XFillStyle)((const XFillStyleItem&)rAttrs.Get(XATTR_FILLSTYLE)).GetValue();
-        bBitmap = (eXFS == XFILL_BITMAP || eXFS == XFILL_GRADIENT || eXFS == XFILL_HATCH);
+        drawing::FillStyle eXFS = (drawing::FillStyle)((const XFillStyleItem&)rAttrs.Get(XATTR_FILLSTYLE)).GetValue();
+        bBitmap = (eXFS == drawing::FillStyle_BITMAP || eXFS == drawing::FillStyle_GRADIENT || eXFS == drawing::FillStyle_HATCH);
     }
 
     aFtTexKind.Enable( bBitmap );

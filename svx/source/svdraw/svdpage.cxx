@@ -1157,7 +1157,7 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 {
     if(!rSdrPage.IsMasterPage())
     {
-        mpProperties->Put(XFillStyleItem(XFILL_NONE));
+        mpProperties->Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
 }
 
@@ -1815,7 +1815,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
 
     if(!IsMasterPage() && TRG_HasMasterPage())
     {
-        if(XFILL_NONE == ((const XFillStyleItem&)pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
         {
             pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
         }

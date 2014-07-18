@@ -73,6 +73,7 @@
 #include <boost/scoped_array.hpp>
 
 using ::std::vector;
+using namespace com::sun::star;
 
 // line ends are now created with an empty name.
 // The checkForUniqueItem method then finds a unique name for the item's value.
@@ -141,7 +142,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     nMaxLevel = 0;
 
     aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
-    aBoxSet.Put( XFillStyleItem( XFILL_NONE ) );
+    aBoxSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     //  Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
     //  um von den konfigurierten Linienenden unabhaengig zu sein
@@ -186,7 +187,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aFromTabSet.Put( XLineEndCenterItem( false ) );
 
     aCircleSet.Put( XLineColorItem( OUString(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
-    aCircleSet.Put( XFillStyleItem( XFILL_NONE ) );
+    aCircleSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     sal_uInt16 nWidth = 55;     // 54 = 1 Pixel
     aCircleSet.Put( XLineWidthItem( nWidth ) );
 }
@@ -205,7 +206,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aCaptionSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( false ) );
-    aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
+    aCaptionSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     Color aYellow( ScDetectiveFunc::GetCommentColor() );
     aCaptionSet.Put( XFillColorItem( OUString(), aYellow ) );
 

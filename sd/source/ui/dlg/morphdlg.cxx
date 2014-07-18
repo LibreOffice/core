@@ -30,6 +30,8 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
@@ -51,11 +53,11 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
 
     const XLineStyle    eLineStyle1 = ( (const XLineStyleItem&) aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
     const XLineStyle    eLineStyle2 = ( (const XLineStyleItem&) aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
-    const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-    const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+    const drawing::FillStyle eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
+    const drawing::FillStyle eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
     if ( ( ( eLineStyle1 == XLINE_NONE ) || ( eLineStyle2 == XLINE_NONE ) ) &&
-         ( ( eFillStyle1 != XFILL_SOLID ) || ( eFillStyle2 != XFILL_SOLID ) ) )
+         ( ( eFillStyle1 != drawing::FillStyle_SOLID ) || ( eFillStyle2 != drawing::FillStyle_SOLID ) ) )
     {
         m_pCbxAttributes->Disable();
     }

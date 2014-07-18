@@ -44,6 +44,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+using namespace com::sun::star;
 
 // BaseProperties section
 
@@ -180,8 +181,8 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
+    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
+    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=true;

@@ -205,9 +205,9 @@ void AreaPropertyPanel::Initialize()
 
 IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 {
-    const XFillStyle eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
+    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
 
-    if((XFillStyle)meLastXFS != eXFS)
+    if((drawing::FillStyle)meLastXFS != eXFS)
     {
         mpLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -219,7 +219,8 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
         // Checked that this works in all apps.
         switch( eXFS )
         {
-            case XFILL_NONE:
+            default:
+            case drawing::FillStyle_NONE:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -231,7 +232,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                     SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
                 break;
             }
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
@@ -244,7 +245,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                     SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L);
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -283,7 +284,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 }
                 break;
             }
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -322,7 +323,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 }
                 break;
             }
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -365,7 +366,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
         meLastXFS = (sal_uInt16)eXFS;
 
-        if(XFILL_NONE != eXFS)
+        if(drawing::FillStyle_NONE != eXFS)
         {
             if(pToolBox)
             {
@@ -381,7 +382,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
 IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 {
-    const XFillStyle eXFS = (XFillStyle)mpLbFillType->GetSelectEntryPos();
+    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -389,11 +390,11 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
     {
         // #i122676# dependent from bFillStyleChange, do execute a single or two
         // changes in one Execute call
-        const bool bFillStyleChange((XFillStyle) meLastXFS != eXFS);
+        const bool bFillStyleChange((drawing::FillStyle) meLastXFS != eXFS);
 
         switch(eXFS)
         {
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 if(bFillStyleChange)
                 {
@@ -402,7 +403,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
                 }
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
@@ -433,7 +434,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
                 }
                 break;
             }
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
@@ -464,7 +465,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
                 }
                 break;
             }
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
@@ -820,11 +821,11 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
                     mpLbFillType->Enable();
                     mpColorTextFT->Enable();
-                    XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
+                    drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
                     meLastXFS = eXFS;
                     mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
 
-                    if(XFILL_NONE == eXFS)
+                    if(drawing::FillStyle_NONE == eXFS)
                     {
                         mpLbFillAttr->SetNoSelection();
                         mpLbFillAttr->Disable();
@@ -851,7 +852,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpColorItem.reset(pState ? (XFillColorItem*)pState->Clone() : 0);
             }
 
-            if(mpStyleItem && XFILL_SOLID == (XFillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
@@ -884,7 +885,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpFillGradientItem.reset(pState ? (XFillGradientItem*)pState->Clone() : 0);
             }
 
-            if(mpStyleItem && XFILL_GRADIENT == (XFillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -913,7 +914,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpHatchItem.reset(pState ? (XFillHatchItem*)pState->Clone() : 0);
             }
 
-            if(mpStyleItem && XFILL_HATCH == (XFillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -942,7 +943,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpBitmapItem.reset(pState ? (XFillBitmapItem*)pState->Clone() : 0);
             }
 
-            if(mpStyleItem && XFILL_BITMAP == (XFillStyle)mpStyleItem->GetValue())
+            if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -968,7 +969,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SFX_ITEM_AVAILABLE == eState)
             {
-                if(mpStyleItem && XFILL_SOLID == (XFillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
                     if(mpColorItem)
                     {
@@ -993,7 +994,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SFX_ITEM_AVAILABLE == eState)
             {
-                if(mpStyleItem && XFILL_GRADIENT == (XFillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
                     if(mpFillGradientItem)
                     {
@@ -1018,7 +1019,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SFX_ITEM_AVAILABLE == eState)
             {
-                if(mpStyleItem && XFILL_HATCH == (XFillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
                     if(mpHatchItem)
                     {
@@ -1043,7 +1044,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SFX_ITEM_AVAILABLE == eState)
             {
-                if(mpStyleItem && XFILL_BITMAP == (XFillStyle)mpStyleItem->GetValue())
+                if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
                     if(mpBitmapItem)
                     {
@@ -1076,18 +1077,18 @@ void AreaPropertyPanel::Update()
 {
     if(mpStyleItem)
     {
-        const XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
+        const drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
         {
-            case XFILL_NONE:
+            case drawing::FillStyle_NONE:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
                 break;
             }
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 if(mpColorItem)
                 {
@@ -1101,7 +1102,7 @@ void AreaPropertyPanel::Update()
                 }
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -1130,7 +1131,7 @@ void AreaPropertyPanel::Update()
                 }
                 break;
             }
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -1159,7 +1160,7 @@ void AreaPropertyPanel::Update()
                 }
                 break;
             }
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();

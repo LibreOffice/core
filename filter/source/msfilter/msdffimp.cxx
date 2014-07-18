@@ -1248,16 +1248,16 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
     if ( nFillFlags & 0x10 )
     {
         MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
-        XFillStyle eXFill = XFILL_NONE;
+        drawing::FillStyle eXFill = drawing::FillStyle_NONE;
         switch( eMSO_FillType )
         {
             case mso_fillSolid :            // Fill with a solid color
-                eXFill = XFILL_SOLID;
+                eXFill = drawing::FillStyle_SOLID;
             break;
             case mso_fillPattern :          // Fill with a pattern (bitmap)
             case mso_fillTexture :          // A texture (pattern with its own color map)
             case mso_fillPicture :          // Center a picture in the shape
-                eXFill = XFILL_BITMAP;
+                eXFill = drawing::FillStyle_BITMAP;
             break;
             case mso_fillShadeCenter :      // Shade from bounding rectangle to end point
             {
@@ -1265,16 +1265,16 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 //But the gradient look well comparing with imported as gradient. And rotate with shape
                 //also works better. So here just keep it.
                 if ( rObjData.aBoundRect.IsEmpty() )// size of object needed to be able
-                    eXFill = XFILL_GRADIENT;        // to create a bitmap substitution
+                    eXFill = drawing::FillStyle_GRADIENT;        // to create a bitmap substitution
                 else
-                    eXFill = XFILL_BITMAP;
+                    eXFill = drawing::FillStyle_BITMAP;
             }
             break;
             case mso_fillShade :            // Shade from start to end points
             case mso_fillShadeShape :       // Shade from shape outline to end point
             case mso_fillShadeScale :       // Similar to mso_fillShade, but the fillAngle
             case mso_fillShadeTitle :       // special type - shade to title ---  for PP
-                eXFill = XFILL_GRADIENT;
+                eXFill = drawing::FillStyle_GRADIENT;
             break;
 //          case mso_fillBackground :       // Use the background fill color/pattern
             default: break;
@@ -1286,7 +1286,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         if (IsProperty(DFF_Prop_fillOpacity))
         {
             dTrans = GetPropertyValue(DFF_Prop_fillOpacity) / 65536.0;
-            if ( eXFill != XFILL_GRADIENT )
+            if ( eXFill != drawing::FillStyle_GRADIENT )
             {
                 dTrans = dTrans * 100;
                 rSet.Put(XFillTransparenceItem(
@@ -1297,15 +1297,15 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         if ( IsProperty(DFF_Prop_fillBackOpacity) )
             dBackTrans = GetPropertyValue(DFF_Prop_fillBackOpacity) / 65536.0;
 
-        if ( ( eMSO_FillType == mso_fillShadeCenter ) && ( eXFill == XFILL_BITMAP ) )
+        if ( ( eMSO_FillType == mso_fillShadeCenter ) && ( eXFill == drawing::FillStyle_BITMAP ) )
         {
             ApplyRectangularGradientAsBitmap( rManager, rIn, rSet, aShadeColors, rObjData, mnFix16Angle );
         }
-        else if ( eXFill == XFILL_GRADIENT )
+        else if ( eXFill == drawing::FillStyle_GRADIENT )
         {
             ImportGradientColor ( rSet, eMSO_FillType, dTrans , dBackTrans );
         }
-        else if ( eXFill == XFILL_BITMAP )
+        else if ( eXFill == drawing::FillStyle_BITMAP )
         {
             if( IsProperty( DFF_Prop_fillBlip ) )
             {
@@ -1370,7 +1370,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         }
     }
     else
-        rSet.Put( XFillStyleItem( XFILL_NONE ) );
+        rSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 }
 
 void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const

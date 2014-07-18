@@ -47,6 +47,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
+using namespace com::sun::star;
 
 XPropertyListRef SvxColorTabPage::GetList()
 {
@@ -312,7 +313,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     , nDlgType( 0 )
     , pPos( NULL )
     , pbAreaTP( NULL )
-    , aXFStyleItem( XFILL_SOLID )
+    , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( (XOutdevItemPool*) rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
@@ -576,7 +577,7 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
             aColor.SetColor (aCurrentColor.GetColor());
         }
         rSet->Put( XFillColorItem( aString, aColor ) );
-        rSet->Put( XFillStyleItem( XFILL_SOLID ) );
+        rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     }
 
     return true;

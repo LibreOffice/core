@@ -761,7 +761,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             {
                                 // If we have a graphic as source object, use it's graphic
                                 // content as fill style
-                                aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                                aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
                                 aSet.Put(XFillBitmapItem(&mrDoc.GetPool(), pSdrGrafObj->GetGraphic()));
                             }
 
@@ -1314,9 +1314,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
             SfxItemSet          rSet = pSetItem->GetItemSet();
-            XFillStyle          eFill= ( (XFillStyleItem&) rSet.Get( XATTR_FILLSTYLE ) ).GetValue();
+            drawing::FillStyle eFill= ( (XFillStyleItem&) rSet.Get( XATTR_FILLSTYLE ) ).GetValue();
 
-            if( eFill == XFILL_SOLID || eFill == XFILL_NONE )
+            if( eFill == drawing::FillStyle_SOLID || eFill == drawing::FillStyle_NONE )
             {
                 const XFillColorItem&   rColItem = (XFillColorItem&) rSet.Get( XATTR_FILLCOLOR );
                 Color                   aColor( rColItem.GetColorValue() );
@@ -1345,7 +1345,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdrObjectPrimitiveHit(*pPickObj, aHitPosB, nHitLog, *GetSdrPageView(), pVisiLayer, false) )
                 {
                     // area fill
-                    if(eFill == XFILL_SOLID )
+                    if(eFill == drawing::FillStyle_SOLID )
                         aSet.Put(XFillColorItem(aName, aColor));
 
                     aSet.Put( XFillStyleItem( eFill ) );

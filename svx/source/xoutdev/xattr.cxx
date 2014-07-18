@@ -2230,7 +2230,7 @@ bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 
 TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
 
-XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
+XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
     SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< sal_uInt16 >(eFillStyle))
 {
 }
@@ -2272,19 +2272,19 @@ SfxItemPresentation XFillStyleItem::GetPresentation
 
             switch( (sal_uInt16)GetValue() )
             {
-                case XFILL_NONE:
+                case drawing::FillStyle_NONE:
                     nId = RID_SVXSTR_INVISIBLE;
                     break;
-                case XFILL_SOLID:
+                case drawing::FillStyle_SOLID:
                     nId = RID_SVXSTR_SOLID;
                     break;
-                case XFILL_GRADIENT:
+                case drawing::FillStyle_GRADIENT:
                     nId = RID_SVXSTR_GRADIENT;
                     break;
-                case XFILL_HATCH:
+                case drawing::FillStyle_HATCH:
                     nId = RID_SVXSTR_HATCH;
                     break;
-                case XFILL_BITMAP:
+                case drawing::FillStyle_BITMAP:
                     nId = RID_SVXSTR_BITMAP;
                     break;
             }

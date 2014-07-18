@@ -232,9 +232,9 @@ void SdPage::EnsureMasterPageDefaultBackground()
         }
         else
         {
-            // no style found, assert and set at least XFILL_NONE
+            // no style found, assert and set at least drawing::FillStyle_NONE
             OSL_FAIL("No Style for MasterPageBackground fill found (!)");
-            getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+            getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
         }
     }
 }

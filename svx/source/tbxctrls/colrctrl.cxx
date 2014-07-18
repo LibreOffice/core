@@ -36,6 +36,7 @@
 #include "svx/xexch.hxx"
 #include <vcl/svapp.hxx>
 
+using namespace com::sun::star;
 
 // - SvxColorValueSetData -
 
@@ -197,7 +198,7 @@ void SvxColorValueSet_docking::DoDrag()
         SfxItemSet&         rSet = aXFillSetItem.GetItemSet();
 
         rSet.Put( XFillColorItem( GetItemText( nItemId ), GetItemColor( nItemId ) ) );
-        rSet.Put(XFillStyleItem( ( 1 == nItemId ) ? XFILL_NONE : XFILL_SOLID ) );
+        rSet.Put(XFillStyleItem( ( 1 == nItemId ) ? drawing::FillStyle_NONE : drawing::FillStyle_SOLID ) );
 
         EndSelection();
         ( new SvxColorValueSetData( aXFillSetItem ) )->StartDrag( this, DND_ACTION_COPY );
@@ -425,7 +426,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
         {
             if ( nPos == 1 )        // unsichtbar
             {
-                XFillStyleItem aXFillStyleItem( XFILL_NONE );
+                XFillStyleItem aXFillStyleItem( drawing::FillStyle_NONE );
                 pDispatcher->Execute( nLeftSlot, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
             }
             else
@@ -448,7 +449,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                 }
                 if ( !bDone )
                 {
-                    XFillStyleItem aXFillStyleItem( XFILL_SOLID );
+                    XFillStyleItem aXFillStyleItem( drawing::FillStyle_SOLID );
                     XFillColorItem aXFillColorItem( aStr, aColor );
                     pDispatcher->Execute(
                         nLeftSlot, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );

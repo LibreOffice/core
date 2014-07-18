@@ -982,7 +982,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         }
         else
         {
-            SetMergedItem(XFillStyleItem(XFILL_NONE));
+            SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
             SetMergedItem(XLineStyleItem(XLINE_NONE));
         }
     }
@@ -1176,7 +1176,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                 // retrieve bitmap for the fill
                 SfxItemSet aSet(GetObjectItemSet());
 
-                aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
                 const BitmapEx aBitmapEx(GetTransformedGraphic().GetBitmapEx());
                 aSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
                 aSet.Put(XFillBmpTileItem(false));

@@ -42,6 +42,8 @@
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 
+using namespace com::sun::star;
+
 SvxGradientTabPage::SvxGradientTabPage
 (
     Window* pParent,
@@ -59,7 +61,7 @@ SvxGradientTabPage::SvxGradientTabPage
     pbAreaTP            ( 0 ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    aXFStyleItem        ( XFILL_GRADIENT ),
+    aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
@@ -335,7 +337,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                         (sal_uInt16) m_pMtrColorTo->GetValue() );
         }
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
-        rSet->Put( XFillStyleItem( XFILL_GRADIENT ) );
+        rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
 
         delete pXGradient;
@@ -780,7 +782,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         const SfxPoolItem* pPoolItem = NULL;
         if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
-            if( ( XFILL_GRADIENT == (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
+            if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
                 ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
             {
                 pGradient = new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() );

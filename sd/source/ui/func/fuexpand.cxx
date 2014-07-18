@@ -43,6 +43,8 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/eeitem.hxx>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 TYPEINIT1( FuExpandPage, FuPoor );
@@ -238,7 +240,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         // remove hard attributes (Flag to sal_True)
                         SfxItemSet aAttr(mpDoc->GetPool());
                         aAttr.Put(XLineStyleItem(XLINE_NONE));
-                        aAttr.Put(XFillStyleItem(XFILL_NONE));
+                        aAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
                         pOutlineObj->SetMergedItemSet(aAttr);
                     }
                 }

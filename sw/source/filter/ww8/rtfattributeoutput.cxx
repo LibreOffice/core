@@ -2971,7 +2971,7 @@ void RtfAttributeOutput::FormatFillStyle(const XFillStyleItem& rFillStyle)
 
 void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradient)
 {
-    if (*m_oFillStyle == XFILL_GRADIENT)
+    if (*m_oFillStyle == drawing::FillStyle_GRADIENT)
     {
         m_aFlyProperties.push_back(std::make_pair<OString, OString>("fillType", OString::number(7))); // Shade using the fillAngle
 

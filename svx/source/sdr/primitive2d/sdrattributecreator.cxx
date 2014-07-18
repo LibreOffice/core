@@ -76,7 +76,7 @@
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-
+using namespace com::sun::star;
 
 namespace drawinglayer
 {
@@ -381,7 +381,7 @@ namespace drawinglayer
 
         attribute::SdrFillAttribute createNewSdrFillAttribute(const SfxItemSet& rSet)
         {
-            const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
+            const drawing::FillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
 
             sal_uInt16 nTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
 
@@ -390,7 +390,7 @@ namespace drawinglayer
                 nTransparence = 100;
             }
 
-            if(XFILL_NONE != eStyle)
+            if(drawing::FillStyle_NONE != eStyle)
             {
                 if(100 != nTransparence)
                 {
@@ -421,13 +421,14 @@ namespace drawinglayer
 
                     switch(eStyle)
                     {
-                        case XFILL_NONE : // for warnings
-                        case XFILL_SOLID :
+                        case drawing::FillStyle_NONE : // for warnings
+                        case drawing::FillStyle_SOLID :
+                        default:
                         {
                             // nothing to do, color is defined
                             break;
                         }
-                        case XFILL_GRADIENT :
+                        case drawing::FillStyle_GRADIENT :
                         {
                             XGradient aXGradient(((XFillGradientItem&)(rSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
 
@@ -463,7 +464,7 @@ namespace drawinglayer
 
                             break;
                         }
-                        case XFILL_HATCH :
+                        case drawing::FillStyle_HATCH :
                         {
                             const XHatch& rHatch(((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue());
                             const Color aColorB(rHatch.GetColor());
@@ -478,7 +479,7 @@ namespace drawinglayer
 
                             break;
                         }
-                        case XFILL_BITMAP :
+                        case drawing::FillStyle_BITMAP :
                         {
                             aFillGraphic = createNewSdrFillGraphicAttribute(rSet);
                             break;

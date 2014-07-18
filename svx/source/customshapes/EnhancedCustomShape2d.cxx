@@ -55,6 +55,7 @@
 #include <rtl/strbuf.hxx>
 #include <math.h>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
@@ -731,7 +732,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nFlags              ( 0 ),
     nColorData          ( 0 ),
     bTextFlow           ( false ),
-    bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != XFILL_NONE ),
+    bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
     bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
     bFlipH              ( false ),
     bFlipV              ( false )
@@ -2003,7 +2004,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     aNewB2DPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(false));
-                aTempSet.Put(XFillStyleItem(XFILL_NONE));
+                aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 pStroke->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pStroke);
             }
@@ -2020,7 +2021,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 pObj = new SdrPathObj(
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
                     aNewB2DPolyPolygon, dBrightness);
-                aTempSet.Put(XFillStyleItem(XFILL_NONE));
+                aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
             else
             {
@@ -2139,11 +2140,11 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
 {
     if ( !rObj.IsLine() )
     {
-        const XFillStyle eFillStyle = ((const XFillStyleItem&)rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
         switch( eFillStyle )
         {
             default:
-            case XFILL_SOLID:
+            case drawing::FillStyle_SOLID:
             {
                 Color aFillColor;
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
@@ -2155,7 +2156,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                 }
                 break;
             }
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_GRADIENT:
             {
                 XGradient aXGradient(((const XFillGradientItem&)rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
@@ -2173,7 +2174,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                 rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );
                 break;
             }
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             {
                 XHatch aXHatch(((const XFillHatchItem&)rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
@@ -2187,7 +2188,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                 rObj.SetMergedItem( XFillHatchItem( "", aXHatch ) );
                 break;
             }
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
             {
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
@@ -2247,10 +2248,10 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             {
                 SdrPathObj* pObj(vObjectList[i]);
                 const XLineStyle eLineStyle = ((const XLineStyleItem&)pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
-                const XFillStyle eFillStyle = ((const XFillStyleItem&)pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+                const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
                 //SJ: #i40600# if bLineGeometryNeededOnly is set linystyle does not matter
-                if( !bLineGeometryNeededOnly && ( XLINE_NONE == eLineStyle ) && ( XFILL_NONE == eFillStyle ) )
+                if( !bLineGeometryNeededOnly && ( XLINE_NONE == eLineStyle ) && ( drawing::FillStyle_NONE == eFillStyle ) )
                     delete pObj;
                 else
                     vTempList.push_back(pObj);

@@ -423,7 +423,7 @@ void SdFiltersTest::testFdo77027()
         // check that the fill style/color was actually imported
         const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
                 pObj->GetMergedItem(XATTR_FILLSTYLE));
-        CPPUNIT_ASSERT_EQUAL(XFILL_SOLID, rStyleItem.GetValue());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(Color(0xff6600), rColorItem.GetColorValue());

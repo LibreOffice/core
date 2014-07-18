@@ -48,6 +48,8 @@
 
 #include <utility>
 
+using namespace com::sun::star;
+
 namespace {
 
 const long SC_NOTECAPTION_WIDTH             =  2900;    /// Default width of note caption textbox.
@@ -113,7 +115,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( XLineStartItem( OUString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
     aItemSet.Put( XLineStartWidthItem( 200 ) );
     aItemSet.Put( XLineStartCenterItem( false ) );
-    aItemSet.Put( XFillStyleItem( XFILL_SOLID ) );
+    aItemSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     aItemSet.Put( XFillColorItem( OUString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
 

@@ -25,6 +25,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 
 // class XFillStyleItem
@@ -34,7 +35,7 @@ class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
 {
 public:
                             TYPEINFO_OVERRIDE();
-                            XFillStyleItem(XFillStyle = XFILL_SOLID);
+                            XFillStyleItem(css::drawing::FillStyle = css::drawing::FillStyle_SOLID);
                             XFillStyleItem(SvStream& rIn);
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
@@ -48,7 +49,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    XFillStyle              GetValue() const { return (XFillStyle) SfxEnumItem::GetValue(); }
+    css::drawing::FillStyle GetValue() const { return (css::drawing::FillStyle) SfxEnumItem::GetValue(); }
 };
 
 #endif

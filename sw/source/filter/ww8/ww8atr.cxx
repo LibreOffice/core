@@ -853,9 +853,9 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 {
                     switch (pXFillStyleItem->GetValue())
                     {
-                    case XFILL_NONE:
+                    case drawing::FillStyle_NONE:
                         break;
-                    case XFILL_SOLID:
+                    case drawing::FillStyle_SOLID:
                     {
                         // Construct an SvxBrushItem, as expected by the exporters.
                         aSet.Put(getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet(), RES_BACKGROUND));

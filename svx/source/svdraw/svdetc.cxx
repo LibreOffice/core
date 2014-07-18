@@ -296,19 +296,19 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
-    XFillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
+    drawing::FillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
     bool bRetval = false;
 
     switch(eFill)
     {
-        case XFILL_SOLID:
+        case drawing::FillStyle_SOLID:
         {
             rCol = ((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue();
             bRetval = true;
 
             break;
         }
-        case XFILL_HATCH:
+        case drawing::FillStyle_HATCH:
         {
             Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetHatchValue().GetColor());
             Color aCol2(COL_WHITE);
@@ -326,7 +326,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             break;
         }
-        case XFILL_GRADIENT: {
+        case drawing::FillStyle_GRADIENT: {
             const XGradient& rGrad=((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
             Color aCol1(rGrad.GetStartColor());
             Color aCol2(rGrad.GetEndColor());
@@ -336,7 +336,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             break;
         }
-        case XFILL_BITMAP:
+        case drawing::FillStyle_BITMAP:
         {
             Bitmap aBitmap(((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
             const Size aSize(aBitmap.GetSizePixel());

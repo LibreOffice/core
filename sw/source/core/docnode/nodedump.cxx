@@ -50,6 +50,8 @@
 #include <boost/optional.hpp>
 #include <rtl/strbuf.hxx>
 
+using namespace com::sun::star;
+
 namespace
 {
 
@@ -487,19 +489,20 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
                 switch (pFillStyleItem->GetValue())
                 {
-                case XFILL_NONE:
+                default:
+                case drawing::FillStyle_NONE:
                     oValue = "none";
                     break;
-                case XFILL_SOLID:
+                case drawing::FillStyle_SOLID:
                     oValue = "solid";
                     break;
-                case XFILL_GRADIENT:
+                case drawing::FillStyle_GRADIENT:
                     oValue = "gradient";
                     break;
-                case XFILL_HATCH:
+                case drawing::FillStyle_HATCH:
                     oValue = "hatch";
                     break;
-                case XFILL_BITMAP:
+                case drawing::FillStyle_BITMAP:
                     oValue = "bitmap";
                     break;
                 }

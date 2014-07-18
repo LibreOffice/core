@@ -55,7 +55,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-
+using namespace com::sun::star;
 
 SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
     SdrObjEditView(pModel1,pOut)
@@ -153,7 +153,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
-    aTempAttr.Put(XFillStyleItem(XFILL_NONE));
+    aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pObj->SetMergedItemSet(aTempAttr);
 
@@ -189,7 +189,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
-    aTempAttr.Put(XFillStyleItem(XFILL_NONE));
+    aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pObj->SetMergedItemSet(aTempAttr);
 

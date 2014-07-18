@@ -1045,7 +1045,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     if ( pRet )
                     {
                         pTObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
-                        pTObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+                        pTObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
                     }
                     if ( bVerticalText )
                     {
@@ -2972,7 +2972,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         if ( !pSet )
         {
             pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
-            pSet->Put( XFillStyleItem( XFILL_NONE ) );
+            pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
         }
         pSet->Put( XLineStyleItem( XLINE_NONE ) );
         Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
@@ -5578,10 +5578,10 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                         pItemSet->GetItemState( XATTR_FILLSTYLE, false, &pFillStyleItem );
                         if ( pFillStyleItem )
                         {
-                            XFillStyle eFillStyle = ((XFillStyleItem*)pFillStyleItem)->GetValue();
+                            drawing::FillStyle eFillStyle = ((XFillStyleItem*)pFillStyleItem)->GetValue();
                             switch( eFillStyle )
                             {
-                                case XFILL_SOLID :
+                                case drawing::FillStyle_SOLID :
                                 {
                                     const SfxPoolItem* pFillColorItem = NULL;
                                     pItemSet->GetItemState( XATTR_FILLCOLOR, false, &pFillColorItem );
@@ -5589,7 +5589,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                         aDefColor = ((XColorItem*)pFillColorItem)->GetColorValue();
                                 }
                                 break;
-                                case XFILL_GRADIENT :
+                                case drawing::FillStyle_GRADIENT :
                                 {
                                     const SfxPoolItem* pGradientItem = NULL;
                                     pItemSet->GetItemState( XATTR_FILLGRADIENT, false, &pGradientItem );
@@ -5597,8 +5597,8 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                         aDefColor = ((XFillGradientItem*)pGradientItem)->GetGradientValue().GetStartColor();
                                 }
                                 break;
-                                case XFILL_HATCH :
-                                case XFILL_BITMAP :
+                                case drawing::FillStyle_HATCH :
+                                case drawing::FillStyle_BITMAP :
                                     aDefColor = Color( COL_WHITE );
                                 break;
                                 default: break;
@@ -7267,11 +7267,11 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             xPropSet->setPropertyValue(  sWritingMode , Any( ::com::sun::star::text::WritingMode_TB_RL ) );
         }
         SfxItemSet aSet( pObj->GetMergedItemSet() );
-        XFillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
+        drawing::FillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
         ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
         switch( eFillStyle )
         {
-            case XFILL_SOLID :
+            case drawing::FillStyle_SOLID :
                 {
                     static const OUString sFillColor( "FillColor" );
                     eFS = com::sun::star::drawing::FillStyle_SOLID;
@@ -7280,7 +7280,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     xPropSet->setPropertyValue( sFillColor, Any( nFillColor ) );
                 }
                 break;
-            case XFILL_GRADIENT :
+            case drawing::FillStyle_GRADIENT :
                 {
                     eFS = com::sun::star::drawing::FillStyle_GRADIENT;
                     XGradient aXGradient(((const XFillGradientItem&)pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
@@ -7301,10 +7301,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
                 }
                 break;
-            case XFILL_HATCH :
+            case drawing::FillStyle_HATCH :
                 eFS = com::sun::star::drawing::FillStyle_HATCH;
             break;
-            case XFILL_BITMAP :
+            case drawing::FillStyle_BITMAP :
                 {
                     eFS = com::sun::star::drawing::FillStyle_BITMAP;
 
@@ -7326,14 +7326,15 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                         xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_NO_REPEAT ) );
                 }
             break;
-            case XFILL_NONE :
+            default:
+            case drawing::FillStyle_NONE :
                 eFS = com::sun::star::drawing::FillStyle_NONE;
             break;
 
         }
         static const OUString sFillStyle( "FillStyle" );
         xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
-        if ( eFillStyle != XFILL_NONE )
+        if ( eFillStyle != drawing::FillStyle_NONE )
         {
             sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
             static const OUString sFillTransparence( "FillTransparence" );

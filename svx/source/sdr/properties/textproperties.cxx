@@ -36,7 +36,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/svdpool.hxx>
 
-
+using namespace com::sun::star;
 
 namespace sdr
 {
@@ -376,7 +376,7 @@ namespace sdr
             {
                 mpItemSet->Put(XLineStyleItem(XLINE_NONE));
                 mpItemSet->Put(XFillColorItem(OUString(), Color(COL_WHITE)));
-                mpItemSet->Put(XFillStyleItem(XFILL_NONE));
+                mpItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
             else
             {

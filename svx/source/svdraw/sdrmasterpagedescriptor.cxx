@@ -24,6 +24,7 @@
 #include <svx/xfillit0.hxx>
 #include <svl/itemset.hxx>
 
+using namespace com::sun::star;
 
 namespace sdr
 {
@@ -106,7 +107,7 @@ namespace sdr
         const SdrPage* pCorrectPage = &GetOwnerPage();
         const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-        if(XFILL_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
         {
             pCorrectPage = &GetUsedPage();
             pCorrectProperties = &pCorrectPage->getSdrPageProperties();

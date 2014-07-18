@@ -254,10 +254,10 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
     sal_uInt16 nPat = SVBT16ToShort(rFill.flpp);
 
     if (nPat == 0) // transparent
-        rSet.Put(XFillStyleItem(XFILL_NONE));
+        rSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
     else
     {
-        rSet.Put(XFillStyleItem(XFILL_SOLID));  // necessary for textbox
+        rSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));  // necessary for textbox
         if (nPat <= 1 || ((sizeof(nPatA)/sizeof(nPatA[0])) <= nPat))
         {
             // Solid background or unknown
@@ -1749,11 +1749,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
     if (eState == SFX_ITEM_SET)
     {
-        const XFillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
+        const drawing::FillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
 
         switch (eFill)
         {
-            case XFILL_NONE:
+            default:
+            case drawing::FillStyle_NONE:
                 // Writer graphics don't have it yet
                 if (eShapeType != mso_sptPictureFrame)
                 {
@@ -1761,8 +1762,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     bBrushItemOk = true;
                 }
             break;
-            case XFILL_SOLID:
-            case XFILL_GRADIENT:
+            case drawing::FillStyle_SOLID:
+            case drawing::FillStyle_GRADIENT:
                 {
                     const Color aColor = static_cast< XFillColorItem const & >(
                         rOldSet.Get(XATTR_FILLCOLOR)).GetColorValue();
@@ -1774,11 +1775,9 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     bBrushItemOk = true;
                 }
             break;
-            // case XFILL_GRADIENT:
-            // break;
-            case XFILL_HATCH:
+            case drawing::FillStyle_HATCH:
             break;
-            case XFILL_BITMAP:
+            case drawing::FillStyle_BITMAP:
                 {
                     GraphicObject aGrfObj(static_cast< XFillBitmapItem const & >(rOldSet.Get(XATTR_FILLBITMAP)).GetGraphicObject());
                     const bool bTile(WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem) ? true: false);
@@ -2725,7 +2724,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetCurrentBoundRect());
 
         SfxItemSet aSet(pDrawModel->GetItemPool());
-        aSet.Put(XFillStyleItem(XFILL_NONE));
+        aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         aSet.Put(XLineStyleItem(XLINE_NONE));
         aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
         aSet.Put(SdrTextAutoGrowHeightItem(false));

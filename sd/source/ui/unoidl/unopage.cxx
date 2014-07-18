@@ -2476,8 +2476,8 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     if( !xSet.is() )
     {
-        // the easy case, no background set. Set XFILL_NONE to represent this
-        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+        // the easy case, no background set. Set drawing::FillStyle_NONE to represent this
+        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
         return;
     }
 
@@ -2517,8 +2517,8 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     if( aSet.Count() == 0 )
     {
-        // no background fill, represent by setting XFILL_NONE
-        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+        // no background fill, represent by setting drawing::FillStyle_NONE
+        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
     }
     else
     {
@@ -2556,9 +2556,9 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
 {
     const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
 
-       if(XFILL_NONE == ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+       if(drawing::FillStyle_NONE == ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
     {
-        // no fill set (switched off by XFILL_NONE), clear rValue to represent this
+        // no fill set (switched off by drawing::FillStyle_NONE), clear rValue to represent this
         rValue.clear();
     }
     else
@@ -2976,7 +2976,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             // should NOT happen and is an error
             const SfxItemSet& rFallbackItemSet(SvxFmDrawPage::mpPage->getSdrPageProperties().GetItemSet());
 
-            if(XFILL_NONE == ((const XFillStyleItem&)rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
+            if(drawing::FillStyle_NONE == ((const XFillStyleItem&)rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
             {
                 rValue <<= Reference< beans::XPropertySet >(
                     new SdUnoPageBackground(GetModel()->GetDoc(), &rFallbackItemSet));

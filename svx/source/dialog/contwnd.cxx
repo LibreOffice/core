@@ -30,6 +30,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "svx/sdrpaintwindow.hxx"
 
+using namespace com::sun::star;
+
 #define TRANSCOL Color( COL_WHITE )
 
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
@@ -70,7 +72,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
         {
             SfxItemSet aSet( pModel->GetItemPool() );
 
-            aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+            aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             aSet.Put( XFillColorItem( "", TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
 

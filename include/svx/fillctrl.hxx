@@ -23,6 +23,7 @@
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 class XFillStyleItem;
 class XFillColorItem;
@@ -53,7 +54,7 @@ private:
     SvxFillTypeBox*     mpFillTypeLB;
     SvxFillAttrBox*     mpFillAttrLB;
 
-    XFillStyle          meLastXFS;
+    css::drawing::FillStyle          meLastXFS;
 
     /// bitfield
     bool                mbUpdate:1;
@@ -93,7 +94,7 @@ private:
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 
-    void InitializeFillStyleAccordingToGivenFillType(XFillStyle eFillStyle);
+    void InitializeFillStyleAccordingToGivenFillType(css::drawing::FillStyle eFillStyle);
     void updateLastFillTypeControlSelectEntryPos();
     void updateLastFillAttrControlSelectEntryPos();
 

@@ -35,6 +35,7 @@
 
 #define CGM_BIG_ENDIAN      0x00020000
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
@@ -98,7 +99,7 @@ bool SdCGMFilter::Import()
                     // set PageFill to given color
                     const Color aColor((sal_uInt8)(nRetValue >> 16), (sal_uInt8)(nRetValue >> 8), (sal_uInt8)(nRetValue >> 16));
                     pSdPage->getSdrPageProperties().PutItem(XFillColorItem(OUString(), aColor));
-                    pSdPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_SOLID));
+                    pSdPage->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
                 }
             }
         }

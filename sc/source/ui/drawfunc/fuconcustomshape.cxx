@@ -35,6 +35,8 @@
 
 #include <math.h>
 
+using namespace com::sun::star;
+
 FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
@@ -88,7 +90,7 @@ bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
                 bForceNoFillStyle = true;
             if ( bForceNoFillStyle )
-                pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+                pObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
             pObj->SetGridOffset( aGridOff );
         }
 

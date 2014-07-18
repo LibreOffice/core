@@ -48,6 +48,8 @@
 #include "sfx2/opengrf.hxx"
 #include "paragrph.hrc"
 
+using namespace com::sun::star;
+
 SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs) :
 
     SvxTabPage          ( pParent,
@@ -65,7 +67,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     bBmpChanged         ( false ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
-    aXFStyleItem        ( XFILL_BITMAP ),
+    aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     aXBitmapItem        ( OUString(), Graphic() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
@@ -231,7 +233,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
     {
         if(PT_BITMAP == *pPageType)
         {
-            _rOutAttrs->Put(XFillStyleItem(XFILL_BITMAP));
+            _rOutAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
@@ -312,9 +314,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
         if(SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
         {
-            const XFillStyle eXFS((XFillStyle)((const XFillStyleItem*)pPoolItem)->GetValue());
+            const drawing::FillStyle eXFS((drawing::FillStyle)((const XFillStyleItem*)pPoolItem)->GetValue());
 
-            if((XFILL_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
+            if((drawing::FillStyle_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
                 pGraphicObject = new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject());
             }

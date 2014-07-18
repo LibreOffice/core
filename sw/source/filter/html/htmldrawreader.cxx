@@ -232,7 +232,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
     case RES_CHRATR_BACKGROUND:
         {
             const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSwItem;
-            rEEItemSet.Put( XFillStyleItem(XFILL_SOLID) );
+            rEEItemSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
             rEEItemSet.Put( XFillColorItem(aEmptyOUStr,
                             rBrushItem.GetColor()) );
         }
@@ -443,7 +443,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     if( bBGColor )
     {
-        aItemSet.Put( XFillStyleItem(XFILL_SOLID) );
+        aItemSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
         aItemSet.Put( XFillColorItem(aEmptyOUStr, aBGColor) );
     }
 

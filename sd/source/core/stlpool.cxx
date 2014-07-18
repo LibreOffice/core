@@ -66,6 +66,7 @@
 #include <svl/itemset.hxx>
 #include "app.hrc"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
@@ -252,7 +253,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 rSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR) );
                 rSet.Put( SvxBackgroundColorItem( Color (COL_AUTO), EE_CHAR_BKGCOLOR )  );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
-                rSet.Put( XFillStyleItem(XFILL_NONE) );
+                rSet.Put( XFillStyleItem(drawing::FillStyle_NONE) );
                 rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
                 rSet.Put( SdrTextAutoGrowHeightItem(false) );
                 // #i16874# enable kerning by default but only for new documents
@@ -346,7 +347,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         pSheet->SetParent( OUString() );
         SfxItemSet& rTitleSet = pSheet->GetItemSet();
         rTitleSet.Put(XLineStyleItem(XLINE_NONE));
-        rTitleSet.Put(XFillStyleItem(XFILL_NONE));
+        rTitleSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         rTitleSet.Put(aSvxFontItem);
         rTitleSet.Put(aSvxFontItemCJK);
         rTitleSet.Put(aSvxFontItemCTL);
@@ -392,7 +393,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         pSheet->SetParent( OUString() );
         SfxItemSet& rSubtitleSet = pSheet->GetItemSet();
         rSubtitleSet.Put(XLineStyleItem(XLINE_NONE));
-        rSubtitleSet.Put(XFillStyleItem(XFILL_NONE));
+        rSubtitleSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         rSubtitleSet.Put(aSvxFontItem);
         rSubtitleSet.Put(aSvxFontItemCJK);
         rSubtitleSet.Put(aSvxFontItemCTL);
@@ -441,7 +442,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         pSheet->SetParent( OUString() );
         SfxItemSet& rNotesSet = pSheet->GetItemSet();
         rNotesSet.Put(XLineStyleItem(XLINE_NONE));
-        rNotesSet.Put(XFillStyleItem(XFILL_NONE));
+        rNotesSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         rNotesSet.Put(aSvxFontItem);
         rNotesSet.Put(aSvxFontItemCJK);
         rNotesSet.Put(aSvxFontItemCTL);
@@ -508,7 +509,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         pSheet->SetParent( OUString() );
         SfxItemSet& rBackgroundSet = pSheet->GetItemSet();
         rBackgroundSet.Put(XLineStyleItem(XLINE_NONE));
-        rBackgroundSet.Put(XFillStyleItem(XFILL_NONE));
+        rBackgroundSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
     }

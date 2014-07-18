@@ -41,7 +41,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
+using namespace com::sun::star;
 
 class ImplConnectMarkerOverlay
 {
@@ -457,7 +457,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                 {
                     SfxItemSet aSet(pMod->GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
-                    aSet.Put(XFillStyleItem(XFILL_NONE));
+                    aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
@@ -467,7 +467,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                     // default for all text frames: no background, no border
                     SfxItemSet aSet(pMod->GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
-                    aSet.Put(XFillStyleItem(XFILL_NONE));
+                    aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                     aSet.Put(XLineColorItem(OUString(),Color(COL_BLACK))); // in case someone turns on Solid
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
@@ -767,10 +767,10 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             if(bUseSolidDragging)
             {
                 const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
-                const XFillStyle eFill(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
+                const drawing::FillStyle eFill(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
                 const XLineStyle eLine(((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue());
 
-                if(XLINE_NONE == eLine && XFILL_NONE == eFill)
+                if(XLINE_NONE == eLine && drawing::FillStyle_NONE == eFill)
                 {
                     bUseSolidDragging = false;
                 }

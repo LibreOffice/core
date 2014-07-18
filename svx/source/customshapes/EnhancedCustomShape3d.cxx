@@ -345,7 +345,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         const OUString aExtrusionColor( "Color" );
         bool bUseExtrusionColor = GetBool( rGeometryItem, aExtrusionColor, false );
 
-        XFillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
+        drawing::FillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );
         aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
@@ -354,15 +354,15 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         if ( eShadeMode == drawing::ShadeMode_DRAFT )
         {
             aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-            aSet.Put( XFillStyleItem ( XFILL_NONE ) );
+            aSet.Put( XFillStyleItem ( drawing::FillStyle_NONE ) );
             aSet.Put( Svx3DDoubleSidedItem( true ) );
         }
         else
         {
             aSet.Put( XLineStyleItem( XLINE_NONE ) );
-            if ( eFillStyle == XFILL_NONE )
-                aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-            else if ( ( eFillStyle == XFILL_BITMAP ) || ( eFillStyle == XFILL_GRADIENT ) || bUseExtrusionColor )
+            if ( eFillStyle == drawing::FillStyle_NONE )
+                aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+            else if ( ( eFillStyle == drawing::FillStyle_BITMAP ) || ( eFillStyle == drawing::FillStyle_GRADIENT ) || bUseExtrusionColor )
                 bUseTwoFillStyles = true;
 
             // #116336#
@@ -386,11 +386,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         while( aIter.IsMore() )
         {
             const SdrObject* pNext = aIter.Next();
-            bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
+            bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == drawing::FillStyle_NONE )
                                         && (((XLineStyleItem&)pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
             basegfx::B2DPolyPolygon aPolyPoly;
             SfxItemSet aLocalSet(aSet);
-            XFillStyle aLocalFillStyle(eFillStyle);
+            drawing::FillStyle aLocalFillStyle(eFillStyle);
 
             if ( pNext->ISA( SdrPathObj ) )
             {
@@ -403,9 +403,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 // invisible (all this 'hidden' logic should be migrated to primitives).
                 if(!bMultipleSubObjects)
                 {
-                    const XFillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
+                    const drawing::FillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
 
-                    if(XFILL_NONE == eStyle)
+                    if(drawing::FillStyle_NONE == eStyle)
                     {
                         const drawinglayer::attribute::SdrLineAttribute aLine(
                             drawinglayer::primitive2d::createNewSdrLineAttribute(rSet));
@@ -443,7 +443,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                 // for draft, create wireframe with fixed line width
                                 aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
                                 aLocalSet.Put(XLineWidthItem(40));
-                                aLocalFillStyle = XFILL_NONE;
+                                aLocalFillStyle = drawing::FillStyle_NONE;
                             }
                             else
                             {
@@ -451,9 +451,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                 aLocalSet.Put(XLineWidthItem(0));
                                 aLocalSet.Put(XLineStyleItem(XLINE_NONE));
                                 aLocalSet.Put(XFillColorItem(OUString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
-                                aLocalSet.Put(XFillStyleItem(XFILL_SOLID));
+                                aLocalSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                                 aLocalSet.Put(XFillTransparenceItem(((const XLineTransparenceItem&)(aLocalSet.Get(XATTR_LINETRANSPARENCE))).GetValue()));
-                                aLocalFillStyle = XFILL_SOLID;
+                                aLocalFillStyle = drawing::FillStyle_SOLID;
                             }
                         }
                         else
@@ -547,7 +547,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
                         p3DObj->SetMergedItem( XFillColorItem( "", ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
-                    p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
+                    p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
                     pScene->Insert3DObj( p3DObj );
@@ -562,12 +562,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     aFrontTransform.translate( 0.0, 0.0, fDepth );
                     p3DObj->NbcSetTransform( aFrontTransform );
 
-                    if ( ( aLocalFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
+                    if ( ( aLocalFillStyle == drawing::FillStyle_BITMAP ) && !aFillBmp.IsEmpty() )
                     {
                         p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
                     }
                 }
-                else if ( aLocalFillStyle == XFILL_NONE )
+                else if ( aLocalFillStyle == drawing::FillStyle_NONE )
                 {
                     XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
                     p3DObj->SetMergedItem( XFillColorItem( "", rLineColor.GetColorValue() ) );

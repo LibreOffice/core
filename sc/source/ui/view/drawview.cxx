@@ -975,7 +975,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
 
         SfxItemSet aSet(GetModel()->GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
 
-        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         aSet.Put(XFillBitmapItem(OUString(), rGraphic));
         rHitObject.SetMergedItemSetAndBroadcast(aSet);
         return &rHitObject;

@@ -50,6 +50,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <boost/scoped_ptr.hpp>
 
+using namespace com::sun::star;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::uno::Reference;
 
@@ -253,7 +254,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
     {
         SfxItemSet aSet( pModel->GetItemPool() );
 
-        aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+        aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
         aSet.Put( XFillColorItem( "", TRANSCOL ) );
 
         if ( !pIMapObj->IsActive() )

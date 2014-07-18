@@ -40,6 +40,7 @@
 #include <docxtablestyleexport.hxx>
 
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -868,7 +869,7 @@ private:
     // Remember first cell (used for for default borders/margins) of each table
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
 
-    boost::optional<XFillStyle> m_oFillStyle;
+    boost::optional<css::drawing::FillStyle> m_oFillStyle;
     /// If FormatBox() already handled fill style / gradient.
     bool m_bIgnoreNextFill;
 

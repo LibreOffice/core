@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 
+#include <com/sun/star/drawing/FillStyle.hpp>
+
 #include "attributeoutputbase.hxx"
 #include "rtfexport.hxx"
 #include "rtfstringbuffer.hxx"
@@ -592,7 +594,7 @@ private:
 
     std::vector< std::pair<OString, OString> > m_aFlyProperties;
 
-    boost::optional<XFillStyle> m_oFillStyle;
+    boost::optional<css::drawing::FillStyle> m_oFillStyle;
 
 public:
     RtfAttributeOutput(RtfExport& rExport);

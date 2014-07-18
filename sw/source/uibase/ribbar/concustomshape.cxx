@@ -45,6 +45,8 @@
 
 #include <math.h>
 
+using namespace com::sun::star;
+
 ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest& rReq )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
 {
@@ -86,7 +88,7 @@ bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 
                 SfxItemSet aAttr( m_pView->GetPool() );
                 if ( bForceNoFillStyle )
-                    aAttr.Put( XFillStyleItem( XFILL_NONE ) );
+                    aAttr.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
                 pObj->SetMergedItemSet(aAttr);
             }
         }

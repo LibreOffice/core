@@ -69,6 +69,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 class Window;
@@ -255,7 +257,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             // Only this page, get attributes for background fill
             const SfxItemSet& rBackgroundAttributes = mpPage->getSdrPageProperties().GetItemSet();
 
-            if(XFILL_NONE != ((const XFillStyleItem&)rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+            if(drawing::FillStyle_NONE != ((const XFillStyleItem&)rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
             {
                 // page attributes are used, take them
                 aMergedAttr.Put(rBackgroundAttributes);
@@ -263,7 +265,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             else
             {
                 if(pStyleSheet
-                    && XFILL_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+                    && drawing::FillStyle_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
                 {
                     // if the page has no fill style, use the settings from the
                     // background stylesheet (if used)
@@ -272,7 +274,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 else
                 {
                     // no fill style from page, start with no fill style
-                    aMergedAttr.Put(XFillStyleItem(XFILL_NONE));
+                    aMergedAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 }
             }
         }
@@ -292,7 +294,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             {
                 pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
 
-                pTempSet->Put( XFillStyleItem( XFILL_BITMAP ) );
+                pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
 
                 // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
                 SfxItemSet aMigrateSet( mpDoc->GetPool(), XATTR_FILLBITMAP, XATTR_FILLBITMAP );
@@ -335,9 +337,9 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             }
 
             // if the background for this page was set to invisible, the background-object has to be deleted, too.
-            if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
+            if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ||
                 ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
-                    ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
+                    ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ) )
                 mbPageBckgrdDeleted = true;
 
             bool bSetToAllPages = false;
@@ -370,7 +372,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         rPageProperties.ClearItem( XATTR_FILLBITMAP );
                         rPageProperties.ClearItem( XATTR_FILLGRADIENT );
                         rPageProperties.ClearItem( XATTR_FILLHATCH );
-                        rPageProperties.PutItem(XFillStyleItem(XFILL_NONE));
+                        rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_NONE));
                     }
                 }
             }
@@ -418,7 +420,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     SdPage *pPage = mpDoc->GetSdPage(i, ePageKind);
 
                     const SfxItemSet& rFillAttributes = pPage->getSdrPageProperties().GetItemSet();
-                       if(XFILL_NONE != ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+                       if(drawing::FillStyle_NONE != ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
                     {
                         SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
                         pUndoGroup->AddAction(pBackgroundObjUndoAction);
@@ -427,7 +429,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                         rPageProperties.ClearItem( XATTR_FILLBITMAP );
                         rPageProperties.ClearItem( XATTR_FILLGRADIENT );
                         rPageProperties.ClearItem( XATTR_FILLHATCH );
-                        rPageProperties.PutItem(XFillStyleItem(XFILL_NONE));
+                        rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_NONE));
 
                         pPage->ActionChanged();
                     }
@@ -445,7 +447,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 {
                     pTempSet->ClearItem( nWhich );
                 }
-                pTempSet->Put(XFillStyleItem(XFILL_NONE));
+                pTempSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
 
             const SfxPoolItem *pItem;

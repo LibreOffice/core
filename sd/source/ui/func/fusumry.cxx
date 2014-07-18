@@ -38,6 +38,8 @@
 #include "optsitem.hxx"
 #include "DrawViewShell.hxx"
 
+using namespace com::sun::star;
+
 namespace sd {
 
 TYPEINIT1( FuSummaryPage, FuPoor );
@@ -209,7 +211,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
     // remove hard attributes (Flag to sal_True)
     SfxItemSet aAttr(mpDoc->GetPool());
     aAttr.Put(XLineStyleItem(XLINE_NONE));
-    aAttr.Put(XFillStyleItem(XFILL_NONE));
+    aAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
     pTextObj->SetMergedItemSet(aAttr);
 
     if( bBegUndo )

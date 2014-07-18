@@ -7147,7 +7147,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         if (pItem)
         {
             const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
-            if(pFillStyle->GetValue() == XFILL_BITMAP)
+            if(pFillStyle->GetValue() == drawing::FillStyle_BITMAP)
             {
                 bImageBackground = true;
             }
@@ -7200,7 +7200,7 @@ void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 
 void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
-    if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && !m_rExport.SdrExporter().getDMLTextFrameSyntax())
+    if (m_oFillStyle && *m_oFillStyle == drawing::FillStyle_GRADIENT && !m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient" );
 
@@ -7244,7 +7244,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor1.getStr() );
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_color2, sColor2.getStr() );
     }
-    else if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && m_rExport.SdrExporter().getDMLTextFrameSyntax())
+    else if (m_oFillStyle && *m_oFillStyle == drawing::FillStyle_GRADIENT && m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         uno::Reference<beans::XPropertySet> xPropertySet = SwXFrames::GetObject(const_cast<SwFrmFmt&>(m_rExport.mpParentFrame->GetFrmFmt()), FLYCNTTYPE_FRM);
         m_rDrawingML.SetFS(m_pSerializer);
@@ -7263,7 +7263,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         {
             const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
             FormatFillStyle(*pFillStyle);
-            if (m_oFillStyle && *m_oFillStyle == XFILL_BITMAP)
+            if (m_oFillStyle && *m_oFillStyle == drawing::FillStyle_BITMAP)
             {
                 const SdrObject* pSdrObj = m_rExport.mpParentFrame->GetFrmFmt().FindRealSdrObject();
                 if (pSdrObj)

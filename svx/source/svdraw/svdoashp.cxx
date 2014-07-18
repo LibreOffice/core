@@ -230,7 +230,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         while(aIterator.IsMore())
         {
             SdrObject* pObj = aIterator.Next();
-            XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetMergedItem(XATTR_FILLSTYLE))).GetValue();
+            drawing::FillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetMergedItem(XATTR_FILLSTYLE))).GetValue();
 
             if(!bLineUsed)
             {
@@ -244,22 +244,22 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
             if(!bAllFillUsed)
             {
-                if(!bSolidFillUsed && XFILL_SOLID == eFillStyle)
+                if(!bSolidFillUsed && drawing::FillStyle_SOLID == eFillStyle)
                 {
                     bSolidFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
-                if(!bGradientFillUsed && XFILL_GRADIENT == eFillStyle)
+                if(!bGradientFillUsed && drawing::FillStyle_GRADIENT == eFillStyle)
                 {
                     bGradientFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
-                if(!bHatchFillUsed && XFILL_HATCH == eFillStyle)
+                if(!bHatchFillUsed && drawing::FillStyle_HATCH == eFillStyle)
                 {
                     bHatchFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
-                if(!bBitmapFillUsed && XFILL_BITMAP == eFillStyle)
+                if(!bBitmapFillUsed && drawing::FillStyle_BITMAP == eFillStyle)
                 {
                     bBitmapFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);

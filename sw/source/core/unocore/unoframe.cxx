@@ -353,7 +353,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             aXFillColorItem.PutValue(*pXFillColorItem);
             rToSet.Put(aXFillColorItem);
         }
-        else if (aXFillStyleItem.GetValue() == XFILL_SOLID && pCol)
+        else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && pCol)
         {
             // Fill style is set to solid, but no fill color is given.
             // On the other hand, we have a BackColor, so use that.
@@ -451,7 +451,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
             rToSet.Put(aXFillTransparenceItem);
         }
-        else if (aXFillStyleItem.GetValue() == XFILL_SOLID && pColTrans)
+        else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && pColTrans)
         {
             // Fill style is set to solid, but no fill transparency is given.
             // On the other hand, we have a BackColorTransparency, so use that.

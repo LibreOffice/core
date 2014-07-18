@@ -54,6 +54,8 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <sfx2/request.hxx>
 
+using namespace com::sun::star;
+
 // static ----------------------------------------------------------------
 
 // Word 97 incompatibility (#i19922#)
@@ -269,9 +271,9 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     if(mbEnableDrawingLayerFillStyles)
     {
         //UUUU When using the XATTR_FILLSTYLE DrawingLayer FillStyle definition
-        // extra action has to be done here since the pool default is XFILL_SOLID
-        // instead of XFILL_NONE (to have the default blue fill color at start).
-        aSet.Put(XFillStyleItem(XFILL_NONE));
+        // extra action has to be done here since the pool default is drawing::FillStyle_SOLID
+        // instead of drawing::FillStyle_NONE (to have the default blue fill color at start).
+        aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
 
     aSet.Put( SfxBoolItem( nWOn,      m_pTurnOnBox->IsChecked() ) );
@@ -654,10 +656,10 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             if(mbEnableDrawingLayerFillStyles)
             {
                 //UUUU The style for header/footer is not yet created, need to reset
-                // XFillStyleItem to XFILL_NONE which is the same as in the style
+                // XFillStyleItem to drawing::FillStyle_NONE which is the same as in the style
                 // initialization. This needs to be done since the pool default for
-                // XFillStyleItem is XFILL_SOLID
-                pBBSet->Put(XFillStyleItem(XFILL_NONE));
+                // XFillStyleItem is drawing::FillStyle_SOLID
+                pBBSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
         }
 

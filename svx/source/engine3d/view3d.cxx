@@ -67,6 +67,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
+using namespace com::sun::star;
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 TYPEINIT1(E3dView, SdrView);
@@ -686,12 +688,12 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
         sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
         XLineStyle eLineStyle = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
-        XFillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
+        drawing::FillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
 
         if(((SdrPathObj*)pObj)->IsClosed()
             && eLineStyle == XLINE_SOLID
             && !nLineWidth
-            && eFillStyle != XFILL_NONE)
+            && eFillStyle != drawing::FillStyle_NONE)
         {
             if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
@@ -717,13 +719,13 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         // Get Itemset of the original object
         SfxItemSet aSet(pObj->GetMergedItemSet());
 
-        XFillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
+        drawing::FillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
 
         // line style turned off
         aSet.Put(XLineStyleItem(XLINE_NONE));
 
         //Determining if FILL_Attribut is set.
-        if(!pPath->IsClosed() || eFillStyle == XFILL_NONE)
+        if(!pPath->IsClosed() || eFillStyle == drawing::FillStyle_NONE)
         {
             // This SdrPathObj is not filled, leave the front and rear face out.
             // Moreover, a two-sided representation necessary.
@@ -733,7 +735,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
             aSet.Put(Svx3DDoubleSidedItem(true));
 
             // Set fill attribute
-            aSet.Put(XFillStyleItem(XFILL_SOLID));
+            aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
 
             // Fill color must be the color line, because the object was
             // previously just a line
@@ -1064,7 +1066,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                 const basegfx::B2DPolyPolygon aExtrudePoly(
                     basegfx::tools::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
-                const XFillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
+                const drawing::FillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
                 const Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetColorValue();
 
                 // sort in ExtrudeObj
@@ -1090,11 +1092,11 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                             // second ciriteria: is another fillstyle or color used?
                             const SfxItemSet& rCompareSet = pAct->mpObj->GetMergedItemSet();
 
-                            XFillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
+                            drawing::FillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
 
                             if(eLocalFillStyle == eCompareFillStyle)
                             {
-                                if(eLocalFillStyle == XFILL_SOLID)
+                                if(eLocalFillStyle == drawing::FillStyle_SOLID)
                                 {
                                     Color aCompareColor = ((const XFillColorItem&)(rCompareSet.Get(XATTR_FILLCOLOR))).GetColorValue();
 
@@ -1103,7 +1105,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                                         bOverlap = false;
                                     }
                                 }
-                                else if(eLocalFillStyle == XFILL_NONE)
+                                else if(eLocalFillStyle == drawing::FillStyle_NONE)
                                 {
                                     bOverlap = false;
                                 }

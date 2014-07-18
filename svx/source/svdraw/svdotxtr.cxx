@@ -38,6 +38,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 
+using namespace com::sun::star;
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
@@ -378,7 +379,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         // set needed items
                         aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_NONE));
-                        aAttributeSet.Put(XFillStyleItem(XFILL_SOLID));
+                        aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
 
                         // create filled SdrPathObj
                         pPathObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
@@ -389,7 +390,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_SOLID));
                         aAttributeSet.Put(XLineWidthItem(0));
-                        aAttributeSet.Put(XFillStyleItem(XFILL_NONE));
+                        aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                         // create line SdrPathObj
                         pPathObj = new SdrPathObj(OBJ_PATHLINE, aPolyPolygon);
