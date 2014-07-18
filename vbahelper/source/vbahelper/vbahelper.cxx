@@ -1015,18 +1015,11 @@ double ShapeHelper::getHeight() const
    return  Millimeter::getInPoints(xShape->getSize().Height);
 }
 
-void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
+void ShapeHelper::setHeight(double _fheight)
 {
-    try
-    {
-        css::awt::Size aSize = xShape->getSize();
-        aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
-        xShape->setSize(aSize);
-    }
-    catch (const css::uno::Exception&)
-    {
-        throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
-    }
+    css::awt::Size aSize = xShape->getSize();
+    aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
+    xShape->setSize(aSize);
 }
 
 double ShapeHelper::getWidth() const
@@ -1034,18 +1027,11 @@ double ShapeHelper::getWidth() const
     return Millimeter::getInPoints(xShape->getSize().Width);
 }
 
-void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
+void ShapeHelper::setWidth(double _fWidth)
 {
-    try
-    {
-        css::awt::Size aSize = xShape->getSize();
-        aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
-        xShape->setSize(aSize);
-    }
-    catch (const css::uno::Exception&)
-    {
-        throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
-    }
+    css::awt::Size aSize = xShape->getSize();
+    aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
+    xShape->setSize(aSize);
 }
 
 double ShapeHelper::getLeft() const

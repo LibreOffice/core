@@ -162,9 +162,9 @@ public:
         throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     double getHeight() const;
-       void setHeight(double _fheight) throw ( css::script::BasicErrorException );
+    void setHeight(double _fheight);
     double getWidth() const;
-    void setWidth(double _fWidth) throw ( css::script::BasicErrorException );
+    void setWidth(double _fWidth);
     double getLeft() const;
     void setLeft(double _fLeft);
     double getTop() const;
