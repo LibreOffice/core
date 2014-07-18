@@ -1381,7 +1381,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
         {
             // update current column only in case of a new position
             // which is also not a "specially" handled one.
-            mnCurCol = nItemPos % mnCols;
+            mnCurCol = mnCols ? nItemPos % mnCols : 0;
         }
         const sal_uInt16 nItemId = (nItemPos != VALUESET_ITEM_NONEITEM) ? GetItemId( nItemPos ) : 0;
         if ( nItemId != mnSelItemId )
