@@ -21,6 +21,7 @@
 
 #include <cstdio>
 #include <set>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -637,7 +638,6 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
 #ifdef OOXTODO
     writeElement( pAppProps, XML_Manager,               "manager" );
-    writeElement( pAppProps, XML_Company,               "company" );
     writeElement( pAppProps, XML_Pages,                 "pages" );
     writeElement( pAppProps, XML_Words,                 "words" );
     writeElement( pAppProps, XML_Characters,            "characters" );
@@ -676,6 +676,21 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
             if (aStats[i].Value >>= nValue)
             {
                 writeElement(pAppProps, XML_Paragraphs, OUString::number(nValue));
+                break;
+            }
+        }
+    }
+
+    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
+    const uno::Sequence<beans::PropertyValue> aUserDefinedProperties = xUserDefinedProperties->getPropertyValues();
+    for (sal_Int32 i = 0; i < aUserDefinedProperties.getLength(); ++i)
+    {
+        if (aUserDefinedProperties[i].Name == "Company")
+        {
+            OUString aValue;
+            if (aUserDefinedProperties[i].Value >>= aValue)
+            {
+                writeElement(pAppProps, XML_Company, aValue);
                 break;
             }
         }

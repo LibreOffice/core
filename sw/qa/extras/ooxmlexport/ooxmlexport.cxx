@@ -99,6 +99,7 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     pXmlDoc = parseExport("docProps/app.xml");
     // One paragraph in the document.
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs", "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "Example Ltd");
 }
 
 DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
