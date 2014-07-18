@@ -5248,7 +5248,7 @@ void Test::testSortWithCellFormats()
             }
 
             const SfxPoolItem* pItem = NULL;
-            if (pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT))
+            if (pPat->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem))
             {
                 // Check if the font weight is applied.
                 if (static_cast<const SvxWeightItem*>(pItem)->GetEnumValue() == WEIGHT_BOLD)
@@ -5258,7 +5258,7 @@ void Test::testSortWithCellFormats()
                 }
             }
 
-            if (pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE))
+            if (pPat->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem))
             {
                 // Check if the italics is applied.
                 if (static_cast<const SvxPostureItem*>(pItem)->GetEnumValue() == ITALIC_NORMAL)
