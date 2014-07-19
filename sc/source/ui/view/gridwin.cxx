@@ -5360,8 +5360,8 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol
         return false;
 
     Rectangle aEditRect2 = pViewData->GetEditArea(eWhich, nCol2, nRow, this, pPattern, false);
-    long nExt = aEditRect2.Left() - aEditRect.Right() + aEditRect2.GetWidth();
-    aEditRect.setWidth(aEditRect.getWidth() + nExt);
+    long nWidth = aEditRect2.Right() - aEditRect.Left();
+    aEditRect.setWidth(nWidth);
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);
     Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
