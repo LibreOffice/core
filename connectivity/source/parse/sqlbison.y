@@ -1152,12 +1152,12 @@ search_condition:
 		}
 	;
 predicate:
-		comparison_predicate     %dprec 2
+		comparison_predicate     %dprec 1
 	|       between_predicate
 	|       all_or_any_predicate
 	|       existence_test
 	|		unique_test
-	|		test_for_null    %dprec 1
+	|		test_for_null    %dprec 2
 	|       in_predicate
 	|       like_predicate
 	;
@@ -3947,11 +3947,11 @@ when_operand_list:
 	;
 when_operand:
 		row_value_constructor_elem
-	|	comparison_predicate_part_2        %dprec 2
+	|	comparison_predicate_part_2        %dprec 1
 	|	between_predicate_part_2
 	|	in_predicate_part_2
 	|	character_like_predicate_part_2
-	|	null_predicate_part_2              %dprec 1
+	|	null_predicate_part_2              %dprec 2
 ;
 searched_when_clause_list:
 		searched_when_clause
