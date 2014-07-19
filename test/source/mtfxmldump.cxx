@@ -20,6 +20,8 @@
 namespace
 {
 
+const size_t constMaxActionType = 513;
+
 int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
@@ -138,6 +140,30 @@ OUString convertLineStyleToString(LineStyle eAlign)
     return OUString();
 }
 
+OUString convertFontWeigthToString(FontWeight eFontWeight)
+{
+    enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,
+                  WEIGHT_LIGHT, WEIGHT_SEMILIGHT, WEIGHT_NORMAL,
+                  WEIGHT_MEDIUM, WEIGHT_SEMIBOLD, WEIGHT_BOLD,
+                  WEIGHT_ULTRABOLD, WEIGHT_BLACK, FontWeight_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
+    switch (eFontWeight)
+    {
+        case WEIGHT_DONTKNOW:   return OUString("unknown");
+        case WEIGHT_THIN:       return OUString("thin");
+        case WEIGHT_ULTRALIGHT: return OUString("ultralight");
+        case WEIGHT_LIGHT:      return OUString("light");
+        case WEIGHT_SEMILIGHT:  return OUString("semilight");
+        case WEIGHT_NORMAL:     return OUString("normal");
+        case WEIGHT_MEDIUM:     return OUString("medium");
+        case WEIGHT_SEMIBOLD:   return OUString("semibold");
+        case WEIGHT_BOLD:       return OUString("bold");
+        case WEIGHT_ULTRABOLD:  return OUString("ultrabold");
+        case WEIGHT_BLACK:      return OUString("black");
+        case FontWeight_FORCE_EQUAL_SIZE:    return OUString("equalsize");
+    }
+    return OUString();
+}
+
 OString convertLineStyleToString(const sal_uInt16 nActionType)
 {
     switch (nActionType)
@@ -203,7 +229,7 @@ OString convertLineStyleToString(const sal_uInt16 nActionType)
 } // anonymous namespace
 
 MetafileXmlDump::MetafileXmlDump() :
-    maFilter(512, false)
+    maFilter(constMaxActionType, false)
 {}
 
 MetafileXmlDump::~MetafileXmlDump()
@@ -216,12 +242,12 @@ void MetafileXmlDump::filterActionType(const sal_uInt16 nActionType, bool bShoul
 
 void MetafileXmlDump::filterAllActionTypes()
 {
-    maFilter.assign(512, true);
+    maFilter.assign(constMaxActionType, true);
 }
 
 void MetafileXmlDump::filterNoneActionTypes()
 {
-    maFilter.assign(512, false);
+    maFilter.assign(constMaxActionType, false);
 }
 
 xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
@@ -234,8 +260,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
         pStream.reset(new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC));
 
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream.get(), NULL);
-    xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
-    xmlTextWriterSetIndent( xmlWriter, 1 );
+    xmlTextWriterPtr xmlWriter = xmlNewTextWriter(xmlOutBuffer);
 
     XmlWriter aWriter(xmlWriter);
     aWriter.startDocument();
@@ -300,6 +325,16 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             }
             break;
 
+            case META_TEXTLINECOLOR_ACTION:
+            {
+                MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
+
+                aWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
+                aWriter.endElement();
+            }
+            break;
+
             case META_TEXTFILLCOLOR_ACTION:
             {
                 MetaTextFillColorAction* pMetaTextFillColorAction = static_cast<MetaTextFillColorAction*>(pAction);
@@ -327,6 +362,8 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
                 aWriter.attribute("stylename", aFont.GetStyleName());
                 aWriter.attribute("width", aFont.GetSize().Width());
                 aWriter.attribute("height", aFont.GetSize().Height());
+                aWriter.attribute("orientation", aFont.GetOrientation());
+                aWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
 
                 aWriter.endElement();
             }
@@ -386,10 +423,20 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
 
             case META_LINECOLOR_ACTION:
             {
-                MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
+                MetaLineColorAction* pMetaLineColorAction = static_cast<MetaLineColorAction*>(pAction);
                 aWriter.startElement(sCurrentElementTag);
 
-                aWriter.attribute("color", convertColorToString(pMetaTextLineColorAction->GetColor()));
+                aWriter.attribute("color", convertColorToString(pMetaLineColorAction->GetColor()));
+                aWriter.endElement();
+            }
+            break;
+
+            case META_FILLCOLOR_ACTION:
+            {
+                MetaFillColorAction* pMetaFillColorAction = static_cast<MetaFillColorAction*>(pAction);
+                aWriter.startElement(sCurrentElementTag);
+
+                aWriter.attribute("color", convertColorToString(pMetaFillColorAction->GetColor()));
                 aWriter.endElement();
             }
             break;
