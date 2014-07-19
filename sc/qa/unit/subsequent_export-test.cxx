@@ -50,13 +50,17 @@
 #include <editeng/udlnitem.hxx>
 #include <formula/grammar.hxx>
 
+#include <test/xmltesttools.hxx>
+
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScExportTest : public ScBootstrapFixture
+class ScExportTest : public ScBootstrapFixture, XmlTestTools
 {
+protected:
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx);
 public:
     ScExportTest();
 
@@ -160,6 +164,29 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 
 };
+
+void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
+{
+    struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
+    {
+        { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
+        { BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml") },
+        { BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart") },
+        { BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main") },
+        { BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006") },
+        { BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape") },
+        { BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup") },
+        { BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing") },
+        { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
+        { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
+        { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
+        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") }
+    };
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
+    {
+        xmlXPathRegisterNs(pXmlXPathCtx, aNamespaces[i].pPrefix, aNamespaces[i].pURI );
+    }
+}
 
 #if !defined MACOSX && !defined DRAGONFLY
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUString &rFilter,
@@ -1832,7 +1859,7 @@ void ScExportTest::testRelativePaths()
 
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "content.xml", ODS);
     CPPUNIT_ASSERT(pDoc);
-    OUString aURL = XPathHelper::getXPath(pDoc,
+    OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));

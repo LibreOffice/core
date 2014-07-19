@@ -25,7 +25,6 @@
 #endif
 
 #include "docsh.hxx"
-#include "scdllapi.h"
 
 using namespace com::sun::star;
 
@@ -39,37 +38,6 @@ namespace XPathHelper
      */
     SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(ScDocShell* pShell, uno::Reference< lang::XMultiServiceFactory> xSFactory,
             const OUString& rFile, sal_Int32 nFormat);
-
-    /**
-     * Helper method to return nodes represented by rXPath.
-     */
-    SCQAHELPER_DLLPUBLIC xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
-
-    /**
-     * Assert that rXPath exists, and returns exactly one node.
-     * In case rAttribute is provided, the rXPath's attribute's value must
-     * equal to the rExpected value.
-     */
-    SCQAHELPER_DLLPUBLIC void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString());
-
-    /**
-     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
-     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
-     */
-    SCQAHELPER_DLLPUBLIC void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
-
-    /**
-     * Same as the assertXPath(), but don't assert: return the string instead.
-     */
-    SCQAHELPER_DLLPUBLIC OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
-    /**
-    Assert that rXPath exists, and its content equals rContent.
-    */
-    SCQAHELPER_DLLPUBLIC void assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
-    /**
-    Same as the assertXPathContent(), but don't assert: return the string instead.
-    */
-    SCQAHELPER_DLLPUBLIC OUString getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath);
 }
 
 #endif
