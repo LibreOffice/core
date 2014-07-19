@@ -97,17 +97,16 @@ extern       SwTxtFrm  *pLinguFrm;
  * only for deleted redlines
  */
 
-static sal_uInt16
+static sal_Int32
 lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
                          sal_Int32 nStt, sal_Int32 nEnd,
                          const sal_Unicode cChar )
 {
-    sal_uInt16 nNumOfMaskedRedlines = 0;
+    sal_Int32 nNumOfMaskedRedlines = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    sal_uInt16 nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX );
 
-    for ( ; nAct < rDoc.GetRedlineTbl().size(); nAct++ )
+    for ( size_t nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.GetRedlineTbl().size(); ++nAct )
     {
         const SwRangeRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
 
@@ -148,8 +147,8 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
                                       const sal_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )
 {
-    sal_uInt16 nRedlinesMasked = 0;
-    sal_uInt16 nHiddenCharsMasked = 0;
+    sal_Int32 nRedlinesMasked = 0;
+    sal_Int32 nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
     const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
@@ -171,7 +170,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
             SwScriptInfo::MaskHiddenRanges( rNode, rText, nStt, nEnd, cChar );
     }
 
-    return (nRedlinesMasked + nHiddenCharsMasked) > 0;
+    return (nRedlinesMasked > 0) || (nHiddenCharsMasked > 0);
 }
 
 /**
@@ -1549,7 +1548,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
 
     if( nBegin < nEnd )
     {
-        sal_uInt16 nCnt = 200;
+        int nCnt = 200;
         SwScanner aScanner( *pNode, pNode->GetTxt(), 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd );
         while( aScanner.NextWord() )
