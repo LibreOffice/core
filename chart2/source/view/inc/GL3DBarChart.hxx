@@ -46,6 +46,7 @@ class GL3DBarChart : public GL3DPlotterBase, public IRenderer
     friend class RenderThread;
     friend class RenderOneFrameThread;
     friend class RenderAnimationThread;
+    friend class RenderBenchMarkThread;
 public:
     GL3DBarChart(
         const css::uno::Reference<css::chart2::XChartType>& xChartType,
@@ -118,6 +119,7 @@ private:
 
     osl::Mutex maMutex;
     rtl::Reference<RenderThread> mpRenderThread;
+    bool mbRenderDie;
 };
 
 }

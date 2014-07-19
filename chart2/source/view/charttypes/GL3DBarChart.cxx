@@ -19,6 +19,13 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include <DataSeriesHelper.hxx>
 
+#include <osl/time.h>
+#ifdef WNT
+#include <windows.h>
+#endif
+
+#define BENCH_MARK_MODE 1
+
 using namespace com::sun::star;
 
 namespace chart {
@@ -125,6 +132,57 @@ void RenderAnimationThread::execute()
     }
 }
 
+class RenderBenchMarkThread : public RenderThread
+{
+public:
+    RenderBenchMarkThread(GL3DBarChart * pChart):
+    RenderThread(pChart)
+    {
+    }
+    void SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps);
+protected:
+    virtual void execute() SAL_OVERRIDE;
+private:
+    void ProcessMouseEvent();
+private:
+    glm::vec3 maStartPos;
+    glm::vec3 maEndPos;
+    sal_Int32 mnSteps;
+};
+
+void RenderBenchMarkThread::SetAnimationCamera(glm::vec3 startPos, glm::vec3 endPos, sal_Int32 steps)
+{
+    maStartPos = startPos;
+    maEndPos = endPos;
+    mnSteps = steps;
+}
+
+void RenderBenchMarkThread::ProcessMouseEvent()
+{
+}
+
+void RenderBenchMarkThread::execute()
+{
+    while (true)
+    {
+        {
+            osl::MutexGuard aGuard(mpChart->maMutex);
+            if (mpChart->mbRenderDie)
+                break;
+            ProcessMouseEvent();
+            renderFrame();
+        }
+        #ifdef WNT
+            Sleep(1);
+        #else
+            TimeValue nTV;
+            nTV.Seconds = 0;
+            nTV.Nanosec = 1000000;
+            osl_waitThread(&nTV);
+        #endif
+    }
+}
+
 GL3DBarChart::GL3DBarChart(
     const css::uno::Reference<css::chart2::XChartType>& xChartType,
     OpenGLWindow& rWindow) :
@@ -140,7 +198,8 @@ GL3DBarChart::GL3DBarChart(
     mnCornerId(0),
     mbBlockUserInput(false),
     mbNeedsNewRender(true),
-    mbCameraInit(false)
+    mbCameraInit(false),
+    mbRenderDie(false)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -159,6 +218,11 @@ GL3DBarChart::BarInformation::BarInformation(const glm::vec3& rPos, float nVal,
 
 GL3DBarChart::~GL3DBarChart()
 {
+    if (BENCH_MARK_MODE)
+    {
+        osl::MutexGuard aGuard(maMutex);
+        mbRenderDie = true;
+    }
     if(mpRenderThread.is())
         mpRenderThread->join();
     osl::MutexGuard aGuard(maMutex);
@@ -396,11 +460,21 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         mpCamera->setPosition(maCameraPosition);
         mpCamera->setDirection(maCameraDirection);
     }
+    if (BENCH_MARK_MODE && (!mpRenderThread.is()))
+    {
+        Size aSize = mrWindow.GetSizePixel();
+        mrWindow.getContext().setWinSize(aSize);
+        mpRenderThread = rtl::Reference<RenderThread>(new RenderBenchMarkThread(this));
+        mrWindow.getContext().resetCurrent();
+        mpRenderThread->launch();
+    }
     mbNeedsNewRender = true;
 }
 
 void GL3DBarChart::update()
 {
+    if (BENCH_MARK_MODE)
+        return;
     if(mpRenderThread.is())
         mpRenderThread->join();
     Size aSize = mrWindow.GetSizePixel();
@@ -408,6 +482,7 @@ void GL3DBarChart::update()
     mpRenderThread = rtl::Reference<RenderThread>(new RenderOneFrameThread(this));
     mrWindow.getContext().resetCurrent();
     mpRenderThread->launch();
+
 }
 
 namespace {
@@ -515,6 +590,8 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 
 void GL3DBarChart::render()
 {
+    if (BENCH_MARK_MODE)
+        return;
     osl::MutexGuard aGuard(maMutex);
     update();
 }
