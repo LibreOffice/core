@@ -126,6 +126,63 @@ enum EmfPlusCombineMode
     EmfPlusCombineModeComplement = 0x00000005
 };
 
+enum EmfPlusHatchStyle
+{
+    HatchStyleHorizontal = 0x00000000,
+    HatchStyleVertical = 0x00000001,
+    HatchStyleForwardDiagonal = 0x00000002,
+    HatchStyleBackwardDiagonal = 0x00000003,
+    HatchStyleLargeGrid = 0x00000004,
+    HatchStyleDiagonalCross = 0x00000005,
+    HatchStyle05Percent = 0x00000006,
+    HatchStyle10Percent = 0x00000007,
+    HatchStyle20Percent = 0x00000008,
+    HatchStyle25Percent = 0x00000009,
+    HatchStyle30Percent = 0x0000000A,
+    HatchStyle40Percent = 0x0000000B,
+    HatchStyle50Percent = 0x0000000C,
+    HatchStyle60Percent = 0x0000000D,
+    HatchStyle70Percent = 0x0000000E,
+    HatchStyle75Percent = 0x0000000F,
+    HatchStyle80Percent = 0x00000010,
+    HatchStyle90Percent = 0x00000011,
+    HatchStyleLightDownwardDiagonal = 0x00000012,
+    HatchStyleLightUpwardDiagonal = 0x00000013,
+    HatchStyleDarkDownwardDiagonal = 0x00000014,
+    HatchStyleDarkUpwardDiagonal = 0x00000015,
+    HatchStyleWideDownwardDiagonal = 0x00000016,
+    HatchStyleWideUpwardDiagonal = 0x00000017,
+    HatchStyleLightVertical = 0x00000018,
+    HatchStyleLightHorizontal = 0x00000019,
+    HatchStyleNarrowVertical = 0x0000001A,
+    HatchStyleNarrowHorizontal = 0x0000001B,
+    HatchStyleDarkVertical = 0x0000001C,
+    HatchStyleDarkHorizontal = 0x0000001D,
+    HatchStyleDashedDownwardDiagonal = 0x0000001E,
+    HatchStyleDashedUpwardDiagonal = 0x0000001F,
+    HatchStyleDashedHorizontal = 0x00000020,
+    HatchStyleDashedVertical = 0x00000021,
+    HatchStyleSmallConfetti = 0x00000022,
+    HatchStyleLargeConfetti = 0x00000023,
+    HatchStyleZigZag = 0x00000024,
+    HatchStyleWave = 0x00000025,
+    HatchStyleDiagonalBrick = 0x00000026,
+    HatchStyleHorizontalBrick = 0x00000027,
+    HatchStyleWeave = 0x00000028,
+    HatchStylePlaid = 0x00000029,
+    HatchStyleDivot = 0x0000002A,
+    HatchStyleDottedGrid = 0x0000002B,
+    HatchStyleDottedDiamond = 0x0000002C,
+    HatchStyleShingle = 0x0000002D,
+    HatchStyleTrellis = 0x0000002E,
+    HatchStyleSphere = 0x0000002F,
+    HatchStyleSmallGrid = 0x00000030,
+    HatchStyleSmallCheckerBoard = 0x00000031,
+    HatchStyleLargeCheckerBoard = 0x00000032,
+    HatchStyleOutlinedDiamond = 0x00000033,
+    HatchStyleSolidDiamond = 0x00000034
+};
+
 const char* emfTypeToName(sal_uInt16 type)
 {
     switch(type)
@@ -403,6 +460,7 @@ namespace cppcanvas
             sal_Int32 surroundColorsNumber;
             ::Color* surroundColors;
             EMFPPath *path;
+            EmfPlusHatchStyle hatchStyle;
 
         public:
             EMFPBrush ()
@@ -423,6 +481,7 @@ namespace cppcanvas
                 , surroundColorsNumber(0)
                 , surroundColors(NULL)
                 , path(NULL)
+                , hatchStyle(HatchStyleHorizontal)
             {
             }
 
@@ -470,7 +529,21 @@ namespace cppcanvas
                         s.ReadUInt32( color );
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO ("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color << std::dec);
+                        break;
+                    }
+                case 1:
+                    {
+                        sal_uInt32 style;
+                        sal_uInt32 foregroundColor;
+                        sal_uInt32 backgroundColor;
+                        s.ReadUInt32( style );
+                        s.ReadUInt32( foregroundColor );
+                        s.ReadUInt32( backgroundColor );
 
+                        hatchStyle = static_cast<EmfPlusHatchStyle>(style);
+                        solidColor  = ::Color(0xff - (foregroundColor >> 24), (foregroundColor >> 16) & 0xff, (foregroundColor >> 8) & 0xff, foregroundColor & 0xff);
+                        secondColor = ::Color(0xff - (backgroundColor >> 24), (backgroundColor >> 16) & 0xff, (backgroundColor >> 8) & 0xff, backgroundColor & 0xff);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\thatch style " << style << " foregroundcolor: 0x" << solidColor.AsRGBHexString() << " background 0x" << secondColor.AsRGBHexString());
                         break;
                     }
                 // path gradient
@@ -1222,8 +1295,49 @@ namespace cppcanvas
                 rState.isFillColorSet = false;
                 rState.isLineColorSet = false;
 
-                if (brush->type == 3 || brush->type == 4) {
+                if (brush->type == 1)
+                {
+                    // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
+                    // for the others the hatch "background" color (secondColor in brush) is used.
 
+                    bool isHatchBlend = true;
+                    double blendFactor = 0.0;
+
+                    switch (brush->hatchStyle)
+                    {
+                        case HatchStyle05Percent: blendFactor = 0.05; break;
+                        case HatchStyle10Percent: blendFactor = 0.10; break;
+                        case HatchStyle20Percent: blendFactor = 0.20; break;
+                        case HatchStyle25Percent: blendFactor = 0.25; break;
+                        case HatchStyle30Percent: blendFactor = 0.30; break;
+                        case HatchStyle40Percent: blendFactor = 0.40; break;
+                        case HatchStyle50Percent: blendFactor = 0.50; break;
+                        case HatchStyle60Percent: blendFactor = 0.60; break;
+                        case HatchStyle70Percent: blendFactor = 0.70; break;
+                        case HatchStyle75Percent: blendFactor = 0.75; break;
+                        case HatchStyle80Percent: blendFactor = 0.80; break;
+                        case HatchStyle90Percent: blendFactor = 0.90; break;
+                        default:
+                            isHatchBlend = false;
+                            break;
+                    }
+                    rState.isFillColorSet = true;
+                    rState.isLineColorSet = false;
+                    ::Color fillColor;
+                    if (isHatchBlend)
+                    {
+                        fillColor = brush->solidColor;
+                        fillColor.Merge(brush->secondColor, static_cast<sal_uInt8>(255 * blendFactor));
+                    }
+                    else
+                    {
+                        fillColor = brush->secondColor;
+                    }
+                    rState.fillColor = ::vcl::unotools::colorToDoubleSequence(fillColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
+                    pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
+                }
+                else if (brush->type == 3 || brush->type == 4)
+                {
                     if (brush->type == 3 && !(brush->additionalFlags & 0x1))
                         return;  // we are unable to parse these brushes yet
 
