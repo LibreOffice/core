@@ -9,6 +9,8 @@
 
 #include "charttest.hxx"
 
+#include <test/xmltesttools.hxx>
+
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -27,8 +29,11 @@
 using uno::Reference;
 using beans::XPropertySet;
 
-class Chart2ExportTest : public ChartTest
+class Chart2ExportTest : public ChartTest, public XmlTestTools
 {
+protected:
+
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx);
 public:
     Chart2ExportTest() : ChartTest() {}
     void test();
@@ -108,38 +113,6 @@ protected:
      */
     xmlDocPtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 
-    /**
-     * Helper method to return nodes represented by rXPath.
-     */
-    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
-
-    /**
-     * Assert that rXPath exists, and returns exactly one node.
-     * In case rAttribute is provided, the rXPath's attribute's value must
-     * equal to the rExpected value.
-     */
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString());
-
-    /**
-     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
-     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
-     */
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
-
-    /**
-     * Same as the assertXPath(), but don't assert: return the string instead.
-     */
-    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
-    /**
-    Assert that rXPath exists, and its content equals rContent.
-    */
-    void assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
-    /**
-    Same as the assertXPathContent(), but don't assert: return the string instead.
-    */
-    OUString getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath);
-
-private:
 };
 
 void Chart2ExportTest::test()
@@ -201,65 +174,27 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
     return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
 }
 
-xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
+void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
-    return pXmlXpathObj->nodesetval;
-}
-
-void Chart2ExportTest::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
-{
-    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("Attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
-        rExpectedValue, aValue);
-}
-
-void Chart2ExportTest::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-        nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
-}
-
-void Chart2ExportTest::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
-{
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent, getXPathContent(pXmlDoc, rXPath));
-}
-
-OUString Chart2ExportTest::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
-{
-             xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-
-             CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
-                     xmlXPathNodeSetGetLength(pXmlNodes) > 0);
-
-             xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-
-            _xmlNode *pNode = &(pXmlNode->children[0]);
-             return pNode ? OUString::createFromAscii((const char*)((pXmlNode->children[0]).content)) : OUString();
-}
-
-OUString Chart2ExportTest::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
-{
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-        1, xmlXPathNodeSetGetLength(pXmlNodes));
-    if (rAttribute.isEmpty())
-        return OUString();
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
+    {
+        { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
+        { BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml") },
+        { BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart") },
+        { BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main") },
+        { BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006") },
+        { BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape") },
+        { BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup") },
+        { BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing") },
+        { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
+        { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
+        { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
+        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") }
+    };
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
+    {
+        xmlXPathRegisterNs(pXmlXPathCtx, aNamespaces[i].pPrefix, aNamespaces[i].pURI );
+    }
 }
 
 namespace {
@@ -584,7 +519,8 @@ void Chart2ExportTest::testChartExternalData()
 
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/c:chartSpace/c:externalData");
+    xmlXPathObjectPtr pXmlPathObj = getXPathNode(pXmlDoc, "/c:chartSpace/c:externalData");
+    xmlNodeSetPtr pXmlNodes = pXmlPathObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
 }
 
