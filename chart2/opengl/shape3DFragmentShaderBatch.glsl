@@ -66,8 +66,7 @@ void main()
 
     vec3 lightAmbient = Lights.ambient.rgb *
                         MaterialDiffuseColor *
-                        Material.matralParameter.ambient.rgb
-                        * 5.0;
+                        Material.matralParameter.ambient.rgb;
 
     for (i = 0; i < Lights.lightNum; i++)
     {

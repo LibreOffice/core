@@ -31,8 +31,8 @@ namespace opengl3D {
 
 namespace {
 
-const int CORNER_DIVION_Y = 10;
-const int CORNER_DIVION_Z = 10;
+const int CORNER_DIVION_Y = 20;
+const int CORNER_DIVION_Z = 20;
 
 int static checkGLError(const char *file, int line)
 {
@@ -855,6 +855,10 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
     size_t verticesNum = polygon.verticesList.size();
     size_t normalsNum = polygon.normalsList.size();
     //check whether the number of vertices and normals are equal
+    if (m_CameraInfo.cameraPos.z >= 0.0f)
+        glPolygonOffset(1.0, 1.0);
+    else
+        glPolygonOffset(-1.0, -1.0);
     if (verticesNum != normalsNum)
     {
         return ;
@@ -1023,6 +1027,9 @@ void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
         m_iLightNum = 0;
         m_Ambient = getColorAsVector(nColor);;
     }
+    SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, -1.0, 1.0, 0.0));
+    SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, 1.0, 1.0, 0.0));
+    SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, -1.0, 1.0, 0.0));
     SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
@@ -1038,7 +1045,7 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::
             }
             m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = getColorAsVector(nColor);
             m_LightsInfo.light[m_LightsInfo.lightNum].positionWorldspace = direction;
-            m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 1.0;
+            m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 0.3f;
             m_LightsInfo.lightNum++;
         }
         else
@@ -1049,7 +1056,7 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::
             }
             m_LightColor[m_iLightNum] = getColorAsVector(nColor);
             m_PositionWorldspace[m_iLightNum] = direction;
-            m_fLightPower[m_iLightNum] = 1.0;
+            m_fLightPower[m_iLightNum] = 0.3f;
             m_iLightNum++;
         }
     }
@@ -2214,6 +2221,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glPolygonOffset(0.0f, 0.0f);
     glUseProgram(maResources.m_3DBatchProID);
     UpdateBatch3DUniformBlock();
     glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
@@ -2268,7 +2276,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
     if (m_Extrude3DInfo.rounded)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_BatchModelMatrixBuf);
             glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * m_BarSurface[i].modelMatrixList.size(), &m_BarSurface[i].modelMatrixList[0][0], GL_DYNAMIC_DRAW);
