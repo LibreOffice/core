@@ -1388,39 +1388,6 @@ void ExcXmlRecord::Save( XclExpStream& )
     // Do nothing; ignored for BIFF output.
 }
 
-class StartXmlElement : public ExcXmlRecord
-{
-public:
-    enum Behavior {
-        CLOSE_ELEMENT       = 0x1,
-        WRITE_NAMESPACES    = 0x2,
-    };
-                        StartXmlElement( sal_Int32 nElement, sal_Int32 eBehavior )
-                            : mnElement( nElement ), meBehavior( (Behavior) eBehavior ) {}
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
-private:
-    sal_Int32           mnElement;
-    Behavior            meBehavior;
-};
-
-void StartXmlElement::SaveXml( XclExpXmlStream& rStrm )
-{
-    sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
-    pStream->write( "<" )
-        ->writeId( mnElement );
-    if( meBehavior & WRITE_NAMESPACES )
-    {
-        rStrm.WriteAttributes(
-                XML_xmlns,                  "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-                FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-                FSEND );
-    }
-    if( meBehavior & CLOSE_ELEMENT )
-    {
-        pStream->write( ">" );
-    }
-}
-
 class EndXmlElement : public ExcXmlRecord
 {
     sal_Int32           mnElement;
@@ -1433,21 +1400,6 @@ void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
     pStream->write("</")->writeId(mnElement)->write(">");
-}
-
-class EndHeaderElement : public EndXmlElement
-{
-public:
-                        EndHeaderElement() : EndXmlElement( XML_header ) {}
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
-};
-
-void EndHeaderElement::SaveXml( XclExpXmlStream& rStrm )
-{
-    // Remove the `xl/revisions/revisionLogX.xml' file from the stack
-    rStrm.PopStream();
-
-    EndXmlElement::SaveXml( rStrm );
 }
 
 XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
