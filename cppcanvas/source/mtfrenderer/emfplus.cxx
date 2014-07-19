@@ -92,6 +92,9 @@ namespace
 #define EmfPlusObjectTypeRegion 0x400
 #define EmfPlusObjectTypeImage 0x500
 #define EmfPlusObjectTypeFont 0x600
+#define EmfPlusObjectTypeStringFormat 0x700
+#define EmfPlusObjectTypeImageAttributes 0x800
+#define EmfPlusObjectTypeCustomLineCap 0x900
 
 #define EmfPlusRegionInitialStateInfinite 0x10000003
 
@@ -1727,6 +1730,21 @@ namespace cppcanvas
                     aObjects [index] = font = new EMFPFont ();
                     font->Read (rObjectStream);
 
+                    break;
+                }
+            case EmfPlusObjectTypeStringFormat:
+                {
+                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'string format' not yet implemented");
+                    break;
+                }
+            case EmfPlusObjectTypeImageAttributes:
+                {
+                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'image attributes' not yet implemented");
+                    break;
+                }
+            case EmfPlusObjectTypeCustomLineCap:
+                {
+                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'custom line cap' not yet implemented");
                     break;
                 }
             default:
