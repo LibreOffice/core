@@ -78,7 +78,7 @@ public:
 
     // positioning related inputs
     const DeviceCoordinate* mpDXArray;     // in pixel units
-    DeviceCoordinate   mnLayoutWidth;      // in pixel units
+    DeviceCoordinate    mnLayoutWidth;      // in pixel units
     int                 mnOrientation;      // in 0-3600 system
 
     // data for bidi and glyph+script fallback
