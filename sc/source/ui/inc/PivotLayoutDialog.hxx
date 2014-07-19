@@ -82,7 +82,7 @@ private:
     formula::RefButton* mpDestinationButton;
 
     PushButton*      mpBtnOK;
-    CloseButton*     mpBtnCancel;
+    CancelButton*     mpBtnCancel;
 
     formula::RefEdit*   mpActiveEdit;
     ScAddress::Details  maAddressDetails;
