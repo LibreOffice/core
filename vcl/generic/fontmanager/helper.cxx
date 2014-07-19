@@ -262,7 +262,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
         unsigned int nBytesToRead = buffer[2] | buffer[3] << 8 | buffer[4] << 16 | buffer[5] << 24;
         if( buffer[0] != 0x80 ) // test for pfb magic number
         {
-            // this migt be a pfa font already
+            // this might be a pfa font already
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
                 ( ! std::strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
                   ! std::strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
