@@ -889,17 +889,14 @@ DECLARE_RTFIMPORT_TEST(testFdo79319, "fdo79319.rtf")
 {
     // the thin horizontal rule was imported as a big fat rectangle
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
-            getProperty<sal_Int16>(xShape, "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape, "RelativeWidth"));
     // FIXME the width/height numbers here are bogus; they should be 15238 / 53
     // (as they are when opening the file in a full soffice)
 #if 0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15238), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(53), xShape->getSize().Height);
-    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER,
-            getProperty<sal_Int16>(xShape, "VertOrient"));
-    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
-            getProperty<sal_Int16>(xShape, "HoriOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, "VertOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, "HoriOrient"));
 #endif
 }
 

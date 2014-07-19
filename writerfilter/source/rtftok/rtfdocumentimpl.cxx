@@ -5572,7 +5572,7 @@ int RTFDocumentImpl::popState()
     }
     break;
     case DESTINATION_LISTNAME:
-    break;
+        break;
     case DESTINATION_LISTLEVEL:
     {
         RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));

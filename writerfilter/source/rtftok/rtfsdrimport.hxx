@@ -47,15 +47,17 @@ public:
     {
         return m_xShape;
     }
-    bool isFakePict() { return m_bFakePict; }
+    bool isFakePict()
+    {
+        return m_bFakePict;
+    }
 private:
     void createShape(const OUString& aService, css::uno::Reference<css::drawing::XShape>& xShape, css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
     void applyProperty(css::uno::Reference<css::drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
-    int initShape(
-        css::uno::Reference<css::drawing::XShape> & o_xShape,
-        css::uno::Reference<css::beans::XPropertySet> & o_xPropSet,
-        bool & o_rIsCustomShape,
-        RTFShape const& rShape, bool bClose, ShapeOrPict const shapeOrPict);
+    int initShape(css::uno::Reference<css::drawing::XShape>& o_xShape,
+                  css::uno::Reference<css::beans::XPropertySet>& o_xPropSet,
+                  bool& o_rIsCustomShape,
+                  RTFShape const& rShape, bool bClose, ShapeOrPict const shapeOrPict);
 
     RTFDocumentImpl& m_rImport;
     std::stack< css::uno::Reference<css::drawing::XShapes> > m_aParents;

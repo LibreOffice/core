@@ -217,11 +217,10 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const O
     }
 }
 
-int RTFSdrImport::initShape(
-    uno::Reference<drawing::XShape> & o_xShape,
-    uno::Reference<beans::XPropertySet> & o_xPropSet,
-    bool & o_rIsCustomShape,
-    RTFShape const& rShape, bool const bClose, ShapeOrPict const shapeOrPict)
+int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
+                            uno::Reference<beans::XPropertySet>& o_xPropSet,
+                            bool& o_rIsCustomShape,
+                            RTFShape const& rShape, bool const bClose, ShapeOrPict const shapeOrPict)
 {
     assert(!o_xShape.is());
     assert(!o_xPropSet.is());
@@ -234,8 +233,8 @@ int RTFSdrImport::initShape(
         std::find_if(rShape.aProperties.begin(),
                      rShape.aProperties.end(),
                      boost::bind(&OUString::equals,
-                         boost::bind(&std::pair<OUString, OUString>::first, _1),
-                         OUString("shapeType"))));
+                                 boost::bind(&std::pair<OUString, OUString>::first, _1),
+                                 OUString("shapeType"))));
 
     if (iter == rShape.aProperties.end())
     {
@@ -246,7 +245,8 @@ int RTFSdrImport::initShape(
             nType = ESCHER_ShpInst_Rectangle;
         }
         else
-        {   // pict is picture by default but can be a rectangle too fdo#79319
+        {
+            // pict is picture by default but can be a rectangle too fdo#79319
             nType = ESCHER_ShpInst_PictureFrame;
         }
     }
@@ -289,8 +289,7 @@ int RTFSdrImport::initShape(
     // Defaults
     if (o_xPropSet.is() && !m_bTextFrame)
     {
-        o_xPropSet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32(
-                        0xffffff))); // White in Word, kind of blue in Writer.
+        o_xPropSet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32(0xffffff))); // White in Word, kind of blue in Writer.
     }
 
     return nType;
@@ -327,8 +326,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
 
     bool bCustom(false);
-    int const nType =
-        initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
+    int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -660,7 +658,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
         }
         else if (i->first == "fHorizRule") // TODO: what does "fStandardHR" do?
-        {   // horizontal rule: relative width defaults to 100% of paragraph
+        {
+            // horizontal rule: relative width defaults to 100% of paragraph
             // TODO: does it have a default height?
             if (!oRelativeWidth)
             {
@@ -674,33 +673,37 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
         }
         else if (i->first == "pctHR")
-        {   // horizontal rule relative width in permille
+        {
+            // horizontal rule relative width in permille
             oRelativeWidth = i->second.toInt32() / 10;
         }
         else if (i->first == "dxHeightHR")
-        {   // horizontal rule height
+        {
+            // horizontal rule height
             sal_uInt32 const nHeight(convertTwipToMm100(i->second.toInt32()));
             rShape.nBottom = rShape.nTop + nHeight;
         }
         else if (i->first == "dxWidthHR")
-        {   // horizontal rule width
+        {
+            // horizontal rule width
             sal_uInt32 const nWidth(convertTwipToMm100(i->second.toInt32()));
             rShape.nRight = rShape.nLeft + nWidth;
         }
         else if (i->first == "alignHR")
-        {   // horizontal orientation *for horizontal rule*
+        {
+            // horizontal orientation *for horizontal rule*
             sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
             switch (i->second.toInt32())
             {
-                case 0:
-                    nHoriOrient = text::HoriOrientation::LEFT;
-                    break;
-                case 1:
-                    nHoriOrient = text::HoriOrientation::CENTER;
-                    break;
-                case 2:
-                    nHoriOrient = text::HoriOrientation::RIGHT;
-                    break;
+            case 0:
+                nHoriOrient = text::HoriOrientation::LEFT;
+                break;
+            case 1:
+                nHoriOrient = text::HoriOrientation::CENTER;
+                break;
+            case 2:
+                nHoriOrient = text::HoriOrientation::RIGHT;
+                break;
             }
             if (xPropertySet.is() && text::HoriOrientation::NONE != nHoriOrient)
             {
