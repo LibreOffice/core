@@ -43,11 +43,14 @@ public:
     void testNonPlaceableWmf();
     void testSine();
     void testEmfProblem();
+    void testWorldTransformFontSize();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testSine);
     CPPUNIT_TEST(testEmfProblem);
+    CPPUNIT_TEST(testWorldTransformFontSize);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -121,6 +124,36 @@ void WmfTest::testEmfProblem()
     assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "left", "740");
     assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "bottom", "2823");
     assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1876");
+}
+
+void WmfTest::testWorldTransformFontSize()
+{
+    SvFileStream aFileStream(getFullUrl("image1.emf"), STREAM_READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(META_FONT_ACTION, false);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/font", 8);
+
+    assertXPath(pDoc, "/metafile/font[1]", "color", "#595959");
+    assertXPath(pDoc, "/metafile/font[1]", "width", "0");
+    assertXPath(pDoc, "/metafile/font[1]", "height", "389");
+    assertXPath(pDoc, "/metafile/font[1]", "orientation", "0");
+    assertXPath(pDoc, "/metafile/font[1]", "weight", "bold");
+
+    // World transform should not affect font size. Rotating text for 90 degrees
+    // should not exchange font width and height.
+    assertXPath(pDoc, "/metafile/font[3]", "color", "#000000");
+    assertXPath(pDoc, "/metafile/font[3]", "width", "0");
+    assertXPath(pDoc, "/metafile/font[3]", "height", "530");
+    assertXPath(pDoc, "/metafile/font[3]", "orientation", "900");
+    assertXPath(pDoc, "/metafile/font[3]", "weight", "normal");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
