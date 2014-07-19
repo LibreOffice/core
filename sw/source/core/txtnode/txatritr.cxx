@@ -113,7 +113,7 @@ bool SwTxtAttrIterator::Next()
         {
             do {
                 const SwTxtAttr* pHt = aStack.front();
-                sal_uInt16 nEndPos = *pHt->End();
+                const sal_Int32 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                     aStack.pop_front();
                 else
@@ -128,7 +128,7 @@ bool SwTxtAttrIterator::Next()
             if( !aStack.empty() )
             {
                 const SwTxtAttr* pHt = aStack.front();
-                const sal_uInt16 nEndPos = *pHt->End();
+                const sal_Int32 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                 {
                     nChgPos = nEndPos;
@@ -156,7 +156,8 @@ bool SwTxtAttrIterator::Next()
 
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
-    sal_uInt16 nIns = 0, nEndPos = *rAttr.End();
+    size_t nIns = 0;
+    const sal_Int32 nEndPos = *rAttr.End();
     for( ; nIns < aStack.size(); ++nIns )
         if( *aStack[ nIns ]->End() > nEndPos )
             break;
