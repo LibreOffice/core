@@ -73,7 +73,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager2 >         m_xManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2>               m_xDesktop;
 
     private:
