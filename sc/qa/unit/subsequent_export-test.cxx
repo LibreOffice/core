@@ -18,6 +18,7 @@
 #include <svl/stritem.hxx>
 
 #include "helper/qahelper.hxx"
+#include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
 
 #include "docsh.hxx"
@@ -107,6 +108,8 @@ public:
     void testFunctionsExcel2010ODS();
 #endif
 
+    void testRelativePaths();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -139,6 +142,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLS);
+    CPPUNIT_TEST(testRelativePaths);
 
     /* TODO: export to ODS currently (2014-04-28) makes the validator stumble,
      * probably due to a loext:fill-character attribute in a
@@ -1819,6 +1823,19 @@ void ScExportTest::testFunctionsExcel2010XLSX()
 void ScExportTest::testFunctionsExcel2010XLS()
 {
     testFunctionsExcel2010(XLS);
+}
+
+void ScExportTest::testRelativePaths()
+{
+    ScDocShellRef xDocSh = loadDoc("fdo79305.", ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "content.xml", ODS);
+    CPPUNIT_ASSERT(pDoc);
+    OUString aURL = XPathHelper::getXPath(pDoc,
+            "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
+    // make sure that the URL is relative
+    CPPUNIT_ASSERT(aURL.startsWith(".."));
 }
 
 #if 0

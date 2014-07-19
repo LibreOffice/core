@@ -19,6 +19,7 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 	boost_headers \
 	mdds_headers \
 	cppunit \
+	libxml2 \
 ))
 
 ifneq ($(SYSTEM_LIBORCUS),)
@@ -59,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 
 $(eval $(call gb_Library_add_exception_objects,scqahelper,\
 	sc/qa/unit/helper/qahelper \
+	sc/qa/unit/helper/xpath \
 ))
 
 # vim: set noet sw=4 ts=4:

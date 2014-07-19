@@ -647,6 +647,35 @@ ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 n
     return xDocSh;
 }
 
+boost::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell, sal_Int32 nFormat )
+{
+    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+
+    boost::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
+    pTempFile->EnableKillingFile();
+    SfxMedium aStoreMedium( pTempFile->GetURL(), STREAM_STD_WRITE );
+    sal_uInt32 nExportFormat = 0;
+    sal_Int32 nFormatType = aFileFormats[nFormat].nFormatType;
+    if (nFormatType == ODS_FORMAT_TYPE)
+        nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+    SfxFilter* pExportFilter = new SfxFilter(
+        aFilterName,
+        OUString(), nFormatType, nExportFormat, aFilterType, 0, OUString(),
+        OUString(), OUString("private:factory/scalc*") );
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    aStoreMedium.SetFilter(pExportFilter);
+    pShell->DoSaveAs( aStoreMedium );
+    pShell->DoClose();
+
+    if(nFormatType == XLSX_FORMAT_TYPE)
+        validate(pTempFile->GetFileName(), test::OOXML);
+    else if (nFormatType == ODS_FORMAT_TYPE)
+        validate(pTempFile->GetFileName(), test::ODF);
+
+    return pTempFile;
+}
+
 void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems )
 {
     for ( unsigned int index=0; index<numElems; ++index )
