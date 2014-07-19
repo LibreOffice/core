@@ -932,17 +932,14 @@ void SwTxtNode::Update(
                     }
                     else // *pEnd == nChangePos
                     {
-                        sal_uInt16 nWhPos;
                         const sal_uInt16 nWhich = pHint->Which();
 
                         OSL_ENSURE(!isCHRATR(nWhich), "Update: char attr hint?");
-                        if (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich))
-                        {
-                            nWhPos = static_cast<sal_uInt16>(nWhich -
-                                        RES_CHRATR_BEGIN);
-                        }
-                        else
+                        if (!(isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)))
                             continue;
+
+                        const sal_uInt16 nWhPos = static_cast<sal_uInt16>(nWhich -
+                                        RES_CHRATR_BEGIN);
 
                         if( aDontExp[ nWhPos ] )
                             continue;
