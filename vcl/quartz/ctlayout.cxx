@@ -341,11 +341,12 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // the view is vertically flipped => flipped glyphs
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
-    SAL_INFO( "vcl.ct", "CGContextSaveGState(" << rAquaGraphics.mrContext << ")" );
-    CGContextSaveGState( rAquaGraphics.mrContext );
-    SAL_INFO( "vcl.ct", "CGContextScaleCTM(" << rAquaGraphics.mrContext << ",1.0,-1.0)" );
-    CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
-    CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
+    CGContextRef context = rAquaGraphics.mrContext;
+    SAL_INFO( "vcl.ct", "CGContextSaveGState(" << context << ")" );
+    CGContextSaveGState( context );
+    SAL_INFO( "vcl.ct", "CGContextScaleCTM(" << context << ",1.0,-1.0)" );
+    CGContextScaleCTM( context, 1.0, -1.0 );
+    CGContextSetShouldAntialias( context, !rAquaGraphics.mbNonAntialiasedText );
 
     // set the text transformation (e.g. position)
     CGPoint aTextPos = GetTextDrawPosition();
@@ -353,49 +354,46 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     if( pStyle->mfFontRotation != 0.0 )
     {
         const CGFloat fRadians = pStyle->mfFontRotation;
-        SAL_INFO( "vcl.ct", "CGContextRotateCTM(" << rAquaGraphics.mrContext << "," << +fRadians << ")" );
-        CGContextRotateCTM( rAquaGraphics.mrContext, +fRadians );
+        SAL_INFO( "vcl.ct", "CGContextRotateCTM(" << context << "," << +fRadians << ")" );
+        CGContextRotateCTM( context, +fRadians );
 
         const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
         aTextPos = CGPointApplyAffineTransform( aTextPos, aInvMatrix );
     }
 
-    SAL_INFO( "vcl.ct", "CGContextSetTextPosition(" << rAquaGraphics.mrContext << "," << aTextPos << ")" );
-    CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
+    SAL_INFO( "vcl.ct", "CGContextSetTextPosition(" << context << "," << aTextPos << ")" );
+    CGContextSetTextPosition( context, aTextPos.x, aTextPos.y );
 
 #ifndef IOS
     // request an update of the to-be-changed window area
     if( rAquaGraphics.IsWindowGraphics() )
     {
-        const CGRect aInkRect = CTLineGetImageBounds( mpCTLine, rAquaGraphics.mrContext );
-        const CGRect aRefreshRect = CGContextConvertRectToDeviceSpace( rAquaGraphics.mrContext, aInkRect );
+        const CGRect aInkRect = CTLineGetImageBounds( mpCTLine, context );
+        const CGRect aRefreshRect = CGContextConvertRectToDeviceSpace( context, aInkRect );
         rAquaGraphics.RefreshRect( aRefreshRect );
     }
 #endif
 
     // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
-    CGContextSetFillColor( rAquaGraphics.mrContext, rAquaGraphics.maTextColor.AsArray() );
+    CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
 
-    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << rAquaGraphics.mrContext << ")" );
+    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << context << ")" );
     // draw the text
-    CTLineDraw( ctline, rAquaGraphics.mrContext );
+    CTLineDraw( ctline, context );
 
     if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
     {
         CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
         CFIndex runCount = CFArrayGetCount(runArray);
 
-        CFIndex runIndex = 0;
-        CTLineRef ctlinebullet = 0;
-        OUString sBullet((sal_Unicode)0xb7); // centered bullet
-
-        for (; runIndex < runCount; runIndex++)
+        for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
         {
 
             CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
             CFIndex runGlyphCount = CTRunGetGlyphCount(run);
 
             CGPoint position;
+            CGSize advance;
             CFIndex runGlyphIndex = 0;
             CFIndex stringIndice = 0;
 
@@ -407,36 +405,32 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                 UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
                 if(curChar == ' ')
                 {
+                    CGFloat ascent;
+                    CGFloat descent;
+                    CGFloat leading;
+                    double fWidth = CTRunGetTypographicBounds ( run, glyphRange,
+                                                                &ascent, &descent, &leading);
                     CTRunGetPositions(run, glyphRange, &position);
-                    // print a dot
-                    if(!ctlinebullet)
-                    {
-                        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
-                                                                                  sBullet.getStr(),
-                                                                                  1,
-                                                                                  kCFAllocatorNull );
-                        // CFAttributedStringCreate copies the attribues parameter
-                        CFAttributedStringRef bulletAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
-                        ctlinebullet = CTLineCreateWithAttributedString( bulletAttrString );
-                        CFRelease( aCFText);
-                        CFRelease( bulletAttrString);
-                        RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
-                        CGContextSetFillColor( rAquaGraphics.mrContext, bulletColor.AsArray() );
-                    }
-                    CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x + position.x, position.y + aTextPos.y );
-                    CTLineDraw(ctlinebullet, rAquaGraphics.mrContext);
+                    CTRunGetAdvances(run, glyphRange, &advance);
+                    CGRect bulletRect = NSMakeRect(aTextPos.x + position.x + advance.width / 4,
+                                                   aTextPos.y + position.y + ascent / 3 - fWidth / 2, fWidth / 2, fWidth / 2);
+                    CGContextSaveGState(context);
+                    RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                    CGContextSetFillColor( context, bulletColor.AsArray() );
+                    CGContextSetStrokeColor(context, bulletColor.AsArray());
+
+                    CGContextBeginPath(context);
+                    CGContextAddEllipseInRect(context, bulletRect);
+                    CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                    CGContextRestoreGState(context);
                 }
             }
-        }
-        if(ctlinebullet)
-        {
-            CFRelease(ctlinebullet);
         }
     }
 
     // restore the original graphic context transformations
-    SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << rAquaGraphics.mrContext << ")" );
-    CGContextRestoreGState( rAquaGraphics.mrContext );
+    SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << context << ")" );
+    CGContextRestoreGState( context );
 }
 
 void CTLayout::DrawText( SalGraphics& rGraphics ) const
