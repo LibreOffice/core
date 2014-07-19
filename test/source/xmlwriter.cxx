@@ -29,7 +29,8 @@ XmlWriter::~XmlWriter()
 
 void XmlWriter::startDocument()
 {
-    xmlTextWriterStartDocument(mpWriter, NULL, NULL, NULL);
+    xmlTextWriterSetIndent(mpWriter, 1);
+    xmlTextWriterStartDocument(mpWriter, NULL, "UTF-8", NULL);
 }
 
 void XmlWriter::endDocument()
