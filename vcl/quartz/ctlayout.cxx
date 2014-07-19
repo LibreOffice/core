@@ -408,12 +408,15 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                     CGFloat ascent;
                     CGFloat descent;
                     CGFloat leading;
+                    CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
+                                                             kCTFontAttributeName);
+                    CGFloat baseSize = CTFontGetSize(runFont);
                     double fWidth = CTRunGetTypographicBounds ( run, glyphRange,
                                                                 &ascent, &descent, &leading);
                     CTRunGetPositions(run, glyphRange, &position);
                     CTRunGetAdvances(run, glyphRange, &advance);
                     CGRect bulletRect = NSMakeRect(aTextPos.x + position.x + advance.width / 4,
-                                                   aTextPos.y + position.y + ascent / 3 - fWidth / 2, fWidth / 2, fWidth / 2);
+                                                   aTextPos.y + position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
                     CGContextSaveGState(context);
                     RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
                     CGContextSetFillColor( context, bulletColor.AsArray() );
