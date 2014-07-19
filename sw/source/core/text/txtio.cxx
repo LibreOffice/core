@@ -171,433 +171,435 @@ CONSTCHAR( pPREP_PAGE, "PAGE" );
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    rOs << " {";
-    rOs <<  "L:" << nLineLength;
-    rOs << " H:" << Height();
-    rOs << " W:" << PrtWidth();
-    rOs << " A:" << nAscent;
-    rOs << pClose;
+    rOs.WriteCharPtr(" {");
+    rOs.WriteCharPtr("L:").WriteInt32(nLineLength);
+    rOs.WriteCharPtr(" H:").WriteUInt16(Height());
+    rOs.WriteCharPtr(" W:").WriteUInt16(PrtWidth());
+    rOs.WriteCharPtr(" A:").WriteUInt32(nAscent);
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TXT:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {END:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
     if( PrtWidth() )
-        rOs << "(view)";
-    rOs << pClose;
+        rOs.WriteCharPtr("(view)");
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {BREAK:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {KERN:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {ARROW:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {MULTI:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {COMBINED:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {LINE:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
     SwLinePortion *pPos = GetPortion();
     while( pPos )
     {
-        rOs << "\t";
+        rOs.WriteCharPtr("\t");
         pPos->operator<<( rOs );
         pPos = pPos->GetPortion();
     }
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwGluePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {GLUE:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << " F:" << GetFixWidth();
-    rOs << " G:" << GetPrtGlue();
-    rOs << pClose;
+    rOs.WriteCharPtr(" F:").WriteUInt16(GetFixWidth());
+    rOs.WriteCharPtr(" G:").WriteInt16(GetPrtGlue());
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFixPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FIX:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwGluePortion::operator<<( rOs );
-    rOs << " Fix:" << nFix;
-    rOs << pClose;
+    rOs.WriteCharPtr(" Fix:").WriteUInt16(nFix);
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FLY:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwFixPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {MAR:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwGluePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FLYCNT:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
     if( bDraw )
     {
         CONSTCHAR( pTxt2, " {DRAWINCNT" );
-        rOs << pTxt2;
-        rOs << pClose;
+        rOs.WriteCharPtr(pTxt2);
+        rOs.WriteCharPtr(pClose);
     }
     else
     {
         CONSTCHAR( pTxt2, " {FRM:" );
-        rOs << pTxt2;
-        rOs << " {FRM:" << GetFlyFrm()->Frm() << pClose;
-        rOs << " {PRT:" << GetFlyFrm()->Prt() << pClose;
-        rOs << pClose;
+        rOs.WriteCharPtr(pTxt2);
+        rOs.WriteCharPtr(" {FRM:");
+        WriteSwRect(rOs, GetFlyFrm()->Frm()).WriteCharPtr(pClose);
+        rOs.WriteCharPtr(" {PRT:");
+        WriteSwRect(rOs, GetFlyFrm()->Prt()).WriteCharPtr(pClose);
+        rOs.WriteCharPtr(pClose);
     }
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwExpandPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {EXP:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFtnPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FTN:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwExpandPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FTNNUM:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwNumberPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {NUMBER:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwExpandPortion::operator<<( rOs );
-    rOs << " Exp:\"" << '\"';
-    rOs << pClose;
+    rOs.WriteCharPtr(" Exp:\"").WriteChar('\"');
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {BULLET:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwNumberPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {GRFNUM:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwNumberPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwHiddenPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {Hidden:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwFldPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwToxPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TOX:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTxtPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwRefPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {Ref:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTxtPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {ISOTOX:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwToxPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {ISOREF:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwRefPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {HYPH:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwExpandPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {HYPHSTR:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwExpandPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {SOFTHYPH:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwHyphPortion::operator<<( rOs );
-    rOs << (IsExpand() ? " on" : " off");
-    rOs << pClose;
+    rOs.WriteCharPtr(IsExpand() ? " on" : " off");
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {SOFTHYPHSTR:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwHyphStrPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwBlankPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {BLANK:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwExpandPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwFldPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {FLD:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
     if( IsFollow() )
-        rOs << " F!";
-    rOs << pClose;
+        rOs.WriteCharPtr(" F!");
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {POSTITS" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTabPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TAB" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwFixPortion::operator<<( rOs );
-    rOs << " T:" << nTabPos;
+    rOs.WriteCharPtr(" T:").WriteUInt16(nTabPos);
     if( IsFilled() )
-        rOs << " \"" << cFill << '\"';
-    rOs << pClose;
+        rOs.WriteCharPtr(" \"").WriteChar(cFill).WriteChar('\"');
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TABLEFT" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTabPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TABRIGHT" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTabPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TABCENTER" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTabPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {TABDECIMAL" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTabPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwParaPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {PAR" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLineLayout::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwHolePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {HOLE" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwLinePortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwQuoVadisPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {QUOVADIS" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwFldPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwErgoSumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {ERGOSUM" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwFldPortion::operator<<( rOs );
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) //$ ostream
 {
     CONSTCHAR( pTxt, " {SIZEINFO:" );
-    rOs << pTxt;
-    rOs << ' ' << (rInf.OnWin() ? "WIN:" : "PRT:" );
-    rOs << " Idx:" << rInf.GetIdx();
-    rOs << " Len:" << rInf.GetLen();
-    rOs << pClose;
+    rOs.WriteCharPtr(pTxt);
+    rOs.WriteChar(' ').WriteCharPtr(rInf.OnWin() ? "WIN:" : "PRT:");
+    rOs.WriteCharPtr(" Idx:").WriteInt32(rInf.GetIdx());
+    rOs.WriteCharPtr(" Len:").WriteInt32(rInf.GetLen());
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {DROP:" );
-    rOs << pTxt;
+    rOs.WriteCharPtr(pTxt);
     SwTxtPortion::operator<<( rOs );
     if( pPart && nDropHeight )
     {
-        rOs << " H:" << nDropHeight;
-        rOs << " L:" << nLines;
-        rOs << " Fnt:" << static_cast<sal_Int32>(pPart->GetFont().GetHeight());
+        rOs.WriteCharPtr(" H:").WriteUInt16(nDropHeight);
+        rOs.WriteCharPtr(" L:").WriteUInt16(nLines);
+        rOs.WriteCharPtr(" Fnt:").WriteInt32(pPart->GetFont().GetHeight());
         if( nX || nY )
-            rOs << " [" << nX << '/' << nY << ']';
+            rOs.WriteCharPtr(" [").WriteInt16(nX).WriteChar('/').WriteInt16(nY).WriteChar(']');
     }
-    rOs << pClose;
+    rOs.WriteCharPtr(pClose);
     return rOs;
 }
 

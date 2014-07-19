@@ -101,6 +101,10 @@ public:
     //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
     inline Rectangle  SVRect() const;
 
+    // Output operator for debugging.
+    friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
+
+
     void _Top(      const long nTop );
     void _Bottom(   const long nBottom );
     void _Left(     const long nLeft );

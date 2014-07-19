@@ -223,4 +223,16 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.A(), rNew.B() - m_Size.getHeight()); }
 
+#ifdef DBG_UTIL
+SvStream& WriteSwRect(SvStream &rStream, const SwRect &rRect)
+{
+    rStream.WriteChar('[').WriteInt32(rRect.Top()).
+            WriteChar('/').WriteInt32(rRect.Left()).
+            WriteChar(',').WriteInt32(rRect.Width()).
+            WriteChar('x').WriteInt32(rRect.Height()).
+            WriteCharPtr("] ");
+    return rStream;
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
