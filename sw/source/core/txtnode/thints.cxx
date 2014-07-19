@@ -1420,7 +1420,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 if( !bNewFtn )
                 {
                     // eine alte Ftn wird umgehaengt (z.B. SplitNode)
-                    for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
+                    for( size_t n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
                         if( pAttr == pDoc->GetFtnIdxs()[n] )
                         {
                             // neuen Index zuweisen, dafuer aus dem SortArray
@@ -1903,7 +1903,7 @@ bool SwTxtNode::SetAttr(
 
     SfxItemSet aCharSet( *rSet.GetPool(), aCharAutoFmtSetRange );
 
-    sal_uInt16 nCount = 0;
+    size_t nCount = 0;
     SfxItemIter aIter( *pSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
@@ -2280,7 +2280,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 namespace
 {
 
-typedef std::pair<sal_uInt16, sal_uInt16> AttrSpan_t;
+typedef std::pair<sal_Int32, sal_Int32> AttrSpan_t;
 typedef std::multimap<AttrSpan_t, const SwTxtAttr*> AttrSpanMap_t;
 
 struct IsAutoStyle
@@ -2342,10 +2342,10 @@ private:
     that tries to access the pointer has to check if it's non-null!
  */
 void
-lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
+lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
         AttrSpanMap_t& o_rSpanMap)
 {
-    sal_uInt16 nLastEnd(0);
+    sal_Int32 nLastEnd(0);
 
     for (sal_uInt16 i(0); i != i_rHints.Count(); ++i)
     {
@@ -2645,11 +2645,10 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     PortionMap aPortionMap;
     std::map<int, bool> RsidOnlyAutoFmtFlagMap;
     sal_Int32 nLastPorStart = COMPLETE_STRING;
-    sal_uInt16 i = 0;
     int nKey = 0;
 
     // get portions by start position:
-    for ( i = 0; i < Count(); ++i )
+    for ( sal_uInt16 i = 0; i < Count(); ++i )
     {
         SwTxtAttr *pHt = GetTextHint( i );
         if ( RES_TXTATR_CHARFMT != pHt->Which() &&
@@ -2706,7 +2705,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     // check if portion i can be merged with portion i+1:
     // note: need to include i=0 to set IgnoreStart and j=nKey+1 to reset
     // IgnoreEnd at first / last portion
-    i = 0;
+    int i = 0;
     int j = i + 1;
     while ( i <= nKey )
     {
