@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_1873654f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-19T09:39:22Z",
+      "side": 0,
+      "message": "Agreed, the testcase as-is doesn\u0027t make sense, and the bugdoc in practice is still rendered the same way. Still, would be nice to rework the testcase instead of just removing it; but it\u0027s not a blocker.",
+      "revId": "7f55c89470b3671f9702ca76317a5388bf7513f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_f88e7126",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-07-19T09:39:22Z",
+      "side": 1,
+      "message": "This, however *is* a problem in my book. The situation seems to be the following:\n\n- the document in Word is imported as of 2 pages, all anchored objects are on the first page.\n- LO, before: the second empty page is indeed missing, but all anchored objects are properly on the first page\n- LO, after: quite some anchored objects are on the second page\n\nSo here the situation significantly gets worse. I could rework the testcase to check the layout dump to see if TEXT1 is on the first page without accessing the page styles, but the root cause is still the same: the test ensures that TEXT1 is not on the second page, but on the first one, and your change breaks exactly that -- so that should be fixed.",
+      "revId": "9503b87b4bd74a8ead82d0e9711bdd27653c18b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
