@@ -1023,7 +1023,7 @@ void SwTxtNode::Update(
     if ( !bNegative && !bDelete )
     {
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
-        for ( sal_uInt16 i = 0; i < rTbl.size(); ++i )
+        for ( size_t i = 0; i < rTbl.size(); ++i )
         {
             SwRangeRedline *const pRedl = rTbl[ i ];
             if ( pRedl->HasMark() )
@@ -1104,8 +1104,8 @@ void SwTxtNode::Update(
 
     if ( pCollector.get() )
     {
-        const sal_uInt16 nCount = pCollector->size();
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        const size_t nCount = pCollector->size();
+        for ( size_t i = 0; i < nCount; ++i )
         {
             m_pSwpHints->TryInsertHint( (*pCollector)[ i ], *this );
         }
@@ -1340,8 +1340,8 @@ static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const OUString& 
     if( !rName.isEmpty() )
     {
         SwCharFmt* pFmt;
-        sal_uInt16 nArrLen = pCharFmts->size();
-        for( sal_uInt16 i = 1; i < nArrLen; i++ )
+        const size_t nArrLen = pCharFmts->size();
+        for( size_t i = 1; i < nArrLen; i++ )
         {
             pFmt = (*pCharFmts)[ i ];
             if( pFmt->GetName()==rName )
@@ -1788,14 +1788,14 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
     // nur falls im Array Attribute stehen (kann nur beim Kopieren
     // sich selbst passieren!!)
-    for ( sal_uInt16 i = 0; i < aArr.size(); ++i )
+    for ( size_t i = 0; i < aArr.size(); ++i )
     {
         InsertHint( aArr[ i ], nsSetAttrMode::SETATTR_NOTXTATRCHR );
     }
 
     if( pDest->GetpSwpHints() )
     {
-        for ( sal_uInt16 i = 0; i < aRefMrkArr.size(); ++i )
+        for ( size_t i = 0; i < aRefMrkArr.size(); ++i )
         {
             SwTxtAttr * const pNewHt = aRefMrkArr[i];
             if( pNewHt->GetEnd() )
@@ -2089,7 +2089,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             nDestStart = nDestStart - nLen;
         }
 
-        for ( sal_uInt16 n = 0; n < aArr.size(); ++n )
+        for ( size_t n = 0; n < aArr.size(); ++n )
         {
             SwTxtAttr *const pNewHt = aArr[n];
             pNewHt->GetStart() = nDestStart + pNewHt->GetStart();
@@ -2273,7 +2273,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             }
             Update( rStart, nLen, true, true );
 
-            for ( sal_uInt16 n = 0; n < aArr.size(); ++n )
+            for ( size_t n = 0; n < aArr.size(); ++n )
             {
                 SwTxtAttr * const pHt = aArr[ n ];
                 pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
