@@ -146,7 +146,9 @@ public:
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLSX);
     CPPUNIT_TEST(testFunctionsExcel2010XLS);
+#if !defined(WNT)
     CPPUNIT_TEST(testRelativePaths);
+#endif
 
     /* TODO: export to ODS currently (2014-04-28) makes the validator stumble,
      * probably due to a loext:fill-character attribute in a
