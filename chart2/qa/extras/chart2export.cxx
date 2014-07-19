@@ -161,17 +161,8 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    sal_uInt64 const nSize = pStream->remainingSize();
-    OStringBuffer aDocument(nSize);
-    char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
-    {
-        pStream->ReadChar( ch );
-        aDocument.append(ch);
-    }
 
-    // Parse the XML.
-    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+    return parseXmlStream(pStream.get());
 }
 
 void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)

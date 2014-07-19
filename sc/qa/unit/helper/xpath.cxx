@@ -15,6 +15,8 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
+#include <test/xmltesttools.hxx>
+
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 xmlDocPtr XPathHelper::parseExport(ScDocShell* pShell, uno::Reference<lang::XMultiServiceFactory> xSFactory, const OUString& rFile, sal_Int32 nFormat)
@@ -26,18 +28,8 @@ xmlDocPtr XPathHelper::parseExport(ScDocShell* pShell, uno::Reference<lang::XMul
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rFile), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    sal_uInt64 const nSize = pStream->remainingSize();
-    OStringBuffer aDocument(nSize);
-    char ch;
-    for (sal_Size i = 0; i < nSize; ++i)
-    {
-        pStream->ReadChar( ch );
-        aDocument.append(ch);
-    }
-    CPPUNIT_ASSERT(!aDocument.isEmpty());
 
-    // Parse the XML.
-    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+    return XmlTestTools::parseXmlStream(pStream.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
