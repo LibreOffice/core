@@ -224,6 +224,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	smd \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
+	OGLTrans \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
@@ -632,7 +636,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	OGLTrans \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \

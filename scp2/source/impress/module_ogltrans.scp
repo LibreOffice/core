@@ -18,17 +18,16 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/ogltrans"
+
 Module gid_Module_Optional_OGLTrans
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_OGLTRANS);
     ParentID = gid_Module_Optional;
-    Files = ( gid_File_Lib_OpenGLTransitions, gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml, gid_File_Share_Registry_Ogltrans_Xcd );
+    Files = ( auto_ogltrans_ALL, gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml, gid_File_Share_Registry_Ogltrans_Xcd );
     Minimal = NO;
     Default = NO;
 End
-
-
-STD_LIB_FILE(gid_File_Lib_OpenGLTransitions, OGLTrans)
 
 File gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml
     TXT_FILE_BODY;
