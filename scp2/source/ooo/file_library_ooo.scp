@@ -92,20 +92,6 @@ End
 
 #endif
 
-#if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
-//we need the nss libs for libxmlsec (or if the internal mozilla is enabled)
-
-File gid_File_Lib_XSec_XmlSec
-    PACKED_LIB_FILE_BODY;
-    #ifdef UNX
-        Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
-    #else
-        Name = "xsec_xmlsec.dll";
-    #endif
-End
-
-#endif
-
 #if defined WNT && !defined _gcc3 && defined WITH_MOZAB4WIN
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80

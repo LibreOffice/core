@@ -575,6 +575,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	unopkgapp \
 	xmlsecurity \
 	xsec_fw \
+	xsec_xmlsec \
 	xstor \
 	$(if $(filter $(OS),MACOSX), \
 		macab1 \
@@ -592,8 +593,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		) \
 	) \
 ))
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
