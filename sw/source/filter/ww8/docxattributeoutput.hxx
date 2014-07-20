@@ -124,7 +124,7 @@ struct TableReference
     {
     }
 
-    TableReference operator= (const TableReference& rhs)
+    TableReference& operator= (const TableReference& rhs)
     {
         m_bTableCellOpen = rhs.m_bTableCellOpen ;
         m_nTableDepth    = rhs.m_nTableDepth ;
