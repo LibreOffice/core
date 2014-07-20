@@ -146,3 +146,8 @@
 # Valencian AVL (this is incompatible with Catalan).
 [ language=ca_XV ]
     3b87a28bf1ff2a8beb76a5b501f40d1c http://sourceforge.net/projects/aoo-extensions/files/1475/0/avl.oxt/download "dict-ca-xv.oxt"
+
+# Valencian RACV (this is incompatible with Catalan).
+[ language=ca_XR ]
+    6112a73444a1ad3cf70736649e228f0f http://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict-ca-xr.oxt"
+
