@@ -16,6 +16,7 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     : ownership_flags(0)
     , m_StartPos(start)
     , m_pRun(pRun)
+    , m_pAdjPositions(NULL)
 {
     assert(pRun);
 
@@ -50,7 +51,7 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
         CTRunGetStringIndices( pRun, aAll, (CFIndex*)m_pStringIndices );
     }
 
-    m_pPositions = CTRunGetPositionsPtr( pRun );
+    m_pPositions = (CGPoint*)CTRunGetPositionsPtr( pRun );
     if( !m_pPositions )
     {
         m_pPositions = new CGPoint[m_nGlyphs];
@@ -80,6 +81,7 @@ CTRunData::~CTRunData()
     {
         delete [] m_pPositions;
     }
+    delete [] m_pAdjPositions;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
