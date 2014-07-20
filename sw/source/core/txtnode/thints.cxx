@@ -480,7 +480,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         InsertNesting( **itOther );
                         if (!bRemoveOverlap)
                         {
-                            if ( SAL_MAX_SIZE-1 == Count() )
+                            if ( MAX_HINTS <= Count() )
                             {
                                 OSL_FAIL("hints array full :-(");
                                 return false;
@@ -499,7 +499,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         InsertNesting( **itOther );
                         if (!bRemoveOverlap)
                         {
-                            if ( SAL_MAX_SIZE-1 == Count() )
+                            if ( MAX_HINTS <= Count() )
                             {
                                 OSL_FAIL("hints array full :-(");
                                 return false;
@@ -517,7 +517,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
     }
 
-    if ( SAL_MAX_SIZE-1 - Count() <= SplitNew.size() )
+    if ( MAX_HINTS <= Count() || MAX_HINTS - Count() <= SplitNew.size() )
     {
         OSL_FAIL("hints array full :-(");
         return false;
@@ -2947,7 +2947,7 @@ bool SwpHints::TryInsertHint(
     SwTxtNode &rNode,
     const SetAttrMode nMode )
 {
-    if ( SAL_MAX_SIZE-1 == Count() ) // we're sorry, this flight is overbooked...
+    if ( MAX_HINTS <= Count() ) // we're sorry, this flight is overbooked...
     {
         OSL_FAIL("hints array full :-(");
         return false;

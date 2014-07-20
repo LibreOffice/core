@@ -91,6 +91,10 @@ protected:
     SwpHtStart m_HintStarts;
     SwpHtEnd   m_HintEnds;
 
+    // SAL_MAX_SIZE is used by GetStartOf to return
+    // failure, so just allow SAL_MAX_SIZE-1 hints
+    static const size_t MAX_HINTS = SAL_MAX_SIZE-1;
+
     //FIXME: why are the non-const methods public?
 public:
     void Insert( const SwTxtAttr *pHt );
