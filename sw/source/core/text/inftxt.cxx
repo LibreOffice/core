@@ -951,7 +951,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
         const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
 
-        lcl_DrawSpecial( *this, rPor, aRect, Color(0x6a, 0xbe, 0xd3), cChar, nOptions );
+        lcl_DrawSpecial( *this, rPor, aRect, Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
     }
 }
 
