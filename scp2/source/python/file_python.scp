@@ -34,21 +34,6 @@ File gid_File_pyuno_python_scripts
     Styles = (FILELIST, PACKED);
 End
 
-File gid_File_Lib_Pyuno
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
-  #else
-  #ifdef MSVC_PKG_DEBUG_RUNTIME
-    Name = "pyuno_d.pyd";
-  #else
-    Name = "pyuno.pyd";
-  #endif // MSVC_PKG_DEBUG_RUNTIME
-  #endif
-End
-
-STD_LIB_FILE( gid_File_Lib_Pythonloader, pythonloader )
-
 File gid_File_Pyuno_Rdb
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program_Services;
@@ -108,16 +93,6 @@ File gid_File_Share_Registry_Pyuno_Xcd
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "pyuno.xcd";
 End
-
-#ifdef UNX
-
-// pyuno.so even on Mac OS X, because it is a python module
-File gid_File_Pyuno
-    PACKED_LIB_FILE_BODY;
-    Name = "pyuno.so";
-End
-
-#endif
 
 #ifdef MINGW_SYSTEM_PYTHON
 

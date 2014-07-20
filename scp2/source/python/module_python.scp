@@ -38,17 +38,8 @@ Module gid_Module_Pyuno
             gid_Dir_Py_PythonCore,
             gid_Dir_Py_PythonCore_Bin,
             gid_Dir_Py_PythonCore_Lib);
-/* right now auto_python_ALL just seems to contain the python core, which we don't need
-   with system-python -  and if this is empty the next one (gid_File_Pyuno) apparently doesn't
-   correctly end up here. */
-    Files = (
-#ifndef SYSTEM_PYTHON
-             auto_python_ALL,
-#endif
-             gid_File_Pyuno,
+    Files = (auto_python_ALL,
              gid_File_Pyuno_Rdb,
-             gid_File_Lib_Pyuno,
-             gid_File_Lib_Pythonloader,
              gid_File_Py_Bin_Python,
              gid_File_Py_Python_Core,
              gid_File_Py_Python_Bin,

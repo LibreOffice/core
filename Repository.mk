@@ -428,6 +428,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
 	pdfimport \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,python, \
+	pythonloader \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,python, \
+	pyuno \
+	$(if $(filter-out WNT,$(OS)),pyuno_wrapper) \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
 	rpt \
 	rptui \
@@ -584,8 +593,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	pyuno \
-	pyuno_wrapper \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
@@ -638,10 +645,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,RTVERLIBS,ure, \
 	cppuhelper \
 	purpenvhelper \
 	salhelper \
-))
-
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	pythonloader \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,UNOVERLIBS,ure, \
