@@ -415,6 +415,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,pdfimport, \
+	pdfimport \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
 	rpt \
 	rptui \
@@ -455,10 +459,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	vclbootstrapprotector \
 	scqahelper \
 	unowinreg \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
-	pdfimport \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
