@@ -58,6 +58,7 @@ private:
     CGPoint         GetTextDrawPosition(void) const;
     double          GetWidth(void) const;
     bool            CacheGlyphLayout(void) const;
+    void            ApplyDXArray( ImplLayoutArgs& rArgs);
 
     const CoreTextStyle* const    mpTextStyle;
 
@@ -103,7 +104,9 @@ CTLayout::~CTLayout()
         CFRelease( mpCTLine );
     }
     if( mpAttrString )
+    {
         CFRelease( mpAttrString );
+    }
 }
 
 bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
@@ -114,6 +117,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     // release an eventual older layout
     if( mpAttrString )
         CFRelease( mpAttrString );
+
     mpAttrString = NULL;
     if( mpCTLine )
     {
@@ -161,100 +165,149 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     return true;
 }
 
-void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+void CTLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
-    if( !mpCTLine)
-        return;
+    CacheGlyphLayout();
 
-    int nPixelWidth = rArgs.mpDXArray ? rArgs.mpDXArray[ mnCharCount - 1 ] : rArgs.mnLayoutWidth;
-    if( nPixelWidth <= 0)
-        return;
-
-    // HACK: justification requests which change the width by just one pixel are probably
-    // #i86038# introduced by lossy conversions between integer based coordinate system
-    int fuzz =  (nPixelWidth - GetTextWidth()) / 2;
-    if (!fuzz)
+    for (boost::ptr_vector<CTRunData>::iterator iter = m_vRunData.begin();
+         iter != m_vRunData.end();
+         ++iter)
     {
-        return;
-    }
+        CTRunStatus status = CTRunGetStatus(iter->m_pRun);
+        delete[] iter->m_pAdjPositions;
+        iter->m_pAdjPositions = new CGPoint[iter->m_nGlyphs];
 
-    // if the text to be justified has whitespace in it then
-    // - Writer goes crazy with its HalfSpace magic
-    // - CoreText handles spaces specially (in particular at the text end)
-    if( mnTrailingSpaceCount )
-    {
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
-        // don't recreate line layout here, because this can lead to problems
-        // (looks like internal issues inside early CoreText versions)
-        mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
-#else
-        if(rArgs.mpDXArray)
+        if(!(status & kCTRunStatusNonMonotonic))
         {
-            int nFullPixelWidth = nPixelWidth;
-            nPixelWidth = mnTrailingSpaceCount == mnCharCount
-                ? 0 : rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
-            mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
+            /* simple 1 to 1 */
+            for(int i = 0 ; i < iter->m_nGlyphs; i++)
+            {
+                if(iter->m_pStringIndices[i] == 0)
+                {
+                    iter->m_pAdjPositions[i].x = 0;
+                    SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
+                }
+                else
+                {
+                    iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
+                    SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " << rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos: " << iter->m_pPositions[i].x);
+                }
+                iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
+            }
         }
         else
         {
+            delete[] iter->m_pAdjPositions;
+            iter->m_pAdjPositions = NULL;
+        }
+    }
+}
+
+void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+{
+    if( !mpCTLine)
+    {
+        return;
+    }
+
+    DeviceCoordinate nPixelWidth = 0;
+
+    if(rArgs.mpDXArray)
+    {
+        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
+        if( nPixelWidth <= 0)
+            return;
+        ApplyDXArray( rArgs );
+        if( mnTrailingSpaceCount )
+        {
+            DeviceCoordinate nFullPixelWidth = nPixelWidth;
+            nPixelWidth = (mnTrailingSpaceCount == mnCharCount) ? 0 :
+                rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
+            mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
+            if( nPixelWidth <= 0)
+                return;
+            // in RTL-layouts trailing spaces are leftmost
+            // TODO: use BiDi-algorithm to thoroughly check this assumption
+            if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+            {
+                mfBaseAdv = mfTrailingSpaceWidth;
+            }
+        }
+        mfCachedWidth = nPixelWidth;
+    }
+    else
+    {
+        nPixelWidth = rArgs.mnLayoutWidth;
+        if( nPixelWidth <= 0)
+            return;
+
+        // if the text to be justified has whitespace in it then
+        // - Writer goes crazy with its HalfSpace magic
+        // - CoreText handles spaces specially (in particular at the text end)
+        if( mnTrailingSpaceCount )
+        {
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
+            // don't recreate line layout here, because this can lead to problems
+            // (looks like internal issues inside early CoreText versions)
+            mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
+#else
             if(mfTrailingSpaceWidth <= 0.0)
             {
                 mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
-                nPixelWidth -= rint(mfTrailingSpaceWidth);
+                nPixelWidth -= mfTrailingSpaceWidth;
+            }
+            if(nPixelWidth <= 0)
+            {
+                return;
+            }
+
+            // recreate the CoreText line layout without trailing spaces
+            SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
+            CFRelease( mpCTLine );
+            CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+                                                                      rArgs.mpStr + mnMinCharPos,
+                                                                      mnCharCount - mnTrailingSpaceCount,
+                                                                      kCFAllocatorNull );
+            CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL,
+                                                                       aCFText,
+                                                                       mpTextStyle->GetStyleDict() );
+            mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
+            SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") = " << mpCTLine );
+            CFRelease( pAttrStr );
+            CFRelease( aCFText );
+#endif
+            // in RTL-layouts trailing spaces are leftmost
+            // TODO: use BiDi-algorithm to thoroughly check this assumption
+            if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+            {
+                mfBaseAdv = mfTrailingSpaceWidth;
             }
         }
-        if(nPixelWidth <= 0)
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
+        CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - mfTrailingSpaceWidth );
+#else
+        CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
+        SAL_INFO( "vcl.ct", "CTLineCreateJustifiedLine(" << mpCTLine << ",1.0," << nPixelWidth << ") = " << pNewCTLine );
+#endif
+        if( !pNewCTLine )
         {
+            // CTLineCreateJustifiedLine can and does fail
+            // handle failure by keeping the unjustified layout
+            // TODO: a better solution such as
+            // - forcing glyph overlap
+            // - changing the font size
+            // - changing the CTM matrix
             return;
         }
-        // recreate the CoreText line layout without trailing spaces
         SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
-        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
-                                                                  rArgs.mpStr + mnMinCharPos,
-                                                                  mnCharCount - mnTrailingSpaceCount,
-                                                                  kCFAllocatorNull );
-        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL,
-                                                                   aCFText,
-                                                                   mpTextStyle->GetStyleDict() );
-        mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
-        SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") = " << mpCTLine );
-        CFRelease( pAttrStr );
-        CFRelease( aCFText );
-#endif
-
-        // in RTL-layouts trailing spaces are leftmost
-        // TODO: use BiDi-algorithm to thoroughly check this assumption
-        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        {
-            mfBaseAdv = mfTrailingSpaceWidth;
-        }
-    }
-
+        mpCTLine = pNewCTLine;
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
-    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - mfTrailingSpaceWidth );
+        mfCachedWidth = nPixelWidth;
 #else
-    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
-    SAL_INFO( "vcl.ct", "CTLineCreateJustifiedLine(" << mpCTLine << ",1.0," << nPixelWidth << ") = " << pNewCTLine );
+        mfCachedWidth = nPixelWidth + mfTrailingSpaceWidth;
 #endif
-    if( !pNewCTLine )
-    {
-        // CTLineCreateJustifiedLine can and does fail
-        // handle failure by keeping the unjustified layout
-        // TODO: a better solution such as
-        // - forcing glyph overlap
-        // - changing the font size
-        // - changing the CTM matrix
-        return;
     }
-    SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
-    CFRelease( mpCTLine );
-    mpCTLine = pNewCTLine;
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
-    mfCachedWidth = nPixelWidth;
-#else
-    mfCachedWidth = nPixelWidth + mfTrailingSpaceWidth;
-#endif
 }
 
 // When drawing right aligned text, rounding errors in the position returned by
@@ -377,60 +430,135 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
     CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
 
-    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << context << ")" );
-    // draw the text
-    CTLineDraw( ctline, context );
-
-    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+    /* if we have a m_vRunData that indicate that an ApplyDXArray occured
+     * iow that we want to use DXArray to align glyphs
+     * Otherwise we just use CoreText to display the whole line
+     */
+    boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
+    if(iter != m_vRunData.end())
     {
-        CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
-        CFIndex runCount = CFArrayGetCount(runArray);
-
-        for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
+        for(; iter != m_vRunData.end(); ++iter)
         {
-
-            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
-            CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-
-            CGPoint position;
-            CGSize advance;
-            CFIndex runGlyphIndex = 0;
-            CFIndex stringIndice = 0;
-
-            for (; runGlyphIndex < runGlyphCount; runGlyphIndex++)
+            CTRunRef run = iter->m_pRun;
+            /* if we do not have Ajusted Poistions for a run, just use CoreText to draw it */
+            if(iter->m_pAdjPositions)
             {
-                CFRange glyphRange = CFRangeMake(runGlyphIndex, 1);
-
-                CTRunGetStringIndices( run, glyphRange, &stringIndice );
-                UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
-                if(curChar == ' ')
+                CTFontRef runFont = iter->m_pFont;
+                CGFloat baseSize = CTFontGetSize(runFont);
+                for (CFIndex runGlyphIndex = 0;
+                     runGlyphIndex < CTRunGetGlyphCount(run);
+                     runGlyphIndex++)
                 {
-                    CGFloat ascent;
-                    CGFloat descent;
-                    CGFloat leading;
-                    CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
-                                                             kCTFontAttributeName);
-                    CGFloat baseSize = CTFontGetSize(runFont);
-                    double fWidth = CTRunGetTypographicBounds ( run, glyphRange,
-                                                                &ascent, &descent, &leading);
-                    CTRunGetPositions(run, glyphRange, &position);
-                    CTRunGetAdvances(run, glyphRange, &advance);
-                    CGRect bulletRect = NSMakeRect(aTextPos.x + position.x + advance.width / 4,
-                                                   aTextPos.y + position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+                    CGFontRef cgFont = CTFontCopyGraphicsFont(runFont, NULL);
                     CGContextSaveGState(context);
-                    RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
-                    CGContextSetFillColor( context, bulletColor.AsArray() );
-                    CGContextSetStrokeColor(context, bulletColor.AsArray());
 
-                    CGContextBeginPath(context);
-                    CGContextAddEllipseInRect(context, bulletRect);
-                    CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                    CGContextSetFont(context, cgFont);
+                    CGContextSetFontSize(context, CTFontGetSize(runFont));
+                    CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
+                    CGContextSetTextPosition( context, aTextPos.x, aTextPos.y );
+                    CGContextShowGlyphsAtPositions(context, iter->m_pGlyphs + runGlyphIndex,
+                                                   iter->m_pAdjPositions + runGlyphIndex, 1);
                     CGContextRestoreGState(context);
+                    CFRelease(cgFont);
                 }
+                /* Do we want to show 'space' as 'bullet' */
+                if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+                {
+                    for(int i = 0 ; i < iter->m_nGlyphs; i++)
+                    {
+                        UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString),
+                                                                   iter->m_pStringIndices[i]);
+                        /* is the character associated with the current glyph a space ? */
+                        if(curChar == ' ')
+                        {
+                            /* make a rect that will enclose the bullet we want to draw */
+                            CFRange glyphRange = CFRangeMake(i, 1);
+                            CGFloat ascent;
+                            CGFloat descent;
+                            CGFloat leading;
+                            CTRunGetTypographicBounds ( run, glyphRange,
+                                                        &ascent, &descent, &leading);
+                            CGRect bulletRect = CGRectMake(aTextPos.x + iter->m_pAdjPositions[i].x + iter->m_pAdvances[i].width / 4,
+                                                           aTextPos.y + iter->m_pAdjPositions[i].y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+
+                            /* Draw a bullet filled with the 'special' color for non-displayable characters */
+                            CGContextSaveGState(context);
+                            RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                            CGContextSetFillColor( context, bulletColor.AsArray() );
+                            CGContextSetStrokeColor(context, bulletColor.AsArray());
+                            CGContextBeginPath(context);
+                            CGContextAddEllipseInRect(context, bulletRect);
+                            CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                            CGContextRestoreGState(context);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                CTRunDraw(run, context, CFRangeMake( 0, 0 ));
+                /* Fixme draw bullet */
             }
         }
     }
+    else
+    {
+        SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << context << ")" );
+        // draw the text
+        CTLineDraw( ctline, context );
 
+        if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+        {
+            CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
+            CFIndex runCount = CFArrayGetCount(runArray);
+
+            for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
+            {
+
+                CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
+                CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+
+                CGPoint position;
+                CGSize advance;
+                CFIndex runGlyphIndex = 0;
+                CFIndex stringIndice = 0;
+
+                for (; runGlyphIndex < runGlyphCount; runGlyphIndex++)
+                {
+                    CFRange glyphRange = CFRangeMake(runGlyphIndex, 1);
+
+                    CTRunGetStringIndices( run, glyphRange, &stringIndice );
+                    UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
+                    if(curChar == ' ')
+                    {
+                        CGFloat ascent;
+                        CGFloat descent;
+                        CGFloat leading;
+                        CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
+                                                                            kCTFontAttributeName);
+                        CGFloat baseSize = CTFontGetSize(runFont);
+                        CTRunGetTypographicBounds ( run, glyphRange,
+                                                    &ascent, &descent, &leading);
+
+                        CTRunGetPositions(run, glyphRange, &position);
+                        CTRunGetAdvances(run, glyphRange, &advance);
+                        CGRect bulletRect = NSMakeRect(aTextPos.x + position.x + advance.width / 4,
+                                                   aTextPos.y + position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+                        CGContextSaveGState(context);
+                        RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                        CGContextSetFillColor( context, bulletColor.AsArray() );
+                        CGContextSetStrokeColor(context, bulletColor.AsArray());
+
+                        CGContextBeginPath(context);
+                        CGContextAddEllipseInRect(context, bulletRect);
+                        CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                        CGContextRestoreGState(context);
+                    }
+                }
+            }
+        }
+
+    }
     // restore the original graphic context transformations
     SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << context << ")" );
     CGContextRestoreGState( context );
@@ -591,14 +719,17 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
     if( !pDXArray )
         return nPixWidth;
 
-    // prepare the sub-pixel accurate logical-width array
-    ::std::vector<double> aWidthVector( mnCharCount );
+    for(int i = 0; i < mnCharCount; i++)
+    {
+        pDXArray[i] = 0.0;
+    }
     if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) )
     {
         const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
-        ::std::fill_n(aWidthVector.begin() + (mnCharCount - mnTrailingSpaceCount),
-                      mnTrailingSpaceCount,
-                      fOneWidth);
+        for(int i = mnCharCount - mnTrailingSpaceCount; i < mnCharCount; i++)
+        {
+            pDXArray[i] = fOneWidth;
+        }
     }
 
     // handle each glyph run
@@ -623,20 +754,10 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
         for( int i = 0; i != nGlyphCount; ++i )
         {
             const int nRelIdx = aIndexVec[i];
-            aWidthVector[nRelIdx] += aSizeVec[i].width;
+            pDXArray[nRelIdx] += aSizeVec[i].width;
+            SAL_INFO( "vcl.ct", "Fill DXArray["<< nRelIdx << "]: " << pDXArray[nRelIdx] << " aSizeVer[" << i << "].width :" << aSizeVec[i].width);
         }
     }
-
-    // convert the sub-pixel accurate array into classic pDXArray integers
-    double fWidthSum = 0.0;
-    sal_Int32 nOldDX = 0;
-    for( int i = 0; i < mnCharCount; ++i)
-    {
-        const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
-        pDXArray[i] = nNewDX - nOldDX;
-        nOldDX = nNewDX;
-    }
-
     return nPixWidth;
 }
 
