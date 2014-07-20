@@ -698,7 +698,7 @@ lcl_ExportHints(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     //search for special text attributes - first some ends
     size_t nEndIndex = 0;
-    sal_uInt16 nNextEnd = 0;
+    sal_Int32 nNextEnd = 0;
     while(nEndIndex < pHints->GetEndCount() &&
         (!pHints->GetEnd(nEndIndex)->GetEnd() ||
         nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetEnd()))))
@@ -781,7 +781,7 @@ lcl_ExportHints(
 
     // then some starts
     size_t nStartIndex = 0;
-    sal_uInt16 nNextStart = 0;
+    sal_Int32 nNextStart = 0;
     while(nStartIndex < pHints->GetStartCount() &&
         nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
     {
