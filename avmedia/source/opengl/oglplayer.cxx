@@ -239,6 +239,25 @@ awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::Runtim
     return awt::Size( 480, 360 );
 }
 
+static bool lcl_CheckOpenGLRequirements()
+{
+    float fVersion = OpenGLHelper::getGLVersion();
+    if( fVersion >= 3.3 )
+    {
+        return true;
+    }
+    else if( fVersion >= 3.0 )
+    {
+        return glewIsSupported("GL_ARB_sampler_objects");
+    }
+    else if( fVersion >= 2.1 )
+    {
+        return glewIsSupported("GL_ARB_sampler_objects GL_ARB_framebuffer_object GL_ARB_vertex_array_object");
+    }
+
+    return false;
+}
+
 uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
      throw ( uno::RuntimeException, std::exception )
 {
@@ -261,6 +280,12 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     if( !m_aContext.init(pChildWindow) )
     {
         SAL_WARN("avmedia.opengl", "Context initialization failed");
+        return uno::Reference< media::XPlayerWindow >();
+    }
+
+    if( !lcl_CheckOpenGLRequirements() )
+    {
+        SAL_WARN("avmedia.opengl", "Your platform does not have the minimal OpenGL requiremenets!");
         return uno::Reference< media::XPlayerWindow >();
     }
 
@@ -295,6 +320,12 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     if( !m_aContext.init() )
     {
         SAL_WARN("avmedia.opengl", "Offscreen context initialization failed");
+        return uno::Reference< media::XFrameGrabber >();
+    }
+
+    if( !lcl_CheckOpenGLRequirements() )
+    {
+        SAL_WARN("avmedia.opengl", "Your platform does not have the minimal OpenGL requiremenets!");
         return uno::Reference< media::XFrameGrabber >();
     }
 
