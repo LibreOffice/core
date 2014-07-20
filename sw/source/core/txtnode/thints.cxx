@@ -1229,7 +1229,7 @@ SwTxtAttr* SwTxtNode::InsertItem(
         // N.B.: also check that the hint is actually in the hints array,
         // because hints of certain types may be merged after successful
         // insertion, and thus destroyed!
-        if (!bSuccess || ( SAL_MAX_SIZE == m_pSwpHints->GetPos( pNew ) ))
+        if (!bSuccess || !m_pSwpHints->Contains( pNew ))
         {
             return 0;
         }

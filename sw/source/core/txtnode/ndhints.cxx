@@ -126,7 +126,7 @@ void SwpHintsArray::DeleteAtPos( const size_t nPos )
     (void) done; // unused in NDEBUG
 }
 
-size_t SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
+bool SwpHintsArray::Contains( const SwTxtAttr *pHt ) const
 {
     // DO NOT use find() here!
     // if called from SwTxtNode::InsertItem, pHt has already been deleted,
@@ -135,10 +135,10 @@ size_t SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
     {
         if (m_HintStarts[i] == pHt)
         {
-            return i;
+            return true;
         }
     }
-    return SAL_MAX_SIZE;
+    return false;
 }
 
 #ifdef DBG_UTIL

@@ -1404,7 +1404,7 @@ void lcl_CopyHint(
 
     case RES_TXTATR_TOXMARK :
         if( pOtherDoc && pDest && pDest->GetpSwpHints()
-            && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+            && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
             // Beim Kopieren von TOXMarks(Client) in andere Dokumente
             // muss der Verzeichnis (Modify) ausgetauscht werden
@@ -1416,7 +1416,7 @@ void lcl_CopyHint(
         // Wenn wir es mit einer Zeichenvorlage zu tun haben,
         // muessen wir natuerlich auch die Formate kopieren.
         if( pDest && pDest->GetpSwpHints()
-            && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+            && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
             SwCharFmt* pFmt =
                 static_cast<SwCharFmt*>(pHt->GetCharFmt().GetCharFmt());
@@ -1434,7 +1434,7 @@ void lcl_CopyHint(
             // Wenn wir es mit benutzerdefinierten INet-Zeichenvorlagen
             // zu tun haben, muessen wir natuerlich auch die Formate kopieren.
             if( pOtherDoc && pDest && pDest->GetpSwpHints()
-                && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+                && pDest->GetpSwpHints()->Contains( pNewHt ) )
             {
                 const SwDoc* const pDoc = static_cast<const SwTxtINetFmt*>(pHt)
                     ->GetTxtNode().GetDoc();
