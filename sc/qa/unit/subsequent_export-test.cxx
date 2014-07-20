@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 class ScExportTest : public ScBootstrapFixture, XmlTestTools
 {
 protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx);
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) SAL_OVERRIDE;
 public:
     ScExportTest();
 

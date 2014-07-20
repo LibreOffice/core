@@ -33,7 +33,7 @@ class Chart2ExportTest : public ChartTest, public XmlTestTools
 {
 protected:
 
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx);
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) SAL_OVERRIDE;
 public:
     Chart2ExportTest() : ChartTest() {}
     void test();
