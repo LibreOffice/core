@@ -9,14 +9,15 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/postgresqlsdbc"
+
 #if defined WITH_POSTGRESQL_SDBC
 
 Module gid_Module_Optional_PostgresqlSdbc
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_POSTGRESQLSDBC);
     ParentID = gid_Module_Prg_Base_Bin;
-    Files = (gid_File_Lib_PostgresqlSdbc,
-             gid_File_Lib_PostgresqlSdbcImpl,
+    Files = (auto_postgresqlsdbc_ALL,
              gid_File_PostgresqlSdbc_Ini,
              gid_File_PostgresqlSdbc_Rdb,
              gid_File_PostgresqlSdbc_Xcd);
@@ -24,10 +25,6 @@ Module gid_Module_Optional_PostgresqlSdbc
     Default = YES;
     Styles = ();
 End
-
-STD_LIB_FILE(gid_File_Lib_PostgresqlSdbc, postgresql-sdbc)
-
-STD_LIB_FILE(gid_File_Lib_PostgresqlSdbcImpl, postgresql-sdbc-impl)
 
 File gid_File_PostgresqlSdbc_Ini
     TXT_FILE_BODY;

@@ -24,6 +24,7 @@ $(eval $(call gb_AutoInstall_add_module,onlineupdate,LIBO_LIB_FILE_COMPONENTCOND
 $(eval $(call gb_AutoInstall_add_module,ooo,LIBO_LIB_FILE,LIBO_EXECUTABLE,LIBO_JAR_FILE))
 $(eval $(call gb_AutoInstall_add_module,ooobinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,python))
+$(eval $(call gb_AutoInstall_add_module,postgresqlsdbc,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,pdfimport,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,reportbuilder,LIBO_LIB_FILE,,LIBO_JAR_FILE))
 $(eval $(call gb_AutoInstall_add_module,sdk,,SDK_EXECUTABLE))
