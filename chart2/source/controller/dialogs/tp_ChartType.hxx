@@ -53,7 +53,7 @@ public:
                 ::com::sun::star::chart2::XChartDocument >& xChartModel
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                , bool bDoLiveUpdate, bool bHideDescription = false );
+                , bool bDoLiveUpdate, bool bShowDescription = true );
     virtual ~ChartTypeTabPage();
 
     virtual void        initializePage() SAL_OVERRIDE;

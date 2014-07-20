@@ -678,7 +678,7 @@ IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl)
 ChartTypeTabPage::ChartTypeTabPage(Window* pParent
         , const uno::Reference< XChartDocument >& xChartModel
         , const uno::Reference< uno::XComponentContext >& xContext
-        , bool bDoLiveUpdate, bool bHideDescription)
+        , bool bDoLiveUpdate, bool bShowDescription)
         : OWizardPage(pParent, "tp_ChartType",
             "modules/schart/ui/tp_ChartType.ui")
         , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(this) )
@@ -702,9 +702,9 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
     m_pSubTypeList->set_width_request(aSize.Width());
     m_pSubTypeList->set_height_request(aSize.Height());
 
-    if( bHideDescription )
+    if( bShowDescription )
     {
-        m_pFT_ChooseType->Hide();
+        m_pFT_ChooseType->Show();
     }
     else
     {
@@ -914,6 +914,7 @@ void ChartTypeTabPage::selectMainType()
 
 void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeController )
 {
+    m_pMainTypeList->Show();
     m_pSubTypeList->Show();
 
     bool bShow = rTypeController.shouldShow_3DLookControl();
