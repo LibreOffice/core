@@ -131,6 +131,20 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
+ifneq (,$(filter ANDROID IOS,$(OS)))
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	$(if $(filter $(OS),ANDROID), \
+		lo-bootstrap \
+	) \
+))
+
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	libotouch \
+))
+
+endif
+
 ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	npsoplugin \
@@ -455,14 +469,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	writerfilter \
 ))
 
-ifneq (,$(filter ANDROID IOS,$(OS)))
-
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	libotouch \
-))
-
-endif
-
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	getuid \
 	smoketest \
@@ -591,12 +597,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 			UAccCOM \
 			winaccessibility \
 		) \
-	) \
-))
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	$(if $(filter $(OS),ANDROID), \
-		lo-bootstrap \
 	) \
 ))
 
