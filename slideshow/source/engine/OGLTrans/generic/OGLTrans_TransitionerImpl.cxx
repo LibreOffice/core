@@ -61,6 +61,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/window.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -337,14 +338,8 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bGLXPresent )
 {
     mbGLXPresent = bGLXPresent;
     if ( bGLXPresent ) {
-        const GLubyte* version = glGetString( GL_VERSION );
-        if( version && version[0] ) {
-            mnGLVersion = version[0] - '0';
-            if( version[1] == '.' && version[2] )
-                mnGLVersion += (version[2] - '0')/10.0;
-        } else
-            mnGLVersion = 1.0;
-        SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << mnGLVersion << "" );
+        mnGLVersion = OpenGLHelper::getGLVersion();
+        SAL_INFO("slideshow.opengl", "GL version: " << mnGLVersion << "" );
 
         const GLubyte* vendor = glGetString( GL_VENDOR );
         mbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );

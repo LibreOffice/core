@@ -305,5 +305,20 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight,
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+float OpenGLHelper::getGLVersion()
+{
+    float fVersion = 1.0;
+    const GLubyte* aVersion = glGetString( GL_VERSION );
+    if( aVersion && aVersion[0] )
+    {
+        fVersion = aVersion[0] - '0';
+        if( aVersion[1] == '.' && aVersion[2] )
+        {
+            fVersion += (aVersion[2] - '0')/10.0;
+        }
+    }
+    return fVersion;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

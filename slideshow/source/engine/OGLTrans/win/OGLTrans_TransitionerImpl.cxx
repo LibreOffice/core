@@ -56,6 +56,8 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include <boost/noncopyable.hpp>
 
 #include <GL/gl.h>
@@ -314,14 +316,8 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
         instance = new OGLTransitionerImpl( NULL );
         if( instance->initWindowFromSlideShowView( xView ) ) {
 
-            const GLubyte* version = glGetString( GL_VERSION );
-            if( version && version[0] ) {
-                cnGLVersion = version[0] - '0';
-                if( version[1] == '.' && version[2] )
-                    cnGLVersion += (version[2] - '0')/10.0;
-            } else
-                cnGLVersion = 1.0;
-            OSL_TRACE("GL version: %s parsed: %f", version, cnGLVersion );
+            cnGLVersion = OpenGLHelper::getGLVersion();
+            OSL_TRACE("GL version: %f", cnGLVersion );
 
             const GLubyte* vendor = glGetString( GL_VENDOR );
             cbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
