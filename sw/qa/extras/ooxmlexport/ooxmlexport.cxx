@@ -2069,6 +2069,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
     // crashtest
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo58194, "fdo58194.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "firstLine", "425");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
