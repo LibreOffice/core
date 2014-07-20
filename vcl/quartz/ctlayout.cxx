@@ -353,7 +353,7 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
     // short circuit if there is nothing to do
     if( (mnCharCount <= 0) || !rAquaGraphics.CheckContext() )
         return true;
-
+#if 0 /* temporarely revert to the 'old way' */
     if (flags & DRAWTEXT_F_OUTLINE)
     {
         CFMutableDictionaryRef styledict = CFDictionaryCreateMutableCopy(
@@ -384,6 +384,7 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
         return true;
     }
     else
+#endif
     {
         return SalLayout::DrawTextSpecial(rGraphics, flags);
     }
