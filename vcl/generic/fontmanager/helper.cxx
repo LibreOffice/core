@@ -248,12 +248,12 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
     bool bSuccess = true;
     bool bEof = false;
     unsigned char buffer[256];
-    sal_uInt64 nRead;
-    sal_uInt64 nOrgPos = 0;
-    rInFile.getPos( nOrgPos );
+    sal_uInt64 nSize(0);
+    rInFile.getSize(nSize);
 
     while( bSuccess && ! bEof )
     {
+        sal_uInt64 nRead;
         // read leading bytes
         bEof = ((0 != rInFile.read( buffer, 6, nRead)) || (nRead != 6));
         if( bEof )
@@ -285,7 +285,12 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
         }
         else if( nType == 1 || nType == 2 )
         {
-            boost::scoped_array<unsigned char> pBuffer(new unsigned char[ nBytesToRead+1 ]);
+            sal_uInt64 nOrgPos(0);
+            rInFile.getPos(nOrgPos);
+            nBytesToRead = std::min<sal_uInt64>(nBytesToRead, nSize - nOrgPos);
+
+            boost::scoped_array<unsigned char> pBuffer(new unsigned char[nBytesToRead+1]);
+            pBuffer[nBytesToRead] = 0;
 
             if( ! rInFile.read( pBuffer.get(), nBytesToRead, nRead ) && nRead == nBytesToRead )
             {
