@@ -446,9 +446,13 @@ uno::Reference< drawing::XShape >
     return pText;
 }
 
-void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
+void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape, bool bInitOpenGL)
 {
     dummy::DummyChart& rChart = dynamic_cast<dummy::DummyChart&>(*xRootShape.get());
+    if(bInitOpenGL)
+    {
+        rChart.invalidateInit();
+    }
     rChart.render();
 }
 

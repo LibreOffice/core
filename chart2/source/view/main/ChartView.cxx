@@ -166,6 +166,7 @@ public:
     virtual void scroll(long nDelta) SAL_OVERRIDE;
     virtual void contextDestroyed() SAL_OVERRIDE;
 
+    const OpenGLWindow* getOpenGLWindow() const;
     void updateOpenGLWindow();
 private:
     ChartView* mpView;
@@ -206,6 +207,11 @@ void GL2DRenderer::scroll(long )
 void GL2DRenderer::contextDestroyed()
 {
     mbContextDestroyed = true;
+}
+
+const OpenGLWindow* GL2DRenderer::getOpenGLWindow() const
+{
+    return mpWindow;
 }
 
 void GL2DRenderer::updateOpenGLWindow()
@@ -2765,7 +2771,7 @@ void ChartView::render()
     bool bRender = pShapeFactory->preRender(pWindow);
     if(bRender)
     {
-        pShapeFactory->render(mxRootShape);
+        pShapeFactory->render(mxRootShape, pWindow != mp2DRenderer->getOpenGLWindow());
         pShapeFactory->postRender(pWindow);
     }
 }
