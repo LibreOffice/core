@@ -543,7 +543,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
 
                         CTRunGetPositions(run, glyphRange, &position);
                         CTRunGetAdvances(run, glyphRange, &advance);
-                        CGRect bulletRect = NSMakeRect(aTextPos.x + position.x + advance.width / 4,
+                        CGRect bulletRect = CGRectMake(aTextPos.x + position.x + advance.width / 4,
                                                    aTextPos.y + position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
                         CGContextSaveGState(context);
                         RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
