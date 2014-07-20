@@ -519,7 +519,7 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 
         if(rMapper.is())
         {
-            for(::std::vector< XMLPropertyState >::const_iterator a = maProperties.begin(); a != maProperties.end(); a++)
+            for(::std::vector< XMLPropertyState >::const_iterator a = maProperties.begin(); a != maProperties.end(); ++a)
             {
                 if(a->mnIndex != -1)
                 {
@@ -567,7 +567,7 @@ bool XMLPropStyleContext::deactivateOldFillStyleDefinitions(
 
         if(rMapper.is())
         {
-            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); a++)
+            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); ++a)
             {
                 if(a->mnIndex != -1)
                 {
@@ -603,7 +603,7 @@ bool XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
             static OUString s_FillBitmapName(RTL_CONSTASCII_USTRINGPARAM("FillBitmapName"));
             static OUString s_FillTransparenceGradientName(RTL_CONSTASCII_USTRINGPARAM("FillTransparenceGradientName"));
 
-            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); a++)
+            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); ++a)
             {
                 if(a->mnIndex != -1)
                 {

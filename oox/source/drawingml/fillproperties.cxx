@@ -402,7 +402,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                     bSymmetric = false;
                                 else
                                 {
-                                    aItA++;
+                                    ++aItA;
                                     aItZ = boost::prior(aItZ);
                                 }
                             }
@@ -430,7 +430,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                  ", number of stops: " << aGradientStops.size());
                         for (GradientFillProperties::GradientStopMap::iterator p(aGradientStops.begin());
                              p != aGradientStops.end();
-                             p++)
+                             ++p)
                             SAL_INFO("oox.drawingml.gradient", "  " << std::distance(aGradientStops.begin(), p) << ": " <<
                                      p->first << ": " <<
                                      std::hex << p->second.getColor( rGraphicHelper, nPhClr ) << std::dec <<
@@ -443,7 +443,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         GradientFillProperties::GradientStopMap::iterator aIt(aGradientStops.begin());
                         double nWidestWidth = -1;
                         GradientFillProperties::GradientStopMap::iterator aWidestSegmentStart;
-                        aIt++;
+                        ++aIt;
                         while( aIt != aGradientStops.end() )
                         {
                             if( aIt->first - boost::prior(aIt)->first > nWidestWidth )
@@ -451,7 +451,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 nWidestWidth = aIt->first - boost::prior(aIt)->first;
                                 aWidestSegmentStart = boost::prior(aIt);
                             }
-                            aIt++;
+                            ++aIt;
                         }
                         assert( nWidestWidth > 0 );
 
@@ -515,7 +515,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                     nWidestWidth = aIt->first - boost::prior(aIt)->first;
                                     aWidestSegmentStart = boost::prior(aIt);
                                 }
-                                aIt++;
+                                ++aIt;
                             }
                         }
                         SAL_INFO("oox.drawingml.gradient", "widest segment start: " << aWidestSegmentStart->first << ", border: " << nBorder);
