@@ -85,7 +85,7 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
     {
         // TODO: This can be optimized, if we make use of the fact that the TxtAttrs
         // are sorted by starting position. We would need to remember two indices, however.
-        for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
+        for ( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() )
@@ -123,8 +123,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        sal_uInt16 i;
-        for( i = 0; i < pTxtAttrs->Count(); i++ )
+        for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( ( pHt->HasDummyChar()

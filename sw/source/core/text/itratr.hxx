@@ -50,7 +50,9 @@ private:
     OutputDevice *pLastOut;
     MSHORT nChgCnt;
     SwRedlineItr *pRedln;
-    sal_Int32 nStartIndex, nEndIndex, nPos;
+    size_t nStartIndex;
+    size_t nEndIndex;
+    sal_Int32 nPos;
     sal_uInt8 nPropFont;
     const void* aMagicNo[ SW_SCRIPTS ];
     MSHORT aFntIdx[ SW_SCRIPTS ];

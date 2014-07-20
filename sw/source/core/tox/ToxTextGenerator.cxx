@@ -301,7 +301,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         return result;
     }
     const SwpHints& hints = pSrc->GetSwpHints();
-    for (sal_uInt16 i = 0; i < hints.Count(); ++i) {
+    for (size_t i = 0; i < hints.Count(); ++i) {
         const SwTxtAttr* hint = hints[i];
         boost::shared_ptr<SfxItemSet> attributesToClone = CollectAttributesForTox(*hint, pool);
         if (attributesToClone->Count() <= 0) {

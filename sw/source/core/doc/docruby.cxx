@@ -205,14 +205,14 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
 
     // search the start
     // look where a ruby attribute starts
-    sal_uInt16 nHtIdx = USHRT_MAX;
     const SwpHints* pHts = pTNd->GetpSwpHints();
     const SwTxtAttr* pAttr = 0;
     if( pHts )
     {
-        const SwTxtAttr* pHt;
-        for( nHtIdx = 0; nHtIdx < pHts->Count(); ++nHtIdx )
-            if( RES_TXTATR_CJK_RUBY == ( pHt = (*pHts)[ nHtIdx ])->Which() &&
+        for( size_t nHtIdx = 0; nHtIdx < pHts->Count(); ++nHtIdx )
+        {
+            const SwTxtAttr* pHt = (*pHts)[ nHtIdx ];
+            if( RES_TXTATR_CJK_RUBY == pHt->Which() &&
                 *pHt->GetAnyEnd() > nStart )
             {
                 if( pHt->GetStart() < nEnd )
@@ -226,6 +226,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
                 }
                 break;
             }
+        }
     }
 
     if( !bHasMark && nStart && ( !pAttr || nStart != pAttr->GetStart()) )

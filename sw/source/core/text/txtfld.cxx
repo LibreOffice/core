@@ -413,7 +413,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
         return;
     if( SwpHints* hints = node->GetpSwpHints())
     {
-        for( int i = 0; i < hints->Count(); ++i )
+        for( size_t i = 0; i < hints->Count(); ++i )
         {
             SwTxtAttr* hint = hints->GetTextHint( i );
             // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character

@@ -89,7 +89,7 @@ void SwTxtFrm::CalcFtnFlag()
     if( !pHints )
         return;
 
-    const sal_uInt16 nSize = pHints->Count();
+    const size_t nSize = pHints->Count();
 
 #ifdef DBG_UTIL
     const sal_Int32 nEnd = nStop != COMPLETE_STRING ? nStop
@@ -98,7 +98,7 @@ void SwTxtFrm::CalcFtnFlag()
     const sal_Int32 nEnd = GetFollow() ? GetFollow()->GetOfst() : COMPLETE_STRING;
 #endif
 
-    for ( sal_uInt16 i = 0; i < nSize; ++i )
+    for ( size_t i = 0; i < nSize; ++i )
     {
         const SwTxtAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
@@ -391,7 +391,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
         return;
 
     bool bRollBack = nLen != COMPLETE_STRING;
-    sal_uInt16 nSize = pHints->Count();
+    const size_t nSize = pHints->Count();
     sal_Int32 nEnd;
     SwTxtFrm* pSource;
     if( bRollBack )
@@ -415,7 +415,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
         SwFtnBossFrm *pEndBoss = 0;
         bool bFtnEndDoc
             = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos;
-        for ( sal_uInt16 i = nSize; i; )
+        for ( size_t i = nSize; i; )
         {
             SwTxtAttr *pHt = pHints->GetTextHint(--i);
             if ( RES_TXTATR_FTN != pHt->Which() )

@@ -483,12 +483,11 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 
         if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
         {
-            const sal_uInt16 nSize = pTxtNd->GetpSwpHints()->Count();
-            sal_uInt16 n;
+            const size_t nSize = pTxtNd->GetpSwpHints()->Count();
             sal_Int32 nAttrStart;
             const sal_Int32* pAttrEnd;
 
-            for( n = 0; n < nSize; ++n )
+            for( size_t n = 0; n < nSize; ++n )
             {
                 SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = pHt->GetStart();

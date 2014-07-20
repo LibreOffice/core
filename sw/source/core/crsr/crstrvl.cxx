@@ -1515,7 +1515,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     POOLATTR_END - 1 );
                 if( pTxtNd->GetpSwpHints() )
                 {
-                    for( sal_uInt16 i = 0; i < pTxtNd->GetSwpHints().Count(); ++i )
+                    for( size_t i = 0; i < pTxtNd->GetSwpHints().Count(); ++i )
                     {
                         const SwTxtAttr* pHt = pTxtNd->GetSwpHints()[i];
                         const sal_Int32 nAttrStart = pHt->GetStart();

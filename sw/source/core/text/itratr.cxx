@@ -140,7 +140,9 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     aAttrHandler.Reset();
     aAttrHandler.ResetFont( *pFnt );
 
-    nStartIndex = nEndIndex = nPos = nChgCnt = 0;
+    nStartIndex = 0;
+    nEndIndex = 0;
+    nPos = nChgCnt = 0;
     if( nPropFont )
         pFnt->SetProportion( nPropFont );
     if( pRedln )
@@ -242,7 +244,9 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
 
             if( nPropFont )
                 pFnt->SetProportion( nPropFont );
-            nStartIndex = nEndIndex = nPos = 0;
+            nStartIndex = 0;
+            nEndIndex = 0;
+            nPos = 0;
             nChgCnt = 0;
 
             // Attention!
@@ -275,7 +279,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
     if( pHints )
     {
         // are there attribute starts left?
-        for (sal_uInt16 i = nStartIndex; i < pHints->GetStartCount(); ++i)
+        for (size_t i = nStartIndex; i < pHints->GetStartCount(); ++i)
         {
             SwTxtAttr *const pAttr(pHints->GetStart(i));
             if (!pAttr->IsFormatIgnoreStart())
@@ -285,7 +289,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
             }
         }
         // are there attribute ends left?
-        for (sal_uInt16 i = nEndIndex; i < pHints->GetEndCount(); ++i)
+        for (size_t i = nEndIndex; i < pHints->GetEndCount(); ++i)
         {
             SwTxtAttr *const pAttr(pHints->GetEnd(i));
             if (!pAttr->IsFormatIgnoreEnd())

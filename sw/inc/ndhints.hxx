@@ -94,30 +94,30 @@ protected:
     //FIXME: why are the non-const methods public?
 public:
     void Insert( const SwTxtAttr *pHt );
-    void DeleteAtPos( const sal_uInt16 nPosInStart );
+    void DeleteAtPos( const size_t nPosInStart );
     void Resort();
-    SwTxtAttr * Cut( const sal_uInt16 nPosInStart );
+    SwTxtAttr * Cut( const size_t nPosInStart );
 
-    inline const SwTxtAttr * GetStart( const sal_uInt16 nPos ) const
+    inline const SwTxtAttr * GetStart( const size_t nPos ) const
         { return m_HintStarts[nPos]; }
-    inline const SwTxtAttr * GetEnd  ( const sal_uInt16 nPos ) const
+    inline const SwTxtAttr * GetEnd( const size_t nPos ) const
         { return m_HintEnds  [nPos]; }
-    inline       SwTxtAttr * GetStart( const sal_uInt16 nPos )
+    inline       SwTxtAttr * GetStart( const size_t nPos )
         { return m_HintStarts[nPos]; }
-    inline       SwTxtAttr * GetEnd  ( const sal_uInt16 nPos )
+    inline       SwTxtAttr * GetEnd( const size_t nPos )
         { return m_HintEnds  [nPos]; }
 
-    inline sal_uInt16 GetEndCount()   const { return m_HintEnds  .size(); }
-    inline sal_uInt16 GetStartCount() const { return m_HintStarts.size(); }
+    inline size_t GetEndCount()   const { return m_HintEnds.size(); }
+    inline size_t GetStartCount() const { return m_HintStarts.size(); }
 
-    inline sal_uInt16 GetStartOf( const SwTxtAttr *pHt ) const;
-    sal_uInt16 GetPos( const SwTxtAttr *pHt ) const;
+    inline size_t GetStartOf( const SwTxtAttr *pHt ) const;
+    size_t GetPos( const SwTxtAttr *pHt ) const;
 
-    inline SwTxtAttr * GetTextHint( const sal_uInt16 nIdx )
+    inline SwTxtAttr * GetTextHint( const size_t nIdx )
         { return GetStart(nIdx); }
-    inline const SwTxtAttr * operator[]( const sal_uInt16 nIdx ) const
+    inline const SwTxtAttr * operator[]( const size_t nIdx ) const
         { return m_HintStarts[nIdx]; }
-    inline sal_uInt16 Count() const { return m_HintStarts.size(); }
+    inline size_t Count() const { return m_HintStarts.size(); }
 
 #ifdef DBG_UTIL
     bool Check(bool) const;
@@ -150,7 +150,7 @@ private:
        Because the TextNode also guarantees removal of the Character for
        attributes without an end. */
     friend class SwTxtNode;
-    void DeleteAtPos( const sal_uInt16 nPos );
+    void DeleteAtPos( const size_t nPos );
     /// Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
@@ -200,18 +200,18 @@ public:
 
 /// Inline Implementations
 
-inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
+inline size_t SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
     SwpHtStart::const_iterator const it =
         m_HintStarts.find(const_cast<SwTxtAttr*>(pHt));
     if ( it == m_HintStarts.end() )
     {
-        return USHRT_MAX;
+        return SAL_MAX_SIZE;
     }
     return it - m_HintStarts.begin();
 }
 
-inline SwTxtAttr *SwpHintsArray::Cut( const sal_uInt16 nPosInStart )
+inline SwTxtAttr *SwpHintsArray::Cut( const size_t nPosInStart )
 {
     SwTxtAttr *pHt = GetTextHint(nPosInStart);
     DeleteAtPos( nPosInStart );

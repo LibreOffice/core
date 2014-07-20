@@ -1251,7 +1251,7 @@ void SwHistory::CopyAttr(
     // copy all attributes of the TextNode in the area from nStart to nEnd
     SwTxtAttr* pHt;
     const sal_Int32 * pEndIdx;
-    for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
+    for( size_t n = 0; n < pHts->Count(); ++n )
     {
         // nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);

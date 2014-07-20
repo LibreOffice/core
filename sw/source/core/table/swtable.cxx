@@ -2468,7 +2468,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( bool bCheckAttr ) const
                 if( pHts )
                 {
                     sal_Int32 nNextSetField = 0;
-                    for( sal_uInt16 n = 0; n < pHts->Count(); ++n )
+                    for( size_t n = 0; n < pHts->Count(); ++n )
                     {
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
                         if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() )

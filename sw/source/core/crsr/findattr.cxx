@@ -706,7 +706,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
     const SwTxtAttr* pAttr;
-    sal_uInt16 nPos = 0;
+    size_t nPos = 0;
 
     // if everything is already there then check with which it will be ended
     if( rCmpArr.Found() )
@@ -780,7 +780,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
     const SwTxtAttr* pAttr;
-    sal_uInt16 nPos = rHtArr.Count();
+    size_t nPos = rHtArr.Count();
     sal_Int32 nSttPos;
 
     // if everything is already there then check with which it will be ended

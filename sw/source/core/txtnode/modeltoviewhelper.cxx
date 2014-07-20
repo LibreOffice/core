@@ -128,7 +128,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
         //first the normal fields, get their position in the node and what the text they expand
         //to is
         const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
-        for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
+        for ( size_t i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
         {
             const SwTxtAttr* pAttr = (*pSwpHints2)[i];
             if (pAttr->HasDummyChar())

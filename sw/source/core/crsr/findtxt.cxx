@@ -54,7 +54,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 
     const SwpHints *pHts = rNd.GetpSwpHints();
 
-    sal_uInt16 n = 0;
+    size_t n = 0;
     sal_Int32 nSoftHyphen = nStart;
     sal_Int32 nHintStart = -1;
     bool bNewHint       = true;
@@ -182,12 +182,12 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 }
 
 // skip all non SwPostIts inside the array
-sal_Int32 GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
+size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
 {
-    sal_Int32 aIndex = 0;
+    size_t aIndex = 0;
     while (aCount)
     {
-        for (sal_Int32 i = 0; i < pHts->Count(); i++ )
+        for (size_t i = 0; i < pHts->Count(); ++i )
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
@@ -200,7 +200,7 @@ sal_Int32 GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
         }
     }
     // throw away all following non postits
-    for( sal_Int32 i = aIndex; i < pHts->Count(); i++ )
+    for( size_t i = aIndex; i < pHts->Count(); ++i )
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
         if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION )
@@ -264,7 +264,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     std::swap(nStart, nEnd);
                 }
 
-                for( sal_Int32 i = 0; i < pHts->Count(); i++ )
+                for( size_t i = 0; i < pHts->Count(); ++i )
                 {
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
                     if ( pTxtAttr->Which()==RES_TXTATR_ANNOTATION )

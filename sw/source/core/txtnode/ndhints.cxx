@@ -113,7 +113,7 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
     m_HintEnds  .insert( const_cast<SwTxtAttr*>(pHt) );
 }
 
-void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
+void SwpHintsArray::DeleteAtPos( const size_t nPos )
 {
     // optimization: nPos is the position in the Starts array
     SwTxtAttr *pHt = m_HintStarts[ nPos ];
@@ -126,7 +126,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
     (void) done; // unused in NDEBUG
 }
 
-sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
+size_t SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
 {
     // DO NOT use find() here!
     // if called from SwTxtNode::InsertItem, pHt has already been deleted,
@@ -138,7 +138,7 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
             return i;
         }
     }
-    return USHRT_MAX;
+    return SAL_MAX_SIZE;
 }
 
 #ifdef DBG_UTIL
@@ -164,7 +164,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
     std::set<SwTxtAttr const*> RsidOnlyAutoFmts;
     if (bPortionsMerged)
     {
-        for (sal_uInt16 i = 0; i < Count(); ++i)
+        for (size_t i = 0; i < Count(); ++i)
         {
             SwTxtAttr const*const pHint(m_HintStarts[i]);
             if (RES_TXTATR_AUTOFMT == pHint->Which())
@@ -179,7 +179,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         }
     }
 
-    for( sal_uInt16 i = 0; i < Count(); ++i )
+    for( size_t i = 0; i < Count(); ++i )
     {
         // --- Start-Kontrolle ---
 
@@ -291,7 +291,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 if (bNeedContinuation || bForbidContinuation)
                 {
                     bool bFound(false);
-                    for (sal_uInt16 j = i + 1; j < Count(); ++j)
+                    for (size_t j = i + 1; j < Count(); ++j)
                     {
                         SwTxtAttr *const pOther(m_HintStarts[j]);
                         if (pOther->GetStart() > *pHt->End())
@@ -337,7 +337,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // 9) nesting portion check
         if (pHtThis->IsNesting())
         {
-            for ( sal_uInt16 j = 0; j < Count(); ++j )
+            for ( size_t j = 0; j < Count(); ++j )
             {
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if ( pOther->IsNesting() &&  (i != j) )

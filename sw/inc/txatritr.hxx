@@ -54,8 +54,9 @@ class SwTxtAttrIterator
     std::deque<const SwTxtAttr*> aStack;
     const SwTxtNode& rTxtNd;
     const SfxPoolItem *pParaItem, *pCurItem;
+    size_t nAttrPos;
     sal_Int32 nChgPos;
-    sal_uInt16 nAttrPos, nWhichId;
+    sal_uInt16 nWhichId;
     bool bIsUseGetWhichOfScript;
 
     void AddToStack( const SwTxtAttr& rAttr );

@@ -1298,9 +1298,11 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             0 != ( pHts = pTNd->GetpSwpHints() ))
         {
             // search for a sequence field:
-            const SfxPoolItem* pItem;
-            for( sal_uInt16 n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
-                if( RES_TXTATR_FIELD == ( pItem = &(*pHts)[ n ]->GetAttr())->Which()
+            const size_t nEnd = pHts->Count();
+            for( size_t n = 0; n < nEnd; ++n )
+            {
+                const SfxPoolItem* pItem = &(*pHts)[ n ]->GetAttr();
+                if( RES_TXTATR_FIELD == pItem->Which()
                     && TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
                 {
                     // sequence field found
@@ -1324,6 +1326,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
                     pFmt->GetDoc()->SetAttr( aFrmSz, *pFmt );
                     break;
                 }
+            }
         }
 
         // set the new Size at the fly themself

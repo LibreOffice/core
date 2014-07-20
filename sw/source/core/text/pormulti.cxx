@@ -857,11 +857,10 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     const SwTxtAttr *pRuby = NULL;
     bool bTwo = false;
     bool bRot = false;
-    sal_uInt16 n2Lines = USHRT_MAX;
-    sal_uInt16 nRotate = USHRT_MAX;
-    sal_uInt16 nCount = pHints ? pHints->Count() : 0;
-    sal_uInt16 i;
-    for( i = 0; i < nCount; ++i )
+    size_t n2Lines = SAL_MAX_SIZE;
+    size_t nRotate = SAL_MAX_SIZE;
+    const size_t nCount = pHints ? pHints->Count() : 0;
+    for( size_t i = 0; i < nCount; ++i )
     {
         const SwTxtAttr *pTmp = (*pHints)[i];
         sal_Int32 nStart = pTmp->GetStart();
@@ -938,7 +937,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
 
         // n2Lines is the index of the last 2-line-attribute, which contains
         // the actual position.
-        i = 0;
+
         // At this moment we know that at position rPos the "winner"-attribute
         // causes a 2-line-portion. The end of the attribute is the end of the
         // portion, if there's no interrupting attribute.
@@ -953,9 +952,9 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         // In the following loop rPos is the critical position and it will be
         // evaluated, if at rPos starts a interrupting or a maintaining
         // continuity attribute.
-        while( i < nCount )
+        for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTxtAttr *pTmp = (*pHints)[i++];
+            const SwTxtAttr *pTmp = (*pHints)[i];
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
             if( rPos < pTmp->GetStart() )
@@ -1029,13 +1028,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         // aEnd-stack, which could interrupts the winning rotation attribute.
         bool bOn = pItem;
         aEnd.push_front( GetTxt().getLength() );
-        // n2Lines is the index of the last 2-line-attribute, which contains
-        // the actual position.
-        i = 0;
+
         sal_Int32 n2Start = rPos;
-        while( i < nCount )
+        for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTxtAttr *pTmp = (*pHints)[i++];
+            const SwTxtAttr *pTmp = (*pHints)[i];
             if( *pTmp->GetAnyEnd() <= n2Start )
                 continue;
             if( n2Start < pTmp->GetStart() )
@@ -1105,10 +1102,9 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             pRet->pAttr = NULL;
             aEnd.push_front( GetTxt().getLength() );
         }
-        i = 0;
-        while( i < nCount )
+        for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTxtAttr *pTmp = (*pHints)[i++];
+            const SwTxtAttr *pTmp = (*pHints)[i];
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
             if( rPos < pTmp->GetStart() )

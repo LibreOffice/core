@@ -494,7 +494,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     if( HasHints() )
     {
-        for ( MSHORT nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
+        for ( size_t nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
         {
             SwTxtAttr* const pTxtAttr = pHints->GetStart( nTmp );
 

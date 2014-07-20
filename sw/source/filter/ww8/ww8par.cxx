@@ -5267,7 +5267,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                 if ( pTxtNode )
                 {
                     const SwpHints* pHints = pTxtNode->GetpSwpHints();
-                    for( sal_uInt16 nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
+                    for( size_t nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
                         const SwTxtAttr *pHt = (*pHints)[nHintPos];
                         const sal_Int32 st = pHt->GetStart();

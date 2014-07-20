@@ -612,7 +612,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         {
             SwFtnBossFrm *pFtnBoss = 0;
             SwFtnBossFrm *pEndBoss = 0;
-            for ( sal_uInt16 i = 0; i < pHints->Count(); ++i )
+            for ( size_t i = 0; i < pHints->Count(); ++i )
             {
                 const SwTxtAttr *pHt = (*pHints)[i];
                 if( RES_TXTATR_FTN==pHt->Which() && pHt->GetStart()>=nStart )
@@ -705,7 +705,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
         {
             SwFtnBossFrm *pFtnBoss = 0;
             SwFtnBossFrm *pEndBoss = 0;
-            for ( sal_uInt16 i = 0; i < pHints->Count(); ++i )
+            for ( size_t i = 0; i < pHints->Count(); ++i )
             {
                 const SwTxtAttr *pHt = (*pHints)[i];
                 if( RES_TXTATR_FTN==pHt->Which() && pHt->GetStart()>=nTxtPos )

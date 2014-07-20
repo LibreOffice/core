@@ -2170,8 +2170,9 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
                     // update chapter fields
                     b = true;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
-                    for( sal_uInt16 n = 0, nEnd = pTNd->GetSwpHints().Count();
-                            n < nEnd; ++n )
+                {
+                    const size_t nEnd = pTNd->GetSwpHints().Count();
+                    for( size_t n = 0 ; n < nEnd; ++n )
                     {
                         const SwTxtAttr* pAttr = pTNd->GetSwpHints()[ n ];
                         if ( pAttr->Which() == RES_TXTATR_FIELD )
@@ -2180,6 +2181,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
                             break;
                         }
                     }
+                }
 
                 if( b )
                     break;

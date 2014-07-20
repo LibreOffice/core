@@ -712,7 +712,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     {
         writer.startElement("hints");
         SwpHints& rHints = GetSwpHints();
-        for (sal_uInt16 i = 0; i < rHints.Count(); ++i)
+        for (size_t i = 0; i < rHints.Count(); ++i)
         {
             writer.startElement("hint");
             SwTxtAttr* pHint = rHints.GetTextHint(i);

@@ -870,9 +870,9 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
         return 0;
 
     sal_uInt16 nAttrs = 0;
-    sal_uInt16 nCntAttr = pTxtNd->GetSwpHints().Count();
+    const size_t nCntAttr = pTxtNd->GetSwpHints().Count();
     sal_Int32 nOldPos = 0;
-    for( sal_uInt16 i=0; i<nCntAttr; i++ )
+    for( size_t i=0; i<nCntAttr; ++i )
     {
         const SwTxtAttr *pHt = pTxtNd->GetSwpHints()[i];
         if( !pHt->End() )
@@ -892,6 +892,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
             OutNewLine();
             OutHTML_SwFmtFld( *this, pHt->GetAttr() );
             nOldPos = nPos;
+            OSL_ENSURE( nAttrs<SAL_MAX_UINT16, "Too many attributes" );
             nAttrs++;
         }
     }

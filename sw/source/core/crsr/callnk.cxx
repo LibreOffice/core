@@ -163,7 +163,7 @@ SwCallLink::~SwCallLink()
             {
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
 
-                for( sal_uInt16 n = 0; n < rHts.Count(); n++ )
+                for( size_t n = 0; n < rHts.Count(); ++n )
                 {
                     const SwTxtAttr* pHt = rHts[ n ];
                     const sal_Int32 *pEnd = pHt->End();

@@ -310,7 +310,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
 // can be optimized if we consider that the TxtAttrs are sorted by start position.
 // but then we'd have to save 2 indices
-        for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
+        for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             sal_Int32 nPos = pHt->GetStart();    // first Attr characters
@@ -417,7 +417,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     sw::PoolItems aRangeItems;
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
-        for( sal_Int32 i = 0; i < pTxtAttrs->Count(); ++i )
+        for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const sal_Int32* pEnd = pHt->End();
@@ -613,7 +613,7 @@ bool SwWW8AttrIter::IsTxtAttr( sal_Int32 nSwPos )
     // search for attrs with dummy character or content
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
-        for (sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i)
+        for (size_t i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( ( pHt->HasDummyChar() || pHt->HasContent() )
@@ -670,7 +670,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
     if (pTxtAttrs && !m_rExport.m_aCurrentCharPropStarts.empty())
     {
         const sal_Int32 nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
-        for (sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i)
+        for (size_t i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const SfxPoolItem* pItem = &pHt->GetAttr();
@@ -1198,7 +1198,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
     {
         m_rExport.m_aCurrentCharPropStarts.push( nPos );
         const sal_Int32* pEnd;
-        for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i )
+        for ( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const SfxPoolItem* pItem = &pHt->GetAttr();
@@ -2661,7 +2661,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     const SfxItemSet* sfxItemSet = NULL;
     if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
     {
-        for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
+        for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const sal_Int32 startPos = pHt->GetStart();    // first Attr characters
@@ -2832,7 +2832,7 @@ void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
 
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
-        for( sal_uInt16 n=0; n < pTxtAttrs->Count(); ++n )
+        for( size_t n=0; n < pTxtAttrs->Count(); ++n )
         {
             const SwTxtAttr* pAttr = (*pTxtAttrs)[ n ];
             if( RES_TXTATR_FLYCNT == pAttr->Which() )

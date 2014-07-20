@@ -436,9 +436,9 @@ void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const sal_uInt16 nSize = pHints->Count();
+        const size_t nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for ( sal_uInt16 i = 0; i < nSize; ++i )
+        for ( size_t i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -1562,28 +1562,26 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const sal_uInt16 nSize = pHints->Count();
+                const size_t nSize = pHints->Count();
                 const sal_Int32 nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : COMPLETE_STRING;
-                for ( sal_uInt16 i = 0; i < nSize; ++i )
+                for ( size_t i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const sal_Int32 nStart = pHt->GetStart();
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
-                            i = nSize;          // induce end of the loop
-                        else
-                        {
+                            break;
+
                 // 4029: wenn wir zurueckfliessen und eine Ftn besitzen, so
                 // fliesst die Ftn in jedem Fall auch mit. Damit sie nicht im
                 // Weg steht, schicken wir uns ein ADJUST_FRM.
                 // pVoid != 0 bedeutet MoveBwd()
-                            const MSHORT nWhich = pHt->Which();
-                            if( RES_TXTATR_FIELD == nWhich ||
-                                (HasFtn() && pVoid && RES_TXTATR_FTN == nWhich))
-                            InvalidateRange( SwCharRange( nStart, 1 ), 1 );
-                        }
+                        const MSHORT nWhich = pHt->Which();
+                        if( RES_TXTATR_FIELD == nWhich ||
+                            (HasFtn() && pVoid && RES_TXTATR_FTN == nWhich))
+                        InvalidateRange( SwCharRange( nStart, 1 ), 1 );
                     }
                 }
             }

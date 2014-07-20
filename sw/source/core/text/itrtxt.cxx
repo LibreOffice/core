@@ -345,7 +345,7 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
                 SwpHints* pTmpHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
 
                 // examine hints in range nEnd - (nEnd + nRangeChar)
-                for( sal_uInt16 i = 0; i < pTmpHints->Count(); i++ )
+                for( size_t i = 0; i < pTmpHints->Count(); ++i )
                 {
                     const SwTxtAttr* pHt = pTmpHints->GetTextHint( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )

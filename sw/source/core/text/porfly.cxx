@@ -185,7 +185,7 @@ sal_Int32 SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     if( !pHints )
         return COMPLETE_STRING;
     SwTxtAttr* pFound = NULL;
-    for ( sal_uInt16 i = 0; i < pHints->Count(); i++)
+    for ( size_t i = 0; i < pHints->Count(); ++i )
     {
         SwTxtAttr *pHt = pHints->GetTextHint( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )

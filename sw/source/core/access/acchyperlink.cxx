@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
-SwAccessibleHyperlink::SwAccessibleHyperlink( sal_uInt16 nHPos,
+SwAccessibleHyperlink::SwAccessibleHyperlink( size_t nHPos,
     SwAccessibleParagraph *p, sal_Int32 nStt, sal_Int32 nEnd ) :
     nHintPos( nHPos ),
     xPara( p ),

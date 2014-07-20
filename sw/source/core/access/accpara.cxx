@@ -1452,8 +1452,8 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         const SwpHints* pSwpHints = GetTxtNode()->GetpSwpHints();
         if (pSwpHints)
         {
-            const sal_uInt16  nSize = pSwpHints->Count();
-            for( sal_uInt16 i = 0; i < nSize; ++i )
+            const size_t nSize = pSwpHints->Count();
+            for( size_t i = 0; i < nSize; ++i )
             {
                 const SwTxtAttr* pHt = (*pSwpHints)[i];
                 if ( ( pHt->Which() == RES_TXTATR_FIELD
@@ -3104,12 +3104,12 @@ class SwHyperlinkIter_Impl
     const SwpHints *pHints;
     sal_Int32 nStt;
     sal_Int32 nEnd;
-    sal_uInt16 nPos;
+    size_t nPos;
 
 public:
     SwHyperlinkIter_Impl( const SwTxtFrm *pTxtFrm );
     const SwTxtAttr *next();
-    sal_uInt16 getCurrHintPos() const { return nPos-1; }
+    size_t getCurrHintPos() const { return nPos-1; }
 
     sal_Int32 startIdx() const { return nStt; }
     sal_Int32 endIdx() const { return nEnd; }

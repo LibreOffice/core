@@ -372,7 +372,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     SplitNew.push_back(& rNewHint);
 
     // pass 1: split the inserted hint into fragments if necessary
-    for ( sal_uInt16 i = 0; i < GetEndCount(); ++i )
+    for ( size_t i = 0; i < GetEndCount(); ++i )
     {
         SwTxtAttr * const pOther = GetEnd(i);
 
@@ -480,7 +480,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         InsertNesting( **itOther );
                         if (!bRemoveOverlap)
                         {
-                            if ( USHRT_MAX == Count() )
+                            if ( SAL_MAX_SIZE-1 == Count() )
                             {
                                 OSL_FAIL("hints array full :-(");
                                 return false;
@@ -499,7 +499,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         InsertNesting( **itOther );
                         if (!bRemoveOverlap)
                         {
-                            if ( USHRT_MAX == Count() )
+                            if ( SAL_MAX_SIZE-1 == Count() )
                             {
                                 OSL_FAIL("hints array full :-(");
                                 return false;
@@ -517,7 +517,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
     }
 
-    if ( USHRT_MAX - SplitNew.size() <= Count() )
+    if ( SAL_MAX_SIZE-1 - Count() <= SplitNew.size() )
     {
         OSL_FAIL("hints array full :-(");
         return false;
@@ -598,7 +598,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
-        for ( sal_uInt16 i = 0; i < Count(); ++i )
+        for ( size_t i = 0; i < Count(); ++i )
         {
             SwTxtAttr* pOther = GetTextHint(i);
 
@@ -663,7 +663,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
-        for ( sal_uInt16 i = 0; i < Count(); ++i )
+        for ( size_t i = 0; i < Count(); ++i )
         {
             const SwTxtAttr* pOther = GetTextHint(i);
 
@@ -695,7 +695,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         aInsDelHints.clear();
 
         // Get all hints that are in [nPorStart, nPorEnd[:
-        for ( sal_uInt16 i = 0; i < Count(); ++i )
+        for ( size_t i = 0; i < Count(); ++i )
         {
             SwTxtAttr *pOther = GetTextHint(i);
 
@@ -1229,7 +1229,7 @@ SwTxtAttr* SwTxtNode::InsertItem(
         // N.B.: also check that the hint is actually in the hints array,
         // because hints of certain types may be merged after successful
         // insertion, and thus destroyed!
-        if (!bSuccess || ( USHRT_MAX == m_pSwpHints->GetPos( pNew ) ))
+        if (!bSuccess || ( SAL_MAX_SIZE == m_pSwpHints->GetPos( pNew ) ))
         {
             return 0;
         }
@@ -1682,7 +1682,7 @@ void SwTxtNode::DeleteAttributes(
     if ( !HasHints() )
         return;
 
-    for ( sal_uInt16 nPos = 0; m_pSwpHints && nPos < m_pSwpHints->Count(); nPos++ )
+    for ( size_t nPos = 0; m_pSwpHints && nPos < m_pSwpHints->Count(); ++nPos )
     {
         SwTxtAttr * const pTxtHt = m_pSwpHints->GetTextHint( nPos );
         const sal_Int32 nHintStart = pTxtHt->GetStart();
@@ -1861,7 +1861,7 @@ bool SwTxtNode::SetAttr(
         bool bHasCharFmts = false;
         if ( HasHints() )
         {
-            for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
+            for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 if ( (*m_pSwpHints)[ n ]->IsCharFmtAttr() )
                 {
@@ -2092,11 +2092,11 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             }
         }
 
-        const sal_uInt16 nSize = m_pSwpHints->Count();
+        const size_t nSize = m_pSwpHints->Count();
 
         if( nStt == nEnd )             // kein Bereich:
         {
-            for (sal_uInt16 n = 0; n < nSize; ++n)
+            for (size_t n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
                 const sal_Int32 nAttrStart = pHt->GetStart();
@@ -2123,7 +2123,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                                    static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
 
-            for (sal_uInt16 n = 0; n < nSize; ++n)
+            for (size_t n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
                 const sal_Int32 nAttrStart = pHt->GetStart();
@@ -2347,7 +2347,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
 {
     sal_Int32 nLastEnd(0);
 
-    for (sal_uInt16 i(0); i != i_rHints.Count(); ++i)
+    for (size_t i = 0; i < i_rHints.Count(); ++i)
     {
         const SwTxtAttr* const pHint(i_rHints[i]);
         const sal_uInt16 nWhich(pHint->Which());
@@ -2567,11 +2567,11 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
 void SwpHints::CalcFlags()
 {
     m_bDDEFields = m_bFootnote = false;
-    const sal_uInt16 nSize = Count();
-    const SwTxtAttr* pAttr;
-    for( sal_uInt16 nPos = 0; nPos < nSize; ++nPos )
+    const size_t nSize = Count();
+    for( size_t nPos = 0; nPos < nSize; ++nPos )
     {
-        switch( ( pAttr = (*this)[ nPos ])->Which() )
+        const SwTxtAttr* pAttr = (*this)[ nPos ];
+        switch( pAttr->Which() )
         {
         case RES_TXTATR_FTN:
             m_bFootnote = true;
@@ -2598,10 +2598,10 @@ bool SwpHints::CalcHiddenParaField()
     m_bCalcHiddenParaField = false;
     bool bOldHasHiddenParaField = m_bHasHiddenParaField;
     bool bNewHasHiddenParaField  = false;
-    const sal_uInt16    nSize = Count();
+    const size_t nSize = Count();
     const SwTxtAttr *pTxtHt;
 
-    for( sal_uInt16 nPos = 0; nPos < nSize; ++nPos )
+    for( size_t nPos = 0; nPos < nSize; ++nPos )
     {
         pTxtHt = (*this)[ nPos ];
         const sal_uInt16 nWhich = pTxtHt->Which();
@@ -2648,7 +2648,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     int nKey = 0;
 
     // get portions by start position:
-    for ( sal_uInt16 i = 0; i < Count(); ++i )
+    for ( size_t i = 0; i < Count(); ++i )
     {
         SwTxtAttr *pHt = GetTextHint( i );
         if ( RES_TXTATR_CHARFMT != pHt->Which() &&
@@ -2838,7 +2838,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
                 SwTxtAttr *const p2 = aIter2->second.first;
                 nNewPortionEnd = *p2->GetEnd();
 
-                const sal_uInt16 nCountBeforeDelete = Count();
+                const size_t nCountBeforeDelete = Count();
                 Delete( p2 );
 
                 // robust: check if deletion actually took place before destroying attribute:
@@ -2910,7 +2910,7 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharF
     const sal_Int32 nHtEnd   = *rNewCharFmt.GetEnd();
     sal_uInt16 nSortNumber = 0;
 
-    for ( sal_uInt16 i = 0; i < rHints.Count(); ++i )
+    for ( size_t i = 0; i < rHints.Count(); ++i )
     {
         const SwTxtAttr* pOtherHt = rHints[i];
 
@@ -2947,7 +2947,7 @@ bool SwpHints::TryInsertHint(
     SwTxtNode &rNode,
     const SetAttrMode nMode )
 {
-    if ( USHRT_MAX == Count() ) // we're sorry, this flight is overbooked...
+    if ( SAL_MAX_SIZE-1 == Count() ) // we're sorry, this flight is overbooked...
     {
         OSL_FAIL("hints array full :-(");
         return false;
@@ -3100,7 +3100,7 @@ bool SwpHints::TryInsertHint(
             SwTxtAttr* pTmpHt;
             sal_Int32 *pTmpHtEnd;
             sal_Int32 *pTmpHintEnd;
-            for( sal_uInt16 n = 0, nEnd = Count(); n < nEnd; ++n )
+            for( size_t n = 0, nEnd = Count(); n < nEnd; ++n )
             {
                 if (RES_TXTATR_REFMARK == (pTmpHt = GetTextHint(n))->Which() &&
                     pHint->GetAttr() == pTmpHt->GetAttr() &&
@@ -3277,7 +3277,7 @@ bool SwpHints::TryInsertHint(
     return true;
 }
 
-void SwpHints::DeleteAtPos( const sal_uInt16 nPos )
+void SwpHints::DeleteAtPos( const size_t nPos )
 {
     SwTxtAttr *pHint = GetTextHint(nPos);
     // ChainDelete( pHint );
@@ -3315,9 +3315,9 @@ void SwpHints::DeleteAtPos( const sal_uInt16 nPos )
 void SwpHints::Delete( SwTxtAttr* pTxtHt )
 {
     // Attr 2.0: SwpHintsArr::Delete( pTxtHt );
-    const sal_uInt16 nPos = GetStartOf( pTxtHt );
-    OSL_ENSURE( USHRT_MAX != nPos, "Attribut nicht im Attribut-Array!" );
-    if( USHRT_MAX != nPos )
+    const size_t nPos = GetStartOf( pTxtHt );
+    OSL_ENSURE( SAL_MAX_SIZE != nPos, "Attribut nicht im Attribut-Array!" );
+    if( SAL_MAX_SIZE != nPos )
         DeleteAtPos( nPos );
 }
 
@@ -3325,7 +3325,7 @@ void SwTxtNode::ClearSwpHintsArr( bool bDelFields )
 {
     if ( HasHints() )
     {
-        sal_uInt16 nPos = 0;
+        size_t nPos = 0;
         while ( nPos < m_pSwpHints->Count() )
         {
             SwTxtAttr* pDel = m_pSwpHints->GetTextHint( nPos );
@@ -3374,7 +3374,8 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     if ( HasHints() )
     {
         const sal_Int32 nEnd = nBegin + nLen;
-        for ( sal_uInt16 i = 0, nSize = m_pSwpHints->Count(); i < nSize; ++i )
+        const size_t nSize = m_pSwpHints->Count();
+        for ( size_t i = 0; i < nSize; ++i )
         {
             // ist der Attribut-Anfang schon groesser als der Idx ?
             const SwTxtAttr *pHt = m_pSwpHints->operator[](i);

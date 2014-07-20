@@ -243,7 +243,7 @@ SwTxtNode::~SwTxtNode()
         SwpHints* pTmpHints = m_pSwpHints;
         m_pSwpHints = 0;
 
-        for( sal_uInt16 j = pTmpHints->Count(); j; )
+        for( size_t j = pTmpHints->Count(); j; )
         {
             // first remove the attribute from the array otherwise
             // if would delete itself
@@ -298,7 +298,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
         // of node <rNode> in order to invalidate position of its first content.
         // Thus, in its <MakeAll()> it will checked its position relative to its reference.
         SwFtnFrm* pFirstFtnOfNode = 0;
-        for( sal_uInt16 j = pSwpHints->Count(); j; )
+        for( size_t j = pSwpHints->Count(); j; )
         {
             pHt = pSwpHints->GetTextHint(--j);
             if (RES_TXTATR_FTN == pHt->Which())
@@ -451,7 +451,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             //              Attribute loeschen
             if ( HasHints() )
             {
-                for ( sal_uInt16 j = m_pSwpHints->Count(); j; )
+                for ( size_t j = m_pSwpHints->Count(); j; )
                 {
                     SwTxtAttr* const pHt = m_pSwpHints->GetTextHint( --j );
                     if ( RES_TXTATR_FLYCNT == pHt ->Which() )
@@ -539,7 +539,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         //              Attribute loeschen
         if ( HasHints() )
         {
-            for ( sal_uInt16 j = m_pSwpHints->Count(); j; )
+            for ( size_t j = m_pSwpHints->Count(); j; )
             {
                 SwTxtAttr* const pHt = m_pSwpHints->GetTextHint( --j );
                 const sal_Int32* const pEnd = pHt->GetEnd();
@@ -596,7 +596,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 void SwTxtNode::MoveTxtAttr_To_AttrSet()
 {
     OSL_ENSURE( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
-    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
 
@@ -849,7 +849,7 @@ void SwTxtNode::Update(
         if ( bNegative )
         {
             const sal_Int32 nChangeEnd = nChangePos + nChangeLen;
-            for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
+            for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 bool bTxtAttrChanged = false;
                 bool bStartOfTxtAttrChanged = false;
@@ -909,7 +909,7 @@ void SwTxtNode::Update(
             bool aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(bool) );
 
-            for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
+            for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 bool bTxtAttrChanged = false;
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
@@ -1169,8 +1169,8 @@ bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
     bool bRet = false;
     if ( HasHints() )
     {
-        const sal_uInt16 nEndCnt = m_pSwpHints->GetEndCount();
-        sal_uInt16 nPos = nEndCnt;
+        const size_t nEndCnt = m_pSwpHints->GetEndCount();
+        size_t nPos = nEndCnt;
         while( nPos )
         {
             SwTxtAttr *pTmp = m_pSwpHints->GetEnd( --nPos );
@@ -1212,7 +1212,7 @@ lcl_GetTxtAttrs(
     sal_Int32 const nIndex, RES_TXTATR const nWhich,
     enum SwTxtNode::GetTxtAttrMode const eMode)
 {
-    sal_uInt16 const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
+    size_t const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
     sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=0;
     switch (eMode)
@@ -1223,7 +1223,7 @@ lcl_GetTxtAttrs(
         default: assert(false);
     }
 
-    for( sal_uInt16 i = 0; i < nSize; ++i )
+    for( size_t i = 0; i < nSize; ++i )
     {
         SwTxtAttr *const pHint = pSwpHints->GetTextHint(i);
         sal_Int32 const nHintStart = pHint->GetStart();
@@ -1404,7 +1404,7 @@ void lcl_CopyHint(
 
     case RES_TXTATR_TOXMARK :
         if( pOtherDoc && pDest && pDest->GetpSwpHints()
-            && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+            && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
         {
             // Beim Kopieren von TOXMarks(Client) in andere Dokumente
             // muss der Verzeichnis (Modify) ausgetauscht werden
@@ -1416,7 +1416,7 @@ void lcl_CopyHint(
         // Wenn wir es mit einer Zeichenvorlage zu tun haben,
         // muessen wir natuerlich auch die Formate kopieren.
         if( pDest && pDest->GetpSwpHints()
-            && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+            && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
         {
             SwCharFmt* pFmt =
                 static_cast<SwCharFmt*>(pHt->GetCharFmt().GetCharFmt());
@@ -1434,7 +1434,7 @@ void lcl_CopyHint(
             // Wenn wir es mit benutzerdefinierten INet-Zeichenvorlagen
             // zu tun haben, muessen wir natuerlich auch die Formate kopieren.
             if( pOtherDoc && pDest && pDest->GetpSwpHints()
-                && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+                && SAL_MAX_SIZE != pDest->GetpSwpHints()->GetPos( pNewHt ) )
             {
                 const SwDoc* const pDoc = static_cast<const SwTxtINetFmt*>(pHt)
                     ->GetTxtNode().GetDoc();
@@ -1487,7 +1487,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ?
                 pDest->GetDoc() : 0;
 
-        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
+        for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
             SwTxtAttr *const pHt = m_pSwpHints->GetTextHint(i);
             sal_Int32 const nAttrStartIdx = pHt->GetStart();
@@ -1656,7 +1656,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // 2. Attribute kopieren
     // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
     // des Attributs hinter dem zu kopierenden Bereich liegt
-    const sal_uInt16 nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
+    const size_t nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
 
     // wird in sich selbst kopiert, dann kann beim Einfuegen ein
     // Attribut geloescht werden. Darum erst ins Tmp-Array kopieren und
@@ -1668,7 +1668,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
     sal_Int32 nDeletedDummyChars(0);
     //Achtung: kann ungueltig sein!!
-    for (sal_uInt16 n = 0; ( n < nSize ); ++n)
+    for (size_t n = 0; n < nSize; ++n)
     {
         const sal_Int32 nAttrStartIdx = (*m_pSwpHints)[n]->GetStart();
         if (!( nAttrStartIdx < nEnd))
@@ -1853,7 +1853,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     if ( HasHints() )
     {
         bool bMergePortionsNeeded(false);
-        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count() &&
+        for ( size_t i = 0; i < m_pSwpHints->Count() &&
                 rIdx >= (*m_pSwpHints)[i]->GetStart(); ++i )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint( i );
@@ -1887,7 +1887,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                         && (*pEndIdx == pHt->GetStart()) )
                 {
                     pHt->GetStart() = pHt->GetStart() - nLen;
-                    const sal_uInt16 nAktLen = m_pSwpHints->Count();
+                    const size_t nAktLen = m_pSwpHints->Count();
                     m_pSwpHints->DeleteAtPos(i);
                     InsertHint( pHt/* AUTOSTYLES:, nsSetAttrMode::SETATTR_NOHINTADJUST*/ );
                     if ( nAktLen > m_pSwpHints->Count() && i )
@@ -2005,7 +2005,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // 2. Attribute verschieben
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
         // des Attributs hinter dem zu verschiebenden Bereich liegt
-        sal_uInt16 nAttrCnt = 0;
+        size_t nAttrCnt = 0;
         while ( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
@@ -2157,7 +2157,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
         // des Attributs hinter dem zu verschiebenden Bereich liegt
         bool bMergePortionsNeeded(false);
-        sal_uInt16 nAttrCnt = 0;
+        size_t nAttrCnt = 0;
         while ( m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()) )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
@@ -2315,7 +2315,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
      * die im Bereich liegen und nicht am Ende des Bereiches liegen
      */
 
-    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
 
@@ -2411,7 +2411,7 @@ void SwTxtNode::GCAttr()
     const bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
 
-    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(i);
 
@@ -2702,7 +2702,7 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
 {
     if ( HasHints() )
     {
-        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); ++i )
+        for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
             SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(i);
             const sal_Int32 nStartPos = pHint->GetStart();
@@ -3183,7 +3183,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     if ( HasHints() )
     {
         sal_Int32 nInsPos = nDestStt - nIdx;
-        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
+        for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*m_pSwpHints)[i];
             const sal_Int32 nAttrStartIdx = pHt->GetStart();

@@ -2335,10 +2335,10 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // ausgegeben, so muessen auch da die Attribute stimmen!!
     rHTMLWrt.bTxtAttr = true;
 
-    sal_uInt16 nAttrPos = 0;
+    size_t nAttrPos = 0;
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const SwTxtAttr * pHt = 0;
-    sal_uInt16 nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
+    const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
     {
         // Ok, es gibt vorher Attribute, die ausgegeben werden muessen

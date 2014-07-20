@@ -97,7 +97,7 @@ SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         sal_Int32 nStt,
                                         bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
-    pParaItem( 0 ), nChgPos( nStt ), nAttrPos( 0 ), nWhichId( nWhchId ),
+    pParaItem( 0 ), nAttrPos( 0 ), nChgPos( nStt ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
     SearchNextChg();
@@ -123,7 +123,7 @@ bool SwTxtAttrIterator::Next()
 
         if( !aStack.empty() )
         {
-            sal_uInt16 nSavePos = nAttrPos;
+            const size_t nSavePos = nAttrPos;
             SearchNextChg();
             if( !aStack.empty() )
             {

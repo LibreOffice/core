@@ -415,7 +415,7 @@ void SwTxtNode::RstTxtAttr(
     //std::vector< const SwTxtAttr* > aNewAttributes;
 
     // iterate over attribute array until start of attribute is behind deletion range
-    sal_uInt16 i = 0;
+    size_t i = 0;
     sal_Int32 nAttrStart;
     SwTxtAttr *pHt = NULL;
     while ( (i < m_pSwpHints->Count())

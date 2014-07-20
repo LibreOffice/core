@@ -2270,7 +2270,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     // equal to the settings in the style
     SwTxtNode *pTxtNd = rEndIdx.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "There is the txt node" );
-    sal_uInt16 nCntAttr = (pTxtNd  && pTxtNd->GetpSwpHints())
+    size_t nCntAttr = (pTxtNd  && pTxtNd->GetpSwpHints())
                             ? pTxtNd->GetSwpHints().Count() : 0;
     if( nCntAttr )
     {
@@ -2284,7 +2284,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         sal_Int32 aEndPos[15] =
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         SwpHints& rHints = pTxtNd->GetSwpHints();
-        for( sal_uInt16 i=0; i < nCntAttr; i++ )
+        for( size_t i=0; i < nCntAttr; i++ )
         {
             SwTxtAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
@@ -2425,10 +2425,10 @@ void SwHTMLParser::AddParSpace()
             sal_uInt16 nWhich;
             SwTxtAttr *pHt;
 
-            sal_uInt16 nCntAttr = (pTxtNode  && pTxtNode->GetpSwpHints())
+            const size_t nCntAttr = (pTxtNode  && pTxtNode->GetpSwpHints())
                             ? pTxtNode->GetSwpHints().Count() : 0;
 
-            for(sal_uInt16 i = 0; (i < nCntAttr) && !bIsCJK; ++i)
+            for(size_t i = 0; (i < nCntAttr) && !bIsCJK; ++i)
             {
                pHt = rHints.GetTextHint(i);
                nWhich = pHt->Which();
