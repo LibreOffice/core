@@ -146,7 +146,7 @@ GL3DBarChart::GL3DBarChart(
     if (mpWindow)
     {
         mpWindow->setRenderer(this);
-        Size aSize = mpWindow->GetSizePixel();
+        aSize = mpWindow->GetSizePixel();
     }
     mpRenderer->SetSize(aSize);
     mpRenderer->init();
@@ -222,9 +222,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     float nXEnd = 0.0;
     float nYPos = 0.0;
 
-    const Color aSeriesColor[] = {
-        COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_BLUE
-    };
+    //const Color aSeriesColor[] = {
+    //    COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_BLUE
+    //};
 
     maCategories.clear();
     maSeriesNames.clear();
@@ -246,7 +246,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
         nMaxPointCount = std::max(nMaxPointCount, nPointCount);
 
-        bool bMappedFillProperty = rDataSeries.hasPropertyMapping("FillColor");
+        //bool bMappedFillProperty = rDataSeries.hasPropertyMapping("FillColor");
 
         // Create series name text object.
         OUString aSeriesName =
@@ -271,22 +271,22 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             p->setPosition(aTopLeft, aTopRight, aBottomRight);
         }
 
-        sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
+        //sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
-            if(bMappedFillProperty)
-            {
-                double nPropVal = rDataSeries.getValueByProperty(nIndex, "FillColor");
-                if(!rtl::math::isNan(nPropVal))
-                    nColor = static_cast<sal_uInt32>(nPropVal);
-            }
+            //if(bMappedFillProperty)
+            //{
+            //    double nPropVal = rDataSeries.getValueByProperty(nIndex, "FillColor");
+            //    if(!rtl::math::isNan(nPropVal))
+            //        nColor = static_cast<sal_uInt32>(nPropVal);
+            //}
 
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (BAR_SIZE_X + BAR_DISTANCE_X) + BAR_DISTANCE_X;
 
-            glm::mat4 aScaleMatrix = glm::scale(glm::vec3(BAR_SIZE_X, BAR_SIZE_Y, float(nVal/nMaxVal)));
-            glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(nXPos, nYPos, 0.0f));
-            glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
+            //glm::mat4 aScaleMatrix = glm::scale(glm::vec3(BAR_SIZE_X, BAR_SIZE_Y, float(nVal/nMaxVal)));
+            //glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(nXPos, nYPos, 0.0f));
+            //glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
             maBarMap.insert(std::pair<sal_uInt32, BarInformation>(nId,
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
