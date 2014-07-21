@@ -1034,18 +1034,18 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !GetContent() )
-        throw io::IOException(); // TODO: error handling
-
-    uno::Sequence< OUString > aProps( 1 );
-    aProps[0] = "Title";
-    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
-
     uno::Sequence< OUString > aResult;
-    sal_Int32 nSize = 0;
 
     try
     {
+        if ( !GetContent() )
+            throw io::IOException(); // TODO: error handling
+
+        uno::Sequence< OUString > aProps( 1 );
+        aProps[0] = "Title";
+        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
+
+        sal_Int32 nSize = 0;
         uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
         uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
@@ -1072,11 +1072,11 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
                                             aCaught );
         }
     }
-    catch( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( "Can not open storage!",
@@ -1086,7 +1086,6 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 
     return aResult;
 }
-
 
 sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
         throw ( uno::RuntimeException, std::exception )
