@@ -46,6 +46,7 @@ namespace dbmm
     {
     public:
         MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes );
+        MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~MacroMigrationPage();
 
     protected:
@@ -53,23 +54,22 @@ namespace dbmm
               MacroMigrationDialog& getDialog()      ;
 
     protected:
-        FixedText   m_aHeader;
+        FixedText*  m_pHeader;
     };
 
     // PreparationPage
     class PreparationPage : public MacroMigrationPage
     {
     public:
-        PreparationPage( MacroMigrationDialog& _rParentDialog );
+        PreparationPage(Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
-        void    showCloseDocsError( bool _bShow );
+        void    showCloseDocsError(bool _bShow);
 
     protected:
-        FixedText   m_aIntroduction;
-        FixedText   m_aCloseDocError;
+        FixedText*  m_pCloseDocError;
     };
 
     // SaveDBDocPage

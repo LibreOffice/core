@@ -47,7 +47,6 @@
 //... fixed texts  .......................................................
 
 #define FT_HEADER                   1
-#define FT_INTRODUCTION             2
 #define FT_EXPLANATION              3
 #define FT_SAVE_AS_LABEL            4
 #define FT_START_MIGRATION          5

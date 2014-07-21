@@ -51,55 +51,6 @@ ModalDialog DLG_MACRO_MIGRATION
     };
 };
 
-//= PreparationPage
-
-TabPage TP_PREPARE
-{
-    HelpID = "dbaccess:TabPage:TP_PREPARE";
-    Pos = MAP_APPFONT( 40, 130 );
-    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
-
-    Hide = TRUE;
-
-    FixedText FT_HEADER
-    {
-        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_CONTENT_MARGIN );
-        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
-
-        Text [ en-US ] = "Welcome to the Database Macro Migration Wizard";
-    };
-
-    FixedText FT_INTRODUCTION
-    {
-        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
-        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
-                            TAB_PAGE_HEIGHT - CONTENT_POS_X - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
-        WordBreak = TRUE;
-
-        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros.\n\n"
-
-            "After you finished it, all macros which were formerly embedded into the forms and reports of "
-            "the current database document will have been moved to the document itself. In this course, "
-            "libraries will be renamed as needed.\n\n"
-
-            "If your forms and reports contain references to those macros, they will be adjusted, where "
-            "possible.\n\n"
-
-            "Before the migration can start, all forms, reports, queries and tables belonging to the document must be closed. "
-            "Press 'Next' to do so.";
-    };
-
-    FixedText FT_CLOSE_DOC_ERROR
-    {
-        Pos = MAP_APPFONT ( TAB_PAGE_CONTENT_MARGIN,
-                            TAB_PAGE_HEIGHT - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
-        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
-                            2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED );
-        Text [ en-US ] = "Not all objects could be closed. Please close them manually, and re-start the wizard.";
-        hide = TRUE;
-    };
-};
-
 //= SaveDBDocPage
 
 TabPage TP_SAVE_DBDOC_AS

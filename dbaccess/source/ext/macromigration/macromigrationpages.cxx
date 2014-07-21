@@ -48,15 +48,22 @@ namespace dbmm
     // MacroMigrationPage
     MacroMigrationPage::MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes )
         :MacroMigrationPage_Base( &_rParentDialog, _rRes )
-        ,m_aHeader( this, MacroMigrationResId( FT_HEADER ) )
     {
-        Font aFont( m_aHeader.GetFont() );
+        m_pHeader = new FixedText(this, MacroMigrationResId(FT_HEADER));
+        Font aFont( m_pHeader->GetFont() );
         aFont.SetWeight( WEIGHT_BOLD );
-        m_aHeader.SetFont( aFont );
+        m_pHeader->SetFont( aFont );
+    }
+
+    MacroMigrationPage::MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
+        : MacroMigrationPage_Base(pParent, rID, rUIXMLDescription)
+        , m_pHeader(0) //remove when upper ctor is removed
+    {
     }
 
     MacroMigrationPage::~MacroMigrationPage()
     {
+        delete m_pHeader;
     }
 
     const MacroMigrationDialog& MacroMigrationPage::getDialog() const
@@ -70,22 +77,20 @@ namespace dbmm
     }
 
     // PreparationPage
-    PreparationPage::PreparationPage( MacroMigrationDialog& _rParentDialog )
-        :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_PREPARE ) )
-        ,m_aIntroduction ( this, MacroMigrationResId( FT_INTRODUCTION    ) )
-        ,m_aCloseDocError( this, MacroMigrationResId( FT_CLOSE_DOC_ERROR ) )
+    PreparationPage::PreparationPage(Window *pParent)
+        : MacroMigrationPage(pParent, "PreparePage" ,"dbaccess/ui/preparepage.ui")
     {
-        FreeResource();
+        get(m_pCloseDocError, "closedocerror");
     }
 
     void PreparationPage::showCloseDocsError( bool _bShow )
     {
-        m_aCloseDocError.Show( _bShow );
+        m_pCloseDocError->Show( _bShow );
     }
 
     TabPage* PreparationPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
-        return new PreparationPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
+        return new PreparationPage(&_rParentDialog);
     }
 
     // SaveDBDocPage
