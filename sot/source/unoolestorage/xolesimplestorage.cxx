@@ -457,7 +457,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         BaseStorage* pStrg = m_pStorage->OpenStorage( aName );
         m_pStorage->ResetError();
         if ( !pStrg )
-            throw io::IOException();
+            throw lang::WrappedTargetException(); // io::IOException(); // TODO
 
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xTempFile, false ); // do not close the original stream
         if ( !pStream )
@@ -489,15 +489,15 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
     else
     {
         BaseStorageStream* pStream = m_pStorage->OpenStream( aName, STREAM_READ | STREAM_SHARE_DENYALL | STREAM_NOCREATE );
-        if ( !pStream || pStream->GetError() || m_pStorage->GetError() )
-        {
-            m_pStorage->ResetError();
-            DELETEZ( pStream );
-            throw io::IOException(); // TODO
-        }
-
         try
         {
+            if ( !pStream || pStream->GetError() || m_pStorage->GetError() )
+            {
+                m_pStorage->ResetError();
+                DELETEZ( pStream );
+                throw io::IOException(); // TODO
+            }
+
             uno::Sequence< sal_Int8 > aData( nBytesCount );
             sal_Int32 nSize = nBytesCount;
             sal_Int32 nRead = 0;
@@ -518,12 +518,12 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
             xOutputStream->closeOutput();
             xSeekable->seek( 0 );
         }
-        catch( uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             DELETEZ( pStream );
             throw;
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
             DELETEZ( pStream );
             throw lang::WrappedTargetException(); // TODO:
