@@ -1040,10 +1040,6 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
         case SFX_ITEM_PRESENTATION_NONE:
         break;
 
-        case SFX_ITEM_PRESENTATION_NAMEONLY:
-            rText = aName;
-        break;
-
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = aValue;
         break;
