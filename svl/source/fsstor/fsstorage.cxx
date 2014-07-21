@@ -1143,27 +1143,29 @@ sal_Bool SAL_CALL FSStorage::hasElements()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !GetContent() )
-        throw io::IOException(); // TODO: error handling
-
-    uno::Sequence< OUString > aProps( 1 );
-    aProps[0] = "TargetURL";
-    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
-
     try
     {
+        if ( !GetContent() )
+            throw io::IOException(); // TODO: error handling
+
+        uno::Sequence< OUString > aProps( 1 );
+        aProps[0] = "TargetURL";
+        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
+
         uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
         return ( xResultSet.is() && xResultSet->next() );
     }
-    catch( uno::Exception& )
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception&)
     {
         throw uno::RuntimeException();
     }
 }
 
-
 //  XDisposable
-
 void SAL_CALL FSStorage::dispose()
         throw ( uno::RuntimeException, std::exception )
 {
