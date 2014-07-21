@@ -226,5 +226,9 @@ int main( int argc, char* argv[] )
 
     gtk_main();
 
+    pOffice->pClass->destroy( pOffice );
+
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
