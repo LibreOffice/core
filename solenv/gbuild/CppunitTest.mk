@@ -75,6 +75,8 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && mkdir $@.user && \
+		$(if $(gb_CppunitTest__use_confpreinit), \
+		    $(INSTDIR)/program/lokconf_init $(call gb_CppunitTest__make_args) &&) \
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
@@ -163,6 +165,12 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)), \
         $(if $(ENABLE_KDE4),$(call gb_Library_get_target,vclplug_kde4)) \
         $(if $(ENABLE_TDE),$(call gb_Library_get_target,vclplug_tde)))
 endif
+
+endef
+
+define gb_CppunitTest_use_confpreinit
+$(call gb_CppunitTest_use_executable,$(1),lokconf_init)
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest__use_confpreinit := TRUE
 
 endef
 
