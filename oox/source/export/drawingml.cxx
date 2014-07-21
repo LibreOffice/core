@@ -1690,7 +1690,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-void DrawingML::WriteText( Reference< XInterface > rXIface, OUString presetWarp, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
+void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& presetWarp, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
 {
     Reference< XText > xXText( rXIface, UNO_QUERY );
     Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
