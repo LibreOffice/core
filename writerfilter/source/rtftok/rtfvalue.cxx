@@ -18,9 +18,12 @@ namespace rtftok
 {
 
 
-RTFValue::RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes,
-                   RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
-                   uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
+RTFValue::RTFValue(int nValue, const OUString& sValue,
+                   RTFSprms rAttributes, RTFSprms rSprms,
+                   uno::Reference<drawing::XShape> const& xShape,
+                   uno::Reference<io::XInputStream> const& xStream,
+                   uno::Reference<embed::XEmbeddedObject> const& xObject,
+                   bool bForceString,
                    const RTFShape& aShape)
     : m_nValue(nValue),
       m_sValue(sValue),
@@ -99,10 +102,10 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     m_pShape.reset(new RTFShape());
 }
 
-RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
+RTFValue::RTFValue(uno::Reference<drawing::XShape> const& xShape)
     : m_nValue(),
       m_sValue(),
-      m_xShape(rShape),
+      m_xShape(xShape),
       m_xStream(),
       m_xObject(),
       m_bForceString(false)
@@ -112,11 +115,11 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     m_pShape.reset(new RTFShape());
 }
 
-RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
+RTFValue::RTFValue(uno::Reference<io::XInputStream> const& xStream)
     : m_nValue(),
       m_sValue(),
       m_xShape(),
-      m_xStream(rStream),
+      m_xStream(xStream),
       m_xObject(),
       m_bForceString(false)
 {
@@ -125,7 +128,7 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
     m_pShape.reset(new RTFShape());
 }
 
-RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
+RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> const& xObject)
     : m_nValue(),
       m_sValue(),
       m_xShape(),

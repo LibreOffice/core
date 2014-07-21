@@ -26,17 +26,19 @@ class RTFValue
 {
 public:
     typedef boost::shared_ptr<RTFValue> Pointer_t;
-    RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms, css::uno::Reference<css::drawing::XShape> rShape,
-             css::uno::Reference<css::io::XInputStream> rStream, css::uno::Reference<css::embed::XEmbeddedObject> rObject, bool bForceString,
-             const RTFShape& aShape);
+    RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms,
+            css::uno::Reference<css::drawing::XShape> const& xShape,
+            css::uno::Reference<css::io::XInputStream> const& xStream,
+            css::uno::Reference<css::embed::XEmbeddedObject> const& xObject,
+            bool bForceString, const RTFShape& aShape);
     RTFValue();
     RTFValue(int nValue);
     RTFValue(const OUString& sValue, bool bForce = false);
     RTFValue(RTFSprms rAttributes);
     RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
-    RTFValue(css::uno::Reference<css::drawing::XShape> rShape);
-    RTFValue(css::uno::Reference<css::io::XInputStream> rStream);
-    RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> rObject);
+    RTFValue(css::uno::Reference<css::drawing::XShape> const& xShape);
+    RTFValue(css::uno::Reference<css::io::XInputStream> const& xStream);
+    RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> const& xObject);
     RTFValue(const RTFShape& aShape);
     virtual ~RTFValue();
     void setString(const OUString& sValue);
