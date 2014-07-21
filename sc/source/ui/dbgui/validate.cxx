@@ -151,12 +151,14 @@ void            ScTPValidationValue::RefInputDonePostHdl()
 
 }
 
-
 sal_Bool ScValidationDlg::Close()
 {
-    if( m_bOwnRefHdlr )
-        if( SfxTabPage* pPage = GetTabPage( TP_VALIDATION_VALUES ) )
-            static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+    SfxTabPage* pPage = GetTabPage(TP_VALIDATION_VALUES);
+    if (pPage)
+        static_cast<ScTPValidationValue*>(pPage)->ParkRefs();
+
+    if (m_bOwnRefHdlr && pPage)
+        static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
 
     return ScValidationDlgBase::Close();
 }
@@ -167,7 +169,6 @@ ScValidationDlg::~ScValidationDlg()
         RemoveRefDlg( false );
     delete mpHBox;
 }
-
 
 // ============================================================================
 
@@ -336,6 +337,22 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     OSL_ENSURE( aListSep.getLength() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.getLength() ? aListSep[0] : ';';
     m_btnRef.Hide(); // cell range picker
+}
+
+void ScTPValidationValue::ParkRefs()
+{
+    //if there are children of the mpHBox, i.e.
+    //in shrunk mode, this will crash
+    //after the mpHBox is deleted
+    if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
+    {
+        m_pRefEdit->SetParent( this );
+    }
+
+    if( m_btnRef.GetParent()!=this )
+    {
+        m_btnRef.SetParent( this );
+    }
 }
 
 ScTPValidationValue::~ScTPValidationValue()

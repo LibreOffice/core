@@ -182,6 +182,8 @@ public:
     virtual sal_Bool                FillItemSet( SfxItemSet& rArgSet );
     virtual void                Reset( const SfxItemSet& rArgSet );
 
+    void                        ParkRefs();
+
 private:
     void                        Init();
 
