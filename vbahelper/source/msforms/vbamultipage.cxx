@@ -19,7 +19,6 @@
 #include "vbamultipage.hxx"
 #include <ooo/vba/XCollection.hpp>
 #include "vbapages.hxx"
-#include <vector>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace com::sun::star;

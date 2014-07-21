@@ -18,7 +18,6 @@
  */
 
 #include "vbaspinbutton.hxx"
-#include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

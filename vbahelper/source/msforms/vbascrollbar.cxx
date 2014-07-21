@@ -18,7 +18,6 @@
  */
 
 #include "vbascrollbar.hxx"
-#include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

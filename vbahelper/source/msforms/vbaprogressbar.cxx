@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaprogressbar.hxx"
-#include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

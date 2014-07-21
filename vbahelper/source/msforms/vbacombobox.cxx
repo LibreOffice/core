@@ -18,7 +18,6 @@
  */
 
 #include "vbacombobox.hxx"
-#include <vector>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
