@@ -34,6 +34,18 @@ public:
 
 #define DECLARE_WW8IMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 
+DECLARE_WW8IMPORT_TEST(testFloatingTableSectionMargins, "floating-table-section-margins.doc")
+{
+    sal_Int32 pageLeft = parseDump("/root/page[2]/infos/bounds", "left").toInt32();
+    sal_Int32 pageWidth = parseDump("/root/page[2]/infos/bounds", "width").toInt32();
+    sal_Int32 tableLeft = parseDump("/root/page[2]/body/column/body/section/column/body/txt[2]/anchored/fly/tab/infos/bounds", "left").toInt32();
+    sal_Int32 tableWidth = parseDump("/root/page[2]/body/column/body/section/column/body/txt[2]/anchored/fly/tab/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT( pageWidth > 0 );
+    CPPUNIT_ASSERT( tableWidth > 0 );
+    // The table's resulting position should be roughly centered.
+    CPPUNIT_ASSERT( abs(( pageLeft + pageWidth / 2 ) - ( tableLeft + tableWidth / 2 )) < 20 );
+}
+
 DECLARE_WW8IMPORT_TEST(testN757910, "n757910.doc")
 {
     // The internal margin was larger than 0.28cm

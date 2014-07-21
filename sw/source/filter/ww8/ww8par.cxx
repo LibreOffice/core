@@ -4440,6 +4440,10 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = (aIter != aStart) && aIter->IsContinuous() &&  bThisAndPreviousAreCompatible;
         bool bInsertPageDesc = !bInsertSection;
+        // HACK Force new pagedesc if margins change, otherwise e.g. floating tables may be anchored improperly.
+        if( aIter->maSep.dyaTop != aPrev->maSep.dyaTop || aIter->maSep.dyaBottom != aPrev->maSep.dyaBottom
+            || aIter->maSep.dxaLeft != aPrev->maSep.dxaLeft || aIter->maSep.dxaRight != aPrev->maSep.dxaRight )
+            bInsertPageDesc = true;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
         if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
         {
