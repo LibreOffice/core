@@ -1946,7 +1946,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
         else if (/* TODO: IsChained() && */ pEditStatus->IsPageOverflow())
         {
-
+            ImpChainText();
         }
     }
 }
