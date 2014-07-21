@@ -1569,7 +1569,6 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         {
                             OUString aStr;
                             GetDoc()->GetAttrPool().GetPresentation( *pItem,
-                                SFX_ITEM_PRESENTATION_COMPLETE,
                                 SFX_MAPUNIT_CM, aStr );
                             if (!sAttrs.isEmpty())
                                 sAttrs += ", ";

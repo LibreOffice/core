@@ -40,7 +40,6 @@ public:
 
     virtual SfxItemPool* Clone() const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation(const SfxPoolItem& rItem,
-        SfxItemPresentation ePresentation,
         SfxMapUnit          ePresentationMetric,
         OUString&             rText,
         const IntlWrapper * pIntlWrapper

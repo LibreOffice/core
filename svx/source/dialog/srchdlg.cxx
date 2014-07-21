@@ -2058,7 +2058,6 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         {
             OUString aStr;
             rPool.GetPresentation( *rItem.pItem,
-                                    SFX_ITEM_PRESENTATION_COMPLETE,
                                     eMapUnit, aStr );
             rStr += aStr;
         }

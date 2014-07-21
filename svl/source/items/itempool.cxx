@@ -507,14 +507,13 @@ const OUString& SfxItemPool::GetName() const
 SfxItemPresentation SfxItemPool::GetPresentation
 (
     const SfxPoolItem&  rItem,
-    SfxItemPresentation ePresent,
     SfxMapUnit          eMetric,
     OUString&           rText,
     const IntlWrapper * pIntlWrapper
 )   const
 {
     return rItem.GetPresentation(
-        ePresent, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
+        SFX_ITEM_PRESENTATION_COMPLETE, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
 }
 
 

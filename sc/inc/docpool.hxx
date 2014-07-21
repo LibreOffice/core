@@ -60,7 +60,6 @@ public:
     void CellStyleCreated( const OUString& rName );
     virtual SfxItemPresentation     GetPresentation(
                                         const SfxPoolItem&  rItem,
-                                        SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
                                         const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;

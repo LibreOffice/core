@@ -343,8 +343,7 @@ OUString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
 
         if ( !IsInvalidItem( pItem ) &&
              pPool->GetPool().GetPresentation(
-                *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                eMetric, aItemPresentation, &aIntlWrapper ) )
+                *pItem, eMetric, aItemPresentation, &aIntlWrapper ) )
         {
             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
                 aDesc += " + ";

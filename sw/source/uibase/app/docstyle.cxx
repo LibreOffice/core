@@ -763,8 +763,7 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
                              pPool->GetPool().GetPresentation(
-                                *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                                eUnit, aItemPresentation, &aIntlWrapper ) )
+                                *pItem, eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
                             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
                                 aDesc += sPlus;
@@ -817,8 +816,7 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
                              pPool->GetPool().GetPresentation(
-                                *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                                eUnit, aItemPresentation, &aIntlWrapper ) )
+                                *pItem, eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
                             bool bIsDefault = false;
                             switch ( pItem->Which() )

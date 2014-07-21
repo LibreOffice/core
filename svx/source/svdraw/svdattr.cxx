@@ -396,7 +396,7 @@ SdrItemPool::~SdrItemPool()
 }
 
 SfxItemPresentation SdrItemPool::GetPresentation(
-              const SfxPoolItem& rItem, SfxItemPresentation ePresentation,
+              const SfxPoolItem& rItem,
               SfxMapUnit ePresentationMetric, OUString& rText,
               const IntlWrapper * pIntlWrapper) const
 {
@@ -411,10 +411,10 @@ SfxItemPresentation SdrItemPool::GetPresentation(
             TakeItemName(nWhich, aStr);
             rText = aStr + " " + rText;
 
-            return ePresentation;
+            return SFX_ITEM_PRESENTATION_COMPLETE;
         }
     }
-    return XOutdevItemPool::GetPresentation(rItem,ePresentation,ePresentationMetric,rText,pIntlWrapper);
+    return XOutdevItemPool::GetPresentation(rItem,ePresentationMetric,rText,pIntlWrapper);
 }
 
 void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)

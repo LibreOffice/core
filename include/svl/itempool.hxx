@@ -144,7 +144,6 @@ public:
         string representation of 'rItem'
     */
     virtual SfxItemPresentation     GetPresentation( const SfxPoolItem& rItem,
-                                        SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
                                         const IntlWrapper * pIntlWrapper = 0 ) const;
