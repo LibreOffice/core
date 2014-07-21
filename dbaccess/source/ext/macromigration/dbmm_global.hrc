@@ -38,7 +38,6 @@
 
 //= tab pages
 
-#define TP_SAVE_DBDOC_AS    ( RID_DBMM_TAPPAGE_START + 1 )
 #define TP_MIGRATE          ( RID_DBMM_TAPPAGE_START + 2 )
 #define TP_SUMMARY          ( RID_DBMM_TAPPAGE_START + 3 )
 

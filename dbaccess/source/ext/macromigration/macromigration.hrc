@@ -47,9 +47,6 @@
 //... fixed texts  .......................................................
 
 #define FT_HEADER                   1
-#define FT_EXPLANATION              3
-#define FT_SAVE_AS_LABEL            4
-#define FT_START_MIGRATION          5
 #define FT_CURRENT_OBJECT_LABEL     6
 #define FT_CURRENT_OBJECT           7
 #define FT_CURRENT_PROGRESS_LABEL     8
@@ -68,12 +65,7 @@
 
 //... edits ..............................................................
 
-#define ED_SAVE_AS_LOCATION     1
 #define ED_CHANGES              2
-
-//... buttons ............................................................
-
-#define PB_BROWSE_SAVE_AS_LOCATION  1
 
 //... strings ............................................................
 

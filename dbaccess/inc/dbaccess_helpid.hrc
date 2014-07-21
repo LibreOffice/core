@@ -245,8 +245,6 @@
 
 #define HID_DLG_DATABASE_WIZARD                           "DBACCESS_HID_DLG_DATABASE_WIZARD"
 
-#define HID_MACRO_MIGRATION_BACKUP_LOCATION               "DBACCESS_HID_MACRO_MIGRATION_BACKUP_LOCATION"
-
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,21 +76,19 @@ namespace dbmm
     class SaveDBDocPage : public MacroMigrationPage
     {
     public:
-        SaveDBDocPage( MacroMigrationDialog& _rParentDialog );
+        SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
+        ~SaveDBDocPage();
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
-        OUString getBackupLocation() const { return m_aLocationController.getURL(); }
-        void            grabLocationFocus() { m_aSaveAsLocation.GrabFocus(); }
+        OUString getBackupLocation() const { return m_pLocationController->getURL(); }
+        void            grabLocationFocus() { m_pSaveAsLocation->GrabFocus(); }
 
     protected:
-        FixedText               m_aExplanation;
-        FixedText               m_aSaveAsLabel;
-        ::svt::OFileURLControl  m_aSaveAsLocation;
-        PushButton              m_aBrowseSaveAsLocation;
-        FixedText               m_aStartMigration;
-        ::svx::DatabaseLocationInputController
-                                m_aLocationController;
+        ::svt::OFileURLControl*  m_pSaveAsLocation;
+        PushButton*             m_pBrowseSaveAsLocation;
+        FixedText*              m_pStartMigration;
+        ::svx::DatabaseLocationInputController* m_pLocationController;
 
     protected:
         // IWizardPageController overridables

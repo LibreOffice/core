@@ -94,29 +94,30 @@ namespace dbmm
     }
 
     // SaveDBDocPage
-    SaveDBDocPage::SaveDBDocPage( MacroMigrationDialog& _rParentDialog )
-        :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_SAVE_DBDOC_AS ) )
-        ,m_aExplanation         ( this, MacroMigrationResId( FT_EXPLANATION             ) )
-        ,m_aSaveAsLabel         ( this, MacroMigrationResId( FT_SAVE_AS_LABEL           ) )
-        ,m_aSaveAsLocation      ( this, MacroMigrationResId( ED_SAVE_AS_LOCATION        ) )
-        ,m_aBrowseSaveAsLocation( this, MacroMigrationResId( PB_BROWSE_SAVE_AS_LOCATION ) )
-        ,m_aStartMigration      ( this, MacroMigrationResId( FT_START_MIGRATION         ) )
-        ,m_aLocationController( _rParentDialog.getComponentContext(), m_aSaveAsLocation, m_aBrowseSaveAsLocation )
+    SaveDBDocPage::SaveDBDocPage(MacroMigrationDialog& _rParentDialog)
+        : MacroMigrationPage(&_rParentDialog, "BackupPage" ,"dbaccess/ui/backuppage.ui")
     {
-        FreeResource();
+        get(m_pStartMigration, "startmigrate");
+        get(m_pBrowseSaveAsLocation, "browse");
+        get(m_pSaveAsLocation, "location");
+        m_pLocationController = new ::svx::DatabaseLocationInputController(
+            _rParentDialog.getComponentContext(), *m_pSaveAsLocation, *m_pBrowseSaveAsLocation);
 
-        m_aSaveAsLocation.SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
-        m_aSaveAsLocation.SetDropDownLineCount( 20 );
-
-        m_aSaveAsLocation.SetHelpId( HID_MACRO_MIGRATION_BACKUP_LOCATION );
+        m_pSaveAsLocation->SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
+        m_pSaveAsLocation->SetDropDownLineCount( 20 );
 
         impl_updateLocationDependentItems();
+    }
+
+    SaveDBDocPage::~SaveDBDocPage()
+    {
+        delete m_pLocationController;
     }
 
     void SaveDBDocPage::impl_updateLocationDependentItems()
     {
         updateDialogTravelUI();
-        m_aStartMigration.Show( !m_aSaveAsLocation.GetText().isEmpty() );
+        m_pStartMigration->Show(!m_pSaveAsLocation->GetText().isEmpty());
     }
 
     IMPL_LINK( SaveDBDocPage, OnLocationModified, Edit*, /**/ )
@@ -140,7 +141,7 @@ namespace dbmm
             aBaseName.appendAscii( ".backup" );
             aURLParser.setBase( aBaseName.makeStringAndClear() );
 
-            m_aLocationController.setURL( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
+            m_pLocationController->setURL( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
             impl_updateLocationDependentItems();
         }
         catch( const Exception& )
@@ -154,7 +155,7 @@ namespace dbmm
         if ( !MacroMigrationPage::canAdvance() )
             return false;
 
-        return !m_aSaveAsLocation.GetText().isEmpty();
+        return !m_pSaveAsLocation->GetText().isEmpty();
     }
 
     bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
@@ -165,7 +166,7 @@ namespace dbmm
         if ( ::svt::WizardTypes::eTravelBackward == _eReason )
             return true;
 
-        if ( !m_aLocationController.prepareCommit() )
+        if ( !m_pLocationController->prepareCommit() )
             return false;
 
         return true;

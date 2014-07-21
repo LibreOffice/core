@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/admindialog \
     dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/applycolpage \
+    dbaccess/uiconfig/ui/backuppage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \
     dbaccess/uiconfig/ui/collectionviewdialog \
     dbaccess/uiconfig/ui/colwidthdialog \
