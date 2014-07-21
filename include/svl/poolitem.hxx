@@ -170,7 +170,7 @@ private:
     inline void              SetRefCount( sal_uLong n );
     inline void              SetKind( sal_uInt16 n );
 public:
-    inline sal_uLong         AddRef( sal_uLong n = 1 ) const;
+    inline void              AddRef( sal_uLong n = 1 ) const;
 private:
     inline sal_uLong         ReleaseRef( sal_uLong n = 1 ) const;
 
@@ -270,11 +270,11 @@ inline void SfxPoolItem::SetKind( sal_uInt16 n )
     m_nKind = n;
 }
 
-inline sal_uLong SfxPoolItem::AddRef( sal_uLong n ) const
+inline void SfxPoolItem::AddRef( sal_uLong n ) const
 {
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
     DBG_ASSERT(ULONG_MAX - m_nRefCount > n, "AddRef: refcount overflow");
-    return (const_cast<SfxPoolItem *>(this)->m_nRefCount += n);
+    const_cast<SfxPoolItem *>(this)->m_nRefCount += n;
 }
 
 inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const

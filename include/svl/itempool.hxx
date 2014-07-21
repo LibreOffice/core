@@ -87,7 +87,7 @@ public:
 
 protected:
     static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
-    static inline sal_uLong         AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
+    static inline void              AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
     static inline sal_uLong         ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
     static inline void              SetKind( SfxPoolItem& rItem, sal_uInt16 nRef );
 
@@ -228,9 +228,9 @@ inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uLong n )
 }
 
 // only the pool may manipulate the reference counts
-inline sal_uLong SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
+inline void SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
 {
-    return rItem.AddRef(n);
+    rItem.AddRef(n);
 }
 
 // only the pool may manipulate the reference counts
