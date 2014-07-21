@@ -360,6 +360,21 @@ void RemoteServer::deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient 
 void SdDLL::RegisterRemotes()
 {
     SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
+
+    // The remote server is likely of no use in headless mode. And as only
+    // one instance of the server can actually own the appropriate ports its
+    // probably best to not even try to do so from our headless instance
+    // (i.e. as to avoid blocking expected usage).
+    // It could perhaps be argued that we would still need the remote
+    // server for tiled rendering of presentations, but even then this
+    // implementation would not be of much use, i.e. would be controlling
+    // the purely imaginary headless presentation -- instead we'd need
+    // to have some sort of mechanism of plugging in our tiled rendering
+    // client to be controlled by the remote server, or provide an
+    // alternative implementation.
+    if ( Application::IsHeadlessModeEnabled() )
+        return;
+
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if ( xContext.is()  && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) )
         return;
