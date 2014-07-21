@@ -3090,18 +3090,8 @@ void writeContent(
             {
                 // <text:a xlink:href="url" xlink:type="simple">value</text:a>
 
-                Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-                bool bUseRelative = officecfg::Office::Common::Save::URL::FileSystem::get( xContext );
                 OUString aURL = static_cast<const SvxURLField*>(pField)->GetURL();
-                if(bUseRelative)
-                {
-                    OUString aBase = rExport.GetOrigFileName();
-                    INetURLObject aURLObject(aBase);
-                    aURLObject.removeSegment();
-                    aURLObject.removeSegment();
-                    aURL = INetURLObject::GetRelURL(aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI), aURL);
-                }
-                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aURL);
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(aURL));
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
