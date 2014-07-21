@@ -197,7 +197,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
 
     Reference< XPropertySet > xPropertySet;
     aControlAny >>= xPropertySet;
-    if( xPropertySet.is() )
+    if( xPropertySet.is() && xStringResourceManager.is())
     {
         Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
         sal_Int32 nLocaleCount = aLocaleSeq.getLength();
