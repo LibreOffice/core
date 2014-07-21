@@ -21,20 +21,18 @@ namespace vcl {
 
 namespace {
 
-const char *LOG_AREA = "vcl.app";
-
 // set the status of a file. Returns false if the status could not be determined.
 bool set_file_status(osl::FileStatus& status, const OUString& file)
 {
     osl::DirectoryItem dirItem;
     osl::FileBase::RC retvalGet = osl::DirectoryItem::get(file, dirItem);
     if (retvalGet != osl::FileBase::E_None) {
-        SAL_WARN(LOG_AREA, "Could not determine status for file '" << file << "'.");
+        SAL_WARN("vcl.app", "Could not determine status for file '" << file << "'.");
         return false;
     }
     osl::FileBase::RC retvalStatus = dirItem.getFileStatus(status);
     if (retvalStatus != osl::FileBase::E_None) {
-        SAL_WARN(LOG_AREA, "Could not determine status for file '" << file << "'.");
+        SAL_WARN("vcl.app", "Could not determine status for file '" << file << "'.");
         return false;
     }
     return true;
@@ -45,7 +43,7 @@ OUString convert_to_absolute_path(const OUString& path)
     salhelper::LinkResolver resolver(0);
     osl::FileBase::RC rc = resolver.fetchFileStatus(path);
     if (rc != osl::FileBase::E_None) {
-        SAL_WARN(LOG_AREA, "Could not resolve path '" << path << "' to search for icon themes.");
+        SAL_WARN("vcl.app", "Could not resolve path '" << path << "' to search for icon themes.");
         throw std::runtime_error("Provided a recursive symlink to a icon theme directory that could not be resolved.");
     }
     return resolver.m_aStatus.getFileURL();
@@ -66,13 +64,13 @@ IconThemeScanner::ScanDirectoryForIconThemes(const OUString& path)
     }
 
     if (!fileStatus.isDirectory()) {
-        SAL_INFO(LOG_AREA, "Cannot search for icon themes in '"<< path << "'. It is not a directory.");
+        SAL_INFO("vcl.app", "Cannot search for icon themes in '"<< path << "'. It is not a directory.");
         return false;
     }
 
     std::vector<OUString> iconThemePaths = ReadIconThemesFromPath(path);
     if (iconThemePaths.empty()) {
-        SAL_WARN(LOG_AREA, "Could not find any icon themes in the provided directory ('" <<path<<"'.");
+        SAL_WARN("vcl.app", "Could not find any icon themes in the provided directory ('" <<path<<"'.");
         return false;
     }
     mFoundIconThemes.clear();
@@ -89,10 +87,10 @@ IconThemeScanner::AddIconThemeByPath(const OUString &url)
     if (!IconThemeInfo::UrlCanBeParsed(url)) {
         return false;
     }
-    SAL_INFO(LOG_AREA, "Found a file that seems to be an icon theme: '" << url << "'" );
+    SAL_INFO("vcl.app", "Found a file that seems to be an icon theme: '" << url << "'" );
     IconThemeInfo newTheme(url);
     mFoundIconThemes.push_back(newTheme);
-    SAL_INFO(LOG_AREA, "Adding the file as '" << newTheme.GetDisplayName() <<
+    SAL_INFO("vcl.app", "Adding the file as '" << newTheme.GetDisplayName() <<
             "' with id '" << newTheme.GetThemeId() << "'.");
     return true;
 }
@@ -101,7 +99,7 @@ IconThemeScanner::AddIconThemeByPath(const OUString &url)
 IconThemeScanner::ReadIconThemesFromPath(const OUString& dir)
 {
     std::vector<OUString> found;
-    SAL_INFO(LOG_AREA, "Scanning directory '" << dir << " for icon themes.");
+    SAL_INFO("vcl.app", "Scanning directory '" << dir << " for icon themes.");
 
     osl::Directory dirToScan(dir);
     osl::FileBase::RC retvalOpen = dirToScan.open();
@@ -131,7 +129,7 @@ IconThemeScanner::FileIsValidIconTheme(const OUString& filename)
 {
     // check whether we can construct a IconThemeInfo from it
     if (!IconThemeInfo::UrlCanBeParsed(filename)) {
-        SAL_INFO(LOG_AREA, "File '" << filename << "' does not seem to be an icon theme.");
+        SAL_INFO("vcl.app", "File '" << filename << "' does not seem to be an icon theme.");
         return false;
     }
 
@@ -194,7 +192,7 @@ IconThemeScanner::GetIconThemeInfo(const OUString& themeId)
     std::vector<IconThemeInfo>::iterator info = std::find_if(mFoundIconThemes.begin(), mFoundIconThemes.end(),
         SameTheme(themeId));
     if (info == mFoundIconThemes.end()) {
-        SAL_WARN(LOG_AREA, "Requested information for icon theme with id '" << themeId
+        SAL_WARN("vcl.app", "Requested information for icon theme with id '" << themeId
                 << "' which does not exist.");
         throw std::runtime_error("Requested information on not-installed icon theme");
     }
