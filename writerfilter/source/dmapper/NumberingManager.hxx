@@ -80,7 +80,7 @@ public:
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
     void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
-    void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > sValue )
+    void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > const& sValue )
         { m_sGraphicBitmap = sValue; }
     void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( const OUString& sValue ) { m_sRGBXchNums += sValue; };
@@ -119,7 +119,7 @@ public:
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
-    void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
+    void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const& xShape);
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape() { return m_xShape;}
 private:
     sal_Int32 m_nId;
@@ -203,7 +203,7 @@ public:
     void CreateNumberingRules(
             DomainMapper& rDMapper,
             com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory> xFactory );
+                com::sun::star::lang::XMultiServiceFactory> const& xFactory );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules( ) { return m_xNumRules; };
@@ -246,7 +246,7 @@ public:
 
     ListsManager(
             DomainMapper& rDMapper,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory);
     virtual ~ListsManager();
 
     typedef boost::shared_ptr< ListsManager >  Pointer;

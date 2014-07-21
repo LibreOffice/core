@@ -83,7 +83,8 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
 }
 #endif
 
-DomainMapperTableHandler::DomainMapperTableHandler(TextReference_t xText, DomainMapper_Impl& rDMapper_Impl)
+DomainMapperTableHandler::DomainMapperTableHandler(TextReference_t const& xText,
+            DomainMapper_Impl& rDMapper_Impl)
     : m_xText(xText),
         m_rDMapper_Impl( rDMapper_Impl ),
         m_nCellIndex(0),
@@ -923,7 +924,8 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 }
 
 // Apply paragraph property to each paragraph within a cell.
-static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> xCell, uno::Any aBottomMargin)
+static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
+        uno::Any aBottomMargin)
 {
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCell, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();

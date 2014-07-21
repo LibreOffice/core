@@ -129,19 +129,19 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
 }
 
 FormControlHelper::FormControlHelper(FieldId eFieldId,
-                                     uno::Reference<text::XTextDocument> rTextDocument,
+                                     uno::Reference<text::XTextDocument> const& xTextDocument,
                                      FFDataHandler::Pointer_t pFFData)
     : m_pFFData(pFFData), m_pImpl(new FormControlHelper_Impl)
 {
     m_pImpl->m_eFieldId = eFieldId;
-    m_pImpl->rTextDocument = rTextDocument;
+    m_pImpl->rTextDocument = xTextDocument;
 }
 
 FormControlHelper::~FormControlHelper()
 {
 }
 
-bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& xTextRange,
                                        const OUString & rControlName)
 {
     if ( !m_pFFData )
@@ -206,7 +206,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     return true;
 }
 
-bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField)
+bool FormControlHelper::processField(uno::Reference<text::XFormField> const& xFormField)
 {
     bool bRes = true;
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
@@ -260,7 +260,7 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
     return bRes;
 }
 
-bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRange)
+bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xTextRange)
 {
     bool bCreated = false;
     if ( !m_pFFData )

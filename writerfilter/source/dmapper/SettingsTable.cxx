@@ -82,7 +82,7 @@ struct SettingsTable_Impl
     uno::Sequence<beans::PropertyValue> m_pCompatSettings;
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
 
-    SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
+    SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory ) :
     m_rDMapper( rDMapper )
     , m_xTextFactory( xTextFactory )
     , m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -115,7 +115,7 @@ struct SettingsTable_Impl
 
 };
 
-SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory)
+SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory)
 : LoggedProperties(dmapper_logger, "SettingsTable")
 , LoggedTable(dmapper_logger, "SettingsTable")
 , m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
@@ -368,7 +368,7 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
     return m_pImpl->m_pCompatSettings;
 }
 
-void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
+void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
 

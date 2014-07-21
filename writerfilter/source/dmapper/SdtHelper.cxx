@@ -135,12 +135,15 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
 }
 
-void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel)
+void SdtHelper::createControlShape(awt::Size aSize,
+        uno::Reference<awt::XControlModel> const& xControlModel)
 {
     createControlShape(aSize, xControlModel, uno::Sequence<beans::PropertyValue>());
 }
 
-void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel, const uno::Sequence<beans::PropertyValue>& rGrabBag)
+void SdtHelper::createControlShape(awt::Size aSize,
+        uno::Reference<awt::XControlModel> const& xControlModel,
+        const uno::Sequence<beans::PropertyValue>& rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY);
     xControlShape->setSize(aSize);

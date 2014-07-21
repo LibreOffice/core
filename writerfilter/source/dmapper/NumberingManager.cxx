@@ -421,7 +421,7 @@ void NumPicBullet::SetId(sal_Int32 nId)
     m_nId = nId;
 }
 
-void NumPicBullet::SetShape(uno::Reference<drawing::XShape> xShape)
+void NumPicBullet::SetShape(uno::Reference<drawing::XShape> const& xShape)
 {
     m_xShape = xShape;
 }
@@ -527,7 +527,7 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValue
 }
 
 uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
-       uno::Reference< lang::XMultiServiceFactory > xFactory )
+       uno::Reference<lang::XMultiServiceFactory> const& xFactory)
 {
     uno::Reference< container::XNameContainer > xStyles;
 
@@ -546,7 +546,7 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
 }
 
 void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
-        uno::Reference< lang::XMultiServiceFactory> xFactory )
+        uno::Reference<lang::XMultiServiceFactory> const& xFactory)
 {
     // Get the UNO Numbering styles
     uno::Reference< container::XNameContainer > xStyles = lcl_getUnoNumberingStyles( xFactory );
@@ -688,7 +688,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
 
 ListsManager::ListsManager(DomainMapper& rDMapper,
-    const uno::Reference< lang::XMultiServiceFactory > xFactory)
+    const uno::Reference<lang::XMultiServiceFactory> & xFactory)
     : LoggedProperties(dmapper_logger, "ListsManager")
     , LoggedTable(dmapper_logger, "ListsManager")
     , m_rDMapper(rDMapper)

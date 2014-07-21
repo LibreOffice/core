@@ -90,7 +90,8 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
 
-    DomainMapperTableHandler(TextReference_t xText, DomainMapper_Impl& rDMapper_Impl);
+    DomainMapperTableHandler(TextReference_t const& xText,
+                             DomainMapper_Impl& rDMapper_Impl);
     virtual ~DomainMapperTableHandler();
 
     virtual void startTable(unsigned int nRows, unsigned int nDepth,

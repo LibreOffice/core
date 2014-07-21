@@ -304,7 +304,7 @@ struct StyleSheetTable_Impl
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
     bool                                    m_bIsNewDoc;
 
-    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc);
+    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
@@ -313,7 +313,10 @@ struct StyleSheetTable_Impl
 };
 
 
-StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc ) :
+StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
+        uno::Reference< text::XTextDocument> const& xTextDocument,
+        bool const bIsNewDoc)
+    :
             m_rDMapper( rDMapper ),
             m_xTextDocument( xTextDocument ),
             m_pCurrentEntry(),
@@ -382,7 +385,9 @@ void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Valu
 }
 
 
-StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc)
+StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
+        uno::Reference< text::XTextDocument> const& xTextDocument,
+        bool const bIsNewDoc)
 : LoggedProperties(dmapper_logger, "StyleSheetTable")
 , LoggedTable(dmapper_logger, "StyleSheetTable")
 , m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument, bIsNewDoc) )

@@ -45,7 +45,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
  public:
     SettingsTable(  DomainMapper& rDMapper,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xTextFactory
             );
     virtual ~SettingsTable();
 
@@ -77,7 +77,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
-    void ApplyProperties( css::uno::Reference< css::text::XTextDocument > xDoc );
+    void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
  private:
     // Properties
