@@ -120,7 +120,7 @@ public:
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}
-    void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
+    void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> const& xF ) { m_xFootnote = xF; }
 
     sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
     void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
@@ -201,15 +201,15 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_ndxaLnn;
     sal_Int32                               m_nLnnMin;
 
-    void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle );
+    void _ApplyProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xStyle );
     ::com::sun::star::uno::Reference< com::sun::star::text::XTextColumns > ApplyColumnProperties(
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xFollowPageStyle, DomainMapper_Impl& rDM_Impl );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xFollowPageStyle, DomainMapper_Impl& rDM_Impl );
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
     void PrepareHeaderFooterProperties( bool bFirstPage );
     bool HasHeader( bool bFirstPage ) const;
     bool HasFooter( bool bFirstPage ) const;
 
-    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle,
+    void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xStyle,
         PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth );
 
 public:
@@ -380,10 +380,10 @@ public:
     void        SetDropCapLength(sal_Int8 nSet) { m_nDropCapLength = nSet;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartingRange() const { return m_xStartingRange; }
-    void SetStartingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xSet ) { m_xStartingRange = xSet; }
+    void SetStartingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xSet ) { m_xStartingRange = xSet; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetEndingRange() const { return m_xEndingRange; }
-    void SetEndingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xSet ) { m_xEndingRange = xSet; }
+    void SetEndingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xSet ) { m_xEndingRange = xSet; }
 
     void                    SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet;}
     const OUString&  GetParaStyleName() const { return m_sParaStyleName;}

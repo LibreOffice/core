@@ -581,7 +581,7 @@ table::ShadowFormat PropertyMap::getShadowFromBorder(table::BorderLine2 aBorder)
     return aFormat;
 }
 
-void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle,
+void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > const& xStyle,
         PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -608,7 +608,7 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
 
 
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
-                            uno::Reference< beans::XPropertySet > xColumnContainer, DomainMapper_Impl& rDM_Impl )
+                            uno::Reference< beans::XPropertySet > const& xColumnContainer, DomainMapper_Impl& rDM_Impl )
 {
     uno::Reference< text::XTextColumns > xColumns;
     try
@@ -860,7 +860,9 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     operator[](PROP_BOTTOM_MARGIN) = uno::makeAny( nBottomMargin );
 }
 
-uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
+uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection,
+        DomainMapper_Impl& rDM_Impl,
+        uno::Reference<text::XTextRange> const& xStartingRange)
 {
     uno::Reference< beans::XPropertySet > xRangeProperties;
     if (bIsFirstSection && rDM_Impl.GetBodyText().is())
@@ -1198,7 +1200,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 }
 
 
-void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet > xStyle )
+void SectionPropertyMap::_ApplyProperties(
+        uno::Reference< beans::XPropertySet > const& xStyle)
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     uno::Reference<beans::XMultiPropertySet> const xMultiSet(xStyle,
