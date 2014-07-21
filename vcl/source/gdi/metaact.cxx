@@ -1199,7 +1199,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     if( nAryLen )
     {
         mpDXAry = new long[ nAryLen ];
-        memcpy( mpDXAry, pDXAry, nAryLen * sizeof( sal_Int32 ) );
+        memcpy( mpDXAry, pDXAry, nAryLen * sizeof(long) );
     }
     else
         mpDXAry = NULL;
