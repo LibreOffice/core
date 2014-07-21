@@ -1929,7 +1929,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFmt.SetBulletChar( cBulletChar );
-            sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4,
+            sal_Int16 nOffs = GetMetricVal( CM_01 ) * 4,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
