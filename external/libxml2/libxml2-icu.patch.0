@@ -17,12 +17,16 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
  LIBS =
  !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
-@@ -78,7 +78,7 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
+@@ -78,7 +78,11 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
  LIBS = $(LIBS) iconv.lib
  !endif 
  !if "$(WITH_ICU)" == "1"
 -LIBS = $(LIBS) icu.lib
++!if "$(DEBUG)" != ""
++LIBS = $(LIBS) icuind.lib icuucd.lib icudtd.lib
++!else
 +LIBS = $(LIBS) icuin.lib icuuc.lib icudt.lib
++!endif
  !endif
  !if "$(WITH_ZLIB)" == "1"
  # could be named differently zdll or zlib
