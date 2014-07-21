@@ -81,8 +81,8 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     void putPropertyToFrameGrabBag( const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
 
 public:
-    explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext> xComponentContext,
-                            css::uno::Reference<css::lang::XMultiServiceFactory> xTextFactory,
+    explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext> const& xComponentContext,
+                            css::uno::Reference<css::lang::XMultiServiceFactory> const& xTextFactory,
                             DomainMapper& rDomainMapper,
                             GraphicImportType eGraphicImportType,
                             std::queue<OUString>& rPositivePercentages);

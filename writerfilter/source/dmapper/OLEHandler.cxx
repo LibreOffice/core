@@ -177,7 +177,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 }
 
 
-void OLEHandler::saveInteropProperties( uno::Reference< text::XTextDocument > xTextDocument, const OUString& sObjectName )
+void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const& xTextDocument, const OUString& sObjectName)
 {
     const OUString sGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     const OUString sEmbeddingsPropName = "EmbeddedObjects";
@@ -225,7 +225,8 @@ void OLEHandler::saveInteropProperties( uno::Reference< text::XTextDocument > xT
 }
 
 
-OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
+OUString OLEHandler::copyOLEOStream(
+        uno::Reference<text::XTextDocument> const& xTextDocument)
 {
     OUString sRet;
     if( !m_xInputStream.is( ) )

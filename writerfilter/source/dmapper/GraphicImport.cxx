@@ -405,8 +405,8 @@ public:
     }
 };
 
-GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentContext,
-                             uno::Reference<lang::XMultiServiceFactory> xTextFactory,
+GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComponentContext,
+                             uno::Reference<lang::XMultiServiceFactory> const& xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType,
                              std::queue<OUString>& rPositivePercentages)

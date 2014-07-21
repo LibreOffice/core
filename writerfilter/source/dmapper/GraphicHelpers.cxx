@@ -260,7 +260,7 @@ sal_Int32 WrapHandler::getWrapMode( )
 }
 
 
-void GraphicZOrderHelper::addItem( uno::Reference< beans::XPropertySet > props, sal_Int32 relativeHeight )
+void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& props, sal_Int32 const relativeHeight)
 {
     items[ relativeHeight ] = props;
 }

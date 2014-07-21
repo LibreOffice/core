@@ -71,7 +71,7 @@ class OLEHandler : public LoggedProperties
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Interoperability
-    virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument,
+    virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const& xTextDocument,
                                         const OUString& sObjectName );
 
 public:
@@ -82,7 +82,7 @@ public:
 
     inline bool isOLEObject( ) { return m_xInputStream.is( ); };
 
-    OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument );
+    OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const & xTextDocument );
 
     ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
     ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}
