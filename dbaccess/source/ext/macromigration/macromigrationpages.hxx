@@ -77,7 +77,7 @@ namespace dbmm
     {
     public:
         SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
-        ~SaveDBDocPage();
+        virtual ~SaveDBDocPage();
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:
