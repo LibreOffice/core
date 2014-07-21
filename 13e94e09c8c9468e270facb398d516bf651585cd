@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_bb6d93ce",
+        "filename": "include/svl/SfxBroadcaster.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-21T05:46:20Z",
+      "side": 1,
+      "message": "use operator[] here",
+      "revId": "13e94e09c8c9468e270facb398d516bf651585cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_fb730bb3",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-21T05:46:20Z",
+      "side": 1,
+      "message": "No need to use vector::at here, rather use vector::operator[].\nIn debug mode, even operator[] does bounds checking, and in production mode, we don\u0027t want the overhead of bounds checking.",
+      "revId": "13e94e09c8c9468e270facb398d516bf651585cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab921fb_db784792",
+        "filename": "svl/source/notify/SfxBroadcaster.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-07-21T05:46:20Z",
+      "side": 1,
+      "message": "return type on same line as method name to match style in rest of file.",
+      "revId": "13e94e09c8c9468e270facb398d516bf651585cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
