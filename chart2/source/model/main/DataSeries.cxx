@@ -335,40 +335,37 @@ Reference< beans::XPropertySet >
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
         DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values", true ) );
-    if( !aValuesSeries.empty() )
+
+    if (aValuesSeries.empty())
+        throw lang::IndexOutOfBoundsException();
+
+    Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
+    if( 0 <= nIndex && nIndex < xSeq->getData().getLength() )
     {
-        Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
-        if( 0 <= nIndex && nIndex < xSeq->getData().getLength() )
         {
+            MutexGuard aGuard( GetMutex() );
+            tDataPointAttributeContainer::iterator aIt( m_aAttributedDataPoints.find( nIndex ) );
+            if( aIt != m_aAttributedDataPoints.end() )
+                xResult = (*aIt).second;
+        }
+        if( !xResult.is() )
+        {
+            Reference< beans::XPropertySet > xParentProperties;
+            Reference< util::XModifyListener > xModifyEventForwarder;
             {
                 MutexGuard aGuard( GetMutex() );
-                tDataPointAttributeContainer::iterator aIt( m_aAttributedDataPoints.find( nIndex ) );
-                if( aIt != m_aAttributedDataPoints.end() )
-                    xResult = (*aIt).second;
+                xParentProperties = this;
+                xModifyEventForwarder = m_xModifyEventForwarder;
             }
-            if( !xResult.is() )
-            {
-                Reference< beans::XPropertySet > xParentProperties;
-                Reference< util::XModifyListener > xModifyEventForwarder;
-                {
-                    MutexGuard aGuard( GetMutex() );
-                    xParentProperties = this;
-                    xModifyEventForwarder = m_xModifyEventForwarder;
-                }
 
-                // create a new XPropertySet for this data point
-                xResult.set( new DataPoint( xParentProperties ) );
-                {
-                    MutexGuard aGuard( GetMutex() );
-                    m_aAttributedDataPoints[ nIndex ] = xResult;
-                }
-                ModifyListenerHelper::addListener( xResult, xModifyEventForwarder );
+            // create a new XPropertySet for this data point
+            xResult.set( new DataPoint( xParentProperties ) );
+            {
+                MutexGuard aGuard( GetMutex() );
+                m_aAttributedDataPoints[ nIndex ] = xResult;
             }
+            ModifyListenerHelper::addListener( xResult, xModifyEventForwarder );
         }
-    }
-    else
-    {
-        throw lang::IndexOutOfBoundsException();
     }
 
     return xResult;
