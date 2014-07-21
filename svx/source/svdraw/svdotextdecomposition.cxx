@@ -792,7 +792,8 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
         }
 
         // Set text object's string
-        pNextTextObj->SetOutlinerParaObject(*pText->GetOutlinerParaObject());
+        pNextTextObj->SetOutlinerParaObject(pText->GetOutlinerParaObject());
+        // XXX: it's a pointer to the first text objs' active text!
 
     }
 }
