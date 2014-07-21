@@ -101,6 +101,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	uri-encode \
 	ui-previewer \
 	tiledrendering \
+	$(if $(filter LINUX,$(OS)), lokconf_init) \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
