@@ -56,6 +56,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,cmislib,\
 	UnpackedTarball/cmis/src/libcmis/onedrive-document \
 	UnpackedTarball/cmis/src/libcmis/onedrive-folder \
 	UnpackedTarball/cmis/src/libcmis/onedrive-object \
+	UnpackedTarball/cmis/src/libcmis/onedrive-object-type \
 	UnpackedTarball/cmis/src/libcmis/onedrive-property \
 	UnpackedTarball/cmis/src/libcmis/onedrive-repository \
 	UnpackedTarball/cmis/src/libcmis/onedrive-session \
