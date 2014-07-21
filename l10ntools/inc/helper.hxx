@@ -15,8 +15,6 @@
 #include "sal/config.h"
 #include "sal/types.h"
 
-#include <cassert>
-
 #include <libxml/parser.h>
 
 #include <rtl/string.hxx>
