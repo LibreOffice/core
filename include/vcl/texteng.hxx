@@ -113,7 +113,7 @@ private:
 
     Font                maFont;
     Color               maTextColor;
-    sal_uInt16              mnCharHeight;
+    long                mnCharHeight;
     sal_uInt16              mnFixCharWidth100;
 
     sal_uLong               mnMaxTextLen;
@@ -259,7 +259,7 @@ public:
 
     sal_uLong           GetTextHeight() const;
     sal_uLong           CalcTextWidth();
-    sal_uInt16          GetCharHeight() const { return mnCharHeight; }
+    long                GetCharHeight() const { return mnCharHeight; }
 
     sal_uLong           GetParagraphCount() const;
     OUString            GetText( sal_uLong nParagraph ) const;

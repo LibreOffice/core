@@ -203,7 +203,7 @@ void TextEngine::SetFont( const Font& rFont )
         mnDefTab = (sal_uInt16)aTextSize.Width();
         if ( !mnDefTab )
             mnDefTab = 1;
-        mnCharHeight = (sal_uInt16)aTextSize.Height();
+        mnCharHeight = aTextSize.Height();
         mnFixCharWidth100 = 0;
 
         FormatFullDoc();
