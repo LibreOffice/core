@@ -656,7 +656,7 @@ void Desktop::Init()
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             SetBootstrapStatus(BS_TERMINATE);
         }
-        else if ( !rCmdLineArgs.GetUnknown().isEmpty()
+        else if ( (!rCmdLineArgs.GetUnknown().isEmpty() && false)
                   || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
         {
             // disable IPC thread in an instance that is just showing a help message
