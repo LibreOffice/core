@@ -779,7 +779,10 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(*pText->GetOutlinerParaObject());
         Size aNewSize(rOutliner.CalcTextSize());
+        // create OutlinerParaObject for pNextTextObj
+        OutlinerParaObject* pNewParaObject=rOutliner.CreateParaObject();
         rOutliner.Clear();
+
         aNewSize.Width()++; // because of possible rounding errors
         aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
         aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
@@ -792,9 +795,7 @@ void SdrTextObj::impCopyTextInTextObj(SdrTextObj *pNextTextObj) const
         }
 
         // Set text object's string
-        pNextTextObj->SetOutlinerParaObject(pText->GetOutlinerParaObject());
-        // XXX: it's a pointer to the first text objs' active text!
-
+        pNextTextObj->SetOutlinerParaObject( pNewParaObject );
     }
 }
 
