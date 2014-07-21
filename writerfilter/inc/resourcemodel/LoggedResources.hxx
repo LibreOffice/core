@@ -59,7 +59,7 @@ public:
     void endParagraphGroup() SAL_OVERRIDE;
     void startCharacterGroup() SAL_OVERRIDE;
     void endCharacterGroup() SAL_OVERRIDE;
-    void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > const& xShape ) SAL_OVERRIDE;
     void endShape() SAL_OVERRIDE;
     void text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
     void utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
@@ -76,7 +76,7 @@ protected:
     virtual void lcl_endParagraphGroup() = 0;
     virtual void lcl_startCharacterGroup() = 0;
     virtual void lcl_endCharacterGroup() = 0;
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape )  = 0;
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > const& xShape )  = 0;
     virtual void lcl_endShape() = 0;
     virtual void lcl_text(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) = 0;

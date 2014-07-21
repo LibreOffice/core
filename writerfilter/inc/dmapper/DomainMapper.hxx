@@ -140,7 +140,7 @@ private:
     virtual void lcl_endParagraphGroup() SAL_OVERRIDE;
     virtual void lcl_startCharacterGroup() SAL_OVERRIDE;
     virtual void lcl_endCharacterGroup() SAL_OVERRIDE;
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > const& xShape ) SAL_OVERRIDE;
     virtual void lcl_endShape( ) SAL_OVERRIDE;
 
     virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;

@@ -89,7 +89,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     virtual void lcl_substream(Id name,
                                ::writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_info(const std::string & info) SAL_OVERRIDE;
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > const& xShape ) SAL_OVERRIDE;
     virtual void lcl_endShape( ) SAL_OVERRIDE;
 
 };

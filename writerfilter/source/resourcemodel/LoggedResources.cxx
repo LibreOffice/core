@@ -21,6 +21,8 @@
 #include <resourcemodel/LoggedResources.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
+using namespace ::com::sun::star;
+
 namespace writerfilter
 {
 
@@ -142,7 +144,7 @@ void LoggedStream::endCharacterGroup()
 #endif
 }
 
-void LoggedStream::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape )
+void LoggedStream::startShape(uno::Reference<drawing::XShape> const& xShape)
 {
 #ifdef DEBUG_DOMAINMAPPER
     mHelper.startElement("shape");

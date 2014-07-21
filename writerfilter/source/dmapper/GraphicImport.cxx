@@ -1368,7 +1368,7 @@ void GraphicImport::lcl_info(const string & /*info*/)
 {
 }
 
-void GraphicImport::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+void GraphicImport::lcl_startShape(uno::Reference<drawing::XShape> const&)
 {
 }
 

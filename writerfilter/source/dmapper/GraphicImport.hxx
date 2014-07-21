@@ -117,7 +117,7 @@ public:
                            writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_info(const std::string & info) SAL_OVERRIDE;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> xShape) SAL_OVERRIDE;
+    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) SAL_OVERRIDE;
     virtual void lcl_endShape() SAL_OVERRIDE;
 
     void handleWrapTextValue(sal_uInt32 nVal);

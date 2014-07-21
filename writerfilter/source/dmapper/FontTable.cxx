@@ -219,7 +219,7 @@ void FontTable::lcl_info(const std::string& )
 {
 }
 
-void FontTable::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > )
+void FontTable::lcl_startShape(uno::Reference<drawing::XShape> const&)
 {
 }
 

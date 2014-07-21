@@ -2616,7 +2616,7 @@ void DomainMapper::markLastSectionGroup( )
     m_pImpl->SetIsLastSectionGroup( true );
 }
 
-void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
+void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
 {
     if (m_pImpl->GetTopContext())
     {
