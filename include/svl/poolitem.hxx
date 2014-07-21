@@ -173,7 +173,6 @@ public:
     inline sal_uLong         AddRef( sal_uLong n = 1 ) const;
 private:
     inline sal_uLong         ReleaseRef( sal_uLong n = 1 ) const;
-    SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 protected:
                              explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
