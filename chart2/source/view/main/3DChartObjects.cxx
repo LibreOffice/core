@@ -11,6 +11,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
+#include <vcl/opengl/GLMHelper.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/bmpacc.hxx>
 

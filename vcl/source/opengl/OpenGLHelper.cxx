@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/opengl/GLMHelper.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <osl/file.hxx>
