@@ -118,23 +118,26 @@
 	<!-- Italic character style. -->
 	<variable name="ITALIC_BIT" select="2"/>
 
+	<!-- Underline character style. -->
+	<variable name="UNDERLINE_BIT" select="4"/>
+
 	<!-- Subscript character style. -->
-	<variable name="SUBSCRIPT_BIT" select="4"/>
+	<variable name="SUBSCRIPT_BIT" select="8"/>
 
 	<!-- Superscript character style. -->
-	<variable name="SUPERSCRIPT_BIT" select="8"/>
+	<variable name="SUPERSCRIPT_BIT" select="16"/>
 
 	<!-- Typewriter character style. -->
-	<variable name="TYPEWRITER_BIT" select="16"/>
+	<variable name="TYPEWRITER_BIT" select="32"/>
 	
 	<!-- Preformatted text paragraph style. -->
-	<variable name="CODE_BIT" select="32"/>
+	<variable name="CODE_BIT" select="64"/>
 
 	<!-- Centered paragraph style. -->
-	<variable name="CENTER_BIT" select="64"/>
+	<variable name="CENTER_BIT" select="128"/>
 
 	<!-- Right aligned paragraph style. -->
-	<variable name="RIGHT_BIT" select="128"/>
+	<variable name="RIGHT_BIT" select="256"/>
 	
 	<!-- Constant defining the empty style. -->
 	<variable name="NO_STYLE" select="0"/>
@@ -976,6 +979,8 @@
 					select="($style mod (2 * $BOLD_BIT)) != 0"/>
 				<variable name="italic" 
 					select="($style mod (2 * $ITALIC_BIT)) - ($style mod ($ITALIC_BIT)) != 0"/>
+				<variable name="underline" 
+					select="($style mod (2 * $UNDERLINE_BIT)) - ($style mod ($UNDERLINE_BIT)) != 0"/>
 				<variable name="superscript" 
 					select="($style mod (2 * $SUPERSCRIPT_BIT)) - ($style mod ($SUPERSCRIPT_BIT)) != 0"/>
 				<variable name="subscript" 
@@ -989,6 +994,8 @@
 					select="($style-left mod (2 * $BOLD_BIT)) != 0"/>
 				<variable name="italic-left" 
 					select="($style-left mod (2 * $ITALIC_BIT)) - ($style-left mod ($ITALIC_BIT)) != 0"/>
+				<variable name="underline-left" 
+					select="($style-left mod (2 * $UNDERLINE_BIT)) - ($style-left mod ($UNDERLINE_BIT)) != 0"/>
 				<variable name="superscript-left" 
 					select="($style-left mod (2 * $SUPERSCRIPT_BIT)) - ($style-left mod ($SUPERSCRIPT_BIT)) != 0"/>
 				<variable name="subscript-left" 
@@ -1000,6 +1007,8 @@
 					select="($style-right mod (2 * $BOLD_BIT)) != 0"/>
 				<variable name="italic-right" 
 					select="($style-right mod (2 * $ITALIC_BIT)) - ($style-right mod ($ITALIC_BIT)) != 0"/>
+				<variable name="underline-right" 
+					select="($style-right mod (2 * $UNDERLINE_BIT)) - ($style-right mod ($UNDERLINE_BIT)) != 0"/>
 				<variable name="superscript-right" 
 					select="($style-right mod (2 * $SUPERSCRIPT_BIT)) - ($style-right mod ($SUPERSCRIPT_BIT)) != 0"/>
 				<variable name="subscript-right" 
@@ -1027,6 +1036,9 @@
 				<if test="not($code) and $typewriter and not($typewriter-left)">
 					<text>&lt;tt&gt;</text>
 				</if>
+				<if test="$underline and not($underline-left)">
+					<text>&lt;u&gt;</text>
+				</if>
 				<if test="$bold and not($bold-left)">
 					<text>'''</text>
 				</if>
@@ -1043,6 +1055,9 @@
 				</if>
 				<if test="$bold and not($bold-right)">
 					<text>'''</text>
+				</if>
+				<if test="$underline and not($underline-right)">
+					<text>&lt;/u&gt;</text>
 				</if>
 				<if test="not($code) and $typewriter and not($typewriter-right)">
 					<text>&lt;/tt&gt;</text>
@@ -1255,6 +1270,8 @@
 			select="($style-mask mod (2 * $BOLD_BIT)) = 0"/>
 		<variable name="italic-requested" 
 			select="($style-mask mod (2 * $ITALIC_BIT)) - ($style-mask mod ($ITALIC_BIT)) = 0"/>
+		<variable name="underline-requested" 
+			select="($style-mask mod (2 * $UNDERLINE_BIT)) - ($style-mask mod ($UNDERLINE_BIT)) = 0"/>
 		<variable name="superscript-requested" 
 			select="($style-mask mod (2 * $SUPERSCRIPT_BIT)) - ($style-mask mod ($SUPERSCRIPT_BIT)) = 0"/>
 		<variable name="subscript-requested" 
@@ -1314,6 +1331,32 @@
 						italic and no parent style must be considered.
 					-->
 					<value-of select="$ITALIC_BIT"/>
+				</when>
+				<otherwise>
+					<value-of select="$NO_STYLE"/>
+				</otherwise>
+			</choose>
+		</variable>
+
+		<variable name="underline-style">
+			<choose>
+				<when test="$underline-requested and boolean($text-properties/@style:text-underline-style='solid')">
+					<!-- Underline found in current style. -->
+					<value-of select="$UNDERLINE_BIT"/>
+				</when>
+				<otherwise>
+					<value-of select="$NO_STYLE"/>
+				</otherwise>
+			</choose>
+		</variable>
+		<variable name="underline-mask">
+			<choose>
+				<when test="$underline-requested and boolean($text-properties/@style:text-underline-style='solid')">
+					<!-- 
+						Other value than "underline" means that the character style is not 
+						underline and no parent style must be considered.
+					-->
+					<value-of select="$UNDERLINE_BIT"/>
 				</when>
 				<otherwise>
 					<value-of select="$NO_STYLE"/>
@@ -1473,9 +1516,9 @@
 			guaranteed to be disjoint, therefore, addition can be use instead 
 			of bitwise or (which is missing in XPath). -->
 		<variable name="updated-style" 
-			select="$style-set + $bold-style + $italic-style + $superscript-style + $subscript-style + $code-style + $typewriter-style + $center-style + $right-style"/>
+			select="$style-set + $bold-style + $italic-style + $underline-style + $superscript-style + $subscript-style + $code-style + $typewriter-style + $center-style + $right-style"/>
 		<variable name="updated-mask" 
-			select="$style-mask + $bold-mask + $italic-mask + $superscript-mask + $subscript-mask + $code-mask + $typewriter-mask + $center-mask + $right-mask"/>
+			select="$style-mask + $bold-mask + $italic-mask + $underline-mask + $superscript-mask + $subscript-mask + $code-mask + $typewriter-mask + $center-mask + $right-mask"/>
 
 		<!-- Inspect linked and nested styles. -->
 		<choose>
