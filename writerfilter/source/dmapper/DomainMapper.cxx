@@ -89,11 +89,11 @@ struct _PageSz
 
 
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
-                            uno::Reference< io::XInputStream > xInputStream,
-                            uno::Reference< lang::XComponent > xModel,
+                            uno::Reference<io::XInputStream> const& xInputStream,
+                            uno::Reference<lang::XComponent> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
-                            uno::Reference< text::XTextRange > xInsertTextRange,
+                            uno::Reference<text::XTextRange> const& xInsertTextRange,
                             bool bIsNewDoc ) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
@@ -984,7 +984,9 @@ void DomainMapper::lcl_sprm(Sprm & rSprm)
         sprmWithProps( rSprm, m_pImpl->GetTopContext() );
 }
 
-sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess> xNumberingRules, sal_Int32 nNumberingLevel, const OUString& aProp)
+sal_Int32 lcl_getCurrentNumberingProperty(
+        uno::Reference<container::XIndexAccess> const& xNumberingRules,
+        sal_Int32 nNumberingLevel, const OUString& aProp)
 {
     sal_Int32 nRet = 0;
 

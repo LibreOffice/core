@@ -145,10 +145,10 @@ uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
 
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
-            uno::Reference < uno::XComponentContext >  xContext,
-            uno::Reference< lang::XComponent >  xModel,
+            uno::Reference<uno::XComponentContext> const& xContext,
+            uno::Reference<lang::XComponent> const& xModel,
             SourceDocumentType eDocumentType,
-            uno::Reference< text::XTextRange > xInsertTextRange,
+            uno::Reference<text::XTextRange> const& xInsertTextRange,
             bool bIsNewDoc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
@@ -718,8 +718,8 @@ bool DomainMapper_Impl::isSdtEndDeferred()
 }
 
 void lcl_MoveBorderPropertiesToFrame(comphelper::SequenceAsHashMap& rFrameProperties,
-    uno::Reference<text::XTextRange> xStartTextRange,
-    uno::Reference<text::XTextRange> xEndTextRange )
+    uno::Reference<text::XTextRange> const& xStartTextRange,
+    uno::Reference<text::XTextRange> const& xEndTextRange )
 {
     try
     {
@@ -763,7 +763,7 @@ void lcl_MoveBorderPropertiesToFrame(comphelper::SequenceAsHashMap& rFrameProper
 
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
-    uno::Reference< text::XTextAppend > xTextAppend,
+    uno::Reference< text::XTextAppend > const& xTextAppend,
     PropertyMapPtr pPropertyMap,
     TextAppendContext& rAppendContext)
 {
@@ -1265,7 +1265,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
 
 
 void DomainMapper_Impl::appendTextContent(
-    const uno::Reference< text::XTextContent > xContent,
+    const uno::Reference< text::XTextContent >& xContent,
     const uno::Sequence< beans::PropertyValue >& xPropertyValues
     )
 {
@@ -1564,7 +1564,8 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     }
 }
 
-void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange, RedlineParamsPtr& pRedline )
+void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xRange,
+        RedlineParamsPtr& pRedline)
 {
     if ( pRedline.get( ) )
     {
@@ -1607,7 +1608,7 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
     }
 }
 
-void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange > xRange )
+void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange > const& xRange )
 {
     if ( m_pParaMarkerRedline.get( ) )
     {
@@ -1616,7 +1617,7 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
     }
 }
 
-void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange )
+void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& xRange )
 {
     vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
     vector< RedlineParamsPtr > aCleaned;
@@ -1725,7 +1726,7 @@ void DomainMapper_Impl::PopAnnotation()
     m_nAnnotationId = -1;
 }
 
-void DomainMapper_Impl::PushPendingShape( const uno::Reference< drawing::XShape > xShape )
+void DomainMapper_Impl::PushPendingShape( const uno::Reference< drawing::XShape > & xShape )
 {
     m_aPendingShapes.push_back(xShape);
 }
@@ -1741,7 +1742,7 @@ uno::Reference<drawing::XShape> DomainMapper_Impl::PopPendingShape()
     return xRet;
 }
 
-void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
+void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > & xShape )
 {
     if (m_aTextAppendStack.empty())
         return;
@@ -1899,7 +1900,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 /*
  * Updating chart height and width after reading the actual values from wp:extent
 */
-void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::XShape > xShape)
+void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::XShape > & xShape)
 {
     if (!xShape.is())
         return;
@@ -2262,7 +2263,8 @@ void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
     format to the XPropertySet
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
-                            uno::Reference< beans::XPropertySet >& xPropertySet, bool bDetectFormat )
+        uno::Reference< beans::XPropertySet > const& xPropertySet,
+        bool const bDetectFormat)
 {
     OUString sFormatString = lcl_ParseFormat( rCommand );
     // find \h - hijri/luna calendar todo: what about saka/era calendar?
@@ -2481,8 +2483,8 @@ bool DomainMapper_Impl::IsOpenField() const
 }
 
 
-FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
-    m_bFieldCommandCompleted( false )
+FieldContext::FieldContext(uno::Reference< text::XTextRange > const& xStart)
+    : m_bFieldCommandCompleted(false)
     ,m_xStartRange( xStart )
 {
     m_pProperties.reset(new PropertyMap());
@@ -2696,7 +2698,7 @@ void DomainMapper_Impl::handleFieldAsk
     (FieldContextPtr pContext,
      PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & xFieldInterface,
-     uno::Reference< beans::XPropertySet > xFieldProperties)
+     uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
     //doesn the command contain a variable name?
     OUString sVariable, sHint;
@@ -2740,7 +2742,7 @@ void DomainMapper_Impl::handleAutoNum
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
     uno::Reference< uno::XInterface > & xFieldInterface,
-    uno::Reference< beans::XPropertySet > xFieldProperties)
+    uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
     //create a sequence field master "AutoNr"
     uno::Reference< beans::XPropertySet > xMaster =
@@ -2765,7 +2767,7 @@ void DomainMapper_Impl::handleAuthor
     (OUString const& rFirstParam,
     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > xFieldProperties,
+     uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
     if ( eFieldId != FIELD_USERINITIALS )
@@ -2786,7 +2788,7 @@ void DomainMapper_Impl::handleAuthor
         OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties)
+        uno::Reference< beans::XPropertySet > const&)
 {
     //some docproperties should be imported as document statistic fields, some as DocInfo fields
     //others should be user fields
@@ -2852,7 +2854,7 @@ void DomainMapper_Impl::handleAuthor
         }
         if (m_xTextFactory.is())
             xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-        xFieldProperties =
+        uno::Reference<beans::XPropertySet> xFieldProperties =
             uno::Reference< beans::XPropertySet >( xFieldInterface,
                 uno::UNO_QUERY_THROW);
         if( bIsCustomField )
@@ -2937,7 +2939,7 @@ void DomainMapper_Impl::handleToc
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > /*xFieldProperties*/,
+     uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
 {
     OUString sValue;
@@ -3205,7 +3207,7 @@ void DomainMapper_Impl::handleIndex
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > /*xFieldProperties*/,
+     uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
 {
     uno::Reference< beans::XPropertySet > xTOC;
@@ -4440,8 +4442,8 @@ _PageMar::_PageMar()
 
 
 void DomainMapper_Impl::RegisterFrameConversion(
-        uno::Reference< text::XTextRange >           xFrameStartRange,
-        uno::Reference< text::XTextRange >           xFrameEndRange,
+        uno::Reference< text::XTextRange > const&    xFrameStartRange,
+        uno::Reference< text::XTextRange > const&    xFrameEndRange,
         const uno::Sequence< beans::PropertyValue >& aFrameProperties
         )
 {

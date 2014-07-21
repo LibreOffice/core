@@ -77,11 +77,11 @@ class DomainMapper : public LoggedProperties, public LoggedTable,
 
 public:
     DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const& xInputStream,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const& xModel,
                                 bool bRepairStorage,
                                 SourceDocumentType eDocumentType,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xInsertTextRange,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xInsertTextRange,
                                 bool bIsNewDoc = true);
     virtual ~DomainMapper();
 
