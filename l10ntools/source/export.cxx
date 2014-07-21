@@ -26,12 +26,11 @@
 #include "srclex.hxx"
 
 #include "boost/scoped_ptr.hpp"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "common.hxx"
 #include "export.hxx"
 #include "tokens.h"
-#include <iostream>
 #include <rtl/strbuf.hxx>
 
 void yyerror( const char * );
@@ -104,44 +103,40 @@ FILE * init(int argc, char ** argv) {
     return pFile;
 }
 
-int Parse( int nTyp, const char *pTokenText ){
-    global::exporter->Execute( nTyp , pTokenText );
-    return 1;
-}
-void Close(){
-    global::exporter->pParseQueue->Close();
-    global::exporter.reset();
-        // avoid nontrivial Export dtor being executed during exit
-}
-
-int WorkOnTokenSet( int nTyp, char *pTokenText )
+bool Parse( int nTyp, const char *pTokenText )
 {
+    return global::exporter->Execute( nTyp, pTokenText );
+}
 
-    global::exporter->pParseQueue->Push( QueueEntry( nTyp , OString(pTokenText) ) );
-    return 1;
+void Close()
+{
+    global::exporter->GetParseQueue()->Close();
+    global::exporter.reset();
+}
+
+bool WorkOnTokenSet( int nTyp, char *pTokenText )
+{
+    global::exporter->GetParseQueue()->Push( QueueEntry( nTyp , OString(pTokenText) ) );
+    return true;
 }
 
 } // extern
 
 extern "C" {
 
-int SetError()
+bool SetError()
 {
     // set error at global instance of class Export
     global::exporter->SetError();
-    return 1;
-}
+    return true;
 }
 
-extern "C" {
-
-int GetError()
+bool GetError()
 {
     // get error at global instance of class Export
-    if (global::exporter->GetError())
-        return 1;
-    return sal_False;
+    return global::exporter->GetError();
 }
+
 }
 
 
@@ -212,9 +207,10 @@ Export::Export(const OString &rOutput)
                 pParseQueue( new ParserQueue( *this ) )
 {
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
-    if (!aOutput.mPo->isOpen()) {
-        fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
-        exit ( -1 );
+    if (!aOutput.mPo->isOpen())
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -236,8 +232,12 @@ Export::Export(
                 sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
 {
-    aOutput.mSimple = new std::ofstream();
-    aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+    aOutput.mSimple = std::fopen(rOutput.getStr(), "w");
+    if ( !aOutput.mSimple )
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
+    }
 
     if ( bUTF8BOM ) WriteUTF8ByteOrderMarkToOutput();
 }
@@ -259,12 +259,11 @@ Export::~Export()
 {
     if( pParseQueue )
         delete pParseQueue;
-    if ( bMergeMode )
+    if ( bMergeMode && aOutput.mSimple )
     {
-        aOutput.mSimple->close();
-        delete aOutput.mSimple;
+        std::fclose(aOutput.mSimple);
     }
-    else
+    else if( aOutput.mPo )
     {
         aOutput.mPo->close();
         delete aOutput.mPo;
@@ -281,7 +280,7 @@ Export::~Export()
     }
 }
 
-int Export::Execute( int nToken, const char * pToken )
+bool Export::Execute( int nToken, const char * pToken )
 {
 
     OString sToken( pToken );
@@ -302,7 +301,7 @@ int Export::Execute( int nToken, const char * pToken )
         // this tokens are not mandatory for parsing, so ignore them ...
         if ( bMergeMode )
             WriteToMerged( sOrig , false ); // ... or write them directly to dest.
-        return 0;
+        return false;
     }
 
     ResData *pResData = NULL;
@@ -322,7 +321,7 @@ int Export::Execute( int nToken, const char * pToken )
         // no res. exists at cur. level so return
         if ( bMergeMode )
             WriteToMerged( sOrig , false );
-        return 0;
+        return false;
     }
 
     if ( bDefine ) {
@@ -340,7 +339,7 @@ int Export::Execute( int nToken, const char * pToken )
                     bNextMustBeDefineEOL = false;
                     if ( bMergeMode )
                         WriteToMerged( sOrig , false );
-                    return 1;
+                    return true;
                 }
             }
         }
@@ -377,7 +376,7 @@ int Export::Execute( int nToken, const char * pToken )
         case NORMDEFINE:
             if ( bMergeMode )
                 WriteToMerged( sOrig , false );
-            return 0;
+            return false;
         case RSCDEFINE:
             bDefine = true; // res. defined in macro
 
@@ -652,8 +651,8 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case PRAGMA : {
-            fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
-            exit(-1);
+            std::fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
+            std::exit(EXIT_FAILURE);
         }
         break;
         }
@@ -674,7 +673,7 @@ int Export::Execute( int nToken, const char * pToken )
         Parse( LEVELDOWN, "" );
     }
 
-    return 1;
+    return true;
 }
 
 void Export::CutComment( OString &rText )
@@ -986,12 +985,7 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
             }
         }
     } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
-        if (sText[i] == '\n') {
-            *aOutput.mSimple << '\n';
-        } else {
-            char cChar = sText[i];
-            *aOutput.mSimple << cChar;
-        }
+        std::fprintf( aOutput.mSimple, "%c", sText[i] );
     }
 }
 
