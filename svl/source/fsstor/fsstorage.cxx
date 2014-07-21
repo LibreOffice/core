@@ -979,18 +979,19 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !GetContent() )
-        throw io::IOException(); // TODO: error handling
-
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
-
-    INetURLObject aURL( m_pImpl->m_aURL );
-    aURL.Append( aName );
 
     uno::Any aResult;
     try
     {
+        if ( !GetContent() )
+            throw io::IOException(); // TODO: error handling
+
+        INetURLObject aURL( m_pImpl->m_aURL );
+        aURL.Append( aName );
+
+
         if ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             aResult <<= openStorageElement( aName, embed::ElementModes::READ );
@@ -1002,21 +1003,21 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
         else
             throw container::NoSuchElementException(); // TODO:
     }
-    catch( container::NoSuchElementException& )
+    catch (const container::NoSuchElementException&)
     {
         throw;
     }
-    catch( lang::WrappedTargetException& )
+    catch (const lang::WrappedTargetException&)
     {
         throw;
     }
-    catch( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
-           uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetException( "Can not open element!",
                                             static_cast< OWeakObject* >( this ),
                                             aCaught );
