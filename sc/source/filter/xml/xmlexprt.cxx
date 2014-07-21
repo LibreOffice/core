@@ -3080,7 +3080,7 @@ void writeContent(
                 // <text:a xlink:href="url" xlink:type="simple">value</text:a>
 
                 OUString aURL = static_cast<const SvxURLField*>(pField)->GetURL();
-                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aURL);
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(aURL));
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
