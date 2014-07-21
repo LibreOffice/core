@@ -27,6 +27,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/settings.hxx>
 
 #include <svx/svdpage.hxx>
@@ -424,9 +425,8 @@ Size ScGridWindow::GetDataAreaSize()
     SdrPage* pPage = pPageView->GetPage();
     Rectangle aDrawDataArea = pPage->GetAllObjBoundRect();
     // Draw layer works in 100th mm, whereas we're working with TWIPs.
-    aDrawDataArea.SetPos( aDrawDataArea.TopLeft() * 1440 / 2540 );
-    aDrawDataArea.SetSize( Size( aDrawDataArea.GetSize().Width() * 1440 / 2540,
-                                 aDrawDataArea.GetSize().Height() * 1440 / 2540 ) );
+    aDrawDataArea.SetPos( convertMm100ToTwip(aDrawDataArea.TopLeft() ) );
+    aDrawDataArea.SetSize( convertMm100ToTwip( aDrawDataArea.GetSize() ) );
 
     // We specifically keep iterating until we have covered both the
     // data area AND the drawing layer area. We also make sure that
@@ -641,7 +641,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     MapMode aDrawMode = pOutDev->GetMapMode();
     Point aOrigin = aDrawMode.GetOrigin();
     aDrawMode.SetMapUnit( MAP_100TH_MM );
-    aDrawMode.SetOrigin( (aOrigin * 2540l) / 1440l );
+    aDrawMode.SetOrigin( convertTwipToMm100( aOrigin ) );
     Rectangle aDrawingRectLogic;
 
     {
