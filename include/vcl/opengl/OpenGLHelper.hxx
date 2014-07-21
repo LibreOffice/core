@@ -36,6 +36,9 @@ public:
      */
     static void createFramebuffer(long nWidth, long nHeight,
             GLuint& nFramebufferId, GLuint& nRenderbufferTextId, GLuint& nRenderbufferColorId);
+
+    // Get OpenGL version (needs a context)
+    static float getGLVersion();
 };
 
 VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
