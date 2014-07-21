@@ -24,30 +24,19 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vector>
-#include <memory>
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-class TitleItemConverter :
-        public ::comphelper::ItemConverter
+class TitleItemConverter : public comphelper::ItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     TitleItemConverter(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        SfxItemPool& rItemPool, SdrModel& rDrawModel,
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+        const css::awt::Size* pRefSize = NULL );
 
     virtual ~TitleItemConverter();
 
@@ -59,18 +48,16 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
 
 private:
     ::std::vector< ItemConverter * >    m_aConverters;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TITLEITEMCONVERTER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

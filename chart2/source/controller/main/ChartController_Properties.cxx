@@ -53,6 +53,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -108,14 +109,14 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     break;
             case OBJECTTYPE_TITLE:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
+                boost::scoped_ptr<awt::Size> pRefSize;
                 if( pRefSizeProvider.get() )
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
-                pItemConverter = new wrapper::TitleItemConverter( xObjectProperties,
-                                                                  rDrawModel.GetItemPool(), rDrawModel,
-                                                                  uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                                                  pRefSize );
+                pItemConverter = new wrapper::TitleItemConverter(
+                    xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
+                    uno::Reference<lang::XMultiServiceFactory>(xChartModel, uno::UNO_QUERY),
+                    pRefSize.get());
             }
             break;
             case OBJECTTYPE_LEGEND:
@@ -143,7 +144,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     break;
             case OBJECTTYPE_AXIS:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
+                boost::scoped_ptr<awt::Size> pRefSize;
                 if( pRefSizeProvider.get() )
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -166,7 +167,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     rDrawModel,
                     uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ),
                     &aExplicitScale, &aExplicitIncrement,
-                    pRefSize );
+                    pRefSize.get() );
             }
             break;
             case OBJECTTYPE_AXIS_UNITLABEL:
@@ -176,7 +177,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_DATA_LABEL:
             case OBJECTTYPE_DATA_POINT:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
+                boost::scoped_ptr<awt::Size> pRefSize;
                 if( pRefSizeProvider.get() )
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -223,7 +224,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
+                                        eMapTo, pRefSize.get(), bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
                                         nNumberFormat, nPercentNumberFormat );
                     break;
             }
@@ -253,14 +254,14 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 break;
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
+                boost::scoped_ptr<awt::Size> pRefSize;
                 if( pRefSizeProvider.get() )
-                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
                 pItemConverter =  new wrapper::RegressionEquationItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        pRefSize );
+                                        pRefSize.get());
                     break;
             }
             case OBJECTTYPE_DATA_STOCK_RANGE:
@@ -287,12 +288,13 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 break;
             case OBJECTTYPE_AXIS:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
+                boost::scoped_ptr<awt::Size> pRefSize;
                 if( pRefSizeProvider.get() )
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
-                pItemConverter =  new wrapper::AllAxisItemConverter( xChartModel, rDrawModel.GetItemPool(),
-                                                                     rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ), pRefSize );
+                pItemConverter =  new wrapper::AllAxisItemConverter(
+                    xChartModel, rDrawModel.GetItemPool(),
+                    rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ), pRefSize.get());
             }
             break;
             case OBJECTTYPE_GRID:

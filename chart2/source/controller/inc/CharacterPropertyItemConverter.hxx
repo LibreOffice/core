@@ -24,59 +24,44 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
-#include <memory>
+#include <boost/optional.hpp>
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-class CharacterPropertyItemConverter :
-        public ::comphelper::ItemConverter
+class CharacterPropertyItemConverter : public comphelper::ItemConverter
 {
 public:
     CharacterPropertyItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+
     CharacterPropertyItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize,
+        const css::awt::Size* pRefSize,
         const OUString & rRefSizePropertyName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rRefSizePropSet =
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = css::uno::Reference<css::beans::XPropertySet>() );
+
     virtual ~CharacterPropertyItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
+    virtual const sal_uInt16* GetWhichPairs() const SAL_OVERRIDE;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
-
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const { return m_xRefSizePropSet;}
+    css::uno::Reference<css::beans::XPropertySet> GetRefSizePropertySet() const;
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::com::sun::star::awt::Size > m_pRefSize;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    OUString                                m_aRefSizePropertyName;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >    m_xRefSizePropSet;
+    OUString m_aRefSizePropertyName;
+    css::uno::Reference<css::beans::XPropertySet> m_xRefSizePropSet;
+    boost::optional<css::awt::Size> m_pRefSize;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARACTERPROPERTYITEMCONVERTER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

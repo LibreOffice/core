@@ -70,12 +70,8 @@ namespace
 };
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AxisItemConverter::AxisItemConverter(
     const Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
@@ -83,7 +79,7 @@ AxisItemConverter::AxisItemConverter(
     const Reference< chart2::XChartDocument > & xChartDoc,
     ::chart::ExplicitScaleData * pScale /* = NULL */,
     ::chart::ExplicitIncrementData * pIncrement /* = NULL */,
-    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
+    const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc ),
         m_pExplicitScale( NULL ),
@@ -100,13 +96,12 @@ AxisItemConverter::AxisItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_PROPERTIES ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
-                                                                 "ReferencePageSize" ));
+    m_aConverters.push_back(
+        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
     OSL_ASSERT( m_xAxis.is());
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AxisItemConverter::~AxisItemConverter()
 {
@@ -993,7 +988,6 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     return (bSetScale || bChangedOtherwise);
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

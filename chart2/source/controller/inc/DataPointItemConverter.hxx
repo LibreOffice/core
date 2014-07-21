@@ -27,45 +27,32 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <memory>
 #include <vector>
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-class DataPointItemConverter :
-        public ::comphelper::ItemConverter
+class DataPointItemConverter : public comphelper::ItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     DataPointItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
             GraphicPropertyItemConverter::FILLED_DATA_POINT,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >(),
+        const css::awt::Size* pRefSize = NULL,
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
         sal_Int32 nSpecialFillColor = 0,
-        bool bOverwriteLabelsForAttributedDataPointsAlso=false,
-        sal_Int32 nNumberFormat=0,
-        sal_Int32 nPercentNumberFormat=0);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        bool bOverwriteLabelsForAttributedDataPointsAlso = false,
+        sal_Int32 nNumberFormat = 0,
+        sal_Int32 nPercentNumberFormat = 0 );
 
     virtual ~DataPointItemConverter();
 
@@ -77,9 +64,9 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw (css::uno::Exception) SAL_OVERRIDE;
 
 private:
     ::std::vector< ItemConverter * >    m_aConverters;
@@ -89,14 +76,12 @@ private:
     sal_Int32                           m_nSpecialFillColor;
     sal_Int32                           m_nNumberFormat;
     sal_Int32                           m_nPercentNumberFormat;
-    ::com::sun::star::uno::Sequence< sal_Int32 > m_aAvailableLabelPlacements;
+    css::uno::Sequence<sal_Int32>       m_aAvailableLabelPlacements;
     bool                                m_bForbidPercentValue;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DATAPOINTITEMCONVERTER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

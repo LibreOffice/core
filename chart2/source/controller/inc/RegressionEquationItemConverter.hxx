@@ -26,21 +26,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
-#include <memory>
 #include <vector>
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-class RegressionEquationItemConverter :
-        public ::comphelper::ItemConverter
+class RegressionEquationItemConverter : public comphelper::ItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     RegressionEquationItemConverter(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -48,9 +42,8 @@ public:
         SdrModel& rDrawModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~RegressionEquationItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const SAL_OVERRIDE;
@@ -69,10 +62,8 @@ private:
     ::std::vector< ItemConverter * >    m_aConverters;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_REGRESSIONEQUATIONITEMCONVERTER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

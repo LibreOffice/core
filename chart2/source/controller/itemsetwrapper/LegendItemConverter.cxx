@@ -54,7 +54,7 @@ LegendItemConverter::LegendItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                 rPropertySet, rItemPool, pRefSize,
+                                 rPropertySet, rItemPool, pRefSize.get(),
                                  "ReferencePageSize" ));
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP

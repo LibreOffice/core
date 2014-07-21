@@ -44,19 +44,15 @@ namespace
 };
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 RegressionEquationItemConverter::RegressionEquationItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
+    const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
@@ -64,10 +60,9 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
                                  xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
 
-    m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                 rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    m_aConverters.push_back(
+        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 RegressionEquationItemConverter::~RegressionEquationItemConverter()
 {
@@ -156,7 +151,6 @@ void RegressionEquationItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

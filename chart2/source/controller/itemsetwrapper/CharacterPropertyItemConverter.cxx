@@ -64,10 +64,7 @@ namespace
 }
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
@@ -75,19 +72,19 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
         ItemConverter( rPropertySet, rItemPool )
 {}
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
-    ::std::auto_ptr< awt::Size > pRefSize,
+    const awt::Size* pRefSize,
     const OUString & rRefSizePropertyName,
     const uno::Reference< beans::XPropertySet > & rRefSizePropSet ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_pRefSize( pRefSize ),
         m_aRefSizePropertyName( rRefSizePropertyName ),
         m_xRefSizePropSet( rRefSizePropSet.is() ? rRefSizePropSet : rPropertySet )
-{}
-SAL_WNODEPRECATED_DECLARATIONS_POP
+{
+    if (pRefSize)
+        m_pRefSize.reset(*pRefSize);
+}
 
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
 {}
@@ -268,7 +265,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 float fHeight;
                 if( aValue >>= fHeight )
                 {
-                    if( m_pRefSize.get())
+                    if (m_pRefSize)
                     {
                         awt::Size aOldRefSize;
                         if( GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
@@ -518,7 +515,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                         bSetValue = true;
                     else
                     {
-                        if( m_pRefSize.get() )
+                        if (m_pRefSize)
                         {
                             awt::Size aNewRefSize = *m_pRefSize;
                             awt::Size aOldRefSize;
@@ -533,11 +530,10 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                     if( bSetValue )
                     {
                         // set new reference size only if there was a reference size before (auto-scaling on)
-                        if( m_pRefSize.get() &&
-                            GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
+                        if (m_pRefSize && GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
                         {
-                            GetRefSizePropertySet()->setPropertyValue( m_aRefSizePropertyName,
-                                                                    uno::makeAny( *m_pRefSize ));
+                            GetRefSizePropertySet()->setPropertyValue(
+                                m_aRefSizePropertyName, uno::makeAny(*m_pRefSize));
                         }
 
                         GetPropertySet()->setPropertyValue( "CharHeight" + aPostfix, aValue );
@@ -556,7 +552,11 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     return bChanged;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+uno::Reference<beans::XPropertySet> CharacterPropertyItemConverter::GetRefSizePropertySet() const
+{
+    return m_xRefSizePropSet;
+}
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,23 +32,21 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "DiagramHelper.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & /*xNamedPropertyContainerFactory*/,
-    ::std::auto_ptr< awt::Size > pRefSize )
+    const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
@@ -56,18 +54,12 @@ AllAxisItemConverter::AllAxisItemConverter(
     for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
-        if( pRefSize.get())
-            m_aConverters.push_back( new ::chart::wrapper::AxisItemConverter(
-                                         xObjectProperties, rItemPool, rDrawModel,
-                                         uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0,
-                                         ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )) ));
-        else
-            m_aConverters.push_back( new ::chart::wrapper::AxisItemConverter(
-                                         xObjectProperties, rItemPool, rDrawModel,
-                                         uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0 ) );
+        m_aConverters.push_back( new ::chart::wrapper::AxisItemConverter(
+            xObjectProperties, rItemPool, rDrawModel,
+            uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0,
+            pRefSize));
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllAxisItemConverter::~AllAxisItemConverter()
 {
@@ -107,13 +99,12 @@ const sal_uInt16 * AllGridItemConverter::GetWhichPairs() const
     return nGridWhichPairs;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    ::std::auto_ptr< awt::Size > pRefSize )
+    const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {
     ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
@@ -129,21 +120,13 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                 xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
-        m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
-                                         xChartModel, xContext,
-                                         xObjectProperties, *aIt, rItemPool, rDrawModel,
-                                         xNamedPropertyContainerFactory,
-                                         GraphicPropertyItemConverter::FILLED_DATA_POINT,
-                                         ::std::auto_ptr< awt::Size >( pRefSize.get() ? new awt::Size( *pRefSize ) : 0),
-                                         true, /*bDataSeries*/
-                                         false, /*bUseSpecialFillColor*/
-                                         0, /*nSpecialFillColor*/
-                                         true /*bOverwriteLabelsForAttributedDataPointsAlso*/,
-                                         nNumberFormat, nPercentNumberFormat
-                                         ));
+        m_aConverters.push_back(
+            new ::chart::wrapper::DataPointItemConverter(
+                xChartModel, xContext, xObjectProperties, *aIt, rItemPool, rDrawModel,
+                xNamedPropertyContainerFactory, GraphicPropertyItemConverter::FILLED_DATA_POINT,
+                pRefSize, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllDataLabelItemConverter::~AllDataLabelItemConverter()
 {
@@ -155,13 +138,12 @@ const sal_uInt16 * AllDataLabelItemConverter::GetWhichPairs() const
     return nDataLabelWhichPairs;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllTitleItemConverter::AllTitleItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    ::std::auto_ptr< awt::Size > pRefSize )
+    const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {
     for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::NORMAL_TITLE_END; nTitle++ )
@@ -170,14 +152,11 @@ AllTitleItemConverter::AllTitleItemConverter(
         if(!xTitle.is())
             continue;
         uno::Reference< beans::XPropertySet > xObjectProperties( xTitle, uno::UNO_QUERY);
-        ::std::auto_ptr< awt::Size > pSingleRefSize(0);
-        if( pRefSize.get())
-            pSingleRefSize = ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize ));
-        m_aConverters.push_back( new ::chart::wrapper::TitleItemConverter(
-                                     xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, pSingleRefSize ));
+        m_aConverters.push_back(
+            new ::chart::wrapper::TitleItemConverter(
+                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, pRefSize));
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllTitleItemConverter::~AllTitleItemConverter()
 {
@@ -215,7 +194,6 @@ const sal_uInt16 * AllSeriesStatisticsConverter::GetWhichPairs() const
     return nStatWhichPairs;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

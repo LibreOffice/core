@@ -190,12 +190,8 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
@@ -203,16 +199,15 @@ DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< XDataSeries > & xSeries,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */,
-    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */,
-    bool bDataSeries /* = false */,
-    bool bUseSpecialFillColor /* = false */,
-    sal_Int32 nSpecialFillColor /* =0 */,
-    bool bOverwriteLabelsForAttributedDataPointsAlso /*false*/,
+    const uno::Reference<lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+    GraphicPropertyItemConverter::eGraphicObjectType eMapTo,
+    const awt::Size* pRefSize,
+    bool bDataSeries,
+    bool bUseSpecialFillColor,
+    sal_Int32 nSpecialFillColor,
+    bool bOverwriteLabelsForAttributedDataPointsAlso,
     sal_Int32 nNumberFormat,
-    sal_Int32 nPercentNumberFormat
-    ) :
+    sal_Int32 nPercentNumberFormat ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_bDataSeries( bDataSeries ),
         m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
@@ -225,7 +220,7 @@ DataPointItemConverter::DataPointItemConverter(
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    m_aConverters.push_back( new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
     if( bDataSeries )
     {
         m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
@@ -241,7 +236,6 @@ DataPointItemConverter::DataPointItemConverter(
 
     m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 DataPointItemConverter::~DataPointItemConverter()
 {
@@ -674,7 +668,6 @@ void DataPointItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,31 +27,22 @@
 #include "ItemConverter.hxx"
 
 #include <vector>
-#include <memory>
 
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
-class AxisItemConverter : public ::comphelper::ItemConverter
+class AxisItemConverter : public comphelper::ItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AxisItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc,
-        ExplicitScaleData * pScale = NULL,
-        ExplicitIncrementData * pIncrement = NULL,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        SfxItemPool& rItemPool, SdrModel& rDrawModel,
+        const css::uno::Reference<css::chart2::XChartDocument> & xChartDoc,
+        ExplicitScaleData* pScale = NULL,
+        ExplicitIncrementData* pIncrement = NULL,
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~AxisItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const SAL_OVERRIDE;
@@ -62,26 +53,24 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw( css::uno::Exception ) SAL_OVERRIDE;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
+        throw( css::uno::Exception ) SAL_OVERRIDE;
 
 private:
     ::std::vector< ItemConverter * >               m_aConverters;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XAxis >  m_xAxis;
+    css::uno::Reference<
+        css::chart2::XAxis >  m_xAxis;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument >      m_xChartDoc;
+    css::uno::Reference<
+        css::chart2::XChartDocument >      m_xChartDoc;
 
     ExplicitScaleData*      m_pExplicitScale;
     ExplicitIncrementData*  m_pExplicitIncrement;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_AXISITEMCONVERTER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

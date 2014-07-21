@@ -23,29 +23,20 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <memory>
-
 class SdrModel;
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
 class AllAxisItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllAxisItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
+        const css::uno::Reference<css::frame::XModel> & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~AllAxisItemConverter();
 
 protected:
@@ -56,12 +47,10 @@ class AllGridItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
     AllGridItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
+        const css::uno::Reference<css::lang::XMultiServiceFactory> & xNamedPropertyContainerFactory );
     virtual ~AllGridItemConverter();
 
 protected:
@@ -71,17 +60,13 @@ protected:
 class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllDataLabelItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~AllDataLabelItemConverter();
 
 protected:
@@ -91,17 +76,12 @@ protected:
 class AllTitleItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllTitleItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        SfxItemPool& rItemPool,
-        SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        SfxItemPool& rItemPool, SdrModel& rDrawModel,
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~AllTitleItemConverter();
 
 protected:
@@ -112,9 +92,7 @@ class AllSeriesStatisticsConverter : public ::comphelper::MultipleItemConverter
 {
 public:
     AllSeriesStatisticsConverter(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel > & xChartModel,
-        SfxItemPool& rItemPool );
+        const css::uno::Reference<css::frame::XModel>& xChartModel, SfxItemPool& rItemPool );
     virtual ~AllSeriesStatisticsConverter();
 
 protected:

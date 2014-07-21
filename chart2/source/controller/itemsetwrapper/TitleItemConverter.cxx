@@ -47,53 +47,44 @@ namespace
 };
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
+namespace chart { namespace wrapper {
 
 class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     FormattedStringsConverter(
         const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
         SfxItemPool & rItemPool,
-        ::std::auto_ptr< awt::Size > pRefSize,
+        const awt::Size* pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~FormattedStringsConverter();
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
     SfxItemPool & rItemPool,
-    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize,
+    const awt::Size* pRefSize,
     const uno::Reference< beans::XPropertySet > & xParentProp ) :
         MultipleItemConverter( rItemPool )
 {
-    bool bHasRefSize = (pRefSize.get() && xParentProp.is());
+    bool bHasRefSize = (pRefSize && xParentProp.is());
     for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
     {
         uno::Reference< beans::XPropertySet > xProp( aStrings[ i ], uno::UNO_QUERY );
         if( xProp.is())
         {
             if( bHasRefSize )
-                m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                             xProp, rItemPool,
-                                             ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )),
-                                             "ReferencePageSize" ,
-                                             xParentProp ));
+                m_aConverters.push_back(
+                    new CharacterPropertyItemConverter(
+                        xProp, rItemPool, pRefSize, "ReferencePageSize", xParentProp));
             else
                 m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
         }
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 FormattedStringsConverter::~FormattedStringsConverter()
 {
@@ -104,14 +95,12 @@ const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
     return nCharacterPropertyWhichPairs;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitleItemConverter::TitleItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const uno::Reference<beans::XPropertySet> & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
+    const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
@@ -132,7 +121,6 @@ TitleItemConverter::TitleItemConverter(
         }
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 TitleItemConverter::~TitleItemConverter()
 {
