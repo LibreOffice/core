@@ -28,7 +28,7 @@
 
 #include <svl/itempool.hxx>
 
-class SfxItemDesruptor_Impl: private boost::noncopyable
+class SfxItemDisruptor_Impl: private boost::noncopyable
 {
     SfxPoolItem *pItem;
     Link         aLink;
@@ -37,27 +37,27 @@ private:
     DECL_LINK( Delete, void* );
 
 public:
-    SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt );
+    SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt );
     void LaunchDeleteOnIdle();
-    ~SfxItemDesruptor_Impl();
+    ~SfxItemDisruptor_Impl();
 };
 
-SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
+SfxItemDisruptor_Impl::SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
-    aLink( LINK(this, SfxItemDesruptor_Impl, Delete) )
+    aLink( LINK(this, SfxItemDisruptor_Impl, Delete) )
 {
 
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
     pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
 }
 
-void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
+void SfxItemDisruptor_Impl::LaunchDeleteOnIdle()
 {
     // process in Idle
     Application::InsertIdleHdl( aLink, 1 );
 }
 
-SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
+SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
 {
 
     // remove from Idle-Handler
@@ -69,7 +69,7 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
     delete pItem;
 }
 
-IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
+IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete)
 {
     delete this;
     return 0;
@@ -78,7 +78,7 @@ IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 void DeleteItemOnIdle(SfxPoolItem* pItem)
 {
     DBG_ASSERT( 0 == pItem->GetRefCount(), "deleting item in use" );
-    SfxItemDesruptor_Impl *pDesruptor = new SfxItemDesruptor_Impl(pItem);
+    SfxItemDisruptor_Impl *pDesruptor = new SfxItemDisruptor_Impl(pItem);
     pDesruptor->LaunchDeleteOnIdle();
 }
 

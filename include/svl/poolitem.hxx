@@ -157,7 +157,7 @@ class SfxItemSet;
 class SVL_DLLPUBLIC SfxPoolItem
 {
 friend class SfxItemPool;
-friend class SfxItemDesruptor_Impl;
+friend class SfxItemDisruptor_Impl;
 friend class SfxItemPoolCache;
 friend class SfxItemSet;
 friend class SfxVoidItem;
