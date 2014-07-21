@@ -531,6 +531,9 @@ void ImpEditEngine::CheckAutoPageSize()
     // FIXME(matteocam)
     fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
                         ? "YES Overflow!\n"  : "NO Overflow!\n" );
+    // setting overflow status // XXX: Is status reset somewhere?
+    if ( IsPageOverflow( aPaperSize, aPrevPaperSize ) )
+        aStatus.bIsPageOverflow = true;
 
     if ( aPaperSize != aPrevPaperSize )
     {
