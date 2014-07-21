@@ -380,8 +380,7 @@ Any Adapter::getValue( const OUString & aPropertyName )
             PyObject_GetAttrString( mWrappedObject.get(), (char*)TO_ASCII(aPropertyName) ),
             SAL_NO_ACQUIRE );
 
-        raiseInvocationTargetExceptionWhenNeeded( runtime);
-        if( !pyRef.is() )
+        if (!pyRef.is() || PyErr_Occurred())
         {
             OUStringBuffer buf;
             buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
