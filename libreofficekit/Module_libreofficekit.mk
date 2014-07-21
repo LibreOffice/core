@@ -13,6 +13,7 @@ ifeq ($(OS),LINUX)
 
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     StaticLibrary_libreofficekit \
+    Executable_lokconf_init \
 ))
 
 # $(eval $(call gb_Module_add_check_targets,libreofficekit,\
