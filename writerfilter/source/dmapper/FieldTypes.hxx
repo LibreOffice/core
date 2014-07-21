@@ -296,7 +296,7 @@ enum FieldId
     /**
      * Bibliography
      */
-    ,FILED_BIBLIOGRAPHY
+    ,FIELD_BIBLIOGRAPHY
     /* Citation
      */
     ,FIELD_CITATION

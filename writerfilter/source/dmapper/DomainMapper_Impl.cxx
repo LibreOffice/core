@@ -2647,7 +2647,7 @@ if(!bFilled)
             {OUString("NUMPAGES"), "PageCount", "", FIELD_NUMPAGES},
             {OUString("INDEX"), "com.sun.star.text.DocumentIndex", "", FIELD_INDEX},
             {OUString("XE"), "com.sun.star.text.DocumentIndexMark", "", FIELD_XE},
-            {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", "", FILED_BIBLIOGRAPHY},
+            {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", "", FIELD_BIBLIOGRAPHY},
             {OUString("CITATION"), "com.sun.star.text.TextField.Bibliography", "", FIELD_CITATION},
 
 //            {OUString(""), "", "", FIELD_},
@@ -3301,7 +3301,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_TOC:
                 case FIELD_INDEX:
                 case FIELD_XE:
-                case FILED_BIBLIOGRAPHY:
+                case FIELD_BIBLIOGRAPHY:
                 case FIELD_CITATION:
                 case FIELD_TC:
                 case FIELD_EQ:
@@ -3788,7 +3788,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         handleIndex(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
-                    case FILED_BIBLIOGRAPHY:
+                    case FIELD_BIBLIOGRAPHY:
                         handleBibliography(pContext, rPropNameSupplier,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
