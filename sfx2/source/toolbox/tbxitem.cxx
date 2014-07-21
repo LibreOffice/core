@@ -1189,7 +1189,7 @@ SfxPopupWindow::SfxPopupWindow(
     Window* pParentWindow,
     const OString& rID, const OUString& rUIXMLDescription,
     const Reference< XFrame >& rFrame ) :
-    FloatingWindow( pParentWindow, rID, rUIXMLDescription)
+    FloatingWindow( pParentWindow, rID, rUIXMLDescription, rFrame)
     , m_bFloating( false )
     , m_bCascading( false )
     , m_nId( nId )
