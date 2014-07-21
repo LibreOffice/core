@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,libreofficekit_tiledrendering, \
 	$(gb_UWINAPI) \
 ))
 
-
 # 	unotest \
 
 ifeq ($(OS),LINUX)
@@ -53,5 +52,7 @@ $(eval $(call gb_CppunitTest_use_ure,libreofficekit_tiledrendering))
 $(eval $(call gb_CppunitTest_use_rdb,libreofficekit_tiledrendering,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,libreofficekit_tiledrendering))
+
+$(eval $(call gb_CppunitTest_use_confpreinit,libreofficekit_tiledrendering))
 
 # vim: set noet sw=4 ts=4:
