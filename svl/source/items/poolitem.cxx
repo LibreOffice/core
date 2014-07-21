@@ -144,7 +144,7 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 
 SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
-    return Clone(0);
+    return Clone();
 }
 
 
@@ -284,7 +284,7 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 // SfxItemHandle ----------------------------------------------------------
 SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
     pRef(new sal_uInt16(1)),
-    pItem(rItem.Clone(0))
+    pItem(rItem.Clone())
 {
 }
 

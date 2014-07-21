@@ -119,12 +119,12 @@ public:
     virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( SfxMapUnit eNewMetric );
 
-    /** Request string representation of pool items
+    /** Request string representation of pool items.
 
-        This virtual function produces a string representation, of
+        This virtual function produces a string representation
         from the respective SfxItemPool subclass' known SfxPoolItems.
 
-        Subclasses, please overwrite this method, and handle
+        Subclasses, please override this method, and handle
         SfxPoolItems that don't return useful/complete information on
         SfxPoolItem::GetPresentation()
 
@@ -147,10 +147,9 @@ public:
                                         SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
-                                        const IntlWrapper * pIntlWrapper
-                                         = 0 ) const;
+                                        const IntlWrapper * pIntlWrapper = 0 ) const;
     virtual SfxItemPool*            Clone() const;
-    const OUString&            GetName() const;
+    const OUString&                 GetName() const;
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );

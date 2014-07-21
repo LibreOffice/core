@@ -170,9 +170,9 @@ private:
     inline void              SetRefCount( sal_uLong n );
     inline void              SetKind( sal_uInt16 n );
 public:
-    inline sal_uLong             AddRef( sal_uLong n = 1 ) const;
+    inline sal_uLong         AddRef( sal_uLong n = 1 ) const;
 private:
-    inline sal_uLong             ReleaseRef( sal_uLong n = 1 ) const;
+    inline sal_uLong         ReleaseRef( sal_uLong n = 1 ) const;
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 protected:
@@ -184,7 +184,7 @@ public:
     virtual                  ~SfxPoolItem();
 
     void                     SetWhich( sal_uInt16 nId ) { m_nWhich = nId; }
-    sal_uInt16                   Which() const { return m_nWhich; }
+    sal_uInt16               Which() const { return m_nWhich; }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
@@ -197,7 +197,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual bool             ScaleMetrics( long lMult, long lDiv );
     virtual bool             HasMetrics() const;
 
@@ -208,8 +208,8 @@ public:
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
-    sal_uLong                    GetRefCount() const { return m_nRefCount; }
-    inline sal_uInt16            GetKind() const { return m_nKind; }
+    sal_uLong                GetRefCount() const { return m_nRefCount; }
+    inline sal_uInt16        GetKind() const { return m_nKind; }
 
     /** Read in a Unicode string from a streamed byte string representation.
 
@@ -254,7 +254,7 @@ public:
                                    const OUString& rString);
 
 private:
-    SfxPoolItem&             operator=( const SfxPoolItem& );    // n.i.!!
+    SfxPoolItem&             operator=( const SfxPoolItem& );    // not implemented!!
 };
 
 
@@ -333,7 +333,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    // von sich selbst eine Kopie erzeugen
+    // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
             void            SetWhich(sal_uInt16 nWh) { m_nWhich = nWh; }
 };
@@ -361,7 +361,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    // von sich selbst eine Kopie erzeugen
+    // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE = 0;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE = 0;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const SAL_OVERRIDE;
@@ -373,12 +373,12 @@ public:
 };
 
 
-// Handle Klasse fuer PoolItems
+// Handle class for PoolItems
 
 class SVL_DLLPUBLIC SfxItemHandle
 {
     sal_uInt16      *pRef;
-    SfxPoolItem *pItem;
+    SfxPoolItem     *pItem;
 public:
     explicit SfxItemHandle( SfxPoolItem& );
     SfxItemHandle( const SfxItemHandle& );
