@@ -264,7 +264,7 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "Label",
+        Property( CHART_UNONAME_LABEL,
                   PROP_DATAPOINT_LABEL,
                   cppu::UnoType<chart2::DataPointLabel>::get(),
                   beans::PropertyAttribute::BOUND

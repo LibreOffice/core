@@ -21,6 +21,8 @@
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include "macros.hxx"
 #include "FastPropertyIdRanges.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -137,7 +139,7 @@ sal_Int32 WrappedDataCaptionProperty::getValueFromSeries( const Reference< beans
     sal_Int32 aRet = 0;
     m_aDefaultValue >>= aRet;
     chart2::DataPointLabel aLabel;
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Label") >>= aLabel ) )
+    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel ) )
         aRet = lcl_LabelToCaption( aLabel );
     return aRet;
 }
@@ -148,7 +150,7 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
         return;
 
     chart2::DataPointLabel aLabel = lcl_CaptionToLabel( nCaption );
-    xSeriesPropertySet->setPropertyValue( "Label", uno::makeAny( aLabel ) );
+    xSeriesPropertySet->setPropertyValue( CHART_UNONAME_LABEL, uno::makeAny( aLabel ) );
 }
 
 } //namespace wrapper

@@ -896,7 +896,7 @@ DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::X
     SAL_WNODEPRECATED_DECLARATIONS_POP
     try
     {
-        if( !(xProp->getPropertyValue("Label") >>= *apLabel) )
+        if( !(xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= *apLabel) )
             apLabel.reset();
     }
     catch(const uno::Exception &e)

@@ -148,14 +148,14 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
         if( xSeriesProperties.is() )
         {
             DataPointLabel aLabelAtSeries;
-            xSeriesProperties->getPropertyValue( "Label" ) >>= aLabelAtSeries;
+            xSeriesProperties->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabelAtSeries;
             aLabelAtSeries.ShowNumber = bInsert;
             if( !bInsert )
             {
                 aLabelAtSeries.ShowNumberInPercent = false;
                 aLabelAtSeries.ShowCategoryName = false;
             }
-            xSeriesProperties->setPropertyValue( "Label", uno::makeAny( aLabelAtSeries ) );
+            xSeriesProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabelAtSeries));
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
@@ -165,14 +165,14 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
                     if( xPointProp.is() )
                     {
                         DataPointLabel aLabel;
-                        xPointProp->getPropertyValue( "Label" ) >>= aLabel;
+                        xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
                         aLabel.ShowNumber = bInsert;
                         if( !bInsert )
                         {
                             aLabel.ShowNumberInPercent = false;
                             aLabel.ShowCategoryName = false;
                         }
-                        xPointProp->setPropertyValue( "Label", uno::makeAny( aLabel ) );
+                        xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
                     }
                 }
             }
@@ -777,7 +777,7 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
         if( xProp.is() )
         {
             DataPointLabel aLabel;
-            if( (xProp->getPropertyValue( "Label" ) >>= aLabel) )
+            if( (xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
         }
     }
@@ -805,7 +805,7 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
                     if( xPointProp.is() )
                     {
                         DataPointLabel aLabel;
-                        if( (xPointProp->getPropertyValue( "Label" ) >>= aLabel) )
+                        if( (xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
                             bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
                         if( bRet )
                             break;
@@ -843,7 +843,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             if( xProp.is() )
             {
                 DataPointLabel aLabel;
-                if( (xProp->getPropertyValue( "Label" ) >>= aLabel) )
+                if( (xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
                     bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
             }
         }
@@ -872,9 +872,9 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
         if( xPointProp.is() )
         {
             DataPointLabel aLabel;
-            xPointProp->getPropertyValue( "Label" ) >>= aLabel;
+            xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
             aLabel.ShowNumber = true;
-            xPointProp->setPropertyValue( "Label", uno::makeAny( aLabel ) );
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
         }
     }
     catch(const uno::Exception &e)
@@ -890,11 +890,11 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
         if( xPointProp.is() )
         {
             DataPointLabel aLabel;
-            xPointProp->getPropertyValue( "Label" ) >>= aLabel;
+            xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
             aLabel.ShowNumber = false;
             aLabel.ShowNumberInPercent = false;
             aLabel.ShowCategoryName = false;
-            xPointProp->setPropertyValue( "Label", uno::makeAny( aLabel ) );
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
         }
     }
     catch(const uno::Exception &e)

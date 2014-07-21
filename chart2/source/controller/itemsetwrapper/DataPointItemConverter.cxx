@@ -310,7 +310,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         {
             const SfxBoolItem & rItem = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId ));
 
-            uno::Any aOldValue( GetPropertySet()->getPropertyValue( "Label" ));
+            uno::Any aOldValue = GetPropertySet()->getPropertyValue(CHART_UNONAME_LABEL);
             chart2::DataPointLabel aLabel;
             if( aOldValue >>= aLabel )
             {
@@ -323,15 +323,15 @@ bool DataPointItemConverter::ApplySpecialItem(
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
                     if( (bOldValue ? 1 : 0) != rValue ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "Label" , aOldValue ) )
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, CHART_UNONAME_LABEL , aOldValue ) )
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Label" , uno::makeAny( aLabel ) );
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL , uno::makeAny( aLabel ) );
                         bChanged = true;
                     }
                 }
                 else if( (bOldValue ? 1 : 0) != rValue )
                 {
-                    GetPropertySet()->setPropertyValue( "Label" , uno::makeAny( aLabel ));
+                    GetPropertySet()->setPropertyValue(CHART_UNONAME_LABEL , uno::makeAny(aLabel));
                     bChanged = true;
                 }
             }
@@ -537,7 +537,7 @@ void DataPointItemConverter::FillSpecialItem(
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             chart2::DataPointLabel aLabel;
-            if( GetPropertySet()->getPropertyValue( "Label" ) >>= aLabel )
+            if (GetPropertySet()->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel)
             {
                 bool bValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
                     (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
@@ -548,7 +548,7 @@ void DataPointItemConverter::FillSpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue(
-                        Reference< chart2::XDataSeries >( GetPropertySet(), uno::UNO_QUERY), "Label" , uno::makeAny(aLabel) ) )
+                        Reference< chart2::XDataSeries >( GetPropertySet(), uno::UNO_QUERY), CHART_UNONAME_LABEL , uno::makeAny(aLabel) ) )
                     {
                         rOutItemSet.InvalidateItem(nWhichId);
                     }

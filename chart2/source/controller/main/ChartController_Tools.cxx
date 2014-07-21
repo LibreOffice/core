@@ -40,6 +40,7 @@
 #include "ShapeController.hxx"
 #include "DiagramHelper.hxx"
 #include "ObjectNameProvider.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -774,7 +775,7 @@ bool ChartController::executeDispatch_Delete()
                             SCH_RESSTR( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )),
                                 m_xUndoManager );
                     chart2::DataPointLabel aLabel;
-                    xObjectProperties->getPropertyValue( "Label" ) >>= aLabel;
+                    xObjectProperties->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
                     aLabel.ShowNumber = false;
                     aLabel.ShowNumberInPercent = false;
                     aLabel.ShowCategoryName = false;
@@ -782,10 +783,10 @@ bool ChartController::executeDispatch_Delete()
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
                         uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
-                        ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Label", uno::makeAny(aLabel) );
+                        ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::makeAny(aLabel) );
                     }
                     else
-                        xObjectProperties->setPropertyValue( "Label", uno::makeAny(aLabel) );
+                        xObjectProperties->setPropertyValue( CHART_UNONAME_LABEL, uno::makeAny(aLabel) );
                     bReturn = true;
                     aUndoGuard.commit();
                 }
