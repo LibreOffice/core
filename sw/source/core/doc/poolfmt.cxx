@@ -1796,8 +1796,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    aFmt.SetListtabPos( (n+1) * nOffs );
-                    aFmt.SetIndentAt( (n+1) * nOffs );
+                    long nPos = (n+1) * static_cast<long>(nOffs);
+                    aFmt.SetListtabPos(nPos);
+                    aFmt.SetIndentAt(nPos);
                 }
 
                 aFmt.SetStart( n+1 );
@@ -1952,8 +1953,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    aFmt.SetListtabPos( nOffs2 + ((n-3) * nOffs) );
-                    aFmt.SetIndentAt( nOffs2 + ((n-3) * nOffs) );
+                    long nPos = nOffs2 + ((n-3) * static_cast<long>(nOffs));
+                    aFmt.SetListtabPos(nPos);
+                    aFmt.SetIndentAt(nPos);
                 }
 
                 pNewRule->Set( n, aFmt );
@@ -2085,8 +2087,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    aFmt.SetListtabPos( ((n & 1) +1) * nOffs );
-                    aFmt.SetIndentAt( ((n & 1) +1) * nOffs );
+                    long nPos = ((n & 1) +1) * static_cast<long>(nOffs);
+                    aFmt.SetListtabPos(nPos);
+                    aFmt.SetIndentAt(nPos);
                 }
 
                 pNewRule->Set( n, aFmt );
