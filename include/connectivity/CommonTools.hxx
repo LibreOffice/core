@@ -75,7 +75,10 @@ namespace connectivity
 
         ORefVector() {}
         ORefVector(size_t _st) : m_vector(_st) {}
-        ORefVector(const ORefVector& _rRH) : m_vector(_rRH.m_vector) {}
+        ORefVector(const ORefVector& rOther)
+            : salhelper::SimpleReferenceObject()
+            , m_vector(rOther.m_vector)
+        {}
 
         ORefVector& operator=(const ORefVector& _rRH)
         {
