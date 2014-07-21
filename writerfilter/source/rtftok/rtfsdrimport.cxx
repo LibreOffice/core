@@ -114,7 +114,7 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
     return aRet;
 }
 
-void RTFSdrImport::pushParent(uno::Reference<drawing::XShapes> xParent)
+void RTFSdrImport::pushParent(uno::Reference<drawing::XShapes> const& xParent)
 {
     m_aParents.push(xParent);
 }
@@ -124,7 +124,8 @@ void RTFSdrImport::popParent()
     m_aParents.pop();
 }
 
-void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle)
+void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                               sal_Int32 const nZOrder, bool const bOldStyle)
 {
     writerfilter::dmapper::DomainMapper& rMapper =
         dynamic_cast<writerfilter::dmapper::DomainMapper&>(m_rImport.Mapper());
@@ -133,13 +134,15 @@ void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet,
     pHelper->addItem(xPropertySet, nZOrder);
 }
 
-void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine)
+void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                                sal_Int32 const nFLine)
 {
     if (nFLine == 0)
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
 }
 
-void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue)
+void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
+        const OUString& aKey, const OUString& aValue)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
