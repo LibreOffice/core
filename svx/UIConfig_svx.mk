@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/asianphoneticguidedialog \
 	svx/uiconfig/ui/chineseconversiondialog \
 	svx/uiconfig/ui/chinesedictionary \
+	svx/uiconfig/ui/colorwindow \
 	svx/uiconfig/ui/compressgraphicdialog \
 	svx/uiconfig/ui/deleteheaderdialog \
 	svx/uiconfig/ui/deletefooterdialog \

@@ -152,6 +152,13 @@ FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
+FloatingWindow::FloatingWindow( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WinBits nStyle ) :
+    SystemWindow( WINDOW_FLOATINGWINDOW )
+{
+    ImplInit( pParent, nStyle );
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+}
+
 FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )
 {
@@ -813,6 +820,35 @@ void FloatingWindow::AddPopupModeWindow( Window* pWindow )
 {
     // !!! up-to-now only 1 window and not yet a list
     mpFirstPopupModeWin = pWindow;
+}
+
+
+Size FloatingWindow::GetOptimalSize() const
+{
+    if (isLayoutEnabled(this))
+        return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+    return getLegacyBestSizeForChildren(*this);
+}
+
+void FloatingWindow::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+{
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
+    if (isLayoutEnabled(this))
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+}
+
+void FloatingWindow::SetSizePixel(const Size& rAllocation)
+{
+    Window::SetSizePixel(rAllocation);
+    if (isLayoutEnabled(this))
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+}
+
+void FloatingWindow::SetPosPixel(const Point& rAllocPos)
+{
+    Window::SetPosPixel(rAllocPos);
+    if (isLayoutEnabled(this))
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), GetOutputSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

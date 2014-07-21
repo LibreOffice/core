@@ -41,16 +41,15 @@ class SvxColorWindow_Impl : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    const sal_uInt16 theSlotId;
-    SvxColorValueSet aColorSet;
-    ComboBox aPaletteComboBox;
-    PushButton aButtonPicker;
-    OUString  maCommand;
-    Link maSelectedLink;
+    const sal_uInt16    theSlotId;
+    SvxColorValueSet*   mpColorSet;
+    Size                maWindowSize;
+    ComboBox*           mpPaletteComboBox;
+    PushButton*         mpButtonPicker;
+    OUString            maCommand;
+    Link                maSelectedLink;
 
-    const sal_uInt16 nButtonWidth;
-    const sal_uInt16 nButtonHeight;
-    PaletteManager& mrPaletteManager;
+    PaletteManager&     mrPaletteManager;
 
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( SelectPaletteHdl, void *);

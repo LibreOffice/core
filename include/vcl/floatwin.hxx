@@ -21,8 +21,11 @@
 #define INCLUDED_VCL_FLOATWIN_HXX
 
 #include <tools/solar.h>
+#include <vcl/builder.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
+#include <vcl/window.hxx>
+#include <vcl/layout.hxx>
 
 class ToolBox;
 
@@ -70,7 +73,9 @@ enum HitTest
 
 // - FloatingWindow -
 
-class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
+class VCL_DLLPUBLIC FloatingWindow
+    : public SystemWindow
+    , public VclBuilderContainer
 {
     class   ImplData;
 private:
@@ -120,6 +125,7 @@ public:
 
 public:
     explicit        FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    explicit        FloatingWindow( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WinBits nStyle = WB_STDFLOATWIN );
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 
@@ -149,6 +155,11 @@ public:
     bool            GrabsFocus() const { return mbGrabFocus; }
 
     static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
+
+    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) SAL_OVERRIDE;
+    virtual void    SetPosPixel(const Point& rNewPos) SAL_OVERRIDE;
+    virtual void    SetSizePixel(const Size& rNewSize) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_FLOATWIN_HXX
