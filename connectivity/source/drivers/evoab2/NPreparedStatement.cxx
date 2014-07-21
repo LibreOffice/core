@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XStatement::executeUpdate", *this );
     return 0;
 }
 

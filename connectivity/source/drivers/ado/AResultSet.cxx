@@ -212,7 +212,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
@@ -283,7 +283,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getLong", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getLong", *this );
     return sal_Int64(0);
 }
 
@@ -301,7 +301,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
     return NULL;
 }
 
@@ -309,20 +309,20 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) t
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
     return NULL;
 }
 
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
     return NULL;
 }
 
@@ -1043,7 +1043,7 @@ OUString OResultSet::getCursorName() const
 void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "ResultSet::FetchDirection", *this );
 }
 
 void OResultSet::setFetchSize(sal_Int32 _par0)

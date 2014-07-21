@@ -47,7 +47,7 @@ BlobHelper::BlobHelper(const ::com::sun::star::uno::Sequence< sal_Int8 >& _val) 
 }
 
 
-// The "return" after a call to throwFeatureNotImplementedException()
+// The "return" after a call to throwFeatureNotImplementedSQLException()
 // (which always throws) will be detected as unreachable when doing
 // global inlining.
 
@@ -55,13 +55,13 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 
 ::sal_Int64 SAL_CALL BlobHelper::position( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XBlob::position", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::position", *this );
     return 0;
 }
 
 ::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
     return 0;
 }
 

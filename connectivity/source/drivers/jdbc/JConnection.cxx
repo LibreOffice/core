@@ -427,7 +427,7 @@ void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
 
 

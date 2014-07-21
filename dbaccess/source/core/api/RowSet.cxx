@@ -2629,22 +2629,22 @@ void SAL_CALL ORowSet::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x
 
 void SAL_CALL ORowSet::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
 }
 
 void SAL_CALL ORowSet::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
 }
 
 void SAL_CALL ORowSet::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
 }
 
 void SAL_CALL ORowSet::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
 }
 
 void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException, std::exception)

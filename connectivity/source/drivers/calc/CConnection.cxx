@@ -259,7 +259,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     return NULL;
 }
 

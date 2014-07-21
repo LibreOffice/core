@@ -160,7 +160,7 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
 
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ ) throw( SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     return NULL;
 }
 sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
@@ -203,7 +203,7 @@ void OEvoabConnection::disposing()
 // -------------------------------- stubbed methods ------------------------------------------------
 void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setAutoCommit", *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -217,7 +217,7 @@ void SAL_CALL OEvoabConnection::rollback(  ) throw(SQLException, RuntimeExceptio
 }
 void SAL_CALL OEvoabConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setReadOnly", *this );
 }
 sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeEx
 }
 void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setCatalog", *this );
 }
 
 OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
@@ -234,7 +234,7 @@ OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeEx
 }
 void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTransactionIsolation", *this );
 }
 
 sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
@@ -244,12 +244,12 @@ sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLExcept
 
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
     return NULL;
 }
 void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

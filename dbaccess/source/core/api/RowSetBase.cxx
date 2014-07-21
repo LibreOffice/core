@@ -378,7 +378,7 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *m_pMySelf );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *m_pMySelf );
     return NULL;
 }
 
@@ -394,7 +394,7 @@ Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(
 
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *m_pMySelf );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *m_pMySelf );
     return NULL;
 }
 

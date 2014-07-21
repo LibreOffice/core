@@ -285,13 +285,27 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
     @param _pNextException
         the next exception to chain into the thrown exception, if any
 */
-OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedException(
+OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException = NULL
     )
-    throw (::com::sun::star::sdbc::SQLException);
+    throw (css::sdbc::SQLException);
 
+/** throw a RuntimeException (Optional feature not implemented)
+    @param _rFeatureName
+        a description of the feature which is not implemented. It's recommended that the feature
+        name is built from the name of the interface plus its method, for instance "XParameters::updateBinaryStream"
+    @param _rxContext
+        the context of the exception
+    @param _pNextException
+        the next exception to chain into the thrown exception, if any
+*/
+OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
+        const OUString& _rFeatureName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+    )
+    throw (css::uno::RuntimeException);
 
 /** throw a SQLException with SQLState 42S22 (Column Not Found)
     @param _rColumnNameName

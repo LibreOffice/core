@@ -295,25 +295,25 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
 
 void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
 }
 
 
 void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& /*x*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
 }
 
 

@@ -255,7 +255,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XParameters::setLong", *this );
+    throwFeatureNotImplementedSQLException( "XParameters::setLong", *this );
 }
 
 
@@ -273,25 +273,25 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
 
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XParameters::setClob", *this );
+    throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XParameters::setBlob", *this );
+    throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XParameters::setArray", *this );
+    throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XParameters::setRef", *this );
+    throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
 }
 
 

@@ -184,7 +184,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XStatement::executeUpdate", *this );
     return 0;
 }
 
@@ -222,56 +222,56 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBoolean", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBoolean", *this );
 }
 
 void SAL_CALL OPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setByte", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setByte", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setDate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setDate", *this );
 }
 
 
 
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setTime", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setTime", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setTimestamp", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setTimestamp", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setDouble", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setDouble", *this );
 }
 
 
 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setFloat", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setFloat", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setInt", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setInt", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setLong", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setLong", *this );
 }
 
 
@@ -288,31 +288,31 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
 
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setObjectWithInfo", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setObjectWithInfo", *this );
 }
 
 
@@ -330,26 +330,26 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setShort", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setShort", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBytes", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBytes", *this );
 }
 
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setCharacterStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setCharacterStream", *this );
 }
 
 
 void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setBinaryStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBinaryStream", *this );
 }
 
 

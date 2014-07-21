@@ -1720,7 +1720,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 
 void SAL_CALL OResultSet::updateLong( sal_Int32 /*columnIndex*/, sal_Int64 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateLong", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateLong", *this );
 }
 
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException, std::exception)
@@ -1885,7 +1885,7 @@ void OResultSet::setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrd
 }
 Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& /*rows*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 };
 

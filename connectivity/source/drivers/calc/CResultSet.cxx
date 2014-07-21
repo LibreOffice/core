@@ -133,7 +133,7 @@ Sequence< sal_Int32 > SAL_CALL OCalcResultSet::deleteRows( const  Sequence<  Any
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 }
 

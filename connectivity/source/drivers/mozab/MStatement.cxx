@@ -353,7 +353,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XStatement::executeUpdate", *this );
     return 0;
 
 }

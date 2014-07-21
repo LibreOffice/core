@@ -621,7 +621,7 @@ void OStatement_Base::setFetchDirection(sal_Int32 /*_par0*/) throw(SQLException,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedException( "Statement::FetchDirection", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "Statement::FetchDirection", *this );
 }
 
 void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -637,7 +637,7 @@ void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/) throw(SQLException, R
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedException( "Statement::MaxFieldSize", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "Statement::MaxFieldSize", *this );
 }
 
 void OStatement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)

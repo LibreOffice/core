@@ -245,7 +245,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     return NULL;
 }
 
@@ -321,7 +321,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
+    throwFeatureNotImplementedSQLException( "XConnection::setCatalog", *this );
 }
 
 OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
@@ -331,7 +331,7 @@ OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
+    throwFeatureNotImplementedSQLException( "XConnection::setTransactionIsolation", *this );
 }
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)

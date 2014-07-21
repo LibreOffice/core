@@ -304,7 +304,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     return NULL;
 }
 
@@ -464,7 +464,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
 
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
 
 // XCloseable

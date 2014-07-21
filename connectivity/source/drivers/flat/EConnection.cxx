@@ -165,7 +165,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
 
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     return NULL;
 }
 

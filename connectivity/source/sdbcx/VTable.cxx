@@ -281,12 +281,12 @@ Reference< XDatabaseMetaData> OTable::getMetaData() const
 // XAlterTable
 void SAL_CALL OTable::alterColumnByName( const OUString& /*colName*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XAlterTable::alterColumnByName", *this );
+    throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByName", *this );
 }
 
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XAlterTable::alterColumnByIndex", *this );
+    throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByIndex", *this );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)

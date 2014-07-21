@@ -429,8 +429,7 @@ void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( SQL_GENERAL_ERROR ), 0, _rNextException);
 }
 
-
-void throwFeatureNotImplementedException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
+void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
@@ -446,6 +445,18 @@ void throwFeatureNotImplementedException( const OUString& _rFeatureName, const R
         0,
         _pNextException ? *_pNextException : Any()
     );
+}
+
+void throwFeatureNotImplementedRuntimeException(const OUString& _rFeatureName, const Reference< XInterface >& _rxContext)
+    throw (RuntimeException)
+{
+    ::connectivity::SharedResources aResources;
+    const OUString sError( aResources.getResourceStringWithSubstitution(
+            STR_UNSUPPORTED_FEATURE,
+            "$featurename$", _rFeatureName
+         ) );
+
+    throw RuntimeException(sError, _rxContext);
 }
 
 void throwInvalidColumnException( const OUString& _rColumnName, const Reference< XInterface >& _rxContext)

@@ -182,7 +182,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
@@ -266,14 +266,14 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XResultSet::getRow", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XResultSet::getRow", *this );
     return 0;
 }
 
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getLong", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getLong", *this );
     return sal_Int64(0);
 }
 
@@ -294,7 +294,7 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
     return NULL;
 }
 
@@ -302,20 +302,20 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*c
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
     return NULL;
 }
 
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRow", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
     return NULL;
 }
 
@@ -690,7 +690,7 @@ OUString ODatabaseMetaDataResultSet::getCursorName() const
 void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "ResultSet::FetchDirection", *this );
 }
 
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)

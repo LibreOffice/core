@@ -178,7 +178,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     {
         ::com::sun::star::uno::Sequence< OUString > aNames = _rMap->getElementNames();
         if ( aNames.getLength() > 0 )
-            ::dbtools::throwFeatureNotImplementedException( "Type maps", NULL );
+            ::dbtools::throwFeatureNotImplementedSQLException( "Type maps", NULL );
     }
     return 0;
 }

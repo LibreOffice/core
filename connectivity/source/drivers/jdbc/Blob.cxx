@@ -124,7 +124,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
 
 sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*pattern*/, sal_Int64 /*start*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
     // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore
     // the pattern parameter. Since the effort for proper implementation is rather high - we would need
     // to translated patter into a byte[] -, we defer this functionality for the moment (hey, it was

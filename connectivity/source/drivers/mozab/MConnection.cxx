@@ -376,7 +376,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     OSL_UNUSED( _sSql );
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
     return NULL;
 }
@@ -392,7 +392,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLExcep
 
 void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setAutoCommit", *this );
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
@@ -440,7 +440,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 
 void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setReadOnly", *this );
 }
 
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setCatalog", *this );
 }
 
 OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
@@ -462,7 +462,7 @@ OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTransactionIsolation", *this );
 }
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
@@ -479,7 +479,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
 
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
 
 // XCloseable

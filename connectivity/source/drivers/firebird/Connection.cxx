@@ -604,14 +604,14 @@ sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, R
 
 Reference< XNameAccess > SAL_CALL Connection::getTypeMap() throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
     return 0;
 }
 
 void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
                                             throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
     (void) typeMap;
 }
 

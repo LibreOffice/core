@@ -112,7 +112,7 @@ sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQ
 
 Any SAL_CALL OCallableStatement::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getObject", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getObject", *this );
     return Any();
 }
 
@@ -172,40 +172,40 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getBinaryStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBinaryStream", *this );
     return NULL;
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getCharacterStream", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
 }
 
 
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
     return NULL;
 }
 
 
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getClob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getBlob", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
     return NULL;
 }
 
 
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
     return NULL;
 }
 

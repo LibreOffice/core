@@ -634,7 +634,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( "XStatement::executeUpdate", *this );
     return 0;
 }
 

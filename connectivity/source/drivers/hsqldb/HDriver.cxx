@@ -530,7 +530,7 @@ namespace connectivity
 
     void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException, std::exception)
     {
-        ::dbtools::throwFeatureNotImplementedException( "XCreateCatalog::createCatalog", *this );
+        ::dbtools::throwFeatureNotImplementedSQLException( "XCreateCatalog::createCatalog", *this );
     }
 
     void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )

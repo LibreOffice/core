@@ -730,7 +730,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     }
     catch(const Exception&)
     {
-        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
+        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateBinaryStream", *this );
     }
 }
 
@@ -761,7 +761,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     }
     catch(const Exception&)
     {
-        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+        ::dbtools::throwFeatureNotImplementedSQLException( "XRowUpdate::updateCharacterStream", *this );
     }
 }
 

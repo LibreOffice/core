@@ -133,14 +133,14 @@ void SAL_CALL OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedException( "XAuthorizable::grantPrivileges", *this );
+    throwFeatureNotImplementedSQLException( "XAuthorizable::grantPrivileges", *this );
 }
 
 void SAL_CALL OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedException( "XAuthorizable::revokePrivileges", *this );
+    throwFeatureNotImplementedSQLException( "XAuthorizable::revokePrivileges", *this );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -155,7 +155,7 @@ OUString SAL_CALL OGroup::getName(  ) throw(::com::sun::star::uno::RuntimeExcept
 
 void SAL_CALL OGroup::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    throwFeatureNotImplementedException( "XNamed::setName", *this );
+    throwFeatureNotImplementedRuntimeException( "XNamed::setName", *this );
 }
 
 // XInterface
