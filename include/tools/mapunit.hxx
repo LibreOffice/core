@@ -20,6 +20,8 @@
 #ifndef INCLUDED_TOOLS_MAPUNIT_HXX
 #define INCLUDED_TOOLS_MAPUNIT_HXX
 
+#include "gen.hxx"
+
 enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
                MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
                MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
@@ -33,12 +35,36 @@ inline sal_Int64 convertTwipToMm100(sal_Int64 n)
         return (n*127-36)/72;
 }
 
+inline Point convertTwipToMm100(const Point& rPoint)
+{
+    return Point(convertTwipToMm100(rPoint.getX()),
+                 convertTwipToMm100(rPoint.getY()));
+}
+
+inline Size convertTwipToMm100(const Size& rSize)
+{
+    return Size(convertTwipToMm100(rSize.getWidth()),
+                convertTwipToMm100(rSize.getHeight()));
+}
+
 inline sal_Int64 convertMm100ToTwip(sal_Int64 n)
 {
     if (n >= 0)
         return (n*72+63)/127;
     else
         return (n*72-63)/127;
+}
+
+inline Point convertMm100ToTwip(const Point& rPoint)
+{
+    return Point(convertMm100ToTwip(rPoint.getX()),
+                 convertMm100ToTwip(rPoint.getY()));
+}
+
+inline Size convertMm100ToTwip(const Size& rSize)
+{
+    return Size(convertMm100ToTwip(rSize.getWidth()),
+                convertMm100ToTwip(rSize.getHeight()));
 }
 
 #endif
