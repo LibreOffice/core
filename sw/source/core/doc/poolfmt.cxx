@@ -1636,13 +1636,14 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             "Wrong AutoFormat Id" );
 
     SwNumRule* pNewRule;
-    sal_uInt16 n;
 
-    for( n = 0; n < GetNumRuleTbl().size(); ++n )
-        if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
+    for (size_t n = 0; n < GetNumRuleTbl().size(); ++n )
+    {
+        if (nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId())
         {
             return pNewRule;
         }
+    }
 
     // error: unknown Pool style
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
@@ -1661,7 +1662,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     {
         bool bIsModified = IsModified();
 
-        n = MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
+        sal_uInt16 n = MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
 
         pNewRule = GetNumRuleTbl()[ n ];
         pNewRule->SetPoolFmtId( nId );
@@ -1707,7 +1708,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -1747,7 +1748,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             }
 
             sal_uInt16 nSpace = 0;
-            for( n = 0; n < MAXLEVEL; ++n )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -1787,7 +1788,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - nOffs );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -1831,7 +1832,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 aFmt.SetStart( n + 1 );
 
@@ -1941,7 +1942,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             }
 
             aFmt.SetSuffix( OUString() );
-            for( n = 3; n < MAXLEVEL; ++n )
+            for (sal_uInt16 n = 3; n < MAXLEVEL; ++n)
             {
                 aFmt.SetStart( n+1 );
 
@@ -1989,7 +1990,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -2034,7 +2035,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -2074,7 +2075,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - nOffs );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
                 aFmt.SetBulletChar( ( n & 1 ? 0x25a1 : 0x2611 ) );
 
@@ -2121,7 +2122,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 switch( n )
                 {
@@ -2173,7 +2174,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
 
-            for( n = 0; n < MAXLEVEL; ++n, ++pArr )
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
