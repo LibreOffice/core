@@ -46,7 +46,7 @@ public:
 
 struct DataLabelsModel;
 
-/** Handler for a chart data point label context (c:dLbl element).
+/** Handler for a chart data point label context (c:dLbls element).
  */
 class DataLabelsContext : public ContextBase< DataLabelsModel >
 {
