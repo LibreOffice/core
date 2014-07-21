@@ -75,9 +75,15 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         if ( pInStrm->remainingSize() == 0 )
             return OUString();
 
-        SotStorageRef aStorage = new SotStorage( pInStrm, false );
-        if ( !aStorage->GetError() && aStorage->IsStream( "PowerPoint Document" ) )
-            return aTypeName;
+        try
+        {
+            SotStorageRef aStorage = new SotStorage( pInStrm, false );
+            if ( !aStorage->GetError() && aStorage->IsStream( "PowerPoint Document" ) )
+                return aTypeName;
+        }
+        catch (const css::ucb::ContentCreationException&)
+        {
+        }
     }
     else
     {
