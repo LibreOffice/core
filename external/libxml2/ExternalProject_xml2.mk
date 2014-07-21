@@ -33,7 +33,7 @@ $(call gb_ExternalProject_use_external_project,xml2,icu)
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript configure.js \
-			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
+			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
 		&& unset MAKEFLAGS \
 		&& LIB="$(ILIB)" nmake \
 	,win32)
