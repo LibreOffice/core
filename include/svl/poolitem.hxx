@@ -162,7 +162,7 @@ friend class SfxItemPoolCache;
 friend class SfxItemSet;
 friend class SfxVoidItem;
 
-    sal_uLong   m_nRefCount;
+    mutable sal_uLong   m_nRefCount;
     sal_uInt16  m_nWhich;
     sal_uInt16  m_nKind;
 
@@ -274,14 +274,14 @@ inline void SfxPoolItem::AddRef( sal_uLong n ) const
 {
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
     DBG_ASSERT(ULONG_MAX - m_nRefCount > n, "AddRef: refcount overflow");
-    const_cast<SfxPoolItem *>(this)->m_nRefCount += n;
+    m_nRefCount += n;
 }
 
 inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
     DBG_ASSERT(m_nRefCount >= n, "AddRef: refcount underflow");
-    const_cast<SfxPoolItem *>(this)->m_nRefCount -= n;
+    m_nRefCount -= n;
     return m_nRefCount;
 }
 
