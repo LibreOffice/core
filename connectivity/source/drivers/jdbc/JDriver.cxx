@@ -192,7 +192,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 OUString("GenerateASBeforeCorrelationName")
                 ,OUString("Generate AS before table correlation names.")
                 ,sal_False
-                ,OUString(  "true"  )
+                ,OUString(  "false"  )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(

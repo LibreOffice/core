@@ -291,7 +291,7 @@ namespace dbtools
     //--------------------------------------------------------------------
     bool DatabaseMetaData::generateASBeforeCorrelationName() const
     {
-        bool doGenerate( true );
+        bool doGenerate( false );
         Any setting;
         if ( lcl_getConnectionSetting( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= doGenerate );

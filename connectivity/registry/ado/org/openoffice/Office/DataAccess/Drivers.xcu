@@ -50,7 +50,7 @@
         </node>
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
+            <value>false</value>
           </prop>
         </node>
         <node oor:name="UseBracketedOuterJoinSyntax" oor:op="replace">
