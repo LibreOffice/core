@@ -150,11 +150,9 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
-            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
-            {
-                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
-                    return i;
-            }
+            sal_uInt16 pPos;
+            if (pMyDoc->ContainsPageDesc( pPage->GetPageDesc(), &pPos ) )
+                return pPos;
         }
     }
     return 0;
@@ -168,12 +166,9 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
         const SwPageFrm *pPage = pFrm->FindPageFrm();
         if ( pPage )
         {
-            SwDoc *pMyDoc = GetDoc();
-            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
-            {
-                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
-                    return i;
-            }
+            sal_uInt16 pPos;
+            if (GetDoc()->ContainsPageDesc( pPage->GetPageDesc(), &pPos ))
+                return pPos;
         }
     }
     return 0;

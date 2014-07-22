@@ -190,6 +190,7 @@ bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, bool bInHeader )
 {
     bool bRet = false;
     SwDoc *pMyDoc = GetDoc();
+    const SwPageDesc* pDesc = NULL;
 
     SET_CURR_SHELL( this );
 
@@ -197,31 +198,28 @@ bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, bool bInHeader )
     {
         // take the current one
         const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();
-        if( pPage )
-            for( sal_uInt16 i = 0; i < pMyDoc->GetPageDescCnt(); ++i )
-                if( pPage->GetPageDesc() == &pMyDoc->GetPageDesc( i ) )
-                {
-                    nDescNo = i;
-                    break;
-                }
+        if( pPage && pMyDoc->ContainsPageDesc(
+                pPage->GetPageDesc(), &nDescNo) )
+            pDesc = pPage->GetPageDesc();
     }
+    else
+        if (nDescNo < pMyDoc->GetPageDescCnt())
+            pDesc = &pMyDoc->GetPageDesc( nDescNo );
 
-    if( USHRT_MAX != nDescNo && nDescNo < pMyDoc->GetPageDescCnt() )
+    if( pDesc )
     {
         // check if the attribute exists
-        const SwPageDesc& rDesc = const_cast<const SwDoc *>(pMyDoc)
-            ->GetPageDesc( nDescNo );
         const SwFmtCntnt* pCnt = 0;
         if( bInHeader )
         {
             // mirrored pages? ignore for now
-            const SwFmtHeader& rHd = rDesc.GetMaster().GetHeader();
+            const SwFmtHeader& rHd = pDesc->GetMaster().GetHeader();
             if( rHd.GetHeaderFmt() )
                 pCnt = &rHd.GetHeaderFmt()->GetCntnt();
         }
         else
         {
-            const SwFmtFooter& rFt = rDesc.GetMaster().GetFooter();
+            const SwFmtFooter& rFt = pDesc->GetMaster().GetFooter();
             if( rFt.GetFooterFmt() )
                 pCnt = &rFt.GetFooterFmt()->GetCntnt();
         }

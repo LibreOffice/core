@@ -684,24 +684,6 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
     return pNew;
 }
 
-SwPageDesc* SwDoc::FindPageDesc(const OUString& rName, sal_uInt16* pPos)
-{
-    SwPageDesc* pRet = NULL;
-    if( pPos ) *pPos = USHRT_MAX;
-
-    for( SwPageDescs::size_type n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
-    {
-        if( maPageDescs[ n ].HasName( rName ) )
-        {
-            pRet = &maPageDescs[ n ];
-            if( pPos )
-                *pPos = n;
-            break;
-        }
-    }
-    return pRet;
-}
-
 // We collect the GlobalNames of the servers at runtime, who don't want to be notified
 // about printer changes. Thereby saving loading a lot of objects (luckily all foreign
 // objects are mapped to one ID).
@@ -830,9 +812,57 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-SwPageDesc * SwDoc::GetPageDesc( const OUString & rName )
+struct CompareSwPageDescName {
+    CompareSwPageDescName(const OUString &rName) : mName(rName) {}
+    bool operator () (const SwPageDesc& other) const { return other.GetName() == mName; }
+    const OUString &mName;
+};
+
+template <class UnaryPredicate>
+static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
+                                     sal_uInt16 *pPos, UnaryPredicate pred )
 {
-    return FindPageDesc(rName);
+    SwPageDescs::iterator it = std::find_if(
+        pPageDescs->begin(), pPageDescs->end(), pred);
+    SwPageDesc* res = NULL;
+    if( it != pPageDescs->end() )
+    {
+        res = const_cast <SwPageDesc *>( &( *it ) );;
+        if( pPos )
+            *pPos = std::distance( pPageDescs->begin(), it );
+    }
+    else if( pPos )
+        *pPos = USHRT_MAX;
+    return res;
+}
+
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos )
+{
+    return lcl_FindPageDesc<CompareSwPageDescName>(
+        &maPageDescs, pPos, CompareSwPageDescName(rName) );
+}
+
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos ) const
+{
+    return lcl_FindPageDesc<CompareSwPageDescName>(
+        const_cast <SwPageDescs *>( &maPageDescs ), pPos,
+        CompareSwPageDescName(rName) );
+}
+
+struct CompareSwPageDescToPtr {
+    CompareSwPageDescToPtr(const SwPageDesc* ptr) : mPtr(ptr) {}
+    bool operator () (const SwPageDesc& other) const { return &other == mPtr; }
+    const SwPageDesc *mPtr;
+};
+
+bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, sal_uInt16* pPos )
+{
+    if (pDesc == NULL)
+        return false;
+    SwPageDesc *res = lcl_FindPageDesc<CompareSwPageDescToPtr>(
+        const_cast <SwPageDescs *>( &maPageDescs ), pPos,
+        CompareSwPageDescToPtr(pDesc) );
+    return res != NULL;
 }
 
 void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
