@@ -399,14 +399,10 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Apply page description
 
-        sal_uInt16 nPos;
-        pSh->FindPageDescByName( pDesc->GetName(),
-                                    sal_False,
-                                    &nPos );
-
-
-        pSh->ChgPageDesc( nPos, *pDesc);
-        pSh->ChgCurPageDesc(*pDesc);
+        SwPageDesc *pd = pSh->FindPageDescByName( pDesc->GetName(),
+                                    sal_False );
+        pSh->ChgPageDescP( *pDesc, pd );
+        pSh->ChgCurPageDesc( *pDesc );
 
         // Insert Frame
         SwFlyFrmAttrMgr aMgr(sal_False, pSh, FRMMGR_TYPE_ENVELP);

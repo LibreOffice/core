@@ -89,9 +89,9 @@ static struct SwCSS1ItemIds
 void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
 {
-    const SwPageDesc *spd =  pDoc->FindPageDescByName( pPageDesc->GetName() );
-    OSL_ENSURE( pPageDesc != spd, "Seitenvorlage nicht gefunden" );
-    if (pPageDesc == spd)
+    bool contains = pDoc->ContainsPageDesc( pPageDesc );
+    OSL_ENSURE( contains, "Seitenvorlage nicht gefunden" );
+    if( contains )
         pDoc->ChgPageDescP( rNewPageDesc, const_cast<SwPageDesc*>( pPageDesc ) );
 }
 

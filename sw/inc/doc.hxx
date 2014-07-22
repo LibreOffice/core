@@ -1361,6 +1361,8 @@ public:
     SwPageDesc* FindPageDescByName( const OUString& rName, sal_uInt16* pPos = 0 ) const;
     SwPageDesc* FindPageDescByName( const OUString& rName, sal_uInt16* pPos = 0 );
     SwPageDesc* FindPageDescByPoolId( sal_uInt16 nPoolId );
+    bool ContainsPageDesc( const SwPageDesc* ) const;
+    bool ContainsPageDesc( const SwPageDesc& ) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */

@@ -1010,7 +1010,6 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, sal_Boo
     aEndStack(pDoc, nFieldFl),
     pPaM(new SwPaM(*(rPaM.GetPoint()))),
     sBaseURL(rBaseURL),
-    nPageDescOffset(GetDoc().GetPageDescCnt()),
     eSrcCharSet(RTL_TEXTENCODING_MS_1252),
     bNewDoc(bNew),
     bStdPD(sal_False),
@@ -1049,8 +1048,6 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, sal_Boo
 
 SwFltShell::~SwFltShell()
 {
-    sal_uInt16 i;
-
     if (eSubMode == Style)
         EndStyle();
     if( pOutDoc->IsInTable() )          // falls nicht ordentlich abgeschlossen
@@ -1064,9 +1061,10 @@ SwFltShell::~SwFltShell()
     aStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
     aEndStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
     aEndStack.SetAttr(*pPaM->GetPoint(), 0, sal_False);
+
+    SwDoc& rDoc = GetDoc();
     if( bProtect ){     // Das ganze Doc soll geschuetzt sein
 
-        SwDoc& rDoc = GetDoc();
                         // 1. SectionFmt und Section anlegen
         SwSectionFmt* pSFmt = rDoc.MakeSectionFmt( 0 );
         SwSectionData aSectionData(CONTENT_SECTION, OUString("PMW-Protect"));
@@ -1090,12 +1088,10 @@ SwFltShell::~SwFltShell()
         // Pagedescriptoren am Dokument updaten (nur so werden auch die
         // linken Seiten usw. eingestellt).
 
-    GetDoc().ChgPageDesc( 0, GetDoc().GetPageDesc( 0 ));    // PageDesc "Standard"
-    for (i=nPageDescOffset;i<GetDoc().GetPageDescCnt();i++)
-    {
-        const SwPageDesc& rPD = GetDoc().GetPageDesc(i);
-        GetDoc().ChgPageDesc(i, rPD);
-    }
+    sal_uInt16 i;
+
+    for (i = 0 ; i < rDoc.GetPageDescCnt(); i++)
+        GetDoc().ChgPageDescP( rDoc.GetPageDesc(i) );
 
     delete pPaM;
     for (i=0; i<sizeof(pColls)/sizeof(*pColls); i++)
@@ -2149,21 +2145,6 @@ void SwFltShell::NextStyle(sal_uInt16 nWhich, sal_uInt16 nNext)
         if( pColls[nWhich] && pColls[nNext] )
             pColls[nWhich]->GetColl()->SetNextTxtFmtColl(
                  *pColls[nNext]->GetColl() );
-}
-
-// UpdatePageDescs muss am Ende des Einlesevorganges aufgerufen werden, damit
-// der Writer den Inhalt der Pagedescs wirklich akzeptiert
-void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
-{
-    // Pagedescriptoren am Dokument updaten (nur so werden auch die
-    // linken Seiten usw. eingestellt).
-
-    // PageDesc "Standard"
-    rDoc.ChgPageDesc(0, rDoc.GetPageDesc(0));
-
-    // PageDescs "Konvert..."
-    for (sal_uInt16 i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
-        rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
