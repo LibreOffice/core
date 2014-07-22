@@ -293,9 +293,9 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     sal_uInt16 nWhich = rEntry.nWID;
 
-    // item state holen
+    // Get item state
     SfxItemState eState = rSet.GetItemState( nWhich, false );
-    // item-Wert als UnoAny zurueckgeben
+    // Return item value as UnoAny
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
     else if(eState < SFX_ITEM_DEFAULT)
@@ -308,7 +308,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
 
-    // which-id ermitteln
+    // Get WhichId
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if( !pEntry || !pEntry->nWID )
     {
@@ -316,9 +316,9 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     }
     sal_uInt16 nWhich = pEntry->nWID;
 
-    // get item state
+    // Get item state
     SfxItemState eState = rSet.GetItemState(nWhich, false);
-    // item-Wert als UnoAny zurueckgeben
+    // Return item value as UnoAny
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
     else if(eState < SFX_ITEM_DEFAULT)

@@ -32,10 +32,11 @@
 using namespace boost;
 
 namespace {
-    // A "Node" represents a subset of inserted SfxItemSets
-    // The root node represents the empty set
-    // The other nodes contain a SfxPoolItem and represents an item set which contains their
-    // pool item and the pool items of their parents.
+    /** A "Node" represents a subset of inserted SfxItemSets
+     * The root node represents the empty set
+     * The other nodes contain a SfxPoolItem and represents an item set which contains their
+     * pool item and the pool items of their parents.
+     */
     class Node
     {
         std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
@@ -148,22 +149,23 @@ namespace {
         return pNextNode;
     }
 
-    /* Find the next node which has a SfxItemSet.
-       The input parameter pLast has a sophisticated meaning:
-       downstairs only:
-       pLast == 0 => scan your children and their children
-                     but neither your parents neither your siblings
-       downstairs and upstairs:
-       pLast == this => scan your children, their children,
-                        the children of your parent behind you, and so on
-       partial downstairs and upstairs
-       pLast != 0 && pLast != this => scan your children behind the given children,
-                        the children of your parent behind you and so on.
-
-       OD 2008-03-11 #i86923#
-       introduce parameters <bSkipUnusedItemSets> and <bSkipIgnorable>
-       and its handling.
-    */
+    /**
+     * Find the next node which has a SfxItemSet.
+     * The input parameter pLast has a sophisticated meaning:
+     * downstairs only:
+     * pLast == 0 => scan your children and their children
+     *               but neither your parents neither your siblings
+     * downstairs and upstairs:
+     * pLast == this => scan your children, their children,
+     *                  the children of your parent behind you, and so on
+     * partial downstairs and upstairs
+     *  pLast != 0 && pLast != this => scan your children behind the given children,
+     *                 the children of your parent behind you and so on.
+     *
+     * OD 2008-03-11 #i86923#
+     * introduce parameters <bSkipUnusedItemSets> and <bSkipIgnorable>
+     * and its handling.
+     */
     Node* Node::nextItemSet( Node* pLast,
                              const bool bSkipUnusedItemSets,
                              const bool bSkipIgnorable )
@@ -343,19 +345,21 @@ namespace {
 
 }
 
-/* This static method creates a unique name from a shared pointer to a SfxItemSet
-   The name is the memory address of the SfxItemSet itself. */
-
+/**
+ * This static method creates a unique name from a shared pointer to a SfxItemSet
+ * The name is the memory address of the SfxItemSet itself.
+ */
 OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
 {
     return OUString::number( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
 
-// class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.
-// The insertItemSet method adds a SfxItemSet into the tree if necessary and returns a shared_ptr
-// to a copy of the SfxItemSet.
-// The aRoot-Node represents an empty SfxItemSet.
-
+/**
+ * class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.
+ * The insertItemSet method adds a SfxItemSet into the tree if necessary and returns a shared_ptr
+ * to a copy of the SfxItemSet.
+ * The aRoot-Node represents an empty SfxItemSet.
+ */
 class StylePoolImpl
 {
 private:

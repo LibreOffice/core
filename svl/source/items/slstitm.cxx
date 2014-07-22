@@ -55,8 +55,8 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     SfxPoolItem( which ),
     pImp(NULL)
 {
-    // PB: das Putten einer leeren Liste funktionierte nicht,
-    // deshalb habe ich hier die Abfrage nach dem Count auskommentiert
+    // FIXME: Putting an empty list does not work
+    // Therefore the query after the count is commented out
     if( pList /*!!! && pList->Count() */ )
     {
         pImp = new SfxImpStringList;
@@ -259,7 +259,7 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUSt
 
     if (pImp)
     {
-        // String gehoert der Liste
+        // String belongs to the list
         for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
             pImp->aList.push_back(rList[n]);
     }

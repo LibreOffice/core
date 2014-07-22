@@ -31,7 +31,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     pSetToPut( 0 ),
     pItemToPut( &pItemPool->Put(*pPutItem) )
 {
-    DBG_ASSERT(pItemPool, "kein Pool angegeben");
+    DBG_ASSERT(pItemPool, "No Pool provided");
 }
 
 
@@ -42,7 +42,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     pSetToPut( pPutSet ),
     pItemToPut( 0 )
 {
-    DBG_ASSERT(pItemPool, "kein Pool angegeben");
+    DBG_ASSERT(pItemPool, "No Pool provided");
 }
 
 
@@ -71,18 +71,18 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
         SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )
         {
-            // aendert sich ueberhaupt etwas?
+            // Did anything change at all?
             if ( rMapEntry.pPoolItem != &rOrigItem )
             {
-                rMapEntry.pPoolItem->AddRef(2); // einen davon fuer den Cache
+                rMapEntry.pPoolItem->AddRef(2); // One for the cache
                 if ( bNew )
-                    pPool->Put( rOrigItem );    //! AddRef??
+                    pPool->Put( rOrigItem );    //FIXME: AddRef?
             }
             return *rMapEntry.pPoolItem;
         }
     }
 
-    // die neue Attributierung in einem neuen Set eintragen
+    // Insert the new attributes in a new Set
     SfxSetItem *pNewItem = (SfxSetItem *)rOrigItem.Clone();
     if ( pItemToPut )
     {
@@ -93,15 +93,15 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
     const SfxSetItem* pNewPoolItem = (const SfxSetItem*) &pPool->Put( *pNewItem );
-    DBG_ASSERT( pNewPoolItem != pNewItem, "Pool: rein == raus?" );
+    DBG_ASSERT( pNewPoolItem != pNewItem, "Pool: same in and out?" );
     delete pNewItem;
 
-    // Refernzzaehler anpassen, je einen davon fuer den Cache
+    // Adapt refcount; one each for the cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
     if ( bNew )
-        pPool->Put( rOrigItem );    //! AddRef??
+        pPool->Put( rOrigItem );    //FIXME: AddRef?
 
-    // die Transformation im Cache eintragen
+    // Add the transformation to the cache
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
     aModify.pPoolItem = (SfxSetItem*) pNewPoolItem;

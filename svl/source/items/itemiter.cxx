@@ -36,7 +36,7 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     {
         SfxItemArray ppFnd = _rSet._aItems;
 
-        // suche das 1. gesetzte Item
+        // Find the first Item that is set
         for ( _nStt = 0; !*(ppFnd + _nStt ); ++_nStt )
             ; // empty loop
         if ( 1 < _rSet.Count() )
