@@ -21,7 +21,6 @@ package com.sun.star.uno;
 /**
  * The <code>ITypeDescription</code> allows to examine a type
  * in detail (e.g. it is used for marshaling/unmarshaling).
- *
  * @deprecated This interface does not cover all the features supported by the
  * corresponding (unpublished) implementation.  But no client code should need
  * to access this functionality, anyway.
@@ -30,7 +29,6 @@ public interface ITypeDescription {
     /**
      * Gets the <code>ITypeDescription</code> of the
      * super, if it exists.
-     * <p>
      * @return  the <code>ITypeDescription</code>.
      */
     ITypeDescription getSuperType();
@@ -39,7 +37,6 @@ public interface ITypeDescription {
      * Gets the <code>IMethodDescription</code> for every
      * method, if this type is an interface. Otherwise
      * returns <code>null</code>.
-     * <p>
      * @return  the <code>IMethodDescription[]</code>.
      */
     IMethodDescription []getMethodDescriptions();
@@ -48,7 +45,6 @@ public interface ITypeDescription {
      * Gets the <code>IMethodDescription</code> for the
      * method with index methodId, if it exists, otherwise
      * returns <code>null</code>.
-     * <p>
      * @return  the <code>IMethodDescription</code>.
      */
     IMethodDescription getMethodDescription(int methodId);
@@ -57,7 +53,6 @@ public interface ITypeDescription {
      * Gets the <code>IMethodDescription</code> for the
      * method with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
-     * <p>
      * @return  the <code>IMethodDescription</code>.
      */
     IMethodDescription getMethodDescription(String name);
@@ -66,7 +61,6 @@ public interface ITypeDescription {
      * Gets the <code>IFieldDescription</code> for every
      * field, if this type is an interface. Otherwise
      * returns <code>null</code>.
-     * <p>
      * @return  the <code>IFieldDescription[]</code>.
      */
       IFieldDescription []getFieldDescriptions();
@@ -75,14 +69,12 @@ public interface ITypeDescription {
      * Gets the <code>IFieldDescription</code> for the
      * field with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
-     * <p>
      * @return  the <code>IFieldDescription</code>.
      */
       IFieldDescription getFieldDescription(String name);
 
     /**
      * Gets the IDL <code>TypeClass</code> of the type.
-     * <p>
      * @return  the <code>TypeClass</code>.
      */
     TypeClass getTypeClass();
@@ -90,14 +82,12 @@ public interface ITypeDescription {
     /**
      * Gets the component <code>ITypeDescription</code> if
      * this is an array type, otherwise returns <code>null</code>.
-     * <p>
      * @return the <code>ITypeDescription</code>
      */
     ITypeDescription getComponentType();
 
     /**
      * Gets the (UNO) type name.
-     *
      * <table>
      *   <caption>Mapping from UNO types to type names</caption>
      *   <thead>
@@ -150,14 +140,12 @@ public interface ITypeDescription {
      * a simple name <var>S</var>, the corresponding type name consists of the
      * same sequence of module names and simple name, with <code>"."</code>
      * separating the individual elements.</p>
-     *
      * @return the type name.
      */
     String getTypeName();
 
     /**
      * Gets the (Java) array type name.
-     *
      * <p>The array type name is defined to be the Java class name (as returned
      * by <code>Class.forName</code>) of the Java array class that corresponds
      * to the UNO sequence type with this type (the UNO type represented by this
@@ -165,14 +153,12 @@ public interface ITypeDescription {
      * <code>ITypeDescription</code> instance representing the UNO type VOID,
      * the array type name is defined to be
      * <code>"[Ljava.lang.Void;"</code>.</p>
-     *
      * @return the array type name.
      */
     String getArrayTypeName();
 
     /**
      * Gets the corresponding java class for the type.
-     * <p>
      * @return   the corresponding java class.
      */
     Class<?> getZClass();

@@ -31,7 +31,7 @@ import com.sun.star.lib.util.WeakMap;
  *
  * <p>The methods <code>queryInterface</code> and <code>areSame</code> delegate
  * calls to the implementing objects and are used instead of casts,
- * <code>instanceof</code>, <code>==</code>, and <code>equals</code>.<p>
+ * <code>instanceof</code>, <code>==</code>, and <code>equals</code>.</p>
  *
  * <p>For historic reasons, this class is not <code>final</code>, and has a
  * <code>public</code> constructor.  These artifacts are considered mistakes,

@@ -410,19 +410,39 @@ public class Type {
         }
     }
 
-    // @see java.lang.Object#equals
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare.
+     * @return <code>true</code> if this object is the same as the obj argument;
+     * <code>false</code> otherwise.
+     * @see java.lang.Object#equals
+     */
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof Type
             && _typeClass == ((Type) obj)._typeClass
             && _typeName.equals(((Type) obj)._typeName);
     }
 
-    // @see java.lang.Object#hashCode
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this object.
+     * @see java.lang.Object#hashCode
+     */
+    @Override
     public int hashCode() {
         return _typeName.hashCode();
     }
 
-    // @see java.lang.Object#toString
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     * @see java.lang.Object#toString
+     */
+    @Override
     public String toString() {
         return "Type[" + _typeName + "]";
     }
