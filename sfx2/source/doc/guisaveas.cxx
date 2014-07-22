@@ -1279,8 +1279,8 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( OUString( "file:///c:/" ) );
-                aObj.SetName( aRecommendedName );
+                INetURLObject aObj( OUString( "c:/" ) + aRecommendedName, INET_PROT_FILE,
+                        INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;
                 if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
@@ -1293,7 +1293,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                         aObj.SetExtension( aExtensions[0] );
                 }
 
-                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+                aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8 );
             }
         }
     }
