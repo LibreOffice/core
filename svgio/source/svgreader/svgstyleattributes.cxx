@@ -208,7 +208,7 @@ namespace svgio
                 return getCssStyleParent();
             }
 
-            if(mrOwner.getParent())
+            if(mrOwner.supportsParentStyle() && mrOwner.getParent())
             {
                 return mrOwner.getParent()->getSvgStyleAttributes();
             }
