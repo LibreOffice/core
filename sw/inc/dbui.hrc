@@ -26,7 +26,6 @@
 
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
 
-#define DLG_MM_SENDMAILS              (RC_DBUI_BEGIN + 25)
 #define DLG_MAILMERGECHILD            (RC_DBUI_BEGIN + 26)
 // Strings ------------------------------------------------------------------
 
@@ -72,6 +71,18 @@
 #define ST_ADDRESSELEMENT       (RC_DBUI_BEGIN + 41)
 #define ST_MATCHESTO            (RC_DBUI_BEGIN + 42)
 #define ST_PREVIEW              (RC_DBUI_BEGIN + 43)
+#define ST_CONTINUE             (RC_DBUI_BEGIN + 44)
+#define ST_LESS                 (RC_DBUI_BEGIN + 45)
+#define ST_TASK                 (RC_DBUI_BEGIN + 46)
+#define ST_STATUS               (RC_DBUI_BEGIN + 47)
+#define ST_SEND                 (RC_DBUI_BEGIN + 48)
+#define ST_SENDINGTO            (RC_DBUI_BEGIN + 49)
+#define ST_COMPLETED            (RC_DBUI_BEGIN + 50)
+#define ST_FAILED               (RC_DBUI_BEGIN + 51)
+#define ST_TERMINATEQUERY       (RC_DBUI_BEGIN + 52)
+
+// ImageList
+#define ILIST                   (RC_DBUI_BEGIN + 53)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0

@@ -28,6 +28,7 @@
 #include <vcl/prgsbar.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include "mailmergehelper.hxx"
@@ -141,23 +142,19 @@ struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
 class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 {
-    FixedLine               m_aStatusFL;
-    FixedText               m_aStatusFT;
+    FixedText               *m_pTransferStatus;
+    FixedText               *m_pPaused;
+    ProgressBar             *m_pProgressBar;
+    FixedText               *m_pErrorStatus;
 
-    FixedLine               m_aTransferStatusFL;
-    FixedText               m_aTransferStatusFT;
-    FixedInfo               m_PausedFI;
-    ProgressBar             m_aProgressBar;
-    FixedText               m_aErrorStatusFT;
+    PushButton              *m_pDetails;
+    SvSimpleTableContainer  *m_pContainer;
+    HeaderBar               *m_pStatusHB;
+    SvTabListBox            *m_pStatusLB;
+    SvSimpleTable           *m_pStatus;
 
-    PushButton              m_aDetailsPB;
-    HeaderBar               m_aStatusHB;
-    SvTabListBox            m_aStatusLB;
-
-    FixedLine               m_aSeparatorFL;
-
-    PushButton              m_aStopPB;
-    PushButton              m_aClosePB;
+    PushButton              *m_pStop;
+    PushButton              *m_pClose;
 
     OUString                m_sMore;
     OUString                m_sLess;
