@@ -1032,9 +1032,8 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     {
         LabelPositionHelper::doDynamicFontResize( *pPropValues, *pPropNames, xTextProp, m_aReferenceSize );
     }
-    if(pPropNames&&pPropValues)
-        return true;
-    return false;
+
+    return (pPropNames && pPropValues);
 }
 
 void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
