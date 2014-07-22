@@ -203,15 +203,16 @@ namespace svgio
 
         const SvgStyleAttributes* SvgStyleAttributes::getParentStyle() const
         {
-            const SvgStyleAttributes* pParentStyle = getCssStyleParent();
+            if(getCssStyleParent())
+            {
+                return getCssStyleParent();
+            }
 
-            if(mrOwner.supportsParentStyle() && mrOwner.getParent())
+            if(mrOwner.getParent())
             {
                 return mrOwner.getParent()->getSvgStyleAttributes();
             }
 
-            if (pParentStyle != this) // to prevent infinite loop
-                return pParentStyle;
             return NULL;
         }
 
