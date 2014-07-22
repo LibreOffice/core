@@ -28,19 +28,19 @@ package com.sun.star.uno;
  * an interprocess connection using an any, you should use this class to add
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
- * <p>
+ * </p>
  */
 public class Any {
     /**
      * The type of the any.
-     * <p>
+     *
      * @see #getType
      */
     protected Type  _type;
 
     /**
      * The data of the any.
-     * <p>
+     *
      * @see #getObject
      */
     protected Object _object;
@@ -52,7 +52,7 @@ public class Any {
 
     /**
      * Constructs a new any.
-     * <p>
+     *
      * @param   zInterface  the type of the any.
      * @param   object      the data of the any.
      * @deprecated as of UDK 2.0
@@ -61,9 +61,11 @@ public class Any {
         this(new Type(zInterface), object);
     }
 
-    /** Constructs a new any with a given type and value
-        @param type the UNO type of the any.
-        @param object the value of the any.
+    /**
+     * Constructs a new any with a given type and value
+     *
+     * @param type the UNO type of the any.
+     * @param object the value of the any.
      */
     public Any(Type type, Object object) {
         if (type.equals(Type.ANY)) {
@@ -74,15 +76,13 @@ public class Any {
     }
 
     /**
-       Complete a UNO <code>ANY</code> (make sure it is wrapped up as an
-       <code>Any</code> instance).
-
-       @param any a Java value representing a UNO <code>ANY</code> value.
-
-       @return a complete Java value (that is, an <code>Any</code> instance)
-       representing the same UNO <code>ANY</code> value as the given argument.
-
-       @since UDK 3.2.3
+     * Complete a UNO <code>ANY</code> (make sure it is wrapped up as an
+     * <code>Any</code> instance).
+     *
+     * @param any a Java value representing a UNO <code>ANY</code> value.
+     * @return a complete Java value (that is, an <code>Any</code> instance)
+     * representing the same UNO <code>ANY</code> value as the given argument.
+     * @since UDK 3.2.3
     */
     public static final Any complete(Object any) {
         return any instanceof Any
@@ -93,8 +93,8 @@ public class Any {
 
     /**
      * Gets the type of the value within the any.
-     * <p>
-     * @return   the type of the value within the any.
+     *
+     * @return the type of the value within the any.
      */
     public Type getType() {
         return _type;
@@ -102,14 +102,22 @@ public class Any {
 
     /**
      * Gets the value within the any.
-     * <p>
-     * @return   gets the value within the any.
+     *
+     * @return gets the value within the any.
      */
     public Object getObject() {
         return _object;
     }
 
-    // @see java.lang.Object#equals
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare.
+     * @return <code>true</code> if this object is the same as the obj argument;
+     * <code>false</code> otherwise.
+     * @see java.lang.Object#equals
+     */
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof Any && _type.equals(((Any) obj)._type)
             && (_object == null
@@ -117,13 +125,25 @@ public class Any {
                 : _object.equals(((Any) obj)._object));
     }
 
-    // @see java.lang.Object#hashCode
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this object.
+     * @see java.lang.Object#hashCode
+     */
+    @Override
     public int hashCode() {
         return _type.hashCode() * 13
             + (_object == null ? 0 : _object.hashCode());
     }
 
-    // @see java.lang.Object#toString
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     * @see java.lang.Object#toString
+     */
+    @Override
     public String toString() {
         return "Any[" + _type + ", " + _object + "]";
     }

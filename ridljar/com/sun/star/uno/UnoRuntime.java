@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * The central class needed for implementing or using UNO components in Java.
@@ -335,19 +336,35 @@ public class UnoRuntime {
             try {
                 return type.getZClass().getConstructor((Class[]) null).
                     newInstance((Object[]) null);
-            } catch (java.lang.RuntimeException e) {
+            } catch (IllegalArgumentException e) {
                 throw e;
-            } catch (java.lang.Exception e) {
+            } catch (SecurityException e) {
+                throw e;
+            } catch (IllegalAccessException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InstantiationException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (NoSuchMethodException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (java.lang.SecurityException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InvocationTargetException e) {
                 throw new java.lang.RuntimeException(e.toString());
             }
         case TypeClass.ENUM_value:
             try {
                 return type.getZClass().getMethod("getDefault", (Class[]) null).
                     invoke(null, (Object[]) null);
-            } catch (java.lang.RuntimeException e) {
+            } catch (IllegalArgumentException e) {
                 throw e;
-            } catch (java.lang.Exception e) {
+            } catch (java.lang.SecurityException e) {
+                throw e;
+            } catch (IllegalAccessException e) {
                 throw new java.lang.RuntimeException(e.toString());
+            } catch (NoSuchMethodException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InvocationTargetException e) {
+            throw new java.lang.RuntimeException(e.toString());
             }
         default:
             throw new IllegalArgumentException(
