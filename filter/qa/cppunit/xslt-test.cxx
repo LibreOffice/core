@@ -47,7 +47,9 @@ public:
 
     CPPUNIT_TEST_SUITE(XsltFilterTest);
     CPPUNIT_TEST(testXsltCopyOld);
+#if LIBXML_VERSION >= 20703
     CPPUNIT_TEST(testXsltCopyNew);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
