@@ -8,11 +8,13 @@ import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.SubTile;
 
 public class MockTileProvider implements TileProvider {
-    private final LayerController layerController;
     private static final int TILE_SIZE = 256;
+    private final LayerController layerController;
+    private final String inputFile;
 
-    public MockTileProvider(LayerController layerController) {
+    public MockTileProvider(LayerController layerController, String inputFile) {
         this.layerController = layerController;
+        this.inputFile = inputFile;
     }
 
     @Override
