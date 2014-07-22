@@ -18,8 +18,6 @@
  */
 
 #include "hangulhanjadlg.hxx"
-#include "hangulhanjadlg.hrc"
-#include "commonlingui.hxx"
 #include <dialmgr.hxx>
 
 #include <cuires.hrc>
@@ -42,6 +40,7 @@
 
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)
+#define MAXNUM_SUGGESTIONS 50
 
 
 namespace svx
@@ -59,56 +58,40 @@ namespace svx
         class FontSwitch
         {
         private:
-            OutputDevice& m_rDev;
+            OutputDevice* m_rDev;
 
         public:
-            inline FontSwitch( OutputDevice& _rDev, const Font& _rTemporaryFont )
+            inline FontSwitch( OutputDevice* _rDev, const Font& _rTemporaryFont )
                 :m_rDev( _rDev )
             {
-                m_rDev.Push( PUSH_FONT );
-                m_rDev.SetFont( _rTemporaryFont );
+                m_rDev->Push( PUSH_FONT );
+                m_rDev->SetFont( _rTemporaryFont );
             }
             inline ~FontSwitch( )
             {
-                m_rDev.Pop( );
+                m_rDev->Pop( );
             }
         };
     }
 
-
     //= PseudoRubyText
-
-    /** a class which allows to draw two texts in a pseudo-ruby way (which basically
-        means one text above or below the other, and a little bit smaller)
-    */
-    class PseudoRubyText
-    {
-    public:
-        enum RubyPosition
-        {
-            eAbove, eBelow
-        };
-
-    protected:
-        const OUString      m_sPrimaryText;
-        const OUString      m_sSecondaryText;
-        const RubyPosition  m_ePosition;
-
-    public:
-        PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition );
-
-    public:
-        void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
-            Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
-            ::vcl::ControlLayoutData* _pLayoutData = NULL );
-    };
-
 
     PseudoRubyText::PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition )
         :m_sPrimaryText( _rPrimary )
         ,m_sSecondaryText( _rSecondary )
         ,m_ePosition( _ePosition )
     {
+    }
+
+    PseudoRubyText::PseudoRubyText()
+    {
+    }
+
+    void PseudoRubyText::init( const OUString& rPrimaryText, const OUString& rSecondaryText, const RubyPosition& rPosition )
+    {
+        m_sPrimaryText = rPrimaryText;
+        m_sSecondaryText = rSecondaryText;
+        m_ePosition = rPosition;
     }
 
 
@@ -130,7 +113,7 @@ namespace svx
         Rectangle aPrimaryRect = _rDevice.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
         Rectangle aSecondaryRect;
         {
-            FontSwitch aFontRestore( _rDevice, aSmallerFont );
+            FontSwitch aFontRestore( &_rDevice, aSmallerFont );
             aSecondaryRect = _rDevice.GetTextRect( _rRect, m_sSecondaryText, _nTextStyle );
         }
 
@@ -190,7 +173,7 @@ namespace svx
 
         _rDevice.DrawText( aPrimaryRect, m_sPrimaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
         {
-            FontSwitch aFontRestore( _rDevice, aSmallerFont );
+            FontSwitch aFontRestore( &_rDevice, aSmallerFont );
             _rDevice.DrawText( aSecondaryRect, m_sSecondaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
         }
 
@@ -201,31 +184,16 @@ namespace svx
             *_pSecondaryLocation = aSecondaryRect;
     }
 
-
     //= RubyRadioButton
 
-    class RubyRadioButton   :public RadioButton
-                            ,protected PseudoRubyText
+    RubyRadioButton::RubyRadioButton( Window* _pParent, WinBits nBits )
+        :RadioButton( _pParent, nBits )
     {
-        using svx::PseudoRubyText::Paint;
+    }
 
-    public:
-        RubyRadioButton(
-            Window* _pParent,
-            const ResId& _rId,          // the text in the resource will be taken as primary text
-            const OUString& _rSecondary,  // this will be the secondary text which will be printed somewhat smaller
-            const PseudoRubyText::RubyPosition _ePosition );
-
-    protected:
-        virtual void    Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
-    };
-
-
-    RubyRadioButton::RubyRadioButton( Window* _pParent, const ResId& _rId,
-        const OUString& _rSecondary, const PseudoRubyText::RubyPosition _ePosition )
-        :RadioButton( _pParent, _rId )
-        ,PseudoRubyText( RadioButton::GetText(), _rSecondary, _ePosition )
+    void RubyRadioButton::init( const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition )
     {
+        m_aRubyText.init( rPrimaryText, rSecondaryText, rPosition );
     }
 
 
@@ -236,8 +204,8 @@ namespace svx
         // calculate the size of the radio image - we're to paint our text _after_ this image
         DBG_ASSERT( !GetModeRadioImage(), "RubyRadioButton::Paint: images not supported!" );
         Size aImageSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
-        aImageSize.Width()  = CalcZoom( aImageSize.Width() );
-        aImageSize.Height()  = CalcZoom( aImageSize.Height() );
+        aImageSize.Width()  = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
+        aImageSize.Height()  = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
 
         Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
         aOverallRect.Left() += aImageSize.Width() + 4;  // 4 is the separator between the image and the text
@@ -270,7 +238,7 @@ namespace svx
 
         // paint the ruby text
         Rectangle aPrimaryTextLocation, aSecondaryTextLocation;
-        PseudoRubyText::Paint( *this, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation );
+        m_aRubyText.Paint( *this, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation );
 
         // the focus rectangle is to be painted around both texts
         Rectangle aCombinedRect( aPrimaryTextLocation );
@@ -297,9 +265,33 @@ namespace svx
             ShowFocus( aTextRect );
     }
 
+    Size RubyRadioButton::GetOptimalSize() const
+    {
+        Font aSmallerFont( GetFont() );
+        aSmallerFont.SetHeight( ( long )( 0.8 * aSmallerFont.GetHeight() ) );
+        Rectangle rect( Point(), Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
+        sal_uInt16 style = GetStyle();
+
+        Size aPrimarySize = GetTextRect( rect, m_aRubyText.getPrimaryText(), style ).GetSize();
+        Size aSecondarySize;
+        {
+            FontSwitch aFontRestore( ( OutputDevice* ) this, aSmallerFont );
+            aSecondarySize = GetTextRect( rect, m_aRubyText.getSecondaryText(), style ).GetSize();
+        }
+
+        Size minimumSize =  CalcMinimumSize();
+        minimumSize.Height() = aPrimarySize.Height() + aSecondarySize.Height() + 5;
+        minimumSize.Width() = aPrimarySize.Width() + aSecondarySize.Width() + 5;
+        return minimumSize;
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRubyRadioButton( Window *pParent, VclBuilder::stringmap & )
+    {
+        return new RubyRadioButton( pParent, WB_LEFT|WB_VCENTER );
+    }
+
 
     //= SuggestionSet
-
 
 
     SuggestionSet::SuggestionSet( Window* pParent )
@@ -335,13 +327,12 @@ namespace svx
     //= SuggestionDisplay
 
 
-
-    SuggestionDisplay::SuggestionDisplay( Window* pParent, const ResId& rResId )
-        : Control( pParent, rResId )
-        , m_bDisplayListBox(true)
-        , m_aValueSet(this)
-        , m_aListBox(this,GetStyle() | WB_BORDER )
-        , m_bInSelectionUpdate(false)
+    SuggestionDisplay::SuggestionDisplay( Window* pParent, WinBits nBits )
+        : Control( pParent, nBits )
+        , m_bDisplayListBox( true )
+        , m_aValueSet( this )
+        , m_aListBox( this,GetStyle() | WB_BORDER )
+        , m_bInSelectionUpdate( false )
     {
         m_aValueSet.SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
         m_aListBox.SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
@@ -353,9 +344,9 @@ namespace svx
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
-        Size aSize(GetSizePixel());
-        m_aValueSet.SetSizePixel(aSize);
-        m_aListBox.SetSizePixel(aSize);
+        Size aSize( approximate_char_width() * 48, GetTextHeight() * 5 );
+        m_aValueSet.SetSizePixel( aSize );
+        m_aListBox.SetSizePixel( aSize );
 
         implUpdateDisplay();
     }
@@ -369,8 +360,8 @@ namespace svx
         bool bShowBox = IsVisible() && m_bDisplayListBox;
         bool bShowSet = IsVisible() && !m_bDisplayListBox;
 
-        m_aListBox.Show(bShowBox);
-        m_aValueSet.Show(bShowSet);
+        m_aListBox.Show( bShowBox );
+        m_aValueSet.Show( bShowSet );
     }
 
     void SuggestionDisplay::StateChanged( StateChangedType nStateChange )
@@ -440,7 +431,7 @@ namespace svx
             return 0L;
 
         m_bInSelectionUpdate = true;
-        if(pControl==&m_aListBox)
+        if( pControl == &m_aListBox )
         {
             sal_uInt16 nPos = m_aListBox.GetSelectEntryPos();
             m_aValueSet.SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
@@ -451,7 +442,7 @@ namespace svx
             m_aListBox.SelectEntryPos( nPos );
         }
         m_bInSelectionUpdate = false;
-        m_aSelectLink.Call(this);
+        m_aSelectLink.Call( this );
         return 0L;
     }
 
@@ -468,7 +459,7 @@ namespace svx
     {
         sal_uInt16 nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
         m_aValueSet.InsertItem( nItemId );
-        OUString* pItemData = new OUString(rStr);
+        OUString* pItemData = new OUString( rStr );
         m_aValueSet.SetItemData( nItemId, pItemData );
     }
     void SuggestionDisplay::SelectEntryPos( sal_uInt16 nPos )
@@ -495,116 +486,73 @@ namespace svx
         m_aListBox.SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSuggestionDisplay( Window *pParent, VclBuilder::stringmap & )
+    {
+        return new SuggestionDisplay( pParent, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
+    }
+
 
     //= HangulHanjaConversionDialog
 
-
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
-        :ModalDialog( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA ) )
-        ,m_pPlayground( new SvxCommonLinguisticControl( this ) )
-        ,m_aFind            ( m_pPlayground.get(), CUI_RES( PB_FIND ) )
-        ,m_aSuggestions     ( m_pPlayground.get(), CUI_RES( CTL_SUGGESTIONS ) )
-        ,m_aFormat          ( m_pPlayground.get(), CUI_RES( FT_FORMAT ) )
-        ,m_aSimpleConversion( m_pPlayground.get(), CUI_RES( RB_SIMPLE_CONVERSION ) )
-        ,m_aHangulBracketed ( m_pPlayground.get(), CUI_RES( RB_HANJA_HANGUL_BRACKETED ) )
-        ,m_aHanjaBracketed  ( m_pPlayground.get(), CUI_RES( RB_HANGUL_HANJA_BRACKETED ) )
-        ,m_aConversion      ( m_pPlayground.get(), CUI_RES( FT_CONVERSION ) )
-        ,m_aHangulOnly      ( m_pPlayground.get(), CUI_RES( CB_HANGUL_ONLY ) )
-        ,m_aHanjaOnly       ( m_pPlayground.get(), CUI_RES( CB_HANJA_ONLY ) )
-        ,m_aReplaceByChar   ( m_pPlayground.get(), CUI_RES( CB_REPLACE_BY_CHARACTER ) )
+        :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
         ,m_pIgnoreNonPrimary( NULL )
         ,m_bDocumentMode( true )
     {
-        // special creation of the 4 pseudo-ruby radio buttons
-        OUString sSecondaryHangul( CUI_RES( STR_HANGUL ) );
-        OUString sSecondaryHanja( CUI_RES( STR_HANJA ) );
-        m_pHanjaAbove.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANGUL_HANJA_ABOVE ), sSecondaryHanja, PseudoRubyText::eAbove ) );
-        m_pHanjaBelow.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANGUL_HANJA_BELOW ), sSecondaryHanja, PseudoRubyText::eBelow ) );
-        m_pHangulAbove.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANJA_HANGUL_ABOVE ), sSecondaryHangul, PseudoRubyText::eAbove ) );
-        m_pHangulBelow.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANJA_HANGUL_BELOW ), sSecondaryHangul, PseudoRubyText::eBelow ) );
+        get( m_aFind, "find" );
+        get( m_aIgnore, "ignore" );
+        get( m_aSuggestions, "suggestions" );
+        get( m_aSimpleConversion, "simpleconversion" );
+        get( m_aHangulBracketed, "hangulbracket" );
+        get( m_aHanjaBracketed, "hanjabracket" );
+        get( m_aHangulOnly, "hangulonly" );
+        get( m_aHanjaOnly, "hanjaonly" );
+        get( m_aReplaceByChar, "replacebychar" );
+        get( m_aOptions, "options" );
+        get( m_aIgnore, "ignore" );
+        get( m_aIgnoreAll, "ignoreall" );
+        get( m_aReplace, "replace" );
+        get( m_aReplaceAll, "replaceall" );
+        get( m_aWordInput, "wordinput" );
+        get( m_aOriginalWord, "originalword" );
+        get( m_pHanjaAbove, "hanja_above" );
+        get( m_pHanjaBelow, "hanja_below" );
+        get( m_pHangulAbove, "hangul_above" );
+        get( m_pHangulBelow, "hangul_below" );
 
-        // since these 4 buttons are not created within the other members, they have a wrong initial Z-Order
-        // correct this
-        m_pHanjaAbove->SetZOrder( &m_aHanjaBracketed, WINDOW_ZORDER_BEHIND );
-        m_pHanjaBelow->SetZOrder( m_pHanjaAbove.get(), WINDOW_ZORDER_BEHIND );
-        m_pHangulAbove->SetZOrder( m_pHanjaBelow.get(), WINDOW_ZORDER_BEHIND );
-        m_pHangulBelow->SetZOrder( m_pHangulAbove.get(), WINDOW_ZORDER_BEHIND );
+        m_aSuggestions->set_height_request( m_aSuggestions->GetTextHeight() * 5 );
+        m_aSuggestions->set_width_request( m_aSuggestions->approximate_char_width() * 48 );
 
-        // VCL automatically sets the WB_GROUP bit, if the previous sibling (at the moment of creation)
-        // is no radion button
-        m_pHanjaAbove->SetStyle( m_pHanjaAbove->GetStyle() & ~WB_GROUP );
+        OUString sHangul = "Hangul";
+        OUString sHanja = "Hanja";
+        m_pHanjaAbove->init( sHangul, sHanja, PseudoRubyText::eAbove );
+        m_pHanjaBelow->init( sHangul, sHanja, PseudoRubyText::eBelow );
+        m_pHangulAbove->init( sHanja, sHangul, PseudoRubyText::eAbove );
+        m_pHangulBelow->init( sHanja, sHangul, PseudoRubyText::eBelow );
 
-        // the "Find" button and the word input control may not have the proper distance/extensions
-        // -> correct this
-        Point aDistance = LogicToPixel( Point( 3, 0 ), MAP_APPFONT );
-        sal_Int32 nTooLargeByPixels =
-            // right margin of the word input control
-            (   m_pPlayground->GetWordInputControl().GetPosPixel().X()
-            +   m_pPlayground->GetWordInputControl().GetSizePixel().Width()
-            )
-            // minus left margin of the find button
-            -   m_aFind.GetPosPixel().X()
-            // plus desired distance between the both
-            +   aDistance.X();
-        // make the word input control smaller
-        Size aSize = m_pPlayground->GetWordInputControl().GetSizePixel();
-        aSize.Width() -= nTooLargeByPixels;
-        m_pPlayground->GetWordInputControl().SetSizePixel( aSize );
-
-        // additionall, the playground is not wide enough (in it's default size)
-        sal_Int32 nEnlargeWidth = 0;
-        {
-            FixedText aBottomAnchor( m_pPlayground.get(), CUI_RES( FT_RESIZE_ANCHOR ) );
-            Point aAnchorPos = aBottomAnchor.GetPosPixel();
-
-            nEnlargeWidth = aAnchorPos.X() - m_pPlayground->GetActionButtonsLocation().X();
-        }
-        m_pPlayground->Enlarge( nEnlargeWidth, 0 );
-
-        // insert our controls into the z-order of the playground
-        m_pPlayground->InsertControlGroup( m_aFind, m_aFind, SvxCommonLinguisticControl::eLeftRightWords );
-        m_pPlayground->InsertControlGroup( m_aSuggestions, m_aHanjaOnly, SvxCommonLinguisticControl::eSuggestionLabel );
-        m_pPlayground->InsertControlGroup( m_aReplaceByChar, m_aReplaceByChar, SvxCommonLinguisticControl::eActionButtons );
-
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eClose, LINK( this, HangulHanjaConversionDialog, OnClose ) );
-        m_pPlayground->GetWordInputControl().SetModifyHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionModified ) );
-        m_aSuggestions.SetSelectHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionSelected ) );
-
-        m_aReplaceByChar.SetClickHdl( LINK( this, HangulHanjaConversionDialog, ClickByCharacterHdl ) );
-
-        m_aHangulOnly.SetClickHdl( LINK( this,  HangulHanjaConversionDialog, OnConversionDirectionClicked ) );
-        m_aHanjaOnly.SetClickHdl(  LINK( this,  HangulHanjaConversionDialog, OnConversionDirectionClicked ) );
-
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions,
-                                        LINK( this, HangulHanjaConversionDialog, OnOption ) );
-        m_pPlayground->GetButton( SvxCommonLinguisticControl::eOptions )->Show();
+        m_aWordInput->SetModifyHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionModified ) );
+        m_aSuggestions->SetSelectHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionSelected ) );
+        m_aReplaceByChar->SetClickHdl( LINK( this, HangulHanjaConversionDialog, ClickByCharacterHdl ) );
+        m_aHangulOnly->SetClickHdl( LINK( this,  HangulHanjaConversionDialog, OnConversionDirectionClicked ) );
+        m_aHanjaOnly->SetClickHdl(  LINK( this,  HangulHanjaConversionDialog, OnConversionDirectionClicked ) );
+        m_aOptions->SetClickHdl( LINK( this, HangulHanjaConversionDialog, OnOption ) );
 
         if ( editeng::HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
         {
-            m_pIgnoreNonPrimary = &m_aHangulOnly;
+            m_pIgnoreNonPrimary = m_aHangulOnly;
         }
         else
         {
-            m_pIgnoreNonPrimary = &m_aHanjaOnly;
+            m_pIgnoreNonPrimary = m_aHanjaOnly;
         }
 
         // initial focus
         FocusSuggestion( );
 
         // initial control values
-        m_aSimpleConversion.Check();
+        m_aSimpleConversion->Check();
 
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eClose     )->SetHelpId(HID_HANGULDLG_BUTTON_CLOSE    );
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnore    )->SetHelpId(HID_HANGULDLG_BUTTON_IGNORE   );
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnoreAll )->SetHelpId(HID_HANGULDLG_BUTTON_IGNOREALL);
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChange    )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGE   );
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChangeAll )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGEALL);
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eOptions   )->SetHelpId(HID_HANGULDLG_BUTTON_OPTIONS  );
-        m_pPlayground->GetWordInputControl().SetHelpId(HID_HANGULDLG_EDIT_NEWWORD);
-
-        FreeResource();
-
-        m_aSuggestions.SetHelpIds();
+        m_aSuggestions->SetHelpIds();
     }
 
 
@@ -615,23 +563,22 @@ namespace svx
 
     void HangulHanjaConversionDialog::FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions )
     {
-        m_aSuggestions.Clear();
-
+        m_aSuggestions->Clear();
         const OUString* pSuggestions = _rSuggestions.getConstArray();
         const OUString* pSuggestionsEnd = _rSuggestions.getConstArray() + _rSuggestions.getLength();
         while ( pSuggestions != pSuggestionsEnd )
-            m_aSuggestions.InsertEntry( *pSuggestions++ );
+            m_aSuggestions->InsertEntry( *pSuggestions++ );
 
         // select the first suggestion, and fill in the suggestion edit field
         OUString sFirstSuggestion;
-        if ( m_aSuggestions.GetEntryCount() )
+        if ( m_aSuggestions->GetEntryCount() )
         {
-            sFirstSuggestion = m_aSuggestions.GetEntry( 0 );
-            m_aSuggestions.SelectEntryPos( 0 );
+            sFirstSuggestion = m_aSuggestions->GetEntry( 0 );
+            m_aSuggestions->SelectEntryPos( 0 );
         }
-        m_pPlayground->GetWordInputControl().SetText( sFirstSuggestion );
-        m_pPlayground->GetWordInputControl().SaveValue();
-        OnSuggestionModified( &m_pPlayground->GetWordInputControl() );
+        m_aWordInput->SetText( sFirstSuggestion );
+        m_aWordInput->SaveValue();
+        OnSuggestionModified( m_aWordInput );
     }
 
 
@@ -643,39 +590,39 @@ namespace svx
 
     void HangulHanjaConversionDialog::SetIgnoreHdl( const Link& _rHdl )
     {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eIgnore, _rHdl );
+        m_aIgnore->SetClickHdl( _rHdl );
     }
 
 
     void HangulHanjaConversionDialog::SetIgnoreAllHdl( const Link& _rHdl )
     {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eIgnoreAll, _rHdl );
+        m_aIgnoreAll->SetClickHdl( _rHdl );
     }
 
 
     void HangulHanjaConversionDialog::SetChangeHdl( const Link& _rHdl )
     {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eChange, _rHdl );
+        m_aReplace->SetClickHdl( _rHdl );
     }
 
 
     void HangulHanjaConversionDialog::SetChangeAllHdl( const Link& _rHdl )
     {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eChangeAll, _rHdl );
+        m_aReplaceAll->SetClickHdl( _rHdl );
     }
 
 
     void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
     {
-        m_aFind.SetClickHdl( _rHdl );
+        m_aFind->SetClickHdl( _rHdl );
     }
 
 
     void HangulHanjaConversionDialog::SetConversionFormatChangedHdl( const Link& _rHdl )
     {
-        m_aSimpleConversion.SetClickHdl( _rHdl );
-        m_aHangulBracketed.SetClickHdl( _rHdl );
-        m_aHanjaBracketed.SetClickHdl( _rHdl );
+        m_aSimpleConversion->SetClickHdl( _rHdl );
+        m_aHangulBracketed->SetClickHdl( _rHdl );
+        m_aHanjaBracketed->SetClickHdl( _rHdl );
         m_pHanjaAbove->SetClickHdl( _rHdl );
         m_pHanjaBelow->SetClickHdl( _rHdl );
         m_pHangulAbove->SetClickHdl( _rHdl );
@@ -689,21 +636,21 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionSelected)
+    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionSelected )
     {
-        m_pPlayground->GetWordInputControl().SetText( m_aSuggestions.GetSelectEntry() );
+        m_aWordInput->SetText( m_aSuggestions->GetSelectEntry() );
         OnSuggestionModified( NULL );
         return 0L;
     }
 
 
-    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionModified)
+    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionModified )
     {
-        m_aFind.Enable( m_pPlayground->GetWordInputControl().IsValueChangedFromSaved() );
+        m_aFind->Enable( m_aWordInput->IsValueChangedFromSaved() );
 
-        bool bSameLen = m_pPlayground->GetWordInputControl().GetText().getLength() == m_pPlayground->GetCurrentText().getLength();
-        m_pPlayground->EnableButton( SvxCommonLinguisticControl::eChange, m_bDocumentMode && bSameLen );
-        m_pPlayground->EnableButton( SvxCommonLinguisticControl::eChangeAll, m_bDocumentMode && bSameLen );
+        bool bSameLen = m_aWordInput->GetText().getLength() == m_aOriginalWord->GetText().getLength();
+        m_aReplace->Enable( m_bDocumentMode && bSameLen );
+        m_aReplaceAll->Enable( m_bDocumentMode && bSameLen );
 
         return 0L;
     }
@@ -711,10 +658,10 @@ namespace svx
 
     IMPL_LINK( HangulHanjaConversionDialog, ClickByCharacterHdl, CheckBox *, pBox )
     {
-        m_aClickByCharacterLink.Call(pBox);
+        m_aClickByCharacterLink.Call( pBox );
 
         bool bByCharacter = pBox->IsChecked();
-        m_aSuggestions.DisplayListBox( !bByCharacter );
+        m_aSuggestions->DisplayListBox( !bByCharacter );
 
         return 0L;
     }
@@ -723,14 +670,14 @@ namespace svx
     IMPL_LINK( HangulHanjaConversionDialog, OnConversionDirectionClicked, CheckBox *, pBox )
     {
         CheckBox *pOtherBox = 0;
-        if (pBox == &m_aHangulOnly)
-            pOtherBox = &m_aHanjaOnly;
-        else if (pBox == &m_aHanjaOnly)
-            pOtherBox = &m_aHangulOnly;
-        if (pBox && pOtherBox)
+        if ( pBox == m_aHangulOnly )
+            pOtherBox = m_aHanjaOnly;
+        else if ( pBox == m_aHanjaOnly )
+            pOtherBox = m_aHangulOnly;
+        if ( pBox && pOtherBox )
         {
             bool bBoxChecked = pBox->IsChecked();
-            if (bBoxChecked)
+            if ( bBoxChecked )
                 pOtherBox->Check( false );
             pOtherBox->Enable( !bBoxChecked );
         }
@@ -738,31 +685,24 @@ namespace svx
         return 0L;
     }
 
-
-    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnClose)
-    {
-        Close();
-        return 0L;
-    }
-
-    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnOption)
+    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnOption )
     {
         HangulHanjaOptionsDialog        aOptDlg( this );
         aOptDlg.Execute();
-        m_aOptionsChangedLink.Call(this);
+        m_aOptionsChangedLink.Call( this );
         return 0L;
     }
 
 
     OUString HangulHanjaConversionDialog::GetCurrentString( ) const
     {
-        return m_pPlayground->GetCurrentText( );
+        return m_aOriginalWord->GetText( );
     }
 
 
     void HangulHanjaConversionDialog::FocusSuggestion( )
     {
-        m_pPlayground->GetWordInputControl().GrabFocus();
+        m_aWordInput->GrabFocus();
     }
 
 
@@ -780,14 +720,13 @@ namespace svx
     void HangulHanjaConversionDialog::SetCurrentString( const OUString& _rNewString,
         const Sequence< OUString >& _rSuggestions, bool _bOriginatesFromDocument )
     {
-        m_pPlayground->SetCurrentText( _rNewString );
+        m_aOriginalWord->SetText( _rNewString );
 
         bool bOldDocumentMode = m_bDocumentMode;
         m_bDocumentMode = _bOriginatesFromDocument; // before FillSuggestions!
         FillSuggestions( _rSuggestions );
 
-        m_pPlayground->EnableButton( SvxCommonLinguisticControl::eIgnoreAll, m_bDocumentMode );
-            // all other buttons have been implicitly enabled or disabled during filling in the suggestions
+        m_aIgnoreAll->Enable( m_bDocumentMode );
 
         // switch the def button depending if we're working for document text
         if ( bOldDocumentMode != m_bDocumentMode )
@@ -796,13 +735,13 @@ namespace svx
             Window* pNewDefButton = NULL;
             if ( m_bDocumentMode )
             {
-                pOldDefButton = &m_aFind;
-                pNewDefButton = m_pPlayground->GetButton( SvxCommonLinguisticControl::eChange );
+                pOldDefButton = m_aFind;
+                pNewDefButton = m_aReplace;
             }
             else
             {
-                pOldDefButton = m_pPlayground->GetButton( SvxCommonLinguisticControl::eChange );
-                pNewDefButton = &m_aFind;
+                pOldDefButton = m_aReplace;
+                pNewDefButton = m_aFind;
             }
 
             DBG_ASSERT( WB_DEFBUTTON == ( pOldDefButton->GetStyle( ) & WB_DEFBUTTON ),
@@ -824,14 +763,14 @@ namespace svx
 
     OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
     {
-        return m_pPlayground->GetWordInputControl().GetText();
+        return m_aWordInput->GetText();
     }
 
 
     void HangulHanjaConversionDialog::SetByCharacter( bool _bByCharacter )
     {
-        m_aReplaceByChar.Check( _bByCharacter );
-        m_aSuggestions.DisplayListBox( !_bByCharacter );
+        m_aReplaceByChar->Check( _bByCharacter );
+        m_aSuggestions->DisplayListBox( !_bByCharacter );
     }
 
 
@@ -840,15 +779,15 @@ namespace svx
             HHC::ConversionDirection _ePrimaryConversionDirection )
     {
         // default state: try both direction
-        m_aHangulOnly.Check( false );
-        m_aHangulOnly.Enable( true );
-        m_aHanjaOnly.Check( false );
-        m_aHanjaOnly.Enable( true );
+        m_aHangulOnly->Check( false );
+        m_aHangulOnly->Enable( true );
+        m_aHanjaOnly->Check( false );
+        m_aHanjaOnly->Enable( true );
 
         if (!_bTryBothDirections)
         {
             CheckBox *pBox = _ePrimaryConversionDirection == HHC::eHangulToHanja?
-                                    &m_aHangulOnly : &m_aHanjaOnly;
+                                    m_aHangulOnly : m_aHanjaOnly;
             pBox->Check( true );
             OnConversionDirectionClicked( pBox );
         }
@@ -857,7 +796,7 @@ namespace svx
 
     bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
     {
-        return !m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked();
+        return !m_aHangulOnly->IsChecked() && !m_aHanjaOnly->IsChecked();
     }
 
 
@@ -865,9 +804,9 @@ namespace svx
             HHC::ConversionDirection eDefaultDirection ) const
     {
         HHC::ConversionDirection eDirection = eDefaultDirection;
-        if (m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked())
+        if ( m_aHangulOnly->IsChecked() && !m_aHanjaOnly->IsChecked() )
             eDirection = HHC::eHangulToHanja;
-        else if (!m_aHangulOnly.IsChecked() && m_aHanjaOnly.IsChecked())
+        else if ( !m_aHangulOnly->IsChecked() && m_aHanjaOnly->IsChecked() )
             eDirection = HHC::eHanjaToHangul;
         return eDirection;
     }
@@ -877,9 +816,9 @@ namespace svx
     {
         switch ( _eType )
         {
-            case HHC::eSimpleConversion: m_aSimpleConversion.Check(); break;
-            case HHC::eHangulBracketed: m_aHangulBracketed.Check(); break;
-            case HHC::eHanjaBracketed:  m_aHanjaBracketed.Check(); break;
+            case HHC::eSimpleConversion: m_aSimpleConversion->Check(); break;
+            case HHC::eHangulBracketed: m_aHangulBracketed->Check(); break;
+            case HHC::eHanjaBracketed:  m_aHanjaBracketed->Check(); break;
             case HHC::eRubyHanjaAbove:  m_pHanjaAbove->Check(); break;
             case HHC::eRubyHanjaBelow:  m_pHanjaBelow->Check(); break;
             case HHC::eRubyHangulAbove: m_pHangulAbove->Check(); break;
@@ -892,11 +831,11 @@ namespace svx
 
     HHC::ConversionFormat HangulHanjaConversionDialog::GetConversionFormat( ) const
     {
-        if ( m_aSimpleConversion.IsChecked() )
+        if ( m_aSimpleConversion->IsChecked() )
             return HHC::eSimpleConversion;
-        if ( m_aHangulBracketed.IsChecked() )
+        if ( m_aHangulBracketed->IsChecked() )
             return HHC::eHangulBracketed;
-        if ( m_aHanjaBracketed.IsChecked() )
+        if ( m_aHanjaBracketed->IsChecked() )
             return HHC::eHanjaBracketed;
         if ( m_pHanjaAbove->IsChecked() )
             return HHC::eRubyHanjaAbove;
