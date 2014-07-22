@@ -51,12 +51,14 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::chart::TimeInterval;
 using ::com::sun::star::chart::TimeIncrement;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetAxisPropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetAxisPropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aAxisPropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aAxisPropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR,     "DisplayLabels",    0 )
         IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,         "MajorTickmarks",   0 )
         IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS,     "MinorTickmarks",   0 )
@@ -68,9 +70,8 @@ namespace
 
     return aAxisPropertyMap;
 };
-} // anonymous namespace
 
-namespace chart { namespace wrapper {
+} // anonymous namespace
 
 AxisItemConverter::AxisItemConverter(
     const Reference< beans::XPropertySet > & rPropertySet,
@@ -108,14 +109,12 @@ AxisItemConverter::~AxisItemConverter()
     delete m_pExplicitScale;
     delete m_pExplicitIncrement;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), DeleteItemConverterPtr() );
 }
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -125,8 +124,7 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
     bool bResult = false;
 
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -140,8 +138,8 @@ const sal_uInt16 * AxisItemConverter::GetWhichPairs() const
 
 bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
-    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
+    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

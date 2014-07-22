@@ -34,17 +34,18 @@
 
 using namespace ::com::sun::star;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetEquationPropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetEquationPropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aEquationPropertyMap;
+    static ItemPropertyMapType aEquationPropertyMap;
 
     return aEquationPropertyMap;
 };
-} // anonymous namespace
 
-namespace chart { namespace wrapper {
+} // anonymous namespace
 
 RegressionEquationItemConverter::RegressionEquationItemConverter(
     const ::com::sun::star::uno::Reference<
@@ -67,13 +68,13 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
 RegressionEquationItemConverter::~RegressionEquationItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
+                     DeleteItemConverterPtr() );
 }
 
 void RegressionEquationItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+                     FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -84,7 +85,7 @@ bool RegressionEquationItemConverter::ApplyItemSet( const SfxItemSet & rItemSet 
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+                     ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -98,8 +99,8 @@ const sal_uInt16 * RegressionEquationItemConverter::GetWhichPairs() const
 
 bool RegressionEquationItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType & rMap( lcl_GetEquationPropertyMap());
-    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ItemPropertyMapType & rMap( lcl_GetEquationPropertyMap());
+    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

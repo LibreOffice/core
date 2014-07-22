@@ -24,8 +24,7 @@
 
 using namespace ::com::sun::star;
 
-namespace comphelper
-{
+namespace chart { namespace wrapper {
 
 MultipleItemConverter::MultipleItemConverter( SfxItemPool& rItemPool )
         : ItemConverter( NULL, rItemPool )
@@ -71,6 +70,6 @@ bool MultipleItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropert
     return false;
 }
 
-} //  namespace comphelper
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,22 +34,23 @@
 
 using namespace ::com::sun::star;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetTitlePropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetTitlePropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aTitlePropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aTitlePropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED, "StackCharacters", 0 )
         );
 
     return aTitlePropertyMap;
 };
+
 } // anonymous namespace
 
-namespace chart { namespace wrapper {
-
-class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
+class FormattedStringsConverter : public MultipleItemConverter
 {
 public:
     FormattedStringsConverter(
@@ -125,13 +126,13 @@ TitleItemConverter::TitleItemConverter(
 TitleItemConverter::~TitleItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
+                     DeleteItemConverterPtr() );
 }
 
 void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+                     FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -142,7 +143,7 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+                     ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -156,8 +157,8 @@ const sal_uInt16 * TitleItemConverter::GetWhichPairs() const
 
 bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
-    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ItemPropertyMapType & rMap( lcl_GetTitlePropertyMap());
+    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

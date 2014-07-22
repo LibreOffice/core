@@ -37,12 +37,14 @@
 
 using namespace ::com::sun::star;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aCharacterPropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aCharacterPropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( EE_CHAR_COLOR, "CharColor", 0 )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", MID_LANG_LOCALE )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", MID_LANG_LOCALE )
@@ -63,8 +65,6 @@ namespace
     return aCharacterPropertyMap;
 }
 } // anonymous namespace
-
-namespace chart { namespace wrapper {
 
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
@@ -96,8 +96,8 @@ const sal_uInt16 * CharacterPropertyItemConverter::GetWhichPairs() const
 
 bool CharacterPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
-    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ItemPropertyMapType & rMap( lcl_GetCharacterPropertyPropertyMap());
+    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

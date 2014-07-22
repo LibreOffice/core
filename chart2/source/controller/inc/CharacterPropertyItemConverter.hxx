@@ -28,7 +28,7 @@
 
 namespace chart { namespace wrapper {
 
-class CharacterPropertyItemConverter : public comphelper::ItemConverter
+class CharacterPropertyItemConverter : public ItemConverter
 {
 public:
     CharacterPropertyItemConverter(

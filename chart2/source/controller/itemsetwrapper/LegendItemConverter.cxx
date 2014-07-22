@@ -60,13 +60,13 @@ LegendItemConverter::LegendItemConverter(
 LegendItemConverter::~LegendItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
+                     DeleteItemConverterPtr() );
 }
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+                     FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -77,7 +77,7 @@ bool LegendItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+                     ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;

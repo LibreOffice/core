@@ -69,12 +69,12 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-::comphelper::ItemConverter* createItemConverter(
+wrapper::ItemConverter* createItemConverter(
     const OUString & aObjectCID, const uno::Reference<frame::XModel>& xChartModel,
     const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
     ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider* pRefSizeProvider )
 {
-    ::comphelper::ItemConverter* pItemConverter=NULL;
+    wrapper::ItemConverter* pItemConverter=NULL;
 
     //get type of selected object
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
@@ -712,7 +712,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
 
-        boost::scoped_ptr<comphelper::ItemConverter> pItemConverter(
+        boost::scoped_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),

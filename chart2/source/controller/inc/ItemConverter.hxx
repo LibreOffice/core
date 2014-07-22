@@ -26,8 +26,8 @@
 
 #include <utility>
 
-namespace comphelper
-{
+namespace chart { namespace wrapper {
+
 
 /** This class serves for conversion between properties of an XPropertySet and
     SfxItems in SfxItemSets.
@@ -193,7 +193,7 @@ private:
     bool                                            m_bIsValid;
 };
 
-} //  namespace comphelper
+}}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMCONVERTER_HXX
 #endif

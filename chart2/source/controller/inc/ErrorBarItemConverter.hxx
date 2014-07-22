@@ -37,8 +37,7 @@ namespace chart
 namespace wrapper
 {
 
-class ErrorBarItemConverter :
-        public ::comphelper::ItemConverter
+class ErrorBarItemConverter : public ItemConverter
 {
 public:
     ErrorBarItemConverter(

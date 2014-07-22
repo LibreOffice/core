@@ -31,8 +31,7 @@ namespace chart
 namespace wrapper
 {
 
-class GraphicPropertyItemConverter :
-        public ::comphelper::ItemConverter
+class GraphicPropertyItemConverter : public ItemConverter
 {
 public:
     enum eGraphicObjectType

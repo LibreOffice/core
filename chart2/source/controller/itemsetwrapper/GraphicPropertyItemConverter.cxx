@@ -45,12 +45,14 @@
 
 using namespace ::com::sun::star;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aDataPointPropertyFilledMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aDataPointPropertyFilledMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "Color", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "BorderColor", 0 )
@@ -69,10 +71,10 @@ namespace
 
     return aDataPointPropertyFilledMap;
 }
-::comphelper::ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
+ItemPropertyMapType & lcl_GetDataPointLinePropertyMap()
 {
-    static ::comphelper::ItemPropertyMapType aDataPointPropertyLineMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aDataPointPropertyLineMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "Color", 0 )
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
@@ -80,10 +82,10 @@ namespace
 
     return aDataPointPropertyLineMap;
 }
-::comphelper::ItemPropertyMapType & lcl_GetLinePropertyMap()
+ItemPropertyMapType & lcl_GetLinePropertyMap()
 {
-    static ::comphelper::ItemPropertyMapType aLinePropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aLinePropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "LineColor", 0 )
@@ -92,10 +94,10 @@ namespace
 
     return aLinePropertyMap;
 }
-::comphelper::ItemPropertyMapType & lcl_GetFillPropertyMap()
+ItemPropertyMapType & lcl_GetFillPropertyMap()
 {
-    static ::comphelper::ItemPropertyMapType aFillPropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aFillPropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "FillColor", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
@@ -148,11 +150,6 @@ bool lcl_SetContentForNamedProperty(
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
-{
-
 GraphicPropertyItemConverter::GraphicPropertyItemConverter(
     const uno::Reference<
     beans::XPropertySet > & rPropertySet,
@@ -191,8 +188,8 @@ const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
 
 bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType::const_iterator aEndIt;
-    ::comphelper::ItemPropertyMapType::const_iterator aIt;
+    ItemPropertyMapType::const_iterator aEndIt;
+    ItemPropertyMapType::const_iterator aIt;
 
     switch( m_eGraphicObjectType )
     {

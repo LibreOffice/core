@@ -22,11 +22,10 @@
 #include <comphelper/InlineContainer.hxx>
 #include "ItemConverter.hxx"
 
-#define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::comphelper::ItemConverter::tPropertyNameType, ::comphelper::ItemConverter::tMemberIdType >(\
+#define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::chart::wrapper::ItemConverter::tPropertyNameType, ::chart::wrapper::ItemConverter::tMemberIdType >(\
     uno, mid))
 
-namespace comphelper
-{
+namespace chart { namespace wrapper {
 
 typedef ::std::map< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
     ItemPropertyMapType;
@@ -74,9 +73,8 @@ struct DeleteItemConverterPtr : public ::std::unary_function< ItemConverter *, v
     { delete pConv; }
 };
 
-} //  namespace comphelper
+}}
 
-// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMPROPERTYMAP_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

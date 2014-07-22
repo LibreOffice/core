@@ -25,8 +25,7 @@
 
 #include <vector>
 
-namespace comphelper
-{
+namespace chart { namespace wrapper {
 
 /** Note: virtual const sal_uInt16 * GetWhichPairs() const; is still pure virtual
  */
@@ -47,7 +46,7 @@ protected:
     ::std::vector< ItemConverter * >            m_aConverters;
 };
 
-} //  namespace comphelper
+}}
 
 #endif
 

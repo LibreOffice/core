@@ -27,7 +27,7 @@ class SdrModel;
 
 namespace chart { namespace wrapper {
 
-class AllAxisItemConverter : public ::comphelper::MultipleItemConverter
+class AllAxisItemConverter : public MultipleItemConverter
 {
 public:
     AllAxisItemConverter(
@@ -43,7 +43,7 @@ protected:
     virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
-class AllGridItemConverter : public ::comphelper::MultipleItemConverter
+class AllGridItemConverter : public MultipleItemConverter
 {
 public:
     AllGridItemConverter(
@@ -57,7 +57,7 @@ protected:
     virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
-class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
+class AllDataLabelItemConverter : public MultipleItemConverter
 {
 public:
     AllDataLabelItemConverter(
@@ -73,7 +73,7 @@ protected:
     virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
-class AllTitleItemConverter : public ::comphelper::MultipleItemConverter
+class AllTitleItemConverter : public MultipleItemConverter
 {
 public:
     AllTitleItemConverter(
@@ -88,7 +88,7 @@ protected:
     virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
-class AllSeriesStatisticsConverter : public ::comphelper::MultipleItemConverter
+class AllSeriesStatisticsConverter : public MultipleItemConverter
 {
 public:
     AllSeriesStatisticsConverter(

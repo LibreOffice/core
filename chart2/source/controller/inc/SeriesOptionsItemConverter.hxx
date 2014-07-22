@@ -30,8 +30,7 @@ namespace chart
 namespace wrapper
 {
 
-class SeriesOptionsItemConverter :
-        public ::comphelper::ItemConverter
+class SeriesOptionsItemConverter : public ItemConverter
 {
 public:
     SeriesOptionsItemConverter(

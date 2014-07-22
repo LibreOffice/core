@@ -32,8 +32,7 @@ namespace chart
 namespace wrapper
 {
 
-class LegendItemConverter :
-        public ::comphelper::ItemConverter
+class LegendItemConverter : public ItemConverter
 {
 public:
     LegendItemConverter(

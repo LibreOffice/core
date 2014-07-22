@@ -34,8 +34,7 @@ namespace chart
 namespace wrapper
 {
 
-class RegressionCurveItemConverter :
-        public ::comphelper::ItemConverter
+class RegressionCurveItemConverter : public ItemConverter
 {
 public:
     RegressionCurveItemConverter(

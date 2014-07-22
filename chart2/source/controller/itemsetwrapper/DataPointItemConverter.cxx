@@ -54,12 +54,14 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-namespace
+namespace chart { namespace wrapper {
+
+namespace {
+
+ItemPropertyMapType & lcl_GetDataPointPropertyMap()
 {
-::comphelper::ItemPropertyMapType & lcl_GetDataPointPropertyMap()
-{
-    static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
-        ::comphelper::MakeItemPropertyMap
+    static ItemPropertyMapType aDataPointPropertyMap(
+        MakeItemPropertyMap
         IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
         );
 
@@ -190,8 +192,6 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
 
 } // anonymous namespace
 
-namespace chart { namespace wrapper {
-
 DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
@@ -240,13 +240,13 @@ DataPointItemConverter::DataPointItemConverter(
 DataPointItemConverter::~DataPointItemConverter()
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::DeleteItemConverterPtr() );
+                     DeleteItemConverterPtr() );
 }
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+                     FillItemSetFunc( rOutItemSet ));
 
     // own items
     ItemConverter::FillItemSet( rOutItemSet );
@@ -263,7 +263,7 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     bool bResult = false;
 
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+                     ApplyItemSetFunc( rItemSet, bResult ));
 
     // own items
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
@@ -279,8 +279,8 @@ const sal_uInt16 * DataPointItemConverter::GetWhichPairs() const
 
 bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
-    ::comphelper::ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
-    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+    ItemPropertyMapType & rMap( lcl_GetDataPointPropertyMap());
+    ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
 
     if( aIt == rMap.end())
         return false;

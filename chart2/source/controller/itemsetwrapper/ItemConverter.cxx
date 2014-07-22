@@ -27,8 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace comphelper
-{
+namespace chart { namespace wrapper {
 
 ItemConverter::ItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
@@ -243,6 +242,6 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
     }
 }
 
-} //  namespace comphelper
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

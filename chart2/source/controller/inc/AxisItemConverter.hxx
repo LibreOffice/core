@@ -32,7 +32,7 @@ class SdrModel;
 
 namespace chart { namespace wrapper {
 
-class AxisItemConverter : public comphelper::ItemConverter
+class AxisItemConverter : public ItemConverter
 {
 public:
     AxisItemConverter(
