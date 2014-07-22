@@ -9,3 +9,36 @@
    }
  
    /**
+--- misc/libbase-1.1.6/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java	2010-04-27 15:58:46.000000000 +0200
++++ misc/build/libbase-1.1.6/source/org/pentaho/reporting/libraries/base/util/ClassQueryTool.java	2014-07-22 17:53:13.000000000 +0200
+@@ -173,7 +173,7 @@
+       final File file = directoryOrJar.getAbsoluteFile();
+       if (file.isDirectory() && file.exists() && file.canRead())
+       {
+-        allURLs.add(file.toURL());
++        allURLs.add(file.toURI().toURL());
+         directoryURLs.add(file);
+         continue;
+       }
+@@ -186,8 +186,8 @@
+       final String fileName = file.getName();
+       if (fileName.endsWith(".jar") || fileName.endsWith(".zip"))
+       {
+-        allURLs.add(file.toURL());
+-        jarURLs.add(file.toURL());
++        allURLs.add(file.toURI().toURL());
++        jarURLs.add(file.toURI().toURL());
+       }
+     }
+ 
+@@ -212,8 +212,8 @@
+         final String fileName = file.getName();
+         if (fileName.endsWith(".jar") || fileName.endsWith(".zip"))
+         {
+-          allURLs.add(file.toURL());
+-          jarURLs.add(file.toURL());
++          allURLs.add(file.toURI().toURL());
++          jarURLs.add(file.toURI().toURL());
+         }
+       }
+     }
