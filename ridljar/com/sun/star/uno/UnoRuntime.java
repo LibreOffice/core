@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * The central class needed for implementing or using UNO components in Java.
@@ -306,22 +307,22 @@ public class UnoRuntime {
         case TypeClass.BOOLEAN_value:
             return Boolean.FALSE;
         case TypeClass.BYTE_value:
-            return new Byte((byte) 0);
+            return (byte) 0;
         case TypeClass.SHORT_value:
         case TypeClass.UNSIGNED_SHORT_value:
-            return new Short((short) 0);
+            return (short) 0;
         case TypeClass.LONG_value:
         case TypeClass.UNSIGNED_LONG_value:
-            return new Integer(0);
+            return 0;
         case TypeClass.HYPER_value:
         case TypeClass.UNSIGNED_HYPER_value:
-            return new Long(0L);
+            return 0L;
         case TypeClass.FLOAT_value:
-            return new Float(0.0f);
+            return 0.0f;
         case TypeClass.DOUBLE_value:
-            return new Double(0.0);
+            return 0.0;
         case TypeClass.CHAR_value:
-            return new Character('\u0000');
+            return '\u0000';
         case TypeClass.STRING_value:
             return "";
         case TypeClass.TYPE_value:
@@ -335,19 +336,35 @@ public class UnoRuntime {
             try {
                 return type.getZClass().getConstructor((Class[]) null).
                     newInstance((Object[]) null);
-            } catch (java.lang.RuntimeException e) {
+            } catch (IllegalArgumentException e) {
                 throw e;
-            } catch (java.lang.Exception e) {
+            } catch (SecurityException e) {
+                throw e;
+            } catch (IllegalAccessException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InstantiationException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (NoSuchMethodException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (java.lang.SecurityException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InvocationTargetException e) {
                 throw new java.lang.RuntimeException(e.toString());
             }
         case TypeClass.ENUM_value:
             try {
                 return type.getZClass().getMethod("getDefault", (Class[]) null).
                     invoke(null, (Object[]) null);
-            } catch (java.lang.RuntimeException e) {
+            } catch (IllegalArgumentException e) {
                 throw e;
-            } catch (java.lang.Exception e) {
+            } catch (java.lang.SecurityException e) {
+                throw e;
+            } catch (IllegalAccessException e) {
                 throw new java.lang.RuntimeException(e.toString());
+            } catch (NoSuchMethodException e) {
+                throw new java.lang.RuntimeException(e.toString());
+            } catch (InvocationTargetException e) {
+            throw new java.lang.RuntimeException(e.toString());
             }
         default:
             throw new IllegalArgumentException(

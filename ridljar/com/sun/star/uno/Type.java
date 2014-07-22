@@ -411,6 +411,7 @@ public class Type {
     }
 
     // @see java.lang.Object#equals
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof Type
             && _typeClass == ((Type) obj)._typeClass
@@ -418,11 +419,13 @@ public class Type {
     }
 
     // @see java.lang.Object#hashCode
+    @Override
     public int hashCode() {
         return _typeName.hashCode();
     }
 
     // @see java.lang.Object#toString
+    @Override
     public String toString() {
         return "Type[" + _typeName + "]";
     }
