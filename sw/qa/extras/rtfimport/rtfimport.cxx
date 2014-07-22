@@ -1323,6 +1323,28 @@ DECLARE_RTFIMPORT_TEST(testN823675, "n823675.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo77996, "fdo77996.rtf")
+{
+    // all styles were imported as name "0"
+    uno::Reference<container::XNameAccess> xChars(getStyles("CharacterStyles"));
+    CPPUNIT_ASSERT(!xChars->hasByName("0"));
+    CPPUNIT_ASSERT(xChars->hasByName("strong"));
+    CPPUNIT_ASSERT(xChars->hasByName("author"));
+    uno::Reference<container::XNameAccess> xParas(getStyles("ParagraphStyles"));
+    CPPUNIT_ASSERT(!xParas->hasByName("0"));
+    CPPUNIT_ASSERT(xParas->hasByName("extract2"));
+    // some document properties were lost
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aln Lin (Bei Jing)"), xProps->getAuthor());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("\xe5\x8e\xa6\xe9\x97\xa8\xe9\x92\xa8\xe4\xb8\x9a\xe8\x82\xa1\xe4\xbb\xbd\xe6\x9c\x89\xe9\x99\x90\xe5\x85\xac\xe5\x8f\xb8", 30,
+            RTL_TEXTENCODING_UTF8),
+        xProps->getTitle());
+    uno::Reference<beans::XPropertySet> xUDProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("jay"), getProperty<OUString>(xUDProps, "Operator"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo47802, "fdo47802.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
