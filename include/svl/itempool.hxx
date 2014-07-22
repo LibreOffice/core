@@ -89,7 +89,7 @@ protected:
     static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
     static inline void              AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
     static inline sal_uLong         ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
-    static inline void              SetKind( SfxPoolItem& rItem, sal_uInt16 nRef );
+    static inline void              SetKind( SfxPoolItem& rItem, SfxItemKind nRef );
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
@@ -238,7 +238,7 @@ inline sal_uLong SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uLong n 
     return rItem.ReleaseRef(n);
 }
 
-inline void SfxItemPool::SetKind( SfxPoolItem& rItem, sal_uInt16 nRef )
+inline void SfxItemPool::SetKind( SfxPoolItem& rItem, SfxItemKind nRef )
 {
     rItem.SetKind( nRef );
 }

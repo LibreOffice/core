@@ -39,13 +39,16 @@ class IntlWrapper;
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
-static const sal_uInt32 SFX_ITEMS_DIRECT=   0xffffffff;
-static const sal_uInt32 SFX_ITEMS_NULL=     0xfffffff0;  // instead StoreSurrogate
-static const sal_uInt32 SFX_ITEMS_DEFAULT=  0xfffffffe;
+static const sal_uInt32 SFX_ITEMS_DIRECT  = 0xffffffff;
+static const sal_uInt32 SFX_ITEMS_NULL    = 0xfffffff0;  // instead StoreSurrogate
+static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
-#define SFX_ITEMS_POOLDEFAULT               0xffff
-#define SFX_ITEMS_STATICDEFAULT             0xfffe
-#define SFX_ITEMS_DELETEONIDLE              0xfffd
+enum SfxItemKind {
+   SFX_ITEMS_NONE,
+   SFX_ITEMS_DELETEONIDLE,
+   SFX_ITEMS_STATICDEFAULT,
+   SFX_ITEMS_POOLDEFAULT
+};
 
 #define SFX_ITEMS_OLD_MAXREF                0xffef
 #define SFX_ITEMS_MAXREF                    0xfffffffe
@@ -162,11 +165,11 @@ friend class SfxVoidItem;
 
     mutable sal_uLong   m_nRefCount;
     sal_uInt16  m_nWhich;
-    sal_uInt16  m_nKind;
+    SfxItemKind  m_nKind;
 
 private:
     inline void              SetRefCount( sal_uLong n );
-    inline void              SetKind( sal_uInt16 n );
+    inline void              SetKind( SfxItemKind n );
 public:
     inline void              AddRef( sal_uLong n = 1 ) const;
 private:
@@ -206,7 +209,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
     sal_uLong                GetRefCount() const { return m_nRefCount; }
-    inline sal_uInt16        GetKind() const { return m_nKind; }
+    inline SfxItemKind       GetKind() const { return m_nKind; }
 
     /** Read in a Unicode string from a streamed byte string representation.
 
@@ -259,10 +262,10 @@ private:
 inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
     m_nRefCount = n;
-    m_nKind = 0;
+    m_nKind = SFX_ITEMS_NONE;
 }
 
-inline void SfxPoolItem::SetKind( sal_uInt16 n )
+inline void SfxPoolItem::SetKind( SfxItemKind n )
 {
     m_nRefCount = SFX_ITEMS_SPECIAL;
     m_nKind = n;
@@ -297,7 +300,7 @@ inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 
 inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetKind() >= SFX_ITEMS_STATICDEFAULT;
+    return pItem && (pItem->GetKind() == SFX_ITEMS_STATICDEFAULT || pItem->GetKind() == SFX_ITEMS_POOLDEFAULT);
 }
 
 inline bool IsPooledItem( const SfxPoolItem *pItem )

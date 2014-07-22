@@ -42,6 +42,34 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
     return pStoringPool_;
 }
 
+static sal_uInt16 convertSfxItemKindToUInt16(SfxItemKind x)
+{
+    if ( x == SFX_ITEMS_NONE )
+        return 0;
+    if ( x == SFX_ITEMS_DELETEONIDLE )
+        return 0xfffd;
+    if ( x == SFX_ITEMS_STATICDEFAULT )
+        return 0xfffe;
+    if ( x == SFX_ITEMS_POOLDEFAULT )
+        return 0xffff;
+    assert(false);
+}
+
+static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 x)
+{
+    if ( x == 0 )
+        return SFX_ITEMS_NONE;
+    if ( x == 0xfffd )
+        return SFX_ITEMS_DELETEONIDLE;
+    if ( x == 0xfffe )
+        return SFX_ITEMS_STATICDEFAULT;
+    if ( x == 0xffff )
+        return SFX_ITEMS_POOLDEFAULT;
+    assert(false);
+}
+
+
+
 /**
  * The SfxItemPool is saved to the specified Stream (together with all its
  * secondary Pools) using its Pool Defaults and pooled Items.
@@ -191,7 +219,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             aItemsRec.NewContent((sal_uInt16)j, 'X' );
 
                             if ( pItem->GetRefCount() == SFX_ITEMS_SPECIAL )
-                                rStream.WriteUInt16( (sal_uInt16) pItem->GetKind() );
+                                rStream.WriteUInt16( convertSfxItemKindToUInt16(pItem->GetKind()) );
                             else
                             {
                                 rStream.WriteUInt16( (sal_uInt16) pItem->GetRefCount() );
@@ -371,7 +399,7 @@ void SfxItemPool_Impl::readTheItems (
         else
         {
             if ( nRef > SFX_ITEMS_OLD_MAXREF )
-                SfxItemPool::SetKind(*pItem, nRef);
+                SfxItemPool::SetKind(*pItem, convertUInt16ToSfxItemKind(nRef));
             else
                 SfxItemPool::AddRef(*pItem, nRef);
         }
@@ -692,6 +720,7 @@ sal_uInt16 SfxItemPool::GetSize_Impl() const
     return pImp->mnEnd - pImp->mnStart + 1;
 }
 
+
 SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 {
     // For the Master the Header has already been loaded in Load()
@@ -843,7 +872,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                 else
                 {
                     if ( nRef > SFX_ITEMS_OLD_MAXREF )
-                        pItem->SetKind( nRef );
+                        pItem->SetKind( convertUInt16ToSfxItemKind(nRef) );
                     else
                         AddRef(*pItem, nRef);
                 }

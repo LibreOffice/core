@@ -44,7 +44,7 @@ IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
-    , m_nKind(0)
+    , m_nKind(SFX_ITEMS_NONE)
 {
     DBG_ASSERT(nWhich <= SHRT_MAX, "invalid WhichId");
 #if OSL_DEBUG_LEVEL > 1
@@ -81,7 +81,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     : m_nRefCount(0) // don't copy that
     , m_nWhich(rCpy.Which()) // call function because of ChkThis() (WTF does that mean?)
-    , m_nKind( 0 )
+    , m_nKind( SFX_ITEMS_NONE )
 {
 #if OSL_DEBUG_LEVEL > 1
     ++nItemCount;
