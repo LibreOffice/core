@@ -184,61 +184,54 @@ void SfxPoolItem::writeUnicodeString(SvStream & rStream, const OUString& rString
     rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
 }
 
-
+/**
+ * This virtual method allows to get a textual representation of the value
+ * for the SfxPoolItem subclasses. It should be overloaded by all UI-relevant
+ * SfxPoolItem subclasses.
+ *
+ * Because the unit of measure of the value in the SfxItemPool is only
+ * queryable via @see SfxItemPool::GetMetric(sal_uInt16) const (and not
+ * via the SfxPoolItem instance or subclass, the own unit of measure is
+ * passed to 'eCoreMetric'.
+ *
+ * The corresponding unit of measure is passed as 'ePresentationMetric'.
+ *
+ *
+ * @return SfxItemPresentation     SFX_ITEM_PRESENTATION_NONE
+ *                                 A textual representation could not be
+ *                                 created
+ *
+ *                                 SFX_ITEM_PRESENTATION_NAMELESS
+ *                                 A textual representation (if applicable
+ *                                 with a unit of measure) could be created,
+ *                                 but it doesn't contain any semantic meaning
+ *
+ *                                 SFX_ITEM_PRESENTATION_COMPLETE
+ *                                 A complete textual representation could be
+ *                                 created with semantic meaning (if applicable
+ *                                 with unit of measure)
+ *
+ * Example:
+ *
+ *    pSvxFontItem->GetPresentation( SFX_PRESENTATION_NAMELESS, ... )
+ *      "12pt" with return SFX_ITEM_PRESENTATION_NAMELESS
+ *
+ *    pSvxColorItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
+ *        "red" with return SFX_ITEM_PRESENTATION_NAMELESS
+ *        Because the SvxColorItem does not know which color it represents
+ *        it cannot provide a name, which is communicated by the return value
+ *
+ *    pSvxBorderItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
+ *        "1cm top border, 2cm left border, 0.2cm bottom border, ..."
+ */
 SfxItemPresentation SfxPoolItem::GetPresentation
 (
-    SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
-    SfxMapUnit          /*eCoreMetric*/,         // IN:  Ma\seinheit des SfxPoolItems
-    SfxMapUnit          /*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
-    OUString&           /*rText*/,               // OUT: textuelle Darstellung
+    SfxItemPresentation /*ePresentation*/,       // IN:  how we should format
+    SfxMapUnit          /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
+    SfxMapUnit          /*ePresentationMetric*/, // IN:  target metric of the presentation
+    OUString&           /*rText*/,               // OUT: textual representation
     const IntlWrapper *
 )   const
-
-/*  [Beschreibung]
-
-    "Uber diese virtuelle Methode kann von den SfxPoolItem-Subklassen
-    eine textuelle Datstellung des Wertes erhalten werden. Sie sollte
-    von allen UI-relevanten SfxPoolItem-Subklassen "uberladen werden.
-
-    Da die Ma\seinheit des Wertes im SfxItemPool nur "uber
-    <SfxItemPool::GetMetric(sal_uInt16)const> erfragbar ist, und nicht etwa
-    in der SfxPoolItem-Instanz oder -Subklasse  verf"ugbar ist, wird die
-    eigene Ma\seinheit als 'eCoreMetric' "ubergeben.
-
-    Die darzustellende Ma\seinheit wird als 'ePresentationMetric'
-    "ubergeben.
-
-
-    [R"uckgabewert]
-
-    SfxItemPresentation     SFX_ITEM_PRESENTATION_NONE
-                            es konnte keine Text-Darstellung erzeugt werden
-
-                            SFX_ITEM_PRESENTATION_NAMELESS
-                            es konnte eine Text-Darstellung (ggf. mit
-                            Ma\seinheit) erzeugt werden, die jedoch keine
-                            semantische Bedeutung enth"alt
-
-                            SFX_ITEM_PRESENTATION_COMPLETE
-                            es konnte eine komplette Text-Darstellung mit
-                            semantischer Bedeutung (und ggf. Ma\seinheit)
-                            erzeugt werden
-
-
-    [Beispiele]
-
-    pSvxFontItem->GetPresentation( SFX_PRESENTATION_NAMELESS, ... )
-        "12pt" mit return SFX_ITEM_PRESENTATION_NAMELESS
-
-    pSvxColorItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
-        "rot" mit return SFX_ITEM_PRESENTATION_NAMELESS
-        (das das SvxColorItem nicht wei\s, was f"ur eine Farbe es darstellt,
-        kann es keinen Namen angeben, was durch den Returnwert mitgeteilt wird.
-
-    pSvxBorderItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
-        "1cm oberer Rand, 2cm linker Rand, 0,2cm unterer Rand, ..."
-*/
-
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }

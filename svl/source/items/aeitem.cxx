@@ -172,21 +172,16 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 
 
 
-
+/**
+ * In contrast to @see SfxEnumItemInterface::GetPosByValue(sal_uInt16) const
+ * this internal method returns the position the value would be for non-present values.
+ */
 sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
-
-/*  [Beschreibung]
-
-    Im Ggs. zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const> liefert
-    diese interne Methode bei nicht vorhandenen Values die Position,
-    an der der Wert liegen w"urde.
-*/
-
 {
     if ( !pValues )
         return 0;
 
-    //!O: binaere Suche oder SortArray verwenden
+    //FIXME: Optimisation: use binary search or SortArray
     sal_uInt16 nPos;
     for ( nPos = 0; nPos < pValues->size(); ++nPos )
         if ( (*pValues)[nPos].nValue >= nVal )
@@ -195,16 +190,13 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 }
 
 
-
-sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
-
-/*  [Beschreibung]
-
-    Liefert im Gegensatz zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const>
-    immer nValue zur"uck, solange nicht mindestens ein Wert mit einer der
-    Methoden <SfxAllEnumItem::InsertValue()> eingef"ugt wurde.
+/**
+ * In contrast to @see SfxEnumItemInterface::GetPosByValue(sal_uInt16) const
+ * this method always returns nValue, as long as not at least one value has
+ * been inserted using the SfxAllEnumItem::InsertValue() methods
 */
 
+sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 {
     if ( !pValues || pValues->empty() )
         return nValue;
@@ -225,7 +217,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
         // remove when exists
         RemoveValue( nValue );
     // then insert
-    pValues->Insert( _GetPosByValue(nValue), pVal ); //! doppelte?!
+    pValues->Insert( _GetPosByValue(nValue), pVal ); // FIXME: Duplicates?
 }
 
 
@@ -238,7 +230,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
 
-    pValues->Insert( _GetPosByValue(nValue), pVal ); //! doppelte?!
+    pValues->Insert( _GetPosByValue(nValue), pVal ); // FIXME: Duplicates?
 }
 
 void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )

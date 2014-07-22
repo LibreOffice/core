@@ -75,11 +75,11 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 
 int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 {
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
+    // Count different => odd in any case
     if ( aSvxMacroTable.size() != rOther.aSvxMacroTable.size() )
         return sal_False;
 
-    // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
+    // Compare single ones; the sequence matters due to performance reasons
     SvxMacroTable::const_iterator it1 = aSvxMacroTable.begin();
     SvxMacroTable::const_iterator it2 = rOther.aSvxMacroTable.begin();
     for ( ; it1 != aSvxMacroTable.end(); ++it1, ++it2 )
