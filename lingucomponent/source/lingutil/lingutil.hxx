@@ -54,6 +54,11 @@ inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const :
 }
 
 #if defined(WNT)
+
+// to be use to get a path name with long path prefix
+// under Windows for Hunspell
+OString Win_AddLongPathPrefix( const OString &rPathName );
+
 ///////////////////////////////////////////////////////////////////////////
 // to be use to get a short path name under Windows that still can be used with
 // the 'fopen' call. This is necessary since under Windows there seems to be
