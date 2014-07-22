@@ -40,24 +40,22 @@ namespace chart
 namespace wrapper
 {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 LegendItemConverter::LegendItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
+    const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                 rPropertySet, rItemPool, pRefSize.get(),
+                                 rPropertySet, rItemPool, pRefSize,
                                  "ReferencePageSize" ));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 LegendItemConverter::~LegendItemConverter()
 {

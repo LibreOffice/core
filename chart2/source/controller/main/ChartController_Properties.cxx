@@ -69,16 +69,10 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::comphelper::ItemConverter* createItemConverter(
-    const OUString & aObjectCID
-    , const uno::Reference< frame::XModel > & xChartModel
-    , const uno::Reference< uno::XComponentContext > & xContext
-    , SdrModel & rDrawModel
-    , ExplicitValueProvider * pExplicitValueProvider = NULL
-    , ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProvider =
-          ::std::auto_ptr< ReferenceSizeProvider >()
-    )
+    const OUString & aObjectCID, const uno::Reference<frame::XModel>& xChartModel,
+    const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
+    ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider* pRefSizeProvider )
 {
     ::comphelper::ItemConverter* pItemConverter=NULL;
 
@@ -110,7 +104,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_TITLE:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
-                if( pRefSizeProvider.get() )
+                if (pRefSizeProvider)
                     pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
                 pItemConverter = new wrapper::TitleItemConverter(
@@ -121,14 +115,14 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             break;
             case OBJECTTYPE_LEGEND:
             {
-                ::std::auto_ptr< awt::Size > pRefSize;
-                if( pRefSizeProvider.get() )
+                boost::scoped_ptr<awt::Size> pRefSize;
+                if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
-                pItemConverter = new wrapper::LegendItemConverter( xObjectProperties,
-                                                                   rDrawModel.GetItemPool(), rDrawModel,
-                                                                   uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                                                   pRefSize );
+                pItemConverter = new wrapper::LegendItemConverter(
+                    xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
+                    uno::Reference<lang::XMultiServiceFactory>(xChartModel, uno::UNO_QUERY),
+                    pRefSize.get());
             }
             break;
             case OBJECTTYPE_LEGEND_ENTRY:
@@ -145,7 +139,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_AXIS:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
-                if( pRefSizeProvider.get() )
+                if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 uno::Reference< beans::XPropertySet > xDiaProp;
@@ -178,7 +172,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_DATA_POINT:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
-                if( pRefSizeProvider.get() )
+                if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 wrapper::GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
@@ -193,6 +187,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
 
                 bool bDataSeries = ( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_LABELS );
+                fprintf(stdout, "chart::createItemConverter:   data series = %d\n", bDataSeries);
 
                 //special color for pie chart:
                 bool bUseSpecialFillColor = false;
@@ -255,7 +250,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
-                if( pRefSizeProvider.get() )
+                if (pRefSizeProvider)
                     pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
                 pItemConverter =  new wrapper::RegressionEquationItemConverter(
@@ -289,7 +284,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             case OBJECTTYPE_AXIS:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
-                if( pRefSizeProvider.get() )
+                if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 pItemConverter =  new wrapper::AllAxisItemConverter(
@@ -309,7 +304,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
     return pItemConverter;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 OUString lcl_getTitleCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
@@ -715,14 +709,13 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
 
         //convert properties to ItemSet
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProv(
-            impl_createReferenceSizeProvider());
+        boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
+
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
-                                 pRefSizeProv ));
+                                 pRefSizeProv.get()));
         SAL_WNODEPRECATED_DECLARATIONS_POP
         if(!apItemConverter.get())
             return bRet;

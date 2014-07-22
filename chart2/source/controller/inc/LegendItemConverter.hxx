@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vector>
-#include <memory>
 
 class SdrModel;
 
@@ -37,7 +36,6 @@ class LegendItemConverter :
         public ::comphelper::ItemConverter
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     LegendItemConverter(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -45,9 +43,8 @@ public:
         SdrModel& rDrawModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
-            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+        const css::awt::Size* pRefSize = NULL );
+
     virtual ~LegendItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const SAL_OVERRIDE;

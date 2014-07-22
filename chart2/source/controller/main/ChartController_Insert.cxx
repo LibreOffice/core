@@ -184,7 +184,7 @@ void ChartController::executeDispatch_InsertTitles()
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
-            TitleDialogData aDialogOutput( impl_createReferenceSizeProvider().release());
+            TitleDialogData aDialogOutput(impl_createReferenceSizeProvider());
             aDlg.getResult( aDialogOutput );
             bool bChanged = aDialogOutput.writeDifferenceToModel( getModel(), m_xCC, &aDialogInput );
             if( bChanged )

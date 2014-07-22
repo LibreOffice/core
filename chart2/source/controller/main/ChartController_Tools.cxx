@@ -152,25 +152,19 @@ bool lcl_deleteDataCurve(
 
 } // anonymous namespace
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
+ReferenceSizeProvider* ChartController::impl_createReferenceSizeProvider()
 {
     awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
 
-    return ::std::auto_ptr< ReferenceSizeProvider >(
-        new ReferenceSizeProvider( aPageSize,
-            Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
+    return new ReferenceSizeProvider(
+        aPageSize, Reference<chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void ChartController::impl_adaptDataSeriesAutoResize()
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider(
-        impl_createReferenceSizeProvider());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    if( apRefSizeProvider.get())
-        apRefSizeProvider->setValuesAtAllDataSeries();
+    boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProvider(impl_createReferenceSizeProvider());
+    if (pRefSizeProvider)
+        pRefSizeProvider->setValuesAtAllDataSeries();
 }
 
 void ChartController::executeDispatch_NewArrangement()
@@ -243,12 +237,12 @@ void ChartController::executeDispatch_ScaleText()
         SCH_RESSTR( STR_ACTION_SCALE_TEXT ),
         m_xUndoManager );
     ControllerLockGuardUNO aCtlLockGuard( getModel() );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProv( impl_createReferenceSizeProvider());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    OSL_ASSERT( apRefSizeProv.get());
-    if( apRefSizeProv.get())
-        apRefSizeProv->toggleAutoResizeState();
+
+    boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
+    OSL_ASSERT( pRefSizeProv.get());
+    if (pRefSizeProv)
+        pRefSizeProv->toggleAutoResizeState();
+
     aUndoGuard.commit();
 }
 

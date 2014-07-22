@@ -534,7 +534,7 @@ private:
     //private methods
 
     bool            impl_isDisposedOrSuspended() const;
-    ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider();
+    ReferenceSizeProvider* impl_createReferenceSizeProvider();
     void                impl_adaptDataSeriesAutoResize();
 
     void                impl_createDrawViewController();
