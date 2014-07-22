@@ -229,6 +229,14 @@ DECLARE_OOXMLIMPORT_TEST(testFdo74745, "fdo74745.docx")
     CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("09/02/14"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo81486, "fdo81486.docx")
+{
+    uno::Reference<text::XTextRange > paragraph = getParagraph(1);
+    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("CustomTitle"));
+}
+
+
 DECLARE_OOXMLIMPORT_TEST(testN751077, "n751077.docx")
 {
 /*
