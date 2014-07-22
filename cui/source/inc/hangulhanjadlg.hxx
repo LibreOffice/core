@@ -40,10 +40,54 @@ class SvxCommonLinguisticControl;
 namespace svx
 {
 
+    //= PseudoRubyText
+
+    /** a class which allows to draw two texts in a pseudo-ruby way (which basically
+        means one text above or below the other, and a little bit smaller)
+    */
+    class PseudoRubyText
+    {
+    public:
+        enum RubyPosition
+        {
+            eAbove, eBelow
+        };
+
+    protected:
+        OUString      m_sPrimaryText;
+        OUString      m_sSecondaryText;
+        RubyPosition  m_ePosition;
+
+    public:
+        PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition );
+        PseudoRubyText();
+        void init( const OUString& rPrimaryText, const OUString& rSecondaryText, const RubyPosition& rPosition );
+        OUString getPrimaryText() const { return m_sPrimaryText; }
+        OUString getSecondaryText() const { return m_sSecondaryText; }
+
+    public:
+        void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
+            Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
+            ::vcl::ControlLayoutData* _pLayoutData = NULL );
+    };
 
 
-    //= HangulHanjaConversionDialog
+    //= RubyRadioButton
 
+    class RubyRadioButton   :public RadioButton
+    {
+
+    public:
+        RubyRadioButton( Window* _pParent, WinBits nBits );
+        void init( const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition );
+        virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+
+    protected:
+        virtual void    Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
+
+    private:
+        PseudoRubyText m_aRubyText;
+    };
 
     class SuggestionSet : public ValueSet
     {
@@ -58,7 +102,7 @@ namespace svx
     class SuggestionDisplay : public Control
     {
     public:
-        SuggestionDisplay( Window* pParent, const ResId& rResId );
+        SuggestionDisplay( Window* pParent, WinBits nBits );
         virtual ~SuggestionDisplay();
 
         void DisplayListBox( bool bDisplayListBox );
@@ -101,30 +145,31 @@ namespace svx
         bool          m_bInSelectionUpdate;
     };
 
+    //= HangulHanjaConversionDialog
+
     class HangulHanjaConversionDialog : public  ModalDialog
     {
     private:
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< SvxCommonLinguisticControl >
-                    m_pPlayground;                  // order matters: before all other controls!
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
-        PushButton      m_aFind;
-        SuggestionDisplay   m_aSuggestions;
-        FixedText       m_aFormat;
-        RadioButton     m_aSimpleConversion;
-        RadioButton     m_aHangulBracketed;
-        RadioButton     m_aHanjaBracketed;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< RadioButton >  m_pHanjaAbove;
-        ::std::auto_ptr< RadioButton >  m_pHanjaBelow;
-        ::std::auto_ptr< RadioButton >  m_pHangulAbove;
-        ::std::auto_ptr< RadioButton >  m_pHangulBelow;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        FixedText       m_aConversion;
-        CheckBox        m_aHangulOnly;
-        CheckBox        m_aHanjaOnly;
-        CheckBox        m_aReplaceByChar;
+        PushButton*         m_aFind;
+        PushButton*         m_aIgnore;
+        PushButton*         m_aIgnoreAll;
+        PushButton*         m_aReplace;
+        PushButton*         m_aReplaceAll;
+        PushButton*         m_aOptions;
+        SuggestionDisplay*  m_aSuggestions;
+        RadioButton*        m_aSimpleConversion;
+        RadioButton*        m_aHangulBracketed;
+        RadioButton*        m_aHanjaBracketed;
+        Edit*               m_aWordInput;
+        FixedText*          m_aOriginalWord;
+        RubyRadioButton*    m_pHanjaAbove;
+        RubyRadioButton*    m_pHanjaBelow;
+        RubyRadioButton*    m_pHangulAbove;
+        RubyRadioButton*    m_pHangulBelow;
+        CheckBox*           m_aHangulOnly;
+        CheckBox*           m_aHanjaOnly;
+        CheckBox*           m_aReplaceByChar;
 
         CheckBox*       m_pIgnoreNonPrimary;
         /** are we working for a document? This is normally true, but in case
