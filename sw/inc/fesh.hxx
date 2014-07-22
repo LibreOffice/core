@@ -554,12 +554,12 @@ public:
     sal_uInt16 GetCurPageDesc( const sal_Bool bCalcFrm = sal_True ) const;
     sal_uInt16 GetMousePageDesc( const Point &rPt ) const;
     sal_uInt16 GetPageDescCnt() const;
-    SwPageDesc* FindPageDescByName( const String& rName,
-                                    sal_Bool bGetFromPool = sal_False,
-                                    sal_uInt16* pPos = 0 );
+    SwPageDesc* FindPageDescByName( const OUString& rName,
+                                    sal_Bool bGetFromPool = sal_False );
 
     const SwPageDesc& GetPageDesc( sal_uInt16 i ) const;
     void  ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
+    void  ChgPageDescP( const SwPageDesc&, SwPageDesc* = NULL );
     /** if inside all selection only one PageDesc, @return this.
      Otherwise @return 0 pointer */
     const SwPageDesc* GetSelectedPageDescs() const;
