@@ -69,7 +69,6 @@ public:
                             { return aNameResId.GetResMgr(); }
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
-    const SfxInterface*     GetRealInterfaceForSlot( const SfxSlot* ) const;
 
     void                    RegisterObjectBar( sal_uInt16, const ResId&, const OUString* pST=0 );
     void                    RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const OUString* pST=0 );

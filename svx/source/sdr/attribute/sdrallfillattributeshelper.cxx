@@ -54,15 +54,6 @@ namespace drawinglayer
             }
         }
 
-        SdrAllFillAttributesHelper::SdrAllFillAttributesHelper()
-        :   maLastPaintRange(),
-            maLastDefineRange(),
-            maFillAttribute(),
-            maFillGradientAttribute(),
-            maPrimitives()
-        {
-        }
-
         SdrAllFillAttributesHelper::SdrAllFillAttributesHelper(const Color& rColor)
         :   maLastPaintRange(),
             maLastDefineRange(),

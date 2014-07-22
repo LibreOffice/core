@@ -50,9 +50,6 @@ typedef short RSWND_STYLE;
 #define WORKWIN_SHOWMINIMIZED           1
 #define WORKWIN_SHOWMAXIMIZED           2
 
-// For "FixedBitmap" resource:
-#define RSC_FIXEDBITMAP_BITMAP          0x0001
-
 // For "FixedImage" resource:
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
 

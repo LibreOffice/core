@@ -37,7 +37,6 @@ namespace svt
         OUString      m_sPreservedText;
 
     public:
-        OFileURLControl(Window* _pParent, const ResId& _rId);
         OFileURLControl(Window* _pParent, WinBits nStyle);
 
     protected:

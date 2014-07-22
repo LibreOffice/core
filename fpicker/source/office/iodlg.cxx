@@ -679,14 +679,6 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     return 0;
 }
 
-
-
-IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG )
-{
-    return 0;
-}
-
-
 bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt )
 {
     // delete the old user filter and create a new one
@@ -2026,7 +2018,6 @@ short SvtFileDialog::PrepareExecute()
     // Somebody might want to enable some controls according to the current filter
     FilterSelect();
 
-    ViewHdl_Impl( this, NULL );
     OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     _pFileView->Show();

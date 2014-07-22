@@ -742,19 +742,6 @@ void FixedBitmap::ImplInitSettings()
     }
 }
 
-void FixedBitmap::ImplLoadRes( const ResId& rResId )
-{
-    Control::ImplLoadRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( RSC_FIXEDBITMAP_BITMAP & nObjMask )
-    {
-        maBitmap = Bitmap( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
-    }
-}
-
 FixedBitmap::FixedBitmap( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDBITMAP )
 {

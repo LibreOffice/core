@@ -45,8 +45,6 @@ public:
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    void                AdjustLayout();
-
     void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
     Window*             GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }

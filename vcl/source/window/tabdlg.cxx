@@ -235,12 +235,4 @@ void TabDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
-void TabDialog::AdjustLayout()
-{
-    SAL_WARN_IF(isLayoutEnabled(), "vcl.layout", "unnecessary to call TabDialog::AdjustLayout when layout enabled");
-
-    ImplPosControls();
-    queue_resize();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

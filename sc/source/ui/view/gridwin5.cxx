@@ -477,17 +477,4 @@ void ScGridWindow::AddChildWindow(Window* pWindow)
     maChildWindows.push_back(pWindow);
 }
 
-void ScGridWindow::DeleteChildWindow(Window* pWindow)
-{
-    for(boost::ptr_vector<Window>::iterator itr = maChildWindows.begin(),
-            itrEnd = maChildWindows.end(); itr != itrEnd; ++itr)
-    {
-        if(&(*itr) == pWindow)
-        {
-            maChildWindows.erase(itr);
-            return;
-        }
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

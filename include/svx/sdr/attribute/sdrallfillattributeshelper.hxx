@@ -48,7 +48,6 @@ namespace drawinglayer
 
         protected:
         public:
-            SdrAllFillAttributesHelper();
             SdrAllFillAttributesHelper(const Color& rColor);
             SdrAllFillAttributesHelper(const SfxItemSet& rSet);
             ~SdrAllFillAttributesHelper();

@@ -116,7 +116,6 @@ private:
 
     DECL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox* );
     DECL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton* );
-    DECL_STATIC_LINK( SvtFileDialog, ViewHdl_Impl, ImageButton* );
     DECL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void* );
     DECL_LINK       (                CancelHdl_Impl, void* );
     DECL_STATIC_LINK( SvtFileDialog, FileNameGetFocusHdl_Impl, void* );

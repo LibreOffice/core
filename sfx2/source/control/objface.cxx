@@ -619,28 +619,4 @@ bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
     return pImpData->aObjectBars[nNo]->bVisible;
 }
 
-const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealSlot ) const
-{
-    SAL_WARN_IF( !pImpData->bRegistered, "sfx.control", "Interface not registered" );
-
-    const SfxInterface* pInterface = this;
-
-    // The slot could also originate from the interface of a shell base class.
-    do
-    {
-        const SfxSlot *pLastSlot  = (*pInterface)[pInterface->Count()-1];
-        const SfxSlot *pFirstSlot = (*pInterface)[0];
-
-        // Is pInterface the Owner of pRealSlot ?
-        if ( pFirstSlot <= pRealSlot && pRealSlot <= pLastSlot )
-            break;
-
-        // Otherwise try the Interface of Super class
-        pInterface = pInterface->pGenoType;
-    }
-    while ( pInterface );
-
-    return pInterface;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

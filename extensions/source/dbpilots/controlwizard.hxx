@@ -90,7 +90,6 @@ namespace dbp
 
     protected:
         void enableFormDatasourceDisplay();
-        void adjustControlForNoDSDisplay(Control* _pControl, bool bConstLowerDistance = false);
 
     protected:
         // OWizardPage overridables

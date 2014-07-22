@@ -1085,12 +1085,6 @@ void DebugHelper::runtimeexception( int err,  const OUString& additionalArgument
     runtimeexception( OUString(), css::uno::Exception(), err, additionalArgument );
 }
 
-void DebugHelper::runtimeexception( const css::uno::Exception& ex ) throw( css::uno::RuntimeException )
-{
-    runtimeexception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
-}
-
-
 Millimeter::Millimeter():m_nMillimeter(0) {}
 
 Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}

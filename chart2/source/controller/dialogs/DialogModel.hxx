@@ -158,7 +158,6 @@ public:
     void startControllerLockTimer();
 
     static OUString ConvertRoleFromInternalToUI( const OUString & rRoleString );
-    static OUString ConvertRoleFromUIToInternal( const OUString& rRoleString );
     static OUString GetRoleDataLabel();
 
     // pass a role string (not translated) and get an index that serves for

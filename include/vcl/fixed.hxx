@@ -138,9 +138,6 @@ private:
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
-protected:
-    SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-
 public:
     explicit        FixedBitmap( Window* pParent, WinBits nStyle = 0 );
     virtual         ~FixedBitmap();

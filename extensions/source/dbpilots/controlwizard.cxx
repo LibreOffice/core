@@ -207,24 +207,6 @@ namespace dbp
         }
     }
 
-
-    void OControlWizardPage::adjustControlForNoDSDisplay(Control* _pControl, bool _bConstLowerDistance)
-    {
-        ::Size aDistanceToMove = LogicToPixel( ::Size( 0, 37 ), MAP_APPFONT );
-
-        ::Point aPos = _pControl->GetPosPixel();
-        aPos.Y() -= aDistanceToMove.Height();
-        _pControl->SetPosPixel(aPos);
-
-        if (_bConstLowerDistance)
-        {
-            ::Size aSize = _pControl->GetSizePixel();
-            aSize.Height() += aDistanceToMove.Height();
-            _pControl->SetSizePixel(aSize);
-        }
-    }
-
-
     void OControlWizardPage::initializePage()
     {
         if (m_pFormDatasource && m_pFormContentTypeLabel && m_pFormTable)
