@@ -27,6 +27,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/generatedvaluespage \
     dbaccess/uiconfig/ui/indexdesigndialog \
     dbaccess/uiconfig/ui/joindialog \
+    dbaccess/uiconfig/ui/migratepage \
     dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/preparepage \
     dbaccess/uiconfig/ui/queryfilterdialog \

@@ -178,58 +178,54 @@ namespace dbmm
     }
 
     // ProgressPage
-    ProgressPage::ProgressPage( MacroMigrationDialog& _rParentDialog )
-        :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_MIGRATE ) )
-        ,m_aObjectCount             ( this, MacroMigrationResId( FT_OBJECT_COUNT            ) )
-        ,m_aCurrentObjectLabel      ( this, MacroMigrationResId( FT_CURRENT_OBJECT_LABEL    ) )
-        ,m_aCurrentObject           ( this, MacroMigrationResId( FT_CURRENT_OBJECT          ) )
-        ,m_aCurrentActionLabel      ( this, MacroMigrationResId( FT_CURRENT_PROGRESS_LABEL  ) )
-        ,m_aCurrentAction           ( this, MacroMigrationResId( FT_CURRENT_PROGRESS        ) )
-        ,m_aCurrentProgress         ( this, MacroMigrationResId( WND_CURRENT_PROGRESS       ) )
-        ,m_aAllProgressLabel        ( this, MacroMigrationResId( FT_ALL_PROGRESS_LABEL      ) )
-        ,m_aAllProgressText         ( this, MacroMigrationResId( FT_OBJECT_COUNT_PROGRESS   ) )
-        ,m_aAllProgress             ( this, MacroMigrationResId( WND_ALL_PROGRESS           ) )
-        ,m_aMigrationDone           ( this, MacroMigrationResId( FT_MIGRATION_DONE          ) )
+    ProgressPage::ProgressPage(Window* pParent)
+        : MacroMigrationPage(pParent, "MigratePage" ,"dbaccess/ui/migratepage.ui")
     {
-        FreeResource();
+        get(m_pObjectCount, "count");
+        get(m_pCurrentObject, "object");
+        get(m_pCurrentAction, "current");
+        m_aCurrentProgress.Set(get<ProgressBar>("currentprogress"));
+        get(m_pAllProgressText, "overall");
+        m_aAllProgress.Set(get<ProgressBar>("allprogress"));
+        get(m_pMigrationDone, "done");
     }
 
-    TabPage* ProgressPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    TabPage* ProgressPage::Create(::svt::RoadmapWizard& _rParentDialog)
     {
-        return new ProgressPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
+        return new ProgressPage(&_rParentDialog);
     }
 
     void ProgressPage::setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports )
     {
-        OUString sText( m_aObjectCount.GetText() );
+        OUString sText( m_pObjectCount->GetText() );
         sText = sText.replaceFirst( "$forms$", OUString::number( _nForms ) );
         sText = sText.replaceFirst( "$reports$", OUString::number( _nReports ) );
-        m_aObjectCount.SetText( sText );
+        m_pObjectCount->SetText( sText );
     }
 
     void ProgressPage::onFinishedSuccessfully()
     {
-        m_aMigrationDone.Show();
+        m_pMigrationDone->Show();
     }
 
     void ProgressPage::startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _nRange )
     {
-        m_aCurrentObject.SetText( _rObjectName );
-        m_aCurrentAction.SetText( _rCurrentAction );
+        m_pCurrentObject->SetText( _rObjectName );
+        m_pCurrentAction->SetText( _rCurrentAction );
         m_aCurrentProgress.SetRange( _nRange );
         m_aCurrentProgress.SetValue( (sal_uInt32)0 );
 
         // since this is currently called from the main thread, which does not have the chance
         // to re-schedule, we need to explicitly update the display
-        m_aCurrentObject.Update();
-        m_aCurrentAction.Update();
+        m_pCurrentObject->Update();
+        m_pCurrentAction->Update();
         Update();
     }
 
     void ProgressPage::setObjectProgressText( const OUString& _rText )
     {
-        m_aCurrentAction.SetText( _rText );
-        m_aCurrentAction.Update();
+        m_pCurrentAction->SetText( _rText );
+        m_pCurrentAction->Update();
         Update();
     }
 
@@ -241,9 +237,9 @@ namespace dbmm
 
     void ProgressPage::endObject()
     {
-        m_aCurrentAction.SetText( OUString() );
+        m_pCurrentAction->SetText( OUString() );
         m_aCurrentProgress.SetValue( m_aCurrentProgress.GetRange() );
-        m_aCurrentAction.Update();
+        m_pCurrentAction->Update();
         Update();
     }
 
@@ -255,7 +251,7 @@ namespace dbmm
 
     void ProgressPage::setOverallProgressText( const OUString& _rText )
     {
-        m_aAllProgressText.SetText( _rText );
+        m_pAllProgressText->SetText( _rText );
         Update();
     }
 

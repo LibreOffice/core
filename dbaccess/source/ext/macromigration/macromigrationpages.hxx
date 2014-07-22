@@ -105,7 +105,7 @@ namespace dbmm
     class ProgressPage : public MacroMigrationPage, public IMigrationProgress
     {
     public:
-        ProgressPage( MacroMigrationDialog& _rParentDialog );
+        ProgressPage(Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -123,16 +123,13 @@ namespace dbmm
         virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
 
     private:
-        FixedText           m_aObjectCount;
-        FixedText           m_aCurrentObjectLabel;
-        FixedText           m_aCurrentObject;
-        FixedText           m_aCurrentActionLabel;
-        FixedText           m_aCurrentAction;
+        FixedText*          m_pObjectCount;
+        FixedText*          m_pCurrentObject;
+        FixedText*          m_pCurrentAction;
         RangeProgressBar    m_aCurrentProgress;
-        FixedText           m_aAllProgressLabel;
-        FixedText           m_aAllProgressText;
+        FixedText*          m_pAllProgressText;
         RangeProgressBar    m_aAllProgress;
-        FixedText           m_aMigrationDone;
+        FixedText*          m_pMigrationDone;
     };
 
     // ResultPage

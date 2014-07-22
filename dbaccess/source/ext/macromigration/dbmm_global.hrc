@@ -36,10 +36,6 @@
 
 #define ERR_INVALID_BACKUP_LOCATION     RID_DBMM_DIALOG_START + 0
 
-//= tab pages
-
-#define TP_MIGRATE          ( RID_DBMM_TAPPAGE_START + 2 )
-
 //= strings
 
 #define STR_FORM                    ( RID_DBMM_STRING_START +  0 )

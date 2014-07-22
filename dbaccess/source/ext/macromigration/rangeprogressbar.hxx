@@ -28,54 +28,46 @@ namespace dbmm
     // RangeProgressBar
     /** a slight extension of the usual progress bar, which is able to remember a range
     */
-    class RangeProgressBar : public ProgressBar
+    class RangeProgressBar
     {
     public:
-        RangeProgressBar( Window* _pParent, WinBits nWinBits = WB_STDPROGRESSBAR )
-            : ProgressBar( _pParent, nWinBits )
+        RangeProgressBar(ProgressBar *pBar = NULL)
+            : m_pBar(pBar)
             , m_nRange(0)
-        { }
+        {
+        }
 
-        RangeProgressBar( Window* _pParent, const ResId& rResId )
-            : ProgressBar( _pParent, rResId )
-            , m_nRange(0)
-        { }
+        void Set(ProgressBar *pBar)
+        {
+            m_pBar = pBar;
+        }
 
-        inline  void        SetRange( sal_uInt32 _nRange );
-        inline  sal_uInt32  GetRange() const;
+        void SetRange(sal_uInt32 _nRange)
+        {
+            m_nRange = _nRange;
+            if ( !m_nRange )
+                m_nRange = 100;
+        }
 
-        inline  void        SetValue( sal_uInt32 _nValue );
-        inline  sal_uInt32  GetValue() const;
+        sal_uInt32 GetRange() const
+        {
+            return m_nRange;
+        }
+
+        void SetValue(sal_uInt32 _nValue)
+        {
+            m_pBar->SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
+        }
+
+        sal_uInt32 GetValue() const
+        {
+            return (sal_uInt32)(m_pBar->GetValue() / 100.0 * m_nRange);
+        }
 
     private:
+        ProgressBar *m_pBar;
         sal_uInt32  m_nRange;
-
-    private:
-        using ProgressBar::SetValue;
-        using ProgressBar::GetValue;
     };
-
-    inline void RangeProgressBar::SetRange( sal_uInt32 _nRange )
-    {
-        m_nRange = _nRange;
-        if ( !m_nRange )
-            m_nRange = 100;
-    }
-
-    inline sal_uInt32 RangeProgressBar::GetRange() const
-    {
-        return m_nRange;
-    }
-
-    inline void RangeProgressBar::SetValue( sal_uInt32 _nValue )
-    {
-        ProgressBar::SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
-    }
-
-    inline sal_uInt32 RangeProgressBar::GetValue() const
-    {
-        return (sal_uInt32)( ProgressBar::GetValue() / 100.0 * m_nRange );
-    }
 
 } // namespace dbmm
 
