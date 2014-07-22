@@ -313,7 +313,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-        rOutProperties.push_back(
+    rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_DATAPOINT_TEXT_ROTATION,
                   cppu::UnoType<double>::get(),
