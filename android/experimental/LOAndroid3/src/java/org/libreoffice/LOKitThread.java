@@ -9,13 +9,13 @@ import org.mozilla.gecko.gfx.SubTile;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
     private static final int TILE_SIZE = 256;
-    public ConcurrentLinkedQueue<LOEvent> mEvents = new ConcurrentLinkedQueue<LOEvent>();
+    public LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
@@ -97,10 +97,7 @@ public class LOKitThread extends Thread {
             try {
                 boolean drawn = false;
                 while (true) {
-                    if (!mEvents.isEmpty()) {
-                        processEvent(mEvents.poll());
-                    }
-                    Thread.sleep(100L);
+                    processEvent(mEventQueue.take());
                 }
             } catch (InterruptedException ex) {
             }
@@ -123,6 +120,6 @@ public class LOKitThread extends Thread {
 
     public void queueEvent(LOEvent event) {
         Log.i(LOGTAG, "Event: " + event.getTypeString());
-        mEvents.add(event);
+        mEventQueue.add(event);
     }
 }
