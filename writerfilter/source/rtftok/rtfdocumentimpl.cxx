@@ -2040,6 +2040,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     break;
     case RTF_PAR:
     {
+        if (m_aStates.top().nDestinationState == DESTINATION_FOOTNOTESEPARATOR)
+            break; // just ignore it - only thing we read in here is CHFTNSEP
         checkFirstRun();
         bool bNeedPap = m_bNeedPap;
         checkNeedPap();
@@ -2047,13 +2049,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             runProps();
         if (!m_aStates.top().pCurrentBuffer)
         {
-            if (m_aStates.top().nDestinationState == DESTINATION_FOOTNOTESEPARATOR)
-            {
-                static const sal_Unicode uCR = 0xd;
-                Mapper().utext((const sal_uInt8*)&uCR, 1);
-            }
-            else
-                parBreak();
+            parBreak();
             // Not in table? Reset max width.
             m_nCellxMax = 0;
         }
