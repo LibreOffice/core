@@ -26,8 +26,7 @@ package com.sun.star.uno;
 public class Union {
     /**
      * Get the value in the union.
-     * The representation of the value is an any.
-     * <p>
+     * <p>The representation of the value is an any.</p>
      *  @return the any value.
      */
     public final Object getValue() {

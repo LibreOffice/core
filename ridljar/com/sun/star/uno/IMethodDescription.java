@@ -34,14 +34,12 @@ public interface IMethodDescription extends IMemberDescription {
     /**
      * Indicates if this method is <code>oneWay</code>,
      * respectively if this method may become executed asynchronously.
-     * <p>
      * @return  true means may execute asynchronously .
      */
     boolean isOneway();
 
     /**
      * Indicates if this method is const.
-     * <p>
      * @return true means it is const.
      */
     boolean isConst();
@@ -49,7 +47,6 @@ public interface IMethodDescription extends IMemberDescription {
     /**
      * Gives any array of <code>ITypeDescription</code> of
      * the [in] parameters.
-     * <p>
      * @return  the in parameters
      */
     ITypeDescription[] getInSignature();
@@ -57,7 +54,6 @@ public interface IMethodDescription extends IMemberDescription {
     /**
      * Gives any array of <code>ITypeDescription</code> of
      * the [out] parameters.
-     * <p>
      * @return  the out parameters
      */
     ITypeDescription[] getOutSignature();
@@ -65,14 +61,12 @@ public interface IMethodDescription extends IMemberDescription {
     /**
      * Gives the <code>ITypeDescription</code> of
      * the return type.
-     * <p>
      * @return  the return type <code>ITypeDescription</code>
      */
     ITypeDescription getReturnSignature();
 
     /**
      * Gives native java method of this method.
-     * <p>
      * @return  the java methodd
      */
     Method getMethod();

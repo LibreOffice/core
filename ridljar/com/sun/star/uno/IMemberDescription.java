@@ -30,28 +30,24 @@ package com.sun.star.uno;
 public interface IMemberDescription {
     /**
      * Gives the name of this member.
-     * <p>
      * @return  the name
      */
     String getName();
 
     /**
      * Indicates if this member is unsigned. (Not useful for IMethodDescription).
-     * <p>
      * @return  the unsigned state
      */
     boolean isUnsigned();
 
     /**
      * Indicates if this member is an any.
-     * <p>
      * @return  the any state
      */
     boolean isAny();
 
     /**
      * Indicates if this member is an interface.
-     * <p>
      * @return  the interface state
      */
     boolean isInterface();
@@ -59,7 +55,6 @@ public interface IMemberDescription {
     /**
      * Gives the relative index of this member in the declaring
      * interface or struct (including superclasses).
-     * <p>
      * @return  the relative index of this member
      */
     int getIndex();
