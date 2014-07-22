@@ -556,13 +556,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         final Boolean escape = (Boolean) prop.getPropertyValue(ESCAPEPROCESSING);
                         rowSetProp.setPropertyValue(ESCAPEPROCESSING, escape);
                         final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);
-                        statement = "SELECT * FROM (" + queryCommand + ") AS \"__LibreOffice_report_result\"";
+                        statement = "SELECT * FROM (" + queryCommand + ") \"__LibreOffice_report_result\"";
                     }
 
                 }
                 else
                 {
-                    statement = "SELECT * FROM (" + command + ") AS \"__LibreOffice_report_result\"";
+                    statement = "SELECT * FROM (" + command + ") \"__LibreOffice_report_result\"";
                 }
             }
             rowSetProp.setPropertyValue(UNO_COMMAND, statement);
