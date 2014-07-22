@@ -895,8 +895,8 @@ namespace
                     if( pHints && pHints->HasFtn() ) //...with footnotes
                     {
                         bUpdateFtn = true; // Heureka
-                        sal_uInt16 nCount = pHints->Count();
-                        for( sal_uInt16 i = 0; i < nCount; ++i )
+                        const size_t nCount = pHints->Count();
+                        for( size_t i = 0; i < nCount; ++i )
                         {
                             SwTxtAttr *pAttr = pHints->GetTextHint( i );
                             if ( pAttr->Which() == RES_TXTATR_FTN )
@@ -2303,7 +2303,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
         m_rSwdoc.GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called
     }
 
-    sal_uInt16 nOldAttrCnt = pNode->GetpSwpHints()
+    const size_t nOldAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
     SwIndex& rIdx = rPt.nContent;
@@ -2357,7 +2357,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     }
     pNode->SetIgnoreDontExpand( bOldExpFlg );
 
-    sal_uInt16 nNewAttrCnt = pNode->GetpSwpHints()
+    const size_t nNewAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
     if( nOldAttrCnt != nNewAttrCnt )
     {
@@ -3572,7 +3572,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         {
             const sal_Int32 *pEndIdx;
             const sal_Int32 nMkCntPos = rPam.GetMark()->nContent.GetIndex();
-            for( sal_uInt16 n = pHts->Count(); n; )
+            for( size_t n = pHts->Count(); n; )
             {
                 const SwTxtAttr* pAttr = (*pHts)[ --n ];
                 if( nMkCntPos > pAttr->GetStart() )
