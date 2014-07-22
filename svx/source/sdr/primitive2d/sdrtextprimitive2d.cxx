@@ -480,6 +480,29 @@ namespace drawinglayer
      } // end of namespace primitive2d
  } // end of namespace drawinglayer
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+
+        SdrChainedTextPrimitive2D::SdrChainedTextPrimitive2D(
+            const SdrText* pSdrText,
+            const OutlinerParaObject& rOutlinerParaObject)
+        : SdrTextPrimitive2D(pSdrText, rOutlinerParaObject)
+        { }
+
+        Primitive2DSequence SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        {
+            Primitive2DSequence aRetval;
+            getSdrText()->GetObject().impDecomposeChainedPrimitive(aRetval, *this, aViewInformation);
+
+            return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
+        }
+
+        // provide unique ID
+        ImplPrimitive2DIDBlock(SdrChainedTextPrimitive2D, PRIMITIVE2D_ID_SDRCHAINEDTEXTPRIMITIVE2D)
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 
  namespace drawinglayer

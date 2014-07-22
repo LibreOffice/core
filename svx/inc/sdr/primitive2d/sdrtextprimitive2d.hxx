@@ -331,6 +331,33 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SdrChainedTextPrimitive2D : public SdrTextPrimitive2D
+        {
+        private:
+            // XXX: might have position of overflowing text
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
+
+        public:
+            SdrChainedTextPrimitive2D(
+                const SdrText* pSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtrs);
+
+            // get data
+
+            // compare operator
+            //virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
+
+            // provide unique ID
+            DeclPrimitive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
