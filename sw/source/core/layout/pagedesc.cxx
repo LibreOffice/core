@@ -452,7 +452,7 @@ SwPageDescExt::operator SwPageDesc() const
 {
     SwPageDesc aResult(aPageDesc);
 
-    SwPageDesc * pPageDesc = pDoc->GetPageDesc(sFollow);
+    SwPageDesc * pPageDesc = pDoc->FindPageDesc(sFollow);
 
     if ( 0 != pPageDesc )
         aResult.SetFollow(pPageDesc);

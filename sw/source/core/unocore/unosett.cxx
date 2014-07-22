@@ -227,21 +227,11 @@ static SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
 
 static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 {
-    SwPageDesc* pRet = 0;
-    const sal_uInt16 nCount = pDoc->GetPageDescCnt();
     OUString uTmp;
     aValue >>= uTmp;
     OUString sPageDesc;
     SwStyleNameMapper::FillUIName(uTmp, sPageDesc, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
-    for( sal_uInt16 i = 0; i < nCount; i++)
-    {
-        const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
-        if(rDesc.GetName() == sPageDesc)
-        {
-            pRet = (SwPageDesc*)&rDesc;
-            break;
-        }
-    }
+    SwPageDesc* pRet = pDoc->FindPageDesc( sPageDesc );
     if(!pRet)
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
