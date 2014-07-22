@@ -187,7 +187,6 @@ wrapper::ItemConverter* createItemConverter(
                     eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
 
                 bool bDataSeries = ( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_LABELS );
-                fprintf(stdout, "chart::createItemConverter:   data series = %d\n", bDataSeries);
 
                 //special color for pie chart:
                 bool bUseSpecialFillColor = false;
