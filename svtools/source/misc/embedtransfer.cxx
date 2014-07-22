@@ -76,6 +76,7 @@ void SvEmbedTransferHelper::AddSupportedFormats()
     AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
     AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     AddFormat( FORMAT_GDIMETAFILE );
+    AddFormat( FORMAT_BITMAP );
 }
 
 
@@ -168,6 +169,10 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                     SetAny( aAny, rFlavor );
                     bRet = true;
+                }
+                else if ( ( nFormat == FORMAT_BITMAP || nFormat == SOT_FORMATSTR_ID_PNG ) && m_pGraphic )
+                {
+                    bRet = SetBitmapEx( m_pGraphic->GetBitmapEx(), rFlavor );
                 }
                 else if ( m_xObj.is() && :: svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {

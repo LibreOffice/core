@@ -499,6 +499,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         // the following solution will be used in the case when the object can not generate the image
         // TODO/LATER: in future the transferhelper must probably be created based on object and the replacement stream
+        // TODO: Block not required now, SvEmbedTransferHelper should be able to handle GDIMetaFile format
         if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {
             pOLEGraph = FindOLEReplacementGraphic();
@@ -832,6 +833,23 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         AddFormat( FORMAT_GDIMETAFILE );
+
+        // Fetch the formats supported via embedtransferhelper as well
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+        uno::Reference < embed::XEmbeddedObject > xObj = FindOLEObj( nAspect );
+        const Graphic* pOLEGraph = FindOLEReplacementGraphic();
+        if( xObj.is() )
+        {
+            TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
+            if ( aD.GetTransferable().is() )
+            {
+                DataFlavorExVector              aVector( aD.GetDataFlavorExVector() );
+                DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
+
+                while( aIter != aEnd )
+                    AddFormat( *aIter++ );
+            }
+        }
         eBufferType = TRNSFR_OLE;
     }
     // Is there anything to provide anyway?
