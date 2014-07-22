@@ -328,6 +328,11 @@ void VDataSeries::releaseShapes()
     m_nPolygonIndex = 0;
 }
 
+uno::Reference<css::chart2::XDataSeries> VDataSeries::getModel() const
+{
+    return m_xDataSeries;
+}
+
 void VDataSeries::setCategoryXAxis()
 {
     m_aValues_X.clear();
@@ -405,14 +410,40 @@ void VDataSeries::setConnectBars( bool bConnectBars )
 {
     m_bConnectBars = bConnectBars;
 }
+
+bool VDataSeries::getConnectBars() const
+{
+    return m_bConnectBars;
+}
+
 void VDataSeries::setGroupBarsPerAxis( bool bGroupBarsPerAxis )
 {
     m_bGroupBarsPerAxis = bGroupBarsPerAxis;
 }
 
+bool VDataSeries::getGroupBarsPerAxis() const
+{
+    return m_bGroupBarsPerAxis;
+}
+
 void VDataSeries::setStartingAngle( sal_Int32 nStartingAngle )
 {
     m_nStartingAngle = nStartingAngle;
+}
+
+sal_Int32 VDataSeries::getStartingAngle() const
+{
+    return m_nStartingAngle;
+}
+
+chart2::StackingDirection VDataSeries::getStackingDirection() const
+{
+    return m_eStackingDirection;
+}
+
+sal_Int32 VDataSeries::getAttachedAxisIndex() const
+{
+    return m_nAxisIndex;
 }
 
 void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
@@ -889,6 +920,11 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
     return this->getPropertiesOfSeries();
 }
 
+uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
+{
+    return uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY);
+}
+
 DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1004,6 +1040,11 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
 void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
 {
     m_nMissingValueTreatment = nMissingValueTreatment;
+}
+
+sal_Int32 VDataSeries::getMissingValueTreatment() const
+{
+    return m_nMissingValueTreatment;
 }
 
 VDataSeries::VDataSeries()

@@ -44,39 +44,33 @@ namespace chart
 class VDataSequence
 {
 public:
-    void init( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xModel );
+    void init( const css::uno::Reference<css::chart2::data::XDataSequence>& xModel );
     bool is() const;
     void clear();
     double getValue( sal_Int32 index ) const;
     sal_Int32 detectNumberFormatKey( sal_Int32 index ) const;
     sal_Int32 getLength() const;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > Model;
+    css::uno::Reference<css::chart2::data::XDataSequence> Model;
 
-    mutable ::com::sun::star::uno::Sequence< double > Doubles;
+    mutable css::uno::Sequence<double> Doubles;
 };
 
 class VDataSeries SAL_FINAL : boost::noncopyable
 {
 public:
-    VDataSeries( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xDataSeries );
+    VDataSeries( const css::uno::Reference<css::chart2::XDataSeries>& xDataSeries );
 
     ~VDataSeries();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
-        getModel() const { return m_xDataSeries;}
+    css::uno::Reference<css::chart2::XDataSeries> getModel() const;
 
     void setCategoryXAxis();
-    void setXValues( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xValues );
-    void setXValuesIfNone( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xValues );
+    void setXValues( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
+    void setXValuesIfNone( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
     void setParticle( const OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
-    void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
+    void setPageReferenceSize( const css::awt::Size & rPageRefSize );
 
     sal_Int32   getTotalPointCount() const { return m_nPointCount;}
     double      getXValue( sal_Int32 index ) const;
@@ -98,8 +92,8 @@ public:
 
     bool        hasPropertyMapping( const OUString& rPropName ) const;
 
-    ::com::sun::star::uno::Sequence< double > getAllX() const;
-    ::com::sun::star::uno::Sequence< double > getAllY() const;
+    css::uno::Sequence< double > getAllX() const;
+    css::uno::Sequence< double > getAllY() const;
 
     double getXMeanValue() const;
     double getYMeanValue() const;
@@ -109,45 +103,41 @@ public:
     sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
     bool        shouldLabelNumberFormatKeyBeDetectedFromYAxis() const;
 
-    sal_Int32   getLabelPlacement( sal_Int32 nPointIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
-                        , sal_Int32 nDimensionCount, bool bSwapXAndY ) const;
+    sal_Int32 getLabelPlacement(
+        sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,
+        sal_Int32 nDimensionCount, bool bSwapXAndY ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        getPropertiesOfPoint( sal_Int32 index ) const;
+    css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        getPropertiesOfSeries() const { return css::uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY );}
+    css::uno::Reference<css::beans::XPropertySet> getPropertiesOfSeries() const;
 
-    ::com::sun::star::chart2::Symbol*
-                        getSymbolProperties( sal_Int32 index ) const;
+    css::chart2::Symbol* getSymbolProperties( sal_Int32 index ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        getXErrorBarProperties( sal_Int32 index ) const;
+    css::uno::Reference<css::beans::XPropertySet> getXErrorBarProperties( sal_Int32 index ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        getYErrorBarProperties( sal_Int32 index ) const;
+    css::uno::Reference<css::beans::XPropertySet> getYErrorBarProperties( sal_Int32 index ) const;
 
     bool hasPointOwnColor( sal_Int32 index ) const;
 
-    ::com::sun::star::chart2::StackingDirection getStackingDirection() const { return m_eStackingDirection;}
-    sal_Int32 getAttachedAxisIndex() const { return m_nAxisIndex;}
+    css::chart2::StackingDirection getStackingDirection() const;
+    sal_Int32 getAttachedAxisIndex() const;
     void setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex );
 
     void doSortByXValues();
 
     void setConnectBars( bool bConnectBars );
-    bool getConnectBars() const { return m_bConnectBars;}
+    bool getConnectBars() const;
 
     void setGroupBarsPerAxis( bool bGroupBarsPerAxis );
-    bool getGroupBarsPerAxis() const { return m_bGroupBarsPerAxis;}
+    bool getGroupBarsPerAxis() const;
 
     void setStartingAngle( sal_Int32 nStartingAngle );
-    sal_Int32 getStartingAngle() const { return m_nStartingAngle;}
+    sal_Int32 getStartingAngle() const;
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole );
 
     //this is only temporarily here for area chart:
-    ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
+    css::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;
     double m_fLogicMinX;
     double m_fLogicMaxX;
@@ -163,8 +153,7 @@ public:
     OUString       getLabelCID_Stub() const { return m_aLabelCID_Stub;}
     OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
 
-    ::com::sun::star::chart2::DataPointLabel*
-                        getDataPointLabelIfLabel( sal_Int32 index ) const;
+    css::chart2::DataPointLabel* getDataPointLabelIfLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
     OUString       getDataCurveEquationCID( sal_Int32 nCurveIndex ) const;
@@ -175,33 +164,31 @@ public:
     void releaseShapes();
 
     void setMissingValueTreatment( sal_Int32 nMissingValueTreatment );
-    sal_Int32 getMissingValueTreatment() const { return m_nMissingValueTreatment;}
+    sal_Int32 getMissingValueTreatment() const;
 
     void setOldTimeBased( VDataSeries* pOldSeries, double nPercent );
     VDataSeries* createCopyForTimeBased() const;
 
 private: //methods
-    ::com::sun::star::chart2::DataPointLabel*
-                        getDataPointLabel( sal_Int32 index ) const;
+    css::chart2::DataPointLabel* getDataPointLabel( sal_Int32 index ) const;
     void adaptPointCache( sal_Int32 nNewPointIndex ) const;
 
     // for copies for time based charting
     VDataSeries();
 
 public: //member
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xLabelsGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorXBarsGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorYBarsGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xLabelsGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xErrorXBarsGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xErrorYBarsGroupShape;
 
     //the following group shapes will be created as children of m_xGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xFrontSubGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xBackSubGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xFrontSubGroupShape;
+    css::uno::Reference<css::drawing::XShapes> m_xBackSubGroupShape;
 
 private: //member
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >       m_xDataSeries;
+    css::uno::Reference<css::chart2::XDataSeries> m_xDataSeries;
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32       m_nPointCount;
@@ -224,9 +211,9 @@ private: //member
     mutable double m_fXMeanValue;
     mutable double m_fYMeanValue;
 
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aAttributedDataPointIndexList;
+    css::uno::Sequence<sal_Int32>    m_aAttributedDataPointIndexList;
 
-    ::com::sun::star::chart2::StackingDirection     m_eStackingDirection;
+    css::chart2::StackingDirection     m_eStackingDirection;
 
     sal_Int32               m_nAxisIndex;//indicates whether this is attached to a main or secondary axis
 
@@ -244,23 +231,21 @@ private: //member
     sal_Int32               m_nGlobalSeriesIndex;
 
     //some cached values for data labels as they are very expensive
-    mutable boost::scoped_ptr<com::sun::star::chart2::DataPointLabel>
+    mutable boost::scoped_ptr<css::chart2::DataPointLabel>
                                                     m_apLabel_Series;
     mutable boost::scoped_ptr<tNameSequence>        m_apLabelPropNames_Series;
     mutable boost::scoped_ptr<tAnySequence>         m_apLabelPropValues_Series;
-    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
-                                                    m_apSymbolProperties_Series;
+    mutable boost::scoped_ptr<css::chart2::Symbol>  m_apSymbolProperties_Series;
 
-    mutable boost::scoped_ptr<com::sun::star::chart2::DataPointLabel>
+    mutable boost::scoped_ptr<css::chart2::DataPointLabel>
                                                     m_apLabel_AttributedPoint;
     mutable boost::scoped_ptr<tNameSequence>        m_apLabelPropNames_AttributedPoint;
     mutable boost::scoped_ptr<tAnySequence>         m_apLabelPropValues_AttributedPoint;
-    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
-                                                    m_apSymbolProperties_AttributedPoint;
-    mutable boost::scoped_ptr<com::sun::star::chart2::Symbol>
+    mutable boost::scoped_ptr<css::chart2::Symbol>  m_apSymbolProperties_AttributedPoint;
+    mutable boost::scoped_ptr<css::chart2::Symbol>
                                                     m_apSymbolProperties_InvisibleSymbolForSelection;
     mutable sal_Int32                               m_nCurrentAttributedPoint;
-    ::com::sun::star::awt::Size                     m_aReferenceSize;
+    css::awt::Size                     m_aReferenceSize;
 
     sal_Int32   m_nMissingValueTreatment;
     bool        m_bAllowPercentValueInDataLabel;
