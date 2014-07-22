@@ -84,7 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/selector \
     cui/source/dialogs/about \
     cui/source/dialogs/colorpicker \
-    cui/source/dialogs/commonlingui \
     cui/source/dialogs/cuicharmap \
     cui/source/dialogs/cuifmsearch \
     cui/source/dialogs/cuigaldlg \
