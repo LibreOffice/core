@@ -47,7 +47,7 @@ ChartTypeDialog::ChartTypeDialog( Window* pParent
         uno::Reference<XChartDocument>::query(m_xChartModel),
         m_xCC,
         true/*live update*/,
-        true/*hide title description*/);
+        false/*don't show title description*/);
 
     m_pChartTypeTabPage->initializePage();
     m_pChartTypeTabPage->Show();
