@@ -33,6 +33,8 @@
 #include <functional>
 #include <algorithm>
 
+#include <boost/checked_delete.hpp>
+
 using namespace ::com::sun::star;
 
 namespace chart
@@ -59,8 +61,7 @@ LegendItemConverter::LegendItemConverter(
 
 LegendItemConverter::~LegendItemConverter()
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     DeleteItemConverterPtr() );
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
 }
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

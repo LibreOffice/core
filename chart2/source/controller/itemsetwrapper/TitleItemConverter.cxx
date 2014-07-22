@@ -32,6 +32,8 @@
 #include <functional>
 #include <algorithm>
 
+#include <boost/checked_delete.hpp>
+
 using namespace ::com::sun::star;
 
 namespace chart { namespace wrapper {
@@ -125,8 +127,7 @@ TitleItemConverter::TitleItemConverter(
 
 TitleItemConverter::~TitleItemConverter()
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
-                     DeleteItemConverterPtr() );
+    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), boost::checked_deleter<ItemConverter>());
 }
 
 void TitleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

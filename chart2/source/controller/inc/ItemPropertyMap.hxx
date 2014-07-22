@@ -67,12 +67,6 @@ private:
     bool & m_rOutResult;
 };
 
-struct DeleteItemConverterPtr : public ::std::unary_function< ItemConverter *, void >
-{
-    void operator() ( ItemConverter * pConv )
-    { delete pConv; }
-};
-
 }}
 
 #endif

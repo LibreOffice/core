@@ -33,6 +33,8 @@
 #include <functional>
 #include <algorithm>
 
+#include <boost/checked_delete.hpp>
+
 using namespace ::com::sun::star;
 
 namespace
