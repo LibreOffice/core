@@ -544,7 +544,7 @@ private:
     void executeDispatch_ObjectProperties();
     void executeDispatch_FormatObject( const OUString& rDispatchCommand );
     void executeDlg_ObjectProperties( const OUString& rObjectCID );
-    bool                executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso );
+    bool executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bSuccessOnUnchanged );
 
     void executeDispatch_ChartType();
 

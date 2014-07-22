@@ -685,7 +685,8 @@ void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObje
         aUndoGuard.commit();
 }
 
-bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso )
+bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
+    const OUString& rObjectCID, bool bSuccessOnUnchanged )
 {
     //return true if the properties were changed successfully
     bool bRet = false;
@@ -763,7 +764,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
         }
 
         //open the dialog
-        if( aDlg.Execute() == RET_OK || (bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso && aDlg.DialogWasClosedWithOK()) )
+        if (aDlg.Execute() == RET_OK || (bSuccessOnUnchanged && aDlg.DialogWasClosedWithOK()))
         {
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if(pOutItemSet)
