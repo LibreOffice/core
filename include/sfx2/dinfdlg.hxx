@@ -407,6 +407,10 @@ struct CustomPropertyLine
 class CustomPropertiesWindow : public Window
 {
 private:
+    FixedText*                          m_pHeaderAccName;
+    FixedText*                          m_pHeaderAccType;
+    FixedText*                          m_pHeaderAccValue;
+
     ComboBox                            m_aNameBox;
     ListBox                             m_aTypeBox;
     Edit                                m_aValueEdit;
@@ -441,13 +445,13 @@ private:
 
 public:
     CustomPropertiesWindow(Window* pParent,
-        const OUString &rHeaderAccName,
-        const OUString &rHeaderAccType,
-        const OUString &rHeaderAccValue);
+        FixedText *pHeaderAccName,
+        FixedText *pHeaderAccType,
+        FixedText *pHeaderAccValue);
     ~CustomPropertiesWindow();
 
-    void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
-    sal_uInt16              GetVisibleLineCount() const;
+    bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
+    sal_uInt16          GetVisibleLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sName, com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
