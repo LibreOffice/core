@@ -336,8 +336,7 @@ void SwTxtFld::ExpandTxtFld(const bool bForceNotify) const
     const SwField* pFld = GetFmtFld().GetField();
     const OUString aNewExpand( pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
-    if (!bForceNotify &&
-        aNewExpand == m_aExpand)
+    if (aNewExpand == m_aExpand)
     {
         // Bei Seitennummernfeldern
         const sal_uInt16 nWhich = pFld->GetTyp()->Which();
@@ -353,7 +352,11 @@ void SwTxtFld::ExpandTxtFld(const bool bForceNotify) const
             {
                 m_pTxtNode->ModifyNotification( 0, 0 );
             }
-            return;
+            if ( !bForceNotify )
+            {
+                // done, if no further notification forced.
+                return;
+            }
         }
     }
 
