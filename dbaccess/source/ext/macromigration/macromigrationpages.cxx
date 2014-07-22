@@ -45,25 +45,9 @@ namespace dbmm
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XModel;
 
-    // MacroMigrationPage
-    MacroMigrationPage::MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes )
-        :MacroMigrationPage_Base( &_rParentDialog, _rRes )
-    {
-        m_pHeader = new FixedText(this, MacroMigrationResId(FT_HEADER));
-        Font aFont( m_pHeader->GetFont() );
-        aFont.SetWeight( WEIGHT_BOLD );
-        m_pHeader->SetFont( aFont );
-    }
-
     MacroMigrationPage::MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
         : MacroMigrationPage_Base(pParent, rID, rUIXMLDescription)
-        , m_pHeader(0) //remove when upper ctor is removed
     {
-    }
-
-    MacroMigrationPage::~MacroMigrationPage()
-    {
-        delete m_pHeader;
     }
 
     const MacroMigrationDialog& MacroMigrationPage::getDialog() const

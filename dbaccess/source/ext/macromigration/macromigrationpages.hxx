@@ -45,16 +45,11 @@ namespace dbmm
     class MacroMigrationPage : public MacroMigrationPage_Base
     {
     public:
-        MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes );
         MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
-        virtual ~MacroMigrationPage();
 
     protected:
         const MacroMigrationDialog& getDialog() const;
-              MacroMigrationDialog& getDialog()      ;
-
-    protected:
-        FixedText*  m_pHeader;
+              MacroMigrationDialog& getDialog();
     };
 
     // PreparationPage
