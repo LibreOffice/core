@@ -20,28 +20,4 @@
 #define TB_BACK                     1
 #define ILIST_TBX                   90
 
-#define FL_SEPARATOR                7
-
-#define FL_STATUS                   60
-#define FT_STATUS1                  61
-#define FL_TRANSFERSTATUS           62
-#define FT_TRANSFERSTATUS           63
-#define PB_PROGRESS                 64
-#define FT_ERRORSTATUS              65
-#define PB_DETAILS                  66
-#define LB_STATUS                   67
-#define FI_PAUSED                   68
-#define PB_STOP                     69
-#define PB_CLOSE                    70
-#define ST_CONTINUE                 71
-#define ST_LESS                     72
-#define ST_TASK                     73
-#define ST_STATUS                   74
-#define ILIST                       75
-#define ST_SEND                     77
-#define ST_SENDINGTO                78
-#define ST_COMPLETED                79
-#define ST_FAILED                   80
-#define ST_TERMINATEQUERY           81
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
