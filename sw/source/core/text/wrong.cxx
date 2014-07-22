@@ -18,7 +18,6 @@
  */
 
 #include "swtypes.hxx"
-#include "txttypes.hxx"
 
 #include "SwGrammarMarkUp.hxx"
 

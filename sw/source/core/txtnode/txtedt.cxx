@@ -49,7 +49,6 @@
 #include <SwGrammarMarkUp.hxx>
 #include <rootfrm.hxx>
 
-#include <txttypes.hxx>
 #include <breakit.hxx>
 #include <crstate.hxx>
 #include <UndoOverwrite.hxx>

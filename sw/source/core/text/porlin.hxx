@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORLIN_HXX
 
 #include "possiz.hxx"
+#include <txttypes.hxx>
 
 #ifdef DBG_UTIL
 #include <libxml/xmlwriter.h>

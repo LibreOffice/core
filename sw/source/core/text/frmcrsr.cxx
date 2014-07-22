@@ -25,7 +25,7 @@
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "colfrm.hxx"
-#include "txttypes.hxx"
+#include "swtypes.hxx"
 #include <sfx2/printer.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>

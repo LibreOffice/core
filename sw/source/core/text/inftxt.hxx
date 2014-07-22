@@ -24,7 +24,6 @@
 #include <map>
 
 #include "swtypes.hxx"
-#include "txttypes.hxx"
 #include "swrect.hxx"
 #include "txtfly.hxx"
 #include "swfont.hxx"

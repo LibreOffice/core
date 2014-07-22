@@ -22,7 +22,6 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imap.hxx>
 
-#include "txttypes.hxx"
 #include "noteurl.hxx"
 
 // Global variable

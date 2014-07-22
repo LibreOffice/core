@@ -22,7 +22,6 @@
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include <fmtsrndenum.hxx>
-#include <txttypes.hxx>
 #include <vector>
 
 class OutputDevice;

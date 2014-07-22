@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_GUESS_HXX
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-#include "txttypes.hxx"
+#include "swtypes.hxx"
 #include "breakit.hxx"
 #include "porrst.hxx"
 
