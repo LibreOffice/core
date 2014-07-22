@@ -29,8 +29,6 @@
 #include <tools/debug.hxx>
 #include <svl/hint.hxx>
 
-typedef long SfxArgumentError;
-
 class SbxVariable;
 class SbxObject;
 class SvStream;
