@@ -780,5 +780,11 @@
     <glade-widget-class title="Suggestion Edit" name="cuilo-SuggestionEdit"
                         generic-name="SuggestionEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Suggestion Display" name="cuilo-SuggestionDisplay"
+                        generic-name="SuggestionDisplay" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="Ruby RadioButton" name="cuilo-RubyRadioButton"
+                        generic-name="RubyRadioButton" parent="GtkRadioButton"
+                        icon-name="widget-gtk-radiobutton"/>
   </glade-widget-classes>
 </glade-catalog>
