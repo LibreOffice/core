@@ -451,10 +451,9 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
         for( size_t nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
         {
-            // ist "uberhaupt ein Item mit dem Which-Wert da?
+            // Is there an Item with that Which value present at all?
             if ( *itrItemArr )
             {
-                // Is there an item with the Which value present at all?
                 SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
                 for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
@@ -997,10 +996,10 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 */
 const SfxPoolItem* SfxItemPool::LoadSurrogate
 (
-    SvStream&           rStream,    // vor einem Surrogat positionierter Stream
-    sal_uInt16&             rWhich,     // Which-Id des zu ladenden <SfxPoolItem>s
-    sal_uInt16              nSlotId,    // Slot-Id des zu ladenden <SfxPoolItem>s
-    const SfxItemPool*  pRefPool    // <SfxItemPool> in dem das Surrogat gilt
+    SvStream&           rStream,    // Stream before a surrogate
+    sal_uInt16&         rWhich,     // WhichId of the SfxPoolItem that is to be loaded
+    sal_uInt16          nSlotId,    // SlotId of the SfxPoolItem that is to be loaded
+    const SfxItemPool*  pRefPool    // SfxItemPool in which the surrogate is valid
 )
 {
     // Read the first surrogate
@@ -1018,34 +1017,35 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
         return 0;
     }
 
-    // Bei einem identisch aufgebauten Pool (im Stream) kann das Surrogat
-    // auf jeden Fall aufgel"ost werden.
+    // If the Pool in the stream has the same structure, the surrogate
+    // can be resolved in any case
     if ( !pRefPool )
         pRefPool = this;
+
     bool bResolvable = !pRefPool->GetName().isEmpty();
     if ( !bResolvable )
     {
-        // Bei einem anders aufgebauten Pool im Stream, mu\s die SlotId
-        // aus dem Stream in eine Which-Id gemappt werden k"onnen.
+        // If the pool in the stream has a different structure, the SlotId
+        // from the stream must be mapable to a WhichId
         sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId, true) : 0;
         if ( IsWhich(nMappedWhich) )
         {
-            // gemappte SlotId kann "ubernommen werden
+            // Mapped SlotId can be taken over
             rWhich = nMappedWhich;
             bResolvable = true;
         }
     }
 
-    // kann Surrogat aufgel"ost werden?
+    // Can the surrogate be resolved?
     if ( bResolvable )
     {
         const SfxPoolItem *pItem = 0;
         for ( SfxItemPool *pTarget = this; pTarget; pTarget = pTarget->pImp->mpSecondary )
         {
-            // richtigen (Folge-) Pool gefunden?
+            // Found the right (Range-)Pool?
             if ( pTarget->IsInRange(rWhich) )
             {
-                // default attribute?
+                // Default attribute?
                 if ( SFX_ITEMS_DEFAULT == nSurrogat )
                     return *(pTarget->pImp->ppStaticDefaults +
                             pTarget->GetIndex_Impl(rWhich));
@@ -1058,15 +1058,15 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
                 if ( !pItem )
                 {
                     OSL_FAIL( "can't resolve surrogate" );
-                    rWhich = 0; // nur zur Sicherheit fuer richtige Stream-Pos
+                    rWhich = 0; // Just to be sure; for the right StreamPos
                     return 0;
                 }
 
-                // Nachladen aus Ref-Pool?
+                // Reload from RefPool?
                 if ( pRefPool != pImp->mpMaster )
                     return &pTarget->Put( *pItem );
 
-                // Referenzen sind NICHT schon mit Pool geladen worden?
+                // References have NOT been loaded together with the pool?
                 if ( !pTarget->HasPersistentRefCounts() )
                     AddRef( *pItem, 1 );
                 else
@@ -1124,7 +1124,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
         SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - dont ask me for surrogates" );
     }
 
-    // pointer on static or pool-default attribute?
+    // Pointer on static or pool-default attribute?
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
         return SFX_ITEMS_DEFAULT;
 
@@ -1162,81 +1162,63 @@ bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
  * Pool loading method.
 */
 void SfxItemPool::SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo )
-
-
 {
     pImp->nStoringStart = nFrom;
     pImp->nStoringEnd = nTo;
 }
 
 
-
+/**
+ * This method allows for the creation of new and incompatible WhichId
+ * Ranges or distributions. Pools that were saved with old versions
+ * are mapped using the provided conversion table until the current
+ * version has been reached. Newer pools can be loaded, but will lose
+ * newer attributes, because the map is saved in conjunction with the pool.
+ *
+ *  Precondition:   Pool must not be loaded yet
+ *  Postcondition:  WhichIds from older versions can be mapped to version 'nVer'
+ *  Runtime:        1.5 * new + 10
+ *
+ *  For newer WhichRanges (nStart,nEnd) it must hold that older WhichRanges
+ *  (nOldStart,nOldEnd) are completely contained in the newer WhichRange.
+ *  It is valid to extend the WhichRange to both sides; also by inserting
+ *  WhichIds. Moving WhichIds is not permitted.
+ *  This method should only be called in or right after the ctor.
+ *
+ *  The array must be static, because its not copied and resued in the
+ *  copy-ctor of the SfxItemPool
+ *
+ *  Example usage:
+ *  Originally (version 0) the pool had the following WhichIds:
+ *
+ *     1:A, 2:B, 3:C, 4:D
+ *
+ *  A newer version (version 1) is now supposed to contain two new Ids
+ *  X and Y between B and C, looking like this:
+ *
+ *      1:A, 2:B, 3:X, 4:Y, 5:C, 6:D
+ *
+ *  We see that the Ids 3 and 4 have changed. For the new version, we
+ *  would need to set the following in the new Pool:
+ *
+ *      static sal_uInt16 nVersion1Map = { 1, 2, 5, 6 };
+ *      pPool->SetVersionMap( 1, 1, 4, &nVersion1Map );
+ *
+ *  @see SfxItemPool::IsLoadingVersionCurrent() const
+ *  @see SfxItemPool::GetNewWhich(sal_uInt16)
+ *  @see SfxItemPool::GetVersion() const
+ */
 void SfxItemPool::SetVersionMap
 (
-    sal_uInt16  nVer,               /*  neue Versionsnummer */
-    sal_uInt16  nOldStart,          /*  alte erste Which-Id */
-    sal_uInt16  nOldEnd,            /*  alte letzte Which-Id */
-    const sal_uInt16* pOldWhichIdTab /*  Array mit genau dem Aufbau der Which-Ids
-                                    der vorhergehenden Version, in denen
-                                    die jeweils neue Which-Id steht. */
+    sal_uInt16  nVer,               // New version number
+    sal_uInt16  nOldStart,          // Old first WhichId
+    sal_uInt16  nOldEnd,            // Old last WhichId
+    const sal_uInt16* pOldWhichIdTab /* Array containing the structure of the WhichIds
+                                        of the previous version, in which the new
+                                        corresponding new WhichId is located */
 )
-
-/*  [Beschreibung]
-
-    Mit dieser Methode k"onnen neue, inkompatible Which-Id-Folgen oder
-    Verteilungen realisiert werden. Pools, die noch mit alten Versionen
-    gespeichert wurden, werden dann "uber die angegebene Tabelle solange
-    gemappt, bis die aktuelle Version erreicht ist. Neuere Pools k"onnen
-    unter Verlust neuer Attribute geladen werden, da die Map mit dem Pool
-    gespeichert wird.
-
-    Precondition:   Pool darf noch nicht geladen sein
-    Postcondition:  Which-Ids aus fr"uheren Versionen k"onnen bei Laden auf
-                    Version 'nVer' gemappt werden
-    Laufzeit:       1.5 * new + 10
-
-    [Anmerkung]
-
-    F"ur neue Which-Ranges (nStart,nEnd) m"ssen im Vergleich zur Vorg"anger-
-    Version (nOldStart,nOldEnd) immer gelten, da\s (nOldStart,nOldEnd)
-    vollst"andig in (nStart,nEnd) enthalten ist. Es ist also zul"assig, den
-    Which-Range in beide Richtungen zu erweitern, auch durch Einf"ugung
-    von Which-Ids, nicht aber ihn zu beschneiden.
-
-    Diese Methode sollte nur im oder direkt nach Aufruf des Konstruktors
-    gerufen werden.
-
-    Das Array mu\s statisch sein, da es nicht kopiert wird und au\serdem
-    im Copy-Ctor des SfxItemPool wiederverwendet wird.
-
-
-    [Beispiel]
-
-    Urspr"unglich (Version 0) hatte der Pool folgende Which-Ids:
-
-        1:A, 2:B, 3:C, 4:D
-
-    Nun soll eine neue Version (Version 1) zwei zus"atzliche Ids X und Y
-    zwischen B und C erhalten, also wie folgt aussehen:
-
-        1:A, 2:B, 3:X, 4:Y, 5:C, 6:D
-
-    Dabei haben sich also die Ids 3 und 4 ge"andert. F"ur die neue Version
-    m"u\ste am Pool folgendes gesetzt werden:
-
-        static sal_uInt16 nVersion1Map = { 1, 2, 5, 6 };
-        pPool->SetVersionMap( 1, 1, 4, &nVersion1Map );
-
-
-    [Querverweise]
-
-    <SfxItemPool::IsLoadingVersionCurrent()const>
-    <SfxItemPool::GetNewWhich(sal_uInt16)>
-    <SfxItemPool::GetVersion()const>
-*/
-
 {
-    // create new map entry to insert
+    // Create new map entry to insert
     const SfxPoolVersion_ImplPtr pVerMap = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl(
                 nVer, nOldStart, nOldEnd, pOldWhichIdTab ) );
     pImp->aVersions.push_back( pVerMap );
@@ -1244,7 +1226,7 @@ void SfxItemPool::SetVersionMap
     DBG_ASSERT( nVer > pImp->nVersion, "Versions not sorted" );
     pImp->nVersion = nVer;
 
-    // Versions-Range anpassen
+    // Adapt version range
     for ( sal_uInt16 n = 0; n < nOldEnd-nOldStart+1; ++n )
     {
         sal_uInt16 nWhich = pOldWhichIdTab[n];
@@ -1260,39 +1242,32 @@ void SfxItemPool::SetVersionMap
 }
 
 
-
+/**
+ * This method converts WhichIds from a file format to the version of the
+ * current pool.
+ * If the file format is older, the conversion tables (set by the pool developer
+ * using SetVersion()) are used. If the file format is newer the conversion tables
+ * loaded from the file format are used. In this case, not every WhichId can be
+ * mapped in which case we return 0.
+ *
+ * The calculation is only defined for WhichIds supported by the corresponding
+ * file version, which is guarded by an assertion.
+ *
+ * Precondition:   Pool must be loaded
+ * Postcondition:  Unchanged
+ * Runtime:        linear(Count of the secondary pools) +
+ *                 linear(Difference of the old and newer version)
+ *
+ * @see SfxItemPool::IsLoadingVersionCurrent() const
+ * @see SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)
+ * @see SfxItemPool::GetVersion() const
+ */
 sal_uInt16 SfxItemPool::GetNewWhich
 (
-    sal_uInt16  nFileWhich      // die aus dem Stream geladene Which-Id
+    sal_uInt16  nFileWhich // The WhichId loaded from the stream
 )   const
-
-/*  [Beschreibung]
-
-    Diese Methoden rechnet Which-Ids aus einem File-Format in die der
-    aktuellen Pool-Version um. Ist das File-Format "alter, werden die vom
-    Pool-Entwickler mit SetVersion() gesetzten Tabellen verwendet,
-    ist das File-Format neuer, dann die aus dem File geladenen Tabellen.
-    Im letzteren Fall kann ggf. nicht jede Which-Id gemappt werden,
-    so da\s 0 zur"uckgeliefert wird.
-
-    Die Berechnung ist nur f"ur Which-Ids definiert, die in der betreffenden
-    File-Version unterst"utzt wurden. Dies ist per Assertion abgesichert.
-
-    Precondition:   Pool mu\s geladen sein
-    Postcondition:  unver"andert
-    Laufzeit:       linear(Anzahl der Sekund"arpools) +
-                    linear(Differenz zwischen alter und neuer Version)
-
-
-    [Querverweise]
-
-    <SfxItemPool::IsLoadingVersionCurrent()const>
-    <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
-    <SfxItemPool::GetVersion()const>
-*/
-
 {
-    // (Sekund"ar-) Pool bestimmen
+    // Determine (secondary) Pool
     if ( !IsInVersionsRange(nFileWhich) )
     {
         if ( pImp->mpSecondary )
@@ -1300,13 +1275,13 @@ sal_uInt16 SfxItemPool::GetNewWhich
         SFX_ASSERT( false, nFileWhich, "unknown which in GetNewWhich()" );
     }
 
-    // Version neuer/gleich/"alter?
+    // Newer/the same/older version?
     short nDiff = (short)pImp->nLoadingVersion - (short)pImp->nVersion;
 
-    // Which-Id einer neueren Version?
+    // WhichId of a newer version?
     if ( nDiff > 0 )
     {
-        // von der Top-Version bis runter zur File-Version stufenweise mappen
+        // Map step by step from the top version down to the file version
         for ( size_t nMap = pImp->aVersions.size(); nMap > 0; --nMap )
         {
             SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap-1];
@@ -1329,10 +1304,10 @@ sal_uInt16 SfxItemPool::GetNewWhich
         }
     }
 
-    // Which-Id einer neueren Version?
+    // WhichId of a newer version?
     else if ( nDiff < 0 )
     {
-        // von der File-Version bis zur aktuellen Version stufenweise mappen
+        // Map step by step from the top version down to the file version
         for ( size_t nMap = 0; nMap < pImp->aVersions.size(); ++nMap )
         {
             SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap];
@@ -1346,7 +1321,7 @@ sal_uInt16 SfxItemPool::GetNewWhich
         }
     }
 
-    // originale (nDiff==0) bzw. gemappte (nDiff!=0) Id zur"uckliefern
+    // Return original (nDiff==0) or mapped (nDiff!=0) Id
     return nFileWhich;
 }
 
@@ -1359,67 +1334,53 @@ bool SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const
 }
 
 
-
+/**
+ * This method determines whether the loaded Pool version corresponds to the
+ * currently loaded Pool structure.
+ *
+ * Precondition:   Pool is loaded
+ * Postcondition:  Unchanged
+ * Runtime:        linear(Count of secondary pools)
+ *
+ * @see SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)
+ * @see SfxItemPool::GetNewWhich(sal_uInt16) const
+ * @see SfxItemPool::GetVersion() const
+ */
 bool SfxItemPool::IsCurrentVersionLoading() const
-
-/*  [Beschreibung]
-
-    Mit dieser Methode kann festgestellt werden, ob die geladene Pool-Version
-    dem aktuellen Pool-Aufbau entspricht.
-
-    Precondition:   Pool mu\s geladen sein
-    Postcondition:  unver"andert
-    Laufzeit:       linear(Anzahl der Sekund"arpools)
-
-
-    [Querverweise]
-
-    <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
-    <SfxItemPool::GetNewWhich(sal_uInt16)const>
-    <SfxItemPool::GetVersion()const>
-*/
-
 {
     return ( pImp->nVersion == pImp->nLoadingVersion ) &&
            ( !pImp->mpSecondary || pImp->mpSecondary->IsCurrentVersionLoading() );
 }
 
 
-
+/**
+ * Saves the SfxPoolItem 'rItem' to the SvStream 'rStream':
+ * either as a surrogate ('bDirect == sal_False') or directly with
+ * 'rItem.Store()'.
+ * Non-poolable Items are always saved directly. Items without WhichId and
+ * SID-Items as well as Items that were not yet present in the file format
+ * version (return sal_False) are not saved.
+ *
+ * The Item is saved to the Stream in the following manner:
+ *   sal_uInt16  rItem.Which()
+ *   sal_uInt16  GetSlotId( rItem.Which() ) or 0 if not available
+ *   sal_uInt16  GetSurrogate( &rItem ) or SFX_ITEM_DIRECT fo '!SFX_ITEM_POOLBLE'
+ *
+ * Optionally (if 'bDirect == sal_True' or '!rItem.IsPoolable()':
+ *   sal_uInt16  rItem.GetVersion()
+ *   sal_uLong   Size
+ *   Size        rItem.Store()
+ *
+ *  @see SfxItemPool::LoadItem(SvStream&,bool) const
+ */
 bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
                                  bool bDirect ) const
-
-/*  [Beschreibung]
-
-    Speichert das <SfxPoolItem> 'rItem' in den <SvStream> 'rStream'
-    entweder als Surrogat ('bDirect == sal_False') oder direkt mit 'rItem.Store()'.
-    Nicht poolable Items werden immer direkt gespeichert. Items ohne Which-Id,
-    also SID-Items, werden nicht gespeichert, ebenso wenn Items, die in der
-    File-Format-Version noch nicht vorhanden waren (return sal_False).
-
-    Das Item wird im Stream wie folgt abgelegt:
-
-    sal_uInt16  rItem.Which()
-    sal_uInt16  GetSlotId( rItem.Which() ) bzw. 0 falls nicht verf"urbar
-    sal_uInt16  GetSurrogate( &rItem ) bzw. SFX_ITEM_DIRECT bei '!SFX_ITEM_POOLBLE'
-
-    optional (falls 'bDirect == sal_True' oder '!rItem.IsPoolable()':
-
-    sal_uInt16  rItem.GetVersion()
-    sal_uLong   Size
-    Size    rItem.Store()
-
-
-    [Querverweise]
-
-    <SfxItemPool::LoadItem(SvStream&,bool)const>
-*/
-
 {
     DBG_ASSERT( !IsInvalidItem(&rItem), "cannot store invalid items" );
 
     if ( IsSlot( rItem.Which() ) )
         return false;
+
     const SfxItemPool *pPool = this;
     while ( !pPool->IsInStoringRange(rItem.Which()) )
         if ( 0 == ( pPool = pPool->pImp->mpSecondary ) )
@@ -1437,7 +1398,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
     {
         rStream.WriteUInt16( nItemVersion );
-        rStream.WriteUInt32( (sal_uInt32) 0L );           // Platz fuer Laenge in Bytes
+        rStream.WriteUInt32( (sal_uInt32) 0L ); // Room for length in bytes
         sal_uLong nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
         sal_uLong nIEnd = rStream.Tell();
@@ -1450,12 +1411,11 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 }
 
 
-
+/**
+ * If pRefPool==-1 => do not put!
+ */
 const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
                                           const SfxItemPool *pRefPool )
-
-// pRefPool==-1 => nicht putten!
-
 {
     sal_uInt16 nWhich(0), nSlot(0); // nSurrogate;
     rStream.ReadUInt16( nWhich ).ReadUInt16( nSlot );
@@ -1464,14 +1424,14 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
     if ( bDontPut || !pRefPool )
         pRefPool = this;
 
-    // richtigen Sekund"ar-Pool finden
+    // Find right secondary Pool
     while ( !pRefPool->IsInVersionsRange(nWhich) )
     {
         if ( pRefPool->pImp->mpSecondary )
             pRefPool = pRefPool->pImp->mpSecondary;
         else
         {
-            // WID in der Version nicht vorhanden => ueberspringen
+            // WID not present in this version => skip
             sal_uInt32 nSurro(0);
             sal_uInt16 nVersion(0), nLen(0);
             rStream.ReadUInt32( nSurro );
@@ -1484,42 +1444,41 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
         }
     }
 
-    // wird eine andere Version geladen?
+    // Are we loading a different version?
     bool bCurVersion = pRefPool->IsCurrentVersionLoading();
     if ( !bCurVersion )
-        // Which-Id auf neue Version mappen
-        nWhich = pRefPool->GetNewWhich( nWhich );
+        nWhich = pRefPool->GetNewWhich( nWhich ); // Map WhichId to new version
 
     DBG_ASSERT( !nWhich || !pImp->bInSetItem ||
                 !pRefPool->pImp->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)]->ISA(SfxSetItem),
                 "loading SetItem in ItemSet of SetItem" );
 
-    // soll "uber Surrogat geladen werden?
+    // Are we loading via surrogate?
     const SfxPoolItem *pItem = 0;
     if ( !bDirect )
     {
-        // Which-Id in dieser Version bekannt?
+        // WhichId known in this version?
         if ( nWhich )
-            // Surrogat laden, reagieren falls keins vorhanden
+            // Load surrogate and react if none present
             pItem = LoadSurrogate( rStream, nWhich, nSlot, pRefPool );
         else
-            // sonst "uberspringen
+            // Else skip it
             rStream.SeekRel( sizeof(sal_uInt16) );
     }
 
-    // wird direkt, also nicht "uber Surrogat geladen?
+    // Is loaded directly (not via surrogate)?
     if ( bDirect || ( nWhich && !pItem ) )
     {
-        // bDirekt bzw. nicht IsPoolable() => Item direkt laden
+        // bDirekt or not IsPoolable() => Load Item directly
         sal_uInt16 nVersion(0);
         sal_uInt32 nLen(0);
         rStream.ReadUInt16( nVersion ).ReadUInt32( nLen );
         sal_uLong nIStart = rStream.Tell();
 
-        // Which-Id in dieser Version bekannt?
+        // WhichId known in this version?
         if ( nWhich )
         {
-            // Item direkt laden
+            // Load Item directly
             SfxPoolItem *pNewItem =
                     pRefPool->GetDefaultItem(nWhich).Create(rStream, nVersion);
             if ( bDontPut )
@@ -1538,7 +1497,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
                 rStream.Seek( nIStart+nLen );
         }
         else
-            // Item "uberspringen
+            // SKip Item
             rStream.Seek( nIStart+nLen );
     }
 
