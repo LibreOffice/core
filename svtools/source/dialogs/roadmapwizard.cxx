@@ -165,7 +165,6 @@ namespace svt
     }
 #endif
 
-
     RoadmapWizard::RoadmapWizard( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, _rRes, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
@@ -181,6 +180,12 @@ namespace svt
         impl_construct();
     }
 
+    RoadmapWizard::RoadmapWizard( Window* _pParent, sal_uInt32 _nButtonFlags )
+        :OWizardMachine( _pParent, _nButtonFlags )
+        ,m_pImpl( new RoadmapWizardImpl )
+    {
+        impl_construct();
+    }
 
     void RoadmapWizard::impl_construct()
     {

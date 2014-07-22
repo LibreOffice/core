@@ -18,37 +18,30 @@
  */
 
 #include "dbmm_global.hrc"
-#include "macromigration.hrc"
 
-ModalDialog DLG_MACRO_MIGRATION
+String STR_TITLE_MACRO_MIGRATION
 {
-    HelpID = "dbaccess:ModalDialog:DLG_MACRO_MIGRATION";
-    OutputSize = TRUE ;
-    Moveable = TRUE;
-    Closeable = TRUE ;
-    Hide = TRUE;
+    Text [ en-US ]  = "Database Document Macro Migration" ;
+};
 
-    Text[ en-US ]  = "Database Document Macro Migration" ;
+String STR_STATE_CLOSE_SUB_DOCS
+{
+    Text [ en-US ] = "Prepare";
+};
 
-    String STR_STATE_CLOSE_SUB_DOCS
-    {
-        Text [ en-US ] = "Prepare";
-    };
+String STR_STATE_BACKUP_DBDOC
+{
+    Text [ en-US ] = "Backup Document";
+};
 
-    String STR_STATE_BACKUP_DBDOC
-    {
-        Text [ en-US ] = "Backup Document";
-    };
+String STR_STATE_MIGRATE
+{
+    Text [ en-US ] = "Migrate";
+};
 
-    String STR_STATE_MIGRATE
-    {
-        Text [ en-US ] = "Migrate";
-    };
-
-    String STR_STATE_SUMMARY
-    {
-        Text [ en-US ] = "Summary";
-    };
+String STR_STATE_SUMMARY
+{
+    Text [ en-US ] = "Summary";
 };
 
 String STR_FORM

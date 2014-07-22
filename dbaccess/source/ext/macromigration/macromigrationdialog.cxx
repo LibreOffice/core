@@ -126,16 +126,15 @@ namespace dbmm
     };
 
     // MacroMigrationDialog
-    MacroMigrationDialog::MacroMigrationDialog( Window* _pParent, const Reference<XComponentContext>& _rContext,
-        const Reference< XOfficeDatabaseDocument >& _rxDocument )
-        :MacroMigrationDialog_Base( _pParent, MacroMigrationResId( DLG_MACRO_MIGRATION ) )
-        ,m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
+    MacroMigrationDialog::MacroMigrationDialog(Window* _pParent, const Reference<XComponentContext>& _rContext,
+        const Reference< XOfficeDatabaseDocument >& _rxDocument)
+        : MacroMigrationDialog_Base(_pParent)
+        , m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
     {
         OUString sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
         OUString sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
         OUString sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
         OUString sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
-        FreeResource();
 
         describeState( STATE_CLOSE_SUB_DOCS,    sTitlePrepare, &PreparationPage::Create   );
         describeState( STATE_BACKUP_DBDOC,      sTitleStoreAs, &SaveDBDocPage::Create     );
@@ -153,10 +152,6 @@ namespace dbmm
         ActivatePage();
 
         OSL_PRECOND( m_pData->xDocumentModel.is(), "MacroMigrationDialog::MacroMigrationDialog: illegal document!" );
-    }
-
-    MacroMigrationDialog::~MacroMigrationDialog()
-    {
     }
 
     const Reference<XComponentContext>& MacroMigrationDialog::getComponentContext() const

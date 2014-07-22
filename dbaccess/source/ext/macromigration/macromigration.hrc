@@ -24,12 +24,6 @@
 #define TAB_PAGE_WIDTH  280
 #define TAB_PAGE_HEIGHT 185
 
-//... strings ............................................................
-#define STR_STATE_CLOSE_SUB_DOCS    1
-#define STR_STATE_BACKUP_DBDOC      2
-#define STR_STATE_MIGRATE           3
-#define STR_STATE_SUMMARY           4
-
 #endif // DBACCESS_MACROMIGRATION_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
