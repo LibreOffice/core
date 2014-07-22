@@ -69,140 +69,65 @@ FloatingWindow DLG_MAILMERGECHILD\
     };
 };
 
-ModelessDialog DLG_MM_SENDMAILS
+
+String ST_SEND
 {
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_MM_SENDMAILS;
-    Size = MAP_APPFONT ( 250 , 221 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE;
+    Text[ en-US ] = "Sending e-mails...";
+};
 
-    Text [ en-US ] = "Sending E-mail messages";
+String  ST_LESS
+{
+    Text[ en-US ] = "<< Less";
+};
 
-    FixedLine  FL_STATUS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text[ en-US ] = "Connection status";
-    };
-    FixedText  FT_STATUS1
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text[ en-US ] = "The connection to the outgoing mail server has been established";
-    };
-    String ST_SEND
-    {
-        Text[ en-US ] = "Sending e-mails...";
-    };
-    FixedLine  FL_TRANSFERSTATUS
-    {
-        Pos = MAP_APPFONT ( 6 , 28 ) ;
-        Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text[ en-US ] = "Transfer status";
-    };
-    FixedText  FT_TRANSFERSTATUS
-    {
-        Pos = MAP_APPFONT ( 12, 39 ) ;
-        Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text[ en-US ] = "%1 of %2 e-mails sent";
-    };
-    FixedText  FI_PAUSED
-    {
-        Pos = MAP_APPFONT ( 125, 39 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Hide = TRUE;
-        Text[ en-US ] = "Sending paused";
-    };
-    Window    PB_PROGRESS
-    {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 226 , 14 ) ;
-        Border = TRUE;
-    };
-    FixedText  FT_ERRORSTATUS
-    {
-        Pos = MAP_APPFONT ( 12 , 67 ) ;
-        Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text[ en-US ] = "E-mails not sent: %1";
-    };
-    PushButton PB_DETAILS
-    {
-        Pos = MAP_APPFONT ( 188 , 81 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text[ en-US ] = "More >>";
-    };
-    String  ST_LESS
-    {
-        Text[ en-US ] = "<< Less";
-    };
+String     ST_CONTINUE
+{
+    Text[ en-US ] = "~Continue";
+};
 
-    Control LB_STATUS
-    {
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
-        Size = MAP_APPFONT ( 226 , 80 ) ;
-        Border = TRUE;
-    };
-    FixedLine  FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 0 , 187 ) ;
-        Size = MAP_APPFONT ( 250 , 8 ) ;
-    };
-    PushButton PB_STOP
-    {
-        Pos = MAP_APPFONT ( 141 , 201 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text[ en-US ] = "~Stop";
-    };
-    PushButton PB_CLOSE
-    {
-        Pos = MAP_APPFONT ( 194 , 201 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text[ en-US ] = "C~lose";
-    };
-    String     ST_CONTINUE
-    {
-        Text[ en-US ] = "~Continue";
-    };
-    #define IMGLIST2_IDS\
-        IdList = \
-        { \
-            FN_FORMULA_CANCEL ;\
-            FN_FORMULA_APPLY     ;\
-        }; \
-        IdCount = 2
+#define IMGLIST2_IDS\
+    IdList = \
+    { \
+        FN_FORMULA_CANCEL ;\
+        FN_FORMULA_APPLY     ;\
+    }; \
+    IdCount = 2
 
-    ImageList ILIST
-    {
-        Prefix = "sc";
-        MaskColor = IMAGE_MASK_COLOR;
-        IMGLIST2_IDS;
-    };
-    String ST_TASK
-    {
-        Text[ en-US ] = "Task";
-    };
-    String ST_STATUS
-    {
-        Text[ en-US ] = "Status";
-    };
-    String ST_SENDINGTO
-    {
-        Text[ en-US ] = "Sending to: %1";
-    };
-    String ST_COMPLETED
-    {
-        Text[ en-US ] = "Successfully sent";
-    };
-    String ST_FAILED
-    {
-        Text[ en-US ] = "Sending failed";
-    };
-    String ST_TERMINATEQUERY
-    {
-        Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
-    };
+ImageList ILIST
+{
+    Prefix = "sc";
+    MaskColor = IMAGE_MASK_COLOR;
+    IMGLIST2_IDS;
+};
+
+String ST_TASK
+{
+    Text[ en-US ] = "Task";
+};
+
+String ST_STATUS
+{
+    Text[ en-US ] = "Status";
+};
+
+String ST_SENDINGTO
+{
+    Text[ en-US ] = "Sending to: %1";
+};
+
+String ST_COMPLETED
+{
+    Text[ en-US ] = "Successfully sent";
+};
+
+String ST_FAILED
+{
+    Text[ en-US ] = "Sending failed";
+};
+
+String ST_TERMINATEQUERY
+{
+    Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

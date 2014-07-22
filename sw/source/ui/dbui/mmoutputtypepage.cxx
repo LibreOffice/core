@@ -227,27 +227,22 @@ SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const OUString& rD
 #define ITEMID_STATUS   2
 
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
-    ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
-    m_aStatusFL( this, SW_RES(             FL_STATUS             )),
-    m_aStatusFT( this, SW_RES(             FT_STATUS1            )),
-    m_aTransferStatusFL( this, SW_RES(     FL_TRANSFERSTATUS     )),
-    m_aTransferStatusFT( this, SW_RES(     FT_TRANSFERSTATUS     )),
-    m_PausedFI(this, SW_RES(               FI_PAUSED             )),
-    m_aProgressBar( this,      SW_RES(     PB_PROGRESS           )),
-    m_aErrorStatusFT( this, SW_RES(        FT_ERRORSTATUS        )),
-    m_aDetailsPB( this, SW_RES(            PB_DETAILS            )),
-    m_aStatusHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER         ),
-    m_aStatusLB( this, SW_RES(             LB_STATUS             )),
-    m_aSeparatorFL( this, SW_RES(          FL_SEPARATOR          )),
-    m_aStopPB( this, SW_RES(               PB_STOP               )),
-    m_aClosePB( this, SW_RES(              PB_CLOSE              )),
-    m_sMore(m_aDetailsPB.GetText()),
+    ModelessDialog /*SfxModalDialog*/(pParent, "SendMailsDialog", "modules/swriter/ui/mmsendmails.ui"),
+    m_pTransferStatus(get<FixedText>("transferstatus")),
+    m_pPaused(get<FixedText>("paused")),
+    m_pProgressBar(get<ProgressBar>("progress")),
+    m_pErrorStatus(get<FixedText>("errorstatus")),
+    m_pDetails(get<PushButton>("details")),
+    m_pContainer(get<SvSimpleTableContainer>("container")),
+    m_pStop(get<PushButton>("stop")),
+    m_pClose(get<PushButton>("close")),
+    m_sMore(m_pDetails->GetText()),
     m_sLess(SW_RES(ST_LESS)),
     m_sContinue(SW_RES( ST_CONTINUE )),
-    m_sStop(m_aStopPB.GetText()),
+    m_sStop(m_pStop->GetText()),
     m_sSend(SW_RES(ST_SEND)),
-    m_sTransferStatus(m_aTransferStatusFT.GetText()),
-    m_sErrorStatus(   m_aErrorStatusFT.GetText()),
+    m_sTransferStatus(m_pTransferStatus->GetText()),
+    m_sErrorStatus(   m_pErrorStatus->GetText()),
     m_sSendingTo(   SW_RES(ST_SENDINGTO )),
     m_sCompleted(   SW_RES(ST_COMPLETED )),
     m_sFailed(      SW_RES(ST_FAILED     )),
@@ -260,47 +255,38 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_nSendCount(0),
     m_nErrorCount(0)
 {
-    m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
+    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MAP_APPFONT);
+    m_pContainer->set_width_request(aSize.Width());
+    m_pContainer->set_height_request(aSize.Height());
+    m_pStatus = new SvSimpleTable(*m_pContainer);
+    m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
+
+    m_nStatusHeight = m_pContainer->get_height_request();
     OUString sTask(SW_RES(ST_TASK));
     OUString sStatus(SW_RES(ST_STATUS));
-    m_aStatusLB.SetHelpId(HID_MM_SENDMAILS_STATUSLB);
+    m_pStatus->SetHelpId(HID_MM_SENDMAILS_STATUSLB);
 
-    FreeResource();
+    m_pDetails->SetClickHdl(LINK( this, SwSendMailDialog, DetailsHdl_Impl));
+    m_pStop->SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
+    m_pClose->SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));
 
-    m_aDetailsPB.SetClickHdl(LINK( this, SwSendMailDialog, DetailsHdl_Impl));
-    m_aStopPB.SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
-    m_aClosePB.SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));
-
-    Size aLBSize(m_aStatusLB.GetSizePixel());
-    m_aStatusHB.SetSizePixel(aLBSize);
-    Size aHeadSize(m_aStatusHB.CalcWindowSizePixel());
-    aHeadSize.Width() = aLBSize.Width();
-    m_aStatusHB.SetSizePixel(aHeadSize);
-    Point aLBPos(m_aStatusLB.GetPosPixel());
-    m_aStatusHB.SetPosPixel(aLBPos);
-    aLBPos.Y() += aHeadSize.Height();
-    aLBSize.Height() -= aHeadSize.Height();
-    m_aStatusLB.SetPosSizePixel(aLBPos, aLBSize);
-
-    Size aSz(m_aStatusHB.GetOutputSizePixel());
-    long nPos1 = aSz.Width()/3 * 2;
-    long nPos2 = aSz.Width()/3;
-    m_aStatusHB.InsertItem( ITEMID_TASK, sTask,
+    long nPos1 = aSize.Width()/3 * 2;
+    long nPos2 = aSize.Width()/3;
+    m_pStatusHB->InsertItem( ITEMID_TASK, sTask,
                             nPos1,
                             HIB_LEFT | HIB_VCENTER );
-    m_aStatusHB.InsertItem( ITEMID_STATUS, sStatus,
+    m_pStatusHB->InsertItem( ITEMID_STATUS, sStatus,
                             nPos2,
                             HIB_LEFT | HIB_VCENTER );
-    m_aStatusHB.Show();
 
-    m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);
-    static long nTabs[] = {3, 0, nPos1, aSz.Width() };
-    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
-    m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
-    m_aStatusLB.SetSpaceBetweenEntries(3);
+    m_pStatus->SetHelpId(HID_MM_MAILSTATUS_TLB);
+    static long nTabs[] = {2, 0, nPos1};
+    m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_pStatus->SetSelectionMode( SINGLE_SELECTION );
+    m_pStatus->SetTabs(&nTabs[0], MAP_PIXEL);
+    m_pStatus->SetSpaceBetweenEntries(3);
 
-    DetailsHdl_Impl( &m_aDetailsPB );
+    DetailsHdl_Impl( m_pDetails );
     UpdateTransferStatus();
 }
 
@@ -329,6 +315,7 @@ SwSendMailDialog::~SwSendMailDialog()
         {
         }
     }
+    delete m_pStatus;
     delete m_pImpl;
 }
 
@@ -350,33 +337,21 @@ void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
     UpdateTransferStatus();
 }
 
-static void lcl_Move(Control& rCtrl, long nYOffset)
-{
-    Point aPos(rCtrl.GetPosPixel());
-    aPos.Y() += nYOffset;
-    rCtrl.SetPosPixel(aPos);
-}
-
 IMPL_LINK_NOARG(SwSendMailDialog, DetailsHdl_Impl)
 {
     long nMove = 0;
-    if(m_aStatusLB.IsVisible())
+    if(m_pContainer->IsVisible())
     {
-        m_aStatusLB.Hide();
-        m_aStatusHB.Hide();
+        m_pContainer->Hide();
         nMove = - m_nStatusHeight;
-        m_aDetailsPB.SetText(m_sMore);
+        m_pDetails->SetText(m_sMore);
     }
     else
     {
-        m_aStatusLB.Show();
-        m_aStatusHB.Show();
+        m_pContainer->Show();
         nMove = m_nStatusHeight;
-        m_aDetailsPB.SetText(m_sLess);
+        m_pDetails->SetText(m_sLess);
     }
-    lcl_Move(m_aSeparatorFL, nMove);
-    lcl_Move(m_aStopPB, nMove);
-    lcl_Move(m_aClosePB, nMove);
     Size aDlgSize = GetSizePixel(); aDlgSize.Height() += nMove; SetSizePixel(aDlgSize);
 
     return 0;
@@ -391,13 +366,13 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
         {
             m_pImpl->xMailDispatcher->stop();
             pButton->SetText(m_sContinue);
-            m_PausedFI.Show();
+            m_pPaused->Show();
         }
         else
         {
             m_pImpl->xMailDispatcher->start();
             pButton->SetText(m_sStop);
-            m_PausedFI.Show(false);
+            m_pPaused->Show(false);
         }
     }
     return 0;
@@ -444,8 +419,8 @@ IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StopSendMails, SwSendMailDialog*,
         pDialog->m_pImpl->xMailDispatcher->isStarted())
     {
         pDialog->m_pImpl->xMailDispatcher->stop();
-        pDialog->m_aStopPB.SetText(pDialog->m_sContinue);
-        pDialog->m_PausedFI.Show();
+        pDialog->m_pStop->SetText(pDialog->m_sContinue);
+        pDialog->m_pPaused->Show();
     }
     return 0;
 }
@@ -493,7 +468,7 @@ void  SwSendMailDialog::IterateMails()
             OUString sTmp(pCurrentMailDescriptor->sEMail);
             sTmp += "\t";
             sTmp += m_sFailed;
-            m_aStatusLB.InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
+            m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -591,7 +566,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
     OUString sTmp(xMessage->getRecipients()[0]);
     sTmp += "\t";
     sTmp += bResult ? m_sCompleted : m_sFailed;
-    m_aStatusLB.InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
+    m_pStatus->InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
     ++m_nSendCount;
     if(!bResult)
         ++m_nErrorCount;
@@ -610,20 +585,20 @@ void SwSendMailDialog::UpdateTransferStatus()
     OUString sStatus( m_sTransferStatus );
     sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
     sStatus = sStatus.replaceFirst("%2", OUString::number(m_pImpl->aDescriptors.size()));
-    m_aTransferStatusFT.SetText(sStatus);
+    m_pTransferStatus->SetText(sStatus);
 
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
-    m_aErrorStatusFT.SetText(sStatus);
+    m_pErrorStatus->SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())
-        m_aProgressBar.SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
+        m_pProgressBar->SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
     else
-        m_aProgressBar.SetValue(0);
+        m_pProgressBar->SetValue(0);
 }
 
 void SwSendMailDialog::AllMailsSent()
 {
-    m_aStopPB.Enable(false);
+    m_pStop->Enable(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
