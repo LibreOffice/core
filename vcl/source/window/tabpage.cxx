@@ -199,22 +199,25 @@ Size TabPage::GetOptimalSize() const
 void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Window::SetPosSizePixel(rAllocPos, rAllocation);
-    if (isLayoutEnabled(this))
+    if (isLayoutEnabled(this) && rAllocation.Width() && rAllocation.Height())
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetSizePixel(const Size& rAllocation)
 {
     Window::SetSizePixel(rAllocation);
-    if (isLayoutEnabled(this))
+    if (isLayoutEnabled(this) && rAllocation.Width() && rAllocation.Height())
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetPosPixel(const Point& rAllocPos)
 {
     Window::SetPosPixel(rAllocPos);
-    if (isLayoutEnabled(this))
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), GetOutputSizePixel());
+    Size aAllocation(GetOutputSizePixel());
+    if (isLayoutEnabled(this) && aAllocation.Width() && aAllocation.Height())
+    {
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), aAllocation);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
