@@ -92,7 +92,10 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 
     // formatting of the chart background
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
-    getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
+    if( mrModel.mxShapeProp.is() )
+    {
+        getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
+    }
 
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
