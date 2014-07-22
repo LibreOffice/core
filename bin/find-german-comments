@@ -36,7 +36,7 @@ class Parser:
     """
     def __init__(self):
         self.strip = string.punctuation + " \n"
-        self.text_cat = self.start_text_cat();
+        self.text_cat = self.start_text_cat()
         op = optparse.OptionParser()
         op.set_usage("%prog [options] <rootdir>\n\n" +
             "Searches for german comments in cxx/hxx source files inside a given root\n" +
@@ -174,8 +174,8 @@ class Parser:
                 sys.stderr.write("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
             if valid:
                 if self.options.line_numbers_pos:
-                   sys.stderr.write("%s ... %s positives\n" % (path, str(len(path_linenums))))
-                   return
+                    sys.stderr.write("%s ... %s positives\n" % (path, str(len(path_linenums))))
+                    return
                 if len(path) + (len(path_linenums)*4) > 75:
                     print "%s:\n" % path
                     while(path_linenums):
@@ -187,13 +187,13 @@ class Parser:
                                 path_linenums.remove(path_linenums[0])
                             except IndexError:
                                 i = 10
-                            i+=1
+                            i += 1
                         numline = [str(i) for i in numline]
-                        print "%s%s" %(TABS, ",".join(numline))
+                        print "%s%s" % (TABS, ",".join(numline))
                 else:
                     if self.options.line_numbers:
                         path_linenums = [str(i) for i in path_linenums]
-                        print "%s:%s%s" % (path,"\t"*tab_calc(path),",".join(path_linenums))
+                        print "%s:%s%s" % (path, "\t"*tab_calc(path), ",".join(path_linenums))
 
         elif not self.options.filenames_only:
             for linenum, s in self.get_comments(path):
@@ -210,7 +210,7 @@ class Parser:
                 print f
 
     def first_elem(self, path):
-        lastElem = os.path.dirname(path);
+        lastElem = os.path.dirname(path)
         done = False
         while not done:
             nextElem = os.path.split(lastElem)[0]
@@ -220,11 +220,11 @@ class Parser:
                 done = True
         return lastElem
 
-    def check_source_files(self, dir):
+    def check_source_files(self, directory):
         """
         checks each _tracked_ file in a directory recursively
         """
-        sock = os.popen(r"git ls-files '%s' |egrep '\.(c|h)xx$'" % dir)
+        sock = os.popen(r"git ls-files '%s' |egrep '\.(c|h)xx$'" % directory)
         lines = sock.readlines()
         sock.close()
 
