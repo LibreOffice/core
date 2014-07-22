@@ -139,17 +139,16 @@ namespace dbmm
     class ResultPage : public MacroMigrationPage
     {
     public:
-        ResultPage( MacroMigrationDialog& _rParentDialog );
+        ResultPage(Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
         void            displayMigrationLog( const bool _bSuccessful, const OUString& _rLog );
 
     private:
-        FixedText       m_aChangesLabel;
-        MultiLineEdit   m_aChanges;
-        OUString          m_aSuccessful;
-        OUString          m_aUnsuccessful;
+        FixedText*        m_pSuccessLabel;
+        FixedText*        m_pFailureLabel;
+        VclMultiLineEdit* m_pChanges;
     };
 
 } // namespace dbmm

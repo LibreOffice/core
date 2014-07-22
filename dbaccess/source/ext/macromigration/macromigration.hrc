@@ -52,7 +52,6 @@
 #define FT_CURRENT_PROGRESS_LABEL     8
 #define FT_CURRENT_PROGRESS           9
 #define FT_ALL_PROGRESS_LABEL       10
-#define FT_CHANGES_LABEL            11
 #define FT_OBJECT_COUNT             12
 #define FT_OBJECT_COUNT_PROGRESS    13
 #define FT_MIGRATION_DONE           14
@@ -63,18 +62,12 @@
 #define WND_CURRENT_PROGRESS    1
 #define WND_ALL_PROGRESS        2
 
-//... edits ..............................................................
-
-#define ED_CHANGES              2
-
 //... strings ............................................................
 
 #define STR_STATE_CLOSE_SUB_DOCS    1
 #define STR_STATE_BACKUP_DBDOC      2
 #define STR_STATE_MIGRATE           3
 #define STR_STATE_SUMMARY           4
-#define STR_SUCCESSFUL              5
-#define STR_UNSUCCESSFUL            6
 
 #endif // DBACCESS_MACROMIGRATION_HRC
 

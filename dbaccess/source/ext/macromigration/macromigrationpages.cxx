@@ -266,45 +266,28 @@ namespace dbmm
     }
 
     // ResultPage
-    ResultPage::ResultPage( MacroMigrationDialog& _rParentDialog )
-        :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_SUMMARY ) )
-        ,m_aChangesLabel( this, MacroMigrationResId( FT_CHANGES_LABEL ) )
-        ,m_aChanges     ( this, MacroMigrationResId( ED_CHANGES       ) )
-        ,m_aSuccessful  (       MacroMigrationResId( STR_SUCCESSFUL   ) )
-        ,m_aUnsuccessful(       MacroMigrationResId( STR_UNSUCCESSFUL ) )
+    ResultPage::ResultPage(Window* pParent)
+        : MacroMigrationPage(pParent, "SummaryPage" ,"dbaccess/ui/summarypage.ui")
     {
-        FreeResource();
+        get(m_pChanges, "textview");
+        m_pChanges->set_height_request(GetTextHeight() * 10);
+        m_pChanges->set_width_request(approximate_char_width() * 40);
+        get(m_pSuccessLabel, "success");
+        get(m_pFailureLabel, "failure");
     }
 
-    TabPage* ResultPage::Create( ::svt::RoadmapWizard& _rParentDialog )
+    TabPage* ResultPage::Create(::svt::RoadmapWizard& _rParentDialog)
     {
-        return new ResultPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
+        return new ResultPage(&_rParentDialog);
     }
 
-    void ResultPage::displayMigrationLog( const bool _bSuccessful, const OUString& _rSummary )
+    void ResultPage::displayMigrationLog(const bool _bSuccessful, const OUString& _rSummary)
     {
-        m_aChangesLabel.SetText( _bSuccessful ? m_aSuccessful : m_aUnsuccessful );
-        m_aChanges.SetText( _rSummary );
-
-        // resize m_aChangesLabel and m_aChances as needed for the label text to fit
-        Rectangle aOriginalLabelSize( m_aChangesLabel.GetPosPixel(), m_aChangesLabel.GetSizePixel() );
-        // assume 3 lines, at most
-        Rectangle aNewLabelSize( aOriginalLabelSize );
-        aNewLabelSize.Bottom() = aNewLabelSize.Top() + m_aChangesLabel.LogicToPixel( Size( 0, 3*8 ), MAP_APPFONT ).Height();
-        TextRectInfo aInfo;
-        aNewLabelSize = m_aChangesLabel.GetTextRect( aNewLabelSize, m_aChangesLabel.GetText(), TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK, &aInfo );
-        aNewLabelSize.Bottom() = aNewLabelSize.Top() + m_aChangesLabel.LogicToPixel( Size( 0, aInfo.GetLineCount() * 8 ), MAP_APPFONT ).Height();
-
-        m_aChangesLabel.SetSizePixel( aNewLabelSize.GetSize() );
-
-        long nChangesDiff = aNewLabelSize.GetHeight() - aOriginalLabelSize.GetHeight();
-        Size aChangesSize( m_aChanges.GetSizePixel() );
-        aChangesSize.Height() -= nChangesDiff;
-        m_aChanges.SetSizePixel( aChangesSize );
-
-        Point aChangesPos( m_aChanges.GetPosPixel() );
-        aChangesPos.Y() += nChangesDiff;
-        m_aChanges.SetPosPixel( aChangesPos );
+        if (_bSuccessful)
+            m_pFailureLabel->Hide();
+        else
+            m_pSuccessLabel->Hide();
+        m_pChanges->SetText(_rSummary);
     }
 
 } // namespace dbmm

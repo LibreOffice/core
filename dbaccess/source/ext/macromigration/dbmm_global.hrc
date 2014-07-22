@@ -39,7 +39,6 @@
 //= tab pages
 
 #define TP_MIGRATE          ( RID_DBMM_TAPPAGE_START + 2 )
-#define TP_SUMMARY          ( RID_DBMM_TAPPAGE_START + 3 )
 
 //= strings
 
