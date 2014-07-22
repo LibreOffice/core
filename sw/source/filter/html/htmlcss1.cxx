@@ -1688,7 +1688,7 @@ void SwHTMLParser::NewStyle()
             sType = rOption.GetString();
     }
 
-    bIgnoreRawData = !sType.getLength() &&
+    bIgnoreRawData = sType.getLength() &&
                      !sType.getToken(0,';').equalsAscii(sCSS_mimetype);
 }
 
