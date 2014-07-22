@@ -297,6 +297,7 @@ namespace cmis
 
             // Get the auth credentials
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
+            AuthProvider::setXEnv( xEnv );
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
@@ -315,10 +316,13 @@ namespace cmis
                         ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
                         ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
                 if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
+                {
+                    libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
                     oauth2Data.reset( new libcmis::OAuth2Data(
                         ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
                         ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
                         ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
+                }
 
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
