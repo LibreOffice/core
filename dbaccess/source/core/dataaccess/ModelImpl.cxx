@@ -1055,7 +1055,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         // known SDB level settings
         AsciiPropertyValue( "NoNameLengthLimit",          makeAny( false ) ),
         AsciiPropertyValue( "AppendTableAliasName",       makeAny( false ) ),
-        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( true ) ),
+        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( false ) ),
         AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( true ) ),
         AsciiPropertyValue( "EnableSQL92Check",           makeAny( false ) ),
         AsciiPropertyValue( "BooleanComparisonMode",      makeAny( BooleanComparisonMode::EQUAL_INTEGER ) ),
