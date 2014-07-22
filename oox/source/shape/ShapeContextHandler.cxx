@@ -290,8 +290,16 @@ void SAL_CALL ShapeContextHandler::startFastElement
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
         {
-            FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+            // Get Target for Type = "officeDocument" from _rels/.rels file
+            // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
+            FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxFilterBase, "/"));
+            OUString aOfficeDocumentFragmentPath = rFragmentHandlerRef->getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
+
+            // Get the theme DO NOT  use msRelationFragmentPath for getting theme as for a document there is a single theme in document.xml.rels
+            // and the same is used by header and footer as well.
+            FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, aOfficeDocumentFragmentPath));
             OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "theme" );
+
             if(!aThemeFragmentPath.isEmpty())
             {
                 uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);

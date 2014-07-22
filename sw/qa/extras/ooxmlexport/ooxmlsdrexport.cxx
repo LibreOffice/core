@@ -1762,6 +1762,24 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80894, "TextFrameRotation.docx")
     "rot","16200000");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo80895, "fdo80895.docx")
+{
+    // DML shapes in header and footer were not getting rendered in LO and the same were not preserved after RT.
+    // In actual there was a shape but because of fetching wrong theme for header.xml or footer.xml
+    // resultant shape was with <a:noFill/> prop in <wps:spPr> hence was not visible.
+    // Checking there is a shape in header without <a:noFill/> element.
+
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:noFill",0);
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:noFill",0);
+
+    // Check for fallback (required for MSO-2007)
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "fillcolor", "#4f81bd");
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:fill", "type", "solid");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
