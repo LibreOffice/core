@@ -948,6 +948,9 @@ public:
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return maPageDescs[i]; }
     SwPageDesc& GetPageDesc( sal_uInt16 i ) { return maPageDescs[i]; }
     SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL);
+    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL) const;
+    // Just searches the pointer in the maPageDescs vector!
+    bool        ContainsPageDesc(const SwPageDesc *pDesc, sal_uInt16* pPos = NULL);
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
@@ -965,7 +968,6 @@ public:
         { CopyPageDescHeaderFooterImpl( false, rSrcFmt, rDestFmt ); }
 
     // For Reader
-    SwPageDesc * GetPageDesc( const OUString & rName );
     void ChgPageDesc( const OUString & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
     void DelPageDesc( const OUString & rName, bool bBroadcast = false);

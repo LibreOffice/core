@@ -1419,12 +1419,13 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( rSrcDesc.GetFollow() != &rSrcDesc )
     {
-        SwPageDesc* pFollow = FindPageDesc( rSrcDesc.GetFollow()->GetName() );
+        const SwPageDesc* pSrcFollow = rSrcDesc.GetFollow();
+        SwPageDesc* pFollow = FindPageDesc( pSrcFollow->GetName() );
         if( !pFollow )
         {
             // copy
-            pFollow = MakePageDesc(rSrcDesc.GetFollow()->GetName());
-            CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
+            pFollow = MakePageDesc( pSrcFollow->GetName() );
+            CopyPageDesc( *pSrcFollow, *pFollow );
         }
         rDstDesc.SetFollow( pFollow );
         bNotifyLayout = true;
