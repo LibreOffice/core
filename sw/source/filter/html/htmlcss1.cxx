@@ -89,16 +89,10 @@ static struct SwCSS1ItemIds
 void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
 {
-    sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
-    sal_uInt16 i;
-    for( i=0; i<nPageDescs; i++ )
-        if( pPageDesc == &pDoc->GetPageDesc(i) )
-        {
-            pDoc->ChgPageDesc( i, rNewPageDesc );
-            return;
-        }
-
-    OSL_ENSURE( i<nPageDescs, "Seitenvorlage nicht gefunden" );
+    const SwPageDesc *spd =  pDoc->FindPageDescByName( pPageDesc->GetName() );
+    OSL_ENSURE( pPageDesc != spd, "Seitenvorlage nicht gefunden" );
+    if (pPageDesc == spd)
+        pDoc->ChgPageDescP( rNewPageDesc, const_cast<SwPageDesc*>( pPageDesc ) );
 }
 
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, sal_Bool bNewDoc ) :
