@@ -1257,12 +1257,14 @@ DECLARE_RTFIMPORT_TEST(testFdo77996, "fdo77996.rtf")
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
     CPPUNIT_ASSERT_EQUAL(OUString("Aln Lin (Bei Jing)"), xProps->getAuthor());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("\xe5\x8e\xa6\xe9\x97\xa8\xe9\x92\xa8\xe4\xb8\x9a\xe8\x82\xa1\xe4\xbb\xbd\xe6\x9c\x89\xe9\x99\x90\xe5\x85\xac\xe5\x8f\xb8", 30,
-            RTL_TEXTENCODING_UTF8),
-        xProps->getTitle());
+    OUString aTitle("\xe5\x8e\xa6\xe9\x97\xa8\xe9\x92\xa8\xe4\xb8\x9a\xe8\x82\xa1\xe4\xbb\xbd\xe6\x9c\x89\xe9\x99\x90\xe5\x85\xac\xe5\x8f\xb8", 30,
+            RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aTitle, xProps->getTitle());
     uno::Reference<beans::XPropertySet> xUDProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("jay"), getProperty<OUString>(xUDProps, "Operator"));
+
+    // fdo#80486 also check that the ftnsep doesn't insert paragraph breaks
+    getParagraph(1, aTitle);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47802, "fdo47802.rtf")
