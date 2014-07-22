@@ -525,7 +525,9 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             mLastPageContext = mPageContext;
 
             /* Update layers. */
-            if (rootLayer != null) mUpdated &= rootLayer.update(mPageContext);
+            if (rootLayer != null) {
+                mUpdated &= rootLayer.update(mPageContext);
+            }
             mUpdated &= mBackgroundLayer.update(mScreenContext);
             mUpdated &= mShadowLayer.update(mPageContext);
             updateCheckerboardLayer(mScreenContext);
@@ -533,14 +535,16 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             mUpdated &= mVertScrollLayer.update(mPageContext);
             mUpdated &= mHorizScrollLayer.update(mPageContext);
 
-            for (Layer layer : mExtraLayers)
+            for (Layer layer : mExtraLayers) {
                 mUpdated &= layer.update(mPageContext);
+            }
 
             GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 
             // If a layer update requires further work, schedule another redraw
-            if (!mUpdated)
+            if (!mUpdated) {
                 mView.requestRender();
+            }
 
             PanningPerfAPI.recordFrameTime();
 
@@ -565,8 +569,9 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             Rect pageRect = getPageRect();
             RectF untransformedPageRect = new RectF(0.0f, 0.0f, pageRect.width(),
                     pageRect.height());
-            if (!untransformedPageRect.contains(mView.getController().getViewport()))
+            if (!untransformedPageRect.contains(mView.getController().getViewport())) {
                 mShadowLayer.draw(mPageContext);
+            }
 
             /* Draw the checkerboard. */
             setScissorRect();
@@ -591,22 +596,24 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             LayerController controller = mView.getController();
 
             /* Draw any extra layers that were added (likely plugins) */
-            for (Layer layer : mExtraLayers)
+            for (Layer layer : mExtraLayers) {
                 layer.draw(mPageContext);
+            }
 
             /* Draw the vertical scrollbar. */
             IntSize screenSize = new IntSize(controller.getViewportSize());
-            if (pageRect.height() > screenSize.height)
+            if (pageRect.height() > screenSize.height) {
                 mVertScrollLayer.draw(mPageContext);
+            }
 
             /* Draw the horizontal scrollbar. */
-            if (pageRect.width() > screenSize.width)
+            if (pageRect.width() > screenSize.width) {
                 mHorizScrollLayer.draw(mPageContext);
+            }
 
             /* Measure how much of the screen is checkerboarding */
             Layer rootLayer = controller.getRoot();
-            if ((rootLayer != null) &&
-                    (mProfileRender || PanningPerfAPI.isRecordingCheckerboard())) {
+            if (rootLayer != null && (mProfileRender || PanningPerfAPI.isRecordingCheckerboard())) {
                 // Find out how much of the viewport area is valid
                 Rect viewport = RectUtils.round(mPageContext.viewport);
                 Region validRegion = rootLayer.getValidRegion(mPageContext);
@@ -622,10 +629,10 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                     //     source, but is not mentioned in the Android documentation,
                     //     and so is liable to change.
                     //     If it does change, this code will need to be reevaluated.
-                    Rect r = new Rect();
+                    Rect rect = new Rect();
                     int checkerboardArea = 0;
-                    for (RegionIterator i = new RegionIterator(validRegion); i.next(r);) {
-                        checkerboardArea += r.width() * r.height();
+                    for (RegionIterator i = new RegionIterator(validRegion); i.next(rect);) {
+                        checkerboardArea += rect.width() * rect.height();
                     }
 
                     checkerboard = checkerboardArea / (float)screenArea;
@@ -658,8 +665,9 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         public void endDrawing() {
             // If a layer update requires further work, schedule another redraw
-            if (!mUpdated)
+            if (!mUpdated) {
                 mView.requestRender();
+            }
 
             PanningPerfAPI.recordFrameTime();
 

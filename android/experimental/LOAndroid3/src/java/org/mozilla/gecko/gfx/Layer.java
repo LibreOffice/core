@@ -69,8 +69,7 @@ public abstract class Layer {
      */
     public final boolean update(RenderContext context) {
         if (mTransactionLock.isHeldByCurrentThread()) {
-            throw new RuntimeException("draw() called while transaction lock held by this " +
-                    "thread?!");
+            throw new RuntimeException("draw() called while transaction lock held by this thread?!");
         }
 
         if (mTransactionLock.tryLock()) {

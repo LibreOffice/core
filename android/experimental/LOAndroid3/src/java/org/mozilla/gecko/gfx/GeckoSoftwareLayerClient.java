@@ -76,9 +76,8 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
         Log.i(LOGTAG, "Creating MultiTileLayer");
         if(mTileLayer == null) {
             mTileLayer = new MultiTileLayer(TILE_SIZE);
+            mLayerController.setRoot(mTileLayer);
         }
-
-        mLayerController.setRoot(mTileLayer);
 
         // Force a resize event to be sent because the results of this
         // are different depending on what tile system we're using
