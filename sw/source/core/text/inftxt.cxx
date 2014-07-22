@@ -149,7 +149,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
 
     pSpace = &rAttrSet.GetLineSpacing();
     nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
-    nDefTabStop = MSHRT_MAX;
+    nDefTabStop = USHRT_MAX;
 }
 
 void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
@@ -919,7 +919,7 @@ void SwTxtPaintInfo::DrawSpecial(const SwLinePortion &rPor, sal_Unicode cChar, c
 {
     if( OnWin() )
     {
-        KSHORT nOldWidth = rPor.Width();
+        sal_uInt16 nOldWidth = rPor.Width();
         OUString sChar( cChar );
         SwPosSize aSize( GetTxtSize( sChar ) );
 
@@ -959,7 +959,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
-        KSHORT nOldWidth = rPor.Width();
+        sal_uInt16 nOldWidth = rPor.Width();
         ((SwLinePortion&)rPor).Width( LINE_BREAK_WIDTH );
 
         SwRect aRect;
@@ -1207,7 +1207,7 @@ void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 }
 
 void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
-                                  const MSHORT nWhich ) const
+                                  const sal_uInt16 nWhich ) const
 {
     if( OnWin() && !IsMulti() )
     {
@@ -1455,7 +1455,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nLeft = rInf.nLeft;
     nRight = rInf.nRight;
     nFirst = rInf.nLeft;
-    nRealWidth = KSHORT(nActWidth);
+    nRealWidth = sal_uInt16(nActWidth);
     nWidth = nRealWidth;
     nLineHeight = 0;
     nLineNettoHeight = 0;
@@ -1492,7 +1492,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
 
 bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
 {
-    const KSHORT nHeight = pCurr->GetRealHeight();
+    const sal_uInt16 nHeight = pCurr->GetRealHeight();
     for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )
     {
         if( pPor->IsFtnPortion() && nHeight > ((SwFtnPortion*)pPor)->Orig() )

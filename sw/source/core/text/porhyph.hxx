@@ -58,8 +58,8 @@ public:
 class SwSoftHyphPortion : public SwHyphPortion
 {
     bool    bExpand;
-    KSHORT  nViewWidth;
-    KSHORT  nHyphWidth;
+    sal_uInt16  nViewWidth;
+    sal_uInt16  nHyphWidth;
 
 public:
     SwSoftHyphPortion();
@@ -71,7 +71,7 @@ public:
     inline void SetExpand( const bool bNew ) { bExpand = bNew; }
     bool IsExpand() const { return bExpand; }
 
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;

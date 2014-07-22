@@ -149,7 +149,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         pRedln->Clear( pFnt );
         if( !bParaFont )
-            nChgCnt = nChgCnt + pRedln->Seek( *pFnt, 0, MSHRT_MAX );
+            nChgCnt = nChgCnt + pRedln->Seek( *pFnt, 0, USHRT_MAX );
         else
             pRedln->Reset();
     }
@@ -438,7 +438,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
     {
         long nMin, nMax;
         SwHTMLTableLayout *pLayout = 0;
-        MSHORT nWhich = pNd->Which();
+        sal_uInt16 nWhich = pNd->Which();
         if( RES_DRAWFRMFMT != nWhich )
         {
             // Does the frame contain a table at the start or the end?
@@ -608,7 +608,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     aIter.SeekAndChgAttrIter( nIdx, pOut );
     sal_Int32 nLen = m_Text.getLength();
     long nAktWidth = 0;
-    MSHORT nAdd = 0;
+    sal_uInt16 nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
     while( nIdx < nLen )
     {
@@ -701,12 +701,12 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                             {
                                 // This is a hack for the wollowing situation: In the paragraph there's a
                                 // text frame with relative size. Then let's take 0.5 cm as minimum width
-                                // and KSHRT_MAX as maximum width
+                                // and USHRT_MAX as maximum width
                                 // It were cleaner and maybe necessary later on to iterate over the content
                                 // of the text frame and call GetMinMaxSize recursively
                                 nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
-                                if( (long)rMax < KSHRT_MAX )
-                                    rMax = KSHRT_MAX;
+                                if( (long)rMax < USHRT_MAX )
+                                    rMax = USHRT_MAX;
                             }
                             else
                                 nAktWidth = pFrmFmt->GetFrmSize().GetWidth();

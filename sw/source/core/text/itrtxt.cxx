@@ -62,7 +62,7 @@ void SwTxtIter::Init()
     nLineNr = 1;
 }
 
-void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
+void SwTxtIter::CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight ) const
 {
     rHeight = GetLineHeight();
     rAscent = pCurr->GetAscent() + rHeight - pCurr->Height();

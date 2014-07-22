@@ -313,7 +313,7 @@ bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     SWAP_IF_SWAPPED( pFrm )
 
     bool bRet = true;
-    MSHORT nOldOrphans = nOrphLines;
+    sal_uInt16 nOldOrphans = nOrphLines;
     if( bHasToFit )
         nOrphLines = 0;
     rLine.Bottom();
@@ -459,7 +459,7 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     // bei uns durchaus mehrere Zeilen ergeben koennten.
     // Dafuer behaelt CalcFollow solange die Kontrolle, bis der Follow alle
     // notwendigen Zeilen bekommen hat.
-    MSHORT nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
+    sal_uInt16 nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
     // #i91421#
@@ -487,10 +487,10 @@ bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool b
 
     // We expect that rLine is set to the last line
     OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
-    MSHORT nLineCnt = rLine.GetLineNr();
+    sal_uInt16 nLineCnt = rLine.GetLineNr();
 
     // First satisfy the Orphans-rule and the wish for initials ...
-    const MSHORT nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );
+    const sal_uInt16 nMinLines = std::max( GetOrphansLines(), rLine.GetDropLines() );
     if ( nLineCnt < nMinLines )
         return false;
 

@@ -75,7 +75,7 @@ public:
     /** line break. This method is called whenever a line break in the
      * layout occurs.
      */
-    virtual void LineBreak(KSHORT nWidth) = 0;
+    virtual void LineBreak(sal_uInt16 nWidth) = 0;
 
     /** skip characters. The SwTxtFrame may only display partially
      * display a certain paragraph (e.g. when the paragaph is split

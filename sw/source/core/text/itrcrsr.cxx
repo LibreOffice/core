@@ -256,7 +256,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     break;
                     case SVX_LINE_SPACE_MIN:
                     {
-                        if( nFirstLineOfs < KSHORT( pSpace->GetLineHeight() ) )
+                        if( nFirstLineOfs < sal_uInt16( pSpace->GetLineHeight() ) )
                             nFirstLineOfs = pSpace->GetLineHeight();
                         break;
                     }
@@ -281,7 +281,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                         nTmp /= 100;
                         if( !nTmp )
                             ++nTmp;
-                        nFirstLineOfs = (KSHORT)nTmp;
+                        nFirstLineOfs = (sal_uInt16)nTmp;
                         break;
                     }
                     case SVX_INTER_LINE_SPACE_FIX:
@@ -416,14 +416,14 @@ bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
-    KSHORT nX = 0;
-    KSHORT nLast = 0;
+    sal_uInt16 nX = 0;
+    sal_uInt16 nLast = 0;
     SwLinePortion *pPor = pCurr->GetFirstPortion();
 
-    KSHORT nTmpHeight, nTmpAscent;
+    sal_uInt16 nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-    KSHORT nPorHeight = nTmpHeight;
-    KSHORT nPorAscent = nTmpAscent;
+    sal_uInt16 nPorHeight = nTmpHeight;
+    sal_uInt16 nPorAscent = nTmpAscent;
 
     // Search for the last Text/EndPortion of the line
     while( pPor )
@@ -473,7 +473,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     SwTxtSizeInfo aInf( GetInfo(), &aText, nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
-    KSHORT nTmpAscent, nTmpHeight;  // Line height
+    sal_uInt16 nTmpAscent, nTmpHeight;  // Line height
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
     const Point aCharPos;
@@ -499,15 +499,15 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     }
     else
     {
-        KSHORT nPorHeight = nTmpHeight;
-        KSHORT nPorAscent = nTmpAscent;
+        sal_uInt16 nPorHeight = nTmpHeight;
+        sal_uInt16 nPorAscent = nTmpAscent;
         SwTwips nX = 0;
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = 0;
         SwTwips nLastBidiPorWidth = 0;
         std::deque<sal_uInt16>* pKanaComp = pCurr->GetpKanaComp();
-        MSHORT nSpaceIdx = 0;
+        sal_uInt16 nSpaceIdx = 0;
         size_t nKanaIdx = 0;
         long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
 
@@ -945,7 +945,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                 SwFldPortion *pTmp = (SwFldPortion*)pPor;
                 while( pTmp->HasFollow() && pTmp->GetExp().isEmpty() )
                 {
-                    KSHORT nAddX = pTmp->Width();
+                    sal_uInt16 nAddX = pTmp->Width();
                     SwLinePortion *pNext = pTmp->GetPortion();
                     while( pNext && !pNext->InFldGrp() )
                     {
@@ -1281,7 +1281,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // Until here everything in document coordinates.
     x -= nLeftMargin;
 
-    KSHORT nX = KSHORT( x );
+    sal_uInt16 nX = sal_uInt16( x );
 
     // If there are attribute changes in the line, search for the paragraph,
     // in which nX is situated.
@@ -1292,7 +1292,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     std::deque<sal_uInt16> *pKanaComp = pCurr->GetpKanaComp();
     sal_Int32 nOldIdx = GetInfo().GetIdx();
-    MSHORT nSpaceIdx = 0;
+    sal_uInt16 nSpaceIdx = 0;
     size_t nKanaIdx = 0;
     long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
     short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
@@ -1300,7 +1300,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // nWidth is the width of the line, or the width of
     // the paragraph with the font change, in which nX is situated.
 
-    KSHORT nWidth = pPor->Width();
+    sal_uInt16 nWidth = pPor->Width();
     if ( pCurr->IsSpaceAdd() || pKanaComp )
     {
         if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -1330,7 +1330,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    KSHORT nWidth30;
+    sal_uInt16 nWidth30;
     if ( pPor->IsPostItsPortion() )
         nWidth30 = 30 + pPor->GetViewWidth( GetInfo() ) / 2;
     else
@@ -1460,7 +1460,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 --nCurrStart;
             else
             {
-                KSHORT nHeight = pPor->Height();
+                sal_uInt16 nHeight = pPor->Height();
                 if ( !nHeight || nHeight > nWidth )
                     nHeight = nWidth;
                 if( nChgNode && nWidth - nHeight/2 > nX )
@@ -1480,7 +1480,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                      ( pPor->IsMultiPortion() &&
                        ((SwMultiPortion*)pPor)->IsBidi()  ) )
                 {
-                    KSHORT nHeight = 0;
+                    sal_uInt16 nHeight = 0;
                     if( !bFieldInfo )
                     {
                         nHeight = pPor->Height();
@@ -1567,7 +1567,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nTmpY = pPor->Height() - nTmpY;
                 if( nTmpY < 0 )
                     nTmpY = 0;
-                nX = (KSHORT)nTmpY;
+                nX = (sal_uInt16)nTmpY;
             }
 
             if( ((SwMultiPortion*)pPor)->HasBrackets() )

@@ -25,17 +25,17 @@
 // Compared to the SV sizes SwPosSize is always positive
 class SwPosSize
 {
-    KSHORT nWidth;
-    KSHORT nHeight;
+    sal_uInt16 nWidth;
+    sal_uInt16 nHeight;
 public:
-    inline SwPosSize( const KSHORT nW = 0, const KSHORT nH = 0 )
+    inline SwPosSize( const sal_uInt16 nW = 0, const sal_uInt16 nH = 0 )
         : nWidth(nW), nHeight(nH) { }
     inline SwPosSize( const Size &rSize )
-        : nWidth(KSHORT(rSize.Width())), nHeight(KSHORT(rSize.Height())){ }
-    inline KSHORT Height() const { return nHeight; }
-    inline void Height( const KSHORT nNew ) { nHeight = nNew; }
-    inline KSHORT Width() const { return nWidth; }
-    inline void Width( const KSHORT nNew ) { nWidth = nNew; }
+        : nWidth(sal_uInt16(rSize.Width())), nHeight(sal_uInt16(rSize.Height())){ }
+    inline sal_uInt16 Height() const { return nHeight; }
+    inline void Height( const sal_uInt16 nNew ) { nHeight = nNew; }
+    inline sal_uInt16 Width() const { return nWidth; }
+    inline void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
 
     inline Size SvLSize() const { return Size( nWidth, nHeight ); }
     inline void SvLSize( const Size &rSize );
@@ -53,20 +53,20 @@ inline SwPosSize &SwPosSize::operator=(const SwPosSize &rSize )
 
 inline void SwPosSize::SvLSize( const Size &rSize )
 {
-    nWidth  = KSHORT(rSize.Width());
-    nHeight = KSHORT(rSize.Height());
+    nWidth  = sal_uInt16(rSize.Width());
+    nHeight = sal_uInt16(rSize.Height());
 }
 
 inline void SwPosSize::SvXSize( const Size &rSize )
 {
-    nHeight = KSHORT(rSize.Width());
-    nWidth = KSHORT(rSize.Height());
+    nHeight = sal_uInt16(rSize.Width());
+    nWidth = sal_uInt16(rSize.Height());
 }
 
 inline SwPosSize &SwPosSize::operator=( const Size &rSize )
 {
-    nWidth  = KSHORT(rSize.Width());
-    nHeight = KSHORT(rSize.Height());
+    nWidth  = sal_uInt16(rSize.Width());
+    nHeight = sal_uInt16(rSize.Height());
     return *this;
 }
 

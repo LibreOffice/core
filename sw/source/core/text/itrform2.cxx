@@ -135,7 +135,7 @@ void SwTxtFormatter::Insert( SwLineLayout *pLay )
         pCurr = pLay;
 }
 
-KSHORT SwTxtFormatter::GetFrmRstHeight() const
+sal_uInt16 SwTxtFormatter::GetFrmRstHeight() const
 {
     // We want the rest height relative to the page.
     // If we're in a table, then pFrm->GetUpper() is not the page.
@@ -149,7 +149,7 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
     if( 0 > nHeight )
         return pCurr->Height();
     else
-        return KSHORT( nHeight );
+        return sal_uInt16( nHeight );
 }
 
 SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
@@ -277,7 +277,7 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
     {
         if( pPor->InTxtGrp() && !pPor->InExpGrp() )
         {
-            MSHORT nOldWhich = pCurr->GetWhichPor();
+            sal_uInt16 nOldWhich = pCurr->GetWhichPor();
             *(SwLinePortion*)pCurr = *pPor;
             pCurr->SetPortion( pPor->GetPortion() );
             pCurr->SetWhichPor( nOldWhich );
@@ -1493,8 +1493,8 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
 
     // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
     // und auch bei geaendertem Ascent (Absenken der Grundlinie).
-    const KSHORT nOldHeight = pCurr->Height();
-    const KSHORT nOldAscent = pCurr->GetAscent();
+    const sal_uInt16 nOldHeight = pCurr->Height();
+    const sal_uInt16 nOldAscent = pCurr->GetAscent();
 
     pCurr->SetEndHyph( false );
     pCurr->SetMidHyph( false );
@@ -1574,7 +1574,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
         if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetPortion() &&
             pCurr->Height() > pPorTmp->Height())))
         {
-            KSHORT nTmpAscent, nTmpHeight;
+            sal_uInt16 nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
             AlignFlyInCntBase( Y() + long( nTmpAscent ) );
             pCurr->CalcLine( *this, GetInfo() );
@@ -1691,7 +1691,7 @@ void SwTxtFormatter::RecalcRealHeight()
 
 void SwTxtFormatter::CalcRealHeight( bool bNewLine )
 {
-    KSHORT nLineHeight = pCurr->Height();
+    sal_uInt16 nLineHeight = pCurr->Height();
     pCurr->SetClipping( false );
 
     SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
@@ -1707,7 +1707,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
         while ( pCurr->Height() > nLineHeight )
             nLineHeight = nLineHeight + nLineDist;
 
-        KSHORT nAsc = pCurr->GetAscent() +
+        sal_uInt16 nAsc = pCurr->GetAscent() +
                       ( bRubyTop ?
                        ( nLineHeight - pCurr->Height() + nRubyHeight ) / 2 :
                        ( nLineHeight - pCurr->Height() - nRubyHeight ) / 2 );
@@ -1754,11 +1754,11 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                             nTmp /= 100;
                             if( !nTmp )
                                 ++nTmp;
-                            nLineHeight = (KSHORT)nTmp;
+                            nLineHeight = (sal_uInt16)nTmp;
                             /*
                             //@TODO figure out how WW maps ascent and descent
                             //in case of prop  line spacing <100%
-                            KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                            sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
                             if( nAsc < pCurr->GetAscent() ||
                                 nLineHeight - nAsc < pCurr->Height() -
                                 pCurr->GetAscent() )
@@ -1772,14 +1772,14 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                 break;
                 case SVX_LINE_SPACE_MIN:
                 {
-                    if( nLineHeight < KSHORT( pSpace->GetLineHeight() ) )
+                    if( nLineHeight < sal_uInt16( pSpace->GetLineHeight() ) )
                         nLineHeight = pSpace->GetLineHeight();
                     break;
                 }
                 case SVX_LINE_SPACE_FIX:
                 {
                     nLineHeight = pSpace->GetLineHeight();
-                    KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                    sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
                     if( nAsc < pCurr->GetAscent() ||
                         nLineHeight - nAsc < pCurr->Height() - pCurr->GetAscent() )
                         pCurr->SetClipping( true );
@@ -1807,7 +1807,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                         nTmp /= 100;
                         if( !nTmp )
                             ++nTmp;
-                        nLineHeight = (KSHORT)nTmp;
+                        nLineHeight = (sal_uInt16)nTmp;
                         break;
                     }
                     case SVX_INTER_LINE_SPACE_FIX:
@@ -1819,7 +1819,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                 }
         }
 #if OSL_DEBUG_LEVEL > 1
-        KSHORT nDummy = nLineHeight + 1;
+        sal_uInt16 nDummy = nLineHeight + 1;
         (void)nDummy;
 #endif
 
@@ -1830,7 +1830,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
             if ( bVert )
                 nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
             nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
-            KSHORT nDiff = KSHORT( nTmpY % RegDiff() );
+            sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
         }
@@ -1869,7 +1869,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.Right( nTmpRight );
     rInf.First( nTmpFirst );
 
-    rInf.RealWidth( KSHORT(rInf.Right()) - KSHORT(GetLeftMargin()) );
+    rInf.RealWidth( sal_uInt16(rInf.Right()) - sal_uInt16(GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
     if( ((SwTxtFormatter*)this)->GetRedln() )
     {
@@ -1896,7 +1896,7 @@ bool SwTxtFormatter::CalcOnceMore()
 {
     if( pDropFmt )
     {
-        const KSHORT nOldDrop = GetDropHeight();
+        const sal_uInt16 nOldDrop = GetDropHeight();
         CalcDropHeight( pDropFmt->GetLines() );
         bOnceMore = nOldDrop != GetDropHeight();
     }
@@ -2026,8 +2026,8 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    KSHORT nTmpHeight = pCurrent->GetRealHeight();
-    KSHORT nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
+    sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
+    sal_uInt16 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
     objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
     if( GetMulti() )
     {
@@ -2219,9 +2219,9 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     {
                         // To be evaluated during reformat of this line:
                         // RealHeight including spacing
-                        rInf.SetLineHeight( KSHORT(nHeight) );
+                        rInf.SetLineHeight( sal_uInt16(nHeight) );
                         // Height without extra spacing
-                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                        rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
                         return true;
                     }
                 }
@@ -2231,8 +2231,8 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                 // The fly portion is not intersected by a fly anymore
                 if ( ! aInter.IsOver( aLine ) )
                 {
-                    rInf.SetLineHeight( KSHORT(nHeight) );
-                    rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                    rInf.SetLineHeight( sal_uInt16(nHeight) );
+                    rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
                     return true;
                 }
                 else
@@ -2246,8 +2246,8 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     if( ! aInter.HasArea() ||
                         ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
                     {
-                        rInf.SetLineHeight( KSHORT(nHeight) );
-                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                        rInf.SetLineHeight( sal_uInt16(nHeight) );
+                        rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
                         return true;
                     }
                 }
@@ -2386,7 +2386,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             // created: here and in MakeFlyDummies.
             // IsDummy() is evaluated in IsFirstTxtLine(), when moving lines
             // and in relation with DropCaps.
-            pFly->Height( KSHORT(aInter.Height()) );
+            pFly->Height( sal_uInt16(aInter.Height()) );
 
             // nNextTop now contains the margin's bottom edge, which we avoid
             // or the next margin's top edge, which we need to respect.
@@ -2398,11 +2398,11 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             if( nNextTop > aInter.Bottom() )
             {
                 SwTwips nH = nNextTop - aInter.Top();
-                if( nH < KSHRT_MAX )
-                    pFly->Height( KSHORT( nH ) );
+                if( nH < USHRT_MAX )
+                    pFly->Height( sal_uInt16( nH ) );
             }
             if( nAscent < pFly->Height() )
-                pFly->SetAscent( KSHORT(nAscent) );
+                pFly->SetAscent( sal_uInt16(nAscent) );
             else
                 pFly->SetAscent( pFly->Height() );
         }
@@ -2416,9 +2416,9 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             }
             else
             {
-                pFly->Height( KSHORT(aInter.Height()) );
+                pFly->Height( sal_uInt16(aInter.Height()) );
                 if( nAscent < pFly->Height() )
-                    pFly->SetAscent( KSHORT(nAscent) );
+                    pFly->SetAscent( sal_uInt16(nAscent) );
                 else
                     pFly->SetAscent( pFly->Height() );
             }
@@ -2492,7 +2492,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     // we use this one when calculating the base, or the frame would be positioned
     // too much to the top, sliding down after all causing a repaint in an area
     // he actually never was in.
-    KSHORT nAscent = 0;
+    sal_uInt16 nAscent = 0;
 
     const bool bTxtFrmVertical = GetInfo().GetTxtFrm()->IsVertical();
 

@@ -40,7 +40,7 @@ SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
     SetWhichPor( POR_ISOTOX );
 }
 
-KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible

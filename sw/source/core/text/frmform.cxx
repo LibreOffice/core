@@ -55,14 +55,14 @@
 
 class FormatLevel
 {
-    static MSHORT nLevel;
+    static sal_uInt16 nLevel;
 public:
     inline FormatLevel()  { ++nLevel; }
     inline ~FormatLevel() { --nLevel; }
-    inline MSHORT GetLevel() const { return nLevel; }
+    inline sal_uInt16 GetLevel() const { return nLevel; }
     static bool LastLevel() { return 10 < nLevel; }
 };
-MSHORT FormatLevel::nLevel = 0;
+sal_uInt16 FormatLevel::nLevel = 0;
 
 void ValidateTxt( SwFrm *pFrm )     // Friend of frame
 {
@@ -1114,8 +1114,8 @@ bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     const SwLineLayout *pOldCur = rLine.GetCurr();
     const sal_Int32 nOldLen    = pOldCur->GetLen();
-    const KSHORT nOldAscent = pOldCur->GetAscent();
-    const KSHORT nOldHeight = pOldCur->Height();
+    const sal_uInt16 nOldAscent = pOldCur->GetAscent();
+    const sal_uInt16 nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
@@ -1575,7 +1575,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         return;
 
     // If necessary the pPara
-    KSHORT nOld  = ((const SwTxtMargin&)rLine).GetDropHeight();
+    sal_uInt16 nOld  = ((const SwTxtMargin&)rLine).GetDropHeight();
     bool bShrink = false;
     bool bGrow   = false;
     bool bGoOn   = rLine.IsOnceMore();
@@ -1594,7 +1594,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         bGoOn = rLine.IsOnceMore();
         if( bGoOn )
         {
-            const KSHORT nNew = ((const SwTxtMargin&)rLine).GetDropHeight();
+            const sal_uInt16 nNew = ((const SwTxtMargin&)rLine).GetDropHeight();
             if( nOld == nNew )
                 bGoOn = false;
             else
@@ -1869,7 +1869,7 @@ bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
     // nStopAt allows CV to alter it
-    static MSHORT nStopAt = 0;
+    static sal_uInt16 nStopAt = 0;
     if( nStopAt == GetFrmId() )
     {
         int i = GetFrmId();

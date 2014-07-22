@@ -72,7 +72,7 @@ class SwRedlineItr
 
     void _Clear( SwFont* pFnt );
     bool _ChkSpecialUnderline() const;
-    void FillHints( MSHORT nAuthor, RedlineType_t eType );
+    void FillHints( sal_uInt16 nAuthor, RedlineType_t eType );
     short _Seek( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld );
     sal_Int32 _GetNextRedln( sal_Int32 nNext );
     short EnterExtend( SwFont& rFnt, sal_Int32 nNew )

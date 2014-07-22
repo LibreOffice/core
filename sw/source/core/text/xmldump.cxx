@@ -175,7 +175,7 @@ class XmlPortionDumper:public SwPortionHandler
         ofs += nLength;
     }
 
-    virtual void LineBreak( KSHORT nWidth ) SAL_OVERRIDE
+    virtual void LineBreak( sal_uInt16 nWidth ) SAL_OVERRIDE
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
         if (nWidth > 0)

@@ -134,11 +134,11 @@ class SwTxtFormatter : public SwTxtPainter
     void InsertPortion( SwTxtFormatInfo &rInf, SwLinePortion *pPor ) const;
 
     // Guess height for the DropPortion
-    void GuessDropHeight( const MSHORT nLines );
+    void GuessDropHeight( const sal_uInt16 nLines );
 
 public:
     // Calculate the height for the DropPortion
-    void CalcDropHeight( const MSHORT nLines );
+    void CalcDropHeight( const sal_uInt16 nLines );
 
     // Calculates the paragraphs bottom, takes anchored objects within it into
     // account which have a wrap setting of "wrap at 1st paragraph"
@@ -188,7 +188,7 @@ public:
     void Insert( SwLineLayout *pLine );
 
     // The remaining height to the page border
-    KSHORT GetFrmRstHeight() const;
+    sal_uInt16 GetFrmRstHeight() const;
 
     // How wide would you be without any bounds (Flys etc.)?
     SwTwips _CalcFitToContent( );

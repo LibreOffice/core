@@ -79,7 +79,7 @@ bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
     long nWidth = pFrm->Prt().Width();
     nWidth *= nPercent;
     nWidth /= 100;
-    return KSHORT(nWidth) <= pLay->Width();
+    return sal_uInt16(nWidth) <= pLay->Width();
 }
 
 // Where does the text start (without whitespace)? (document global)
@@ -193,7 +193,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 
                 if( nPos < aLine.GetEnd() )
                 {
-                    MSHORT nOff = !bWithLineBreak && CH_BREAK ==
+                    sal_uInt16 nOff = !bWithLineBreak && CH_BREAK ==
                                 aLine.GetInfo().GetChar( aLine.GetEnd() - 1 )
                                 ? 1 : 0;
                     pPam = AddPam( pPam, pFrm, nPos, aLine.GetEnd() - nPos - nOff );

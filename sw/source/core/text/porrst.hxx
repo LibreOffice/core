@@ -42,8 +42,8 @@ public:
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -97,12 +97,12 @@ public:
 // The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTxtPortion
 {
-    KSHORT nInnerWidth;
+    sal_uInt16 nInnerWidth;
 public:
     inline SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
         { SetWhichPor( POR_HNG );  SetLen( 1 ); Height( aSize.Height() ); }
 
-    inline KSHORT GetInnerWidth() const { return nInnerWidth; }
+    inline sal_uInt16 GetInnerWidth() const { return nInnerWidth; }
 };
 
 // Used to hide text
@@ -134,7 +134,7 @@ public:
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo& rInf ) const SAL_OVERRIDE;
 };
 
 #endif

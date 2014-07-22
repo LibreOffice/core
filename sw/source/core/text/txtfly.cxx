@@ -130,11 +130,11 @@ SwContourCache::SwContourCache() :
 
 SwContourCache::~SwContourCache()
 {
-    for( MSHORT i = 0; i < nObjCnt; delete pTextRanger[ i++ ] )
+    for( sal_uInt16 i = 0; i < nObjCnt; delete pTextRanger[ i++ ] )
         ;
 }
 
-void SwContourCache::ClrObject( MSHORT nPos )
+void SwContourCache::ClrObject( sal_uInt16 nPos )
 {
     assert(pTextRanger[nPos] && "ClrObject: Already cleared. Good Bye!");
     nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
@@ -149,7 +149,7 @@ void SwContourCache::ClrObject( MSHORT nPos )
 void ClrContourCache( const SdrObject *pObj )
 {
     if( pContourCache && pObj )
-        for( MSHORT i = 0; i < pContourCache->GetCount(); ++i )
+        for( sal_uInt16 i = 0; i < pContourCache->GetCount(); ++i )
             if( pObj == pContourCache->GetObject( i ) )
             {
                 pContourCache->ClrObject( i );
@@ -161,7 +161,7 @@ void ClrContourCache()
 {
     if( pContourCache )
     {
-        for( MSHORT i = 0; i < pContourCache->GetCount();
+        for( sal_uInt16 i = 0; i < pContourCache->GetCount();
              delete pContourCache->pTextRanger[ i++ ] )
              ;
         pContourCache->nObjCnt = 0;
@@ -208,7 +208,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     const long nXPos, const bool bRight )
 {
     SwRect aRet;
-    MSHORT nPos = 0; // Suche im Cache ...
+    sal_uInt16 nPos = 0; // Suche im Cache ...
     while( nPos < GetCount() && pObj != pSdrObj[ nPos ] )
         ++nPos;
     if( GetCount() == nPos ) // nicht gefunden
@@ -281,10 +281,10 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
     LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
 
-    MSHORT nCount;
+    sal_uInt16 nCount;
     if( 0 != ( nCount = pTmp->size() ) )
     {
-        MSHORT nIdx = 0;
+        sal_uInt16 nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
             ++nIdx;
         bool bOdd = (nIdx % 2);
@@ -434,7 +434,7 @@ bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
     if( pSorted ) // bOn actually makes sure that we have objects on the side,
                   // but who knows who deleted somehting in the meantime?
     {
-        for ( MSHORT i = 0; i < pSorted->Count(); ++i )
+        for ( sal_uInt16 i = 0; i < pSorted->Count(); ++i )
         {
             const SwAnchoredObject* pObj = (*pSorted)[i];
 
@@ -503,8 +503,8 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
-        for( MSHORT i = 0; i < nCount; ++i )
+        sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        for( sal_uInt16 i = 0; i < nCount; ++i )
         {
             // #i68520#
             const SwAnchoredObject* pTmpAnchoredObj = (*mpAnchoredObjList)[i];
@@ -568,7 +568,7 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     {
         // What a huge effort ...
         SwSaveClip aClipVout( rInf.GetpOut() );
-        for( MSHORT i = 0; i < aRegion.size(); ++i )
+        for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
         {
             SwRect &rRect = aRegion[i];
             if( rRect != aRegion.GetOrigin() )
@@ -592,8 +592,8 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
-        for( MSHORT i = 0; i < nCount; ++i )
+        sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        for( sal_uInt16 i = 0; i < nCount; ++i )
         {
             // #i68520#
             const SwAnchoredObject* pAnchoredObjTmp = (*mpAnchoredObjList)[i];
@@ -635,7 +635,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         }
     }
 
-    for( MSHORT i = 0; i < aRegion.size(); ++i )
+    for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
     {
         if ( bNoGraphic )
         {

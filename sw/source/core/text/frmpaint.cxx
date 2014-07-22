@@ -69,7 +69,7 @@ class SwExtraPainter
     SwTwips nX;
     SwTwips nRedX;
     sal_uLong nLineNr;
-    MSHORT nDivider;
+    sal_uInt16 nDivider;
     bool bGoLeft;
     bool bLineNum;
     inline bool IsClipChg() { return aClip.IsChg(); }
@@ -110,7 +110,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
         if( aRect.Bottom() > nBottom )
             aRect.Bottom( nBottom );
     }
-    MSHORT nVirtPageNum = 0;
+    sal_uInt16 nVirtPageNum = 0;
     if( bLineNum )
     {
         /* Initializes the Members necessary for line numbering:
@@ -371,7 +371,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                             if( bLineNum &&
                                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
                             {
-                                KSHORT nTmpHeight, nTmpAscent;
+                                sal_uInt16 nTmpHeight, nTmpAscent;
                                 aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
                                 aExtra.PaintExtra( aLine.Y(), nTmpAscent,
                                     nTmpHeight, bRed );
@@ -387,7 +387,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            if ( MSHRT_MAX == pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) )
+            if ( USHRT_MAX == pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) )
                 bRedLine = false;
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
@@ -485,8 +485,8 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
             if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
             {
-                MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
-                if( MSHRT_MAX != nRedlPos )
+                sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+                if( USHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init(  rTxtNode.GetSwAttrSet(),

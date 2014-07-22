@@ -36,7 +36,7 @@ protected:
     SwFont  *pFnt;                  // For multi-line fields
     sal_Int32 nNextOffset;         // Offset of the follow in the original string
     sal_Int32 nNextScriptChg;
-    KSHORT  nViewWidth;             // Screen width for empty fields
+    sal_uInt16  nViewWidth;             // Screen width for empty fields
     bool bFollow : 1;           // 2nd or later part of a field
     bool bLeft : 1;             // Used by SwNumberPortion
     bool bHide : 1;             // Used by SwNumberPortion
@@ -72,7 +72,7 @@ public:
     // Empty fields are also allowed
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
 
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     inline bool IsFollow() const { return bFollow; }
     inline void SetFollow( bool bNew ) { bFollow = bNew; }
@@ -126,8 +126,8 @@ public:
 class SwNumberPortion : public SwFldPortion
 {
 protected:
-    KSHORT  nFixWidth;      // See Glues
-    KSHORT  nMinDist;       // Minimal distance to the text
+    sal_uInt16  nFixWidth;      // See Glues
+    sal_uInt16  nMinDist;       // Minimal distance to the text
     bool    mbLabelAlignmentPosAndSpaceModeActive;
 
 public:
@@ -135,10 +135,10 @@ public:
                      SwFont *pFnt,
                      const bool bLeft,
                      const bool bCenter,
-                     const KSHORT nMinDst,
+                     const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Field cloner for SplitGlue
@@ -156,7 +156,7 @@ public:
                      SwFont *pFnt,
                      const bool bLeft,
                      const bool bCenter,
-                     const KSHORT nMinDst,
+                     const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -176,7 +176,7 @@ public:
                      const Size& rGrfSize,
                      const bool bLeft,
                      const bool bCenter,
-                     const KSHORT nMinDst,
+                     const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
@@ -220,7 +220,7 @@ public:
     SwCombinedPortion( const OUString &rExpand );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

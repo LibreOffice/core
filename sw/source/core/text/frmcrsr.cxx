@@ -527,8 +527,8 @@ struct SwFillData
     long Right() const { return aFrm.Right(); }
     long Bottom() const { return aFrm.Bottom(); }
     SwFillCrsrPos &Fill() const { return *pCMS->pFill; }
-    void SetTab( MSHORT nNew ) { pCMS->pFill->nTabCnt = nNew; }
-    void SetSpace( MSHORT nNew ) { pCMS->pFill->nSpaceCnt = nNew; }
+    void SetTab( sal_uInt16 nNew ) { pCMS->pFill->nTabCnt = nNew; }
+    void SetSpace( sal_uInt16 nNew ) { pCMS->pFill->nSpaceCnt = nNew; }
     void SetOrient( const sal_Int16 eNew ){ pCMS->pFill->eOrient = eNew; }
 };
 
@@ -651,7 +651,7 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
-    MSHORT nChgFrm = 2;
+    sal_uInt16 nChgFrm = 2;
     if( pCMS )
     {
         if( MV_UPDOWN == pCMS->eState )
@@ -1302,7 +1302,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             (SwColumnFrm*)GetUpper()->GetUpper()->GetUpper()->Lower(); // The 1st column
         // The first SwFrm in BodyFrm of the first column
         const SwFrm* pFrm = ((SwLayoutFrm*)pTmp->Lower())->Lower();
-        MSHORT nNextCol = 0;
+        sal_uInt16 nNextCol = 0;
         // In which column do we end up in?
         while( rFill.X() > pTmp->Frm().Right() && pTmp->GetNext() )
         {
@@ -1356,7 +1356,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     }
     SwFont *pFnt;
     SwTxtFmtColl* pColl = GetTxtNode()->GetTxtColl();
-    MSHORT nFirst = GetTxtNode()->GetSwAttrSet().GetULSpace().GetLower();
+    sal_uInt16 nFirst = GetTxtNode()->GetSwAttrSet().GetULSpace().GetLower();
     SwTwips nDiff = rFill.Y() - Frm().Bottom();
     if( nDiff < nFirst )
         nDiff = -1;
@@ -1494,7 +1494,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                         {
                             nIndent /= nSpace;
                             nIndent *= nSpace;
-                            rFill.SetTab( MSHORT( nIndent ) );
+                            rFill.SetTab( sal_uInt16( nIndent ) );
                             rRect.Left( nIndent + rFill.Left() );
                         }
                         else
@@ -1508,9 +1508,9 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                     rFill.nLineWidth += rFill.bFirstLine ? nLeft : nTxtLeft;
                     SwTwips nLeftTab = nLeft;
                     SwTwips nRightTab = nLeft;
-                    MSHORT nSpaceCnt = 0;
-                    MSHORT nTabCnt = 0;
-                    MSHORT nIdx = 0;
+                    sal_uInt16 nSpaceCnt = 0;
+                    sal_uInt16 nTabCnt = 0;
+                    sal_uInt16 nIdx = 0;
                     do
                     {
                         nLeftTab = nRightTab;
@@ -1530,7 +1530,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                             const SvxTabStopItem& rTab =
                                 (const SvxTabStopItem &)pSet->
                                 GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
-                            MSHORT nDefTabDist = (MSHORT)rTab[0].GetTabPos();
+                            sal_uInt16 nDefTabDist = (sal_uInt16)rTab[0].GetTabPos();
                             nRightTab = nLeftTab - nTxtLeft;
                             nRightTab /= nDefTabDist;
                             nRightTab = nRightTab * nDefTabDist + nTxtLeft;

@@ -157,8 +157,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
                 const bool bVirt = pTmpRootFrm->IsVirtPageNum();
 
-                MSHORT nVirtNum = pFrame->GetVirtPageNum();
-                MSHORT nNumPages = pTmpRootFrm->GetPageNum();
+                sal_uInt16 nVirtNum = pFrame->GetVirtPageNum();
+                sal_uInt16 nNumPages = pTmpRootFrm->GetPageNum();
                 sal_Int16 nNumFmt = -1;
                 if(SVX_NUM_PAGEDESC == pFld->GetFormat())
                     nNumFmt = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
@@ -455,7 +455,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         const bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         const bool bLabelAlignmentPosAndSpaceModeActive(
                 rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
-        const KSHORT nMinDist = bLabelAlignmentPosAndSpaceModeActive
+        const sal_uInt16 nMinDist = bLabelAlignmentPosAndSpaceModeActive
                                 ? 0 : rNumFmt.GetCharTextDistance();
 
         if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )

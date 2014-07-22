@@ -27,21 +27,21 @@ class SwLineLayout;
 class SwGluePortion : public SwLinePortion
 {
 private:
-    KSHORT nFixWidth;
+    sal_uInt16 nFixWidth;
 public:
-                SwGluePortion( const KSHORT nInitFixWidth );
+                SwGluePortion( const sal_uInt16 nInitFixWidth );
 
     void Join( SwGluePortion *pVictim );
 
     inline short GetPrtGlue() const;
-    inline KSHORT GetFixWidth() const { return nFixWidth; }
-    inline void SetFixWidth( const KSHORT nNew ) { nFixWidth = nNew; }
+    inline sal_uInt16 GetFixWidth() const { return nFixWidth; }
+    inline void SetFixWidth( const sal_uInt16 nNew ) { nFixWidth = nNew; }
     void MoveGlue( SwGluePortion *pTarget, const short nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
 
@@ -50,19 +50,19 @@ public:
 
 class SwFixPortion : public SwGluePortion
 {
-    KSHORT nFix;        // The width offset in the line
+    sal_uInt16 nFix;        // The width offset in the line
 public:
         SwFixPortion( const SwRect &rFlyRect );
-        SwFixPortion( const KSHORT nFixWidth, const KSHORT nFixPos );
-    inline void   Fix( const KSHORT nNewFix ) { nFix = nNewFix; }
-    inline KSHORT Fix() const { return nFix; }
+        SwFixPortion( const sal_uInt16 nFixWidth, const sal_uInt16 nFixPos );
+    inline void   Fix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
+    inline sal_uInt16 Fix() const { return nFix; }
     OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwMarginPortion : public SwGluePortion
 {
 public:
-        SwMarginPortion( const KSHORT nFixWidth );
+        SwMarginPortion( const sal_uInt16 nFixWidth );
         void AdjustRight( const SwLineLayout* pCurr );
     OUTPUT_OPERATOR_OVERRIDE
 };

@@ -219,7 +219,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     // The word/char is larger than the line
     // Special case 1: The word is larger than the line
     // We truncate ...
-    const KSHORT nLineWidth = (KSHORT)(rInf.Width() - rInf.X());
+    const sal_uInt16 nLineWidth = (sal_uInt16)(rInf.Width() - rInf.X());
     sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
     if( nLen )
     {
@@ -233,7 +233,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
 
             // changing these values requires also changing them in
             // guess.cxx
-            KSHORT nItalic = 0;
+            sal_uInt16 nItalic = 0;
             if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
             {
                 nItalic = Height() / 12;
@@ -395,7 +395,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                 Width( aGuess.BreakWidth() );
             else
                 // this actually should not happen
-                Width( KSHORT(rInf.Width() - rInf.X()) );
+                Width( sal_uInt16(rInf.Width() - rInf.X()) );
 
             SetLen( aGuess.BreakPos() - rInf.GetIdx() );
 
@@ -476,7 +476,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
         // First set ourselves and the insert, because there could be
         // a SwLineLayout
-        KSHORT nBlankSize;
+        sal_uInt16 nBlankSize;
         if( nHoleLen == GetLen() )
             nBlankSize = Width();
         else
@@ -491,7 +491,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-sal_Int32 SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwTxtPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
     OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
@@ -746,7 +746,7 @@ SwPosSize SwTxtInputFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return rInf.GetTxtSize();
 }
 
-KSHORT SwTxtInputFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwTxtInputFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     if( !Width()
         && ContainsOnlyDummyChars()

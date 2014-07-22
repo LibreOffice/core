@@ -48,14 +48,14 @@ protected:
 
 private:
     OutputDevice *pLastOut;
-    MSHORT nChgCnt;
+    sal_uInt16 nChgCnt;
     SwRedlineItr *pRedln;
     size_t nStartIndex;
     size_t nEndIndex;
     sal_Int32 nPos;
     sal_uInt8 nPropFont;
     const void* aMagicNo[ SW_SCRIPTS ];
-    MSHORT aFntIdx[ SW_SCRIPTS ];
+    sal_uInt16 aFntIdx[ SW_SCRIPTS ];
     const SwTxtNode* m_pTxtNode;
 
     void SeekFwd( const sal_Int32 nPos );

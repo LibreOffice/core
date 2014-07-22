@@ -40,7 +40,7 @@ SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
     SetWhichPor( POR_ISOREF );
 }
 
-KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible

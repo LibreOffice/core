@@ -21,14 +21,6 @@
 
 #include "swtypes.hxx"
 
-// Ueberpruefte USHORTs, z.B. Indizes auf Arrays oder garantiert kleine
-// Integerwerte, auch von aussen vorgegebene
-#define MSHORT sal_uInt16
-#define MSHRT_MAX USHRT_MAX
-// Koordinaten: Breite, Hoehe und Offsets in X-/Y-Richtung sowie Ascent etc.
-#define KSHORT sal_uInt16
-#define KSHRT_MAX USHRT_MAX
-
 // Portiontypen
 #define POR_LIN         0x0000
 #define POR_FLYCNT      0x0001

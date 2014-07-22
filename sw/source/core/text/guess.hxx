@@ -35,7 +35,7 @@ class SwTxtGuess
     sal_Int32 nBreakPos;       // start index of break position
     sal_Int32 nFieldDiff;      // absolut positions can be wrong if we
                                 // a field in the text has been expanded
-    KSHORT nBreakWidth;         // width of the broken portion
+    sal_uInt16 nBreakWidth;         // width of the broken portion
 public:
     inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
@@ -44,12 +44,12 @@ public:
 
     // true, if current portion still fits to current line
     bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
-                    const KSHORT nHeight );
+                    const sal_uInt16 nHeight );
     bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const sal_Int32 nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
     inline void ClearHangingPortion() { pHanging = NULL; }
-    inline KSHORT BreakWidth() const { return nBreakWidth; }
+    inline sal_uInt16 BreakWidth() const { return nBreakWidth; }
     inline sal_Int32 CutPos() const { return nCutPos; }
     inline sal_Int32 BreakStart() const { return nBreakStart; }
     inline sal_Int32 BreakPos() const {return nBreakPos; }

@@ -347,7 +347,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     , mnHeightOfLastLine( 0 ) // OD 2004-03-17 #i11860#
     , mnAdditionalFirstLineOffset( 0 )
     , nOfst( 0 )
-    , nCacheIdx( MSHRT_MAX )
+    , nCacheIdx( USHRT_MAX )
     , bLocked( false )
     , bWidow( false )
     , bJustWidow( false )
@@ -377,7 +377,7 @@ const OUString& SwTxtFrm::GetTxt() const
 
 void SwTxtFrm::ResetPreps()
 {
-    if ( GetCacheIdx() != MSHRT_MAX )
+    if ( GetCacheIdx() != USHRT_MAX )
     {
         SwParaPortion *pPara;
         if( 0 != (pPara = GetPara()) )
@@ -842,14 +842,14 @@ static void lcl_ModifyOfst( SwTxtFrm* pFrm, sal_Int32 nPos, sal_Int32 nLen )
 
 // Related: fdo#56031 filter out attribute changes that don't matter for
 // humans/a11y to stop flooding the destination mortal with useless noise
-static bool isA11yRelevantAttribute(MSHORT nWhich)
+static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
 {
     return nWhich != RES_CHRATR_RSID;
 }
 
 static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& nWhich )
 {
-    for( std::vector<MSHORT>::const_iterator nItr = nWhich.begin();
+    for( std::vector<sal_uInt16>::const_iterator nItr = nWhich.begin();
             nItr < nWhich.end(); ++nItr )
         if ( isA11yRelevantAttribute( *nItr ) )
             return true;
@@ -859,7 +859,7 @@ static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& nWhich )
 
 void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
     // modifications concerning frame attributes are processed by the base class
     if( IsInRange( aFrmFmtSetRange, nWhich ) || RES_FMT_CHG == nWhich )
@@ -969,7 +969,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     nLen = 1;
 
                 _InvalidateRange( SwCharRange( nPos, nLen) );
-                MSHORT nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
+                sal_uInt16 nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
@@ -1054,7 +1054,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             SwAttrSet& rNewSet = *((SwAttrSetChg*)pNew)->GetChgSet();
             const SfxPoolItem* pItem = 0;
             int nClear = 0;
-            MSHORT nCount = rNewSet.Count();
+            sal_uInt16 nCount = rNewSet.Count();
 
             if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
             {
@@ -1132,7 +1132,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 SwSortedObjs *pObjs = GetDrawObjs();
                 for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
                 {
-                    SwAnchoredObject* pAnchoredObj = (*pObjs)[MSHORT(i)];
+                    SwAnchoredObject* pAnchoredObj = (*pObjs)[sal_uInt16(i)];
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
@@ -1320,7 +1320,7 @@ bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
     return true;
 }
 
-void SwTxtFrm::PrepWidows( const MSHORT nNeed, bool bNotify )
+void SwTxtFrm::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
 {
     OSL_ENSURE(GetFollow() && nNeed, "+SwTxtFrm::Prepare: lost all friends");
 
@@ -1329,7 +1329,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, bool bNotify )
         return;
     pPara->SetPrepWidows();
 
-    MSHORT nHave = nNeed;
+    sal_uInt16 nHave = nNeed;
 
     // Wir geben ein paar Zeilen ab und schrumpfen im CalcPreps()
     SWAP_IF_NOT_SWAPPED( this )
@@ -1495,7 +1495,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( pPara->IsPrepMustFit() )
                 return;
             // see comment in WidowsAndOrphans::FindOrphans and CalcPreps()
-            PrepWidows( *(const MSHORT *)pVoid, bNotify );
+            PrepWidows( *(const sal_uInt16 *)pVoid, bNotify );
             break;
 
         case PREP_FTN :
@@ -1578,7 +1578,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // fliesst die Ftn in jedem Fall auch mit. Damit sie nicht im
                 // Weg steht, schicken wir uns ein ADJUST_FRM.
                 // pVoid != 0 bedeutet MoveBwd()
-                        const MSHORT nWhich = pHt->Which();
+                        const sal_uInt16 nWhich = pHt->Which();
                         if( RES_TXTATR_FIELD == nWhich ||
                             (HasFtn() && pVoid && RES_TXTATR_FTN == nWhich))
                         InvalidateRange( SwCharRange( nStart, 1 ), 1 );
@@ -1620,7 +1620,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     if ( GetDrawObjs() )
                     {
                         const sal_uInt32 nCnt = GetDrawObjs()->Count();
-                        for ( MSHORT i = 0; i < nCnt; ++i )
+                        for ( sal_uInt16 i = 0; i < nCnt; ++i )
                         {
                             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
                             // #i28701# - consider all
@@ -1957,7 +1957,7 @@ bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     return bRet;
 }
 
-KSHORT SwTxtFrm::GetParHeight() const
+sal_uInt16 SwTxtFrm::GetParHeight() const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::GetParHeight with swapped frame" );
@@ -1965,11 +1965,11 @@ KSHORT SwTxtFrm::GetParHeight() const
     if( !HasPara() )
     {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
         // bei UnderSized ruhig nur 1 Twip mehr anfordern.
-        KSHORT nRet = (KSHORT)Prt().SSize().Height();
+        sal_uInt16 nRet = (sal_uInt16)Prt().SSize().Height();
         if( IsUndersized() )
         {
             if( IsEmpty() || GetTxt().isEmpty() )
-                nRet = (KSHORT)EmptyHeight();
+                nRet = (sal_uInt16)EmptyHeight();
             else
                 ++nRet;
         }
@@ -1978,7 +1978,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 
     // FME, OD 08.01.2004 #i11859# - refactoring and improve code
     const SwLineLayout* pLineLayout = GetPara();
-    KSHORT nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
+    sal_uInt16 nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
     if( GetOfst() && !IsFollow() )  // Ist dieser Absatz gescrollt? Dann ist unsere
         nHeight *= 2;               // bisherige Hoehe mind. eine Zeilenhoehe zu gering
     // OD 2004-03-04 #115793#
@@ -2334,24 +2334,24 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
     return nRet;
 }
 
-KSHORT SwTxtFrm::FirstLineHeight() const
+sal_uInt16 SwTxtFrm::FirstLineHeight() const
 {
     if ( !HasPara() )
     {
         if( IsEmpty() && IsValid() )
-            return IsVertical() ? (KSHORT)Prt().Width() : (KSHORT)Prt().Height();
-        return KSHRT_MAX;
+            return IsVertical() ? (sal_uInt16)Prt().Width() : (sal_uInt16)Prt().Height();
+        return USHRT_MAX;
     }
     const SwParaPortion *pPara = GetPara();
     if ( !pPara )
-        return KSHRT_MAX;
+        return USHRT_MAX;
 
     return pPara->Height();
 }
 
-MSHORT SwTxtFrm::GetLineCount( sal_Int32 nPos )
+sal_uInt16 SwTxtFrm::GetLineCount( sal_Int32 nPos )
 {
-    MSHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     SwTxtFrm *pFrm = this;
     do
     {

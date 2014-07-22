@@ -99,7 +99,7 @@ void SwWrongList::ClearList()
  */
 bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
-    const MSHORT nPos = GetWrongPos( rChk );
+    const sal_uInt16 nPos = GetWrongPos( rChk );
     if ( nPos >= Count() )
         return false;
     const sal_Int32 nWrPos = Pos( nPos );
@@ -123,7 +123,7 @@ bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
  */
 bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
-    MSHORT nPos = GetWrongPos( rChk );
+    sal_uInt16 nPos = GetWrongPos( rChk );
     rLn += rChk;
 
     if( nPos == Count() )
@@ -269,11 +269,11 @@ void SwWrongList::SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd )
  */
 void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 {
-    MSHORT i = GetWrongPos( nPos );
+    sal_uInt16 i = GetWrongPos( nPos );
     if( nDiff < 0 )
     {
         const sal_Int32 nEnd = nPos - nDiff;
-        MSHORT nLst = i;
+        sal_uInt16 nLst = i;
         bool bJump = false;
         while( nLst < Count() && Pos( nLst ) < nEnd )
             ++nLst;
@@ -356,14 +356,14 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
    @return <true> if ???
  */
 bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
-                             sal_Int32 nLen, MSHORT nIndex, sal_Int32 nCursorPos )
+                             sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos )
 {
     // length of word must be greater than 0 and cursor position must be outside the word
     bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
 
     sal_Int32 nWrPos = 0;
     sal_Int32 nWrEnd = rEnd;
-    MSHORT nCnt = nIndex;
+    sal_uInt16 nCnt = nIndex;
     if( nCnt < Count() )
     {
         nWrPos = Pos( nCnt );
@@ -442,7 +442,7 @@ bool SwWrongList::InvalidateWrong( )
 SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
 {
     SwWrongList *pRet = NULL;
-    MSHORT nLst = 0;
+    sal_uInt16 nLst = 0;
     while( nLst < Count() && Pos( nLst ) < nSplitPos )
         ++nLst;
     if( nLst )

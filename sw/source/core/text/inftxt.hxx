@@ -78,7 +78,7 @@ class SwLineInfo
     SvxTabStopItem* pRuler;
     const SvxLineSpacingItem *pSpace;
     sal_uInt16 nVertAlign;
-    KSHORT nDefTabStop;
+    sal_uInt16 nDefTabStop;
     bool bListTabStopIncluded;
     long nListTabStopPosition;
 
@@ -92,8 +92,8 @@ public:
     const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
                                  const SwTwips nRight ) const;
     inline const SvxLineSpacingItem *GetLineSpacing() const { return pSpace; }
-    inline KSHORT GetDefTabStop() const { return nDefTabStop; }
-    inline void SetDefTabStop( KSHORT nNew ) const
+    inline sal_uInt16 GetDefTabStop() const { return nDefTabStop; }
+    inline void SetDefTabStop( sal_uInt16 nNew ) const
         { ( (SwLineInfo*)this )->nDefTabStop = nNew; }
 
     // vertical alignment
@@ -288,7 +288,7 @@ public:
     inline sal_Unicode GetChar( const sal_Int32 nPos ) const
     { if (m_pTxt && nPos < m_pTxt->getLength()) return (*m_pTxt)[ nPos ]; return 0; }
 
-    KSHORT      GetTxtHeight() const;
+    sal_uInt16      GetTxtHeight() const;
 
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rTxt, const sal_Int32 nIdx,
@@ -309,7 +309,7 @@ public:
                                            const sal_uInt16 nComp,
                                            sal_Int32& rExtraCharPos ) const;
 
-    KSHORT GetAscent() const;
+    sal_uInt16 GetAscent() const;
 
     inline sal_Int32 GetIdx() const { return m_nIdx; }
     inline void SetIdx( const sal_Int32 nNew ) { m_nIdx = nNew; }
@@ -362,9 +362,9 @@ public:
 
     // Feature: Kana Compression
 
-    inline MSHORT GetKanaIdx() const { return m_nKanaIdx; }
+    inline sal_uInt16 GetKanaIdx() const { return m_nKanaIdx; }
     inline void ResetKanaIdx(){ m_nKanaIdx = 0; }
-    inline void SetKanaIdx( MSHORT nNew ) { m_nKanaIdx = nNew; }
+    inline void SetKanaIdx( sal_uInt16 nNew ) { m_nKanaIdx = nNew; }
     inline void IncKanaIdx() { ++m_nKanaIdx; }
     inline void SetKanaComp( std::deque<sal_uInt16> *pNew ){ m_pKanaComp = pNew; }
     inline std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp; }
@@ -389,7 +389,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     Point       aPos;       // Paint position
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
-    MSHORT nSpaceIdx;
+    sal_uInt16 nSpaceIdx;
     void _DrawText( const OUString &rText, const SwLinePortion &rPor,
                    const sal_Int32 nIdx, const sal_Int32 nLen,
                    const bool bKern, const bool bWrong = false,
@@ -455,7 +455,7 @@ public:
     void DrawRedArrow( const SwLinePortion &rPor ) const;
     void DrawPostIts( const SwLinePortion &rPor, bool bScript ) const;
     void DrawBackground( const SwLinePortion &rPor ) const;
-    void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
+    void DrawViewOpt( const SwLinePortion &rPor, const sal_uInt16 nWhich ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
     /**
@@ -493,9 +493,9 @@ public:
 
     // STUFF FOR JUSTIFIED ALIGNMENT
 
-    inline MSHORT GetSpaceIdx() const { return nSpaceIdx; }
+    inline sal_uInt16 GetSpaceIdx() const { return nSpaceIdx; }
     inline void ResetSpaceIdx(){nSpaceIdx = 0; }
-    inline void SetSpaceIdx( MSHORT nNew ) { nSpaceIdx = nNew; }
+    inline void SetSpaceIdx( sal_uInt16 nNew ) { nSpaceIdx = nNew; }
     inline void IncSpaceIdx() { ++nSpaceIdx; }
     inline void RemoveFirstSpaceAdd() { pSpaceAdd->erase( pSpaceAdd->begin() ); }
     inline long GetSpaceAdd() const
@@ -536,11 +536,11 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     SwTwips nLeft;              // Left margin
     SwTwips nRight;             // Right margin
     SwTwips nFirst;             // EZE
-    KSHORT nRealWidth;          // "real" line width
-    KSHORT nWidth;              // "virtual" line width
-    KSHORT nLineHeight;         // Final height after CalcLine
-    KSHORT nLineNettoHeight;    // line height without spacing
-    KSHORT nForcedLeftMargin;   // Shift of left margin due to frame
+    sal_uInt16 nRealWidth;          // "real" line width
+    sal_uInt16 nWidth;              // "virtual" line width
+    sal_uInt16 nLineHeight;         // Final height after CalcLine
+    sal_uInt16 nLineNettoHeight;    // line height without spacing
+    sal_uInt16 nForcedLeftMargin;   // Shift of left margin due to frame
 
     sal_Int16  nMinLeading;     // minimum number of chars before hyphenation point
     sal_Int16  nMinTrailing;    // minimum number of chars after hyphenation point
@@ -588,8 +588,8 @@ public:
     SwTxtFormatInfo( const SwTxtFormatInfo& rInf, SwLineLayout& rLay,
         SwTwips nActWidth );
 
-    inline KSHORT Width() const { return nWidth; }
-    inline void Width( const KSHORT nNew ) { nWidth = nNew; }
+    inline sal_uInt16 Width() const { return nWidth; }
+    inline void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
            void Init();
 
     // Returns the first changed position of the paragraph
@@ -602,10 +602,10 @@ public:
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
     inline SwTwips First() const { return nFirst; }
     inline void First( const SwTwips nNew ) { nFirst = nNew; }
-    inline KSHORT RealWidth() const { return nRealWidth; }
-    inline void RealWidth( const KSHORT nNew ) { nRealWidth = nNew; }
-    inline KSHORT ForcedLeftMargin() const { return nForcedLeftMargin; }
-    inline void ForcedLeftMargin( const KSHORT nN ) { nForcedLeftMargin = nN; }
+    inline sal_uInt16 RealWidth() const { return nRealWidth; }
+    inline void RealWidth( const sal_uInt16 nNew ) { nRealWidth = nNew; }
+    inline sal_uInt16 ForcedLeftMargin() const { return nForcedLeftMargin; }
+    inline void ForcedLeftMargin( const sal_uInt16 nN ) { nForcedLeftMargin = nN; }
 
     inline sal_uInt8 &MaxHyph() { return nMaxHyph; }
     inline const sal_uInt8 &MaxHyph() const { return nMaxHyph; }
@@ -650,10 +650,10 @@ public:
     inline void SetLineStart( const sal_Int32 nNew ) { nLineStart = nNew; }
 
     // these are used during fly calculation
-    inline KSHORT GetLineHeight() const { return nLineHeight; }
-    inline void SetLineHeight( const KSHORT nNew ) { nLineHeight = nNew; }
-    inline KSHORT GetLineNettoHeight() const { return nLineNettoHeight; }
-    inline void SetLineNettoHeight( const KSHORT nNew ) { nLineNettoHeight = nNew; }
+    inline sal_uInt16 GetLineHeight() const { return nLineHeight; }
+    inline void SetLineHeight( const sal_uInt16 nNew ) { nLineHeight = nNew; }
+    inline sal_uInt16 GetLineNettoHeight() const { return nLineNettoHeight; }
+    inline void SetLineNettoHeight( const sal_uInt16 nNew ) { nLineNettoHeight = nNew; }
 
     inline const SwLinePortion *GetUnderflow() const { return pUnderflow; }
     inline SwLinePortion *GetUnderflow() { return pUnderflow; }
@@ -766,14 +766,14 @@ public:
    ~SwFontSave();
 };
 
-inline KSHORT SwTxtSizeInfo::GetAscent() const
+inline sal_uInt16 SwTxtSizeInfo::GetAscent() const
 {
     SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
 
     return ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
 }
 
-inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
+inline sal_uInt16 SwTxtSizeInfo::GetTxtHeight() const
 {
     SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
 

@@ -94,7 +94,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 
     // nPaintOfst wurde exakt auf das Ende eingestellt, deswegen <=
     // nPaintOfst ist dokumentglobal, deswegen nLeftMar aufaddieren
-    // const KSHORT nLeftMar = KSHORT(GetLeftMargin());
+    // const sal_uInt16 nLeftMar = sal_uInt16(GetLeftMargin());
     // 8310: painten von LineBreaks in leeren Zeilen.
     if( nPaintOfst && pCurr->Width() )
     {
@@ -177,7 +177,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                      && GetDropLines() >= GetLineNr();
     }
 
-    KSHORT nTmpHeight, nTmpAscent;
+    sal_uInt16 nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
 
     // bClip decides if there's a need to clip

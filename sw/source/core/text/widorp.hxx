@@ -59,15 +59,15 @@ public:
 class WidowsAndOrphans : public SwTxtFrmBreak
 {
 private:
-    MSHORT   nWidLines, nOrphLines;
+    sal_uInt16   nWidLines, nOrphLines;
 
 public:
     WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst = 0,
         bool bCheckKeep = true );
     bool FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine );
-    MSHORT GetWidowsLines() const
+    sal_uInt16 GetWidowsLines() const
     { return nWidLines; }
-    MSHORT GetOrphansLines() const
+    sal_uInt16 GetOrphansLines() const
     { return nOrphLines; }
     void ClrOrphLines(){ nOrphLines = 0; }
 

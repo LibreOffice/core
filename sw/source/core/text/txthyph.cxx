@@ -36,7 +36,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
-                                const OUString &rTxt, const MSHORT nMinTrail )
+                                const OUString &rTxt, const sal_uInt16 nMinTrail )
 {
     if( rTxt.getLength() < 4 || m_pFnt->IsSymbol(m_pVsh) )
         return 0;
@@ -225,7 +225,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         return false;
 
     OUString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
-    MSHORT nMinTrail = 0;
+    sal_uInt16 nMinTrail = 0;
     if( nWrdStart + nLen > nEnd )
         nMinTrail = nWrdStart + nLen - nEnd - 1;
 
@@ -298,9 +298,9 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         aHyphPor.SetLen( 1 );
 
         static const void* pLastMagicNo = 0;
-        static KSHORT aMiniCacheH = 0, aMiniCacheW = 0;
+        static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
         const void* pTmpMagic;
-        MSHORT nFntIdx;
+        sal_uInt16 nFntIdx;
         rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
         if( !pLastMagicNo || pLastMagicNo != pTmpMagic ) {
             pLastMagicNo = pTmpMagic;
@@ -396,7 +396,7 @@ SwSoftHyphPortion::SwSoftHyphPortion() :
     SetWhichPor( POR_SOFTHYPH );
 }
 
-KSHORT SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
     // Moment errechnet werden:

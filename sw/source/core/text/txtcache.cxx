@@ -72,20 +72,20 @@ bool SwTxtFrm::_HasPara() const
             return true;
     }
     else
-        ((SwTxtFrm*)this)->nCacheIdx = MSHRT_MAX;
+        ((SwTxtFrm*)this)->nCacheIdx = USHRT_MAX;
 
     return false;
 }
 
 SwParaPortion *SwTxtFrm::GetPara()
 {
-    if ( GetCacheIdx() != MSHRT_MAX )
+    if ( GetCacheIdx() != USHRT_MAX )
     {   SwTxtLine *pLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
                                         Get( this, GetCacheIdx(), false );
         if ( pLine )
             return pLine->GetPara();
         else
-            nCacheIdx = MSHRT_MAX;
+            nCacheIdx = USHRT_MAX;
     }
     return 0;
 }
@@ -93,7 +93,7 @@ SwParaPortion *SwTxtFrm::GetPara()
 void SwTxtFrm::ClearPara()
 {
     OSL_ENSURE( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
-    if ( !IsLocked() && GetCacheIdx() != MSHRT_MAX )
+    if ( !IsLocked() && GetCacheIdx() != USHRT_MAX )
     {
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
                                         Get( this, GetCacheIdx(), false );
@@ -103,13 +103,13 @@ void SwTxtFrm::ClearPara()
             pTxtLine->SetPara( 0 );
         }
         else
-            nCacheIdx = MSHRT_MAX;
+            nCacheIdx = USHRT_MAX;
     }
 }
 
 void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
 {
-    if ( GetCacheIdx() != MSHRT_MAX )
+    if ( GetCacheIdx() != USHRT_MAX )
     {
         // Only change the information, the CacheObj stays there
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
@@ -123,7 +123,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
         else
         {
             OSL_ENSURE( !pNew, "+SetPara: Losing SwParaPortion" );
-            nCacheIdx = MSHRT_MAX;
+            nCacheIdx = USHRT_MAX;
         }
     }
     else if ( pNew )

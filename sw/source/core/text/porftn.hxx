@@ -27,14 +27,14 @@ class SwTxtFtn;
 class SwFtnPortion : public SwFldPortion
 {
     SwTxtFtn *pFtn;
-    KSHORT nOrigHeight;
+    sal_uInt16 nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
 public:
     SwFtnPortion( const OUString &rExpand, SwTxtFtn *pFtn,
-                  KSHORT nOrig = KSHRT_MAX );
-    KSHORT& Orig() { return nOrigHeight; }
+                  sal_uInt16 nOrig = USHRT_MAX );
+    sal_uInt16& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
@@ -84,7 +84,7 @@ class SwErgoSumPortion : public SwFldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Field cloner for SplitGlue

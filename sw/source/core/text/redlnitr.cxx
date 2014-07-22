@@ -248,7 +248,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                     FillHints( pRed->GetAuthor(), pRed->GetType() );
 
                     SfxWhichIter aIter( *pSet );
-                    MSHORT nWhich = aIter.FirstWhich();
+                    sal_uInt16 nWhich = aIter.FirstWhich();
                     while( nWhich )
                     {
                         const SfxPoolItem* pItem;
@@ -278,7 +278,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
     return nRet + EnterExtend( rFnt, nNew );
 }
 
-void SwRedlineItr::FillHints( MSHORT nAuthor, RedlineType_t eType )
+void SwRedlineItr::FillHints( sal_uInt16 nAuthor, RedlineType_t eType )
 {
     switch ( eType )
     {
@@ -363,7 +363,7 @@ bool SwRedlineItr::_ChkSpecialUnderline() const
     // below the base line
     for (size_t i = 0; i < m_Hints.size(); ++i)
     {
-        MSHORT nWhich = m_Hints[i]->Which();
+        sal_uInt16 nWhich = m_Hints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
             return true;
@@ -441,11 +441,11 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
-    MSHORT nOldAttr = rArr[ nPos - nStart ];
+    sal_uInt16 nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
     {   // We stayed within the ExtendText-section
-        MSHORT nAttr = rArr[ nPos - nStart ];
+        sal_uInt16 nAttr = rArr[ nPos - nStart ];
         if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
         {
             rFnt = *pFnt;
@@ -472,7 +472,7 @@ sal_Int32 SwExtend::Next( sal_Int32 nNext )
     else if( nPos < nEnd )
     {
         sal_Int32 nIdx = nPos - nStart;
-        MSHORT nAttr = rArr[ nIdx ];
+        sal_uInt16 nAttr = rArr[ nIdx ];
         while( ++nIdx < (sal_Int32)rArr.size() && nAttr == rArr[ nIdx ] )
             ; //nothing
         nIdx = nIdx + nStart;

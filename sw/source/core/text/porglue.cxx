@@ -27,14 +27,14 @@
 #include "porfly.hxx"
 #include <comphelper/string.hxx>
 
-SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
+SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
     : nFixWidth( nInitFixWidth )
 {
     PrtWidth( nFixWidth );
     SetWhichPor( POR_GLUE );
 }
 
-sal_Int32 SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwGluePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
     if( !GetLen() || nOfst > GetLen() || !Width() )
         return SwLinePortion::GetCrsrOfst( nOfst );
@@ -131,19 +131,19 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
 
 // Wir erwarten ein framelokales SwRect !
 SwFixPortion::SwFixPortion( const SwRect &rRect )
-       :SwGluePortion( KSHORT(rRect.Width()) ), nFix( KSHORT(rRect.Left()) )
+       :SwGluePortion( sal_uInt16(rRect.Width()) ), nFix( sal_uInt16(rRect.Left()) )
 {
-    Height( KSHORT(rRect.Height()) );
+    Height( sal_uInt16(rRect.Height()) );
     SetWhichPor( POR_FIX );
 }
 
-SwFixPortion::SwFixPortion(const KSHORT nFixedWidth, const KSHORT nFixedPos)
+SwFixPortion::SwFixPortion(const sal_uInt16 nFixedWidth, const sal_uInt16 nFixedPos)
        : SwGluePortion(nFixedWidth), nFix(nFixedPos)
 {
     SetWhichPor( POR_FIX );
 }
 
-SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
+SwMarginPortion::SwMarginPortion( const sal_uInt16 nFixedWidth )
     :SwGluePortion( nFixedWidth )
 {
     SetWhichPor( POR_MARGIN );
@@ -182,8 +182,8 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             pRight->MoveAllGlue( pLeft );
             pRight = 0;
         }
-        KSHORT nRightGlue = pRight && 0 < pRight->GetPrtGlue()
-                          ? KSHORT(pRight->GetPrtGlue()) : 0;
+        sal_uInt16 nRightGlue = pRight && 0 < pRight->GetPrtGlue()
+                          ? sal_uInt16(pRight->GetPrtGlue()) : 0;
         // 2) balance left and right Glue
         //    But not for tabs ...
         if( pLeft && nRightGlue && !pRight->InTabGrp() )

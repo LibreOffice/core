@@ -27,7 +27,7 @@ class SwExpandPortion : public SwTxtPortion
 public:
     inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
@@ -55,7 +55,7 @@ public:
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    MSHORT MayUnderflow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
+    sal_uInt16 MayUnderflow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
         bool bUnderflow ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -71,7 +71,7 @@ public:
             SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
     bool IsScript() const { return bScript; }
     OUTPUT_OPERATOR_OVERRIDE

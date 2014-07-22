@@ -38,7 +38,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
@@ -62,7 +62,7 @@ public:
 
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
 
@@ -74,11 +74,11 @@ private:
 
 class SwHolePortion : public SwLinePortion
 {
-    KSHORT nBlankWidth;
+    sal_uInt16 nBlankWidth;
 public:
             SwHolePortion( const SwTxtPortion &rPor );
-    inline KSHORT GetBlankWidth( ) const { return nBlankWidth; }
-    inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
+    inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
+    inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;

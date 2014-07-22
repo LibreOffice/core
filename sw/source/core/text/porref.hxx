@@ -31,14 +31,14 @@ public:
 
 class SwIsoRefPortion : public SwRefPortion
 {
-    KSHORT nViewWidth;
+    sal_uInt16 nViewWidth;
 
 public:
             SwIsoRefPortion();
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;

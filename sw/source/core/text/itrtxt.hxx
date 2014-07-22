@@ -40,8 +40,8 @@ protected:
     SwTwips nY;
     SwTwips nRegStart;          // The register's start position (Y)
     sal_Int32 nStart;          // Start in the text string, end = pCurr->GetLen()
-    KSHORT nRegDiff;            // Register's line distance
-    MSHORT nLineNr;             // Line number
+    sal_uInt16 nRegDiff;            // Register's line distance
+    sal_uInt16 nLineNr;             // Line number
     bool bPrev          : 1;
     bool bRegisterOn    : 1;    // Keep in register
     bool bOneBlock      : 1;    // Justified text: Dispose single words
@@ -84,13 +84,13 @@ public:
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
     inline sal_Int32 GetLength() const { return pCurr->GetLen(); }
-    inline MSHORT GetLineNr() const { return nLineNr; }
+    inline sal_uInt16 GetLineNr() const { return nLineNr; }
     inline sal_Int32 GetStart() const { return nStart; }
     inline sal_Int32 GetEnd() const { return GetStart() + GetLength(); }
     inline SwTwips Y() const { return nY; }
 
     inline SwTwips RegStart() const { return nRegStart; }
-    inline KSHORT RegDiff() const { return nRegDiff; }
+    inline sal_uInt16 RegDiff() const { return nRegDiff; }
     inline bool IsRegisterOn() const { return bRegisterOn; }
 
     inline SwTxtInfo &GetInfo() { return *pInf; }
@@ -113,8 +113,8 @@ public:
     // Truncates all after pCurr
     void TruncLines( bool bNoteFollow = false );
 
-    inline KSHORT GetLineHeight() const { return pCurr->GetRealHeight(); }
-    void CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const;
+    inline sal_uInt16 GetLineHeight() const { return pCurr->GetRealHeight(); }
+    void CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight ) const;
 
     // Lots of trouble for querying pCurr == pPara
     inline bool IsFirstTxtLine() const
@@ -144,11 +144,11 @@ private:
           SwTwips nLeft;
           SwTwips nRight;
           SwTwips nFirst;
-          KSHORT  nDropLeft;
-          KSHORT  nDropHeight;
-          KSHORT  nDropDescent;
-          MSHORT  nDropLines;
-          MSHORT  nAdjust;
+          sal_uInt16  nDropLeft;
+          sal_uInt16  nDropHeight;
+          sal_uInt16  nDropDescent;
+          sal_uInt16  nDropLines;
+          sal_uInt16  nAdjust;
           // #i91133#
           SwTwips mnTabLeft;
 
@@ -156,7 +156,7 @@ protected:
     // For FormatQuoVadis
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
     // For CalcFlyAdjust
-    inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
+    inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
     inline SwTxtMargin(SwTxtNode* pTxtNode)
@@ -188,9 +188,9 @@ public:
     inline bool IsOneBlock() const { return bOneBlock; }
     inline bool IsLastBlock() const { return bLastBlock; }
     inline bool IsLastCenter() const { return bLastCenter; }
-    inline MSHORT GetAdjust() const { return nAdjust; }
-    inline KSHORT GetLineWidth() const
-           { return KSHORT( Right() - GetLeftMargin() + 1 ); }
+    inline sal_uInt16 GetAdjust() const { return nAdjust; }
+    inline sal_uInt16 GetLineWidth() const
+           { return sal_uInt16( Right() - GetLeftMargin() + 1 ); }
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
     inline bool HasNegFirst() const { return nFirst < nLeft; }
 
@@ -200,13 +200,13 @@ public:
         return mnTabLeft;
     }
     // DropCaps
-    inline MSHORT GetDropLines() const { return nDropLines; }
-    inline void SetDropLines( const MSHORT nNew ) { nDropLines = nNew; }
-    inline KSHORT GetDropLeft() const { return nDropLeft; }
-    inline KSHORT GetDropHeight() const { return nDropHeight; }
-    inline void SetDropHeight( const KSHORT nNew ) { nDropHeight = nNew; }
-    inline KSHORT GetDropDescent() const { return nDropDescent; }
-    inline void SetDropDescent( const KSHORT nNew ) { nDropDescent = nNew; }
+    inline sal_uInt16 GetDropLines() const { return nDropLines; }
+    inline void SetDropLines( const sal_uInt16 nNew ) { nDropLines = nNew; }
+    inline sal_uInt16 GetDropLeft() const { return nDropLeft; }
+    inline sal_uInt16 GetDropHeight() const { return nDropHeight; }
+    inline void SetDropHeight( const sal_uInt16 nNew ) { nDropHeight = nNew; }
+    inline sal_uInt16 GetDropDescent() const { return nDropDescent; }
+    inline void SetDropDescent( const sal_uInt16 nNew ) { nDropDescent = nNew; }
     void DropInit();
 
     // Returns the TxtPos for start and end of the current line without whitespace

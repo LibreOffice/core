@@ -59,7 +59,7 @@ class SwContourCache
     const SdrObject *pSdrObj[ POLY_CNT ];
     TextRanger *pTextRanger[ POLY_CNT ];
     long nPntCnt;
-    MSHORT nObjCnt;
+    sal_uInt16 nObjCnt;
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
         const SwTxtFrm* pFrm, const SwRect &rLine, const long nXPos,
         const bool bRight );
@@ -67,9 +67,9 @@ class SwContourCache
 public:
     SwContourCache();
     ~SwContourCache();
-    const SdrObject* GetObject( MSHORT nPos ) const{ return pSdrObj[ nPos ]; }
-    MSHORT GetCount() const { return nObjCnt; }
-    void ClrObject( MSHORT nPos );
+    const SdrObject* GetObject( sal_uInt16 nPos ) const{ return pSdrObj[ nPos ]; }
+    sal_uInt16 GetCount() const { return nObjCnt; }
+    void ClrObject( sal_uInt16 nPos );
 
     /**
       Computes the rectangle that will cover the object in the given line.

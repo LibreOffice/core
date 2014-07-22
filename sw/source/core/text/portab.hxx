@@ -23,20 +23,20 @@
 
 class SwTabPortion : public SwFixPortion
 {
-    const KSHORT nTabPos;
+    const sal_uInt16 nTabPos;
     const sal_Unicode cFill;
     const bool bAutoTabStop;
 
     // Format() branches either into PreFormat() or PostFormat()
     bool PreFormat( SwTxtFormatInfo &rInf );
 public:
-    SwTabPortion( const KSHORT nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
+    SwTabPortion( const sal_uInt16 nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     bool PostFormat( SwTxtFormatInfo &rInf );
     inline  bool IsFilled() const { return 0 != cFill; }
-    inline  KSHORT GetTabPos() const { return nTabPos; }
+    inline  sal_uInt16 GetTabPos() const { return nTabPos; }
     inline  bool IsAutoTabStop() const { return bAutoTabStop; }
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -48,7 +48,7 @@ public:
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
-    inline SwTabLeftPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0', bool bAutoTab = true )
+    inline SwTabLeftPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar='\0', bool bAutoTab = true )
          : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR_OVERRIDE
@@ -57,7 +57,7 @@ public:
 class SwTabRightPortion : public SwTabPortion
 {
 public:
-    inline SwTabRightPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0' )
+    inline SwTabRightPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar='\0' )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABRIGHT ); }
     OUTPUT_OPERATOR_OVERRIDE
@@ -66,7 +66,7 @@ public:
 class SwTabCenterPortion : public SwTabPortion
 {
 public:
-    inline SwTabCenterPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0' )
+    inline SwTabCenterPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar='\0' )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABCENTER ); }
     OUTPUT_OPERATOR_OVERRIDE
@@ -84,7 +84,7 @@ class SwTabDecimalPortion : public SwTabPortion
     sal_uInt16 mnWidthOfPortionsUpTpDecimalPosition;
 
 public:
-    inline SwTabDecimalPortion( const KSHORT nTabPosVal, const sal_Unicode cTab,
+    inline SwTabDecimalPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cTab,
                                 const sal_Unicode cFillChar = '\0' )
          : SwTabPortion( nTabPosVal, cFillChar ),
            mcTab(cTab),
@@ -108,7 +108,7 @@ public:
 class SwAutoTabDecimalPortion : public SwTabDecimalPortion
 {
 public:
-    inline SwAutoTabDecimalPortion( const KSHORT nTabPosVal, const sal_Unicode cTab,
+    inline SwAutoTabDecimalPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cTab,
                                     const sal_Unicode cFillChar = '\0' )
          : SwTabDecimalPortion( nTabPosVal, cTab, cFillChar )
     { SetLen( 0 ); }

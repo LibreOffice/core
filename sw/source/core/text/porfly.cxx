@@ -412,7 +412,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     }
 }
 
-sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
+sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const sal_uInt16 nOfst,
     const Point &rPoint, SwPosition *pPos, SwCrsrMoveState* pCMS ) const
 {
     // Da die FlyCnt nicht an der Seite haengen, wird ihr
@@ -426,7 +426,7 @@ sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
         return 0;
 }
 
-sal_Int32 SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwFlyCntPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
     // OSL_ENSURE( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
     return SwLinePortion::GetCrsrOfst( nOfst );

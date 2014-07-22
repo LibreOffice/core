@@ -31,7 +31,7 @@
 bool ChkChain( SwLinePortion *pStart )
 {
     SwLinePortion *pPor = pStart->GetPortion();
-    MSHORT nCount = 0;
+    sal_uInt16 nCount = 0;
     while( pPor )
     {
         ++nCount;
@@ -63,7 +63,7 @@ SwLinePortion *SwLinePortion::Compress()
     return GetLen() || Width() ? this : 0;
 }
 
-KSHORT SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
+sal_uInt16 SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
 {
     return 0;
 }
@@ -84,18 +84,18 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     OSL_ENSURE( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
     OSL_ENSURE( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
 
-    const KSHORT nViewWidth = GetViewWidth( rInf );
+    const sal_uInt16 nViewWidth = GetViewWidth( rInf );
 
     if( ! nViewWidth )
         return;
 
-    const KSHORT nHalfView = nViewWidth / 2;
+    const sal_uInt16 nHalfView = nViewWidth / 2;
     sal_uInt16 nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
         nLastWidth = nLastWidth + (sal_uInt16)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
-    KSHORT nPos;
+    sal_uInt16 nPos;
     SwTxtPaintInfo aInf( rInf );
 
     const bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
@@ -108,25 +108,25 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     switch ( nDir )
     {
     case 0 :
-        nPos = KSHORT( rInf.X() );
+        nPos = sal_uInt16( rInf.X() );
         if( nLastWidth > nHalfView )
             nPos += nLastWidth - nHalfView;
         aInf.X( nPos );
         break;
     case 900 :
-        nPos = KSHORT( rInf.Y() );
+        nPos = sal_uInt16( rInf.Y() );
         if( nLastWidth > nHalfView )
             nPos -= nLastWidth + nHalfView;
         aInf.Y( nPos );
         break;
     case 1800 :
-        nPos = KSHORT( rInf.X() );
+        nPos = sal_uInt16( rInf.X() );
         if( nLastWidth > nHalfView )
             nPos -= nLastWidth + nHalfView;
         aInf.X( nPos );
         break;
     case 2700 :
-        nPos = KSHORT( rInf.Y() );
+        nPos = sal_uInt16( rInf.Y() );
         if( nLastWidth > nHalfView )
             nPos += nLastWidth - nHalfView;
         aInf.Y( nPos );
@@ -222,7 +222,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     return pPos;
 }
 
-sal_Int32 SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwLinePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();
@@ -249,7 +249,7 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const KSHORT nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
+    const sal_uInt16 nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
     // Nur Portions mit echter Breite koennen ein true zurueckliefern
     // Notizen beispielsweise setzen niemals bFull==true
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )

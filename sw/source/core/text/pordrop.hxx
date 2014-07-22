@@ -62,36 +62,36 @@ class SwDropPortion : public SwTxtPortion
 {
     friend class SwDropCapCache;
     SwDropPortionPart* pPart; // due to script/attribute changes
-    MSHORT nLines;          // Line count
-    KSHORT nDropHeight;     // Height
-    KSHORT nDropDescent;    // Distance to the next line
-    KSHORT nDistance;       // Distance to the text
-    KSHORT nFix;            // Fixed position
+    sal_uInt16 nLines;          // Line count
+    sal_uInt16 nDropHeight;     // Height
+    sal_uInt16 nDropDescent;    // Distance to the next line
+    sal_uInt16 nDistance;       // Distance to the text
+    sal_uInt16 nFix;            // Fixed position
     short nX;               // X PaintOffset
     short nY;               // Y Offset
 
     bool FormatTxt( SwTxtFormatInfo &rInf );
     void PaintTxt( const SwTxtPaintInfo &rInf ) const;
 
-    inline void Fix( const KSHORT nNew ) { nFix = nNew; }
+    inline void Fix( const sal_uInt16 nNew ) { nFix = nNew; }
 public:
-    SwDropPortion( const MSHORT nLineCnt,
-                   const KSHORT nDropHeight,
-                   const KSHORT nDropDescent,
-                   const KSHORT nDistance );
+    SwDropPortion( const sal_uInt16 nLineCnt,
+                   const sal_uInt16 nDropHeight,
+                   const sal_uInt16 nDropDescent,
+                   const sal_uInt16 nDistance );
     virtual ~SwDropPortion();
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
             void PaintDrop( const SwTxtPaintInfo &rInf ) const;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
 
-    inline MSHORT GetLines() const { return nLines; }
-    inline KSHORT GetDistance() const { return nDistance; }
-    inline KSHORT GetDropHeight() const { return nDropHeight; }
-    inline KSHORT GetDropDescent() const { return nDropDescent; }
-    inline KSHORT GetDropLeft() const { return Width() + nFix; }
+    inline sal_uInt16 GetLines() const { return nLines; }
+    inline sal_uInt16 GetDistance() const { return nDistance; }
+    inline sal_uInt16 GetDropHeight() const { return nDropHeight; }
+    inline sal_uInt16 GetDropDescent() const { return nDropDescent; }
+    inline sal_uInt16 GetDropLeft() const { return Width() + nFix; }
 
     inline SwDropPortionPart* GetPart() const { return pPart; }
     inline void SetPart( SwDropPortionPart* pNew ) { pPart = pNew; }

@@ -46,7 +46,7 @@ using namespace ::com::sun::star::linguistic2;
 // returns true if no line break has to be performed
 // otherwise possible break or hyphenation position is determined
 bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
-                            const KSHORT nPorHeight )
+                            const sal_uInt16 nPorHeight )
 {
     nCutPos = rInf.GetIdx();
 
@@ -81,7 +81,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if( !nMaxLen )
         return false;
 
-    KSHORT nItalic = 0;
+    sal_uInt16 nItalic = 0;
     if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
     {
         bool bAddItalic = true;

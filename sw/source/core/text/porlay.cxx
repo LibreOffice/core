@@ -251,11 +251,11 @@ static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 n
 // Swapped out from FormatLine()
 void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
-    const KSHORT nLineWidth = rInf.RealWidth();
+    const sal_uInt16 nLineWidth = rInf.RealWidth();
 
-    KSHORT nFlyAscent = 0;
-    KSHORT nFlyHeight = 0;
-    KSHORT nFlyDescent = 0;
+    sal_uInt16 nFlyAscent = 0;
+    sal_uInt16 nFlyHeight = 0;
+    sal_uInt16 nFlyDescent = 0;
     bool bOnlyPostIts = true;
     SetHanging( false );
 
@@ -286,11 +286,11 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         }
         else
         {
-            KSHORT nLineHeight = Height();
+            sal_uInt16 nLineHeight = Height();
             Init( GetPortion() );
             SwLinePortion *pPos = pPortion;
             SwLinePortion *pLast = this;
-            KSHORT nMaxDescent = 0;
+            sal_uInt16 nMaxDescent = 0;
 
             // A group is a segment in the portion chain of pCurr or a fixed
             // portion spanning to the end or the next fixed portion
@@ -347,8 +347,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
                 // We had an attribute change: Sum up/build maxima of length and mass
 
-                KSHORT nPosHeight = pPos->Height();
-                KSHORT nPosAscent = pPos->GetAscent();
+                sal_uInt16 nPosHeight = pPos->Height();
+                sal_uInt16 nPosAscent = pPos->GetAscent();
 
                 SAL_WARN_IF( nPosHeight < nPosAscent,
                         "sw.core", "SwLineLayout::CalcLine: bad ascent or height" );
@@ -381,7 +381,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         {
                             if( pPos->InNumberGrp() )
                             {
-                                KSHORT nTmp = rInf.GetFont()->GetAscent(
+                                sal_uInt16 nTmp = rInf.GetFont()->GetAscent(
                                                 rInf.GetVsh(), *rInf.GetOut() );
                                 if( nTmp > nPosAscent )
                                 {

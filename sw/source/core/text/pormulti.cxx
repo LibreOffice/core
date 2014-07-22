@@ -100,10 +100,10 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
     } while ( pLay );
     if( HasBrackets() )
     {
-        KSHORT nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nHeight;
+        sal_uInt16 nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nHeight;
         if( nTmp > Height() )
         {
-            KSHORT nAdd = ( nTmp - Height() ) / 2;
+            sal_uInt16 nAdd = ( nTmp - Height() ) / 2;
             GetRoot().SetAscent( GetRoot().GetAscent() + nAdd );
             GetRoot().Height( GetRoot().Height() + nAdd );
             Height( nTmp );
@@ -329,7 +329,7 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
     sal_Unicode cCh = bOpen ? pBracket->cPre : pBracket->cPost;
     if( !cCh )
         return;
-    KSHORT nChWidth = bOpen ? PreWidth() : PostWidth();
+    sal_uInt16 nChWidth = bOpen ? PreWidth() : PostWidth();
     if( !nChWidth )
         return;
     if( !bOpen )
@@ -411,7 +411,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
             pTmpFnt->SetActual( pBracket->nPostScript );
         SwFontSave aSave( rInf, pTmpFnt );
         SwPosSize aSize = rInf.GetTxtSize( aStr );
-        KSHORT nTmpAsc = rInf.GetAscent();
+        sal_uInt16 nTmpAsc = rInf.GetAscent();
         if( nTmpAsc > pBracket->nAscent )
         {
             pBracket->nHeight += nTmpAsc - pBracket->nAscent;
@@ -504,7 +504,7 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
             if( nMyBlank )
                 nMultiSpace /= nMyBlank;
 
-            if( nMultiSpace < KSHRT_MAX * SPACING_PRECISION_FACTOR )
+            if( nMultiSpace < USHRT_MAX * SPACING_PRECISION_FACTOR )
             {
 //                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
                 // #i65711# SetLLSpaceAdd replaces the first value,
@@ -635,8 +635,8 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
         pCurr = GetRoot().GetNext();
         rInf.SetIdx( nOldIdx + GetRoot().GetLen() );
     }
-    KSHORT nLeft = 0;   // the space in front of the first letter
-    KSHORT nRight = 0;  // the space at the end of the last letter
+    sal_uInt16 nLeft = 0;   // the space in front of the first letter
+    sal_uInt16 nRight = 0;  // the space at the end of the last letter
     sal_uInt16 nSub = 0;
     switch ( nAdjustment )
     {
@@ -1167,7 +1167,7 @@ class SwSpaceManipulator
     SwTxtPaintInfo& rInfo;
     SwMultiPortion& rMulti;
     std::vector<long>* pOldSpaceAdd;
-    MSHORT nOldSpIdx;
+    sal_uInt16 nOldSpIdx;
     long nSpaceAdd;
     bool bSpaceChg;
     sal_uInt8 nOldDir;
@@ -1304,7 +1304,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     // old values must be saved and restored at the end
     sal_Int32 nOldLen = GetInfo().GetLen();
-    KSHORT nOldX = KSHORT(GetInfo().X());
+    sal_uInt16 nOldX = sal_uInt16(GetInfo().X());
     long nOldY = GetInfo().Y();
     sal_Int32 nOldIdx = GetInfo().GetIdx();
 
@@ -1338,7 +1338,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         GetInfo().SetIdx( nTmpOldIdx );
     }
 
-    KSHORT nTmpX = KSHORT(GetInfo().X());
+    sal_uInt16 nTmpX = sal_uInt16(GetInfo().X());
 
     SwLineLayout* pLay = &rMulti.GetRoot();// the first line of the multiportion
     SwLinePortion* pPor = pLay->GetFirstPortion();//first portion of these line
@@ -1624,14 +1624,14 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
     SwTwips nMaxWidth = rInf.Width();
-    KSHORT nOldX = 0;
+    sal_uInt16 nOldX = 0;
 
     if( rMulti.HasBrackets() )
     {
         sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.SetIdx( ((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart );
         SeekAndChg( rInf );
-        nOldX = KSHORT(GetInfo().X());
+        nOldX = sal_uInt16(GetInfo().X());
         ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
         rInf.SetIdx( nOldIdx );
     }
@@ -1761,8 +1761,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         bRet = false;
         FormatReset( aInf );
         aInf.X( nTmpX );
-        aInf.Width( KSHORT(nActWidth) );
-        aInf.RealWidth( KSHORT(nActWidth) );
+        aInf.Width( sal_uInt16(nActWidth) );
+        aInf.RealWidth( sal_uInt16(nActWidth) );
         aInf.SetFirstMulti( bFirstMulti );
         aInf.SetNumDone( rInf.IsNumDone() );
         aInf.SetFtnDone( rInf.IsFtnDone() );
@@ -1950,8 +1950,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         else if( nAsc < 0 )
             nAsc = 0;
         rMulti.Width( rMulti.Height() );
-        rMulti.Height( KSHORT(nH) );
-        rMulti.SetAscent( KSHORT(nAsc) );
+        rMulti.Height( sal_uInt16(nH) );
+        rMulti.SetAscent( sal_uInt16(nAsc) );
         bRet = ( rInf.GetPos().X() + rMulti.Width() > rInf.Width() ) &&
                  nStartIdx != rInf.GetLineStart();
     }
@@ -2284,7 +2284,7 @@ SwTxtCursorSave::~SwTxtCursorSave()
 {
     if( bSpaceChg )
         SwDoubleLinePortion::ResetSpaceAdd( pTxtCrsr->pCurr );
-    pTxtCrsr->pCurr->Width( KSHORT(nWidth) );
+    pTxtCrsr->pCurr->Width( sal_uInt16(nWidth) );
     pTxtCrsr->pCurr = pCurr;
     pTxtCrsr->nStart = nStart;
     pTxtCrsr->SetPropFont( nOldProp );

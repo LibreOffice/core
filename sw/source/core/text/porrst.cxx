@@ -72,10 +72,10 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     SetWhichPor( POR_BRK );
 }
 
-sal_Int32 SwBreakPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwBreakPortion::GetCrsrOfst( const sal_uInt16 ) const
 { return 0; }
 
-KSHORT SwBreakPortion::GetViewWidth( const SwTxtSizeInfo & ) const
+sal_uInt16 SwBreakPortion::GetViewWidth( const SwTxtSizeInfo & ) const
 { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
@@ -241,8 +241,8 @@ SwTwips SwTxtFrm::EmptyHeight() const
     const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
     if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
     {
-        MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
-        if( MSHRT_MAX != nRedlPos )
+        sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+        if( USHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
             aAttrHandler.Init(  GetTxtNode()->GetSwAttrSet(),
@@ -319,7 +319,7 @@ bool SwTxtFrm::FormatEmpty()
         ClearPara();
         ResetBlinkPor();
     }
-    SetCacheIdx( MSHRT_MAX );
+    SetCacheIdx( USHRT_MAX );
     if( !IsEmpty() )
     {
         SetEmpty( true );
@@ -336,7 +336,7 @@ bool SwTxtFrm::FormatEmpty()
     return true;
 }
 
-bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
+bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
     const SwFrm *pFrm = this;
     rRegDiff = 0;
@@ -388,7 +388,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
 
                             aFnt.ChgFnt( pSh, *pOut );
                             rRegDiff = aFnt.GetHeight( pSh, *pOut );
-                            KSHORT nNettoHeight = rRegDiff;
+                            sal_uInt16 nNettoHeight = rRegDiff;
 
                             switch( rSpace.GetLineSpaceRule() )
                             {
@@ -396,7 +396,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                 break;
                                 case SVX_LINE_SPACE_MIN:
                                 {
-                                    if( rRegDiff < KSHORT( rSpace.GetLineHeight() ) )
+                                    if( rRegDiff < sal_uInt16( rSpace.GetLineHeight() ) )
                                         rRegDiff = rSpace.GetLineHeight();
                                     break;
                                 }
@@ -416,7 +416,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     nTmp /= 100;
                                     if( !nTmp )
                                         ++nTmp;
-                                    rRegDiff = (KSHORT)nTmp;
+                                    rRegDiff = (sal_uInt16)nTmp;
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
@@ -525,7 +525,7 @@ bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
     return false;
 }
 
-KSHORT SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
+sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
 {
     if( !mnViewWidth )
         mnViewWidth = rInf.GetTxtSize(OUString(' ')).Width();

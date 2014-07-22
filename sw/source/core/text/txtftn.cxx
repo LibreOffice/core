@@ -793,11 +793,11 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
     SWAP_IF_SWAPPED( pFrm )
 
-    KSHORT nReal;
+    sal_uInt16 nReal;
     {
-        KSHORT nOldReal = pCurr->GetRealHeight();
-        KSHORT nOldAscent = pCurr->GetAscent();
-        KSHORT nOldHeight = pCurr->Height();
+        sal_uInt16 nOldReal = pCurr->GetRealHeight();
+        sal_uInt16 nOldAscent = pCurr->GetAscent();
+        sal_uInt16 nOldHeight = pCurr->Height();
         ((SwTxtFormatter*)this)->CalcRealHeight();
         nReal = pCurr->GetRealHeight();
         if( nReal < nOldReal )
@@ -972,7 +972,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
-    MSHORT nVirtNum = pPage->GetVirtPageNum();
+    sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
     const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
 }
@@ -1054,7 +1054,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     // natuerlich da, wo wir unseren Quovadis Text reinsetzen wollen.
     // Erst mal sehen, ob es so schlimm ist:
     SwLinePortion *pPor = pCurr->GetFirstPortion();
-    KSHORT nLastLeft = 0;
+    sal_uInt16 nLastLeft = 0;
     while( pPor )
     {
         if ( pPor->IsFlyPortion() )
@@ -1065,7 +1065,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     // Das alte Spiel: wir wollen, dass die Zeile an einer bestimmten
     // Stelle umbricht, also beeinflussen wir die Width.
     // nLastLeft ist jetzt quasi der rechte Rand.
-    const KSHORT nOldRealWidth = rInf.RealWidth();
+    const sal_uInt16 nOldRealWidth = rInf.RealWidth();
     rInf.RealWidth( nOldRealWidth - nLastLeft );
 
     OUString aErgo = lcl_GetPageNumber( pErgoFrm->FindPageFrm() );
@@ -1187,7 +1187,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         pCurrPor = pQuo;
     }
 
-    pCurr->Width( pCurr->Width() + KSHORT( nQuoWidth ) );
+    pCurr->Width( pCurr->Width() + sal_uInt16( nQuoWidth ) );
 
     // Und noch einmal adjustieren wegen des Adjustment und nicht zu Letzt
     // wegen folgendem Sonderfall: In der Zeile hat der DummUser durchgaengig
@@ -1205,7 +1205,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 // Oszillationen verwendet.
 void SwTxtFormatter::MakeDummyLine()
 {
-    KSHORT nRstHeight = GetFrmRstHeight();
+    sal_uInt16 nRstHeight = GetFrmRstHeight();
     if( pCurr && nRstHeight > pCurr->Height() )
     {
         SwLineLayout *pLay = new SwLineLayout;
@@ -1306,7 +1306,7 @@ SwFtnSave::~SwFtnSave()
 }
 
 SwFtnPortion::SwFtnPortion( const OUString &rExpand,
-                            SwTxtFtn *pFootn, KSHORT nReal )
+                            SwTxtFtn *pFootn, sal_uInt16 nReal )
         : SwFldPortion( rExpand, 0 )
         , pFtn(pFootn)
         , nOrigHeight( nReal )
@@ -1452,7 +1452,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     SetWhichPor( POR_ERGOSUM );
 }
 
-sal_Int32 SwErgoSumPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwErgoSumPortion::GetCrsrOfst( const sal_uInt16 ) const
 {
     return 0;
 }

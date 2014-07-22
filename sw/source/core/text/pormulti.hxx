@@ -54,10 +54,10 @@ struct SwMultiCreator
 struct SwBracket
 {
     sal_Int32 nStart;      // Start of text attribute determins the font
-    KSHORT nAscent;         // Ascent of the brackets
-    KSHORT nHeight;         // Height of them
-    KSHORT nPreWidth;       // Width of the opening bracket
-    KSHORT nPostWidth;      // Width of the closing bracket
+    sal_uInt16 nAscent;         // Ascent of the brackets
+    sal_uInt16 nHeight;         // Height of them
+    sal_uInt16 nPreWidth;       // Width of the opening bracket
+    sal_uInt16 nPostWidth;      // Width of the closing bracket
     sal_Unicode cPre;       // Initial character, e.g. '('
     sal_Unicode cPost;      // Final character, e.g. ')'
     sal_uInt8 nPreScript;       // Script of the initial character
@@ -165,11 +165,11 @@ public:
     void SetBrackets( const SwDoubleLinePortion& rDouble );
     void PaintBracket( SwTxtPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
-    inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
-    inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
+    inline sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
+    inline sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
     inline void ClearBrackets()
         { pBracket->nPreWidth = pBracket->nPostWidth=0; Width( 0 ); }
-    inline KSHORT BracketWidth(){ return PreWidth() + PostWidth(); }
+    inline sal_uInt16 BracketWidth(){ return PreWidth() + PostWidth(); }
 
     void CalcBlanks( SwTxtFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );

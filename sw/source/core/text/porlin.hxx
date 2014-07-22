@@ -63,11 +63,11 @@ protected:
     SwLinePortion *pPortion;
     // Count of chars and spaces on the line
     sal_Int32 nLineLength;
-    KSHORT nAscent;      // Maximum ascender
+    sal_uInt16 nAscent;      // Maximum ascender
 
     SwLinePortion();
 private:
-    MSHORT nWhichPor;       // Who's who?
+    sal_uInt16 nWhichPor;       // Who's who?
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
 
@@ -84,13 +84,13 @@ public:
     inline sal_Int32 GetLen() const { return nLineLength; }
     inline void SetLen( const sal_Int32 nLen ) { nLineLength = nLen; }
     inline void SetPortion( SwLinePortion *pNew ){ pPortion = pNew; }
-    inline KSHORT &GetAscent() { return nAscent; }
-    inline KSHORT GetAscent() const { return nAscent; }
-    inline void SetAscent( const KSHORT nNewAsc ) { nAscent = nNewAsc; }
-    inline void  PrtWidth( KSHORT nNewWidth ) { Width( nNewWidth ); }
-    inline KSHORT PrtWidth() const { return Width(); }
-    inline void AddPrtWidth( const KSHORT nNew ) { Width( Width() + nNew ); }
-    inline void SubPrtWidth( const KSHORT nNew ) { Width( Width() - nNew ); }
+    inline sal_uInt16 &GetAscent() { return nAscent; }
+    inline sal_uInt16 GetAscent() const { return nAscent; }
+    inline void SetAscent( const sal_uInt16 nNewAsc ) { nAscent = nNewAsc; }
+    inline void  PrtWidth( sal_uInt16 nNewWidth ) { Width( nNewWidth ); }
+    inline sal_uInt16 PrtWidth() const { return Width(); }
+    inline void AddPrtWidth( const sal_uInt16 nNew ) { Width( Width() + nNew ); }
+    inline void SubPrtWidth( const sal_uInt16 nNew ) { Width( Width() - nNew ); }
 
     inline const SwPosSize &PrtSize() const { return *this; }
 
@@ -103,8 +103,8 @@ public:
     // Returns 0, if there's no payload
     virtual SwLinePortion *Compress();
 
-    inline void SetWhichPor( const MSHORT nNew )    { nWhichPor = nNew; }
-    inline MSHORT GetWhichPor( ) const        { return nWhichPor; }
+    inline void SetWhichPor( const sal_uInt16 nNew )    { nWhichPor = nNew; }
+    inline sal_uInt16 GetWhichPor( ) const        { return nWhichPor; }
 
 // Group queries
     inline bool InTxtGrp() const { return nWhichPor & PORGRP_TXT; }
@@ -155,7 +155,7 @@ public:
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     void CalcTxtSize( const SwTxtSizeInfo &rInfo );
 
@@ -172,7 +172,7 @@ public:
     virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // For SwFldPortion, SwSoftHyphPortion
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const;
 
     // for text- and multi-portions
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;

@@ -258,7 +258,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     pCurrent->InitSpaceAdd();
     sal_Int32 nGluePortion = 0;
     sal_Int32 nCharCnt = 0;
-    MSHORT nSpaceIdx = 0;
+    sal_uInt16 nSpaceIdx = 0;
 
     // i60591: hennerdrews
     SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
@@ -404,7 +404,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     pCurrent->SetKanaComp( pNewKana );
 
     const sal_uInt16 nNull = 0;
-    MSHORT nKanaIdx = 0;
+    sal_uInt16 nKanaIdx = 0;
     long nKanaDiffSum = 0;
     SwTwips nRepaintOfst = 0;
     SwTwips nX = 0;
@@ -544,7 +544,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     const sal_uInt16 nRealHeight = GetLineHeight();
     const sal_uInt16 nLineHeight = pCurrent->Height();
 
-    KSHORT nPrtWidth = pCurrent->PrtWidth();
+    sal_uInt16 nPrtWidth = pCurrent->PrtWidth();
     SwLinePortion *pLast = pCurrent->FindLastPortion();
 
     if( GetInfo().IsMulti() )
@@ -575,7 +575,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     pLast->Append( pRight );
 
     if( long( nPrtWidth )< nRealWidth )
-        pRight->PrtWidth( KSHORT( nRealWidth - nPrtWidth ) );
+        pRight->PrtWidth( sal_uInt16( nRealWidth - nPrtWidth ) );
 
     // pCurrent->Width() is set to the real size, because we attach the
     // MarginPortions.
@@ -584,7 +584,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     // implicitly. GetLeftMarginAdjust() and IsJustified() think they have a
     // line filled with chars.
 
-    pCurrent->PrtWidth( KSHORT( nRealWidth ) );
+    pCurrent->PrtWidth( sal_uInt16( nRealWidth ) );
     return pRight;
 }
 
@@ -698,7 +698,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
 {
     SwTxtFly aTxtFly( GetTxtFrm() );
 
-    const KSHORT nCurrWidth = pCurr->PrtWidth();
+    const sal_uInt16 nCurrWidth = pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = 0;
 
     SwRect aLineVert( rCurrRect );
@@ -725,12 +725,12 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
             aLocal.Left( nCurrWidth );
 
         // If the rect is wider than the line, we adjust it to the right size
-        KSHORT nLocalWidth = KSHORT( aLocal.Left() + aLocal.Width() );
+        sal_uInt16 nLocalWidth = sal_uInt16( aLocal.Left() + aLocal.Width() );
         if( nRealWidth < long( nLocalWidth ) )
             aLocal.Width( nRealWidth - aLocal.Left() );
         GetInfo().GetParaPortion()->SetFly( true );
         pFlyPortion = new SwFlyPortion( aLocal );
-        pFlyPortion->Height( KSHORT( rCurrRect.Height() ) );
+        pFlyPortion->Height( sal_uInt16( rCurrRect.Height() ) );
         // The Width could be smaller than the FixWidth, thus:
         pFlyPortion->AdjFixWidth();
     }
@@ -743,7 +743,7 @@ void SwTxtAdjuster::CalcDropAdjust()
     OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
             "CalcDropAdjust: No reason for DropAdjustment." );
 
-    const MSHORT nLineNumber = GetLineNr();
+    const sal_uInt16 nLineNumber = GetLineNr();
 
     // 1) Skip dummies
     Top();
@@ -773,10 +773,10 @@ void SwTxtAdjuster::CalcDropAdjust()
             if( pRight && pRight != pLeft )
             {
                 // 5) Calculate nMinLeft. Who is the most to left?
-                const KSHORT nDropLineStart =
-                    KSHORT(GetLineStart()) + pLeft->Width() + pDropPor->Width();
-                KSHORT nMinLeft = nDropLineStart;
-                for( MSHORT i = 1; i < GetDropLines(); ++i )
+                const sal_uInt16 nDropLineStart =
+                    sal_uInt16(GetLineStart()) + pLeft->Width() + pDropPor->Width();
+                sal_uInt16 nMinLeft = nDropLineStart;
+                for( sal_uInt16 i = 1; i < GetDropLines(); ++i )
                 {
                     if( NextLine() )
                     {
@@ -790,8 +790,8 @@ void SwTxtAdjuster::CalcDropAdjust()
                             nMinLeft = 0;
                         else
                         {
-                            const KSHORT nLineStart =
-                                KSHORT(GetLineStart()) + pMar->Width();
+                            const sal_uInt16 nLineStart =
+                                sal_uInt16(GetLineStart()) + pMar->Width();
                             if( nMinLeft > nLineStart )
                                 nMinLeft = nLineStart;
                         }
@@ -827,7 +827,7 @@ void SwTxtAdjuster::CalcDropRepaint()
     SwRepaint &rRepaint = GetInfo().GetParaPortion()->GetRepaint();
     if( rRepaint.Top() > Y() )
         rRepaint.Top( Y() );
-    for( MSHORT i = 1; i < GetDropLines(); ++i )
+    for( sal_uInt16 i = 1; i < GetDropLines(); ++i )
         NextLine();
     const SwTwips nBottom = Y() + GetLineHeight() - 1;
     if( rRepaint.Bottom() < nBottom )

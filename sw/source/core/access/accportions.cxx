@@ -228,7 +228,7 @@ void SwAccessiblePortionData::Special(
         bLastIsSpecial = true;
 }
 
-void SwAccessiblePortionData::LineBreak(KSHORT /*nWidth*/)
+void SwAccessiblePortionData::LineBreak(sal_uInt16 /*nWidth*/)
 {
     OSL_ENSURE( !bFinished, "We are already done!" );
 

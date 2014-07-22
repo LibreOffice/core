@@ -22,7 +22,7 @@
 #include <inftxt.hxx>
 #include <porexp.hxx>
 
-sal_Int32 SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
+sal_Int32 SwExpandPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
 
 bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
@@ -104,7 +104,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
 // dann duerfen keine Underflows generiert werden!
 // Komplikationen bei Flys...
 
-MSHORT SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
+sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     sal_Int32 nIdx, bool bUnderflow ) const
 {
     if( rInf.StopUnderflow() )
@@ -153,7 +153,7 @@ MSHORT SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
 // Format end of Line
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
-    MSHORT nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
+    sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
     if( nMay )
     {
         if( nMay > 1 )
@@ -216,11 +216,11 @@ void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rInf.DrawPostIts( *this, IsScript() );
 }
 
-KSHORT SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Nicht zu fassen: PostIts sind immer zu sehen.
     return rInf.OnWin() ?
-                (KSHORT)rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
+                (sal_uInt16)rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )

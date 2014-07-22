@@ -116,7 +116,7 @@ SwFldPortion::~SwFldPortion()
         pBlink->Delete( this );
 }
 
-KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // even though this is const, nViewWidth should be computed at the very end:
     SwFldPortion* pThis = (SwFldPortion*)this;
@@ -323,7 +323,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         // gesetzt und wird in nRest uebertragen. Ansonsten bleibt die
         // Laenge erhalten und wuerde auch in nRest einfliessen!
         SetLen(0);
-           const MSHORT nFollow = IsFollow() ? 0 : 1;
+        const sal_uInt16 nFollow = IsFollow() ? 0 : 1;
 
         // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
         // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
@@ -492,7 +492,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   SwFont *pFont,
                                   const bool bLft,
                                   const bool bCntr,
-                                  const KSHORT nMinDst,
+                                  const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
         : SwFldPortion( rExpand, pFont ),
           nFixWidth(0),
@@ -505,7 +505,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
     SetCenter( bCntr );
 }
 
-sal_Int32 SwNumberPortion::GetCrsrOfst( const MSHORT ) const
+sal_Int32 SwNumberPortion::GetCrsrOfst( const sal_uInt16 ) const
 {
     return 0;
 }
@@ -587,10 +587,10 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         if ( rInf.IsMulti() )
         {
             if ( Height() < nDiff )
-                Height( KSHORT( nDiff ) );
+                Height( sal_uInt16( nDiff ) );
         }
         else if( Width() < nDiff )
-            Width( KSHORT(nDiff) );
+            Width( sal_uInt16(nDiff) );
     }
     return bFull;
 }
@@ -625,7 +625,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 
     // calculate the width of the number portion, including follows
-    const KSHORT nOldWidth = Width();
+    const sal_uInt16 nOldWidth = Width();
     sal_uInt16 nSumWidth = 0;
     sal_uInt16 nOffset = 0;
 
@@ -674,7 +674,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             // logical const: reset width
             SwLinePortion *pThis = (SwLinePortion*)this;
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
-            KSHORT nSpaceOffs = nFixWidth;
+            sal_uInt16 nSpaceOffs = nFixWidth;
             pThis->Width( nFixWidth );
 
             if( ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
@@ -690,7 +690,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
                     if( IsCenter() )
                     {
                         /* #110778# a / 2 * 2 == a is not a tautology */
-                        KSHORT nTmpOffset = nOffset;
+                        sal_uInt16 nTmpOffset = nOffset;
                         nOffset /= 2;
                         if( nOffset < nMinDist )
                             nOffset = nTmpOffset - nMinDist;
@@ -731,7 +731,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   SwFont *pFont,
                                   const bool bLft,
                                   const bool bCntr,
-                                  const KSHORT nMinDst,
+                                  const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwNumberPortion( OUString(cBullet) + rBulletFollowedBy,
                        pFont, bLft, bCntr, nMinDst,
@@ -747,7 +747,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
-        const bool bLft, const bool bCntr, const KSHORT nMinDst,
+        const bool bLft, const bool bCntr, const sal_uInt16 nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
@@ -778,7 +778,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
-    Height( KSHORT(nGrfHeight) );
+    Height( sal_uInt16(nGrfHeight) );
     bNoPaint = false;
 }
 
@@ -807,7 +807,7 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( false );
 //    Width( nFixWidth );
-    KSHORT nFollowedByWidth( 0 );
+    sal_uInt16 nFollowedByWidth( 0 );
     if ( mbLabelAlignmentPosAndSpaceModeActive )
     {
         SwFldPortion::Format( rInf );
@@ -824,7 +824,7 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        Width( rInf.Width() - (KSHORT)rInf.X() );
+        Width( rInf.Width() - (sal_uInt16)rInf.X() );
         if( bFly )
         {
             SetLen( 0 );
@@ -859,7 +859,7 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     if( Width() < nDiff )
-        Width( KSHORT(nDiff) );
+        Width( sal_uInt16(nDiff) );
     return bFull;
 }
 
@@ -888,7 +888,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( nFixWidth < Width() && !bTmpLeft )
     {
-        KSHORT nOffset = Width() - nFixWidth;
+        sal_uInt16 nOffset = Width() - nFixWidth;
         if( nOffset < nMinDist )
             nOffset = 0;
         else
@@ -907,7 +907,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( bReplace )
     {
-        KSHORT nTmpH = GetPortion() ? GetPortion()->GetAscent() : 120;
+        sal_uInt16 nTmpH = GetPortion() ? GetPortion()->GetAscent() : 120;
         aSize = Size( nTmpH, nTmpH );
         aPos.Y() = rInf.Y() - nTmpH;
     }
@@ -1298,7 +1298,7 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     if( !GetLen() ) // for the dummy part at the end of the line, where
         return 0;   // the combined portion doesn't fit.

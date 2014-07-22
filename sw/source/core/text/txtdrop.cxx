@@ -96,10 +96,10 @@ SwDropPortionPart::~SwDropPortionPart()
 }
 
 // SwDropPortion CTor, DTor
-SwDropPortion::SwDropPortion( const MSHORT nLineCnt,
-                              const KSHORT nDrpHeight,
-                              const KSHORT nDrpDescent,
-                              const KSHORT nDist )
+SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
+                              const sal_uInt16 nDrpHeight,
+                              const sal_uInt16 nDrpDescent,
+                              const sal_uInt16 nDist )
   : pPart( 0 ),
     nLines( nLineCnt ),
     nDropHeight(nDrpHeight),
@@ -244,8 +244,8 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
     const SwDropPortionPart* pCurrPart = GetPart();
     const sal_Int32 nOldLen = GetLen();
-    const KSHORT nOldWidth = Width();
-    const KSHORT nOldAscent = GetAscent();
+    const sal_uInt16 nOldWidth = Width();
+    const sal_uInt16 nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
@@ -293,11 +293,11 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
         return;
 
     // set the lying values
-    const KSHORT nOldHeight = Height();
-    const KSHORT nOldWidth  = Width();
-    const KSHORT nOldAscent = GetAscent();
+    const sal_uInt16 nOldHeight = Height();
+    const sal_uInt16 nOldWidth  = Width();
+    const sal_uInt16 nOldAscent = GetAscent();
     const SwTwips nOldPosY  = rInf.Y();
-    const KSHORT nOldPosX   = (KSHORT)rInf.X();
+    const sal_uInt16 nOldPosX   = (sal_uInt16)rInf.X();
     const SwParaPortion *pPara = rInf.GetParaPortion();
     const Point aOutPos( nOldPosX + nX, nOldPosY - pPara->GetAscent()
                          - pPara->GetRealHeight() + pPara->Height() );
@@ -418,18 +418,18 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return aPosSize;
 }
 
-sal_Int32 SwDropPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwDropPortion::GetCrsrOfst( const sal_uInt16 ) const
 {
     return 0;
 }
 
-void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
+void SwTxtFormatter::CalcDropHeight( const sal_uInt16 nLines )
 {
     const SwLinePortion *const pOldCurr = GetCurr();
-    KSHORT nDropHght = 0;
-    KSHORT nAscent = 0;
-    KSHORT nHeight = 0;
-    KSHORT nDropLns = 0;
+    sal_uInt16 nDropHght = 0;
+    sal_uInt16 nAscent = 0;
+    sal_uInt16 nHeight = 0;
+    sal_uInt16 nDropLns = 0;
     const bool bRegisterOld = IsRegisterOn();
     bRegisterOn = false;
 
@@ -483,11 +483,11 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
 
 //  We assume hat the font height doesn't change and that at first there
 //  are at least as many lines, as the DropCap-setting claims
-void SwTxtFormatter::GuessDropHeight( const MSHORT nLines )
+void SwTxtFormatter::GuessDropHeight( const sal_uInt16 nLines )
 {
     OSL_ENSURE( nLines, "GuessDropHeight: Give me more Lines!" );
-    KSHORT nAscent = 0;
-    KSHORT nHeight = 0;
+    sal_uInt16 nAscent = 0;
+    sal_uInt16 nHeight = 0;
     SetDropLines( nLines );
     if ( GetDropLines() > 1 )
     {
@@ -609,7 +609,7 @@ void SwTxtPainter::PaintDropPortion()
 
     // MarginPortion und Adjustment!
     const SwLinePortion *pPor = pCurr->GetFirstPortion();
-    KSHORT nX = 0;
+    sal_uInt16 nX = 0;
     while( pPor && !pPor->IsDropPortion() )
     {
         nX = nX + pPor->Width();
@@ -618,7 +618,7 @@ void SwTxtPainter::PaintDropPortion()
     Point aLineOrigin( GetTopLeft() );
 
     aLineOrigin.X() += nX;
-    KSHORT nTmpAscent, nTmpHeight;
+    sal_uInt16 nTmpAscent, nTmpHeight;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     aLineOrigin.Y() += nTmpAscent;
     GetInfo().SetIdx( GetStart() );
@@ -639,9 +639,9 @@ class SwDropCapCache
     long aMagicNo[ DROP_CACHE_SIZE ];
     OUString aTxt[ DROP_CACHE_SIZE ];
     sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
-    KSHORT aWishedHeight[ DROP_CACHE_SIZE ];
+    sal_uInt16 aWishedHeight[ DROP_CACHE_SIZE ];
     short aDescent[ DROP_CACHE_SIZE ];
-    MSHORT nIndex;
+    sal_uInt16 nIndex;
 public:
     SwDropCapCache();
     ~SwDropCapCache(){}
@@ -663,7 +663,7 @@ void SwDropPortion::DeleteDropCapCache()
 void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 {
     const void* pFntNo = 0;
-    MSHORT nTmpIdx = 0;
+    sal_uInt16 nTmpIdx = 0;
 
     OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
 
@@ -721,7 +721,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             // save keys for cache
             aMagicNo[ nTmpIdx ] = sal_IntPtr(pFntNo);
             aTxt[ nTmpIdx ] = aStr;
-            aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
+            aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
             // save initial scaling factor
             aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
         }
@@ -729,7 +729,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         bool bGrow = ( pDrop->GetLen() != 0 );
 
         // for growing control
-        long nMax = KSHRT_MAX;
+        long nMax = USHRT_MAX;
         long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1
         long nGrow = 0;
@@ -800,7 +800,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                     if ( bHaveGlyphRect )
                     {
                         FontMetric aWinMet( pWin->GetFontMetric() );
-                        nAscent = (KSHORT) aWinMet.GetAscent();
+                        nAscent = (sal_uInt16) aWinMet.GetAscent();
                     }
                     else
                     // We do not have a window or our window could not
@@ -1019,8 +1019,8 @@ bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
         nDistance = 0;
     else
     {
-        const KSHORT nWant = Width() + GetDistance();
-        const KSHORT nRest = (sal_uInt16)(rInf.Width() - rInf.X());
+        const sal_uInt16 nWant = Width() + GetDistance();
+        const sal_uInt16 nRest = (sal_uInt16)(rInf.Width() - rInf.X());
         if( ( nWant > nRest ) ||
             lcl_IsDropFlyInter( rInf, Width() + GetDistance(), nDropHeight ) )
             nDistance = 0;
