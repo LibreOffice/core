@@ -315,8 +315,8 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     // about 120+ characters which will usually be exceed when
                     // using dictionaries as extensions. (Hunspell waits UTF-8 encoded
                     // path with \\?\ long path prefix.)
-                    OString aTmpaff = OUStringToOString(aff, RTL_TEXTENCODING_UTF8);
-                    OString aTmpdict = OUStringToOString(dict, RTL_TEXTENCODING_UTF8);
+                    OString aTmpaff = Win_AddLongPathPrefix(OUStringToOString(aff, RTL_TEXTENCODING_UTF8));
+                    OString aTmpdict = Win_AddLongPathPrefix(OUStringToOString(dict, RTL_TEXTENCODING_UTF8));
 #else
                     OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));

@@ -48,6 +48,14 @@ using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
 #if defined(WNT)
+
+OString Win_AddLongPathPrefix( const OString &rPathName )
+{
+#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
+  if (!rPathName.match(WIN32_LONG_PATH_PREFIX)) return WIN32_LONG_PATH_PREFIX + rPathName;
+  return rPathName;
+}
+
 OString Win_GetShortPathName( const OUString &rLongPathName )
 {
     OString aRes;
