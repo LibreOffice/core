@@ -385,7 +385,7 @@ void BubbleChart::createShapes()
                             sal_Int32 nOffset = 0;
                             if(LABEL_ALIGN_CENTER!=eAlignment)
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                             , fBubbleSize, fBubbleSize, aScreenPosition2D, eAlignment, nOffset );
                         }
                     }

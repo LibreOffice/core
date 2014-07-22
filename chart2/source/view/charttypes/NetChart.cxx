@@ -678,7 +678,7 @@ void NetChart::createShapes()
                                     .transformSceneToScreenPosition( aScenePosition3D ) );
                             }
 
-                            this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
                                             , fLogicValueForLabeDisplay
                                             , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }

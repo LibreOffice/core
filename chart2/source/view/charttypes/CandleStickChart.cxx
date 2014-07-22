@@ -303,16 +303,16 @@ void CandleStickChart::createShapes()
                     if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                     {
                         if(isValidPosition(aPosMiddleFirst))
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                         , fUnscaledY_First, 1.0, Position3DToAWTPoint(aPosMiddleFirst), LABEL_ALIGN_LEFT_BOTTOM );
                         if(isValidPosition(aPosMiddleLast))
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                         , fUnscaledY_Last, 1.0, Position3DToAWTPoint(aPosMiddleLast), LABEL_ALIGN_RIGHT_TOP );
                         if(isValidPosition(aPosMiddleMinimum))
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                         , fUnscaledY_Min, 1.0, Position3DToAWTPoint(aPosMiddleMinimum), LABEL_ALIGN_BOTTOM );
                         if(isValidPosition(aPosMiddleMaximum))
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                         , fUnscaledY_Max, 1.0, Position3DToAWTPoint(aPosMiddleMaximum), LABEL_ALIGN_TOP );
                     }
                 }//next series in x slot (next y slot)

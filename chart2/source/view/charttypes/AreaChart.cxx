@@ -989,7 +989,7 @@ void AreaChart::createShapes()
                                         .transformSceneToScreenPosition( aScenePosition3D ) );
                             }
 
-                            this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
+                            createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
                                     , fLogicValueForLabeDisplay
                                     , rLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }

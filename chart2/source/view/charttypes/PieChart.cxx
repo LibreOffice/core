@@ -492,7 +492,7 @@ void PieChart::createShapes()
                     }
 
                     double nVal = pSeries->getYValue( nPointIndex );
-                    aPieLabelInfo.xTextShape = this->createDataLabel( xTextTarget, *pSeries, nPointIndex
+                    aPieLabelInfo.xTextShape = createDataLabel( xTextTarget, *pSeries, nPointIndex
                                     , nVal, fLogicYSum, aScreenPosition2D, eAlignment );
 
                     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );

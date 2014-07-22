@@ -435,9 +435,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         else if(LABEL_ALIGN_BOTTOM==eAlignment)
             aScreenPosition2D.Y += nOffset;
 
-        uno::Reference< drawing::XShapes > xTarget_(
-                m_pShapeFactory->createGroup2D( this->getLabelsGroupShape(rDataSeries, xTarget)
-                    , ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(),nPointIndex ) ) );
+        uno::Reference< drawing::XShapes > xTarget_ =
+            m_pShapeFactory->createGroup2D(
+                getLabelsGroupShape(rDataSeries, xTarget),
+                ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(), nPointIndex));
 
         //check whether the label needs to be created and how:
         DataPointLabel* pLabel = rDataSeries.getDataPointLabelIfLabel( nPointIndex );
@@ -459,7 +460,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         if(pLabel->ShowLegendSymbol)
         {
             sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
-            awt::Size aCurrentRatio = this->getPreferredLegendKeyAspectRatio();
+            awt::Size aCurrentRatio = getPreferredLegendKeyAspectRatio();
             sal_Int32 nSymbolWidth = aCurrentRatio.Width;
             if( aCurrentRatio.Height > 0 )
             {
@@ -508,8 +509,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
             if(pLabel->ShowNumber)
             {
-                OUString aNumber( this->getLabelTextForValue( rDataSeries
-                    , nPointIndex, fValue, false /*bAsPercentage*/ ) );
+                OUString aNumber = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
                 if( !aNumber.isEmpty() )
                 {
                     if(!aText.isEmpty())
@@ -527,8 +527,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 if( fValue < 0 )
                     fValue*=-1.0;
 
-                OUString aPercentage( this->getLabelTextForValue( rDataSeries
-                    , nPointIndex, fValue, true /*bAsPercentage*/ ) );
+                OUString aPercentage = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
                 if( !aPercentage.isEmpty() )
                 {
                     if(!aText.isEmpty())

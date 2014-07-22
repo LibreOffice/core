@@ -843,10 +843,9 @@ void BarChart::createShapes()
                                 }
                             }
 
-                            awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(
-                                eAlignment, nLabelPlacement
-                                , fLogicX, fLowerYValue, fUpperYValue, fLogicZ
-                                , fLowerBarDepth, fUpperBarDepth, fBaseValue, pPosHelper ));
+                            awt::Point aScreenPosition2D = getLabelScreenPositionAndAlignment(
+                                eAlignment, nLabelPlacement, fLogicX, fLowerYValue, fUpperYValue, fLogicZ,
+                                fLowerBarDepth, fUpperBarDepth, fBaseValue, pPosHelper);
                             sal_Int32 nOffset = 0;
                             if(LABEL_ALIGN_CENTER!=eAlignment)
                             {
@@ -854,8 +853,9 @@ void BarChart::createShapes()
                                 if( m_nDimension == 3 )
                                     nOffset = 260;
                             }
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nPointIndex
-                                            , fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
+                            createDataLabel(
+                                xTextTarget, **aSeriesIter, nPointIndex,
+                                fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset);
                         }
 
                     }//end iteration through partial points
