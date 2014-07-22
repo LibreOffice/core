@@ -711,21 +711,21 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
 
         boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
 
-        ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
+        boost::scoped_ptr<comphelper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
                                  pRefSizeProv.get()));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        if(!apItemConverter.get())
+
+        if (!pItemConverter)
             return bRet;
 
-        SfxItemSet aItemSet = apItemConverter->CreateEmptyItemSet();
+        SfxItemSet aItemSet = pItemConverter->CreateEmptyItemSet();
 
         if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X || eObjectType == OBJECTTYPE_DATA_ERRORS_Y )
             aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE, eObjectType == OBJECTTYPE_DATA_ERRORS_Y ));
 
-        apItemConverter->FillItemSet( aItemSet );
+        pItemConverter->FillItemSet(aItemSet);
 
         //prepare dialog
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter( rObjectCID );
@@ -769,7 +769,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
             if(pOutItemSet)
             {
                 ControllerLockGuardUNO aCLGuard( getModel());
-                apItemConverter->ApplyItemSet( *pOutItemSet );//model should be changed now
+                pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
                 bRet = true;
             }
         }
