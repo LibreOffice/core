@@ -22,6 +22,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <tools/stream.hxx>
 #include <svl/ctypeitm.hxx>
+#include <stringio.hxx>
 
 // The following defines are copied from chaos/source/items/cstritem.cxx:
 #define CNTSTRINGITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )

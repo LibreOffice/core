@@ -211,48 +211,6 @@ public:
     sal_uLong                GetRefCount() const { return m_nRefCount; }
     inline SfxItemKind       GetKind() const { return m_nKind; }
 
-    /** Read in a Unicode string from a streamed byte string representation.
-
-        @param rStream  Some (input) stream.  Its Stream/TargetCharSets must
-        be set to correct values!
-
-        @return  On success, returns the reconstructed Unicode string.
-     */
-    static OUString readByteString(SvStream & rStream);
-
-    /** Write a byte string representation of a Unicode string into a stream.
-
-        @param rStream  Some (output) stream.  Its Stream/TargetCharSets must
-        be set to correct values!
-
-        @param rString  Some Unicode string.
-     */
-    static void writeByteString(SvStream & rStream,
-                                const OUString& rString);
-
-    /** Read in a Unicode string from either a streamed Unicode or byte string
-        representation.
-
-        @param rStream  Some (input) stream.  If bUnicode is false, its
-        Stream/TargetCharSets must be set to correct values!
-
-        @param bUnicode  Whether to read in a stream Unicode (true) or byte
-        string (false) representation.
-
-        @return          On success, returns the reconstructed Unicode string.
-     */
-    static OUString readUnicodeString(SvStream & rStream, bool bUnicode);
-
-    /** Write a Unicode string representation of a Unicode string into a
-        stream.
-
-        @param rStream  Some (output) stream.
-
-        @param rString  Some Unicode string.
-     */
-    static void writeUnicodeString(SvStream & rStream,
-                                   const OUString& rString);
-
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& );    // not implemented!!
 };

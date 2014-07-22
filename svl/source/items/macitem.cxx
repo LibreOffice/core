@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 
 #include <svl/macitem.hxx>
+#include <stringio.hxx>
 
 TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
 
@@ -107,8 +108,8 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;
         rStrm.ReadUInt16( nCurKey );
-        aLibName = SfxPoolItem::readByteString(rStrm);
-        aMacName = SfxPoolItem::readByteString(rStrm);
+        aLibName = readByteString(rStrm);
+        aMacName = readByteString(rStrm);
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm.ReadUInt16( eType );
@@ -135,8 +136,8 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     {
         const SvxMacro& rMac = it->second;
         rStream.WriteUInt16( it->first );
-        SfxPoolItem::writeByteString(rStream, rMac.GetLibName());
-        SfxPoolItem::writeByteString(rStream, rMac.GetMacName());
+        writeByteString(rStream, rMac.GetLibName());
+        writeByteString(rStream, rMac.GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStream.WriteUInt16( (sal_uInt16)rMac.GetScriptType() );

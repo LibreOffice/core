@@ -23,6 +23,7 @@
 #include <tools/vcompat.hxx>
 
 #include <svl/cntwall.hxx>
+#include <stringio.hxx>
 
 #define CNTWALLPAPERITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
 #define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )

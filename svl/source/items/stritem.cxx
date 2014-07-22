@@ -18,6 +18,7 @@
  */
 
 #include <svl/stritem.hxx>
+#include <stringio.hxx>
 
 
 //  class SfxStringItem

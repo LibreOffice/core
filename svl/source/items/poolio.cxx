@@ -149,7 +149,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     {
         SfxMiniRecordWriter aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER);
         rStream.WriteUInt16( pImp->nVersion );
-        SfxPoolItem::writeByteString(rStream, pImp->aName);
+        writeByteString(rStream, pImp->aName);
     }
 
     // VersionMaps
@@ -560,7 +560,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
         // Read Header
         rStream.ReadUInt16( pImp->nLoadingVersion );
-        aExternName = SfxPoolItem::readByteString(rStream);
+        aExternName = readByteString(rStream);
         bool bOwnPool = aExternName == pImp->aName;
 
         //! As long as we cannot read foreign Pools
@@ -734,7 +734,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     OUString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
         rStream.ReadUInt16( pImp->nLoadingVersion );
-    aExternName = SfxPoolItem::readByteString(rStream);
+    aExternName = readByteString(rStream);
     bool bOwnPool = aExternName == pImp->aName;
     pImp->bStreaming = true;
 
@@ -1531,6 +1531,28 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
     }
 
     return pItem;
+}
+
+
+OUString readByteString(SvStream& rStream)
+{
+    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
+}
+
+void writeByteString(SvStream & rStream, const OUString& rString)
+{
+    rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
+}
+
+OUString readUnicodeString(SvStream & rStream, bool bUnicode)
+{
+    return rStream.ReadUniOrByteString(bUnicode ? RTL_TEXTENCODING_UCS2 :
+                                      rStream.GetStreamCharSet());
+}
+
+void writeUnicodeString(SvStream & rStream, const OUString& rString)
+{
+    rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
 }
 
 

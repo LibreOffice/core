@@ -159,31 +159,6 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-// static
-OUString SfxPoolItem::readByteString(SvStream& rStream)
-{
-    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
-}
-
-// static
-void SfxPoolItem::writeByteString(SvStream & rStream, const OUString& rString)
-{
-    rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
-}
-
-// static
-OUString SfxPoolItem::readUnicodeString(SvStream & rStream, bool bUnicode)
-{
-    return rStream.ReadUniOrByteString(bUnicode ? RTL_TEXTENCODING_UCS2 :
-                                      rStream.GetStreamCharSet());
-}
-
-// static
-void SfxPoolItem::writeUnicodeString(SvStream & rStream, const OUString& rString)
-{
-    rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
-}
-
 /**
  * This virtual method allows to get a textual representation of the value
  * for the SfxPoolItem subclasses. It should be overloaded by all UI-relevant

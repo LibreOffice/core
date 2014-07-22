@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
+#include <stringio.hxx>
 
 TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 

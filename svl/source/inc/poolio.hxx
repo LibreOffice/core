@@ -71,7 +71,7 @@ struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
     typedef boost::unordered_map<SfxPoolItem*,sal_uInt32> Hash;
 
 public:
-    /// Track list of indicees into our array that contain an empty slot
+    /// Track list of indices into our array that contain an empty slot
     FreeList maFree;
     /// Hash of SfxPoolItem pointer to index into our array that contains that slot
     Hash     maHash;
@@ -243,6 +243,47 @@ struct SfxItemPool_Impl
 #define SFX_STYLES_REC                  sal_uInt8(0x03)
 #define SFX_STYLES_REC_HEADER       sal_uInt16(0x0010)
 #define SFX_STYLES_REC_STYLES       sal_uInt16(0x0020)
+
+/** Read in a Unicode string from a streamed byte string representation.
+
+    @param rStream  Some (input) stream.  Its Stream/TargetCharSets must
+    be set to correct values!
+
+    @return  On success, returns the reconstructed Unicode string.
+ */
+OUString readByteString(SvStream & rStream);
+
+/** Write a byte string representation of a Unicode string into a stream.
+
+    @param rStream  Some (output) stream.  Its Stream/TargetCharSets must
+    be set to correct values!
+
+    @param rString  Some Unicode string.
+ */
+void writeByteString(SvStream & rStream, const OUString& rString);
+
+/** Read in a Unicode string from either a streamed Unicode or byte string
+    representation.
+
+    @param rStream  Some (input) stream.  If bUnicode is false, its
+    Stream/TargetCharSets must be set to correct values!
+
+    @param bUnicode  Whether to read in a stream Unicode (true) or byte
+    string (false) representation.
+
+    @return          On success, returns the reconstructed Unicode string.
+ */
+OUString readUnicodeString(SvStream & rStream, bool bUnicode);
+
+/** Write a Unicode string representation of a Unicode string into a
+    stream.
+
+    @param rStream  Some (output) stream.
+
+    @param rString  Some Unicode string.
+ */
+void writeUnicodeString(SvStream & rStream, const OUString& rString);
+
 
 #endif // INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
