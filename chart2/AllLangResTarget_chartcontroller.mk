@@ -36,7 +36,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,chart2/res,\
     chart2/source/controller/dialogs/Bitmaps.src \
-    chart2/source/controller/dialogs/dlg_CreationWizard.src \
     chart2/source/controller/dialogs/tp_PointGeometry.src \
     chart2/source/controller/menus/ShapeContextMenu.src \
     chart2/source/controller/menus/ShapeEditContextMenu.src \

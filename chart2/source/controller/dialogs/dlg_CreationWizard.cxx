@@ -18,7 +18,6 @@
  */
 
 #include "dlg_CreationWizard.hxx"
-#include "dlg_CreationWizard.hrc"
 #include "ResId.hxx"
 #include "macros.hxx"
 #include "Strings.hrc"
@@ -30,6 +29,9 @@
 #include "tp_DataSource.hxx"
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
+
+#define CHART_WIZARD_PAGEWIDTH  250
+#define CHART_WIZARD_PAGEHEIGHT 170
 
 namespace chart
 {
@@ -51,10 +53,10 @@ namespace
 CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XModel >& xChartModel
                                , const uno::Reference< uno::XComponentContext >& xContext
                                , sal_Int32 nOnePageOnlyIndex )
-                : svt::RoadmapWizard( pParent, SchResId(DLG_CHART_WIZARD)
-                    , ( nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount )
+                : svt::RoadmapWizard( pParent,
+                    static_cast<sal_uInt32>((nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount)
                         ?  WZB_HELP | WZB_CANCEL | WZB_FINISH
-                        :  WZB_HELP | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH
+                        :  WZB_HELP | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
                   )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
@@ -67,8 +69,6 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
                 , m_bCanTravel( true )
 {
     m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
-    // Do not call FreeResource(), because there are no sub-elements defined in
-    // the dialog resource
     ShowButtonFixedLine( true );
     defaultButton( WZB_FINISH );
 
@@ -90,7 +90,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
     this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
     this->SetRoadmapInteractive( true );
     Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
-    Size aSize( this->GetSizePixel() );
+    Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MAP_APPFONT));
     aSize.Width() += aAdditionalRoadmapSize.Width();
     this->SetSizePixel( aSize );
 
@@ -106,6 +106,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
     // Call ActivatePage, to create and activate the first page
     ActivatePage();
 }
+
 CreationWizard::~CreationWizard()
 {
 }
