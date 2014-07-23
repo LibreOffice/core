@@ -22,10 +22,6 @@
 
 #include "rcid.hrc"
 
-// Dialoge --------------------------------------------------------------------
-
-#define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
-
 #define DLG_MAILMERGECHILD            (RC_DBUI_BEGIN + 26)
 // Strings ------------------------------------------------------------------
 
@@ -79,9 +75,19 @@
 #define ST_COMPLETED            (RC_DBUI_BEGIN + 49)
 #define ST_FAILED               (RC_DBUI_BEGIN + 50)
 #define ST_TERMINATEQUERY       (RC_DBUI_BEGIN + 51)
+#define ST_STARTING             (RC_DBUI_BEGIN + 52)
+#define ST_DOCUMETNTYPE         (RC_DBUI_BEGIN + 53)
+#define ST_ADDRESSBLOCK         (RC_DBUI_BEGIN + 54)
+#define ST_GREETINGSLINE        (RC_DBUI_BEGIN + 55)
+#define ST_LAYOUT               (RC_DBUI_BEGIN + 56)
+#define ST_PREPAREMERGE         (RC_DBUI_BEGIN + 57)
+#define ST_MERGE                (RC_DBUI_BEGIN + 58)
+#define ST_OUTPUT               (RC_DBUI_BEGIN + 59)
+#define ST_FINISH               (RC_DBUI_BEGIN + 60)
+#define ST_ADDRESSLIST          (RC_DBUI_BEGIN + 61)
 
 // ImageList
-#define ILIST                   (RC_DBUI_BEGIN + 52)
+#define ILIST                   (RC_DBUI_BEGIN + 62)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0
