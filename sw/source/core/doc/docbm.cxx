@@ -1389,29 +1389,28 @@ namespace
         bool m_isMark;
         sal_Int32 m_nCntnt;
     };
-    class _SwSaveTypeCountContent
+    class _SwSaveTypeCountContent : public MarkEntry
     {
-        bool bCharBound;
         sal_uInt16 nCount;
         sal_Int32 nContent;
 
     public:
-        _SwSaveTypeCountContent() { bCharBound=false; nCount=0; nContent = 0; }
+        _SwSaveTypeCountContent() { m_bOther=false; nCount=0; nContent = 0; }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
-                bCharBound = static_cast<bool>(rArr[ rPos++ ]);
+                m_bOther = static_cast<bool>(rArr[ rPos++ ]);
                 nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
                 nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
             }
         void Add( std::vector<sal_uLong> &rArr )
         {
-            rArr.push_back( bCharBound );
+            rArr.push_back( m_bOther );
             rArr.push_back( nCount );
             rArr.push_back( nContent );
         }
 
-        void SetCharBound( bool bCB )        { bCharBound = bCB; }
-        bool IsCharBound() const          { return bCharBound; }
+        void SetCharBound( bool bCB )        { m_bOther = bCB; }
+        bool IsCharBound() const          { return m_bOther; }
 
         void SetCount( sal_uInt16 n )       { nCount = n; }
         sal_uInt16 GetCount() const         { return nCount; }
