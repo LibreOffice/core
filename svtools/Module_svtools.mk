@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_l10n_targets,svtools,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,svtools,\
+    CppunitTest_svtools_graphic \
     CppunitTest_svtools_html \
 ))
 
