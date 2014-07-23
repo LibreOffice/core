@@ -509,6 +509,12 @@ public:
 
 void GL3DBarChart::moveToDefault()
 {
+    if(BENCH_MARK_MODE)
+    {
+        // add correct handling here!!
+        return;
+    }
+
     if(mpRenderThread.is())
         mpRenderThread->join();
 
@@ -539,6 +545,12 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 
     if(nButtons != MOUSE_LEFT)
         return;
+
+    if (BENCH_MARK_MODE)
+    {
+        // add correct handling here !!
+        return;
+    }
 
     sal_uInt32 nId = 5;
     {
@@ -592,6 +604,7 @@ void GL3DBarChart::render()
 {
     if (BENCH_MARK_MODE)
         return;
+
     osl::MutexGuard aGuard(maMutex);
     update();
 }
@@ -650,6 +663,12 @@ glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 
 void GL3DBarChart::moveToCorner()
 {
+    if(BENCH_MARK_MODE)
+    {
+        // add correct handling here!!
+        return;
+    }
+
     osl::MutexGuard aGuard(maMutex);
     if(mpRenderThread.is())
         mpRenderThread->join();
