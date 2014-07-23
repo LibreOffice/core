@@ -38,18 +38,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/java/XJavaVM.hpp>
-#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <boost/unordered_set.hpp>
@@ -62,15 +53,12 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/metaact.hxx>
 #include <svtools/grfmgr.hxx>
-#include <svx/unomodel.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>
@@ -85,7 +73,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::java;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::style;
