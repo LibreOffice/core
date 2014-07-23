@@ -264,7 +264,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_nStatusHeight = m_pContainer->get_height_request();
     OUString sTask(SW_RES(ST_TASK));
     OUString sStatus(SW_RES(ST_STATUS));
-    m_pStatus->SetHelpId(HID_MM_SENDMAILS_STATUSLB);
 
     m_pDetails->SetClickHdl(LINK( this, SwSendMailDialog, DetailsHdl_Impl));
     m_pStop->SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
@@ -279,7 +278,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
                             nPos2,
                             HIB_LEFT | HIB_VCENTER );
 
-    m_pStatus->SetHelpId(HID_MM_MAILSTATUS_TLB);
     static long nTabs[] = {2, 0, nPos1};
     m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_pStatus->SetSelectionMode( SINGLE_SELECTION );
