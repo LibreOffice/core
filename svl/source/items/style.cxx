@@ -64,9 +64,9 @@ TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
-    sal_uInt16          nAction,        // SFX_STYLESHEET_... (s.o.)
+    sal_uInt16          nAction,        // SFX_STYLESHEET_... (see above)
     const OUString&     rOldName,
-    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
+    SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
 :   SfxStyleSheetHint( nAction, rStyleSheet ),
     aName( rOldName )
@@ -75,8 +75,8 @@ SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 
 SfxStyleSheetHint::SfxStyleSheetHint
 (
-    sal_uInt16              nAction,        // SFX_STYLESHEET_... (s.o.)
-    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
+    sal_uInt16              nAction,    // SFX_STYLESHEET_... (see above)
+    SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
 :   pStyleSh( &rStyleSheet ),
     nHint( nAction )
@@ -245,8 +245,9 @@ void SfxStyleSheetBase::SetHidden( bool hidden )
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
 }
 
-// Change follow
-
+/**
+ * Change follow
+ */
 const OUString& SfxStyleSheetBase::GetFollow() const
 {
     return aFollow;
@@ -267,8 +268,10 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
     return true;
 }
 
-// Set Itemset. The default implementation creates a new set
-
+/**
+ * Set Itemset
+ * The default implementation creates a new set
+ */
 SfxItemSet& SfxStyleSheetBase::GetItemSet()
 {
     if( !pSet )
@@ -279,8 +282,9 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
     return *pSet;
 }
 
-// Hilfe-Datei und -ID setzen und abfragen
-
+/**
+ * Set help file and ID and return it
+ */
 sal_uLong SfxStyleSheetBase::GetHelpId( OUString& rFile )
 {
     rFile = aHelpFile;
@@ -293,43 +297,52 @@ void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uLong nId )
     nHelpId = nId;
 }
 
-// Next style possible? Default: Yes
-
+/**
+ * Next style possible?
+ * Default: Yes
+ */
 bool SfxStyleSheetBase::HasFollowSupport() const
 {
     return true;
 }
 
-// Basisvorlage m"oglich? Default: Ja
-
+/**
+ * Base template possible?
+ * Default: Yes
+ */
 bool SfxStyleSheetBase::HasParentSupport() const
 {
     return true;
 }
 
-// Basisvorlage uf NULL setzen m"oglich? Default: Nein
-
+/**
+ * Setting base template to NULL possible?
+ * Default: No
+ */
 bool SfxStyleSheetBase::HasClearParentSupport() const
 {
     return false;
 }
 
-// Defaultmaessig sind alle StyleSheets Used
-
+/**
+ * By default all stylesheets are set to used
+ */
 bool SfxStyleSheetBase::IsUsed() const
 {
     return true;
 }
 
-// eingestellte Attribute ausgeben
-
+/**
+ * Return set attributes
+ */
 OUString SfxStyleSheetBase::GetDescription()
 {
     return GetDescription( SFX_MAPUNIT_CM );
 }
 
-// eingestellte Attribute ausgeben
-
+/**
+ * Return set attributes
+ */
 OUString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
@@ -674,10 +687,10 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
     return *xStyle.get();
 }
 
-// Hilfsroutine: Falls eine Vorlage dieses Namens existiert, wird
-// sie neu erzeugt. Alle Vorlagen, die diese Vorlage zum Parent haben,
-// werden umgehaengt.
-
+/**
+ * Helper function: If a template with this name exists it is created
+ * anew. All templates that have this template as a parent are reconnected.
+ */
 SfxStyleSheetBase& SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
 {
     SfxStyleSheetIterator aIter(this, rSheet.GetFamily(), nMask);
@@ -896,16 +909,14 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
     const OUString aOldParent(aParent);
     if(SfxStyleSheetBase::SetParent(rName))
     {
-            // aus der Benachrichtigungskette des alten
-            // Parents gfs. austragen
+        // Remove from notification chain of the old parent if applicable
         if(!aOldParent.isEmpty())
         {
             SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aOldParent, nFamily, SFXSTYLEBIT_ALL);
             if(pParent)
                 EndListening(*pParent);
         }
-            // in die Benachrichtigungskette des neuen
-            // Parents eintragen
+        // Add to the notification chain of the new parent
         if(!aParent.isEmpty())
         {
             SfxStyleSheet *pParent = (SfxStyleSheet *)pPool->Find(aParent, nFamily, SFXSTYLEBIT_ALL);
@@ -917,7 +928,9 @@ bool SfxStyleSheet::SetParent( const OUString& rName )
     return false;
 }
 
-// Notify all listeners
+/**
+ * Notify all listeners
+ */
 void SfxStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     Forward(rBC, rHint);
@@ -945,7 +958,9 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const SfxStyleSheet& r )
     return new SfxStyleSheet( r );
 }
 
-// class SfxUnoStyleSheet
+/**
+ * class SfxUnoStyleSheet
+ */
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
 : ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
 {
@@ -963,7 +978,9 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
     return pRet;
 }
 
-// XUnoTunnel
+/**
+ * XUnoTunnel
+ */
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )

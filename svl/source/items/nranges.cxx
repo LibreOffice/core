@@ -45,26 +45,22 @@ inline void Swap_Impl(const sal_uInt16 *& rp1, const sal_uInt16 *& rp2)
     rp2 = pTemp;
 }
 
-
+/**
+ * Creates a sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
+ * first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
+ * remainder.
+ *
+ * It returns the number of sal_uInt16s which are contained in the described
+ * set of sal_uInt16s.
+ */
 sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
                                sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull )
-
-/** <H3>Description</H3>
-
-    Creates an sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
-    first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
-    remaider.
-
-    It returns the number of sal_uInt16s which are contained in the described
-    set of sal_uInt16s.
-*/
-
 {
     sal_uInt16 nSize = 0, nIns = 0;
     std::vector<sal_uInt16> aNumArr;
     aNumArr.push_back( nWh1 );
     aNumArr.push_back( nWh2 );
-    DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
+    DBG_ASSERT( nWh1 <= nWh2, "Invalid range" );
     nSize += nWh2 - nWh1 + 1;
     aNumArr.push_back( nNull );
     bool bEndOfRange = false;
@@ -77,15 +73,15 @@ sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
         if ( bEndOfRange )
         {
             const sal_uInt16 nPrev(*aNumArr.rbegin());
-            DBG_ASSERT( nPrev <= nIns, "Ungueltiger Bereich" );
+            DBG_ASSERT( nPrev <= nIns, "Invalid range" );
             nSize += nIns - nPrev + 1;
         }
         aNumArr.push_back( nIns );
     }
 
-    assert( bEndOfRange ); // odd number of Which-IDs
+    assert( bEndOfRange ); // odd number of WhichIds
 
-    // so, jetzt sind alle Bereiche vorhanden und
+    // Now all ranges are present
     rpRanges = new sal_uInt16[ aNumArr.size() + 1 ];
     std::copy( aNumArr.begin(), aNumArr.end(), rpRanges);
     *(rpRanges + aNumArr.size()) = 0;
@@ -93,15 +89,12 @@ sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
     return nSize;
 }
 
-
+/**
+ * Determines the number of sal_uInt16s in a 0-terminated array of pairs of
+ * sal_uInt16s.
+ * The terminating 0 is not included in the count.
+ */
 sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
-
-/** <H3>Description</H3>
-
-    Determines the number of sal_uInt16s in an 0-terminated array of pairs of
-    sal_uInt16s. The terminating 0 is not included in the count.
-*/
-
 {
     sal_uInt16 nCount = 0;
     while ( *pRanges )
@@ -112,15 +105,11 @@ sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
-
+/**
+ * Determines the total number of sal_uInt16s described in a 0-terminated
+ * array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
+ */
 sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
-
-/** <H3>Description</H3>
-
-    Determines the total number of sal_uInt16s described in an 0-terminated
-    array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
-*/
-
 {
     sal_uInt16 nCount = 0;
 
@@ -135,14 +124,10 @@ sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
     return nCount;
 }
 
-
+/**
+ * Copy ctor
+ */
 SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
-
-/** <H3>Description</H3>
-
-    Copy-Ctor.
-*/
-
 {
     if ( rOrig._pRanges )
     {
@@ -154,17 +139,12 @@ SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
         _pRanges = 0;
 }
 
-
+/**
+ * Constructs a SfxUShortRanges instance from one range of sal_uInt16s.
+ *
+ * Precondition: nWhich1 <= nWhich2
+ */
 SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
-
-/** <H3>Description</H3>
-
-    Constructs an SfxUShortRanges-instance from one range of sal_uInt16s.
-
-    precondition:
-        nWhich1 <= nWhich2
-*/
-
 :   _pRanges( new sal_uInt16[3] )
 {
     _pRanges[0] = nWhich1;
@@ -172,18 +152,14 @@ SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     _pRanges[2] = 0;
 }
 
-
+/**
+ * Constcurts an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
+ * terminates with on 0.
+ *
+ * Precondition: for each n >= 0 && n < (sizeof(pArr)-1)
+ *     pArr[2n] <= pArr[2n+1] && ( pArr[2n+2]-pArr[2n+1] ) > 1
+ */
 SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
-
-/** <H3>Description</H3>
-
-    Constcurts an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
-    terminates with on 0.
-
-    precondition: for each n >= 0 && n < (sizeof(pArr)-1)
-        pArr[2n] <= pArr[2n+1] && ( pArr[2n+2]-pArr[2n+1] ) > 1
-*/
-
 {
     DBG_CHECK_RANGES(sal_uInt16, pArr);
     sal_uInt16 nCount = Count_Impl(pArr) + 1;
@@ -221,17 +197,13 @@ bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
     return true;
 }
 
-
+/**
+ * Assigns ranges from 'rRanges' to '*this'.
+ */
 SfxUShortRanges& SfxUShortRanges::operator =
 (
     const SfxUShortRanges &rRanges
 )
-
-/** <H3>Description</H3>
-
-    Assigns ranges from 'rRanges' to '*this'.
-*/
-
 {
     // special case: assign itself
     if ( &rRanges == this )
@@ -252,21 +224,16 @@ SfxUShortRanges& SfxUShortRanges::operator =
     return *this;
 }
 
-
+/**
+ * Merges *this with 'rRanges'.
+ *  for each sal_uInt16 n:
+ *    this->Contains( n ) || rRanges.Contains( n ) => this'->Contains( n )
+ *    !this->Contains( n ) && !rRanges.Contains( n ) => !this'->Contains( n )
+ */
 SfxUShortRanges& SfxUShortRanges::operator +=
 (
     const SfxUShortRanges &rRanges
 )
-
-/** <H3>Description</H3>
-
-    Merges *this with 'rRanges'.
-
-    for each sal_uInt16 n:
-        this->Contains( n ) || rRanges.Contains( n ) => this'->Contains( n )
-        !this->Contains( n ) && !rRanges.Contains( n ) => !this'->Contains( n )
-*/
-
 {
     // special cases: one is empty
     if ( rRanges.IsEmpty() )
@@ -411,22 +378,17 @@ copy_rest:
     return *this;
 }
 
-
+/**
+ * Removes 'rRanges' from '*this'.
+ *  for each sal_uInt16 n:
+ *    this->Contains( n ) && rRanges.Contains( n ) => !this'->Contains( n )
+ *    this->Contains( n ) && !rRanges.Contains( n ) => this'->Contains( n )
+ *    !this->Contains( n ) => !this'->Contains( n )
+ */
 SfxUShortRanges& SfxUShortRanges::operator -=
 (
     const SfxUShortRanges &rRanges
 )
-
-/** <H3>Description</H3>
-
-    Removes 'rRanges' from '*this'.
-
-    for each sal_uInt16 n:
-        this->Contains( n ) && rRanges.Contains( n ) => !this'->Contains( n )
-        this->Contains( n ) && !rRanges.Contains( n ) => this'->Contains( n )
-        !this->Contains( n ) => !this'->Contains( n )
-*/
-
 {
     // special cases: one is empty
     if ( rRanges.IsEmpty() || IsEmpty() )
@@ -552,22 +514,17 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     return *this;
 }
 
-
+/**
+ * Determines intersection of '*this' with 'rRanges'.
+ *   for each sal_uInt16 n:
+ *     this->Contains( n ) && rRanges.Contains( n ) => this'->Contains( n )
+ *     !this->Contains( n ) => !this'->Contains( n )
+ *     !rRanges.Contains( n ) => !this'->Contains( n )
+ */
 SfxUShortRanges& SfxUShortRanges::operator /=
 (
     const SfxUShortRanges &rRanges
 )
-
-/** <H3>Description</H3>
-
-    Determines intersection of '*this' with 'rRanges'.
-
-    for each sal_uInt16 n:
-        this->Contains( n ) && rRanges.Contains( n ) => this'->Contains( n )
-        !this->Contains( n ) => !this'->Contains( n )
-        !rRanges.Contains( n ) => !this'->Contains( n )
-*/
-
 {
     // boundary cases
     // * first set is empty -> nothing to be done
@@ -670,15 +627,11 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     return *this;
 }
 
-
+/**
+ * Determines the number of USHORTs in the set described by the ranges
+ * of USHORTs in '*this'.
+ */
 sal_uInt16 SfxUShortRanges::Count() const
-
-/** <H3>Description</H3>
-
-    Determines the number of USHORTs in the set described by the ranges
-    of USHORTs in '*this'.
-*/
-
 {
     return Capacity_Impl( _pRanges );
 }
