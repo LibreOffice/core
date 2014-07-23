@@ -23,7 +23,7 @@ class Tutorial2
     , public Plugin
     {
     public:
-        Tutorial2( CompilerInstance& compiler );
+        Tutorial2( const InstantiationData& data );
         virtual void run() override;
         // Will be called for every if statement.
         bool VisitIfStmt( const IfStmt* ifstmt );

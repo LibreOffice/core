@@ -22,8 +22,8 @@ namespace loplugin
 {
 
 // Ctor, pass arguments.
-Tutorial3::Tutorial3( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+Tutorial3::Tutorial3( const InstantiationData& data )
+    : RewritePlugin( data )
     {
     }
 

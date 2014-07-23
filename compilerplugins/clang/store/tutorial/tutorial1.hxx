@@ -26,7 +26,7 @@ class Tutorial1
     {
     public:
         // Ctor, nothing special.
-        Tutorial1( CompilerInstance& compiler );
+        Tutorial1( const InstantiationData& data );
         // The function that will be called to perform the actual action.
         virtual void run() override;
         // Function from Clang, it will be called for every return statement in the source.
