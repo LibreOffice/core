@@ -129,6 +129,11 @@ namespace /* private */
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
+
+        // it is apparently possible that the environment is not completely
+        // sorted; Cygwin may append entries, which breaks the equal_range
+        std::stable_sort(environment->begin(), environment->end(),
+            less_environment_variable());
     }
 
     /* the environment list must be sorted, new values
