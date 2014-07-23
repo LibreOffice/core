@@ -1540,8 +1540,8 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // export data labels
                     // Excel does not like our current data label export
                     // for scatter charts
-                    if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR )
-                        exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
+                    if( eChartType != chart::TYPEID_SCATTER )
+                        exportDataLabels(aSeriesSeq[nSeriesIdx], nSeriesLength);
 
                     exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
@@ -2264,127 +2264,103 @@ void ChartExport::_exportAxis(
     pFS->endElement( FSNS( XML_c, nAxisType ) );
 }
 
-void ChartExport::exportDataLabels(
-    const uno::Reference< beans::XPropertySet > & xSeriesProperties,
+namespace {
+
+const char* toOOXMLPlacement( sal_Int32 nPlacement )
+{
+    switch (nPlacement)
+    {
+        case css::chart::DataLabelPlacement::OUTSIDE:       return "outEnd";
+        case css::chart::DataLabelPlacement::INSIDE:        return "inEnd";
+        case css::chart::DataLabelPlacement::CENTER:        return "ctr";
+        case css::chart::DataLabelPlacement::NEAR_ORIGIN:   return "inBase";
+        case css::chart::DataLabelPlacement::TOP:           return "t";
+        case css::chart::DataLabelPlacement::BOTTOM:        return "b";
+        case css::chart::DataLabelPlacement::LEFT:          return "l";
+        case css::chart::DataLabelPlacement::RIGHT:         return "r";
+        case css::chart::DataLabelPlacement::AVOID_OVERLAP: return "bestFit";
+        default:
+            ;
+    }
+
+    return "outEnd";
+}
+
+void writeLabelProperties( FSHelperPtr pFS, const uno::Reference<beans::XPropertySet>& xPropSet )
+{
+    if (!xPropSet.is())
+        return;
+
+    chart2::DataPointLabel aLabel;
+    sal_Int32 nLabelPlacement = css::chart::DataLabelPlacement::OUTSIDE;
+    sal_Int32 nLabelBorderWidth = 0;
+    sal_Int32 nLabelBorderColor = 0x00FFFFFF;
+
+    xPropSet->getPropertyValue("Label") >>= aLabel;
+    xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
+    xPropSet->getPropertyValue("LabelBorderWidth") >>= nLabelBorderWidth;
+    xPropSet->getPropertyValue("LabelBorderColor") >>= nLabelBorderColor;
+
+    if (nLabelBorderWidth > 0)
+    {
+        pFS->startElement(FSNS(XML_c, XML_spPr), FSEND);
+        pFS->startElement(FSNS(XML_a, XML_ln), XML_w, IS(convertHmmToEmu(nLabelBorderWidth)), FSEND);
+        pFS->startElement(FSNS(XML_a, XML_solidFill), FSEND);
+
+        OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
+        pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr.getStr(), FSEND);
+
+        pFS->endElement(FSNS(XML_a, XML_solidFill));
+        pFS->endElement(FSNS(XML_a, XML_ln));
+        pFS->endElement(FSNS(XML_c, XML_spPr));
+    }
+
+    pFS->singleElement(FSNS(XML_c, XML_dLblPos), XML_val, toOOXMLPlacement(nLabelPlacement), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, BS(aLabel.ShowLegendSymbol), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, BS(aLabel.ShowNumber), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, BS(aLabel.ShowCategoryName), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, BS(false), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, BS(aLabel.ShowNumberInPercent), FSEND);
+}
+
+}
+
+void ChartExport::exportDataLabels( const uno::Reference<chart2::XDataSeries> & xSeries,
     sal_Int32 nSeriesLength )
 {
-    // TODO: export field separators, missing flag vs. showing series name or not
-    uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
+    if (!xSeries.is() || nSeriesLength <= 0)
+        return;
 
-    if( xSeriesProperties.is())
+    uno::Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement(FSNS(XML_c, XML_dLbls), FSEND);
+
+    uno::Sequence<sal_Int32> aAttrLabelIndices;
+    xPropSet->getPropertyValue("AttributedDataPoints") >>= aAttrLabelIndices;
+
+    const sal_Int32* p = aAttrLabelIndices.getConstArray();
+    const sal_Int32* pEnd = p + aAttrLabelIndices.getLength();
+    for (; p != pEnd; ++p)
     {
-        FSHelperPtr pFS = GetFS();
-        pFS->startElement( FSNS( XML_c, XML_dLbls ),
-                    FSEND );
+        sal_Int32 nIdx = *p;
+        uno::Reference<beans::XPropertySet> xLabelPropSet = xSeries->getDataPointByIndex(nIdx);
+        if (!xLabelPropSet.is())
+            continue;
 
-        bool showLegendSymbol = false;
-        bool showNumber = false;
-        bool showCategoryName = false;
-        bool showNumberInPercent = false;
-
-        sal_Int32 nElem;
-        for( nElem = 0; nElem < nSeriesLength; ++nElem)
-        {
-            uno::Reference< beans::XPropertySet > xPropSet;
-
-            try
-            {
-                xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
-                        xSeries, nElem, getModel() );
-            }
-            catch( const uno::Exception & rEx )
-            {
-                SAL_WARN("oox", "Exception caught during Export of data label: " << rEx.Message );
-            }
-
-            if( xPropSet.is() )
-            {
-               namespace cssc2 = ::com::sun::star::chart2;
-               cssc2::DataPointLabel aLabel;
-               if (GetProperty( xPropSet, "Label"))
-               {
-                   mAny >>= aLabel;
-
-                   namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-                   sal_Int32 nPlacement(csscd::AVOID_OVERLAP);
-                   const char *aPlacement = NULL;
-                   OUString aSep;
-
-                   if (GetProperty( xPropSet, "LabelPlacement"))
-                       mAny >>= nPlacement;
-
-                   switch( nPlacement )
-                   {
-                       case csscd::OUTSIDE:       aPlacement = "outEnd";  break;
-                       case csscd::INSIDE:        aPlacement = "inEnd";   break;
-                       case csscd::CENTER:        aPlacement = "ctr";     break;
-                       case csscd::NEAR_ORIGIN:   aPlacement = "inBase";  break;
-                       case csscd::TOP:           aPlacement = "t";       break;
-                       case csscd::BOTTOM:        aPlacement = "b";       break;
-                       case csscd::LEFT:          aPlacement = "l";       break;
-                       case csscd::RIGHT:         aPlacement = "r";       break;
-                       case csscd::AVOID_OVERLAP: aPlacement = "bestFit";  break;
-                   }
-
-                   if(aLabel.ShowLegendSymbol || aLabel.ShowNumber || aLabel.ShowCategoryName || aLabel.ShowNumberInPercent)
-                   {
-                       pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
-                       pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
-                       pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
-
-                       pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, aLabel.ShowLegendSymbol ? "1": "0", FSEND);
-                       if (aLabel.ShowLegendSymbol)
-                       {
-                           showLegendSymbol = true;
-                       }
-
-                       pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,aLabel.ShowNumber ? "1": "0", FSEND);
-                       if(aLabel.ShowNumber)
-                       {
-                           showNumber = true;
-                       }
-
-                       pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val, aLabel.ShowCategoryName ? "1": "0", FSEND);
-                       if(aLabel.ShowCategoryName)
-                       {
-                           showCategoryName =  true;
-                       }
-
-                       // MSO somehow assumes series name to be on (=displayed) by default.
-                       // Let's put false here and switch it off then, since we have no UI means
-                       // in LibO to toggle it on anyway
-                       pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
-
-                       pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,aLabel.ShowNumberInPercent ? "1": "0", FSEND);
-                       if(aLabel.ShowNumberInPercent)
-                       {
-                           showNumberInPercent = true;
-                       }
-
-                       if (GetProperty( xPropSet, "LabelSeparator"))
-                       {
-                           mAny >>= aSep;
-                           pFS->startElement( FSNS( XML_c, XML_separator), FSEND);
-                           pFS->writeEscaped(aSep);
-                           pFS->endElement( FSNS( XML_c, XML_separator) );
-                       }
-                       pFS->endElement( FSNS( XML_c, XML_dLbl ));
-                   }
-
-               }
-            }
-        }
-
-        pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, showLegendSymbol ? "1": "0", FSEND);
-        pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val, showNumber ? "1": "0", FSEND);
-        pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val, showCategoryName ? "1": "0", FSEND);
-
-        pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
-
-        pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val, showNumberInPercent ? "1": "0", FSEND);
-
-        pFS->endElement( FSNS( XML_c, XML_dLbls ) );
+        // Individual label property thhat overwrites the baseline.
+        pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
+        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
+        writeLabelProperties(pFS, xLabelPropSet);
+        pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
+
+    // Baseline label properties for all labels.
+    writeLabelProperties(pFS, xPropSet);
+
+    pFS->endElement(FSNS(XML_c, XML_dLbls));
 }
 
 void ChartExport::exportDataPoints(

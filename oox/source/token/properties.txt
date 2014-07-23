@@ -266,6 +266,9 @@ IterationCount
 IterationEpsilon
 Japanese
 Label
+LabelBorderColor
+LabelBorderStyle
+LabelBorderWidth
 LabelPlacement
 LabelPosition
 LabelSeparator
