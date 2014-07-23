@@ -18,14 +18,10 @@ ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
-	source/lib/icudt$(ICU_MAJOR).dll \
-	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
 ))
 else
 $(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
-	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
-	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 ))
 endif # $(COM)
