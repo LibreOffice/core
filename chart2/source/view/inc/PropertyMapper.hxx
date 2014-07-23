@@ -43,6 +43,12 @@ typedef ::comphelper::MakeSequence< OUString >      tMakeNameSequence;
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > tAnySequence;
 typedef ::comphelper::MakeSequence< ::com::sun::star::uno::Any >      tMakeAnySequence;
 
+/**
+ * PropertyMapper provides easy mapping of the property names of various
+ * objects in the chart model, to the property names of the destination
+ * shape objects (those whose service names begin with
+ * com.sun.star.drawing.).
+ */
 class OOO_DLLPUBLIC_CHARTTOOLS PropertyMapper
 {
 public:
@@ -54,6 +60,16 @@ public:
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap* pOverwriteMap=0 );
 
+    /**
+     * Fetch property values from the source object and map it to the
+     * destination container.  Only those properties that are explicitly set
+     * will be inserted into the destination container.
+     *
+     * @param rValueMap destination container
+     * @param rNameMap property name mapping rule
+     * @param xSourceProp source object from which the property values are
+     *                    pulled.
+     */
     static void getValueMap(
           tPropertyNameValueMap& rValueMap
         , const tPropertyNameMap& rNameMap
