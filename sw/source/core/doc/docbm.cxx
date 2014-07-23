@@ -1404,9 +1404,6 @@ namespace
             rArr.push_back( *this );
         }
 
-        void SetCharBound( bool bCB )        { m_bOther = bCB; }
-        bool IsCharBound() const          { return m_bOther; }
-
         void SetCount( sal_uInt16 n )       { m_nIdx = n; }
         sal_uInt16 GetCount() const         { return m_nIdx; }
         sal_uInt16 DecCount()               { return --m_nIdx; }
@@ -1450,7 +1447,7 @@ namespace
                                      FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
                                    ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                             {
-                                aSave.SetCharBound(false);
+                                aSave.m_bOther = false;
                                 aSave.SetContent( pAPos->nContent.GetIndex() );
 
                                 OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
@@ -1460,7 +1457,7 @@ namespace
                                     if( nCntnt <= aSave.GetContent() )
                                     {
                                         if( SAVEFLY_SPLIT == nSaveFly )
-                                            aSave.SetCharBound(true);
+                                            aSave.m_bOther = true;
                                         else
                                             continue;
                                     }
@@ -1495,14 +1492,14 @@ namespace
                              ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
                                FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
                         {
-                            aSave.SetCharBound(false);
+                            aSave.m_bOther = false;
                             aSave.SetContent( pAPos->nContent.GetIndex() );
                             if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                             {
                                 if( nCntnt <= aSave.GetContent() )
                                 {
                                     if( SAVEFLY_SPLIT == nSaveFly )
-                                        aSave.SetCharBound(true);
+                                        aSave.m_bOther = true;
                                     else
                                         continue;
                                 }
@@ -1528,7 +1525,7 @@ namespace
         {
             _SwSaveTypeCountContent aSave( rSaveArr, n );
             SwPosition* pPos = 0;
-            if(!aSave.IsCharBound())
+            if(!aSave.m_bOther)
             {
                 SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
                 const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
