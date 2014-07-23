@@ -5108,7 +5108,6 @@ AC_SUBST(GNUMAKE_WIN_NATIVE)
 
 _make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
 STALE_MAKE=
-make_warning=
 if test "$_make_ver_check" = ""; then
    STALE_MAKE=TRUE
 fi
