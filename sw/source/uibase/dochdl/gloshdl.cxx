@@ -410,20 +410,20 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
-        for(size_t i = 1; i <= nGroupCount; ++i)
+        for(size_t i = 0; i < nGroupCount; ++i)
         {
-            OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
+            OUString sTitle = pGlossaryList->GetGroupTitle(i);
             // get group name with path-extension
-            OUString sGroupName = pGlossaryList->GetGroupName(i - 1, false);
+            OUString sGroupName = pGlossaryList->GetGroupName(i, false);
             if(sGroupName == pGlossary->GetName())
                 continue;
-            const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+            const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i);
             if(nBlockCount)
             {
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)
                 {
-                    OUString sLongName(pGlossaryList->GetBlockLongName(i - 1, j));
-                    OUString sShortName(pGlossaryList->GetBlockShortName(i - 1, j));
+                    OUString sLongName(pGlossaryList->GetBlockLongName(i, j));
+                    OUString sShortName(pGlossaryList->GetBlockShortName(i, j));
                     if( rSCmp.isEqual( rShortName, sShortName ))
                     {
                         TextBlockInfo_Impl* pData = new TextBlockInfo_Impl;
