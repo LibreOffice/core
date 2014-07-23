@@ -21,6 +21,7 @@
 #include "macros.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -346,6 +347,46 @@ void DataPointProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    // Properties specific to data label.
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_STYLE,
+                  PROP_DATAPOINT_LABEL_BORDER_STYLE,
+                  cppu::UnoType<drawing::LineStyle>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_COLOR,
+                  PROP_DATAPOINT_LABEL_BORDER_COLOR,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_WIDTH,
+                  PROP_DATAPOINT_LABEL_BORDER_WIDTH,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+         Property( CHART_UNONAME_LABEL_BORDER_DASH,
+                   PROP_DATAPOINT_LABEL_BORDER_DASH,
+                   cppu::UnoType<drawing::LineDash>::get(),
+                   beans::PropertyAttribute::BOUND
+                   | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_DASHNAME,
+                  PROP_DATAPOINT_LABEL_BORDER_DASH_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LABEL_BORDER_TRANS,
+                  PROP_DATAPOINT_LABEL_BORDER_TRANS,
+                  cppu::UnoType<sal_Int16>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void DataPointProperties::AddDefaultsToMap(
@@ -399,6 +440,16 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_OFFSET, 0.0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_GEOMETRY3D, chart2::DataPointGeometry3D::CUBOID );
 
+    //@todo maybe choose a different one here -> should be dynamically that of the attached axis
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
+
+    PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_TEXT_ROTATION, 0.0 );
+
+    PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE, true);
+
+    // data label
     PropertyHelper::setPropertyValueDefault(
         rOutMap, PROP_DATAPOINT_LABEL,
         chart2::DataPointLabel(
@@ -409,15 +460,12 @@ void DataPointProperties::AddDefaultsToMap(
             ));
 
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
-
-    //@todo maybe choose a different one here -> should be dynamically that of the attached axis
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
-    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
-
-    PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_TEXT_ROTATION, 0.0 );
-
-    PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE, true);
+    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, drawing::LineStyle_NONE);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);
+    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_WIDTH, 0);
+    PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH, drawing::LineDash());
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH_NAME);
+    PropertyHelper::setPropertyValueDefault<sal_Int16>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_TRANS, 0);
 }
 
 } //  namespace chart

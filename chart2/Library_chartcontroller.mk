@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/itemsetwrapper/RegressionEquationItemConverter \
     chart2/source/controller/itemsetwrapper/SeriesOptionsItemConverter \
     chart2/source/controller/itemsetwrapper/StatisticsItemConverter \
+    chart2/source/controller/itemsetwrapper/TextLabelItemConverter \
     chart2/source/controller/itemsetwrapper/TitleItemConverter \
     chart2/source/controller/main/ChartController \
     chart2/source/controller/main/ChartController_EditData \

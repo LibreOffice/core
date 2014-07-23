@@ -39,6 +39,8 @@
 #include "WrappedScaleTextProperties.hxx"
 #include "WrappedNumberFormatProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
+#include <unonames.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
