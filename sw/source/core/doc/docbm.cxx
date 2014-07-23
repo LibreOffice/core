@@ -1566,30 +1566,30 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
     // 5. CrsrShell
-    {
-        SwCrsrShell* pShell = pDoc->GetEditShell();
-        if( pShell )
-        {
-            aSave.SetTypeAndCount( 0x800, 0 );
-            FOREACHSHELL_START( pShell )
-                SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-                if( _pStkCrsr )
-                    do {
-                        lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
-                                    aSave, false );
-                        aSave.IncCount();
-                    } while ( (_pStkCrsr != 0 ) &&
-                        ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-
-                FOREACHPAM_START( PCURSH->_GetCrsr() )
-                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
-                                aSave, false );
-                    aSave.IncCount();
-                FOREACHPAM_END()
-
-            FOREACHSHELL_END( pShell )
-        }
-    }
+//    {
+//        SwCrsrShell* pShell = pDoc->GetEditShell();
+//        if( pShell )
+//        {
+//            aSave.SetTypeAndCount( 0x800, 0 );
+//            FOREACHSHELL_START( pShell )
+//                SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+//                if( _pStkCrsr )
+//                    do {
+//                        lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
+//                                    aSave, false );
+//                        aSave.IncCount();
+//                    } while ( (_pStkCrsr != 0 ) &&
+//                        ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+//
+//                FOREACHPAM_START( PCURSH->_GetCrsr() )
+//                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
+//                                aSave, false );
+//                    aSave.IncCount();
+//                FOREACHPAM_END()
+//
+//            FOREACHSHELL_END( pShell )
+//        }
+//    }
 }
 
 void _RestoreCntntIdx(SwDoc* pDoc,
@@ -1805,6 +1805,12 @@ namespace
         }
 #endif
     };
+    struct PaMEntry
+    {
+        SwPaM* m_pPaM;
+        bool m_isMark;
+        sal_Int32 m_nCntnt;
+    };
     struct OffsetUpdater
     {
         const SwCntntNode* m_pNewCntntNode;
@@ -1838,6 +1844,7 @@ namespace
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
         std::vector<MarkEntry> m_aUnoCrsrEntries;
+        std::vector<PaMEntry> m_aShellCrsrEntries;
         std::vector<sal_uLong> m_aSaveArr;
         typedef boost::function<void (SwPosition& rPos, sal_Int32 nCntnt)> updater_t;
         virtual void Clear() SAL_OVERRIDE
@@ -1845,17 +1852,19 @@ namespace
             m_aBkmkEntries.clear();
             m_aRedlineEntries.clear();
             m_aUnoCrsrEntries.clear();
+            m_aShellCrsrEntries.clear();
             m_aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aUnoCrsrEntries.empty() && m_aSaveArr.empty();
+            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty() && m_aSaveArr.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
             SaveRedlines(pDoc, nNode, nCntnt);
             SaveUnoCrsrs(pDoc, nNode, nCntnt);
+            SaveShellCrsrs(pDoc, nNode, nCntnt);
             return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aSaveArr, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
@@ -1866,6 +1875,7 @@ namespace
             RestoreRedlines(pDoc, aUpdater);
             _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
             RestoreUnoCrsrs(pDoc, aUpdater);
+            RestoreShellCrsrs(pDoc, aUpdater);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
@@ -1876,6 +1886,7 @@ namespace
             RestoreRedlines(pDoc, aUpdater);
             _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
             RestoreUnoCrsrs(pDoc, aUpdater);
+            RestoreShellCrsrs(pDoc, aUpdater);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
@@ -1885,6 +1896,8 @@ namespace
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
+            inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void RestoreShellCrsrs(SwDoc* pDoc, updater_t& rUpdater);
             inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
@@ -2082,6 +2095,45 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater)
     }
 }
 
+static void lcl_ChkPaM( std::vector<PaMEntry> &rPaMEntries, sal_uLong nNode, sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
+{
+    const SwPosition* pPos = &rPaM.GetBound( bPoint );
+    if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nCntnt )
+    {
+        const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
+        rPaMEntries.push_back(aEntry);
+    }
+}
+void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+{
+    SwCrsrShell* pShell = pDoc->GetEditShell();
+    if( pShell )
+    {
+        FOREACHSHELL_START( pShell )
+            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            if( _pStkCrsr )
+                do {
+                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
+                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
+                } while ( (_pStkCrsr != 0 ) &&
+                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+
+            FOREACHPAM_START( PCURSH->_GetCrsr() )
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
+            FOREACHPAM_END()
+
+        FOREACHSHELL_END( pShell )
+    }
+}
+
+void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
+{
+    BOOST_FOREACH(const PaMEntry& aEntry, m_aShellCrsrEntries)
+    {
+        rUpdater(aEntry.m_pPaM->GetBound(aEntry.m_isMark), aEntry.m_nCntnt);
+    }
+}
 namespace sw { namespace mark {
     boost::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
     {
