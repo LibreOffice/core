@@ -1403,10 +1403,6 @@ namespace
         {
             rArr.push_back( *this );
         }
-
-
-        void SetContent( sal_Int32 n )     { m_nCntnt = n; }
-        sal_Int32 GetContent() const       { return m_nCntnt; }
     };
     void _SaveCntntIdx(SwDoc* pDoc,
         sal_uLong nNode,
@@ -1445,13 +1441,13 @@ namespace
                                    ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                             {
                                 aSave.m_bOther = false;
-                                aSave.SetContent( pAPos->nContent.GetIndex() );
+                                aSave.m_nCntnt = pAPos->nContent.GetIndex();
 
                                 OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
                                         "_SaveCntntIdx: Wrong Node-Index" );
                                 if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                                 {
-                                    if( nCntnt <= aSave.GetContent() )
+                                    if( nCntnt <= aSave.m_nCntnt )
                                     {
                                         if( SAVEFLY_SPLIT == nSaveFly )
                                             aSave.m_bOther = true;
@@ -1490,10 +1486,10 @@ namespace
                                FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
                         {
                             aSave.m_bOther = false;
-                            aSave.SetContent( pAPos->nContent.GetIndex() );
+                            aSave.m_nCntnt = pAPos->nContent.GetIndex();
                             if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                             {
-                                if( nCntnt <= aSave.GetContent() )
+                                if( nCntnt <= aSave.m_nCntnt )
                                 {
                                     if( SAVEFLY_SPLIT == nSaveFly )
                                         aSave.m_bOther = true;
@@ -1534,7 +1530,7 @@ namespace
                     if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                     {
                         aNewPos.nContent.Assign( pCNd,
-                                                 aSave.GetContent() + nOffset );
+                                                 aSave.m_nCntnt + nOffset );
                     }
                     else
                     {
@@ -1552,9 +1548,9 @@ namespace
             }
             if( pPos )
             {
-                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
+                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
                 pPos->nNode = *pCNd;
-                pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
+                pPos->nContent.Assign( pCNd, aSave.m_nCntnt + nOffset );
             }
         }
     }
@@ -1572,7 +1568,7 @@ namespace
         while( n < rSaveArr.size() )
         {
             _SwSaveTypeCountContent aSave( rSaveArr, n );
-            if( aSave.GetContent() >= nChkLen )
+            if( aSave.m_nCntnt >= nChkLen )
                 rSaveArr[n].m_nCntnt -= nChkLen;
             else
             {
@@ -1588,7 +1584,7 @@ namespace
                         if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                         {
                             aNewPos.nContent.Assign( pCNd, std::min(
-                                                     aSave.GetContent(), nLen ) );
+                                                     aSave.m_nCntnt, nLen ) );
                         }
                         else
                         {
@@ -1602,7 +1598,7 @@ namespace
                 if( pPos )
                 {
                     pPos->nNode = rNd;
-                    pPos->nContent.Assign( pCNd, std::min( aSave.GetContent(), nLen ) );
+                    pPos->nContent.Assign( pCNd, std::min( aSave.m_nCntnt, nLen ) );
                 }
                 n -= 1;
                 rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 1);
