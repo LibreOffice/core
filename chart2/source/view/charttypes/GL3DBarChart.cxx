@@ -561,7 +561,6 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
 
-    osl::MutexGuard aGuard(maMutex);
     std::map<sal_uInt32, const BarInformation>::const_iterator itr =
         maBarMap.find(nId);
 
@@ -571,9 +570,6 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     mbBlockUserInput = true;
 
     const BarInformation& rBarInfo = itr->second;
-
-    if(mpRenderThread.is())
-        mpRenderThread->join();
 
     maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
                 OUString("Value: ") + OUString::number(rBarInfo.mnVal), 0));
