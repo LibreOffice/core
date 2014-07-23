@@ -24,7 +24,7 @@
 #include <windows.h>
 #endif
 
-#define BENCH_MARK_MODE 1
+#define BENCH_MARK_MODE 0
 
 using namespace com::sun::star;
 
