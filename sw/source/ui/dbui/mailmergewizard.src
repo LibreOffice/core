@@ -17,58 +17,56 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mailmergewizard.hrc>
 #include <dbui.hrc>
 
-ModalDialog DLG_MAILMERGEWIZARD
+String ST_STARTING
 {
-    HelpID = "sw:ModalDialog:DLG_MAILMERGEWIZARD";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Mail Merge Wizard" ;
-    Moveable = TRUE ;
+    Text [ en-US ] = "Select starting document";
+};
 
-    String ST_STARTING
-    {
-        Text [ en-US ] = "Select starting document";
-    };
-    String ST_DOCUMETNTYPE
-    {
-        Text [ en-US ] = "Select document type";
-    };
-    String ST_ADDRESSBLOCK
-    {
-        Text [ en-US ] = "Insert address block";
-    };
-    String ST_ADDRESSLIST
-    {
-        Text [ en-US ] = "Select address list";
-    };
-    String ST_GREETINGSLINE
-    {
-        Text [ en-US ] = "Create salutation";
-    };
-    String ST_LAYOUT
-    {
-        Text [ en-US ] = "Adjust layout";
-    };
-    String ST_PREPAREMERGE
-    {
-        Text [ en-US ] = "Edit document";
-    };
-    String ST_MERGE
-    {
-        Text [ en-US ] = "Personalize document";
-    };
-    String ST_OUTPUT
-    {
-        Text [ en-US ] = "Save, print or send";
-    };
-    String ST_FINISH
-    {
-        Text [ en-US ] = "~Finish";
-    };
+String ST_DOCUMETNTYPE
+{
+    Text [ en-US ] = "Select document type";
+};
 
+String ST_ADDRESSBLOCK
+{
+    Text [ en-US ] = "Insert address block";
+};
+
+String ST_ADDRESSLIST
+{
+    Text [ en-US ] = "Select address list";
+};
+
+String ST_GREETINGSLINE
+{
+    Text [ en-US ] = "Create salutation";
+};
+
+String ST_LAYOUT
+{
+    Text [ en-US ] = "Adjust layout";
+};
+
+String ST_PREPAREMERGE
+{
+    Text [ en-US ] = "Edit document";
+};
+
+String ST_MERGE
+{
+    Text [ en-US ] = "Personalize document";
+};
+
+String ST_OUTPUT
+{
+    Text [ en-US ] = "Save, print or send";
+};
+
+String ST_FINISH
+{
+    Text [ en-US ] = "~Finish";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
