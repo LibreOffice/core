@@ -1126,42 +1126,38 @@ namespace sw { namespace mark
 
 namespace
 {
-    // Array structure: 2 longs,
-    //  1st long contains the type and position in the DocArray,
-    //  2nd long contains the ContentPosition
-
     //  CntntType --
     //          0x2000 = Paragraph anchored frame
     //          0x2001 = frame anchored at character, which should be moved
 
     class _SwSaveTypeCountContent
     {
-        union {
-            struct { sal_uInt16 nType, nCount; } TC;
-            sal_uLong nTypeCount;
-            } TYPECOUNT;
+        sal_uInt16 nType;
+        sal_uInt16 nCount;
         sal_Int32 nContent;
 
     public:
-        _SwSaveTypeCountContent() { TYPECOUNT.nTypeCount = 0; nContent = 0; }
+        _SwSaveTypeCountContent() { nType=0; nCount=0; nContent = 0; }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
-                TYPECOUNT.nTypeCount = rArr[ rPos++ ];
+                nType = static_cast<sal_uInt16>(rArr[ rPos++ ]);
+                nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
                 nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
             }
         void Add( std::vector<sal_uLong> &rArr )
         {
-            rArr.push_back( TYPECOUNT.nTypeCount );
+            rArr.push_back( nType );
+            rArr.push_back( nCount );
             rArr.push_back( nContent );
         }
 
-        void SetType( sal_uInt16 n )        { TYPECOUNT.TC.nType = n; }
-        sal_uInt16 GetType() const          { return TYPECOUNT.TC.nType; }
+        void SetType( sal_uInt16 n )        { nType = n; }
+        sal_uInt16 GetType() const          { return nType; }
 
-        void SetCount( sal_uInt16 n )       { TYPECOUNT.TC.nCount = n; }
-        sal_uInt16 GetCount() const         { return TYPECOUNT.TC.nCount; }
-        sal_uInt16 IncCount()               { return ++TYPECOUNT.TC.nCount; }
-        sal_uInt16 DecCount()               { return --TYPECOUNT.TC.nCount; }
+        void SetCount( sal_uInt16 n )       { nCount = n; }
+        sal_uInt16 GetCount() const         { return nCount; }
+        sal_uInt16 IncCount()               { return ++nCount; }
+        sal_uInt16 DecCount()               { return --nCount; }
 
         void SetContent( sal_Int32 n )     { nContent = n; }
         sal_Int32 GetContent() const       { return nContent; }
