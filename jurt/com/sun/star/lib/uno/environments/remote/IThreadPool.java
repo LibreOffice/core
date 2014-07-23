@@ -19,9 +19,8 @@
 package com.sun.star.lib.uno.environments.remote;
 
 /**
- * This interface is an abstraction of the various
- * threadpool implementations.
- * <p>
+ * This interface is an abstraction of the various threadpool implementations.
+ *
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolFactory
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPoolFactory
  * @since       UDK1.0
@@ -29,25 +28,25 @@ package com.sun.star.lib.uno.environments.remote;
 public interface IThreadPool {
     /**
      * Retrieves the global threadId for the current thread.
-     * <p>
-     * @return the thread id
+     *
+     * @return the thread id.
      */
     ThreadId getThreadId();
 
     /**
      * Attaches this thread to the thread pool.
-     * <p>
+     *
      * @see                 #enter
      */
     public void attach();
 
     /**
-     * As above, but hands in an already existing
-     * instance of the threadid of the current thread.
-     * Returns a handle which can be used in enter and
-     * detach calls.<p>
-     * The function exists for performance
-     * optimization reasons.
+     * As above, but hands in an already existing instance of the threadid of
+     * the current thread.
+     *
+     * <p>The function exists for performance.</p>
+     *
+     * @return Returns a handle which can be used in enter and detach calls.
      * @see #attach
      */
     public Object attach( ThreadId id );
@@ -59,11 +58,11 @@ public interface IThreadPool {
     public void detach();
 
     /**
-     * As above, but hands in an already existing
-     * instance of the threadid of the current thread
-     * and a handle returned by attach.
-     * The function exists for performance
-     * optimization reasons.
+     * As above, but hands in an already existing instance of the threadid of
+     * the current thread and a handle returned by attach.
+     *
+     * <p>The function exists for performance.</p>
+     *
      * @see #attach()
      * @see #detach()
      */
@@ -71,45 +70,44 @@ public interface IThreadPool {
 
     /**
      * Lets this thread enter the thread pool.
-     * This thread then executes all jobs put via
-     * <code>putJob</code> until a reply job arrives.
-     * <p>
+     *
+     * <p>This thread then executes all jobs put via <code>putJob</code> until
+     * a reply job arrives.</p>
+     *
      * @see                 #putJob
      */
     public Object enter() throws Throwable;
 
     /**
-     * as above but hands in an already existing
-     * instance of the threadid of the current thread
-     * and a handle returned by attach.
-     * This thread then executes all jobs put via
-     * <code>putJob</code> until a reply job arrives.
-     * <p>
+     * As above but hands in an already existing instance of the threadid of
+     * the current thread and a handle returned by attach.
+     *
+     * <p>This thread then executes all jobs put via <code>putJob</code> until
+     * a reply job arrives.</p>
+     *
      * @see                 #putJob
      */
     public Object enter( Object handle, ThreadId id ) throws Throwable;
 
     /**
-     * Queues a job into the jobQueue of the thread belonging
-     * to the jobs threadId.
-     * <p>
+     * Queues a job into the jobQueue of the thread belonging to the jobs
+     * threadId.
+     *
      * @param job       the job
      */
     public void putJob(Job job);
 
     /**
-     * Disposes this thread pool, thus releasing
-     * all threads by throwing a <code>DisposedException</code> with the given
-     * <code>Throwable</code> cause.
-     * <p>
+     * Disposes this thread pool, thus releasing all threads by throwing a
+     * <code>DisposedException</code> with the given <code>Throwable</code> cause.
+     *
      * @param throwable   the cause
      */
     public void dispose(Throwable throwable);
 
 
     /**
-     * Destroys the thread pool and tries
-     * to join all created threads immediately.
+     * Destroys the thread pool and tries to join all created threads immediately.
      */
     public void destroy();
 }

@@ -36,11 +36,12 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * The BridgeFactory class implements the <code>XBridgeFactory</code> Interface.
- * It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
- * XBridge component.
- * <p>
- * This component is only usable for remote bridges.
- * <p>
+ *
+ * <p>It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
+ * XBridge component.</p>
+ *
+ * <p>This component is only usable for remote bridges.</p>
+ *
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
  */
@@ -48,18 +49,21 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     static private final boolean DEBUG = false;
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through reflection.
+     * The name of the service, the <code>JavaLoader</code> acceses this through
+     * reflection.
      */
     public final static String __serviceName = "com.sun.star.bridge.BridgeFactory";
 
     /**
      * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param   implName     the name of the implementation for which a service is desired.
+     * @param   multiFactory the service manager to be uses if needed.
+     * @param   regKey       the registryKey.
+     * @return  returns a <code>XSingleServiceFactory</code> for creating the component.
+     *
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
     public static XSingleServiceFactory __getServiceFactory(String implName,
@@ -78,11 +82,12 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
     /**
      * Creates a remote bridge and memorizes it under <code>sName</code>.
-     * <p>
-     * @return   the bridge
-     * @param    sName                the name to memorize the bridge
-     * @param    sProtocol            the protocol the bridge should use
-     * @param    anInstanceProvider   the instance provider
+     *
+     * @param    sName                the name to memorize the bridge.
+     * @param    sProtocol            the protocol the bridge should use.
+     * @param    anInstanceProvider   the instance provider.
+     * @return   the bridge.
+     *
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public XBridge createBridge(String sName, String sProtocol, XConnection aConnection, XInstanceProvider anInstanceProvider) throws
@@ -132,9 +137,9 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
     /**
      * Gets a remote bridge which must already exist.
-     * <p>
-     * @return   the bridge
-     * @param    sName                the name of the bridge
+     *
+     * @param    sName                the name of the bridge.
+     * @return   the bridge.
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public XBridge getBridge(String sName) throws com.sun.star.uno.RuntimeException {
@@ -160,10 +165,10 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     }
 
     /**
-     * Gives all created bridges
-     * <p>
-     * @return   the bridges
-     * @see                           com.sun.star.bridge.XBridgeFactory
+     * Gives all created bridges.
+     *
+     * @return   the bridges.
+     * @see      com.sun.star.bridge.XBridgeFactory
      */
     public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
         ArrayList<XBridge> vector = new ArrayList<XBridge>();
@@ -191,6 +196,13 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             }
         }
 
+        /**
+         * Returns a string representation of the object.
+         *
+         * @return a string representation of the object.
+         * @see java.lang.Object#toString
+         */
+        @Override
         public String toString() {
             return token;
         }

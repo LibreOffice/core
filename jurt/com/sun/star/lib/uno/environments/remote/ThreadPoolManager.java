@@ -39,7 +39,7 @@ public final class ThreadPoolManager {
     /**
      * Creates a thread pool instance.
      *
-     * @return a new thread pool instance; will never be <CODE>null</CODE>
+     * @return a new thread pool instance; will never be <CODE>null</CODE>.
      */
     public static synchronized IThreadPool create() {
         if (useNative) {
@@ -56,7 +56,7 @@ public final class ThreadPoolManager {
      * Leads to using the native thread pool factory, unless a Java thread pool
      * has already been created.
      *
-     * @return <CODE>false</CODE> if a Java thread pool has already been created
+     * @return <CODE>false</CODE> if a Java thread pool has already been created.
      */
     public static synchronized boolean useNative() {
         useNative = javaFactory == null;

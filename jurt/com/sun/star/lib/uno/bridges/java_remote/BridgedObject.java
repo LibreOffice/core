@@ -28,9 +28,9 @@ public final class BridgedObject {
      * Obtains the bridge associated with a bridged object.
      *
      * @param obj a reference to a (Java representation of a) UNO object;
-     *     must not be null
+     *     must not be null.
      * @return the bridge associated with the given object, if it is indeed
-     *     bridged; otherwise, null is returned
+     *     bridged; otherwise, null is returned.
      */
     public static XBridge getBridge(Object obj) {
         return ProxyFactory.getBridge(obj);

@@ -43,17 +43,26 @@ public final class java_environment implements IEnvironment {
         this.context = context;
     }
 
-    // @see com.sun.star.uno.IEnvironment#getContext
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#getContext
+     */
     public Object getContext() {
         return context;
     }
 
-    // @see com.sun.star.uno.IEnvironment#getName
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#getName
+     */
     public String getName() {
         return "java";
     }
 
-    // @see com.sun.star.uno.IEnvironment#registerInterface
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#registerInterface
+     */
     public Object registerInterface(Object object, String[] oid, Type type) {
         if (oid[0] == null) {
             oid[0] = UnoRuntime.generateOid(object);
@@ -66,8 +75,8 @@ public final class java_environment implements IEnvironment {
      * You have to revoke ANY interface that has been registered via this
      * method.
      *
-     * @param oid object id of interface to be revoked
-     * @param type the type description of the interface
+     * @param oid object id of interface to be revoked.
+     * @param type the type description of the interface.
      * @see com.sun.star.uno.IEnvironment#revokeInterface
      */
     public void revokeInterface(String oid, Type type) {
@@ -80,8 +89,8 @@ public final class java_environment implements IEnvironment {
      * Retrieves an interface identified by its object id and type from this
      * environment.
      *
-     * @param oid object id of interface to be retrieved
-     * @param type the type description of the interface to be retrieved
+     * @param oid object id of interface to be retrieved.
+     * @param type the type description of the interface to be retrieved.
      * @see com.sun.star.uno.IEnvironment#getRegisteredInterface
      */
     public Object getRegisteredInterface(String oid, Type type) {
@@ -96,14 +105,17 @@ public final class java_environment implements IEnvironment {
      * Retrieves the object identifier for a registered interface from this
      * environment.
      *
-     * @param object a registered interface
+     * @param object a registered interface.
      * @see com.sun.star.uno.IEnvironment#getRegisteredObjectIdentifier
      */
     public String getRegisteredObjectIdentifier(Object object) {
         return UnoRuntime.generateOid(object);
     }
 
-    // @see com.sun.star.uno.IEnvironment#list
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#list
+     */
     public void list() {
 // TODO???
 //      synchronized (proxies) {

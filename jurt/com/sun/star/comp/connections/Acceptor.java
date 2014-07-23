@@ -128,7 +128,10 @@ public final class Acceptor implements XAcceptor {
         return acc.accept(connectionDescription);
     }
 
-    // see com.sun.star.connection.XAcceptor#stopAccepting
+    /**
+     *
+     * @see com.sun.star.connection.XAcceptor#stopAccepting
+     */
     public void stopAccepting() {
         XAcceptor acc;
         synchronized (this) {

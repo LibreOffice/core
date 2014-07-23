@@ -41,11 +41,28 @@ public final class ThreadId {
         this.id = id;
     }
 
+    /**
+     * Indicates whether some other object is equal to this one.
+     *
+     * @param obj the reference object with which to compare.
+     * @return <code>true</code> if this object is the same as the obj argument;
+     * <code>false</code> otherwise.
+     *
+     * @see java.lang.Object#equals
+     */
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof ThreadId
             && Arrays.equals(id, ((ThreadId) obj).id);
     }
 
+    /**
+     * Returns a hash code value for the object.
+     *
+     * @return a hash code value for this object.
+     * @see java.lang.Object#hashCode
+     */
+    @Override
     public int hashCode() {
         int h = hash;
         if (h == 0) {
@@ -60,6 +77,13 @@ public final class ThreadId {
         return h;
     }
 
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     * @see java.lang.Object#toString
+     */
+    @Override
     public String toString() {
         StringBuffer b = new StringBuffer("[ThreadId:");
         for (int i = 0; i < id.length; ++i) {

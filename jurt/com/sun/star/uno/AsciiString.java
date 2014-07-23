@@ -20,17 +20,17 @@ package com.sun.star.uno;
 
 /**
  * The Ascii class represents the IDL build in type <code>asciistring</code>.
- * <p>
- * @deprecated do not use
+ *
+ * @deprecated do not use.
  */
 public final class AsciiString {
     public final String asciistring;
 
     /**
      * Constructs a new <code>AsciiString</code>.
-     * <p>
-     * @deprecated do not use
-     * @param   s  the String value
+     *
+     * @deprecated do not use.
+     * @param   s  the String value.
      */
     public AsciiString(String s) {
         asciistring = s;

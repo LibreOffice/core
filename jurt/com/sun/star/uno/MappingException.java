@@ -21,12 +21,14 @@ package com.sun.star.uno;
 
 /**
  * The mapping Exception.
- * The exception is replaced by the com.sun.star.lang.DisposedException.
- * @deprecated since UDK 3.0.2
- * <p>
+ *
+ * <p>The exception is replaced by the com.sun.star.lang.DisposedException.</p>
+ *
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IQueryInterface
  * @see         com.sun.star.uno.IBridge
+ *
+ * @deprecated since UDK 3.0.2
  */
 public class MappingException extends com.sun.star.uno.RuntimeException {
     /**
@@ -38,7 +40,7 @@ public class MappingException extends com.sun.star.uno.RuntimeException {
 
     /**
      * Contructs an <code>MappingException</code> with a detail message.
-     * <p>
+     *
      * @param  message   the detail message.
      */
     public MappingException(String message) {
@@ -46,9 +48,9 @@ public class MappingException extends com.sun.star.uno.RuntimeException {
     }
 
     /**
-     * Contructs an <code>MappingException</code> with a detail message
-     * and a context.
-     * <p>
+     * Contructs an <code>MappingException</code> with a detail message and a
+     * context.
+     *
      * @param  message   the detail message.
      * @param  context   the context.
      */

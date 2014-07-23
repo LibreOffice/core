@@ -18,7 +18,6 @@
 
 package com.sun.star.comp.loader;
 
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -39,9 +38,10 @@ import com.sun.star.uno.Type;
 
 /**
  * The purpose of this class to help component implementation.
- * This class has default implementations for <code>getServiceFactory</code>
- * and <code>writeRegistryServiceInfo</code>.
- * <p>
+ *
+ * <p>This class has default implementations for <code>getServiceFactory</code>
+ * and <code>writeRegistryServiceInfo</code>.</p>
+ *
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XSingleServiceFactory
@@ -207,12 +207,9 @@ public class FactoryHelper {
                 break;
             }
 
-            try
-            {
+            try {
                 return _constructor.newInstance( args );
-            }
-            catch (InvocationTargetException invocationTargetException)
-            {
+            } catch (InvocationTargetException invocationTargetException) {
                 Throwable targetException = invocationTargetException.getTargetException();
 
                 if (targetException instanceof java.lang.RuntimeException)
@@ -223,13 +220,9 @@ public class FactoryHelper {
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
                     throw new com.sun.star.uno.Exception( targetException.toString() );
-            }
-            catch (IllegalAccessException illegalAccessException)
-            {
+            } catch (IllegalAccessException illegalAccessException) {
                 throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
-            }
-            catch (InstantiationException instantiationException)
-            {
+            } catch (InstantiationException instantiationException) {
                 throw new com.sun.star.uno.Exception( instantiationException.toString() );
             }
         }
@@ -280,8 +273,7 @@ public class FactoryHelper {
                 break;
             }
 
-            try
-            {
+            try {
                 Object instance = _constructor.newInstance( args );
                 if (bInitCall)
                 {
@@ -293,9 +285,7 @@ public class FactoryHelper {
                     }
                 }
                 return instance;
-            }
-            catch (InvocationTargetException invocationTargetException)
-            {
+            } catch (InvocationTargetException invocationTargetException) {
                 Throwable targetException = invocationTargetException.getTargetException();
 
                 if (targetException instanceof java.lang.RuntimeException)
@@ -306,22 +296,18 @@ public class FactoryHelper {
                     throw (com.sun.star.uno.RuntimeException)targetException;
                 else
                     throw new com.sun.star.uno.Exception( targetException.toString() );
-            }
-            catch (IllegalAccessException illegalAccessException)
-            {
+            } catch (IllegalAccessException illegalAccessException) {
                 throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
-            }
-            catch (InstantiationException instantiationException)
-            {
+            } catch (InstantiationException instantiationException) {
                 throw new com.sun.star.uno.Exception( instantiationException.toString() );
             }
         }
 
         /**
          * Creates an instance of the desired service.
-         * <p>
-         * @return  returns an instance of the desired service
-         * @see                  com.sun.star.lang.XSingleServiceFactory
+         *
+         * @return  returns an instance of the desired service.
+         * @see     com.sun.star.lang.XSingleServiceFactory
          */
         public Object createInstance()
             throws com.sun.star.uno.Exception,
@@ -330,12 +316,13 @@ public class FactoryHelper {
             return createInstanceWithContext( null );
         }
 
-         /**
+        /**
          * Creates an instance of the desired service.
-         * <p>
-         * @return  returns an instance of the desired service
-         * @param   args     the args given to the constructor of the service
-         * @see              com.sun.star.lang.XSingleServiceFactory
+         *
+         * @param   args the args given to the constructor of the service.
+         * @return  returns an instance of the desired service.
+         *
+         * @see     com.sun.star.lang.XSingleServiceFactory
          */
         public Object createInstanceWithArguments(Object[] args)
             throws com.sun.star.uno.Exception,
@@ -344,31 +331,31 @@ public class FactoryHelper {
             return createInstanceWithArgumentsAndContext( args, null );
         }
 
-         /**
-         * Gives the supported services
-         * <p>
-         * @return  returns an array of supported services
-         * @see             com.sun.star.lang.XServiceInfo
+        /**
+         * Gives the supported services.
+         *
+         * @return  returns an array of supported services.
+         * @see     com.sun.star.lang.XServiceInfo
          */
         public String[] getSupportedServiceNames() throws com.sun.star.uno.RuntimeException {
             return new String[]{_serviceName};
         }
 
-         /**
-         * Gives the implementation name
-         * <p>
-         * @return  returns the implementation name
-         * @see             com.sun.star.lang.XServiceInfo
+        /**
+         * Gives the implementation name.
+         *
+         * @return  returns the implementation name.
+         * @see     com.sun.star.lang.XServiceInfo
          */
         public String getImplementationName() throws com.sun.star.uno.RuntimeException {
             return _implName;
         }
 
-         /**
+        /**
          * Indicates if the given service is supported.
-         * <p>
-         * @return  returns true if the given service is supported
-         * @see              com.sun.star.lang.XServiceInfo
+         *
+         * @return  returns true if the given service is supported.
+         * @see     com.sun.star.lang.XServiceInfo
          */
         public boolean supportsService(String serviceName) throws com.sun.star.uno.RuntimeException {
             String services[] = getSupportedServiceNames();
@@ -402,14 +389,14 @@ public class FactoryHelper {
 
     /**
      * Creates a factory for the given class.
-     * <p>
+     *
+     * @param   implClass     the implementing class.
+     * @param   multiFactory  the given multi service factory (service manager).
+     * @param   regKey        the given registry key.
+     * @return  returns a factory.
+     *
+     * @see     com.sun.star.lang.XServiceInfo
      * @deprecated as of UDK 1.0
-     * <p>
-     * @return  returns a factory
-     * @param   implClass     the implementing class
-     * @param   multiFactory  the given multi service factory (service manager)
-     * @param   regKey        the given registry key
-     * @see              com.sun.star.lang.XServiceInfo
      */
     static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           XMultiServiceFactory multiFactory,
@@ -422,17 +409,14 @@ public class FactoryHelper {
 
             try {
                 serviceName = implClass.getField("__serviceName");
-            }
-            catch(NoSuchFieldException noSuchFieldExceptio) {
+            } catch(NoSuchFieldException noSuchFieldExceptio) {
                 serviceName = implClass.getField("serviceName");  // old style
             }
 
             xSingleServiceFactory =  new Factory(implClass, (String)serviceName.get(null), multiFactory, regKey);
-        }
-        catch(NoSuchFieldException noSuchFieldException) {
+        } catch(NoSuchFieldException noSuchFieldException) {
             System.err.println("##### FactoryHelper.getServiceFactory - exception:" + noSuchFieldException);
-        }
-        catch(IllegalAccessException illegalAccessException) {
+        } catch(IllegalAccessException illegalAccessException) {
             System.err.println("##### FactoryHelper.getServiceFactory - exception:" + illegalAccessException);
         }
 
@@ -441,13 +425,14 @@ public class FactoryHelper {
 
     /**
      * Creates a factory for the given class.
-     * <p>
-     * @return  returns a factory
-     * @param   implClass     the implementing class
-     * @param   serviceName   the service name of the implementing class
-     * @param   multiFactory  the given multi service factory (service manager)
-     * @param   regKey        the given registry key
-     * @see              com.sun.star.lang.XServiceInfo
+     *
+     * @param   implClass     the implementing class.
+     * @param   serviceName   the service name of the implementing class.
+     * @param   multiFactory  the given multi service factory (service manager).
+     * @param   regKey        the given registry key.
+     *
+     * @return  returns a factory.
+     * @see     com.sun.star.lang.XServiceInfo
      */
     static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           String serviceName,
@@ -457,24 +442,26 @@ public class FactoryHelper {
         return new Factory(implClass, serviceName, multiFactory, regKey);
     }
 
-    /** Creates a factory for the given class.
-
-        @return returns a factory object
-        @param   implClass     the implementing class
-    */
+    /**
+     * Creates a factory for the given class.
+     *
+     * @param  implClass the implementing class.
+     * @return returns a factory object.
+     */
     static public Object createComponentFactory( Class<?> implClass, String serviceName )
     {
         return new Factory( implClass, serviceName, null, null );
     }
 
     /**
-     * Writes the registration data into the registry key
-     * <p>
-     * @return  success
-     * @param   implName      the name of the implementing class
-     * @param   serviceName   the service name
-     * @param   regKey        the given registry key
-     * @see                    com.sun.star.lang.XServiceInfo
+     * Writes the registration data into the registry key.
+     *
+     * @param   implName      the name of the implementing class.
+     * @param   serviceName   the service name.
+     * @param   regKey        the given registry key.
+     * @return  success.
+     *
+     * @see     com.sun.star.lang.XServiceInfo
      */
     static public boolean writeRegistryServiceInfo(String implName, String serviceName, XRegistryKey regKey) {
         boolean result = false;
@@ -493,35 +480,32 @@ public class FactoryHelper {
         return result;
     }
 
-    /** Writes the registration data into the registry key.
-     * Several services are supported.
+    /**
+     * Writes the registration data into the registry key.
      *
-     * @param impl_name name of implementation
-     * @param supported_services supported services of implementation
-     * @param xKey registry key to write to
-     * @return success
-    */
+     * <p>Several services are supported.</p>
+     *
+     * @param impl_name name of implementation.
+     * @param supported_services supported services of implementation.
+     * @param xKey registry key to write to.
+     * @return success.
+     */
     public static boolean writeRegistryServiceInfo(
         String impl_name, String supported_services [], XRegistryKey xKey )
     {
-          try
-        {
+        try {
             XRegistryKey xNewKey = xKey.createKey( "/" + impl_name + "/UNO/SERVICES" );
-            for ( int nPos = 0; nPos < supported_services.length; ++nPos )
-            {
+            for ( int nPos = 0; nPos < supported_services.length; ++nPos ) {
                 xNewKey.createKey( supported_services[ nPos ] );
             }
             return true;
-          }
-          catch (com.sun.star.registry.InvalidRegistryException exc)
-        {
-            if (DEBUG)
-            {
+        } catch (com.sun.star.registry.InvalidRegistryException exc) {
+            if (DEBUG) {
                 System.err.println(
                     "##### " + Factory.class.getName() + ".writeRegistryServiceInfo -- exc: " +
                     exc.toString() );
             }
-          }
+        }
         return false;
     }
 

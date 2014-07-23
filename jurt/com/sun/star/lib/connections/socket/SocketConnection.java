@@ -34,8 +34,9 @@ import com.sun.star.io.XStreamListener;
 /**
  * The SocketConnection implements the <code>XConnection</code> interface
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
- * This class is not part of the provided <code>api</code>.
- * <p>
+ *
+ * <p>This class is not part of the provided <code>api</code>.</p>
+ *
  * @see         com.sun.star.lib.connections.socket.socketAcceptor
  * @see         com.sun.star.lib.connections.socket.socketConnector
  * @see         com.sun.star.connection.XConnection
@@ -56,9 +57,9 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Constructs a new <code>SocketConnection</code>.
-     * <p>
-     * @param  description   the description of the connection
-     * @param  socket        the socket of the connection
+     *
+     * @param  description   the description of the connection.
+     * @param  socket        the socket of the connection.
      */
     public SocketConnection(String description, Socket socket) throws IOException {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - instantiated " + description + " " + socket);
@@ -77,14 +78,13 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         _firstRead = true;
     }
 
-
-
-
-    public void addStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
+    public void addStreamListener(XStreamListener aListener )
+            throws com.sun.star.uno.RuntimeException {
         _listeners.add(aListener);
     }
 
-    public void removeStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
+    public void removeStreamListener(XStreamListener aListener )
+            throws com.sun.star.uno.RuntimeException {
         _listeners.remove(aListener);
     }
 
@@ -112,16 +112,17 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         }
     }
 
-
     /**
      * Read the required number of bytes.
-     * <p>
-     * @return   the number of bytes read
-     * @param    bytes   the outparameter, where the bytes have to be placed
-     * @param    nBytesToRead the number of bytes to read
-     * @see       com.sun.star.connection.XConnection#read
+     *
+     * @param    bytes   the outparameter, where the bytes have to be placed.
+     * @param    nBytesToRead the number of bytes to read.
+     * @return   the number of bytes read.
+     *
+     * @see      com.sun.star.connection.XConnection#read
      */
-    public int read(/*OUT*/byte[][] bytes, int nBytesToRead) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
+            throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         if(_firstRead) {
             _firstRead = false;
 
@@ -144,8 +145,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
                 read_bytes += count;
             }
             while(read_bytes >= 0 && read_bytes < nBytesToRead && count >= 0);
-        }
-        catch(IOException ioException) {
+        } catch(IOException ioException) {
             if(DEBUG) {
                 System.err.println("##### " + getClass().getName() + ".read - exception occurred:" + ioException);
                 ioException.printStackTrace();
@@ -168,15 +168,15 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Write bytes.
-     * <p>
-     * @param    aData the bytes to write
+     *
+     * @param    aData the bytes to write.
      * @see       com.sun.star.connection.XConnection#write
      */
-    public void write(byte aData[]) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public void write(byte aData[]) throws com.sun.star.io.IOException,
+            com.sun.star.uno.RuntimeException {
         try {
             _outputStream.write(aData);
-        }
-        catch(IOException ioException) {
+        } catch(IOException ioException) {
             com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
             notifyListeners_error(unoIOException);
 
@@ -188,14 +188,14 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Flushes the buffer.
-     * <p>
+     *
      * @see       com.sun.star.connection.XConnection#flush
      */
-    public void flush() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public void flush() throws com.sun.star.io.IOException,
+            com.sun.star.uno.RuntimeException {
         try {
             _outputStream.flush();
-        }
-        catch(IOException ioException) {
+        } catch(IOException ioException) {
             com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
             notifyListeners_error(unoIOException);
 
@@ -205,14 +205,14 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Closes the connection.
-     * <p>
+     *
      * @see       com.sun.star.connection.XConnection#close
      */
-    public void close() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
+    public void close() throws com.sun.star.io.IOException,
+            com.sun.star.uno.RuntimeException {
         try {
             _socket.close();
-        }
-        catch(IOException ioException) {
+        } catch(IOException ioException) {
             com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
             notifyListeners_error(unoIOException);
 
@@ -225,8 +225,8 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Gives a description of the connection.
-     * <p>
-     * @return  the description
+     *
+     * @return  the description.
      * @see       com.sun.star.connection.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {

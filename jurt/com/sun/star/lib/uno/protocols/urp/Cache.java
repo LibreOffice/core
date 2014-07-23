@@ -21,18 +21,18 @@ package com.sun.star.lib.uno.protocols.urp;
 import java.util.HashMap;
 
 /**
-   An LRU cache for arbitrary objects.
-
-   This class is not synchronized, as any necessary synchronization will already
-   take place in the client.
-*/
+ * An LRU cache for arbitrary objects.
+ *
+ * <p>This class is not synchronized, as any necessary synchronization will already
+ * take place in the client.</p>
+ */
 final class Cache {
     /**
-       Create a cache.
-
-       @param size the maximum cache size, must be between 0, inclusive, and
-       NOT_CACHED, exclusive
-    */
+     * Create a cache.
+     *
+     * @param size the maximum cache size, must be between 0, inclusive, and
+     * NOT_CACHED, exclusive.
+     */
     public Cache(int size) {
         maxSize = size;
     }

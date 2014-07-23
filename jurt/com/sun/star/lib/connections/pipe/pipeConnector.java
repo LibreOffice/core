@@ -101,17 +101,16 @@ public final class pipeConnector implements XConnector {
     public synchronized XConnection connect(String connectionDescription)
         throws NoConnectException, ConnectionSetupException
     {
-        if (bConnected) {
+        if (bConnected)
             throw new ConnectionSetupException("alread connected");
-        }
 
-    try
-    {
-        XConnection xConn = new PipeConnection( connectionDescription );
-        bConnected = true;
-        return xConn;
-    }
-    catch ( java.io.IOException e ) { throw new NoConnectException(); }
+        try {
+            XConnection xConn = new PipeConnection( connectionDescription );
+            bConnected = true;
+            return xConn;
+        } catch ( java.io.IOException e ) {
+            throw new NoConnectException();
+        }
     }
 
     private boolean bConnected = false;
