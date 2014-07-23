@@ -37,10 +37,6 @@ class IntlWrapper;
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
-static const sal_uInt32 SFX_ITEMS_DIRECT  = 0xffffffff;
-static const sal_uInt32 SFX_ITEMS_NULL    = 0xfffffff0;  // instead StoreSurrogate
-static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
-
 enum SfxItemKind {
    SFX_ITEMS_NONE,
    SFX_ITEMS_DELETEONIDLE,

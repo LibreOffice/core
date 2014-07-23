@@ -41,6 +41,7 @@ static sal_uLong nRangesCopyCount = 0;   // How often have ranges been copied?
 #endif
 
 #include "nranges.cxx"
+#include "poolio.hxx"
 
 
 #ifdef DBG_UTIL

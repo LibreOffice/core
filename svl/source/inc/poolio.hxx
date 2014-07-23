@@ -33,6 +33,10 @@ class SfxItemPoolUser;
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif
 
+static const sal_uInt32 SFX_ITEMS_DIRECT  = 0xffffffff;
+static const sal_uInt32 SFX_ITEMS_NULL    = 0xfffffff0;  // instead StoreSurrogate
+static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
+
 struct SfxPoolVersion_Impl
 {
     sal_uInt16          _nVer;

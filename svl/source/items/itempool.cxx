@@ -979,6 +979,11 @@ const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
     return pImp->mpPoolRanges;
 }
 
+const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const
+{
+    return GetItem2(nWhich, SFX_ITEMS_DEFAULT);
+}
+
 const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) const
 {
     if ( !IsInRange(nWhich) )

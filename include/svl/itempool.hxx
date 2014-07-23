@@ -163,6 +163,7 @@ public:
 
     sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
+    const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             sal_uInt16 &rWhich, sal_uInt16 nSlotId,
