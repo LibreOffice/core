@@ -28,6 +28,7 @@
 #include "dlg_InsertErrorBars.hxx"
 #include "ViewElementListProvider.hxx"
 #include "DataPointItemConverter.hxx"
+#include "TextLabelItemConverter.hxx"
 #include "AxisItemConverter.hxx"
 #include "MultipleChartConverters.hxx"
 #include "TitleItemConverter.hxx"
@@ -167,8 +168,35 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_AXIS_UNITLABEL:
                     break;
             case OBJECTTYPE_DATA_LABELS:
-            case OBJECTTYPE_DATA_SERIES:
             case OBJECTTYPE_DATA_LABEL:
+            {
+                boost::scoped_ptr<awt::Size> pRefSize;
+                if (pRefSizeProvider)
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+
+                uno::Reference<XDataSeries> xSeries = ObjectIdentifier::getDataSeriesForCID(aObjectCID, xChartModel);
+                uno::Reference<XChartType> xChartType = ChartModelHelper::getChartTypeOfSeries(xChartModel, xSeries);
+
+                uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(xChartModel);
+
+                bool bDataSeries = eObjectType == OBJECTTYPE_DATA_LABELS;
+
+                sal_Int32 nPointIndex = -1; /*-1 for whole series*/
+                if (!bDataSeries)
+                    nPointIndex = aParticleID.toInt32();
+
+                sal_Int32 nNumberFormat = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+                    xObjectProperties, xSeries, nPointIndex, xDiagram);
+                sal_Int32 nPercentNumberFormat = ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
+                    xObjectProperties,uno::Reference<util::XNumberFormatsSupplier>(xChartModel, uno::UNO_QUERY));
+
+                pItemConverter = new wrapper::TextLabelItemConverter(
+                    xChartModel, xObjectProperties, xSeries,
+                    rDrawModel.GetItemPool(), pRefSize.get(), bDataSeries,
+                    nNumberFormat, nPercentNumberFormat);
+            }
+            break;
+            case OBJECTTYPE_DATA_SERIES:
             case OBJECTTYPE_DATA_POINT:
             {
                 boost::scoped_ptr<awt::Size> pRefSize;
@@ -186,7 +214,7 @@ wrapper::ItemConverter* createItemConverter(
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
 
-                bool bDataSeries = ( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_LABELS );
+                bool bDataSeries = eObjectType == OBJECTTYPE_DATA_SERIES;
 
                 //special color for pie chart:
                 bool bUseSpecialFillColor = false;

@@ -22,6 +22,13 @@
 #define CHART_UNONAME_ERRORBAR_X            "ErrorBarX"
 #define CHART_UNONAME_ERRORBAR_Y            "ErrorBarY"
 #define CHART_UNONAME_LABEL                 "Label"
+#define CHART_UNONAME_LABEL_SEP             "LabelSeparator"
+#define CHART_UNONAME_LABEL_BORDER_STYLE    "LabelBorderStyle"
+#define CHART_UNONAME_LABEL_BORDER_WIDTH    "LabelBorderWidth"
+#define CHART_UNONAME_LABEL_BORDER_COLOR    "LabelBorderColor"
+#define CHART_UNONAME_LABEL_BORDER_DASH     "LabelBorderDash"
+#define CHART_UNONAME_LABEL_BORDER_DASHNAME "LabelBorderDashName"
+#define CHART_UNONAME_LABEL_BORDER_TRANS    "LabelBorderTransparency"
 
 #endif
 

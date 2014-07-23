@@ -115,6 +115,7 @@ public:
 
     static const tMakePropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineSeriesProperties();
+    static const tMakePropertyNameMap& getPropertyNameMapForTextLabelProperties();
 
     static void getTextLabelMultiPropertyLists(
                 const ::com::sun::star::uno::Reference<

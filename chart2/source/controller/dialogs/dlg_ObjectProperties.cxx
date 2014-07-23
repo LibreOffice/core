@@ -388,6 +388,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
+            AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_BORDER));
             AddTabPage(TP_DATA_DESCR, SCH_RESSTR(STR_OBJECT_DATALABELS), DataLabelsTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SCH_RESSTR(STR_PAGE_FONT));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SCH_RESSTR(STR_PAGE_FONT_EFFECTS));
