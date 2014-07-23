@@ -1744,17 +1744,52 @@ namespace drawinglayer
 
                             if(maClipPolyPolygon.count())
                             {
-                                // there is already a clip polygon set; build clipped union of
-                                // current mask polygon and new one
-                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                                    aMask,
-                                    maClipPolyPolygon,
-                                    true, // #i106516# we want the inside of aMask, not the outside
-                                    false);
+                                // due to the cost of PolyPolygon clipping and numerical reasons try first if the current
+                                // and the new ClipRegion are ranges. If yes, processing can be simplified
+                                if(basegfx::tools::isRectangle(aMask)
+                                    && basegfx::tools::isRectangle(maClipPolyPolygon))
+                                {
+                                    // both ClipPolygons are rectangles
+                                    if(aMask.getB2DRange().equal(maClipPolyPolygon.getB2DRange()))
+                                    {
+                                        // equal -> no change in ClipRegion needed, leave
+                                        // maClipPolyPolygon unchanged
+                                    }
+                                    else
+                                    {
+                                        // not equal -> create new ClipRegion from the two ranges
+                                        basegfx::B2DRange aClipRange(aMask.getB2DRange());
+
+                                        aClipRange.intersect(maClipPolyPolygon.getB2DRange());
+
+                                        if(aClipRange.isEmpty())
+                                        {
+                                            // no common ClipRegion -> set empty ClipRegion, no content to show
+                                            maClipPolyPolygon.clear();
+                                        }
+                                        else
+                                        {
+                                            // use common ClipRegion as new ClipRegion
+                                            maClipPolyPolygon = basegfx::B2DPolyPolygon(
+                                                basegfx::tools::createPolygonFromRect(aClipRange));
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // The current ClipRegion or the new one is not a rectangle;
+                                    // there is already a clip polygon set; build clipped union of
+                                    // current mask polygon and new one
+                                    maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                        aMask,
+                                        maClipPolyPolygon,
+                                        true, // #i106516# we want the inside of aMask, not the outside
+                                        false);
+                                }
                             }
                             else
                             {
-                                // use mask directly
+                                // use new mask directly as ClipRegion
                                 maClipPolyPolygon = aMask;
                             }
 
@@ -1763,8 +1798,13 @@ namespace drawinglayer
                                 // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
                                 // Removed subdivision and fixed in Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
                                 // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
-                                mpOutputDevice->Push(PUSH_CLIPREGION);
-                                mpOutputDevice->SetClipRegion(Region(maClipPolyPolygon));
+                                const bool bNewClipRegion(maClipPolyPolygon != aLastClipPolyPolygon);
+
+                                if(bNewClipRegion)
+                                {
+                                    mpOutputDevice->Push(PUSH_CLIPREGION);
+                                    mpOutputDevice->SetClipRegion(Region(maClipPolyPolygon));
+                                }
 
                                 // recursively paint content
                                 // #121267# Only need to process sub-content when clip polygon is *not* empty.
@@ -1772,7 +1812,10 @@ namespace drawinglayer
                                 process(rMaskCandidate.getChildren());
 
                                 // restore VCL clip region
-                                mpOutputDevice->Pop();
+                                if(bNewClipRegion)
+                                {
+                                    mpOutputDevice->Pop();
+                                }
                             }
 
                             // restore to rescued clip polygon
