@@ -687,11 +687,14 @@ void GL3DBarChart::moveToCorner()
 
 void GL3DBarChart::scroll(long nDelta)
 {
-    osl::MutexGuard aGuard(maMutex);
+    {
+        osl::MutexGuard aGuard(maMutex);
 
-    glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
-    maCameraPosition -= (float((nDelta/10)) * maDir);
-    mpCamera->setPosition(maCameraPosition);
+        glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
+        maCameraPosition -= (float((nDelta/10)) * maDir);
+        mpCamera->setPosition(maCameraPosition);
+    }
+
     update();
 }
 
