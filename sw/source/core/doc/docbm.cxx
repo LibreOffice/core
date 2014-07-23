@@ -1156,7 +1156,6 @@ namespace
 
         void SetCount( sal_uInt16 n )       { nCount = n; }
         sal_uInt16 GetCount() const         { return nCount; }
-        sal_uInt16 IncCount()               { return ++nCount; }
         sal_uInt16 DecCount()               { return --nCount; }
 
         void SetContent( sal_Int32 n )     { nContent = n; }
