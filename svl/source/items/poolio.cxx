@@ -53,6 +53,7 @@ static sal_uInt16 convertSfxItemKindToUInt16(SfxItemKind x)
     if ( x == SFX_ITEMS_POOLDEFAULT )
         return 0xffff;
     assert(false);
+    abort();
 }
 
 static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 x)
@@ -66,6 +67,7 @@ static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 x)
     if ( x == 0xffff )
         return SFX_ITEMS_POOLDEFAULT;
     assert(false);
+    abort();
 }
 
 
