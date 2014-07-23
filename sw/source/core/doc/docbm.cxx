@@ -1413,13 +1413,6 @@ namespace
 
         void SetContent( sal_Int32 n )     { m_nCntnt = n; }
         sal_Int32 GetContent() const       { return m_nCntnt; }
-#if OSL_DEBUG_LEVEL > 0
-        void Dump()
-        {
-            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << IsCharBound() << "\tContent: " << GetContent());
-        }
-#endif
-
     };
     void _SaveCntntIdx(SwDoc* pDoc,
         sal_uLong nNode,
@@ -1565,9 +1558,6 @@ namespace
             }
             if( pPos )
             {
-    #if OSL_DEBUG_LEVEL > 0
-                aSave.Dump();
-    #endif
                 SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.GetCount() << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
                 pPos->nNode = *pCNd;
                 pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
@@ -1761,15 +1751,6 @@ namespace
     {
         BOOST_FOREACH(MarkEntry& aEntry, *pEntries)
             aEntry.Dump();
-    }
-    static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
-    {
-        sal_uInt16 n = 0;
-        while( n < rSaveArr.size() )
-        {
-            _SwSaveTypeCountContent aSave( rSaveArr, n );
-            aSave.Dump();
-        }
     }
 #endif
 }
