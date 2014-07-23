@@ -409,15 +409,15 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
     {
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-        sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
-        for(sal_uInt16 i = 1; i <= nGroupCount; i++)
+        const size_t nGroupCount = pGlossaryList->GetGroupCount();
+        for(size_t i = 1; i <= nGroupCount; ++i)
         {
             OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
             // get group name with path-extension
             OUString sGroupName = pGlossaryList->GetGroupName(i - 1, false);
             if(sGroupName == pGlossary->GetName())
                 continue;
-            sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+            const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
             if(nBlockCount)
             {
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)

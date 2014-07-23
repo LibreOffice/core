@@ -165,14 +165,14 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     return bRet;
 }
 
-sal_uInt16  SwGlossaryList::GetGroupCount()
+size_t SwGlossaryList::GetGroupCount()
 {
     if(!bFilled)
         Update();
     return aGroupArr.size();
 }
 
-OUString SwGlossaryList::GetGroupName(sal_uInt16 nPos, bool bNoPath)
+OUString SwGlossaryList::GetGroupName(size_t nPos, bool bNoPath)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
     if(nPos < aGroupArr.size())
@@ -186,7 +186,7 @@ OUString SwGlossaryList::GetGroupName(sal_uInt16 nPos, bool bNoPath)
     return OUString();
 }
 
-OUString SwGlossaryList::GetGroupTitle(sal_uInt16 nPos)
+OUString SwGlossaryList::GetGroupTitle(size_t nPos)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
     if(nPos < aGroupArr.size())
@@ -197,7 +197,7 @@ OUString SwGlossaryList::GetGroupTitle(sal_uInt16 nPos)
     return OUString();
 }
 
-sal_uInt16 SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
+sal_uInt16 SwGlossaryList::GetBlockCount(size_t nGroup)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
     if(nGroup < aGroupArr.size())
@@ -208,7 +208,7 @@ sal_uInt16 SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
     return 0;
 }
 
-OUString SwGlossaryList::GetBlockLongName(sal_uInt16 nGroup, sal_uInt16 nBlock)
+OUString SwGlossaryList::GetBlockLongName(size_t nGroup, sal_uInt16 nBlock)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
     if(nGroup < aGroupArr.size())
@@ -219,7 +219,7 @@ OUString SwGlossaryList::GetBlockLongName(sal_uInt16 nGroup, sal_uInt16 nBlock)
     return OUString();
 }
 
-OUString SwGlossaryList::GetBlockShortName(sal_uInt16 nGroup, sal_uInt16 nBlock)
+OUString SwGlossaryList::GetBlockShortName(size_t nGroup, sal_uInt16 nBlock)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
     if(nGroup < aGroupArr.size())

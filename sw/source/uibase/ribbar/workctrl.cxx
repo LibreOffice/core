@@ -189,14 +189,14 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
 
             pPopup = new PopupMenu;
             SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-            sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
-            for(sal_uInt16 i = 1; i <= nGroupCount; i++)
+            const size_t nGroupCount = pGlossaryList->GetGroupCount();
+            for(size_t i = 1; i <= nGroupCount; ++i)
             {
                 OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
-                sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+                const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
                 if(nBlockCount)
                 {
-                    sal_uInt16 nIndex = 100 * (i);
+                    sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
                     // but insert without extension
                     pPopup->InsertItem( i, sTitle);
                     PopupMenu* pSub = new PopupMenu;

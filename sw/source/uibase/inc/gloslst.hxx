@@ -62,13 +62,13 @@ public:
     bool            GetShortName(const OUString& rLongName,
                                        OUString& rShortName, OUString& rGroupName );
 
-    sal_uInt16      GetGroupCount();
-    OUString        GetGroupName(sal_uInt16 nPos, bool bNoPath = true);
-    OUString        GetGroupTitle(sal_uInt16 nPos);
+    size_t          GetGroupCount();
+    OUString        GetGroupName(size_t nPos, bool bNoPath = true);
+    OUString        GetGroupTitle(size_t nPos);
 
-    sal_uInt16      GetBlockCount(sal_uInt16 nGroup);
-    OUString        GetBlockLongName(sal_uInt16 nGroup, sal_uInt16 nBlock);
-    OUString        GetBlockShortName(sal_uInt16 nGroup, sal_uInt16 nBlock);
+    sal_uInt16      GetBlockCount(size_t nGroup);
+    OUString        GetBlockLongName(size_t nGroup, sal_uInt16 nBlock);
+    OUString        GetBlockShortName(size_t nGroup, sal_uInt16 nBlock);
 
     void            Update();
 
