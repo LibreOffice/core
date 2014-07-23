@@ -1133,8 +1133,6 @@ namespace
     //  CntntType --
     //          0x2000 = Paragraph anchored frame
     //          0x2001 = frame anchored at character, which should be moved
-    //          0x0800 = Crsr from the CrsrShell Mark
-    //          0x0801 = Crsr from the CrsrShell Point
 
     class _SwSaveTypeCountContent
     {
@@ -1214,37 +1212,6 @@ namespace
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
 
-    static void lcl_ChkPaM( std::vector<sal_uLong> &rSaveArr, sal_uLong nNode, sal_Int32 nCntnt,
-                    const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
-                    bool bChkSelDirection )
-    {
-        // Respect direction of selection
-        bool bBound1IsStart = !bChkSelDirection ||
-                            ( *rPam.GetPoint() < *rPam.GetMark()
-                                ? rPam.GetPoint() == &rPam.GetBound()
-                                : rPam.GetMark() == &rPam.GetBound());
-
-        const SwPosition* pPos = &rPam.GetBound( true );
-        if( pPos->nNode.GetIndex() == nNode &&
-            ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
-                                : pPos->nContent.GetIndex() <= nCntnt ))
-        {
-            rSave.SetContent( pPos->nContent.GetIndex() );
-            rSave.Add( rSaveArr );
-        }
-
-        pPos = &rPam.GetBound( false );
-        if( pPos->nNode.GetIndex() == nNode &&
-            ( (bBound1IsStart && bChkSelDirection)
-                        ? pPos->nContent.GetIndex() <= nCntnt
-                        : pPos->nContent.GetIndex() < nCntnt ))
-        {
-            rSave.SetContent( pPos->nContent.GetIndex() );
-            rSave.IncType();
-            rSave.Add( rSaveArr );
-            rSave.DecType();
-        }
-    }
 #if 0
     static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
     {
@@ -1565,31 +1532,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
             }
         }
     }
-    // 5. CrsrShell
-//    {
-//        SwCrsrShell* pShell = pDoc->GetEditShell();
-//        if( pShell )
-//        {
-//            aSave.SetTypeAndCount( 0x800, 0 );
-//            FOREACHSHELL_START( pShell )
-//                SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-//                if( _pStkCrsr )
-//                    do {
-//                        lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
-//                                    aSave, false );
-//                        aSave.IncCount();
-//                    } while ( (_pStkCrsr != 0 ) &&
-//                        ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-//
-//                FOREACHPAM_START( PCURSH->_GetCrsr() )
-//                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
-//                                aSave, false );
-//                    aSave.IncCount();
-//                FOREACHPAM_END()
-//
-//            FOREACHSHELL_END( pShell )
-//        }
-//    }
 }
 
 void _RestoreCntntIdx(SwDoc* pDoc,
@@ -1638,47 +1580,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                     pFrmFmt->NotifyClients( pAnchor, pAnchor );
                 }
                 break;
-
-            case 0x0800:
-            case 0x0801:
-                {
-                    SwCrsrShell* pShell = pDoc->GetEditShell();
-                    if( pShell )
-                    {
-                        sal_uInt16 nCnt = 0;
-                        FOREACHSHELL_START( pShell )
-                            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-                            if( _pStkCrsr )
-                                do {
-                                    if( aSave.GetCount() == nCnt )
-                                    {
-                                        pPos = &_pStkCrsr->GetBound( 0x0800 ==
-                                                            aSave.GetType() );
-                                        break;
-                                    }
-                                    ++nCnt;
-                                } while ( (_pStkCrsr != 0 ) &&
-                                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-
-                            if( pPos )
-                                break;
-
-                            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                                if( aSave.GetCount() == nCnt )
-                                {
-                                    pPos = &PCURCRSR->GetBound( 0x0800 ==
-                                                        aSave.GetType() );
-                                    break;
-                                }
-                                ++nCnt;
-                            FOREACHPAM_END()
-                            if( pPos )
-                                break;
-
-                        FOREACHSHELL_END( pShell )
-                    }
-            }
-            break;
         }
 
         if( pPos )
@@ -1734,47 +1635,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                         }
                         aNew.SetAnchor( &aNewPos );
                         pFrmFmt->SetFmtAttr( aNew );
-                    }
-                }
-                break;
-
-            case 0x0800:
-            case 0x0801:
-                {
-                    SwCrsrShell* pShell = pDoc->GetEditShell();
-                    if( pShell )
-                    {
-                        sal_uInt16 nCnt = 0;
-                        FOREACHSHELL_START( pShell )
-                            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-                            if( _pStkCrsr )
-                                do {
-                                    if( aSave.GetCount() == nCnt )
-                                    {
-                                        pPos = &_pStkCrsr->GetBound( 0x0800 ==
-                                                    aSave.GetType() );
-                                        break;
-                                    }
-                                    ++nCnt;
-                                } while ( (_pStkCrsr != 0 ) &&
-                                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-
-                            if( pPos )
-                                break;
-
-                            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                                if( aSave.GetCount() == nCnt )
-                                {
-                                    pPos = &PCURCRSR->GetBound( 0x0800 ==
-                                                aSave.GetType() );
-                                    break;
-                                }
-                                ++nCnt;
-                            FOREACHPAM_END()
-                            if( pPos )
-                                break;
-
-                        FOREACHSHELL_END( pShell )
                     }
                 }
                 break;
@@ -1930,6 +1790,15 @@ namespace
         {
             const MarkEntry aEntry = { nIdx, true, pPos->nContent.GetIndex() };
             rMarkEntries.push_back(aEntry);
+        }
+    }
+    static void lcl_ChkPaM( std::vector<PaMEntry> &rPaMEntries, sal_uLong nNode, sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
+    {
+        const SwPosition* pPos = &rPaM.GetBound( bPoint );
+        if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nCntnt )
+        {
+            const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
+            rPaMEntries.push_back(aEntry);
         }
     }
 #if 0
@@ -2095,15 +1964,6 @@ void CntntIdxStoreImpl::RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater)
     }
 }
 
-static void lcl_ChkPaM( std::vector<PaMEntry> &rPaMEntries, sal_uLong nNode, sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
-{
-    const SwPosition* pPos = &rPaM.GetBound( bPoint );
-    if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nCntnt )
-    {
-        const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
-        rPaMEntries.push_back(aEntry);
-    }
-}
 void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
     SwCrsrShell* pShell = pDoc->GetEditShell();
