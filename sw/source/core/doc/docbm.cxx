@@ -1678,78 +1678,35 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     // Paragraph anchored objects
     MarkEntry aSave;
     SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
-    if( pNode )
-    {
-
-        SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
+    if( !pNode )
+        return;
+    SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
 #if OSL_DEBUG_LEVEL > 1
-        static bool bViaDoc = false;
-        if( bViaDoc )
-            pFrm = NULL;
+    static bool bViaDoc = false;
+    if( bViaDoc )
+        pFrm = NULL;
 #endif
-        if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
+    if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
+    {
+        if( pFrm->GetDrawObjs() )
         {
-            if( pFrm->GetDrawObjs() )
+            const SwSortedObjs& rDObj = *pFrm->GetDrawObjs();
+            for( sal_uInt32 n = rDObj.Count(); n; )
             {
-                const SwSortedObjs& rDObj = *pFrm->GetDrawObjs();
-                for( sal_uInt32 n = rDObj.Count(); n; )
-                {
-                    SwAnchoredObject* pObj = rDObj[ --n ];
-                    const SwFrmFmt& rFmt = pObj->GetFrmFmt();
-                    const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
-                    SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
-                    if ( pAPos &&
-                         ( ( nSaveFly &&
-                             FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
-                           ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
-                    {
-                        aSave.m_bOther = false;
-                        aSave.m_nCntnt = pAPos->nContent.GetIndex();
-
-                        OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
-                                "_SaveCntntIdx: Wrong Node-Index" );
-                        if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
-                        {
-                            if( nCntnt <= aSave.m_nCntnt )
-                            {
-                                if( SAVEFLY_SPLIT == nSaveFly )
-                                    aSave.m_bOther = true;
-                                else
-                                    continue;
-                            }
-                        }
-                        aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
-                        while( aSave.m_nIdx &&
-                                &rFmt != (*pDoc->GetSpzFrmFmts())[
-                                --aSave.m_nIdx ] )
-                            ; // nothing
-                        OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
-                                                aSave.m_nIdx ],
-                                "_SaveCntntIdx: Lost FrameFormat" );
-                        m_aFlyEntries.push_back(aSave);
-                    }
-                }
-            }
-        }
-        else // No layout, so it's a bit more expensive ...
-        {
-            for( aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
-                    aSave.m_nIdx ; )
-            {
-                SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
-                                            --aSave.m_nIdx ];
-                if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
-                        RES_DRAWFRMFMT != pFrmFmt->Which() )
-                    continue;
-
-                const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+                SwAnchoredObject* pObj = rDObj[ --n ];
+                const SwFrmFmt& rFmt = pObj->GetFrmFmt();
+                const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
                 SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
-                if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
-                     ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
-                       FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
+                if ( pAPos &&
+                     ( ( nSaveFly &&
+                         FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
+                       ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                 {
                     aSave.m_bOther = false;
                     aSave.m_nCntnt = pAPos->nContent.GetIndex();
+
+                    OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
+                            "_SaveCntntIdx: Wrong Node-Index" );
                     if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                     {
                         if( nCntnt <= aSave.m_nCntnt )
@@ -1760,8 +1717,49 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
                                 continue;
                         }
                     }
+                    aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
+                    while( aSave.m_nIdx &&
+                            &rFmt != (*pDoc->GetSpzFrmFmts())[
+                            --aSave.m_nIdx ] )
+                        ; // nothing
+                    OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
+                                            aSave.m_nIdx ],
+                            "_SaveCntntIdx: Lost FrameFormat" );
                     m_aFlyEntries.push_back(aSave);
                 }
+            }
+        }
+    }
+    else // No layout, so it's a bit more expensive ...
+    {
+        for( aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
+                aSave.m_nIdx ; )
+        {
+            SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
+                                        --aSave.m_nIdx ];
+            if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
+                    RES_DRAWFRMFMT != pFrmFmt->Which() )
+                continue;
+
+            const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+            if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+                 ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                   FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
+            {
+                aSave.m_bOther = false;
+                aSave.m_nCntnt = pAPos->nContent.GetIndex();
+                if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
+                {
+                    if( nCntnt <= aSave.m_nCntnt )
+                    {
+                        if( SAVEFLY_SPLIT == nSaveFly )
+                            aSave.m_bOther = true;
+                        else
+                            continue;
+                    }
+                }
+                m_aFlyEntries.push_back(aSave);
             }
         }
     }
