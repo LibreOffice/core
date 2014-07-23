@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,icu))
 $(eval $(call gb_Module_add_targets,icu,\
 	UnpackedTarball_icu \
 	ExternalPackage_icu \
+	ExternalPackage_icu_ure \
 	ExternalProject_icu \
 ))
 

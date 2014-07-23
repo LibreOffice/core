@@ -1393,6 +1393,10 @@ endef
 
 else # !SYSTEM_ICU
 
+$(eval $(call gb_Helper_register_packages_for_install,ure, \
+	icu_ure \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo, \
 	icu \
 ))
