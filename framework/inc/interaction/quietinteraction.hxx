@@ -38,7 +38,6 @@ namespace framework{
                 But it can be used to intercept problems e.g. during loading of documents.
 
                 In current implementation we solve conflicts for following situations only:
-                    - AmbigousFilterRequest
                     - InteractiveIOException
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.

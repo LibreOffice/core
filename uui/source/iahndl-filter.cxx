@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -190,109 +189,6 @@ handleNoSuchFilterRequest_(
 }
 
 void
-handleAmbigousFilterRequest_(
-    Window * pParent,
-    uno::Reference< uno::XComponentContext > const & xContext,
-    document::AmbigousFilterRequest const & rRequest,
-    uno::Sequence<
-        uno::Reference<
-            task::XInteractionContinuation > > const & rContinuations)
-{
-    uno::Reference< task::XInteractionAbort > xAbort;
-    uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
-    getContinuations(rContinuations, &xAbort, &xFilterTransport);
-
-    uui::FilterNameList lNames;
-
-    uno::Reference< container::XNameContainer > xFilterContainer;
-    try
-    {
-        xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
-            OUString( "com.sun.star.document.FilterFactory"), xContext ),
-            uno::UNO_QUERY );
-    }
-    catch ( uno::Exception & )
-    {
-    }
-
-    if( xFilterContainer.is() )
-    {
-        uno::Any                              aPackedSet    ;
-        uno::Sequence< beans::PropertyValue > lProps        ;
-        sal_Int32                             nStep         ;
-        uui::FilterNamePair                   aPair         ;
-
-        try
-        {
-            aPackedSet = xFilterContainer->getByName( rRequest.SelectedFilter );
-        }
-        catch(const container::NoSuchElementException&)
-        {
-            aPackedSet.clear();
-        }
-        aPackedSet >>= lProps;
-        for( nStep=0; nStep<lProps.getLength(); ++nStep )
-        {
-            if( lProps[nStep].Name.equalsAscii("UIName") )
-            {
-                OUString sTemp;
-                lProps[nStep].Value >>= sTemp;
-                aPair.sUI       = sTemp;
-                aPair.sInternal = rRequest.SelectedFilter;
-                lNames.push_back( aPair );
-                break;
-            }
-        }
-
-        try
-        {
-            aPackedSet = xFilterContainer->getByName( rRequest.DetectedFilter );
-        }
-        catch(const container::NoSuchElementException&)
-        {
-            aPackedSet.clear();
-        }
-        aPackedSet >>= lProps;
-        for( nStep=0; nStep<lProps.getLength(); ++nStep )
-        {
-            if( lProps[nStep].Name.equalsAscii("UIName") )
-            {
-                OUString sTemp;
-                lProps[nStep].Value >>= sTemp;
-                aPair.sUI       = sTemp;
-                aPair.sInternal = rRequest.DetectedFilter;
-                lNames.push_back( aPair );
-                break;
-            }
-        }
-    }
-
-    if( xAbort.is() && xFilterTransport.is() )
-    {
-        if( lNames.size() < 1 )
-        {
-            xAbort->select();
-        }
-        else
-        {
-            OUString sFilter;
-            executeFilterDialog( pParent,
-                                 rRequest.URL,
-                                 lNames,
-                                 sFilter );
-
-            if( !sFilter.isEmpty() )
-            {
-                xFilterTransport->setFilter( sFilter );
-                xFilterTransport->select();
-            }
-            else
-                xAbort->select();
-        }
-    }
-}
-
-void
 handleFilterOptionsRequest_(
     uno::Reference< uno::XComponentContext > const & xContext,
     document::FilterOptionsRequest const & rRequest,
@@ -406,24 +302,6 @@ UUIInteractionHelper::handleNoSuchFilterRequest(
                                    m_xContext,
                                    aNoSuchFilterRequest,
                                    rRequest->getContinuations());
-        return true;
-    }
-    return false;
-}
-
-bool
-UUIInteractionHelper::handleAmbigousFilterRequest(
-    uno::Reference< task::XInteractionRequest > const & rRequest)
-{
-    uno::Any aAnyRequest(rRequest->getRequest());
-
-    document::AmbigousFilterRequest aAmbigousFilterRequest;
-    if (aAnyRequest >>= aAmbigousFilterRequest)
-    {
-        handleAmbigousFilterRequest_(getParentProperty(),
-                                     m_xContext,
-                                     aAmbigousFilterRequest,
-                                     rRequest->getContinuations());
         return true;
     }
     return false;

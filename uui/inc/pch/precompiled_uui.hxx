@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>

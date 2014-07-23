@@ -25,7 +25,6 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 
@@ -81,20 +80,9 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
     css::task::ErrorCodeRequest          aErrorCodeRequest;
-    css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
     css::document::FilterOptionsRequest  aFilterOptionsRequest;
 
-    if (aRequest>>=aAmbigousFilterRequest)
-    {
-        if (xFilter.is())
-        {
-            // user selected filter wins every time!
-            xFilter->setFilter( aAmbigousFilterRequest.SelectedFilter );
-            xFilter->select();
-        }
-    }
-    else
     if( aRequest >>= aErrorCodeRequest )
     {
         // warnings can be ignored   => approve

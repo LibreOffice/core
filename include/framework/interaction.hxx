@@ -28,7 +28,6 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <rtl/ustring.hxx>

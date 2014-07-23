@@ -46,7 +46,6 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
@@ -1220,16 +1219,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
     css::task::ErrorCodeRequest          aErrorCodeRequest;
-    css::document::AmbigousFilterRequest aAmbigousFilterRequest;
-    if( aRequest >>= aAmbigousFilterRequest )
-    {
-        if( xFilterSelect.is() )
-        {
-            xFilterSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); // user selected filter wins!
-            xFilterSelect->select();
-        }
-    }
-    else if( aRequest >>= aErrorCodeRequest )
+    if( aRequest >>= aErrorCodeRequest )
     {
         bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
         if (xApprove.is() && bWarning)

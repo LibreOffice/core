@@ -82,7 +82,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

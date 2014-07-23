@@ -852,9 +852,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleNoSuchFilterRequest( rRequest ) )
                 return true;
 
-            if ( handleAmbigousFilterRequest( rRequest ) )
-                return true;
-
             if ( handleFilterOptionsRequest( rRequest ) )
                 return true;
 

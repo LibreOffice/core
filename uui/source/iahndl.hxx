@@ -217,11 +217,6 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest);
 
     bool
-    handleAmbigousFilterRequest(
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionRequest > const & rRequest);
-
-    bool
     handleFilterOptionsRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest);
