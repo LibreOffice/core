@@ -1389,26 +1389,14 @@ namespace
         bool m_isMark;
         sal_Int32 m_nCntnt;
     };
-    class _SwSaveTypeCountContent : public MarkEntry
-    {
-    public:
-        _SwSaveTypeCountContent() { m_bOther=false; m_nIdx=0; m_nCntnt = 0; }
-        _SwSaveTypeCountContent( const std::vector<MarkEntry> &rArr, sal_uInt16& rPos )
-        {
-            m_nIdx = rArr[ rPos ].m_nIdx;
-            m_bOther = rArr[ rPos ].m_bOther;
-            m_nCntnt = rArr[ rPos ].m_nCntnt;
-        }
-    };
     void _SaveCntntIdx(SwDoc* pDoc,
         sal_uLong nNode,
         sal_Int32 nCntnt,
         std::vector<MarkEntry> &rSaveArr,
         sal_uInt8 nSaveFly)
     {
-        // 1. Bookmarks
-        _SwSaveTypeCountContent aSave;
-        // 4. Paragraph anchored objects
+        // Paragraph anchored objects
+        MarkEntry aSave;
         {
             SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
             if( pNode )
@@ -1512,7 +1500,7 @@ namespace
         sal_uInt16 n = 0;
         while( n < rSaveArr.size() )
         {
-            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            MarkEntry aSave = rSaveArr[n++];
             SwPosition* pPos = 0;
             if(!aSave.m_bOther)
             {
@@ -1563,7 +1551,7 @@ namespace
         sal_uInt16 n = 0;
         while( n < rSaveArr.size() )
         {
-            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            MarkEntry aSave = rSaveArr[n];
             if( aSave.m_nCntnt >= nChkLen )
                 rSaveArr[n].m_nCntnt -= nChkLen;
             else
