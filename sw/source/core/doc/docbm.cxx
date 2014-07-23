@@ -1399,10 +1399,6 @@ namespace
             m_bOther = rArr[ rPos ].m_bOther;
             m_nCntnt = rArr[ rPos ].m_nCntnt;
         }
-        void Add( std::vector<MarkEntry> &rArr )
-        {
-            rArr.push_back( *this );
-        }
     };
     void _SaveCntntIdx(SwDoc* pDoc,
         sal_uLong nNode,
@@ -1463,7 +1459,7 @@ namespace
                                 OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
                                                         aSave.m_nIdx ],
                                         "_SaveCntntIdx: Lost FrameFormat" );
-                                aSave.Add( rSaveArr );
+                                rSaveArr.push_back(aSave);
                             }
                         }
                     }
@@ -1497,7 +1493,7 @@ namespace
                                         continue;
                                 }
                             }
-                            aSave.Add( rSaveArr );
+                            rSaveArr.push_back(aSave);
                         }
                     }
                 }
