@@ -232,12 +232,9 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_pPaused(get<FixedText>("paused")),
     m_pProgressBar(get<ProgressBar>("progress")),
     m_pErrorStatus(get<FixedText>("errorstatus")),
-    m_pDetails(get<PushButton>("details")),
     m_pContainer(get<SvSimpleTableContainer>("container")),
     m_pStop(get<PushButton>("stop")),
     m_pClose(get<PushButton>("close")),
-    m_sMore(m_pDetails->GetText()),
-    m_sLess(SW_RES(ST_LESS)),
     m_sContinue(SW_RES( ST_CONTINUE )),
     m_sStop(m_pStop->GetText()),
     m_sSend(SW_RES(ST_SEND)),
@@ -265,7 +262,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     OUString sTask(SW_RES(ST_TASK));
     OUString sStatus(SW_RES(ST_STATUS));
 
-    m_pDetails->SetClickHdl(LINK( this, SwSendMailDialog, DetailsHdl_Impl));
     m_pStop->SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
     m_pClose->SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));
 
@@ -284,7 +280,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_pStatus->SetTabs(&nTabs[0], MAP_PIXEL);
     m_pStatus->SetSpaceBetweenEntries(3);
 
-    DetailsHdl_Impl( m_pDetails );
     UpdateTransferStatus();
 }
 
@@ -333,26 +328,6 @@ void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
 {
     m_pImpl->nDocumentCount = nAllDocuments;
     UpdateTransferStatus();
-}
-
-IMPL_LINK_NOARG(SwSendMailDialog, DetailsHdl_Impl)
-{
-    long nMove = 0;
-    if(m_pContainer->IsVisible())
-    {
-        m_pContainer->Hide();
-        nMove = - m_nStatusHeight;
-        m_pDetails->SetText(m_sMore);
-    }
-    else
-    {
-        m_pContainer->Show();
-        nMove = m_nStatusHeight;
-        m_pDetails->SetText(m_sLess);
-    }
-    Size aDlgSize = GetSizePixel(); aDlgSize.Height() += nMove; SetSizePixel(aDlgSize);
-
-    return 0;
 }
 
 IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )

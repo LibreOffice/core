@@ -72,17 +72,16 @@
 #define ST_MATCHESTO            (RC_DBUI_BEGIN + 42)
 #define ST_PREVIEW              (RC_DBUI_BEGIN + 43)
 #define ST_CONTINUE             (RC_DBUI_BEGIN + 44)
-#define ST_LESS                 (RC_DBUI_BEGIN + 45)
-#define ST_TASK                 (RC_DBUI_BEGIN + 46)
-#define ST_STATUS               (RC_DBUI_BEGIN + 47)
-#define ST_SEND                 (RC_DBUI_BEGIN + 48)
-#define ST_SENDINGTO            (RC_DBUI_BEGIN + 49)
-#define ST_COMPLETED            (RC_DBUI_BEGIN + 50)
-#define ST_FAILED               (RC_DBUI_BEGIN + 51)
-#define ST_TERMINATEQUERY       (RC_DBUI_BEGIN + 52)
+#define ST_TASK                 (RC_DBUI_BEGIN + 45)
+#define ST_STATUS               (RC_DBUI_BEGIN + 46)
+#define ST_SEND                 (RC_DBUI_BEGIN + 47)
+#define ST_SENDINGTO            (RC_DBUI_BEGIN + 48)
+#define ST_COMPLETED            (RC_DBUI_BEGIN + 49)
+#define ST_FAILED               (RC_DBUI_BEGIN + 50)
+#define ST_TERMINATEQUERY       (RC_DBUI_BEGIN + 51)
 
 // ImageList
-#define ILIST                   (RC_DBUI_BEGIN + 53)
+#define ILIST                   (RC_DBUI_BEGIN + 52)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0

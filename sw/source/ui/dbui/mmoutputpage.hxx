@@ -147,7 +147,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     ProgressBar             *m_pProgressBar;
     FixedText               *m_pErrorStatus;
 
-    PushButton              *m_pDetails;
     SvSimpleTableContainer  *m_pContainer;
     HeaderBar               *m_pStatusHB;
     SvTabListBox            *m_pStatusLB;
@@ -156,8 +155,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     PushButton              *m_pStop;
     PushButton              *m_pClose;
 
-    OUString                m_sMore;
-    OUString                m_sLess;
     OUString                m_sContinue;
     OUString                m_sStop;
     OUString                m_sSend;
@@ -179,7 +176,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    SAL_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, void* );
     SAL_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
     SAL_DLLPRIVATE DECL_LINK( CloseHdl_Impl, void* );
     SAL_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );

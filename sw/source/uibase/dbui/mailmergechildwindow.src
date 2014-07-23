@@ -75,11 +75,6 @@ String ST_SEND
     Text[ en-US ] = "Sending e-mails...";
 };
 
-String  ST_LESS
-{
-    Text[ en-US ] = "<< Less";
-};
-
 String     ST_CONTINUE
 {
     Text[ en-US ] = "~Continue";

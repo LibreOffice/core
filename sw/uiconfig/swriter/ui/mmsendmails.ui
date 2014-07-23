@@ -207,48 +207,34 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButtonBox" id="buttonbox1">
+                          <object class="GtkExpander" id="details">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="hexpand">True</property>
-                            <property name="orientation">vertical</property>
-                            <property name="layout_style">start</property>
+                            <property name="can_focus">True</property>
                             <child>
-                              <object class="GtkButton" id="details">
-                                <property name="label" translatable="yes">More &gt;&gt;</property>
-                                <property name="use_action_appearance">False</property>
+                              <object class="svtlo-SvSimpleTableContainer" id="container">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="margin_top">6</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="Simple Table Container-selection"/>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Details</property>
+                                <property name="use_underline">True</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svtlo-SvSimpleTableContainer" id="container">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">4</property>
                           </packing>
                         </child>
                       </object>
