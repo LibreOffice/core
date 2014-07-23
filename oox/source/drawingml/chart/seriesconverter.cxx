@@ -34,11 +34,13 @@
 #include "drawingml/chart/typegroupconverter.hxx"
 #include "drawingml/chart/typegroupmodel.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include <oox/drawingml/lineproperties.hxx>
 
 namespace oox {
 namespace drawingml {
 namespace chart {
 
+using namespace com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
@@ -162,6 +164,20 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     }
 }
 
+void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
+{
+    LineProperties& rLP = rShape.getLineProperties();
+    if (rLP.moLineWidth.has())
+    {
+        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.get());
+        rPropSet.setProperty(PROP_LabelBorderWidth, uno::makeAny(nWidth));
+        rPropSet.setProperty(PROP_LabelBorderStyle, uno::makeAny(drawing::LineStyle_SOLID));
+    }
+    const Color& aColor = rLP.maLineFill.maFillColor;
+    sal_Int32 nColor = aColor.getColor(rGraphicHelper);
+    rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
+}
+
 } // namespace
 
 DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
@@ -175,7 +191,10 @@ DataLabelConverter::~DataLabelConverter()
 
 void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
 {
-    if( rxDataSeries.is() ) try
+    if (!rxDataSeries.is())
+        return;
+
+    try
     {
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
@@ -201,6 +220,9 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             aPropSet.setProperty( PROP_LabelPlacement,
                                   aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
         }
+
+        if (mrModel.mxShapeProp)
+            importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
     }
     catch( Exception& )
     {
@@ -222,6 +244,10 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     {
         PropertySet aPropSet( rxDataSeries );
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true );
+
+        if (mrModel.mxShapeProp)
+            // Import baseline border properties for these data labels.
+            importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
     }
 
     // data point label settings
