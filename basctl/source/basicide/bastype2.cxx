@@ -41,7 +41,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include <cassert>
-#include <map>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

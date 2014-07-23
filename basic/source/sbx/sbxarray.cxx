@@ -20,7 +20,6 @@
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
 #include "runtime.hxx"
-#include <vector>
 
 #include <boost/optional.hpp>
 

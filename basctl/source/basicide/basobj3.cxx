@@ -18,7 +18,6 @@
  */
 
 #include <vcl/msgbox.hxx>
-#include <vector>
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>

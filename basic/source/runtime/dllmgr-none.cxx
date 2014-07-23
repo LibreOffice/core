@@ -24,12 +24,6 @@
 #include <postwin.h>
 #endif
 
-#include <algorithm>
-#include <cstddef>
-#include <list>
-#include <map>
-#include <vector>
-
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
 #include <osl/thread.h>
