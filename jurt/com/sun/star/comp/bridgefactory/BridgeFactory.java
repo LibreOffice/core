@@ -36,11 +36,12 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * The BridgeFactory class implements the <code>XBridgeFactory</code> Interface.
- * It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
- * XBridge component.
- * <p>
- * This component is only usable for remote bridges.
- * <p>
+ *
+ * <p>It wrapps the <code>UnoRuntime#getBridgeByName</code>method and delivers a
+ * XBridge component.</p>
+ *
+ * <p>This component is only usable for remote bridges.</p>
+ *
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
  */
@@ -54,8 +55,8 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
     /**
      * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
+     * <p>This method is called by the <code>JavaLoader</code></p>
+     *
      * @return  returns a <code>XSingleServiceFactory</code> for creating the component
      * @param   implName     the name of the implementation for which a service is desired
      * @param   multiFactory the service manager to be uses if needed
@@ -78,7 +79,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
     /**
      * Creates a remote bridge and memorizes it under <code>sName</code>.
-     * <p>
+     *
      * @return   the bridge
      * @param    sName                the name to memorize the bridge
      * @param    sProtocol            the protocol the bridge should use
@@ -132,7 +133,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
     /**
      * Gets a remote bridge which must already exist.
-     * <p>
+     *
      * @return   the bridge
      * @param    sName                the name of the bridge
      * @see                           com.sun.star.bridge.XBridgeFactory
@@ -160,10 +161,10 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     }
 
     /**
-     * Gives all created bridges
-     * <p>
+     * Gives all created bridges.
+     *
      * @return   the bridges
-     * @see                           com.sun.star.bridge.XBridgeFactory
+     * @see      com.sun.star.bridge.XBridgeFactory
      */
     public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
         ArrayList<XBridge> vector = new ArrayList<XBridge>();
@@ -191,6 +192,13 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             }
         }
 
+        /**
+         * Returns a string representation of the object.
+         *
+         * @return a string representation of the object.
+         * @see java.lang.Object#toString
+         */
+        @Override
         public String toString() {
             return token;
         }

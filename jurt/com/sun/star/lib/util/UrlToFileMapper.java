@@ -116,8 +116,6 @@ public final class UrlToFileMapper {
         }
     }
 
-
-
     private static String encode(String url) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < url.length(); ++i) {

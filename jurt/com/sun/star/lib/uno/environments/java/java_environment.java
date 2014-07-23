@@ -43,17 +43,26 @@ public final class java_environment implements IEnvironment {
         this.context = context;
     }
 
-    // @see com.sun.star.uno.IEnvironment#getContext
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#getContext
+     */
     public Object getContext() {
         return context;
     }
 
-    // @see com.sun.star.uno.IEnvironment#getName
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#getName
+     */
     public String getName() {
         return "java";
     }
 
-    // @see com.sun.star.uno.IEnvironment#registerInterface
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#registerInterface
+     */
     public Object registerInterface(Object object, String[] oid, Type type) {
         if (oid[0] == null) {
             oid[0] = UnoRuntime.generateOid(object);
@@ -103,7 +112,10 @@ public final class java_environment implements IEnvironment {
         return UnoRuntime.generateOid(object);
     }
 
-    // @see com.sun.star.uno.IEnvironment#list
+    /**
+     *
+     * @see com.sun.star.uno.IEnvironment#list
+     */
     public void list() {
 // TODO???
 //      synchronized (proxies) {

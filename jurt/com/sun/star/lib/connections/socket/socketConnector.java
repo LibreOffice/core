@@ -106,18 +106,18 @@ public final class socketConnector implements XConnector {
     public synchronized XConnection connect(String connectionDescription)
         throws NoConnectException, ConnectionSetupException
     {
-        if (connected) {
+        if (connected)
             throw new ConnectionSetupException("alread connected");
-        }
+
         ConnectionDescriptor desc;
         try {
             desc = new ConnectionDescriptor(connectionDescription);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             throw new ConnectionSetupException(e.toString());
         }
-        if (desc.getHost() == null) {
+
+        if (desc.getHost() == null)
             throw new ConnectionSetupException("host parameter missing");
-        }
         // Try all (IPv4 and IPv6) addresses, in case this client is on a
         // dual-stack host and the server process is an IPv4-only process, also
         // on a dual-stack host (see Stevens, Fenner, Rudoff: "Unix Network
@@ -135,16 +135,15 @@ public final class socketConnector implements XConnector {
                 socket = new Socket(adr[i], desc.getPort());
                 break;
             } catch (IOException e) {
-                if (i == adr.length - 1) {
+                if (i == adr.length - 1)
                     throw new NoConnectException(e.toString());
-                }
             }
         }
         XConnection con;
         try {
-            if (desc.getTcpNoDelay() != null) {
+            if (desc.getTcpNoDelay() != null)
                 socket.setTcpNoDelay(desc.getTcpNoDelay().booleanValue());
-            }
+
             con = new SocketConnection(connectionDescription, socket);
         } catch (IOException e) {
             throw new NoConnectException(e.toString());

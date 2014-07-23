@@ -42,21 +42,20 @@ class XConnectionOutputStream_Adapter extends OutputStream {
 
         try {
             _xConnection.write(_bytes);
-        }
-        catch(com.sun.star.io.IOException ioException) {
+        } catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
 
         if(DEBUG) System.err.println("#### " + this.getClass()  + " - one byte written:" +  _bytes[0]);
     }
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         byte bytes[]  ;
 
-        if(off == 0 && len == b.length)
+        if(off == 0 && len == b.length) {
             bytes = b;
-
-        else {
+        } else {
             bytes = new byte[len];
 
             System.arraycopy(b, off, bytes, 0, len);
@@ -64,17 +63,16 @@ class XConnectionOutputStream_Adapter extends OutputStream {
 
         try {
             _xConnection.write(bytes);
-        }
-        catch(com.sun.star.io.IOException ioException) {
+        } catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
     }
 
+    @Override
     public void flush() throws IOException {
         try {
             _xConnection.flush();
-        }
-        catch(com.sun.star.io.IOException ioException) {
+        } catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
     }

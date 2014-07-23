@@ -39,8 +39,10 @@ public class WeakReference
     // itself. Therefore the XAdapter would be kept aliver although this is not
     // necessary.
 
-    /** Creates an instance of this class.
-     *@param obj - another instance that is to be copied
+    /**
+     * Creates an instance of this class.
+     *
+     * @param obj - another instance that is to be copied.
      */
     public WeakReference(WeakReference obj)
     {
@@ -60,8 +62,10 @@ public class WeakReference
         }
     }
 
-    /** Creates an instance of this class.
-     *@param obj XWeak implementation
+    /**
+     * Creates an instance of this class.
+     *
+     * @param obj XWeak implementation.
      */
     public WeakReference(Object obj)
     {
@@ -73,8 +77,11 @@ public class WeakReference
                 m_listener= new OWeakRefListener(adapter);
         }
     }
-    /** Returns a hard reference to the object that is kept weak by this class.
-     *@return a hard reference to the XWeak implementation.
+
+    /**
+     * Returns a hard reference to the object that is kept weak by this class.
+     *
+     * @return a hard reference to the XWeak implementation.
      */
     public Object get()
     {
@@ -84,25 +91,34 @@ public class WeakReference
     }
 }
 
-/** Implementation of com.sun.star.uno.XReference for use with WeakReference.
- *  It keeps the XAdapter implementation and registers always with it. Deregistering
- *  occurs on notification by the adapter and the adapter is released.
+/**
+ * Implementation of com.sun.star.uno.XReference for use with WeakReference.
+ *
+ * <p>It keeps the XAdapter implementation and registers always with it.
+ * Deregistering occurs on notification by the adapter and the adapter is
+ * released.</p>
  */
 class OWeakRefListener implements XReference
 {
     private final boolean DEBUG= false;
     private XAdapter m_adapter;
 
-    /** The constructor registered this object with adapter.
-     *@param adapter the XAdapter implementation.
+    /**
+     * The constructor registered this object with adapter.
+     *
+     * @param adapter the XAdapter implementation.
      */
     OWeakRefListener( XAdapter adapter)
     {
         m_adapter= adapter;
         m_adapter.addReference(this);
     }
-    /** Method of com.sun.star.uno.XReference. When called, it deregisteres this
-     *  object with the adapter and releases the reference to it.
+
+    /**
+     * Method of <code>com.sun.star.uno.XReference</code>.
+     *
+     * <p>When called, it deregisteres this object with the adapter and releases
+     * the reference to it.</p>
      */
     synchronized public void dispose()
     {
@@ -113,9 +129,11 @@ class OWeakRefListener implements XReference
         }
     }
 
-    /** Obtains a hard reference to the object which is kept weak by the adapter
-     *  and returns it.
-     *  @return hard reference to the otherwise weakly kept object.
+    /**
+     * Obtains a hard reference to the object which is kept weak by the adapter
+     * and returns it.
+     *
+     * @return hard reference to the otherwise weakly kept object.
      */
     synchronized Object get()
     {

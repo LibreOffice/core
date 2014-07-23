@@ -20,7 +20,7 @@ package com.sun.star.uno;
 
 /**
  * The Ascii class represents the IDL build in type <code>asciistring</code>.
- * <p>
+ *
  * @deprecated do not use
  */
 public final class AsciiString {
@@ -28,7 +28,7 @@ public final class AsciiString {
 
     /**
      * Constructs a new <code>AsciiString</code>.
-     * <p>
+     *
      * @deprecated do not use
      * @param   s  the String value
      */

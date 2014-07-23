@@ -22,7 +22,6 @@ package com.sun.star.lib.uno.environments.remote;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 import java.lang.reflect.InvocationTargetException;
 
 import com.sun.star.lib.uno.typedesc.MethodDescription;
@@ -35,7 +34,7 @@ import com.sun.star.uno.XCurrentContext;
 /**
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
- * <p>
+ *
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
  * @since       UDK1.0
@@ -56,8 +55,8 @@ public class Job {
     }
 
     /**
-     * Dispatches a <code>queryInterface</code> call
-     * <p>
+     * Dispatches a <code>queryInterface</code> call.
+     *
      * @return  the result of the call (should be an <code>Any</code>)
      */
     protected Object dispatch_queryInterface(Type type) {
@@ -153,8 +152,10 @@ public class Job {
 //          _disposeId  = null;
     }
 
-    // The name of this method is chosen to generate a somewhat self-explanatory
-    // stack trace:
+    /**
+     * The name of this method is chosen to generate a somewhat self-explanatory
+     * stack trace.
+     */
     private Exception remoteUnoRequestRaisedException(Object exception) {
         Exception e = (Exception) exception;
         e.fillInStackTrace();

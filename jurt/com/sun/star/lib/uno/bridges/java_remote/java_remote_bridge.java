@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,12 +62,13 @@ import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.Any;
 
 /**
- * This class implements a remote bridge. Therefor
- * various interfaces are implemented.
- * <p>
- * The protocol to used is passed by name, the bridge
- * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
- * <p>
+ * This class implements a remote bridge.
+ *
+ * <p>Therefor various interfaces are implemented.</p>
+ *
+ * <p>The protocol to used is passed by name, the bridge
+ * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.</p>
+ *
  * @since       UDK1.0
  */
 public class java_remote_bridge
@@ -219,8 +219,7 @@ public class java_remote_bridge
         synchronized (refHolders) {
             LinkedList<RefHolder> l = refHolders.get(oid);
             if (l != null) {
-                for (Iterator<RefHolder> i = l.iterator(); i.hasNext();) {
-                    RefHolder rh = i.next();
+                for (RefHolder rh : l) {
                     if (type.isSupertypeOf(rh.getType())) {
                         return true;
                     }
@@ -256,8 +255,7 @@ public class java_remote_bridge
         synchronized (refHolders) {
             LinkedList<RefHolder> l = refHolders.get(oid);
             if (l != null) {
-                for (Iterator<RefHolder> i = l.iterator(); i.hasNext();) {
-                    RefHolder rh = i.next();
+                for (RefHolder rh : l) {
                     if (rh.getType().equals(type)) {
                         try {
                             if (rh.release()) {
@@ -353,19 +351,22 @@ public class java_remote_bridge
 
     /**
      * Constructs a new bridge.
-     * <p>
-     * This method is not part of the provided <code>api</code>
-     * and should only be used by the UNO runtime.
-     * <p>
+     * <p> This method is not part of the provided <code>api</code>
+     * and should only be used by the UNO runtime.</p>
+     *
+     * @param  args the custom parameters: arg[0] == protocol_name,
+     * arg[1] == xConnection, arg[2] == xInstanceProvider
+     *
      * @deprecated as of UDK 1.0
-     * <p>
-     * @param  args               the custom parameters: arg[0] == protocol_name, arg[1] == xConnection, arg[2] == xInstanceProvider
      */
     public java_remote_bridge(Object args[]) throws Exception {
         this(UnoRuntime.getEnvironment("java", null), UnoRuntime.getEnvironment("remote", null), args);
     }
 
-    // @see com.sun.star.uno.IBridge#mapInterfaceTo
+    /**
+     *
+     * @see com.sun.star.uno.IBridge#mapInterfaceTo
+     */
     public Object mapInterfaceTo(Object object, Type type) {
         checkDisposed();
         if (object == null) {
@@ -397,7 +398,7 @@ public class java_remote_bridge
 
     /**
      * Maps an object from destination environment to the source environment.
-     * <p>
+     *
      * @return     the object in the source environment
      * @param      oId        the object to map
      * @param      type       the interface under which is to be mapped
@@ -423,7 +424,7 @@ public class java_remote_bridge
 
     /**
      * Gives the source environment.
-     * <p>
+     *
      * @return   the source environment of this bridge
      * @see      com.sun.star.uno.IBridge#getSourceEnvironment
      */
@@ -433,7 +434,7 @@ public class java_remote_bridge
 
     /**
      * Gives the destination environment.
-     * <p>
+     *
      * @return   the destination environment of this bridge
      * @see      com.sun.star.uno.IBridge#getTargetEnvironment
      */
@@ -443,7 +444,7 @@ public class java_remote_bridge
 
     /**
      * Increases the life count.
-     * <p>
+     *
      * @see com.sun.star.uno.IBridge#acquire
      */
     public synchronized void acquire() {
@@ -454,8 +455,9 @@ public class java_remote_bridge
 
     /**
      * Decreases the life count.
-     * If the life count drops to zero, the bridge disposes itself.
-     * <p>
+     *
+     * <p>If the life count drops to zero, the bridge disposes itself.</p>
+     *
      * @see com.sun.star.uno.IBridge#release
      */
     public void release() {
@@ -552,7 +554,10 @@ public class java_remote_bridge
         }
     }
 
-    // @see com.sun.star.bridge.XBridge#getInstance
+    /**
+     *
+     * @see com.sun.star.bridge.XBridge#getInstance
+     */
     public Object getInstance(String instanceName) {
         Type t = new Type(XInterface.class);
         return sendInternalRequest(
@@ -560,8 +565,8 @@ public class java_remote_bridge
     }
 
     /**
-     * Gives the name of this bridge
-     * <p>
+     * Gives the name of this bridge.
+     *
      * @return  the name of this bridge
      * @see     com.sun.star.bridge.XBridge#getName
      */
@@ -570,8 +575,8 @@ public class java_remote_bridge
     }
 
     /**
-     * Gives a description of the connection type and protocol used
-     * <p>
+     * Gives a description of the connection type and protocol used.
+     *
      * @return  connection type and protocol
      * @see     com.sun.star.bridge.XBridge#getDescription
      */
@@ -664,7 +669,9 @@ public class java_remote_bridge
         }
     }
 
-    // Methods XComponent
+    /**
+     * Methods XComponent.
+     */
     public void addEventListener(XEventListener xEventListener) {
         _listeners.add(xEventListener);
     }
@@ -673,7 +680,10 @@ public class java_remote_bridge
         _listeners.remove(xEventListener);
     }
 
-    // @see NotifyDispose.addDisposeListener
+    /**
+     *
+     * @see NotifyDispose.addDisposeListener
+     */
     public void addDisposeListener(DisposeListener listener) {
         synchronized (this) {
             if (!disposed) {
@@ -684,7 +694,9 @@ public class java_remote_bridge
         listener.notifyDispose(this);
     }
 
-    // This function must only be called while synchronized on this object:
+    /**
+     * This function must only be called while synchronized on this object.
+     */
     private synchronized void checkDisposed() {
         if (disposed) {
             throw new DisposedException("java_remote_bridge " + this

@@ -40,13 +40,11 @@ class XConnectionInputStream_Adapter extends InputStream {
     }
 
     public int read() throws IOException {
-
-        int len  ;
+        int len;
 
         try {
             len = _xConnection.read(_bytes, 1);
-        }
-        catch(com.sun.star.io.IOException ioException) {
+        } catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
 
@@ -55,13 +53,13 @@ class XConnectionInputStream_Adapter extends InputStream {
         return len == 0 ? -1 : _bytes[0][0] & 0xff;
     }
 
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
 //      byte bytes[][] = new byte[1][];
 
         try {
             len = _xConnection.read(_bytes, len - off);
-        }
-        catch(com.sun.star.io.IOException ioException) {
+        } catch(com.sun.star.io.IOException ioException) {
             throw new IOException(ioException.toString());
         }
 

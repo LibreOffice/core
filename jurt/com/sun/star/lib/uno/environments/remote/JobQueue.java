@@ -22,13 +22,15 @@ import com.sun.star.lang.DisposedException;
 
 /**
  * The <code>JobQueue</code> implements a queue for jobs.
- * For every jobs thread id exists a job queue which is registered
- * at the <code>ThreadPool</code>.
- * A JobQueue is splitted in a sync job queue and an async job queue.
+ *
+ * <p>For every jobs thread id exists a job queue which is registered
+ * at the <code>ThreadPool</code>.</p>
+ *
+ * <p>A JobQueue is splitted in a sync job queue and an async job queue.
  * The sync job queue is the registerd queue, it delegates async jobs
  * (put by <code>putjob</code>) into the async queue, which is only
- * known by the sync queue.
- * <p>
+ * known by the sync queue.</p>
+ *
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
@@ -81,8 +83,7 @@ public class JobQueue {
 
             try {
                   enter(2000, _disposeId);
-            }
-            catch(Throwable throwable) {
+            } catch(Throwable throwable) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
                     System.err.println(getClass().getName() + " - exception occurred:" + throwable);
                     throwable.printStackTrace(System.err);
@@ -107,9 +108,9 @@ public class JobQueue {
 
 
     /**
-     * Constructs a async job queue with the given thread id
-     * which belongs to the given sync job queue.
-     * <p>
+     * Constructs a async job queue with the given thread id which belongs to
+     * the given sync job queue.
+     *
      * @param threadId         the thread id
      * @see                    com.sun.star.lib.uno.environments.remote.ThreadId
      */
@@ -135,7 +136,7 @@ public class JobQueue {
 
     /**
      * Constructs a sync job queue with the given thread id and the given thread.
-     * <p>
+     *
      * @param threadId        the thread id
      * @param createThread    if true, the queue creates a worker thread if needed
      * @see             com.sun.star.lib.uno.environments.remote.ThreadId
@@ -150,8 +151,8 @@ public class JobQueue {
     }
 
     /**
-     * Gives the thread id of this queue
-     * <p>
+     * Gives the thread id of this queue.
+     *
      * @return  the thread id
      * @see     com.sun.star.lib.uno.environments.remote.ThreadId
      */
@@ -185,7 +186,7 @@ public class JobQueue {
 
     /**
      * Removes a job from the queue.
-     * <p>
+     *
      * @return a job or null if timed out
      * @param  waitTime        the maximum amount of time to wait for a job
      */
@@ -209,8 +210,7 @@ public class JobQueue {
                 try {
                     // wait for new job
                     wait(waitTime);
-                }
-                catch(InterruptedException interruptedException) {
+                } catch(InterruptedException interruptedException) {
                       throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                 }
 
@@ -246,8 +246,7 @@ public class JobQueue {
 
                     try {
                         _async_jobQueue.wait();
-                    }
-                    catch(InterruptedException interruptedException) {
+                    } catch(InterruptedException interruptedException) {
                         throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                     }
                 }
@@ -259,7 +258,7 @@ public class JobQueue {
 
     /**
      * Puts a job into the queue.
-     * <p>
+     *
      * @param  job        the job
      * @param  disposeId  a dispose id
      */
@@ -287,7 +286,7 @@ public class JobQueue {
 
     /**
      * Enters the job queue.
-     * <p>
+     *
      * @return the result of the final job (reply)
      * @param  disposeId  a dispose id
      */
@@ -297,7 +296,7 @@ public class JobQueue {
 
     /**
      * Enters the job queue.
-     * <p>
+     *
      * @return the result of the final job (reply)
      * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitly)
      * @param  disposeId  a dispose id
@@ -367,9 +366,8 @@ public class JobQueue {
     }
 
     /**
-     * If the given disposeId is registered,
-     * interrups the worker thread.
-     * <p>
+     * If the given disposeId is registered, interrups the worker thread.
+     *
      * @param disposeId    the dispose id
      */
     synchronized void dispose(Object disposeId, Throwable throwable) {

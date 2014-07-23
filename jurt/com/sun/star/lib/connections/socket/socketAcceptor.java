@@ -161,7 +161,9 @@ public final class socketAcceptor implements XAcceptor {
         }
     }
 
-    // see com.sun.star.connection.XAcceptor#stopAccepting
+    /**
+     * @see com.sun.star.connection.XAcceptor#stopAccepting
+     */
     public void stopAccepting() {
         ServerSocket serv;
         synchronized (this) {

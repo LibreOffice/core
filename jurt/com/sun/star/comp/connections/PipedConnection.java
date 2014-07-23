@@ -29,11 +29,10 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 
 /**
- * The PipedConnection is a component that implements the
+ * The <code>PipedConnection</code> is a component that implements the
  * <code>XConnection</code> Interface.
- * It is useful for <code>Thread</code> communication
- * in one Process.
- * <p>
+ * <p>It is useful for <code>Thread</code> communication in one Process.</p>
+ *
  * @see         com.sun.star.connection.XConnection
  * @see         com.sun.star.comp.loader.JavaLoader
  * @since       UDK1.0
@@ -51,8 +50,8 @@ public class PipedConnection implements XConnection {
 
     /**
      * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
      * @return  returns a <code>XSingleServiceFactory</code> for creating the component
      * @param   implName     the name of the implementation for which a service is desired
      * @param   multiFactory the service manager to be uses if needed
@@ -75,8 +74,7 @@ public class PipedConnection implements XConnection {
     }
 
     /**
-     * The amount of time in milliseconds, to wait to
-     * see check the buffers.
+     * The amount of time in milliseconds, to wait to see check the buffers.
      */
     protected static final int __waitTime = 10000;
 
@@ -89,7 +87,7 @@ public class PipedConnection implements XConnection {
     /**
      * Constructs a new <code>PipedConnection</code>, sees if there
      * is an other side, which it should be connected to.
-     * <p>
+     *
      * @param    args   Another side could be in index 0.
      */
     public PipedConnection(Object args[]) throws com.sun.star.uno.RuntimeException {
@@ -105,8 +103,7 @@ public class PipedConnection implements XConnection {
     }
 
     /**
-     * This is a private method, used to cummunicate
-     * internal in the pipe.
+     * This is a private method, used to cummunicate internal in the pipe.
      */
     private synchronized void receive(byte aData[]) throws com.sun.star.io.IOException {
         int bytesWritten = 0;
@@ -155,11 +152,11 @@ public class PipedConnection implements XConnection {
 
     /**
      * Read the required number of bytes.
-     * <p>
-     * @return   the number of bytes read
-     * @param    aReadBytes   the out parameter, where the bytes have to be placed
-     * @param    nBytesToRead the number of bytes to read
-     * @see      com.sun.star.connection.XConnection#read
+     *
+     * @return  the number of bytes read
+     * @param   aReadBytes   the out parameter, where the bytes have to be placed
+     * @param   nBytesToRead the number of bytes to read
+     * @see     com.sun.star.connection.XConnection#read
      */
     public synchronized int read(/*OUT*/byte[][] aReadBytes, int nBytesToRead) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         aReadBytes[0] = new byte[nBytesToRead];
@@ -211,9 +208,9 @@ public class PipedConnection implements XConnection {
 
     /**
      * Write bytes.
-     * <p>
-     * @param    aData the bytes to write
-     * @see       com.sun.star.connection.XConnection#write
+     *
+     * @param   aData the bytes to write
+     * @see     com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[]) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         _otherSide.receive(aData);
@@ -221,8 +218,8 @@ public class PipedConnection implements XConnection {
 
     /**
      * Flushes the buffer, notifies if necessary the other side that new data has arrived.
-     * <p>
-     * @see       com.sun.star.connection.XConnection#flush
+     *
+     * @see     com.sun.star.connection.XConnection#flush
      */
     public void flush() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         synchronized(_otherSide) {
@@ -232,8 +229,8 @@ public class PipedConnection implements XConnection {
 
     /**
      * Closes the pipe.
-     * <p>
-     * @see       com.sun.star.connection.XConnection#close()
+     *
+     * @see     com.sun.star.connection.XConnection#close()
      */
     public synchronized void close() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         if(!_closed) {
@@ -247,9 +244,9 @@ public class PipedConnection implements XConnection {
 
     /**
      * Gives a description of this pipe.
-     * <p>
+     *
      * @return  the description
-     * @see       com.sun.star.connection.XConnection#getDescription
+     * @see     com.sun.star.connection.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {
         return getClass().getName();

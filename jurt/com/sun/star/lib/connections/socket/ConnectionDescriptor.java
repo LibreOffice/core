@@ -19,8 +19,7 @@
 package com.sun.star.lib.connections.socket;
 
 /**
- * Helper class for <code>socketAcceptor</code> and
- * <code>socketConnector</code>.
+ * Helper class for <code>socketAcceptor</code> and <code>socketConnector</code>.
  *
  * <p>FIXME:  Once those classes have been moved from <code>jurt</code> to
  * <code>javaunohelper</code>, they should use
