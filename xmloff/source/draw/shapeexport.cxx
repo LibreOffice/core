@@ -2256,9 +2256,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 OUString aResolveURL( sImageURL );
                 const OUString sPackageURL( "vnd.sun.star.Package:" );
 
-                // trying to preserve the filename
+                // trying to preserve the filename for embedded images which already have its stream inside the package
+                bool bIsEmbeddedImageWithExistingStreamInPackage = false;
                 if ( aStreamURL.match( sPackageURL, 0 ) )
                 {
+                    bIsEmbeddedImageWithExistingStreamInPackage = true;
+
                     OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
                     sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
                     if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
@@ -2278,20 +2281,23 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
                 if( !aStr.isEmpty() )
                 {
-                    aStreamURL = sPackageURL;
-                    if( aStr[ 0 ] == '#' )
+                    // apply possible changed stream URL to embedded image object
+                    if ( bIsEmbeddedImageWithExistingStreamInPackage )
                     {
-                        aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
-                    }
-                    else
-                    {
-                        aStreamURL = aStreamURL.concat( aStr );
-                    }
+                        aStreamURL = sPackageURL;
+                        if ( aStr[0] == '#' )
+                        {
+                            aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                        }
+                        else
+                        {
+                            aStreamURL = aStreamURL.concat( aStr );
+                        }
 
-                    // update stream URL for load on demand
-                    uno::Any aAny;
-                    aAny <<= aStreamURL;
-                    xPropSet->setPropertyValue("GraphicStreamURL", aAny );
+                        uno::Any aAny;
+                        aAny <<= aStreamURL;
+                        xPropSet->setPropertyValue( OUString("GraphicStreamURL"), aAny );
+                    }
 
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
