@@ -5106,7 +5106,7 @@ AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
 AC_SUBST(GNUMAKE)
 AC_SUBST(GNUMAKE_WIN_NATIVE)
 
-_make_ver_check=`$GNUMAKE --version | grep LibreOffice`
+_make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
 STALE_MAKE=
 make_warning=
 if test "$_make_ver_check" = ""; then
@@ -13087,35 +13087,31 @@ fi
 
 if test "$STALE_MAKE" = "TRUE" -a "$build_os" = "cygwin"; then
 
-cygwin_arch=`echo $MACHTYPE | sed 's/-.*//'`
-if test "$cygwin_arch" = "x86_64"; then
-    download_make_url=http://users.freedesktop.org/~michael/x86_64/make
-else
-    download_make_url=http://dev-www.libreoffice.org/bin/cygwin/make
-fi
-
 cat << _EOS
 ****************************************************************************
 WARNING:
 Your make version is known to be horribly slow, and hard to debug
 problems with. To get a reasonably functional make please do:
 
-to install a pre-compiled binary make for cygwin
+to install a pre-compiled binary make for Win32
 
-mkdir -p /opt/lo/bin
-cd /opt/lo/bin
-wget $download_make_url
-chmod +x make
+ mkdir -p /opt/lo/bin
+ cd /opt/lo/bin
+ wget http://dev-www.libreoffice.org/bin/cygwin/make-85047eb-msvc.exe
+ cp make-85047eb-msvc.exe make
+ chmod +x make
 
 to install from source:
 place yourself in a working directory of you choice.
 
-git clone https://gerrit.libreoffice.org/p/gnu-make-lo.git
-cd gnu-make-lo
-autoreconf -i
-./configure --prefix=/opt/lo
-make
-make install
+ git clone git://git.savannah.gnu.org/make.git
+
+ [go to Start menu, click on "VS2012 x86 Native Tools Command Prompt"]
+ set PATH=%PATH%;C:\Cygwin\bin
+ cd .../path/to/make_git
+ build_w32.bat --without-guile
+
+should result in a WinRel/gnumake.exe
 
 Then re-run autogen.sh
 
