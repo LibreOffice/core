@@ -196,7 +196,6 @@ GL3DBarChart::GL3DBarChart(
     mnMaxY(0),
     mnDistance(0.0),
     mnCornerId(0),
-    mbBlockUserInput(false),
     mbNeedsNewRender(true),
     mbCameraInit(false),
     mbRenderDie(false)
@@ -535,9 +534,6 @@ void GL3DBarChart::moveToDefault()
 
 void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 {
-    if(mbBlockUserInput)
-        return;
-
     if (nButtons == MOUSE_RIGHT)
     {
         moveToDefault();
@@ -566,8 +562,6 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 
     if(itr == maBarMap.end())
         return;
-
-    mbBlockUserInput = true;
 
     const BarInformation& rBarInfo = itr->second;
 
@@ -607,10 +601,6 @@ void GL3DBarChart::render()
 
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
-    if(mbBlockUserInput)
-        return;
-
-    mbBlockUserInput = true;
     long direction = rEndPos.X() - rStartPos.X();
     if(direction < 0)
     {
