@@ -606,7 +606,6 @@ void GL3DBarChart::render()
     if (BENCH_MARK_MODE)
         return;
 
-    osl::MutexGuard aGuard(maMutex);
     update();
 }
 
