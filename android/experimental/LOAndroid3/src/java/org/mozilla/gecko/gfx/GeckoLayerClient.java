@@ -49,19 +49,22 @@ import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
-public abstract class GeckoLayerClient {
+import java.util.List;
+
+public class GeckoLayerClient {
     private static final String LOGTAG = "GeckoLayerClient";
     private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
+
+    private static final IntSize TILE_SIZE = new IntSize(256, 256);
+
     protected IntSize mScreenSize;
     protected Layer mTileLayer;
-
     /* The viewport that Gecko is currently displaying. */
     protected ViewportMetrics mGeckoViewport;
-
     /* The viewport that Gecko will display when drawing is finished */
     protected ViewportMetrics mNewGeckoViewport;
-
     protected LayerController mLayerController;
+    private Context mContext;
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
@@ -74,14 +77,33 @@ public abstract class GeckoLayerClient {
     private String mLastCheckerboardColor;
 
     public GeckoLayerClient(Context context) {
+        mContext = context;
         mScreenSize = new IntSize(0, 0);
     }
 
-    protected abstract boolean setupLayer();
+    protected boolean setupLayer() {
+        Log.i(LOGTAG, "Creating MultiTileLayer");
+        if (mTileLayer == null) {
+            mTileLayer = new MultiTileLayer(TILE_SIZE);
+            mLayerController.setRoot(mTileLayer);
+        }
 
-    protected abstract void updateLayerAfterDraw();
+        // Force a resize event to be sent because the results of this
+        // are different depending on what tile system we're using
+        //sendResizeEventIfNecessary(true);
 
-    protected abstract IntSize getTileSize();
+        return false;
+    }
+
+    protected void updateLayerAfterDraw() {
+        if (mTileLayer instanceof MultiTileLayer) {
+            ((MultiTileLayer) mTileLayer).invalidate();
+        }
+    }
+
+    protected IntSize getTileSize() {
+        return TILE_SIZE;
+    }
 
     /**
      * Attaches the root layer to the layer controller so that Gecko appears.
@@ -94,7 +116,7 @@ public abstract class GeckoLayerClient {
             layerController.setViewportMetrics(mGeckoViewport);
         }
 
-        sendResizeEventIfNecessary();
+        sendResizeEventIfNecessary(false);
     }
 
     public boolean beginDrawing(ViewportMetrics viewportMetrics) {
@@ -155,24 +177,26 @@ public abstract class GeckoLayerClient {
         DisplayMetrics metrics = new DisplayMetrics();
         LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+        IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
+
         // Return immediately if the screen size hasn't changed or the viewport
         // size is zero (which indicates that the rendering surface hasn't been
         // allocated yet).
-        boolean screenSizeChanged = (metrics.widthPixels != mScreenSize.width || metrics.heightPixels != mScreenSize.height);
+        boolean screenSizeChanged = !mScreenSize.equals(newScreenSize);
         boolean viewportSizeValid = (mLayerController != null && mLayerController.getViewportSize().isPositive());
 
         if (!(force || (screenSizeChanged && viewportSizeValid))) {
             return;
         }
 
-        mScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
+        mScreenSize = newScreenSize;
+
+        if (screenSizeChanged) {
+            Log.d(LOGTAG, "Screen-size changed to " + mScreenSize);
+        }
+
         IntSize tileSize = getTileSize();
-
-        Log.e(LOGTAG, "### Screen-size changed to " + mScreenSize);
-
-        LOEvent event = LOEvent.sizeChanged(
-                metrics.widthPixels, metrics.heightPixels,
-                tileSize.width, tileSize.height);
+        LOEvent event = LOEvent.sizeChanged(metrics.widthPixels, metrics.heightPixels, tileSize.width, tileSize.height);
         LOKitShell.sendEvent(event);
     }
 
@@ -235,5 +259,18 @@ public abstract class GeckoLayerClient {
 
     private void sendResizeEventIfNecessary() {
         sendResizeEventIfNecessary(false);
+    }
+
+    public void addTile(SubTile tile) {
+        if (mTileLayer instanceof MultiTileLayer) {
+            ((MultiTileLayer) mTileLayer).addTile(tile);
+        }
+    }
+
+    public List<SubTile> getTiles() {
+        if (mTileLayer instanceof MultiTileLayer) {
+            return ((MultiTileLayer) mTileLayer).getTiles();
+        }
+        return null;
     }
 }

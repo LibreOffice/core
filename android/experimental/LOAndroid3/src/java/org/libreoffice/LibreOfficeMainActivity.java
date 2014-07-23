@@ -1,7 +1,6 @@
 package org.libreoffice;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -11,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import org.mozilla.gecko.gfx.GeckoSoftwareLayerClient;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 
 public class LibreOfficeMainActivity extends Activity {
@@ -22,7 +21,7 @@ public class LibreOfficeMainActivity extends Activity {
     private LinearLayout mMainLayout;
     private RelativeLayout mGeckoLayout;
     private static LayerController mLayerController;
-    private static GeckoSoftwareLayerClient mLayerClient;
+    private static GeckoLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
 
     public static LibreOfficeMainActivity mAppContext;
@@ -81,7 +80,7 @@ public class LibreOfficeMainActivity extends Activity {
             mLayerController = new LayerController(this);
 
             Log.e(LOGTAG, "### Creating GeckoSoftwareLayerClient");
-            mLayerClient = new GeckoSoftwareLayerClient(this);
+            mLayerClient = new GeckoLayerClient(this);
             Log.e(LOGTAG, "### Done creating GeckoSoftwareLayerClient");
 
             mLayerController.setLayerClient(mLayerClient);
@@ -98,7 +97,7 @@ public class LibreOfficeMainActivity extends Activity {
         return sLOKitThread;
     }
 
-    public static GeckoSoftwareLayerClient getLayerClient() {
+    public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
     }
 
