@@ -117,9 +117,10 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
         if(!rGroupName.isEmpty() && rGroupName != pGroup->sName)
             continue;
 
+        sal_Int32 nPosLong = 0;
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
-            OUString sLong = pGroup->sLongNames.getToken(j, STRING_DELIM);
+            const OUString sLong = pGroup->sLongNames.getToken(0, STRING_DELIM, nPosLong);
             if(rLongName != sLong)
                 continue;
 
