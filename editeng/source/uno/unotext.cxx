@@ -699,7 +699,8 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
 
     case EE_PARA_NUMBULLET:
         {
-            if((rSet.GetItemState( EE_PARA_NUMBULLET, true ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT)) == 0)
+            SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET, true );
+            if( eState != SFX_ITEM_SET && eState != SFX_ITEM_DEFAULT)
                 throw uno::RuntimeException();
 
             SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, true );
@@ -740,7 +741,8 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
     case EE_PARA_BULLETSTATE:
         {
             bool bState = false;
-            if( rSet.GetItemState( EE_PARA_BULLETSTATE, true ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
+            SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE, true );
+            if( eState == SFX_ITEM_SET || eState == SFX_ITEM_DEFAULT )
             {
                 SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, true );
                 bState = pItem->GetValue() ? sal_True : sal_False;
@@ -971,7 +973,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState;
+                    SfxItemState eTempItemState = SFX_ITEM_UNKNOWN;
                     while( *pWhichId )
                     {
                         if(nPara != -1)
@@ -1039,6 +1041,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
                 return beans::PropertyState_DIRECT_VALUE;
             case SFX_ITEM_DEFAULT:
                 return beans::PropertyState_DEFAULT_VALUE;
+            default: break;
 //              case SFX_ITEM_UNKNOWN:
             }
         }
@@ -1118,7 +1121,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState;
+                    SfxItemState eTempItemState = SFX_ITEM_UNKNOWN;
                     while( *pWhichId )
                     {
                         eTempItemState = pSet->GetItemState( *pWhichId );
@@ -2425,14 +2428,14 @@ void SvxDummyTextSource::GetPortions( sal_Int32, std::vector<sal_Int32>& ) const
 {
 }
 
-sal_uInt16 SvxDummyTextSource::GetItemState( const ESelection&, sal_uInt16 ) const
+SfxItemState SvxDummyTextSource::GetItemState( const ESelection&, sal_uInt16 ) const
 {
-    return 0;
+    return SFX_ITEM_UNKNOWN;
 }
 
-sal_uInt16 SvxDummyTextSource::GetItemState( sal_Int32, sal_uInt16 ) const
+SfxItemState SvxDummyTextSource::GetItemState( sal_Int32, sal_uInt16 ) const
 {
-    return 0;
+    return SFX_ITEM_UNKNOWN;
 }
 
 SfxItemPool* SvxDummyTextSource::GetPool() const

@@ -594,7 +594,7 @@ void SvxColorTabPage::UpdateModified()
 
 void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 {
-    sal_uInt16 nState = rSet->GetItemState( XATTR_FILLCOLOR );
+    SfxItemState nState = rSet->GetItemState( XATTR_FILLCOLOR );
 
     Color aNewColor;
 

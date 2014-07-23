@@ -184,8 +184,8 @@ public:
     virtual void            RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich ) SAL_OVERRIDE;
     virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const SAL_OVERRIDE;
 
-    sal_uInt16              GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const SAL_OVERRIDE;
-    sal_uInt16              GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    SfxItemState            GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    SfxItemState            GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const SAL_OVERRIDE;
 
     virtual SfxItemPool*    GetPool() const SAL_OVERRIDE;
 

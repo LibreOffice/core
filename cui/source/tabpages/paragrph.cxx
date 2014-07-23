@@ -2187,7 +2187,7 @@ static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBo
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich, true);
-    if(!eState || eState == SFX_ITEM_DISABLED )
+    if( eState == SFX_ITEM_UNKNOWN || eState == SFX_ITEM_DISABLED )
         rBox.Enable(false);
     else if(eState >= SFX_ITEM_AVAILABLE)
     {

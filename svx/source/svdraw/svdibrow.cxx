@@ -325,6 +325,7 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
                             case SFX_ITEM_DONTCARE: sRet = "DontCare"; break;
                             case SFX_ITEM_SET     : sRet = "Set";      break;
                             case SFX_ITEM_DEFAULT : sRet = "Default";  break;
+                            case SFX_ITEM_READONLY: sRet = "ReadOnly";  break;
                         } // switch
                     } break;
                     case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;

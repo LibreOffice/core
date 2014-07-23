@@ -148,8 +148,8 @@ public:
     virtual void        RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const = 0;
 
-    virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
-    virtual sal_uInt16      GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const = 0;
+    virtual SfxItemState    GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
+    virtual SfxItemState    GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const = 0;
 
     virtual void        QuickInsertText( const OUString& rText, const ESelection& rSel ) = 0;
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;

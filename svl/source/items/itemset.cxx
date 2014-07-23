@@ -737,7 +737,8 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 
 {
     // special case: exactly one sal_uInt16 which is already included?
-    if ( nFrom == nTo && SFX_ITEM_AVAILABLE <= GetItemState(nFrom, false) )
+    SfxItemState eItemState = GetItemState(nFrom, false);
+    if ( nFrom == nTo && ( eItemState == SFX_ITEM_DEFAULT || eItemState == SFX_ITEM_SET ) )
         return;
 
     // merge new range
@@ -1096,7 +1097,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
-            if( 0 == rSet.GetItemState( nWhich, false ) )
+            if( SFX_ITEM_UNKNOWN == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich );        // loeschen
             if( aIter.IsAtEnd() )
                 break;

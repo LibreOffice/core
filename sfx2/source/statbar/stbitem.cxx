@@ -290,7 +290,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = aItemStatus.State;
+                    eState = (SfxItemState) aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotID );
                 }
                 else

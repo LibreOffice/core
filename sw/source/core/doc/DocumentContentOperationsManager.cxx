@@ -4148,9 +4148,9 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 // Safe numrule item at destination.
                 // #i86492# - Safe also <ListId> item of destination.
-                int aNumRuleState = SFX_ITEM_UNKNOWN;
+                SfxItemState aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
-                int aListIdState = SFX_ITEM_UNKNOWN;
+                SfxItemState aListIdState = SFX_ITEM_UNKNOWN;
                 SfxStringItem aListIdItem( RES_PARATR_LIST_ID, OUString() );
                 {
                     const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
@@ -4293,9 +4293,9 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
             // Save numrule at destination
             // #i86492# - Safe also <ListId> item of destination.
-            int aNumRuleState = SFX_ITEM_UNKNOWN;
+            SfxItemState aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
-            int aListIdState = SFX_ITEM_UNKNOWN;
+            SfxItemState aListIdState = SFX_ITEM_UNKNOWN;
             SfxStringItem aListIdItem( RES_PARATR_LIST_ID, OUString() );
             {
                 const SfxItemSet* pAttrSet = pDestTxtNd->GetpSwAttrSet();

@@ -548,7 +548,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = aItemStatus.State;
+                    eState = (SfxItemState) aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
                 else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
@@ -939,6 +939,8 @@ void SfxToolBoxControl::StateChanged
             nItemBits |= TIB_CHECKABLE;
         }
         break;
+
+        default: break; // do nothing
     }
 
     pImpl->pBox->SetItemState( GetId(), eTri );
@@ -1094,7 +1096,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = aItemStatus.State;
+                    eState = (SfxItemState) aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
                 else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )

@@ -2078,6 +2078,9 @@ void SvxStyleToolBoxControl::StateChanged(
         case SFX_ITEM_DONTCARE:
             eTri = TRISTATE_INDET;
             break;
+
+        default:
+            break;
     }
 
     rTbx.SetItemState( nId, eTri );

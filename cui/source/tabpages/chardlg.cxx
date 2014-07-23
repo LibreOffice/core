@@ -812,6 +812,8 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
                 pLangBox->SelectLanguage( eLangType );
             break;
         }
+        case SFX_ITEM_DONTCARE:
+            break;
     }
 
     OUString sMapText(pFontList->GetFontMapText(

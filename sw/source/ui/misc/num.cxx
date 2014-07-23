@@ -366,7 +366,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     sal_uInt16 nTmpNumLvl =
         pOutlineDlg ? SwOutlineTabDialog::GetActNumLevel() : 0;
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
-    if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, false, &pItem))
+    if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, false, &pItem) != SFX_ITEM_UNKNOWN)
     {
         bPreset = ((const SfxBoolItem*)pItem)->GetValue();
     }

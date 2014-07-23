@@ -107,8 +107,8 @@ namespace accessibility
         void            RemoveAttribs( const ESelection& /*rSelection*/, bool /*bRemoveParaAttribs*/, sal_uInt16 /*nWhich*/ ) SAL_OVERRIDE {}
         void            GetPortions( sal_Int32 /*nPara*/, std::vector<sal_Int32>& /*rList*/ ) const SAL_OVERRIDE {}
 
-        sal_uInt16          GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const SAL_OVERRIDE { return 0; }
-        sal_uInt16          GetItemState( sal_Int32 /*nPara*/, sal_uInt16 /*nWhich*/ ) const SAL_OVERRIDE { return 0; }
+        SfxItemState    GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const SAL_OVERRIDE { return SFX_ITEM_UNKNOWN; }
+        SfxItemState    GetItemState( sal_Int32 /*nPara*/, sal_uInt16 /*nWhich*/ ) const SAL_OVERRIDE { return SFX_ITEM_UNKNOWN; }
 
         SfxItemPool*    GetPool() const SAL_OVERRIDE { return NULL; }
 

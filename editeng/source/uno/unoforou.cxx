@@ -244,12 +244,12 @@ bool SvxOutlinerForwarder::IsValid() const
     return rOutliner.GetUpdateMode();
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+SfxItemState SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
     return GetSvxEditEngineItemState( (EditEngine&)rOutliner.GetEditEngine(), rSel, nWhich );
 }
 
-sal_uInt16 SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
+SfxItemState SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
     const SfxItemSet& rSet = rOutliner.GetParaAttribs( nPara );
     return rSet.GetItemState( nWhich );

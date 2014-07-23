@@ -203,7 +203,7 @@ throw( RuntimeException, std::exception )
         {
             ItemStatus aItemStatus;
             rEvent.State >>= aItemStatus;
-            eState = aItemStatus.State;
+            eState = (SfxItemState) aItemStatus.State;
             pItem = new SfxVoidItem( m_nSlotID );
         }
         else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility >::get() )

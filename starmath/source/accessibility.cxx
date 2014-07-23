@@ -1112,7 +1112,7 @@ void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_Int32, sal_Int32)
 {
 }
 
-static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+static SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     std::vector<EECharAttrib> aAttribs;
 
@@ -1204,18 +1204,18 @@ static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESel
     return eState;
 }
 
-sal_uInt16 SmTextForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+SfxItemState SmTextForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
-    sal_uInt16 nState = SFX_ITEM_DISABLED;
+    SfxItemState nState = SFX_ITEM_DISABLED;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
         nState = GetSvxEditEngineItemState( *pEditEngine, rSel, nWhich );
     return nState;
 }
 
-sal_uInt16 SmTextForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
+SfxItemState SmTextForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
-    sal_uInt16 nState = SFX_ITEM_DISABLED;
+    SfxItemState nState = SFX_ITEM_DISABLED;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {

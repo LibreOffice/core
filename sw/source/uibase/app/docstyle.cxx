@@ -1493,15 +1493,16 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 }
                 break;
                 case SFX_ITEM_DONTCARE:
-                    // set NumRule to default values
-                    // what are the default values?
-                    {
-                        SwNumRule aRule( pNumRule->GetName(),
-                                         // #i89178#
-                                         numfunc::GetDefaultPositionAndSpaceMode() );
-                        rDoc.ChgNumRuleFmts( aRule );
-                    }
-                    break;
+                // set NumRule to default values
+                // what are the default values?
+                {
+                    SwNumRule aRule( pNumRule->GetName(),
+                                     // #i89178#
+                                     numfunc::GetDefaultPositionAndSpaceMode() );
+                    rDoc.ChgNumRuleFmts( aRule );
+                }
+                break;
+                default: break;
                 }
             }
             break;

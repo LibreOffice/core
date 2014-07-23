@@ -130,16 +130,15 @@ enum SfxItemPresentation
 
 
 
-typedef sal_uInt16 SfxItemState;
-
-#define SFX_ITEM_UNKNOWN    0x0000
-
-#define SFX_ITEM_DISABLED   0x0001
-#define SFX_ITEM_READONLY   0x0002
-
-#define SFX_ITEM_DONTCARE   0x0010
-#define SFX_ITEM_DEFAULT    0x0020
-#define SFX_ITEM_SET        0x0030
+enum SfxItemState {
+    // These values have to match the values in the com::sun::star::frame::status::ItemState IDL
+    SFX_ITEM_UNKNOWN  = 0,
+    SFX_ITEM_DISABLED = 0x0001,
+    SFX_ITEM_READONLY = 0x0002,
+    SFX_ITEM_DONTCARE = 0x0010,
+    SFX_ITEM_DEFAULT  = 0x0020,
+    SFX_ITEM_SET      = 0x0030
+};
 
 // old stuff - dont use!!!
 #define SFX_ITEM_AVAILABLE  SFX_ITEM_DEFAULT

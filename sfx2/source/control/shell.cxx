@@ -886,7 +886,7 @@ const SfxPoolItem* SfxShell::GetSlotState
     // Get Slot on the given Interface
     if ( !pIF )
         pIF = GetInterface();
-    SfxItemState eState;
+    SfxItemState eState = SFX_ITEM_UNKNOWN;
     SfxItemPool &rPool = GetPool();
 
     const SfxSlot* pSlot = NULL;

@@ -184,7 +184,7 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     pInternalController(0),
     pController(0),
     pLastItem( 0 ),
-    eLastState( 0 ),
+    eLastState( SFX_ITEM_UNKNOWN ),
     bItemVisible( true )
 {
     bCtrlDirty = true;

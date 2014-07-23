@@ -165,7 +165,7 @@ void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32
     rEditEngine.FieldClicked( rField, nPara, nPos );
 }
 
-sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     std::vector<EECharAttrib> aAttribs;
 
@@ -258,12 +258,12 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
     return eState;
 }
 
-sal_uInt16 SvxEditEngineForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+SfxItemState SvxEditEngineForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
     return GetSvxEditEngineItemState( rEditEngine, rSel, nWhich );
 }
 
-sal_uInt16 SvxEditEngineForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
+SfxItemState SvxEditEngineForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
     const SfxItemSet& rSet = rEditEngine.GetParaAttribs( nPara );
     return rSet.GetItemState( nWhich );
