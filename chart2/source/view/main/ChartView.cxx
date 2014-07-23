@@ -3250,13 +3250,7 @@ void ChartView::createShapes3D()
 
     if (!m_pGL3DPlotter)
     {
-        m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, pWindow));
-    }
-    else
-    {
-        GL3DBarChart* pChart = dynamic_cast<GL3DBarChart*>(m_pGL3DPlotter.get());
-        if (pChart)
-            pChart->setOpenGLWindow(pWindow);
+        m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, *pWindow));
     }
 
     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );

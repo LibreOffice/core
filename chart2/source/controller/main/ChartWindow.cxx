@@ -22,10 +22,7 @@
 #include "HelpIds.hrc"
 
 #include <vcl/help.hxx>
-#include <vcl/openglwin.hxx>
 #include <vcl/settings.hxx>
-
-#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
 using namespace ::com::sun::star;
 
@@ -45,11 +42,10 @@ namespace
 namespace chart
 {
 
-ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits nStyle )
+ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, WinBits nStyle )
         : Window(pParent, nStyle)
-        , m_pWindowController( pController )
+        , m_pWindowController( pWindowController )
         , m_bInPaint(false)
-        , m_pOpenGLWindow(new OpenGLWindow(this))
 {
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -59,21 +55,10 @@ ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits
     EnableRTL( false );
     if( pParent )
         pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode
-
-    m_pOpenGLWindow->Show();
-    uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
-    sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow);
-    x3DWindowProvider->setWindow(nWindowPtr);
 }
 
 ChartWindow::~ChartWindow()
 {
-    if (m_pWindowController && m_pWindowController->getModel().is())
-    {
-        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(m_pWindowController->getModel(), uno::UNO_QUERY_THROW);
-        x3DWindowProvider->setWindow(0);
-    }
-    delete m_pOpenGLWindow;
 }
 
 void ChartWindow::clear()
@@ -94,18 +79,10 @@ void ChartWindow::PrePaint()
 void ChartWindow::Paint( const Rectangle& rRect )
 {
     m_bInPaint = true;
-    if (m_pOpenGLWindow && m_pOpenGLWindow->IsVisible())
-    {
-        m_pOpenGLWindow->Paint(rRect);
-    }
-    else if (m_pWindowController)
-    {
-        m_pWindowController->execute_Paint(rRect);
-    }
+    if( m_pWindowController )
+        m_pWindowController->execute_Paint( rRect );
     else
-    {
         Window::Paint( rRect );
-    }
     m_bInPaint = false;
 }
 
@@ -147,8 +124,6 @@ void ChartWindow::Resize()
         m_pWindowController->execute_Resize();
     else
         Window::Resize();
-
-    m_pOpenGLWindow->SetSizePixel(GetSizePixel());
 }
 
 void ChartWindow::Activate()

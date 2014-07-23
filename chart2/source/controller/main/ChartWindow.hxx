@@ -21,12 +21,10 @@
 
 #include <vcl/window.hxx>
 
-class OpenGLWindow;
-
 namespace chart
 {
 
-class ChartController;
+class WindowController;
 
 /** The ChartWindow collects events from the window and forwards them the to the controller
 thus the controller can perform appropriate actions
@@ -35,7 +33,7 @@ thus the controller can perform appropriate actions
 class ChartWindow : public Window
 {
 public:
-    ChartWindow( ChartController* pController, Window* pParent, WinBits nStyle );
+    ChartWindow( WindowController* pWindowController, Window* pParent, WinBits nStyle );
     virtual ~ChartWindow();
 
     void clear();
@@ -65,9 +63,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
 private:
-    ChartController* m_pWindowController;
+    WindowController*    m_pWindowController;
     bool m_bInPaint;
-    OpenGLWindow* m_pOpenGLWindow;
 
     void adjustHighContrastMode();
 };

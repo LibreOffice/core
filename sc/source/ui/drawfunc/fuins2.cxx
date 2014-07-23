@@ -544,6 +544,22 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     ScDocument& rScDoc   = pScDocSh->GetDocument();
     bool bUndo (rScDoc.IsUndoEnabled());
 
+    Window* pParentWindow = rData.GetActiveWin();
+    OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
+    Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
+    pChildWindow->SetSizePixel(aWindowSize);
+    pChildWindow->Show();
+    uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( xChartModel, uno::UNO_QUERY_THROW );
+    sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pChildWindow);
+    x3DWindowProvider->setWindow(nWindowPtr);
+    ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
+    if(pGridWindow)
+    {
+        pGridWindow->AddChildWindow(pChildWindow);
+    }
+    else
+        SAL_WARN("sc", "not a grid window. You are in serious trouble");
+
     if( pReqArgs )
     {
         const SfxPoolItem* pItem;
@@ -618,6 +634,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // get chart position (from window size and data range)
         aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     }
+    pChildWindow->SetPosPixel(pChildWindow->LogicToPixel(aStart, MapMode(MAP_100TH_MM)));
 
     Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
@@ -712,6 +729,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     sal_Int16 nDialogRet = xDialog->execute();
                     if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                     {
+                        pGridWindow->DeleteChildWindow(pChildWindow);
                         // leave OLE inplace mode and unmark
                         OSL_ASSERT( pViewShell );
                         OSL_ASSERT( pView );

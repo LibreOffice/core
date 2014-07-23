@@ -420,6 +420,7 @@ public:
      * Takes ownership of the window
      */
     void            AddChildWindow(Window* pChildWindow);
+    void            DeleteChildWindow(Window* pChildWindow);
 
 protected:
     // #114409#
