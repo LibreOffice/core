@@ -1001,6 +1001,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
         adaptPointCache( index );
         if (!m_apLabelPropValues_AttributedPoint)
         {
+            // Cache these properties for this point.
             m_apLabelPropNames_AttributedPoint.reset(new tNameSequence);
             m_apLabelPropValues_AttributedPoint.reset(new tAnySequence);
             xTextProp.set( this->getPropertiesOfPoint( index ));
@@ -1015,6 +1016,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     {
         if (!m_apLabelPropValues_Series)
         {
+            // Cache these properties for the whole series.
             m_apLabelPropNames_Series.reset(new tNameSequence);
             m_apLabelPropValues_Series.reset(new tAnySequence);
             xTextProp.set( this->getPropertiesOfPoint( index ));
