@@ -1389,55 +1389,6 @@ namespace
         bool m_isMark;
         sal_Int32 m_nCntnt;
     };
-    void _RestoreCntntIdx(SwDoc* pDoc,
-        std::vector<MarkEntry> &rSaveArr,
-        sal_uLong nNode,
-        sal_Int32 nOffset,
-        bool bAuto)
-    {
-        SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-        SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-        sal_uInt16 n = 0;
-        while( n < rSaveArr.size() )
-        {
-            MarkEntry aSave = rSaveArr[n++];
-            SwPosition* pPos = 0;
-            if(!aSave.m_bOther)
-            {
-                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
-                const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-                if( rFlyAnchor.GetCntntAnchor() )
-                {
-                    SwFmtAnchor aNew( rFlyAnchor );
-                    SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                    aNewPos.nNode = *pCNd;
-                    if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                    {
-                        aNewPos.nContent.Assign( pCNd,
-                                                 aSave.m_nCntnt + nOffset );
-                    }
-                    else
-                    {
-                        aNewPos.nContent.Assign( 0, 0 );
-                    }
-                    aNew.SetAnchor( &aNewPos );
-                    pFrmFmt->SetFmtAttr( aNew );
-                }
-            }
-            else if( bAuto )
-            {
-                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
-                SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-                pFrmFmt->NotifyClients( pAnchor, pAnchor );
-            }
-            if( pPos )
-            {
-                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
-                pPos->nNode = *pCNd;
-                pPos->nContent.Assign( pCNd, aSave.m_nCntnt + nOffset );
-            }
-        }
-    }
 
     void _RestoreCntntIdx(std::vector<MarkEntry> &rSaveArr,
         const SwNode& rNd,
@@ -1551,7 +1502,7 @@ namespace
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            _RestoreCntntIdx(pDoc, m_aFlyEntries, nNode, nOffset, bAuto);
+            RestoreFlys(pDoc, nNode, nOffset, bAuto);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
@@ -1573,6 +1524,7 @@ namespace
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly);
+            inline void RestoreFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset, bool bAuto);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
@@ -1813,6 +1765,52 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
                     }
                 }
             }
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset, bool bAuto)
+{
+    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+    SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+    sal_uInt16 n = 0;
+    while( n < m_aFlyEntries.size() )
+    {
+        MarkEntry aSave = m_aFlyEntries[n++];
+        SwPosition* pPos = 0;
+        if(!aSave.m_bOther)
+        {
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
+            const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
+            if( rFlyAnchor.GetCntntAnchor() )
+            {
+                SwFmtAnchor aNew( rFlyAnchor );
+                SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
+                aNewPos.nNode = *pCNd;
+                if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                {
+                    aNewPos.nContent.Assign( pCNd,
+                                             aSave.m_nCntnt + nOffset );
+                }
+                else
+                {
+                    aNewPos.nContent.Assign( 0, 0 );
+                }
+                aNew.SetAnchor( &aNewPos );
+                pFrmFmt->SetFmtAttr( aNew );
+            }
+        }
+        else if( bAuto )
+        {
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
+            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
+            pFrmFmt->NotifyClients( pAnchor, pAnchor );
+        }
+        if( pPos )
+        {
+            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
+            pPos->nNode = *pCNd;
+            pPos->nContent.Assign( pCNd, aSave.m_nCntnt + nOffset );
         }
     }
 }
