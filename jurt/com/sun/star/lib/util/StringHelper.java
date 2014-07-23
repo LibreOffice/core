@@ -18,7 +18,8 @@
 
 package com.sun.star.lib.util;
 
-/** jurt.jar internal string helper methods.
+/**
+ * jurt.jar internal string helper methods.
  */
 public final class StringHelper
 {

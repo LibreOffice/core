@@ -39,10 +39,6 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
 
     protected XMultiServiceFactory multiServiceFactory = null;
 
-    /** default constructor
-     */
-//      public JavaLoaderFactory() {}
-
     public JavaLoaderFactory(XMultiServiceFactory factory) {
         multiServiceFactory = factory;
     }
@@ -64,7 +60,8 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
         return loader;
     }
 
-    /** implements the XServiceInfo interface
+    /**
+     * Implements the XServiceInfo interface.
      */
     public String getImplementationName()
             throws com.sun.star.uno.RuntimeException
@@ -72,19 +69,22 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
         return JavaLoader.class.getName();
     }
 
-    /** implements the XServiceInfo interface
+    /**
+     * Implements the XServiceInfo interface.
      */
     public boolean supportsService(String serviceName)
             throws com.sun.star.uno.RuntimeException
     {
-        for ( int i = 0; i < supportedServices.length; i++ ) {
-            if ( supportedServices[i].equals(serviceName) )
+        for (String supportedService : supportedServices) {
+            if (supportedService.equals(serviceName)) {
                 return true;
+            }
         }
         return false;
     }
 
-    /** implements the XServiceInfo interface
+    /**
+     * Implements the XServiceInfo interface.
      */
     public String[] getSupportedServiceNames()
             throws com.sun.star.uno.RuntimeException

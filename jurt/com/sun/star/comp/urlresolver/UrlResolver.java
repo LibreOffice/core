@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
- * <p>
+ *
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.connection.Connector
  * @since       UDK1.0
@@ -120,12 +120,14 @@ public class UrlResolver {
 
     /**
      * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param   implName     the name of the implementation for which a service is desired.
+     * @param   multiFactory the service manager to be uses if needed.
+     * @param   regKey       the registryKey.
+     * @return  returns a <code>XSingleServiceFactory</code> for creating the component.
+     *
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
     public static XSingleServiceFactory __getServiceFactory(String implName,

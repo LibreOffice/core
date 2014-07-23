@@ -21,28 +21,28 @@ package com.sun.star.lib.util;
 import java.util.LinkedList;
 
 /**
-   Helper class to asynchronously execute finalize methods.
-
-   Current JVMs seem not to be robust against long-running finalize methods, in
-   that such long-running finalize methods may lead to OutOfMemoryErrors.  This
-   class mitigates the problem by asynchronously shifting the bodies of
-   potentially long-running finalize methods into an extra thread.  Classes that
-   make use of this in their finalize methods are the proxies used in the
-   intra-process JNI UNO bridge and the inter-process Java URP UNO bridge (where
-   in both cases finalizers lead to synchronous UNO release calls).
-
-   If JVMs are getting more mature and should no longer have problems with
-   long-running finalize mehtods, this class could be removed again.
-*/
+ * Helper class to asynchronously execute finalize methods.
+ *
+ * <p>Current JVMs seem not to be robust against long-running finalize methods,
+ * in that such long-running finalize methods may lead to OutOfMemoryErrors. This
+ * class mitigates the problem by asynchronously shifting the bodies of
+ * potentially long-running finalize methods into an extra thread.  Classes that
+ * make use of this in their finalize methods are the proxies used in the
+ * intra-process JNI UNO bridge and the inter-process Java URP UNO bridge (where
+ * in both cases finalizers lead to synchronous UNO release calls).</p>
+ *
+ * <p>If JVMs are getting more mature and should no longer have problems with
+ * long-running finalize mehtods, this class could be removed again.</p>
+ */
 public final class AsynchronousFinalizer {
     /**
-       Add a job to be executed asynchronously.
-
-       The run method of the given job is called exactly once.  If it terminates
-       abnormally by throwing any Throwable, that is ignored.
-
-       @param job represents the body of some finalize method; must not be null.
-    */
+     * Add a job to be executed asynchronously.
+     *
+     * <p>The run method of the given job is called exactly once. If it terminates
+     * abnormally by throwing any Throwable, that is ignored.</p>
+     *
+     * @param job represents the body of some finalize method; must not be null.
+     */
     public static void add(Job job) {
         synchronized (queue) {
             boolean first = queue.isEmpty();
@@ -54,11 +54,12 @@ public final class AsynchronousFinalizer {
     }
 
     /**
-       An interface to represent bodies of finalize methods.
-
-       Similar to Runnable, except that the run method may throw any Throwable
-       (which is effectively ignored by AsynchronousFinalizer.add, similar to
-       any Throwables raised by finalize being ignored).
+     * An interface to represent bodies of finalize methods.
+     *
+     * Similar to <code>Runnable</code>, except that the run method may throw any
+     * <code>Throwable</code> (which is effectively ignored by
+     * <code>AsynchronousFinalizer.add</code>, similar to any <code>Throwables</code>
+     * raised by finalize being ignored).
     */
     public interface Job {
         void run() throws Throwable;

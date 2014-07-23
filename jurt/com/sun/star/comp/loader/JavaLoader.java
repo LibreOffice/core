@@ -19,9 +19,7 @@
 package com.sun.star.comp.loader;
 
 import java.lang.reflect.Method;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.net.URLDecoder;
 
 import com.sun.star.loader.CannotActivateFactoryException;
@@ -49,10 +47,14 @@ import com.sun.star.uno.AnyConverter;
 
 
 /**
- * The <code>JavaLoader</code> class provides the functionality of the <code>com.sun.star.loader.Java</code>
- * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
- * The loader is used by the <code>ServiceManger</code>.
- * <p>
+ * The <code>JavaLoader</code> class provides the functionality of the
+ * <code>com.sun.star.loader.Java</code> service.
+ *
+ * <p>Therefor the <code>JavaLoader</code> activates external UNO components
+ * which are implemented in Java.</p>
+ *
+ * <p>The loader is used by the <code>ServiceManger</code>.</p>
+ *
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
  * @see         com.sun.star.comp.servicemanager.ServiceManager
@@ -77,21 +79,18 @@ public class JavaLoader implements XImplementationLoader,
     private XMacroExpander m_xMacroExpander = null;
     private static final String EXPAND_PROTOCOL_PREFIX = "vnd.sun.star.expand:";
 
-    /** Expands macrofied url using the macro expander singleton.
+    /**
+     * Expands macrofied url using the macro expander singleton.
      */
     private String expand_url( String url ) throws RuntimeException
     {
-        if (url != null && url.startsWith( EXPAND_PROTOCOL_PREFIX ))
-        {
-            try
-            {
-                if (m_xMacroExpander == null)
-                {
+        if (url != null && url.startsWith( EXPAND_PROTOCOL_PREFIX )) {
+            try {
+                if (m_xMacroExpander == null) {
                     XPropertySet xProps =
                         UnoRuntime.queryInterface(
                             XPropertySet.class, multiServiceFactory );
-                    if (xProps == null)
-                    {
+                    if (xProps == null) {
                         throw new com.sun.star.uno.RuntimeException(
                             "service manager does not support XPropertySet!",
                             this );
@@ -113,21 +112,16 @@ public class JavaLoader implements XImplementationLoader,
                         '+', "%2B" ) );
                 // expand macro string
                 String ret = m_xMacroExpander.expandMacros( macro );
-                if (DEBUG)
-                {
+                if (DEBUG) {
                     System.err.println(
                         "JavaLoader.expand_url(): " + url + " => " +
                         macro + " => " + ret );
                 }
                 return ret;
-            }
-            catch (com.sun.star.uno.Exception exc)
-            {
+            } catch (com.sun.star.uno.Exception exc) {
                 throw new com.sun.star.uno.RuntimeException(
                     exc.getMessage(), this );
-            }
-            catch (java.lang.Exception exc)
-            {
+            } catch (java.lang.Exception exc) {
                 throw new com.sun.star.uno.RuntimeException(
                     exc.getMessage(), this );
             }
@@ -135,22 +129,24 @@ public class JavaLoader implements XImplementationLoader,
         return url;
     }
 
-    /** default constructor
-     */
-
     /**
-     * Creates a new instance of the <code>JavaLoader</code> class.
-     * <p>
+     * Default constructor.
+     *
+     * <p>Creates a new instance of the <code>JavaLoader</code> class.</p>
      */
     public JavaLoader() {}
 
     /**
-     * Creates a new <code>JavaLoader</code> object. The specified <code>com.sun.star.lang.XMultiServiceFactory</code>
-     * is the <code>ServiceManager</code> service which can be deliviert to all components the <code>JavaLoader</code> is
-     * loading.
-     * To set the <code>MultiServiceFactory</code> you can use the <code>com.sun.star.lang.XInitialization</code> interface, either.
-     * <p>
-     * @param   factory     the <code>ServiceManager</code>
+     * Creates a new <code>JavaLoader</code> object.
+     *
+     * <p>The specified <code>com.sun.star.lang.XMultiServiceFactory</code> is
+     * the <code>ServiceManager</code> service which can be deliviert to all
+     * components the <code>JavaLoader</code> is loading.</p>
+     *
+     * <p>To set the <code>MultiServiceFactory</code> you can use the
+     * <code>com.sun.star.lang.XInitialization</code> interface, either.</p>
+     *
+     * @param   factory     the <code>ServiceManager</code>.
      * @see     com.sun.star.comp.servicemanager.ServiceManager
      * @see     com.sun.star.lang.XInitialization
      */
@@ -159,10 +155,11 @@ public class JavaLoader implements XImplementationLoader,
     }
 
     /**
-     * Unlike the original intention, the method could be called every time a new
-     * <code>com.sun.star.lang.XMultiServiceFactory</code> should be set at the loader.
-     * <p>
-     * @param       args - the first parameter (args[0]) specifices the <code>ServiceManager</code>
+     * Unlike the original intention, the method could be called every time a
+     * new <code>com.sun.star.lang.XMultiServiceFactory</code> should be set at
+     * the loader.
+     *
+     * @param       args - the first parameter (args[0]) specifices the <code>ServiceManager</code>.
      * @see         com.sun.star.lang.XInitialization
      * @see         com.sun.star.comp.servicemanager.ServiceManager
      */
@@ -170,13 +167,13 @@ public class JavaLoader implements XImplementationLoader,
             throws com.sun.star.uno.Exception,
                    com.sun.star.uno.RuntimeException
     {
-        if (args.length == 0) throw new com.sun.star.lang.IllegalArgumentException("No arguments specified");
+        if (args.length == 0)
+            throw new com.sun.star.lang.IllegalArgumentException("No arguments specified");
 
         try {
             multiServiceFactory = (XMultiServiceFactory) AnyConverter.toObject(
                 new Type(XMultiServiceFactory.class), args[0]);
-        }
-        catch (ClassCastException castEx) {
+        } catch (ClassCastException castEx) {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "The argument must be an instance of XMultiServiceFactory");
         }
@@ -184,8 +181,8 @@ public class JavaLoader implements XImplementationLoader,
 
     /**
      * Supplies the implementation name of the component.
-     * <p>
-     * @return      the implementation name - here the class name
+     *
+     * @return      the implementation name - here the class name.
      * @see         com.sun.star.lang.XServiceInfo
      */
     public String getImplementationName()
@@ -196,25 +193,27 @@ public class JavaLoader implements XImplementationLoader,
 
     /**
      * Verifies if a given service is supported by the component.
-     * <p>
-     * @return      true,if service is supported - otherwise false
-     * @param       serviceName     the name of the service that should be checked
+     *
+     * @param       serviceName     the name of the service that should be checked.
+     * @return      true,if service is supported - otherwise false.
+     *
      * @see         com.sun.star.lang.XServiceInfo
      */
     public boolean supportsService(String serviceName)
             throws com.sun.star.uno.RuntimeException
     {
-        for ( int i = 0; i < supportedServices.length; i++ ) {
-            if ( supportedServices[i].equals(serviceName) )
+        for (String supportedService : supportedServices) {
+            if (supportedService.equals(serviceName)) {
                 return true;
+            }
         }
         return false;
     }
 
     /**
-     * Supplies a list of all service names supported by the component
-     * <p>
-     * @return      a String array with all supported services
+     * Supplies a list of all service names supported by the component.
+     *
+     * @return      a String array with all supported services.
      * @see         com.sun.star.lang.XServiceInfo
      */
     public String[] getSupportedServiceNames()
@@ -225,18 +224,23 @@ public class JavaLoader implements XImplementationLoader,
 
     /**
      * Provides a components factory.
-     * The <code>JavaLoader</code> tries to load the class first. If a loacation URL is given the
-     * RegistrationClassFinder is used to load the class. Otherwise the class is loaded thru the Class.forName
-     * method.
-     * To get the factory the inspects the class for the optional static member functions __getServiceFactory resp.
-     * getServiceFactory (DEPRECATED).
-     * If the function can not be found a default factory @see ComponentFactoryWrapper will be created.
-     * <p>
-     * @return      the factory for the component (@see com.sun.star.lang.XSingleServiceFactory)
-     * @param       implementationName          the implementation (class) name of the component
+     *
+     * <p>The <code>JavaLoader</code> tries to load the class first. If a
+     * loacation URL is given the RegistrationClassFinder is used to load the
+     * class. Otherwise the class is loaded thru the Class.forName method.</p>
+     *
+     * <p>To get the factory the inspects the class for the optional static member
+     * functions __getServiceFactory resp. getServiceFactory (DEPRECATED).</p>
+     *
+     * <p>If the function can not be found a default factory @see ComponentFactoryWrapper
+     * will be created.</p>
+     *
+     * @param       implementationName          the implementation (class) name of the component.
      * @param       implementationLoaderUrl     the URL of the implementation loader. Not used.
-     * @param       locationUrl                 points to an archive (JAR file) which contains a component
-     * @param       xKey                        registry key
+     * @param       locationUrl                 points to an archive (JAR file) which contains a component.
+     * @param       xKey                        registry key.
+     * @return      the factory for the component (@see com.sun.star.lang.XSingleServiceFactory)
+     *
      * @see         com.sun.star.loader.XImplementationLoader
      * @see         com.sun.star.comp.loader.RegistrationClassFinder
      */
@@ -254,7 +258,7 @@ public class JavaLoader implements XImplementationLoader,
 
         DEBUG("try to get factory for " + implementationName);
 
-        // first we must get the class of the implementation
+        // First we must get the class of the implementation
         // 1. If a location URL is given it is assumed that this points to a JAR file.
         //    The components class name is stored in the manifest file.
         // 2. If only the implementation name is given, the class is loaded with the
@@ -274,20 +278,17 @@ public class JavaLoader implements XImplementationLoader,
                         "Cannot find class " + implementationName);
                 }
             }
-        }
-        catch (java.net.MalformedURLException e) {
+        } catch (java.net.MalformedURLException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
                     "Can not activate factory because " + e );
             cae.initCause(e);
             throw cae;
-        }
-        catch (java.io.IOException e) {
+        } catch (java.io.IOException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
                     "Can not activate factory because " + e );
             cae.initCause(e);
             throw cae;
-        }
-        catch (java.lang.ClassNotFoundException e) {
+        } catch (java.lang.ClassNotFoundException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
                     "Can not activate factory because " + e );
             cae.initCause(e);
@@ -303,69 +304,56 @@ public class JavaLoader implements XImplementationLoader,
         // - old style: use the public static method getServiceFactory ( DEPRECATED )
 
         Method compfac_method = null;
-        try
-        {
+        try {
              compfac_method = clazz.getMethod(
                 "__getComponentFactory", new Class [] { String.class } );
+        } catch ( NoSuchMethodException noSuchMethodEx) {
+        } catch ( SecurityException secEx) {
         }
-        catch ( NoSuchMethodException noSuchMethodEx) {}
-        catch ( SecurityException secEx) {}
 
         Method method = null;
-        if (null == compfac_method)
-        {
+        if (null == compfac_method) {
             try {
                 method = clazz.getMethod("__getServiceFactory", paramTypes);
-            }
-            catch ( NoSuchMethodException noSuchMethodEx) {
+            } catch ( NoSuchMethodException noSuchMethodEx) {
                 method = null;
-            }
-            catch ( SecurityException secEx) {
+            } catch ( SecurityException secEx) {
                 method = null;
             }
         }
 
         try {
-            if (null != compfac_method)
-            {
+            if (null != compfac_method) {
                 Object ret = compfac_method.invoke( clazz, new Object [] { implementationName } );
                 if (null == ret || !(ret instanceof XSingleComponentFactory))
-                {
                     throw new CannotActivateFactoryException(
                         "No factory object for " + implementationName );
-                }
+
                 return ret;
             }
-            else
-            {
-                if ( method == null ) {
+            else {
+                if ( method == null )
                     method = clazz.getMethod("getServiceFactory", paramTypes);
-                }
 
                 Object oRet = method.invoke(clazz, params);
 
-                if ( (oRet != null) && (oRet instanceof XSingleServiceFactory) ) {
+                if ( (oRet != null) && (oRet instanceof XSingleServiceFactory) )
                     returnObject = oRet;
-                }
             }
-        }
-        catch ( NoSuchMethodException e) {
+        } catch ( NoSuchMethodException e) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
                         + implementationName + " because " + e.toString() );
-        }
-        catch ( SecurityException e) {
+        } catch ( SecurityException e) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
                         + implementationName + " because " + e.toString() );
-        }
-        catch ( IllegalAccessException e ) {
+        } catch ( IllegalAccessException e ) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
                         + implementationName + " because " + e.toString() );
         }
         catch ( IllegalArgumentException e ) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
                         + implementationName + " because " + e.toString() );
-        }
-        catch ( InvocationTargetException e ) {
+        } catch ( InvocationTargetException e ) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
                         + implementationName + " because " + e.getTargetException().toString() );
         }
@@ -374,14 +362,18 @@ public class JavaLoader implements XImplementationLoader,
     }
 
     /**
-     * Registers the component in a registry under a given root key. If the component supports the optional
-     * methods __writeRegistryServiceInfo, writeRegistryServiceInfo (DEPRECATED), the call is delegated to that
-     * method. Otherwise a default registration will be accomplished.
-     * <p>
-     * @return      true if registration is successfully - otherwise false
+     * Registers the component in a registry under a given root key.
+     *
+     * <p>If the component supports the optional
+     * methods __writeRegistryServiceInfo, writeRegistryServiceInfo (DEPRECATED),
+     * the call is delegated to that method. Otherwise a default registration
+     * will be accomplished.</p>
+     *
      * @param       regKey                  the root key under that the component should be registred.
      * @param       implementationLoaderUrl specifies the loader, the component is loaded by.
-     * @param       locationUrl             points to an archive (JAR file) which contains a component
+     * @param       locationUrl             points to an archive (JAR file) which contains a component.
+     * @return      true if registration is successfully - otherwise false.
+     *
      * @see         ComponentFactoryWrapper
      */
     public boolean writeRegistryInfo( XRegistryKey regKey,
@@ -398,10 +390,8 @@ public class JavaLoader implements XImplementationLoader,
 
             Class<?> clazz = RegistrationClassFinder.find(locationUrl);
             if (null == clazz)
-            {
                 throw new CannotRegisterImplementationException(
                     "Cannot determine registration class!" );
-            }
 
             Class<?>[] paramTypes = { XRegistryKey.class };
             Object[] params = { regKey };
@@ -411,8 +401,7 @@ public class JavaLoader implements XImplementationLoader,
 
             if ( (oRet != null) && (oRet instanceof Boolean) )
                 success = ((Boolean) oRet).booleanValue();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             CannotRegisterImplementationException e2 =
                 new CannotRegisterImplementationException(e.toString());
             e2.initCause(e);
@@ -423,12 +412,12 @@ public class JavaLoader implements XImplementationLoader,
     }
 
     /**
-     * Supplies the factory for the <code>JavaLoader</code>
-     * <p>
-     * @return  the factory for the <code>JavaLoader</code>
-     * @param   implName        the name of the desired component
-     * @param   multiFactory    the <code>ServiceManager</code> is delivered to the factory
-     * @param   regKey          not used - can be null
+     * Supplies the factory for the <code>JavaLoader</code>.
+     *
+     * @param   implName        the name of the desired component.
+     * @param   multiFactory    the <code>ServiceManager</code> is delivered to the factory.
+     * @param   regKey          not used - can be null.
+     * @return  the factory for the <code>JavaLoader</code>.
      */
     public static XSingleServiceFactory getServiceFactory( String implName,
                                                            XMultiServiceFactory multiFactory,
@@ -442,9 +431,9 @@ public class JavaLoader implements XImplementationLoader,
 
     /**
      * Registers the <code>JavaLoader</code> at the registry.
-     * <p>
-     * @return     true if registration succseeded - otherwise false
-     * @param      regKey   root key under which the <code>JavaLoader</code> should be regidstered
+     *
+     * @param      regKey   root key under which the <code>JavaLoader</code> should be regidstered.
+     * @return     true if registration succseeded - otherwise false.
      */
     public static boolean writeRegistryServiceInfo(XRegistryKey regKey) {
         boolean result = false;
@@ -452,12 +441,12 @@ public class JavaLoader implements XImplementationLoader,
         try {
             XRegistryKey newKey = regKey.createKey("/" + JavaLoader.class.getName() + "/UNO/SERVICE");
 
-            for (int i=0; i<supportedServices.length; i++)
-                newKey.createKey(supportedServices[i]);
+            for (String supportedService : supportedServices) {
+                newKey.createKey(supportedService);
+            }
 
             result = true;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             if (DEBUG) System.err.println(">>>JavaLoader.writeRegistryServiceInfo " + ex);
         }
 

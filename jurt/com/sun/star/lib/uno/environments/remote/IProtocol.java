@@ -51,24 +51,24 @@ public interface IProtocol {
      * synchronized.</p>
      *
      * @return a non-null message; if the input stream is exhausted, a
-     *     <code>java.io.IOException</code> is thrown instead
+     *     <code>java.io.IOException</code> is thrown instead.
      */
     Message readMessage() throws IOException;
 
     /**
      * Writes a request message.
      *
-     * @param oid a non-null OID
-     * @param type a non-null UNO type
+     * @param oid a non-null OID.
+     * @param type a non-null UNO type.
      * @param function a non-null function (the name of a UNO interface method
      *     or attribute compatible with the given <code>type</code>, or either
-     *     <code>"queryInterface"</code> or <code>"release"</code>)
-     * @param tid a non-null TID
+     *     <code>"queryInterface"</code> or <code>"release"</code>).
+     * @param tid a non-null TID.
      * @param arguments a list of UNO arguments compatible with the given
      *     <code>type</code> and <code>function</code>; may be null to represent
-     *     an empty list
+     *     an empty list.
      * @return <code>true</code> if the request message is sent as a synchronous
-     *     request
+     *     request.
      */
     boolean writeRequest(
         String oid, TypeDescription type, String function, ThreadId tid,
@@ -79,11 +79,11 @@ public interface IProtocol {
      * Writes a reply message.
      *
      * @param exception <code>true</code> if the reply corresponds to a raised
-     *     exception
-     * @param tid a non-null TID
+     *     exception.
+     * @param tid a non-null TID.
      * @param result if <code>exception</code> is <code>true</code>, a non-null
      *     UNO exception; otherwise, a UNO return value, which may be null to
-     *     represent a <code>VOID</code> return value
+     *     represent a <code>VOID</code> return value.
      */
     void writeReply(boolean exception, ThreadId tid, Object result)
         throws IOException;

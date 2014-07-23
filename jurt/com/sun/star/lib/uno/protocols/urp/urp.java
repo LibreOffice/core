@@ -46,10 +46,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-// This class internally relies on the availability of Java UNO type information
-// for the interface type com.sun.star.bridge.XProtocolProperties, even though
-// URP itself does not rely on that type.
-
+/**
+ * This class internally relies on the availability of Java UNO type information
+ * for the interface type <code>com.sun.star.bridge.XProtocolProperties</code>,
+ * even though URP itself does not rely on that type.
+ */
 public final class urp implements IProtocol {
     public urp(
         IBridge bridge, String attributes, InputStream input,
@@ -62,7 +63,10 @@ public final class urp implements IProtocol {
         forceSynchronous = parseAttributes(attributes);
     }
 
-    // @see IProtocol#init
+    /**
+     *
+     * @see IProtocol#init
+     */
     public void init() throws IOException {
         synchronized (monitor) {
             if (state == STATE_INITIAL0) {
@@ -71,7 +75,10 @@ public final class urp implements IProtocol {
         }
     }
 
-    // @see IProtocol#terminate
+    /**
+     *
+     * @see IProtocol#terminate
+     */
     public void terminate() {
         synchronized (monitor) {
             state = STATE_TERMINATED;
@@ -80,7 +87,10 @@ public final class urp implements IProtocol {
         }
     }
 
-    // @see IProtocol#readMessage
+    /**
+     *
+     * @see IProtocol#readMessage
+     */
     public Message readMessage() throws IOException {
         for (;;) {
             if (!unmarshal.hasMore()) {
@@ -108,7 +118,10 @@ public final class urp implements IProtocol {
         }
     }
 
-    // @see IProtocol#writeRequest
+    /**
+     *
+     * @see IProtocol#writeRequest
+     */
     public boolean writeRequest(
         String oid, TypeDescription type, String function, ThreadId tid,
         Object[] arguments)
@@ -133,7 +146,10 @@ public final class urp implements IProtocol {
         }
     }
 
-    // @see IProtocol#writeReply
+    /**
+     *
+     * @see IProtocol#writeReply
+     */
     public void writeReply(boolean exception, ThreadId tid, Object result)
         throws IOException
     {

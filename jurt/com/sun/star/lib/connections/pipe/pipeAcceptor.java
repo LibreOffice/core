@@ -108,13 +108,16 @@ public final class pipeAcceptor implements XAcceptor {
         AlreadyAcceptingException, ConnectionSetupException,
         com.sun.star.lang.IllegalArgumentException
     {
-    throw new java.lang.NoSuchMethodError( "pipeAcceptor not fully implemented yet" );
+        throw new java.lang.NoSuchMethodError( "pipeAcceptor not fully implemented yet" );
 
     //try { return new PipeConnection( connectionDescription ); }
     //catch ( java.io.IOException e ) { return null; }
     }
 
-    // see com.sun.star.connection.XAcceptor#stopAccepting
+    /**
+     *
+     * @see com.sun.star.connection.XAcceptor#stopAccepting
+     */
     public void stopAccepting() {
     }
 

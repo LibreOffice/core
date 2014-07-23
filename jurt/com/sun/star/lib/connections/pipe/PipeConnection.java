@@ -31,7 +31,7 @@ import com.sun.star.lib.util.NativeLibraryLoader;
  * The PipeConnection implements the <code>XConnection</code> interface
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
- * <p>
+ *
  * @see         com.sun.star.lib.connections.pipe.pipeAcceptor
  * @see         com.sun.star.lib.connections.pipe.pipeConnector
  * @see         com.sun.star.connection.XConnection
@@ -55,8 +55,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Constructs a new <code>PipeConnection</code>.
-     * <p>
-     * @param  description   the description of the connection
+     *
+     * @param  description   the description of the connection.
      */
     public PipeConnection(String description)
         throws IOException
@@ -69,8 +69,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         // get pipe name from pipe descriptor
         String aPipeName  ;
         StringTokenizer aTokenizer = new StringTokenizer( description, "," );
-        if ( aTokenizer.hasMoreTokens() )
-        {
+        if ( aTokenizer.hasMoreTokens() ) {
             String aConnType = aTokenizer.nextToken();
             if ( !aConnType.equals( "pipe" ) )
                 throw new RuntimeException( "invalid pipe descriptor: does not start with 'pipe,'" );
@@ -79,19 +78,20 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
             if ( !aPipeNameParam.substring( 0, 5 ).equals( "name=" ) )
                 throw new RuntimeException( "invalid pipe descriptor: no 'name=' parameter found" );
             aPipeName = aPipeNameParam.substring( 5 );
-             }
+        }
         else
             throw new RuntimeException( "invalid or empty pipe descriptor" );
 
         // create the pipe
-        try
-        { createJNI( aPipeName ); }
-        catch ( java.lang.NullPointerException aNPE )
-        { throw new IOException( aNPE.getMessage() ); }
-        catch ( com.sun.star.io.IOException aIOE )
-        { throw new IOException( aIOE.getMessage() ); }
-        catch ( java.lang.Exception aE )
-        { throw new IOException( aE.getMessage() ); }
+        try {
+            createJNI( aPipeName );
+        } catch ( java.lang.NullPointerException aNPE ) {
+            throw new IOException( aNPE.getMessage() );
+        } catch ( com.sun.star.io.IOException aIOE ) {
+            throw new IOException( aIOE.getMessage() );
+        } catch ( java.lang.Exception aE ) {
+            throw new IOException( aE.getMessage() );
+        }
     }
 
     public void addStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
@@ -148,11 +148,12 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Read the required number of bytes.
-     * <p>
-     * @return   the number of bytes read
-     * @param    bytes   the outparameter, where the bytes have to be placed
-     * @param    nBytesToRead the number of bytes to read
-     * @see       com.sun.star.connection.XConnection#read
+     *
+     * @param    bytes   the outparameter, where the bytes have to be placed.
+     * @param    nBytesToRead the number of bytes to read.
+     * @return   the number of bytes read.
+     *
+     * @see      com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -168,9 +169,9 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Write bytes.
-     * <p>
-     * @param    aData the bytes to write
-     * @see       com.sun.star.connection.XConnection#write
+     *
+     * @param    aData the bytes to write.
+     * @see      com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[])
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -180,8 +181,8 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Flushes the buffer.
-     * <p>
-     * @see       com.sun.star.connection.XConnection#flush
+     *
+     * @see      com.sun.star.connection.XConnection#flush
      */
     public void flush()
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -191,7 +192,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Closes the connection.
-     * <p>
+     *
      * @see       com.sun.star.connection.XConnection#close
      */
     public void close()
@@ -205,9 +206,9 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     /**
      * Gives a description of the connection.
-     * <p>
-     * @return  the description
-      * @see       com.sun.star.connection.XConnection#getDescription
+     *
+     * @return  the description.
+     * @see     com.sun.star.connection.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {
         return _aDescription;

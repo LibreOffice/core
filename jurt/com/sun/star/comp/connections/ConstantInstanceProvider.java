@@ -31,7 +31,7 @@ import com.sun.star.comp.loader.FactoryHelper;
 /**
  * The <code>ConstantInstanceProvider</code> is a component
  * that implements the <code>XInstanceProvider</code> Interface.
- * <p>
+ *
  * @see         com.sun.star.bridge.XBridge
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.bridge.XInstanceProvider
@@ -45,18 +45,20 @@ public class ConstantInstanceProvider implements XInstanceProvider {
     static public final boolean DEBUG = false;
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through reflection.
+     * The name of the service, the <code>JavaLoader</code> acceses this through
+     * reflection.
      */
     static private final String __serviceName = "com.sun.star.comp.connection.InstanceProvider";
 
     /**
      * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param   implName     the name of the implementation for which a service is desired.
+     * @param   multiFactory the service manager to be uses if needed.
+     * @param   regKey       the registryKey.
+     * @return  returns a <code>XSingleServiceFactory</code> for creating the component.
+     *
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
     public static XSingleServiceFactory __getServiceFactory(String implName,
@@ -86,8 +88,8 @@ public class ConstantInstanceProvider implements XInstanceProvider {
 
     /**
      * Constructs a new <code>ConstantInstanceProvider</code>.
-     * Uses the provided ServiceManager as the provided instance.
-     * <p>
+     * <p>Uses the provided ServiceManager as the provided instance.</p>
+     *
      * @param    serviceManager   the provided service manager
      */
     public ConstantInstanceProvider(XMultiServiceFactory serviceManager) {
@@ -99,7 +101,7 @@ public class ConstantInstanceProvider implements XInstanceProvider {
 
     /**
      * Gives an object for the passed instance name.
-     * <p>
+     *
      * @return  the desired instance
      * @param   sInstanceName   the name of the desired instance
      */
