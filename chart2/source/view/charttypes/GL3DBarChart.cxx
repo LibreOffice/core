@@ -509,10 +509,10 @@ public:
 
 void GL3DBarChart::moveToDefault()
 {
-    osl::MutexGuard aGuard(maMutex);
     if(mpRenderThread.is())
         mpRenderThread->join();
 
+    osl::MutexGuard aGuard(maMutex);
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
     mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, maDefaultCameraPosition, STEPS));
