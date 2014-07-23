@@ -556,6 +556,8 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         mpRenderThread->join();
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
+    // we need this update here to render one frame without picking mode being set
+    update();
 
     std::map<sal_uInt32, const BarInformation>::const_iterator itr =
         maBarMap.find(nId);
