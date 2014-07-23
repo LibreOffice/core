@@ -116,3 +116,31 @@
          win.toFront();
  		splashScreen = win;
  	}
+--- src/bsh/Remote.java	2003-12-19 17:14:29.000000000 +0100
++++ src.new/bsh/Remote.java	2014-07-23 08:52:39.000000000 +0200
+@@ -137,13 +137,14 @@
+ 	static String doHttp( String postURL, String text ) 
+ 	{
+ 		String returnValue = null;
++
++		try {
+ 		StringBuffer sb = new StringBuffer();
+ 		sb.append( "bsh.client=Remote" );
+ 		sb.append( "&bsh.script=" );
+-		sb.append( URLEncoder.encode( text ) );
++		  sb.append( URLEncoder.encode(text,"UTF-8") );
+ 		String formData = sb.toString(  );
+ 
+-		try {
+ 		  URL url = new URL( postURL );
+ 		  HttpURLConnection urlcon =
+ 			  (HttpURLConnection) url.openConnection(  );
+@@ -172,6 +173,8 @@
+ 
+ 		  System.out.println( "Return Value: "+returnValue );
+ 
++		} catch (UnsupportedEncodingException e) {
++		  System.out.println(e);     // bad character encoding
+ 		} catch (MalformedURLException e) {
+ 		  System.out.println(e);     // bad postURL
+ 		} catch (IOException e2) {
