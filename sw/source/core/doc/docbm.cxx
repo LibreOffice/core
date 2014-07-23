@@ -1126,33 +1126,29 @@ namespace sw { namespace mark
 
 namespace
 {
-    //  CntntType --
-    //          0x2000 = Paragraph anchored frame
-    //          0x2001 = frame anchored at character, which should be moved
-
     class _SwSaveTypeCountContent
     {
-        sal_uInt16 nType;
+        bool bCharBound;
         sal_uInt16 nCount;
         sal_Int32 nContent;
 
     public:
-        _SwSaveTypeCountContent() { nType=0; nCount=0; nContent = 0; }
+        _SwSaveTypeCountContent() { bCharBound=false; nCount=0; nContent = 0; }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
-                nType = static_cast<sal_uInt16>(rArr[ rPos++ ]);
+                bCharBound = static_cast<bool>(rArr[ rPos++ ]);
                 nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
                 nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
             }
         void Add( std::vector<sal_uLong> &rArr )
         {
-            rArr.push_back( nType );
+            rArr.push_back( bCharBound );
             rArr.push_back( nCount );
             rArr.push_back( nContent );
         }
 
-        void SetType( sal_uInt16 n )        { nType = n; }
-        sal_uInt16 GetType() const          { return nType; }
+        void SetCharBound( bool bCB )        { bCharBound = bCB; }
+        bool IsCharBound() const          { return bCharBound; }
 
         void SetCount( sal_uInt16 n )       { nCount = n; }
         sal_uInt16 GetCount() const         { return nCount; }
@@ -1163,7 +1159,7 @@ namespace
 #if OSL_DEBUG_LEVEL > 0
         void Dump()
         {
-            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << GetType() << "\tContent: " << GetContent());
+            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << IsCharBound() << "\tContent: " << GetContent());
         }
 #endif
 
@@ -1459,7 +1455,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                                  FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
                                ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                         {
-                            aSave.SetType( 0x2000 );
+                            aSave.SetCharBound(false);
                             aSave.SetContent( pAPos->nContent.GetIndex() );
 
                             OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
@@ -1469,7 +1465,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                                 if( nCntnt <= aSave.GetContent() )
                                 {
                                     if( SAVEFLY_SPLIT == nSaveFly )
-                                        aSave.SetType( 0x2001 );
+                                        aSave.SetCharBound(true);
                                     else
                                         continue;
                                 }
@@ -1504,14 +1500,14 @@ void _SaveCntntIdx(SwDoc* pDoc,
                          ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
                            FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
                     {
-                        aSave.SetType( 0x2000 );
+                        aSave.SetCharBound(false);
                         aSave.SetContent( pAPos->nContent.GetIndex() );
                         if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                         {
                             if( nCntnt <= aSave.GetContent() )
                             {
                                 if( SAVEFLY_SPLIT == nSaveFly )
-                                    aSave.SetType( 0x2001 );
+                                    aSave.SetCharBound(true);
                                 else
                                     continue;
                             }
@@ -1537,41 +1533,34 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     {
         _SwSaveTypeCountContent aSave( rSaveArr, n );
         SwPosition* pPos = 0;
-        switch( aSave.GetType() )
+        if(!aSave.IsCharBound())
         {
-            case 0x2000:
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+            const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
+            if( rFlyAnchor.GetCntntAnchor() )
+            {
+                SwFmtAnchor aNew( rFlyAnchor );
+                SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
+                aNewPos.nNode = *pCNd;
+                if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                 {
-                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-                    const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-                    if( rFlyAnchor.GetCntntAnchor() )
-                    {
-                        SwFmtAnchor aNew( rFlyAnchor );
-                        SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                        aNewPos.nNode = *pCNd;
-                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                        {
-                            aNewPos.nContent.Assign( pCNd,
-                                                     aSave.GetContent() + nOffset );
-                        }
-                        else
-                        {
-                            aNewPos.nContent.Assign( 0, 0 );
-                        }
-                        aNew.SetAnchor( &aNewPos );
-                        pFrmFmt->SetFmtAttr( aNew );
-                    }
+                    aNewPos.nContent.Assign( pCNd,
+                                             aSave.GetContent() + nOffset );
                 }
-                break;
-            case 0x2001:
-                if( bAuto )
+                else
                 {
-                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-                    SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-                    pFrmFmt->NotifyClients( pAnchor, pAnchor );
+                    aNewPos.nContent.Assign( 0, 0 );
                 }
-                break;
+                aNew.SetAnchor( &aNewPos );
+                pFrmFmt->SetFmtAttr( aNew );
+            }
         }
-
+        else if( bAuto )
+        {
+            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
+            pFrmFmt->NotifyClients( pAnchor, pAnchor );
+        }
         if( pPos )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -1602,32 +1591,26 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
         else
         {
             SwPosition* pPos = 0;
-            switch( aSave.GetType() )
             {
-            case 0x2000:
-            case 0x2001:
+                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
+                if( rFlyAnchor.GetCntntAnchor() )
                 {
-                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-                    const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-                    if( rFlyAnchor.GetCntntAnchor() )
+                    SwFmtAnchor aNew( rFlyAnchor );
+                    SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
+                    aNewPos.nNode = rNd;
+                    if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
                     {
-                        SwFmtAnchor aNew( rFlyAnchor );
-                        SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                        aNewPos.nNode = rNd;
-                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                        {
-                            aNewPos.nContent.Assign( pCNd, std::min(
-                                                     aSave.GetContent(), nLen ) );
-                        }
-                        else
-                        {
-                            aNewPos.nContent.Assign( 0, 0 );
-                        }
-                        aNew.SetAnchor( &aNewPos );
-                        pFrmFmt->SetFmtAttr( aNew );
+                        aNewPos.nContent.Assign( pCNd, std::min(
+                                                 aSave.GetContent(), nLen ) );
                     }
+                    else
+                    {
+                        aNewPos.nContent.Assign( 0, 0 );
+                    }
+                    aNew.SetAnchor( &aNewPos );
+                    pFrmFmt->SetFmtAttr( aNew );
                 }
-                break;
             }
 
             if( pPos )
