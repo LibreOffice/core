@@ -1502,7 +1502,7 @@ namespace
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            RestoreFlys(pDoc, nNode, nOffset, bAuto);
+            RestoreFlys(pDoc, pCNd, nOffset, bAuto);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
@@ -1524,7 +1524,7 @@ namespace
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly);
-            inline void RestoreFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset, bool bAuto);
+            inline void RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nOffset, bool bAuto);
             inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreUnoCrsrs(SwDoc* pDoc, updater_t& rUpdater);
             inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
@@ -1764,9 +1764,8 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     }
 }
 
-void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset, bool bAuto)
+void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, SwCntntNode* pCNd, sal_Int32 nOffset, bool bAuto)
 {
-    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     sal_uInt16 n = 0;
     while( n < m_aFlyEntries.size() )
@@ -1803,7 +1802,7 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOff
         }
         if( pPos )
         {
-            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
+            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << pCNd << " from " << pPos->nContent.GetIndex() << " to " << (aSave.m_nCntnt + nOffset));
             pPos->nNode = *pCNd;
             pPos->nContent.Assign( pCNd, aSave.m_nCntnt + nOffset );
         }
