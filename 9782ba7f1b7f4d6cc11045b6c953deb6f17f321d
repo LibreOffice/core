@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab921fb_3e76113f",
+        "filename": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-07-23T12:48:58Z",
+      "side": 1,
+      "message": "there is a warning \"unused variable w\" here ... i\u0027m guessing this should compare w.size() with 3, right? i\u0027ll push a fix for that to master...",
+      "revId": "9782ba7f1b7f4d6cc11045b6c953deb6f17f321d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
