@@ -1391,33 +1391,30 @@ namespace
     };
     class _SwSaveTypeCountContent : public MarkEntry
     {
-        sal_uInt16 nCount;
-        sal_Int32 nContent;
-
     public:
-        _SwSaveTypeCountContent() { m_bOther=false; nCount=0; nContent = 0; }
+        _SwSaveTypeCountContent() { m_bOther=false; m_nIdx=0; m_nCntnt = 0; }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
                 m_bOther = static_cast<bool>(rArr[ rPos++ ]);
-                nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
-                nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
+                m_nIdx = static_cast<sal_uInt16>(rArr[ rPos++ ]);
+                m_nCntnt = static_cast<sal_Int32>(rArr[ rPos++ ]);
             }
         void Add( std::vector<sal_uLong> &rArr )
         {
             rArr.push_back( m_bOther );
-            rArr.push_back( nCount );
-            rArr.push_back( nContent );
+            rArr.push_back( m_nIdx );
+            rArr.push_back( m_nCntnt );
         }
 
         void SetCharBound( bool bCB )        { m_bOther = bCB; }
         bool IsCharBound() const          { return m_bOther; }
 
-        void SetCount( sal_uInt16 n )       { nCount = n; }
-        sal_uInt16 GetCount() const         { return nCount; }
-        sal_uInt16 DecCount()               { return --nCount; }
+        void SetCount( sal_uInt16 n )       { m_nIdx = n; }
+        sal_uInt16 GetCount() const         { return m_nIdx; }
+        sal_uInt16 DecCount()               { return --m_nIdx; }
 
-        void SetContent( sal_Int32 n )     { nContent = n; }
-        sal_Int32 GetContent() const       { return nContent; }
+        void SetContent( sal_Int32 n )     { m_nCntnt = n; }
+        sal_Int32 GetContent() const       { return m_nCntnt; }
 #if OSL_DEBUG_LEVEL > 0
         void Dump()
         {
