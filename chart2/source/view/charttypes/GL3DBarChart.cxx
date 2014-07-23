@@ -223,9 +223,10 @@ GL3DBarChart::~GL3DBarChart()
         osl::MutexGuard aGuard(maMutex);
         mbRenderDie = true;
     }
+
     if(mpRenderThread.is())
         mpRenderThread->join();
-    osl::MutexGuard aGuard(maMutex);
+
     if(mbValidContext)
         mrWindow.setRenderer(NULL);
 }
