@@ -22,8 +22,8 @@ if( a == 1 )
 namespace loplugin
 {
 
-Tutorial2::Tutorial2( CompilerInstance& compiler )
-    : Plugin( compiler )
+Tutorial2::Tutorial2( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 

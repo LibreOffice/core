@@ -24,7 +24,7 @@ class Tutorial3
     {
     public:
         // One more argument for ctor.
-        Tutorial3( CompilerInstance& compiler, Rewriter& rewriter );
+        Tutorial3( const InstantiationData& data );
         virtual void run() override;
         // Will be called for every if statement.
         bool VisitIfStmt( const IfStmt* ifstmt );

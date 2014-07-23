@@ -21,8 +21,8 @@ namespace loplugin
 {
 
 // Ctor, nothing special, pass the argument(s).
-Tutorial1::Tutorial1( CompilerInstance& compiler )
-    : Plugin( compiler )
+Tutorial1::Tutorial1( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 
