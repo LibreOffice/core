@@ -25,20 +25,12 @@
 
 // basics
 
-#define RID_DIALOG_START                RID_ABP_START
 #define RID_PAGE_START                  RID_ABP_START
 #define RID_STRING_START                RID_ABP_START
 #define RID_ERRORBOX_START              RID_ABP_START
 #define RID_UNTYPED_START               RID_ABP_START
 #define RID_QUERYBOX_START              RID_ABP_START
 #define RID_BITMAP_START                RID_ABP_START
-
-// dialogs
-
-#define RID_DLG_ADDRESSBOOKSOURCEPILOT  ( RID_DIALOG_START +  0 )
-// please adjust RID_DIALOG_END (below) when adding new dialogs
-
-#define RID_DIALOG_END                  RID_DLG_ADDRESSBOOKSOURCEPILOT
 
 // strings
 
@@ -48,9 +40,15 @@
 #define RID_STR_PLEASECHECKSETTINGS     ( RID_STRING_START +  3 )
 #define RID_STR_FIELDDIALOGTITLE        ( RID_STRING_START +  4 )
 #define RID_STR_NOFIELDSASSIGNED        ( RID_STRING_START +  5 )
+#define RID_STR_ABSOURCEDIALOGTITLE     ( RID_STRING_START +  6 )
+#define RID_STR_SELECT_ABTYPE           ( RID_STRING_START +  7 )
+#define RID_STR_INVOKE_ADMIN_DIALOG     ( RID_STRING_START +  8 )
+#define RID_STR_TABLE_SELECTION         ( RID_STRING_START +  9 )
+#define RID_STR_MANUAL_FIELD_MAPPING    ( RID_STRING_START +  10 )
+#define RID_STR_FINAL_CONFIRM           ( RID_STRING_START +  11 )
 // please adjust RID_STRING_END (below) when adding new strings
 
-#define RID_STRING_END                  RID_STR_NOFIELDSASSIGNED
+#define RID_STRING_END                  RID_STR_FINAL_CONFIRM
 
 // error boxes
 
@@ -84,9 +82,6 @@
 
 //= range checks
 
-#if RID_DIALOG_END > RID_ABP_END
-    #error "please adjust the resource id ranges!!"
-#endif
 #if RID_STRING_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
@@ -107,12 +102,6 @@
 #define FL_SEPARATOR            1
 
 #define FT_NAME_EXPL             4
-
-#define STR_SELECT_ABTYPE           1
-#define STR_INVOKE_ADMIN_DIALOG     2
-#define STR_TABLE_SELECTION         3
-#define STR_MANUAL_FIELD_MAPPING    4
-#define STR_FINAL_CONFIRM           5
 
 // some defines
 #define WINDOW_SIZE_X   240

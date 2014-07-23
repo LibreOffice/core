@@ -19,43 +19,36 @@
 
 #include "abpresid.hrc"
 
-ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
+String RID_STR_ABSOURCEDIALOGTITLE
 {
-    Text [ en-US ] = "Address Book Data Source Wizard" ;
-
-    HelpId = HID_ABSPILOT;
-
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
-
-    String STR_SELECT_ABTYPE
-    {
-        Text [ en-US ] = "Address book type";
-    };
-
-    String STR_INVOKE_ADMIN_DIALOG
-    {
-        Text [ en-US ] = "Connection Settings";
-    };
-
-    String STR_TABLE_SELECTION
-    {
-        Text [ en-US ] = "Table selection";
-    };
-
-    String STR_MANUAL_FIELD_MAPPING
-    {
-        Text [ en-US ] = "Field Assignment";
-    };
-
-    String STR_FINAL_CONFIRM
-    {
-        Text [ en-US ] = "Data Source Title";
-    };
+    Text [ en-US ] = "Address Book Data Source Wizard";
 };
+
+String RID_STR_SELECT_ABTYPE
+{
+    Text [ en-US ] = "Address book type";
+};
+
+String RID_STR_INVOKE_ADMIN_DIALOG
+{
+    Text [ en-US ] = "Connection Settings";
+};
+
+ String RID_STR_TABLE_SELECTION
+{
+    Text [ en-US ] = "Table selection";
+};
+
+String RID_STR_MANUAL_FIELD_MAPPING
+{
+    Text [ en-US ] = "Field Assignment";
+};
+
+String RID_STR_FINAL_CONFIRM
+{
+    Text [ en-US ] = "Data Source Title";
+};
+
 
 ErrorBox RID_ERR_NEEDTYPESELECTION
 {
