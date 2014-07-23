@@ -1393,18 +1393,6 @@ namespace
     {
     public:
         _SwSaveTypeCountContent() { m_bOther=false; m_nIdx=0; m_nCntnt = 0; }
-        _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
-            {
-                m_bOther = static_cast<bool>(rArr[ rPos++ ]);
-                m_nIdx = static_cast<sal_uInt16>(rArr[ rPos++ ]);
-                m_nCntnt = static_cast<sal_Int32>(rArr[ rPos++ ]);
-            }
-        void Add( std::vector<sal_uLong> &rArr )
-        {
-            rArr.push_back( m_bOther );
-            rArr.push_back( m_nIdx );
-            rArr.push_back( m_nCntnt );
-        }
         _SwSaveTypeCountContent( const std::vector<MarkEntry> &rArr, sal_uInt16& rPos )
         {
             m_nIdx = rArr[ rPos ].m_nIdx;
@@ -1436,7 +1424,7 @@ namespace
     void _SaveCntntIdx(SwDoc* pDoc,
         sal_uLong nNode,
         sal_Int32 nCntnt,
-        std::vector<sal_uLong> &rSaveArr,
+        std::vector<MarkEntry> &rSaveArr,
         sal_uInt8 nSaveFly)
     {
         // 1. Bookmarks
@@ -1535,7 +1523,7 @@ namespace
     }
 
     void _RestoreCntntIdx(SwDoc* pDoc,
-        std::vector<sal_uLong> &rSaveArr,
+        std::vector<MarkEntry> &rSaveArr,
         sal_uLong nNode,
         sal_Int32 nOffset,
         bool bAuto)
@@ -1587,7 +1575,7 @@ namespace
         }
     }
 
-    void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
+    void _RestoreCntntIdx(std::vector<MarkEntry> &rSaveArr,
         const SwNode& rNd,
         sal_Int32 nLen,
         sal_Int32 nChkLen)
@@ -1601,7 +1589,7 @@ namespace
         {
             _SwSaveTypeCountContent aSave( rSaveArr, n );
             if( aSave.GetContent() >= nChkLen )
-                rSaveArr[ n-1 ] -= nChkLen;
+                rSaveArr[n].m_nCntnt -= nChkLen;
             else
             {
                 SwPosition* pPos = 0;
@@ -1632,8 +1620,8 @@ namespace
                     pPos->nNode = rNd;
                     pPos->nContent.Assign( pCNd, std::min( aSave.GetContent(), nLen ) );
                 }
-                n -= 2;
-                rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 2);
+                n -= 1;
+                rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 1);
             }
         }
     }
@@ -1669,21 +1657,21 @@ namespace
     {
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
+        std::vector<MarkEntry> m_aFlyEntries;
         std::vector<MarkEntry> m_aUnoCrsrEntries;
         std::vector<PaMEntry> m_aShellCrsrEntries;
-        std::vector<sal_uLong> m_aSaveArr;
         typedef boost::function<void (SwPosition& rPos, sal_Int32 nCntnt)> updater_t;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
             m_aRedlineEntries.clear();
+            m_aFlyEntries.clear();
             m_aUnoCrsrEntries.clear();
             m_aShellCrsrEntries.clear();
-            m_aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty() && m_aSaveArr.empty();
+            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
@@ -1691,7 +1679,7 @@ namespace
             SaveRedlines(pDoc, nNode, nCntnt);
             SaveUnoCrsrs(pDoc, nNode, nCntnt);
             SaveShellCrsrs(pDoc, nNode, nCntnt);
-            return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aSaveArr, nSaveFly);
+            return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aFlyEntries, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
@@ -1699,7 +1687,7 @@ namespace
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
+            _RestoreCntntIdx(pDoc, m_aFlyEntries, nNode, nOffset, bAuto);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
@@ -1710,7 +1698,7 @@ namespace
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
-            _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
+            _RestoreCntntIdx(m_aFlyEntries, rNd, nLen, nCorrLen);
             RestoreUnoCrsrs(pDoc, aUpdater);
             RestoreShellCrsrs(pDoc, aUpdater);
         }
