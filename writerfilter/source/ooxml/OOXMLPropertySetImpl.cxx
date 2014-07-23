@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <ooxml/resourceids.hxx>
+#include<boost/make_shared.hpp>
 
 namespace writerfilter {
 namespace ooxml

@@ -24,9 +24,12 @@
 #include <sax/fastattribs.hxx>
 #include "OOXMLFactory.hxx"
 #include "OOXMLFastHelper.hxx"
+#include<boost/make_shared.hpp>
+
 
 namespace writerfilter {
 namespace ooxml {
+
 
 AttributeInfo::AttributeInfo()
 :m_nResource(RT_NoResource), m_nRef(0)
@@ -103,7 +106,6 @@ OOXMLFactory::OOXMLFactory()
 {
     // multi-thread-safe mutex for all platforms
     osl::MutexGuard aGuard(OOXMLFactory_Mutex::get());
-    mnRefCnt = 0;
 }
 
 OOXMLFactory::~OOXMLFactory()
@@ -149,7 +151,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         const char *pValue = "";
                         pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLBooleanValue(pValue));
+                        OOXMLValue::Pointer_t xValue = boost::make_shared <OOXMLBooleanValue>(pValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -157,7 +159,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 case RT_String:
                     {
                         OUString aValue(pAttribs->getValue(nToken));
-                        OOXMLValue::Pointer_t xValue(new OOXMLStringValue(aValue));
+                        OOXMLValue::Pointer_t xValue = boost::make_shared<OOXMLStringValue>(aValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -166,7 +168,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         sal_Int32 nValue;
                         pAttribs->getAsInteger(nToken,nValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                        OOXMLValue::Pointer_t xValue = boost::make_shared<OOXMLIntegerValue> (nValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -175,7 +177,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         const char *pValue = "";
                         pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLHexValue(pValue));
+                        OOXMLValue::Pointer_t xValue = boost::make_shared<OOXMLHexValue> (pValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -184,7 +186,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     {
                         const char *pValue = "";
                         pAttribs->getAsChar(nToken, pValue);
-                        OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
+                        OOXMLValue::Pointer_t xValue = boost::make_shared<OOXMLUniversalMeasureValue>(pValue);
                         pHandler->newProperty(nId, xValue);
                         pFactory->attributeAction(pHandler, nToken, xValue);
                     }
@@ -198,7 +200,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         {
                             OUString aValue(Attribs->getValue(nToken));
                             sal_uInt32 nValue = (*pListValueMap)[aValue];
-                            OOXMLValue::Pointer_t xValue(new OOXMLIntegerValue(nValue));
+                            OOXMLValue::Pointer_t xValue  = boost::make_shared<OOXMLIntegerValue>(nValue);
                             pHandler->newProperty(nId, xValue);
                             pFactory->attributeAction(pHandler, nToken, xValue);
                         }
@@ -261,11 +263,6 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
     {
         pFactory->endAction(pHandler);
     }
-}
-
-OOXMLFactory_ns::OOXMLFactory_ns()
-{
-  mnRefCnt = 0;
 }
 
 void OOXMLFactory_ns::startAction(OOXMLFastContextHandler *)
