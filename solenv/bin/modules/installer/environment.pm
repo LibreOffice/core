@@ -107,7 +107,7 @@ sub set_global_environment_variables
 {
     my ( $environment ) = @_;
 
-    $installer::globals::build = $environment->{'LIBO_VERSION_MAJOR'}.$environment->{'LIBO-VERSION_MINOR'}."0";
+    $installer::globals::build = $environment->{'LIBO_VERSION_MAJOR'}.$environment->{'LIBO_VERSION_MINOR'}."0";
     $installer::globals::compiler = $environment->{'OUTPATH'};
 
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
