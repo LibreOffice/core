@@ -1405,6 +1405,16 @@ namespace
             rArr.push_back( m_nIdx );
             rArr.push_back( m_nCntnt );
         }
+        _SwSaveTypeCountContent( const std::vector<MarkEntry> &rArr, sal_uInt16& rPos )
+        {
+            m_nIdx = rArr[ rPos ].m_nIdx;
+            m_bOther = rArr[ rPos ].m_bOther;
+            m_nCntnt = rArr[ rPos ].m_nCntnt;
+        }
+        void Add( std::vector<MarkEntry> &rArr )
+        {
+            rArr.push_back( *this );
+        }
 
         void SetCharBound( bool bCB )        { m_bOther = bCB; }
         bool IsCharBound() const          { return m_bOther; }
