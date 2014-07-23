@@ -669,9 +669,10 @@ void GL3DBarChart::moveToCorner()
         return;
     }
 
-    osl::MutexGuard aGuard(maMutex);
     if(mpRenderThread.is())
         mpRenderThread->join();
+
+    osl::MutexGuard aGuard(maMutex);
 
     Size aSize = mrWindow.GetSizePixel();
     mrWindow.getContext().setWinSize(aSize);
