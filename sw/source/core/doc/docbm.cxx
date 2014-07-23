@@ -1404,9 +1404,6 @@ namespace
             rArr.push_back( *this );
         }
 
-        void SetCount( sal_uInt16 n )       { m_nIdx = n; }
-        sal_uInt16 GetCount() const         { return m_nIdx; }
-        sal_uInt16 DecCount()               { return --m_nIdx; }
 
         void SetContent( sal_Int32 n )     { m_nCntnt = n; }
         sal_Int32 GetContent() const       { return m_nCntnt; }
@@ -1462,13 +1459,13 @@ namespace
                                             continue;
                                     }
                                 }
-                                aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
-                                while( aSave.GetCount() &&
+                                aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
+                                while( aSave.m_nIdx &&
                                         &rFmt != (*pDoc->GetSpzFrmFmts())[
-                                        aSave.DecCount() ] )
+                                        --aSave.m_nIdx ] )
                                     ; // nothing
                                 OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
-                                                        aSave.GetCount() ],
+                                                        aSave.m_nIdx ],
                                         "_SaveCntntIdx: Lost FrameFormat" );
                                 aSave.Add( rSaveArr );
                             }
@@ -1477,11 +1474,11 @@ namespace
                 }
                 else // No layout, so it's a bit more expensive ...
                 {
-                    for( aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
-                            aSave.GetCount() ; )
+                    for( aSave.m_nIdx = pDoc->GetSpzFrmFmts()->size();
+                            aSave.m_nIdx ; )
                     {
                         SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
-                                                    aSave.DecCount() ];
+                                                    --aSave.m_nIdx ];
                         if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
                                 RES_DRAWFRMFMT != pFrmFmt->Which() )
                             continue;
@@ -1527,7 +1524,7 @@ namespace
             SwPosition* pPos = 0;
             if(!aSave.m_bOther)
             {
-                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
                 const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
                 if( rFlyAnchor.GetCntntAnchor() )
                 {
@@ -1549,13 +1546,13 @@ namespace
             }
             else if( bAuto )
             {
-                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
                 SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
                 pFrmFmt->NotifyClients( pAnchor, pAnchor );
             }
             if( pPos )
             {
-                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.GetCount() << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
+                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.m_nIdx << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
                 pPos->nNode = *pCNd;
                 pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
             }
@@ -1581,7 +1578,7 @@ namespace
             {
                 SwPosition* pPos = 0;
                 {
-                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.m_nIdx ];
                     const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
                     if( rFlyAnchor.GetCntntAnchor() )
                     {
