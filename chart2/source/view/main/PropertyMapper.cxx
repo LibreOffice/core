@@ -20,6 +20,7 @@
 #include "PropertyMapper.hxx"
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -334,6 +335,19 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
     return m_aShapePropertyMapForLineSeriesProperties;
 }
 
+const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
+{
+    // taget name (drawing layer) : source name (chart model)
+    static tMakePropertyNameMap aMap = tMakePropertyNameMap
+        ( getPropertyNameMapForCharacterProperties() )
+        ( "LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE )
+        ( "LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH )
+        ( "LineColor", CHART_UNONAME_LABEL_BORDER_COLOR )
+        ( "LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS ) // fix the spelling!
+        ;
+    return aMap;
+}
+
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
@@ -425,12 +439,11 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
 {
     //fill character properties into the ValueMap
     tPropertyNameValueMap aValueMap;
-    PropertyMapper::getValueMap( aValueMap
-            , PropertyMapper::getPropertyNameMapForCharacterProperties()
-            , xSourceProp );
+    tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForTextLabelProperties();
+
+    PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 
     //some more shape properties apart from character properties, position-matrix and label string
-    aValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny(drawing::LineStyle_NONE) ) ); // drawing::LineStyle
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
