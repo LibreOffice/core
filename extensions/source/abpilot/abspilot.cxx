@@ -59,8 +59,8 @@ namespace abp
 
 
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
-        :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
-            WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS )
+        :OAddessBookSourcePilot_Base( _pParent,
+            static_cast<sal_uInt32>(WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS) )
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
@@ -126,11 +126,13 @@ namespace abp
         ActivatePage();
 
         typeSelectionChanged( m_aSettings.eType );
+
+        OUString sDialogTitle = ModuleRes(RID_STR_ABSOURCEDIALOGTITLE).toString();
+        SetText(sDialogTitle);
     }
 
     OAddessBookSourcePilot::~OAddessBookSourcePilot()
     {
-        FreeResource();
     }
 
 
@@ -139,18 +141,17 @@ namespace abp
         sal_uInt16 nResId = 0;
         switch ( _nState )
         {
-            case STATE_SELECT_ABTYPE:        nResId = STR_SELECT_ABTYPE; break;
-            case STATE_INVOKE_ADMIN_DIALOG:  nResId = STR_INVOKE_ADMIN_DIALOG; break;
-            case STATE_TABLE_SELECTION:      nResId = STR_TABLE_SELECTION; break;
-            case STATE_MANUAL_FIELD_MAPPING: nResId = STR_MANUAL_FIELD_MAPPING; break;
-            case STATE_FINAL_CONFIRM:        nResId = STR_FINAL_CONFIRM; break;
+            case STATE_SELECT_ABTYPE:        nResId = RID_STR_SELECT_ABTYPE; break;
+            case STATE_INVOKE_ADMIN_DIALOG:  nResId = RID_STR_INVOKE_ADMIN_DIALOG; break;
+            case STATE_TABLE_SELECTION:      nResId = RID_STR_TABLE_SELECTION; break;
+            case STATE_MANUAL_FIELD_MAPPING: nResId = RID_STR_MANUAL_FIELD_MAPPING; break;
+            case STATE_FINAL_CONFIRM:        nResId = RID_STR_FINAL_CONFIRM; break;
         }
         DBG_ASSERT( nResId, "OAddessBookSourcePilot::getStateDisplayName: don't know this state!" );
 
         OUString sDisplayName;
         if ( nResId )
         {
-            svt::OLocalResourceAccess aAccess( ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ), RSC_MODALDIALOG );
             sDisplayName = ModuleRes(nResId).toString();
         }
 
