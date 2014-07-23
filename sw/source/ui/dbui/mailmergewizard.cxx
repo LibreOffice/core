@@ -36,14 +36,12 @@
 #include <vcl/msgbox.hxx>
 
 #include <helpid.h>
-#include <mailmergewizard.hrc>
 
 using namespace svt;
 using namespace ::com::sun::star;
 
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
-                        SW_RES(DLG_MAILMERGEWIZARD),
                         WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP),
         m_pSwView(&rView),
         m_bDocumentLoad( false ),
@@ -60,7 +58,6 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
-    FreeResource();
     ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, false);
