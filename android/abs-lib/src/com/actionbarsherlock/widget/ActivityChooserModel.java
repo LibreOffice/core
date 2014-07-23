@@ -299,7 +299,7 @@ class ActivityChooserModel extends DataSetObservable {
     private boolean mHistoricalRecordsChanged = true;
 
     /**
-     * Hander for scheduling work on client tread.
+     * Handler for scheduling work on client thread.
      */
     private final Handler mHandler = new Handler();
 

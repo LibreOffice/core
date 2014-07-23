@@ -79,7 +79,7 @@ namespace sw
         area, so this sw::Frame simplies matters by providing a single unified
         view of the multitute of elements in writer and their differing quirks.
 
-        A sw::Frame wraps a writer frame and is guaranted to have a suitable
+        A sw::Frame wraps a writer frame and is guaranteed to have a suitable
         anchor position available from it. It hides much of the needless
         complexity of the multitude of floating/inline elements in writer, it...
 

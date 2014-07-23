@@ -25,7 +25,7 @@ import com.sun.star.lang.DisposedException;
  * For every jobs thread id exists a job queue which is registered
  * at the <code>ThreadPool</code>.
  * A JobQueue is splitted in a sync job queue and an async job queue.
- * The sync job queue is the registerd queue, it delegates async jobs
+ * The sync job queue is the registered queue, it delegates async jobs
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>

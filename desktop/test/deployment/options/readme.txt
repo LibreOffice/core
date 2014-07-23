@@ -1,4 +1,4 @@
-Important: The hander component extensionoptions.jar in the extensions may not 
+Important: The handler component extensionoptions.jar in the extensions may not 
 contain exactly the same sources as the one build in the handler directory. To
 make sure that debugging works build the handler directory and put the 
 extensionoptions.jar into the extension.
@@ -10,7 +10,7 @@ leaf1.oxt: Defines a leaf under the node WriterNode
 
 leaf1mod.oxt: Defines a leaf under the node WriterNode
 
-It has a douplicate entry in the manifest.xml (OptionsDialog.xcu). This would cause a DisposedException when uninstalling on OOo 3.0 and prevent the extension from being uninstalled. This is actually a bug of the extensions. However, the error is difficult to investigate. Therefore this was fixed to make OOo more robust (i96690).
+It has a duplicate entry in the manifest.xml (OptionsDialog.xcu). This would cause a DisposedException when uninstalling on OOo 3.0 and prevent the extension from being uninstalled. This is actually a bug of the extensions. However, the error is difficult to investigate. Therefore this was fixed to make OOo more robust (i96690).
 ================================================================================
 
 leaf2.oxt: Defines a leaf under a node that has a name which requires special 

@@ -60,7 +60,7 @@ typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
 #define SFX_CALLMODE_SLOT               0x00    // sync/async from Slot
 #define SFX_CALLMODE_SYNCHRON           0x01    // synchronously in the same Stackframe
 #define SFX_CALLMODE_ASYNCHRON          0x02    // asynchronously via AppEvent
-#define SFX_CALLMODE_RECORD             0x04    // take into accont while recording
+#define SFX_CALLMODE_RECORD             0x04    // take into account while recording
 #define SFX_CALLMODE_API                0x08    // API call (silent)
 #define SFX_CALLMODE_MODAL              0x10    // despite ModalMode
 
@@ -85,7 +85,7 @@ class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
     However these instances will be handled by the Macro <SFX_BINDINGS>
     or the associated <SfxViewFrame>.
 
-    The SfxBindings manages all of its Slot-Ids bound by the registerd
+    The SfxBindings manages all of its Slot-Ids bound by the registered
     controllers and keeps a cache of the <Slot-Server> respectively.
     (it is what we call the combination of SfxShell instance and SfxSlot).
     In the SfxBindings it is stored, if and in this case which controllers
@@ -220,7 +220,7 @@ inline bool SfxBindings::IsInRegistrations() const
 /*  [Description]
 
     Determines whether the <SfxContollerItems> SfxBindings instance is
-    registerd or unregisted, i.e. <SfxBindings::EnterRegistrations()>
+    registered or unregistered, i.e. <SfxBindings::EnterRegistrations()>
     calls that have not been closed by <SfxBindings::LeaveRegistrations()>.
 
     [Return value]

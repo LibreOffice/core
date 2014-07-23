@@ -67,7 +67,7 @@ MailToDispatcher::~MailToDispatcher()
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
-    @descr      A protocol handler is registerd for an URL pattern inside configuration and will
+    @descr      A protocol handler is registered for an URL pattern inside configuration and will
                 be asked by the generic dispatch mechanism inside framework, if he can handle this
                 special URL which match his registration. He can agree by returning of a valid dispatch
                 instance or disagree by returning <NULL/>.

@@ -69,7 +69,7 @@ ServiceHandler::~ServiceHandler()
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
-    @descr      A protocol handler is registerd for an URL pattern inside configuration and will
+    @descr      A protocol handler is registered for an URL pattern inside configuration and will
                 be asked by the generic dispatch mechanism inside framework, if he can handle this
                 special URL which match his registration. He can agree by returning of a valid dispatch
                 instance or disagree by returning <NULL/>.
@@ -231,7 +231,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 /**
     @short      add/remove listener for state events
     @descr      We use an internal container to hold such registered listener. This container lives if we live.
-                And if call pas registration as non breakable transaction - we can accept the request without
+                And if call pass registration as non breakable transaction - we can accept the request without
                 any explicit lock. Because we share our mutex with this container.
 
     @param      xListener

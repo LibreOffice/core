@@ -43,7 +43,7 @@ published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
     void registerThread();
 
 
-    /** revokes the current thread from the list of registerd threads.
+    /** revokes the current thread from the list of registered threads.
 
         <p>This method should be called at the end of every JNI call from Java. </p>
      */
