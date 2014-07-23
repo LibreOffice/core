@@ -48,6 +48,32 @@ namespace svgio
 
                 if(rDocument.hasSvgStyleAttributesById())
                 {
+                    // #i125293# If we have CssStyles we need to buuild a linked list of SvgStyleAttributes
+                    // which represent this for the current object. There are various methods to
+                    // specify CssStyles which need to be taken into account in a given order:
+                    // - 'id' element
+                    // - 'class' element(s)
+                    // - type-dependent elements (e..g. 'rect' for all rect elements)
+                    // - local firect attributes (rOriginal)
+                    // - inherited attributes (up the hierarchy)
+                    // The first three will be collected in maCssStyleVector for the current element
+                    // (once, this will not change) and be linked in the needed order using the
+                    // get/setCssStyleParent at the SvgStyleAttributes which will be used preferred in
+                    // member evaluation over the existing parent hierarchy
+
+                    // check for 'id' references
+                    if(getId())
+                    {
+                        // search for CSS style equal to Id
+                        const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(*getId());
+
+                        if(pNew)
+                        {
+                            const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                        }
+                    }
+
+                    // check for 'class' references
                     if(getClass())
                     {
                         // find all referenced CSS styles, a list of entries is allowed
@@ -87,20 +113,10 @@ namespace svgio
                         }
                     }
 
-                    if(maCssStyleVector.empty() && getId())
+                    // check for class-dependent references to CssStyles
+                    if(rClassStr.getLength())
                     {
-                        // if none found, search for CSS style equal to Id
-                        const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(*getId());
-
-                        if(pNew)
-                        {
-                            const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
-                        }
-                    }
-
-                    if(maCssStyleVector.empty() && !rClassStr.isEmpty())
-                    {
-                        // if none found, search for CSS style equal to class type
+                        // search for CSS style equal to class type
                         const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
 
                         if(pNew)
@@ -111,29 +127,50 @@ namespace svgio
                 }
             }
 
-            if(!maCssStyleVector.empty())
+            if(maCssStyleVector.empty())
             {
-                // #i123510# if CSS styles were found, create a linked list with rOriginal as parent
-                // and all CSS styles as linked children, so that the style attribute has
-                // priority over the CSS style. If there is no style attribute this means that
-                // no values are set at rOriginal, thus it is still correct to have that order.
-                // Repeated style requests should only be issued from sub-Text nodes and I'm not
-                // sure if in-between text nodes may build other chains (should not happen). But
-                // it's only a re-chaining with pointers (cheap), so allow to do it every time.
-                SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(&rOriginal);
-                pCurrent->setCssStyleParent(0);
+                // return original if no CssStlyes found
+                return &rOriginal;
+            }
+            else
+            {
+                // #i125293# rOriginal will be the last element in the linked list; use no CssStyleParent
+                // there (reset it) to ensure that the parent hierarchy will be used when it's base
+                // is referenced. This new chaning inserts the CssStyles before the original style,
+                // this makes the whole process much safer since the original style when used will
+                // be not different to the situation without CssStyles; thus loops which may be caused
+                // by trying to use the parent hierarchy of the owner of the style will be avoided
+                // already in this mechanism. It's still good to keep the supportsParentStyle
+                // from #i125258# in place, though.
+                // This chain building using pointers will be done every time when checkForCssStyle
+                // is used (not the search, only the chaining). This is needed since the CssStyles
+                // themselves will be potentially used multiple times. It is not expensive since it's
+                // only changing some pointers.
+                // The alternative would be to create the style hierarchy for every element (or even
+                // for the element containing the hierarchy) in a vector of pointers and to use that.
+                // Resetting the CssStyleParent on rOriginal is probably not needeed
+                // but simply safer to do.
+                const_cast< SvgStyleAttributes& >(rOriginal).setCssStyleParent(0);
 
-                for(sal_uInt32 a(0); a < maCssStyleVector.size(); a++)
+                // loop over the existing CssStyles and link them. There is a first one, take
+                // as current
+                SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(maCssStyleVector[0]);
+
+                for(sal_uInt32 a(1); a < maCssStyleVector.size(); a++)
                 {
                     SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
 
                     pCurrent->setCssStyleParent(pNext);
                     pCurrent = pNext;
-                    pCurrent->setCssStyleParent(0);
                 }
-            }
 
-            return &rOriginal;
+                // pCurrent is the last used CssStyle, let it point to the original style
+                pCurrent->setCssStyleParent(&rOriginal);
+
+                // return 1st CssStyle as style chain start element (only for the
+                // local element, still no hierarchy used here)
+                return maCssStyleVector[0];
+            }
         }
 
         SvgNode::SvgNode(

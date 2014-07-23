@@ -38,7 +38,8 @@ namespace svgio
 
         const SvgStyleAttributes* SvgTspanNode::getSvgStyleAttributes() const
         {
-            return &maSvgStyleAttributes;
+            // #i125293# Need to support CssStyles in tspan text sections
+            return checkForCssStyle(OUString("tspan"), maSvgStyleAttributes);
         }
 
         void SvgTspanNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
