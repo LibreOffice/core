@@ -1126,45 +1126,6 @@ namespace sw { namespace mark
 
 namespace
 {
-    class _SwSaveTypeCountContent
-    {
-        bool bCharBound;
-        sal_uInt16 nCount;
-        sal_Int32 nContent;
-
-    public:
-        _SwSaveTypeCountContent() { bCharBound=false; nCount=0; nContent = 0; }
-        _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
-            {
-                bCharBound = static_cast<bool>(rArr[ rPos++ ]);
-                nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
-                nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
-            }
-        void Add( std::vector<sal_uLong> &rArr )
-        {
-            rArr.push_back( bCharBound );
-            rArr.push_back( nCount );
-            rArr.push_back( nContent );
-        }
-
-        void SetCharBound( bool bCB )        { bCharBound = bCB; }
-        bool IsCharBound() const          { return bCharBound; }
-
-        void SetCount( sal_uInt16 n )       { nCount = n; }
-        sal_uInt16 GetCount() const         { return nCount; }
-        sal_uInt16 DecCount()               { return --nCount; }
-
-        void SetContent( sal_Int32 n )     { nContent = n; }
-        sal_Int32 GetContent() const       { return nContent; }
-#if OSL_DEBUG_LEVEL > 0
-        void Dump()
-        {
-            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << IsCharBound() << "\tContent: " << GetContent());
-        }
-#endif
-
-    };
-
     // #i59534: If a paragraph will be splitted we have to restore some redline positions
     // This help function checks a position compared with a node and an content index
 
@@ -1197,18 +1158,6 @@ namespace
     {
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
-
-#if 0
-    static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
-    {
-        sal_uInt16 n = 0;
-        while( n < rSaveArr.size() )
-        {
-            _SwSaveTypeCountContent aSave( rSaveArr, n );
-            aSave.Dump();
-        }
-    }
-#endif
 }
 
 // IDocumentMarkAccess for SwDoc
@@ -1419,210 +1368,6 @@ void _DelBookmarks(
 }
 
 
-void _SaveCntntIdx(SwDoc* pDoc,
-    sal_uLong nNode,
-    sal_Int32 nCntnt,
-    std::vector<sal_uLong> &rSaveArr,
-    sal_uInt8 nSaveFly)
-{
-    // 1. Bookmarks
-    _SwSaveTypeCountContent aSave;
-    // 4. Paragraph anchored objects
-    {
-        SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
-        if( pNode )
-        {
-
-            SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
-#if OSL_DEBUG_LEVEL > 1
-            static bool bViaDoc = false;
-            if( bViaDoc )
-                pFrm = NULL;
-#endif
-            if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
-            {
-                if( pFrm->GetDrawObjs() )
-                {
-                    const SwSortedObjs& rDObj = *pFrm->GetDrawObjs();
-                    for( sal_uInt32 n = rDObj.Count(); n; )
-                    {
-                        SwAnchoredObject* pObj = rDObj[ --n ];
-                        const SwFrmFmt& rFmt = pObj->GetFrmFmt();
-                        const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
-                        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
-                        if ( pAPos &&
-                             ( ( nSaveFly &&
-                                 FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
-                               ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
-                        {
-                            aSave.SetCharBound(false);
-                            aSave.SetContent( pAPos->nContent.GetIndex() );
-
-                            OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
-                                    "_SaveCntntIdx: Wrong Node-Index" );
-                            if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
-                            {
-                                if( nCntnt <= aSave.GetContent() )
-                                {
-                                    if( SAVEFLY_SPLIT == nSaveFly )
-                                        aSave.SetCharBound(true);
-                                    else
-                                        continue;
-                                }
-                            }
-                            aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
-                            while( aSave.GetCount() &&
-                                    &rFmt != (*pDoc->GetSpzFrmFmts())[
-                                    aSave.DecCount() ] )
-                                ; // nothing
-                            OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
-                                                    aSave.GetCount() ],
-                                    "_SaveCntntIdx: Lost FrameFormat" );
-                            aSave.Add( rSaveArr );
-                        }
-                    }
-                }
-            }
-            else // No layout, so it's a bit more expensive ...
-            {
-                for( aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
-                        aSave.GetCount() ; )
-                {
-                    SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
-                                                aSave.DecCount() ];
-                    if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
-                            RES_DRAWFRMFMT != pFrmFmt->Which() )
-                        continue;
-
-                    const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-                    SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
-                    if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
-                         ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
-                           FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
-                    {
-                        aSave.SetCharBound(false);
-                        aSave.SetContent( pAPos->nContent.GetIndex() );
-                        if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
-                        {
-                            if( nCntnt <= aSave.GetContent() )
-                            {
-                                if( SAVEFLY_SPLIT == nSaveFly )
-                                    aSave.SetCharBound(true);
-                                else
-                                    continue;
-                            }
-                        }
-                        aSave.Add( rSaveArr );
-                    }
-                }
-            }
-        }
-    }
-}
-
-void _RestoreCntntIdx(SwDoc* pDoc,
-    std::vector<sal_uLong> &rSaveArr,
-    sal_uLong nNode,
-    sal_Int32 nOffset,
-    bool bAuto)
-{
-    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    sal_uInt16 n = 0;
-    while( n < rSaveArr.size() )
-    {
-        _SwSaveTypeCountContent aSave( rSaveArr, n );
-        SwPosition* pPos = 0;
-        if(!aSave.IsCharBound())
-        {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-            const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-            if( rFlyAnchor.GetCntntAnchor() )
-            {
-                SwFmtAnchor aNew( rFlyAnchor );
-                SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                aNewPos.nNode = *pCNd;
-                if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                {
-                    aNewPos.nContent.Assign( pCNd,
-                                             aSave.GetContent() + nOffset );
-                }
-                else
-                {
-                    aNewPos.nContent.Assign( 0, 0 );
-                }
-                aNew.SetAnchor( &aNewPos );
-                pFrmFmt->SetFmtAttr( aNew );
-            }
-        }
-        else if( bAuto )
-        {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-            pFrmFmt->NotifyClients( pAnchor, pAnchor );
-        }
-        if( pPos )
-        {
-#if OSL_DEBUG_LEVEL > 0
-            aSave.Dump();
-#endif
-            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.GetCount() << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
-            pPos->nNode = *pCNd;
-            pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
-        }
-    }
-}
-
-void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
-    const SwNode& rNd,
-    sal_Int32 nLen,
-    sal_Int32 nChkLen)
-{
-    const SwDoc* pDoc = rNd.GetDoc();
-    const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-
-    sal_uInt16 n = 0;
-    while( n < rSaveArr.size() )
-    {
-        _SwSaveTypeCountContent aSave( rSaveArr, n );
-        if( aSave.GetContent() >= nChkLen )
-            rSaveArr[ n-1 ] -= nChkLen;
-        else
-        {
-            SwPosition* pPos = 0;
-            {
-                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
-                const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-                if( rFlyAnchor.GetCntntAnchor() )
-                {
-                    SwFmtAnchor aNew( rFlyAnchor );
-                    SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                    aNewPos.nNode = rNd;
-                    if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
-                    {
-                        aNewPos.nContent.Assign( pCNd, std::min(
-                                                 aSave.GetContent(), nLen ) );
-                    }
-                    else
-                    {
-                        aNewPos.nContent.Assign( 0, 0 );
-                    }
-                    aNew.SetAnchor( &aNewPos );
-                    pFrmFmt->SetFmtAttr( aNew );
-                }
-            }
-
-            if( pPos )
-            {
-                pPos->nNode = rNd;
-                pPos->nContent.Assign( pCNd, std::min( aSave.GetContent(), nLen ) );
-            }
-            n -= 2;
-            rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 2);
-        }
-    }
-}
 
 namespace
 {
@@ -1644,6 +1389,248 @@ namespace
         bool m_isMark;
         sal_Int32 m_nCntnt;
     };
+    class _SwSaveTypeCountContent
+    {
+        bool bCharBound;
+        sal_uInt16 nCount;
+        sal_Int32 nContent;
+
+    public:
+        _SwSaveTypeCountContent() { bCharBound=false; nCount=0; nContent = 0; }
+        _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
+            {
+                bCharBound = static_cast<bool>(rArr[ rPos++ ]);
+                nCount = static_cast<sal_uInt16>(rArr[ rPos++ ]);
+                nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
+            }
+        void Add( std::vector<sal_uLong> &rArr )
+        {
+            rArr.push_back( bCharBound );
+            rArr.push_back( nCount );
+            rArr.push_back( nContent );
+        }
+
+        void SetCharBound( bool bCB )        { bCharBound = bCB; }
+        bool IsCharBound() const          { return bCharBound; }
+
+        void SetCount( sal_uInt16 n )       { nCount = n; }
+        sal_uInt16 GetCount() const         { return nCount; }
+        sal_uInt16 DecCount()               { return --nCount; }
+
+        void SetContent( sal_Int32 n )     { nContent = n; }
+        sal_Int32 GetContent() const       { return nContent; }
+#if OSL_DEBUG_LEVEL > 0
+        void Dump()
+        {
+            SAL_INFO("sw.core", "Count: " << GetCount() << "\tType: " << IsCharBound() << "\tContent: " << GetContent());
+        }
+#endif
+
+    };
+    void _SaveCntntIdx(SwDoc* pDoc,
+        sal_uLong nNode,
+        sal_Int32 nCntnt,
+        std::vector<sal_uLong> &rSaveArr,
+        sal_uInt8 nSaveFly)
+    {
+        // 1. Bookmarks
+        _SwSaveTypeCountContent aSave;
+        // 4. Paragraph anchored objects
+        {
+            SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+            if( pNode )
+            {
+
+                SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
+    #if OSL_DEBUG_LEVEL > 1
+                static bool bViaDoc = false;
+                if( bViaDoc )
+                    pFrm = NULL;
+    #endif
+                if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
+                {
+                    if( pFrm->GetDrawObjs() )
+                    {
+                        const SwSortedObjs& rDObj = *pFrm->GetDrawObjs();
+                        for( sal_uInt32 n = rDObj.Count(); n; )
+                        {
+                            SwAnchoredObject* pObj = rDObj[ --n ];
+                            const SwFrmFmt& rFmt = pObj->GetFrmFmt();
+                            const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
+                            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                            if ( pAPos &&
+                                 ( ( nSaveFly &&
+                                     FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
+                                   ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
+                            {
+                                aSave.SetCharBound(false);
+                                aSave.SetContent( pAPos->nContent.GetIndex() );
+
+                                OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
+                                        "_SaveCntntIdx: Wrong Node-Index" );
+                                if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
+                                {
+                                    if( nCntnt <= aSave.GetContent() )
+                                    {
+                                        if( SAVEFLY_SPLIT == nSaveFly )
+                                            aSave.SetCharBound(true);
+                                        else
+                                            continue;
+                                    }
+                                }
+                                aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
+                                while( aSave.GetCount() &&
+                                        &rFmt != (*pDoc->GetSpzFrmFmts())[
+                                        aSave.DecCount() ] )
+                                    ; // nothing
+                                OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
+                                                        aSave.GetCount() ],
+                                        "_SaveCntntIdx: Lost FrameFormat" );
+                                aSave.Add( rSaveArr );
+                            }
+                        }
+                    }
+                }
+                else // No layout, so it's a bit more expensive ...
+                {
+                    for( aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
+                            aSave.GetCount() ; )
+                    {
+                        SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
+                                                    aSave.DecCount() ];
+                        if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
+                                RES_DRAWFRMFMT != pFrmFmt->Which() )
+                            continue;
+
+                        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+                        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                        if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+                             ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                               FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
+                        {
+                            aSave.SetCharBound(false);
+                            aSave.SetContent( pAPos->nContent.GetIndex() );
+                            if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
+                            {
+                                if( nCntnt <= aSave.GetContent() )
+                                {
+                                    if( SAVEFLY_SPLIT == nSaveFly )
+                                        aSave.SetCharBound(true);
+                                    else
+                                        continue;
+                                }
+                            }
+                            aSave.Add( rSaveArr );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void _RestoreCntntIdx(SwDoc* pDoc,
+        std::vector<sal_uLong> &rSaveArr,
+        sal_uLong nNode,
+        sal_Int32 nOffset,
+        bool bAuto)
+    {
+        SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+        SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+        sal_uInt16 n = 0;
+        while( n < rSaveArr.size() )
+        {
+            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            SwPosition* pPos = 0;
+            if(!aSave.IsCharBound())
+            {
+                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
+                if( rFlyAnchor.GetCntntAnchor() )
+                {
+                    SwFmtAnchor aNew( rFlyAnchor );
+                    SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
+                    aNewPos.nNode = *pCNd;
+                    if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                    {
+                        aNewPos.nContent.Assign( pCNd,
+                                                 aSave.GetContent() + nOffset );
+                    }
+                    else
+                    {
+                        aNewPos.nContent.Assign( 0, 0 );
+                    }
+                    aNew.SetAnchor( &aNewPos );
+                    pFrmFmt->SetFmtAttr( aNew );
+                }
+            }
+            else if( bAuto )
+            {
+                SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
+                pFrmFmt->NotifyClients( pAnchor, pAnchor );
+            }
+            if( pPos )
+            {
+    #if OSL_DEBUG_LEVEL > 0
+                aSave.Dump();
+    #endif
+                SAL_INFO("sw.core", "setting " << pPos << " for Index " << aSave.GetCount() << " on Node " << nNode << " from " << pPos->nContent.GetIndex() << " to " << (aSave.GetContent() + nOffset));
+                pPos->nNode = *pCNd;
+                pPos->nContent.Assign( pCNd, aSave.GetContent() + nOffset );
+            }
+        }
+    }
+
+    void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
+        const SwNode& rNd,
+        sal_Int32 nLen,
+        sal_Int32 nChkLen)
+    {
+        const SwDoc* pDoc = rNd.GetDoc();
+        const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+        SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+
+        sal_uInt16 n = 0;
+        while( n < rSaveArr.size() )
+        {
+            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            if( aSave.GetContent() >= nChkLen )
+                rSaveArr[ n-1 ] -= nChkLen;
+            else
+            {
+                SwPosition* pPos = 0;
+                {
+                    SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
+                    const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
+                    if( rFlyAnchor.GetCntntAnchor() )
+                    {
+                        SwFmtAnchor aNew( rFlyAnchor );
+                        SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
+                        aNewPos.nNode = rNd;
+                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                        {
+                            aNewPos.nContent.Assign( pCNd, std::min(
+                                                     aSave.GetContent(), nLen ) );
+                        }
+                        else
+                        {
+                            aNewPos.nContent.Assign( 0, 0 );
+                        }
+                        aNew.SetAnchor( &aNewPos );
+                        pFrmFmt->SetFmtAttr( aNew );
+                    }
+                }
+
+                if( pPos )
+                {
+                    pPos->nNode = rNd;
+                    pPos->nContent.Assign( pCNd, std::min( aSave.GetContent(), nLen ) );
+                }
+                n -= 2;
+                rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 2);
+            }
+        }
+    }
     struct OffsetUpdater
     {
         const SwCntntNode* m_pNewCntntNode;
@@ -1774,11 +1761,21 @@ namespace
             rPaMEntries.push_back(aEntry);
         }
     }
+
 #if 0
     static void DumpEntries(std::vector<MarkEntry>* pEntries)
     {
         BOOST_FOREACH(MarkEntry& aEntry, *pEntries)
             aEntry.Dump();
+    }
+    static void DumpSaves(std::vector<sal_uLong> &rSaveArr)
+    {
+        sal_uInt16 n = 0;
+        while( n < rSaveArr.size() )
+        {
+            _SwSaveTypeCountContent aSave( rSaveArr, n );
+            aSave.Dump();
+        }
     }
 #endif
 }
@@ -1967,6 +1964,7 @@ void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater
         rUpdater(aEntry.m_pPaM->GetBound(aEntry.m_isMark), aEntry.m_nCntnt);
     }
 }
+
 namespace sw { namespace mark {
     boost::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
     {
