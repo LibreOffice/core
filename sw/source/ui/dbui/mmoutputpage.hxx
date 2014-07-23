@@ -149,7 +149,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 
     SvSimpleTableContainer  *m_pContainer;
     HeaderBar               *m_pStatusHB;
-    SvTabListBox            *m_pStatusLB;
     SvSimpleTable           *m_pStatus;
 
     PushButton              *m_pStop;
