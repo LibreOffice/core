@@ -37,6 +37,7 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
+#include<boost/make_shared.hpp>
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -398,7 +399,7 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
         pLogger->attribute("value", std::string("(null)"));
 
     pLogger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
+            IdToString::Pointer_t(boost::make_shared<OOXMLIdToString>()));
 
     mpParserState->dumpXml( pLogger );
 
@@ -453,16 +454,16 @@ void OOXMLFastContextHandler::sendTableDepth() const
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(mnTableDepth));
+                (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(1));
+                (boost::make_shared<OOXMLIntegerValue>(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
@@ -540,8 +541,8 @@ void OOXMLFastContextHandler::endParagraphGroup()
 void OOXMLFastContextHandler::startSdt()
 {
     OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
-    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
-    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    OOXMLValue::Pointer_t pVal(boost::make_shared<OOXMLIntegerValue>(1));
+    OOXMLProperty::Pointer_t pProp(boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
     pProps->add(pProp);
     mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 }
@@ -549,8 +550,8 @@ void OOXMLFastContextHandler::startSdt()
 void OOXMLFastContextHandler::endSdt()
 {
     OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
-    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
-    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    OOXMLValue::Pointer_t pVal(boost::make_shared<OOXMLIntegerValue>(1));
+    OOXMLProperty::Pointer_t pProp(boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
     pProps->add(pProp);
     mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 }
@@ -772,11 +773,11 @@ void OOXMLFastContextHandler::propagateCharacterProperties()
 
 void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
 {
-    OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
-    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
+    OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLPropertySetValue>(getPropertySet()));
+    OOXMLPropertySet::Pointer_t pPropertySet(boost::make_shared<OOXMLPropertySetImpl>());
 
     OOXMLProperty::Pointer_t pProp
-        (new OOXMLPropertyImpl(rId, pValue, OOXMLPropertyImpl::SPRM));
+        (boost::make_shared<OOXMLPropertyImpl>(rId, pValue, OOXMLPropertyImpl::SPRM));
 
     pPropertySet->add(pProp);
     mpParserState->setCharacterProperties(pPropertySet);
@@ -822,16 +823,16 @@ void OOXMLFastContextHandler::sendTableProperties()
 void OOXMLFastContextHandler::clearTableProps()
 {
     mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
-                                     (new OOXMLPropertySetImpl()));
+                                     (boost::make_shared<OOXMLPropertySetImpl>()));
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 {
-    OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
-    OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
+    OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLPropertySetValue>(getPropertySet()));
+    OOXMLPropertySet::Pointer_t pPropertySet(boost::make_shared<OOXMLPropertySetImpl>());
 
     OOXMLProperty::Pointer_t pProp
-    (new OOXMLPropertyImpl(rId, pValue, OOXMLPropertyImpl::SPRM));
+    (boost::make_shared<OOXMLPropertyImpl>(rId, pValue, OOXMLPropertyImpl::SPRM));
 
     pPropertySet->add(pProp);
     mpStream->props(pPropertySet);
@@ -839,7 +840,7 @@ void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 
 void OOXMLFastContextHandler::clearProps()
 {
-    setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl()));
+    setPropertySet(OOXMLPropertySet::Pointer_t(boost::make_shared<OOXMLPropertySetImpl>()));
 }
 
 void OOXMLFastContextHandler::setDefaultBooleanValue()
@@ -939,7 +940,7 @@ void OOXMLFastContextHandler::resolveData(const OUString & rId)
     uno::Reference<io::XInputStream> xInputStream
         (objDocument->getInputStreamForId(rId));
 
-    OOXMLValue::Pointer_t aValue(new OOXMLInputStreamValue(xInputStream));
+    OOXMLValue::Pointer_t aValue(boost::make_shared<OOXMLInputStreamValue>(xInputStream));
 
     newProperty(NS_ooxml::LN_inputstream, aValue);
 }
@@ -963,7 +964,7 @@ void OOXMLFastContextHandler::sendPropertyToParent()
         if (pProps.get() != NULL)
         {
             OOXMLProperty::Pointer_t
-                pProp(new OOXMLPropertyImpl(mId, getValue(),
+                pProp(boost::make_shared<OOXMLPropertyImpl>(mId, getValue(),
                                             OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
@@ -983,10 +984,10 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
             if (pProps.get() != NULL)
             {
                 OOXMLValue::Pointer_t pValue
-                (new OOXMLPropertySetValue(getPropertySet()));
+                (boost::make_shared<OOXMLPropertySetValue>(getPropertySet()));
 
                 OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(getId(), pValue, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(getId(), pValue, OOXMLPropertyImpl::SPRM));
 
 
                 pParentProps->add(pProp);
@@ -1018,7 +1019,7 @@ void OOXMLFastContextHandlerStream::newProperty(const Id & rId,
     if (rId != 0x0)
     {
         OOXMLPropertyImpl::Pointer_t pProperty
-            (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+            (boost::make_shared<OOXMLPropertyImpl>(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
 
         mpPropertySetAttrs->add(pProperty);
     }
@@ -1089,7 +1090,7 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
 
 OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
 {
-    return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
+    return OOXMLValue::Pointer_t(boost::make_shared<OOXMLPropertySetValue>(mpPropertySet));
 }
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -1116,7 +1117,7 @@ void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLog
     pLogger->attribute("resolve", mbResolve ? "resolve" : "noResolve");
 
     pLogger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
+            IdToString::Pointer_t(boost::make_shared<OOXMLIdToString>()));
 
     mpParserState->dumpXml( pLogger );
 
@@ -1130,7 +1131,7 @@ void OOXMLFastContextHandlerProperties::newProperty
     if (rId != 0x0)
     {
         OOXMLPropertyImpl::Pointer_t pProperty
-            (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+            (boost::make_shared<OOXMLPropertyImpl>(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
 
         mpPropertySet->add(pProperty);
     }
@@ -1250,7 +1251,7 @@ void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
 {
     OOXMLPropertySet::Pointer_t pPropSet(mpPropertySet->clone());
     OOXMLTableImpl::ValuePointer_t pTmpVal
-        (new OOXMLPropertySetValue(pPropSet));
+        (boost::make_shared<OOXMLPropertySetValue>(pPropSet));
 
     mTable.add(pTmpVal);
 
@@ -1298,7 +1299,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
+        OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLBooleanValue>(true));
         setValue(pValue);
     }
 }
@@ -1307,7 +1308,7 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(0));
+        OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLIntegerValue>(0));
         setValue(pValue);
     }
 }
@@ -1316,7 +1317,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(sal_uInt32(0)));
+        OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLHexValue>(sal_uInt32(0)));
         setValue(pValue);
     }
 }
@@ -1325,7 +1326,7 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
+        OOXMLValue::Pointer_t pValue(boost::make_shared<OOXMLStringValue>(OUString()));
         setValue(pValue);
     }
 }
@@ -1469,23 +1470,23 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(mnTableDepth));
+                (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(1));
+                (boost::make_shared<OOXMLIntegerValue>(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLBooleanValue(mnTableDepth > 0));
+                (boost::make_shared<OOXMLBooleanValue>(mnTableDepth > 0));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
@@ -1520,23 +1521,23 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(mnTableDepth));
+                (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(1));
+                (boost::make_shared<OOXMLIntegerValue>(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared<OOXMLPropertyImpl>(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
         {
             OOXMLValue::Pointer_t pVal
-                (new OOXMLIntegerValue(1));
+                (boost::make_shared<OOXMLIntegerValue>(1));
             OOXMLProperty::Pointer_t pProp
-                (new OOXMLPropertyImpl(NS_ooxml::LN_tblRow, pVal, OOXMLPropertyImpl::SPRM));
+                (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_tblRow, pVal, OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
         }
 
@@ -1569,39 +1570,39 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
             OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
             {
                 OOXMLValue::Pointer_t pVal
-                    (new OOXMLIntegerValue(mnTableDepth));
+                    (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
                 OOXMLProperty::Pointer_t pProp
-                    (new OOXMLPropertyImpl(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
+                    (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_tblDepth, pVal, OOXMLPropertyImpl::SPRM));
                 pProps->add(pProp);
             }
             {
                 OOXMLValue::Pointer_t pVal
-                    (new OOXMLIntegerValue(1));
+                    (boost::make_shared<OOXMLIntegerValue>(1));
                 OOXMLProperty::Pointer_t pProp
-                    (new OOXMLPropertyImpl(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
+                    (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_inTbl, pVal, OOXMLPropertyImpl::SPRM));
                 pProps->add(pProp);
             }
             {
                 OOXMLValue::Pointer_t pVal
                     (new OOXMLBooleanValue(mnTableDepth > 0));
                 OOXMLProperty::Pointer_t pProp
-                    (new OOXMLPropertyImpl(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
+                    (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_tblCell, pVal, OOXMLPropertyImpl::SPRM));
                 pProps->add(pProp);
             }
 
             mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 
             // fake <w:tcBorders> with no border
-            OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySetImpl());
+            OOXMLPropertySet::Pointer_t pCellProps( boost::make_shared<OOXMLPropertySetImpl>());
             {
-                OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySetImpl());
+                OOXMLPropertySet::Pointer_t pBorderProps( boost::make_shared<OOXMLPropertySetImpl>());
                 static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for( size_t j = 0; j < SAL_N_ELEMENTS( borders ); ++j )
                     pBorderProps->add( fakeNoBorder( borders[ j ] ));
-                OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pBorderProps ));
+                OOXMLValue::Pointer_t pValue( boost::make_shared<OOXMLPropertySetValue>( pBorderProps ));
                 OOXMLProperty::Pointer_t pProp
-                    (new OOXMLPropertyImpl(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLPropertyImpl::SPRM));
+                    (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLPropertyImpl::SPRM));
                 pCellProps->add(pProp);
                 mpParserState->setCellProperties(pCellProps);
             }
@@ -1614,14 +1615,14 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
 
 OOXMLProperty::Pointer_t OOXMLFastContextHandlerTextTableRow::fakeNoBorder( Id id )
 {
-    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySetImpl());
-    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(0));
+    OOXMLPropertySet::Pointer_t pProps( boost::make_shared<OOXMLPropertySetImpl>());
+    OOXMLValue::Pointer_t pVal(boost::make_shared<OOXMLIntegerValue>(0));
     OOXMLProperty::Pointer_t pPropVal
-        (new OOXMLPropertyImpl(NS_ooxml::LN_CT_Border_val, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+        (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_CT_Border_val, pVal, OOXMLPropertyImpl::ATTRIBUTE));
     pProps->add(pPropVal);
-    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pProps ));
+    OOXMLValue::Pointer_t pValue( boost::make_shared<OOXMLPropertySetValue>( pProps ));
     OOXMLProperty::Pointer_t pProp
-        (new OOXMLPropertyImpl(id, pValue, OOXMLPropertyImpl::SPRM));
+        (boost::make_shared< OOXMLPropertyImpl>(id, pValue, OOXMLPropertyImpl::SPRM));
     return pProp;
 }
 
@@ -1648,12 +1649,12 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
     mpParserState->startTable();
     mnTableDepth++;
 
-    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    boost::shared_ptr<OOXMLPropertySet> pProps( boost::make_shared<OOXMLPropertySetImpl>() );
     {
         OOXMLValue::Pointer_t pVal
-            (new OOXMLIntegerValue(mnTableDepth));
+            (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
         OOXMLProperty::Pointer_t pProp
-            (new OOXMLPropertyImpl(NS_ooxml::LN_tblStart, pVal, OOXMLPropertyImpl::SPRM));
+            (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_tblStart, pVal, OOXMLPropertyImpl::SPRM));
         pProps->add(pProp);
     }
     mpParserState->setCharacterProperties(pProps);
@@ -1667,12 +1668,12 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 {
     endAction(Element);
 
-    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    boost::shared_ptr<OOXMLPropertySet> pProps( boost::make_shared<OOXMLPropertySetImpl>());
     {
         OOXMLValue::Pointer_t pVal
-            (new OOXMLIntegerValue(mnTableDepth));
+            (boost::make_shared<OOXMLIntegerValue>(mnTableDepth));
         OOXMLProperty::Pointer_t pProp
-            (new OOXMLPropertyImpl(NS_ooxml::LN_tblEnd, pVal, OOXMLPropertyImpl::SPRM));
+            (boost::make_shared< OOXMLPropertyImpl>(NS_ooxml::LN_tblEnd, pVal, OOXMLPropertyImpl::SPRM));
         pProps->add(pProp);
     }
     mpParserState->setCharacterProperties(pProps);
@@ -1752,7 +1753,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
         if (xShape.is())
         {
             OOXMLValue::Pointer_t
-                pValue(new OOXMLShapeValue(xShape));
+                pValue(boost::make_shared<OOXMLShapeValue>(xShape));
             newProperty(NS_ooxml::LN_shape, pValue);
             m_bShapeSent = true;
 
@@ -2215,8 +2216,8 @@ void OOXMLFastContextHandlerMath::process()
     if (isForwardEvents())
     {
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
-        OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        OOXMLProperty::Pointer_t pProp( new OOXMLPropertyImpl( NS_ooxml::LN_starmath, pVal, OOXMLPropertyImpl::ATTRIBUTE ));
+        OOXMLValue::Pointer_t pVal( boost::make_shared<OOXMLStarMathValue>( ref ));
+        OOXMLProperty::Pointer_t pProp( boost::make_shared<OOXMLPropertyImpl>( NS_ooxml::LN_starmath, pVal, OOXMLPropertyImpl::ATTRIBUTE ));
         pProps->add( pProp );
         mpStream->props( writerfilter::Reference< Properties >::Pointer_t( pProps ));
     }

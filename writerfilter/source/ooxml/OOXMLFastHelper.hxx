@@ -22,6 +22,7 @@
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
 #include "OOXMLFastContextHandler.hxx"
+#include<boost/make_shared.hpp>
 
 namespace writerfilter {
 
@@ -68,7 +69,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
                                      Id nId,
                                      const OUString & rValue)
 {
-    OOXMLValue::Pointer_t pVal(new T(rValue));
+    OOXMLValue::Pointer_t pVal(boost::make_shared<T>(rValue));
 
     pHandler->newProperty(nId, pVal);
 }
@@ -78,7 +79,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
                                      Id nId,
                                      sal_Int32 nVal)
 {
-    OOXMLValue::Pointer_t pVal(new T(nVal));
+    OOXMLValue::Pointer_t pVal(boost::make_shared<T>(nVal));
 
     pHandler->newProperty(nId, pVal);
 }

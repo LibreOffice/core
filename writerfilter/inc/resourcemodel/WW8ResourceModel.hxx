@@ -22,10 +22,10 @@
 
 #include <string>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include<boost/shared_ptr.hpp>
 /**
    @file WW8ResourceModel.hxx
 

@@ -28,7 +28,8 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 
 #include "OOXMLFastContextHandler.hxx"
-#include <boost/intrusive_ptr.hpp>
+
+
 
 namespace writerfilter {
 namespace ooxml {
@@ -95,7 +96,7 @@ typedef boost::unordered_map<Id, TokenToIdMapPointer> TokenToIdsMap;
 
 class OOXMLFactory_ns {
 public:
-    typedef boost::intrusive_ptr<OOXMLFactory_ns> Pointer_t;
+    typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
@@ -110,13 +111,9 @@ public:
     ListValueMapPointer getListValueMap(Id nId);
     CreateElementMapPointer getCreateElementMap(Id nId);
     TokenToIdMapPointer getTokenToIdMap(Id nId);
-    sal_uInt32 mnRefCnt;
-    OOXMLFactory_ns();
-    virtual ~OOXMLFactory_ns();
 
 protected:
-
-
+     virtual ~OOXMLFactory_ns();
     AttributesMap m_AttributesMap;
     ListValuesMap m_ListValuesMap;
     CreateElementsMap m_CreateElementsMap;
@@ -130,8 +127,9 @@ protected:
 
 class OOXMLFactory
 {
+
 public:
-    typedef boost::intrusive_ptr<OOXMLFactory>Pointer_t;
+    typedef boost::shared_ptr<OOXMLFactory>Pointer_t;
 
     static Pointer_t getInstance();
 
@@ -151,8 +149,6 @@ public:
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
     virtual ~OOXMLFactory();
-     sal_uInt32 mnRefCnt;
-
 private:
     static Pointer_t m_Instance;
 
@@ -164,20 +160,6 @@ private:
                                       OOXMLFactory_ns::Pointer_t pFactory,
                                       Token_t Element);
 };
-
-
-template <class T>
-  inline void intrusive_ptr_add_ref(T* p)
-  {
-    p->mnRefCnt++;
-  }
-  template <class T>
-  inline void intrusive_ptr_release(T* p)
-  {
-    if (!(--p->mnRefCnt))
-      delete p;
-  }
-
 
 }
 }

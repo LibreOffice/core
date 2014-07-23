@@ -31,7 +31,7 @@ namespace ooxml {
     print("""class OOXMLFactory_%s : public OOXMLFactory_ns
 {
 public:
-    typedef boost::intrusive_ptr <OOXMLFactory_ns> Pointer_t;
+    typedef boost::shared_ptr <OOXMLFactory_ns> Pointer_t;
 
     static Pointer_t getInstance();
 
