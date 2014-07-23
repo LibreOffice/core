@@ -1157,16 +1157,11 @@ namespace
 
         void SetType( sal_uInt16 n )        { TYPECOUNT.TC.nType = n; }
         sal_uInt16 GetType() const          { return TYPECOUNT.TC.nType; }
-        void IncType()                  { ++TYPECOUNT.TC.nType; }
-        void DecType()                  { --TYPECOUNT.TC.nType; }
 
         void SetCount( sal_uInt16 n )       { TYPECOUNT.TC.nCount = n; }
         sal_uInt16 GetCount() const         { return TYPECOUNT.TC.nCount; }
         sal_uInt16 IncCount()               { return ++TYPECOUNT.TC.nCount; }
         sal_uInt16 DecCount()               { return --TYPECOUNT.TC.nCount; }
-
-        void SetTypeAndCount( sal_uInt16 nT, sal_uInt16 nC )
-            { TYPECOUNT.TC.nCount = nC; TYPECOUNT.TC.nType = nT; }
 
         void SetContent( sal_Int32 n )     { nContent = n; }
         sal_Int32 GetContent() const       { return nContent; }
@@ -1479,7 +1474,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                                 if( nCntnt <= aSave.GetContent() )
                                 {
                                     if( SAVEFLY_SPLIT == nSaveFly )
-                                        aSave.IncType(); // = 0x2001;
+                                        aSave.SetType( 0x2001 );
                                     else
                                         continue;
                                 }
@@ -1521,7 +1516,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                             if( nCntnt <= aSave.GetContent() )
                             {
                                 if( SAVEFLY_SPLIT == nSaveFly )
-                                    aSave.IncType(); // = 0x2001;
+                                    aSave.SetType( 0x2001 );
                                 else
                                     continue;
                             }
