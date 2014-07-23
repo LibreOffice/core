@@ -18,6 +18,9 @@
  */
 
 #include <cstdarg>
+
+#include <boost/static_assert.hpp>
+
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
@@ -155,9 +158,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         // as long as our reference to the XJavaVM service lasts), and
         // convert the non-refcounted pointer into a refcounted one
         // immediately:
-        OSL_ENSURE(sizeof (sal_Int64)
-                        >= sizeof (jvmaccess::UnoVirtualMachine *),
-                    "Pointer cannot be represented as sal_Int64");
+        BOOST_STATIC_ASSERT(sizeof (sal_Int64)
+                        >= sizeof (jvmaccess::UnoVirtualMachine *));
         sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
             static_cast< jvmaccess::UnoVirtualMachine * >(0));
         javaVM_xJavaVM->getJavaVM(processID) >>= nPointer;
