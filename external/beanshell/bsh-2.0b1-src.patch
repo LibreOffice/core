@@ -83,3 +83,36 @@
  		BshClassPath bcp = new BshClassPath( "Test", urls );
  	}
  
+--- misc/BeanShell/src/bsh/util/AWTConsole.java	2003-12-19 17:14:29.000000000 +0100
++++ misc/build/BeanShell/src/bsh/util/AWTConsole.java	2014-07-23 07:32:12.000000000 +0200
+@@ -325,7 +325,7 @@
+ 		final Frame f = new Frame("Bsh Console");
+ 		f.add(console, "Center");
+ 		f.pack();
+-		f.show();
++		f.setVisible(true);
+ 		f.addWindowListener( new WindowAdapter() {
+ 			public void windowClosing( WindowEvent e ) {
+ 				f.dispose();
+--- misc/BeanShell/src/bsh/util/ClassBrowser.java	2003-12-19 17:14:29.000000000 +0100
++++ misc/build/BeanShell/src/bsh/util/ClassBrowser.java	2014-07-23 07:32:52.000000000 +0200
+@@ -409,7 +409,7 @@
+ 		f.getContentPane().add( "Center", cb );
+ 		cb.setFrame( f );
+ 		f.pack();
+-		f.show();
++		f.setVisible(true);
+ 	}
+ 
+ 	public void setFrame( JFrame frame ) {
+--- misc/BeanShell/src/bsh/util/Util.java	2003-12-19 17:14:29.000000000 +0100
++++ misc/build/BeanShell/src/bsh/util/Util.java	2014-07-23 07:33:29.000000000 +0200
+@@ -80,7 +80,7 @@
+         try { mt.waitForAll(); } catch ( Exception e ) { }
+         Graphics gr=can.getBufferedGraphics();
+         gr.drawImage(img, 0, 0, can);
+-        win.show();
++        win.setVisible(true);
+         win.toFront();
+ 		splashScreen = win;
+ 	}
