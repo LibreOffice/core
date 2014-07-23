@@ -38,13 +38,13 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     pSrtLst = new _SetGetExpFlds();
 
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = rFldTypes.size();
+    const size_t nSize = rFldTypes.size();
 
     // iterate over all types
-    for(sal_uInt16 i=0; i < nSize; ++i)
+    for(size_t i=0; i < nSize; ++i)
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        sal_uInt16 nType = pFldType->Which();
+        const sal_uInt16 nType = pFldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
@@ -82,13 +82,13 @@ SwInputFieldList::~SwInputFieldList()
     delete pSrtLst;
 }
 
-sal_uInt16 SwInputFieldList::Count() const
+size_t SwInputFieldList::Count() const
 {
     return pSrtLst->size();
 }
 
 // get field from list in sorted order
-SwField* SwInputFieldList::GetField(sal_uInt16 nId)
+SwField* SwInputFieldList::GetField(size_t nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetTxtFld();
     OSL_ENSURE( pTxtFld, "no TextFld" );
@@ -109,7 +109,7 @@ void SwInputFieldList::PopCrsr()
 }
 
 /// go to position of a field
-void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
+void SwInputFieldList::GotoFieldPos(size_t nId)
 {
     pSh->StartAllAction();
     (*pSrtLst)[ nId ]->GetPosOfContent( *pSh->GetCrsr()->GetPoint() );
@@ -121,18 +121,18 @@ void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
  * All new ones are added to SortList so that they can be updated.
  * For text blocks: update only input fields.
  *
- * @return count
+ * @return true if not empty
  */
-sal_uInt16 SwInputFieldList::BuildSortLst()
+bool SwInputFieldList::BuildSortLst()
 {
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    sal_uInt16 nSize = rFldTypes.size();
+    const size_t nSize = rFldTypes.size();
 
     // iterate over all types
-    for( sal_uInt16 i = 0; i < nSize; ++i )
+    for( size_t i = 0; i < nSize; ++i )
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        sal_uInt16 nType = pFldType->Which();
+        const sal_uInt16 nType = pFldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
         {
@@ -166,7 +166,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
 
     // the pointers are not needed anymore
     aTmpLst.clear();
-    return pSrtLst->size();
+    return !pSrtLst->empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

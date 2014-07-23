@@ -137,14 +137,14 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
     if( !pTmp )
         pTmp = new SwInputFieldList( this );
 
-    const sal_uInt16 nCnt = pTmp->Count();
+    const size_t nCnt = pTmp->Count();
     if(nCnt)
     {
         pTmp->PushCrsr();
 
         bool bCancel = false;
         OString aDlgPos;
-        for( sal_uInt16 i = 0; i < nCnt && !bCancel; ++i )
+        for( size_t i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
             SwField* pField = pTmp->GetField( i );

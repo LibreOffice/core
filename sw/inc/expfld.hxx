@@ -357,17 +357,17 @@ public:
     SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst = false );
     ~SwInputFieldList();
 
-    sal_uInt16      Count() const;
-    SwField*    GetField(sal_uInt16 nId);
+    size_t      Count() const;
+    SwField*    GetField(size_t nId);
 
-    void        GotoFieldPos(sal_uInt16 nId);
+    void        GotoFieldPos(size_t nId);
     void        PushCrsr();
     void        PopCrsr();
 
-    /** Put all that are new into SortLst for updating. @return count.
+    /** Put all that are new into SortLst for updating. @return true if not empty.
      (For Glossary: only update its input-fields).
      Compare TmpLst with current fields. */
-    sal_uInt16      BuildSortLst();
+    bool        BuildSortLst();
 
 private:
     SwEditShell*              pSh;
