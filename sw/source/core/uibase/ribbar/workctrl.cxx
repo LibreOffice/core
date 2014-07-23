@@ -136,7 +136,7 @@ SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void SwTbxInsertCtrl::Select( sal_Bool /*bMod1*/ )
+void SwTbxInsertCtrl::Select( sal_uInt16 /*nSelectModifier*/ )
 {
     if( nLastSlotId )
     {
