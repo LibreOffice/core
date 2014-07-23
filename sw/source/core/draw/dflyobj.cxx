@@ -469,9 +469,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             // if there's no viewport set, all fly-frames will be painted,
             // which is slow, wastes memory, and can cause other trouble.
             (void) rViewInformation; // suppress "unused parameter" warning
-            if (!pShell->IsTiledRendering())
-                // FIXME is it OK to have no viewport during tiled rendering?
-                assert(!rViewInformation.getViewport().isEmpty());
+            assert(!rViewInformation.getViewport().isEmpty());
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
