@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -475,7 +476,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     if( nFetchDirection != -1 )
         nDeleted++;
 
-    Sequence< Property >* pOrigProps = new Sequence<Property> ( *m_pProperties );
+    boost::scoped_ptr<Sequence< Property > > pOrigProps(new Sequence<Property> ( *m_pProperties ));
     sal_Int32 nOrigProps = pOrigProps->getLength();
 
     m_pProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2
@@ -513,7 +514,6 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
 
         m_nFetchDirectionPropertyHandle = rMyProp.Handle;
     }
-    delete pOrigProps;
 }
 
 CCRS_PropertySetInfo::~CCRS_PropertySetInfo()

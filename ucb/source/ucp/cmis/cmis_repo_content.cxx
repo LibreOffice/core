@@ -37,6 +37,7 @@
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
 #include "cmis_resultset.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -177,17 +178,16 @@ namespace cmis
                             ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
                             ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
 
-                    libcmis::Session* session = libcmis::SessionFactory::createSession(
+                    boost::scoped_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", false, oauth2Data );
-                    if (session == NULL )
+                            rUsername, rPassword, "", false, oauth2Data ));
+                    if (!session)
                         ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,
                                             uno::Sequence< uno::Any >( 0 ),
                                             xEnv,
                                             OUString( ) );
                     m_aRepositories = session->getRepositories( );
-                    delete session;
                 }
                 catch (const libcmis::Exception& e)
                 {

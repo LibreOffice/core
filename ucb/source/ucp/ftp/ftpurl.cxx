@@ -38,6 +38,7 @@
 #include "ftphandleprovider.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpcontainer.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace ftp;
 using namespace com::sun::star::ucb;
@@ -159,17 +160,17 @@ void FTPURL::parse(const OUString& url)
        strncmp("ftp://",lower.getStr(),6))
         throw malformed_exception();
 
-    char *buffer = new char[1+aIdent.getLength()];
+    boost::scoped_array<char> buffer(new char[1+aIdent.getLength()]);
     const char* p2 = aIdent.getStr();
     p2 += 6;
 
     char ch;
-    char *p1 = buffer;      // determine "username:password@host:port"
+    char *p1 = buffer.get();      // determine "username:password@host:port"
     while((ch = *p2++) != '/' && ch)
         *p1++ = ch;
     *p1 = 0;
 
-    OUString aExpr(buffer, strlen(buffer), RTL_TEXTENCODING_UTF8);
+    OUString aExpr(buffer.get(), strlen(buffer.get()), RTL_TEXTENCODING_UTF8);
 
     sal_Int32 l = aExpr.indexOf('@');
     m_aHost = aExpr.copy(1+l);
@@ -203,26 +204,26 @@ void FTPURL::parse(const OUString& url)
     }
 
     while(ch) {  // now determine the pathsegments ...
-        p1 = buffer;
+        p1 = buffer.get();
         while((ch = *p2++) != '/' && ch)
             *p1++ = ch;
         *p1 = 0;
 
         if(buffer[0]) {
-            if( strcmp(buffer,"..") == 0 && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
+            if( strcmp(buffer.get(),"..") == 0 && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
                 m_aPathSegmentVec.pop_back();
-            else if(strcmp(buffer,".") == 0)
+            else if(strcmp(buffer.get(),".") == 0)
                 ; // Ignore
             else
                 // This is a legal name.
                 m_aPathSegmentVec.push_back(
-                    OUString(buffer,
-                                  strlen(buffer),
+                    OUString(buffer.get(),
+                                  strlen(buffer.get()),
                                   RTL_TEXTENCODING_UTF8));
         }
     }
 
-    delete[] buffer;
+    buffer.reset();
 
     if(m_bShowPassword)
         m_pFCP->setHost(m_aHost,

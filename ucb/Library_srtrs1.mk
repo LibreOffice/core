@@ -12,6 +12,8 @@ $(eval $(call gb_Library_Library,srtrs1))
 
 $(eval $(call gb_Library_set_componentfile,srtrs1,ucb/source/sorter/srtrs1))
 
+$(eval $(call gb_Library_use_external,srtrs1,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,srtrs1))
 
 $(eval $(call gb_Library_use_libraries,srtrs1,\

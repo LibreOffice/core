@@ -23,6 +23,7 @@
 #include "filstr.hxx"
 #include "shell.hxx"
 #include "prov.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -142,10 +143,10 @@ XStream_impl::readBytes(
     if( ! m_nIsOpen )
         throw io::IOException( THROW_WHERE );
 
-    sal_Int8 * buffer;
+    boost::scoped_array<sal_Int8> buffer;
     try
     {
-        buffer = new sal_Int8[nBytesToRead];
+        buffer.reset(new sal_Int8[nBytesToRead]);
     }
     catch (const std::bad_alloc&)
     {
@@ -154,14 +155,12 @@ XStream_impl::readBytes(
     }
 
     sal_uInt64 nrc(0);
-    if(m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc )
+    if(m_aFile.read( buffer.get(),sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
     {
-        delete[] buffer;
         throw io::IOException( THROW_WHERE );
     }
-    aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
-    delete[] buffer;
+    aData = uno::Sequence< sal_Int8 > ( buffer.get(), (sal_uInt32)nrc );
     return ( sal_Int32 ) nrc;
 }
 
