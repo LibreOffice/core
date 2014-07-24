@@ -27,6 +27,7 @@
 #include <svtools/ruler.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
+#include <svtools/colorcfg.hxx>
 
 #include <boost/scoped_array.hpp>
 #include <vector>
@@ -1021,7 +1022,10 @@ void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
         if ( IsControlBackground() )
             aColor = GetControlBackground();
         else
-            aColor = rStyleSettings.GetDialogColor();
+        {
+            svtools::ColorConfig aColorConfig;
+            aColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+        }
         SetBackground( aColor );
     }
 
