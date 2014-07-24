@@ -67,7 +67,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     m_pBaseLb->setMaxWidthChars(nMaxWidth);
     get(m_pFilterFt, "categoryft");
     get(m_pFilterLb, "category");
-    m_pFilterLb->SetStyle(m_pFilterLb->GetStyle() | WB_SORT);
+    //note that the code depends on categories not being lexically
+    //sorted, so if its changed to sorted, the code needs to
+    //be adapted to be position unaware
     m_pFilterLb->setMaxWidthChars(nMaxWidth);
     get(m_pDescFt, "desc");
 
