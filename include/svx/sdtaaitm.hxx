@@ -33,7 +33,7 @@ public:
     virtual bool HasMetrics() const SAL_OVERRIDE;
     virtual bool ScaleMetrics(long nMul, long nDiv) SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+    virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 #endif

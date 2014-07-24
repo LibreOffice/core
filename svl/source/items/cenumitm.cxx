@@ -37,13 +37,12 @@ bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-SfxItemPresentation
-SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
+bool SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                       SfxMapUnit, OUString & rText,
                                       const IntlWrapper *) const
 {
     rText = OUString::number( GetEnumValue() );
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual
@@ -173,13 +172,13 @@ int SfxBoolItem::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation SfxBoolItem::GetPresentation(SfxItemPresentation,
+bool SfxBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,
                                                  const IntlWrapper *) const
 {
     rText = GetValueTextByVal(m_bValue);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual

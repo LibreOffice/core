@@ -36,7 +36,7 @@ public:
         const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
         const sal_uInt16 nId );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -69,7 +69,7 @@ public:
         const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
         const sal_uInt16 nId  );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -98,7 +98,7 @@ public:
         const SvxCellJustifyMethod eMethod,
         const sal_uInt16 nId );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;

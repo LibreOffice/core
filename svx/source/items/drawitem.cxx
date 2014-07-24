@@ -54,7 +54,7 @@ SvxColorListItem::SvxColorListItem( const SvxColorListItem& rItem ) :
 {
 }
 
-SfxItemPresentation SvxColorListItem::GetPresentation
+bool SvxColorListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -63,7 +63,7 @@ SfxItemPresentation SvxColorListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxColorListItem::operator==( const SfxPoolItem& rItem ) const
@@ -123,7 +123,7 @@ SvxGradientListItem::SvxGradientListItem( const SvxGradientListItem& rItem ) :
 
 
 
-SfxItemPresentation SvxGradientListItem::GetPresentation
+bool SvxGradientListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -132,7 +132,7 @@ SfxItemPresentation SvxGradientListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -177,7 +177,7 @@ SvxHatchListItem::SvxHatchListItem( const SvxHatchListItem& rItem ) :
 
 
 
-SfxItemPresentation SvxHatchListItem::GetPresentation
+bool SvxHatchListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -186,7 +186,7 @@ SfxItemPresentation SvxHatchListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -227,7 +227,7 @@ SvxBitmapListItem::SvxBitmapListItem( const SvxBitmapListItem& rItem ) :
 {
 }
 
-SfxItemPresentation SvxBitmapListItem::GetPresentation
+bool SvxBitmapListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -236,7 +236,7 @@ SfxItemPresentation SvxBitmapListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxBitmapListItem::operator==( const SfxPoolItem& rItem ) const
@@ -275,7 +275,7 @@ SvxDashListItem::SvxDashListItem( const SvxDashListItem& rItem ) :
 {
 }
 
-SfxItemPresentation SvxDashListItem::GetPresentation
+bool SvxDashListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -284,7 +284,7 @@ SfxItemPresentation SvxDashListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxDashListItem::operator==( const SfxPoolItem& rItem ) const
@@ -322,7 +322,7 @@ SvxLineEndListItem::SvxLineEndListItem( const SvxLineEndListItem& rItem ) :
 {
 }
 
-SfxItemPresentation SvxLineEndListItem::GetPresentation
+bool SvxLineEndListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -331,7 +331,7 @@ SfxItemPresentation SvxLineEndListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxLineEndListItem::operator==( const SfxPoolItem& rItem ) const

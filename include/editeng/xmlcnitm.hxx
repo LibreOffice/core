@@ -44,7 +44,7 @@ public:
     using SfxPoolItem::Compare;
     virtual int Compare( const SfxPoolItem &rWith ) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(
+    virtual bool GetPresentation(
                                 SfxItemPresentation ePresentation,
                                 SfxMapUnit eCoreMetric,
                                 SfxMapUnit ePresentationMetric,

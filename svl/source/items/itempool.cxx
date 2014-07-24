@@ -474,7 +474,7 @@ const OUString& SfxItemPool::GetName() const
 
 
 
-SfxItemPresentation SfxItemPool::GetPresentation
+bool SfxItemPool::GetPresentation
 (
     const SfxPoolItem&  rItem,
     SfxMapUnit          eMetric,

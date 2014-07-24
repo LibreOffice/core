@@ -43,13 +43,13 @@ int CntByteItem::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
+bool CntByteItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,
                                                  const IntlWrapper *) const
 {
     rText = OUString::number( m_nValue );
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual
@@ -146,14 +146,14 @@ int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
+bool CntUInt16Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
                                                    OUString & rText,
                                                    const IntlWrapper *)
     const
 {
     rText = OUString::number( m_nValue );
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual
@@ -248,13 +248,13 @@ int CntInt32Item::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
+bool CntInt32Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,
                                                   const IntlWrapper *) const
 {
     rText = OUString::number( m_nValue );
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual
@@ -350,14 +350,14 @@ int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
+bool CntUInt32Item::GetPresentation(SfxItemPresentation,
                                                    SfxMapUnit, SfxMapUnit,
                                                    OUString & rText,
                                                    const IntlWrapper *)
     const
 {
     rText = OUString::number(m_nValue);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual

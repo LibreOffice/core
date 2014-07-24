@@ -62,7 +62,7 @@ bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 
 
 
-SfxItemPresentation SfxSetItem::GetPresentation
+bool SfxSetItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -71,7 +71,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

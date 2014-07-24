@@ -240,7 +240,7 @@ public:
     virtual bool                        operator ==( const SfxPoolItem& ) const SAL_OVERRIDE;
     SfxFrameDescriptorItem&             operator =( const SfxFrameDescriptorItem & );
 
-    virtual SfxItemPresentation         GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                             SfxMapUnit eCoreMetric,
                                             SfxMapUnit ePresMetric,
                                             OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;

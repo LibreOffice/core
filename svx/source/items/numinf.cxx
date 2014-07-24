@@ -117,7 +117,7 @@ SvxNumberInfoItem::~SvxNumberInfoItem()
 
 
 
-SfxItemPresentation SvxNumberInfoItem::GetPresentation
+bool SvxNumberInfoItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -126,7 +126,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

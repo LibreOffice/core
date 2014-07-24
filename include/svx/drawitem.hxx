@@ -40,7 +40,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxColorListItem( const SvxColorListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -70,7 +70,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -100,7 +100,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -131,7 +131,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -162,7 +162,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -190,7 +190,7 @@ public:
                                     sal_uInt16 nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;

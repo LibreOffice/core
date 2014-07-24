@@ -36,7 +36,7 @@ public:
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     virtual ~SvxLineColorItem();
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

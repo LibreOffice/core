@@ -41,7 +41,7 @@ public:
                           const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

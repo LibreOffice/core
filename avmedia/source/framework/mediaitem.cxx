@@ -127,14 +127,14 @@ SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
     return new MediaItem( *this );
 }
 
-SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
+bool MediaItem::GetPresentation( SfxItemPresentation,
                                                   SfxMapUnit,
                                                   SfxMapUnit,
                                                   OUString& rText,
                                                   const IntlWrapper * ) const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const

@@ -79,7 +79,7 @@ public:
     SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

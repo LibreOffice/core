@@ -45,7 +45,7 @@ public:
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+    virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
@@ -104,7 +104,7 @@ public:
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+    virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
@@ -163,7 +163,7 @@ public:
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+    virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
@@ -222,7 +222,7 @@ public:
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+    virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)

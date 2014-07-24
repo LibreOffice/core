@@ -50,7 +50,7 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 
 
 
-SfxItemPresentation SfxFlagItem::GetPresentation
+bool SfxFlagItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -62,7 +62,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     rText = OUString();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += GetFlag(nFlag) ? OUString("true") : OUString("false");
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

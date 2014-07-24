@@ -59,7 +59,7 @@ bool SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
     return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
 }
 
-SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
+bool  SwPageFtnInfoItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -72,7 +72,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -83,11 +83,11 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
                         ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
                         ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
-            return ePres;
+            return true;
         }
         default:; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const

@@ -130,7 +130,7 @@ int CntContentTypeItem::Compare( const SfxPoolItem &rWith, const IntlWrapper& rI
     return rIntlWrapper.getCollator()->compareString( aOwnText, aWithText );
 }
 
-SfxItemPresentation CntContentTypeItem::GetPresentation(
+bool CntContentTypeItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreMetric,
     SfxMapUnit          ePresMetric,
@@ -149,7 +149,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
     if (!_aPresentation.isEmpty())
     {
         rText = _aPresentation;
-        return SFX_ITEM_PRESENTATION_COMPLETE;
+        return true;
     }
     else
         return CntUnencodedStringItem::GetPresentation(ePres, eCoreMetric,

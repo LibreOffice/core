@@ -37,7 +37,7 @@ public:
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+    virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)

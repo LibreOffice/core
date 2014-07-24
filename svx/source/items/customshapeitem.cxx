@@ -239,7 +239,7 @@ bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
     return bRet;
 }
 
-SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
+bool SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
 {
@@ -247,8 +247,11 @@ SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
     {
         rText = " " + rText;
+        return true;
     }
-    return ePresentation;
+    else if ( ePresentation == SFX_ITEM_PRESENTATION_NAMELESS )
+        return true;
+    return false;
 }
 
 SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const

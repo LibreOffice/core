@@ -58,7 +58,7 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 
 
 
-SfxItemPresentation SfxSpellCheckItem::GetPresentation
+bool SfxSpellCheckItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          ,
@@ -71,15 +71,15 @@ SfxItemPresentation SfxSpellCheckItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            return ePres;
+            return true;
         }
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -137,7 +137,7 @@ SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 
 
 
-SfxItemPresentation SfxHyphenRegionItem::GetPresentation
+bool SfxHyphenRegionItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          ,
@@ -150,7 +150,7 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -159,10 +159,10 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
                     EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     "," +
                     EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail));
-            return ePres;
+            return true;
         }
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 

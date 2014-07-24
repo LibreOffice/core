@@ -262,7 +262,7 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 
 
 
-SfxItemPresentation SvxSearchItem::GetPresentation
+bool SvxSearchItem::GetPresentation
 (
     SfxItemPresentation ,
     SfxMapUnit          ,
@@ -271,7 +271,7 @@ SfxItemPresentation SvxSearchItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 void SvxSearchItem::Notify( const Sequence< OUString > & )

@@ -288,7 +288,7 @@ OUString ScProtectionAttr::GetValueText() const
     return aValue;
 }
 
-SfxItemPresentation ScProtectionAttr::GetPresentation
+bool ScProtectionAttr::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit /* eCoreMetric */,
@@ -332,7 +332,7 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
             ePres = SFX_ITEM_PRESENTATION_NONE;
     }
 
-    return ePres;
+    return ePres != SFX_ITEM_PRESENTATION_NONE;
 }
 
 bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
@@ -403,7 +403,7 @@ SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
     return new ScRangeItem( *this );
 }
 
-SfxItemPresentation ScRangeItem::GetPresentation
+bool ScRangeItem::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit          /* eCoreUnit */,
@@ -433,7 +433,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
         }
     }
 
-    return ePres;
+    return ePres != SFX_ITEM_PRESENTATION_NONE;
 }
 
 //      ScTableListItem - List from Tables (-numbers)
@@ -503,7 +503,7 @@ SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
     return new ScTableListItem( *this );
 }
 
-SfxItemPresentation ScTableListItem::GetPresentation
+bool ScTableListItem::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit          /* eCoreUnit */,
@@ -530,11 +530,11 @@ SfxItemPresentation ScTableListItem::GetPresentation
                 }
             rText += ")";
             }
-            return ePres;
+            return true;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
 
         default:
         {
@@ -542,7 +542,7 @@ SfxItemPresentation ScTableListItem::GetPresentation
         }
     }
 
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 //      ScPageHFItem - Dates from the Head and Foot lines
@@ -842,7 +842,7 @@ ScViewObjectModeItem::~ScViewObjectModeItem()
 {
 }
 
-SfxItemPresentation ScViewObjectModeItem::GetPresentation
+bool ScViewObjectModeItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /* eCoreUnit */,
@@ -879,15 +879,14 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
+        return true;
         break;
 
-        default:
-        {
+        default: break;
             // added to avoid warnings
-        }
     }
 
-    return ePres;
+    return false;
 }
 
 OUString ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
@@ -1022,12 +1021,12 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
 }
 } // namespace
 
-SfxItemPresentation ScPageScaleToItem::GetPresentation(
+bool ScPageScaleToItem::GetPresentation(
         SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const
 {
     rText = OUString();
     if( !IsValid() || (ePres == SFX_ITEM_PRESENTATION_NONE) )
-        return SFX_ITEM_PRESENTATION_NONE;
+        return false;
 
     OUString aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
     OUString aValue( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_WIDTH ) );
@@ -1038,21 +1037,23 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
+        return false;
         break;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = aValue;
+            return true;
         break;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = aName + " (" + aValue + ")";
+            return true;
         break;
 
         default:
             OSL_FAIL( "ScPageScaleToItem::GetPresentation - unknown presentation mode" );
-            ePres = SFX_ITEM_PRESENTATION_NONE;
     }
-    return ePres;
+    return false;
 }
 
 bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const

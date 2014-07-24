@@ -48,13 +48,13 @@ int SfxVisibilityItem::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
+bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,
                                                   const IntlWrapper *) const
 {
     rText = GetValueTextByVal(m_nValue.bVisible);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

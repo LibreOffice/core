@@ -50,7 +50,7 @@ SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
 }
 
 
-SfxItemPresentation SvxHorJustifyItem::GetPresentation
+bool SvxHorJustifyItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -61,14 +61,14 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -207,7 +207,7 @@ SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
 }
 
 
-SfxItemPresentation SvxVerJustifyItem::GetPresentation
+bool SvxVerJustifyItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -219,14 +219,14 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -348,7 +348,7 @@ SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
 }
 
 
-SfxItemPresentation SvxJustifyMethodItem::GetPresentation
+bool SvxJustifyMethodItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -360,14 +360,14 @@ SfxItemPresentation SvxJustifyMethodItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

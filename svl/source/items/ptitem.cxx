@@ -55,7 +55,7 @@ SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
 
 
 
-SfxItemPresentation SfxPointItem::GetPresentation
+bool SfxPointItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -65,7 +65,7 @@ SfxItemPresentation SfxPointItem::GetPresentation
 )   const
 {
     rText = OUString::number(aVal.X()) + ", " + OUString::number(aVal.Y()) + ", ";
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

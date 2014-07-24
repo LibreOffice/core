@@ -51,12 +51,12 @@ int SfxInt64Item::Compare( const SfxPoolItem& r, const IntlWrapper& /*rIntlWrapp
     return Compare(r);
 }
 
-SfxItemPresentation SfxInt64Item::GetPresentation(
+bool SfxInt64Item::GetPresentation(
     SfxItemPresentation, SfxMapUnit, SfxMapUnit, OUString& rText,
     const IntlWrapper* /*pIntlWrapper*/ ) const
 {
     rText = OUString::number(mnValue);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 bool SfxInt64Item::QueryValue(

@@ -690,10 +690,9 @@ SfxItemPool* ScDocumentPool::Clone() const
     return new SfxItemPool (*this, true);
 }
 
-static SfxItemPresentation lcl_HFPresentation
+static bool lcl_HFPresentation
 (
     const SfxPoolItem&  rItem,
-    SfxItemPresentation ePresentation,
     SfxMapUnit          eCoreMetric,
     SfxMapUnit          ePresentationMetric,
     OUString&           rText,
@@ -706,7 +705,7 @@ static SfxItemPresentation lcl_HFPresentation
     if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
     {
         if( false == ((const SfxBoolItem*)pItem)->GetValue() )
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 
     SfxItemIter aIter( rSet );
@@ -773,7 +772,7 @@ static SfxItemPresentation lcl_HFPresentation
             default:
                 if ( !pIntl )
                     pIntl = ScGlobal::GetScIntlWrapper();
-                pItem->GetPresentation( ePresentation, eCoreMetric, ePresentationMetric, aText, pIntl );
+                pItem->GetPresentation( SFX_ITEM_PRESENTATION_COMPLETE, eCoreMetric, ePresentationMetric, aText, pIntl );
 
         }
 
@@ -788,10 +787,10 @@ static SfxItemPresentation lcl_HFPresentation
     rText = comphelper::string::stripEnd(rText, ' ');
     rText = comphelper::string::stripEnd(rText, '+');
     rText = comphelper::string::stripEnd(rText, ' ');
-    return ePresentation;
+    return true;
 }
 
-SfxItemPresentation ScDocumentPool::GetPresentation(
+bool ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
     SfxMapUnit          ePresentationMetric,
     OUString&           rText,
@@ -802,7 +801,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
     OUString aStrNo   ( ScGlobal::GetRscString(STR_NO) );
     OUString aStrSep(": ");
 
-    SfxItemPresentation ePresentationRet = SFX_ITEM_PRESENTATION_COMPLETE;
+    bool ePresentationRet = true;
     switch( nW )
     {
         case ATTR_PAGE_TOPDOWN:
@@ -850,7 +849,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
             }
             else
             {
-                ePresentationRet = SFX_ITEM_PRESENTATION_NONE;
+                ePresentationRet = false;
             }
         }
         break;
@@ -866,7 +865,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
             }
             else
             {
-                ePresentationRet = SFX_ITEM_PRESENTATION_NONE;
+                ePresentationRet = false;
             }
         }
         break;
@@ -883,7 +882,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
             }
             else
             {
-                ePresentationRet = SFX_ITEM_PRESENTATION_NONE;
+                ePresentationRet = false;
             }
         }
         break;
@@ -892,7 +891,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             OUString  aBuffer;
 
-            if( lcl_HFPresentation( rItem, SFX_ITEM_PRESENTATION_COMPLETE, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
+            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) )
             {
                 rText = ScGlobal::GetRscString(STR_HEADER) + " ( " + aBuffer + " ) ";
             }
@@ -903,7 +902,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
         {
             OUString  aBuffer;
 
-            if( lcl_HFPresentation( rItem, SFX_ITEM_PRESENTATION_COMPLETE, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) != SFX_ITEM_PRESENTATION_NONE )
+            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) )
             {
                 rText = ScGlobal::GetRscString(STR_FOOTER) + " ( " + aBuffer + " ) ";
             }

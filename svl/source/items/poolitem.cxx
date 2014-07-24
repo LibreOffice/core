@@ -199,7 +199,7 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
  *    pSvxBorderItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
  *        "1cm top border, 2cm left border, 0.2cm bottom border, ..."
  */
-SfxItemPresentation SfxPoolItem::GetPresentation
+bool SfxPoolItem::GetPresentation
 (
     SfxItemPresentation /*ePresentation*/,       // IN:  how we should format
     SfxMapUnit          /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
@@ -208,7 +208,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // SfxVoidItem ------------------------------------------------------------
@@ -235,7 +235,7 @@ rCmp
 }
 
 
-SfxItemPresentation SfxVoidItem::GetPresentation
+bool SfxVoidItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -245,7 +245,7 @@ SfxItemPresentation SfxVoidItem::GetPresentation
 )   const
 {
     rText = "Void";
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

@@ -79,7 +79,7 @@ private:
             virtual ~SdrCustomShapeGeometryItem();
 
             virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-            virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
+            virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                             OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 

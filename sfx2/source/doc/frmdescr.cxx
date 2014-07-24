@@ -198,7 +198,7 @@ SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
 
 
 
-SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
+bool SfxFrameDescriptorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -208,7 +208,7 @@ SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

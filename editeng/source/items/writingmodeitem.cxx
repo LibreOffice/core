@@ -65,28 +65,28 @@ sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
     return USHRT_MAX;
 }
 
-SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePres,
+bool SvxWritingModeItem::GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/,
         SfxMapUnit /*ePresMetric*/,
         OUString &rText,
         const IntlWrapper *  ) const
 {
-    SfxItemPresentation eRet = ePres;
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NONE:
         rText = OUString();
+        return false;
         break;
 
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
         rText = EE_RESSTR(RID_SVXITEMS_FRMDIR_BEGIN + GetValue());
+        return true;
         break;
 
     default:
-        eRet = SFX_ITEM_PRESENTATION_NONE;
+        return false;
     }
-    return eRet;
 }
 
 bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )

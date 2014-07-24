@@ -98,14 +98,14 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
 
 }
 
-SfxItemPresentation SfxEventNamesItem::GetPresentation( SfxItemPresentation,
+bool SfxEventNamesItem::GetPresentation( SfxItemPresentation,
                                     SfxMapUnit,
                                     SfxMapUnit,
                                     OUString &rText,
                                     const IntlWrapper* ) const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const

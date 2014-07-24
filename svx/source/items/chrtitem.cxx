@@ -246,7 +246,7 @@ OUString SvxDoubleItem::GetValueText() const
 
 
 
-SfxItemPresentation SvxDoubleItem::GetPresentation
+bool SvxDoubleItem::GetPresentation
             ( SfxItemPresentation /*ePresentation*/, SfxMapUnit /*eCoreMetric*/,
               SfxMapUnit /*ePresentationMetric*/, OUString& rText,
               const IntlWrapper * pIntlWrapper) const
@@ -259,7 +259,7 @@ SfxItemPresentation SvxDoubleItem::GetPresentation
     }
     else
         rText = GetValueText();
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

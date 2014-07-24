@@ -29,7 +29,7 @@ public:
     SdrTextFixedCellHeightItem( bool bUseFixedCellHeight = false );
     SVX_DLLPRIVATE SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
 
-    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
+    SVX_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                     OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 

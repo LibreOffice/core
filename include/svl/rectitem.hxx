@@ -37,7 +37,7 @@ public:
                              SfxRectangleItem( const SfxRectangleItem& );
                              virtual ~SfxRectangleItem() {}
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

@@ -58,7 +58,7 @@ SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
 
 
 
-SfxItemPresentation SfxRangeItem::GetPresentation
+bool SfxRangeItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -68,7 +68,7 @@ SfxItemPresentation SfxRangeItem::GetPresentation
 )   const
 {
     rText = OUString::number(nFrom) + ":" + OUString::number(nTo);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 
@@ -159,14 +159,14 @@ bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 }
 
 
-SfxItemPresentation SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
+bool SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
                                     SfxMapUnit /*eCoreMetric*/,
                                     SfxMapUnit /*ePresMetric*/,
                                     OUString & /*rText*/,
                                     const IntlWrapper * ) const
 {
     // not implemented
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

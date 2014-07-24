@@ -58,13 +58,12 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
 }
 
 // virtual
-SfxItemPresentation
-CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
+bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                         SfxMapUnit, OUString & rText,
                                         const IntlWrapper *) const
 {
     rText = m_aValue;
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 // virtual

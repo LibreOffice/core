@@ -66,7 +66,7 @@ SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
     return new SvxRotateModeItem( (SvxRotateMode) nVal,Which() );
 }
 
-SfxItemPresentation SvxRotateModeItem::GetPresentation(
+bool SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 OUString& rText, const IntlWrapper * )  const
@@ -81,11 +81,12 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString( GetValue() );
+            return true;
             break;
         default: ;//prevent warning
     }
 
-    return ePres;
+    return false;
 }
 
 OUString SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const

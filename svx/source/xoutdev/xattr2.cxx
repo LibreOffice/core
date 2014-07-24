@@ -56,7 +56,7 @@ SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
     return new XLineTransparenceItem(rIn);
 }
 
-SfxItemPresentation XLineTransparenceItem::GetPresentation
+bool XLineTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -69,15 +69,15 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -115,14 +115,14 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineJointItem( *this );
 }
 
-SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+bool XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
     rText = OUString();
 
     switch( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE: return ePres;
+        case SFX_ITEM_PRESENTATION_NONE: return false;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -159,10 +159,10 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
             if( nId )
                 rText = SVX_RESSTR( nId );
 
-            return ePres;
+            return true;
         }
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -334,14 +334,14 @@ SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineCapItem( *this );
 }
 
-SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+bool XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
                                                      SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
     rText = OUString();
 
     switch( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NONE: return ePres;
+        case SFX_ITEM_PRESENTATION_NONE: return false;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -366,10 +366,10 @@ SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, Sf
             if( nId )
                 rText = SVX_RESSTR( nId );
 
-            return ePres;
+            return true;
         }
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -446,7 +446,7 @@ SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
     return new XFillTransparenceItem(rIn);
 }
 
-SfxItemPresentation XFillTransparenceItem::GetPresentation
+bool XFillTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -459,15 +459,15 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -519,7 +519,7 @@ SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) 
     return new XGradientStepCountItem( rIn );
 }
 
-SfxItemPresentation XGradientStepCountItem::GetPresentation
+bool XGradientStepCountItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -532,14 +532,14 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
 //          rText = OUString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString::number(GetValue());
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -567,7 +567,7 @@ SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new XFillBmpTileItem( rIn );
 }
 
-SfxItemPresentation XFillBmpTileItem::GetPresentation
+bool XFillBmpTileItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -580,12 +580,12 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -613,7 +613,7 @@ SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new XFillBmpPosItem( rIn );
 }
 
-SfxItemPresentation XFillBmpPosItem::GetPresentation
+bool XFillBmpPosItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -626,12 +626,12 @@ SfxItemPresentation XFillBmpPosItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -664,7 +664,7 @@ SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new XFillBmpSizeXItem( rIn );
 }
 
-SfxItemPresentation XFillBmpSizeXItem::GetPresentation
+bool XFillBmpSizeXItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -677,12 +677,12 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -715,7 +715,7 @@ SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new XFillBmpSizeYItem( rIn );
 }
 
-SfxItemPresentation XFillBmpSizeYItem::GetPresentation
+bool XFillBmpSizeYItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -728,12 +728,12 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -766,7 +766,7 @@ SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) co
     return new XFillBmpSizeLogItem( rIn );
 }
 
-SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
+bool XFillBmpSizeLogItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -779,12 +779,12 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -812,7 +812,7 @@ SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/
     return new XFillBmpTileOffsetXItem( rIn );
 }
 
-SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
+bool XFillBmpTileOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -825,12 +825,12 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -858,7 +858,7 @@ SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/
     return new XFillBmpTileOffsetYItem( rIn );
 }
 
-SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
+bool XFillBmpTileOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -871,12 +871,12 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -904,7 +904,7 @@ SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) co
     return new XFillBmpStretchItem( rIn );
 }
 
-SfxItemPresentation XFillBmpStretchItem::GetPresentation
+bool XFillBmpStretchItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -917,12 +917,12 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -950,7 +950,7 @@ SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/)
     return new XFillBmpPosOffsetXItem( rIn );
 }
 
-SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
+bool XFillBmpPosOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -963,12 +963,12 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -996,7 +996,7 @@ SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/)
     return new XFillBmpPosOffsetYItem( rIn );
 }
 
-SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
+bool XFillBmpPosOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1009,12 +1009,12 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 
@@ -1042,7 +1042,7 @@ SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
     return new XFillBackgroundItem( rIn );
 }
 
-SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+bool XFillBackgroundItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
                                                           SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
     rText = OUString();
@@ -1050,13 +1050,13 @@ SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation eP
     switch( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
+            return false;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 

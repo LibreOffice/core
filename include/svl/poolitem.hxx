@@ -184,7 +184,8 @@ public:
     virtual int              Compare( const SfxPoolItem &rWith ) const;
     virtual int              Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePresentation,
+    /**  @return true if it has a valid string representation */
+    virtual bool             GetPresentation( SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresentationMetric,
                                     OUString &rText,
@@ -278,7 +279,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
@@ -306,7 +307,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

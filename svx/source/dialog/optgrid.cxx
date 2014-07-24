@@ -103,7 +103,7 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
                 nFldSnapY    == rItem.nFldSnapY     );
 }
 
-SfxItemPresentation  SvxGridItem::GetPresentation
+bool  SvxGridItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -115,13 +115,13 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = "SvxGridItem";
             return ePres;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 

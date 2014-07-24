@@ -128,7 +128,7 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return  true;
 }
 
-SfxItemPresentation SvxGrfCrop::GetPresentation(
+bool SvxGrfCrop::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* pIntl ) const
 {
@@ -136,21 +136,19 @@ SfxItemPresentation SvxGrfCrop::GetPresentation(
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NAMELESS:
+        return true;
     case SFX_ITEM_PRESENTATION_COMPLETE:
-        if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-        {
-            rText = "L: "  + OUString(::GetMetricText( GetLeft(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
-                    " R: " + OUString(::GetMetricText( GetRight(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
-                    " T: " + OUString(::GetMetricText( GetTop(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
-                    " B: " + OUString(::GetMetricText( GetBottom(), eCoreUnit, SFX_MAPUNIT_MM, pIntl ));
-        }
+        rText = "L: "  + OUString(::GetMetricText( GetLeft(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                " R: " + OUString(::GetMetricText( GetRight(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                " T: " + OUString(::GetMetricText( GetTop(), eCoreUnit, SFX_MAPUNIT_MM, pIntl )) +
+                " B: " + OUString(::GetMetricText( GetBottom(), eCoreUnit, SFX_MAPUNIT_MM, pIntl ));
+        return true;
         break;
 
     default:
-        ePres = SFX_ITEM_PRESENTATION_NONE;
+        return false;
         break;
     }
-    return ePres;
 }
 
 

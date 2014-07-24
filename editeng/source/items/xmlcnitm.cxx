@@ -63,14 +63,14 @@ int SvXMLAttrContainerItem::Compare( const SfxPoolItem &/*rWith*/ ) const
     return 0;
 }
 
-SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
+bool SvXMLAttrContainerItem::GetPresentation(
                     SfxItemPresentation /*ePresentation*/,
                     SfxMapUnit /*eCoreMetric*/,
                     SfxMapUnit /*ePresentationMetric*/,
                     OUString & /*rText*/,
                     const IntlWrapper * /*pIntlWrapper*/ ) const
 {
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const

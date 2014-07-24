@@ -69,13 +69,13 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 }
 
 // virtual
-SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
+bool SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,
                                                   const IntlWrapper *) const
 {
     rText = OUString::number(m_nValue);
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

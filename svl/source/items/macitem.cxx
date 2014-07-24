@@ -205,7 +205,7 @@ SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxItemPresentation SvxMacroItem::GetPresentation
+bool SvxMacroItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -229,7 +229,7 @@ SfxItemPresentation SvxMacroItem::GetPresentation
     }
 */
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

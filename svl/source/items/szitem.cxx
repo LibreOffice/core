@@ -52,7 +52,7 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
 
 
 
-SfxItemPresentation SfxSizeItem::GetPresentation
+bool SfxSizeItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -62,7 +62,7 @@ SfxItemPresentation SfxSizeItem::GetPresentation
 )   const
 {
     rText = OUString::number(aVal.Width()) + ", " + OUString::number(aVal.Height()) + ", ";
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

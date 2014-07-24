@@ -45,7 +45,7 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
 
 
 
-SfxItemPresentation SvxPostItAuthorItem::GetPresentation
+bool SvxPostItAuthorItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -57,16 +57,16 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE) + GetValue();
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -93,7 +93,7 @@ SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich 
 
 
 
-SfxItemPresentation SvxPostItDateItem::GetPresentation
+bool SvxPostItDateItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -105,16 +105,16 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE) + GetValue();
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -141,7 +141,7 @@ SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich 
 
 
 
-SfxItemPresentation SvxPostItTextItem::GetPresentation
+bool SvxPostItTextItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -153,16 +153,16 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetValue();
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE) + GetValue();
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

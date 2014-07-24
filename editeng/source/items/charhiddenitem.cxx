@@ -33,7 +33,7 @@ SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
     return new SvxCharHiddenItem( *this );
 }
 
-SfxItemPresentation SvxCharHiddenItem::GetPresentation
+bool SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -45,7 +45,7 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -54,11 +54,11 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_CHARHIDDEN_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,7 @@ public:
     virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const SAL_OVERRIDE;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

@@ -29,7 +29,7 @@ public:
     virtual int Compare( const SfxPoolItem& r ) const SAL_OVERRIDE;
     virtual int Compare( const SfxPoolItem& r, const IntlWrapper& rIntlWrapper ) const SAL_OVERRIDE;
 
-    virtual SfxItemPresentation GetPresentation(
+    virtual bool GetPresentation(
         SfxItemPresentation, SfxMapUnit, SfxMapUnit,
         OUString& rText, const IntlWrapper* pIntlWrapper = NULL ) const SAL_OVERRIDE;
 

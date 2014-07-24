@@ -39,7 +39,7 @@ protected:
 public:
 
     virtual SfxItemPool* Clone() const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation(const SfxPoolItem& rItem,
+    virtual bool GetPresentation(const SfxPoolItem& rItem,
         SfxMapUnit          ePresentationMetric,
         OUString&             rText,
         const IntlWrapper * pIntlWrapper

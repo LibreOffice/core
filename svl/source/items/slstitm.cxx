@@ -138,7 +138,7 @@ bool SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-SfxItemPresentation SfxStringListItem::GetPresentation
+bool SfxStringListItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -148,7 +148,7 @@ SfxItemPresentation SfxStringListItem::GetPresentation
 )   const
 {
     rText = "(List)";
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

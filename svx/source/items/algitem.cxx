@@ -60,7 +60,7 @@ SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, cons
 
 
 
-SfxItemPresentation SvxOrientationItem::GetPresentation
+bool SvxOrientationItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -71,14 +71,14 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueText( GetValue() );
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -228,7 +228,7 @@ SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
 
 
 
-SfxItemPresentation SvxMarginItem::GetPresentation
+bool SvxMarginItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -242,7 +242,7 @@ SfxItemPresentation SvxMarginItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
@@ -252,7 +252,7 @@ SfxItemPresentation SvxMarginItem::GetPresentation
                         GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
                         cpDelimTmp +
                         GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -271,11 +271,11 @@ SfxItemPresentation SvxMarginItem::GetPresentation
                         SVX_RESSTR(RID_SVXITEMS_MARGIN_BOTTOM) +
                         GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl ) +
                         " " + EE_RESSTR(GetMetricId(ePresUnit));
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

@@ -223,7 +223,7 @@ SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
 
 
 
-SfxItemPresentation SvxLineSpacingItem::GetPresentation
+bool SvxLineSpacingItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -236,7 +236,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
 #else
     rText = OUString();
 #endif
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -416,7 +416,7 @@ SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 
 
 
-SfxItemPresentation SvxAdjustItem::GetPresentation
+bool SvxAdjustItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -428,14 +428,14 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( (sal_uInt16)GetAdjust() );
-            return ePres;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -545,7 +545,7 @@ SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 
 
 
-SfxItemPresentation SvxWidowsItem::GetPresentation
+bool SvxWidowsItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -580,7 +580,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     }
 
     rText = rText.replaceFirst( "%1", OUString::number( GetValue() ) );
-    return ePres;
+    return ePres != SFX_ITEM_PRESENTATION_NONE;
 }
 
 // class SvxOrphansItem --------------------------------------------------
@@ -616,7 +616,7 @@ SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 
 
 
-SfxItemPresentation SvxOrphansItem::GetPresentation
+bool SvxOrphansItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -651,7 +651,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     }
 
     rText = rText.replaceFirst( "%1", OUString::number( GetValue() ) );
-    return ePres;
+    return ePres != SFX_ITEM_PRESENTATION_NONE;
 }
 
 // class SvxHyphenZoneItem -----------------------------------------------
@@ -736,7 +736,7 @@ SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 
 
 
-SfxItemPresentation SvxHyphenZoneItem::GetPresentation
+bool SvxHyphenZoneItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -749,7 +749,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             sal_uInt16 nId = RID_SVXITEMS_HYPHEN_FALSE;
@@ -765,7 +765,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
                     OUString::number( nMaxHyphens );
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -786,11 +786,11 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
                     EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
                     cpDelimTmp +
                     EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         }
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1091,7 +1091,7 @@ SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 
 
 
-SfxItemPresentation SvxTabStopItem::GetPresentation
+bool SvxTabStopItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -1121,7 +1121,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
             }
         }
     }
-    return ePres;
+    return ePres != SFX_ITEM_PRESENTATION_NONE;
 }
 
 
@@ -1259,7 +1259,7 @@ SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 
 
-SfxItemPresentation SvxFmtSplitItem::GetPresentation
+bool SvxFmtSplitItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1271,7 +1271,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1284,7 +1284,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
         }
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1325,7 +1325,7 @@ bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return bRet;
 }
 
-SfxItemPresentation SvxPageModelItem::GetPresentation
+bool SvxPageModelItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1339,22 +1339,22 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             if ( bSet )
                 rText = GetValue();
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
             if ( bSet )
             {
                 rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
             }
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1386,7 +1386,7 @@ sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
+bool SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
@@ -1402,11 +1402,11 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
             rText = EE_RESSTR( !GetValue()
                                     ? RID_SVXITEMS_SCRPTSPC_OFF
                                     : RID_SVXITEMS_SCRPTSPC_ON );
-            return ePres;
+            return true;
         }
     default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1439,7 +1439,7 @@ sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
+bool SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
@@ -1455,12 +1455,12 @@ SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
                 rText = EE_RESSTR( !GetValue()
                                         ? RID_SVXITEMS_HNGPNCT_OFF
                                         : RID_SVXITEMS_HNGPNCT_ON );
-                return ePres;
+                return true;
             }
         default: ;//prevent warning
             break;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1492,7 +1492,7 @@ sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
+bool SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
@@ -1508,12 +1508,12 @@ SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
                 rText = EE_RESSTR( !GetValue()
                                         ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
                                         : RID_SVXITEMS_FORBIDDEN_RULE_ON );
-                return ePres;
+                return true;
             }
         default: ;//prevent warning
             break;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 /*************************************************************************
@@ -1549,7 +1549,7 @@ sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
+bool SvxParaVertAlignItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
@@ -1572,12 +1572,12 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
                     default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
                 }
                 rText = EE_RESSTR( nTmp );
-                return ePres;
+                return true;
             }
         default: ;//prevent warning
             break;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
@@ -1634,7 +1634,7 @@ sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxParaGridItem::GetPresentation(
+bool SvxParaGridItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
@@ -1651,12 +1651,12 @@ SfxItemPresentation SvxParaGridItem::GetPresentation(
                         EE_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
                         EE_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_OFF );
 
-                return ePres;
+                return true;
             }
         default: ;//prevent warning
             break;
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 

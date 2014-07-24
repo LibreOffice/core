@@ -381,7 +381,7 @@ sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
     return(2);
 }
 
-SfxItemPresentation XFillBitmapItem::GetPresentation(
+bool XFillBitmapItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit /*eCoreUnit*/,
     SfxMapUnit /*ePresUnit*/,
@@ -392,13 +392,13 @@ SfxItemPresentation XFillBitmapItem::GetPresentation(
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText += GetName();
-            return ePres;
+            return true;
         default:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
     }
 }
 

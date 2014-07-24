@@ -96,7 +96,7 @@ inline OUString GetUsageText( const sal_uInt16 eU )
 
 
 
-SfxItemPresentation SvxPageItem::GetPresentation
+bool SvxPageItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -110,7 +110,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
-            return SFX_ITEM_PRESENTATION_NONE;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             if ( !aDescName.isEmpty() )
@@ -128,7 +128,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
             {
                 rText += cpDelimTmp + aUsageText;
             }
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+            return true;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -148,11 +148,11 @@ SfxItemPresentation SvxPageItem::GetPresentation
             {
                 rText += cpDelimTmp + aUsageText;
             }
-            return SFX_ITEM_PRESENTATION_COMPLETE;
+            return true;
         }
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -297,7 +297,7 @@ SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
 
 
 
-SfxItemPresentation SvxSetItem::GetPresentation
+bool SvxSetItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -306,7 +306,7 @@ SfxItemPresentation SvxSetItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const

@@ -142,8 +142,10 @@ public:
 
         @param[out] rText
         string representation of 'rItem'
+
+        @return true if it has a valid string representation
     */
-    virtual SfxItemPresentation     GetPresentation( const SfxPoolItem& rItem,
+    virtual bool                    GetPresentation( const SfxPoolItem& rItem,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
                                         const IntlWrapper * pIntlWrapper = 0 ) const;

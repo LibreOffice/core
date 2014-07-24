@@ -111,7 +111,7 @@ public:
                             virtual ~ScProtectionAttr();
 
     virtual OUString            GetValueText() const;
-    virtual SfxItemPresentation GetPresentation(
+    virtual bool GetPresentation(
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -164,7 +164,7 @@ public:
 
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString &rText,
@@ -219,7 +219,7 @@ public:
 
     // "pure virtual Methoden" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString &rText,
@@ -290,7 +290,7 @@ public:
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString& rText,
@@ -350,7 +350,7 @@ public:
                                     { mnWidth = nWidth; mnHeight = nHeight; }
     inline void                 SetInvalid() { mnWidth = mnHeight = 0; }
 
-    virtual SfxItemPresentation GetPresentation(
+    virtual bool GetPresentation(
                                     SfxItemPresentation ePresentation,
                                     SfxMapUnit, SfxMapUnit,
                                     OUString& rText,

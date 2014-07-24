@@ -52,7 +52,7 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
 
 
 
-SfxItemPresentation SfxRectangleItem::GetPresentation
+bool SfxRectangleItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
     SfxMapUnit              /*eCoreMetric*/,
@@ -65,7 +65,7 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
             OUString::number(aVal.Left())   + ", " +
             OUString::number(aVal.Bottom()) + ", " +
             OUString::number(aVal.Right());
-    return SFX_ITEM_PRESENTATION_NAMELESS;
+    return true;
 }
 
 

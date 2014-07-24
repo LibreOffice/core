@@ -195,7 +195,7 @@ bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
 
 
 
-SfxItemPresentation SvxFontListItem::GetPresentation
+bool SvxFontListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -204,7 +204,7 @@ SfxItemPresentation SvxFontListItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxFontItem -----------------------------------------------------
@@ -438,7 +438,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxFontItem::GetPresentation
+bool SvxFontItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -450,14 +450,14 @@ SfxItemPresentation SvxFontItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = aFamilyName;
-            return ePres;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -507,7 +507,7 @@ SfxPoolItem* SvxPostureItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxPostureItem::GetPresentation
+bool SvxPostureItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -519,14 +519,14 @@ SfxItemPresentation SvxPostureItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( GetValue() );
-            return ePres;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -672,7 +672,7 @@ SfxPoolItem* SvxWeightItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxWeightItem::GetPresentation
+bool SvxWeightItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -684,14 +684,14 @@ SfxItemPresentation SvxWeightItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( GetValue() );
-            return ePres;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1034,7 +1034,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-SfxItemPresentation SvxFontHeightItem::GetPresentation
+bool SvxFontHeightItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -1046,7 +1046,7 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1065,11 +1065,11 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
             }
             else
                 rText = OUString::number( nProp ) + "%";
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1233,7 +1233,7 @@ bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-SfxItemPresentation SvxFontWidthItem::GetPresentation
+bool SvxFontWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -1245,7 +1245,7 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1257,11 +1257,11 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
             }
             else
                 rText = OUString::number( nProp ) + "%";
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxTextLineItem ------------------------------------------------
@@ -1327,7 +1327,7 @@ SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxTextLineItem::GetPresentation
+bool SvxTextLineItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1339,16 +1339,16 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( GetValue() );
             if( !mColor.GetTransparency() )
                 rText = rText + OUString(cpDelim) + ::GetColorString( mColor );
-            return ePres;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1555,7 +1555,7 @@ SfxPoolItem* SvxCrossedOutItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxCrossedOutItem::GetPresentation
+bool SvxCrossedOutItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1567,14 +1567,14 @@ SfxItemPresentation SvxCrossedOutItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( GetValue() );
-            return ePres;
+            return true;
         default: ;//prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -1652,7 +1652,7 @@ SfxPoolItem* SvxShadowedItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxShadowedItem::GetPresentation
+bool SvxShadowedItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1664,7 +1664,7 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1673,11 +1673,11 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_SHADOWED_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxAutoKernItem -------------------------------------------------
@@ -1713,7 +1713,7 @@ SfxPoolItem* SvxAutoKernItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxAutoKernItem::GetPresentation
+bool SvxAutoKernItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1725,7 +1725,7 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1734,11 +1734,11 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_AUTOKERN_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxWordLineModeItem ---------------------------------------------
@@ -1775,7 +1775,7 @@ SfxPoolItem* SvxWordLineModeItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxWordLineModeItem::GetPresentation
+bool SvxWordLineModeItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1787,7 +1787,7 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1796,11 +1796,11 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_WORDLINE_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxContourItem --------------------------------------------------
@@ -1836,7 +1836,7 @@ SfxPoolItem* SvxContourItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxContourItem::GetPresentation
+bool SvxContourItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1848,7 +1848,7 @@ SfxItemPresentation SvxContourItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -1857,11 +1857,11 @@ SfxItemPresentation SvxContourItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_CONTOUR_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxPropSizeItem -------------------------------------------------
@@ -1897,7 +1897,7 @@ SfxPoolItem* SvxPropSizeItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxPropSizeItem::GetPresentation
+bool SvxPropSizeItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -1906,7 +1906,7 @@ SfxItemPresentation SvxPropSizeItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxBackgroundColorItem -----------------------------------------
@@ -2053,7 +2053,7 @@ SfxPoolItem* SvxColorItem::Create(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
 
 
 
-SfxItemPresentation SvxColorItem::GetPresentation
+bool SvxColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2065,14 +2065,14 @@ SfxItemPresentation SvxColorItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = ::GetColorString( mColor );
-            return ePres;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -2132,7 +2132,7 @@ SfxPoolItem* SvxCharSetColorItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxCharSetColorItem::GetPresentation
+bool SvxCharSetColorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2141,7 +2141,7 @@ SfxItemPresentation SvxCharSetColorItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxKerningItem --------------------------------------------------
@@ -2192,7 +2192,7 @@ SfxPoolItem* SvxKerningItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxKerningItem::GetPresentation
+bool SvxKerningItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -2204,11 +2204,11 @@ SfxItemPresentation SvxKerningItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
                     " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
-            return ePres;
+            return true;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText = EE_RESSTR(RID_SVXITEMS_KERNING_COMPLETE);
@@ -2224,11 +2224,11 @@ SfxItemPresentation SvxKerningItem::GetPresentation
             rText = rText +
                     GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
                     " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2291,7 +2291,7 @@ SfxPoolItem* SvxCaseMapItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxCaseMapItem::GetPresentation
+bool SvxCaseMapItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2303,14 +2303,14 @@ SfxItemPresentation SvxCaseMapItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( GetValue() );
-            return ePres;
+            return true;
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -2439,7 +2439,7 @@ sal_uInt16 SvxEscapementItem::GetValueCount() const
 
 
 
-SfxItemPresentation SvxEscapementItem::GetPresentation
+bool SvxEscapementItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2451,7 +2451,7 @@ SfxItemPresentation SvxEscapementItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -2464,11 +2464,11 @@ SfxItemPresentation SvxEscapementItem::GetPresentation
                 else
                     rText = rText + OUString::number( nEsc ) + "%";
             }
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -2604,7 +2604,7 @@ SfxPoolItem* SvxLanguageItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxLanguageItem::GetPresentation
+bool SvxLanguageItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2616,16 +2616,16 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText = SvtLanguageTable::GetLanguageString( (LanguageType)GetValue() );
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2703,7 +2703,7 @@ SfxPoolItem* SvxNoLinebreakItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxNoLinebreakItem::GetPresentation
+bool SvxNoLinebreakItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2712,7 +2712,7 @@ SfxItemPresentation SvxNoLinebreakItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxNoHyphenItem -------------------------------------------------
@@ -2748,7 +2748,7 @@ SfxPoolItem* SvxNoHyphenItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 
 
-SfxItemPresentation SvxNoHyphenItem::GetPresentation
+bool SvxNoHyphenItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2757,7 +2757,7 @@ SfxItemPresentation SvxNoHyphenItem::GetPresentation
 )   const
 {
     rText = OUString();
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 /*
@@ -2789,7 +2789,7 @@ SvxLineColorItem::~SvxLineColorItem()
 
 
 
-SfxItemPresentation SvxLineColorItem::GetPresentation
+bool SvxLineColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -2836,7 +2836,7 @@ SfxPoolItem* SvxBlinkItem::Create(SvStream& rStrm, sal_uInt16) const
 
 
 
-SfxItemPresentation SvxBlinkItem::GetPresentation
+bool SvxBlinkItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2848,7 +2848,7 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -2857,11 +2857,11 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
             if ( GetValue() )
                 nId = RID_SVXITEMS_BLINK_TRUE;
             rText = EE_RESSTR(nId);
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 // class SvxEmphaisMarkItem ---------------------------------------------------
@@ -2899,7 +2899,7 @@ SfxPoolItem* SvxEmphasisMarkItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 
 
-SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
+bool SvxEmphasisMarkItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2912,7 +2912,7 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NONE:
             rText = OUString();
-            return ePres;
+            return false;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             {
@@ -2926,11 +2926,11 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
                                     : 0;
                 if( nId )
                     rText += EE_RESSTR( nId );
-                return ePres;
+                return true;
             }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -3101,7 +3101,7 @@ bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-SfxItemPresentation SvxTwoLinesItem::GetPresentation( SfxItemPresentation ePres,
+bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation ePres,
                             SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
@@ -3123,11 +3123,11 @@ SfxItemPresentation SvxTwoLinesItem::GetPresentation( SfxItemPresentation ePres,
                 if( GetEndBracket() )
                     rText += OUString(GetEndBracket());
             }
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 
@@ -3192,7 +3192,7 @@ sal_uInt16 SvxCharRotateItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxCharRotateItem::GetPresentation(
+bool SvxCharRotateItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
@@ -3215,11 +3215,11 @@ SfxItemPresentation SvxCharRotateItem::GetPresentation(
                 if( IsFitToLine() )
                     rText += EE_RESSTR( RID_SVXITEMS_CHARROTATE_FITLINE );
             }
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
@@ -3335,7 +3335,7 @@ sal_uInt16 SvxCharScaleWidthItem::GetVersion( sal_uInt16 nFFVer ) const
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
-SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
+bool SvxCharScaleWidthItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
@@ -3356,11 +3356,11 @@ SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
                 rText = rText.replaceFirst( "$(ARG1)",
                             OUString::number( GetValue() ));
             }
-            return ePres;
+            return true;
         }
         default: ; //prevent warning
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+    return false;
 }
 
 bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
@@ -3432,7 +3432,7 @@ sal_uInt16 SvxCharReliefItem::GetValueCount() const
     return RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE;
 }
 
-SfxItemPresentation SvxCharReliefItem::GetPresentation
+bool SvxCharReliefItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
@@ -3455,7 +3455,7 @@ SfxItemPresentation SvxCharReliefItem::GetPresentation
     default:
         eRet = SFX_ITEM_PRESENTATION_NONE;
     }
-    return eRet;
+    return eRet != SFX_ITEM_PRESENTATION_NONE;
 }
 
 bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,

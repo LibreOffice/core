@@ -34,7 +34,7 @@ public:
     SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(sal_uInt16 nId, SvStream& rIn);
     virtual bool             operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+    virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const SAL_OVERRIDE;
     virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const SAL_OVERRIDE;

@@ -42,7 +42,7 @@ public:
                        sal_uInt16 nWhich  );
     SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -74,7 +74,7 @@ public:
     SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );
 
     virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
