@@ -324,7 +324,9 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mnLinesCount(0),
     mnLinesSinceRefresh(0),
     mfLastRefreshTime(0.0),
-    mnCurRow(0)
+    mnCurRow(0),
+    mbIsFirst(true),
+    mbIsUpdate(false)
 {
     maImportTimer.SetTimeout(0);
     maImportTimer.SetTimeoutHdl( LINK(this, DataStream, ImportTimerHdl) );
@@ -477,6 +479,7 @@ void DataStream::MoveData()
         break;
         case MOVE_UP:
         {
+            mbIsUpdate = true;
             // Remove the top row and shift the remaining rows upward. Then
             // insert a new row at the end row position.
             ScRange aRange = maStartRange;
@@ -486,6 +489,7 @@ void DataStream::MoveData()
         break;
         case MOVE_DOWN:
         {
+            mbIsUpdate = true;
             // Remove the end row and shift the remaining rows downward by
             // inserting a new row at the top row.
             ScRange aRange = maStartRange;
@@ -496,6 +500,18 @@ void DataStream::MoveData()
         case NO_MOVE:
         default:
             ;
+    }
+    if(mbIsFirst&&mbIsUpdate)
+    {
+         int importTimeout = 0;
+         char * cenv = getenv( "streamtimeout" );
+         if(cenv)
+         {
+             double denv = atof(cenv);
+             importTimeout = 1000 * denv;
+         }
+         maImportTimer.SetTimeout(importTimeout);
+         mbIsFirst = false;
     }
 }
 

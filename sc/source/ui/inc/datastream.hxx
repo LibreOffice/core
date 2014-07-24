@@ -124,6 +124,8 @@ private:
     Timer maImportTimer;
 
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
+    bool mbIsFirst;
+    bool mbIsUpdate;
 };
 
 }
