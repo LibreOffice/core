@@ -1111,19 +1111,6 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
-#define PCURSH ((SwCrsrShell*)_pStartShell)
-#define FOREACHSHELL_START( pEShell ) \
-    {\
-        SwViewShell *_pStartShell = pEShell; \
-        do { \
-            if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
-            {
-
-#define FOREACHSHELL_END( pEShell ) \
-            } \
-        } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pEShell ); \
-    }
-
 namespace
 {
     // #i59534: If a paragraph will be splitted we have to restore some redline positions
@@ -1823,21 +1810,24 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
     SwCrsrShell* pShell = pDoc->GetEditShell();
     if( !pShell )
         return;
-    FOREACHSHELL_START( pShell )
-        SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-        if( _pStkCrsr )
-            do {
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
-                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
-            } while ( (_pStkCrsr != 0 ) &&
-                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+    SwViewShell *_pStartShell = pShell;
+    do {
+        if( _pStartShell->IsA( TYPE( SwCrsrShell )) )
+        {
+            SwPaM *_pStkCrsr = ((SwCrsrShell*)_pStartShell)->GetStkCrsr();
+            if( _pStkCrsr )
+                do {
+                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, true);
+                    lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr, false);
+                } while ( (_pStkCrsr != 0 ) &&
+                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != ((SwCrsrShell*)_pStartShell)->GetStkCrsr()) );
 
-        FOREACHPAM_START( PCURSH->_GetCrsr() )
-            lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
-            lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
-        FOREACHPAM_END()
-
-    FOREACHSHELL_END( pShell )
+            FOREACHPAM_START( ((SwCrsrShell*)_pStartShell)->_GetCrsr() )
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, true);
+                lcl_ChkPaM( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR, false);
+            FOREACHPAM_END()
+        }
+    } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pShell );
 }
 
 void CntntIdxStoreImpl::RestoreShellCrsrs(SwDoc* /* pDoc */, updater_t& rUpdater)
