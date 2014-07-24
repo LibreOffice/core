@@ -1858,11 +1858,11 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
         {
         case RES_CHRFMT:
             pUndo = new SwUndoRenameCharFmt(rFmt.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_PARA;
+            eFamily = SFX_STYLE_FAMILY_CHAR;
             break;
         case RES_TXTFMTCOLL:
             pUndo = new SwUndoRenameFmtColl(rFmt.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_CHAR;
+            eFamily = SFX_STYLE_FAMILY_PARA;
             break;
         case RES_FRMFMT:
             pUndo = new SwUndoRenameFrmFmt(rFmt.GetName(), sNewName, this);
