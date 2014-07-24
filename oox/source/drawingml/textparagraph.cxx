@@ -113,6 +113,8 @@ void TextParagraph::insertAt(
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
                 && (*maRuns.begin())->getTextCharacterProperties().maCharColor.isUsed() )
                 aioBulletList[ PROP_BulletColor ] <<= (*maRuns.begin())->getTextCharacterProperties().maCharColor.getColor( rFilterBase.getGraphicHelper() );
+            if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maCharColor.isUsed() )
+                aioBulletList[ PROP_BulletColor ] <<= aTextCharacterStyle.maCharColor.getColor( rFilterBase.getGraphicHelper() );
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 18 );
             aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize, true );
