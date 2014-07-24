@@ -142,6 +142,12 @@ endif
 # Note: if the *Object_dep_target does not exist it will be created by
 # concat-deps as PHONY
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_CObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_CObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
@@ -209,6 +215,12 @@ $(call gb_GenCObject_get_target,%) :
 	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_GenCObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_GenCObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_GenCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
@@ -226,6 +238,12 @@ $(call gb_GenCxxObject_get_target,%) :
 	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_GenCxxObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_GenCxxObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_GenCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(eval $(gb_CxxObject__set_pchflags)))
@@ -307,6 +325,12 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_ObjCxxObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_ObjCxxObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_ObjCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
@@ -329,6 +353,12 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_ObjCObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_ObjCObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_ObjCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
@@ -886,6 +916,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CObject_get_dep_target,$(2))
 $(call gb_CObject_get_dep_target,$(2)) :| $(dir $(call gb_CObject_get_dep_target,$(2))).dir
+$(call gb_CObject_get_target,$(2)) :| $(dir $(call gb_CObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -909,6 +940,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
 $(call gb_CxxObject_get_dep_target,$(2)) :| $(dir $(call gb_CxxObject_get_dep_target,$(2))).dir
+$(call gb_CxxObject_get_target,$(2)) :| $(dir $(call gb_CxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -929,6 +961,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCObject_get_dep_target,$(2))
 $(call gb_ObjCObject_get_dep_target,$(2)) :| $(dir $(call gb_ObjCObject_get_dep_target,$(2))).dir
+$(call gb_ObjCObject_get_target,$(2)) :| $(dir $(call gb_ObjCObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -949,6 +982,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCxxObject_get_dep_target,$(2))
 $(call gb_ObjCxxObject_get_dep_target,$(2)) :| $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))).dir
+$(call gb_ObjCxxObject_get_target,$(2)) :| $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -968,6 +1002,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_AsmObject_get_dep_target,$(2))
 $(call gb_AsmObject_get_dep_target,$(2)) :| $(dir $(call gb_AsmObject_get_dep_target,$(2))).dir
+$(call gb_AsmObject_get_target,$(2)) :| $(dir $(call gb_AsmObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -992,6 +1027,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCObject_get_dep_target,$(2))
 $(call gb_GenCObject_get_dep_target,$(2)) :| $(dir $(call gb_GenCObject_get_dep_target,$(2))).dir
+$(call gb_GenCObject_get_target,$(2)) :| $(dir $(call gb_GenCObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -1020,6 +1056,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxObject_get_dep_target,$(2))
 $(call gb_GenCxxObject_get_dep_target,$(2)) :| $(dir $(call gb_GenCxxObject_get_dep_target,$(2))).dir
+$(call gb_GenCxxObject_get_target,$(2)) :| $(dir $(call gb_GenCxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
