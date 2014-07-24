@@ -1662,7 +1662,6 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     BOOST_FOREACH(const MarkEntry& aEntry, m_aFlyEntries)
     {
-        SwPosition* pPos = 0;
         if(!aEntry.m_bOther)
         {
             SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
@@ -1685,11 +1684,6 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto
             SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
             SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
             pFrmFmt->NotifyClients( pAnchor, pAnchor );
-        }
-        if( pPos )
-        {
-            SAL_INFO("sw.core", "setting " << pPos << " for Index " << aEntry.m_nIdx << " from " << pPos->nContent.GetIndex());
-            rUpdater(*pPos, aEntry.m_nCntnt);
         }
     }
 }
