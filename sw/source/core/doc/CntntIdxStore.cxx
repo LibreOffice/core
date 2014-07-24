@@ -110,14 +110,13 @@ namespace
             : m_pNewCntntNode(pNewCntntNode), m_nLen(nLen), m_nCorrLen(nCorrLen) {};
         void operator()(SwPosition& rPos, sal_Int32 nCntnt) const
         {
+            rPos.nNode = *m_pNewCntntNode;
             if( nCntnt < m_nCorrLen )
             {
-                rPos.nNode = *m_pNewCntntNode;
                 rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), std::min( nCntnt, static_cast<sal_Int32>(m_nLen) ) );
             }
             else
             {
-                rPos.nNode = *m_pNewCntntNode;
                 rPos.nContent -= m_nCorrLen;
             }
         };
