@@ -230,7 +230,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         GraphicNativeMetadata aMetadata;
         if ( aMetadata.read(aGraphic) )
         {
-            sal_uInt16 aRotation = aMetadata.getRotation();
+            const sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
                 MessageDialog aQueryBox( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui");
@@ -289,7 +289,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
     bool bReturn = false;
     SwDocShell* pDocShell = GetDocShell();
-    sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
+    const sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     // when in HTML mode insert only as a link
     boost::scoped_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
@@ -308,9 +308,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     std::vector<OUString> aFormats;
     SwDoc* pDoc = pDocShell->GetDoc();
-    const sal_uInt16 nArrLen = pDoc->GetFrmFmts()->size();
-    sal_uInt16 i;
-    for( i = 0; i < nArrLen; i++ )
+    const size_t nArrLen = pDoc->GetFrmFmts()->size();
+    for( size_t i = 0; i < nArrLen; ++i )
     {
         SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
         if(pFmt->IsDefault() || pFmt->IsAuto())
@@ -322,7 +321,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     const ::std::vector<OUString>& rFrmPoolArr(
             SwStyleNameMapper::GetFrmFmtUINameArray());
-    for( i = 0; i < rFrmPoolArr.size(); ++i )
+    for( size_t i = 0; i < rFrmPoolArr.size(); ++i )
     {
         aFormats.push_back(rFrmPoolArr[i]);
     }
@@ -334,7 +333,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
     OUString sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
-    for( i = 0; i < aFormats.size(); i++ )
+    for( size_t i = 0; i < aFormats.size(); ++i )
     {
         pEntries[i] = aFormats[i];
         if(pEntries[i].equals(sGraphicFormat))
@@ -521,7 +520,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
 void SwView::Execute(SfxRequest &rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     bool bIgnore = false;
@@ -596,8 +595,9 @@ void SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                sal_uInt16 nOn = ((const SfxBoolItem*)pItem)->GetValue() ? nsRedlineMode_t::REDLINE_ON : 0;
-                sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
+                const sal_uInt16 nOn = ((const SfxBoolItem*)pItem)->GetValue()
+                    ? nsRedlineMode_t::REDLINE_ON : 0;
+                const sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
             }
         }
@@ -638,7 +638,7 @@ void SwView::Execute(SfxRequest &rReq)
                     pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
                     nOn = 0;
                 }
-                sal_uInt16 nMode = pIDRA->GetRedlineMode();
+                const sal_uInt16 nMode = pIDRA->GetRedlineMode();
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
@@ -780,7 +780,7 @@ void SwView::Execute(SfxRequest &rReq)
                         pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
 
                         // re-initialize the Redline dialog
-                        sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
+                        const sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
                         SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)
                                                 pVFrame->GetChildWindow(nId);
                         if (pRed)
@@ -922,10 +922,9 @@ void SwView::Execute(SfxRequest &rReq)
             bool bOldCrsrInReadOnly = m_pWrtShell->IsReadOnlyAvailable();
             m_pWrtShell->SetReadOnlyAvailable( true );
 
-            for( sal_uInt16 i = 0; i < 2; ++i )
+            for( int i = 0; i < 2; ++i )
             {
-                sal_uInt16 nCount = m_pWrtShell->GetTOXCount();
-                if( 1 == nCount )
+                if( m_pWrtShell->GetTOXCount() == 1 )
                     ++i;
 
                 while( m_pWrtShell->GotoPrevTOXBase() )
@@ -987,7 +986,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
-                sal_uInt16 nValue = ((SfxUInt16Item*)pItem)->GetValue();
+                const sal_uInt16 nValue = ((SfxUInt16Item*)pItem)->GetValue();
                 switch ( nSlot )
                 {
                     case FN_INSERT_CTRL:
@@ -1018,7 +1017,7 @@ void SwView::Execute(SfxRequest &rReq)
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
             {
                 SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-                sal_uInt16 nTab = ((const SfxUInt16Item*)pItem)->GetValue();
+                const sal_uInt16 nTab = ((const SfxUInt16Item*)pItem)->GetValue();
                 MakeDefTabs( nTab, aDefTabs );
                 m_pWrtShell->SetDefault( aDefTabs );
             }
@@ -1331,7 +1330,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         rShell.FirePageChangeEvent(m_nOldPageNum, nLogPage);
                     m_nOldPageNum = nLogPage;
                 }
-                sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
+                const sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
                 if (m_nPageCnt != nCnt)   // notify Basic
                 {
                     m_nPageCnt = nCnt;
@@ -1778,7 +1777,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case SID_ATTR_SIZE:
         {
-            sal_uLong nId = FN_INSERT_FIELD;
+            sal_uInt16 nId = FN_INSERT_FIELD;
             if( rSh.IsCrsrInTbl() )
                 nId = FN_FORMAT_TABLE_DLG;
             else if( rSh.GetCurTOX() )
@@ -1804,8 +1803,8 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     nId = SID_ATTR_TRANSFORM;
             }
             if( nId )
-                GetViewFrame()->GetDispatcher()->Execute(
-                    static_cast< sal_uInt16 >( nId ), SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                GetViewFrame()->GetDispatcher()->Execute(nId,
+                    SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
         }
         break;
 
@@ -2073,7 +2072,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
     m_pViewImpl->InitRequest( rRequest );
     m_pViewImpl->SetParam( pItem ? 1 : 0 );
-    sal_uInt16 nSlot = rRequest.GetSlot();
+    const sal_uInt16 nSlot = rRequest.GetSlot();
 
     if ( !pItem )
     {
@@ -2451,7 +2450,7 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         SfxMedium* pMed = m_pViewImpl->CreateMedium();
         if ( pMed )
         {
-            sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
+            const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
             long nFound = InsertMedium( nSlot, pMed, m_pViewImpl->GetParam() );
 
             if ( SID_INSERTDOC == nSlot )
