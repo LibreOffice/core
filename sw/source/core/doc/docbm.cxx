@@ -1466,6 +1466,11 @@ namespace
                 rPos.nNode = *m_pNewCntntNode;
                 rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), std::min( nCntnt, static_cast<sal_Int32>(m_nLen) ) );
             }
+            else
+            {
+                rPos.nNode = *m_pNewCntntNode;
+                rPos.nContent -= m_nCorrLen;
+            }
         };
     };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
