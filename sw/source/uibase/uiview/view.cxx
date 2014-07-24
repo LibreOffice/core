@@ -73,6 +73,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -948,12 +949,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     if( m_pWrtShell->GetDoc()->IsUpdateExpFld() )
     {
-        if (m_pWrtShell->GetDoc()->containsUpdatableFields())
+        if (m_pWrtShell->GetDoc()->GetDocumentFieldsManager().containsUpdatableFields())
         {
             SET_CURR_SHELL( m_pWrtShell );
             m_pWrtShell->StartAction();
             m_pWrtShell->CalcLayout();
-            m_pWrtShell->GetDoc()->UpdateFlds(NULL, false);
+            m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
             m_pWrtShell->EndAction();
         }
         m_pWrtShell->GetDoc()->SetUpdateExpFldStat( false );

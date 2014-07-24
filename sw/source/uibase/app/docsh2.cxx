@@ -77,6 +77,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -270,7 +271,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         switch( nAction )
         {
         case 2:
-            mpDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
+            mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
         // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
@@ -826,7 +827,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             //pWrtShell is not set in page preview
             if(mpWrtShell)
                 mpWrtShell->StartAllAction();
-            mpDoc->UpdateFlds( NULL, false );
+            mpDoc->getIDocumentFieldsAccess().UpdateFlds( NULL, false );
             mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
             mpDoc->RemoveInvisibleContent();
             if(mpWrtShell)

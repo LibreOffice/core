@@ -26,6 +26,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <fldbas.hxx>
@@ -88,11 +89,11 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        sal_uInt16 nPos = GetDoc()->GetFldTypes()->GetPos(this);
+        sal_uInt16 nPos = GetDoc()->getIDocumentFieldsAccess().GetFldTypes()->GetPos(this);
 
         if (nPos != USHRT_MAX)
         {
-            GetDoc()->RemoveFldType(nPos);
+            GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nPos);
             delete this;
         }
     }

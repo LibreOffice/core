@@ -36,6 +36,7 @@
 #include <DocumentLinksAdministrationManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -1194,7 +1195,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwPaM* pPam;
     SwViewShell* pVSh = 0;
     SwEditShell* pESh = pDoc->GetEditShell( &pVSh );
-    pDoc->LockExpFlds();
+    pDoc->getIDocumentFieldsAccess().LockExpFlds();
     {
         // Insert an empty TextNode at the Section's start
         SwNodeIndex aIdx( *pSectNd, +1 );
@@ -1419,9 +1420,9 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
     pDoc->getIDocumentLinksAdministration().SetVisibleLinks( bWasVisibleLinks );
 
-    pDoc->UnlockExpFlds();
-    if( !pDoc->IsExpFldsLocked() )
-        pDoc->UpdateExpFlds(NULL, true);
+    pDoc->getIDocumentFieldsAccess().UnlockExpFlds();
+    if( !pDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
+        pDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
     if( pESh )
         pESh->EndAllAction();

@@ -33,6 +33,7 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
@@ -2092,7 +2093,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
         // Convert Table formulas to their relative representation
         SwTableFmlUpdate aMsgHnt( this );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
-        GetFrmFmt()->GetDoc()->UpdateTblFlds( &aMsgHnt );
+        GetFrmFmt()->GetDoc()->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
     }
 
     _CpyTabFrms aCpyFmt;
@@ -2159,7 +2160,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     {
         // A DDE-Table is being copied
         // Does the new Document actually have it's FieldType?
-        SwFieldType* pFldType = pInsDoc->InsertFldType(
+        SwFieldType* pFldType = pInsDoc->getIDocumentFieldsAccess().InsertFldType(
                                     *((SwDDETable*)this)->GetDDEFldType() );
         OSL_ENSURE( pFldType, "unknown FieldType" );
 
@@ -2179,7 +2180,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         // Conver the Table formulas to their relative representation
         SwTableFmlUpdate aMsgHnt( this );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
-        pSrcDoc->UpdateTblFlds( &aMsgHnt );
+        pSrcDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
     }
 
     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pInsDoc );

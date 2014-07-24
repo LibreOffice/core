@@ -19,6 +19,7 @@
 
 #include <node.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
@@ -68,7 +69,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         pTxtNd->UpdateOutlineState();
 
         // update the structure fields
-        GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
     }
 }
 

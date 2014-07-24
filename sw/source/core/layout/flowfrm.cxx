@@ -23,6 +23,7 @@
 #include "viewimp.hxx"
 #include "viewopt.hxx"
 #include "frmtool.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include "dcontact.hxx"
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -1935,7 +1936,7 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
                 {
                     SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
-                        pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on!
+                        pSh->GetDoc()->getIDocumentFieldsAccess().SetNewFldLst(true);  // Will be done by CalcLayout() later on!
 
                     pNewPage->InvalidateSpelling();
                     pNewPage->InvalidateSmartTags();
@@ -2467,7 +2468,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
             m_rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, false );
             SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
-                pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on
+                pSh->GetDoc()->getIDocumentFieldsAccess().SetNewFldLst(true);  // Will be done by CalcLayout() later on
 
             pNewPage->InvalidateSpelling();
             pNewPage->InvalidateSmartTags();

@@ -126,7 +126,7 @@ public:
     /// the destructor will free all objects still in the vector
     ~SwFldTypes();
     sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
 class SwTOXTypes : public std::vector<SwTOXType*> {

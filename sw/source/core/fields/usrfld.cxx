@@ -26,6 +26,7 @@
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
@@ -207,7 +208,7 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if ( !IsModifyLocked() )
     {
         LockModify();
-        GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )->UpdateFlds();
         UnlockModify();
     }
 }

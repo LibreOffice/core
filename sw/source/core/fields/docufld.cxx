@@ -72,6 +72,7 @@
 #include <pagedesc.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -2113,7 +2114,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 
 sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 {
-    SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->GetSysFldType( RES_REFPAGESETFLD));
+    SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_REFPAGESETFLD));
     for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
             // update only the GetRef fields

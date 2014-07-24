@@ -28,6 +28,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
@@ -628,7 +629,7 @@ bool SwCrsrShell::MoveFldType(
         if( RES_INPUTFLD == pFldType->Which() && bAddSetExpressionFldsToInputFlds )
         {
             // there are hidden input fields in the set exp. fields
-            const SwFldTypes& rFldTypes = *mpDoc->GetFldTypes();
+            const SwFldTypes& rFldTypes = *mpDoc->getIDocumentFieldsAccess().GetFldTypes();
             const size_t nSize = rFldTypes.size();
             for( size_t i=0; i < nSize; ++i )
             {
@@ -642,7 +643,7 @@ bool SwCrsrShell::MoveFldType(
     }
     else
     {
-        const SwFldTypes& rFldTypes = *mpDoc->GetFldTypes();
+        const SwFldTypes& rFldTypes = *mpDoc->getIDocumentFieldsAccess().GetFldTypes();
         const size_t nSize = rFldTypes.size();
         for( size_t i=0; i < nSize; ++i )
         {
@@ -675,7 +676,7 @@ bool SwCrsrShell::MoveFldType(
         {
             // create dummy for the search
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
-                (SwDateTimeFieldType*)mpDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
+                (SwDateTimeFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_DATETIMEFLD ) ) );
 
             pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
                         mpDoc->IsClipBoard() );

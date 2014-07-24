@@ -19,6 +19,7 @@
 
 #include <swtypes.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <usrfld.hxx>
 #include <docufld.hxx>
 #include <expfld.hxx>
@@ -890,7 +891,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
                     pSh = ::GetActiveWrtShell();
                 if(pSh)
                 {
-                    const SwFldTypes* p = pSh->GetDoc()->GetFldTypes();
+                    const SwFldTypes* p = pSh->GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
                     sal_uInt16 i;
 
                     for (i = 0; i < INIT_FLDTYPES; i++)

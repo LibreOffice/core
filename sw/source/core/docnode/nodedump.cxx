@@ -11,6 +11,7 @@
 #include "drawdoc.hxx"
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <UndoManager.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
@@ -184,7 +185,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     m_pNodes->dumpAsXml( writer );
     mpMarkManager->dumpAsXml( writer );
     m_pUndoManager->dumpAsXml(writer);
-    mpFldTypes->dumpAsXml( writer );
+    getIDocumentFieldsAccess().GetFldTypes()->dumpAsXml( writer );
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
     mpFrmFmtTbl->dumpAsXml( writer, "frmFmtTbl" );
@@ -242,7 +243,7 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
 } // namespace mark
 } // namespace sw
 
-void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
+void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer(w);
     writer.startElement("swfldtypes");

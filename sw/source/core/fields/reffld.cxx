@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
@@ -748,7 +749,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
         const OUString rPar1 = GetPar1();
         // don't convert when the name points to an existing field type
-        if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
+        if(!pDoc->getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
             sal_uInt16 nResId = USHRT_MAX;
@@ -834,7 +835,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
 
     case REF_SEQUENCEFLD:
         {
-            SwFieldType* pFldType = pDoc->GetFldType( RES_SETEXPFLD, rRefMark, false );
+            SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, rRefMark, false );
             if( pFldType && pFldType->GetDepends() &&
                 nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
@@ -948,7 +949,7 @@ typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
 /// @param[in,out] rIds The list of IDs found in the document.
 void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
-    SwFieldType *const pType = rDoc.GetFldType(RES_SETEXPFLD, aName, false);
+    SwFieldType *const pType = rDoc.getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, aName, false);
 
     if (!pType)
         return;
@@ -996,7 +997,7 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
             AddId( GetFirstUnusedId(aIds), *pIt );
 
         // Change the Sequence number of all SetExp fields in the source document
-        SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
+        SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, aName, false );
         if( pType )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
@@ -1090,7 +1091,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         {
             // when copying _to_ clipboard, expectation is that no fields exist
             // so no re-mapping is required to avoid collisions
-            assert(!rDestDoc.GetSysFldType(RES_GETREFFLD)->GetDepends());
+            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFldType(RES_GETREFFLD)->GetDepends());
             return; // don't modify the fields in the source doc
         }
 

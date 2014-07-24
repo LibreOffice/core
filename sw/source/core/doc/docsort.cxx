@@ -32,6 +32,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -522,7 +523,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Switch to relative Formulas
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_RELBOXNAME;
-    UpdateTblFlds( &aMsgHnt );
+    getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
     // Table as a flat array structure
     FlatFndBox aFlatBox(this, aFndBox);

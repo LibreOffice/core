@@ -34,6 +34,7 @@
 #include <mdiexp.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <docary.hxx>
 #include <rootfrm.hxx>
@@ -395,8 +396,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     {
         pDesc->SetNumType( rChged.GetNumType() );
         // Notify page number fields that NumFormat has changed
-        GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
-        GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
+        getIDocumentFieldsAccess().GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
+        getIDocumentFieldsAccess().GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
 
         // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
         // that refer to a changed page, so we invalidate foot notes.

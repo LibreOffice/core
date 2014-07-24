@@ -22,6 +22,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -196,7 +197,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
+    ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrmFmt is created.
@@ -270,7 +271,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
-    ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
+    ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrmFmt is created.

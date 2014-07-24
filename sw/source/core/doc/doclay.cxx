@@ -66,6 +66,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -1043,9 +1044,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     bool bTable = false;    // To save some code.
 
     // Get the field first, because we retrieve the TxtColl via the field's name
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->size(),
+    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.getIDocumentFieldsAccess().GetFldTypes()->size(),
             "FldType index out of bounds." );
-    SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.GetFldTypes())[nId] : NULL;
+    SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.getIDocumentFieldsAccess().GetFldTypes())[nId] : NULL;
     OSL_ENSURE(!pType || pType->Which() == RES_SETEXPFLD, "wrong Id for Label");
 
     SwTxtFmtColl * pColl = NULL;
@@ -1392,9 +1393,9 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
 
     // Because we get by the TxtColl's name, we need to create the field first.
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->size(),
+    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.getIDocumentFieldsAccess().GetFldTypes()->size(),
             "FldType index out of bounds" );
-    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.GetFldTypes())[nId] : 0;
+    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.getIDocumentFieldsAccess().GetFldTypes())[nId] : 0;
     OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
 
     SwTxtFmtColl *pColl = NULL;

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <node.hxx>
 #include <frmfmt.hxx>
 #include <swtable.hxx>
@@ -271,9 +272,9 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // Is the field type available in the new document?
         pDDEType = ((SwDDETable&)GetTable()).GetDDEFldType();
         if( pDDEType->IsDeleted() )
-            pDoc->InsDeletedFldType( *pDDEType );
+            pDoc->getIDocumentFieldsAccess().InsDeletedFldType( *pDDEType );
         else
-            pDDEType = (SwDDEFieldType*)pDoc->InsertFldType( *pDDEType );
+            pDDEType = (SwDDEFieldType*)pDoc->getIDocumentFieldsAccess().InsertFldType( *pDDEType );
         OSL_ENSURE( pDDEType, "unknown FieldType" );
 
         // Swap the table pointers in the node

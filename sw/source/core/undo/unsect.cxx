@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -363,7 +364,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
              !aInsertedSect.GetCondition().isEmpty() )
         {
             SwCalc aCalc( rDoc );
-            rDoc.FldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
+            rDoc.getIDocumentFieldsAccess().FldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
             bool bRecalcCondHidden =
                     aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool();
             aInsertedSect.SetCondHidden( bRecalcCondHidden );

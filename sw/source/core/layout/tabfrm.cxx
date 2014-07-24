@@ -22,6 +22,7 @@
 #include "cntfrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include "docsh.hxx"
 #include "viewimp.hxx"
 #include "swtable.hxx"
@@ -3092,7 +3093,7 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     if (GetFmt()->GetPageDesc().GetNumOffset())
                         ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
                     SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
-                    GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
+                    GetFmt()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
                 }
             }
             break;

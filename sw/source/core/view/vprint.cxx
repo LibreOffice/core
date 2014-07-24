@@ -47,6 +47,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
@@ -323,7 +324,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"SwViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
-    pPrtDoc->LockExpFlds();
+    pPrtDoc->getIDocumentFieldsAccess().LockExpFlds();
 
     // use given printer
     //! Make a copy of it since it gets destroyed with the temporary document

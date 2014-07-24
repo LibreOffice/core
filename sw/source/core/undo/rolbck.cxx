@@ -40,6 +40,7 @@
 #include <ftnidx.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
@@ -266,7 +267,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
         m_nFldWhich == RES_USERFLD ||
         m_nFldWhich == RES_SETEXPFLD ||
         m_nFldWhich == RES_DDEFLD ||
-        !pDoc->GetSysFldType( m_nFldWhich ))
+        !pDoc->getIDocumentFieldsAccess().GetSysFldType( m_nFldWhich ))
     {
         m_pFldType.reset( m_pFld->GetField()->GetTyp()->Copy() );
         m_pFld->GetField()->ChgTyp( m_pFldType.get() ); // change field type
@@ -292,12 +293,12 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
     SwFieldType* pNewFldType = m_pFldType.get();
     if ( !pNewFldType )
     {
-        pNewFldType = pDoc->GetSysFldType( m_nFldWhich );
+        pNewFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType( m_nFldWhich );
     }
     else
     {
         // register type with the document
-        pNewFldType = pDoc->InsertFldType( *m_pFldType );
+        pNewFldType = pDoc->getIDocumentFieldsAccess().InsertFldType( *m_pFldType );
     }
 
     m_pFld->GetField()->ChgTyp( pNewFldType ); // change field type

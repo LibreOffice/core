@@ -20,6 +20,7 @@
 #include "switerator.hxx"
 #include "editsh.hxx"
 #include "doc.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -37,7 +38,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     // create sorted list of all  input fields
     pSrtLst = new _SetGetExpFlds();
 
-    const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
+    const SwFldTypes& rFldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const size_t nSize = rFldTypes.size();
 
     // iterate over all types
@@ -125,7 +126,7 @@ void SwInputFieldList::GotoFieldPos(size_t nId)
  */
 bool SwInputFieldList::BuildSortLst()
 {
-    const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
+    const SwFldTypes& rFldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const size_t nSize = rFldTypes.size();
 
     // iterate over all types

@@ -37,6 +37,8 @@ class _SetGetExpFld;
 struct SwHash;
 class SwNode;
 
+namespace rtl { class OUString; }
+using rtl::OUString;
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
  /** Document fields related interfaces

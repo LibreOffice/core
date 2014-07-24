@@ -29,6 +29,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -339,7 +340,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         SwCalc aCalc( *this );
         if( ! IsInReading() )
         {
-            FldsToCalc( aCalc, pNewSectNode->GetIndex(), USHRT_MAX );
+            getIDocumentFieldsAccess().FldsToCalc( aCalc, pNewSectNode->GetIndex(), USHRT_MAX );
         }
         SwSection& rNewSect = pNewSectNode->GetSection();
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
@@ -715,7 +716,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         SwCalc aCalc( *this );
         if( !pIdx )
             pIdx = pFmt->GetCntnt().GetCntntIdx();
-        FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
+        getIDocumentFieldsAccess().FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
 
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag

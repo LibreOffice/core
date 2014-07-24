@@ -23,6 +23,7 @@
 #include <svl/urihelper.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
@@ -176,7 +177,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     bool bRet = false;
     SET_CURR_SHELL( this );
 
-    pInsDoc->LockExpFlds();
+    pInsDoc->getIDocumentFieldsAccess().LockExpFlds();
 
     if( IsTableMode() )
     {
@@ -249,9 +250,9 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         }
     }
 
-    pInsDoc->UnlockExpFlds();
-    if( !pInsDoc->IsExpFldsLocked() )
-        pInsDoc->UpdateExpFlds(NULL, true);
+    pInsDoc->getIDocumentFieldsAccess().UnlockExpFlds();
+    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
+        pInsDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
     // set the saved Node position back to the correct Node
     if( bRet && pSttNd )

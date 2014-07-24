@@ -25,6 +25,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -697,7 +698,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         // Change table formulas into relative representation
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
-        pCpyDoc->UpdateTblFlds( &aMsgHnt );
+        pCpyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
     }
 
     // delete frames
@@ -747,7 +748,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         // Convert Table formulas to their relative representation
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
-        pCpyDoc->UpdateTblFlds( &aMsgHnt );
+        pCpyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
     }
 
     SwTblNumFmtMerge aTNFM( *pCpyDoc, *pDoc );
@@ -995,7 +996,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         // Convert Table formulas to their relative representation
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
-        pCpyDoc->UpdateTblFlds( &aMsgHnt );
+        pCpyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
     }
 
     // Delete the Frames

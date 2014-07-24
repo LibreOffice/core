@@ -41,6 +41,7 @@
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>
@@ -1149,7 +1150,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
 void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFlds.empty();
-    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, OUString(),false);
+    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, OUString(),false);
     SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
     SwFmtFld* pSwFmtFld = aIter.First();
     while(pSwFmtFld)

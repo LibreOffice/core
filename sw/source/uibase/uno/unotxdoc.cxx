@@ -100,6 +100,7 @@
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -168,7 +169,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView && pSwView->HasSelection( false );  // check for any selection, not just text selection
-    const bool bHasPostIts      = sw_GetPostIts( pDocShell->GetDoc(), 0 );
+    const bool bHasPostIts      = sw_GetPostIts( &pDocShell->GetDoc()->getIDocumentFieldsAccess(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrintData();
@@ -3961,11 +3962,11 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
     const bool bContainsHiddenChars         = m_pShell->GetDoc()->ContainsHiddenChars();
-    const SwFieldType* pFldType = m_pShell->GetDoc()->GetSysFldType( RES_HIDDENTXTFLD );
+    const SwFieldType* pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD );
     const bool bContainsHiddenFields        = pFldType && pFldType->GetDepends();
-    pFldType = m_pShell->GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
+    pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD );
     const bool bContainsHiddenParagraphs    = pFldType && pFldType->GetDepends();
-    pFldType = m_pShell->GetDoc()->GetSysFldType( RES_JUMPEDITFLD );
+    pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_JUMPEDITFLD );
     const bool bContainsPlaceHolders        = pFldType && pFldType->GetDepends();
     const bool bContainsFields              = m_pShell->IsAnyFieldInDoc();
 

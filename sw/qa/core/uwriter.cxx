@@ -33,6 +33,7 @@
 #include "breakit.hxx"
 #include "doc.hxx"
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include "docsh.hxx"
 #include "docstat.hxx"
 #include "docufld.hxx"
@@ -597,7 +598,7 @@ void SwDocTest::testSwScanner()
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), OUString("An Author"),
+            (SwPostItFieldType*)m_pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD), OUString("An Author"),
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
 

@@ -80,6 +80,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
 #include <dbui.hrc>
@@ -1028,7 +1029,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
                             pWorkDoc->SetDBManager( this );
                             SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
-                            pWorkDoc->UpdateFlds(NULL, false);
+                            pWorkDoc->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
                             SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                             pWorkDoc->RemoveInvisibleContent();

@@ -81,6 +81,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -637,7 +638,7 @@ void SwHTMLParser::Continue( int nToken )
             if( !aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
-                    (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );
+                    (SwScriptFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_SCRIPTFLD );
 
                 SwScriptField aFld( pType, aScriptType, aScriptSource,
                                     false );
@@ -5433,7 +5434,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
     sText.append("\">");
 
     SwPostItField aPostItFld(
-        (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
+        (SwPostItFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_POSTITFLD ),
         aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );

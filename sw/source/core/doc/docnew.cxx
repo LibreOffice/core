@@ -98,6 +98,7 @@
 #include <DocumentOutlineNodesManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -211,6 +212,7 @@ SwDoc::SwDoc()
     m_pDocumentListsManager( new ::sw::DocumentListsManager( *this ) ),
     m_pDocumentOutlineNodesManager( new ::sw::DocumentOutlineNodesManager( *this ) ),
     m_pDocumentContentOperationsManager( new ::sw::DocumentContentOperationsManager( *this ) ),
+    m_pDocumentFieldsManager( new ::sw::DocumentFieldsManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -227,8 +229,6 @@ SwDoc::SwDoc()
     mpTOXTypes( new SwTOXTypes() ),
     mpDefTOXBases( new SwDefTOXBase_Impl() ),
     mpCurrentView( 0 ),
-    mpUpdtFlds( new SwDocUpdtFld( this ) ),
-    mpFldTypes( new SwFldTypes() ),
     mpGlossaryDoc( 0 ),
     mpOutlineRule( 0 ),
     mpFtnInfo( new SwFtnInfo ),
@@ -251,7 +251,6 @@ SwDoc::SwDoc()
     mpGrammarContact(createGrammarContact()),
     m_pXmlIdRegistry(),
     mReferenceCount(0),
-    mnLockExpFld( 0 ),
     mbGlossDoc(false),
     mbModified(false),
     mbDtor(false),
@@ -259,7 +258,6 @@ SwDoc::SwDoc()
     mbLoaded(false),
     mbUpdateExpFld(false),
     mbNewDoc(false),
-    mbNewFldLst(true),
     mbCopyIsMove(false),
     mbInReading(false),
     mbInXMLImport(false),
@@ -322,7 +320,7 @@ SwDoc::SwDoc()
     // Set BodyFmt for columns
     mpColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
-    _InitFieldTypes();
+    GetDocumentFieldsManager()._InitFieldTypes();
 
     // Create a default OutlineNumRule (for Filters)
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
@@ -473,7 +471,6 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteAndDestroyAll();
 
     delete mpUnoCrsrTbl;
-    delete mpUpdtFlds;
     delete mpACEWord;
 
     // Release the BaseLinks
@@ -622,7 +619,6 @@ SwDoc::~SwDoc()
     delete mpEndNoteInfo;
     delete mpLineNumberInfo;
     delete mpFtnIdxs;
-    delete mpFldTypes;
     delete mpTOXTypes;
     delete mpDocStat;
     delete mpEmptyPageFmt;
@@ -774,10 +770,7 @@ void SwDoc::ClearDoc()
 
     mxForbiddenCharsTable.clear();
 
-    for(SwFldTypes::const_iterator it = mpFldTypes->begin() + INIT_FLDTYPES;
-        it != mpFldTypes->end(); ++it)
-        delete *it;
-    mpFldTypes->erase( mpFldTypes->begin() + INIT_FLDTYPES, mpFldTypes->end() );
+    GetDocumentFieldsManager().ClearFieldTypes();
 
     delete mpNumberFormatter, mpNumberFormatter = 0;
 
@@ -948,7 +941,7 @@ void SwDoc::Paste( const SwDoc& rSource )
     aCpyPam.Move( fnMoveForward, fnGoDoc );
 
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
-    this->LockExpFlds();
+    this->getIDocumentFieldsAccess().LockExpFlds();
 
     {
         SwPosition& rInsPos = *aInsertPam.GetPoint();
@@ -1000,8 +993,8 @@ void SwDoc::Paste( const SwDoc& rSource )
 
     this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
-    UnlockExpFlds();
-    UpdateFlds(NULL, false);
+    getIDocumentFieldsAccess().UnlockExpFlds();
+    getIDocumentFieldsAccess().UpdateFlds(NULL, false);
 }
 
 sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const

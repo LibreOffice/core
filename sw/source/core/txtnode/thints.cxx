@@ -53,6 +53,7 @@
 #include <breakit.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1159,8 +1160,8 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 case RES_HIDDENTXTFLD:
                 case RES_DBNUMSETFLD:
                 case RES_DBNEXTSETFLD:
-                    if( !pDoc->IsNewFldLst() && GetNodes().IsDocNodes() )
-                        pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pAttr );
+                    if( !pDoc->getIDocumentFieldsAccess().IsNewFldLst() && GetNodes().IsDocNodes() )
+                        pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( false, *(SwTxtFld*)pAttr );
                     break;
                 case RES_DDEFLD:
                     if( GetNodes().IsDocNodes() &&
@@ -3020,7 +3021,7 @@ bool SwpHints::TryInsertHint(
             SwDoc* pDoc = rNode.GetDoc();
             const SwField* pFld = ((SwTxtFld*)pHint)->GetFmtFld().GetField();
 
-            if( !pDoc->IsNewFldLst() )
+            if( !pDoc->getIDocumentFieldsAccess().IsNewFldLst() )
             {
                 // was fuer ein Feld ist es denn ??
                 // bestimmte Felder mussen am Doc das Calculations-Flag updaten
@@ -3034,9 +3035,9 @@ bool SwpHints::TryInsertHint(
                 case RES_DBNEXTSETFLD:
                     {
                         if( bDelFirst )
-                            pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pHint );
+                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( false, *(SwTxtFld*)pHint );
                         if( rNode.GetNodes().IsDocNodes() )
-                            pDoc->InsDelFldInFldLst( true, *(SwTxtFld*)pHint );
+                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( true, *(SwTxtFld*)pHint );
                     }
                     break;
                 case RES_DDEFLD:
@@ -3059,7 +3060,7 @@ bool SwpHints::TryInsertHint(
                         // bevor die ReferenzNummer gesetzt wird, sollte
                         // das Feld am richtigen FeldTypen haengen!
                         SwSetExpFieldType* pFldType = (SwSetExpFieldType*)
-                                    pDoc->InsertFldType( *pFld->GetTyp() );
+                                    pDoc->getIDocumentFieldsAccess().InsertFldType( *pFld->GetTyp() );
                         if( pFldType != pFld->GetTyp() )
                         {
                             SwFmtFld* pFmtFld = (SwFmtFld*)&((SwTxtFld*)pHint)->GetFmtFld();
@@ -3074,7 +3075,7 @@ bool SwpHints::TryInsertHint(
                     break;
 
                 case RES_DDEFLD:
-                    if( pDoc->IsNewFldLst() )
+                    if( pDoc->getIDocumentFieldsAccess().IsNewFldLst() )
                         ((SwDDEFieldType*)pFld->GetTyp())->IncRefCnt();
                     bInsFldType = ((SwDDEFieldType*)pFld->GetTyp())->IsDeleted();
                     break;
@@ -3085,7 +3086,7 @@ bool SwpHints::TryInsertHint(
                     break;
                 }
                 if( bInsFldType )
-                    pDoc->InsDeletedFldType( *pFld->GetTyp() );
+                    pDoc->getIDocumentFieldsAccess().InsDeletedFldType( *pFld->GetTyp() );
             }
         }
         break;

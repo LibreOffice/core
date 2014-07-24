@@ -37,6 +37,7 @@
 #include <fmtfld.hxx>
 
 #include "doc.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include "docsh.hxx"
 #include "docufld.hxx"
 #include "wrthtml.hxx"
@@ -90,7 +91,7 @@ void SwHTMLParser::EndScript()
     if( bInsSrcIntoFld && !bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
-            (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );
+            (SwScriptFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_SCRIPTFLD );
 
         SwScriptField aFld( pType, aScriptType,
                             !aScriptURL.isEmpty() ? aScriptURL : aScriptSource,

@@ -73,6 +73,7 @@
 #include <fmtclbl.hxx>
 #include <section.hxx>
 #include <docsh.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
@@ -2252,7 +2253,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     this->pFmtOfJustInsertedApo = 0;
     SwPostItField aPostIt(
-        (SwPostItFieldType*)rDoc.GetSysFldType(RES_POSTITFLD), sAuthor,
+        (SwPostItFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD), sAuthor,
         sTxt, sInitials, OUString(), aDate );
     aPostIt.SetTextObject(pOutliner);
 
@@ -3522,7 +3523,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Page number
                 SwPageNumberField aFld(
-                    (SwPageNumberFieldType*)rDoc.GetSysFldType(
+                    (SwPageNumberFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(
                     RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
                 rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
             }

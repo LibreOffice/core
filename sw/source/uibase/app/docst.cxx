@@ -63,6 +63,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentListsAccess.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
@@ -1257,7 +1258,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            ((SwDocShell&)rSource).mpDoc->SetFixFields(false, NULL);
+            ((SwDocShell&)rSource).mpDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
         if( mpWrtShell )
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),

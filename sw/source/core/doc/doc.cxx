@@ -29,6 +29,7 @@
 #include <DocumentOutlineNodesManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -383,6 +384,28 @@ IDocumentRedlineAccess& SwDoc::getIDocumentRedlineAccess()
     return *m_pDocumentRedlineManager;
 }
 
+//IDocumentFieldsAccess
+
+IDocumentFieldsAccess const & SwDoc::getIDocumentFieldsAccess() const
+{
+    return *m_pDocumentFieldsManager;
+}
+
+IDocumentFieldsAccess & SwDoc::getIDocumentFieldsAccess()
+{
+    return *m_pDocumentFieldsManager;
+}
+
+::sw::DocumentFieldsManager const & SwDoc::GetDocumentFieldsMAnager() const
+{
+    return *m_pDocumentFieldsManager;
+}
+
+::sw::DocumentFieldsManager & SwDoc::GetDocumentFieldsManager()
+{
+    return *m_pDocumentFieldsManager;
+}
+
 /* Implementations the next Interface here */
 
 /*
@@ -396,19 +419,10 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
         maDBData = rNewData;
         SetModified();
     }
-    GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
+    getIDocumentFieldsAccess().GetSysFldType(RES_DBNAMEFLD)->UpdateFlds();
 }
 
 
-
-/// @returns the field type of the Doc
-SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
-{
-    for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
-        if( eWhich == (*mpFldTypes)[i]->Which() )
-            return (*mpFldTypes)[i];
-    return 0;
-}
 
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
@@ -1006,7 +1020,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
 
     // #i93174#: notes contain paragraphs that are not nodes
     {
-        SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
+        SwFieldType * const pPostits( getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
@@ -1068,7 +1082,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
     // optionally update stat. fields
     if (bFields)
     {
-        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
+        SwFieldType *pType = getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
         pType->UpdateFlds();
     }
 
@@ -1104,8 +1118,8 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
 
 void SwDoc::DocInfoChgd( )
 {
-    GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-    GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
+    getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
+    getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
     SetModified();
 }
 
@@ -1456,7 +1470,7 @@ bool SwDoc::RemoveInvisibleContent()
 
     {
         SwTxtNode* pTxtNd;
-        SwIterator<SwFmtFld,SwFieldType> aIter( *GetSysFldType( RES_HIDDENPARAFLD )  );
+        SwIterator<SwFmtFld,SwFieldType> aIter( *getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD )  );
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
             if( pFmtFld->GetTxtFld() &&
@@ -1620,7 +1634,7 @@ bool SwDoc::HasInvisibleContent() const
 {
     bool bRet = false;
 
-    SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
+    SwClientIter aIter( *getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD ) );
     if( aIter.First( TYPE( SwFmtFld ) ) )
         bRet = true;
 
@@ -1676,10 +1690,10 @@ bool SwDoc::RestoreInvisibleContent()
 bool SwDoc::ConvertFieldsToText()
 {
     bool bRet = false;
-    LockExpFlds();
+    getIDocumentFieldsAccess().LockExpFlds();
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
 
-    const SwFldTypes* pMyFldTypes = GetFldTypes();
+    const SwFldTypes* pMyFldTypes = getIDocumentFieldsAccess().GetFldTypes();
     sal_uInt16 nCount = pMyFldTypes->size();
     //go backward, field types are removed
     for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
@@ -1747,7 +1761,7 @@ bool SwDoc::ConvertFieldsToText()
     if( bRet )
         SetModified();
     GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, NULL );
-    UnlockExpFlds();
+    getIDocumentFieldsAccess().UnlockExpFlds();
     return bRet;
 
 }
@@ -1832,22 +1846,6 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
     }
 
     return OUString("??");
-}
-
-SwField * SwDoc::GetFieldAtPos(const SwPosition & rPos)
-{
-    SwTxtFld * const pAttr = GetTxtFldAtPos(rPos);
-
-    return (pAttr) ? const_cast<SwField *>( pAttr->GetFmtFld().GetField() ) : 0;
-}
-
-SwTxtFld * SwDoc::GetTxtFldAtPos(const SwPosition & rPos)
-{
-    SwTxtNode * const pNode = rPos.nNode.GetNode().GetTxtNode();
-
-    return (pNode != NULL)
-        ? pNode->GetFldTxtAttrAt( rPos.nContent.GetIndex(), true )
-        : 0;
 }
 
 bool SwDoc::ContainsHiddenChars() const

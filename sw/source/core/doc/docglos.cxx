@@ -24,6 +24,7 @@
 
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
@@ -126,10 +127,10 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                     xGlosDPS->getDocumentProperties() );
                 lcl_copyDocumentProperties(xDocProps, xGlosDocProps);
         }
-            pGDoc->SetFixFields(false, NULL);
+            pGDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
 
             // StartAllAction();
-            LockExpFlds();
+            getIDocumentFieldsAccess().LockExpFlds();
 
             SwNodeIndex aStt( pGDoc->GetNodes().GetEndOfExtras(), 1 );
             SwCntntNode* pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
@@ -172,9 +173,9 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                         __pStartCrsr );
             GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
-            UnlockExpFlds();
-            if( !IsExpFldsLocked() )
-                UpdateExpFlds(NULL, true);
+            getIDocumentFieldsAccess().UnlockExpFlds();
+            if( !getIDocumentFieldsAccess().IsExpFldsLocked() )
+                getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
             bRet = true;
         }
         mbInsOnlyTxtGlssry = bSav_IsInsGlossary;

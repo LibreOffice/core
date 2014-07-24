@@ -64,6 +64,7 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -1310,7 +1311,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // all table formulas to internal (BOXPTR) representation.
             SwTableFmlUpdate aMsgHnt( &pTblNode->GetTable() );
             aMsgHnt.eFlags = TBL_BOXPTR;
-            pDoc->UpdateTblFlds( &aMsgHnt );
+            pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
             pTblNode->GetTable().GCLines();
 
             pFrm = pTblNode->MakeFrm( pLay );

@@ -68,6 +68,7 @@
 #include <glosdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
@@ -672,7 +673,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         SID_TEMPLATE, false);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
-                        pDocSh->GetDoc()->SetFixFields(false, 0);
+                        pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(false, 0);
                     }
                 }
                 break;

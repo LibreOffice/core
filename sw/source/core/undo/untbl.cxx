@@ -37,6 +37,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -310,7 +311,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDDEFldType )
     {
-        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
+        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.getIDocumentFieldsAccess().InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNode->GetTable(), pNewType );
         pTblNode->SetNewTable( pDDETbl );
@@ -472,7 +473,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDDEFldType )
     {
-        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.InsertFldType(
+        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.getIDocumentFieldsAccess().InsertFldType(
                                                             *pDDEFldType);
         SwDDETable* pDDETbl = new SwDDETable( pTblNd->GetTable(), pNewType );
         pTblNd->SetNewTable( pDDETbl, false );
@@ -1686,7 +1687,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
-    rDoc.UpdateTblFlds( &aMsgHnt );
+    rDoc.getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
     CHECK_TABLE( pTblNd->GetTable() )
 
@@ -1870,7 +1871,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
             aMsgHnt.eFlags = TBL_BOXPTR;
-            rDoc.UpdateTblFlds( &aMsgHnt );
+            rDoc.getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
             SwTable &rTable = pTblNd->GetTable();
             if( nMax > nMin && rTable.IsNewModel() )
                 rTable.PrepareDeleteCol( nMin, nMax );
@@ -1882,7 +1883,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             SwTableFmlUpdate aMsgHnt( &rTbl );
             aMsgHnt.eFlags = TBL_BOXPTR;
-            rDoc.UpdateTblFlds( &aMsgHnt );
+            rDoc.getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
             SwTableBox* pBox = rTbl.GetTblBox( nCurrBox );
             TblChgMode eOldMode = rTbl.GetTblChgMode();
@@ -1955,7 +1956,7 @@ void SwUndoTblMerge::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
-    rDoc.UpdateTblFlds( &aMsgHnt );
+    rDoc.getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
     _FndBox aTmpBox( 0, 0 );
     // ? TL_CHART2: notification or locking of controller required ?
@@ -2392,7 +2393,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // No matter what was set, an update of the table is always a good idea
         SwTableFmlUpdate aTblUpdate( &pSttNd->FindTableNode()->GetTable() );
-        rDoc.UpdateTblFlds( &aTblUpdate );
+        rDoc.getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
     }
 
     if( !pNd->IsCntntNode() )
@@ -2909,7 +2910,7 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableFmlUpdate aMsgHnt( &rTbl );
     aMsgHnt.eFlags = TBL_BOXPTR;
-    pDoc->UpdateTblFlds( &aMsgHnt );
+    pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
     switch( nMode )
     {
@@ -3024,7 +3025,7 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableFmlUpdate aMsgHnt( pTbl );
     aMsgHnt.eFlags = TBL_BOXPTR;
-    pDoc->UpdateTblFlds( &aMsgHnt );
+    pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
 
     // get lines for layout update
     _FndBox aFndBox( 0, 0 );

@@ -35,6 +35,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
@@ -766,7 +767,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
         pDoc->SetTblBoxFormulaAttrs( *rCell.pBox, aSet );
         // update table
         SwTableFmlUpdate aTblUpdate( SwTable::FindTable( rCell.GetFrmFmt() ));
-        pDoc->UpdateTblFlds( &aTblUpdate );
+        pDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
     }
 }
 
@@ -945,7 +946,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
         GetDoc()->SetTblBoxFormulaAttrs( *pBox, aSet );
         // update table
         SwTableFmlUpdate aTblUpdate( SwTable::FindTable( GetFrmFmt() ));
-        pMyDoc->UpdateTblFlds( &aTblUpdate );
+        pMyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
     }
 }
 

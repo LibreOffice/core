@@ -56,6 +56,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <rootfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -104,7 +105,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
         SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
         pClpDoc->DelLayoutFmt( pFly );
     }
-    pClpDoc->GCFieldTypes();        // delete the FieldTypes
+    pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
 
     // if a string was passed, copy it to the clipboard-
     // document. Then also the Calculator can use the internal
@@ -115,7 +116,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
         return true;                // das wars.
     }
 
-    pClpDoc->LockExpFlds();
+    pClpDoc->getIDocumentFieldsAccess().LockExpFlds();
     pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
     bool bRet;
 
@@ -216,9 +217,9 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
         bRet = _CopySelToDoc( pClpDoc, 0 );     // copy the selections
 
     pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)0 );
-    pClpDoc->UnlockExpFlds();
-    if( !pClpDoc->IsExpFldsLocked() )
-        pClpDoc->UpdateExpFlds(NULL, true);
+    pClpDoc->getIDocumentFieldsAccess().UnlockExpFlds();
+    if( !pClpDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
+        pClpDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
     return bRet;
 }
@@ -449,7 +450,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     SET_CURR_SHELL( pDestShell );
 
     pDestShell->StartAllAction();
-    pDestShell->GetDoc()->LockExpFlds();
+    pDestShell->GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
 
     // Shift references
     bool bCopyIsMove = mpDoc->IsCopyIsMove();
@@ -463,7 +464,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
-     SwFieldType* pTblFldTyp = pDestShell->GetDoc()->GetSysFldType( RES_TABLEFLD );
+     SwFieldType* pTblFldTyp = pDestShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_TABLEFLD );
 
     if( IsFrmSelected() )
     {
@@ -654,8 +655,8 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         for( ; nActCnt; --nActCnt )
             pDestShell->StartAllAction();
     }
-    pDestShell->GetDoc()->UnlockExpFlds();
-    pDestShell->GetDoc()->UpdateFlds(NULL, false);
+    pDestShell->GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
+    pDestShell->GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
 
     pDestShell->EndAllAction();
     return bRet;
@@ -681,7 +682,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
-     SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
+     SwFieldType* pTblFldTyp = GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_TABLEFLD );
 
     SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode().GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
@@ -699,7 +700,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     bool bRet = true, bDelTbl = true;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
-    GetDoc()->LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
 
     // When the clipboard content has been created by a rectangular selection
     // the pasting is more sophisticated:
@@ -1106,8 +1107,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
         for( ; nActCnt; --nActCnt )
             StartAllAction();
     }
-    GetDoc()->UnlockExpFlds();
-    GetDoc()->UpdateFlds(NULL, false);
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
     EndAllAction();
 
     return bRet;
@@ -1156,7 +1157,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     SET_CURR_SHELL( this );
 
     StartAllAction();
-    GetDoc()->LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
     SetSelection(aCpyPam);
     // copy the text of the selection
     SwEditShell::Copy(&rToFill);
@@ -1192,8 +1193,8 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
             rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
-    GetDoc()->UnlockExpFlds();
-    GetDoc()->UpdateFlds(NULL, false);
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UpdateFlds(NULL, false);
     Pop(false);
     EndAllAction();
 

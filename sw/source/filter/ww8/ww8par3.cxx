@@ -61,6 +61,7 @@
 #include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docsh.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
@@ -125,7 +126,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aFormula.sDefault = GetFieldResult(pF);
 
         SwInputField aFld(
-            static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+            static_cast<SwInputFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )),
             aFormula.sDefault,
             aFormula.sTitle,
             INP_TXT,
@@ -240,7 +241,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
     if (!bUseEnhFields)
     {
-        SwDropDownField aFld((SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+        SwDropDownField aFld((SwDropDownFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN));
 
         aFld.SetName(aFormula.sTitle);
         aFld.SetHelp(aFormula.sHelp);

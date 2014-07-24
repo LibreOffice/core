@@ -21,6 +21,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include "docsh.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/zformat.hxx>
 #include <unotools/useroptions.hxx>
@@ -283,7 +284,7 @@ void SwHTMLParser::NewField()
     if( RES_DATEFLD==nType || RES_TIMEFLD==nType )
         nWhich = RES_DATETIMEFLD;
 
-    SwFieldType* pType = pDoc->GetSysFldType( nWhich );
+    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFldType( nWhich );
     SwField *pFld = 0;
     bool bInsOnEndTag = false;
 
@@ -640,7 +641,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     }
 
     SwPostItField aPostItFld(
-                    (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
+                    (SwPostItFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_POSTITFLD ),
                     aEmptyOUStr, aComment, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     InsertAttr( SwFmtFld( aPostItFld ) );
 

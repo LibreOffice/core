@@ -23,6 +23,7 @@
 #include <boost/make_shared.hpp>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <fmtanchr.hxx>
@@ -264,8 +265,9 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 
 void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
+    SwRedlineTbl const & pRedlineTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     long int nIdx = 0;
-    BOOST_FOREACH(const SwRangeRedline* pRdl, pDoc->GetRedlineTbl())
+    BOOST_FOREACH(const SwRangeRedline* pRdl, std::make_pair(pRedlineTbl.begin(), pRedlineTbl.end()))
     {
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
@@ -291,7 +293,7 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 
 void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 {
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
+    const SwRedlineTbl& rRedlTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
     {
         SwPosition* const pPos = (SwPosition*)( aEntry.m_bOther

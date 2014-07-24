@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -36,7 +37,7 @@ using namespace com::sun::star;
 
 bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
-    const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
     uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);

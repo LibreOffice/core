@@ -39,6 +39,7 @@
 #include "fmtornt.hxx"
 #include "fmtfordr.hxx"
 #include "doc.hxx"
+#include <IDocumentFieldsAccess.hxx>
 #include "swtable.hxx"
 #include "swtblfmt.hxx"
 #include "pam.hxx"
@@ -1157,7 +1158,7 @@ static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pT
         ++nCount;
         sName = sPrefixStr + OUString::number(nCount);
     }
-    while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false));
+    while (NULL != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_DDEFLD, sName, false));
 
     return sName;
 }
@@ -1192,7 +1193,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     else
     {
         // check for existing DDE field type with the same name
-        SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false);
+        SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_DDEFLD, sName, false);
         if (NULL != pOldType)
         {
             // same values -> return old type
@@ -1218,7 +1219,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
         // create new field type and return
         SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
         pType = (SwDDEFieldType*)pTableNode->
-            GetDoc()->InsertFldType(aDDEFieldType);
+            GetDoc()->getIDocumentFieldsAccess().InsertFldType(aDDEFieldType);
     }
 
     OSL_ENSURE(NULL != pType, "We really want a SwDDEFieldType here!");

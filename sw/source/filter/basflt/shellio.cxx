@@ -41,6 +41,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>
@@ -366,7 +367,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         eOld = static_cast<RedlineMode_t>(
                 ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
 
-        pDoc->SetFieldsDirty(false, NULL, 0);
+        pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, NULL, 0);
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
@@ -531,7 +532,7 @@ bool Reader::SetTemplate( SwDoc& rDoc )
     {
         rDoc.RemoveAllFmtLanguageDependencies();
         rDoc.ReplaceStyles( *pTemplate );
-        rDoc.SetFixFields(false, NULL);
+        rDoc.getIDocumentFieldsAccess().SetFixFields(false, NULL);
         bRet = true;
     }
 

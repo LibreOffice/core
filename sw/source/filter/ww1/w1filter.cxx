@@ -43,6 +43,7 @@
 #include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
@@ -628,7 +629,7 @@ oncemore:
             if (aName.isEmpty())
                 break;
             aName = rOut.ConvertUStr(aName);
-            SwFieldType* pFT = rOut.GetDoc().InsertFldType(
+            SwFieldType* pFT = rOut.GetDoc().getIDocumentFieldsAccess().InsertFldType(
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr);
             ((SwSetExpField*)pField)->SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
@@ -817,11 +818,11 @@ oncemore:
             {
                 OUString aName("Ww");
                 aName += OUString::number( nPlcIndex );
-                SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
+                SwFieldType* pFT = rOut.GetDoc().getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
                 {
                     SwSetExpFieldType aS(&rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_FORMULA);
-                    pFT = rOut.GetDoc().InsertFldType(aS);
+                    pFT = rOut.GetDoc().getIDocumentFieldsAccess().InsertFldType(aS);
                 }
                 SwSetExpField aFld((SwSetExpFieldType*)pFT, sFormula);
                 aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
@@ -883,7 +884,7 @@ oncemore:
             if (aName.isEmpty())
                 break;
 
-            SwFieldType* pFT = rOut.GetDoc().InsertFldType(
+            SwFieldType* pFT = rOut.GetDoc().getIDocumentFieldsAccess().InsertFldType(
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
             ((SwSetExpField*)pField)->SetInputFlag( true );

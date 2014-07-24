@@ -21,6 +21,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -133,7 +134,7 @@ void SwDDETable::ChangeContent()
     const IDocumentSettingAccess* pIDSA = GetFrmFmt()->getIDocumentSettingAccess();
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
     if( AUTOUPD_FIELD_AND_CHARTS == pIDSA->getFieldUpdateFlags(true) )
-        pDoc->SetFieldsDirty( true, NULL, 0 );
+        pDoc->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 }
 
 SwDDEFieldType* SwDDETable::GetDDEFldType()

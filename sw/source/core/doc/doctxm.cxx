@@ -38,6 +38,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -1261,7 +1262,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    SwFieldType* pSeqFld = pDoc->GetFldType(RES_SETEXPFLD, GetSequenceName(), false);
+    SwFieldType* pSeqFld = pDoc->getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, GetSequenceName(), false);
     if(!pSeqFld)
         return;
 
@@ -1303,7 +1304,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, OUString(), false);
+    SwFieldType* pAuthFld = pDoc->getIDocumentFieldsAccess().GetFldType(RES_AUTHORITY, OUString(), false);
     if(!pAuthFld)
         return;
 

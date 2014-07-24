@@ -21,6 +21,7 @@
 #include <crsskip.hxx>
 #include <hintids.hxx>
 #include <SidebarWin.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/outliner.hxx>
@@ -387,7 +388,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if (pPostIt)
                 {
-                    SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, OUString(), false);
+                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, OUString(), false);
                     SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
                     SwFmtFld* pSwFmtFld = aIter.First();
                     while( pSwFmtFld )

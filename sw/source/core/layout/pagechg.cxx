@@ -46,6 +46,7 @@
 #include "doc.hxx"
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include "fesh.hxx"
 #include "dview.hxx"
 #include "dflyobj.hxx"
@@ -1128,7 +1129,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
     if ( bNotifyFields && (!pImp || !pImp->IsUpdateExpFlds()) )
     {
         SwDocPosUpdate aMsgHnt( nDocPos );
-        pDoc->UpdatePageFlds( &aMsgHnt );
+        pDoc->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1257,7 +1258,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
     if ( !pSh || !pSh->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPrevPage->Frm().Top() );
-        pDoc->UpdatePageFlds( &aMsgHnt );
+        pDoc->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
     }
     return pPage;
 }
@@ -1384,7 +1385,7 @@ void SwRootFrm::RemoveSuperfluous()
          (!pSh || !pSh->Imp()->IsUpdateExpFlds()) )
     {
         SwDocPosUpdate aMsgHnt( nDocPos );
-        GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
+        GetFmt()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
     }
 }
 

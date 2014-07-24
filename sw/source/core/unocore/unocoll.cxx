@@ -23,6 +23,7 @@
 #include <svx/svxids.hrc>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <fmtcol.hxx>
 #include <poolfmt.hxx>
@@ -784,11 +785,11 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
         {
-            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyOUStr, true);
+            SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFldType(RES_AUTHORITY, aEmptyOUStr, true);
             if(!pType)
             {
                 SwAuthorityFieldType aType(pDoc);
-                pType = pDoc->InsertFldType(aType);
+                pType = pDoc->getIDocumentFieldsAccess().InsertFldType(aType);
             }
             xRet = SwXFieldMaster::CreateXFieldMaster(*pDoc, *pType);
         }

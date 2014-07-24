@@ -23,6 +23,7 @@
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
 #include <ndtxt.hxx>
@@ -77,26 +78,26 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwTxtFld * pTxtFld = SwDoc::GetTxtFldAtPos(GetPosition());
+    SwTxtFld * pTxtFld = sw::DocumentFieldsManager::GetTxtFldAtPos(GetPosition());
     const SwField * pField = pTxtFld ? pTxtFld->GetFmtFld().GetField() : NULL;
 
     if (pField)
     {
-        pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
+        pDoc->getIDocumentFieldsAccess().UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
     }
 }
 
 void SwUndoFieldFromDoc::DoImpl()
 {
-    SwTxtFld * pTxtFld = SwDoc::GetTxtFldAtPos(GetPosition());
+    SwTxtFld * pTxtFld = sw::DocumentFieldsManager::GetTxtFldAtPos(GetPosition());
     const SwField * pField = pTxtFld ? pTxtFld->GetFmtFld().GetField() : NULL;
 
     if (pField)
     {
-        pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
+        pDoc->getIDocumentFieldsAccess().UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
 
-        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyOUStr, false) == pDstFmtFld->GetField()->GetTyp() )
+        if ( pDoc->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, aEmptyOUStr, false) == pDstFmtFld->GetField()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
     }
 }
@@ -125,7 +126,7 @@ SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
 
 void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwField * pField = SwDoc::GetFieldAtPos(GetPosition());
+    SwField * pField = sw::DocumentFieldsManager::GetFieldAtPos(GetPosition());
 
     if (pField)
         pField->PutValue(aOldVal, nWhich);
@@ -133,7 +134,7 @@ void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoFieldFromAPI::DoImpl()
 {
-    SwField * pField = SwDoc::GetFieldAtPos(GetPosition());
+    SwField * pField = sw::DocumentFieldsManager::GetFieldAtPos(GetPosition());
 
     if (pField)
         pField->PutValue(aNewVal, nWhich);

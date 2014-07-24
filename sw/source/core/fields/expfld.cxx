@@ -35,6 +35,7 @@
 #include <fmtanchr.hxx>
 #include <txtftn.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <layfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -340,7 +341,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     // #i82544#
     if( bLateInitialization )
     {
-        SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), false);
+        SwFieldType* pSetExpFld = rDoc.getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, GetFormula(), false);
         if( pSetExpFld )
         {
             bLateInitialization = false;
@@ -355,7 +356,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     {
         SwHash** ppHashTbl;
         sal_uInt16 nSize;
-        rDoc.FldsToExpand( ppHashTbl, nSize, aEndFld );
+        rDoc.getIDocumentFieldsAccess().FldsToExpand( ppHashTbl, nSize, aEndFld );
         sExpand = LookString( ppHashTbl, nSize, GetFormula() );
         ::DeleteHashTable( ppHashTbl, nSize );
     }
@@ -363,7 +364,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     {
         // fill calculator with values
         SwCalc aCalc( rDoc );
-        rDoc.FldsToCalc(aCalc, aEndFld);
+        rDoc.getIDocumentFieldsAccess().FldsToCalc(aCalc, aEndFld);
 
         // calculate value
         SetValue(aCalc.Calculate(GetFormula()).GetDouble());
@@ -1171,7 +1172,7 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
     else if( (nSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
-            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFldType( RES_USERFLD, getContent(), false ) );
         if( pUserTyp )
         {
             pUserTyp->SetContent( rNewFieldContent );
@@ -1224,7 +1225,7 @@ OUString SwInputField::Expand() const
     if( (nSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
-            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFldType( RES_USERFLD, getContent(), false ) );
         if( pUserTyp )
             return pUserTyp->GetContent();
     }

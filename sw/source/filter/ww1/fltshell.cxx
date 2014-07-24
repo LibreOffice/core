@@ -45,6 +45,7 @@
 #include <redline.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
@@ -557,11 +558,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
-                SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName, false);
+                SwFieldType* pFT = pDoc->getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, rName, false);
                 if (!pFT)
                 {
                     SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);
-                    pFT = pDoc->InsertFldType(aS);
+                    pFT = pDoc->getIDocumentFieldsAccess().InsertFldType(aS);
                 }
                 SwSetExpField aFld((SwSetExpFieldType*)pFT, pB->GetValSys());
                 aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
@@ -1153,11 +1154,11 @@ SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 {
     OUString aName("ErrorTag");
-    SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName, false );
+    SwFieldType* pFT = GetDoc().getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, aName, false );
     if( pFT == 0)
     {
         SwSetExpFieldType aS(&GetDoc(), aName, nsSwGetSetExpType::GSE_STRING);
-        pFT = GetDoc().InsertFldType(aS);
+        pFT = GetDoc().getIDocumentFieldsAccess().InsertFldType(aS);
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
                         OUString::createFromAscii( pErr ));
@@ -1335,7 +1336,7 @@ const SfxPoolItem& SwFltShell::GetFlyFrmAttr(sal_uInt16 nWhich)
 
 SwFieldType* SwFltShell::GetSysFldType(sal_uInt16 eWhich)
 {
-    return GetDoc().GetSysFldType(eWhich);
+    return GetDoc().getIDocumentFieldsAccess().GetSysFldType(eWhich);
 }
 
 bool SwFltShell::GetWeightBold()

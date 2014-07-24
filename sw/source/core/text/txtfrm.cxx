@@ -33,6 +33,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include "rootfrm.hxx"
 #include <pagefrm.hxx>
 #include <viewsh.hxx>

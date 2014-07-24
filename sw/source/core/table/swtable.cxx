@@ -36,6 +36,7 @@
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
@@ -2200,7 +2201,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         // something changed and some BoxAttribut remained in the set!
         if( pNewFmt || pNewFml || pNewVal )
         {
-            GetDoc()->SetFieldsDirty(true, NULL, 0);
+            GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, NULL, 0);
 
             if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMAT, false ) ||
                 SFX_ITEM_SET == GetItemState( RES_BOXATR_VALUE, false ) ||

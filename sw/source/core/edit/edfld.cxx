@@ -23,6 +23,7 @@
 #include <editsh.hxx>
 #include <fldbas.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -42,7 +43,7 @@
 /// count field types with a ResId, if 0 count all
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 {
-    const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
 
     if(nResId == USHRT_MAX)
@@ -75,7 +76,7 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 /// get field types with a ResId, if 0 get all
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bUsed ) const
 {
-    const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
 
     if(nResId == USHRT_MAX && nFld < nSize)
@@ -118,7 +119,7 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bU
 /// get first type with given ResId and name
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const OUString& rName) const
 {
-    return GetDoc()->GetFldType( nResId, rName, false );
+    return GetDoc()->getIDocumentFieldsAccess().GetFldType( nResId, rName, false );
 }
 
 /// delete field type
@@ -126,11 +127,11 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 {
     if( USHRT_MAX == nResId )
     {
-        GetDoc()->RemoveFldType(nFld);
+        GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nFld);
         return;
     }
 
-    const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
     sal_uInt16 nIdx = 0;
     for( sal_uInt16 i = 0; i < nSize; ++i )
@@ -138,7 +139,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
         if( (*pFldTypes)[i]->Which() == nResId &&
             nIdx++ == nFld )
         {
-            GetDoc()->RemoveFldType( i );
+            GetDoc()->getIDocumentFieldsAccess().RemoveFldType( i );
             return;
         }
 }
@@ -146,7 +147,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 /// delete field type based on its name
 void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 {
-    const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
     const CharClass& rCC = GetAppCharClass();
 
@@ -160,7 +161,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
         {
             if( aTmp == rCC.lowercase( pFldType->GetName() ) )
             {
-                GetDoc()->RemoveFldType(i);
+                GetDoc()->getIDocumentFieldsAccess().RemoveFldType(i);
                 return;
             }
         }
@@ -270,7 +271,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
             if (pTxtFld != 0)
-                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, true);
+                GetDoc()->getIDocumentFieldsAccess().UpdateFld(pTxtFld, rFld, pMsgHnt, true);
         }
 
         // bOkay (instead of return because of EndAllAction) becomes false,
@@ -318,7 +319,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                             rFld.GetTyp()->Which() )
                             bOkay = false;
 
-                        bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
+                        bTblSelBreak = GetDoc()->getIDocumentFieldsAccess().UpdateFld(pTxtFld, rFld,
                                                            pMsgHnt, false);
                     }
                     // The search area is reduced by the found area:
@@ -367,7 +368,7 @@ void SwEditShell::UpdateExpFlds(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->UpdateExpFlds(NULL, true);
+    GetDoc()->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
     if (bCloseDB)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -389,17 +390,17 @@ SwDBManager* SwEditShell::GetDBManager() const
 /// insert field type
 SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
 {
-    return GetDoc()->InsertFldType(rFldType);
+    return GetDoc()->getIDocumentFieldsAccess().InsertFldType(rFldType);
 }
 
 void SwEditShell::LockExpFlds()
 {
-    GetDoc()->LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
 }
 
 void SwEditShell::UnlockExpFlds()
 {
-    GetDoc()->UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
 }
 
 void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
@@ -429,7 +430,7 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 
 bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
-    const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
+    const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {

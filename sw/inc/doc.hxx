@@ -22,7 +22,6 @@
 // SwDoc interfaces
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
 #include <IDocumentStatistics.hxx>
@@ -213,6 +212,7 @@ namespace sw {
     class DocumentOutlineNodesManager;
     class DocumentContentOperationsManager;
     class DocumentRedlineManager;
+    class DocumentFieldsManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -250,7 +250,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
-    public IDocumentFieldsAccess,
     public IDocumentStylePoolAccess,
     public IDocumentLineNumberAccess,
     public IDocumentStatistics,
@@ -294,6 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentListsManager > m_pDocumentListsManager;
     const ::boost::scoped_ptr< ::sw::DocumentOutlineNodesManager > m_pDocumentOutlineNodesManager;
     const ::boost::scoped_ptr< ::sw::DocumentContentOperationsManager > m_pDocumentContentOperationsManager;
+    const ::boost::scoped_ptr< ::sw::DocumentFieldsManager > m_pDocumentFieldsManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -316,8 +316,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwViewShell       *mpCurrentView;  //< SwDoc should get a new member mpCurrentView
 
-    SwDocUpdtFld    *mpUpdtFlds;         //< Struct for updating fields
-    SwFldTypes      *mpFldTypes;
     SwDBManager         *mpDBManager;            /**< Pointer to the DBManager for
                                          evaluation of DB-fields. */
 
@@ -374,7 +372,6 @@ private:
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
 
     sal_Int32   mReferenceCount;
-    sal_Int8    mnLockExpFld;        //< If != 0 UpdateExpFlds() has no effect!
 
     bool mbGlossDoc              : 1;    //< TRUE: glossary document.
     bool mbModified              : 1;    //< TRUE: document has changed.
@@ -386,7 +383,6 @@ private:
     bool mbLoaded                : 1;    //< TRUE: Doc loaded.
     bool mbUpdateExpFld          : 1;    //< TRUE: Update expression fields.
     bool mbNewDoc                : 1;    //< TRUE: new Doc.
-    bool mbNewFldLst             : 1;    //< TRUE: Rebuild field-list.
     bool mbCopyIsMove            : 1;    //< TRUE: Copy is a hidden Move.
     bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
@@ -435,12 +431,7 @@ private:
     // gcc: aFtnInfo::CopyCtor is private, therefore we too have to protect ourselves.
     SwDoc( const SwDoc &);
 
-    // For fields:
-    void _InitFieldTypes();     //< Called by CTOR!!
-    void _MakeFldList( int eMode );
-
     // Database fields:
-    void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
     void AddUsedDBToList( std::vector<OUString>& rDBNameList,
                           const std::vector<OUString>& rUsedDBNames );
     void AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName );
@@ -545,45 +536,11 @@ public:
     ::sw::DocumentLinksAdministrationManager & GetDocumentLinksAdministrationManager();
 
     // IDocumentFieldsAccess
-    virtual const SwFldTypes *GetFldTypes() const SAL_OVERRIDE;
-    virtual SwFieldType *InsertFldType(const SwFieldType &) SAL_OVERRIDE;
-    virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
-    virtual void RemoveFldType(sal_uInt16 nFld) SAL_OVERRIDE;
-    virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
-    virtual void InsDeletedFldType(SwFieldType &) SAL_OVERRIDE;
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) SAL_OVERRIDE;
-    virtual void UpdateRefFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateTblFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds) SAL_OVERRIDE;
-    virtual void UpdateUsrFlds() SAL_OVERRIDE;
-    virtual void UpdatePageFlds(SfxPoolItem*) SAL_OVERRIDE;
-    virtual void LockExpFlds() SAL_OVERRIDE;
-    virtual void UnlockExpFlds() SAL_OVERRIDE;
-    virtual bool IsExpFldsLocked() const SAL_OVERRIDE;
-    virtual SwDocUpdtFld& GetUpdtFlds() const SAL_OVERRIDE;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) SAL_OVERRIDE;
-    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual bool IsNewFldLst() const SAL_OVERRIDE;
-    virtual void SetNewFldLst( bool bFlag) SAL_OVERRIDE;
-    virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld) SAL_OVERRIDE;
+    IDocumentFieldsAccess const & getIDocumentFieldsAccess() const;
+    IDocumentFieldsAccess & getIDocumentFieldsAccess();
 
-    /** Returns the field at a certain position.
-       @param rPos position to search at
-       @return pointer to field at the given position or NULL in case no field is found
-    */
-    static SwField* GetFieldAtPos(const SwPosition& rPos);
-
-    /** Returns the field at a certain position.
-       @param rPos position to search at
-       @return pointer to field at the given position or NULL in case no field is found
-    */
-    static SwTxtFld* GetTxtFldAtPos(const SwPosition& rPos);
-    bool containsUpdatableFields();
+    ::sw::DocumentFieldsManager const & GetDocumentFieldsMAnager() const;
+    ::sw::DocumentFieldsManager & GetDocumentFieldsManager();
 
     // IDocumentContentOperations
     IDocumentContentOperations const & getIDocumentContentOperations() const;
@@ -990,9 +947,6 @@ public:
             return NULL;
         return &(maPatternNms[nPos]);
     }
-
-    // Delete all unreferenced field types.
-    void GCFieldTypes();    //< impl. in docfld.cxx
 
     // Query / connect current document with glossary document.
     void SetGlossaryDoc( SwDoc* pDoc ) { mpGlossaryDoc = pDoc; }

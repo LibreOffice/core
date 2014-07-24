@@ -32,6 +32,7 @@
 #include <docfld.hxx>
 #include <docstat.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -456,7 +457,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     if( !pFnd )
     {
         // then check doc
-        SwHash** ppDocTbl = rDoc.GetUpdtFlds().GetFldTypeTable();
+        SwHash** ppDocTbl = rDoc.getIDocumentFieldsAccess().GetUpdtFlds().GetFldTypeTable();
         for( SwHash* pEntry = *(ppDocTbl+ii); pEntry; pEntry = pEntry->pNext )
         {
             if( aStr == pEntry->aStr )

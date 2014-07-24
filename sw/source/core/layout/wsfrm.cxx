@@ -37,6 +37,7 @@
 #include "viewopt.hxx"
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
 #include <flyfrm.hxx>
@@ -2027,7 +2028,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                 if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
                     ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
                 SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
-                pPage->GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
+                pPage->GetFmt()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
             }
             break;
 

@@ -82,6 +82,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -439,7 +440,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         pClpDocFac = new SwDocFac;
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->LockExpFlds();     // never update fields - leave text as it is
+        pTmpDoc->getIDocumentFieldsAccess().LockExpFlds();     // never update fields - leave text as it is
         lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         // in CORE a new one was created (OLE-Objekte copied!)
@@ -871,7 +872,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->LockExpFlds();     // Never update fields - leave text as is
+        pTmpDoc->getIDocumentFieldsAccess().LockExpFlds();     // Never update fields - leave text as is
         lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         {
@@ -1049,7 +1050,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to 1st ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->LockExpFlds();   // never update fields - leave text as it is
+    pCDoc->getIDocumentFieldsAccess().LockExpFlds();   // never update fields - leave text as it is
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
 

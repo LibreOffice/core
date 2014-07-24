@@ -28,6 +28,7 @@
 #include <hints.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
@@ -308,7 +309,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            UpdateRefFlds(NULL);
+            getIDocumentFieldsAccess().UpdateRefFlds(NULL);
         }
         SetModified();
     }
@@ -376,7 +377,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            UpdateRefFlds(NULL);
+            getIDocumentFieldsAccess().UpdateRefFlds(NULL);
         }
         SetModified();
     }

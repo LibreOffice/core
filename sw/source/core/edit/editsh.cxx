@@ -33,6 +33,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -565,7 +566,7 @@ OUString SwEditShell::Calculate()
                     {
                         if( !bValidFlds )
                         {
-                            GetDoc()->FldsToCalc( aCalc,
+                            GetDoc()->getIDocumentFieldsAccess().FldsToCalc( aCalc,
                                                   pStart->nNode.GetIndex(),
                                                   pStart->nContent.GetIndex() );
                             bValidFlds = true;

@@ -27,6 +27,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentListsAccess.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>
@@ -140,7 +141,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     if( !GetFtnIdxs().empty() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
         GetFtnIdxs().UpdateAllFtn();
 
-    UpdateExpFlds(NULL, true);
+    getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
     SetModified();
 }

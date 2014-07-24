@@ -35,6 +35,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -606,7 +607,7 @@ void SwViewShell::UpdateFlds(bool bCloseDB)
     else
         StartAction();
 
-    GetDoc()->UpdateFlds(0, bCloseDB);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFlds(0, bCloseDB);
 
     if ( bCrsr )
         ((SwCrsrShell*)this)->EndAction();
@@ -917,9 +918,9 @@ void SwViewShell::CalcLayout()
     aAction.SetStatBar( true );
     aAction.SetCalcLayout( true );
     aAction.SetReschedule( true );
-    GetDoc()->LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
     aAction.Action();
-    GetDoc()->UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
 
     //the SetNewFldLst() on the Doc was cut off and must be fetched again
     //(see flowfrm.cxx, txtfld.cxx)
@@ -931,8 +932,8 @@ void SwViewShell::CalcLayout()
         aAction.SetReschedule( true );
 
         SwDocPosUpdate aMsgHnt( 0 );
-        GetDoc()->UpdatePageFlds( &aMsgHnt );
-        GetDoc()->UpdateExpFlds(NULL, true);
+        GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
+        GetDoc()->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
         aAction.Action();
     }
@@ -2099,14 +2100,14 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
-        ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
+        ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = true;
     }
     if ( mpOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
     {
         SwHiddenParaFieldType* pFldType = (SwHiddenParaFieldType*)GetDoc()->
-                                          GetSysFldType(RES_HIDDENPARAFLD);
+                                          getIDocumentFieldsAccess().GetSysFldType(RES_HIDDENPARAFLD);
         if( pFldType && pFldType->GetDepends() )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );

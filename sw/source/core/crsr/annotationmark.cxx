@@ -21,6 +21,7 @@
 
 #include <doc.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <fldbas.hxx>
 #include <switerator.hxx>
 #include <fmtfld.hxx>
@@ -88,7 +89,7 @@ namespace sw { namespace mark
 
         SwFmtFld* pAnnotationFmtFld = NULL;
 
-        SwFieldType* pType = pDoc->GetFldType( RES_POSTITFLD, OUString(), false );
+        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFldType( RES_POSTITFLD, OUString(), false );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld != NULL; pFmtFld = aIter.Next() )
         {

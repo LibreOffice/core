@@ -20,6 +20,7 @@
 
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 #include <unotools/lingucfg.hxx>
@@ -125,20 +126,20 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
         SwFldUpdateFlags nFldUpdFlag = m_rSwdoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
         if( ( AUTOUPD_FIELD_ONLY == nFldUpdFlag
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
-                m_rSwdoc.GetUpdtFlds().IsFieldsDirty()
+                m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().IsFieldsDirty()
                 // If we switch the field name the Fields are not updated.
                 // So the "backgorund update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
-            if ( m_rSwdoc.GetUpdtFlds().IsInUpdateFlds() ||
-                 m_rSwdoc.IsExpFldsLocked() )
+            if ( m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||
+                 m_rSwdoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
             {
                 pTimer->Start();
                 return 0;
             }
 
             //  Action brackets!
-            m_rSwdoc.GetUpdtFlds().SetInUpdateFlds( true );
+            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( true );
 
             pTmpRoot->StartAllAction();
 
@@ -146,17 +147,17 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
             const bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( true );
 
-            m_rSwdoc.GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
-            m_rSwdoc.UpdateExpFlds( 0, false );      // Updates ExpressionFields
-            m_rSwdoc.UpdateTblFlds(NULL);                // Tables
-            m_rSwdoc.UpdateRefFlds(NULL);                // References
+            m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
+            m_rSwdoc.getIDocumentFieldsAccess().UpdateExpFlds( 0, false );      // Updates ExpressionFields
+            m_rSwdoc.getIDocumentFieldsAccess().UpdateTblFlds(NULL);                // Tables
+            m_rSwdoc.getIDocumentFieldsAccess().UpdateRefFlds(NULL);                // References
 
             pTmpRoot->EndAllAction();
 
             pStartSh->LockView( bOldLockView );
 
-            m_rSwdoc.GetUpdtFlds().SetInUpdateFlds( false );
-            m_rSwdoc.GetUpdtFlds().SetFieldsDirty( false );
+            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( false );
+            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetFieldsDirty( false );
         }
     }
 #ifdef TIMELOG

@@ -1919,8 +1919,8 @@ const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return G
 IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return GetDoc(); }
 const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return &GetDoc()->getIDocumentLinksAdministration(); }
 IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return &GetDoc()->getIDocumentLinksAdministration(); }
-const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
-IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
+const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return &GetDoc()->getIDocumentFieldsAccess(); }
+IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return &GetDoc()->getIDocumentContentOperations(); }
 IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc()->getIDocumentListItems(); } // #i83479#
 

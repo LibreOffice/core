@@ -92,6 +92,7 @@
 #include <poolfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
@@ -312,7 +313,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
 void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
-    SwFieldType* pType = pDoc->GetSysFldType( RES_CHAPTERFLD );
+    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD );
     SwIterator<SwFmtFld,SwFieldType> aFmtFlds( *pType );
     for ( SwFmtFld* pFld = aFmtFlds.First(); pFld; pFld = aFmtFlds.Next() )
     {
@@ -893,7 +894,7 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, s
 {
     const SwTxtNode* pNd;
 
-    SwFieldType* pType = pDoc->GetSysFldType( RES_GETREFFLD );
+    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD );
     SwIterator<SwFmtFld, SwFieldType> aFmtFlds( *pType );
     for ( SwFmtFld* pFmtFld = aFmtFlds.First(); pFmtFld; pFmtFld = aFmtFlds.Next() )
     {

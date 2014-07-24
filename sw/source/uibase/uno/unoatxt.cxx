@@ -41,6 +41,7 @@
 #include <IMark.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
@@ -327,7 +328,7 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
     SwPosition aPos(aIdx, SwIndex(pNd, (pNd) ? pNd->Len() : 0));
 
     bool bRet = false;
-    pInsDoc->LockExpFlds();
+    pInsDoc->getIDocumentFieldsAccess().LockExpFlds();
     {
         SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : pxRange->GetDoc());
         SwPaM aPam(pDoc->GetNodes());
@@ -347,9 +348,9 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
         bRet = pDoc->getIDocumentContentOperations().CopyRange( *pPam, aPos, false ) || bRet;
     }
 
-    pInsDoc->UnlockExpFlds();
-    if( !pInsDoc->IsExpFldsLocked() )
-        pInsDoc->UpdateExpFlds(NULL, true);
+    pInsDoc->getIDocumentFieldsAccess().UnlockExpFlds();
+    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
+        pInsDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
 
     return bRet;
 }

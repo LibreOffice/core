@@ -22,6 +22,7 @@
 #include <node.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <pam.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -118,9 +119,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     // declare all fields as invalid, updating will happen
     // in the idle-handler of the doc
-    if( GetDoc()->SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
+    if( GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
         rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
+        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
     // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
@@ -268,7 +269,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             case RES_TXTATR_INPUTFIELD:
                                 {
                                     SwTxtFld* pTxtFld = static_cast<SwTxtFld*>(pAttr);
-                                    rNds.GetDoc()->InsDelFldInFldLst( !bToUndo, *pTxtFld );
+                                    rNds.GetDoc()->getIDocumentFieldsAccess().InsDelFldInFldLst( !bToUndo, *pTxtFld );
 
                                     const SwFieldType* pTyp = pTxtFld->GetFmtFld().GetField()->GetTyp();
                                     if ( RES_POSTITFLD == pTyp->Which() )
@@ -345,9 +346,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     // declare all fields as invalid, updating will happen
     // in the idle-handler of the doc
-    GetDoc()->SetFieldsDirty( true, NULL, 0 );
+    GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     if( rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
+        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&

@@ -38,6 +38,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <hints.hxx>
@@ -1722,7 +1723,7 @@ SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
         ( pNFmt = rDest.GetNumberFormatter( true ))->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )
-        ((SwGetRefFieldType*)rSrc.GetSysFldType( RES_GETREFFLD ))->
+        ((SwGetRefFieldType*)rSrc.getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD ))->
             MergeWithOtherDoc( rDest );
 }
 

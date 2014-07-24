@@ -35,6 +35,7 @@
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
 #include <switerator.hxx>
@@ -552,7 +553,7 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
 
     if( pAuthType->IsSequence() )
     {
-       if(!pAuthType->GetDoc()->IsExpFldsLocked())
+       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
        if( m_nTempSequencePos >= 0 )
            sRet += OUString::number( m_nTempSequencePos );
@@ -576,7 +577,7 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField) const
 
     if( pAuthType->IsSequence() )
     {
-       if(!pAuthType->GetDoc()->IsExpFldsLocked())
+       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
        if( m_nTempSequencePos >= 0 )
            sRet += OUString::number( m_nTempSequencePos );

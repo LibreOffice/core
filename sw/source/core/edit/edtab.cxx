@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -253,7 +254,7 @@ void SwEditShell::UpdateTable()
             StartUndo();
         EndAllTblBoxEdit();
         SwTableFmlUpdate aTblUpdate( (SwTable*)&pTblNd->GetTable() );
-        GetDoc()->UpdateTblFlds( &aTblUpdate );
+        GetDoc()->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
         if( DoesUndo() )
             EndUndo();
         EndAllAction();
@@ -319,7 +320,7 @@ bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
 
             SwTableFmlUpdate aTblUpdate( (SwTable*)&rTbl );
             aTblUpdate.eFlags = TBL_BOXNAME;
-            ((SwDoc*)GetDoc())->UpdateTblFlds( &aTblUpdate );
+            ((SwDoc*)GetDoc())->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
 
             rSet.Put( pTblFmt->GetAttrSet() );
         }
